@@ -1,0 +1,29 @@
+{
+  "name": "project-celestia",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "check-types": "turbo run check-types"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.18.0",
+      "onFail": "download"
+    }
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "turbo": "^2.10.7",
+    "typescript": "^7.0.2"
+  }
+}

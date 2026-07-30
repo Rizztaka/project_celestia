@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "emitDeclarationOnly": true,
+    "types": ["vitest", "node"]
+  },
+  "include": ["vitest.config.ts"]
+}

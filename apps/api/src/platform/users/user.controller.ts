@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { UserService } from "./user.service.js";
-import { createUserSchema } from "./user.validation.js";
+// Replace: import { createUserSchema } from './user.validation.js';
+import { createUserSchema } from "@celestia/api-contracts";
 
 export class UserController {
   private userService: UserService;

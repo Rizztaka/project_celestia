@@ -1,5 +1,6 @@
 import { UserRepository } from "./user.repository.js";
-import type { CreateUserInput } from "./user.validation.js";
+// Replace: import type { CreateUserInput } from './user.validation.js';
+import type { CreateUserInput } from "@celestia/api-contracts";
 
 export class UserService {
   private userRepository: UserRepository;

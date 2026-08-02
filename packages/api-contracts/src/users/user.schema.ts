@@ -8,5 +8,4 @@ export const createUserSchema = z.object({
     .max(30, "Username must not exceed 30 characters"),
 });
 
-// We export the inferred type so our Service knows exactly what to expect
 export type CreateUserInput = z.infer<typeof createUserSchema>;

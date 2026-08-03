@@ -1,50 +1,66 @@
-import { useState } from "react";
-import type { CreateUserInput } from "@celestia/api-contracts";
+/**
+ * App.tsx — Application root
+ *
+ * Responsibilities:
+ *   1. Provide TanStack QueryClient to the component tree
+ *   2. Define the React Router route hierarchy
+ *   3. Enforce authentication via ProtectedRoute
+ *
+ * Route structure:
+ *   /login       — public, LoginPage
+ *   /register    — public, RegisterPage
+ *   /            — protected, DashboardPage
+ *   /profile     — protected, ProfilePage
+ *
+ * State management split (per ARCHITECTURE.md):
+ *   - Zustand (auth.store.ts)  → token, isAuthenticated (client state)
+ *   - TanStack Query           → server data (profile, future game data)
+ */
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";
+import ProfilePage from "./pages/ProfilePage";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Don't retry on 4xx errors — auth failures, not found, etc. are
+      // not going to succeed on retry
+      retry: (failureCount, error) => {
+        if (error instanceof Error && "status" in error) {
+          const status = (error as { status: number }).status;
+          if (status >= 400 && status < 500) return false;
+        }
+        return failureCount < 2;
+      },
+    },
+  },
+});
 
 function App() {
-  // We are successfully using the shared type from our backend contracts!
-  const [formData, setFormData] = useState<Partial<CreateUserInput>>({
-    username: "",
-    email: "",
-  });
-
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50 flex flex-col items-center justify-center p-8">
-      <h1 className="text-4xl font-bold text-indigo-400 mb-2">
-        Project Celestia
-      </h1>
-      <p className="text-lg text-zinc-400 mb-8">
-        Full-Stack Foundation Established
-      </p>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-      <div className="bg-zinc-900 p-8 rounded-xl border border-zinc-800 shadow-2xl w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-6">Tailwind v4 is working!</h2>
+          {/* Protected routes — ProtectedRoute redirects to /login if not authenticated */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<DashboardPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
 
-        <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="Username"
-            className="w-full bg-zinc-950 border border-zinc-800 rounded px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
-            value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full bg-zinc-950 border border-zinc-800 rounded px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-          />
-          <button className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-4 rounded transition-colors">
-            Ready to Connect API
-          </button>
-        </div>
-      </div>
-    </div>
+          {/* Catch-all — redirect unknown paths to dashboard (or login if not authed) */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 

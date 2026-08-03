@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { UserService } from "./user.service.js";
-// Replace: import { createUserSchema } from './user.validation.js';
 import { createUserSchema } from "@celestia/api-contracts";
+import { successResponse } from "@/core/utils/response.js";
 
 export class UserController {
   private userService: UserService;
@@ -10,34 +10,24 @@ export class UserController {
     this.userService = new UserService();
   }
 
-  // We use arrow functions to automatically bind 'this'
+  // Arrow functions automatically bind 'this' — no need for .bind() in routes
   createUser = async (req: Request, res: Response) => {
-    // 1. Validate request body (Zod will throw if invalid)
+    // 1. Validate request body — Zod throws ZodError if invalid,
+    //    which the global error handler converts to a 400 response
     const validatedData = createUserSchema.parse(req.body);
 
-    // 2. Call service
+    // 2. Delegate to service (business rules live there, not here)
     const user = await this.userService.createUser(validatedData);
 
-    // 3. Return consistent response structure
-    res.status(201).json({
-      success: true,
-      data: user,
-      message: "User created successfully",
-    });
+    // 3. Return standardized success response
+    res.status(201).json(successResponse(user, "User created successfully"));
   };
 
   getUser = async (req: Request, res: Response) => {
-    // 1. Extract params and strictly type as string
     const userId = req.params.id as string;
 
-    // 2. Call service
     const user = await this.userService.getUserById(userId);
 
-    // 3. Return consistent response structure
-    res.status(200).json({
-      success: true,
-      data: user,
-      message: "User retrieved successfully",
-    });
+    res.status(200).json(successResponse(user, "User retrieved successfully"));
   };
 }

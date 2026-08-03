@@ -81,7 +81,7 @@ This document is expected to evolve as the project grows.
 * ✅ DEVELOPMENT\_GUIDE.md
 * ✅ UI\_UX\_GUIDELINES.md
 * ✅ FEATURE\_SPECIFICATIONS.md
-* ⬜ DECISIONS.md
+* ✅ DECISIONS.md
 * ⬜ Repository initialization
 * ⬜ Development environment
 * ⬜ CI setup

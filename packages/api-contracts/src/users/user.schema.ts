@@ -6,6 +6,7 @@ export const createUserSchema = z.object({
     .string()
     .min(3, "Username must be at least 3 characters long")
     .max(30, "Username must not exceed 30 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters long"), // <-- Added password validation
 });
 
 export type CreateUserInput = z.infer<typeof createUserSchema>;

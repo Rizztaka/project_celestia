@@ -14,6 +14,7 @@ export default defineConfig({
     coverage: {
       reporter: ["text", "json", "html"],
     },
-    passWithNoTests: true,
+    // passWithNoTests was removed — 20 tests now exist and the suite must not
+    // silently pass if test files are accidentally deleted.
   },
 });

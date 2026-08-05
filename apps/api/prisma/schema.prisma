@@ -14,9 +14,114 @@ model User {
   id        String   @id @default(uuid())
   email     String   @unique
   username  String   @unique
-  password  String   // <-- Add this line to store the hashed password
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Back-relation to Genshin domain — no column is added to the users table.
+  // One user has at most one Genshin account in Phase 2.
+  genshinAccount GenshinAccount?
+
   @@map("users")
+}
+
+// ==========================================
+// GENSHIN DOMAIN
+// ==========================================
+
+/// Links a platform User to their Genshin Impact data.
+/// One user = one Genshin account in Phase 2 (enforced by @unique on userId).
+/// Phase 6 will remove @unique to support multi-account.
+model GenshinAccount {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  uid           String?  // in-game UID (9 digits), optional until importer runs (2B)
+  nickname      String?  // in-game traveler nickname
+  adventureRank Int?
+  worldLevel    Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  characters GenshinCharacter[]
+  weapons    GenshinWeapon[]
+  artifacts  GenshinArtifact[]
+
+  @@map("genshin_accounts")
+}
+
+/// A single character owned by the player.
+/// characterKey maps to static game data JSON (e.g. "hutao", "raiden_shogun").
+/// Talent levels are base values (1–10) before constellation C3/C5 bonuses —
+/// effective level is computed in the Intelligence Core (Phase 4).
+model GenshinCharacter {
+  id               String  @id @default(uuid())
+  accountId        String
+  characterKey     String  // references static game data, NOT a FK
+  level            Int     // 1–90
+  ascension        Int     // 0–6
+  constellation    Int     // 0–6
+  talentNormal     Int     // 1–10 (base level)
+  talentSkill      Int     // 1–10 (base level)
+  talentBurst      Int     // 1–10 (base level)
+  equippedWeaponId String? @unique // 1:1 with GenshinWeapon; null = no weapon equipped
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account           GenshinAccount    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  equippedWeapon    GenshinWeapon?    @relation(fields: [equippedWeaponId], references: [id])
+  equippedArtifacts GenshinArtifact[] // up to 5 (one per slot), enforced by unique index below
+
+  @@unique([accountId, characterKey]) // a character can only appear once per account
+  @@map("genshin_characters")
+}
+
+/// A weapon in the player's inventory.
+/// weaponKey maps to static game data (e.g. "StaffOfHoma").
+model GenshinWeapon {
+  id         String  @id @default(uuid())
+  accountId  String
+  weaponKey  String  // references static game data, NOT a FK
+  level      Int     // 1–90
+  ascension  Int     // 0–6
+  refinement Int     // 1–5
+  locked     Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account    GenshinAccount    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  equippedBy GenshinCharacter? // back-relation from GenshinCharacter.equippedWeaponId
+
+  @@map("genshin_weapons")
+}
+
+/// A single artifact in the player's inventory.
+/// setKey, slotKey, and mainStatKey reference static game data constants.
+/// subStats are stored as JSON: [{ key: "critRate_", value: 6.6 }, ...]
+/// equippedCharacterId is null when the artifact is in inventory but not equipped.
+model GenshinArtifact {
+  id                  String  @id @default(uuid())
+  accountId           String
+  setKey              String  // e.g. "ShimenawasReminiscence"
+  slotKey             String  // "flower" | "plume" | "sands" | "goblet" | "circlet"
+  level               Int     // 0–20
+  rarity              Int     // 1–5 (star count)
+  mainStatKey         String  // e.g. "hp", "atk", "critRate_", "eleMas"
+  subStats            Json    @default("[]") // ArtifactSubStat[]
+  locked              Boolean @default(false)
+  equippedCharacterId String? // FK to GenshinCharacter.id; null = in inventory
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account    GenshinAccount    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  equippedBy GenshinCharacter? @relation(fields: [equippedCharacterId], references: [id])
+
+  // A character cannot have two artifacts in the same slot.
+  // NULLs are treated as distinct by PostgreSQL, so multiple unequipped
+  // artifacts with the same slotKey are correctly allowed.
+  @@unique([equippedCharacterId, slotKey])
+  @@map("genshin_artifacts")
 }

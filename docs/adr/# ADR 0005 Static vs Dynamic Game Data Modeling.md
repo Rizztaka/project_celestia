@@ -1,8 +1,11 @@
 # ADR 0005: Static vs Dynamic Game Data Modeling
 
-**Date:** 2026-08-05  
-**Status:** Accepted  
-**Context:** Phase 2 (Genshin Foundation)
+Status: Accepted
+Date: 2026-08-05
+Project Architect: Rizztaka
+Project Owner: Rizztaka
+
+---
 
 ## Context
 When designing the database schema for a user's Genshin Impact roster (characters, weapons, artifacts), we had to decide how to represent the static game data (e.g., character base stats, weapon types, artifact set bonuses) alongside the dynamic user data (e.g., a player's character level, constellation, artifact sub-stats).

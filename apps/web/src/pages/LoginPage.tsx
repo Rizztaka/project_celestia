@@ -50,23 +50,27 @@ function LoginPage() {
     mutation.error instanceof ApiError ? mutation.error.message : null;
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background ambient glow */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl mix-blend-screen pointer-events-none"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl mix-blend-screen pointer-events-none"></div>
+      
+      <div className="w-full max-w-sm animate-fade-in relative z-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-white tracking-tight">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-display font-bold text-gradient tracking-tight">
             Project Celestia
           </h1>
-          <p className="text-zinc-400 text-sm mt-1">Sign in to your account</p>
+          <p className="text-zinc-400 text-sm mt-2 font-medium">Sign in to your account</p>
         </div>
 
         {/* Card */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-xl">
+        <div className="glass-panel rounded-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1">
               <label
                 htmlFor="email"
-                className="text-xs font-medium text-zinc-400 uppercase tracking-wide"
+                className="text-xs font-semibold text-zinc-400 uppercase tracking-wider"
               >
                 Email
               </label>
@@ -78,14 +82,14 @@ function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                className="w-full bg-celestia-950/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition-all shadow-inner"
               />
             </div>
 
             <div className="space-y-1">
               <label
                 htmlFor="password"
-                className="text-xs font-medium text-zinc-400 uppercase tracking-wide"
+                className="text-xs font-semibold text-zinc-400 uppercase tracking-wider"
               >
                 Password
               </label>
@@ -97,7 +101,7 @@ function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                className="w-full bg-celestia-950/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition-all shadow-inner"
               />
             </div>
 
@@ -105,8 +109,9 @@ function LoginPage() {
             {errorMessage && (
               <div
                 role="alert"
-                className="bg-red-950/50 border border-red-800 text-red-300 text-sm px-3 py-2 rounded-lg"
+                className="bg-danger-950/20 border border-danger-500/30 text-danger-400 text-sm px-4 py-3 rounded-xl animate-fade-in flex items-start gap-2"
               >
+                <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                 {errorMessage}
               </div>
             )}
@@ -114,7 +119,7 @@ function LoginPage() {
             <button
               type="submit"
               disabled={mutation.isPending}
-              className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors mt-2"
+              className="w-full bg-gradient-to-r from-accent-500 to-indigo-600 hover:from-accent-400 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-accent-glow/30 mt-4"
             >
               {mutation.isPending ? "Signing in…" : "Sign in"}
             </button>
@@ -126,7 +131,7 @@ function LoginPage() {
           Don&apos;t have an account?{" "}
           <Link
             to="/register"
-            className="text-indigo-400 hover:text-indigo-300 transition-colors"
+            className="text-accent-400 hover:text-accent-300 font-medium transition-colors"
           >
             Create one
           </Link>

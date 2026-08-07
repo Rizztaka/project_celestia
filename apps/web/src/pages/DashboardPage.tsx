@@ -92,21 +92,29 @@ function DashboardPage() {
           Your Genshin companion is being built. Check back soon.
         </p>
 
-        {/* Phase 2 placeholder */}
+        {/* Phase 2 — Import entry point */}
         <div className="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            { label: "Characters", desc: "Coming in Phase 2" },
-            { label: "Artifacts", desc: "Coming in Phase 2" },
-            { label: "Daily Planner", desc: "Coming in Phase 3" },
-          ].map((card) => (
-            <div
-              key={card.label}
-              className="bg-zinc-900 border border-zinc-800 rounded-xl p-5"
-            >
-              <h2 className="font-semibold text-white text-sm">{card.label}</h2>
-              <p className="text-zinc-500 text-xs mt-1">{card.desc}</p>
-            </div>
-          ))}
+          <a
+            href="/import"
+            className="bg-zinc-900 border border-zinc-800 hover:border-indigo-700 rounded-xl p-5 transition-colors group"
+          >
+            <h2 className="font-semibold text-white text-sm group-hover:text-indigo-400 transition-colors">
+              Import Account
+            </h2>
+            <p className="text-zinc-500 text-xs mt-1">
+              Import your roster from Genshin Optimizer or Inventory Kamera.
+            </p>
+          </a>
+
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 opacity-50">
+            <h2 className="font-semibold text-white text-sm">Roster</h2>
+            <p className="text-zinc-500 text-xs mt-1">Coming in Phase 2D</p>
+          </div>
+
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 opacity-50">
+            <h2 className="font-semibold text-white text-sm">Daily Planner</h2>
+            <p className="text-zinc-500 text-xs mt-1">Coming in Phase 3</p>
+          </div>
         </div>
       </main>
     </div>

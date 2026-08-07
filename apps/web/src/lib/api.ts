@@ -69,3 +69,30 @@ export async function fetchApi<T>(
 
   return json.data as T;
 }
+
+// ============================================================
+// Genshin Impact API Functions
+// ============================================================
+
+export interface ImportResult {
+  charactersImported: number;
+  weaponsImported: number;
+  artifactsImported: number;
+}
+
+/**
+ * importGenshinAccount — POST /games/genshin/import
+ *
+ * Sends a parsed GOOD-format payload to the backend importer.
+ * The caller is responsible for JSON.parse()-ing the raw textarea string
+ * before passing it here. If JSON.parse() throws, catch it in the UI and
+ * show an inline error — do NOT call this function with invalid JSON.
+ */
+export async function importGenshinAccount(
+  goodPayload: unknown,
+): Promise<ImportResult> {
+  return fetchApi<ImportResult>("/games/genshin/import", {
+    method: "POST",
+    body: JSON.stringify(goodPayload),
+  });
+}

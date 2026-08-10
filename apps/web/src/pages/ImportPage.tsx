@@ -17,7 +17,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { importGenshinAccount, ApiError, type ImportResult } from "../lib/api";
 import { useAuthStore } from "../stores/auth.store";
 
@@ -27,8 +27,14 @@ function ImportPage() {
   const [goodJson, setGoodJson] = useState("");
   const [parseError, setParseError] = useState<string | null>(null);
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation<ImportResult, Error, unknown>({
     mutationFn: (goodPayload: unknown) => importGenshinAccount(goodPayload),
+    onSuccess: () => {
+      // Invalidate the genshin cache so the Roster page reflects the new data
+      queryClient.invalidateQueries({ queryKey: ["genshin"] });
+    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -122,8 +128,14 @@ function ImportPage() {
           {/* Actions */}
           <div className="flex flex-col items-center gap-4">
             <Link
-              to="/"
+              to="/roster"
               className="w-full sm:w-auto min-w-[200px] text-center bg-gradient-to-r from-accent-500 to-indigo-600 hover:from-accent-400 hover:to-indigo-500 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-lg shadow-accent-glow/30"
+            >
+              Go to Roster
+            </Link>
+            <Link
+              to="/"
+              className="w-full sm:w-auto min-w-[200px] text-center glass-panel hover-lift text-white font-semibold py-3 px-6 rounded-xl transition-all"
             >
               Go to Dashboard
             </Link>

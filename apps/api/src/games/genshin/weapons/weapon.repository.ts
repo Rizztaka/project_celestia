@@ -7,7 +7,10 @@ export class GenshinWeaponRepository {
   }
 
   async findByAccountId(accountId: string): Promise<GenshinWeapon[]> {
-    return prisma.genshinWeapon.findMany({ where: { accountId } });
+    return prisma.genshinWeapon.findMany({
+      where:   { accountId },
+      orderBy: { level: "desc" },
+    });
   }
 
   async findById(id: string): Promise<GenshinWeapon | null> {

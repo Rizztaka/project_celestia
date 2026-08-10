@@ -9,7 +9,10 @@ export class GenshinArtifactRepository {
   }
 
   async findByAccountId(accountId: string): Promise<GenshinArtifact[]> {
-    return prisma.genshinArtifact.findMany({ where: { accountId } });
+    return prisma.genshinArtifact.findMany({
+      where:   { accountId },
+      orderBy: [{ level: "desc" }, { rarity: "desc" }],
+    });
   }
 
   async findById(id: string): Promise<GenshinArtifact | null> {

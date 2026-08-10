@@ -1,5 +1,6 @@
 import { GenshinArtifactRepository } from "./artifact.repository.js";
 import { NotFoundError } from "@/core/errors/app-error.js";
+import { prisma } from "@/core/db/prisma.js";
 import type { GenshinArtifact, Prisma } from "@prisma/client";
 
 /**
@@ -64,6 +65,23 @@ export class GenshinArtifactService {
    */
   async getArtifacts(accountId: string): Promise<GenshinArtifact[]> {
     return this.artifactRepository.findByAccountId(accountId);
+  }
+
+  /**
+   * Public read API for the HTTP layer (Milestone 2E).
+   *
+   * Accepts a userId (from the JWT) rather than an accountId, handling the
+   * user→account resolution internally.
+   *
+   * Returns an empty array — never throws — when the user has no Genshin
+   * account yet. An empty inventory is a valid state.
+   */
+  async getArtifactsForUser(userId: string): Promise<GenshinArtifact[]> {
+    const account = await prisma.genshinAccount.findUnique({
+      where: { userId },
+    });
+    if (!account) return [];
+    return this.artifactRepository.findByAccountId(account.id);
   }
 
   /**

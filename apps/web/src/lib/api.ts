@@ -136,3 +136,64 @@ export interface RosterResponse {
 export async function fetchGenshinRoster(): Promise<RosterResponse> {
   return fetchApi<RosterResponse>("/games/genshin/characters");
 }
+
+// ============================================================
+// Genshin Inventory Types & Functions (Milestone 2E)
+// ============================================================
+
+export interface InventoryWeapon {
+  id: string;
+  weaponKey: string;
+  level: number;
+  ascension: number;
+  refinement: number;
+  locked: boolean;
+  equippedCharacterId: string | null;
+}
+
+export interface ArtifactSubStat {
+  key: string;
+  value: number;
+}
+
+export interface InventoryArtifact {
+  id: string;
+  setKey: string;
+  slotKey: string;
+  level: number;
+  rarity: number;
+  mainStatKey: string;
+  subStats: ArtifactSubStat[];
+  locked: boolean;
+}
+
+export interface WeaponsResponse {
+  weapons: InventoryWeapon[];
+  total: number;
+}
+
+export interface ArtifactsResponse {
+  artifacts: InventoryArtifact[];
+  total: number;
+}
+
+/**
+ * fetchGenshinWeapons — GET /games/genshin/weapons
+ *
+ * Returns the authenticated user's full weapon inventory, ordered level desc.
+ * Always returns a WeaponsResponse, even if the user has no data yet.
+ */
+export async function fetchGenshinWeapons(): Promise<WeaponsResponse> {
+  return fetchApi<WeaponsResponse>("/games/genshin/weapons");
+}
+
+/**
+ * fetchGenshinArtifacts — GET /games/genshin/artifacts
+ *
+ * Returns the authenticated user's full artifact inventory, ordered by
+ * level desc then rarity desc.
+ * Always returns an ArtifactsResponse, even if the user has no data yet.
+ */
+export async function fetchGenshinArtifacts(): Promise<ArtifactsResponse> {
+  return fetchApi<ArtifactsResponse>("/games/genshin/artifacts");
+}

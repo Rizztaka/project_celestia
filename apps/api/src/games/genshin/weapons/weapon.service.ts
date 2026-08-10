@@ -1,5 +1,6 @@
 import { GenshinWeaponRepository } from "./weapon.repository.js";
 import { NotFoundError } from "@/core/errors/app-error.js";
+import { prisma } from "@/core/db/prisma.js";
 import type { GenshinWeapon } from "@prisma/client";
 
 export interface AddWeaponInput {
@@ -48,6 +49,23 @@ export class GenshinWeaponService {
    */
   async getWeapons(accountId: string): Promise<GenshinWeapon[]> {
     return this.weaponRepository.findByAccountId(accountId);
+  }
+
+  /**
+   * Public read API for the HTTP layer (Milestone 2E).
+   *
+   * Accepts a userId (from the JWT) rather than an accountId, handling the
+   * user→account resolution internally.
+   *
+   * Returns an empty array — never throws — when the user has no Genshin
+   * account yet. An empty inventory is a valid state.
+   */
+  async getWeaponsForUser(userId: string): Promise<GenshinWeapon[]> {
+    const account = await prisma.genshinAccount.findUnique({
+      where: { userId },
+    });
+    if (!account) return [];
+    return this.weaponRepository.findByAccountId(account.id);
   }
 
   /**

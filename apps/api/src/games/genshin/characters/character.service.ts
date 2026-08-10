@@ -1,5 +1,7 @@
 import { GenshinCharacterRepository } from "./character.repository.js";
+import type { CharacterWithWeapon } from "./character.repository.js";
 import { ConflictError, NotFoundError } from "@/core/errors/app-error.js";
+import { prisma } from "@/core/db/prisma.js";
 import type { GenshinCharacter } from "@prisma/client";
 
 export interface AddCharacterInput {
@@ -63,6 +65,24 @@ export class GenshinCharacterService {
    */
   async getCharacters(accountId: string): Promise<GenshinCharacter[]> {
     return this.characterRepository.findByAccountId(accountId);
+  }
+
+  /**
+   * Public read API for the HTTP layer (Milestone 2D).
+   *
+   * Accepts a userId (from the JWT) rather than an accountId, handling the
+   * user→account resolution internally.
+   *
+   * Returns an empty array — never throws — when the user has no Genshin
+   * account yet. An empty roster is a valid state (user registered but
+   * has not imported). A 404 at this level would be incorrect.
+   */
+  async getCharactersForUser(userId: string): Promise<CharacterWithWeapon[]> {
+    const account = await prisma.genshinAccount.findUnique({
+      where: { userId },
+    });
+    if (!account) return [];
+    return this.characterRepository.findByAccountIdWithWeapon(account.id);
   }
 
   /**

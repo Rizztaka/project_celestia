@@ -96,3 +96,43 @@ export async function importGenshinAccount(
     body: JSON.stringify(goodPayload),
   });
 }
+
+// ============================================================
+// Genshin Roster Types & Functions (Milestone 2D)
+// ============================================================
+
+export interface RosterWeapon {
+  id: string;
+  weaponKey: string;
+  level: number;
+  refinement: number;
+}
+
+export interface RosterCharacter {
+  id: string;
+  characterKey: string;
+  level: number;
+  ascension: number;
+  constellation: number;
+  talentNormal: number;
+  talentSkill: number;
+  talentBurst: number;
+  equippedWeaponId: string | null;
+  equippedWeapon: RosterWeapon | null;
+}
+
+export interface RosterResponse {
+  characters: RosterCharacter[];
+  total: number;
+}
+
+/**
+ * fetchGenshinRoster — GET /games/genshin/characters
+ *
+ * Returns the authenticated user's full character roster.
+ * Always returns a RosterResponse, even if the user has no data yet
+ * (server returns an empty array, not a 404).
+ */
+export async function fetchGenshinRoster(): Promise<RosterResponse> {
+  return fetchApi<RosterResponse>("/games/genshin/characters");
+}

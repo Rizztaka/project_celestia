@@ -111,13 +111,20 @@ function DashboardPage() {
             </p>
           </a>
 
-          <div className="glass-panel rounded-2xl p-6 opacity-40 grayscale">
-            <div className="w-12 h-12 rounded-xl bg-zinc-800 text-zinc-500 flex items-center justify-center mb-4">
+          <a
+            href="/roster"
+            className="glass-panel hover-lift rounded-2xl p-6 group cursor-pointer block"
+          >
+            <div className="w-12 h-12 rounded-xl bg-violet-500/20 text-violet-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
             </div>
-            <h2 className="font-display font-bold text-white text-lg">Roster</h2>
-            <p className="text-zinc-500 text-sm mt-2">Coming in Phase 2D</p>
-          </div>
+            <h2 className="font-display font-bold text-white text-lg group-hover:text-violet-400 transition-colors">
+              Roster
+            </h2>
+            <p className="text-zinc-400 text-sm mt-2 leading-relaxed">
+              Browse your imported characters, their talents, and equipped weapons.
+            </p>
+          </a>
 
           <div className="glass-panel rounded-2xl p-6 opacity-40 grayscale">
             <div className="w-12 h-12 rounded-xl bg-zinc-800 text-zinc-500 flex items-center justify-center mb-4">

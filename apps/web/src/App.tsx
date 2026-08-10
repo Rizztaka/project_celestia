@@ -11,6 +11,8 @@
  *   /register    — public, RegisterPage
  *   /            — protected, DashboardPage
  *   /profile     — protected, ProfilePage
+ *   /import      — protected, ImportPage
+ *   /roster      — protected, RosterPage   ← Milestone 2D
  *
  * State management split (per ARCHITECTURE.md):
  *   - Zustand (auth.store.ts)  → token, isAuthenticated (client state)
@@ -25,6 +27,7 @@ import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import ImportPage from "./pages/ImportPage";
+import RosterPage from "./pages/RosterPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -56,6 +59,7 @@ function App() {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/import" element={<ImportPage />} />
+            <Route path="/roster" element={<RosterPage />} />
           </Route>
 
           {/* Catch-all — redirect unknown paths to dashboard (or login if not authed) */}

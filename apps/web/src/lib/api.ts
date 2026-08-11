@@ -197,3 +197,66 @@ export async function fetchGenshinWeapons(): Promise<WeaponsResponse> {
 export async function fetchGenshinArtifacts(): Promise<ArtifactsResponse> {
   return fetchApi<ArtifactsResponse>("/games/genshin/artifacts");
 }
+
+// ============================================================
+// Daily Companion Types & Functions (Milestone 3A)
+// ============================================================
+
+/**
+ * Mirrors the DailyCompanion Prisma model returned by the backend.
+ *
+ * NOTE: `resinAmount` is the checkpoint value at `resinUpdatedAt`.
+ * Use computeCurrentResin() from lib/resin.ts to get the effective current amount.
+ */
+export interface DailyState {
+  id:                 string;
+  userId:             string;
+  resinAmount:        number;   // checkpoint value — project forward with resin.ts
+  resinUpdatedAt:     string;   // ISO 8601 UTC timestamp
+  commissionsDone:    boolean;
+  teapotClaimed:      boolean;
+  transformerClaimed: boolean;
+  dailyResetAt:       string;   // ISO 8601 UTC timestamp of last reset
+  createdAt:          string;
+  updatedAt:          string;
+}
+
+/**
+ * fetchDailyState — GET /companion/daily
+ *
+ * Returns the authenticated user's daily companion state.
+ * Creates the record with safe defaults on the user's first call.
+ */
+export async function fetchDailyState(): Promise<DailyState> {
+  return fetchApi<DailyState>("/companion/daily");
+}
+
+/**
+ * patchResin — PATCH /companion/resin
+ *
+ * Updates the user's resin checkpoint. The backend stores the given amount
+ * and refreshes resinUpdatedAt to now(). The frontend then projects forward
+ * from this new checkpoint.
+ *
+ * @param amount Integer in [0, 200].
+ */
+export async function patchResin(amount: number): Promise<DailyState> {
+  return fetchApi<DailyState>("/companion/resin", {
+    method: "PATCH",
+    body:   JSON.stringify({ amount }),
+  });
+}
+
+/**
+ * patchChecklist — PATCH /companion/checklist
+ *
+ * Updates one or more daily checklist flags. At least one field is required.
+ */
+export async function patchChecklist(
+  input: Partial<Pick<DailyState, "commissionsDone" | "teapotClaimed" | "transformerClaimed">>,
+): Promise<DailyState> {
+  return fetchApi<DailyState>("/companion/checklist", {
+    method: "PATCH",
+    body:   JSON.stringify(input),
+  });
+}

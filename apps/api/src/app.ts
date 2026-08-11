@@ -9,9 +9,10 @@ import { ZodError } from "zod";
 import { logger } from "@/core/logger/logger.js";
 import { AppError } from "@/core/errors/app-error.js";
 import { errorResponse } from "@/core/utils/response.js";
-import { userRoutes } from "./platform/users/user.routes.js";
-import { authRoutes } from "./platform/auth/auth.routes.js";
-import { genshinRoutes } from "./games/genshin/genshin.routes.js";
+import { userRoutes }     from "./platform/users/user.routes.js";
+import { authRoutes }     from "./platform/auth/auth.routes.js";
+import { companionRoutes } from "./platform/companion/companion.routes.js";
+import { genshinRoutes }  from "./games/genshin/genshin.routes.js";
 
 export const app = express();
 
@@ -43,8 +44,9 @@ v1Router.get("/health", (_req, res) => {
 });
 
 // Platform routes
-v1Router.use("/auth", authRoutes);
-v1Router.use("/users", userRoutes);
+v1Router.use("/auth",      authRoutes);
+v1Router.use("/users",     userRoutes);
+v1Router.use("/companion", companionRoutes); // Phase 3
 
 // Game routes
 v1Router.use("/games/genshin", genshinRoutes);

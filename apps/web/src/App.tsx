@@ -28,8 +28,9 @@ import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import ImportPage from "./pages/ImportPage";
-import RosterPage from "./pages/RosterPage";
+import RosterPage    from "./pages/RosterPage";
 import InventoryPage from "./pages/InventoryPage";
+import PlannerPage   from "./pages/PlannerPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -63,6 +64,7 @@ function App() {
             <Route path="/import" element={<ImportPage />} />
             <Route path="/roster"     element={<RosterPage />} />
             <Route path="/inventory"  element={<InventoryPage />} />
+            <Route path="/planner"    element={<PlannerPage />} />
           </Route>
 
           {/* Catch-all — redirect unknown paths to dashboard (or login if not authed) */}

@@ -22,6 +22,9 @@ model User {
   // One user has at most one Genshin account in Phase 2.
   genshinAccount GenshinAccount?
 
+  // Back-relation to the Daily Companion (Phase 3).
+  dailyCompanion DailyCompanion?
+
   @@map("users")
 }
 
@@ -124,4 +127,45 @@ model GenshinArtifact {
   // artifacts with the same slotKey are correctly allowed.
   @@unique([equippedCharacterId, slotKey])
   @@map("genshin_artifacts")
+}
+
+// ==========================================
+// PLATFORM COMPANION DOMAIN (Phase 3)
+// ==========================================
+
+/// Stores a user's daily companion state: resin tracking and daily checklist.
+/// One-to-one with User. Created lazily on the user's first GET request (upsert).
+///
+/// Resin is tracked as a checkpoint: the stored amount + the time it was set.
+/// The effective current amount is projected forward on the frontend using
+/// the regeneration rate (1 per 8 minutes, cap 200). No backend polling needed.
+///
+/// Daily checklist flags are reset lazily when the daily reset boundary
+/// (20:00 UTC = 04:00 Asia/Shanghai UTC+8) is detected to have passed
+/// since dailyResetAt was last written.
+model DailyCompanion {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  // Resin tracking — checkpoint model
+  // resinAmount is the value at the moment resinUpdatedAt was recorded.
+  // Do NOT read resinAmount as the "current" value without projecting forward.
+  resinAmount    Int      @default(0)    // 0–200
+  resinUpdatedAt DateTime @default(now()) // when resinAmount was last set by the user
+
+  // Daily checklist
+  commissionsDone    Boolean @default(false)
+  teapotClaimed      Boolean @default(false)
+  transformerClaimed Boolean @default(false)
+
+  // Tracks the DateTime of the last daily reset that was applied to this record.
+  // Used by the lazy reset logic in DailyCompanionService.getDailyState().
+  dailyResetAt DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("daily_companion")
 }

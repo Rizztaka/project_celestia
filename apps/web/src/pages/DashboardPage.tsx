@@ -141,13 +141,20 @@ function DashboardPage() {
             </p>
           </a>
 
-          <div className="glass-panel rounded-2xl p-6 opacity-40 grayscale">
-            <div className="w-12 h-12 rounded-xl bg-zinc-800 text-zinc-500 flex items-center justify-center mb-4">
+          <a
+            href="/planner"
+            className="glass-panel hover-lift rounded-2xl p-6 group cursor-pointer block"
+          >
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
             </div>
-            <h2 className="font-display font-bold text-white text-lg">Daily Planner</h2>
-            <p className="text-zinc-500 text-sm mt-2">Coming in Phase 3</p>
-          </div>
+            <h2 className="font-display font-bold text-white text-lg group-hover:text-emerald-400 transition-colors">
+              Daily Planner
+            </h2>
+            <p className="text-zinc-400 text-sm mt-2 leading-relaxed">
+              Track your resin and daily checklist.
+            </p>
+          </a>
         </div>
       </main>
     </div>

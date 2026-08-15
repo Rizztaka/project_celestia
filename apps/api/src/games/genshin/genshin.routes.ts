@@ -4,6 +4,7 @@ import { characterRoutes } from './characters/character.routes.js';
 import { weaponRoutes } from './weapons/weapon.routes.js';
 import { artifactRoutes } from './artifacts/artifact.routes.js';
 import { characterIntelligenceRoutes } from './intelligence/character-intelligence/character-intelligence.routes.js';
+import { teamIntelligenceRoutes } from './intelligence/team-intelligence/team-intelligence.routes.js';
 
 const router = Router();
 
@@ -17,6 +18,7 @@ const router = Router();
  *   weaponRoutes      → /weapons       ✅ Milestone 2E
  *   artifactRoutes    → /artifacts     ✅ Milestone 2E
  *   characterIntelligenceRoutes → /intelligence ✅ Milestone 4A
+ *   teamIntelligenceRoutes      → /intelligence ✅ Milestone 4B
  *
  * Per ADR 0001 (Modular Monolith): each sub-domain owns its own routes file.
  * This file only aggregates — no route definitions belong here directly.
@@ -26,5 +28,6 @@ router.use(characterRoutes);
 router.use(weaponRoutes);
 router.use(artifactRoutes);
 router.use(characterIntelligenceRoutes);
+router.use(teamIntelligenceRoutes);
 
 export { router as genshinRoutes };

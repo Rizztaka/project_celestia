@@ -1,5 +1,6 @@
-import { prisma } from '@/core/db/prisma.js';
 import type { GenshinAccount, Prisma } from '@prisma/client';
+
+import { prisma } from '@/core/db/prisma.js';
 
 export class GenshinAccountRepository {
   async create(data: Prisma.GenshinAccountCreateInput): Promise<GenshinAccount> {

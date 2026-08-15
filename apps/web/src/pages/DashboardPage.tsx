@@ -11,11 +11,12 @@
  * redirect to /login.
  */
 
-import { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { fetchApi, ApiError } from '../lib/api';
-import { useAuthStore } from '../stores/auth.store';
 import type { MeResponse } from '@celestia/api-contracts';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+
+import { ApiError,fetchApi } from '../lib/api';
+import { useAuthStore } from '../stores/auth.store';
 
 function DashboardPage() {
   const logout = useAuthStore((state) => state.logout);

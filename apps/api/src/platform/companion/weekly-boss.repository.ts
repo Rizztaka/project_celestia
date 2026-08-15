@@ -1,5 +1,6 @@
-import { prisma } from '@/core/db/prisma.js';
 import type { WeeklyBossState } from '@prisma/client';
+
+import { prisma } from '@/core/db/prisma.js';
 
 export class WeeklyBossRepository {
   /**

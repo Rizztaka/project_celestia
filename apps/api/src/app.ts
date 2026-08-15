@@ -1,14 +1,21 @@
-import express, { type Request, type Response, type NextFunction } from 'express';
-import helmet from 'helmet';
 import cors from 'cors';
+import express, { type NextFunction,type Request, type Response } from 'express';
+import helmet from 'helmet';
 import { ZodError } from 'zod';
-import { logger } from '@/core/logger/logger.js';
+
 import { AppError } from '@/core/errors/app-error.js';
+import { logger } from '@/core/logger/logger.js';
 import { errorResponse } from '@/core/utils/response.js';
-import { userRoutes } from './platform/users/user.routes.js';
+
+import { GenshinCompanionProvider } from './games/genshin/companion/genshin-companion.provider.js';
+import { genshinRoutes } from './games/genshin/genshin.routes.js';
 import { authRoutes } from './platform/auth/auth.routes.js';
 import { companionRoutes } from './platform/companion/companion.routes.js';
-import { genshinRoutes } from './games/genshin/genshin.routes.js';
+import { companionRegistry } from './platform/companion/companion-registry.service.js';
+import { userRoutes } from './platform/users/user.routes.js';
+
+// Register companion providers
+companionRegistry.register(new GenshinCompanionProvider());
 
 export const app = express();
 

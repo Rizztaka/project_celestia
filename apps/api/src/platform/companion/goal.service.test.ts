@@ -1,7 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GoalService } from './goal.service.js';
 import { GoalType } from '@prisma/client';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
 import { BadRequestError, ConflictError } from '@/core/errors/app-error.js';
+
+import { GoalService } from './goal.service.js';
+import { companionRegistry } from './companion-registry.service.js';
+import { GenshinCompanionProvider } from '../../games/genshin/companion/genshin-companion.provider.js';
+
+companionRegistry.register(new GenshinCompanionProvider());
 
 // Mock the repository
 const mockCreate = vi.fn();

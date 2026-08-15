@@ -1,13 +1,15 @@
 import { createRequire } from 'module';
+
 import { prisma } from '@/core/db/prisma.js';
 import { NotFoundError, UnprocessableError } from '@/core/errors/app-error.js';
-import { GenshinCharacterService } from '../../characters/character.service.js';
+
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
+import { GenshinCharacterService } from '../../characters/character.service.js';
 import {
-  scoreAllTemplates,
-  type TeamTemplate,
-  type TeamScoreBreakdown,
   type CharacterInput,
+  scoreAllTemplates,
+  type TeamScoreBreakdown,
+  type TeamTemplate,
   type TemplateRoleResult,
 } from './team-intelligence.calculator.js';
 import { explainTeamScore } from './team-intelligence.explainer.js';

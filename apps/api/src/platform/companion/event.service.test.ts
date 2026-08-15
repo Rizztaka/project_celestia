@@ -1,6 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { EventService } from './event.service.js';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
 import { BadRequestError, NotFoundError } from '@/core/errors/app-error.js';
+
+import { EventService } from './event.service.js';
+import { companionRegistry } from './companion-registry.service.js';
+import { GenshinCompanionProvider } from '../../games/genshin/companion/genshin-companion.provider.js';
+
+companionRegistry.register(new GenshinCompanionProvider());
 
 // -------------------------------------------------------
 // Mock repository

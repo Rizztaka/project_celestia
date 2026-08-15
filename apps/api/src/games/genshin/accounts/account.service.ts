@@ -1,6 +1,8 @@
-import { GenshinAccountRepository } from './account.repository.js';
-import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
 import type { GenshinAccount } from '@prisma/client';
+
+import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
+
+import { GenshinAccountRepository } from './account.repository.js';
 
 export interface CreateAccountInput {
   userId: string;

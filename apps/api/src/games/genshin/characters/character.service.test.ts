@@ -1,8 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GenshinCharacterService } from './character.service.js';
-import { GenshinCharacterRepository } from './character.repository.js';
-import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
 import type { GenshinCharacter } from '@prisma/client';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
+
+import { GenshinCharacterRepository } from './character.repository.js';
+import { GenshinCharacterService } from './character.service.js';
 
 vi.mock('./character.repository.js');
 

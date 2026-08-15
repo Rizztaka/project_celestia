@@ -1,5 +1,7 @@
 import { Router } from 'express';
+
 import { requireAuth } from '@/core/middleware/auth.middleware.js';
+
 import { GenshinArtifactController } from './artifact.controller.js';
 
 const router = Router();

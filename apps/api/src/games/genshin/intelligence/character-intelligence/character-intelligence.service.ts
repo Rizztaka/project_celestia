@@ -1,8 +1,10 @@
 import { createRequire } from 'module';
+
 import { prisma } from '@/core/db/prisma.js';
 import { NotFoundError, UnprocessableError } from '@/core/errors/app-error.js';
-import { GenshinCharacterService } from '../../characters/character.service.js';
+
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
+import { GenshinCharacterService } from '../../characters/character.service.js';
 import {
   calculateCharacterScore,
   type CharacterInput,
@@ -17,7 +19,7 @@ import { explainCharacterScore } from './character-intelligence.explainer.js';
 
 const require = createRequire(import.meta.url);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 const characterProfiles: Record<string, StaticCharacterProfile> = require(
   '../../static/character-profiles.json',
 );

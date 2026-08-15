@@ -1,8 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { UserService } from './user.service.js';
-import { UserRepository } from './user.repository.js';
-import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
 import type { User } from '@prisma/client';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
+
+import { UserRepository } from './user.repository.js';
+import { UserService } from './user.service.js';
 
 // ============================================================
 // Mock the entire UserRepository module.

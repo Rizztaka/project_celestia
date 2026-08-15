@@ -1,12 +1,14 @@
+import type { LoginInput,RegisterInput } from '@celestia/api-contracts';
+import type { User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import type { User } from '@prisma/client';
+
 import { env } from '@/core/config/env.js';
 import { UnauthorizedError } from '@/core/errors/app-error.js';
-import { AuthRepository } from './auth.repository.js';
-import { UserService } from '../users/user.service.js';
+
 import type { SafeUser } from '../users/user.service.js';
-import type { RegisterInput, LoginInput } from '@celestia/api-contracts';
+import { UserService } from '../users/user.service.js';
+import { AuthRepository } from './auth.repository.js';
 
 // ============================================================
 // Types

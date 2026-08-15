@@ -1,8 +1,10 @@
-import { GenshinCharacterRepository } from './character.repository.js';
-import type { CharacterWithWeapon } from './character.repository.js';
-import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
-import { prisma } from '@/core/db/prisma.js';
 import type { GenshinCharacter } from '@prisma/client';
+
+import { prisma } from '@/core/db/prisma.js';
+import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
+
+import type { CharacterWithWeapon } from './character.repository.js';
+import { GenshinCharacterRepository } from './character.repository.js';
 
 export interface AddCharacterInput {
   characterKey: string; // e.g. "hutao", "raiden_shogun"

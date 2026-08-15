@@ -1,5 +1,6 @@
-import { prisma } from '@/core/db/prisma.js';
 import type { GenshinArtifact, Prisma } from '@prisma/client';
+
+import { prisma } from '@/core/db/prisma.js';
 
 export class GenshinArtifactRepository {
   async create(data: Prisma.GenshinArtifactCreateInput): Promise<GenshinArtifact> {

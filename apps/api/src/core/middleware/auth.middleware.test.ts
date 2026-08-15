@@ -1,7 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { Request, Response, NextFunction } from 'express';
-import { requireAuth } from './auth.middleware.js';
+import type { NextFunction,Request, Response } from 'express';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
 import { UnauthorizedError } from '@/core/errors/app-error.js';
+
+import { requireAuth } from './auth.middleware.js';
 
 // ============================================================
 // Mocks

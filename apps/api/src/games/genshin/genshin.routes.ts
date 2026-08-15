@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import { importerRoutes } from './importer/importer.routes.js';
-import { characterRoutes } from './characters/character.routes.js';
-import { weaponRoutes } from './weapons/weapon.routes.js';
+
 import { artifactRoutes } from './artifacts/artifact.routes.js';
+import { characterRoutes } from './characters/character.routes.js';
+import { importerRoutes } from './importer/importer.routes.js';
 import { characterIntelligenceRoutes } from './intelligence/character-intelligence/character-intelligence.routes.js';
 import { teamIntelligenceRoutes } from './intelligence/team-intelligence/team-intelligence.routes.js';
+import { weaponRoutes } from './weapons/weapon.routes.js';
 
 const router = Router();
 

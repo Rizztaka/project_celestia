@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express';
+
 import { successResponse } from '@/core/utils/response.js';
+
 import { GenshinCharacterService } from './character.service.js';
 
 export class GenshinCharacterController {

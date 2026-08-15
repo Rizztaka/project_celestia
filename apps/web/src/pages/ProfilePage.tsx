@@ -8,12 +8,13 @@
  * cached and no new network call is made (staleTime default behaviour).
  */
 
+import type { MeResponse } from '@celestia/api-contracts';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { fetchApi, ApiError } from '../lib/api';
+
+import { ApiError,fetchApi } from '../lib/api';
 import { useAuthStore } from '../stores/auth.store';
-import type { MeResponse } from '@celestia/api-contracts';
 
 function ProfilePage() {
   const logout = useAuthStore((state) => state.logout);

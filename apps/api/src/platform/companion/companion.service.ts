@@ -1,7 +1,9 @@
-import { z } from 'zod';
-import { BadRequestError } from '@/core/errors/app-error.js';
-import { DailyCompanionRepository, type CompanionScalars } from './companion.repository.js';
 import type { DailyCompanion } from '@prisma/client';
+import { z } from 'zod';
+
+import { BadRequestError } from '@/core/errors/app-error.js';
+
+import { type CompanionScalars,DailyCompanionRepository } from './companion.repository.js';
 
 // -------------------------------------------------------
 // Zod validation schemas (per ADR 0007 — service-level)

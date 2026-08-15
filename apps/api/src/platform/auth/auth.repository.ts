@@ -1,5 +1,6 @@
-import { prisma } from '@/core/db/prisma.js';
 import type { User } from '@prisma/client';
+
+import { prisma } from '@/core/db/prisma.js';
 
 /**
  * AuthRepository is responsible only for data access operations

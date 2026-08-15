@@ -1,5 +1,7 @@
 import { Router } from 'express';
+
 import { requireAuth } from '@/core/middleware/auth.middleware.js';
+
 import { TeamIntelligenceController } from './team-intelligence.controller.js';
 
 const router = Router();

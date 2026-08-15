@@ -1,7 +1,9 @@
-import { GenshinWeaponRepository } from './weapon.repository.js';
-import { NotFoundError } from '@/core/errors/app-error.js';
-import { prisma } from '@/core/db/prisma.js';
 import type { GenshinWeapon } from '@prisma/client';
+
+import { prisma } from '@/core/db/prisma.js';
+import { NotFoundError } from '@/core/errors/app-error.js';
+
+import { GenshinWeaponRepository } from './weapon.repository.js';
 
 export interface AddWeaponInput {
   weaponKey: string; // e.g. "StaffOfHoma", "EngulfingLightning"

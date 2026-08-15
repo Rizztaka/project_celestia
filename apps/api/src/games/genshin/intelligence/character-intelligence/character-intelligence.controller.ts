@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express';
+
 import { successResponse } from '@/core/utils/response.js';
+
 import { CharacterIntelligenceService } from './character-intelligence.service.js';
 
 export class CharacterIntelligenceController {

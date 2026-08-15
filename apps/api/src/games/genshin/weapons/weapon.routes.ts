@@ -1,5 +1,7 @@
 import { Router } from 'express';
+
 import { requireAuth } from '@/core/middleware/auth.middleware.js';
+
 import { GenshinWeaponController } from './weapon.controller.js';
 
 const router = Router();

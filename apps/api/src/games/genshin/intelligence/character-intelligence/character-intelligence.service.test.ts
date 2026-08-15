@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
 
 // ── Mock prisma before the service is imported ─────────────────────────────
 vi.mock('@/core/db/prisma.js', () => ({
@@ -19,8 +19,9 @@ vi.mock('../../characters/character.service.js', () => ({
 
 // ── Import after mocks are in place ─────────────────────────────────────────
 import { prisma } from '@/core/db/prisma.js';
-import { CharacterIntelligenceService } from './character-intelligence.service.js';
+
 import { calculateCharacterScore } from './character-intelligence.calculator.js';
+import { CharacterIntelligenceService } from './character-intelligence.service.js';
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 

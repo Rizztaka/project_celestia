@@ -1,45 +1,8 @@
-import { z } from 'zod';
+import type { EventsFileData, StaticEvent, StaticRewardTier } from '@/core/contracts/companion.interfaces.js';
 import { BadRequestError, NotFoundError } from '@/core/errors/app-error.js';
+
+import { companionRegistry } from './companion-registry.service.js';
 import { EventRepository } from './event.repository.js';
-import { createRequire } from 'module';
-
-// -------------------------------------------------------
-// Static event data (loaded once at module init)
-// -------------------------------------------------------
-
-const require = createRequire(import.meta.url);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const eventsFile: EventsFile = require('../../games/genshin/static/events.json');
-
-// -------------------------------------------------------
-// Static data types (mirrors events.json schema)
-// -------------------------------------------------------
-
-interface StaticRewardTier {
-  tierId: string;
-  label: string;
-  primogems: number;
-  other: string[];
-}
-
-interface StaticEvent {
-  key: string;
-  name: string;
-  type: string;
-  startUtc: string;
-  endUtc: string;
-  description: string;
-  wikiUrl: string | null;
-  rewardTiers: StaticRewardTier[];
-}
-
-interface EventsFile {
-  patch: string;
-  patchStartUtc: string;
-  patchEndUtc: string;
-  events: StaticEvent[];
-}
 
 // -------------------------------------------------------
 // Public response types
@@ -86,6 +49,8 @@ export interface TierUpdateResult {
 // Input validation
 // -------------------------------------------------------
 
+import { z } from 'zod';
+
 const PatchTierSchema = z.object({
   claimed: z.boolean(),
 });
@@ -108,8 +73,9 @@ export class EventService {
    * The root-level totalUnclaimedPrimogems is the sum of unclaimed Primogem
    * tiers across ALL active events.
    */
-  async getEvents(userId: string): Promise<EventsResponse> {
+  async getEvents(userId: string, gameId: string = 'genshin'): Promise<EventsResponse> {
     const now = new Date();
+    const eventsFile = companionRegistry.getProvider(gameId).getEventsData();
 
     // Load all user progress rows as a fast lookup map: "eventKey|tierId" → claimed
     const progressRows = await this.repository.findAllByUserId(userId);
@@ -195,6 +161,7 @@ export class EventService {
     eventKey: string,
     tierId: string,
     rawBody: unknown,
+    gameId: string = 'genshin',
   ): Promise<TierUpdateResult> {
     // Validate request body
     const result = PatchTierSchema.safeParse(rawBody);
@@ -203,6 +170,8 @@ export class EventService {
         result.error.errors[0]?.message ?? 'Invalid request body. Expected { claimed: boolean }.',
       );
     }
+
+    const eventsFile = companionRegistry.getProvider(gameId).getEventsData();
 
     // Validate eventKey exists in the static file
     const staticEvent = eventsFile.events.find((e) => e.key === eventKey);

@@ -1,8 +1,10 @@
+import { loginSchema,registerSchema } from '@celestia/api-contracts';
 import type { Request, Response } from 'express';
-import { registerSchema, loginSchema } from '@celestia/api-contracts';
+
 import { successResponse } from '@/core/utils/response.js';
-import { AuthService } from './auth.service.js';
+
 import { UserService } from '../users/user.service.js';
+import { AuthService } from './auth.service.js';
 
 export class AuthController {
   private authService: AuthService;

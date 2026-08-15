@@ -1,5 +1,6 @@
-import { prisma } from '@/core/db/prisma.js';
 import type { GenshinWeapon, Prisma } from '@prisma/client';
+
+import { prisma } from '@/core/db/prisma.js';
 
 export class GenshinWeaponRepository {
   async create(data: Prisma.GenshinWeaponCreateInput): Promise<GenshinWeapon> {

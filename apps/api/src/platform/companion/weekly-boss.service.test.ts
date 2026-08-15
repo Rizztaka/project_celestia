@@ -1,10 +1,16 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { BadRequestError, NotFoundError } from '@/core/errors/app-error.js';
+
 import {
-  WeeklyBossService,
   getLastWeeklyResetBoundary,
   getNextWeeklyResetBoundary,
+  WeeklyBossService,
 } from './weekly-boss.service.js';
-import { BadRequestError, NotFoundError } from '@/core/errors/app-error.js';
+import { companionRegistry } from './companion-registry.service.js';
+import { GenshinCompanionProvider } from '../../games/genshin/companion/genshin-companion.provider.js';
+
+companionRegistry.register(new GenshinCompanionProvider());
 
 // -------------------------------------------------------
 // Mock repository

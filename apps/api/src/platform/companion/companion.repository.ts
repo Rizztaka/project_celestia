@@ -1,5 +1,6 @@
-import { prisma } from '@/core/db/prisma.js';
 import type { DailyCompanion, Prisma } from '@prisma/client';
+
+import { prisma } from '@/core/db/prisma.js';
 
 /** Scalar fields the caller can set on creation or update. */
 export type CompanionScalars = {

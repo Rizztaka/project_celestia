@@ -1,8 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GenshinWeaponService } from './weapon.service.js';
-import { GenshinWeaponRepository } from './weapon.repository.js';
-import { NotFoundError } from '@/core/errors/app-error.js';
 import type { GenshinWeapon } from '@prisma/client';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { NotFoundError } from '@/core/errors/app-error.js';
+
+import { GenshinWeaponRepository } from './weapon.repository.js';
+import { GenshinWeaponService } from './weapon.service.js';
 
 vi.mock('./weapon.repository.js');
 

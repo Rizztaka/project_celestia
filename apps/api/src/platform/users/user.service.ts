@@ -1,7 +1,9 @@
-import { UserRepository } from './user.repository.js';
-import type { User } from '@prisma/client';
 import type { CreateUserInput } from '@celestia/api-contracts';
+import type { User } from '@prisma/client';
+
 import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
+
+import { UserRepository } from './user.repository.js';
 
 /**
  * A User with the password field removed.

@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express';
+
 import { successResponse } from '@/core/utils/response.js';
+
 import { EventService } from './event.service.js';
 
 export class EventController {

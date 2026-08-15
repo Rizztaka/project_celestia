@@ -1,8 +1,8 @@
 import {
   categoriseMaterial,
   CATEGORY_COLORS,
-  materialDisplayName,
   type MaterialCategory,
+  materialDisplayName,
 } from '../lib/static';
 
 interface MaterialRowProps {

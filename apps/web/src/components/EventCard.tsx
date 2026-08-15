@@ -1,4 +1,4 @@
-import type { GenshinEvent, EventRewardTier } from '../lib/api';
+import type { EventRewardTier,GenshinEvent } from '../lib/api';
 
 // -------------------------------------------------------
 // Helpers

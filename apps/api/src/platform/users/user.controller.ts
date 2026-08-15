@@ -1,7 +1,9 @@
-import type { Request, Response } from 'express';
-import { UserService } from './user.service.js';
 import { createUserSchema } from '@celestia/api-contracts';
+import type { Request, Response } from 'express';
+
 import { successResponse } from '@/core/utils/response.js';
+
+import { UserService } from './user.service.js';
 
 export class UserController {
   private userService: UserService;

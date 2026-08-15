@@ -1,29 +1,12 @@
-import { z } from 'zod';
-import { BadRequestError, NotFoundError, ConflictError } from '@/core/errors/app-error.js';
-import { GoalRepository } from './goal.repository.js';
-import { prisma } from '@/core/db/prisma.js';
-import { GoalType } from '@prisma/client';
 import type { UpgradeGoal } from '@prisma/client';
-import { createRequire } from 'module';
+import { GoalType } from '@prisma/client';
+import { z } from 'zod';
 
-// -------------------------------------------------------
-// Static seed data (loaded once at module init)
-// -------------------------------------------------------
+import { prisma } from '@/core/db/prisma.js';
+import { BadRequestError, ConflictError, NotFoundError } from '@/core/errors/app-error.js';
 
-const require = createRequire(import.meta.url);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const characterMaterials: Record<
-  string,
-  any
-> = require('../../games/genshin/static/character-materials.json');
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const weaponMaterials: Record<
-  string,
-  any
-> = require('../../games/genshin/static/weapon-materials.json');
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const domainSchedule: any = require('../../games/genshin/static/domain-schedule.json');
+import { companionRegistry } from './companion-registry.service.js';
+import { GoalRepository } from './goal.repository.js';
 
 // -------------------------------------------------------
 // Zod validation
@@ -239,13 +222,16 @@ export class GoalService {
    * Throws BadRequestError on invalid input.
    * Throws ConflictError if a duplicate goal already exists.
    */
-  async createGoal(userId: string, rawInput: unknown): Promise<UpgradeGoal> {
+  async createGoal(userId: string, rawInput: unknown, gameId: string = 'genshin'): Promise<UpgradeGoal> {
     const result = CreateGoalSchema.safeParse(rawInput);
     if (!result.success) {
       throw new BadRequestError(result.error.errors[0]?.message ?? 'Invalid goal input');
     }
 
     const data: CreateGoalData = result.data;
+    const provider = companionRegistry.getProvider(gameId);
+    const characterMaterials = provider.getCharacterMaterials();
+    const weaponMaterials = provider.getWeaponMaterials();
 
     // Validate targetKey exists in static data
     if (
@@ -311,8 +297,11 @@ export class GoalService {
    * Computes the full material delta across all active goals for the user.
    * Returns needed (total from goals), inventory (from GOOD import), and delta (needed - inventory).
    */
-  async getMaterialDelta(userId: string): Promise<MaterialDelta> {
+  async getMaterialDelta(userId: string, gameId: string = 'genshin'): Promise<MaterialDelta> {
     const goals = await this.repository.findAllByUserId(userId);
+    const provider = companionRegistry.getProvider(gameId);
+    const characterMaterials = provider.getCharacterMaterials();
+    const weaponMaterials = provider.getWeaponMaterials();
 
     const needed: Record<string, number> = {};
 
@@ -379,13 +368,15 @@ export class GoalService {
    * Returns today's open domains filtered by the user's active goals.
    * "Today" is determined by the Asia server day boundary (20:00 UTC).
    */
-  async getTodayDomains(userId: string): Promise<TodayResult> {
+  async getTodayDomains(userId: string, gameId: string = 'genshin'): Promise<TodayResult> {
     const todayIndex = getAsiaServerWeekday();
     const serverDay = DAY_NAMES[todayIndex]!;
     const isSunday = todayIndex === 6;
 
-    const { needed } = await this.getMaterialDelta(userId);
+    const { needed } = await this.getMaterialDelta(userId, gameId);
     const neededKeys = new Set(Object.keys(needed));
+    const provider = companionRegistry.getProvider(gameId);
+    const domainSchedule = provider.getDomainSchedule();
 
     type DomainEntry = {
       domainKey: string;

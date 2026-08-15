@@ -1,33 +1,7 @@
-import { z } from 'zod';
-import { createRequire } from 'module';
 import { BadRequestError, NotFoundError } from '@/core/errors/app-error.js';
+
+import { companionRegistry } from './companion-registry.service.js';
 import { WeeklyBossRepository } from './weekly-boss.repository.js';
-
-// -------------------------------------------------------
-// Static data (loaded once at module init)
-// -------------------------------------------------------
-
-const require = createRequire(import.meta.url);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const weeklybossesFile: WeeklyBossesFile = require('../../games/genshin/static/weekly-bosses.json');
-
-// -------------------------------------------------------
-// Static data types (mirrors weekly-bosses.json schema)
-// -------------------------------------------------------
-
-interface StaticWeeklyBoss {
-  key: string;
-  name: string;
-  location: string;
-  domainName: string;
-  dropKeys: string[];
-  wikiUrl: string | null;
-}
-
-interface WeeklyBossesFile {
-  bosses: StaticWeeklyBoss[];
-}
 
 // -------------------------------------------------------
 // Public response types
@@ -60,6 +34,8 @@ export interface BossUpdateResult {
 // -------------------------------------------------------
 // Input validation
 // -------------------------------------------------------
+
+import { z } from 'zod';
 
 const PatchBossSchema = z.object({
   defeated: z.boolean(),
@@ -125,10 +101,11 @@ export class WeeklyBossService {
    * Sunday 20:00 UTC boundary, the defeatedBossKeys are cleared and persisted
    * before the response is built.
    */
-  async getWeeklyBosses(userId: string): Promise<WeeklyBossesResponse> {
+  async getWeeklyBosses(userId: string, gameId: string = 'genshin'): Promise<WeeklyBossesResponse> {
     const now = new Date();
     const lastBoundary = getLastWeeklyResetBoundary(now);
     const nextBoundary = getNextWeeklyResetBoundary(now);
+    const weeklybossesFile = companionRegistry.getProvider(gameId).getWeeklyBossesData();
 
     let row = await this.repository.findByUserId(userId);
 
@@ -175,7 +152,7 @@ export class WeeklyBossService {
    * The defeatedBossKeys array is treated as a set: toggling defeated=true
    * adds the key, defeated=false removes it. Idempotent.
    */
-  async patchBoss(userId: string, bossKey: string, rawBody: unknown): Promise<BossUpdateResult> {
+  async patchBoss(userId: string, bossKey: string, rawBody: unknown, gameId: string = 'genshin'): Promise<BossUpdateResult> {
     // Validate request body
     const result = PatchBossSchema.safeParse(rawBody);
     if (!result.success) {
@@ -183,6 +160,8 @@ export class WeeklyBossService {
         result.error.errors[0]?.message ?? 'Invalid request body. Expected { defeated: boolean }.',
       );
     }
+
+    const weeklybossesFile = companionRegistry.getProvider(gameId).getWeeklyBossesData();
 
     // Validate bossKey against static data
     const staticBoss = weeklybossesFile.bosses.find((b) => b.key === bossKey);
@@ -196,7 +175,7 @@ export class WeeklyBossService {
     const now = new Date();
     const lastBoundary = getLastWeeklyResetBoundary(now);
 
-    let row = await this.repository.findByUserId(userId);
+    const row = await this.repository.findByUserId(userId);
 
     // Apply lazy reset if the row is stale before writing — avoids a race
     // where a toggle after the weekly reset boundary would persist against the old week
@@ -214,7 +193,7 @@ export class WeeklyBossService {
 
     const weeklyResetAt =
       row && row.weeklyResetAt >= lastBoundary ? row.weeklyResetAt : lastBoundary;
-    row = await this.repository.upsert(userId, Array.from(keySet), weeklyResetAt);
+    await this.repository.upsert(userId, Array.from(keySet), weeklyResetAt);
 
     return { bossKey, defeated };
   }

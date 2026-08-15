@@ -1,5 +1,6 @@
-import { prisma } from '@/core/db/prisma.js';
 import type { EventProgress } from '@prisma/client';
+
+import { prisma } from '@/core/db/prisma.js';
 
 export class EventRepository {
   /**

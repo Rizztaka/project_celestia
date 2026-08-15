@@ -1,7 +1,9 @@
-import { GenshinArtifactRepository } from './artifact.repository.js';
-import { NotFoundError } from '@/core/errors/app-error.js';
-import { prisma } from '@/core/db/prisma.js';
 import type { GenshinArtifact, Prisma } from '@prisma/client';
+
+import { prisma } from '@/core/db/prisma.js';
+import { NotFoundError } from '@/core/errors/app-error.js';
+
+import { GenshinArtifactRepository } from './artifact.repository.js';
 
 /**
  * Represents a single artifact sub-stat.

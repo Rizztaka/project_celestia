@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { useAuthStore } from '../stores/auth.store';
-import { fetchGenshinRoster } from '../lib/api';
+
 import type { RosterCharacter, RosterWeapon } from '../lib/api';
+import { fetchGenshinRoster } from '../lib/api';
+import { useAuthStore } from '../stores/auth.store';
 
 // -------------------------------------------------------
 // Utility: format a GOOD PascalCase character key into a

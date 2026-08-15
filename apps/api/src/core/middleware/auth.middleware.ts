@@ -1,5 +1,6 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { NextFunction,Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+
 import { env } from '@/core/config/env.js';
 import { UnauthorizedError } from '@/core/errors/app-error.js';
 

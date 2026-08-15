@@ -1,9 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { AuthService } from './auth.service.js';
-import { AuthRepository } from './auth.repository.js';
-import { UserService } from '../users/user.service.js';
-import { ConflictError, UnauthorizedError } from '@/core/errors/app-error.js';
 import type { User } from '@prisma/client';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { ConflictError, UnauthorizedError } from '@/core/errors/app-error.js';
+
+import { UserService } from '../users/user.service.js';
+import { AuthRepository } from './auth.repository.js';
+import { AuthService } from './auth.service.js';
 
 // ============================================================
 // Module Mocks

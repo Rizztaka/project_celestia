@@ -20,18 +20,19 @@
  *   - TanStack Query           → server data (profile, future game data)
  */
 
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BrowserRouter, Navigate,Route, Routes } from 'react-router-dom';
+
 import { ProtectedRoute } from './components/ProtectedRoute';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
-import ProfilePage from './pages/ProfilePage';
 import ImportPage from './pages/ImportPage';
-import RosterPage from './pages/RosterPage';
-import InventoryPage from './pages/InventoryPage';
-import PlannerPage from './pages/PlannerPage';
 import IntelligencePage from './pages/IntelligencePage';
+import InventoryPage from './pages/InventoryPage';
+import LoginPage from './pages/LoginPage';
+import PlannerPage from './pages/PlannerPage';
+import ProfilePage from './pages/ProfilePage';
+import RegisterPage from './pages/RegisterPage';
+import RosterPage from './pages/RosterPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {

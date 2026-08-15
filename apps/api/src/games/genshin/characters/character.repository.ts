@@ -1,5 +1,6 @@
-import { prisma } from '@/core/db/prisma.js';
 import type { GenshinCharacter, GenshinWeapon, Prisma } from '@prisma/client';
+
+import { prisma } from '@/core/db/prisma.js';
 
 /**
  * A GenshinCharacter row with its equippedWeapon relation eagerly loaded.

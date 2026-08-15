@@ -6,12 +6,13 @@
  * Form input is preserved after failure so users don't have to retype.
  */
 
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
-import { fetchApi, ApiError } from '../lib/api';
-import { useAuthStore } from '../stores/auth.store';
+
+import { ApiError,fetchApi } from '../lib/api';
 import type { AuthUser } from '../stores/auth.store';
+import { useAuthStore } from '../stores/auth.store';
 
 interface RegisterResponse {
   user: AuthUser;

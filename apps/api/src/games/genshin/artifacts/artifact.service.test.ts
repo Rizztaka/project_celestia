@@ -1,8 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GenshinArtifactService } from './artifact.service.js';
-import { GenshinArtifactRepository } from './artifact.repository.js';
-import { NotFoundError } from '@/core/errors/app-error.js';
 import type { GenshinArtifact } from '@prisma/client';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { NotFoundError } from '@/core/errors/app-error.js';
+
+import { GenshinArtifactRepository } from './artifact.repository.js';
+import { GenshinArtifactService } from './artifact.service.js';
 
 vi.mock('./artifact.repository.js');
 

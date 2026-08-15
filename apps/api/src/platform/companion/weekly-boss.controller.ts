@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express';
+
 import { successResponse } from '@/core/utils/response.js';
+
 import { WeeklyBossService } from './weekly-boss.service.js';
 
 export class WeeklyBossController {

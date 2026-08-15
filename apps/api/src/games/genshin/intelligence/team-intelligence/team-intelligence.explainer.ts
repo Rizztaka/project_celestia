@@ -1,8 +1,8 @@
 import type {
-  TeamTemplate,
-  TeamScoreBreakdown,
-  TemplateRoleResult,
   CharacterInput,
+  TeamScoreBreakdown,
+  TeamTemplate,
+  TemplateRoleResult,
 } from './team-intelligence.calculator.js';
 
 // -------------------------------------------------------

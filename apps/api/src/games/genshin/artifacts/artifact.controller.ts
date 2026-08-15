@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express';
+
 import { successResponse } from '@/core/utils/response.js';
+
 import { GenshinArtifactService } from './artifact.service.js';
 
 export class GenshinArtifactController {

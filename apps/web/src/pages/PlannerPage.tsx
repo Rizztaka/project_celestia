@@ -1,32 +1,33 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback,useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '../stores/auth.store';
-import {
-  fetchDailyState,
-  patchResin,
-  patchChecklist,
-  fetchGoals,
-  createGoal,
-  deleteGoal,
-  fetchMaterialDelta,
-  fetchTodayDomains,
-  fetchEvents,
-  patchEventTier,
-  fetchWeeklyBosses,
-  patchWeeklyBoss,
-  type DailyState,
-  type UpgradeGoal,
-  type CreateGoalInput,
-  type EventsResponse,
-  type WeeklyBossesResponse,
-} from '../lib/api';
-import { resinFullAt, formatTimeUntilFull, MAX_RESIN } from '../lib/resin';
-import { phasesToLevelRange, goalTypeLabel } from '../lib/static';
+
+import EventCard from '../components/EventCard';
 import GoalForm from '../components/GoalForm';
 import MaterialRow from '../components/MaterialRow';
-import EventCard from '../components/EventCard';
 import WeeklyBossCard from '../components/WeeklyBossCard';
+import {
+  createGoal,
+  type CreateGoalInput,
+  type DailyState,
+  deleteGoal,
+  type EventsResponse,
+  fetchDailyState,
+  fetchEvents,
+  fetchGoals,
+  fetchMaterialDelta,
+  fetchTodayDomains,
+  fetchWeeklyBosses,
+  patchChecklist,
+  patchEventTier,
+  patchResin,
+  patchWeeklyBoss,
+  type UpgradeGoal,
+  type WeeklyBossesResponse,
+} from '../lib/api';
+import { formatTimeUntilFull, MAX_RESIN,resinFullAt } from '../lib/resin';
+import { goalTypeLabel,phasesToLevelRange } from '../lib/static';
+import { useAuthStore } from '../stores/auth.store';
 
 // -------------------------------------------------------
 // Constants
@@ -203,11 +204,13 @@ function ResinUpdateForm({
   isPending: boolean;
 }) {
   const [value, setValue] = useState<string>(String(currentResin));
+  const [prevResin, setPrevResin] = useState(currentResin);
 
   // Keep the input in sync when the server returns a new checkpoint
-  useEffect(() => {
+  if (currentResin !== prevResin) {
+    setPrevResin(currentResin);
     setValue(String(currentResin));
-  }, [currentResin]);
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -342,7 +345,7 @@ export default function PlannerPage() {
   });
 
   // ── Live resin tick ───────────────────────────────────
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {

@@ -1,14 +1,15 @@
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { useAuthStore } from '../stores/auth.store';
+
 import {
-  fetchGenshinWeapons,
-  fetchGenshinArtifacts,
-  type InventoryWeapon,
-  type InventoryArtifact,
   type ArtifactSubStat,
+  fetchGenshinArtifacts,
+  fetchGenshinWeapons,
+  type InventoryArtifact,
+  type InventoryWeapon,
 } from '../lib/api';
+import { useAuthStore } from '../stores/auth.store';
 
 // -------------------------------------------------------
 // Formatting utilities

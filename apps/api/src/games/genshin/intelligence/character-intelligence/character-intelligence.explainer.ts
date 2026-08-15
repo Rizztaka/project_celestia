@@ -1,7 +1,7 @@
 import type {
   CharacterInput,
-  StaticCharacterProfile,
   ScoreBreakdown,
+  StaticCharacterProfile,
 } from './character-intelligence.calculator.js';
 
 // -------------------------------------------------------

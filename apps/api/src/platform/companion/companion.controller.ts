@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express';
+
 import { successResponse } from '@/core/utils/response.js';
+
 import { DailyCompanionService } from './companion.service.js';
 
 export class DailyCompanionController {

@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express';
+
 import { successResponse } from '@/core/utils/response.js';
+
 import { TeamIntelligenceService } from './team-intelligence.service.js';
 
 export class TeamIntelligenceController {

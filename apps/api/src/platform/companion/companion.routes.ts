@@ -1,8 +1,10 @@
 import { Router } from 'express';
+
 import { requireAuth } from '@/core/middleware/auth.middleware.js';
+
 import { DailyCompanionController } from './companion.controller.js';
-import { GoalController } from './goal.controller.js';
 import { EventController } from './event.controller.js';
+import { GoalController } from './goal.controller.js';
 import { WeeklyBossController } from './weekly-boss.controller.js';
 
 const router = Router();

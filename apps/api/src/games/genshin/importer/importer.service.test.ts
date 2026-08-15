@@ -1,7 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GenshinImportService } from './importer.service.js';
-import { BadRequestError } from '@/core/errors/app-error.js';
 import type { GenshinAccount } from '@prisma/client';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { BadRequestError } from '@/core/errors/app-error.js';
+
+import { GenshinImportService } from './importer.service.js';
 
 // ============================================================
 // Transaction context mock

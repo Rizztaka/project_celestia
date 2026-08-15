@@ -31,6 +31,7 @@ import ImportPage from './pages/ImportPage';
 import RosterPage from './pages/RosterPage';
 import InventoryPage from './pages/InventoryPage';
 import PlannerPage from './pages/PlannerPage';
+import IntelligencePage from './pages/IntelligencePage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -65,6 +66,7 @@ function App() {
             <Route path="/roster" element={<RosterPage />} />
             <Route path="/inventory" element={<InventoryPage />} />
             <Route path="/planner" element={<PlannerPage />} />
+            <Route path="/intelligence" element={<IntelligencePage />} />
           </Route>
 
           {/* Catch-all — redirect unknown paths to dashboard (or login if not authed) */}

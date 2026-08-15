@@ -423,3 +423,45 @@ export async function patchWeeklyBoss(
     body: JSON.stringify({ defeated }),
   });
 }
+
+// ============================================================
+// Character Intelligence Types & Functions (Milestone 4A)
+// ============================================================
+
+export type RecommendationLabel =
+  | 'ASCEND_AND_LEVEL'
+  | 'LEVEL_TALENTS'
+  | 'CLOSE_LEVEL_GAP'
+  | 'COMPLETE';
+
+export interface CharacterRecommendation {
+  characterKey: string;
+  rank: number;
+  score: number;
+  recommendation: RecommendationLabel;
+  explanations: string[];
+}
+
+export interface SkippedCharacter {
+  characterKey: string;
+  reason: string;
+}
+
+export interface CharacterIntelligenceResponse {
+  recommendations: CharacterRecommendation[];
+  skipped: SkippedCharacter[];
+  analysedAt: string;
+}
+
+/**
+ * fetchCharacterIntelligence — GET /games/genshin/intelligence/characters
+ *
+ * Returns the top 5 highest-ROI character build recommendations for the
+ * authenticated user, each with a numeric score and plain-language explanations.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if the roster is empty.
+ */
+export async function fetchCharacterIntelligence(): Promise<CharacterIntelligenceResponse> {
+  return fetchApi<CharacterIntelligenceResponse>('/games/genshin/intelligence/characters');
+}

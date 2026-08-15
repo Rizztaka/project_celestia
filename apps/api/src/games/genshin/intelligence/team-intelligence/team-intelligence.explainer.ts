@@ -77,7 +77,8 @@ export function explainTeamScore(
   // ── 3. Missing required roles — actionable gap advice ─────────────────
   const missingRequired = roles.filter((r) => r.isRequired && r.filledBy === null);
   for (const role of missingRequired) {
-    const topCandidates = role.candidates.slice(0, 3).map(toDisplayName).join(', ');
+    const originalRole = template.roles.find((r) => r.roleId === role.roleId)!;
+    const topCandidates = originalRole.candidates.slice(0, 3).map(toDisplayName).join(', ');
     explanations.push(
       `Missing a ${role.label} — ${topCandidates} would complete this slot. Import your account data if you own them.`,
     );

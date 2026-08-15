@@ -1,13 +1,14 @@
-import { prisma } from "@/core/db/prisma.js";
-import { BadRequestError } from "@/core/errors/app-error.js";
-import { GoodPayloadSchema, type GoodPayload } from "./importer.schema.js";
-import { ZodError } from "zod";
-import type { Prisma } from "@prisma/client";
+import { prisma } from '@/core/db/prisma.js';
+import { BadRequestError } from '@/core/errors/app-error.js';
+import { GoodPayloadSchema, type GoodPayload } from './importer.schema.js';
+import { ZodError } from 'zod';
+import type { Prisma } from '@prisma/client';
 
 export interface ImportResult {
   charactersImported: number;
   weaponsImported: number;
   artifactsImported: number;
+  materialsImported: number;
 }
 
 export class GenshinImportService {
@@ -20,10 +21,7 @@ export class GenshinImportService {
    *
    * Throws BadRequestError if the JSON is invalid or fails schema validation.
    */
-  async importAccount(
-    userId: string,
-    rawJson: string,
-  ): Promise<ImportResult> {
+  async importAccount(userId: string, rawJson: string): Promise<ImportResult> {
     // -------------------------------------------------------
     // Step 1 — Validate the GOOD payload
     // -------------------------------------------------------
@@ -174,10 +172,25 @@ export class GenshinImportService {
         });
       }
 
+      // 3i. Replace the material inventory.
+      //     Materials are fully replaced on every import (delete-all then insert),
+      //     matching the strategy used for weapons and artifacts.
+      //     Only items with quantity > 0 are stored to keep the table compact.
+      await tx.genshinMaterial.deleteMany({ where: { accountId } });
+
+      const materialEntries = Object.entries(payload.materials).filter(([, qty]) => qty > 0);
+
+      for (const [itemKey, quantity] of materialEntries) {
+        await tx.genshinMaterial.create({
+          data: { accountId, itemKey, quantity },
+        });
+      }
+
       return {
         charactersImported: payload.characters.length,
         weaponsImported: payload.weapons.length,
         artifactsImported: payload.artifacts.length,
+        materialsImported: materialEntries.length,
       };
     });
 
@@ -195,9 +208,7 @@ export class GenshinImportService {
     try {
       parsed = JSON.parse(rawJson);
     } catch {
-      throw new BadRequestError(
-        "Invalid GOOD format: the provided string is not valid JSON.",
-      );
+      throw new BadRequestError('Invalid GOOD format: the provided string is not valid JSON.');
     }
 
     try {
@@ -205,13 +216,11 @@ export class GenshinImportService {
     } catch (error) {
       if (error instanceof ZodError) {
         const firstIssue = error.issues[0];
-        const path = firstIssue?.path.join(".") ?? "unknown field";
-        const message = firstIssue?.message ?? "Validation failed.";
-        throw new BadRequestError(
-          `Invalid GOOD format: ${path} — ${message}`,
-        );
+        const path = firstIssue?.path.join('.') ?? 'unknown field';
+        const message = firstIssue?.message ?? 'Validation failed.';
+        throw new BadRequestError(`Invalid GOOD format: ${path} — ${message}`);
       }
-      throw new BadRequestError("Invalid GOOD format: validation failed.");
+      throw new BadRequestError('Invalid GOOD format: validation failed.');
     }
   }
 }

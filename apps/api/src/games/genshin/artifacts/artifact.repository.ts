@@ -1,17 +1,15 @@
-import { prisma } from "@/core/db/prisma.js";
-import type { GenshinArtifact, Prisma } from "@prisma/client";
+import { prisma } from '@/core/db/prisma.js';
+import type { GenshinArtifact, Prisma } from '@prisma/client';
 
 export class GenshinArtifactRepository {
-  async create(
-    data: Prisma.GenshinArtifactCreateInput,
-  ): Promise<GenshinArtifact> {
+  async create(data: Prisma.GenshinArtifactCreateInput): Promise<GenshinArtifact> {
     return prisma.genshinArtifact.create({ data });
   }
 
   async findByAccountId(accountId: string): Promise<GenshinArtifact[]> {
     return prisma.genshinArtifact.findMany({
-      where:   { accountId },
-      orderBy: [{ level: "desc" }, { rarity: "desc" }],
+      where: { accountId },
+      orderBy: [{ level: 'desc' }, { rarity: 'desc' }],
     });
   }
 
@@ -19,10 +17,7 @@ export class GenshinArtifactRepository {
     return prisma.genshinArtifact.findUnique({ where: { id } });
   }
 
-  async update(
-    id: string,
-    data: Prisma.GenshinArtifactUpdateInput,
-  ): Promise<GenshinArtifact> {
+  async update(id: string, data: Prisma.GenshinArtifactUpdateInput): Promise<GenshinArtifact> {
     return prisma.genshinArtifact.update({ where: { id }, data });
   }
 

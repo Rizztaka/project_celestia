@@ -10,12 +10,12 @@
  *   - Immediate feedback on submission
  */
 
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import { fetchApi, ApiError } from "../lib/api";
-import { useAuthStore } from "../stores/auth.store";
-import type { AuthUser } from "../stores/auth.store";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { fetchApi, ApiError } from '../lib/api';
+import { useAuthStore } from '../stores/auth.store';
+import type { AuthUser } from '../stores/auth.store';
 
 interface LoginResponse {
   user: AuthUser;
@@ -26,18 +26,18 @@ function LoginPage() {
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const mutation = useMutation({
     mutationFn: () =>
-      fetchApi<LoginResponse>("/auth/login", {
-        method: "POST",
+      fetchApi<LoginResponse>('/auth/login', {
+        method: 'POST',
         body: JSON.stringify({ email, password }),
       }),
     onSuccess: (data) => {
       login(data.token, data.user);
-      navigate("/", { replace: true });
+      navigate('/', { replace: true });
     },
   });
 
@@ -46,22 +46,21 @@ function LoginPage() {
     mutation.mutate();
   };
 
-  const errorMessage =
-    mutation.error instanceof ApiError ? mutation.error.message : null;
+  const errorMessage = mutation.error instanceof ApiError ? mutation.error.message : null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden p-4">
       {/* Background ambient glow */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl mix-blend-screen pointer-events-none"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl mix-blend-screen pointer-events-none"></div>
-      
-      <div className="w-full max-w-sm animate-fade-in relative z-10">
+      <div className="bg-accent-500/10 pointer-events-none absolute left-1/4 top-1/4 h-96 w-96 rounded-full mix-blend-screen blur-3xl"></div>
+      <div className="pointer-events-none absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-indigo-500/10 mix-blend-screen blur-3xl"></div>
+
+      <div className="animate-fade-in relative z-10 w-full max-w-sm">
         {/* Header */}
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-display font-bold text-gradient tracking-tight">
+        <div className="mb-10 text-center">
+          <h1 className="font-display text-gradient text-3xl font-bold tracking-tight">
             Project Celestia
           </h1>
-          <p className="text-zinc-400 text-sm mt-2 font-medium">Sign in to your account</p>
+          <p className="mt-2 text-sm font-medium text-zinc-400">Sign in to your account</p>
         </div>
 
         {/* Card */}
@@ -70,7 +69,7 @@ function LoginPage() {
             <div className="space-y-1">
               <label
                 htmlFor="email"
-                className="text-xs font-semibold text-zinc-400 uppercase tracking-wider"
+                className="text-xs font-semibold uppercase tracking-wider text-zinc-400"
               >
                 Email
               </label>
@@ -82,14 +81,14 @@ function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full bg-celestia-950/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition-all shadow-inner"
+                className="bg-celestia-950/50 focus:border-accent-500 focus:ring-accent-500 w-full rounded-xl border border-white/10 px-4 py-2.5 text-sm text-white placeholder-zinc-600 shadow-inner transition-all focus:outline-none focus:ring-1"
               />
             </div>
 
             <div className="space-y-1">
               <label
                 htmlFor="password"
-                className="text-xs font-semibold text-zinc-400 uppercase tracking-wider"
+                className="text-xs font-semibold uppercase tracking-wider text-zinc-400"
               >
                 Password
               </label>
@@ -101,7 +100,7 @@ function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-celestia-950/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition-all shadow-inner"
+                className="bg-celestia-950/50 focus:border-accent-500 focus:ring-accent-500 w-full rounded-xl border border-white/10 px-4 py-2.5 text-sm text-white placeholder-zinc-600 shadow-inner transition-all focus:outline-none focus:ring-1"
               />
             </div>
 
@@ -109,9 +108,21 @@ function LoginPage() {
             {errorMessage && (
               <div
                 role="alert"
-                className="bg-danger-950/20 border border-danger-500/30 text-danger-400 text-sm px-4 py-3 rounded-xl animate-fade-in flex items-start gap-2"
+                className="bg-danger-950/20 border-danger-500/30 text-danger-400 animate-fade-in flex items-start gap-2 rounded-xl border px-4 py-3 text-sm"
               >
-                <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                <svg
+                  className="h-5 w-5 shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
                 {errorMessage}
               </div>
             )}
@@ -119,16 +130,16 @@ function LoginPage() {
             <button
               type="submit"
               disabled={mutation.isPending}
-              className="w-full bg-gradient-to-r from-accent-500 to-indigo-600 hover:from-accent-400 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-accent-glow/30 mt-4"
+              className="from-accent-500 hover:from-accent-400 shadow-accent-glow/30 mt-4 w-full rounded-xl bg-gradient-to-r to-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:to-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {mutation.isPending ? "Signing in…" : "Sign in"}
+              {mutation.isPending ? 'Signing in…' : 'Sign in'}
             </button>
           </form>
         </div>
 
         {/* Footer link */}
-        <p className="text-center text-zinc-500 text-sm mt-6">
-          Don&apos;t have an account?{" "}
+        <p className="mt-6 text-center text-sm text-zinc-500">
+          Don&apos;t have an account?{' '}
           <Link
             to="/register"
             className="text-accent-400 hover:text-accent-300 font-medium transition-colors"

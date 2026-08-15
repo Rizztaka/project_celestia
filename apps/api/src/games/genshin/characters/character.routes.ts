@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { requireAuth } from "@/core/middleware/auth.middleware.js";
-import { GenshinCharacterController } from "./character.controller.js";
+import { Router } from 'express';
+import { requireAuth } from '@/core/middleware/auth.middleware.js';
+import { GenshinCharacterController } from './character.controller.js';
 
 const router = Router();
 const characterController = new GenshinCharacterController();
@@ -11,6 +11,6 @@ const characterController = new GenshinCharacterController();
  * Full path: GET /api/v1/games/genshin/characters
  * Requires a valid JWT — userId is always taken from the verified token.
  */
-router.get("/characters", requireAuth, characterController.listCharacters);
+router.get('/characters', requireAuth, characterController.listCharacters);
 
 export { router as characterRoutes };

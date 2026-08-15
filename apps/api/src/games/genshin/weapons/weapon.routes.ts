@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { requireAuth } from "@/core/middleware/auth.middleware.js";
-import { GenshinWeaponController } from "./weapon.controller.js";
+import { Router } from 'express';
+import { requireAuth } from '@/core/middleware/auth.middleware.js';
+import { GenshinWeaponController } from './weapon.controller.js';
 
 const router = Router();
 const weaponController = new GenshinWeaponController();
@@ -11,6 +11,6 @@ const weaponController = new GenshinWeaponController();
  * Full path: GET /api/v1/games/genshin/weapons
  * Requires a valid JWT — userId is always taken from the verified token.
  */
-router.get("/weapons", requireAuth, weaponController.listWeapons);
+router.get('/weapons', requireAuth, weaponController.listWeapons);
 
 export { router as weaponRoutes };

@@ -1,7 +1,7 @@
-import type { Request, Response } from "express";
-import { UserService } from "./user.service.js";
-import { createUserSchema } from "@celestia/api-contracts";
-import { successResponse } from "@/core/utils/response.js";
+import type { Request, Response } from 'express';
+import { UserService } from './user.service.js';
+import { createUserSchema } from '@celestia/api-contracts';
+import { successResponse } from '@/core/utils/response.js';
 
 export class UserController {
   private userService: UserService;
@@ -20,7 +20,7 @@ export class UserController {
     const user = await this.userService.createUser(validatedData);
 
     // 3. Return standardized success response
-    res.status(201).json(successResponse(user, "User created successfully"));
+    res.status(201).json(successResponse(user, 'User created successfully'));
   };
 
   getUser = async (req: Request, res: Response) => {
@@ -28,6 +28,6 @@ export class UserController {
 
     const user = await this.userService.getUserById(userId);
 
-    res.status(200).json(successResponse(user, "User retrieved successfully"));
+    res.status(200).json(successResponse(user, 'User retrieved successfully'));
   };
 }

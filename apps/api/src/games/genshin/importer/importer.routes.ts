@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { requireAuth } from "@/core/middleware/auth.middleware.js";
-import { GenshinImportController } from "./importer.controller.js";
+import { Router } from 'express';
+import { requireAuth } from '@/core/middleware/auth.middleware.js';
+import { GenshinImportController } from './importer.controller.js';
 
 const router = Router();
 const importController = new GenshinImportController();
@@ -12,6 +12,6 @@ const importController = new GenshinImportController();
  * Requires a valid JWT — userId is always taken from the verified token,
  * never from the request body, preventing cross-account data injection.
  */
-router.post("/import", requireAuth, importController.importGenshinAccount);
+router.post('/import', requireAuth, importController.importGenshinAccount);
 
 export { router as importerRoutes };

@@ -1,0 +1,101 @@
+{
+  "_comment": "PLACEHOLDER DATA — Current as of Patch 5.8. Add new bosses as they are released. Key must not change once set.",
+  "bosses": [
+    {
+      "key": "Dvalin",
+      "name": "Stormterror Dvalin",
+      "location": "Mondstadt",
+      "domainName": "Confront Stormterror",
+      "dropKeys": ["HurricaneSeed", "CleansingHeart", "HoarfrostCore"],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Confront_Stormterror"
+    },
+    {
+      "key": "Lupus",
+      "name": "Lupus Boreas, Dominator of Wolves",
+      "location": "Mondstadt",
+      "domainName": "Wolf of the North Challenge",
+      "dropKeys": ["WolfsGravestone", "RingedLeopardPetal", "IcecrystalMoth"],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Wolf_of_the_North_Challenge"
+    },
+    {
+      "key": "Signora",
+      "name": "La Signora",
+      "location": "Mondstadt",
+      "domainName": "Enter the Golden House",
+      "dropKeys": ["TailOfBoreas", "RingOfBoreas", "SpiritLocketOfBoreas"],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Enter_the_Golden_House"
+    },
+    {
+      "key": "Shogun",
+      "name": "Magatsu Mitake Narukami no Mikoto",
+      "location": "Inazuma",
+      "domainName": "End of the Oneiric Euthymia",
+      "dropKeys": ["MudraOfTheMalfeasantGeneral", "TearsOfTheCalamitousGod", "TheMeaningOfAeons"],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/End_of_the_Oneiric_Euthymia"
+    },
+    {
+      "key": "Beisht",
+      "name": "Beisht (Everlasting Lord of Arcane Wisdom)",
+      "location": "Sumeru",
+      "domainName": "Twisted Realm of the Arcane",
+      "dropKeys": ["MirrorOfMushin", "LightGuardian", "PuppetStrings"],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Twisted_Realm_of_the_Arcane"
+    },
+    {
+      "key": "Apep",
+      "name": "Apep, the Vines of Chaos",
+      "location": "Sumeru",
+      "domainName": "Khvarena of Good and Evil",
+      "dropKeys": ["PrimordialGreenbloom", "DestructiveCapacitor", "ForbiddenCurseScrolls"],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Khvarena_of_Good_and_Evil"
+    },
+    {
+      "key": "Azhdaha",
+      "name": "Azhdaha",
+      "location": "Liyue",
+      "domainName": "Beneath the Dragon-Queller",
+      "dropKeys": ["DragonLordsCrown", "BloodjadeBranch", "GildedScale"],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Beneath_the_Dragon-Queller"
+    },
+    {
+      "key": "Childe",
+      "name": "Tartaglia",
+      "location": "Liyue",
+      "domainName": "Enter the Golden House",
+      "dropKeys": ["ShadowOfTheWarrior", "ShardOfAFoulLegacy", "TheLilacStone"],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Enter_the_Golden_House"
+    },
+    {
+      "key": "Scaramouche",
+      "name": "Everlasting Lord of Arcane Wisdom (Scaramouche)",
+      "location": "Sumeru",
+      "domainName": "Joururi Workshop",
+      "dropKeys": ["MirrorOfMushin", "LightGuardian", "PuppetStrings"],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Joururi_Workshop"
+    },
+    {
+      "key": "Shoukumonegate",
+      "name": "All-Devouring Narwhal",
+      "location": "Fontaine",
+      "domainName": "The Realm of Beginnings",
+      "dropKeys": ["FangOfTheMountainKing", "TotemOfTheCauldron", "EchoOfScorchingMight"],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/The_Realm_of_Beginnings"
+    },
+    {
+      "key": "Chlothar",
+      "name": "Chlothar Hroswitha Augusta",
+      "location": "Fontaine",
+      "domainName": "The Realm of Conflict",
+      "dropKeys": ["SplinterOfDarkIron", "ScorchingHeat", "SpectralHusk"],
+      "wikiUrl": null
+    },
+    {
+      "key": "BabyLizard",
+      "name": "Iktomisaurus",
+      "location": "Natlan",
+      "domainName": "The Spiritseal Domain",
+      "dropKeys": ["IncandescenceShard", "CharredRemains", "CrystallineBloom"],
+      "wikiUrl": null
+    }
+  ]
+}

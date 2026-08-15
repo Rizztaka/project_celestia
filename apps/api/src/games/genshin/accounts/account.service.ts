@@ -1,6 +1,6 @@
-import { GenshinAccountRepository } from "./account.repository.js";
-import { ConflictError, NotFoundError } from "@/core/errors/app-error.js";
-import type { GenshinAccount } from "@prisma/client";
+import { GenshinAccountRepository } from './account.repository.js';
+import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
+import type { GenshinAccount } from '@prisma/client';
 
 export interface CreateAccountInput {
   userId: string;
@@ -32,9 +32,7 @@ export class GenshinAccountService {
   async createAccount(input: CreateAccountInput): Promise<GenshinAccount> {
     const existing = await this.accountRepository.findByUserId(input.userId);
     if (existing) {
-      throw new ConflictError(
-        "A Genshin account already exists for this user.",
-      );
+      throw new ConflictError('A Genshin account already exists for this user.');
     }
 
     return this.accountRepository.create({
@@ -53,7 +51,7 @@ export class GenshinAccountService {
   async getAccountByUserId(userId: string): Promise<GenshinAccount> {
     const account = await this.accountRepository.findByUserId(userId);
     if (!account) {
-      throw new NotFoundError("Genshin account not found.");
+      throw new NotFoundError('Genshin account not found.');
     }
     return account;
   }
@@ -62,13 +60,10 @@ export class GenshinAccountService {
    * Updates optional account metadata (UID, nickname, AR, WL).
    * Throws NotFoundError if the account does not exist.
    */
-  async updateAccount(
-    userId: string,
-    input: UpdateAccountInput,
-  ): Promise<GenshinAccount> {
+  async updateAccount(userId: string, input: UpdateAccountInput): Promise<GenshinAccount> {
     const account = await this.accountRepository.findByUserId(userId);
     if (!account) {
-      throw new NotFoundError("Genshin account not found.");
+      throw new NotFoundError('Genshin account not found.');
     }
     return this.accountRepository.update(account.id, input);
   }

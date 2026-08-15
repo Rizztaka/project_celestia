@@ -1,6 +1,6 @@
-import type { Request, Response } from "express";
-import { successResponse } from "@/core/utils/response.js";
-import { GenshinArtifactService } from "./artifact.service.js";
+import type { Request, Response } from 'express';
+import { successResponse } from '@/core/utils/response.js';
+import { GenshinArtifactService } from './artifact.service.js';
 
 export class GenshinArtifactController {
   private artifactService: GenshinArtifactService;
@@ -23,14 +23,14 @@ export class GenshinArtifactController {
    * global error handler in app.ts automatically.
    */
   listArtifacts = async (req: Request, res: Response) => {
-    const artifacts = await this.artifactService.getArtifactsForUser(
-      req.user!.id,
-    );
-    res.status(200).json(
-      successResponse(
-        { artifacts, total: artifacts.length },
-        "Artifacts retrieved successfully.",
-      ),
-    );
+    const artifacts = await this.artifactService.getArtifactsForUser(req.user!.id);
+    res
+      .status(200)
+      .json(
+        successResponse(
+          { artifacts, total: artifacts.length },
+          'Artifacts retrieved successfully.',
+        ),
+      );
   };
 }

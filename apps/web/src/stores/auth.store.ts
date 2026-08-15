@@ -15,8 +15,8 @@
  * The full profile is fetched on demand by TanStack Query via GET /auth/me.
  */
 
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 // AuthUser mirrors the SafeUser shape from the API (Omit<User, "password">)
 // but is defined locally so the frontend has no runtime dependency on the
@@ -58,7 +58,7 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: "celestia_auth", // localStorage key
+      name: 'celestia_auth', // localStorage key
       // Persist both token and isAuthenticated so that page reloads
       // correctly restore the authenticated session.
       // User profile data is NOT persisted — it is re-fetched fresh

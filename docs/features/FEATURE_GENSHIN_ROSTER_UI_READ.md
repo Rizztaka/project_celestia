@@ -20,6 +20,7 @@ Allow authenticated users to view all characters currently in their Genshin acco
 roster, along with each character's progression stats and equipped weapon.
 
 This milestone completes the Phase 2 data loop. After 2D:
+
 - The user can **write** their data via the Import page (2C).
 - The user can **read** their data via the Roster page (2D).
 
@@ -45,6 +46,7 @@ service expects an `accountId`. There is currently no method that accepts a `use
 and returns the character roster in one call.
 
 The controller could chain calls:
+
 ```
 accountService.getAccountByUserId(userId) → accountId
 characterService.getCharactersWithWeapon(accountId) → characters[]
@@ -56,6 +58,7 @@ which is incorrect. An empty roster is a valid, expected state.
 
 **Approved approach:** Add a single `getCharactersForUser(userId)` method to
 `GenshinCharacterService` that:
+
 1. Looks up the account via `prisma.genshinAccount.findUnique({ where: { userId } })`.
 2. **Returns an empty array (not an error) if no account exists.** An unimported
    user has a valid empty roster.
@@ -117,6 +120,7 @@ async getCharactersForUser(userId: string): Promise<CharacterWithWeapon[]> {
 **Auth:** Required (Bearer JWT)
 
 **Success Response (200):**
+
 ```json
 {
   "success": true,
@@ -147,6 +151,7 @@ async getCharactersForUser(userId: string): Promise<CharacterWithWeapon[]> {
 ```
 
 **Empty roster response (200 — not 404):**
+
 ```json
 {
   "success": true,
@@ -164,12 +169,14 @@ async getCharactersForUser(userId: string): Promise<CharacterWithWeapon[]> {
 ```typescript
 listCharacters = async (req: Request, res: Response) => {
   const characters = await this.characterService.getCharactersForUser(req.user!.id);
-  res.status(200).json(
-    successResponse(
-      { characters, total: characters.length },
-      "Characters retrieved successfully."
-    )
-  );
+  res
+    .status(200)
+    .json(
+      successResponse(
+        { characters, total: characters.length },
+        'Characters retrieved successfully.',
+      ),
+    );
 };
 ```
 
@@ -182,7 +189,7 @@ No try/catch. No validation. Pure translation: `req.user.id` in, response out.
 **File:** `apps/api/src/games/genshin/characters/character.routes.ts` [NEW]
 
 ```typescript
-router.get("/characters", requireAuth, characterController.listCharacters);
+router.get('/characters', requireAuth, characterController.listCharacters);
 ```
 
 Full path: `GET /api/v1/games/genshin/characters`
@@ -194,8 +201,8 @@ Full path: `GET /api/v1/games/genshin/characters`
 **File:** `apps/api/src/games/genshin/genshin.routes.ts` [MODIFY]
 
 ```typescript
-router.use(importerRoutes);    // ✅ /import
-router.use(characterRoutes);   // ✅ /characters  ← ADD THIS
+router.use(importerRoutes); // ✅ /import
+router.use(characterRoutes); // ✅ /characters  ← ADD THIS
 ```
 
 No changes to `app.ts` — the parent aggregator already handles this.
@@ -235,7 +242,7 @@ export interface RosterResponse {
 }
 
 export async function fetchGenshinRoster(): Promise<RosterResponse> {
-  return fetchApi<RosterResponse>("/games/genshin/characters");
+  return fetchApi<RosterResponse>('/games/genshin/characters');
 }
 ```
 
@@ -247,7 +254,7 @@ export async function fetchGenshinRoster(): Promise<RosterResponse> {
 
 ```typescript
 const { data, isLoading, error } = useQuery({
-  queryKey: ["genshin", "characters"],
+  queryKey: ['genshin', 'characters'],
   queryFn: fetchGenshinRoster,
   retry: false,
 });
@@ -272,8 +279,7 @@ The GOOD format uses PascalCase character keys (e.g. `"HuTao"`, `"RaidenShogun"`
 // "HuTao"            → "Hu Tao"
 // "RaidenShogun"     → "Raiden Shogun"
 // "KaedeharaKazuha"  → "Kaedhara Kazuha"
-const formatCharacterName = (key: string): string =>
-  key.replace(/([A-Z])/g, " $1").trim();
+const formatCharacterName = (key: string): string => key.replace(/([A-Z])/g, ' $1').trim();
 ```
 
 > **Note:** This is a best-effort formatter for Phase 2D. A proper static lookup
@@ -348,6 +354,7 @@ card linking to `/roster`.
 ## Open Questions (None — all resolved above)
 
 All architecture decisions were resolved during research:
+
 1. ✅ **Empty state:** 200 with empty array, not 404.
 2. ✅ **Character names:** PascalCase regex for 2D; static lookup table deferred to Phase 4.
 3. ✅ **Scope:** Characters only for 2D. Weapon and artifact browsing pages are 2E.
@@ -359,22 +366,22 @@ All architecture decisions were resolved during research:
 
 ### Backend (API)
 
-| File | Type | Description |
-|---|---|---|
-| `characters/character.repository.ts` | MODIFY | Add `findByAccountIdWithWeapon()` with Prisma `include` |
-| `characters/character.service.ts` | MODIFY | Add `getCharactersForUser(userId)` with empty-state handling |
-| `characters/character.controller.ts` | NEW | `listCharacters` handler |
-| `characters/character.routes.ts` | NEW | `GET /characters` protected route |
-| `games/genshin/genshin.routes.ts` | MODIFY | Mount `characterRoutes` |
+| File                                 | Type   | Description                                                  |
+| ------------------------------------ | ------ | ------------------------------------------------------------ |
+| `characters/character.repository.ts` | MODIFY | Add `findByAccountIdWithWeapon()` with Prisma `include`      |
+| `characters/character.service.ts`    | MODIFY | Add `getCharactersForUser(userId)` with empty-state handling |
+| `characters/character.controller.ts` | NEW    | `listCharacters` handler                                     |
+| `characters/character.routes.ts`     | NEW    | `GET /characters` protected route                            |
+| `games/genshin/genshin.routes.ts`    | MODIFY | Mount `characterRoutes`                                      |
 
 ### Frontend (Web)
 
-| File | Type | Description |
-|---|---|---|
-| `lib/api.ts` | MODIFY | Add `RosterCharacter`, `RosterWeapon`, `RosterResponse`, `fetchGenshinRoster()` |
-| `pages/RosterPage.tsx` | NEW | Roster page with `CharacterCard`, skeleton, empty state |
-| `App.tsx` | MODIFY | Add `/roster` protected route |
-| `pages/DashboardPage.tsx` | MODIFY | Activate the Roster card link |
+| File                      | Type   | Description                                                                     |
+| ------------------------- | ------ | ------------------------------------------------------------------------------- |
+| `lib/api.ts`              | MODIFY | Add `RosterCharacter`, `RosterWeapon`, `RosterResponse`, `fetchGenshinRoster()` |
+| `pages/RosterPage.tsx`    | NEW    | Roster page with `CharacterCard`, skeleton, empty state                         |
+| `App.tsx`                 | MODIFY | Add `/roster` protected route                                                   |
+| `pages/DashboardPage.tsx` | MODIFY | Activate the Roster card link                                                   |
 
 ---
 

@@ -1,18 +1,14 @@
-import express, {
-  type Request,
-  type Response,
-  type NextFunction,
-} from "express";
-import helmet from "helmet";
-import cors from "cors";
-import { ZodError } from "zod";
-import { logger } from "@/core/logger/logger.js";
-import { AppError } from "@/core/errors/app-error.js";
-import { errorResponse } from "@/core/utils/response.js";
-import { userRoutes }     from "./platform/users/user.routes.js";
-import { authRoutes }     from "./platform/auth/auth.routes.js";
-import { companionRoutes } from "./platform/companion/companion.routes.js";
-import { genshinRoutes }  from "./games/genshin/genshin.routes.js";
+import express, { type Request, type Response, type NextFunction } from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import { ZodError } from 'zod';
+import { logger } from '@/core/logger/logger.js';
+import { AppError } from '@/core/errors/app-error.js';
+import { errorResponse } from '@/core/utils/response.js';
+import { userRoutes } from './platform/users/user.routes.js';
+import { authRoutes } from './platform/auth/auth.routes.js';
+import { companionRoutes } from './platform/companion/companion.routes.js';
+import { genshinRoutes } from './games/genshin/genshin.routes.js';
 
 export const app = express();
 
@@ -21,12 +17,17 @@ export const app = express();
 // ============================================================
 
 app.use(helmet());
-app.use(cors());
-app.use(express.json());
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+    credentials: true,
+  }),
+);
+app.use(express.json({ limit: '50mb' }));
 
 // Request Logging
 app.use((req, _res, next) => {
-  logger.info({ method: req.method, url: req.url }, "Incoming request");
+  logger.info({ method: req.method, url: req.url }, 'Incoming request');
   next();
 });
 
@@ -39,19 +40,19 @@ app.use((req, _res, next) => {
 
 const v1Router = express.Router();
 
-v1Router.get("/health", (_req, res) => {
-  res.status(200).json({ status: "ok" });
+v1Router.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'ok' });
 });
 
 // Platform routes
-v1Router.use("/auth",      authRoutes);
-v1Router.use("/users",     userRoutes);
-v1Router.use("/companion", companionRoutes); // Phase 3
+v1Router.use('/auth', authRoutes);
+v1Router.use('/users', userRoutes);
+v1Router.use('/companion', companionRoutes); // Phase 3
 
 // Game routes
-v1Router.use("/games/genshin", genshinRoutes);
+v1Router.use('/games/genshin', genshinRoutes);
 
-app.use("/api/v1", v1Router);
+app.use('/api/v1', v1Router);
 
 // ============================================================
 // Global Error Handler
@@ -66,25 +67,20 @@ app.use("/api/v1", v1Router);
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   // Domain errors thrown by services — carry their own status code
   if (err instanceof AppError) {
-    return res
-      .status(err.statusCode)
-      .json(errorResponse(err.errorCode, err.message));
+    return res.status(err.statusCode).json(errorResponse(err.errorCode, err.message));
   }
 
   // Zod validation errors thrown by schema.parse() in controllers
   if (err instanceof ZodError) {
-    return res.status(400).json(
-      errorResponse(
-        "VALIDATION_ERROR",
-        err.errors[0]?.message ?? "Validation failed",
-      ),
-    );
+    return res
+      .status(400)
+      .json(errorResponse('VALIDATION_ERROR', err.errors[0]?.message ?? 'Validation failed'));
   }
 
   // Unexpected errors — log them, never expose internals to the client
-  logger.error({ err }, "Unhandled server error");
+  logger.error({ err }, 'Unhandled server error');
 
   return res
     .status(500)
-    .json(errorResponse("INTERNAL_SERVER_ERROR", "An unexpected error occurred"));
+    .json(errorResponse('INTERNAL_SERVER_ERROR', 'An unexpected error occurred'));
 });

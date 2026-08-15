@@ -6,7 +6,7 @@
  */
 
 export interface UpdateChecklistInput {
-  commissionsDone?:    boolean;
-  teapotClaimed?:      boolean;
+  commissionsDone?: boolean;
+  teapotClaimed?: boolean;
   transformerClaimed?: boolean;
 }

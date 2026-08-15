@@ -31,14 +31,14 @@ retrieved via Service and Repository classes.
 
 `ARCHITECTURE.md` draws a hard boundary between two types of data:
 
-| Category | Examples | Where it lives |
-|---|---|---|
-| **Static Game Data** | Character names, weapon base stats, artifact set bonuses, material costs | Version-controlled JSON files in the codebase |
-| **Dynamic User Data** | A player's character at level 80, C2, with specific talents | PostgreSQL via Prisma |
+| Category              | Examples                                                                 | Where it lives                                |
+| --------------------- | ------------------------------------------------------------------------ | --------------------------------------------- |
+| **Static Game Data**  | Character names, weapon base stats, artifact set bonuses, material costs | Version-controlled JSON files in the codebase |
+| **Dynamic User Data** | A player's character at level 80, C2, with specific talents              | PostgreSQL via Prisma                         |
 
 **Consequence for this schema:**  
 The database **never stores** a character's base stats, element, weapon type,
-or any other static game metadata. It only stores a user's *instance* of that
+or any other static game metadata. It only stores a user's _instance_ of that
 character (level, constellation, talent levels, etc.), referenced by a string
 key that maps to the static data files.
 
@@ -225,8 +225,8 @@ model GenshinArtifact {
 ```typescript
 // Not in the DB schema — used in Service/Repository layer to type the JSON field.
 interface ArtifactSubStat {
-  key: string;    // e.g. "critRate_", "atk_", "hp", "eleMas"
-  value: number;  // e.g. 6.6, 35, 299, 23
+  key: string; // e.g. "critRate_", "atk_", "hp", "eleMas"
+  value: number; // e.g. 6.6, 35, 299, 23
 }
 ```
 
@@ -236,11 +236,11 @@ interface ArtifactSubStat {
 
 ### Trade-off 1: JSON sub-stats vs separate ArtifactSubStat table
 
-| | JSON on GenshinArtifact | Separate table |
-|---|---|---|
-| Complexity | Simple, one table | Extra join on every artifact query |
-| Queryability | Cannot DB-filter by sub-stat value | Can `WHERE key = 'critRate_' AND value > 10` |
-| Phase 2A fit | ✅ Correct for storage only | Overkill — Intelligence Core (Phase 4) does filtering in code |
+|              | JSON on GenshinArtifact            | Separate table                                                |
+| ------------ | ---------------------------------- | ------------------------------------------------------------- |
+| Complexity   | Simple, one table                  | Extra join on every artifact query                            |
+| Queryability | Cannot DB-filter by sub-stat value | Can `WHERE key = 'critRate_' AND value > 10`                  |
+| Phase 2A fit | ✅ Correct for storage only        | Overkill — Intelligence Core (Phase 4) does filtering in code |
 
 **Decision:** JSON for Phase 2A. Intelligence Core (Phase 4) will filter in application code. If profiling in Phase 4 shows this is a bottleneck, we can migrate to a junction table then.
 
@@ -263,18 +263,22 @@ In Genshin, a character can be "Level 20 / Ascension 0" (not yet ascended) or "L
 Each subdomain in `apps/api/src/games/genshin/` follows the existing DDD pattern.
 
 ### Module: `accounts/`
+
 - `GenshinAccountRepository`: `create()`, `findByUserId()`, `findById()`
 - `GenshinAccountService`: `createAccount()`, `getAccountByUserId()`
 
 ### Module: `characters/`
+
 - `GenshinCharacterRepository`: `create()`, `findByAccountId()`, `findByKey()`, `update()`, `delete()`
 - `GenshinCharacterService`: `addCharacter()`, `getCharacters()`, `updateCharacter()`, `removeCharacter()`
 
 ### Module: `weapons/`
+
 - `GenshinWeaponRepository`: `create()`, `findByAccountId()`, `findById()`, `update()`, `delete()`
 - `GenshinWeaponService`: `addWeapon()`, `getWeapons()`, `updateWeapon()`, `removeWeapon()`
 
 ### Module: `artifacts/`
+
 - `GenshinArtifactRepository`: `create()`, `findByAccountId()`, `findById()`, `update()`, `delete()`
 - `GenshinArtifactService`: `addArtifact()`, `getArtifacts()`, `updateArtifact()`, `removeArtifact()`
 
@@ -285,12 +289,14 @@ Each subdomain in `apps/api/src/games/genshin/` follows the existing DDD pattern
 ## Database Impact
 
 **New tables:**
+
 - `genshin_accounts`
 - `genshin_characters`
 - `genshin_weapons`
 - `genshin_artifacts`
 
 **Modified tables:**
+
 - `users` — gains a `genshinAccount` back-relation (no column change; Prisma relation only)
 
 **Migration:** A single `prisma migrate dev` migration named `add-genshin-foundation`.

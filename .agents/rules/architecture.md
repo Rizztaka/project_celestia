@@ -1,0 +1,27 @@
+---
+description: Critical architectural and coding rules for Project Celestia. Always apply these guidelines when writing or reviewing code in this workspace.
+trigger: always_on
+---
+
+# Project Celestia Global Rules
+
+## Architectural Integrity
+- **Modular Monolith**: Code must be organized by feature/domain (e.g. `games/genshin/teams/`), not by technical layer (e.g. `controllers/`).
+- **Platform vs Game**: Platform modules (Authentication, Users) must NEVER contain game-specific logic. Each game (e.g. Genshin) must be isolated.
+- **Composition over Inheritance**: Favor reusable composition patterns over deep inheritance.
+- **No Premature Optimization**: Do not implement Redis, worker queues, or WebSockets unless explicitly requested.
+
+## Backend (Express + Prisma)
+- **Controllers**: Must ONLY validate requests, call services, and return responses. They must never contain business logic.
+- **Services**: Contain the actual business rules and heavy calculations.
+- **Repositories**: Handle database access.
+- **API Responses**: Always return consistent structures (`{ success: true, data: {} }` or `{ success: false, error: {} }`).
+
+## Frontend (React + Vite)
+- **TanStack Query**: Responsible for server state, API communication, and caching.
+- **Zustand**: Responsible for UI state, theme, and local preferences. NEVER duplicate server state inside Zustand.
+- **Components**: Must be reusable, small, and predictable. Move business logic out of components unless purely presentation-related.
+
+## Intelligence Core
+- Recommendation engines must produce deterministic results.
+- Always separate calculations from explanations. The core must explain the reasoning behind every recommendation.

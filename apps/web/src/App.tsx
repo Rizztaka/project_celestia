@@ -20,17 +20,17 @@
  *   - TanStack Query           → server data (profile, future game data)
  */
 
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import DashboardPage from "./pages/DashboardPage";
-import ProfilePage from "./pages/ProfilePage";
-import ImportPage from "./pages/ImportPage";
-import RosterPage    from "./pages/RosterPage";
-import InventoryPage from "./pages/InventoryPage";
-import PlannerPage   from "./pages/PlannerPage";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import ProfilePage from './pages/ProfilePage';
+import ImportPage from './pages/ImportPage';
+import RosterPage from './pages/RosterPage';
+import InventoryPage from './pages/InventoryPage';
+import PlannerPage from './pages/PlannerPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,7 +38,7 @@ const queryClient = new QueryClient({
       // Don't retry on 4xx errors — auth failures, not found, etc. are
       // not going to succeed on retry
       retry: (failureCount, error) => {
-        if (error instanceof Error && "status" in error) {
+        if (error instanceof Error && 'status' in error) {
           const status = (error as { status: number }).status;
           if (status >= 400 && status < 500) return false;
         }
@@ -62,9 +62,9 @@ function App() {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/import" element={<ImportPage />} />
-            <Route path="/roster"     element={<RosterPage />} />
-            <Route path="/inventory"  element={<InventoryPage />} />
-            <Route path="/planner"    element={<PlannerPage />} />
+            <Route path="/roster" element={<RosterPage />} />
+            <Route path="/inventory" element={<InventoryPage />} />
+            <Route path="/planner" element={<PlannerPage />} />
           </Route>
 
           {/* Catch-all — redirect unknown paths to dashboard (or login if not authed) */}

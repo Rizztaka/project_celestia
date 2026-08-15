@@ -1,6 +1,6 @@
-import type { Request, Response } from "express";
-import { successResponse } from "@/core/utils/response.js";
-import { DailyCompanionService } from "./companion.service.js";
+import type { Request, Response } from 'express';
+import { successResponse } from '@/core/utils/response.js';
+import { DailyCompanionService } from './companion.service.js';
 
 export class DailyCompanionController {
   private readonly companionService: DailyCompanionService;
@@ -22,9 +22,7 @@ export class DailyCompanionController {
    */
   getDaily = async (req: Request, res: Response) => {
     const state = await this.companionService.getDailyState(req.user!.id);
-    res.status(200).json(
-      successResponse(state, "Daily state retrieved successfully."),
-    );
+    res.status(200).json(successResponse(state, 'Daily state retrieved successfully.'));
   };
 
   /**
@@ -34,13 +32,8 @@ export class DailyCompanionController {
    * Body: { amount: number } — must be an integer in [0, 200].
    */
   updateResin = async (req: Request, res: Response) => {
-    const state = await this.companionService.updateResin(
-      req.user!.id,
-      req.body?.amount,
-    );
-    res.status(200).json(
-      successResponse(state, "Resin updated successfully."),
-    );
+    const state = await this.companionService.updateResin(req.user!.id, req.body?.amount);
+    res.status(200).json(successResponse(state, 'Resin updated successfully.'));
   };
 
   /**
@@ -51,12 +44,7 @@ export class DailyCompanionController {
    * At least one field must be present.
    */
   updateChecklist = async (req: Request, res: Response) => {
-    const state = await this.companionService.updateChecklist(
-      req.user!.id,
-      req.body,
-    );
-    res.status(200).json(
-      successResponse(state, "Checklist updated successfully."),
-    );
+    const state = await this.companionService.updateChecklist(req.user!.id, req.body);
+    res.status(200).json(successResponse(state, 'Checklist updated successfully.'));
   };
 }

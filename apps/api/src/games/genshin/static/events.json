@@ -1,0 +1,75 @@
+{
+  "_comment": "PLACEHOLDER DATA — Update this file each patch (~every 6 weeks). Current: Patch 5.8 placeholder.",
+  "patch": "5.8",
+  "patchStartUtc": "2026-08-06T06:00:00Z",
+  "patchEndUtc": "2026-09-17T05:59:59Z",
+  "events": [
+    {
+      "key": "EchoesOfTheDeep5.8",
+      "name": "Echoes of the Deep",
+      "type": "combat",
+      "startUtc": "2026-08-06T10:00:00Z",
+      "endUtc": "2026-08-25T14:59:59Z",
+      "description": "Challenge ancient constructs across four difficulty stages. Each stage completed earns exclusive rewards including Primogems and crafting materials.",
+      "wikiUrl": null,
+      "rewardTiers": [
+        { "tierId": "t1", "label": "Stage I Clear", "primogems": 60, "other": [] },
+        { "tierId": "t2", "label": "Stage II Clear", "primogems": 60, "other": [] },
+        { "tierId": "t3", "label": "Stage III Clear", "primogems": 60, "other": [] },
+        {
+          "tierId": "t4",
+          "label": "All Stages Clear",
+          "primogems": 0,
+          "other": ["CrownOfInsight", "PrimoGemsBonus"]
+        }
+      ]
+    },
+    {
+      "key": "HarmonicSymphony5.8",
+      "name": "Harmonic Symphony",
+      "type": "exploration",
+      "startUtc": "2026-08-13T10:00:00Z",
+      "endUtc": "2026-09-01T14:59:59Z",
+      "description": "Explore hidden melodies scattered across Teyvat. Collect resonance fragments to unlock a special musical sequence and its rewards.",
+      "wikiUrl": null,
+      "rewardTiers": [
+        { "tierId": "t1", "label": "5 Melodies Found", "primogems": 40, "other": [] },
+        { "tierId": "t2", "label": "10 Melodies Found", "primogems": 40, "other": [] },
+        { "tierId": "t3", "label": "All 15 Found", "primogems": 40, "other": ["TeachingsOfBallad"] }
+      ]
+    },
+    {
+      "key": "TidalBounty5.8",
+      "name": "Tidal Bounty",
+      "type": "limited_domain",
+      "startUtc": "2026-08-20T10:00:00Z",
+      "endUtc": "2026-09-08T14:59:59Z",
+      "description": "A limited-time domain opens during the tidal surge. Challenge it to earn rare talent books and Primogems. Stamina refreshes daily.",
+      "wikiUrl": null,
+      "rewardTiers": [
+        {
+          "tierId": "t1",
+          "label": "First Clear",
+          "primogems": 60,
+          "other": ["TeachingsOfTransience"]
+        },
+        { "tierId": "t2", "label": "5 Total Clears", "primogems": 40, "other": [] }
+      ]
+    },
+    {
+      "key": "PatchLogin5.8",
+      "name": "Patch 5.8 Login Event",
+      "type": "login",
+      "startUtc": "2026-08-06T06:00:00Z",
+      "endUtc": "2026-09-17T05:59:59Z",
+      "description": "Log in on separate days to collect cumulative rewards including Primogems and Hero's Wit.",
+      "wikiUrl": null,
+      "rewardTiers": [
+        { "tierId": "d1", "label": "Day 1 Login", "primogems": 60, "other": [] },
+        { "tierId": "d2", "label": "Day 3 Login", "primogems": 60, "other": [] },
+        { "tierId": "d3", "label": "Day 5 Login", "primogems": 60, "other": [] },
+        { "tierId": "d4", "label": "Day 7 Login", "primogems": 60, "other": [] }
+      ]
+    }
+  ]
+}

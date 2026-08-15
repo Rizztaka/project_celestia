@@ -1,7 +1,7 @@
-import { GenshinArtifactRepository } from "./artifact.repository.js";
-import { NotFoundError } from "@/core/errors/app-error.js";
-import { prisma } from "@/core/db/prisma.js";
-import type { GenshinArtifact, Prisma } from "@prisma/client";
+import { GenshinArtifactRepository } from './artifact.repository.js';
+import { NotFoundError } from '@/core/errors/app-error.js';
+import { prisma } from '@/core/db/prisma.js';
+import type { GenshinArtifact, Prisma } from '@prisma/client';
 
 /**
  * Represents a single artifact sub-stat.
@@ -14,10 +14,10 @@ export interface ArtifactSubStat {
 }
 
 export interface AddArtifactInput {
-  setKey: string;      // e.g. "ShimenawasReminiscence"
-  slotKey: string;     // "flower" | "plume" | "sands" | "goblet" | "circlet"
-  level: number;       // 0–20
-  rarity: number;      // 1–5
+  setKey: string; // e.g. "ShimenawasReminiscence"
+  slotKey: string; // "flower" | "plume" | "sands" | "goblet" | "circlet"
+  level: number; // 0–20
+  rarity: number; // 1–5
   mainStatKey: string; // e.g. "hp", "critRate_", "eleMas"
   subStats: ArtifactSubStat[];
   locked?: boolean;
@@ -42,10 +42,7 @@ export class GenshinArtifactService {
    * Multiple artifacts with the same setKey/slotKey are allowed —
    * a player can own many flower pieces from the same set.
    */
-  async addArtifact(
-    accountId: string,
-    input: AddArtifactInput,
-  ): Promise<GenshinArtifact> {
+  async addArtifact(accountId: string, input: AddArtifactInput): Promise<GenshinArtifact> {
     return this.artifactRepository.create({
       account: { connect: { id: accountId } },
       setKey: input.setKey,
@@ -89,13 +86,10 @@ export class GenshinArtifactService {
    * NotFoundError is returned whether the artifact doesn't exist or belongs to
    * another account (anti-enumeration).
    */
-  async getArtifactById(
-    accountId: string,
-    artifactId: string,
-  ): Promise<GenshinArtifact> {
+  async getArtifactById(accountId: string, artifactId: string): Promise<GenshinArtifact> {
     const artifact = await this.artifactRepository.findById(artifactId);
     if (!artifact || artifact.accountId !== accountId) {
-      throw new NotFoundError("Artifact not found.");
+      throw new NotFoundError('Artifact not found.');
     }
     return artifact;
   }
@@ -122,10 +116,7 @@ export class GenshinArtifactService {
    * Removes an artifact from inventory.
    * Throws NotFoundError if not found or if it belongs to another account.
    */
-  async removeArtifact(
-    accountId: string,
-    artifactId: string,
-  ): Promise<GenshinArtifact> {
+  async removeArtifact(accountId: string, artifactId: string): Promise<GenshinArtifact> {
     await this.getArtifactById(accountId, artifactId);
     return this.artifactRepository.delete(artifactId);
   }

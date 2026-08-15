@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /**
  * Schema for the POST /auth/register endpoint.
@@ -9,20 +9,20 @@ import { z } from "zod";
  * or additional profile fields) without affecting the users domain.
  */
 export const registerSchema = z.object({
-  email: z.string().email("Invalid email address format"),
+  email: z.string().email('Invalid email address format'),
   username: z
     .string()
-    .min(3, "Username must be at least 3 characters long")
-    .max(30, "Username must not exceed 30 characters"),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
+    .min(3, 'Username must be at least 3 characters long')
+    .max(30, 'Username must not exceed 30 characters'),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
 });
 
 /**
  * Schema for the POST /auth/login endpoint.
  */
 export const loginSchema = z.object({
-  email: z.string().email("Invalid email address format"),
-  password: z.string().min(1, "Password is required"),
+  email: z.string().email('Invalid email address format'),
+  password: z.string().min(1, 'Password is required'),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;

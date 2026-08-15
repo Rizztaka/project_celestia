@@ -1,0 +1,191 @@
+{
+  "_comment": "Domain rotation schedule. Days use 0=Monday through 5=Saturday. Sunday (6) all talent/weapon domains are open. talentBook values match the 'book' field in character-materials.json.",
+  "talentDomains": [
+    {
+      "domainKey": "ForsakenRift",
+      "name": "Forsaken Rift",
+      "location": "Mondstadt",
+      "days": [0, 3],
+      "drops": ["Freedom"],
+      "dropKeys": ["TeachingsOfFreedom", "GuidesToFreedom", "PhilosophiesOfFreedom"]
+    },
+    {
+      "domainKey": "ForsakenRift",
+      "name": "Forsaken Rift",
+      "location": "Mondstadt",
+      "days": [1, 4],
+      "drops": ["Resistance"],
+      "dropKeys": ["TeachingsOfResistance", "GuidesToResistance", "PhilosophiesOfResistance"]
+    },
+    {
+      "domainKey": "ForsakenRift",
+      "name": "Forsaken Rift",
+      "location": "Mondstadt",
+      "days": [2, 5],
+      "drops": ["Ballad"],
+      "dropKeys": ["TeachingsOfBallad", "GuidesToBallad", "PhilosophiesOfBallad"]
+    },
+    {
+      "domainKey": "CeciliaGarden",
+      "name": "Cecilia Garden",
+      "location": "Mondstadt",
+      "days": [0, 3],
+      "drops": ["Transience"],
+      "dropKeys": ["TeachingsOfTransience", "GuidesToTransience", "PhilosophiesOfTransience"]
+    },
+    {
+      "domainKey": "CeciliaGarden",
+      "name": "Cecilia Garden",
+      "location": "Mondstadt",
+      "days": [1, 4],
+      "drops": ["Elegance"],
+      "dropKeys": ["TeachingsOfElegance", "GuidesToElegance", "PhilosophiesOfElegance"]
+    },
+    {
+      "domainKey": "CeciliaGarden",
+      "name": "Cecilia Garden",
+      "location": "Mondstadt",
+      "days": [2, 5],
+      "drops": ["Light"],
+      "dropKeys": ["TeachingsOfLight", "GuidesToLight", "PhilosophiesOfLight"]
+    },
+    {
+      "domainKey": "TaishanMansion",
+      "name": "Taishan Mansion",
+      "location": "Liyue",
+      "days": [0, 3],
+      "drops": ["Prosperity"],
+      "dropKeys": ["TeachingsOfProsperity", "GuidesToProsperity", "PhilosophiesOfProsperity"]
+    },
+    {
+      "domainKey": "TaishanMansion",
+      "name": "Taishan Mansion",
+      "location": "Liyue",
+      "days": [1, 4],
+      "drops": ["Diligence"],
+      "dropKeys": ["TeachingsOfDiligence", "GuidesToDiligence", "PhilosophiesOfDiligence"]
+    },
+    {
+      "domainKey": "TaishanMansion",
+      "name": "Taishan Mansion",
+      "location": "Liyue",
+      "days": [2, 5],
+      "drops": ["Gold"],
+      "dropKeys": ["TeachingsOfGold", "GuidesToGold", "PhilosophiesOfGold"]
+    },
+    {
+      "domainKey": "HiddenPalaceOfZhouFormula",
+      "name": "Hidden Palace of Zhou Formula",
+      "location": "Liyue",
+      "days": [0, 3],
+      "drops": ["Gold"],
+      "dropKeys": ["TeachingsOfGold", "GuidesToGold", "PhilosophiesOfGold"]
+    },
+    {
+      "domainKey": "VioletCourt",
+      "name": "Violet Court",
+      "location": "Inazuma",
+      "days": [0, 3],
+      "drops": ["Transience"],
+      "dropKeys": ["TeachingsOfTransience", "GuidesToTransience", "PhilosophiesOfTransience"]
+    },
+    {
+      "domainKey": "VioletCourt",
+      "name": "Violet Court",
+      "location": "Inazuma",
+      "days": [1, 4],
+      "drops": ["Elegance"],
+      "dropKeys": ["TeachingsOfElegance", "GuidesToElegance", "PhilosophiesOfElegance"]
+    },
+    {
+      "domainKey": "VioletCourt",
+      "name": "Violet Court",
+      "location": "Inazuma",
+      "days": [2, 5],
+      "drops": ["Light"],
+      "dropKeys": ["TeachingsOfLight", "GuidesToLight", "PhilosophiesOfLight"]
+    },
+    {
+      "domainKey": "ChallengeOfElites",
+      "name": "Court of Flowing Sand",
+      "location": "Sumeru",
+      "days": [0, 3],
+      "drops": ["Ingenuity"],
+      "dropKeys": ["TeachingsOfIngenuity", "GuidesToIngenuity", "PhilosophiesOfIngenuity"]
+    },
+    {
+      "domainKey": "ChallengeOfElites",
+      "name": "Court of Flowing Sand",
+      "location": "Sumeru",
+      "days": [1, 4],
+      "drops": ["Praxis"],
+      "dropKeys": ["TeachingsOfPraxis", "GuidesToPraxis", "PhilosophiesOfPraxis"]
+    },
+    {
+      "domainKey": "ChallengeOfElites",
+      "name": "Court of Flowing Sand",
+      "location": "Sumeru",
+      "days": [2, 5],
+      "drops": ["Admonition"],
+      "dropKeys": ["TeachingsOfAdmonition", "GuidesToAdmonition", "PhilosophiesOfAdmonition"]
+    },
+    {
+      "domainKey": "PalaceOfHeart",
+      "name": "Pale Forgotten Glory",
+      "location": "Fontaine",
+      "days": [0, 3],
+      "drops": ["Order"],
+      "dropKeys": ["TeachingsOfOrder", "GuidesToOrder", "PhilosophiesOfOrder"]
+    },
+    {
+      "domainKey": "PalaceOfHeart",
+      "name": "Pale Forgotten Glory",
+      "location": "Fontaine",
+      "days": [1, 4],
+      "drops": ["Justice"],
+      "dropKeys": ["TeachingsOfJustice", "GuidesToJustice", "PhilosophiesOfJustice"]
+    },
+    {
+      "domainKey": "PalaceOfHeart",
+      "name": "Pale Forgotten Glory",
+      "location": "Fontaine",
+      "days": [2, 5],
+      "drops": ["Kindling"],
+      "dropKeys": ["TeachingsOfKindling", "GuidesToKindling", "PhilosophiesOfKindling"]
+    }
+  ],
+  "weaponDomains": [
+    {
+      "domainKey": "ClearPoolAndMountainCavern",
+      "name": "Clear Pool and Mountain Cavern",
+      "location": "Mondstadt",
+      "days": [0, 3],
+      "materialGroup": "Decarabian",
+      "dropKeys": ["FragmentOfDecarabianEpic", "DecarabiansTower", "LithicSpear"]
+    },
+    {
+      "domainKey": "CeciliaGardenWeapon",
+      "name": "Cecilia Garden (Weapons)",
+      "location": "Mondstadt",
+      "days": [1, 4],
+      "materialGroup": "WolfsTooth",
+      "dropKeys": ["TilesOfTalisman", "ThunderingPoise", "AerialAerosiderite"]
+    },
+    {
+      "domainKey": "HiddenPalaceOfLianshanFormula",
+      "name": "Hidden Palace of Lianshan Formula",
+      "location": "Liyue",
+      "days": [0, 3],
+      "materialGroup": "Guyun",
+      "dropKeys": ["ChaoticOrigin", "TalentLordly", "MistVeiled"]
+    },
+    {
+      "domainKey": "HiddenPalaceOfLianshanFormulaWeapon",
+      "name": "Hidden Palace of Lianshan Formula",
+      "location": "Liyue",
+      "days": [2, 5],
+      "materialGroup": "Aerosiderite",
+      "dropKeys": ["TilesOfTalisman", "ThunderingPoise", "AerialAerosiderite"]
+    }
+  ]
+}

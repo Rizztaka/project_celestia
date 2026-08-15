@@ -1,6 +1,6 @@
-import type { Request, Response } from "express";
-import { successResponse } from "@/core/utils/response.js";
-import { GenshinCharacterService } from "./character.service.js";
+import type { Request, Response } from 'express';
+import { successResponse } from '@/core/utils/response.js';
+import { GenshinCharacterService } from './character.service.js';
 
 export class GenshinCharacterController {
   private characterService: GenshinCharacterService;
@@ -23,14 +23,14 @@ export class GenshinCharacterController {
    * global error handler in app.ts automatically.
    */
   listCharacters = async (req: Request, res: Response) => {
-    const characters = await this.characterService.getCharactersForUser(
-      req.user!.id,
-    );
-    res.status(200).json(
-      successResponse(
-        { characters, total: characters.length },
-        "Characters retrieved successfully.",
-      ),
-    );
+    const characters = await this.characterService.getCharactersForUser(req.user!.id);
+    res
+      .status(200)
+      .json(
+        successResponse(
+          { characters, total: characters.length },
+          'Characters retrieved successfully.',
+        ),
+      );
   };
 }

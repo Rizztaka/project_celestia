@@ -1,8 +1,8 @@
-import type { Request, Response } from "express";
-import { registerSchema, loginSchema } from "@celestia/api-contracts";
-import { successResponse } from "@/core/utils/response.js";
-import { AuthService } from "./auth.service.js";
-import { UserService } from "../users/user.service.js";
+import type { Request, Response } from 'express';
+import { registerSchema, loginSchema } from '@celestia/api-contracts';
+import { successResponse } from '@/core/utils/response.js';
+import { AuthService } from './auth.service.js';
+import { UserService } from '../users/user.service.js';
 
 export class AuthController {
   private authService: AuthService;
@@ -25,7 +25,7 @@ export class AuthController {
   register = async (req: Request, res: Response) => {
     const validatedData = registerSchema.parse(req.body);
     const result = await this.authService.register(validatedData);
-    res.status(201).json(successResponse(result, "Registration successful"));
+    res.status(201).json(successResponse(result, 'Registration successful'));
   };
 
   /**
@@ -37,7 +37,7 @@ export class AuthController {
   login = async (req: Request, res: Response) => {
     const validatedData = loginSchema.parse(req.body);
     const result = await this.authService.login(validatedData);
-    res.status(200).json(successResponse(result, "Login successful"));
+    res.status(200).json(successResponse(result, 'Login successful'));
   };
 
   /**
@@ -50,6 +50,6 @@ export class AuthController {
   me = async (req: Request, res: Response) => {
     // req.user is set by requireAuth middleware — it is always present here
     const user = await this.userService.getUserById(req.user!.id);
-    res.status(200).json(successResponse(user, "Profile retrieved successfully"));
+    res.status(200).json(successResponse(user, 'Profile retrieved successfully'));
   };
 }

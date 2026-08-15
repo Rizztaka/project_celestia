@@ -25,8 +25,8 @@ export class AppError extends Error {
 // ============================================================
 
 export class BadRequestError extends AppError {
-  constructor(message = "The request was invalid.") {
-    super(message, 400, "BAD_REQUEST");
+  constructor(message = 'The request was invalid.') {
+    super(message, 400, 'BAD_REQUEST');
   }
 }
 
@@ -35,8 +35,8 @@ export class BadRequestError extends AppError {
 // ============================================================
 
 export class UnauthorizedError extends AppError {
-  constructor(message = "Authentication is required to access this resource.") {
-    super(message, 401, "UNAUTHORIZED");
+  constructor(message = 'Authentication is required to access this resource.') {
+    super(message, 401, 'UNAUTHORIZED');
   }
 }
 
@@ -45,8 +45,8 @@ export class UnauthorizedError extends AppError {
 // ============================================================
 
 export class ForbiddenError extends AppError {
-  constructor(message = "You do not have permission to access this resource.") {
-    super(message, 403, "FORBIDDEN");
+  constructor(message = 'You do not have permission to access this resource.') {
+    super(message, 403, 'FORBIDDEN');
   }
 }
 
@@ -55,8 +55,8 @@ export class ForbiddenError extends AppError {
 // ============================================================
 
 export class NotFoundError extends AppError {
-  constructor(message = "The requested resource was not found.") {
-    super(message, 404, "NOT_FOUND");
+  constructor(message = 'The requested resource was not found.') {
+    super(message, 404, 'NOT_FOUND');
   }
 }
 
@@ -65,8 +65,8 @@ export class NotFoundError extends AppError {
 // ============================================================
 
 export class ConflictError extends AppError {
-  constructor(message = "A conflict occurred with the current state of the resource.") {
-    super(message, 409, "CONFLICT");
+  constructor(message = 'A conflict occurred with the current state of the resource.') {
+    super(message, 409, 'CONFLICT');
   }
 }
 
@@ -75,7 +75,7 @@ export class ConflictError extends AppError {
 // ============================================================
 
 export class UnprocessableError extends AppError {
-  constructor(message = "The request data could not be processed.") {
-    super(message, 422, "UNPROCESSABLE_ENTITY");
+  constructor(message = 'The request data could not be processed.') {
+    super(message, 422, 'UNPROCESSABLE_ENTITY');
   }
 }

@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { requireAuth } from "@/core/middleware/auth.middleware.js";
-import { GenshinArtifactController } from "./artifact.controller.js";
+import { Router } from 'express';
+import { requireAuth } from '@/core/middleware/auth.middleware.js';
+import { GenshinArtifactController } from './artifact.controller.js';
 
 const router = Router();
 const artifactController = new GenshinArtifactController();
@@ -11,6 +11,6 @@ const artifactController = new GenshinArtifactController();
  * Full path: GET /api/v1/games/genshin/artifacts
  * Requires a valid JWT — userId is always taken from the verified token.
  */
-router.get("/artifacts", requireAuth, artifactController.listArtifacts);
+router.get('/artifacts', requireAuth, artifactController.listArtifacts);
 
 export { router as artifactRoutes };

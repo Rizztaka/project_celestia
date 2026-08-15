@@ -1,0 +1,33 @@
+{
+  "_comment": "Meta profiles for the Character Intelligence Engine. Opinions current as of Patch 5.x. metaTier: 1=SS/S, 2=A, 3=B/C.",
+  "HuTao": {
+    "metaTier": 1,
+    "role": "dps",
+    "priorityTalent": "skill",
+    "weaponRarity": 5
+  },
+  "Venti": {
+    "metaTier": 1,
+    "role": "support",
+    "priorityTalent": "burst",
+    "weaponRarity": 5
+  },
+  "RaidenShogun": {
+    "metaTier": 1,
+    "role": "sub_dps",
+    "priorityTalent": "burst",
+    "weaponRarity": 5
+  },
+  "Zhongli": {
+    "metaTier": 1,
+    "role": "support",
+    "priorityTalent": "skill",
+    "weaponRarity": 5
+  },
+  "Furina": {
+    "metaTier": 1,
+    "role": "support",
+    "priorityTalent": "burst",
+    "weaponRarity": 5
+  }
+}

@@ -1,32 +1,32 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { GenshinWeaponService } from "./weapon.service.js";
-import { GenshinWeaponRepository } from "./weapon.repository.js";
-import { NotFoundError } from "@/core/errors/app-error.js";
-import type { GenshinWeapon } from "@prisma/client";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { GenshinWeaponService } from './weapon.service.js';
+import { GenshinWeaponRepository } from './weapon.repository.js';
+import { NotFoundError } from '@/core/errors/app-error.js';
+import type { GenshinWeapon } from '@prisma/client';
 
-vi.mock("./weapon.repository.js");
+vi.mock('./weapon.repository.js');
 
 // -------------------------------------------------------
 // Fixtures
 // -------------------------------------------------------
 
-const ACCOUNT_ID = "account-abc-123";
-const OTHER_ACCOUNT_ID = "account-xyz-999";
+const ACCOUNT_ID = 'account-abc-123';
+const OTHER_ACCOUNT_ID = 'account-xyz-999';
 
 const mockWeapon: GenshinWeapon = {
-  id: "weapon-abc-123",
+  id: 'weapon-abc-123',
   accountId: ACCOUNT_ID,
-  weaponKey: "StaffOfHoma",
+  weaponKey: 'StaffOfHoma',
   level: 90,
   ascension: 6,
   refinement: 1,
   locked: false,
-  createdAt: new Date("2026-01-01T00:00:00Z"),
-  updatedAt: new Date("2026-01-01T00:00:00Z"),
+  createdAt: new Date('2026-01-01T00:00:00Z'),
+  updatedAt: new Date('2026-01-01T00:00:00Z'),
 };
 
 const addInput = {
-  weaponKey: "StaffOfHoma",
+  weaponKey: 'StaffOfHoma',
   level: 90,
   ascension: 6,
   refinement: 1,
@@ -36,7 +36,7 @@ const addInput = {
 // Tests
 // -------------------------------------------------------
 
-describe("GenshinWeaponService", () => {
+describe('GenshinWeaponService', () => {
   let service: GenshinWeaponService;
   let mockRepo: {
     findByAccountId: ReturnType<typeof vi.fn>;
@@ -68,8 +68,8 @@ describe("GenshinWeaponService", () => {
   // addWeapon
   // ---------------------------------------------------
 
-  describe("addWeapon", () => {
-    it("creates and returns the weapon", async () => {
+  describe('addWeapon', () => {
+    it('creates and returns the weapon', async () => {
       mockRepo.create.mockResolvedValue(mockWeapon);
 
       const result = await service.addWeapon(ACCOUNT_ID, addInput);
@@ -78,7 +78,7 @@ describe("GenshinWeaponService", () => {
       expect(mockRepo.create).toHaveBeenCalledOnce();
     });
 
-    it("allows duplicate weaponKeys in the same account (multiple copies)", async () => {
+    it('allows duplicate weaponKeys in the same account (multiple copies)', async () => {
       mockRepo.create.mockResolvedValue(mockWeapon);
 
       // Calling twice should both succeed — no duplicate check on weapons
@@ -93,8 +93,8 @@ describe("GenshinWeaponService", () => {
   // getWeapons
   // ---------------------------------------------------
 
-  describe("getWeapons", () => {
-    it("returns all weapons for the account", async () => {
+  describe('getWeapons', () => {
+    it('returns all weapons for the account', async () => {
       mockRepo.findByAccountId.mockResolvedValue([mockWeapon]);
 
       const result = await service.getWeapons(ACCOUNT_ID);
@@ -107,8 +107,8 @@ describe("GenshinWeaponService", () => {
   // getWeaponById
   // ---------------------------------------------------
 
-  describe("getWeaponById", () => {
-    it("returns the weapon when it belongs to the account", async () => {
+  describe('getWeaponById', () => {
+    it('returns the weapon when it belongs to the account', async () => {
       mockRepo.findById.mockResolvedValue(mockWeapon);
 
       const result = await service.getWeaponById(ACCOUNT_ID, mockWeapon.id);
@@ -116,20 +116,20 @@ describe("GenshinWeaponService", () => {
       expect(result).toEqual(mockWeapon);
     });
 
-    it("throws NotFoundError when weapon does not exist", async () => {
+    it('throws NotFoundError when weapon does not exist', async () => {
       mockRepo.findById.mockResolvedValue(null);
 
-      await expect(
-        service.getWeaponById(ACCOUNT_ID, "nonexistent-id"),
-      ).rejects.toThrow(NotFoundError);
+      await expect(service.getWeaponById(ACCOUNT_ID, 'nonexistent-id')).rejects.toThrow(
+        NotFoundError,
+      );
     });
 
-    it("throws NotFoundError when weapon belongs to a different account (cross-account guard)", async () => {
+    it('throws NotFoundError when weapon belongs to a different account (cross-account guard)', async () => {
       mockRepo.findById.mockResolvedValue(mockWeapon); // accountId = ACCOUNT_ID
 
-      await expect(
-        service.getWeaponById(OTHER_ACCOUNT_ID, mockWeapon.id),
-      ).rejects.toThrow(NotFoundError);
+      await expect(service.getWeaponById(OTHER_ACCOUNT_ID, mockWeapon.id)).rejects.toThrow(
+        NotFoundError,
+      );
     });
   });
 
@@ -137,8 +137,8 @@ describe("GenshinWeaponService", () => {
   // updateWeapon
   // ---------------------------------------------------
 
-  describe("updateWeapon", () => {
-    it("updates and returns the weapon", async () => {
+  describe('updateWeapon', () => {
+    it('updates and returns the weapon', async () => {
       const updated = { ...mockWeapon, refinement: 5 };
       mockRepo.findById.mockResolvedValue(mockWeapon);
       mockRepo.update.mockResolvedValue(updated);
@@ -150,11 +150,11 @@ describe("GenshinWeaponService", () => {
       expect(result.refinement).toBe(5);
     });
 
-    it("throws NotFoundError when weapon does not exist", async () => {
+    it('throws NotFoundError when weapon does not exist', async () => {
       mockRepo.findById.mockResolvedValue(null);
 
       await expect(
-        service.updateWeapon(ACCOUNT_ID, "nonexistent-id", { refinement: 5 }),
+        service.updateWeapon(ACCOUNT_ID, 'nonexistent-id', { refinement: 5 }),
       ).rejects.toThrow(NotFoundError);
     });
   });
@@ -163,8 +163,8 @@ describe("GenshinWeaponService", () => {
   // removeWeapon
   // ---------------------------------------------------
 
-  describe("removeWeapon", () => {
-    it("deletes and returns the removed weapon", async () => {
+  describe('removeWeapon', () => {
+    it('deletes and returns the removed weapon', async () => {
       mockRepo.findById.mockResolvedValue(mockWeapon);
       mockRepo.delete.mockResolvedValue(mockWeapon);
 
@@ -174,12 +174,12 @@ describe("GenshinWeaponService", () => {
       expect(mockRepo.delete).toHaveBeenCalledWith(mockWeapon.id);
     });
 
-    it("throws NotFoundError when weapon does not exist", async () => {
+    it('throws NotFoundError when weapon does not exist', async () => {
       mockRepo.findById.mockResolvedValue(null);
 
-      await expect(
-        service.removeWeapon(ACCOUNT_ID, "nonexistent-id"),
-      ).rejects.toThrow(NotFoundError);
+      await expect(service.removeWeapon(ACCOUNT_ID, 'nonexistent-id')).rejects.toThrow(
+        NotFoundError,
+      );
     });
   });
 });

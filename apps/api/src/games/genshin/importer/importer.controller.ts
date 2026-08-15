@@ -1,6 +1,6 @@
-import type { Request, Response } from "express";
-import { successResponse } from "@/core/utils/response.js";
-import { GenshinImportService } from "./importer.service.js";
+import type { Request, Response } from 'express';
+import { successResponse } from '@/core/utils/response.js';
+import { GenshinImportService } from './importer.service.js';
 
 export class GenshinImportController {
   private importService: GenshinImportService;
@@ -26,12 +26,7 @@ export class GenshinImportController {
     // JSON.stringify re-serializes it so the service receives a raw
     // JSON string, which it parses and validates internally.
     const rawJson = JSON.stringify(req.body);
-    const result = await this.importService.importAccount(
-      req.user!.id,
-      rawJson,
-    );
-    res
-      .status(200)
-      .json(successResponse(result, "Account imported successfully."));
+    const result = await this.importService.importAccount(req.user!.id, rawJson);
+    res.status(200).json(successResponse(result, 'Account imported successfully.'));
   };
 }

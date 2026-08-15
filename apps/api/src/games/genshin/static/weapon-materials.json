@@ -1,0 +1,251 @@
+{
+  "_comment": "Weapon ascension material costs per phase. Weapons share ascension material types by their material group. Phase costs are identical for all weapons in the same group — only the material keys differ.",
+  "_structure": {
+    "materialGroup": "Which domain group this weapon belongs to (determines which days its materials drop)",
+    "billet": "Weapon billet type (e.g. 'BoatOfBillets' for polearms)",
+    "commonT1/T2/T3": "Common drop item keys"
+  },
+  "StaffOfHoma": {
+    "type": "Polearm",
+    "materialGroup": "Aerosiderite",
+    "materials": {
+      "matT1": "TilesOfTalisman",
+      "matT2": "ThunderingPoise",
+      "matT3": "AerialAerosiderite",
+      "commonT1": "FirmArrowhead",
+      "commonT2": "SharpArrowhead",
+      "commonT3": "WeatheredArrowhead",
+      "billet": "PolishedPrism"
+    },
+    "ascension": [
+      {
+        "phase": 1,
+        "matT1": 3,
+        "matT2": 0,
+        "matT3": 0,
+        "commonT1": 3,
+        "commonT2": 0,
+        "commonT3": 0,
+        "billet": 0,
+        "mora": 10000
+      },
+      {
+        "phase": 2,
+        "matT1": 3,
+        "matT2": 12,
+        "matT3": 0,
+        "commonT1": 6,
+        "commonT2": 0,
+        "commonT3": 0,
+        "billet": 0,
+        "mora": 20000
+      },
+      {
+        "phase": 3,
+        "matT1": 6,
+        "matT2": 6,
+        "matT3": 0,
+        "commonT1": 0,
+        "commonT2": 9,
+        "commonT3": 0,
+        "billet": 1,
+        "mora": 30000
+      },
+      {
+        "phase": 4,
+        "matT1": 4,
+        "matT2": 0,
+        "matT3": 12,
+        "commonT1": 0,
+        "commonT2": 12,
+        "commonT3": 0,
+        "billet": 0,
+        "mora": 45000
+      },
+      {
+        "phase": 5,
+        "matT1": 6,
+        "matT2": 0,
+        "matT3": 18,
+        "commonT1": 0,
+        "commonT2": 0,
+        "commonT3": 9,
+        "billet": 0,
+        "mora": 55000
+      },
+      {
+        "phase": 6,
+        "matT1": 4,
+        "matT2": 0,
+        "matT3": 12,
+        "commonT1": 0,
+        "commonT2": 0,
+        "commonT3": 18,
+        "billet": 1,
+        "mora": 65000
+      }
+    ]
+  },
+  "EngulfingLightning": {
+    "type": "Polearm",
+    "materialGroup": "Mask",
+    "materials": {
+      "matT1": "RemedyFragment",
+      "matT2": "KinsMask",
+      "matT3": "ForbiddenCurseMask",
+      "commonT1": "OldHandguard",
+      "commonT2": "KageouchiHandguard",
+      "commonT3": "FamedHandguard",
+      "billet": "PolishedPrism"
+    },
+    "ascension": [
+      {
+        "phase": 1,
+        "matT1": 3,
+        "matT2": 0,
+        "matT3": 0,
+        "commonT1": 3,
+        "commonT2": 0,
+        "commonT3": 0,
+        "billet": 0,
+        "mora": 10000
+      },
+      {
+        "phase": 2,
+        "matT1": 3,
+        "matT2": 12,
+        "matT3": 0,
+        "commonT1": 6,
+        "commonT2": 0,
+        "commonT3": 0,
+        "billet": 0,
+        "mora": 20000
+      },
+      {
+        "phase": 3,
+        "matT1": 6,
+        "matT2": 6,
+        "matT3": 0,
+        "commonT1": 0,
+        "commonT2": 9,
+        "commonT3": 0,
+        "billet": 1,
+        "mora": 30000
+      },
+      {
+        "phase": 4,
+        "matT1": 4,
+        "matT2": 0,
+        "matT3": 12,
+        "commonT1": 0,
+        "commonT2": 12,
+        "commonT3": 0,
+        "billet": 0,
+        "mora": 45000
+      },
+      {
+        "phase": 5,
+        "matT1": 6,
+        "matT2": 0,
+        "matT3": 18,
+        "commonT1": 0,
+        "commonT2": 0,
+        "commonT3": 9,
+        "billet": 0,
+        "mora": 55000
+      },
+      {
+        "phase": 6,
+        "matT1": 4,
+        "matT2": 0,
+        "matT3": 12,
+        "commonT1": 0,
+        "commonT2": 0,
+        "commonT3": 18,
+        "billet": 1,
+        "mora": 65000
+      }
+    ]
+  },
+  "HuntersPath": {
+    "type": "Bow",
+    "materialGroup": "PatchworkArtwork",
+    "materials": {
+      "matT1": "TangledStem",
+      "matT2": "EntwiningBranch",
+      "matT3": "IntricateBranch",
+      "commonT1": "FadedRedSatin",
+      "commonT2": "TrimmedRedSilk",
+      "commonT3": "RefinedRadiantSpincrystal",
+      "billet": "BowBillet"
+    },
+    "ascension": [
+      {
+        "phase": 1,
+        "matT1": 3,
+        "matT2": 0,
+        "matT3": 0,
+        "commonT1": 3,
+        "commonT2": 0,
+        "commonT3": 0,
+        "billet": 0,
+        "mora": 10000
+      },
+      {
+        "phase": 2,
+        "matT1": 3,
+        "matT2": 12,
+        "matT3": 0,
+        "commonT1": 6,
+        "commonT2": 0,
+        "commonT3": 0,
+        "billet": 0,
+        "mora": 20000
+      },
+      {
+        "phase": 3,
+        "matT1": 6,
+        "matT2": 6,
+        "matT3": 0,
+        "commonT1": 0,
+        "commonT2": 9,
+        "commonT3": 0,
+        "billet": 1,
+        "mora": 30000
+      },
+      {
+        "phase": 4,
+        "matT1": 4,
+        "matT2": 0,
+        "matT3": 12,
+        "commonT1": 0,
+        "commonT2": 12,
+        "commonT3": 0,
+        "billet": 0,
+        "mora": 45000
+      },
+      {
+        "phase": 5,
+        "matT1": 6,
+        "matT2": 0,
+        "matT3": 18,
+        "commonT1": 0,
+        "commonT2": 0,
+        "commonT3": 9,
+        "billet": 0,
+        "mora": 55000
+      },
+      {
+        "phase": 6,
+        "matT1": 4,
+        "matT2": 0,
+        "matT3": 12,
+        "commonT1": 0,
+        "commonT2": 0,
+        "commonT3": 18,
+        "billet": 1,
+        "mora": 65000
+      }
+    ]
+  }
+}

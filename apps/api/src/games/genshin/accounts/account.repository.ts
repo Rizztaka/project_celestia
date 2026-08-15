@@ -1,5 +1,5 @@
-import { prisma } from "@/core/db/prisma.js";
-import type { GenshinAccount, Prisma } from "@prisma/client";
+import { prisma } from '@/core/db/prisma.js';
+import type { GenshinAccount, Prisma } from '@prisma/client';
 
 export class GenshinAccountRepository {
   async create(data: Prisma.GenshinAccountCreateInput): Promise<GenshinAccount> {
@@ -14,10 +14,7 @@ export class GenshinAccountRepository {
     return prisma.genshinAccount.findUnique({ where: { id } });
   }
 
-  async update(
-    id: string,
-    data: Prisma.GenshinAccountUpdateInput,
-  ): Promise<GenshinAccount> {
+  async update(id: string, data: Prisma.GenshinAccountUpdateInput): Promise<GenshinAccount> {
     return prisma.genshinAccount.update({ where: { id }, data });
   }
 

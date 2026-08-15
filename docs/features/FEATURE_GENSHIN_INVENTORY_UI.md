@@ -21,6 +21,7 @@ via a single unified **Inventory page** with tab-based navigation. This is the f
 read-side implementation of Phase 2 (Genshin Foundation).
 
 After 2E, the complete Phase 2 data cycle is:
+
 - **Write:** Import page (2C)
 - **Read (Characters):** Roster page (2D)
 - **Read (Weapons + Artifacts):** Inventory page (2E) ← this milestone
@@ -123,6 +124,7 @@ We also add `orderBy: [{ level: "desc" }, { rarity: "desc" }]` to
 **Auth:** Required (Bearer JWT)
 
 **Success Response (200):**
+
 ```json
 {
   "success": true,
@@ -144,6 +146,7 @@ We also add `orderBy: [{ level: "desc" }, { rarity: "desc" }]` to
 ```
 
 **Empty inventory response (200):**
+
 ```json
 {
   "success": true,
@@ -159,6 +162,7 @@ We also add `orderBy: [{ level: "desc" }, { rarity: "desc" }]` to
 **Auth:** Required (Bearer JWT)
 
 **Success Response (200):**
+
 ```json
 {
   "success": true,
@@ -197,9 +201,9 @@ We also add `orderBy: [{ level: "desc" }, { rarity: "desc" }]` to
 ```typescript
 listWeapons = async (req: Request, res: Response) => {
   const weapons = await this.weaponService.getWeaponsForUser(req.user!.id);
-  res.status(200).json(
-    successResponse({ weapons, total: weapons.length }, "Weapons retrieved successfully.")
-  );
+  res
+    .status(200)
+    .json(successResponse({ weapons, total: weapons.length }, 'Weapons retrieved successfully.'));
 };
 ```
 
@@ -210,9 +214,11 @@ listWeapons = async (req: Request, res: Response) => {
 ```typescript
 listArtifacts = async (req: Request, res: Response) => {
   const artifacts = await this.artifactService.getArtifactsForUser(req.user!.id);
-  res.status(200).json(
-    successResponse({ artifacts, total: artifacts.length }, "Artifacts retrieved successfully.")
-  );
+  res
+    .status(200)
+    .json(
+      successResponse({ artifacts, total: artifacts.length }, 'Artifacts retrieved successfully.'),
+    );
 };
 ```
 
@@ -228,7 +234,7 @@ validation logic.
 **File:** `apps/api/src/games/genshin/weapons/weapon.routes.ts` [NEW]
 
 ```typescript
-router.get("/weapons", requireAuth, weaponController.listWeapons);
+router.get('/weapons', requireAuth, weaponController.listWeapons);
 ```
 
 Full path: `GET /api/v1/games/genshin/weapons`
@@ -238,7 +244,7 @@ Full path: `GET /api/v1/games/genshin/weapons`
 **File:** `apps/api/src/games/genshin/artifacts/artifact.routes.ts` [NEW]
 
 ```typescript
-router.get("/artifacts", requireAuth, artifactController.listArtifacts);
+router.get('/artifacts', requireAuth, artifactController.listArtifacts);
 ```
 
 Full path: `GET /api/v1/games/genshin/artifacts`
@@ -250,10 +256,10 @@ Full path: `GET /api/v1/games/genshin/artifacts`
 **File:** `apps/api/src/games/genshin/genshin.routes.ts` [MODIFY]
 
 ```typescript
-router.use(importerRoutes);    // ✅ /import        (2C)
-router.use(characterRoutes);   // ✅ /characters    (2D)
-router.use(weaponRoutes);      // ✅ /weapons       (2E)
-router.use(artifactRoutes);    // ✅ /artifacts     (2E)
+router.use(importerRoutes); // ✅ /import        (2C)
+router.use(characterRoutes); // ✅ /characters    (2D)
+router.use(weaponRoutes); // ✅ /weapons       (2E)
+router.use(artifactRoutes); // ✅ /artifacts     (2E)
 ```
 
 No changes to `app.ts`.
@@ -307,11 +313,11 @@ export interface ArtifactsResponse {
 }
 
 export async function fetchGenshinWeapons(): Promise<WeaponsResponse> {
-  return fetchApi<WeaponsResponse>("/games/genshin/weapons");
+  return fetchApi<WeaponsResponse>('/games/genshin/weapons');
 }
 
 export async function fetchGenshinArtifacts(): Promise<ArtifactsResponse> {
-  return fetchApi<ArtifactsResponse>("/games/genshin/artifacts");
+  return fetchApi<ArtifactsResponse>('/games/genshin/artifacts');
 }
 ```
 
@@ -328,13 +334,13 @@ simultaneously on re-import.
 ```typescript
 // In InventoryPage.tsx:
 const weaponsQuery = useQuery({
-  queryKey: ["genshin", "weapons"],
+  queryKey: ['genshin', 'weapons'],
   queryFn: fetchGenshinWeapons,
   retry: false,
 });
 
 const artifactsQuery = useQuery({
-  queryKey: ["genshin", "artifacts"],
+  queryKey: ['genshin', 'artifacts'],
   queryFn: fetchGenshinArtifacts,
   retry: false,
 });
@@ -352,7 +358,7 @@ with no loading delay after the initial render.
 #### Tab Navigation (React State, Not Sub-Routes)
 
 ```typescript
-const [activeTab, setActiveTab] = useState<"weapons" | "artifacts">("weapons");
+const [activeTab, setActiveTab] = useState<'weapons' | 'artifacts'>('weapons');
 ```
 
 The active tab is stored in component state. No URL change occurs on tab switch.
@@ -415,6 +421,7 @@ Artifacts can number in the hundreds. A compact row layout is critical for usabi
 ```
 
 Layout (left to right):
+
 1. **Slot icon** (SVG or initials badge for flower/plume/sands/goblet/circlet).
 2. **Set name** (formatted PascalCase) + slot name.
 3. **Rarity stars** (★ count colored gold/purple based on 5★/4★).
@@ -435,25 +442,25 @@ A small lookup map converts them to short display labels for the artifact rows:
 
 ```typescript
 const STAT_LABELS: Record<string, string> = {
-  "hp":           "HP",
-  "hp_":          "HP%",
-  "atk":          "ATK",
-  "atk_":         "ATK%",
-  "def":          "DEF",
-  "def_":         "DEF%",
-  "eleMas":       "EM",
-  "enerRech_":    "ER%",
-  "critRate_":    "CR",
-  "critDMG_":     "CD",
-  "heal_":        "Heal%",
-  "pyro_dmg_":    "Pyro%",
-  "hydro_dmg_":   "Hydro%",
-  "cryo_dmg_":    "Cryo%",
-  "electro_dmg_": "Electro%",
-  "anemo_dmg_":   "Anemo%",
-  "geo_dmg_":     "Geo%",
-  "dendro_dmg_":  "Dendro%",
-  "physical_dmg_":"Phys%",
+  hp: 'HP',
+  hp_: 'HP%',
+  atk: 'ATK',
+  atk_: 'ATK%',
+  def: 'DEF',
+  def_: 'DEF%',
+  eleMas: 'EM',
+  enerRech_: 'ER%',
+  critRate_: 'CR',
+  critDMG_: 'CD',
+  heal_: 'Heal%',
+  pyro_dmg_: 'Pyro%',
+  hydro_dmg_: 'Hydro%',
+  cryo_dmg_: 'Cryo%',
+  electro_dmg_: 'Electro%',
+  anemo_dmg_: 'Anemo%',
+  geo_dmg_: 'Geo%',
+  dendro_dmg_: 'Dendro%',
+  physical_dmg_: 'Phys%',
 };
 
 function formatStat(key: string): string {
@@ -470,11 +477,11 @@ deferral needed here — the stat key vocabulary is finite and well-known.
 
 ```typescript
 const SLOT_LABELS: Record<string, string> = {
-  flower:  "Flower",
-  plume:   "Plume",
-  sands:   "Sands",
-  goblet:  "Goblet",
-  circlet: "Circlet",
+  flower: 'Flower',
+  plume: 'Plume',
+  sands: 'Sands',
+  goblet: 'Goblet',
+  circlet: 'Circlet',
 };
 ```
 
@@ -530,26 +537,26 @@ Instead, we add a new **Inventory** card to the dashboard grid that links to `/i
 
 ### Backend (API)
 
-| File | Type | Description |
-|---|---|---|
-| `weapons/weapon.service.ts` | MODIFY | Add `getWeaponsForUser(userId)` + `prisma` import |
-| `artifacts/artifact.service.ts` | MODIFY | Add `getArtifactsForUser(userId)` + `prisma` import |
-| `weapons/weapon.repository.ts` | MODIFY | Add `orderBy: { level: "desc" }` to `findByAccountId` |
+| File                               | Type   | Description                                                                 |
+| ---------------------------------- | ------ | --------------------------------------------------------------------------- |
+| `weapons/weapon.service.ts`        | MODIFY | Add `getWeaponsForUser(userId)` + `prisma` import                           |
+| `artifacts/artifact.service.ts`    | MODIFY | Add `getArtifactsForUser(userId)` + `prisma` import                         |
+| `weapons/weapon.repository.ts`     | MODIFY | Add `orderBy: { level: "desc" }` to `findByAccountId`                       |
 | `artifacts/artifact.repository.ts` | MODIFY | Add `orderBy: [{ level: "desc" }, { rarity: "desc" }]` to `findByAccountId` |
-| `weapons/weapon.controller.ts` | NEW | `GenshinWeaponController.listWeapons` |
-| `artifacts/artifact.controller.ts` | NEW | `GenshinArtifactController.listArtifacts` |
-| `weapons/weapon.routes.ts` | NEW | `GET /weapons` protected route |
-| `artifacts/artifact.routes.ts` | NEW | `GET /artifacts` protected route |
-| `genshin.routes.ts` | MODIFY | Mount `weaponRoutes` and `artifactRoutes` |
+| `weapons/weapon.controller.ts`     | NEW    | `GenshinWeaponController.listWeapons`                                       |
+| `artifacts/artifact.controller.ts` | NEW    | `GenshinArtifactController.listArtifacts`                                   |
+| `weapons/weapon.routes.ts`         | NEW    | `GET /weapons` protected route                                              |
+| `artifacts/artifact.routes.ts`     | NEW    | `GET /artifacts` protected route                                            |
+| `genshin.routes.ts`                | MODIFY | Mount `weaponRoutes` and `artifactRoutes`                                   |
 
 ### Frontend (Web)
 
-| File | Type | Description |
-|---|---|---|
-| `lib/api.ts` | MODIFY | Add `InventoryWeapon`, `InventoryArtifact`, `WeaponsResponse`, `ArtifactsResponse`, `fetchGenshinWeapons()`, `fetchGenshinArtifacts()` |
-| `pages/InventoryPage.tsx` | NEW | Tabbed inventory page with `WeaponCard` grid and `ArtifactRow` list |
-| `App.tsx` | MODIFY | Add `/inventory` protected route |
-| `pages/DashboardPage.tsx` | MODIFY | Replace Daily Planner placeholder with live Inventory card |
+| File                      | Type   | Description                                                                                                                            |
+| ------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `lib/api.ts`              | MODIFY | Add `InventoryWeapon`, `InventoryArtifact`, `WeaponsResponse`, `ArtifactsResponse`, `fetchGenshinWeapons()`, `fetchGenshinArtifacts()` |
+| `pages/InventoryPage.tsx` | NEW    | Tabbed inventory page with `WeaponCard` grid and `ArtifactRow` list                                                                    |
+| `App.tsx`                 | MODIFY | Add `/inventory` protected route                                                                                                       |
+| `pages/DashboardPage.tsx` | MODIFY | Replace Daily Planner placeholder with live Inventory card                                                                             |
 
 ---
 

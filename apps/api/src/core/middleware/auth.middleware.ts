@@ -1,7 +1,7 @@
-import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
-import { env } from "@/core/config/env.js";
-import { UnauthorizedError } from "@/core/errors/app-error.js";
+import type { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { env } from '@/core/config/env.js';
+import { UnauthorizedError } from '@/core/errors/app-error.js';
 
 // ============================================================
 // Express Request Augmentation
@@ -49,16 +49,12 @@ interface JwtPayload {
  * Usage:
  *   router.get("/protected", requireAuth, controller.handler);
  */
-export const requireAuth = (
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-): void => {
+export const requireAuth = (req: Request, _res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader?.startsWith("Bearer ")) {
+  if (!authHeader?.startsWith('Bearer ')) {
     throw new UnauthorizedError(
-      "Missing or malformed authorization header. Expected: Bearer <token>",
+      'Missing or malformed authorization header. Expected: Bearer <token>',
     );
   }
 
@@ -70,6 +66,6 @@ export const requireAuth = (
     next();
   } catch {
     // jwt.verify throws on expiry, bad signature, malformed token, etc.
-    throw new UnauthorizedError("Invalid or expired token.");
+    throw new UnauthorizedError('Invalid or expired token.');
   }
 };

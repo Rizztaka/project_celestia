@@ -1,0 +1,13 @@
+# node_modules
+node_modules
+.turbo
+dist
+.next
+coverage
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+*.log
+.windsurf
+.claude
+.agents

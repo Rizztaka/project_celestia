@@ -11,11 +11,11 @@
  * redirect to /login.
  */
 
-import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchApi, ApiError } from "../lib/api";
-import { useAuthStore } from "../stores/auth.store";
-import type { MeResponse } from "@celestia/api-contracts";
+import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { fetchApi, ApiError } from '../lib/api';
+import { useAuthStore } from '../stores/auth.store';
+import type { MeResponse } from '@celestia/api-contracts';
 
 function DashboardPage() {
   const logout = useAuthStore((state) => state.logout);
@@ -25,8 +25,8 @@ function DashboardPage() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["me"],
-    queryFn: () => fetchApi<MeResponse>("/auth/me"),
+    queryKey: ['me'],
+    queryFn: () => fetchApi<MeResponse>('/auth/me'),
     retry: false, // don't retry auth failures
   });
 
@@ -40,19 +40,19 @@ function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <p className="text-zinc-500 text-sm">Loading…</p>
+      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
+        <p className="text-sm text-zinc-500">Loading…</p>
       </div>
     );
   }
 
   if (error && !(error instanceof ApiError && error.status === 401)) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
         <div className="text-center">
-          <p className="text-red-400 text-sm">Something went wrong.</p>
-          <p className="text-zinc-500 text-xs mt-1">
-            {error instanceof Error ? error.message : "Unknown error"}
+          <p className="text-sm text-red-400">Something went wrong.</p>
+          <p className="mt-1 text-xs text-zinc-500">
+            {error instanceof Error ? error.message : 'Unknown error'}
           </p>
         </div>
       </div>
@@ -60,22 +60,22 @@ function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden text-zinc-300">
+    <div className="relative min-h-screen overflow-hidden text-zinc-300">
       {/* Top navigation bar */}
-      <nav className="glass-panel border-b-0 border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
-        <span className="font-display font-bold text-gradient text-lg tracking-tight">
+      <nav className="glass-panel sticky top-0 z-50 flex items-center justify-between border-b-0 border-white/10 px-6 py-4">
+        <span className="font-display text-gradient text-lg font-bold tracking-tight">
           Project Celestia
         </span>
         <div className="flex items-center gap-6">
           <a
             href="/profile"
-            className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+            className="text-sm font-medium text-zinc-400 transition-colors hover:text-white"
           >
             Profile
           </a>
           <button
             onClick={logout}
-            className="text-sm font-medium text-zinc-500 hover:text-danger-400 transition-colors"
+            className="hover:text-danger-400 text-sm font-medium text-zinc-500 transition-colors"
           >
             Sign out
           </button>
@@ -83,75 +83,102 @@ function DashboardPage() {
       </nav>
 
       {/* Main content */}
-      <main className="max-w-5xl mx-auto px-6 py-16 animate-fade-in relative z-10">
+      <main className="animate-fade-in relative z-10 mx-auto max-w-5xl px-6 py-16">
         <div className="mb-12">
-          <h1 className="text-4xl font-display font-bold tracking-tight text-white">
-            Welcome back,{" "}
-            <span className="text-gradient">{profile?.username}</span>
+          <h1 className="font-display text-4xl font-bold tracking-tight text-white">
+            Welcome back, <span className="text-gradient">{profile?.username}</span>
           </h1>
-          <p className="text-zinc-400 mt-3 text-lg max-w-2xl">
+          <p className="mt-3 max-w-2xl text-lg text-zinc-400">
             Your Genshin companion is being built. Check back soon for new features.
           </p>
         </div>
 
         {/* Phase 2 — Import entry point */}
-        <div className="mt-10 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <a
             href="/import"
-            className="glass-panel hover-lift rounded-2xl p-6 group cursor-pointer block"
+            className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
           >
-            <div className="w-12 h-12 rounded-xl bg-accent-500/20 text-accent-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+            <div className="bg-accent-500/20 text-accent-400 mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                />
+              </svg>
             </div>
-            <h2 className="font-display font-bold text-white text-lg group-hover:text-accent-400 transition-colors">
+            <h2 className="font-display group-hover:text-accent-400 text-lg font-bold text-white transition-colors">
               Import Account
             </h2>
-            <p className="text-zinc-400 text-sm mt-2 leading-relaxed">
+            <p className="mt-2 text-sm leading-relaxed text-zinc-400">
               Import your roster from Genshin Optimizer or Inventory Kamera.
             </p>
           </a>
 
           <a
             href="/roster"
-            className="glass-panel hover-lift rounded-2xl p-6 group cursor-pointer block"
+            className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
           >
-            <div className="w-12 h-12 rounded-xl bg-violet-500/20 text-violet-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400 transition-transform group-hover:scale-110">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
             </div>
-            <h2 className="font-display font-bold text-white text-lg group-hover:text-violet-400 transition-colors">
+            <h2 className="font-display text-lg font-bold text-white transition-colors group-hover:text-violet-400">
               Roster
             </h2>
-            <p className="text-zinc-400 text-sm mt-2 leading-relaxed">
+            <p className="mt-2 text-sm leading-relaxed text-zinc-400">
               Browse your imported characters, their talents, and equipped weapons.
             </p>
           </a>
 
           <a
             href="/inventory"
-            className="glass-panel hover-lift rounded-2xl p-6 group cursor-pointer block"
+            className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
           >
-            <div className="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 transition-transform group-hover:scale-110">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                />
+              </svg>
             </div>
-            <h2 className="font-display font-bold text-white text-lg group-hover:text-amber-400 transition-colors">
+            <h2 className="font-display text-lg font-bold text-white transition-colors group-hover:text-amber-400">
               Inventory
             </h2>
-            <p className="text-zinc-400 text-sm mt-2 leading-relaxed">
+            <p className="mt-2 text-sm leading-relaxed text-zinc-400">
               Browse your full weapon and artifact inventories.
             </p>
           </a>
 
           <a
             href="/planner"
-            className="glass-panel hover-lift rounded-2xl p-6 group cursor-pointer block"
+            className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
           >
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 transition-transform group-hover:scale-110">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
             </div>
-            <h2 className="font-display font-bold text-white text-lg group-hover:text-emerald-400 transition-colors">
+            <h2 className="font-display text-lg font-bold text-white transition-colors group-hover:text-emerald-400">
               Daily Planner
             </h2>
-            <p className="text-zinc-400 text-sm mt-2 leading-relaxed">
+            <p className="mt-2 text-sm leading-relaxed text-zinc-400">
               Track your resin and daily checklist.
             </p>
           </a>

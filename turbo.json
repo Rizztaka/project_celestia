@@ -13,6 +13,7 @@
       "outputs": ["coverage/**"]
     },
     "lint": {},
+    "format": {},
     "dev": {
       "cache": false,
       "persistent": true

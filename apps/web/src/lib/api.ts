@@ -10,7 +10,7 @@
  *   const data = await fetchApi<MeResponse>("/auth/me");
  */
 
-const API_BASE = "http://localhost:4000/api/v1";
+const API_BASE = 'http://localhost:4000/api/v1';
 
 export class ApiError extends Error {
   public readonly code: string;
@@ -18,13 +18,13 @@ export class ApiError extends Error {
 
   constructor(code: string, message: string, status: number) {
     super(message);
-    this.name = "ApiError";
+    this.name = 'ApiError';
     this.code = code;
     this.status = status;
   }
 }
 
-import { useAuthStore } from "../stores/auth.store";
+import { useAuthStore } from '../stores/auth.store';
 
 /**
  * fetchApi — typed wrapper around the browser Fetch API.
@@ -37,19 +37,16 @@ import { useAuthStore } from "../stores/auth.store";
  * Throws ApiError for non-2xx responses, parsed from the standard
  * { success: false, error: { code, message } } response shape.
  */
-export async function fetchApi<T>(
-  path: string,
-  options: RequestInit = {},
-): Promise<T> {
+export async function fetchApi<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = useAuthStore.getState().token;
 
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
     ...(options.headers as Record<string, string>),
   };
 
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   const response = await fetch(`${API_BASE}${path}`, {
@@ -61,8 +58,8 @@ export async function fetchApi<T>(
 
   if (!response.ok || !json.success) {
     throw new ApiError(
-      json.error?.code ?? "UNKNOWN_ERROR",
-      json.error?.message ?? "An unexpected error occurred",
+      json.error?.code ?? 'UNKNOWN_ERROR',
+      json.error?.message ?? 'An unexpected error occurred',
       response.status,
     );
   }
@@ -88,11 +85,9 @@ export interface ImportResult {
  * before passing it here. If JSON.parse() throws, catch it in the UI and
  * show an inline error — do NOT call this function with invalid JSON.
  */
-export async function importGenshinAccount(
-  goodPayload: unknown,
-): Promise<ImportResult> {
-  return fetchApi<ImportResult>("/games/genshin/import", {
-    method: "POST",
+export async function importGenshinAccount(goodPayload: unknown): Promise<ImportResult> {
+  return fetchApi<ImportResult>('/games/genshin/import', {
+    method: 'POST',
     body: JSON.stringify(goodPayload),
   });
 }
@@ -134,7 +129,7 @@ export interface RosterResponse {
  * (server returns an empty array, not a 404).
  */
 export async function fetchGenshinRoster(): Promise<RosterResponse> {
-  return fetchApi<RosterResponse>("/games/genshin/characters");
+  return fetchApi<RosterResponse>('/games/genshin/characters');
 }
 
 // ============================================================
@@ -184,7 +179,7 @@ export interface ArtifactsResponse {
  * Always returns a WeaponsResponse, even if the user has no data yet.
  */
 export async function fetchGenshinWeapons(): Promise<WeaponsResponse> {
-  return fetchApi<WeaponsResponse>("/games/genshin/weapons");
+  return fetchApi<WeaponsResponse>('/games/genshin/weapons');
 }
 
 /**
@@ -195,7 +190,7 @@ export async function fetchGenshinWeapons(): Promise<WeaponsResponse> {
  * Always returns an ArtifactsResponse, even if the user has no data yet.
  */
 export async function fetchGenshinArtifacts(): Promise<ArtifactsResponse> {
-  return fetchApi<ArtifactsResponse>("/games/genshin/artifacts");
+  return fetchApi<ArtifactsResponse>('/games/genshin/artifacts');
 }
 
 // ============================================================
@@ -209,16 +204,16 @@ export async function fetchGenshinArtifacts(): Promise<ArtifactsResponse> {
  * Use computeCurrentResin() from lib/resin.ts to get the effective current amount.
  */
 export interface DailyState {
-  id:                 string;
-  userId:             string;
-  resinAmount:        number;   // checkpoint value — project forward with resin.ts
-  resinUpdatedAt:     string;   // ISO 8601 UTC timestamp
-  commissionsDone:    boolean;
-  teapotClaimed:      boolean;
+  id: string;
+  userId: string;
+  resinAmount: number; // checkpoint value — project forward with resin.ts
+  resinUpdatedAt: string; // ISO 8601 UTC timestamp
+  commissionsDone: boolean;
+  teapotClaimed: boolean;
   transformerClaimed: boolean;
-  dailyResetAt:       string;   // ISO 8601 UTC timestamp of last reset
-  createdAt:          string;
-  updatedAt:          string;
+  dailyResetAt: string; // ISO 8601 UTC timestamp of last reset
+  createdAt: string;
+  updatedAt: string;
 }
 
 /**
@@ -228,7 +223,7 @@ export interface DailyState {
  * Creates the record with safe defaults on the user's first call.
  */
 export async function fetchDailyState(): Promise<DailyState> {
-  return fetchApi<DailyState>("/companion/daily");
+  return fetchApi<DailyState>('/companion/daily');
 }
 
 /**
@@ -241,9 +236,9 @@ export async function fetchDailyState(): Promise<DailyState> {
  * @param amount Integer in [0, 200].
  */
 export async function patchResin(amount: number): Promise<DailyState> {
-  return fetchApi<DailyState>("/companion/resin", {
-    method: "PATCH",
-    body:   JSON.stringify({ amount }),
+  return fetchApi<DailyState>('/companion/resin', {
+    method: 'PATCH',
+    body: JSON.stringify({ amount }),
   });
 }
 
@@ -253,10 +248,178 @@ export async function patchResin(amount: number): Promise<DailyState> {
  * Updates one or more daily checklist flags. At least one field is required.
  */
 export async function patchChecklist(
-  input: Partial<Pick<DailyState, "commissionsDone" | "teapotClaimed" | "transformerClaimed">>,
+  input: Partial<Pick<DailyState, 'commissionsDone' | 'teapotClaimed' | 'transformerClaimed'>>,
 ): Promise<DailyState> {
-  return fetchApi<DailyState>("/companion/checklist", {
-    method: "PATCH",
-    body:   JSON.stringify(input),
+  return fetchApi<DailyState>('/companion/checklist', {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+  });
+}
+
+// ============================================================
+// Upgrade Goals & Farming Planner Types (Milestone 3B)
+// ============================================================
+
+export type GoalType = 'CHARACTER_ASCENSION' | 'CHARACTER_TALENT' | 'WEAPON_ASCENSION';
+export type TalentType = 'normal' | 'skill' | 'burst';
+
+export interface UpgradeGoal {
+  id: string;
+  userId: string;
+  goalType: GoalType;
+  targetKey: string;
+  fromPhase: number;
+  toPhase: number;
+  talentType: TalentType | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MaterialDelta {
+  needed: Record<string, number>;
+  inventory: Record<string, number>;
+  delta: Record<string, number>;
+}
+
+export interface TodayDomain {
+  domainKey: string;
+  name: string;
+  location: string;
+  drops: string[];
+  dropKeys: string[];
+  relevantToGoals: boolean;
+}
+
+export interface TodayResult {
+  serverDay: string;
+  domains: TodayDomain[];
+}
+
+export interface CreateGoalInput {
+  goalType: GoalType;
+  targetKey: string;
+  fromPhase: number;
+  toPhase: number;
+  talentType: TalentType | null;
+}
+
+export async function fetchGoals(): Promise<UpgradeGoal[]> {
+  return fetchApi<UpgradeGoal[]>('/companion/goals');
+}
+
+export async function createGoal(input: CreateGoalInput): Promise<UpgradeGoal> {
+  return fetchApi<UpgradeGoal>('/companion/goals', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  });
+}
+
+export async function deleteGoal(id: string): Promise<void> {
+  await fetchApi<void>(`/companion/goals/${id}`, { method: 'DELETE' });
+}
+
+export async function fetchMaterialDelta(): Promise<MaterialDelta> {
+  return fetchApi<MaterialDelta>('/companion/goals/materials');
+}
+
+export async function fetchTodayDomains(): Promise<TodayResult> {
+  return fetchApi<TodayResult>('/companion/goals/today');
+}
+
+// ============================================================
+// Event Planner Types (Milestone 3C)
+// ============================================================
+
+export interface EventRewardTier {
+  tierId: string;
+  label: string;
+  primogems: number;
+  other: string[];
+  claimed: boolean;
+}
+
+export interface GenshinEvent {
+  key: string;
+  name: string;
+  type: string;
+  startUtc: string;
+  endUtc: string;
+  isActive: boolean;
+  isUpcoming: boolean;
+  isExpired: boolean;
+  hoursRemaining: number;
+  description: string;
+  wikiUrl: string | null;
+  rewardTiers: EventRewardTier[];
+  claimedPrimogems: number;
+  totalPrimogems: number;
+}
+
+export interface EventsResponse {
+  patch: string;
+  totalUnclaimedPrimogems: number;
+  events: GenshinEvent[];
+}
+
+export interface TierUpdateResult {
+  eventKey: string;
+  tierId: string;
+  claimed: boolean;
+}
+
+export async function fetchEvents(): Promise<EventsResponse> {
+  return fetchApi<EventsResponse>('/companion/events');
+}
+
+export async function patchEventTier(
+  eventKey: string,
+  tierId: string,
+  claimed: boolean,
+): Promise<TierUpdateResult> {
+  return fetchApi<TierUpdateResult>(`/companion/events/${eventKey}/tiers/${tierId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ claimed }),
+  });
+}
+
+// ============================================================
+// Weekly Boss Planner Types (Milestone 3D)
+// ============================================================
+
+export interface HydratedWeeklyBoss {
+  key: string;
+  name: string;
+  location: string;
+  domainName: string;
+  dropKeys: string[];
+  wikiUrl: string | null;
+  defeated: boolean;
+}
+
+export interface WeeklyBossesResponse {
+  weeklyResetAt: string;
+  nextResetAt: string;
+  defeatedCount: number;
+  discountedRemaining: number;
+  nextFightCost: number;
+  bosses: HydratedWeeklyBoss[];
+}
+
+export interface BossUpdateResult {
+  bossKey: string;
+  defeated: boolean;
+}
+
+export async function fetchWeeklyBosses(): Promise<WeeklyBossesResponse> {
+  return fetchApi<WeeklyBossesResponse>('/companion/weekly-bosses');
+}
+
+export async function patchWeeklyBoss(
+  bossKey: string,
+  defeated: boolean,
+): Promise<BossUpdateResult> {
+  return fetchApi<BossUpdateResult>(`/companion/weekly-bosses/${bossKey}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ defeated }),
   });
 }

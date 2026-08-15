@@ -11,8 +11,8 @@
  * server polling entirely.
  */
 
-const MAX_RESIN      = 200;
-const REGEN_SECONDS  = 8 * 60; // 480 seconds per resin
+const MAX_RESIN = 200;
+const REGEN_SECONDS = 8 * 60; // 480 seconds per resin
 
 /**
  * Computes the effective current resin from a stored checkpoint.
@@ -23,7 +23,7 @@ const REGEN_SECONDS  = 8 * 60; // 480 seconds per resin
  */
 export function computeCurrentResin(storedAmount: number, updatedAt: string): number {
   const elapsedSeconds = (Date.now() - new Date(updatedAt).getTime()) / 1000;
-  const regenerated    = Math.floor(elapsedSeconds / REGEN_SECONDS);
+  const regenerated = Math.floor(elapsedSeconds / REGEN_SECONDS);
   return Math.min(storedAmount + regenerated, MAX_RESIN);
 }
 
@@ -47,11 +47,11 @@ export function resinFullAt(storedAmount: number, updatedAt: string): Date | nul
   const current = computeCurrentResin(storedAmount, updatedAt);
   if (current >= MAX_RESIN) return null;
 
-  const remaining      = MAX_RESIN - current;
+  const remaining = MAX_RESIN - current;
   const elapsedSeconds = (Date.now() - new Date(updatedAt).getTime()) / 1000;
   // Time to next tick + time for remaining-1 full ticks
   const secsToNextTick = REGEN_SECONDS - (elapsedSeconds % REGEN_SECONDS);
-  const secsToFull     = secsToNextTick + (remaining - 1) * REGEN_SECONDS;
+  const secsToFull = secsToNextTick + (remaining - 1) * REGEN_SECONDS;
 
   return new Date(Date.now() + secsToFull * 1000);
 }
@@ -61,9 +61,9 @@ export function resinFullAt(storedAmount: number, updatedAt: string): Date | nul
  * Example: "14h 32m", "0h 7m"
  */
 export function formatTimeUntilFull(fullAt: Date | null): string {
-  if (!fullAt) return "FULL";
+  if (!fullAt) return 'FULL';
   const totalMinutes = Math.ceil((fullAt.getTime() - Date.now()) / 60_000);
-  const hours   = Math.floor(totalMinutes / 60);
+  const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
   return `${hours}h ${minutes}m`;
 }

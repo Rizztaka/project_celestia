@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { BadRequestError } from "@/core/errors/app-error.js";
-import { DailyCompanionRepository, type CompanionScalars } from "./companion.repository.js";
-import type { DailyCompanion } from "@prisma/client";
+import { z } from 'zod';
+import { BadRequestError } from '@/core/errors/app-error.js';
+import { DailyCompanionRepository, type CompanionScalars } from './companion.repository.js';
+import type { DailyCompanion } from '@prisma/client';
 
 // -------------------------------------------------------
 // Zod validation schemas (per ADR 0007 — service-level)
@@ -9,22 +9,21 @@ import type { DailyCompanion } from "@prisma/client";
 
 const UpdateResinSchema = z.object({
   amount: z
-    .number({ invalid_type_error: "amount must be a number" })
-    .int("amount must be an integer")
-    .min(0, "amount must be at least 0")
-    .max(200, "amount must be at most 200"),
+    .number({ invalid_type_error: 'amount must be a number' })
+    .int('amount must be an integer')
+    .min(0, 'amount must be at least 0')
+    .max(200, 'amount must be at most 200'),
 });
 
 const UpdateChecklistSchema = z
   .object({
-    commissionsDone:    z.boolean().optional(),
-    teapotClaimed:      z.boolean().optional(),
+    commissionsDone: z.boolean().optional(),
+    teapotClaimed: z.boolean().optional(),
     transformerClaimed: z.boolean().optional(),
   })
-  .refine(
-    (data) => Object.values(data).some((v) => v !== undefined),
-    { message: "At least one checklist field must be provided." },
-  );
+  .refine((data) => Object.values(data).some((v) => v !== undefined), {
+    message: 'At least one checklist field must be provided.',
+  });
 
 // -------------------------------------------------------
 // Daily reset boundary (lazy reset, per spec Decision 3)
@@ -77,10 +76,10 @@ export class DailyCompanionService {
     const lastReset = getLastResetBoundary();
     if (companion.dailyResetAt < lastReset) {
       companion = await this.repository.upsert(userId, {
-        commissionsDone:    false,
-        teapotClaimed:      false,
+        commissionsDone: false,
+        teapotClaimed: false,
         transformerClaimed: false,
-        dailyResetAt:       new Date(),
+        dailyResetAt: new Date(),
       });
     }
 
@@ -98,11 +97,11 @@ export class DailyCompanionService {
   async updateResin(userId: string, rawAmount: unknown): Promise<DailyCompanion> {
     const result = UpdateResinSchema.safeParse({ amount: rawAmount });
     if (!result.success) {
-      throw new BadRequestError(result.error.errors[0]?.message ?? "Invalid amount");
+      throw new BadRequestError(result.error.errors[0]?.message ?? 'Invalid amount');
     }
 
     return this.repository.upsert(userId, {
-      resinAmount:    result.data.amount,
+      resinAmount: result.data.amount,
       resinUpdatedAt: new Date(),
     });
   }
@@ -113,13 +112,10 @@ export class DailyCompanionService {
    * Accepts a partial update — only the fields present in the request body
    * are changed. Throws ValidationError if the body is empty.
    */
-  async updateChecklist(
-    userId:   string,
-    rawInput: unknown,
-  ): Promise<DailyCompanion> {
+  async updateChecklist(userId: string, rawInput: unknown): Promise<DailyCompanion> {
     const result = UpdateChecklistSchema.safeParse(rawInput);
     if (!result.success) {
-      throw new BadRequestError(result.error.errors[0]?.message ?? "Invalid checklist update");
+      throw new BadRequestError(result.error.errors[0]?.message ?? 'Invalid checklist update');
     }
 
     // Strip undefined keys so Prisma receives only the fields to change

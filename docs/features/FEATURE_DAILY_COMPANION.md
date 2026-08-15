@@ -22,6 +22,7 @@ of Phase 3 and the first feature in the project that mutates game-state data rat
 than just importing it from an external scanner.
 
 After 3A:
+
 - The user can **set their current resin** and the system will mathematically
   compute how much they currently have, updating in real time in the browser.
 - The user can **check off daily tasks** (Commissions, Teapot, Parametric Transformer).
@@ -43,11 +44,13 @@ not inside `genshin.routes.ts`.
 ### Finding 2 — Resin regeneration is fully computable from two fields
 
 Genshin's resin rules:
+
 - Max cap: **200 resin**.
 - Regeneration rate: **1 resin every 8 minutes** (= 480 seconds).
 - Resin does NOT regenerate beyond the cap.
 
 To avoid a polling-heavy backend, we use the "timestamp + stored value" pattern:
+
 1. The backend stores `resinAmount` (integer, 0–200) and `resinUpdatedAt` (UTC DateTime).
 2. On every `GET`, the backend returns both raw fields. The **frontend** computes
    the effective current amount by projecting forward from `resinUpdatedAt`.
@@ -128,6 +131,7 @@ model DailyCompanion {
 ```
 
 Additionally, add the back-relation to the `User` model:
+
 ```prisma
 dailyCompanion DailyCompanion?
 ```
@@ -177,6 +181,7 @@ operation, eliminating a create/update conditional in the service.
 3. Returns the final state.
 
 **Daily Reset Logic (lazy):**
+
 ```typescript
 function getLastResetBoundary(): Date {
   // Asia server daily reset: 04:00 AM UTC+8 = 20:00 UTC previous day.
@@ -210,8 +215,8 @@ reset all checklist flags to `false` and sets `dailyResetAt = now()` before retu
 
 ```typescript
 interface UpdateChecklistInput {
-  commissionsDone?:    boolean;
-  teapotClaimed?:      boolean;
+  commissionsDone?: boolean;
+  teapotClaimed?: boolean;
   transformerClaimed?: boolean;
 }
 ```
@@ -251,20 +256,20 @@ Three methods:
 // GET /companion/daily
 getDaily = async (req: Request, res: Response) => {
   const state = await this.companionService.getDailyState(req.user!.id);
-  res.status(200).json(successResponse(state, "Daily state retrieved successfully."));
+  res.status(200).json(successResponse(state, 'Daily state retrieved successfully.'));
 };
 
 // PATCH /companion/resin
 updateResin = async (req: Request, res: Response) => {
   const { amount } = req.body; // validated by Zod schema (see below)
   const state = await this.companionService.updateResin(req.user!.id, amount);
-  res.status(200).json(successResponse(state, "Resin updated successfully."));
+  res.status(200).json(successResponse(state, 'Resin updated successfully.'));
 };
 
 // PATCH /companion/checklist
 updateChecklist = async (req: Request, res: Response) => {
   const state = await this.companionService.updateChecklist(req.user!.id, req.body);
-  res.status(200).json(successResponse(state, "Checklist updated successfully."));
+  res.status(200).json(successResponse(state, 'Checklist updated successfully.'));
 };
 ```
 
@@ -275,14 +280,15 @@ const UpdateResinSchema = z.object({
   amount: z.number().int().min(0).max(200),
 });
 
-const UpdateChecklistSchema = z.object({
-  commissionsDone:    z.boolean().optional(),
-  teapotClaimed:      z.boolean().optional(),
-  transformerClaimed: z.boolean().optional(),
-}).refine(
-  (data) => Object.values(data).some((v) => v !== undefined),
-  { message: "At least one checklist field must be provided." }
-);
+const UpdateChecklistSchema = z
+  .object({
+    commissionsDone: z.boolean().optional(),
+    teapotClaimed: z.boolean().optional(),
+    transformerClaimed: z.boolean().optional(),
+  })
+  .refine((data) => Object.values(data).some((v) => v !== undefined), {
+    message: 'At least one checklist field must be provided.',
+  });
 ```
 
 ---
@@ -290,12 +296,13 @@ const UpdateChecklistSchema = z.object({
 ### Routes: `companion.routes.ts`
 
 ```typescript
-router.get("/daily",      requireAuth, companionController.getDaily);
-router.patch("/resin",    requireAuth, companionController.updateResin);
-router.patch("/checklist",requireAuth, companionController.updateChecklist);
+router.get('/daily', requireAuth, companionController.getDaily);
+router.patch('/resin', requireAuth, companionController.updateResin);
+router.patch('/checklist', requireAuth, companionController.updateChecklist);
 ```
 
 Full paths:
+
 - `GET    /api/v1/companion/daily`
 - `PATCH  /api/v1/companion/resin`
 - `PATCH  /api/v1/companion/checklist`
@@ -306,7 +313,7 @@ Full paths:
 
 ```typescript
 // Companion routes (Phase 3)
-v1Router.use("/companion", companionRoutes);
+v1Router.use('/companion', companionRoutes);
 ```
 
 ---
@@ -355,7 +362,7 @@ export function resinFullAt(storedAmount: number, updatedAt: string): Date | nul
   if (current >= MAX_RESIN) return null;
   const remaining = MAX_RESIN - current;
   const elapsedSeconds = (Date.now() - new Date(updatedAt).getTime()) / 1000;
-  const secondsToFull = (remaining * REGEN_SECONDS) - (elapsedSeconds % REGEN_SECONDS);
+  const secondsToFull = remaining * REGEN_SECONDS - (elapsedSeconds % REGEN_SECONDS);
   return new Date(Date.now() + secondsToFull * 1000);
 }
 ```
@@ -372,32 +379,32 @@ export function resinFullAt(storedAmount: number, updatedAt: string): Date | nul
 // ============================================================
 
 export interface DailyState {
-  id:                 string;
-  userId:             string;
-  resinAmount:        number;
-  resinUpdatedAt:     string; // ISO string
-  commissionsDone:    boolean;
-  teapotClaimed:      boolean;
+  id: string;
+  userId: string;
+  resinAmount: number;
+  resinUpdatedAt: string; // ISO string
+  commissionsDone: boolean;
+  teapotClaimed: boolean;
   transformerClaimed: boolean;
-  dailyResetAt:       string; // ISO string
+  dailyResetAt: string; // ISO string
 }
 
 export async function fetchDailyState(): Promise<DailyState> {
-  return fetchApi<DailyState>("/companion/daily");
+  return fetchApi<DailyState>('/companion/daily');
 }
 
 export async function updateResin(amount: number): Promise<DailyState> {
-  return fetchApi<DailyState>("/companion/resin", {
-    method: "PATCH",
+  return fetchApi<DailyState>('/companion/resin', {
+    method: 'PATCH',
     body: JSON.stringify({ amount }),
   });
 }
 
 export async function updateChecklist(
-  input: Partial<Pick<DailyState, "commissionsDone" | "teapotClaimed" | "transformerClaimed">>
+  input: Partial<Pick<DailyState, 'commissionsDone' | 'teapotClaimed' | 'transformerClaimed'>>,
 ): Promise<DailyState> {
-  return fetchApi<DailyState>("/companion/checklist", {
-    method: "PATCH",
+  return fetchApi<DailyState>('/companion/checklist', {
+    method: 'PATCH',
     body: JSON.stringify(input),
   });
 }
@@ -432,6 +439,7 @@ PlannerPage
 
 An SVG circle using `stroke-dasharray` and `stroke-dashoffset` to render a
 smooth arc from 0° to 360° representing 0–200 resin. Colors:
+
 - 0–159: `stroke: #6366f1` (accent indigo)
 - 160–179: `stroke: #f59e0b` (amber, approaching cap)
 - 180–199: `stroke: #ef4444` (danger red, near cap)
@@ -444,6 +452,7 @@ second using a `useInterval` hook driven by `setInterval`. This creates the
 #### Live Resin Countdown
 
 Below the circle:
+
 - While below cap: `"Full in 14h 32m"` — computed from `resinFullAt()`.
   Format: `Xh Ym` (hours + minutes, no seconds — too noisy for a "full" estimate).
 - At cap (200): an emerald pulsing badge `"● FULL"`.
@@ -451,6 +460,7 @@ Below the circle:
 #### Manual Resin Update
 
 A small form:
+
 - Number input: `type="number"` with `min=0`, `max=200`, step=1.
 - Pre-filled with `computeCurrentResin(...)` so the user adjusts from the
   correct value.
@@ -504,25 +514,25 @@ Activate the dimmed Daily Planner card linking to `/planner` (emerald theme).
 
 ### Backend (API)
 
-| File | Type | Description |
-|---|---|---|
-| `prisma/schema.prisma` | MODIFY | Add `DailyCompanion` model + back-relation on `User` |
-| `prisma/migrations/` | NEW | Auto-generated migration from `prisma migrate dev` |
-| `platform/companion/companion.repository.ts` | NEW | `findByUserId` + `upsert` |
-| `platform/companion/companion.service.ts` | NEW | `getDailyState`, `updateResin`, `updateChecklist` with lazy reset |
-| `platform/companion/companion.controller.ts` | NEW | `getDaily`, `updateResin`, `updateChecklist` handlers |
-| `platform/companion/companion.routes.ts` | NEW | Three protected routes |
-| `app.ts` | MODIFY | Mount `companionRoutes` at `/companion` |
+| File                                         | Type   | Description                                                       |
+| -------------------------------------------- | ------ | ----------------------------------------------------------------- |
+| `prisma/schema.prisma`                       | MODIFY | Add `DailyCompanion` model + back-relation on `User`              |
+| `prisma/migrations/`                         | NEW    | Auto-generated migration from `prisma migrate dev`                |
+| `platform/companion/companion.repository.ts` | NEW    | `findByUserId` + `upsert`                                         |
+| `platform/companion/companion.service.ts`    | NEW    | `getDailyState`, `updateResin`, `updateChecklist` with lazy reset |
+| `platform/companion/companion.controller.ts` | NEW    | `getDaily`, `updateResin`, `updateChecklist` handlers             |
+| `platform/companion/companion.routes.ts`     | NEW    | Three protected routes                                            |
+| `app.ts`                                     | MODIFY | Mount `companionRoutes` at `/companion`                           |
 
 ### Frontend (Web)
 
-| File | Type | Description |
-|---|---|---|
-| `lib/resin.ts` | NEW | `computeCurrentResin`, `secondsUntilNextResin`, `resinFullAt` |
-| `lib/api.ts` | MODIFY | Add `DailyState`, `fetchDailyState`, `updateResin`, `updateChecklist` |
-| `pages/PlannerPage.tsx` | NEW | Full planner page with SVG resin arc, live countdown, checklist |
-| `App.tsx` | MODIFY | Add `/planner` protected route |
-| `pages/DashboardPage.tsx` | MODIFY | Activate Daily Planner card |
+| File                      | Type   | Description                                                           |
+| ------------------------- | ------ | --------------------------------------------------------------------- |
+| `lib/resin.ts`            | NEW    | `computeCurrentResin`, `secondsUntilNextResin`, `resinFullAt`         |
+| `lib/api.ts`              | MODIFY | Add `DailyState`, `fetchDailyState`, `updateResin`, `updateChecklist` |
+| `pages/PlannerPage.tsx`   | NEW    | Full planner page with SVG resin arc, live countdown, checklist       |
+| `App.tsx`                 | MODIFY | Add `/planner` protected route                                        |
+| `pages/DashboardPage.tsx` | MODIFY | Activate Daily Planner card                                           |
 
 ---
 

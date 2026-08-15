@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { UserService } from "./user.service.js";
-import { UserRepository } from "./user.repository.js";
-import { ConflictError, NotFoundError } from "@/core/errors/app-error.js";
-import type { User } from "@prisma/client";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { UserService } from './user.service.js';
+import { UserRepository } from './user.repository.js';
+import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
+import type { User } from '@prisma/client';
 
 // ============================================================
 // Mock the entire UserRepository module.
@@ -10,32 +10,32 @@ import type { User } from "@prisma/client";
 // — no real database connections are made during unit tests.
 // ============================================================
 
-vi.mock("./user.repository.js");
+vi.mock('./user.repository.js');
 
 // ============================================================
 // Helpers
 // ============================================================
 
 const mockUser: User = {
-  id: "test-user-id",
-  email: "rizzler@celestia.dev",
-  username: "rizzler",
-  password: "hashed_password_value",
-  createdAt: new Date("2026-01-01T00:00:00Z"),
-  updatedAt: new Date("2026-01-01T00:00:00Z"),
+  id: 'test-user-id',
+  email: 'rizzler@celestia.dev',
+  username: 'rizzler',
+  password: 'hashed_password_value',
+  createdAt: new Date('2026-01-01T00:00:00Z'),
+  updatedAt: new Date('2026-01-01T00:00:00Z'),
 };
 
 const validInput = {
-  email: "rizzler@celestia.dev",
-  username: "rizzler",
-  password: "securepassword123",
+  email: 'rizzler@celestia.dev',
+  username: 'rizzler',
+  password: 'securepassword123',
 };
 
 // ============================================================
 // Tests
 // ============================================================
 
-describe("UserService", () => {
+describe('UserService', () => {
   let userService: UserService;
   let mockRepository: {
     findByEmail: ReturnType<typeof vi.fn>;
@@ -58,9 +58,7 @@ describe("UserService", () => {
     };
 
     // Make the UserRepository constructor return our mock
-    vi.mocked(UserRepository).mockImplementation(
-      () => mockRepository as unknown as UserRepository,
-    );
+    vi.mocked(UserRepository).mockImplementation(() => mockRepository as unknown as UserRepository);
 
     userService = new UserService();
   });
@@ -69,8 +67,8 @@ describe("UserService", () => {
   // createUser
   // ----------------------------------------------------------
 
-  describe("createUser", () => {
-    it("creates and returns a user when email and username are unique", async () => {
+  describe('createUser', () => {
+    it('creates and returns a user when email and username are unique', async () => {
       mockRepository.findByEmail.mockResolvedValue(null);
       mockRepository.findByUsername.mockResolvedValue(null);
       mockRepository.create.mockResolvedValue(mockUser);
@@ -81,30 +79,26 @@ describe("UserService", () => {
       expect(mockRepository.create).toHaveBeenCalledWith(validInput);
     });
 
-    it("throws ConflictError when the email is already registered", async () => {
+    it('throws ConflictError when the email is already registered', async () => {
       mockRepository.findByEmail.mockResolvedValue(mockUser);
 
+      await expect(userService.createUser(validInput)).rejects.toThrow(ConflictError);
       await expect(userService.createUser(validInput)).rejects.toThrow(
-        ConflictError,
-      );
-      await expect(userService.createUser(validInput)).rejects.toThrow(
-        "Email is already registered.",
+        'Email is already registered.',
       );
     });
 
-    it("throws ConflictError when the username is already taken", async () => {
+    it('throws ConflictError when the username is already taken', async () => {
       mockRepository.findByEmail.mockResolvedValue(null);
       mockRepository.findByUsername.mockResolvedValue(mockUser);
 
+      await expect(userService.createUser(validInput)).rejects.toThrow(ConflictError);
       await expect(userService.createUser(validInput)).rejects.toThrow(
-        ConflictError,
-      );
-      await expect(userService.createUser(validInput)).rejects.toThrow(
-        "Username is already taken.",
+        'Username is already taken.',
       );
     });
 
-    it("does not call create when email is already taken", async () => {
+    it('does not call create when email is already taken', async () => {
       mockRepository.findByEmail.mockResolvedValue(mockUser);
 
       await expect(userService.createUser(validInput)).rejects.toThrow();
@@ -116,28 +110,24 @@ describe("UserService", () => {
   // getUserById
   // ----------------------------------------------------------
 
-  describe("getUserById", () => {
-    it("returns the user without the password field", async () => {
+  describe('getUserById', () => {
+    it('returns the user without the password field', async () => {
       mockRepository.findById.mockResolvedValue(mockUser);
 
-      const result = await userService.getUserById("test-user-id");
+      const result = await userService.getUserById('test-user-id');
 
-      expect(result).not.toHaveProperty("password");
+      expect(result).not.toHaveProperty('password');
       expect(result.id).toBe(mockUser.id);
       expect(result.email).toBe(mockUser.email);
       expect(result.username).toBe(mockUser.username);
-      expect(mockRepository.findById).toHaveBeenCalledWith("test-user-id");
+      expect(mockRepository.findById).toHaveBeenCalledWith('test-user-id');
     });
 
-    it("throws NotFoundError when the user does not exist", async () => {
+    it('throws NotFoundError when the user does not exist', async () => {
       mockRepository.findById.mockResolvedValue(null);
 
-      await expect(userService.getUserById("nonexistent-id")).rejects.toThrow(
-        NotFoundError,
-      );
-      await expect(userService.getUserById("nonexistent-id")).rejects.toThrow(
-        "User not found.",
-      );
+      await expect(userService.getUserById('nonexistent-id')).rejects.toThrow(NotFoundError);
+      await expect(userService.getUserById('nonexistent-id')).rejects.toThrow('User not found.');
     });
   });
 });

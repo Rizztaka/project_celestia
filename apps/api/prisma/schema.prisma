@@ -25,6 +25,15 @@ model User {
   // Back-relation to the Daily Companion (Phase 3).
   dailyCompanion DailyCompanion?
 
+  // Back-relation to upgrade goals (Phase 3B).
+  upgradeGoals   UpgradeGoal[]
+
+  // Back-relation to event progress (Phase 3C).
+  eventProgress  EventProgress[]
+
+  // Back-relation to weekly boss state (Phase 3D).
+  weeklyBossState WeeklyBossState?
+
   @@map("users")
 }
 
@@ -49,6 +58,7 @@ model GenshinAccount {
   characters GenshinCharacter[]
   weapons    GenshinWeapon[]
   artifacts  GenshinArtifact[]
+  materials  GenshinMaterial[]  // Phase 3B — material inventory from GOOD import
 
   @@map("genshin_accounts")
 }
@@ -168,4 +178,115 @@ model DailyCompanion {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("daily_companion")
+}
+
+// ==========================================
+// GENSHIN MATERIAL INVENTORY (Phase 3B)
+// ==========================================
+
+/// Stores the player's material inventory as imported from the GOOD format.
+/// Fully replaced on every import (delete-all then insert), same as weapons/artifacts.
+/// itemKey uses the GOOD format's item key (e.g. "SilkFlower", "WhopperflowerNectar").
+model GenshinMaterial {
+  id        String @id @default(uuid())
+  accountId String
+  itemKey   String // GOOD-format item key, references static data — NOT a FK
+  quantity  Int    // current stack size
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account GenshinAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, itemKey]) // one row per item per account
+  @@map("genshin_materials")
+}
+
+// ==========================================
+// UPGRADE GOALS (Phase 3B)
+// ==========================================
+
+/// Goal type discriminator.
+enum GoalType {
+  CHARACTER_ASCENSION
+  CHARACTER_TALENT
+  WEAPON_ASCENSION
+}
+
+/// Records a user's intent to upgrade a character or weapon.
+/// Goals belong to User (not GenshinAccount) so they survive GOOD re-imports.
+/// targetKey references the static seed data — it is NOT a database foreign key.
+model UpgradeGoal {
+  id        String   @id @default(uuid())
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  goalType   GoalType
+  targetKey  String   // e.g. "HuTao", "StaffOfHoma" — references static seed data
+  fromPhase  Int      // inclusive lower bound (0–5)
+  toPhase    Int      // inclusive upper bound (1–6)
+  talentType String?  // "normal" | "skill" | "burst" — required for CHARACTER_TALENT, else null
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Prevents duplicate goals for the same upgrade target + slot per user.
+  // talentType is included so a user can track all three talents independently.
+  @@unique([userId, goalType, targetKey, talentType])
+  @@map("upgrade_goals")
+}
+
+// ==========================================
+// EVENT PROGRESS (Phase 3C)
+// ==========================================
+
+/// Tracks which reward tiers a user has claimed for a time-limited patch event.
+/// One row per (userId, eventKey, tierId). Both eventKey and tierId reference
+/// the static events.json — they are NOT database foreign keys.
+/// Stale rows (from past patches) are harmless and ignored at query time (ADR decision: lazy cleanup).
+model EventProgress {
+  id        String   @id @default(uuid())
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  eventKey  String  // matches events.json "key" field, e.g. "EchoesOfTheDeep5.8"
+  tierId    String  // matches events.json rewardTiers[].tierId, e.g. "t1"
+  claimed   Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // One progress row per (user, event, tier) — upsert target.
+  @@unique([userId, eventKey, tierId])
+  @@map("event_progress")
+}
+
+// ==========================================
+// WEEKLY BOSS STATE (Phase 3D)
+// ==========================================
+
+/// Tracks a user's weekly boss defeat status for the current week.
+/// One-to-one with User. Created lazily on the user's first weekly boss request.
+///
+/// defeatedBossKeys stores the set of bossKeys defeated this week as a JSON
+/// string array (e.g. ["Dvalin", "Lupus"]). JSON storage is used instead of
+/// a junction table because the weekly lazy reset (ADR-0009) requires clearing
+/// all defeats atomically — a single UPDATE rather than destructive DELETEs
+/// that would violate ADR-0010 (GET must not mutate state destructively).
+///
+/// Weekly reset boundary: Sunday 20:00 UTC (= Monday 04:00 UTC+8 / Asia server).
+/// Reset is applied lazily on every GET request, not by a cron job.
+model WeeklyBossState {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  defeatedBossKeys Json     @default("[]") // string[] — keys from weekly-bosses.json
+  weeklyResetAt    DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("weekly_boss_state")
 }

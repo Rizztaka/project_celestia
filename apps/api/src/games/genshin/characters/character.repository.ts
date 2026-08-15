@@ -1,5 +1,5 @@
-import { prisma } from "@/core/db/prisma.js";
-import type { GenshinCharacter, GenshinWeapon, Prisma } from "@prisma/client";
+import { prisma } from '@/core/db/prisma.js';
+import type { GenshinCharacter, GenshinWeapon, Prisma } from '@prisma/client';
 
 /**
  * A GenshinCharacter row with its equippedWeapon relation eagerly loaded.
@@ -10,9 +10,7 @@ export type CharacterWithWeapon = GenshinCharacter & {
 };
 
 export class GenshinCharacterRepository {
-  async create(
-    data: Prisma.GenshinCharacterCreateInput,
-  ): Promise<GenshinCharacter> {
+  async create(data: Prisma.GenshinCharacterCreateInput): Promise<GenshinCharacter> {
     return prisma.genshinCharacter.create({ data });
   }
 
@@ -24,13 +22,11 @@ export class GenshinCharacterRepository {
    * Returns all characters for an account with their equipped weapon eagerly loaded.
    * Characters are ordered by level descending (highest-level characters first).
    */
-  async findByAccountIdWithWeapon(
-    accountId: string,
-  ): Promise<CharacterWithWeapon[]> {
+  async findByAccountIdWithWeapon(accountId: string): Promise<CharacterWithWeapon[]> {
     return prisma.genshinCharacter.findMany({
-      where:   { accountId },
+      where: { accountId },
       include: { equippedWeapon: true },
-      orderBy: { level: "desc" },
+      orderBy: { level: 'desc' },
     });
   }
 
@@ -38,19 +34,13 @@ export class GenshinCharacterRepository {
     return prisma.genshinCharacter.findUnique({ where: { id } });
   }
 
-  async findByKey(
-    accountId: string,
-    characterKey: string,
-  ): Promise<GenshinCharacter | null> {
+  async findByKey(accountId: string, characterKey: string): Promise<GenshinCharacter | null> {
     return prisma.genshinCharacter.findUnique({
       where: { accountId_characterKey: { accountId, characterKey } },
     });
   }
 
-  async update(
-    id: string,
-    data: Prisma.GenshinCharacterUpdateInput,
-  ): Promise<GenshinCharacter> {
+  async update(id: string, data: Prisma.GenshinCharacterUpdateInput): Promise<GenshinCharacter> {
     return prisma.genshinCharacter.update({ where: { id }, data });
   }
 

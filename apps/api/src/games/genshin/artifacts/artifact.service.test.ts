@@ -1,49 +1,49 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { GenshinArtifactService } from "./artifact.service.js";
-import { GenshinArtifactRepository } from "./artifact.repository.js";
-import { NotFoundError } from "@/core/errors/app-error.js";
-import type { GenshinArtifact } from "@prisma/client";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { GenshinArtifactService } from './artifact.service.js';
+import { GenshinArtifactRepository } from './artifact.repository.js';
+import { NotFoundError } from '@/core/errors/app-error.js';
+import type { GenshinArtifact } from '@prisma/client';
 
-vi.mock("./artifact.repository.js");
+vi.mock('./artifact.repository.js');
 
 // -------------------------------------------------------
 // Fixtures
 // -------------------------------------------------------
 
-const ACCOUNT_ID = "account-abc-123";
-const OTHER_ACCOUNT_ID = "account-xyz-999";
+const ACCOUNT_ID = 'account-abc-123';
+const OTHER_ACCOUNT_ID = 'account-xyz-999';
 
 const mockArtifact: GenshinArtifact = {
-  id: "artifact-abc-123",
+  id: 'artifact-abc-123',
   accountId: ACCOUNT_ID,
-  setKey: "ShimenawasReminiscence",
-  slotKey: "goblet",
+  setKey: 'ShimenawasReminiscence',
+  slotKey: 'goblet',
   level: 20,
   rarity: 5,
-  mainStatKey: "pyro_dmg_",
+  mainStatKey: 'pyro_dmg_',
   subStats: [
-    { key: "critRate_", value: 6.6 },
-    { key: "critDMG_", value: 13.2 },
-    { key: "atk_", value: 5.8 },
-    { key: "hp", value: 299 },
+    { key: 'critRate_', value: 6.6 },
+    { key: 'critDMG_', value: 13.2 },
+    { key: 'atk_', value: 5.8 },
+    { key: 'hp', value: 299 },
   ],
   locked: false,
   equippedCharacterId: null,
-  createdAt: new Date("2026-01-01T00:00:00Z"),
-  updatedAt: new Date("2026-01-01T00:00:00Z"),
+  createdAt: new Date('2026-01-01T00:00:00Z'),
+  updatedAt: new Date('2026-01-01T00:00:00Z'),
 };
 
 const addInput = {
-  setKey: "ShimenawasReminiscence",
-  slotKey: "goblet",
+  setKey: 'ShimenawasReminiscence',
+  slotKey: 'goblet',
   level: 20,
   rarity: 5,
-  mainStatKey: "pyro_dmg_",
+  mainStatKey: 'pyro_dmg_',
   subStats: [
-    { key: "critRate_", value: 6.6 },
-    { key: "critDMG_", value: 13.2 },
-    { key: "atk_", value: 5.8 },
-    { key: "hp", value: 299 },
+    { key: 'critRate_', value: 6.6 },
+    { key: 'critDMG_', value: 13.2 },
+    { key: 'atk_', value: 5.8 },
+    { key: 'hp', value: 299 },
   ],
 };
 
@@ -51,7 +51,7 @@ const addInput = {
 // Tests
 // -------------------------------------------------------
 
-describe("GenshinArtifactService", () => {
+describe('GenshinArtifactService', () => {
   let service: GenshinArtifactService;
   let mockRepo: {
     findByAccountId: ReturnType<typeof vi.fn>;
@@ -83,8 +83,8 @@ describe("GenshinArtifactService", () => {
   // addArtifact
   // ---------------------------------------------------
 
-  describe("addArtifact", () => {
-    it("creates and returns the artifact, unequipped by default", async () => {
+  describe('addArtifact', () => {
+    it('creates and returns the artifact, unequipped by default', async () => {
       mockRepo.create.mockResolvedValue(mockArtifact);
 
       const result = await service.addArtifact(ACCOUNT_ID, addInput);
@@ -94,7 +94,7 @@ describe("GenshinArtifactService", () => {
       expect(mockRepo.create).toHaveBeenCalledOnce();
     });
 
-    it("allows multiple artifacts with the same setKey and slotKey", async () => {
+    it('allows multiple artifacts with the same setKey and slotKey', async () => {
       mockRepo.create.mockResolvedValue(mockArtifact);
 
       // A player can own many goblets from the same set
@@ -109,14 +109,14 @@ describe("GenshinArtifactService", () => {
   // getArtifacts
   // ---------------------------------------------------
 
-  describe("getArtifacts", () => {
-    it("returns all artifacts for the account", async () => {
+  describe('getArtifacts', () => {
+    it('returns all artifacts for the account', async () => {
       mockRepo.findByAccountId.mockResolvedValue([mockArtifact]);
 
       const result = await service.getArtifacts(ACCOUNT_ID);
 
       expect(result).toHaveLength(1);
-      expect(result[0]?.setKey).toBe("ShimenawasReminiscence");
+      expect(result[0]?.setKey).toBe('ShimenawasReminiscence');
     });
   });
 
@@ -124,8 +124,8 @@ describe("GenshinArtifactService", () => {
   // getArtifactById
   // ---------------------------------------------------
 
-  describe("getArtifactById", () => {
-    it("returns the artifact when it belongs to the account", async () => {
+  describe('getArtifactById', () => {
+    it('returns the artifact when it belongs to the account', async () => {
       mockRepo.findById.mockResolvedValue(mockArtifact);
 
       const result = await service.getArtifactById(ACCOUNT_ID, mockArtifact.id);
@@ -133,20 +133,20 @@ describe("GenshinArtifactService", () => {
       expect(result).toEqual(mockArtifact);
     });
 
-    it("throws NotFoundError when artifact does not exist", async () => {
+    it('throws NotFoundError when artifact does not exist', async () => {
       mockRepo.findById.mockResolvedValue(null);
 
-      await expect(
-        service.getArtifactById(ACCOUNT_ID, "nonexistent-id"),
-      ).rejects.toThrow(NotFoundError);
+      await expect(service.getArtifactById(ACCOUNT_ID, 'nonexistent-id')).rejects.toThrow(
+        NotFoundError,
+      );
     });
 
-    it("throws NotFoundError when artifact belongs to a different account (cross-account guard)", async () => {
+    it('throws NotFoundError when artifact belongs to a different account (cross-account guard)', async () => {
       mockRepo.findById.mockResolvedValue(mockArtifact); // accountId = ACCOUNT_ID
 
-      await expect(
-        service.getArtifactById(OTHER_ACCOUNT_ID, mockArtifact.id),
-      ).rejects.toThrow(NotFoundError);
+      await expect(service.getArtifactById(OTHER_ACCOUNT_ID, mockArtifact.id)).rejects.toThrow(
+        NotFoundError,
+      );
     });
   });
 
@@ -154,8 +154,8 @@ describe("GenshinArtifactService", () => {
   // updateArtifact
   // ---------------------------------------------------
 
-  describe("updateArtifact", () => {
-    it("updates and returns the artifact", async () => {
+  describe('updateArtifact', () => {
+    it('updates and returns the artifact', async () => {
       const updated = { ...mockArtifact, level: 16, locked: true };
       mockRepo.findById.mockResolvedValue(mockArtifact);
       mockRepo.update.mockResolvedValue(updated);
@@ -169,11 +169,11 @@ describe("GenshinArtifactService", () => {
       expect(result.locked).toBe(true);
     });
 
-    it("throws NotFoundError when artifact does not exist", async () => {
+    it('throws NotFoundError when artifact does not exist', async () => {
       mockRepo.findById.mockResolvedValue(null);
 
       await expect(
-        service.updateArtifact(ACCOUNT_ID, "nonexistent-id", { level: 16 }),
+        service.updateArtifact(ACCOUNT_ID, 'nonexistent-id', { level: 16 }),
       ).rejects.toThrow(NotFoundError);
     });
   });
@@ -182,8 +182,8 @@ describe("GenshinArtifactService", () => {
   // removeArtifact
   // ---------------------------------------------------
 
-  describe("removeArtifact", () => {
-    it("deletes and returns the removed artifact", async () => {
+  describe('removeArtifact', () => {
+    it('deletes and returns the removed artifact', async () => {
       mockRepo.findById.mockResolvedValue(mockArtifact);
       mockRepo.delete.mockResolvedValue(mockArtifact);
 
@@ -193,12 +193,12 @@ describe("GenshinArtifactService", () => {
       expect(mockRepo.delete).toHaveBeenCalledWith(mockArtifact.id);
     });
 
-    it("throws NotFoundError when artifact does not exist", async () => {
+    it('throws NotFoundError when artifact does not exist', async () => {
       mockRepo.findById.mockResolvedValue(null);
 
-      await expect(
-        service.removeArtifact(ACCOUNT_ID, "nonexistent-id"),
-      ).rejects.toThrow(NotFoundError);
+      await expect(service.removeArtifact(ACCOUNT_ID, 'nonexistent-id')).rejects.toThrow(
+        NotFoundError,
+      );
     });
   });
 });

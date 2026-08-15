@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { AuthService } from "./auth.service.js";
-import { AuthRepository } from "./auth.repository.js";
-import { UserService } from "../users/user.service.js";
-import { ConflictError, UnauthorizedError } from "@/core/errors/app-error.js";
-import type { User } from "@prisma/client";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { AuthService } from './auth.service.js';
+import { AuthRepository } from './auth.repository.js';
+import { UserService } from '../users/user.service.js';
+import { ConflictError, UnauthorizedError } from '@/core/errors/app-error.js';
+import type { User } from '@prisma/client';
 
 // ============================================================
 // Module Mocks
@@ -14,33 +14,33 @@ import type { User } from "@prisma/client";
 //   - Isolated (no external dependencies)
 // ============================================================
 
-vi.mock("bcryptjs", () => ({
+vi.mock('bcryptjs', () => ({
   default: {
     hash: vi.fn(),
     compare: vi.fn(),
   },
 }));
 
-vi.mock("jsonwebtoken", () => ({
+vi.mock('jsonwebtoken', () => ({
   default: {
-    sign: vi.fn().mockReturnValue("mock.jwt.token"),
+    sign: vi.fn().mockReturnValue('mock.jwt.token'),
   },
 }));
 
-vi.mock("./auth.repository.js");
-vi.mock("../users/user.service.js");
+vi.mock('./auth.repository.js');
+vi.mock('../users/user.service.js');
 
 // ============================================================
 // Helpers
 // ============================================================
 
 const mockUser: User = {
-  id: "user-abc-123",
-  email: "traveler@celestia.dev",
-  username: "traveler",
-  password: "$2a$12$hashedpasswordvalue",
-  createdAt: new Date("2026-01-01T00:00:00Z"),
-  updatedAt: new Date("2026-01-01T00:00:00Z"),
+  id: 'user-abc-123',
+  email: 'traveler@celestia.dev',
+  username: 'traveler',
+  password: '$2a$12$hashedpasswordvalue',
+  createdAt: new Date('2026-01-01T00:00:00Z'),
+  updatedAt: new Date('2026-01-01T00:00:00Z'),
 };
 
 // What gets returned to clients — password is stripped
@@ -56,7 +56,7 @@ const mockSafeUser = {
 // Tests
 // ============================================================
 
-describe("AuthService", () => {
+describe('AuthService', () => {
   let authService: AuthService;
   let mockAuthRepository: { findByEmail: ReturnType<typeof vi.fn> };
   let mockUserService: { createUser: ReturnType<typeof vi.fn> };
@@ -68,7 +68,7 @@ describe("AuthService", () => {
     vi.clearAllMocks();
 
     // Resolve the mocked bcryptjs module
-    const bcryptModule = await import("bcryptjs");
+    const bcryptModule = await import('bcryptjs');
     bcrypt = bcryptModule.default as unknown as typeof bcrypt;
 
     // Build typed mocks for repositories and services
@@ -79,9 +79,7 @@ describe("AuthService", () => {
       () => mockAuthRepository as unknown as AuthRepository,
     );
 
-    vi.mocked(UserService).mockImplementation(
-      () => mockUserService as unknown as UserService,
-    );
+    vi.mocked(UserService).mockImplementation(() => mockUserService as unknown as UserService);
 
     authService = new AuthService();
   });
@@ -90,57 +88,51 @@ describe("AuthService", () => {
   // register
   // ----------------------------------------------------------
 
-  describe("register", () => {
+  describe('register', () => {
     const registerInput = {
-      email: "traveler@celestia.dev",
-      username: "traveler",
-      password: "plainpassword",
+      email: 'traveler@celestia.dev',
+      username: 'traveler',
+      password: 'plainpassword',
     };
 
-    it("returns safeUser and token on successful registration", async () => {
-      bcrypt.hash.mockResolvedValue("hashed_password");
+    it('returns safeUser and token on successful registration', async () => {
+      bcrypt.hash.mockResolvedValue('hashed_password');
       mockUserService.createUser.mockResolvedValue(mockUser);
 
       const result = await authService.register(registerInput);
 
-      expect(result.token).toBe("mock.jwt.token");
+      expect(result.token).toBe('mock.jwt.token');
       expect(result.user).toEqual(mockSafeUser);
       // Verify the password was NEVER sent back to the client
-      expect(result.user).not.toHaveProperty("password");
+      expect(result.user).not.toHaveProperty('password');
     });
 
-    it("hashes the password before calling UserService", async () => {
-      bcrypt.hash.mockResolvedValue("hashed_password");
+    it('hashes the password before calling UserService', async () => {
+      bcrypt.hash.mockResolvedValue('hashed_password');
       mockUserService.createUser.mockResolvedValue(mockUser);
 
       await authService.register(registerInput);
 
-      expect(bcrypt.hash).toHaveBeenCalledWith("plainpassword", 12);
+      expect(bcrypt.hash).toHaveBeenCalledWith('plainpassword', 12);
       expect(mockUserService.createUser).toHaveBeenCalledWith(
-        expect.objectContaining({ password: "hashed_password" }),
+        expect.objectContaining({ password: 'hashed_password' }),
       );
     });
 
-    it("propagates ConflictError when email is already registered", async () => {
-      bcrypt.hash.mockResolvedValue("hashed_password");
+    it('propagates ConflictError when email is already registered', async () => {
+      bcrypt.hash.mockResolvedValue('hashed_password');
       mockUserService.createUser.mockRejectedValue(
-        new ConflictError("Email is already registered."),
+        new ConflictError('Email is already registered.'),
       );
 
-      await expect(authService.register(registerInput)).rejects.toThrow(
-        ConflictError,
-      );
+      await expect(authService.register(registerInput)).rejects.toThrow(ConflictError);
     });
 
-    it("propagates ConflictError when username is already taken", async () => {
-      bcrypt.hash.mockResolvedValue("hashed_password");
-      mockUserService.createUser.mockRejectedValue(
-        new ConflictError("Username is already taken."),
-      );
+    it('propagates ConflictError when username is already taken', async () => {
+      bcrypt.hash.mockResolvedValue('hashed_password');
+      mockUserService.createUser.mockRejectedValue(new ConflictError('Username is already taken.'));
 
-      await expect(authService.register(registerInput)).rejects.toThrow(
-        ConflictError,
-      );
+      await expect(authService.register(registerInput)).rejects.toThrow(ConflictError);
     });
   });
 
@@ -148,60 +140,48 @@ describe("AuthService", () => {
   // login
   // ----------------------------------------------------------
 
-  describe("login", () => {
+  describe('login', () => {
     const loginInput = {
-      email: "traveler@celestia.dev",
-      password: "correctpassword",
+      email: 'traveler@celestia.dev',
+      password: 'correctpassword',
     };
 
-    it("returns safeUser and token on successful login", async () => {
+    it('returns safeUser and token on successful login', async () => {
       mockAuthRepository.findByEmail.mockResolvedValue(mockUser);
       bcrypt.compare.mockResolvedValue(true);
 
       const result = await authService.login(loginInput);
 
-      expect(result.token).toBe("mock.jwt.token");
+      expect(result.token).toBe('mock.jwt.token');
       expect(result.user).toEqual(mockSafeUser);
-      expect(result.user).not.toHaveProperty("password");
+      expect(result.user).not.toHaveProperty('password');
     });
 
-    it("throws UnauthorizedError when the email is not found", async () => {
+    it('throws UnauthorizedError when the email is not found', async () => {
       mockAuthRepository.findByEmail.mockResolvedValue(null);
 
-      await expect(authService.login(loginInput)).rejects.toThrow(
-        UnauthorizedError,
-      );
+      await expect(authService.login(loginInput)).rejects.toThrow(UnauthorizedError);
       // Confirm the generic message — prevents email enumeration
-      await expect(authService.login(loginInput)).rejects.toThrow(
-        "Invalid email or password.",
-      );
+      await expect(authService.login(loginInput)).rejects.toThrow('Invalid email or password.');
     });
 
-    it("throws UnauthorizedError when the password is incorrect", async () => {
+    it('throws UnauthorizedError when the password is incorrect', async () => {
       mockAuthRepository.findByEmail.mockResolvedValue(mockUser);
       bcrypt.compare.mockResolvedValue(false);
 
-      await expect(authService.login(loginInput)).rejects.toThrow(
-        UnauthorizedError,
-      );
-      await expect(authService.login(loginInput)).rejects.toThrow(
-        "Invalid email or password.",
-      );
+      await expect(authService.login(loginInput)).rejects.toThrow(UnauthorizedError);
+      await expect(authService.login(loginInput)).rejects.toThrow('Invalid email or password.');
     });
 
-    it("uses the same error message for wrong-email and wrong-password (anti-enumeration)", async () => {
+    it('uses the same error message for wrong-email and wrong-password (anti-enumeration)', async () => {
       // Test that both paths produce identical messages
       // This prevents attackers from discovering valid emails
       mockAuthRepository.findByEmail.mockResolvedValue(null);
-      const notFoundError = await authService
-        .login(loginInput)
-        .catch((e: Error) => e.message);
+      const notFoundError = await authService.login(loginInput).catch((e: Error) => e.message);
 
       mockAuthRepository.findByEmail.mockResolvedValue(mockUser);
       bcrypt.compare.mockResolvedValue(false);
-      const wrongPasswordError = await authService
-        .login(loginInput)
-        .catch((e: Error) => e.message);
+      const wrongPasswordError = await authService.login(loginInput).catch((e: Error) => e.message);
 
       expect(notFoundError).toBe(wrongPasswordError);
     });

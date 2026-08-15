@@ -1,5 +1,5 @@
-import { prisma } from "@/core/db/prisma.js";
-import type { GenshinWeapon, Prisma } from "@prisma/client";
+import { prisma } from '@/core/db/prisma.js';
+import type { GenshinWeapon, Prisma } from '@prisma/client';
 
 export class GenshinWeaponRepository {
   async create(data: Prisma.GenshinWeaponCreateInput): Promise<GenshinWeapon> {
@@ -8,8 +8,8 @@ export class GenshinWeaponRepository {
 
   async findByAccountId(accountId: string): Promise<GenshinWeapon[]> {
     return prisma.genshinWeapon.findMany({
-      where:   { accountId },
-      orderBy: { level: "desc" },
+      where: { accountId },
+      orderBy: { level: 'desc' },
     });
   }
 
@@ -17,10 +17,7 @@ export class GenshinWeaponRepository {
     return prisma.genshinWeapon.findUnique({ where: { id } });
   }
 
-  async update(
-    id: string,
-    data: Prisma.GenshinWeaponUpdateInput,
-  ): Promise<GenshinWeapon> {
+  async update(id: string, data: Prisma.GenshinWeaponUpdateInput): Promise<GenshinWeapon> {
     return prisma.genshinWeapon.update({ where: { id }, data });
   }
 

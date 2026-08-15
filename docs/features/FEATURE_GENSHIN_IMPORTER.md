@@ -79,6 +79,7 @@ platforms like Project Celestia.
 ```
 
 **Key observations:**
+
 - `location` on weapons and artifacts is the character `key` they are equipped on,
   or an empty string `""` if unequipped.
 - There are no stable IDs for weapons or artifacts — two copies of the same
@@ -133,21 +134,21 @@ or any other GOOD-compatible tool to export their account data.
 
 ## GOOD Field → Database Field Mapping
 
-| GOOD Field | Database Field | Notes |
-|---|---|---|
-| `character.key` | `characterKey` | e.g. `"HuTao"` |
-| `character.level` | `level` | 1–90 |
-| `character.ascension` | `ascension` | 0–6 |
-| `character.constellation` | `constellation` | 0–6 |
-| `character.talent.auto` | `talentNormal` | 1–10 (base) |
-| `character.talent.skill` | `talentSkill` | 1–10 (base) |
-| `character.talent.burst` | `talentBurst` | 1–10 (base) |
-| `weapon.key` | `weaponKey` | e.g. `"StaffOfHoma"` |
-| `weapon.lock` | `locked` | boolean |
-| `weapon.location` | (resolved to `equippedWeaponId` on character) | |
-| `artifact.substats` | `subStats` | renamed |
-| `artifact.lock` | `locked` | boolean |
-| `artifact.location` | (resolved to `equippedCharacterId` on artifact) | |
+| GOOD Field                | Database Field                                  | Notes                |
+| ------------------------- | ----------------------------------------------- | -------------------- |
+| `character.key`           | `characterKey`                                  | e.g. `"HuTao"`       |
+| `character.level`         | `level`                                         | 1–90                 |
+| `character.ascension`     | `ascension`                                     | 0–6                  |
+| `character.constellation` | `constellation`                                 | 0–6                  |
+| `character.talent.auto`   | `talentNormal`                                  | 1–10 (base)          |
+| `character.talent.skill`  | `talentSkill`                                   | 1–10 (base)          |
+| `character.talent.burst`  | `talentBurst`                                   | 1–10 (base)          |
+| `weapon.key`              | `weaponKey`                                     | e.g. `"StaffOfHoma"` |
+| `weapon.lock`             | `locked`                                        | boolean              |
+| `weapon.location`         | (resolved to `equippedWeaponId` on character)   |                      |
+| `artifact.substats`       | `subStats`                                      | renamed              |
+| `artifact.lock`           | `locked`                                        | boolean              |
+| `artifact.location`       | (resolved to `equippedCharacterId` on artifact) |                      |
 
 ---
 
@@ -159,9 +160,9 @@ the single source of truth for what the importer accepts.
 ```typescript
 // importer.schema.ts
 
-import { z } from "zod";
+import { z } from 'zod';
 
-const SLOT_KEYS = ["flower", "plume", "sands", "goblet", "circlet"] as const;
+const SLOT_KEYS = ['flower', 'plume', 'sands', 'goblet', 'circlet'] as const;
 
 export const GoodSubStatSchema = z.object({
   key: z.string().min(1),
@@ -174,7 +175,7 @@ export const GoodCharacterSchema = z.object({
   constellation: z.number().int().min(0).max(6),
   ascension: z.number().int().min(0).max(6),
   talent: z.object({
-    auto:  z.number().int().min(1).max(15), // accept up to 15 (some tools export effective talent levels)
+    auto: z.number().int().min(1).max(15), // accept up to 15 (some tools export effective talent levels)
     skill: z.number().int().min(1).max(15),
     burst: z.number().int().min(1).max(15),
   }),
@@ -185,7 +186,7 @@ export const GoodWeaponSchema = z.object({
   level: z.number().int().min(1).max(90),
   ascension: z.number().int().min(0).max(6),
   refinement: z.number().int().min(1).max(5),
-  location: z.string().default(""), // "" = unequipped
+  location: z.string().default(''), // "" = unequipped
   lock: z.boolean().default(false),
 });
 
@@ -196,17 +197,17 @@ export const GoodArtifactSchema = z.object({
   rarity: z.number().int().min(1).max(5),
   mainStatKey: z.string().min(1),
   lock: z.boolean().default(false),
-  location: z.string().default(""),
+  location: z.string().default(''),
   substats: z.array(GoodSubStatSchema).max(4),
 });
 
 export const GoodPayloadSchema = z.object({
-  format: z.literal("GOOD"),
+  format: z.literal('GOOD'),
   version: z.number().int().positive(),
   source: z.string().optional(),
   characters: z.array(GoodCharacterSchema).default([]),
-  weapons:    z.array(GoodWeaponSchema).default([]),
-  artifacts:  z.array(GoodArtifactSchema).default([]),
+  weapons: z.array(GoodWeaponSchema).default([]),
+  artifacts: z.array(GoodArtifactSchema).default([]),
 });
 
 // Type inferred from the schema — used throughout the importer service
@@ -306,16 +307,16 @@ STEP 4 — Return import summary
 
 ## Deduplication Strategy
 
-| Entity | Strategy | Reason |
-|---|---|---|
-| **GenshinAccount** | Find or create | One per user. Update metadata if exists. |
-| **GenshinCharacter** | **Upsert** by `(accountId, characterKey)` | Characters have a stable natural key. A player cannot have two Hu Taos. The unique index from 2A makes this trivial. |
-| **GenshinWeapon** | **Replace** (delete all + re-insert) | No stable natural ID. A player can own two identical weapons. The GOOD payload represents the player's complete current state. |
-| **GenshinArtifact** | **Replace** (delete all + re-insert) | Same as weapons — no stable natural ID. Players constantly discard and replace artifacts. |
+| Entity               | Strategy                                  | Reason                                                                                                                         |
+| -------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **GenshinAccount**   | Find or create                            | One per user. Update metadata if exists.                                                                                       |
+| **GenshinCharacter** | **Upsert** by `(accountId, characterKey)` | Characters have a stable natural key. A player cannot have two Hu Taos. The unique index from 2A makes this trivial.           |
+| **GenshinWeapon**    | **Replace** (delete all + re-insert)      | No stable natural ID. A player can own two identical weapons. The GOOD payload represents the player's complete current state. |
+| **GenshinArtifact**  | **Replace** (delete all + re-insert)      | Same as weapons — no stable natural ID. Players constantly discard and replace artifacts.                                      |
 
 **Why Replace is correct for weapons and artifacts:**
 
-Artifacts in particular are frequently discarded. If a player throws away a 
+Artifacts in particular are frequently discarded. If a player throws away a
 flower artifact and re-exports their GOOD file, that flower is simply gone from
 the payload. A "merge" strategy (delete only records not in the new payload)
 would require a stable ID to match old records to new records — which GOOD
@@ -357,17 +358,20 @@ This is a new subdomain within the Genshin bounded context.
 **Files:**
 
 #### `importer.schema.ts`
+
 - Contains all Zod schemas for GOOD format validation.
 - Exported so the HTTP controller (Milestone 2C) can use them for request validation.
 - Contains the `GoodPayload` TypeScript type inferred from `GoodPayloadSchema`.
 
 #### `importer.service.ts`
+
 - `GenshinImportService` class.
 - Single public method: `importAccount(userId: string, rawJson: string): Promise<ImportResult>`.
 - Does NOT extend or depend on the Milestone 2A CRUD services.
 - Uses Prisma directly via the interactive transaction pattern.
 
 #### `importer.service.test.ts`
+
 - Unit tests for `GenshinImportService`.
 - Prisma is mocked at the module level.
 - Tests cover: happy path, invalid JSON, invalid GOOD format, re-import (upsert),
@@ -378,8 +382,8 @@ This is a new subdomain within the Genshin bounded context.
 ```typescript
 export interface ImportResult {
   charactersImported: number;
-  weaponsImported:    number;
-  artifactsImported:  number;
+  weaponsImported: number;
+  artifactsImported: number;
 }
 ```
 
@@ -387,16 +391,16 @@ export interface ImportResult {
 
 ## Edge Cases and Defined Behaviors
 
-| Edge Case | Behavior |
-|---|---|
-| Invalid JSON (not parseable) | `BadRequestError("Invalid GOOD format: JSON parse failed.")` |
-| Valid JSON but missing `format: "GOOD"` | `BadRequestError("Invalid GOOD format: expected format to be 'GOOD'.")` |
-| Payload has no characters/weapons/artifacts | Valid import — upserts account metadata, leaves roster unchanged for missing sections. |
-| `location` references a character not in the payload | Weapon/artifact is created unequipped. No error thrown. |
-| Re-import with same data | Idempotent. Characters are upserted (no change to values). Weapons/artifacts are replaced with identical data. |
-| Re-import with fewer characters | Characters not in the GOOD payload are **left untouched** in the database. In Genshin Impact, a player can never lose a character they have pulled. A character missing from a GOOD export is always a scanner omission (the player deselected it for a faster scan) — never an actual data loss. Deleting DB records due to scanner omissions would be a critical UX failure. Manual deletion will be provided via the UI in Milestone 2C. |
-| Artifact with invalid `slotKey` | Caught by Zod validation before DB touch — `BadRequestError`. |
-| Transaction fails midway (e.g., DB constraint) | Full rollback — DB state unchanged. |
+| Edge Case                                            | Behavior                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Invalid JSON (not parseable)                         | `BadRequestError("Invalid GOOD format: JSON parse failed.")`                                                                                                                                                                                                                                                                                                                                                                                |
+| Valid JSON but missing `format: "GOOD"`              | `BadRequestError("Invalid GOOD format: expected format to be 'GOOD'.")`                                                                                                                                                                                                                                                                                                                                                                     |
+| Payload has no characters/weapons/artifacts          | Valid import — upserts account metadata, leaves roster unchanged for missing sections.                                                                                                                                                                                                                                                                                                                                                      |
+| `location` references a character not in the payload | Weapon/artifact is created unequipped. No error thrown.                                                                                                                                                                                                                                                                                                                                                                                     |
+| Re-import with same data                             | Idempotent. Characters are upserted (no change to values). Weapons/artifacts are replaced with identical data.                                                                                                                                                                                                                                                                                                                              |
+| Re-import with fewer characters                      | Characters not in the GOOD payload are **left untouched** in the database. In Genshin Impact, a player can never lose a character they have pulled. A character missing from a GOOD export is always a scanner omission (the player deselected it for a faster scan) — never an actual data loss. Deleting DB records due to scanner omissions would be a critical UX failure. Manual deletion will be provided via the UI in Milestone 2C. |
+| Artifact with invalid `slotKey`                      | Caught by Zod validation before DB touch — `BadRequestError`.                                                                                                                                                                                                                                                                                                                                                                               |
+| Transaction fails midway (e.g., DB constraint)       | Full rollback — DB state unchanged.                                                                                                                                                                                                                                                                                                                                                                                                         |
 
 ---
 
@@ -416,11 +420,13 @@ export interface ImportResult {
 ## Performance Considerations
 
 A large GOOD export can contain:
+
 - ~60 characters
 - ~200 weapons
 - ~1500 artifacts
 
 Operations:
+
 - 60 upserts for characters
 - 1 bulk delete + ~200 creates for weapons
 - 1 bulk delete + ~1500 creates for artifacts

@@ -1,11 +1,11 @@
-import { GenshinWeaponRepository } from "./weapon.repository.js";
-import { NotFoundError } from "@/core/errors/app-error.js";
-import { prisma } from "@/core/db/prisma.js";
-import type { GenshinWeapon } from "@prisma/client";
+import { GenshinWeaponRepository } from './weapon.repository.js';
+import { NotFoundError } from '@/core/errors/app-error.js';
+import { prisma } from '@/core/db/prisma.js';
+import type { GenshinWeapon } from '@prisma/client';
 
 export interface AddWeaponInput {
   weaponKey: string; // e.g. "StaffOfHoma", "EngulfingLightning"
-  level: number;     // 1–90
+  level: number; // 1–90
   ascension: number; // 0–6
   refinement: number; // 1–5
   locked?: boolean;
@@ -30,10 +30,7 @@ export class GenshinWeaponService {
    * Note: duplicate weaponKeys are allowed — a player can own multiple
    * copies of the same weapon (e.g., two R1 copies of a 4-star).
    */
-  async addWeapon(
-    accountId: string,
-    input: AddWeaponInput,
-  ): Promise<GenshinWeapon> {
+  async addWeapon(accountId: string, input: AddWeaponInput): Promise<GenshinWeapon> {
     return this.weaponRepository.create({
       account: { connect: { id: accountId } },
       weaponKey: input.weaponKey,
@@ -73,13 +70,10 @@ export class GenshinWeaponService {
    * NotFoundError is returned whether the weapon doesn't exist or belongs to
    * another account (anti-enumeration).
    */
-  async getWeaponById(
-    accountId: string,
-    weaponId: string,
-  ): Promise<GenshinWeapon> {
+  async getWeaponById(accountId: string, weaponId: string): Promise<GenshinWeapon> {
     const weapon = await this.weaponRepository.findById(weaponId);
     if (!weapon || weapon.accountId !== accountId) {
-      throw new NotFoundError("Weapon not found.");
+      throw new NotFoundError('Weapon not found.');
     }
     return weapon;
   }
@@ -101,10 +95,7 @@ export class GenshinWeaponService {
    * Removes a weapon from inventory.
    * Throws NotFoundError if not found or if it belongs to another account.
    */
-  async removeWeapon(
-    accountId: string,
-    weaponId: string,
-  ): Promise<GenshinWeapon> {
+  async removeWeapon(accountId: string, weaponId: string): Promise<GenshinWeapon> {
     await this.getWeaponById(accountId, weaponId);
     return this.weaponRepository.delete(weaponId);
   }

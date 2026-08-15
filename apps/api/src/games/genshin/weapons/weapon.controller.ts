@@ -1,6 +1,6 @@
-import type { Request, Response } from "express";
-import { successResponse } from "@/core/utils/response.js";
-import { GenshinWeaponService } from "./weapon.service.js";
+import type { Request, Response } from 'express';
+import { successResponse } from '@/core/utils/response.js';
+import { GenshinWeaponService } from './weapon.service.js';
 
 export class GenshinWeaponController {
   private weaponService: GenshinWeaponService;
@@ -24,11 +24,8 @@ export class GenshinWeaponController {
    */
   listWeapons = async (req: Request, res: Response) => {
     const weapons = await this.weaponService.getWeaponsForUser(req.user!.id);
-    res.status(200).json(
-      successResponse(
-        { weapons, total: weapons.length },
-        "Weapons retrieved successfully.",
-      ),
-    );
+    res
+      .status(200)
+      .json(successResponse({ weapons, total: weapons.length }, 'Weapons retrieved successfully.'));
   };
 }

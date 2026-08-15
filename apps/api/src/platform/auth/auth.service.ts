@@ -1,12 +1,12 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import type { User } from "@prisma/client";
-import { env } from "@/core/config/env.js";
-import { UnauthorizedError } from "@/core/errors/app-error.js";
-import { AuthRepository } from "./auth.repository.js";
-import { UserService } from "../users/user.service.js";
-import type { SafeUser } from "../users/user.service.js";
-import type { RegisterInput, LoginInput } from "@celestia/api-contracts";
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import type { User } from '@prisma/client';
+import { env } from '@/core/config/env.js';
+import { UnauthorizedError } from '@/core/errors/app-error.js';
+import { AuthRepository } from './auth.repository.js';
+import { UserService } from '../users/user.service.js';
+import type { SafeUser } from '../users/user.service.js';
+import type { RegisterInput, LoginInput } from '@celestia/api-contracts';
 
 // ============================================================
 // Types
@@ -80,13 +80,13 @@ export class AuthService {
     const user = await this.authRepository.findByEmail(data.email);
 
     if (!user) {
-      throw new UnauthorizedError("Invalid email or password.");
+      throw new UnauthorizedError('Invalid email or password.');
     }
 
     const isPasswordValid = await bcrypt.compare(data.password, user.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedError("Invalid email or password.");
+      throw new UnauthorizedError('Invalid email or password.');
     }
 
     const token = this.generateToken(user.id);
@@ -105,7 +105,7 @@ export class AuthService {
    */
   private generateToken(userId: string): string {
     return jwt.sign({ sub: userId }, env.JWT_SECRET, {
-      expiresIn: env.JWT_EXPIRY as jwt.SignOptions["expiresIn"],
+      expiresIn: env.JWT_EXPIRY as jwt.SignOptions['expiresIn'],
     });
   }
 

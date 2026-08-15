@@ -1,7 +1,7 @@
-import { UserRepository } from "./user.repository.js";
-import type { User } from "@prisma/client";
-import type { CreateUserInput } from "@celestia/api-contracts";
-import { ConflictError, NotFoundError } from "@/core/errors/app-error.js";
+import { UserRepository } from './user.repository.js';
+import type { User } from '@prisma/client';
+import type { CreateUserInput } from '@celestia/api-contracts';
+import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
 
 /**
  * A User with the password field removed.
@@ -9,7 +9,7 @@ import { ConflictError, NotFoundError } from "@/core/errors/app-error.js";
  * Defined here rather than imported from auth.service.ts to avoid a
  * circular module dependency (auth depends on users; users must not depend on auth).
  */
-export type SafeUser = Omit<User, "password">;
+export type SafeUser = Omit<User, 'password'>;
 
 export class UserService {
   private userRepository: UserRepository;
@@ -22,15 +22,13 @@ export class UserService {
     // Business Rule 1: Email must be unique
     const existingEmail = await this.userRepository.findByEmail(data.email);
     if (existingEmail) {
-      throw new ConflictError("Email is already registered.");
+      throw new ConflictError('Email is already registered.');
     }
 
     // Business Rule 2: Username must be unique
-    const existingUsername = await this.userRepository.findByUsername(
-      data.username,
-    );
+    const existingUsername = await this.userRepository.findByUsername(data.username);
     if (existingUsername) {
-      throw new ConflictError("Username is already taken.");
+      throw new ConflictError('Username is already taken.');
     }
 
     // If all rules pass, save to the database
@@ -40,7 +38,7 @@ export class UserService {
   async getUserById(id: string): Promise<SafeUser> {
     const user = await this.userRepository.findById(id);
     if (!user) {
-      throw new NotFoundError("User not found.");
+      throw new NotFoundError('User not found.');
     }
     const { password: _password, ...safeUser } = user;
     return safeUser;

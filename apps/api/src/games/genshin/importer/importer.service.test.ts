@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { GenshinImportService } from "./importer.service.js";
-import { BadRequestError } from "@/core/errors/app-error.js";
-import type { GenshinAccount } from "@prisma/client";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { GenshinImportService } from './importer.service.js';
+import { BadRequestError } from '@/core/errors/app-error.js';
+import type { GenshinAccount } from '@prisma/client';
 
 // ============================================================
 // Transaction context mock
@@ -26,13 +26,18 @@ const mockTx = {
     create: vi.fn(),
     update: vi.fn(),
   },
+  // Phase 3B: material inventory step added to the importer transaction
+  genshinMaterial: {
+    deleteMany: vi.fn(),
+    create: vi.fn(),
+  },
 };
 
 // ============================================================
 // Module-level mocks
 // ============================================================
 
-vi.mock("@/core/db/prisma.js", () => ({
+vi.mock('@/core/db/prisma.js', () => ({
   prisma: {
     genshinAccount: {
       findUnique: vi.fn(),
@@ -40,9 +45,9 @@ vi.mock("@/core/db/prisma.js", () => ({
     },
     // $transaction executes the interactive callback immediately with mockTx.
     // This lets us test the inner logic without a real database.
-    $transaction: vi.fn().mockImplementation(
-      (callback: (tx: typeof mockTx) => Promise<unknown>) => callback(mockTx),
-    ),
+    $transaction: vi
+      .fn()
+      .mockImplementation((callback: (tx: typeof mockTx) => Promise<unknown>) => callback(mockTx)),
   },
 }));
 
@@ -51,23 +56,23 @@ vi.mock("@/core/db/prisma.js", () => ({
 // ============================================================
 
 const mockAccount: GenshinAccount = {
-  id: "account-abc-123",
-  userId: "user-abc-123",
+  id: 'account-abc-123',
+  userId: 'user-abc-123',
   uid: null,
   nickname: null,
   adventureRank: null,
   worldLevel: null,
-  createdAt: new Date("2026-01-01T00:00:00Z"),
-  updatedAt: new Date("2026-01-01T00:00:00Z"),
+  createdAt: new Date('2026-01-01T00:00:00Z'),
+  updatedAt: new Date('2026-01-01T00:00:00Z'),
 };
 
 const VALID_GOOD_PAYLOAD = JSON.stringify({
-  format: "GOOD",
+  format: 'GOOD',
   version: 2,
-  source: "Genshin Optimizer",
+  source: 'Genshin Optimizer',
   characters: [
     {
-      key: "HuTao",
+      key: 'HuTao',
       level: 90,
       constellation: 1,
       ascension: 6,
@@ -76,33 +81,33 @@ const VALID_GOOD_PAYLOAD = JSON.stringify({
   ],
   weapons: [
     {
-      key: "StaffOfHoma",
+      key: 'StaffOfHoma',
       level: 90,
       ascension: 6,
       refinement: 1,
-      location: "HuTao",
+      location: 'HuTao',
       lock: false,
     },
   ],
   artifacts: [
     {
-      setKey: "ShimenawasReminiscence",
-      slotKey: "goblet",
+      setKey: 'ShimenawasReminiscence',
+      slotKey: 'goblet',
       level: 20,
       rarity: 5,
-      mainStatKey: "pyro_dmg_",
+      mainStatKey: 'pyro_dmg_',
       lock: false,
-      location: "HuTao",
+      location: 'HuTao',
       substats: [
-        { key: "critRate_", value: 6.6 },
-        { key: "critDMG_", value: 13.2 },
+        { key: 'critRate_', value: 6.6 },
+        { key: 'critDMG_', value: 13.2 },
       ],
     },
   ],
 });
 
 const EMPTY_GOOD_PAYLOAD = JSON.stringify({
-  format: "GOOD",
+  format: 'GOOD',
   version: 2,
   characters: [],
   weapons: [],
@@ -114,9 +119,9 @@ const EMPTY_GOOD_PAYLOAD = JSON.stringify({
 // ============================================================
 
 // Import prisma after mocking so we get the mocked version
-const { prisma } = await import("@/core/db/prisma.js");
+const { prisma } = await import('@/core/db/prisma.js');
 
-describe("GenshinImportService", () => {
+describe('GenshinImportService', () => {
   let service: GenshinImportService;
 
   beforeEach(() => {
@@ -131,9 +136,9 @@ describe("GenshinImportService", () => {
     mockTx.genshinWeapon.deleteMany.mockResolvedValue({ count: 0 });
     mockTx.genshinArtifact.deleteMany.mockResolvedValue({ count: 0 });
     mockTx.genshinCharacter.upsert.mockResolvedValue({
-      id: "char-abc-123",
+      id: 'char-abc-123',
       accountId: mockAccount.id,
-      characterKey: "HuTao",
+      characterKey: 'HuTao',
       level: 90,
       ascension: 6,
       constellation: 1,
@@ -145,9 +150,9 @@ describe("GenshinImportService", () => {
       updatedAt: new Date(),
     });
     mockTx.genshinWeapon.create.mockResolvedValue({
-      id: "weapon-abc-123",
+      id: 'weapon-abc-123',
       accountId: mockAccount.id,
-      weaponKey: "StaffOfHoma",
+      weaponKey: 'StaffOfHoma',
       level: 90,
       ascension: 6,
       refinement: 1,
@@ -156,13 +161,13 @@ describe("GenshinImportService", () => {
       updatedAt: new Date(),
     });
     mockTx.genshinArtifact.create.mockResolvedValue({
-      id: "artifact-abc-123",
+      id: 'artifact-abc-123',
       accountId: mockAccount.id,
-      setKey: "ShimenawasReminiscence",
-      slotKey: "goblet",
+      setKey: 'ShimenawasReminiscence',
+      slotKey: 'goblet',
       level: 20,
       rarity: 5,
-      mainStatKey: "pyro_dmg_",
+      mainStatKey: 'pyro_dmg_',
       subStats: [],
       locked: false,
       equippedCharacterId: null,
@@ -179,49 +184,49 @@ describe("GenshinImportService", () => {
   // Validation
   // ----------------------------------------------------------
 
-  describe("validation", () => {
-    it("throws BadRequestError when input is not valid JSON", async () => {
-      await expect(
-        service.importAccount("user-abc-123", "{ this is not json }"),
-      ).rejects.toThrow(BadRequestError);
+  describe('validation', () => {
+    it('throws BadRequestError when input is not valid JSON', async () => {
+      await expect(service.importAccount('user-abc-123', '{ this is not json }')).rejects.toThrow(
+        BadRequestError,
+      );
 
-      await expect(
-        service.importAccount("user-abc-123", "{ this is not json }"),
-      ).rejects.toThrow("not valid JSON");
+      await expect(service.importAccount('user-abc-123', '{ this is not json }')).rejects.toThrow(
+        'not valid JSON',
+      );
 
       // No DB calls should have been made
       expect(prisma.genshinAccount.findUnique).not.toHaveBeenCalled();
     });
 
     it("throws BadRequestError when JSON is valid but format is not 'GOOD'", async () => {
-      const wrongFormat = JSON.stringify({ format: "NOTGOOD", version: 1 });
+      const wrongFormat = JSON.stringify({ format: 'NOTGOOD', version: 1 });
 
-      await expect(
-        service.importAccount("user-abc-123", wrongFormat),
-      ).rejects.toThrow(BadRequestError);
+      await expect(service.importAccount('user-abc-123', wrongFormat)).rejects.toThrow(
+        BadRequestError,
+      );
 
       expect(prisma.genshinAccount.findUnique).not.toHaveBeenCalled();
     });
 
-    it("throws BadRequestError when artifact has an invalid slotKey", async () => {
+    it('throws BadRequestError when artifact has an invalid slotKey', async () => {
       const invalidSlot = JSON.stringify({
-        format: "GOOD",
+        format: 'GOOD',
         version: 2,
         artifacts: [
           {
-            setKey: "GladiatorsFinale",
-            slotKey: "invalidSlot", // not in the enum
+            setKey: 'GladiatorsFinale',
+            slotKey: 'invalidSlot', // not in the enum
             level: 20,
             rarity: 5,
-            mainStatKey: "atk",
+            mainStatKey: 'atk',
             substats: [],
           },
         ],
       });
 
-      await expect(
-        service.importAccount("user-abc-123", invalidSlot),
-      ).rejects.toThrow(BadRequestError);
+      await expect(service.importAccount('user-abc-123', invalidSlot)).rejects.toThrow(
+        BadRequestError,
+      );
     });
   });
 
@@ -229,19 +234,19 @@ describe("GenshinImportService", () => {
   // Account creation
   // ----------------------------------------------------------
 
-  describe("account management", () => {
-    it("creates a new GenshinAccount when the user has none", async () => {
+  describe('account management', () => {
+    it('creates a new GenshinAccount when the user has none', async () => {
       vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValue(null);
 
-      await service.importAccount("user-abc-123", VALID_GOOD_PAYLOAD);
+      await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
       expect(prisma.genshinAccount.create).toHaveBeenCalledOnce();
     });
 
-    it("uses the existing account when the user already has one", async () => {
+    it('uses the existing account when the user already has one', async () => {
       vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValue(mockAccount);
 
-      await service.importAccount("user-abc-123", VALID_GOOD_PAYLOAD);
+      await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
       expect(prisma.genshinAccount.create).not.toHaveBeenCalled();
     });
@@ -251,52 +256,50 @@ describe("GenshinImportService", () => {
   // Import algorithm
   // ----------------------------------------------------------
 
-  describe("import algorithm", () => {
-    it("clears equippedWeaponId on characters before deleting weapons", async () => {
-      await service.importAccount("user-abc-123", VALID_GOOD_PAYLOAD);
+  describe('import algorithm', () => {
+    it('clears equippedWeaponId on characters before deleting weapons', async () => {
+      await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
       // updateMany (clear weapon FKs) must be called BEFORE deleteMany (weapons)
-      const updateManyOrder = vi
-        .mocked(mockTx.genshinCharacter.updateMany)
-        .mock.invocationCallOrder[0];
-      const deleteManyOrder = vi
-        .mocked(mockTx.genshinWeapon.deleteMany)
-        .mock.invocationCallOrder[0];
+      const updateManyOrder = vi.mocked(mockTx.genshinCharacter.updateMany).mock
+        .invocationCallOrder[0];
+      const deleteManyOrder = vi.mocked(mockTx.genshinWeapon.deleteMany).mock
+        .invocationCallOrder[0];
 
       expect(updateManyOrder).toBeLessThan(deleteManyOrder!);
     });
 
-    it("upserts characters using the accountId_characterKey index", async () => {
-      await service.importAccount("user-abc-123", VALID_GOOD_PAYLOAD);
+    it('upserts characters using the accountId_characterKey index', async () => {
+      await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
       expect(mockTx.genshinCharacter.upsert).toHaveBeenCalledWith(
         expect.objectContaining({
           where: {
             accountId_characterKey: {
               accountId: mockAccount.id,
-              characterKey: "HuTao",
+              characterKey: 'HuTao',
             },
           },
         }),
       );
     });
 
-    it("maps GOOD talent field names to database field names correctly", async () => {
-      await service.importAccount("user-abc-123", VALID_GOOD_PAYLOAD);
+    it('maps GOOD talent field names to database field names correctly', async () => {
+      await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
       expect(mockTx.genshinCharacter.upsert).toHaveBeenCalledWith(
         expect.objectContaining({
           create: expect.objectContaining({
-            talentNormal: 6,  // from talent.auto
-            talentSkill: 9,   // from talent.skill
-            talentBurst: 9,   // from talent.burst
+            talentNormal: 6, // from talent.auto
+            talentSkill: 9, // from talent.skill
+            talentBurst: 9, // from talent.burst
           }),
         }),
       );
     });
 
-    it("maps GOOD lock field to database locked field", async () => {
-      await service.importAccount("user-abc-123", VALID_GOOD_PAYLOAD);
+    it('maps GOOD lock field to database locked field', async () => {
+      await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
       expect(mockTx.genshinWeapon.create).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -305,39 +308,37 @@ describe("GenshinImportService", () => {
       );
     });
 
-    it("resolves weapon location to equippedWeaponId on the character", async () => {
-      await service.importAccount("user-abc-123", VALID_GOOD_PAYLOAD);
+    it('resolves weapon location to equippedWeaponId on the character', async () => {
+      await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
       // The character should have been updated with the weapon's DB id
       expect(mockTx.genshinCharacter.update).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { id: "char-abc-123" },
-          data: { equippedWeaponId: "weapon-abc-123" },
+          where: { id: 'char-abc-123' },
+          data: { equippedWeaponId: 'weapon-abc-123' },
         }),
       );
     });
 
-    it("resolves artifact location to equippedCharacterId on the artifact", async () => {
-      await service.importAccount("user-abc-123", VALID_GOOD_PAYLOAD);
+    it('resolves artifact location to equippedCharacterId on the artifact', async () => {
+      await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
       expect(mockTx.genshinArtifact.update).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { id: "artifact-abc-123" },
-          data: { equippedCharacterId: "char-abc-123" },
+          where: { id: 'artifact-abc-123' },
+          data: { equippedCharacterId: 'char-abc-123' },
         }),
       );
     });
 
-    it("returns the correct import summary", async () => {
-      const result = await service.importAccount(
-        "user-abc-123",
-        VALID_GOOD_PAYLOAD,
-      );
+    it('returns the correct import summary', async () => {
+      const result = await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
       expect(result).toEqual({
         charactersImported: 1,
         weaponsImported: 1,
         artifactsImported: 1,
+        materialsImported: 0, // VALID_GOOD_PAYLOAD has no materials block
       });
     });
   });
@@ -346,66 +347,64 @@ describe("GenshinImportService", () => {
   // Edge cases
   // ----------------------------------------------------------
 
-  describe("edge cases", () => {
-    it("handles an empty payload without errors and returns zeros", async () => {
-      const result = await service.importAccount(
-        "user-abc-123",
-        EMPTY_GOOD_PAYLOAD,
-      );
+  describe('edge cases', () => {
+    it('handles an empty payload without errors and returns zeros', async () => {
+      const result = await service.importAccount('user-abc-123', EMPTY_GOOD_PAYLOAD);
 
       expect(result).toEqual({
         charactersImported: 0,
         weaponsImported: 0,
         artifactsImported: 0,
+        materialsImported: 0,
       });
     });
 
-    it("leaves weapon unequipped when location references a character not in the payload", async () => {
+    it('leaves weapon unequipped when location references a character not in the payload', async () => {
       const payloadWithUnknownLocation = JSON.stringify({
-        format: "GOOD",
+        format: 'GOOD',
         version: 2,
         characters: [], // HuTao is NOT in the payload
         weapons: [
           {
-            key: "StaffOfHoma",
+            key: 'StaffOfHoma',
             level: 90,
             ascension: 6,
             refinement: 1,
-            location: "HuTao", // refers to a character not exported
+            location: 'HuTao', // refers to a character not exported
             lock: false,
           },
         ],
         artifacts: [],
       });
 
-      await service.importAccount("user-abc-123", payloadWithUnknownLocation);
+      await service.importAccount('user-abc-123', payloadWithUnknownLocation);
 
       // Weapon was created but character update for equipping was NOT called
       expect(mockTx.genshinWeapon.create).toHaveBeenCalledOnce();
       expect(mockTx.genshinCharacter.update).not.toHaveBeenCalled();
     });
 
-    it("leaves artifact unequipped when location references a character not in the payload", async () => {
+    it('leaves artifact unequipped when location references a character not in the payload', async () => {
       const payloadWithUnknownLocation = JSON.stringify({
-        format: "GOOD",
+        format: 'GOOD',
         version: 2,
         characters: [],
         weapons: [],
         artifacts: [
           {
-            setKey: "ShimenawasReminiscence",
-            slotKey: "goblet",
+            setKey: 'ShimenawasReminiscence',
+            slotKey: 'goblet',
             level: 20,
             rarity: 5,
-            mainStatKey: "pyro_dmg_",
+            mainStatKey: 'pyro_dmg_',
             lock: false,
-            location: "HuTao", // character not in payload
+            location: 'HuTao', // character not in payload
             substats: [],
           },
         ],
       });
 
-      await service.importAccount("user-abc-123", payloadWithUnknownLocation);
+      await service.importAccount('user-abc-123', payloadWithUnknownLocation);
 
       expect(mockTx.genshinArtifact.create).toHaveBeenCalledOnce();
       expect(mockTx.genshinArtifact.update).not.toHaveBeenCalled();

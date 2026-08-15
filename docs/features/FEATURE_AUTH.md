@@ -95,11 +95,11 @@ Both endpoints return the standard success envelope:
 
 ## API Endpoints
 
-| Method | Path                        | Auth Required | Description                        |
-|--------|-----------------------------|---------------|------------------------------------|  
-| POST   | /api/v1/auth/register       | No            | Create new account                 |
-| POST   | /api/v1/auth/login          | No            | Authenticate user                  |
-| GET    | /api/v1/auth/me             | Yes (Bearer)  | Return current user's safe profile |
+| Method | Path                  | Auth Required | Description                        |
+| ------ | --------------------- | ------------- | ---------------------------------- |
+| POST   | /api/v1/auth/register | No            | Create new account                 |
+| POST   | /api/v1/auth/login    | No            | Authenticate user                  |
+| GET    | /api/v1/auth/me       | Yes (Bearer)  | Return current user's safe profile |
 
 ---
 
@@ -150,7 +150,7 @@ can be added in a later phase if refresh token rotation or rate limiting is need
 The feature is complete when:
 
 - [x] `POST /api/v1/auth/register` creates a user and returns a JWT
-- [x] `POST /api/v1/auth/login` verifies credentials and returns a JWT  
+- [x] `POST /api/v1/auth/login` verifies credentials and returns a JWT
 - [x] `GET /api/v1/auth/me` returns current user profile when token is valid
 - [x] Duplicate email/username returns 409 Conflict
 - [x] Invalid credentials return 401 Unauthorized

@@ -1,14 +1,14 @@
-import { prisma } from "@/core/db/prisma.js";
-import type { DailyCompanion, Prisma } from "@prisma/client";
+import { prisma } from '@/core/db/prisma.js';
+import type { DailyCompanion, Prisma } from '@prisma/client';
 
 /** Scalar fields the caller can set on creation or update. */
 export type CompanionScalars = {
-  resinAmount?:      number;
-  resinUpdatedAt?:   Date;
-  commissionsDone?:  boolean;
-  teapotClaimed?:    boolean;
+  resinAmount?: number;
+  resinUpdatedAt?: Date;
+  commissionsDone?: boolean;
+  teapotClaimed?: boolean;
   transformerClaimed?: boolean;
-  dailyResetAt?:     Date;
+  dailyResetAt?: Date;
 };
 
 export class DailyCompanionRepository {
@@ -33,7 +33,7 @@ export class DailyCompanionRepository {
    */
   async upsert(userId: string, data: CompanionScalars): Promise<DailyCompanion> {
     return prisma.dailyCompanion.upsert({
-      where:  { userId },
+      where: { userId },
       update: data,
       create: {
         user: { connect: { id: userId } },
@@ -42,4 +42,3 @@ export class DailyCompanionRepository {
     });
   }
 }
-

@@ -52,6 +52,7 @@ Body:          The raw GOOD payload object (the frontend JSON.parses the textare
 ```
 
 **Response on success (200):**
+
 ```json
 {
   "success": true,
@@ -65,6 +66,7 @@ Body:          The raw GOOD payload object (the frontend JSON.parses the textare
 ```
 
 **Response on validation failure (400):**
+
 ```json
 {
   "success": false,
@@ -76,6 +78,7 @@ Body:          The raw GOOD payload object (the frontend JSON.parses the textare
 ```
 
 **Response on unauthenticated request (401):**
+
 ```json
 {
   "success": false,
@@ -105,7 +108,7 @@ importGenshinAccount = async (req: Request, res: Response) => {
   // are infrequent user-triggered events, not a hot API path.
   const rawJson = JSON.stringify(req.body);
   const result = await this.importService.importAccount(req.user!.id, rawJson);
-  res.status(200).json(successResponse(result, "Account imported successfully."));
+  res.status(200).json(successResponse(result, 'Account imported successfully.'));
 };
 ```
 
@@ -141,18 +144,19 @@ genshin.routes.ts           ← mounted at /api/v1/games/genshin
 **File:** `apps/api/src/games/genshin/importer/importer.routes.ts` [NEW]
 
 ```typescript
-router.post("/import", requireAuth, importController.importGenshinAccount);
+router.post('/import', requireAuth, importController.importGenshinAccount);
 ```
 
 ---
 
 ### Mounting the Router in `app.ts`
 
-**File:** `apps/api/src/app.ts`  [MODIFY]
+**File:** `apps/api/src/app.ts` [MODIFY]
 
 Add one line to the v1Router:
+
 ```typescript
-v1Router.use("/games/genshin", genshinRoutes);
+v1Router.use('/games/genshin', genshinRoutes);
 ```
 
 This means the full endpoint URL becomes `POST /api/v1/games/genshin/import`,
@@ -165,7 +169,7 @@ which is clean, extensible (future character/artifact CRUD routes all live under
 
 ### API Client Function
 
-**File:** `apps/web/src/lib/api.ts`  [MODIFY]
+**File:** `apps/web/src/lib/api.ts` [MODIFY]
 
 Add a typed function for the import endpoint. This follows the established pattern
 of domain-specific functions wrapping `fetchApi`:
@@ -178,10 +182,10 @@ export interface ImportResult {
 }
 
 export async function importGenshinAccount(
-  goodPayload: unknown,  // unknown because it comes from JSON.parse — typed by Zod on backend
+  goodPayload: unknown, // unknown because it comes from JSON.parse — typed by Zod on backend
 ): Promise<ImportResult> {
-  return fetchApi<ImportResult>("/games/genshin/import", {
-    method: "POST",
+  return fetchApi<ImportResult>('/games/genshin/import', {
+    method: 'POST',
     body: JSON.stringify(goodPayload),
   });
 }
@@ -220,6 +224,7 @@ ImportPage
 ```
 
 **Key behavior rules:**
+
 - The textarea value is preserved after errors. The user should not lose their
   pasted JSON just because the import failed.
 - Clicking "Import" first calls `JSON.parse(value)` in the component. If that
@@ -240,6 +245,7 @@ const mutation = useMutation({
 ```
 
 **Error message priority:**
+
 1. Local JSON parse error (client-side, before network request)
 2. `mutation.error instanceof ApiError ? mutation.error.message : null`
    (server-side: Bad Request from invalid GOOD format, 500 server error, etc.)
@@ -248,7 +254,7 @@ const mutation = useMutation({
 
 ### Route Registration in `App.tsx`
 
-**File:** `apps/web/src/App.tsx`  [MODIFY]
+**File:** `apps/web/src/App.tsx` [MODIFY]
 
 Add `/import` as a protected route:
 
@@ -256,7 +262,7 @@ Add `/import` as a protected route:
 <Route element={<ProtectedRoute />}>
   <Route path="/" element={<DashboardPage />} />
   <Route path="/profile" element={<ProfilePage />} />
-  <Route path="/import" element={<ImportPage />} />   {/* NEW */}
+  <Route path="/import" element={<ImportPage />} /> {/* NEW */}
 </Route>
 ```
 
@@ -264,7 +270,7 @@ Add `/import` as a protected route:
 
 ### Dashboard Update
 
-**File:** `apps/web/src/pages/DashboardPage.tsx`  [MODIFY]
+**File:** `apps/web/src/pages/DashboardPage.tsx` [MODIFY]
 
 Replace the existing "Characters — Coming in Phase 2" placeholder card with a
 real, clickable "Import Account" card that links to `/import`.
@@ -277,13 +283,13 @@ export from Genshin Optimizer or Inventory Kamera."
 
 ## Error Handling Summary
 
-| Error Source | Error Type | HTTP Status | UI Behavior |
-|---|---|---|---|
-| Textarea is empty on submit | Client validation | N/A | Inline message: "Paste your GOOD export first." |
-| Textarea content is not valid JSON | `JSON.parse` throws | N/A | Inline message: "This doesn't look like valid JSON." |
-| GOOD payload fails Zod schema | `BadRequestError` from service | 400 | `mutation.error.message` shown in error banner |
-| JWT missing or expired | `UnauthorizedError` from middleware | 401 | `ApiError` — `useEffect` calls `logout()`, ProtectedRoute redirects to `/login` |
-| Unexpected server error | Unhandled error in global handler | 500 | Generic "Something went wrong." message in error banner |
+| Error Source                       | Error Type                          | HTTP Status | UI Behavior                                                                     |
+| ---------------------------------- | ----------------------------------- | ----------- | ------------------------------------------------------------------------------- |
+| Textarea is empty on submit        | Client validation                   | N/A         | Inline message: "Paste your GOOD export first."                                 |
+| Textarea content is not valid JSON | `JSON.parse` throws                 | N/A         | Inline message: "This doesn't look like valid JSON."                            |
+| GOOD payload fails Zod schema      | `BadRequestError` from service      | 400         | `mutation.error.message` shown in error banner                                  |
+| JWT missing or expired             | `UnauthorizedError` from middleware | 401         | `ApiError` — `useEffect` calls `logout()`, ProtectedRoute redirects to `/login` |
+| Unexpected server error            | Unhandled error in global handler   | 500         | Generic "Something went wrong." message in error banner                         |
 
 ---
 
@@ -291,33 +297,33 @@ export from Genshin Optimizer or Inventory Kamera."
 
 ### Backend (API)
 
-| File | Type | Description |
-|---|---|---|
-| `games/genshin/importer/importer.controller.ts` | NEW | `GenshinImportController` with `importGenshinAccount` handler |
-| `games/genshin/importer/importer.routes.ts` | NEW | Express router for `/import` (protected by `requireAuth`) |
-| `app.ts` | MODIFY | Mount `genshinRoutes` at `/api/v1/games/genshin` |
+| File                                            | Type   | Description                                                   |
+| ----------------------------------------------- | ------ | ------------------------------------------------------------- |
+| `games/genshin/importer/importer.controller.ts` | NEW    | `GenshinImportController` with `importGenshinAccount` handler |
+| `games/genshin/importer/importer.routes.ts`     | NEW    | Express router for `/import` (protected by `requireAuth`)     |
+| `app.ts`                                        | MODIFY | Mount `genshinRoutes` at `/api/v1/games/genshin`              |
 
 ### Frontend (Web)
 
-| File | Type | Description |
-|---|---|---|
-| `pages/ImportPage.tsx` | NEW | Full import page with textarea, loading, success, and error states |
-| `lib/api.ts` | MODIFY | Add `importGenshinAccount()` API client function |
-| `App.tsx` | MODIFY | Add `/import` protected route |
-| `pages/DashboardPage.tsx` | MODIFY | Replace Phase 2 placeholder card with real "Import Account" link |
+| File                      | Type   | Description                                                        |
+| ------------------------- | ------ | ------------------------------------------------------------------ |
+| `pages/ImportPage.tsx`    | NEW    | Full import page with textarea, loading, success, and error states |
+| `lib/api.ts`              | MODIFY | Add `importGenshinAccount()` API client function                   |
+| `App.tsx`                 | MODIFY | Add `/import` protected route                                      |
+| `pages/DashboardPage.tsx` | MODIFY | Replace Phase 2 placeholder card with real "Import Account" link   |
 
 ---
 
 ## Edge Cases and Defined Behaviors
 
-| Edge Case | Behavior |
-|---|---|
-| Empty textarea on submit | Client-side check — no network request, inline message |
-| Non-JSON text pasted | `JSON.parse` fails client-side — no request, inline message |
-| Valid JSON but wrong format (e.g., a Pokémon tracker JSON) | Backend `BadRequestError` — `mutation.error.message` displayed in banner |
-| User submits twice rapidly | Button is disabled while `isPending` |
-| Import succeeds but user navigates away and back | Success state is cleared (TanStack Query mutation state is not persisted) |
-| Logout while import is in flight | 401 returned — `logout()` called — redirect to `/login` |
+| Edge Case                                                  | Behavior                                                                  |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Empty textarea on submit                                   | Client-side check — no network request, inline message                    |
+| Non-JSON text pasted                                       | `JSON.parse` fails client-side — no request, inline message               |
+| Valid JSON but wrong format (e.g., a Pokémon tracker JSON) | Backend `BadRequestError` — `mutation.error.message` displayed in banner  |
+| User submits twice rapidly                                 | Button is disabled while `isPending`                                      |
+| Import succeeds but user navigates away and back           | Success state is cleared (TanStack Query mutation state is not persisted) |
+| Logout while import is in flight                           | 401 returned — `logout()` called — redirect to `/login`                   |
 
 ---
 

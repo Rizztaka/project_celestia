@@ -1,31 +1,31 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { GenshinAccountService } from "./account.service.js";
-import { GenshinAccountRepository } from "./account.repository.js";
-import { ConflictError, NotFoundError } from "@/core/errors/app-error.js";
-import type { GenshinAccount } from "@prisma/client";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { GenshinAccountService } from './account.service.js';
+import { GenshinAccountRepository } from './account.repository.js';
+import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
+import type { GenshinAccount } from '@prisma/client';
 
-vi.mock("./account.repository.js");
+vi.mock('./account.repository.js');
 
 // -------------------------------------------------------
 // Fixtures
 // -------------------------------------------------------
 
 const mockAccount: GenshinAccount = {
-  id: "account-abc-123",
-  userId: "user-abc-123",
-  uid: "123456789",
-  nickname: "Traveler",
+  id: 'account-abc-123',
+  userId: 'user-abc-123',
+  uid: '123456789',
+  nickname: 'Traveler',
   adventureRank: 60,
   worldLevel: 8,
-  createdAt: new Date("2026-01-01T00:00:00Z"),
-  updatedAt: new Date("2026-01-01T00:00:00Z"),
+  createdAt: new Date('2026-01-01T00:00:00Z'),
+  updatedAt: new Date('2026-01-01T00:00:00Z'),
 };
 
 // -------------------------------------------------------
 // Tests
 // -------------------------------------------------------
 
-describe("GenshinAccountService", () => {
+describe('GenshinAccountService', () => {
   let service: GenshinAccountService;
   let mockRepo: {
     findByUserId: ReturnType<typeof vi.fn>;
@@ -53,10 +53,10 @@ describe("GenshinAccountService", () => {
   // createAccount
   // ---------------------------------------------------
 
-  describe("createAccount", () => {
-    const input = { userId: "user-abc-123", nickname: "Traveler" };
+  describe('createAccount', () => {
+    const input = { userId: 'user-abc-123', nickname: 'Traveler' };
 
-    it("creates and returns a new account", async () => {
+    it('creates and returns a new account', async () => {
       mockRepo.findByUserId.mockResolvedValue(null);
       mockRepo.create.mockResolvedValue(mockAccount);
 
@@ -66,7 +66,7 @@ describe("GenshinAccountService", () => {
       expect(mockRepo.create).toHaveBeenCalledOnce();
     });
 
-    it("throws ConflictError when the user already has an account", async () => {
+    it('throws ConflictError when the user already has an account', async () => {
       mockRepo.findByUserId.mockResolvedValue(mockAccount);
 
       await expect(service.createAccount(input)).rejects.toThrow(ConflictError);
@@ -78,21 +78,19 @@ describe("GenshinAccountService", () => {
   // getAccountByUserId
   // ---------------------------------------------------
 
-  describe("getAccountByUserId", () => {
-    it("returns the account when it exists", async () => {
+  describe('getAccountByUserId', () => {
+    it('returns the account when it exists', async () => {
       mockRepo.findByUserId.mockResolvedValue(mockAccount);
 
-      const result = await service.getAccountByUserId("user-abc-123");
+      const result = await service.getAccountByUserId('user-abc-123');
 
       expect(result).toEqual(mockAccount);
     });
 
-    it("throws NotFoundError when the account does not exist", async () => {
+    it('throws NotFoundError when the account does not exist', async () => {
       mockRepo.findByUserId.mockResolvedValue(null);
 
-      await expect(
-        service.getAccountByUserId("user-abc-123"),
-      ).rejects.toThrow(NotFoundError);
+      await expect(service.getAccountByUserId('user-abc-123')).rejects.toThrow(NotFoundError);
     });
   });
 
@@ -100,13 +98,13 @@ describe("GenshinAccountService", () => {
   // updateAccount
   // ---------------------------------------------------
 
-  describe("updateAccount", () => {
-    it("updates and returns the account", async () => {
+  describe('updateAccount', () => {
+    it('updates and returns the account', async () => {
       const updated = { ...mockAccount, adventureRank: 59 };
       mockRepo.findByUserId.mockResolvedValue(mockAccount);
       mockRepo.update.mockResolvedValue(updated);
 
-      const result = await service.updateAccount("user-abc-123", {
+      const result = await service.updateAccount('user-abc-123', {
         adventureRank: 59,
       });
 
@@ -116,12 +114,12 @@ describe("GenshinAccountService", () => {
       });
     });
 
-    it("throws NotFoundError when the account does not exist", async () => {
+    it('throws NotFoundError when the account does not exist', async () => {
       mockRepo.findByUserId.mockResolvedValue(null);
 
-      await expect(
-        service.updateAccount("user-abc-123", { adventureRank: 59 }),
-      ).rejects.toThrow(NotFoundError);
+      await expect(service.updateAccount('user-abc-123', { adventureRank: 59 })).rejects.toThrow(
+        NotFoundError,
+      );
     });
   });
 });

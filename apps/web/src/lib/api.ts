@@ -510,3 +510,57 @@ export interface TeamIntelligenceResponse {
 export async function fetchTeamIntelligence(): Promise<TeamIntelligenceResponse> {
   return fetchApi<TeamIntelligenceResponse>('/games/genshin/intelligence/teams');
 }
+
+// ============================================================
+// Artifact Intelligence Types & Functions (Milestone 4C)
+// ============================================================
+
+export interface ArtifactSubStatWithWeight {
+  key: string;
+  value: number;
+  weight: number;
+}
+
+export interface EquippedArtifactOutput {
+  slotKey: string;
+  setKey: string;
+  level: number;
+  rarity: number;
+  mainStatKey: string;
+  slotScore: number;
+  subStats: ArtifactSubStatWithWeight[];
+}
+
+export interface ArtifactRecommendation {
+  characterKey: string;
+  rank: number;
+  artifactEfficiencyScore: number;
+  recommendationScore: number;
+  equippedArtifacts: EquippedArtifactOutput[];
+  explanations: string[];
+}
+
+export interface ArtifactSkippedCharacter {
+  characterKey: string;
+  reason: string;
+}
+
+export interface ArtifactIntelligenceResponse {
+  recommendations: ArtifactRecommendation[];
+  skipped: ArtifactSkippedCharacter[];
+  analysedAt: string;
+}
+
+/**
+ * fetchArtifactIntelligence — GET /games/genshin/intelligence/artifacts
+ *
+ * Returns the top 5 characters whose artifacts need the most improvement,
+ * each with an Artifact Efficiency Score (AES), per-slot breakdowns, and
+ * plain-language explanations.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if the roster is empty.
+ */
+export async function fetchArtifactIntelligence(): Promise<ArtifactIntelligenceResponse> {
+  return fetchApi<ArtifactIntelligenceResponse>('/games/genshin/intelligence/artifacts');
+}

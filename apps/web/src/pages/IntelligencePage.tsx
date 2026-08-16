@@ -3,7 +3,11 @@ import { type ReactNode,useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
+  type ArtifactRecommendation,
+  type ArtifactSkippedCharacter,
   type CharacterRecommendation,
+  type EquippedArtifactOutput,
+  fetchArtifactIntelligence,
   fetchCharacterIntelligence,
   fetchTeamIntelligence,
   type RecommendationLabel,
@@ -546,7 +550,7 @@ function Nav({ onLogout }: { onLogout: () => void }) {
 // Empty / error state
 // -------------------------------------------------------
 
-function EmptyState({ errorCode, tab }: { errorCode: string | null; tab: 'characters' | 'teams' }) {
+function EmptyState({ errorCode, tab }: { errorCode: string | null; tab: 'characters' | 'teams' | 'artifacts' }) {
   const isNoAccount = errorCode === 'NOT_FOUND';
   const isUnprocessable = errorCode === 'UNPROCESSABLE_ENTITY';
 
@@ -638,10 +642,379 @@ function useTeamIntelligence() {
 }
 
 // -------------------------------------------------------
+// Artifact Intelligence — hook
+// -------------------------------------------------------
+
+function useArtifactIntelligence() {
+  return useQuery({
+    queryKey: ['intelligence', 'artifacts'],
+    queryFn: fetchArtifactIntelligence,
+    staleTime: 5 * 60 * 1000,
+    retry: (failureCount, error) => {
+      if (error instanceof ApiError && (error.status === 404 || error.status === 422)) {
+        return false;
+      }
+      return failureCount < 2;
+    },
+  });
+}
+
+// -------------------------------------------------------
+// Artifact Intelligence — stat key display names
+// -------------------------------------------------------
+
+const STAT_DISPLAY: Record<string, string> = {
+  critRate_: 'Crit Rate',
+  critDMG_: 'Crit DMG',
+  enerRech_: 'Energy Recharge',
+  eleMas: 'Elem. Mastery',
+  hp_: 'HP%',
+  atk_: 'ATK%',
+  def_: 'DEF%',
+  hp: 'Flat HP',
+  atk: 'Flat ATK',
+  def: 'Flat DEF',
+  pyro_dmg_: 'Pyro DMG',
+  hydro_dmg_: 'Hydro DMG',
+  electro_dmg_: 'Electro DMG',
+  cryo_dmg_: 'Cryo DMG',
+  anemo_dmg_: 'Anemo DMG',
+  geo_dmg_: 'Geo DMG',
+  dendro_dmg_: 'Dendro DMG',
+  phys_dmg_: 'Physical DMG',
+  heal_: 'Healing Bonus',
+};
+
+function displayStat(key: string): string {
+  return STAT_DISPLAY[key] ?? key;
+}
+
+// -------------------------------------------------------
+// Artifact Intelligence — AES ring gauge
+// -------------------------------------------------------
+
+function AesGauge({ score }: { score: number }) {
+  const radius = 30;
+  const circumference = 2 * Math.PI * radius;
+  const filled = (score / 100) * circumference;
+  const gap = circumference - filled;
+
+  const color =
+    score >= 60 ? '#4ade80' : // green
+    score >= 35 ? '#fb923c' : // orange
+    '#f87171'; // red
+
+  return (
+    <div className="relative flex h-20 w-20 shrink-0 items-center justify-center">
+      <svg className="absolute inset-0 -rotate-90" width="80" height="80" viewBox="0 0 80 80">
+        {/* Track */}
+        <circle
+          cx="40" cy="40" r={radius}
+          fill="none"
+          stroke="rgba(255,255,255,0.05)"
+          strokeWidth="7"
+        />
+        {/* Fill */}
+        <circle
+          cx="40" cy="40" r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth="7"
+          strokeLinecap="round"
+          strokeDasharray={`${filled} ${gap}`}
+          className="transition-all duration-700"
+        />
+      </svg>
+      <div className="relative flex flex-col items-center">
+        <span className="font-display text-lg font-bold text-white leading-none">{score}</span>
+        <span className="text-[9px] font-semibold uppercase tracking-widest text-zinc-500">AES</span>
+      </div>
+    </div>
+  );
+}
+
+// -------------------------------------------------------
+// Artifact Intelligence — single slot card
+// -------------------------------------------------------
+
+const SLOT_ICONS: Record<string, string> = {
+  flower: '❀', plume: '🪶', sands: '⌛', goblet: '🏆', circlet: '⭕',
+};
+
+function SlotBreakdown({ artifact }: { artifact: EquippedArtifactOutput }) {
+  const slotLabel = artifact.slotKey.charAt(0).toUpperCase() + artifact.slotKey.slice(1);
+  const icon = SLOT_ICONS[artifact.slotKey] ?? '◆';
+  const slotScore = artifact.slotScore;
+  const barColor =
+    slotScore >= 60 ? 'from-green-500 to-emerald-400' :
+    slotScore >= 35 ? 'from-orange-500 to-amber-400' :
+    'from-red-500 to-rose-400';
+
+  return (
+    <div className="flex flex-col gap-2 rounded-xl border border-white/5 bg-white/[0.02] p-3 transition-all hover:border-white/10">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <span className="text-sm">{icon}</span>
+          <span className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500">{slotLabel}</span>
+        </div>
+        <span className="font-display text-xs font-bold text-white">{slotScore}</span>
+      </div>
+      {/* Score bar */}
+      <div className="h-1 w-full overflow-hidden rounded-full bg-white/5">
+        <div
+          className={`h-full rounded-full bg-gradient-to-r ${barColor} transition-all duration-700`}
+          style={{ width: `${slotScore}%` }}
+        />
+      </div>
+      {/* Main stat */}
+      <p className="text-[10px] text-zinc-600">
+        <span className="text-zinc-500">Main:</span> {displayStat(artifact.mainStatKey)}
+      </p>
+      {/* Sub-stats */}
+      <ul className="space-y-1">
+        {artifact.subStats.map((sub, i) => {
+          const weightClass =
+            sub.weight >= 0.8 ? 'text-amber-400' :
+            sub.weight >= 0.4 ? 'text-zinc-300' :
+            'text-zinc-600';
+          return (
+            <li key={i} className={`flex items-center justify-between text-[10px] ${weightClass}`}>
+              <span>{displayStat(sub.key)}</span>
+              <span className="font-semibold">{Number.isInteger(sub.value) ? sub.value : sub.value.toFixed(1)}</span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
+// -------------------------------------------------------
+// Artifact Intelligence — explanation bullet classifier
+// -------------------------------------------------------
+
+function isWarning(text: string): boolean {
+  const lower = text.toLowerCase();
+  return (
+    lower.includes('missing') ||
+    lower.includes('weakest') ||
+    lower.includes('main stat') ||
+    lower.includes('switching') ||
+    lower.includes('replace')
+  );
+}
+
+function isPraise(text: string): boolean {
+  const lower = text.toLowerCase();
+  return lower.includes('positive') || lower.includes('excellent');
+}
+
+// -------------------------------------------------------
+// Artifact Intelligence — recommendation card
+// -------------------------------------------------------
+
+function ArtifactCard({ rec }: { rec: ArtifactRecommendation }) {
+  const name = formatName(rec.characterKey);
+  const initials = getInitials(name);
+  const aes = rec.artifactEfficiencyScore;
+  const urgency = aes < 30 ? 'CRITICAL' : aes < 50 ? 'NEEDS WORK' : 'IMPROVABLE';
+  const urgencyColor =
+    aes < 30 ? { text: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30', bar: 'from-red-500/0 via-red-400 to-red-500/0' } :
+    aes < 50 ? { text: 'text-orange-400', bg: 'bg-orange-500/10', border: 'border-orange-500/30', bar: 'from-orange-500/0 via-orange-400 to-orange-500/0' } :
+               { text: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30', bar: 'from-amber-500/0 via-amber-400 to-amber-500/0' };
+
+  return (
+    <article
+      id={`artifact-card-${rec.rank}`}
+      className="glass-panel hover-lift group relative flex flex-col gap-5 overflow-hidden rounded-2xl border border-white/5 p-6 transition-all"
+    >
+      {/* Accent top line */}
+      <div className={`absolute inset-x-0 top-0 h-[2px] rounded-t-2xl bg-gradient-to-r ${urgencyColor.bar}`} />
+
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <RankBadge rank={rec.rank} />
+        <AesGauge score={aes} />
+
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="font-display text-base font-bold text-white">{name}</p>
+            <span
+              className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest
+                ${urgencyColor.text} ${urgencyColor.bg} ${urgencyColor.border}`}
+            >
+              {urgency}
+            </span>
+          </div>
+
+          <div className="mt-2 flex items-center gap-2">
+            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/5">
+              <div
+                className={`h-full rounded-full bg-gradient-to-r ${
+                  aes < 30 ? 'from-red-500 to-rose-400' :
+                  aes < 50 ? 'from-orange-500 to-amber-400' :
+                  'from-amber-500 to-yellow-400'
+                } transition-all duration-700`}
+                style={{ width: `${aes}%` }}
+              />
+            </div>
+            <span className={`shrink-0 font-display text-sm font-bold ${urgencyColor.text}`}>
+              {aes}/100
+            </span>
+          </div>
+        </div>
+
+        {/* Avatar initials */}
+        <div className={`hidden h-12 w-12 shrink-0 select-none items-center justify-center rounded-xl border font-display text-sm font-bold sm:flex
+          ${urgencyColor.text} ${urgencyColor.bg} ${urgencyColor.border}`}
+        >
+          {initials}
+        </div>
+      </div>
+
+      <div className="border-t border-white/5" />
+
+      {/* Slot breakdowns */}
+      {rec.equippedArtifacts.length > 0 && (
+        <div>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-zinc-600">
+            Artifact Breakdown
+          </p>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+            {rec.equippedArtifacts.map((a) => (
+              <SlotBreakdown key={a.slotKey} artifact={a} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {rec.equippedArtifacts.length > 0 && <div className="border-t border-white/5" />}
+
+      {/* Explanations */}
+      <ul className="space-y-2.5" role="list" aria-label={`Artifact improvement suggestions for ${name}`}>
+        {rec.explanations.map((explanation, i) => {
+          const warn = isWarning(explanation);
+          const praise = isPraise(explanation);
+          const bulletColor =
+            warn ? 'text-red-400' :
+            praise ? 'text-green-400' :
+            'text-zinc-500';
+          const textColor =
+            warn ? 'text-zinc-300' :
+            praise ? 'text-zinc-400' :
+            'text-zinc-400';
+          return (
+            <li key={i} className={`flex items-start gap-2.5 text-sm leading-relaxed ${textColor}`}>
+              <span className={`mt-0.5 shrink-0 ${bulletColor}`} aria-hidden="true">›</span>
+              {explanation}
+            </li>
+          );
+        })}
+      </ul>
+    </article>
+  );
+}
+
+// -------------------------------------------------------
+// Artifact Intelligence — skipped accordion
+// -------------------------------------------------------
+
+function ArtifactSkippedAccordion({ skipped }: { skipped: ArtifactSkippedCharacter[] }) {
+  const [open, setOpen] = useState(false);
+  if (skipped.length === 0) return null;
+
+  return (
+    <section className="animate-fade-in" id="artifact-skipped-section">
+      <button
+        id="artifact-skipped-toggle"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        aria-controls="artifact-skipped-list"
+        className="glass-panel flex w-full items-center justify-between rounded-2xl border border-white/5 px-6 py-4 text-sm font-medium text-zinc-400 transition-all hover:border-white/10 hover:text-white"
+      >
+        <div className="flex items-center gap-2">
+          <svg className="h-4 w-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          <span>
+            {skipped.length} character{skipped.length !== 1 ? 's' : ''} with well-optimised artifacts or no profile yet
+          </span>
+        </div>
+        <svg
+          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {open && (
+        <ul
+          id="artifact-skipped-list"
+          role="list"
+          className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {skipped.map((s) => (
+            <li
+              key={s.characterKey}
+              id={`artifact-skipped-${s.characterKey}`}
+              className="glass-panel flex items-center gap-3 rounded-xl border border-white/5 px-4 py-3"
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-green-400/20 bg-green-400/10 font-display text-xs font-bold text-green-400">
+                {getInitials(formatName(s.characterKey))}
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-white">{formatName(s.characterKey)}</p>
+                <p className="truncate text-xs text-zinc-500">{s.reason}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+// -------------------------------------------------------
+// Artifact Intelligence — skeleton card
+// -------------------------------------------------------
+
+function ArtifactSkeletonCard() {
+  return (
+    <div className="glass-panel flex animate-pulse flex-col gap-5 rounded-2xl border border-white/5 p-6">
+      <div className="flex items-center gap-4">
+        <div className="h-9 w-9 shrink-0 rounded-xl bg-white/5" />
+        <div className="h-20 w-20 shrink-0 rounded-full bg-white/5" />
+        <div className="flex-1 space-y-2">
+          <div className="flex gap-2">
+            <div className="h-5 w-28 rounded-lg bg-white/5" />
+            <div className="h-5 w-20 rounded-full bg-white/5" />
+          </div>
+          <div className="h-1.5 w-full rounded-full bg-white/5" />
+        </div>
+        <div className="hidden h-12 w-12 shrink-0 rounded-xl bg-white/5 sm:block" />
+      </div>
+      <div className="border-t border-white/5" />
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="h-36 rounded-xl bg-white/5" />
+        ))}
+      </div>
+      <div className="border-t border-white/5" />
+      <div className="space-y-2.5">
+        <div className="h-4 w-full rounded bg-white/5" />
+        <div className="h-4 w-5/6 rounded bg-white/5" />
+      </div>
+    </div>
+  );
+}
+
+// -------------------------------------------------------
 // Tab system
 // -------------------------------------------------------
 
-type Tab = 'characters' | 'teams';
+type Tab = 'characters' | 'teams' | 'artifacts';
 
 const TABS: { id: Tab; label: string; icon: ReactNode }[] = [
   {
@@ -659,6 +1032,15 @@ const TABS: { id: Tab; label: string; icon: ReactNode }[] = [
     icon: (
       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+    ),
+  },
+  {
+    id: 'artifacts',
+    label: 'Artifact Assembly',
+    icon: (
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
       </svg>
     ),
   },
@@ -781,6 +1163,76 @@ function TeamTab() {
 }
 
 // -------------------------------------------------------
+// Tab: Artifact Assembly panel
+// -------------------------------------------------------
+
+function ArtifactTab() {
+  const { data, isLoading, isError, error } = useArtifactIntelligence();
+  const errorCode = isError && error instanceof ApiError ? error.code : null;
+  const recommendations = data?.recommendations ?? [];
+  const skipped = data?.skipped ?? [];
+
+  return (
+    <>
+      {/* Stat strip */}
+      {!isLoading && !isError && (
+        <div className="animate-fade-in flex gap-6 rounded-2xl border border-white/5 bg-white/[0.02] px-6 py-4">
+          <div>
+            <p className="font-display text-2xl font-bold text-white">{recommendations.length}</p>
+            <p className="text-xs text-zinc-500">Characters needing artifact work</p>
+          </div>
+          <div className="border-l border-white/5 pl-6">
+            <p className="font-display text-2xl font-bold text-white">{skipped.length}</p>
+            <p className="text-xs text-zinc-500">Already well-equipped</p>
+          </div>
+          {recommendations.length > 0 && (
+            <div className="border-l border-white/5 pl-6">
+              <p className="font-display text-2xl font-bold text-red-400">
+                {recommendations[0].artifactEfficiencyScore}
+              </p>
+              <p className="text-xs text-zinc-500">Lowest AES (most urgent)</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {isLoading && (
+        <div className="space-y-5">
+          {Array.from({ length: 3 }).map((_, i) => <ArtifactSkeletonCard key={i} />)}
+        </div>
+      )}
+
+      {isError && <EmptyState errorCode={errorCode} tab="artifacts" />}
+
+      {!isLoading && !isError && recommendations.length === 0 && (
+        <div className="animate-fade-in flex flex-col items-center justify-center py-24 text-center">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-green-400/20 bg-green-400/10">
+            <svg className="h-10 w-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+            </svg>
+          </div>
+          <h2 className="font-display mb-3 text-2xl font-bold text-white">Artifacts Fully Optimised</h2>
+          <p className="max-w-sm text-base leading-relaxed text-zinc-400">
+            All profiled characters in your roster have artifact efficiency above 60. Excellent gear management!
+          </p>
+        </div>
+      )}
+
+      {!isLoading && !isError && recommendations.length > 0 && (
+        <div className="space-y-8">
+          <section aria-label="Top artifact improvement recommendations" className="animate-fade-in space-y-5">
+            {recommendations.map((rec) => (
+              <ArtifactCard key={rec.characterKey} rec={rec} />
+            ))}
+          </section>
+          {skipped.length > 0 && <ArtifactSkippedAccordion skipped={skipped} />}
+        </div>
+      )}
+    </>
+  );
+}
+
+// -------------------------------------------------------
 // IntelligencePage — main export
 // -------------------------------------------------------
 
@@ -849,6 +1301,7 @@ export default function IntelligencePage() {
         >
           {activeTab === 'characters' && <CharacterTab />}
           {activeTab === 'teams' && <TeamTab />}
+          {activeTab === 'artifacts' && <ArtifactTab />}
         </div>
       </main>
     </div>

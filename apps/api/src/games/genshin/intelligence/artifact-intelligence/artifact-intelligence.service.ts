@@ -155,12 +155,10 @@ export class ArtifactIntelligenceService {
       }
     }
 
-    // Edge case: if all characters were skipped but the roster wasn't empty
-    if (recommendations.length === 0 && skipped.length > 0) {
-        // We still return 200 OK, just with an empty recommendations array.
-    } else if (recommendations.length === 0 && skipped.length === 0) {
-        // Should be impossible due to roster.length > 0 check, but safe fallback
-        throw new UnprocessableError('No characters could be analysed.');
+    // Edge case: if no characters could be analysed and none were skipped
+    // (Should be impossible due to roster.length > 0 check, but safe fallback)
+    if (recommendations.length === 0 && skipped.length === 0) {
+      throw new UnprocessableError('No characters could be analysed.');
     }
 
     // 4. Sort (highest recommendation score first) and return top 5

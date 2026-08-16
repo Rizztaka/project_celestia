@@ -1,0 +1,148 @@
+{
+  "_comment": "Artifact stat weight profiles for the Artifact Intelligence Engine. Patch 5.x.",
+  "HuTao": {
+    "subStatWeights": {
+      "critRate_": 1.0,
+      "critDMG_": 1.0,
+      "hp_": 0.75,
+      "eleMas": 0.75,
+      "enerRech_": 0.25,
+      "atk_": 0.0,
+      "atk": 0.0,
+      "hp": 0.0,
+      "def": 0.0,
+      "def_": 0.0
+    },
+    "mainStatPriority": {
+      "sands": ["hp_", "eleMas"],
+      "goblet": ["pyro_dmg_"],
+      "circlet": ["critRate_", "critDMG_"]
+    }
+  },
+  "Arlecchino": {
+    "subStatWeights": {
+      "critRate_": 1.0,
+      "critDMG_": 1.0,
+      "atk_": 0.8,
+      "eleMas": 0.5,
+      "enerRech_": 0.0
+    },
+    "mainStatPriority": {
+      "sands": ["atk_"],
+      "goblet": ["pyro_dmg_"],
+      "circlet": ["critRate_", "critDMG_"]
+    }
+  },
+  "RaidenShogun": {
+    "subStatWeights": {
+      "critRate_": 1.0,
+      "critDMG_": 1.0,
+      "enerRech_": 1.0,
+      "atk_": 0.7,
+      "eleMas": 0.2
+    },
+    "mainStatPriority": {
+      "sands": ["enerRech_", "atk_"],
+      "goblet": ["electro_dmg_", "atk_"],
+      "circlet": ["critRate_", "critDMG_"]
+    }
+  },
+  "Furina": {
+    "subStatWeights": {
+      "critRate_": 1.0,
+      "critDMG_": 1.0,
+      "hp_": 0.9,
+      "enerRech_": 0.9
+    },
+    "mainStatPriority": {
+      "sands": ["hp_", "enerRech_"],
+      "goblet": ["hp_", "hydro_dmg_"],
+      "circlet": ["critRate_", "critDMG_", "hp_"]
+    }
+  },
+  "Kazuha": {
+    "subStatWeights": {
+      "eleMas": 1.0,
+      "enerRech_": 0.9,
+      "critRate_": 0.4,
+      "critDMG_": 0.4,
+      "atk_": 0.3
+    },
+    "mainStatPriority": {
+      "sands": ["eleMas", "enerRech_"],
+      "goblet": ["eleMas", "anemo_dmg_"],
+      "circlet": ["eleMas", "critRate_", "critDMG_"]
+    }
+  },
+  "Bennett": {
+    "subStatWeights": {
+      "enerRech_": 1.0,
+      "hp_": 0.8,
+      "hp": 0.4,
+      "critRate_": 0.3,
+      "critDMG_": 0.3,
+      "atk_": 0.0
+    },
+    "mainStatPriority": {
+      "sands": ["enerRech_", "hp_"],
+      "goblet": ["hp_", "pyro_dmg_"],
+      "circlet": ["heal_", "hp_", "critRate_"]
+    }
+  },
+  "Yelan": {
+    "subStatWeights": {
+      "critRate_": 1.0,
+      "critDMG_": 1.0,
+      "hp_": 0.9,
+      "enerRech_": 0.9,
+      "eleMas": 0.3
+    },
+    "mainStatPriority": {
+      "sands": ["hp_", "enerRech_"],
+      "goblet": ["hydro_dmg_", "hp_"],
+      "circlet": ["critRate_", "critDMG_"]
+    }
+  },
+  "Zhongli": {
+    "subStatWeights": {
+      "hp_": 1.0,
+      "hp": 0.5,
+      "enerRech_": 0.4,
+      "critRate_": 0.3,
+      "critDMG_": 0.3
+    },
+    "mainStatPriority": {
+      "sands": ["hp_"],
+      "goblet": ["hp_", "geo_dmg_"],
+      "circlet": ["hp_", "critRate_", "critDMG_"]
+    }
+  },
+  "Xingqiu": {
+    "subStatWeights": {
+      "critRate_": 1.0,
+      "critDMG_": 1.0,
+      "enerRech_": 0.9,
+      "atk_": 0.8,
+      "eleMas": 0.3
+    },
+    "mainStatPriority": {
+      "sands": ["atk_", "enerRech_"],
+      "goblet": ["hydro_dmg_"],
+      "circlet": ["critRate_", "critDMG_"]
+    }
+  },
+  "Nahida": {
+    "subStatWeights": {
+      "eleMas": 1.0,
+      "critRate_": 0.8,
+      "critDMG_": 0.8,
+      "enerRech_": 0.5,
+      "atk_": 0.3
+    },
+    "mainStatPriority": {
+      "sands": ["eleMas"],
+      "goblet": ["eleMas", "dendro_dmg_"],
+      "circlet": ["eleMas", "critRate_", "critDMG_"]
+    }
+  }
+}

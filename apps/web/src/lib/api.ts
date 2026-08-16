@@ -465,3 +465,48 @@ export interface CharacterIntelligenceResponse {
 export async function fetchCharacterIntelligence(): Promise<CharacterIntelligenceResponse> {
   return fetchApi<CharacterIntelligenceResponse>('/games/genshin/intelligence/characters');
 }
+
+// ============================================================
+// Team Intelligence Types & Functions (Milestone 4B)
+// ============================================================
+
+export interface TeamRosterSlot {
+  roleId: string;
+  label: string;
+  element: string | null;
+  characterKey: string | null;
+  investmentScore: number;
+  isRequired: boolean;
+  flex: boolean;
+}
+
+export interface TeamRecommendation {
+  rank: number;
+  templateId: string;
+  templateName: string;
+  archetype: string;
+  reaction: string;
+  score: number;
+  isBuildable: boolean;
+  roster: TeamRosterSlot[];
+  explanations: string[];
+}
+
+export interface TeamIntelligenceResponse {
+  recommendations: TeamRecommendation[];
+  analysedAt: string;
+}
+
+/**
+ * fetchTeamIntelligence — GET /games/genshin/intelligence/teams
+ *
+ * Returns the top 3 most buildable, meta-relevant team compositions for the
+ * authenticated user, each with a synergy score and plain-language explanations.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if the roster has fewer than 4 characters or no
+ * buildable team can be assembled.
+ */
+export async function fetchTeamIntelligence(): Promise<TeamIntelligenceResponse> {
+  return fetchApi<TeamIntelligenceResponse>('/games/genshin/intelligence/teams');
+}

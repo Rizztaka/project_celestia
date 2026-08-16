@@ -1,17 +1,18 @@
-import { useState, type ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { type ReactNode,useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuthStore } from '../stores/auth.store';
+
 import {
+  type CharacterRecommendation,
   fetchCharacterIntelligence,
   fetchTeamIntelligence,
-  type CharacterRecommendation,
   type RecommendationLabel,
   type SkippedCharacter,
   type TeamRecommendation,
   type TeamRosterSlot,
 } from '../lib/api';
 import { ApiError } from '../lib/api';
+import { useAuthStore } from '../stores/auth.store';
 
 // -------------------------------------------------------
 // Utilities

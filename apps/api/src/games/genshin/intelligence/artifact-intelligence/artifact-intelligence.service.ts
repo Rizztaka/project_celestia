@@ -166,10 +166,14 @@ export class ArtifactIntelligenceService {
     // 4. Sort (highest recommendation score first) and return top 5
     recommendations.sort((a, b) => b._sortScore - a._sortScore);
 
-    const top5 = recommendations.slice(0, 5).map(({ _sortScore: _, ...rec }, index) => ({
-      ...rec,
-      rank: index + 1,
-    }));
+    const top5 = recommendations.slice(0, 5).map((rec, index) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { _sortScore, ...rest } = rec;
+      return {
+        ...rest,
+        rank: index + 1,
+      };
+    });
 
     return {
       recommendations: top5,

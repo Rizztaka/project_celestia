@@ -1,8 +1,11 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
 import { prisma } from '@/core/db/prisma.js';
 import { NotFoundError, UnprocessableError } from '@/core/errors/app-error.js';
+
+import { type ArtifactInput, type ArtifactWeightProfile,calculateArtifactScore, calculateSlotScore } from './artifact-intelligence.calculator.js';
 import { ArtifactIntelligenceService } from './artifact-intelligence.service.js';
-import { calculateSlotScore, calculateArtifactScore, type ArtifactInput, type ArtifactWeightProfile } from './artifact-intelligence.calculator.js';
 
 // Mock Prisma
 vi.mock('@/core/db/prisma.js', () => ({

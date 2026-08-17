@@ -1,0 +1,29 @@
+{
+  "_comment": "Active and upcoming character/weapon banners. Update this file each patch cycle. CharacterKeys must match the keys used in character-materials.json and team-templates.json.",
+  "banners": [
+    {
+      "bannerId": "banner_hutao_phase1",
+      "name": "Papilio Charontis",
+      "type": "CHARACTER",
+      "fiveStarKey": "HuTao",
+      "fourStarKeys": ["Xingqiu", "Thoma", "Diona"],
+      "endDate": "2026-09-24T23:59:59Z"
+    },
+    {
+      "bannerId": "banner_nahida_phase1",
+      "name": "Folio of Foliage",
+      "type": "CHARACTER",
+      "fiveStarKey": "Nahida",
+      "fourStarKeys": ["Beidou", "Fischl", "Collei"],
+      "endDate": "2026-09-24T23:59:59Z"
+    },
+    {
+      "bannerId": "banner_yelan_phase2",
+      "name": "Covenant of Rock",
+      "type": "CHARACTER",
+      "fiveStarKey": "Yelan",
+      "fourStarKeys": ["Xiangling", "Noelle", "Barbara"],
+      "endDate": "2026-10-15T23:59:59Z"
+    }
+  ]
+}

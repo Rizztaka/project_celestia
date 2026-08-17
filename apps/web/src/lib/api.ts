@@ -564,3 +564,40 @@ export interface ArtifactIntelligenceResponse {
 export async function fetchArtifactIntelligence(): Promise<ArtifactIntelligenceResponse> {
   return fetchApi<ArtifactIntelligenceResponse>('/games/genshin/intelligence/artifacts');
 }
+
+// ============================================================
+// Planner Intelligence Types & Functions (Milestone 4D)
+// ============================================================
+
+export interface PlannerRouteItem {
+  goalId: string;
+  targetKey: string;
+  goalType: string;
+  talentType: string | null;
+  domainName: string;
+  resinCost: number;
+  runs: number;
+  explanations: string[];
+}
+
+export interface PlannerIntelligenceResponse {
+  currentResin: number;
+  timeUntilCapped: string;
+  route: PlannerRouteItem[];
+  unallocatedResin: number;
+  analysedAt: string;
+}
+
+/**
+ * fetchPlannerIntelligence — GET /games/genshin/intelligence/planner
+ *
+ * Returns an optimised daily farming route for the authenticated user,
+ * allocating their projected resin across their active upgrade goals ranked
+ * by character priority and domain time-gating.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if the user has no active upgrade goals.
+ */
+export async function fetchPlannerIntelligence(): Promise<PlannerIntelligenceResponse> {
+  return fetchApi<PlannerIntelligenceResponse>('/games/genshin/intelligence/planner');
+}

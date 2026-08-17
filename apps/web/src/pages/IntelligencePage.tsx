@@ -9,7 +9,10 @@ import {
   type EquippedArtifactOutput,
   fetchArtifactIntelligence,
   fetchCharacterIntelligence,
+  fetchPlannerIntelligence,
   fetchTeamIntelligence,
+  type PlannerIntelligenceResponse,
+  type PlannerRouteItem,
   type RecommendationLabel,
   type SkippedCharacter,
   type TeamRecommendation,
@@ -550,7 +553,7 @@ function Nav({ onLogout }: { onLogout: () => void }) {
 // Empty / error state
 // -------------------------------------------------------
 
-function EmptyState({ errorCode, tab }: { errorCode: string | null; tab: 'characters' | 'teams' | 'artifacts' }) {
+function EmptyState({ errorCode, tab }: { errorCode: string | null; tab: 'characters' | 'teams' | 'artifacts' | 'planner' }) {
   const isNoAccount = errorCode === 'NOT_FOUND';
   const isUnprocessable = errorCode === 'UNPROCESSABLE_ENTITY';
 
@@ -569,6 +572,11 @@ function EmptyState({ errorCode, tab }: { errorCode: string | null; tab: 'charac
     body = 'Your roster needs at least 4 characters to assemble a team. Import your character data to unlock team analysis.';
     cta = 'Import Data';
     ctaHref = '/import';
+  } else if (isUnprocessable && tab === 'planner') {
+    title = 'No Upgrade Goals';
+    body = 'Add upgrade goals in the Planner to receive daily farming route recommendations.';
+    cta = 'Open Planner';
+    ctaHref = '/planner';
   } else if (isUnprocessable) {
     title = 'Your Roster is Empty';
     body = 'Import your Genshin account data to populate your roster and enable the Intelligence Engine.';
@@ -644,6 +652,20 @@ function useTeamIntelligence() {
 // -------------------------------------------------------
 // Artifact Intelligence — hook
 // -------------------------------------------------------
+
+function usePlannerIntelligence() {
+  return useQuery({
+    queryKey: ['intelligence', 'planner'],
+    queryFn: fetchPlannerIntelligence,
+    staleTime: 60 * 1000, // 1 minute — resin changes every 8 min so stay fresh
+    retry: (failureCount, error) => {
+      if (error instanceof ApiError && (error.status === 404 || error.status === 422)) {
+        return false;
+      }
+      return failureCount < 2;
+    },
+  });
+}
 
 function useArtifactIntelligence() {
   return useQuery({
@@ -1014,7 +1036,7 @@ function ArtifactSkeletonCard() {
 // Tab system
 // -------------------------------------------------------
 
-type Tab = 'characters' | 'teams' | 'artifacts';
+type Tab = 'characters' | 'teams' | 'artifacts' | 'planner';
 
 const TABS: { id: Tab; label: string; icon: ReactNode }[] = [
   {
@@ -1041,6 +1063,15 @@ const TABS: { id: Tab; label: string; icon: ReactNode }[] = [
     icon: (
       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      </svg>
+    ),
+  },
+  {
+    id: 'planner',
+    label: 'Resin Planner',
+    icon: (
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
       </svg>
     ),
   },
@@ -1233,6 +1264,220 @@ function ArtifactTab() {
 }
 
 // -------------------------------------------------------
+// Planner Intelligence — skeleton
+// -------------------------------------------------------
+
+function PlannerSkeletonCard() {
+  return (
+    <div className="glass-panel flex animate-pulse flex-col gap-5 rounded-2xl border border-white/5 p-6">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex-1 space-y-2">
+          <div className="h-4 w-2/3 rounded-lg bg-white/5" />
+          <div className="h-3 w-1/3 rounded bg-white/5" />
+        </div>
+        <div className="h-10 w-20 shrink-0 rounded-xl bg-white/5" />
+      </div>
+      <div className="border-t border-white/5" />
+      <div className="space-y-2.5">
+        <div className="h-3.5 w-full rounded bg-white/5" />
+        <div className="h-3.5 w-5/6 rounded bg-white/5" />
+        <div className="h-3.5 w-4/6 rounded bg-white/5" />
+      </div>
+    </div>
+  );
+}
+
+// -------------------------------------------------------
+// Planner Intelligence — route card
+// -------------------------------------------------------
+
+const GOAL_TYPE_COLORS: Record<string, { bg: string; border: string; text: string; pill: string }> = {
+  CHARACTER_TALENT:    { bg: 'bg-violet-500/10',  border: 'border-violet-500/30',  text: 'text-violet-300',  pill: 'bg-violet-500/20 text-violet-300 border-violet-500/30' },
+  WEAPON_ASCENSION:    { bg: 'bg-amber-500/10',   border: 'border-amber-500/30',   text: 'text-amber-300',   pill: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
+  CHARACTER_ASCENSION: { bg: 'bg-cyan-500/10',    border: 'border-cyan-500/30',    text: 'text-cyan-300',    pill: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' },
+};
+
+const GOAL_TYPE_LABELS: Record<string, string> = {
+  CHARACTER_TALENT:    'Talent Book',
+  WEAPON_ASCENSION:    'Weapon Ascension',
+  CHARACTER_ASCENSION: 'Ascension Material',
+};
+
+function PlannerRouteCard({ item, rank }: { item: PlannerRouteItem; rank: number }) {
+  const style = GOAL_TYPE_COLORS[item.goalType] ?? {
+    bg: 'bg-white/5', border: 'border-white/20', text: 'text-zinc-400', pill: 'bg-white/5 text-zinc-400 border-white/20',
+  };
+  const goalLabel = GOAL_TYPE_LABELS[item.goalType] ?? item.goalType;
+  const targetName = item.targetKey.replace(/([A-Z])/g, ' $1').trim();
+
+  return (
+    <div
+      className={`glass-panel group relative flex flex-col gap-5 overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:border-white/10 hover:shadow-lg ${
+        style.bg
+      } ${style.border}`}
+    >
+      {/* Rank indicator — subtle left accent bar */}
+      <div
+        className={`absolute left-0 top-4 h-10 w-1 rounded-r-full transition-all duration-300 group-hover:h-16 ${style.text.replace('text-', 'bg-')}`}
+      />
+
+      {/* Card header */}
+      <div className="flex items-start justify-between gap-4 pl-4">
+        <div className="min-w-0 flex-1">
+          <div className="mb-1 flex items-center gap-2">
+            {/* Rank badge */}
+            <div
+              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg font-display text-xs font-bold text-white ${
+                rank === 1
+                  ? 'bg-gradient-to-br from-amber-400 to-yellow-300 shadow-[0_0_12px_rgba(251,191,36,0.35)]'
+                  : rank === 2
+                    ? 'bg-gradient-to-br from-zinc-400 to-zinc-300'
+                    : rank === 3
+                      ? 'bg-gradient-to-br from-amber-700 to-amber-600'
+                      : 'bg-accent-500/30 text-accent-300'
+              }`}
+            >
+              #{rank}
+            </div>
+            <h3 className="truncate font-display text-lg font-bold text-white">{item.domainName}</h3>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${style.pill}`}>
+              {goalLabel}
+            </span>
+            <span className="text-sm text-zinc-400">for <span className="font-semibold text-zinc-200">{targetName}</span></span>
+          </div>
+        </div>
+
+        {/* Resin cost badge */}
+        <div className="shrink-0 text-right">
+          <div className="flex flex-col items-end gap-0.5 rounded-xl border border-white/10 bg-white/5 px-4 py-2">
+            <p className="font-display text-xl font-bold text-white">{item.resinCost}</p>
+            <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-500">Resin</p>
+            <p className="text-xs text-zinc-400">{item.runs} run{item.runs !== 1 ? 's' : ''}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="border-t border-white/5" />
+
+      {/* Explanation bullets */}
+      <ul className="space-y-2 pl-4">
+        {item.explanations.map((explanation, i) => (
+          <li key={i} className="flex items-start gap-2.5 text-sm leading-relaxed text-zinc-300">
+            <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${style.text.replace('text-', 'bg-')}`} />
+            {explanation}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// -------------------------------------------------------
+// Tab: Resin Planner panel
+// -------------------------------------------------------
+
+function PlannerTab() {
+  const { data, isLoading, isError, error } = usePlannerIntelligence();
+  const errorCode = isError && error instanceof ApiError ? error.code : null;
+  const route = (data as PlannerIntelligenceResponse | undefined)?.route ?? [];
+
+  // Resin bar: clamp to 0–200
+  const resinPct = data ? Math.min((data.currentResin / 200) * 100, 100) : 0;
+  const resinColorClass =
+    resinPct >= 90
+      ? 'from-red-500 to-orange-400'
+      : resinPct >= 60
+        ? 'from-amber-500 to-yellow-400'
+        : 'from-accent-500 to-indigo-400';
+
+  return (
+    <>
+      {/* Stat strip */}
+      {!isLoading && !isError && data && (
+        <div className="animate-fade-in rounded-2xl border border-white/5 bg-white/[0.02] p-6">
+          {/* Resin bar */}
+          <div className="mb-5">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {/* Resin orb icon */}
+                <svg className="h-4 w-4 text-accent-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 2a8 8 0 110 16A8 8 0 0112 4zm0 2a6 6 0 100 12A6 6 0 0112 6zm0 2a4 4 0 110 8 4 4 0 010-8z" />
+                </svg>
+                <span className="text-sm font-semibold text-zinc-300">Original Resin</span>
+              </div>
+              <span className="font-display text-sm font-bold text-white">
+                {data.currentResin}<span className="text-zinc-500">/200</span>
+              </span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-white/5">
+              <div
+                className={`h-full rounded-full bg-gradient-to-r transition-all duration-700 ${resinColorClass}`}
+                style={{ width: `${resinPct}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Stats row */}
+          <div className="flex gap-6">
+            <div>
+              <p className="font-display text-2xl font-bold text-white">{data.timeUntilCapped}</p>
+              <p className="text-xs text-zinc-500">Until capped</p>
+            </div>
+            <div className="border-l border-white/5 pl-6">
+              <p className="font-display text-2xl font-bold text-white">{route.length}</p>
+              <p className="text-xs text-zinc-500">Domains to farm</p>
+            </div>
+            {data.unallocatedResin > 0 && (
+              <div className="border-l border-white/5 pl-6">
+                <p className="font-display text-2xl font-bold text-amber-400">{data.unallocatedResin}</p>
+                <p className="text-xs text-zinc-500">Unallocated resin</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Loading skeletons */}
+      {isLoading && (
+        <div className="space-y-5">
+          {Array.from({ length: 3 }).map((_, i) => <PlannerSkeletonCard key={i} />)}
+        </div>
+      )}
+
+      {/* Error state */}
+      {isError && <EmptyState errorCode={errorCode} tab="planner" />}
+
+      {/* Empty — all goals cleared for today */}
+      {!isLoading && !isError && route.length === 0 && (
+        <div className="animate-fade-in flex flex-col items-center justify-center py-24 text-center">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-green-400/20 bg-green-400/10">
+            <svg className="h-10 w-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+            </svg>
+          </div>
+          <h2 className="font-display mb-3 text-2xl font-bold text-white">Nothing Left to Farm Today</h2>
+          <p className="max-w-sm text-base leading-relaxed text-zinc-400">
+            All priority domains have been allocated. Either you've run them already, or today's resin can't cover any more runs. Check back after reset!
+          </p>
+        </div>
+      )}
+
+      {/* Route cards */}
+      {!isLoading && !isError && route.length > 0 && (
+        <section aria-label="Daily farming route recommendations" className="animate-fade-in space-y-5">
+          {route.map((item, i) => (
+            <PlannerRouteCard key={item.goalId} item={item} rank={i + 1} />
+          ))}
+        </section>
+      )}
+    </>
+  );
+}
+
+// -------------------------------------------------------
 // IntelligencePage — main export
 // -------------------------------------------------------
 
@@ -1302,6 +1547,7 @@ export default function IntelligencePage() {
           {activeTab === 'characters' && <CharacterTab />}
           {activeTab === 'teams' && <TeamTab />}
           {activeTab === 'artifacts' && <ArtifactTab />}
+          {activeTab === 'planner' && <PlannerTab />}
         </div>
       </main>
     </div>

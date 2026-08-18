@@ -10,9 +10,13 @@ import {
   fetchArtifactIntelligence,
   fetchCharacterIntelligence,
   fetchPlannerIntelligence,
+  fetchPullIntelligence,
   fetchTeamIntelligence,
   type PlannerIntelligenceResponse,
   type PlannerRouteItem,
+  type PullIntelligenceResponse,
+  type PullRecommendation,
+  type PullRecommendationLabel,
   type RecommendationLabel,
   type SkippedCharacter,
   type TeamRecommendation,
@@ -553,7 +557,7 @@ function Nav({ onLogout }: { onLogout: () => void }) {
 // Empty / error state
 // -------------------------------------------------------
 
-function EmptyState({ errorCode, tab }: { errorCode: string | null; tab: 'characters' | 'teams' | 'artifacts' | 'planner' }) {
+function EmptyState({ errorCode, tab }: { errorCode: string | null; tab: 'characters' | 'teams' | 'artifacts' | 'planner' | 'pulls' }) {
   const isNoAccount = errorCode === 'NOT_FOUND';
   const isUnprocessable = errorCode === 'UNPROCESSABLE_ENTITY';
 
@@ -1036,7 +1040,7 @@ function ArtifactSkeletonCard() {
 // Tab system
 // -------------------------------------------------------
 
-type Tab = 'characters' | 'teams' | 'artifacts' | 'planner';
+type Tab = 'characters' | 'teams' | 'artifacts' | 'planner' | 'pulls';
 
 const TABS: { id: Tab; label: string; icon: ReactNode }[] = [
   {
@@ -1072,6 +1076,15 @@ const TABS: { id: Tab; label: string; icon: ReactNode }[] = [
     icon: (
       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+    ),
+  },
+  {
+    id: 'pulls',
+    label: 'Pull Value',
+    icon: (
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
       </svg>
     ),
   },
@@ -1478,6 +1491,259 @@ function PlannerTab() {
 }
 
 // -------------------------------------------------------
+// Pull Intelligence — hook
+// -------------------------------------------------------
+
+function usePullIntelligence() {
+  return useQuery({
+    queryKey: ['intelligence', 'pulls'],
+    queryFn: fetchPullIntelligence,
+    staleTime: 5 * 60 * 1000,
+    retry: (failureCount, error) => {
+      if (error instanceof ApiError && (error.status === 404 || error.status === 422)) {
+        return false;
+      }
+      return failureCount < 2;
+    },
+  });
+}
+
+// -------------------------------------------------------
+// Pull Intelligence — skeleton
+// -------------------------------------------------------
+
+function PullSkeletonCard() {
+  return (
+    <div className="glass-panel flex animate-pulse flex-col gap-5 rounded-2xl border border-white/5 p-6">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1 space-y-2">
+          <div className="h-5 w-2/3 rounded-lg bg-white/5" />
+          <div className="h-3.5 w-1/3 rounded bg-white/5" />
+        </div>
+        <div className="h-10 w-28 shrink-0 rounded-xl bg-white/5" />
+      </div>
+      <div className="border-t border-white/5" />
+      <div className="space-y-2.5">
+        <div className="h-3.5 w-full rounded bg-white/5" />
+        <div className="h-3.5 w-5/6 rounded bg-white/5" />
+        <div className="h-3.5 w-4/6 rounded bg-white/5" />
+      </div>
+    </div>
+  );
+}
+
+// -------------------------------------------------------
+// Pull Intelligence — recommendation card
+// -------------------------------------------------------
+
+const PULL_LABEL_CONFIG: Record<
+  PullRecommendationLabel,
+  { bg: string; border: string; text: string; badge: string; label: string }
+> = {
+  MUST_PULL: {
+    bg: 'bg-amber-500/10',
+    border: 'border-amber-500/30',
+    text: 'text-amber-300',
+    badge: 'bg-gradient-to-r from-amber-400 to-yellow-300 text-zinc-900 shadow-[0_0_18px_rgba(251,191,36,0.45)]',
+    label: 'MUST PULL',
+  },
+  GOOD_VALUE: {
+    bg: 'bg-accent-500/10',
+    border: 'border-accent-500/30',
+    text: 'text-accent-400',
+    badge: 'bg-accent-500/20 text-accent-300 border border-accent-500/40',
+    label: 'GOOD VALUE',
+  },
+  SKIP: {
+    bg: 'bg-white/[0.02]',
+    border: 'border-white/5',
+    text: 'text-zinc-500',
+    badge: 'bg-zinc-800 text-zinc-400 border border-zinc-700',
+    label: 'SKIP',
+  },
+};
+
+function PullRecommendationCard({ rec }: { rec: PullRecommendation }) {
+  const cfg = PULL_LABEL_CONFIG[rec.recommendation];
+  const fiveStarName = formatName(rec.fiveStarKey);
+
+  // Score arc: 0-100 mapped to stroke-dashoffset on a circle
+  const CIRCUMFERENCE = 2 * Math.PI * 20; // r=20
+  const filled = Math.min(rec.pullValueScore, 100);
+  const offset = CIRCUMFERENCE * (1 - filled / 100);
+
+  return (
+    <div
+      className={`glass-panel group relative flex flex-col gap-5 overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:border-white/10 hover:shadow-lg ${
+        cfg.bg
+      } ${cfg.border}`}
+    >
+      {/* Top accent bar */}
+      <div className={`absolute left-0 top-0 h-1 w-full bg-gradient-to-r opacity-60 ${
+        rec.recommendation === 'MUST_PULL'
+          ? 'from-amber-400 to-yellow-300'
+          : rec.recommendation === 'GOOD_VALUE'
+            ? 'from-accent-500 to-indigo-400'
+            : 'from-zinc-700 to-zinc-600'
+      }`} />
+
+      {/* Card header */}
+      <div className="flex items-start justify-between gap-4 pt-2">
+        <div className="min-w-0 flex-1">
+          {/* Recommendation badge */}
+          <div className="mb-2">
+            <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold tracking-wider ${cfg.badge}`}>
+              {cfg.label}
+            </span>
+          </div>
+          <h3 className="truncate font-display text-xl font-bold text-white">{rec.bannerName}</h3>
+          <p className={`mt-0.5 text-sm font-semibold ${cfg.text}`}>{fiveStarName}</p>
+        </div>
+
+        {/* Score gauge */}
+        <div className="relative flex shrink-0 flex-col items-center gap-1">
+          <svg width="52" height="52" viewBox="0 0 48 48" className="-rotate-90">
+            {/* Track */}
+            <circle cx="24" cy="24" r="20" fill="none" strokeWidth="4" className="stroke-white/10" />
+            {/* Fill */}
+            <circle
+              cx="24"
+              cy="24"
+              r="20"
+              fill="none"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeDasharray={CIRCUMFERENCE}
+              strokeDashoffset={offset}
+              className={`transition-all duration-700 ${
+                rec.recommendation === 'MUST_PULL'
+                  ? 'stroke-amber-400'
+                  : rec.recommendation === 'GOOD_VALUE'
+                    ? 'stroke-accent-400'
+                    : 'stroke-zinc-600'
+              }`}
+            />
+          </svg>
+          {/* Score number in center */}
+          <span className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-sm font-bold ${
+            rec.recommendation === 'MUST_PULL' ? 'text-amber-300' : rec.recommendation === 'GOOD_VALUE' ? 'text-accent-300' : 'text-zinc-500'
+          }`}>
+            {rec.pullValueScore}
+          </span>
+          <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">Score</p>
+        </div>
+      </div>
+
+      {/* 4-star rate-ups */}
+      {rec.fourStarKeys.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs text-zinc-600">4★ Rate-ups:</span>
+          {rec.fourStarKeys.map((key) => (
+            <span
+              key={key}
+              className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-zinc-300"
+            >
+              {formatName(key)}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Divider */}
+      <div className="border-t border-white/5" />
+
+      {/* Explanation bullets */}
+      <ul className="space-y-2">
+        {rec.explanations.map((explanation, i) => (
+          <li key={i} className="flex items-start gap-2.5 text-sm leading-relaxed text-zinc-300">
+            <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${
+              rec.recommendation === 'MUST_PULL'
+                ? 'bg-amber-400'
+                : rec.recommendation === 'GOOD_VALUE'
+                  ? 'bg-accent-400'
+                  : 'bg-zinc-600'
+            }`} />
+            {explanation}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// -------------------------------------------------------
+// Tab: Pull Value panel
+// -------------------------------------------------------
+
+function PullTab() {
+  const { data, isLoading, isError, error } = usePullIntelligence();
+  const errorCode = isError && error instanceof ApiError ? error.code : null;
+  const recommendations = (data as PullIntelligenceResponse | undefined)?.recommendations ?? [];
+
+  // Stat strip counts
+  const mustPullCount = recommendations.filter((r) => r.recommendation === 'MUST_PULL').length;
+  const goodValueCount = recommendations.filter((r) => r.recommendation === 'GOOD_VALUE').length;
+
+  return (
+    <>
+      {/* Stat strip */}
+      {!isLoading && !isError && data && recommendations.length > 0 && (
+        <div className="animate-fade-in flex gap-6 rounded-2xl border border-white/5 bg-white/[0.02] px-6 py-4">
+          <div>
+            <p className="font-display text-2xl font-bold text-white">{recommendations.length}</p>
+            <p className="text-xs text-zinc-500">Active banners</p>
+          </div>
+          <div className="border-l border-white/5 pl-6">
+            <p className="font-display text-2xl font-bold text-amber-400">{mustPullCount}</p>
+            <p className="text-xs text-zinc-500">Must Pull</p>
+          </div>
+          {goodValueCount > 0 && (
+            <div className="border-l border-white/5 pl-6">
+              <p className="font-display text-2xl font-bold text-accent-400">{goodValueCount}</p>
+              <p className="text-xs text-zinc-500">Good Value</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Loading */}
+      {isLoading && (
+        <div className="space-y-5">
+          {Array.from({ length: 3 }).map((_, i) => <PullSkeletonCard key={i} />)}
+        </div>
+      )}
+
+      {/* Error */}
+      {isError && <EmptyState errorCode={errorCode} tab="pulls" />}
+
+      {/* Empty — no active banners */}
+      {!isLoading && !isError && recommendations.length === 0 && (
+        <div className="animate-fade-in flex flex-col items-center justify-center py-24 text-center">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-accent-500/20 bg-accent-500/10">
+            <svg className="h-10 w-10 text-accent-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+            </svg>
+          </div>
+          <h2 className="font-display mb-3 text-2xl font-bold text-white">No Active Banners</h2>
+          <p className="max-w-sm text-base leading-relaxed text-zinc-400">
+            There are no active banners to evaluate right now. Check back when a new patch launches!
+          </p>
+        </div>
+      )}
+
+      {/* Banner cards */}
+      {!isLoading && !isError && recommendations.length > 0 && (
+        <section aria-label="Banner pull value recommendations" className="animate-fade-in space-y-5">
+          {recommendations.map((rec) => (
+            <PullRecommendationCard key={rec.bannerId} rec={rec} />
+          ))}
+        </section>
+      )}
+    </>
+  );
+}
+
+// -------------------------------------------------------
 // IntelligencePage — main export
 // -------------------------------------------------------
 
@@ -1548,6 +1814,7 @@ export default function IntelligencePage() {
           {activeTab === 'teams' && <TeamTab />}
           {activeTab === 'artifacts' && <ArtifactTab />}
           {activeTab === 'planner' && <PlannerTab />}
+          {activeTab === 'pulls' && <PullTab />}
         </div>
       </main>
     </div>

@@ -601,3 +601,37 @@ export interface PlannerIntelligenceResponse {
 export async function fetchPlannerIntelligence(): Promise<PlannerIntelligenceResponse> {
   return fetchApi<PlannerIntelligenceResponse>('/games/genshin/intelligence/planner');
 }
+
+// ============================================================
+// Pull Intelligence Types & Functions (Milestone 4E)
+// ============================================================
+
+export type PullRecommendationLabel = 'MUST_PULL' | 'GOOD_VALUE' | 'SKIP';
+
+export interface PullRecommendation {
+  bannerId: string;
+  bannerName: string;
+  fiveStarKey: string;
+  fourStarKeys: string[];
+  pullValueScore: number;
+  recommendation: PullRecommendationLabel;
+  explanations: string[];
+}
+
+export interface PullIntelligenceResponse {
+  recommendations: PullRecommendation[];
+  analysedAt: string;
+}
+
+/**
+ * fetchPullIntelligence — GET /games/genshin/intelligence/pulls
+ *
+ * Returns Pull Value recommendations for all currently active banners,
+ * scored by how much each banner's 5-star would improve the user's roster,
+ * team compositions, and synergy with their most-invested characters.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ */
+export async function fetchPullIntelligence(): Promise<PullIntelligenceResponse> {
+  return fetchApi<PullIntelligenceResponse>('/games/genshin/intelligence/pulls');
+}

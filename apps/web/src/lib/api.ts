@@ -635,3 +635,40 @@ export interface PullIntelligenceResponse {
 export async function fetchPullIntelligence(): Promise<PullIntelligenceResponse> {
   return fetchApi<PullIntelligenceResponse>('/games/genshin/intelligence/pulls');
 }
+
+// ============================================================
+// Knowledge Intelligence Types & Functions (Milestone 4F)
+// ============================================================
+
+export type KnowledgeInsightKey =
+  | 'ELEMENTAL_SPECIALIST'
+  | 'TALENT_NEGLECTOR'
+  | 'ARTIFACT_HOARDER'
+  | 'MAX_CONSTELLATION'
+  | 'DIVERSE_ROSTER';
+
+export interface KnowledgeInsight {
+  key: KnowledgeInsightKey;
+  title: string;
+  body: string;
+  iconKey: KnowledgeInsightKey;
+}
+
+export interface KnowledgeIntelligenceResponse {
+  insights: KnowledgeInsight[];
+  totalInsightsFound: number;
+  analysedAt: string;
+}
+
+/**
+ * fetchKnowledgeIntelligence — GET /games/genshin/intelligence/knowledge
+ *
+ * Returns up to 3 personalized daily account insights (elemental specialist,
+ * talent neglect, artifact hoarding, C6 characters, roster diversity),
+ * rotated daily via a seeded selection.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ */
+export async function fetchKnowledgeIntelligence(): Promise<KnowledgeIntelligenceResponse> {
+  return fetchApi<KnowledgeIntelligenceResponse>('/games/genshin/intelligence/knowledge');
+}

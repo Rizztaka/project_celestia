@@ -672,3 +672,76 @@ export interface KnowledgeIntelligenceResponse {
 export async function fetchKnowledgeIntelligence(): Promise<KnowledgeIntelligenceResponse> {
   return fetchApi<KnowledgeIntelligenceResponse>('/games/genshin/intelligence/knowledge');
 }
+
+// ============================================================
+// Endgame Center Types & Functions (Milestone 5B)
+// ============================================================
+
+export interface AbyssHalfRun {
+  id: string;
+  half: 1 | 2;
+  stars: number;
+  team: string[];
+}
+
+export interface AbyssChamber {
+  chamber: number;
+  totalStars: number;
+  halves: AbyssHalfRun[];
+}
+
+export interface AbyssFloor {
+  floor: number;
+  totalStars: number;
+  chambers: AbyssChamber[];
+}
+
+export interface AbyssCycleResult {
+  cycleId: string;
+  totalStars: number;
+  maxStars: number;
+  completedChambers: number;
+  floors: AbyssFloor[];
+}
+
+export interface AbyssHistoryResponse {
+  cycles: AbyssCycleResult[];
+}
+
+export interface LogAbyssRunPayload {
+  cycleId: string;
+  floor: number;
+  chamber: number;
+  half: 1 | 2;
+  stars: number;
+  team: string[];
+}
+
+/**
+ * fetchAbyssHistory — GET /games/genshin/endgame/abyss
+ *
+ * Returns the authenticated user's full Spiral Abyss run history,
+ * grouped by cycle → floor → chamber. Historical cycles are preserved
+ * for future Intelligence Core analysis.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ */
+export async function fetchAbyssHistory(): Promise<AbyssHistoryResponse> {
+  return fetchApi<AbyssHistoryResponse>('/games/genshin/endgame/abyss');
+}
+
+/**
+ * logAbyssRun — POST /games/genshin/endgame/abyss
+ *
+ * Logs or updates a single chamber-half run.
+ * Upserts on [cycleId, floor, chamber, half] — re-clears are supported.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if input validation fails.
+ */
+export async function logAbyssRun(payload: LogAbyssRunPayload): Promise<AbyssHalfRun> {
+  return fetchApi<AbyssHalfRun>('/games/genshin/endgame/abyss', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}

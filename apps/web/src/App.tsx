@@ -25,6 +25,7 @@ import { BrowserRouter, Navigate,Route, Routes } from 'react-router-dom';
 
 import { ProtectedRoute } from './components/ProtectedRoute';
 import DashboardPage from './pages/DashboardPage';
+import EndgamePage from './pages/EndgamePage';
 import ImportPage from './pages/ImportPage';
 import IntelligencePage from './pages/IntelligencePage';
 import InventoryPage from './pages/InventoryPage';
@@ -68,6 +69,7 @@ function App() {
             <Route path="/inventory" element={<InventoryPage />} />
             <Route path="/planner" element={<PlannerPage />} />
             <Route path="/intelligence" element={<IntelligencePage />} />
+            <Route path="/endgame" element={<EndgamePage />} />
           </Route>
 
           {/* Catch-all — redirect unknown paths to dashboard (or login if not authed) */}

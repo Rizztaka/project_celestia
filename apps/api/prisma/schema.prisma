@@ -59,6 +59,7 @@ model GenshinAccount {
   weapons    GenshinWeapon[]
   artifacts  GenshinArtifact[]
   materials  GenshinMaterial[]  // Phase 3B — material inventory from GOOD import
+  spiralAbyssRuns SpiralAbyssRun[] // Phase 5A — endgame abyss tracking
 
   @@map("genshin_accounts")
 }
@@ -140,8 +141,35 @@ model GenshinArtifact {
 }
 
 // ==========================================
-// PLATFORM COMPANION DOMAIN (Phase 3)
+// ENDGAME DOMAIN (Phase 5)
 // ==========================================
+
+/// Records a single half-chamber attempt in the Spiral Abyss for one cycle.
+/// cycleId encodes the game version + first/second half, e.g. "5.0-1", "5.0-2".
+/// Unique constraint prevents logging the same chamber half twice in one cycle
+/// — the upsert pattern (logAbyssRun) will update stars/team instead.
+///
+/// team is stored as a JSON string array of characterKeys:
+/// ["HuTao", "Xingqiu", "Yelan", "Zhongli"]
+model SpiralAbyssRun {
+  id        String   @id @default(uuid())
+  accountId String
+  cycleId   String   // e.g. "5.0-1" (version + first/second reset)
+  floor     Int      // 9–12
+  chamber   Int      // 1–3
+  half      Int      // 1 or 2
+  stars     Int      // 0–3
+  team      Json     @default("[]") // string[] of characterKeys
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account GenshinAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  // Prevent duplicate rows for the same chamber slot in one cycle.
+  @@unique([accountId, cycleId, floor, chamber, half])
+  @@map("spiral_abyss_runs")
+}
 
 /// Stores a user's daily companion state: resin tracking and daily checklist.
 /// One-to-one with User. Created lazily on the user's first GET request (upsert).

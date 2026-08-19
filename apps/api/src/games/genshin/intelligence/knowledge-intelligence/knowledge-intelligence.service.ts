@@ -7,10 +7,10 @@ import type { CharacterWithWeapon } from '../../characters/character.repository.
 import { GenshinCharacterService } from '../../characters/character.service.js';
 import type { CharacterInput } from '../character-intelligence/character-intelligence.calculator.js';
 import {
-  runAllAnalyzers,
   type KnowledgeInsightData,
+  runAllAnalyzers,
 } from './knowledge-intelligence.calculator.js';
-import { explainInsight, type InsightExplanation } from './knowledge-intelligence.explainer.js';
+import { explainInsight } from './knowledge-intelligence.explainer.js';
 
 // -------------------------------------------------------
 // Static data — loaded once at module init

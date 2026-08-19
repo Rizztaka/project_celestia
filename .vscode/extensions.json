@@ -4,6 +4,8 @@
     "esbenp.prettier-vscode",
     "Prisma.prisma",
     "bradlc.vscode-tailwindcss",
-    "yoavbls.pretty-ts-errors"
+    "yoavbls.pretty-ts-errors",
+    "usernamehw.errorlens",
+    "eamodio.gitlens"
   ]
 }

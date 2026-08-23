@@ -84,13 +84,38 @@ function DashboardPage() {
       </nav>
 
       {/* Main content */}
-      <main className="animate-fade-in relative z-10 mx-auto max-w-5xl px-6 py-16">
+      <main className="animate-fade-in relative z-10 mx-auto max-w-5xl px-6 py-10">
+        
+        {/* Launch Banner (Phase 7) */}
+        <div className="mb-8 overflow-hidden rounded-2xl border border-accent-500/30 bg-accent-500/10 p-1 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-accent-500/20 to-indigo-500/20 blur-xl"></div>
+          <div className="relative flex items-center justify-between rounded-xl bg-celestia-900/80 px-6 py-4 backdrop-blur-md">
+            <div className="flex items-center gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-500/20 text-accent-400">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-display font-bold text-white">All Systems Operational</h3>
+                <p className="text-xs text-accent-200">Project Celestia is fully online and ready for deployment.</p>
+              </div>
+            </div>
+            <div className="hidden sm:block">
+              <span className="relative flex h-3 w-3">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75"></span>
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-accent-500"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div className="mb-12">
           <h1 className="font-display text-4xl font-bold tracking-tight text-white">
             Welcome back, <span className="text-gradient">{profile?.username}</span>
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-zinc-400">
-            Your Genshin companion is being built. Check back soon for new features.
+            Your Genshin companion is fully online. Explore the features below.
           </p>
         </div>
 

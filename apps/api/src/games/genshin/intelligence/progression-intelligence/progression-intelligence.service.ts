@@ -39,7 +39,8 @@ export class ProgressionIntelligenceService {
       throw new NotFoundError('No Genshin Impact account found for this user.');
     }
 
-    const roster = await GenshinCharacterService.getByUserId(userId);
+    const charService = new GenshinCharacterService();
+    const roster = await charService.getCharactersForUser(userId);
     const totalAvailableCharacters = Object.keys(ELEMENT_MAP).length;
     const owned = roster.length;
 
@@ -52,7 +53,7 @@ export class ProgressionIntelligenceService {
 
     // 2. Ascension Maturity
     // Count characters with ascension >= 5 (meaning level 80+)
-    const highlyAscended = roster.filter(char => char.ascension >= 5).length;
+    const highlyAscended = roster.filter((char: any) => char.ascension >= 5).length;
     const maturityPercentage = owned > 0 ? (highlyAscended / owned) * 100 : 0;
     let maturityRank = 'Trainee';
     if (maturityPercentage >= 80) maturityRank = 'Abyss Ready';
@@ -62,7 +63,7 @@ export class ProgressionIntelligenceService {
     // 3. Elemental Spread
     const counts: Record<string, number> = {};
     for (const char of roster) {
-      const element = ELEMENT_MAP[char.key] || 'Unknown';
+      const element = ELEMENT_MAP[char.characterKey] || 'Unknown';
       counts[element] = (counts[element] || 0) + 1;
     }
 

@@ -17,11 +17,11 @@ vi.mock('@/core/db/prisma.js', () => ({
   },
 }));
 
-vi.mock('../../characters/character.service.js', () => ({
-  GenshinCharacterService: {
-    getByUserId: vi.fn(),
-  },
-}));
+vi.mock('../../characters/character.service.js', () => {
+  const GenshinCharacterService = vi.fn();
+  GenshinCharacterService.prototype.getCharactersForUser = vi.fn();
+  return { GenshinCharacterService };
+});
 
 describe('Progression Intelligence Service', () => {
   const MOCK_USER_ID = 'test-user-123';
@@ -40,7 +40,7 @@ describe('Progression Intelligence Service', () => {
   });
 
   it('should handle an empty roster safely (no divide by zero)', async () => {
-    (GenshinCharacterService.getByUserId as any).mockResolvedValue([]);
+    (GenshinCharacterService.prototype.getCharactersForUser as any).mockResolvedValue([]);
 
     const result = await progressionIntelligenceService.analyzeProgression(MOCK_USER_ID);
 
@@ -59,14 +59,14 @@ describe('Progression Intelligence Service', () => {
     
     // Mock a roster that is exactly 50% of the total characters
     const mockRoster = Array.from({ length: Math.floor(totalChars / 2) }).map((_, i) => ({
-      key: `Char${i}`,
+      characterKey: `Char${i}`,
       level: 1,
       ascension: 1,
       constellation: 0,
       element: 'Pyro'
     }));
 
-    (GenshinCharacterService.getByUserId as any).mockResolvedValue(mockRoster);
+    (GenshinCharacterService.prototype.getCharactersForUser as any).mockResolvedValue(mockRoster);
 
     const result = await progressionIntelligenceService.analyzeProgression(MOCK_USER_ID);
     
@@ -79,12 +79,12 @@ describe('Progression Intelligence Service', () => {
 
   it('should correctly calculate ascension maturity (level 80+ / ascension 5+)', async () => {
     const mockRoster = [
-      { key: 'Diluc', ascension: 6 },
-      { key: 'Jean', ascension: 5 },
-      { key: 'Amber', ascension: 4 },
-      { key: 'Kaeya', ascension: 0 },
+      { characterKey: 'Diluc', ascension: 6 },
+      { characterKey: 'Jean', ascension: 5 },
+      { characterKey: 'Amber', ascension: 4 },
+      { characterKey: 'Kaeya', ascension: 0 },
     ];
-    (GenshinCharacterService.getByUserId as any).mockResolvedValue(mockRoster);
+    (GenshinCharacterService.prototype.getCharactersForUser as any).mockResolvedValue(mockRoster);
 
     const result = await progressionIntelligenceService.analyzeProgression(MOCK_USER_ID);
     
@@ -97,12 +97,12 @@ describe('Progression Intelligence Service', () => {
   it('should correctly sort and calculate elemental spread', async () => {
     // 2 Pyro, 1 Anemo, 1 Unknown (if missing from static data)
     const mockRoster = [
-      { key: 'Diluc' }, // Pyro
-      { key: 'Amber' }, // Pyro
-      { key: 'Jean' }, // Anemo
-      { key: 'MissingNo' } // Unknown
+      { characterKey: 'Diluc' }, // Pyro
+      { characterKey: 'Amber' }, // Pyro
+      { characterKey: 'Jean' }, // Anemo
+      { characterKey: 'MissingNo' } // Unknown
     ];
-    (GenshinCharacterService.getByUserId as any).mockResolvedValue(mockRoster);
+    (GenshinCharacterService.prototype.getCharactersForUser as any).mockResolvedValue(mockRoster);
 
     const result = await progressionIntelligenceService.analyzeProgression(MOCK_USER_ID);
     

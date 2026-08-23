@@ -44,7 +44,11 @@ function RegisterPage() {
     mutation.mutate();
   };
 
-  const errorMessage = mutation.error instanceof ApiError ? mutation.error.message : null;
+  const errorMessage = mutation.error instanceof ApiError 
+    ? mutation.error.message 
+    : mutation.error instanceof Error 
+      ? mutation.error.message 
+      : mutation.error ? String(mutation.error) : null;
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden p-4">

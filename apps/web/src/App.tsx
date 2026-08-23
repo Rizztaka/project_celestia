@@ -54,11 +54,48 @@ const queryClient = new QueryClient({
   },
 });
 
+import React from 'react';
+
+class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean, error: Error | null }> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex h-screen w-screen flex-col items-center justify-center bg-zinc-950 p-6 text-center">
+          <h1 className="mb-4 text-3xl font-bold text-red-500">Fatal App Crash</h1>
+          <p className="mb-6 text-zinc-400">Something caused the app to crash entirely.</p>
+          <pre className="max-w-3xl overflow-auto rounded-lg bg-zinc-900 p-4 text-left text-sm text-red-300">
+            {this.state.error?.message}
+            {'\n\n'}
+            {this.state.error?.stack}
+          </pre>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-8 rounded-lg bg-indigo-600 px-6 py-2 font-semibold text-white hover:bg-indigo-500"
+          >
+            Reload Page
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Suspense fallback={<div className="flex h-screen w-screen items-center justify-center bg-zinc-950"><div className="h-8 w-8 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" /></div>}>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Suspense fallback={<div className="flex h-screen w-screen items-center justify-center bg-zinc-950"><div className="h-8 w-8 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" /></div>}>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -81,6 +118,7 @@ function App() {
         </Suspense>
       </BrowserRouter>
     </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 

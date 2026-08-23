@@ -1,7 +1,7 @@
 import { prisma } from '@/core/db/prisma.js';
 
 // -------------------------------------------------------
-// Types
+// Types — Abyss
 // -------------------------------------------------------
 
 export interface CreateAbyssRunInput {
@@ -28,7 +28,34 @@ export type AbyssRunRecord = {
 };
 
 // -------------------------------------------------------
-// Repository
+// Types — Theater
+// -------------------------------------------------------
+
+export type TheaterDifficulty = 'EASY' | 'NORMAL' | 'HARD' | 'VISIONARY';
+
+export interface UpsertTheaterRunInput {
+  accountId: string;
+  seasonId: string;
+  difficulty: TheaterDifficulty;
+  actsCleared: number;
+  stars: number;
+  cast: string[];
+}
+
+export type TheaterRunRecord = {
+  id: string;
+  accountId: string;
+  seasonId: string;
+  difficulty: TheaterDifficulty;
+  actsCleared: number;
+  stars: number;
+  cast: unknown; // Prisma returns Json as unknown; service casts to string[]
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+// -------------------------------------------------------
+// Repository — Abyss
 // -------------------------------------------------------
 
 /**
@@ -93,4 +120,51 @@ export async function findAbyssRunsByCycle(
     where: { accountId, cycleId },
     orderBy: [{ floor: 'asc' }, { chamber: 'asc' }, { half: 'asc' }],
   });
+}
+
+// -------------------------------------------------------
+// Repository — Theater
+// -------------------------------------------------------
+
+/**
+ * Upserts an Imaginarium Theater run for the given account + season.
+ * If a row already exists for [accountId, seasonId] it will be overwritten.
+ *
+ * This allows a player to update their run if they replay the Theater
+ * and achieve a better score within the same season.
+ */
+export async function upsertTheaterRun(input: UpsertTheaterRunInput): Promise<TheaterRunRecord> {
+  return prisma.imaginariumTheaterRun.upsert({
+    where: {
+      accountId_seasonId: {
+        accountId: input.accountId,
+        seasonId: input.seasonId,
+      },
+    },
+    update: {
+      difficulty: input.difficulty,
+      actsCleared: input.actsCleared,
+      stars: input.stars,
+      cast: input.cast,
+    },
+    create: {
+      accountId: input.accountId,
+      seasonId: input.seasonId,
+      difficulty: input.difficulty,
+      actsCleared: input.actsCleared,
+      stars: input.stars,
+      cast: input.cast,
+    },
+  }) as Promise<TheaterRunRecord>;
+}
+
+/**
+ * Returns all Theater runs for an account, ordered by seasonId descending
+ * (most recent season first).
+ */
+export async function findTheaterRunsByAccount(accountId: string): Promise<TheaterRunRecord[]> {
+  return prisma.imaginariumTheaterRun.findMany({
+    where: { accountId },
+    orderBy: [{ seasonId: 'desc' }],
+  }) as Promise<TheaterRunRecord[]>;
 }

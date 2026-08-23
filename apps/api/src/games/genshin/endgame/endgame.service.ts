@@ -4,23 +4,36 @@ import { NotFoundError, UnprocessableError } from '@/core/errors/app-error.js';
 import {
   findAbyssRunsByAccount,
   findAbyssRunsByCycle,
+  findTheaterRunsByAccount,
   upsertAbyssRun,
+  upsertTheaterRun,
   type AbyssRunRecord,
   type CreateAbyssRunInput,
+  type TheaterDifficulty,
+  type TheaterRunRecord,
 } from './endgame.repository.js';
 
 // -------------------------------------------------------
-// Constants
+// Constants — Abyss
 // -------------------------------------------------------
 
 const VALID_FLOORS = [9, 10, 11, 12] as const;
 const VALID_CHAMBERS = [1, 2, 3] as const;
 const VALID_HALVES = [1, 2] as const;
-const MAX_STARS = 3;
+const MAX_ABYSS_STARS = 3;
 const MAX_TEAM_SIZE = 4;
 
 // -------------------------------------------------------
-// Response types
+// Constants — Theater
+// -------------------------------------------------------
+
+const VALID_DIFFICULTIES: TheaterDifficulty[] = ['EASY', 'NORMAL', 'HARD', 'VISIONARY'];
+const MAX_ACTS_CLEARED = 10;
+const MAX_THEATER_STARS = 10;
+const MAX_CAST_SIZE = 12; // up to 12 chars in a Theater cast
+
+// -------------------------------------------------------
+// Response types — Abyss
 // -------------------------------------------------------
 
 /** A single logged chamber-half run with its team and star rating. */
@@ -49,7 +62,7 @@ export interface AbyssFloor {
 export interface AbyssCycleResult {
   cycleId: string;
   totalStars: number;
-  maxStars: number; // always 36 (12 floors × 3 chambers × 3 stars × 2 halves... wait — correct is 3 stars per chamber)
+  maxStars: number; // always 36 (4 floors × 3 chambers × 3 stars)
   completedChambers: number;
   floors: AbyssFloor[];
 }
@@ -60,7 +73,26 @@ export interface AbyssHistoryResponse {
 }
 
 // -------------------------------------------------------
-// Input type for logging a run (service-level)
+// Response types — Theater
+// -------------------------------------------------------
+
+/** A single logged Imaginarium Theater run. */
+export interface TheaterRun {
+  id: string;
+  seasonId: string;
+  difficulty: TheaterDifficulty;
+  actsCleared: number;
+  stars: number;
+  cast: string[];
+}
+
+/** Full Theater history response. */
+export interface TheaterHistoryResponse {
+  runs: TheaterRun[];
+}
+
+// -------------------------------------------------------
+// Input types (service-level)
 // -------------------------------------------------------
 
 export interface LogAbyssRunInput {
@@ -70,6 +102,14 @@ export interface LogAbyssRunInput {
   half: 1 | 2;
   stars: number;
   team: string[];
+}
+
+export interface LogTheaterRunInput {
+  seasonId: string;
+  difficulty: TheaterDifficulty;
+  actsCleared: number;
+  stars: number;
+  cast: string[];
 }
 
 // -------------------------------------------------------
@@ -142,17 +182,32 @@ function groupRuns(records: AbyssRunRecord[]): AbyssCycleResult[] {
   return cycles;
 }
 
+function mapTheaterRecord(record: TheaterRunRecord): TheaterRun {
+  return {
+    id: record.id,
+    seasonId: record.seasonId,
+    difficulty: record.difficulty,
+    actsCleared: record.actsCleared,
+    stars: record.stars,
+    cast: castTeam(record.cast),
+  };
+}
+
 // -------------------------------------------------------
 // Service
 // -------------------------------------------------------
 
 export class EndgameService {
+  // ──────────────────────────────────────────────────────
+  // Abyss methods
+  // ──────────────────────────────────────────────────────
+
   /**
    * Validates and upserts a single Abyss chamber-half run for the authenticated user.
    *
    * Throws:
    *  - NotFoundError (404) if the user has no Genshin account.
-   *  - ValidationError (422) if floor/chamber/half/stars values are out of range.
+   *  - UnprocessableError (422) if floor/chamber/half/stars values are out of range.
    */
   async logAbyssRun(userId: string, input: LogAbyssRunInput): Promise<AbyssHalfRun> {
     // ── 1. Validate input ranges ──────────────────────────────────────────
@@ -165,8 +220,8 @@ export class EndgameService {
     if (!(VALID_HALVES as readonly number[]).includes(input.half)) {
       throw new UnprocessableError('Half must be 1 or 2.');
     }
-    if (input.stars < 0 || input.stars > MAX_STARS) {
-      throw new UnprocessableError(`Stars must be between 0 and ${MAX_STARS}.`);
+    if (input.stars < 0 || input.stars > MAX_ABYSS_STARS) {
+      throw new UnprocessableError(`Stars must be between 0 and ${MAX_ABYSS_STARS}.`);
     }
     if (input.team.length > MAX_TEAM_SIZE) {
       throw new UnprocessableError(`Team cannot exceed ${MAX_TEAM_SIZE} characters.`);
@@ -245,5 +300,90 @@ export class EndgameService {
 
     const grouped = groupRuns(records);
     return grouped[0] ?? null;
+  }
+
+  // ──────────────────────────────────────────────────────
+  // Theater methods
+  // ──────────────────────────────────────────────────────
+
+  /**
+   * Validates and upserts an Imaginarium Theater run for the authenticated user.
+   *
+   * Business rules:
+   *  - difficulty must be one of: EASY, NORMAL, HARD, VISIONARY
+   *  - actsCleared must be between 1 and 10
+   *  - stars must be between 0 and 10
+   *  - cast must not exceed 12 characters
+   *  - seasonId must be non-empty
+   *
+   * Throws:
+   *  - NotFoundError (404) if the user has no Genshin account.
+   *  - UnprocessableError (422) if any field is out of range.
+   */
+  async logTheaterRun(userId: string, input: LogTheaterRunInput): Promise<TheaterRun> {
+    // ── 1. Validate input ranges ──────────────────────────────────────────
+    if (input.seasonId.trim() === '') {
+      throw new UnprocessableError('seasonId must not be empty.');
+    }
+    if (!VALID_DIFFICULTIES.includes(input.difficulty)) {
+      throw new UnprocessableError(
+        `difficulty must be one of: ${VALID_DIFFICULTIES.join(', ')}.`,
+      );
+    }
+    if (input.actsCleared < 1 || input.actsCleared > MAX_ACTS_CLEARED) {
+      throw new UnprocessableError(
+        `actsCleared must be between 1 and ${MAX_ACTS_CLEARED}.`,
+      );
+    }
+    if (input.stars < 0 || input.stars > MAX_THEATER_STARS) {
+      throw new UnprocessableError(
+        `stars must be between 0 and ${MAX_THEATER_STARS}.`,
+      );
+    }
+    if (input.cast.length > MAX_CAST_SIZE) {
+      throw new UnprocessableError(`cast cannot exceed ${MAX_CAST_SIZE} characters.`);
+    }
+    if (input.cast.some((k) => typeof k !== 'string' || k.trim() === '')) {
+      throw new UnprocessableError('All cast members must be non-empty strings.');
+    }
+
+    // ── 2. Resolve account ────────────────────────────────────────────────
+    const account = await prisma.genshinAccount.findUnique({ where: { userId } });
+    if (!account) {
+      throw new NotFoundError(
+        'No Genshin Impact account found. Please import your data first.',
+      );
+    }
+
+    // ── 3. Upsert the run ─────────────────────────────────────────────────
+    const record = await upsertTheaterRun({
+      accountId: account.id,
+      seasonId: input.seasonId.trim(),
+      difficulty: input.difficulty,
+      actsCleared: input.actsCleared,
+      stars: input.stars,
+      cast: input.cast.map((k) => k.trim()),
+    });
+
+    return mapTheaterRecord(record);
+  }
+
+  /**
+   * Returns the full Theater run history for the authenticated user,
+   * ordered by seasonId descending (most recent first).
+   *
+   * Throws:
+   *  - NotFoundError (404) if the user has no Genshin account.
+   */
+  async getTheaterHistory(userId: string): Promise<TheaterHistoryResponse> {
+    const account = await prisma.genshinAccount.findUnique({ where: { userId } });
+    if (!account) {
+      throw new NotFoundError(
+        'No Genshin Impact account found. Please import your data first.',
+      );
+    }
+
+    const records = await findTheaterRunsByAccount(account.id);
+    return { runs: records.map(mapTheaterRecord) };
   }
 }

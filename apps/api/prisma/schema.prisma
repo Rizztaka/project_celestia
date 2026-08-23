@@ -54,12 +54,13 @@ model GenshinAccount {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  characters GenshinCharacter[]
-  weapons    GenshinWeapon[]
-  artifacts  GenshinArtifact[]
-  materials  GenshinMaterial[]  // Phase 3B — material inventory from GOOD import
-  spiralAbyssRuns SpiralAbyssRun[] // Phase 5A — endgame abyss tracking
+  user            User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  characters      GenshinCharacter[]
+  weapons         GenshinWeapon[]
+  artifacts       GenshinArtifact[]
+  materials       GenshinMaterial[]       // Phase 3B — material inventory from GOOD import
+  spiralAbyssRuns SpiralAbyssRun[]        // Phase 5A — endgame abyss tracking
+  theaterRuns     ImaginariumTheaterRun[] // Phase 5C — endgame theater tracking
 
   @@map("genshin_accounts")
 }
@@ -169,6 +170,42 @@ model SpiralAbyssRun {
   // Prevent duplicate rows for the same chamber slot in one cycle.
   @@unique([accountId, cycleId, floor, chamber, half])
   @@map("spiral_abyss_runs")
+}
+
+// ==========================================
+// IMAGINARIUM THEATER (Phase 5C)
+// ==========================================
+
+enum TheaterDifficulty {
+  EASY
+  NORMAL
+  HARD
+  VISIONARY
+}
+
+/// Tracks a user's Imaginarium Theater run for a given season.
+/// One row per (accountId, seasonId) — upserted if the user improves their score.
+/// seasonId is a human-readable string, e.g. "August 2024".
+///
+/// cast stores the JSON array of characterKeys the player brought into the run.
+/// stars is the number of medals/stars earned (0–10).
+model ImaginariumTheaterRun {
+  id         String            @id @default(uuid())
+  accountId  String
+  seasonId   String            // e.g. "August 2024"
+  difficulty TheaterDifficulty
+  actsCleared Int              // 1–10
+  stars      Int               // 0–10
+  cast       Json @default("[]") // string[] of characterKeys
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account GenshinAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  // One run per account per season — upsert target.
+  @@unique([accountId, seasonId])
+  @@map("imaginarium_theater_runs")
 }
 
 /// Stores a user's daily companion state: resin tracking and daily checklist.

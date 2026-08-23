@@ -1614,35 +1614,37 @@ function PullRecommendationCard({ rec }: { rec: PullRecommendation }) {
         </div>
 
         {/* Score gauge */}
-        <div className="relative flex shrink-0 flex-col items-center gap-1">
-          <svg width="52" height="52" viewBox="0 0 48 48" className="-rotate-90">
-            {/* Track */}
-            <circle cx="24" cy="24" r="20" fill="none" strokeWidth="4" className="stroke-white/10" />
-            {/* Fill */}
-            <circle
-              cx="24"
-              cy="24"
-              r="20"
-              fill="none"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeDasharray={CIRCUMFERENCE}
-              strokeDashoffset={offset}
-              className={`transition-all duration-700 ${
-                rec.recommendation === 'MUST_PULL'
-                  ? 'stroke-amber-400'
-                  : rec.recommendation === 'GOOD_VALUE'
-                    ? 'stroke-accent-400'
-                    : 'stroke-zinc-600'
-              }`}
-            />
-          </svg>
-          {/* Score number in center */}
-          <span className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-sm font-bold ${
-            rec.recommendation === 'MUST_PULL' ? 'text-amber-300' : rec.recommendation === 'GOOD_VALUE' ? 'text-accent-300' : 'text-zinc-500'
-          }`}>
-            {rec.pullValueScore}
-          </span>
+        <div className="flex shrink-0 flex-col items-center gap-1">
+          <div className="relative">
+            <svg width="52" height="52" viewBox="0 0 48 48" className="-rotate-90">
+              {/* Track */}
+              <circle cx="24" cy="24" r="20" fill="none" strokeWidth="4" className="stroke-white/10" />
+              {/* Fill */}
+              <circle
+                cx="24"
+                cy="24"
+                r="20"
+                fill="none"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeDasharray={CIRCUMFERENCE}
+                strokeDashoffset={offset}
+                className={`transition-all duration-700 ${
+                  rec.recommendation === 'MUST_PULL'
+                    ? 'stroke-amber-400'
+                    : rec.recommendation === 'GOOD_VALUE'
+                      ? 'stroke-accent-400'
+                      : 'stroke-zinc-600'
+                }`}
+              />
+            </svg>
+            {/* Score number in center */}
+            <span className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-sm font-bold ${
+              rec.recommendation === 'MUST_PULL' ? 'text-amber-300' : rec.recommendation === 'GOOD_VALUE' ? 'text-accent-300' : 'text-zinc-500'
+            }`}>
+              {rec.pullValueScore}
+            </span>
+          </div>
           <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">Score</p>
         </div>
       </div>
@@ -1751,6 +1753,118 @@ function PullTab() {
             <PullRecommendationCard key={rec.bannerId} rec={rec} />
           ))}
         </section>
+      )}
+    </>
+  );
+}
+
+// -------------------------------------------------------
+// Knowledge Intelligence - hook & Tab
+// -------------------------------------------------------
+
+function useKnowledgeIntelligence() {
+  return useQuery({
+    queryKey: ['intelligence', 'knowledge'],
+    queryFn: fetchKnowledgeIntelligence,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    retry: 1,
+  });
+}
+
+function KnowledgeInsightIcon({ iconKey }: { iconKey: KnowledgeInsightKey }) {
+  switch (iconKey) {
+    case 'DIVERSE_ROSTER':
+      return (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      );
+    case 'ELEMENTAL_SPECIALIST':
+      return (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      );
+    case 'ARTIFACT_HOARDER':
+      return (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+      );
+    case 'MAX_CONSTELLATION':
+      return (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+        </svg>
+      );
+    case 'TALENT_NEGLECTOR':
+      return (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      );
+    default:
+      return (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      );
+  }
+}
+
+function KnowledgeTab() {
+  const { data, isLoading, isError, error } = useKnowledgeIntelligence();
+  const errorCode = isError && error instanceof ApiError ? error.code : null;
+  const insights = (data as KnowledgeIntelligenceResponse | undefined)?.insights ?? [];
+
+  return (
+    <>
+      {isLoading && (
+        <div className="grid gap-6 md:grid-cols-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex flex-col gap-4 rounded-2xl border border-white/5 bg-white/[0.02] p-6">
+              <div className="h-6 w-48 animate-pulse rounded bg-white/5" />
+              <div className="space-y-2">
+                <div className="h-4 w-full animate-pulse rounded bg-white/5" />
+                <div className="h-4 w-5/6 animate-pulse rounded bg-white/5" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {isError && <EmptyState errorCode={errorCode} tab="knowledge" />}
+
+      {!isLoading && !isError && insights.length === 0 && (
+        <div className="animate-fade-in flex flex-col items-center justify-center py-24 text-center">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-blue-500/20 bg-blue-500/10">
+            <svg className="h-10 w-10 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h2 className="font-display mb-3 text-2xl font-bold text-white">No Insights Available</h2>
+          <p className="max-w-sm text-base leading-relaxed text-zinc-400">
+            We couldn't generate insights for your account yet. Make sure you have imported data!
+          </p>
+        </div>
+      )}
+
+      {!isLoading && !isError && insights.length > 0 && (
+        <div className="animate-fade-in grid gap-6 md:grid-cols-2">
+          {insights.map((insight) => (
+            <div key={insight.key} className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] p-6 transition-all hover:border-white/10 hover:bg-white/[0.03]">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/20 text-blue-400 transition-transform group-hover:scale-110">
+                <KnowledgeInsightIcon iconKey={insight.iconKey} />
+              </div>
+              <h3 className="mb-2 font-display text-xl font-bold text-white transition-colors group-hover:text-blue-400">
+                {insight.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-zinc-400">
+                {insight.body}
+              </p>
+            </div>
+          ))}
+        </div>
       )}
     </>
   );

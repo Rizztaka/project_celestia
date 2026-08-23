@@ -19,6 +19,14 @@ const LogAbyssRunSchema = z.object({
   team: z.array(z.string().min(1)).max(4).default([]),
 });
 
+const LogTheaterRunSchema = z.object({
+  seasonId: z.string().min(1, 'seasonId is required'),
+  difficulty: z.enum(['EASY', 'NORMAL', 'HARD', 'VISIONARY']),
+  actsCleared: z.number().int().min(1).max(10),
+  stars: z.number().int().min(0).max(10),
+  cast: z.array(z.string().min(1)).max(12).default([]),
+});
+
 // -------------------------------------------------------
 // Controller
 // -------------------------------------------------------
@@ -29,6 +37,10 @@ export class EndgameController {
   constructor() {
     this.service = new EndgameService();
   }
+
+  // ─────────────────────────────────────────────────────
+  // Abyss endpoints
+  // ─────────────────────────────────────────────────────
 
   /**
    * GET /api/v1/games/genshin/endgame/abyss
@@ -75,6 +87,45 @@ export class EndgameController {
 
       const data = await this.service.logAbyssRun(req.user!.id, parsed.data);
       res.status(201).json(successResponse(data, 'Abyss run logged successfully.'));
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  // ─────────────────────────────────────────────────────
+  // Theater endpoints
+  // ─────────────────────────────────────────────────────
+
+  /**
+   * GET /api/v1/games/genshin/endgame/theater
+   *
+   * Returns the full Imaginarium Theater run history for the authenticated user,
+   * ordered by seasonId descending (most recent first).
+   */
+  getTheaterHistory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const data = await this.service.getTheaterHistory(req.user!.id);
+      res.json(successResponse(data, 'Theater history retrieved successfully.'));
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  /**
+   * POST /api/v1/games/genshin/endgame/theater
+   *
+   * Logs (or updates) an Imaginarium Theater run for the given season.
+   * Body: { seasonId, difficulty, actsCleared, stars, cast[] }
+   */
+  logTheaterRun = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const parsed = LogTheaterRunSchema.safeParse(req.body);
+      if (!parsed.success) {
+        throw new UnprocessableError(parsed.error.errors.map((e) => e.message).join('; '));
+      }
+
+      const data = await this.service.logTheaterRun(req.user!.id, parsed.data);
+      res.status(201).json(successResponse(data, 'Theater run logged successfully.'));
     } catch (err) {
       next(err);
     }

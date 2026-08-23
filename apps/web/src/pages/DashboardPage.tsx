@@ -13,6 +13,7 @@
 
 import type { MeResponse } from '@celestia/api-contracts';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 
 import { ApiError,fetchApi } from '../lib/api';
@@ -22,7 +23,7 @@ function DashboardPage() {
   const logout = useAuthStore((state) => state.logout);
 
   const {
-    data: profile,
+    // data,
     isLoading,
     error,
   } = useQuery({
@@ -110,17 +111,52 @@ function DashboardPage() {
           </div>
         </div>
 
-        <div className="mb-12">
-          <h1 className="font-display text-4xl font-bold tracking-tight text-white">
-            Welcome back, <span className="text-gradient">{profile?.username}</span>
-          </h1>
-          <p className="mt-3 max-w-2xl text-lg text-zinc-400">
-            Your Genshin companion is fully online. Explore the features below.
-          </p>
+        <header className="mb-8 relative">
+        <h1 className="text-4xl font-bold tracking-tight text-white mb-2">Welcome Back</h1>
+        <p className="text-muted-foreground text-lg">Select a game domain to enter your personalized command center.</p>
+      </header>
+
+      {/* GAME DOMAINS (DUAL PORTAL) */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        {/* Genshin Impact Portal */}
+        <div className="glass-panel p-8 relative overflow-hidden group cursor-pointer border-blue-500/30 hover:border-blue-400 transition-all duration-500">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute -right-20 -top-20 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-400/30 transition-all duration-700" />
+          
+          <div className="relative z-10 flex flex-col h-full">
+            <h2 className="text-3xl font-bold text-white mb-4 drop-shadow-md">Genshin Impact</h2>
+            <p className="text-blue-100/70 mb-8 flex-grow">Manage your Teyvat journey. Optimize your roster, analyze pull history, and conquer the Spiral Abyss.</p>
+            <div className="flex gap-4 mt-auto">
+              <Link to="/roster" className="btn-primary flex-1 text-center bg-blue-600 hover:bg-blue-500">
+                Enter Domain
+              </Link>
+            </div>
+          </div>
         </div>
 
-        {/* Phase 2 — Import entry point */}
-        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* NIKKE Portal */}
+        <div className="glass-panel p-8 relative overflow-hidden group cursor-pointer border-pink-500/30 hover:border-pink-400 transition-all duration-500">
+          <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute -right-20 -top-20 w-64 h-64 bg-pink-500/20 rounded-full blur-3xl group-hover:bg-pink-400/30 transition-all duration-700" />
+          
+          <div className="relative z-10 flex flex-col h-full">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-3xl font-bold text-white drop-shadow-md">Goddess of Victory</h2>
+              <span className="px-2 py-1 text-xs font-bold bg-pink-500/20 text-pink-300 rounded-md border border-pink-500/30">NEW</span>
+            </div>
+            <p className="text-pink-100/70 mb-8 flex-grow">Command your Nikke squad. Track limits breaks, manage Overload gear, and prepare for the surface reclamation.</p>
+            <div className="flex gap-4 mt-auto">
+              <Link to="/nikke/roster" className="btn-primary flex-1 text-center bg-pink-600 hover:bg-pink-500">
+                Enter Domain
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-16">
+        <h2 className="text-2xl font-bold tracking-tight text-white mb-6">Quick Navigation</h2>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <a
             href="/import"
             className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
@@ -275,6 +311,7 @@ function DashboardPage() {
             </p>
           </a>
         </div>
+      </section>
       </main>
     </div>
   );

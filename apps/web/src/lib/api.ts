@@ -891,3 +891,52 @@ export interface ProgressionIntelligenceResponse {
 export async function fetchProgressionIntelligence(): Promise<ProgressionIntelligenceResponse> {
   return fetchApi<ProgressionIntelligenceResponse>('/games/genshin/intelligence/progression');
 }
+
+// ============================================================
+// NIKKE DOMAIN (Phase 7)
+// ============================================================
+
+export interface NikkeAccount {
+  id: string;
+  userId: string;
+  commanderName: string | null;
+  commanderLevel: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NikkeCharacter {
+  id: string;
+  accountId: string;
+  characterKey: string;
+  level: number;
+  limitBreak: number;
+  coreEnhance: number;
+  skill1: number;
+  skill2: number;
+  burstSkill: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function fetchNikkeAccount(): Promise<NikkeAccount> {
+  return fetchApi<NikkeAccount>('/games/nikke/accounts/me');
+}
+
+export async function createNikkeAccount(payload: { commanderName?: string, commanderLevel?: number }): Promise<NikkeAccount> {
+  return fetchApi<NikkeAccount>('/games/nikke/accounts/me', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+}
+
+export async function fetchNikkeRoster(): Promise<NikkeCharacter[]> {
+  return fetchApi<NikkeCharacter[]>('/games/nikke/characters');
+}
+
+export async function addNikkeToRoster(payload: { characterKey: string, level?: number, limitBreak?: number, coreEnhance?: number }): Promise<NikkeCharacter> {
+  return fetchApi<NikkeCharacter>('/games/nikke/characters', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+}

@@ -35,6 +35,7 @@ import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import RosterPage from './pages/RosterPage';
 import SimulatorsPage from './pages/SimulatorsPage';
+import { NikkeRosterPage } from './pages/nikke/NikkeRosterPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -72,6 +73,7 @@ function App() {
             <Route path="/intelligence" element={<IntelligencePage />} />
             <Route path="/endgame" element={<EndgamePage />} />
             <Route path="/simulators" element={<SimulatorsPage />} />
+            <Route path="/nikke/roster" element={<NikkeRosterPage />} />
           </Route>
 
           {/* Catch-all — redirect unknown paths to dashboard (or login if not authed) */}

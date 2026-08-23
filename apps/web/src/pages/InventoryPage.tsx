@@ -101,9 +101,17 @@ function WeaponCard({ weapon }: { weapon: InventoryWeapon }) {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div
-          className={`font-display flex h-11 w-11 shrink-0 select-none items-center justify-center rounded-xl border-2 text-sm font-bold ${ref.border} ${ref.text}`}
+          className={`font-display relative flex h-11 w-11 shrink-0 select-none items-center justify-center rounded-xl border-2 text-sm font-bold overflow-hidden ${ref.border} ${ref.text}`}
         >
-          {initials}
+          <img 
+            src={`https://enka.network/ui/UI_EquipIcon_${weapon.weaponKey}.png`} 
+            alt={displayName} 
+            className="absolute inset-0 w-full h-full object-cover z-10"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
+          />
+          <span className="relative z-0">{initials}</span>
         </div>
         <div className="min-w-0 flex-1">
           <p className="font-display group-hover:text-accent-400 truncate text-sm font-bold text-white transition-colors">

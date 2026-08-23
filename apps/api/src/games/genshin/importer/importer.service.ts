@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import type { Prisma } from '@prisma/client';
 import { ZodError } from 'zod';
 
@@ -110,51 +111,59 @@ export class GenshinImportService {
         characterMap.set(char.key, upserted.id);
       }
 
-      // 3e. Insert all weapons and track their DB IDs alongside GOOD locations.
-      const weaponResults: Array<{ id: string; location: string }> = [];
+      // 3e. Bulk insert all weapons with pre-generated UUIDs
+      const weaponsToInsert = [];
+      const weaponLocations = []; // Map ID -> location
 
       for (const weapon of payload.weapons) {
-        const created = await tx.genshinWeapon.create({
-          data: {
-            accountId,
-            weaponKey: weapon.key,
-            level: weapon.level,
-            ascension: weapon.ascension,
-            refinement: weapon.refinement,
-            locked: weapon.lock,
-          },
+        const weaponId = randomUUID();
+        weaponsToInsert.push({
+          id: weaponId,
+          accountId,
+          weaponKey: weapon.key,
+          level: weapon.level,
+          ascension: weapon.ascension,
+          refinement: weapon.refinement,
+          locked: weapon.lock,
         });
-        weaponResults.push({ id: created.id, location: weapon.location });
+        if (weapon.location) {
+          weaponLocations.push({ id: weaponId, location: weapon.location });
+        }
       }
 
-      // 3f. Insert all artifacts and track their DB IDs alongside GOOD locations.
-      const artifactResults: Array<{ id: string; location: string }> = [];
+      if (weaponsToInsert.length > 0) {
+        await tx.genshinWeapon.createMany({ data: weaponsToInsert });
+      }
+
+      // 3f. Bulk insert all artifacts with pre-generated UUIDs
+      const artifactsToInsert = [];
+      const artifactLocations = []; // Map ID -> location
 
       for (const artifact of payload.artifacts) {
-        const created = await tx.genshinArtifact.create({
-          data: {
-            accountId,
-            setKey: artifact.setKey,
-            slotKey: artifact.slotKey,
-            level: artifact.level,
-            rarity: artifact.rarity,
-            mainStatKey: artifact.mainStatKey,
-            // ArtifactSubStat[] must be cast because our typed interface
-            // lacks the index signature Prisma's Json type requires.
-            subStats: artifact.substats as unknown as Prisma.InputJsonValue,
-            locked: artifact.lock,
-          },
+        const artifactId = randomUUID();
+        artifactsToInsert.push({
+          id: artifactId,
+          accountId,
+          setKey: artifact.setKey,
+          slotKey: artifact.slotKey,
+          level: artifact.level,
+          rarity: artifact.rarity,
+          mainStatKey: artifact.mainStatKey,
+          subStats: artifact.substats as unknown as Prisma.InputJsonValue,
+          locked: artifact.lock,
         });
-        artifactResults.push({ id: created.id, location: artifact.location });
+        if (artifact.location) {
+          artifactLocations.push({ id: artifactId, location: artifact.location });
+        }
+      }
+
+      if (artifactsToInsert.length > 0) {
+        await tx.genshinArtifact.createMany({ data: artifactsToInsert });
       }
 
       // 3g. Resolve weapon equipment.
-      //     For each weapon with a non-empty location, link it to the character
-      //     by updating the character's equippedWeaponId.
-      //     If the location references a character not in this GOOD payload,
-      //     the weapon is silently left unequipped.
-      for (const { id: weaponId, location } of weaponResults) {
-        if (!location) continue;
+      //     We update the character's equippedWeaponId for each location match.
+      for (const { id: weaponId, location } of weaponLocations) {
         const characterId = characterMap.get(location);
         if (!characterId) continue;
         await tx.genshinCharacter.update({
@@ -164,9 +173,7 @@ export class GenshinImportService {
       }
 
       // 3h. Resolve artifact equipment.
-      //     Same approach as weapons: link artifact → character via location field.
-      for (const { id: artifactId, location } of artifactResults) {
-        if (!location) continue;
+      for (const { id: artifactId, location } of artifactLocations) {
         const characterId = characterMap.get(location);
         if (!characterId) continue;
         await tx.genshinArtifact.update({
@@ -176,17 +183,17 @@ export class GenshinImportService {
       }
 
       // 3i. Replace the material inventory.
-      //     Materials are fully replaced on every import (delete-all then insert),
-      //     matching the strategy used for weapons and artifacts.
-      //     Only items with quantity > 0 are stored to keep the table compact.
       await tx.genshinMaterial.deleteMany({ where: { accountId } });
 
       const materialEntries = Object.entries(payload.materials).filter(([, qty]) => qty > 0);
+      const materialsToInsert = materialEntries.map(([itemKey, quantity]) => ({
+        accountId,
+        itemKey,
+        quantity,
+      }));
 
-      for (const [itemKey, quantity] of materialEntries) {
-        await tx.genshinMaterial.create({
-          data: { accountId, itemKey, quantity },
-        });
+      if (materialsToInsert.length > 0) {
+        await tx.genshinMaterial.createMany({ data: materialsToInsert });
       }
 
       return {

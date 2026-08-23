@@ -368,6 +368,98 @@
           "weight": 15
         }
       ]
+    },
+    {
+      "id": "odette_freeze",
+      "name": "Odette Freeze",
+      "archetype": "FREEZE",
+      "reaction": "Freeze",
+      "reactionElements": ["Cryo", "Hydro"],
+      "description": "Odette serves as the Cryo driver in a Freeze team, consistently applying Cryo to freeze enemies in place. Paired with a Hydro enabler like Furina or Kokomi, enemies are locked down and vulnerable to the full Cryo DPS burst. An Anemo support like Kazuha shreds Cryo resistance for maximum damage.",
+      "roles": [
+        {
+          "roleId": "cryo_dps",
+          "label": "Cryo DPS",
+          "element": "Cryo",
+          "candidates": ["Odette", "KamisatoAyaka", "Ganyu", "Eula"],
+          "required": true,
+          "flex": false,
+          "weight": 35
+        },
+        {
+          "roleId": "hydro_enabler",
+          "label": "Hydro Enabler",
+          "element": "Hydro",
+          "candidates": ["Furina", "Kokomi", "Xingqiu", "Mona", "Barbara"],
+          "required": true,
+          "flex": false,
+          "weight": 30
+        },
+        {
+          "roleId": "cryo_support",
+          "label": "Cryo Support / Resonance",
+          "element": "Cryo",
+          "candidates": ["Shenhe", "Rosaria", "Diona", "Layla"],
+          "required": false,
+          "flex": true,
+          "weight": 20
+        },
+        {
+          "roleId": "anemo_shred",
+          "label": "Anemo Support",
+          "element": "Anemo",
+          "candidates": ["KaedeharaKazuha", "Venti", "Sucrose"],
+          "required": false,
+          "flex": true,
+          "weight": 15
+        }
+      ]
+    },
+    {
+      "id": "nodkrai_cryo_support",
+      "name": "Nod Krai Cryo Support",
+      "archetype": "FREEZE",
+      "reaction": "Freeze",
+      "reactionElements": ["Cryo", "Hydro"],
+      "description": "Nod Krai acts as a Cryo off-field support, enabling Freeze reactions and providing Cryo resonance for teammates. Pairs well with a Hydro DPS like Neuvillette for consistent Freeze uptime, or with another strong Cryo DPS as a sub-DPS support.",
+      "roles": [
+        {
+          "roleId": "cryo_support",
+          "label": "Cryo Support (Nod Krai)",
+          "element": "Cryo",
+          "candidates": ["NodKrai"],
+          "required": true,
+          "flex": false,
+          "weight": 30
+        },
+        {
+          "roleId": "main_dps",
+          "label": "Main DPS",
+          "element": null,
+          "candidates": ["Neuvillette", "KamisatoAyaka", "Ganyu", "Odette"],
+          "required": true,
+          "flex": true,
+          "weight": 35
+        },
+        {
+          "roleId": "cryo_resonance",
+          "label": "Cryo Resonance Partner",
+          "element": "Cryo",
+          "candidates": ["Shenhe", "Rosaria", "Diona", "Layla", "Odette"],
+          "required": false,
+          "flex": true,
+          "weight": 20
+        },
+        {
+          "roleId": "healer_shielder",
+          "label": "Healer / Shielder",
+          "element": null,
+          "candidates": ["Zhongli", "Diona", "Kokomi", "Bennett"],
+          "required": false,
+          "flex": true,
+          "weight": 15
+        }
+      ]
     }
   ]
 }

@@ -9,6 +9,7 @@ import { errorResponse } from '@/core/utils/response.js';
 
 import { GenshinCompanionProvider } from './games/genshin/companion/genshin-companion.provider.js';
 import { genshinRoutes } from './games/genshin/genshin.routes.js';
+import { nikkeRoutes } from './games/nikke/nikke.routes.js';
 import { authRoutes } from './platform/auth/auth.routes.js';
 import { companionRoutes } from './platform/companion/companion.routes.js';
 import { companionRegistry } from './platform/companion/companion-registry.service.js';
@@ -58,6 +59,7 @@ v1Router.use('/companion', companionRoutes); // Phase 3
 
 // Game routes
 v1Router.use('/games/genshin', genshinRoutes);
+v1Router.use('/games/nikke', nikkeRoutes);
 
 app.use('/api/v1', v1Router);
 

@@ -22,6 +22,9 @@ model User {
   // One user has at most one Genshin account in Phase 2.
   genshinAccount GenshinAccount?
 
+  // Back-relation to NIKKE domain (Phase 7).
+  nikkeAccount NikkeAccount?
+
   // Back-relation to the Daily Companion (Phase 3).
   dailyCompanion DailyCompanion?
 
@@ -354,4 +357,55 @@ model WeeklyBossState {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("weekly_boss_state")
+}
+
+// ==========================================
+// NIKKE DOMAIN (PHASE 7)
+// ==========================================
+
+model NikkeAccount {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  commanderName String?
+  commanderLevel Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  characters    NikkeCharacter[]
+}
+
+model NikkeCharacter {
+  id            String   @id @default(uuid())
+  accountId     String
+  characterKey  String   // Static reference
+  level         Int      // 1-200+
+  limitBreak    Int      // 0-3+
+  coreEnhance   Int      // 0-7
+  skill1        Int      // 1-10
+  skill2        Int      // 1-10
+  burstSkill    Int      // 1-10
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  account       NikkeAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  equipment     NikkeEquipment[]
+
+  @@unique([accountId, characterKey])
+}
+
+model NikkeEquipment {
+  id            String   @id @default(uuid())
+  characterId   String
+  slot          String   // e.g., Head, Torso, Arm, Leg
+  tier          Int      // e.g., 9 for T9
+  manufacturer  String?  // e.g., Tetra, Missilis, Elysion, Pilgrim
+  level         Int      // 1-5
+  isOverload    Boolean  @default(false)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  character     NikkeCharacter @relation(fields: [characterId], references: [id], onDelete: Cascade)
 }

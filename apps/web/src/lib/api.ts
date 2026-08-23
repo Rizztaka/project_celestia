@@ -856,3 +856,38 @@ export async function simulatePulls(payload: SimulatePullsPayload): Promise<Simu
     body: JSON.stringify(payload),
   });
 }
+
+// ============================================================
+// Progression Intelligence (Milestone 6B)
+// ============================================================
+
+export interface ElementalSpread {
+  element: string;
+  count: number;
+  percentage: number;
+}
+
+export interface ProgressionIntelligenceResponse {
+  rosterCompletion: {
+    owned: number;
+    total: number;
+    percentage: number;
+    rank: string;
+  };
+  ascensionMaturity: {
+    highlyAscended: number; // Ascension 5 or 6 (level 80+)
+    totalOwned: number;
+    percentage: number;
+    rank: string;
+  };
+  elementalSpread: ElementalSpread[];
+  analysedAt: string;
+}
+
+/**
+ * fetchProgressionIntelligence — GET /games/genshin/intelligence/progression
+ * Returns high-level account progression metrics.
+ */
+export async function fetchProgressionIntelligence(): Promise<ProgressionIntelligenceResponse> {
+  return fetchApi<ProgressionIntelligenceResponse>('/games/genshin/intelligence/progression');
+}

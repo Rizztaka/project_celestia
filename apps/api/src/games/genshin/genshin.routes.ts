@@ -8,6 +8,7 @@ import { characterIntelligenceRoutes } from './intelligence/character-intelligen
 import { knowledgeIntelligenceRoutes } from './intelligence/knowledge-intelligence/knowledge-intelligence.routes.js';
 import { plannerIntelligenceRoutes } from './intelligence/planner-intelligence/planner-intelligence.routes.js';
 import { pullIntelligenceRoutes } from './intelligence/pull-intelligence/pull-intelligence.routes.js';
+import { progressionIntelligenceRoutes } from './intelligence/progression-intelligence/progression-intelligence.routes.js';
 import { teamIntelligenceRoutes } from './intelligence/team-intelligence/team-intelligence.routes.js';
 import { endgameRoutes } from './endgame/endgame.routes.js';
 import { weaponRoutes } from './weapons/weapon.routes.js';
@@ -43,6 +44,7 @@ router.use(teamIntelligenceRoutes);
 router.use(artifactIntelligenceRoutes);
 router.use(plannerIntelligenceRoutes);
 router.use(pullIntelligenceRoutes);
+router.use(progressionIntelligenceRoutes);
 router.use(knowledgeIntelligenceRoutes);
 router.use(endgameRoutes);
 router.use(pullSimulatorRoutes);

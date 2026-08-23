@@ -11,6 +11,7 @@ import {
   fetchCharacterIntelligence,
   fetchKnowledgeIntelligence,
   fetchPlannerIntelligence,
+  fetchProgressionIntelligence,
   fetchPullIntelligence,
   fetchTeamIntelligence,
   type KnowledgeIntelligenceResponse,
@@ -1870,6 +1871,114 @@ function KnowledgeTab() {
 }
 
 // -------------------------------------------------------
+// Account Progression Section (Milestone 6B)
+// -------------------------------------------------------
+
+function AccountProgressionSection() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['intelligence', 'progression'],
+    queryFn: fetchProgressionIntelligence,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  if (isLoading || isError || !data) return null;
+
+  return (
+    <section className="animate-fade-in mb-10">
+      <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-accent-400">
+        Account Progression Summary
+      </h2>
+      <div className="grid gap-4 md:grid-cols-3">
+        {/* Roster Completion */}
+        <div className="glass-panel flex flex-col items-center justify-center rounded-2xl border border-white/5 p-6 text-center">
+          <div className="relative mb-3 flex h-24 w-24 items-center justify-center">
+            <svg className="-rotate-90" width="96" height="96" viewBox="0 0 96 96">
+              <circle cx="48" cy="48" r="40" fill="none" strokeWidth="6" className="stroke-white/5" />
+              <circle
+                cx="48"
+                cy="48"
+                r="40"
+                fill="none"
+                strokeWidth="6"
+                strokeLinecap="round"
+                className="stroke-amber-400 transition-all duration-1000"
+                strokeDasharray={251.2}
+                strokeDashoffset={251.2 * (1 - data.rosterCompletion.percentage / 100)}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="font-display text-xl font-bold text-amber-300">
+                {Math.round(data.rosterCompletion.percentage)}%
+              </span>
+            </div>
+          </div>
+          <h3 className="font-display text-lg font-bold text-white">Roster Completion</h3>
+          <p className="mt-1 text-xs text-zinc-400">
+            {data.rosterCompletion.owned} / {data.rosterCompletion.total} Characters
+          </p>
+          <span className="mt-3 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-amber-400">
+            {data.rosterCompletion.rank}
+          </span>
+        </div>
+
+        {/* Ascension Maturity */}
+        <div className="glass-panel flex flex-col items-center justify-center rounded-2xl border border-white/5 p-6 text-center">
+          <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-violet-500/10 border border-violet-500/30">
+            <svg className="h-10 w-10 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h3 className="font-display text-lg font-bold text-white">Ascension Maturity</h3>
+          <p className="mt-1 text-xs text-zinc-400">
+            {data.ascensionMaturity.highlyAscended} highly invested (Level 80+)
+          </p>
+          <div className="mt-4 w-full">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-white/5">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-violet-500 to-indigo-400 transition-all duration-1000"
+                style={{ width: `${data.ascensionMaturity.percentage}%` }}
+              />
+            </div>
+          </div>
+          <span className="mt-4 rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-violet-400">
+            {data.ascensionMaturity.rank}
+          </span>
+        </div>
+
+        {/* Elemental Spread */}
+        <div className="glass-panel flex flex-col justify-center rounded-2xl border border-white/5 p-6">
+          <h3 className="mb-4 text-center font-display text-lg font-bold text-white">Elemental Spread</h3>
+          <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/5">
+            {data.elementalSpread.map((es) => (
+              <div
+                key={es.element}
+                className="h-full border-r border-zinc-950/20 transition-all duration-1000 last:border-0"
+                style={{
+                  width: `${es.percentage}%`,
+                  backgroundColor: ELEMENT_COLORS[es.element]?.text.replace('text-', '') || 'gray',
+                }}
+                title={`${es.element}: ${es.count} (${Math.round(es.percentage)}%)`}
+              />
+            ))}
+          </div>
+          <div className="mt-5 grid grid-cols-2 gap-2">
+            {data.elementalSpread.slice(0, 4).map((es) => {
+              const style = getElementStyle(es.element);
+              return (
+                <div key={es.element} className={`flex items-center justify-between rounded-lg border px-2 py-1 ${style.bg} ${style.border}`}>
+                  <span className={`text-[10px] font-bold uppercase tracking-widest ${style.text}`}>{es.element}</span>
+                  <span className="text-xs font-semibold text-white">{es.count}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// -------------------------------------------------------
 // IntelligencePage — main export
 // -------------------------------------------------------
 
@@ -1898,6 +2007,9 @@ export default function IntelligencePage() {
             Your personal analyst — surfaces the highest-ROI character investments and the best team compositions your roster can assemble right now.
           </p>
         </header>
+
+        {/* Progression Summary Dashboard */}
+        <AccountProgressionSection />
 
         {/* Tab bar */}
         <div

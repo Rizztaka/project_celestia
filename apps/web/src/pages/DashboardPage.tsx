@@ -69,12 +69,12 @@ function DashboardPage() {
           Project Celestia
         </span>
         <div className="flex items-center gap-6">
-          <a
-            href="/profile"
+          <Link
+            to="/profile"
             className="text-sm font-medium text-zinc-400 transition-colors hover:text-white"
           >
             Profile
-          </a>
+          </Link>
           <button
             onClick={logout}
             className="hover:text-danger-400 text-sm font-medium text-zinc-500 transition-colors"
@@ -161,8 +161,8 @@ function DashboardPage() {
       <section className="mt-16">
         <h2 className="text-2xl font-bold tracking-tight text-white mb-6">Quick Navigation</h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <a
-            href="/import"
+          <Link
+            to="/import"
             className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
           >
             <div className="bg-accent-500/20 text-accent-400 mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
@@ -181,10 +181,10 @@ function DashboardPage() {
             <p className="mt-2 text-sm leading-relaxed text-zinc-400">
               Import your roster from Genshin Optimizer or Inventory Kamera.
             </p>
-          </a>
+          </Link>
 
-          <a
-            href="/roster"
+          <Link
+            to="/roster"
             className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
           >
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400 transition-transform group-hover:scale-110">
@@ -203,10 +203,10 @@ function DashboardPage() {
             <p className="mt-2 text-sm leading-relaxed text-zinc-400">
               Browse your imported characters, their talents, and equipped weapons.
             </p>
-          </a>
+          </Link>
 
-          <a
-            href="/inventory"
+          <Link
+            to="/inventory"
             className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
           >
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 transition-transform group-hover:scale-110">
@@ -225,10 +225,10 @@ function DashboardPage() {
             <p className="mt-2 text-sm leading-relaxed text-zinc-400">
               Browse your full weapon and artifact inventories.
             </p>
-          </a>
+          </Link>
 
-          <a
-            href="/planner"
+          <Link
+            to="/planner"
             className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
           >
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 transition-transform group-hover:scale-110">
@@ -247,10 +247,10 @@ function DashboardPage() {
             <p className="mt-2 text-sm leading-relaxed text-zinc-400">
               Track your resin and daily checklist.
             </p>
-          </a>
+          </Link>
 
-          <a
-            href="/endgame"
+          <Link
+            to="/endgame"
             className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
           >
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400 transition-transform group-hover:scale-110">
@@ -269,10 +269,10 @@ function DashboardPage() {
             <p className="mt-2 text-sm leading-relaxed text-zinc-400">
               Track your Spiral Abyss teams and star ratings per cycle.
             </p>
-          </a>
+          </Link>
 
-          <a
-            href="/intelligence"
+          <Link
+            to="/intelligence"
             className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
           >
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/20 text-blue-400 transition-transform group-hover:scale-110">
@@ -291,10 +291,10 @@ function DashboardPage() {
             <p className="mt-2 text-sm leading-relaxed text-zinc-400">
               AI-driven insights for your characters, artifacts, and teams.
             </p>
-          </a>
+          </Link>
 
-          <a
-            href="/simulators"
+          <Link
+            to="/simulators"
             className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
           >
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 transition-transform group-hover:scale-110">
@@ -313,7 +313,7 @@ function DashboardPage() {
             <p className="mt-2 text-sm leading-relaxed text-zinc-400">
               Simulate banner wishes with accurate pity and 50/50 mechanics.
             </p>
-          </a>
+          </Link>
         </div>
       </section>
       </main>

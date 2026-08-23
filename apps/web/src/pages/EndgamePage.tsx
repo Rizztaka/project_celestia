@@ -16,7 +16,6 @@ import { Link } from 'react-router-dom';
 
 import type {
   AbyssCycleResult,
-  LogAbyssRunPayload,
   LogTheaterRunPayload,
   RosterCharacter,
   TheaterDifficulty,

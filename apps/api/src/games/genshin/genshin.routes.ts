@@ -11,7 +11,7 @@ import { pullIntelligenceRoutes } from './intelligence/pull-intelligence/pull-in
 import { teamIntelligenceRoutes } from './intelligence/team-intelligence/team-intelligence.routes.js';
 import { endgameRoutes } from './endgame/endgame.routes.js';
 import { weaponRoutes } from './weapons/weapon.routes.js';
-
+import pullSimulatorRoutes from './simulators/pull-simulator.routes.js';
 const router = Router();
 
 /**
@@ -45,5 +45,5 @@ router.use(plannerIntelligenceRoutes);
 router.use(pullIntelligenceRoutes);
 router.use(knowledgeIntelligenceRoutes);
 router.use(endgameRoutes);
-
+router.use(pullSimulatorRoutes);
 export { router as genshinRoutes };

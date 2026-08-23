@@ -13,7 +13,6 @@ import {
   fetchPlannerIntelligence,
   fetchPullIntelligence,
   fetchTeamIntelligence,
-  type KnowledgeInsight,
   type KnowledgeIntelligenceResponse,
   type KnowledgeInsightKey,
   type PlannerIntelligenceResponse,

@@ -800,3 +800,59 @@ export async function logTheaterRun(payload: LogTheaterRunPayload): Promise<Thea
     body: JSON.stringify(payload),
   });
 }
+
+// ============================================================
+// Pull Simulator (Milestone 6A)
+// ============================================================
+
+export interface Banner {
+  bannerId: string;
+  name: string;
+  type: string;
+  fiveStarKey: string;
+  fourStarKeys: string[];
+  endDate: string;
+}
+
+export interface PullResultItem {
+  id: string;
+  type: '3_STAR' | '4_STAR' | '5_STAR';
+  itemKey: string;
+  isFeatured: boolean;
+}
+
+export interface SimulatePullsPayload {
+  bannerId: string;
+  count: number;
+  currentPity5: number;
+  currentPity4: number;
+  guaranteed5: boolean;
+  guaranteed4: boolean;
+}
+
+export interface SimulatePullsResult {
+  pulls: PullResultItem[];
+  endPity5: number;
+  endPity4: number;
+  endGuaranteed5: boolean;
+  endGuaranteed4: boolean;
+}
+
+/**
+ * fetchBanners — GET /games/genshin/simulators/banners
+ * Returns the list of currently active banners from static data.
+ */
+export async function fetchBanners(): Promise<Banner[]> {
+  return fetchApi<Banner[]>('/games/genshin/simulators/banners');
+}
+
+/**
+ * simulatePulls — POST /games/genshin/simulators/simulate-pulls
+ * Runs a gacha simulation with the given pity state.
+ */
+export async function simulatePulls(payload: SimulatePullsPayload): Promise<SimulatePullsResult> {
+  return fetchApi<SimulatePullsResult>('/games/genshin/simulators/simulate-pulls', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}

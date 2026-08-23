@@ -227,6 +227,28 @@ function DashboardPage() {
               AI-driven insights for your characters, artifacts, and teams.
             </p>
           </a>
+
+          <a
+            href="/simulators"
+            className="glass-panel hover-lift group block cursor-pointer rounded-2xl p-6"
+          >
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 transition-transform group-hover:scale-110">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                />
+              </svg>
+            </div>
+            <h2 className="font-display text-lg font-bold text-white transition-colors group-hover:text-amber-400">
+              Pull Simulator
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+              Simulate banner wishes with accurate pity and 50/50 mechanics.
+            </p>
+          </a>
         </div>
       </main>
     </div>

@@ -745,3 +745,58 @@ export async function logAbyssRun(payload: LogAbyssRunPayload): Promise<AbyssHal
     body: JSON.stringify(payload),
   });
 }
+
+// ============================================================
+// Theater Types & Functions (Milestone 5C/5D)
+// ============================================================
+
+export type TheaterDifficulty = 'EASY' | 'NORMAL' | 'HARD' | 'VISIONARY';
+
+export interface TheaterRun {
+  id: string;
+  seasonId: string;
+  difficulty: TheaterDifficulty;
+  actsCleared: number;
+  stars: number;
+  cast: string[];
+}
+
+export interface TheaterHistoryResponse {
+  runs: TheaterRun[];
+}
+
+export interface LogTheaterRunPayload {
+  seasonId: string;
+  difficulty: TheaterDifficulty;
+  actsCleared: number;
+  stars: number;
+  cast: string[];
+}
+
+/**
+ * fetchTheaterHistory — GET /games/genshin/endgame/theater
+ *
+ * Returns the authenticated user's full Imaginarium Theater run history,
+ * ordered by seasonId descending (most recent season first).
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ */
+export async function fetchTheaterHistory(): Promise<TheaterHistoryResponse> {
+  return fetchApi<TheaterHistoryResponse>('/games/genshin/endgame/theater');
+}
+
+/**
+ * logTheaterRun — POST /games/genshin/endgame/theater
+ *
+ * Logs or updates an Imaginarium Theater run for a given season.
+ * Upserts on [seasonId] — re-clearing a season is fully supported.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if input validation fails.
+ */
+export async function logTheaterRun(payload: LogTheaterRunPayload): Promise<TheaterRun> {
+  return fetchApi<TheaterRun>('/games/genshin/endgame/theater', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}

@@ -55,15 +55,16 @@ export class GenshinImportService {
     // If any step throws, PostgreSQL rolls back the entire transaction
     // and the database is left in its pre-import state.
     // -------------------------------------------------------
-    const result = await prisma.$transaction(async (tx) => {
-      // 3a. Clear equippedWeaponId on all existing characters for this account.
-      //     Required before deleting weapons: GenshinCharacter.equippedWeaponId
-      //     is a FK to GenshinWeapon. Deleting weapons while a character still
-      //     references them causes a FK constraint violation.
-      await tx.genshinCharacter.updateMany({
-        where: { accountId },
-        data: { equippedWeaponId: null },
-      });
+    const result = await prisma.$transaction(
+      async (tx) => {
+        // 3a. Clear equippedWeaponId on all existing characters for this account.
+        //     Required before deleting weapons: GenshinCharacter.equippedWeaponId
+        //     is a FK to GenshinWeapon. Deleting weapons while a character still
+        //     references them causes a FK constraint violation.
+        await tx.genshinCharacter.updateMany({
+          where: { accountId },
+          data: { equippedWeaponId: null },
+        });
 
       // 3b. Delete all weapons for this account (Replace strategy).
       await tx.genshinWeapon.deleteMany({ where: { accountId } });
@@ -194,7 +195,12 @@ export class GenshinImportService {
         artifactsImported: payload.artifacts.length,
         materialsImported: materialEntries.length,
       };
-    });
+      },
+      {
+        maxWait: 10000, // wait up to 10s to acquire a connection
+        timeout: 120000, // 2 minutes for the transaction to complete
+      },
+    );
 
     return result;
   }

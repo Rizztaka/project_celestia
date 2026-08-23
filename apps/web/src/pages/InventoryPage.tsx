@@ -9,6 +9,7 @@ import {
   type InventoryArtifact,
   type InventoryWeapon,
 } from '../lib/api';
+import { ASSET_MAPPING } from '../lib/asset-mapping';
 import { useAuthStore } from '../stores/auth.store';
 
 // -------------------------------------------------------
@@ -104,7 +105,7 @@ function WeaponCard({ weapon }: { weapon: InventoryWeapon }) {
           className={`font-display relative flex h-11 w-11 shrink-0 select-none items-center justify-center rounded-xl border-2 text-sm font-bold overflow-hidden ${ref.border} ${ref.text}`}
         >
           <img 
-            src={`https://enka.network/ui/UI_EquipIcon_${weapon.weaponKey}.png`} 
+            src={`https://enka.network/ui/UI_EquipIcon_${ASSET_MAPPING.weapons[weapon.weaponKey] || weapon.weaponKey}.png`} 
             alt={displayName} 
             className="absolute inset-0 w-full h-full object-cover z-10"
             onError={(e) => {

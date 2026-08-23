@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import type { RosterCharacter, RosterWeapon } from '../lib/api';
 import { fetchGenshinRoster } from '../lib/api';
+import { ASSET_MAPPING } from '../lib/asset-mapping';
 import { useAuthStore } from '../stores/auth.store';
 
 // -------------------------------------------------------
@@ -61,7 +62,7 @@ function CharacterCard({ character }: { character: RosterCharacter }) {
           className={`font-display relative flex h-12 w-12 shrink-0 select-none items-center justify-center rounded-xl border-2 text-sm font-bold overflow-hidden transition-all ${colorClass} ${glowClass}`}
         >
           <img 
-            src={`https://enka.network/ui/UI_AvatarIcon_${character.characterKey}.png`} 
+            src={`https://enka.network/ui/UI_AvatarIcon_${ASSET_MAPPING.characters[character.characterKey] || character.characterKey}.png`} 
             alt={displayName} 
             className="absolute inset-0 w-full h-full object-cover"
             onError={(e) => {
@@ -145,7 +146,7 @@ function WeaponChip({ weapon }: { weapon: RosterWeapon | null }) {
     <div className="flex items-center gap-2">
       <div className="relative flex h-5 w-5 shrink-0 items-center justify-center">
         <img 
-          src={`https://enka.network/ui/UI_EquipIcon_${weapon.weaponKey}.png`} 
+          src={`https://enka.network/ui/UI_EquipIcon_${ASSET_MAPPING.weapons[weapon.weaponKey] || weapon.weaponKey}.png`} 
           alt={weapon.weaponKey}
           className="absolute inset-0 w-full h-full object-contain z-10"
           onError={(e) => {

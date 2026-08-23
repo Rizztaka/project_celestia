@@ -21,27 +21,28 @@
  */
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Navigate,Route, Routes } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { ProtectedRoute } from './components/ProtectedRoute';
-import DashboardPage from './pages/DashboardPage';
-import EndgamePage from './pages/EndgamePage';
-import ImportPage from './pages/ImportPage';
-import IntelligencePage from './pages/IntelligencePage';
-import InventoryPage from './pages/InventoryPage';
-import LoginPage from './pages/LoginPage';
-import PlannerPage from './pages/PlannerPage';
-import ProfilePage from './pages/ProfilePage';
-import RegisterPage from './pages/RegisterPage';
-import RosterPage from './pages/RosterPage';
-import SimulatorsPage from './pages/SimulatorsPage';
-import { NikkeRosterPage } from './pages/nikke/NikkeRosterPage';
+
+// Lazy loaded page components
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const EndgamePage = lazy(() => import('./pages/EndgamePage'));
+const ImportPage = lazy(() => import('./pages/ImportPage'));
+const IntelligencePage = lazy(() => import('./pages/IntelligencePage'));
+const InventoryPage = lazy(() => import('./pages/InventoryPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const PlannerPage = lazy(() => import('./pages/PlannerPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const RosterPage = lazy(() => import('./pages/RosterPage'));
+const SimulatorsPage = lazy(() => import('./pages/SimulatorsPage'));
+const NikkeRosterPage = lazy(() => import('./pages/nikke/NikkeRosterPage').then(m => ({ default: m.NikkeRosterPage })));
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // Don't retry on 4xx errors — auth failures, not found, etc. are
-      // not going to succeed on retry
       retry: (failureCount, error) => {
         if (error instanceof Error && 'status' in error) {
           const status = (error as { status: number }).status;
@@ -57,28 +58,27 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+        <Suspense fallback={<div className="flex h-screen w-screen items-center justify-center bg-zinc-950"><div className="h-8 w-8 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" /></div>}>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
 
-          {/* Protected routes — ProtectedRoute redirects to /login if not authenticated */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/import" element={<ImportPage />} />
-            <Route path="/roster" element={<RosterPage />} />
-            <Route path="/inventory" element={<InventoryPage />} />
-            <Route path="/planner" element={<PlannerPage />} />
-            <Route path="/intelligence" element={<IntelligencePage />} />
-            <Route path="/endgame" element={<EndgamePage />} />
-            <Route path="/simulators" element={<SimulatorsPage />} />
-            <Route path="/nikke/roster" element={<NikkeRosterPage />} />
-          </Route>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/import" element={<ImportPage />} />
+              <Route path="/roster" element={<RosterPage />} />
+              <Route path="/inventory" element={<InventoryPage />} />
+              <Route path="/planner" element={<PlannerPage />} />
+              <Route path="/intelligence" element={<IntelligencePage />} />
+              <Route path="/endgame" element={<EndgamePage />} />
+              <Route path="/simulators" element={<SimulatorsPage />} />
+              <Route path="/nikke/roster" element={<NikkeRosterPage />} />
+            </Route>
 
-          {/* Catch-all — redirect unknown paths to dashboard (or login if not authed) */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </QueryClientProvider>
   );

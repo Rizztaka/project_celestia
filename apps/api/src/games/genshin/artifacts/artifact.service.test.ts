@@ -1,5 +1,5 @@
 import type { GenshinArtifact } from '@prisma/client';
-import { beforeEach,describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { NotFoundError } from '@/core/errors/app-error.js';
 
@@ -7,6 +7,15 @@ import { GenshinArtifactRepository } from './artifact.repository.js';
 import { GenshinArtifactService } from './artifact.service.js';
 
 vi.mock('./artifact.repository.js');
+
+// Mock prisma for getArtifactsForUser (which queries genshinAccount directly)
+vi.mock('@/core/db/prisma.js', () => ({
+  prisma: {
+    genshinAccount: {
+      findUnique: vi.fn(),
+    },
+  },
+}));
 
 // -------------------------------------------------------
 // Fixtures
@@ -119,6 +128,42 @@ describe('GenshinArtifactService', () => {
 
       expect(result).toHaveLength(1);
       expect(result[0]?.setKey).toBe('ShimenawasReminiscence');
+    });
+  });
+
+  // ---------------------------------------------------
+  // getArtifactsForUser (Milestone 2E — HTTP read API)
+  // ---------------------------------------------------
+
+  describe('getArtifactsForUser', () => {
+    it('returns artifacts when the user has a Genshin account', async () => {
+      const { prisma } = await import('@/core/db/prisma.js');
+      vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValue({
+        id: ACCOUNT_ID,
+        userId: 'user-abc-123',
+        uid: '700000001',
+        nickname: null,
+        adventureRank: null,
+        worldLevel: null,
+        createdAt: new Date('2026-01-01T00:00:00Z'),
+        updatedAt: new Date('2026-01-01T00:00:00Z'),
+      });
+      mockRepo.findByAccountId.mockResolvedValue([mockArtifact]);
+
+      const result = await service.getArtifactsForUser('user-abc-123');
+
+      expect(result).toHaveLength(1);
+      expect(result[0]?.setKey).toBe('ShimenawasReminiscence');
+    });
+
+    it('returns an empty array when the user has no Genshin account', async () => {
+      const { prisma } = await import('@/core/db/prisma.js');
+      vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValue(null);
+
+      const result = await service.getArtifactsForUser('user-no-account');
+
+      expect(result).toEqual([]);
+      expect(mockRepo.findByAccountId).not.toHaveBeenCalled();
     });
   });
 

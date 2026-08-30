@@ -1,5 +1,5 @@
 import type { GenshinWeapon } from '@prisma/client';
-import { beforeEach,describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { NotFoundError } from '@/core/errors/app-error.js';
 
@@ -7,6 +7,15 @@ import { GenshinWeaponRepository } from './weapon.repository.js';
 import { GenshinWeaponService } from './weapon.service.js';
 
 vi.mock('./weapon.repository.js');
+
+// Mock prisma for getWeaponsForUser (which queries genshinAccount directly)
+vi.mock('@/core/db/prisma.js', () => ({
+  prisma: {
+    genshinAccount: {
+      findUnique: vi.fn(),
+    },
+  },
+}));
 
 // -------------------------------------------------------
 // Fixtures
@@ -102,6 +111,42 @@ describe('GenshinWeaponService', () => {
       const result = await service.getWeapons(ACCOUNT_ID);
 
       expect(result).toHaveLength(1);
+    });
+  });
+
+  // ---------------------------------------------------
+  // getWeaponsForUser (Milestone 2E — HTTP read API)
+  // ---------------------------------------------------
+
+  describe('getWeaponsForUser', () => {
+    it('returns weapons when the user has a Genshin account', async () => {
+      const { prisma } = await import('@/core/db/prisma.js');
+      vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValue({
+        id: ACCOUNT_ID,
+        userId: 'user-abc-123',
+        uid: '700000001',
+        nickname: null,
+        adventureRank: null,
+        worldLevel: null,
+        createdAt: new Date('2026-01-01T00:00:00Z'),
+        updatedAt: new Date('2026-01-01T00:00:00Z'),
+      });
+      mockRepo.findByAccountId.mockResolvedValue([mockWeapon]);
+
+      const result = await service.getWeaponsForUser('user-abc-123');
+
+      expect(result).toHaveLength(1);
+      expect(result[0]?.weaponKey).toBe('StaffOfHoma');
+    });
+
+    it('returns an empty array when the user has no Genshin account', async () => {
+      const { prisma } = await import('@/core/db/prisma.js');
+      vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValue(null);
+
+      const result = await service.getWeaponsForUser('user-no-account');
+
+      expect(result).toEqual([]);
+      expect(mockRepo.findByAccountId).not.toHaveBeenCalled();
     });
   });
 

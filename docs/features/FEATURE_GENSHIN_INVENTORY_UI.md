@@ -2,9 +2,9 @@
 
 **Feature ID:** FEAT-006  
 **Priority:** P0  
-**Status:** Designing  
+**Status:** Completed  
 **Phase:** 2E — Weapon & Artifact Browsing UI  
-**Last Updated:** 2026-08-10
+**Last Updated:** 2026-08-30
 
 ---
 
@@ -562,23 +562,23 @@ Instead, we add a new **Inventory** card to the dashboard grid that links to `/i
 
 ## Acceptance Criteria
 
-- [ ] `GET /api/v1/games/genshin/weapons` returns 200 with weapon array for authenticated user with imported data
-- [ ] `GET /api/v1/games/genshin/weapons` returns 200 with **empty array** for user who has never imported
-- [ ] `GET /api/v1/games/genshin/artifacts` returns 200 with artifact array for authenticated user with imported data
-- [ ] `GET /api/v1/games/genshin/artifacts` returns 200 with **empty array** for user who has never imported
-- [ ] Both endpoints return 401 for unauthenticated requests
-- [ ] Weapons are ordered by level descending
-- [ ] Artifacts are ordered by level descending, then rarity descending
-- [ ] `/inventory` page renders the Weapons tab by default
-- [ ] Tab switching between Weapons and Artifacts is instant (no re-fetch)
-- [ ] Both tabs show skeleton loading states while fetching
-- [ ] Both tabs show an empty-state CTA linking to `/import` when inventory is empty
-- [ ] `WeaponCard` displays: formatted name, level, ascension, refinement badge, equipped/unequipped status
-- [ ] `ArtifactRow` displays: slot badge, set name, level, rarity, main stat, all sub-stats, lock icon
-- [ ] Dashboard "Inventory" card links to `/inventory`
-- [ ] `/inventory` is a protected route — unauthenticated users are redirected to `/login`
-- [ ] Zero TypeScript errors on both `apps/api` and `apps/web`
-- [ ] All existing 72 tests continue to pass
+- [x] `GET /api/v1/games/genshin/weapons` returns 200 with weapon array for authenticated user with imported data
+- [x] `GET /api/v1/games/genshin/weapons` returns 200 with **empty array** for user who has never imported
+- [x] `GET /api/v1/games/genshin/artifacts` returns 200 with artifact array for authenticated user with imported data
+- [x] `GET /api/v1/games/genshin/artifacts` returns 200 with **empty array** for user who has never imported
+- [x] Both endpoints return 401 for unauthenticated requests
+- [x] Weapons are ordered by level descending
+- [x] Artifacts are ordered by level descending, then rarity descending
+- [x] `/inventory` page renders the Weapons tab by default
+- [x] Tab switching between Weapons and Artifacts is instant (no re-fetch)
+- [x] Both tabs show skeleton loading states while fetching
+- [x] Both tabs show an empty-state CTA linking to `/import` when inventory is empty
+- [x] `WeaponCard` displays: formatted name, level, ascension, refinement badge, equipped/unequipped status
+- [x] `ArtifactRow` displays: slot badge, set name, level, rarity, main stat, all sub-stats, lock icon
+- [x] Dashboard "Inventory" card links to `/inventory`
+- [x] `/inventory` is a protected route — unauthenticated users are redirected to `/login`
+- [x] Zero TypeScript errors on both `apps/api` and `apps/web`
+- [x] All existing tests continue to pass; new `getWeaponsForUser` and `getArtifactsForUser` unit tests added
 
 ---
 

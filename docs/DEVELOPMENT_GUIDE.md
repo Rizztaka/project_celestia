@@ -391,6 +391,52 @@ A feature is considered complete only when:
 
 \---
 
+## **Testing Strategy**
+
+- **Correctness before optimization.** Accuracy before feature quantity.
+- **Critical calculation logic** must have independent reference/regression tests.
+- **Coverage is a diagnostic metric**, not the definition of quality. Do not chase 100% coverage at the expense of meaningful tests.
+- Every important implementation should include appropriate tests in the same implementation cycle (the same Sunday).
+- CI should verify typechecking, linting, tests, builds, and other appropriate quality gates.
+
+\---
+
+## **Security Standards**
+
+- **Production secrets** must never be unnecessarily exposed to AI agents.
+- **AI agents** should not have unrestricted production database access.
+- **Authentication and authorization** must be treated separately.
+- **User-owned resources** must be strictly protected against cross-user access.
+- Production schema changes must be controlled and reviewable.
+
+\---
+
+## **Performance Strategy**
+
+- Good performance without premature optimization.
+- Honest incompleteness is preferable to false precision.
+- Heavy computation should only receive worker/queue infrastructure (like BullMQ/Redis) when actual measurements justify it.
+- Do not introduce microservices or Kubernetes merely to appear enterprise-level.
+
+\---
+
+## **Deployment & Reliability Strategy**
+
+- Aim for **zero-cost operation** for the foreseeable future.
+- Maintain enterprise-level engineering quality without unnecessary enterprise complexity.
+- Schema changes are tracked, reviewed, and deployed deterministically using Prisma migrations.
+- Maintainability for a solo developer using AI-assisted development is a priority.
+
+\---
+
+## **AI-Agent & MCP Workflow**
+
+- We utilize a structured AI workflow: Gemini (Architect/Reviewer), Claude (Implementer), and ChatGPT (Independent Reviewer).
+- Planning happens Monday–Saturday; Implementation happens on Sunday.
+- For full details on agent handoffs, MCP server constraints, and artifact rules, refer to `.agents/AGENTS.md`.
+
+\---
+
 ## **Guiding Principle**
 
 Write code that your future self—and future contributors—will be happy to maintain.

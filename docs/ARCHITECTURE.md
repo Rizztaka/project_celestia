@@ -325,7 +325,7 @@ Responsible for:
 - Selected items
 - Temporary local state
 
-Server state must never be duplicated inside Zustand.
+Server state should generally belong to TanStack Query; client/UI state should generally belong to Zustand/local state. Server state must never be duplicated inside Zustand.
 
 \---
 
@@ -369,7 +369,7 @@ Future upgrades may include:
 - WebSockets
 - Microservice extraction
 
-These should only be introduced when profiling demonstrates a measurable need.
+These should only be introduced when profiling demonstrates a measurable need. Do not introduce Redis/BullMQ/microservices/Kubernetes/etc. merely to appear enterprise-level. Heavy computation should only receive worker/queue infrastructure when measurements justify it.
 
 \---
 
@@ -411,6 +411,10 @@ Every architectural decision should prioritize:
 - Explainability
 - Performance
 - Developer Experience
+- Correctness before optimization
+- Accuracy before feature quantity
+- Honest incompleteness over false precision
+- One Sunday represents one coherent milestone
 
 \---
 

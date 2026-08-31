@@ -3,7 +3,10 @@
 // -------------------------------------------------------
 
 import type { CharacterInput } from '../character-intelligence/character-intelligence.calculator.js';
-import type { TeamScoreBreakdown, TeamTemplate } from '../team-intelligence/team-intelligence.calculator.js';
+import type {
+  TeamScoreBreakdown,
+  TeamTemplate,
+} from '../team-intelligence/team-intelligence.calculator.js';
 import type { CharacterRecommendation } from '../character-intelligence/character-intelligence.service.js';
 
 // Re-export for convenience
@@ -28,14 +31,14 @@ export interface PullScoreBreakdown {
 
   // Score components
   alreadyOwned: boolean;
-  ownershipPenalty: number;          // 0 or -100
-  teamEnablerBonus: number;          // 0..60
+  ownershipPenalty: number; // 0 or -100
+  teamEnablerBonus: number; // 0..60
   teamEnablerTemplateName: string | null;
-  synergyBonus: number;              // 0..40
-  synergyWith: string[];             // top invested chars that synergize
-  fourStarGapBonus: number;          // 0..20
+  synergyBonus: number; // 0..40
+  synergyWith: string[]; // top invested chars that synergize
+  fourStarGapBonus: number; // 0..20
 
-  totalScore: number;                // clamped 0-100
+  totalScore: number; // clamped 0-100
   recommendation: PullRecommendationLabel;
 }
 
@@ -76,7 +79,10 @@ function findBestTeamEnabledBy(
   templates: TeamTemplate[],
   roster: CharacterInput[],
   currentBreakdowns: TeamScoreBreakdown[],
-  scoreAllTemplatesFn: (templates: TeamTemplate[], roster: CharacterInput[]) => TeamScoreBreakdown[],
+  scoreAllTemplatesFn: (
+    templates: TeamTemplate[],
+    roster: CharacterInput[],
+  ) => TeamScoreBreakdown[],
 ): { bonusScore: number; templateName: string | null } {
   // Only try for templates the character appears in as a candidate
   const relevantTemplates = templates.filter((t) =>
@@ -210,7 +216,10 @@ export function calculatePullValue(
   templates: TeamTemplate[],
   currentBreakdowns: TeamScoreBreakdown[],
   characterRecs: CharacterRecommendation[],
-  scoreAllTemplatesFn: (templates: TeamTemplate[], roster: CharacterInput[]) => TeamScoreBreakdown[],
+  scoreAllTemplatesFn: (
+    templates: TeamTemplate[],
+    roster: CharacterInput[],
+  ) => TeamScoreBreakdown[],
 ): PullScoreBreakdown {
   const { fiveStarKey, fourStarKeys } = banner;
   const ownedKeys = new Set(roster.map((c) => c.characterKey));
@@ -244,9 +253,7 @@ export function calculatePullValue(
 
   // ── 3. Synergy Bonus ──────────────────────────────────────────────────────
   // Top N invested characters by Character Intelligence rank (rank 1 = best)
-  const topInvestedKeys = characterRecs
-    .slice(0, TOP_N_FOR_SYNERGY)
-    .map((r) => r.characterKey);
+  const topInvestedKeys = characterRecs.slice(0, TOP_N_FOR_SYNERGY).map((r) => r.characterKey);
 
   const { bonus: synergyBonus, synergyWith } = calculateSynergyBonus(
     fiveStarKey,

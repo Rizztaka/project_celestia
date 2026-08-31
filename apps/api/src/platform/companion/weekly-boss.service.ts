@@ -152,7 +152,12 @@ export class WeeklyBossService {
    * The defeatedBossKeys array is treated as a set: toggling defeated=true
    * adds the key, defeated=false removes it. Idempotent.
    */
-  async patchBoss(userId: string, bossKey: string, rawBody: unknown, gameId: string = 'genshin'): Promise<BossUpdateResult> {
+  async patchBoss(
+    userId: string,
+    bossKey: string,
+    rawBody: unknown,
+    gameId: string = 'genshin',
+  ): Promise<BossUpdateResult> {
     // Validate request body
     const result = PatchBossSchema.safeParse(rawBody);
     if (!result.success) {

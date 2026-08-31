@@ -1,13 +1,16 @@
 # Feature: Pull Intelligence Engine (Milestone 4E)
 
 ## Goal
+
 Evaluate the current character and weapon banners to provide a personalized "Pull Value Score" for the user, based exclusively on their current roster, investments, and team gaps.
 
 ## Philosophy & ADR-0011 Adherence
+
 - **Deterministic**: The value of a banner character is derived purely from how many high-tier teams they enable for the user, and how well they synergize with the user's highest-invested characters.
 - **Separation of Concerns**: The engine must separate calculations (`pull-intelligence.calculator.ts`) from explanations (`pull-intelligence.explainer.ts`).
 
 ## Required Data
+
 1. **Banners Data (`banners.json`)**: A new static JSON file defining current or upcoming banners.
    ```json
    [
@@ -23,6 +26,7 @@ Evaluate the current character and weapon banners to provide a personalized "Pul
 3. **Character Intelligence Data**: Does this banner character pair well with a character the user has already heavily invested in?
 
 ## Calculation Rules (`pull-intelligence.calculator.ts`)
+
 A banner character's Base Pull Value is calculated as follows:
 
 1. **Roster Status (0 or -100)**:
@@ -38,12 +42,15 @@ A banner character's Base Pull Value is calculated as follows:
    - Do the 4-stars on the banner fill critical gaps (e.g., user lacks Xingqiu)? Add minor bonuses.
 
 ## Explanations (`pull-intelligence.explainer.ts`)
+
 Must map the score and bonuses to plain-language bullets:
+
 - "Pulling Hu Tao would unlock the S-Tier 'Vaporize Hu Tao' team (you already have Xingqiu and Zhongli built)."
 - "Highly synergistic with your most invested character (Yelan)."
 - "Skip: You already have this character and their early constellations are low-impact."
 
 ## API Response
+
 `GET /api/v1/games/genshin/intelligence/pulls`
 
 ```typescript

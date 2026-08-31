@@ -10,12 +10,14 @@ import type { CharacterRecommendation } from '../character-intelligence/characte
 
 const require = createRequire(import.meta.url);
 
-const characterMaterials: Record<string, CharacterMaterial> = require(
-  '../../static/character-materials.json',
-);
-const weaponMaterials: Record<string, WeaponMaterial> = require(
-  '../../static/weapon-materials.json',
-);
+const characterMaterials: Record<
+  string,
+  CharacterMaterial
+> = require('../../static/character-materials.json');
+const weaponMaterials: Record<
+  string,
+  WeaponMaterial
+> = require('../../static/weapon-materials.json');
 const domainSchedule: DomainSchedule = require('../../static/domain-schedule.json');
 
 // -------------------------------------------------------
@@ -189,9 +191,7 @@ export function filterAndScoreGoals(
   dayOfWeek: number,
   characterRankings: CharacterRecommendation[],
 ): ScoredGoal[] {
-  const scoreMap = new Map<string, number>(
-    characterRankings.map((r) => [r.characterKey, r.score]),
-  );
+  const scoreMap = new Map<string, number>(characterRankings.map((r) => [r.characterKey, r.score]));
 
   const result: ScoredGoal[] = [];
 

@@ -38,13 +38,57 @@ export interface PullSimulationResult {
 
 const STANDARD_5_STARS = ['Diluc', 'Jean', 'Mona', 'Qiqi', 'Keqing', 'Tighnari', 'Dehya'];
 const STANDARD_4_STARS = [
-  'Amber', 'Kaeya', 'Lisa', 'Barbara', 'Razor', 'Xiangling', 'Beidou', 'Xingqiu',
-  'Ningguang', 'Fischl', 'Bennett', 'Noelle', 'Chongyun', 'Sucrose', 'Diona', 'Xinyan',
-  'Rosaria', 'Yanfei', 'Sayu', 'KujouSara', 'Thoma', 'Gorou', 'YunJin', 'Collei',
-  'Dori', 'Candace', 'Layla', 'Faruzan', 'Yaoyao', 'Mika', 'Kaveh', 'Kirara',
-  'Lynette', 'Freminet', 'Charlotte', 'Chevreuse', 'Gaming', 'Sethos', 'Kachina'
+  'Amber',
+  'Kaeya',
+  'Lisa',
+  'Barbara',
+  'Razor',
+  'Xiangling',
+  'Beidou',
+  'Xingqiu',
+  'Ningguang',
+  'Fischl',
+  'Bennett',
+  'Noelle',
+  'Chongyun',
+  'Sucrose',
+  'Diona',
+  'Xinyan',
+  'Rosaria',
+  'Yanfei',
+  'Sayu',
+  'KujouSara',
+  'Thoma',
+  'Gorou',
+  'YunJin',
+  'Collei',
+  'Dori',
+  'Candace',
+  'Layla',
+  'Faruzan',
+  'Yaoyao',
+  'Mika',
+  'Kaveh',
+  'Kirara',
+  'Lynette',
+  'Freminet',
+  'Charlotte',
+  'Chevreuse',
+  'Gaming',
+  'Sethos',
+  'Kachina',
 ];
-const WEAPONS_3_STAR = ['Harbinger of Dawn', 'Slingshot', 'Thrilling Tales of Dragon Slayers', 'Black Tassel', 'Debate Club', 'Bloodtainted Greatsword', 'Cool Steel', 'Sharpshooter\'s Oath', 'Magic Guide'];
+const WEAPONS_3_STAR = [
+  'Harbinger of Dawn',
+  'Slingshot',
+  'Thrilling Tales of Dragon Slayers',
+  'Black Tassel',
+  'Debate Club',
+  'Bloodtainted Greatsword',
+  'Cool Steel',
+  "Sharpshooter's Oath",
+  'Magic Guide',
+];
 
 export class PullSimulatorService {
   private getBanner(bannerId: string): Banner {
@@ -56,7 +100,7 @@ export class PullSimulatorService {
   public simulatePulls(request: PullRequest): PullSimulationResult {
     const banner = this.getBanner(request.bannerId);
     const pulls: PullResultItem[] = [];
-    
+
     let pity5 = request.currentPity5;
     let pity4 = request.currentPity4;
     let guaranteed5 = request.guaranteed5;
@@ -79,10 +123,10 @@ export class PullSimulatorService {
       if (Math.random() <= prob5) {
         // We got a 5-star!
         const win5050 = guaranteed5 || Math.random() < 0.5;
-        const itemKey = win5050 
-          ? banner.fiveStarKey 
+        const itemKey = win5050
+          ? banner.fiveStarKey
           : STANDARD_5_STARS[Math.floor(Math.random() * STANDARD_5_STARS.length)];
-        
+
         pulls.push({
           id: Math.random().toString(36).substring(7),
           type: '5_STAR',
@@ -93,8 +137,8 @@ export class PullSimulatorService {
         // Reset state
         pity5 = 0;
         guaranteed5 = !win5050; // If we lost 50/50, next is guaranteed
-        // Pulling a 5-star doesn't reset 4-star pity in some games, but in Genshin it does if it replaces the 4-star roll? 
-        // Actually, in Genshin 4-star pity counts independently, but a 5-star doesn't reset it. 
+        // Pulling a 5-star doesn't reset 4-star pity in some games, but in Genshin it does if it replaces the 4-star roll?
+        // Actually, in Genshin 4-star pity counts independently, but a 5-star doesn't reset it.
         // For simplicity, we just continue.
         continue;
       }

@@ -54,9 +54,9 @@ describe('detectElementalSpecialist', () => {
 
   it('returns null when no single element reaches 40%', () => {
     const roster = [
-      makeChar({ characterKey: 'HuTao' }),       // Pyro
+      makeChar({ characterKey: 'HuTao' }), // Pyro
       makeChar({ characterKey: 'RaidenShogun' }), // Electro
-      makeChar({ characterKey: 'Xingqiu' }),      // Hydro
+      makeChar({ characterKey: 'Xingqiu' }), // Hydro
     ];
     expect(detectElementalSpecialist(roster, ELEMENT_MAP)).toBeNull();
   });
@@ -78,10 +78,10 @@ describe('detectElementalSpecialist', () => {
 
   it('ignores non-fully-built characters (ascension < 6)', () => {
     const roster = [
-      makeChar({ characterKey: 'HuTao' }),                              // Pyro, ascension 6
-      makeChar({ characterKey: 'Xiangling', ascension: 4 }),            // Pyro, ascension 4 — ignored
-      makeChar({ characterKey: 'RaidenShogun' }),                       // Electro, ascension 6
-      makeChar({ characterKey: 'Fischl' }),                             // Electro, ascension 6
+      makeChar({ characterKey: 'HuTao' }), // Pyro, ascension 6
+      makeChar({ characterKey: 'Xiangling', ascension: 4 }), // Pyro, ascension 4 — ignored
+      makeChar({ characterKey: 'RaidenShogun' }), // Electro, ascension 6
+      makeChar({ characterKey: 'Fischl' }), // Electro, ascension 6
     ];
     // Only ascension-6 chars: HuTao(Pyro), Raiden(Electro), Fischl(Electro)
     // Electro = 2/3 = 66% — should trigger
@@ -98,7 +98,9 @@ describe('detectElementalSpecialist', () => {
 
 describe('detectTalentNeglector', () => {
   it('returns null when no fully-ascended characters have low talents', () => {
-    const roster = [makeChar({ characterKey: 'HuTao', talentNormal: 8, talentSkill: 10, talentBurst: 9 })];
+    const roster = [
+      makeChar({ characterKey: 'HuTao', talentNormal: 8, talentSkill: 10, talentBurst: 9 }),
+    ];
     expect(detectTalentNeglector(roster)).toBeNull();
   });
 
@@ -115,8 +117,20 @@ describe('detectTalentNeglector', () => {
 
   it('picks the highest-level neglected character when multiple exist', () => {
     const roster = [
-      makeChar({ characterKey: 'HuTao', level: 80, talentNormal: 1, talentSkill: 1, talentBurst: 1 }),
-      makeChar({ characterKey: 'Bennett', level: 90, talentNormal: 2, talentSkill: 3, talentBurst: 2 }),
+      makeChar({
+        characterKey: 'HuTao',
+        level: 80,
+        talentNormal: 1,
+        talentSkill: 1,
+        talentBurst: 1,
+      }),
+      makeChar({
+        characterKey: 'Bennett',
+        level: 90,
+        talentNormal: 2,
+        talentSkill: 3,
+        talentBurst: 2,
+      }),
     ];
     const result = detectTalentNeglector(roster);
     expect(result!.subject).toBe('Bennett'); // level 90 > 80
@@ -190,11 +204,11 @@ describe('detectDiverseRoster', () => {
 
   it('detects diverse roster with ≥5 elements', () => {
     const roster = [
-      makeChar({ characterKey: 'HuTao', ascension: 4 }),         // Pyro
-      makeChar({ characterKey: 'RaidenShogun', ascension: 4 }),  // Electro
-      makeChar({ characterKey: 'Xingqiu', ascension: 4 }),       // Hydro
-      makeChar({ characterKey: 'Zhongli', ascension: 4 }),       // Geo
-      makeChar({ characterKey: 'Nahida', ascension: 4 }),        // Dendro
+      makeChar({ characterKey: 'HuTao', ascension: 4 }), // Pyro
+      makeChar({ characterKey: 'RaidenShogun', ascension: 4 }), // Electro
+      makeChar({ characterKey: 'Xingqiu', ascension: 4 }), // Hydro
+      makeChar({ characterKey: 'Zhongli', ascension: 4 }), // Geo
+      makeChar({ characterKey: 'Nahida', ascension: 4 }), // Dendro
       makeChar({ characterKey: 'KaedeharaKazuha', ascension: 4 }), // Anemo
     ];
     const result = detectDiverseRoster(roster, ELEMENT_MAP);
@@ -242,14 +256,24 @@ describe('explainInsight', () => {
   });
 
   it('generates a valid explanation for TALENT_NEGLECTOR', () => {
-    const explanation = explainInsight({ key: 'TALENT_NEGLECTOR', subject: 'HuTao', value: 3, valueAlt: 1 });
+    const explanation = explainInsight({
+      key: 'TALENT_NEGLECTOR',
+      subject: 'HuTao',
+      value: 3,
+      valueAlt: 1,
+    });
     expect(explanation.body).toContain('Hu Tao');
     expect(explanation.body).toContain('3');
     expect(explanation.iconKey).toBe('TALENT_NEGLECTOR');
   });
 
   it('generates a valid explanation for ARTIFACT_HOARDER', () => {
-    const explanation = explainInsight({ key: 'ARTIFACT_HOARDER', subject: 'artifacts', value: 110, valueAlt: 120 });
+    const explanation = explainInsight({
+      key: 'ARTIFACT_HOARDER',
+      subject: 'artifacts',
+      value: 110,
+      valueAlt: 120,
+    });
     expect(explanation.body).toContain('110');
     expect(explanation.iconKey).toBe('ARTIFACT_HOARDER');
   });
@@ -261,7 +285,11 @@ describe('explainInsight', () => {
   });
 
   it('generates a valid explanation for DIVERSE_ROSTER', () => {
-    const explanation = explainInsight({ key: 'DIVERSE_ROSTER', subject: 'Anemo, Cryo, Dendro, Electro, Pyro', value: 5 });
+    const explanation = explainInsight({
+      key: 'DIVERSE_ROSTER',
+      subject: 'Anemo, Cryo, Dendro, Electro, Pyro',
+      value: 5,
+    });
     expect(explanation.body).toContain('5');
     expect(explanation.iconKey).toBe('DIVERSE_ROSTER');
   });

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback,useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import EventCard from '../components/EventCard';
@@ -25,8 +25,8 @@ import {
   type UpgradeGoal,
   type WeeklyBossesResponse,
 } from '../lib/api';
-import { formatTimeUntilFull, MAX_RESIN,resinFullAt } from '../lib/resin';
-import { goalTypeLabel,phasesToLevelRange } from '../lib/static';
+import { formatTimeUntilFull, MAX_RESIN, resinFullAt } from '../lib/resin';
+import { goalTypeLabel, phasesToLevelRange } from '../lib/static';
 import { useAuthStore } from '../stores/auth.store';
 
 // -------------------------------------------------------

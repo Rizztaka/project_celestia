@@ -15,7 +15,13 @@ export class NikkeCharacterController {
   async addNikke(req: Request, res: Response, next: NextFunction) {
     try {
       const { characterKey, level, limitBreak, coreEnhance } = req.body;
-      const character = await nikkeCharacterService.addCharacter(req.user!.id, characterKey, level, limitBreak, coreEnhance);
+      const character = await nikkeCharacterService.addCharacter(
+        req.user!.id,
+        characterKey,
+        level,
+        limitBreak,
+        coreEnhance,
+      );
       res.status(201).json(successResponse(character, 'Character added'));
     } catch (error) {
       next(error);

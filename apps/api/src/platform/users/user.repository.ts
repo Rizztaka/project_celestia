@@ -1,4 +1,4 @@
-import type { Prisma,User } from '@prisma/client';
+import type { Prisma, User } from '@prisma/client';
 
 import { prisma } from '@/core/db/prisma.js';
 

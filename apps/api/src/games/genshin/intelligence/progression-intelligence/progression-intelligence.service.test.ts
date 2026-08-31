@@ -34,9 +34,9 @@ describe('Progression Intelligence Service', () => {
   it('should throw NotFoundError if account does not exist', async () => {
     (prisma.genshinAccount.findUnique as any).mockResolvedValue(null);
 
-    await expect(progressionIntelligenceService.analyzeProgression(MOCK_USER_ID))
-      .rejects
-      .toThrow(NotFoundError);
+    await expect(progressionIntelligenceService.analyzeProgression(MOCK_USER_ID)).rejects.toThrow(
+      NotFoundError,
+    );
   });
 
   it('should handle an empty roster safely (no divide by zero)', async () => {
@@ -47,29 +47,29 @@ describe('Progression Intelligence Service', () => {
     expect(result.rosterCompletion.owned).toBe(0);
     expect(result.rosterCompletion.percentage).toBe(0);
     expect(result.rosterCompletion.rank).toBe('Beginner');
-    
+
     expect(result.ascensionMaturity.highlyAscended).toBe(0);
     expect(result.ascensionMaturity.percentage).toBe(0);
-    
+
     expect(result.elementalSpread.length).toBe(0);
   });
 
   it('should calculate roster completion accurately based on static JSON size', async () => {
     const totalChars = Object.keys(ELEMENT_MAP).length;
-    
+
     // Mock a roster that is exactly 50% of the total characters
     const mockRoster = Array.from({ length: Math.floor(totalChars / 2) }).map((_, i) => ({
       characterKey: `Char${i}`,
       level: 1,
       ascension: 1,
       constellation: 0,
-      element: 'Pyro'
+      element: 'Pyro',
     }));
 
     (GenshinCharacterService.prototype.getCharactersForUser as any).mockResolvedValue(mockRoster);
 
     const result = await progressionIntelligenceService.analyzeProgression(MOCK_USER_ID);
-    
+
     expect(result.rosterCompletion.owned).toBe(mockRoster.length);
     expect(result.rosterCompletion.total).toBe(totalChars);
     expect(result.rosterCompletion.percentage).toBeGreaterThanOrEqual(49);
@@ -87,7 +87,7 @@ describe('Progression Intelligence Service', () => {
     (GenshinCharacterService.prototype.getCharactersForUser as any).mockResolvedValue(mockRoster);
 
     const result = await progressionIntelligenceService.analyzeProgression(MOCK_USER_ID);
-    
+
     expect(result.ascensionMaturity.highlyAscended).toBe(2);
     expect(result.ascensionMaturity.totalOwned).toBe(4);
     expect(result.ascensionMaturity.percentage).toBe(50);
@@ -100,21 +100,21 @@ describe('Progression Intelligence Service', () => {
       { characterKey: 'Diluc' }, // Pyro
       { characterKey: 'Amber' }, // Pyro
       { characterKey: 'Jean' }, // Anemo
-      { characterKey: 'MissingNo' } // Unknown
+      { characterKey: 'MissingNo' }, // Unknown
     ];
     (GenshinCharacterService.prototype.getCharactersForUser as any).mockResolvedValue(mockRoster);
 
     const result = await progressionIntelligenceService.analyzeProgression(MOCK_USER_ID);
-    
+
     expect(result.elementalSpread).toHaveLength(3);
-    
+
     // Should be sorted by count descending
     expect(result.elementalSpread[0].element).toBe('Pyro');
     expect(result.elementalSpread[0].count).toBe(2);
     expect(result.elementalSpread[0].percentage).toBe(50);
-    
+
     // Anemo and Unknown have 1 each
-    const otherElements = result.elementalSpread.slice(1).map(e => e.element);
+    const otherElements = result.elementalSpread.slice(1).map((e) => e.element);
     expect(otherElements).toContain('Anemo');
     expect(otherElements).toContain('Unknown');
   });

@@ -100,12 +100,7 @@ export async function upsertAbyssRun(input: CreateAbyssRunInput): Promise<AbyssR
 export async function findAbyssRunsByAccount(accountId: string): Promise<AbyssRunRecord[]> {
   return prisma.spiralAbyssRun.findMany({
     where: { accountId },
-    orderBy: [
-      { cycleId: 'desc' },
-      { floor: 'asc' },
-      { chamber: 'asc' },
-      { half: 'asc' },
-    ],
+    orderBy: [{ cycleId: 'desc' }, { floor: 'asc' }, { chamber: 'asc' }, { half: 'asc' }],
   });
 }
 

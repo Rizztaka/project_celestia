@@ -1,4 +1,4 @@
-import { beforeEach,describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // ── Mock prisma before the service is imported ─────────────────────────────
 vi.mock('@/core/db/prisma.js', () => ({
@@ -131,7 +131,7 @@ describe('CharacterIntelligenceService', () => {
     const trulyComplete = {
       ...furinaComplete,
       characterKey: 'Zhongli', // metaTier 1, priorityTalent skill
-      talentSkill: 9,          // above target 8, gap = 0 → sub2 = 0
+      talentSkill: 9, // above target 8, gap = 0 → sub2 = 0
     };
     // Zhongli: sub1=0 + sub2=0 (skill 9>=8) + sub3=20 + 0 = 20 → not skipped.
     // We need someone that genuinely scores < 20. Use metaTier 3 unknown with all talents >= 8.
@@ -203,7 +203,9 @@ describe('CharacterIntelligenceService', () => {
     const rec = result.recommendations.find((r) => r.characterKey === 'HuTao');
 
     expect(rec).toBeDefined();
-    expect(rec?.explanations.some((e) => e.includes('Staff Of Homa') && e.includes('Level 90'))).toBe(true);
+    expect(
+      rec?.explanations.some((e) => e.includes('Staff Of Homa') && e.includes('Level 90')),
+    ).toBe(true);
   });
 
   // ── Calculator unit tests (pure function, no mocking needed) ────────────
@@ -217,7 +219,12 @@ describe('CharacterIntelligenceService', () => {
       // sub5 = 0                   (level 60 ≠ cap 50 for asc 2)
       // total = 62
       const input = raidenNeglected;
-      const profile = { metaTier: 1, role: 'sub_dps', priorityTalent: 'burst', weaponRarity: 5 } as const;
+      const profile = {
+        metaTier: 1,
+        role: 'sub_dps',
+        priorityTalent: 'burst',
+        weaponRarity: 5,
+      } as const;
       const breakdown = calculateCharacterScore(input, profile);
       expect(breakdown.score).toBe(62);
       expect(breakdown.subScores.ascensionGap).toBe(12);
@@ -233,7 +240,12 @@ describe('CharacterIntelligenceService', () => {
       // sub5 = 0   (level 90 is cap for asc 6, but penalty only applies when asc < 6)
       // total = 20 — right at the threshold, so this IS recommended (score >= 20)
       const input = furinaComplete;
-      const profile = { metaTier: 1, role: 'support', priorityTalent: 'burst', weaponRarity: 5 } as const;
+      const profile = {
+        metaTier: 1,
+        role: 'support',
+        priorityTalent: 'burst',
+        weaponRarity: 5,
+      } as const;
       const breakdown = calculateCharacterScore(input, profile);
       expect(breakdown.score).toBe(20);
       // Label should be COMPLETE since no meaningful investment gap exists,
@@ -243,14 +255,24 @@ describe('CharacterIntelligenceService', () => {
 
     it('applies the weapon-mismatch sub-score when a high-level weapon is on a low-level character', () => {
       const input = huTaoWeaponMismatch;
-      const profile = { metaTier: 1, role: 'dps', priorityTalent: 'skill', weaponRarity: 5 } as const;
+      const profile = {
+        metaTier: 1,
+        role: 'dps',
+        priorityTalent: 'skill',
+        weaponRarity: 5,
+      } as const;
       const breakdown = calculateCharacterScore(input, profile);
       expect(breakdown.subScores.weaponMismatch).toBe(15);
     });
 
     it('applies the level-cap-hit penalty when the character is exactly at their ascension cap', () => {
       const cappedChar = { ...raidenNeglected, level: 40, ascension: 1 }; // lvl 40 = cap for asc 1
-      const profile = { metaTier: 2, role: 'support', priorityTalent: 'burst', weaponRarity: 4 } as const;
+      const profile = {
+        metaTier: 2,
+        role: 'support',
+        priorityTalent: 'burst',
+        weaponRarity: 4,
+      } as const;
       const breakdown = calculateCharacterScore(cappedChar, profile);
       expect(breakdown.subScores.levelCapHit).toBe(-5);
     });
@@ -264,13 +286,23 @@ describe('CharacterIntelligenceService', () => {
         talentBurst: 1,
         equippedWeapon: { weaponKey: 'Foo', level: 90, refinement: 1 },
       };
-      const profile = { metaTier: 1, role: 'dps', priorityTalent: 'burst', weaponRarity: 5 } as const;
+      const profile = {
+        metaTier: 1,
+        role: 'dps',
+        priorityTalent: 'burst',
+        weaponRarity: 5,
+      } as const;
       const breakdown = calculateCharacterScore(worstCase, profile);
       expect(breakdown.score).toBeLessThanOrEqual(100);
     });
 
     it('produces identical scores for identical inputs (deterministic)', () => {
-      const profile = { metaTier: 1, role: 'sub_dps', priorityTalent: 'burst', weaponRarity: 5 } as const;
+      const profile = {
+        metaTier: 1,
+        role: 'sub_dps',
+        priorityTalent: 'burst',
+        weaponRarity: 5,
+      } as const;
       const a = calculateCharacterScore(raidenNeglected, profile);
       const b = calculateCharacterScore(raidenNeglected, profile);
       expect(a.score).toBe(b.score);

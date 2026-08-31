@@ -15,7 +15,11 @@ export class NikkeAccountController {
   async createMyAccount(req: Request, res: Response, next: NextFunction) {
     try {
       const { commanderName, commanderLevel } = req.body;
-      const account = await nikkeAccountService.createAccount(req.user!.id, commanderName, commanderLevel);
+      const account = await nikkeAccountService.createAccount(
+        req.user!.id,
+        commanderName,
+        commanderLevel,
+      );
       res.status(201).json(successResponse(account, 'Account created'));
     } catch (error) {
       next(error);

@@ -6,10 +6,7 @@ import { NotFoundError } from '@/core/errors/app-error.js';
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
 import { GenshinCharacterService } from '../../characters/character.service.js';
 import type { CharacterInput } from '../character-intelligence/character-intelligence.calculator.js';
-import {
-  type KnowledgeInsightData,
-  runAllAnalyzers,
-} from './knowledge-intelligence.calculator.js';
+import { type KnowledgeInsightData, runAllAnalyzers } from './knowledge-intelligence.calculator.js';
 import { explainInsight } from './knowledge-intelligence.explainer.js';
 
 // -------------------------------------------------------
@@ -128,9 +125,7 @@ export class KnowledgeIntelligenceService {
     // ── 1. Verify Genshin account ─────────────────────────────────────────
     const account = await prisma.genshinAccount.findUnique({ where: { userId } });
     if (!account) {
-      throw new NotFoundError(
-        'No Genshin Impact account found. Please import your data first.',
-      );
+      throw new NotFoundError('No Genshin Impact account found. Please import your data first.');
     }
 
     // ── 2. Fetch roster ───────────────────────────────────────────────────

@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { ApiError,fetchApi } from '../lib/api';
+import { ApiError, fetchApi } from '../lib/api';
 import { useAuthStore } from '../stores/auth.store';
 
 function ProfilePage() {

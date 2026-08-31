@@ -429,10 +429,7 @@ export async function patchWeeklyBoss(
 // ============================================================
 
 export type RecommendationLabel =
-  | 'ASCEND_AND_LEVEL'
-  | 'LEVEL_TALENTS'
-  | 'CLOSE_LEVEL_GAP'
-  | 'COMPLETE';
+  'ASCEND_AND_LEVEL' | 'LEVEL_TALENTS' | 'CLOSE_LEVEL_GAP' | 'COMPLETE';
 
 export interface CharacterRecommendation {
   characterKey: string;
@@ -923,10 +920,13 @@ export async function fetchNikkeAccount(): Promise<NikkeAccount> {
   return fetchApi<NikkeAccount>('/games/nikke/accounts/me');
 }
 
-export async function createNikkeAccount(payload: { commanderName?: string, commanderLevel?: number }): Promise<NikkeAccount> {
+export async function createNikkeAccount(payload: {
+  commanderName?: string;
+  commanderLevel?: number;
+}): Promise<NikkeAccount> {
   return fetchApi<NikkeAccount>('/games/nikke/accounts/me', {
     method: 'POST',
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   });
 }
 
@@ -934,9 +934,14 @@ export async function fetchNikkeRoster(): Promise<NikkeCharacter[]> {
   return fetchApi<NikkeCharacter[]>('/games/nikke/characters');
 }
 
-export async function addNikkeToRoster(payload: { characterKey: string, level?: number, limitBreak?: number, coreEnhance?: number }): Promise<NikkeCharacter> {
+export async function addNikkeToRoster(payload: {
+  characterKey: string;
+  level?: number;
+  limitBreak?: number;
+  coreEnhance?: number;
+}): Promise<NikkeCharacter> {
   return fetchApi<NikkeCharacter>('/games/nikke/characters', {
     method: 'POST',
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   });
 }

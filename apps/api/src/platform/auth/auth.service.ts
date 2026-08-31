@@ -1,4 +1,4 @@
-import type { LoginInput,RegisterInput } from '@celestia/api-contracts';
+import type { LoginInput, RegisterInput } from '@celestia/api-contracts';
 import type { User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';

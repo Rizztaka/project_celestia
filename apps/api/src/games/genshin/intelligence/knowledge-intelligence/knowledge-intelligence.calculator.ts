@@ -68,24 +68,16 @@ export function detectElementalSpecialist(
  * TALENT_NEGLECTOR
  * Finds the most-neglected character: ascended to 6 but all talents ≤ 4.
  */
-export function detectTalentNeglector(
-  roster: CharacterInput[],
-): KnowledgeInsightData | null {
+export function detectTalentNeglector(roster: CharacterInput[]): KnowledgeInsightData | null {
   const neglected = roster.filter(
-    (c) =>
-      c.ascension >= 6 &&
-      c.talentNormal <= 4 &&
-      c.talentSkill <= 4 &&
-      c.talentBurst <= 4,
+    (c) => c.ascension >= 6 && c.talentNormal <= 4 && c.talentSkill <= 4 && c.talentBurst <= 4,
   );
 
   if (neglected.length === 0) return null;
 
   // Pick the one with highest level (most "obvious" neglect)
   const worst = neglected.reduce((a, b) => (a.level > b.level ? a : b));
-  const avgTalent = Math.round(
-    (worst.talentNormal + worst.talentSkill + worst.talentBurst) / 3,
-  );
+  const avgTalent = Math.round((worst.talentNormal + worst.talentSkill + worst.talentBurst) / 3);
 
   return {
     key: 'TALENT_NEGLECTOR',
@@ -119,9 +111,7 @@ export function detectArtifactHoarder(
  * MAX_CONSTELLATION
  * Detects if the user has any C6 character.
  */
-export function detectMaxConstellation(
-  roster: CharacterInput[],
-): KnowledgeInsightData | null {
+export function detectMaxConstellation(roster: CharacterInput[]): KnowledgeInsightData | null {
   const c6 = roster.filter((c) => c.constellation === 6);
   if (c6.length === 0) return null;
 

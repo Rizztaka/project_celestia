@@ -1,4 +1,4 @@
-import { loginSchema,registerSchema } from '@celestia/api-contracts';
+import { loginSchema, registerSchema } from '@celestia/api-contracts';
 import type { Request, Response } from 'express';
 
 import { successResponse } from '@/core/utils/response.js';

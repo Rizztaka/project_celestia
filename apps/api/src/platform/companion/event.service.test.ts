@@ -1,4 +1,4 @@
-import { beforeEach,describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BadRequestError, NotFoundError } from '@/core/errors/app-error.js';
 
@@ -30,8 +30,18 @@ describe('EventService', () => {
   let service: EventService;
 
   beforeEach(() => {
+    // Freeze the system clock inside the EchoesOfTheDeep5.8 validity window
+    // (2026-08-06T10:00:00Z – 2026-08-25T14:59:59Z) so the event is always
+    // "active" regardless of when the tests are run.
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-08-10T12:00:00Z'));
     vi.clearAllMocks();
     service = new EventService();
+  });
+
+  afterEach(() => {
+    // Restore real timers to prevent leakage into other test files.
+    vi.useRealTimers();
   });
 
   // ─────────────────────────────────────────────────────

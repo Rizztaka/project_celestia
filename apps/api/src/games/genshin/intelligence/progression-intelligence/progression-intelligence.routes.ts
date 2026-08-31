@@ -8,7 +8,7 @@ const router = Router();
 router.get(
   '/intelligence/progression',
   requireAuth,
-  progressionIntelligenceController.getProgressionAnalysis
+  progressionIntelligenceController.getProgressionAnalysis,
 );
 
 export { router as progressionIntelligenceRoutes };

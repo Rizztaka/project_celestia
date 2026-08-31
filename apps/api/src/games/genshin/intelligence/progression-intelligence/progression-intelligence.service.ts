@@ -45,7 +45,8 @@ export class ProgressionIntelligenceService {
     const owned = roster.length;
 
     // 1. Roster Completion
-    const completionPercentage = totalAvailableCharacters > 0 ? (owned / totalAvailableCharacters) * 100 : 0;
+    const completionPercentage =
+      totalAvailableCharacters > 0 ? (owned / totalAvailableCharacters) * 100 : 0;
     let completionRank = 'Beginner';
     if (completionPercentage >= 90) completionRank = 'Archon of Collecting';
     else if (completionPercentage >= 70) completionRank = 'Veteran Collector';

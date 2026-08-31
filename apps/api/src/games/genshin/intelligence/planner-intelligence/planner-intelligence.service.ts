@@ -3,10 +3,7 @@ import { NotFoundError, UnprocessableError } from '@/core/errors/app-error.js';
 import { DailyCompanionService } from '@/platform/companion/companion.service.js';
 
 import { CharacterIntelligenceService } from '../character-intelligence/character-intelligence.service.js';
-import {
-  allocateResin,
-  filterAndScoreGoals,
-} from './planner-intelligence.calculator.js';
+import { allocateResin, filterAndScoreGoals } from './planner-intelligence.calculator.js';
 import { explainRouteItem } from './planner-intelligence.explainer.js';
 
 // -------------------------------------------------------
@@ -101,17 +98,12 @@ export class PlannerIntelligenceService {
     // ── 1. Verify Genshin account exists ─────────────────────────────────
     const account = await prisma.genshinAccount.findUnique({ where: { userId } });
     if (!account) {
-      throw new NotFoundError(
-        'No Genshin Impact account found. Please import your data first.',
-      );
+      throw new NotFoundError('No Genshin Impact account found. Please import your data first.');
     }
 
     // ── 2. Fetch resin (projected from checkpoint) ────────────────────────
     const companion = await this.companionService.getDailyState(userId);
-    const currentResin = projectCurrentResin(
-      companion.resinAmount,
-      companion.resinUpdatedAt,
-    );
+    const currentResin = projectCurrentResin(companion.resinAmount, companion.resinUpdatedAt);
 
     // ── 3. Fetch upgrade goals ────────────────────────────────────────────
     const goals = await prisma.upgradeGoal.findMany({ where: { userId } });

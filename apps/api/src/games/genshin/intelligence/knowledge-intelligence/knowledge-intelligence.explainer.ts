@@ -29,9 +29,10 @@ export function explainInsight(insight: KnowledgeInsightData): InsightExplanatio
     case 'TALENT_NEGLECTOR':
       return {
         title: 'The Forgotten One',
-        body: insight.valueAlt && insight.valueAlt > 1
-          ? `You have ${insight.valueAlt} maxed-out characters whose talents have barely been touched. ${name} is the most glaring example — fully ascended, but with an average talent level of only ${insight.value}. The Akasha System disapproves.`
-          : `${name} is fully ascended but their talents average only level ${insight.value}. A true powerhouse left untapped — the Akasha System disapproves!`,
+        body:
+          insight.valueAlt && insight.valueAlt > 1
+            ? `You have ${insight.valueAlt} maxed-out characters whose talents have barely been touched. ${name} is the most glaring example — fully ascended, but with an average talent level of only ${insight.value}. The Akasha System disapproves.`
+            : `${name} is fully ascended but their talents average only level ${insight.value}. A true powerhouse left untapped — the Akasha System disapproves!`,
         iconKey: 'TALENT_NEGLECTOR',
       };
 
@@ -45,9 +46,10 @@ export function explainInsight(insight: KnowledgeInsightData): InsightExplanatio
     case 'MAX_CONSTELLATION':
       return {
         title: 'Dedicated Summoner',
-        body: insight.value > 1
-          ? `You've reached C6 on ${insight.value} characters, including ${name}. The Primogems spent... we do not speak of it.`
-          : `${name} has reached their full potential at C6. The Primogems spent to get here could fund a small nation.`,
+        body:
+          insight.value > 1
+            ? `You've reached C6 on ${insight.value} characters, including ${name}. The Primogems spent... we do not speak of it.`
+            : `${name} has reached their full potential at C6. The Primogems spent to get here could fund a small nation.`,
         iconKey: 'MAX_CONSTELLATION',
       };
 

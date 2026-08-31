@@ -2,22 +2,29 @@ $ vitest run
 
 [1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mD:/Genshin Personal/project-celestia/apps/api[39m
 
- [32m✓[39m src/core/middleware/auth.middleware.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 32[2mms[22m[39m
- [32m✓[39m src/platform/companion/event.service.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/platform/companion/goal.service.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m src/platform/companion/weekly-boss.service.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 22[2mms[22m[39m
- [32m✓[39m src/games/genshin/importer/importer.service.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 30[2mms[22m[39m
- [32m✓[39m src/games/genshin/intelligence/character-intelligence/character-intelligence.service.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m src/games/genshin/intelligence/team-intelligence/team-intelligence.service.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 19[2mms[22m[39m
- [32m✓[39m src/games/genshin/characters/character.service.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 17[2mms[22m[39m
- [32m✓[39m src/games/genshin/artifacts/artifact.service.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/games/genshin/weapons/weapon.service.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/platform/auth/auth.service.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 27[2mms[22m[39m
- [32m✓[39m src/platform/users/user.service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/games/genshin/accounts/account.service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/games/genshin/simulators/pull-simulator.service.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m src/core/middleware/auth.middleware.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 59[2mms[22m[39m
+ [32m✓[39m src/games/genshin/weapons/weapon.service.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/games/genshin/endgame/endgame.service.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/platform/companion/event.service.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/platform/companion/weekly-boss.service.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/games/genshin/importer/importer.service.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/games/genshin/intelligence/team-intelligence/team-intelligence.service.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.service.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/games/genshin/characters/character.service.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/platform/auth/auth.service.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/games/genshin/artifacts/artifact.service.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/games/genshin/intelligence/character-intelligence/character-intelligence.service.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/platform/companion/goal.service.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.service.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/platform/users/user.service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/games/genshin/accounts/account.service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
 
-[2m Test Files [22m [1m[32m13 passed[39m[22m[90m (13)[39m
-[2m      Tests [22m [1m[32m144 passed[39m[22m[90m (144)[39m
-[2m   Start at [22m 22:07:15
-[2m   Duration [22m 2.27s[2m (transform 1.63s, setup 0ms, collect 5.30s, tests 238ms, environment 4ms, prepare 6.20s)[22m
+[2m Test Files [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+[2m      Tests [22m [1m[32m254 passed[39m[22m[90m (254)[39m
+[2m   Start at [22m 19:56:10
+[2m   Duration [22m 4.30s[2m (transform 4.54s, setup 0ms, collect 10.30s, tests 564ms, environment 7ms, prepare 15.15s)[22m
 

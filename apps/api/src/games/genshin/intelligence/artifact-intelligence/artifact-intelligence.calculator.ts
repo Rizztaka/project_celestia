@@ -82,9 +82,13 @@ export function calculateSlotScore(
 
   // 2. Check main stat bonus
   let mainStatBonus = 0;
-  const isSandsMatch = artifact.slotKey === 'sands' && profile.mainStatPriority.sands.includes(artifact.mainStatKey);
-  const isGobletMatch = artifact.slotKey === 'goblet' && profile.mainStatPriority.goblet.includes(artifact.mainStatKey);
-  const isCircletMatch = artifact.slotKey === 'circlet' && profile.mainStatPriority.circlet.includes(artifact.mainStatKey);
+  const isSandsMatch =
+    artifact.slotKey === 'sands' && profile.mainStatPriority.sands.includes(artifact.mainStatKey);
+  const isGobletMatch =
+    artifact.slotKey === 'goblet' && profile.mainStatPriority.goblet.includes(artifact.mainStatKey);
+  const isCircletMatch =
+    artifact.slotKey === 'circlet' &&
+    profile.mainStatPriority.circlet.includes(artifact.mainStatKey);
 
   if (isSandsMatch || isGobletMatch || isCircletMatch) {
     mainStatBonus = MAIN_STAT_BONUS;

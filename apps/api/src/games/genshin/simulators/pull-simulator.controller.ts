@@ -16,13 +16,13 @@ export const pullSimulatorController = {
   simulatePulls(req: Request, res: Response) {
     try {
       const { bannerId, count, currentPity5, currentPity4, guaranteed5, guaranteed4 } = req.body;
-      
+
       if (!bannerId) {
         return res.status(400).json({ success: false, error: 'bannerId is required' });
       }
-      
+
       const parsedCount = parseInt(count) || 1;
-      
+
       const request = {
         bannerId: String(bannerId),
         count: parsedCount,
@@ -44,5 +44,5 @@ export const pullSimulatorController = {
         error: err.message || 'Unknown error occurred in simulation',
       });
     }
-  }
+  },
 };

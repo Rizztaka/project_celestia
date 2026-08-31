@@ -1,5 +1,5 @@
 import type { GenshinAccount } from '@prisma/client';
-import { beforeEach,describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
 

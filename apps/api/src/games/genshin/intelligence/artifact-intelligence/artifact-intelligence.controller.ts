@@ -14,6 +14,8 @@ export class ArtifactIntelligenceController {
   getRecommendations = async (req: Request, res: Response) => {
     const userId = req.user!.id; // Guaranteed by requireAuth middleware
     const result = await this.service.getRecommendations(userId);
-    res.status(200).json(successResponse(result, 'Artifact recommendations generated successfully'));
+    res
+      .status(200)
+      .json(successResponse(result, 'Artifact recommendations generated successfully'));
   };
 }

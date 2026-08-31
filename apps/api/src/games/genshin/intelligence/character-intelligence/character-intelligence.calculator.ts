@@ -4,15 +4,15 @@
 
 export interface CharacterInput {
   characterKey: string;
-  level: number;        // 1–90
-  ascension: number;    // 0–6
+  level: number; // 1–90
+  ascension: number; // 0–6
   constellation: number; // 0–6
   talentNormal: number; // 1–10 (base, before C3/C5 bonus)
-  talentSkill: number;  // 1–10
-  talentBurst: number;  // 1–10
+  talentSkill: number; // 1–10
+  talentBurst: number; // 1–10
   equippedWeapon: {
     weaponKey: string;
-    level: number;      // 1–90
+    level: number; // 1–90
     refinement: number; // 1–5
   } | null;
 }
@@ -27,20 +27,17 @@ export interface StaticCharacterProfile {
 export interface ScoreBreakdown {
   score: number;
   subScores: {
-    ascensionGap: number;   // 0–35
-    talentNeglect: number;  // 0–30
-    metaWeight: number;     // 0–20
+    ascensionGap: number; // 0–35
+    talentNeglect: number; // 0–30
+    metaWeight: number; // 0–20
     weaponMismatch: number; // 0–15
-    levelCapHit: number;    // 0 or –5
+    levelCapHit: number; // 0 or –5
   };
   recommendationLabel: RecommendationLabel;
 }
 
 export type RecommendationLabel =
-  | 'ASCEND_AND_LEVEL'
-  | 'LEVEL_TALENTS'
-  | 'CLOSE_LEVEL_GAP'
-  | 'COMPLETE';
+  'ASCEND_AND_LEVEL' | 'LEVEL_TALENTS' | 'CLOSE_LEVEL_GAP' | 'COMPLETE';
 
 // -------------------------------------------------------
 // Internal helpers

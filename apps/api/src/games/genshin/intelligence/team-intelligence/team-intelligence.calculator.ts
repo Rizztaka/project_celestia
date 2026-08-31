@@ -30,8 +30,8 @@ export interface TemplateRoleResult {
   roleId: string;
   label: string;
   element: string | null;
-  filledBy: string | null;        // characterKey, or null if no candidate in roster
-  investmentScore: number;        // 0–100 (simplified, ascension + talents only)
+  filledBy: string | null; // characterKey, or null if no candidate in roster
+  investmentScore: number; // 0–100 (simplified, ascension + talents only)
   isRequired: boolean;
   flex: boolean;
   weight: number;
@@ -39,11 +39,11 @@ export interface TemplateRoleResult {
 
 export interface TeamScoreBreakdown {
   templateId: string;
-  score: number;                  // 0–100, clamped
+  score: number; // 0–100, clamped
   subScores: {
-    roleCoverage: number;         // 0–50
-    investmentLevel: number;      // 0–30
-    resonanceBonus: number;       // 0–12
+    roleCoverage: number; // 0–50
+    investmentLevel: number; // 0–30
+    resonanceBonus: number; // 0–12
     reactionCompleteness: number; // 0–8
   };
   roles: TemplateRoleResult[];
@@ -95,14 +95,9 @@ function characterInvestmentScore(character: CharacterInput): number {
  * qualifies for. A character can fill at most one role per team (deduplication).
  * Roles are processed in descending weight order to maximize the total score.
  */
-function assignRoles(
-  template: TeamTemplate,
-  roster: CharacterInput[],
-): TemplateRoleResult[] {
+function assignRoles(template: TeamTemplate, roster: CharacterInput[]): TemplateRoleResult[] {
   // Build a map from characterKey → CharacterInput for O(1) lookups.
-  const rosterMap = new Map<string, CharacterInput>(
-    roster.map((c) => [c.characterKey, c]),
-  );
+  const rosterMap = new Map<string, CharacterInput>(roster.map((c) => [c.characterKey, c]));
 
   // Sort roles by weight descending so the most important slots are filled first.
   const sortedRoles = [...template.roles].sort((a, b) => b.weight - a.weight);
@@ -204,9 +199,7 @@ export function calculateTeamScore(
   const roles = assignRoles(template, roster);
 
   // ── Buildability gate ─────────────────────────────────────────────────────
-  const isBuildable = roles
-    .filter((r) => r.isRequired)
-    .every((r) => r.filledBy !== null);
+  const isBuildable = roles.filter((r) => r.isRequired).every((r) => r.filledBy !== null);
 
   // ── Sub-score 1: Role Coverage (max 50) ───────────────────────────────────
   const totalWeight = template.roles.reduce((sum, r) => sum + r.weight, 0);
@@ -214,9 +207,7 @@ export function calculateTeamScore(
     .filter((r) => r.filledBy !== null)
     .reduce((sum, r) => sum + r.weight, 0);
 
-  const roleCoverage = totalWeight > 0
-    ? Math.round((filledWeight / totalWeight) * 50)
-    : 0;
+  const roleCoverage = totalWeight > 0 ? Math.round((filledWeight / totalWeight) * 50) : 0;
 
   // ── Sub-score 2: Investment Level (max 30) ────────────────────────────────
   const filledRoles = roles.filter((r) => r.filledBy !== null);
@@ -232,9 +223,7 @@ export function calculateTeamScore(
 
   // ── Sub-score 4: Reaction Completeness (max 8) ────────────────────────────
   const filledElements = new Set(
-    roles
-      .filter((r) => r.filledBy !== null && r.element !== null)
-      .map((r) => r.element as string),
+    roles.filter((r) => r.filledBy !== null && r.element !== null).map((r) => r.element as string),
   );
 
   const reactionElements = template.reactionElements;

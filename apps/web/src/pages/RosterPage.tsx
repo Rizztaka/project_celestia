@@ -59,12 +59,12 @@ function CharacterCard({ character }: { character: RosterCharacter }) {
       <div className="flex items-center gap-4">
         {/* Avatar circle */}
         <div
-          className={`font-display relative flex h-12 w-12 shrink-0 select-none items-center justify-center rounded-xl border-2 text-sm font-bold overflow-hidden transition-all ${colorClass} ${glowClass}`}
+          className={`font-display relative flex h-12 w-12 shrink-0 select-none items-center justify-center overflow-hidden rounded-xl border-2 text-sm font-bold transition-all ${colorClass} ${glowClass}`}
         >
-          <img 
-            src={`https://enka.network/ui/UI_AvatarIcon_${ASSET_MAPPING.characters[character.characterKey] || character.characterKey}.png`} 
-            alt={displayName} 
-            className="absolute inset-0 w-full h-full object-cover"
+          <img
+            src={`https://enka.network/ui/UI_AvatarIcon_${ASSET_MAPPING.characters[character.characterKey] || character.characterKey}.png`}
+            alt={displayName}
+            className="absolute inset-0 h-full w-full object-cover"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = 'none';
             }}
@@ -135,7 +135,12 @@ function WeaponChip({ weapon }: { weapon: RosterWeapon | null }) {
     return (
       <div className="flex items-center gap-2 text-xs text-zinc-600">
         <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+          />
         </svg>
         <span>No weapon equipped</span>
       </div>
@@ -145,20 +150,30 @@ function WeaponChip({ weapon }: { weapon: RosterWeapon | null }) {
   return (
     <div className="flex items-center gap-2">
       <div className="relative flex h-5 w-5 shrink-0 items-center justify-center">
-        <img 
-          src={`https://enka.network/ui/UI_EquipIcon_${ASSET_MAPPING.weapons[weapon.weaponKey] || weapon.weaponKey}.png`} 
+        <img
+          src={`https://enka.network/ui/UI_EquipIcon_${ASSET_MAPPING.weapons[weapon.weaponKey] || weapon.weaponKey}.png`}
           alt={weapon.weaponKey}
-          className="absolute inset-0 w-full h-full object-contain z-10"
+          className="absolute inset-0 z-10 h-full w-full object-contain"
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = 'none';
           }}
         />
-        <svg className="relative z-0 h-4 w-4 shrink-0 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.25 2.25L21.75 9.75M19.5 4.5L4.5 19.5M4.5 19.5l-2.25 2.25M4.5 19.5l7.5-7.5" />
+        <svg
+          className="relative z-0 h-4 w-4 shrink-0 text-amber-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M14.25 2.25L21.75 9.75M19.5 4.5L4.5 19.5M4.5 19.5l-2.25 2.25M4.5 19.5l7.5-7.5"
+          />
         </svg>
       </div>
       <div className="flex flex-col">
-        <span className="font-display group-hover:text-amber-400 text-sm font-bold text-white transition-colors">
+        <span className="font-display text-sm font-bold text-white transition-colors group-hover:text-amber-400">
           {formatName(weapon.weaponKey)}
         </span>
         <div className="flex items-center gap-2 text-xs">

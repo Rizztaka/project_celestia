@@ -6,11 +6,7 @@
       "name": "Song on the Frozen Wind",
       "type": "CHARACTER",
       "fiveStarKey": "Odette",
-      "fourStarKeys": [
-        "Shenhe",
-        "Rosaria",
-        "Layla"
-      ],
+      "fourStarKeys": ["Shenhe", "Rosaria", "Layla"],
       "endDate": "2026-09-10T23:59:59Z"
     }
   ]

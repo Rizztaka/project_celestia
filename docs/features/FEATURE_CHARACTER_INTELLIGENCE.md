@@ -12,8 +12,8 @@
 Analyse a user's imported Genshin roster and produce a prioritised list of characters they
 should build next, along with plain-language explanations for every recommendation.
 
-The engine answers the question: *"Which character will yield the greatest account-wide
-improvement if I invest in them today?"*
+The engine answers the question: _"Which character will yield the greatest account-wide
+improvement if I invest in them today?"_
 
 ---
 
@@ -91,10 +91,10 @@ Authorization: Bearer <JWT>
 
 ### Error Responses
 
-| Status | Code | Condition |
-|--------|------|-----------|
-| `404` | `ACCOUNT_NOT_FOUND` | User has no imported Genshin account |
-| `422` | `ROSTER_EMPTY` | Account exists but has zero characters |
+| Status | Code                | Condition                              |
+| ------ | ------------------- | -------------------------------------- |
+| `404`  | `ACCOUNT_NOT_FOUND` | User has no imported Genshin account   |
+| `422`  | `ROSTER_EMPTY`      | Account exists but has zero characters |
 
 ---
 
@@ -108,21 +108,21 @@ Authorization: Bearer <JWT>
 ```typescript
 interface CharacterInput {
   characterKey: string;
-  level: number;           // 1–90
-  ascension: number;       // 0–6
-  constellation: number;   // 0–6
-  talentNormal: number;    // 1–10 (base)
-  talentSkill: number;     // 1–10 (base)
-  talentBurst: number;     // 1–10 (base)
+  level: number; // 1–90
+  ascension: number; // 0–6
+  constellation: number; // 0–6
+  talentNormal: number; // 1–10 (base)
+  talentSkill: number; // 1–10 (base)
+  talentBurst: number; // 1–10 (base)
   equippedWeapon: {
     weaponKey: string;
-    level: number;         // 1–90
-    refinement: number;    // 1–5
+    level: number; // 1–90
+    refinement: number; // 1–5
   } | null;
 }
 
 interface StaticCharacterProfile {
-  metaTier: 1 | 2 | 3;         // 1 = SS/S, 2 = A, 3 = B or below
+  metaTier: 1 | 2 | 3; // 1 = SS/S, 2 = A, 3 = B or below
   role: 'dps' | 'sub_dps' | 'support' | 'healer';
   priorityTalent: 'normal' | 'skill' | 'burst';
   weaponRarity: 4 | 5;
@@ -147,14 +147,14 @@ score += min(35, ascensionGap × 12)
 **`expectedAscension(level)` lookup table:**
 
 | Level range | Expected ascension |
-|---|---|
-| 1–20 | 0 |
-| 21–40 | 1 |
-| 41–50 | 2 |
-| 51–60 | 3 |
-| 61–70 | 4 |
-| 71–80 | 5 |
-| 81–90 | 6 |
+| ----------- | ------------------ |
+| 1–20        | 0                  |
+| 21–40       | 1                  |
+| 41–50       | 2                  |
+| 51–60       | 3                  |
+| 61–70       | 4                  |
+| 71–80       | 5                  |
+| 81–90       | 6                  |
 
 ---
 
@@ -220,12 +220,12 @@ score    = clamp(rawScore, 0, 100)
 
 ### Recommendation Label
 
-| Condition | Label |
-|---|---|
-| `sub1 >= 24` (ascension gap ≥ 2) | `"ASCEND_AND_LEVEL"` |
-| `sub2 >= 20` and `sub1 < 24` | `"LEVEL_TALENTS"` |
-| `sub4 >= 8` and both gaps small | `"CLOSE_LEVEL_GAP"` |
-| `score < 20` | → appears in `skipped[]`, not `recommendations[]` |
+| Condition                        | Label                                             |
+| -------------------------------- | ------------------------------------------------- |
+| `sub1 >= 24` (ascension gap ≥ 2) | `"ASCEND_AND_LEVEL"`                              |
+| `sub2 >= 20` and `sub1 < 24`     | `"LEVEL_TALENTS"`                                 |
+| `sub4 >= 8` and both gaps small  | `"CLOSE_LEVEL_GAP"`                               |
+| `score < 20`                     | → appears in `skipped[]`, not `recommendations[]` |
 
 ---
 
@@ -251,19 +251,23 @@ It is the **only** place where prose strings are generated.
 ### Explanation Templates (per sub-score)
 
 **Ascension Gap:**
+
 > `"{name} is Level {level} but only Ascension {ascension} — ascending them will raise their stats and unlock a higher level cap."`
 
 **Talent Neglect:**
+
 > `"{name}'s {priorityTalentLabel} talent is Level {talentLevel}. Raising it to 8+ is one of the highest-ROI investments for this character."`
 > `"As a {role}, their {priorityTalentLabel} directly scales their primary contribution to a team."`
 
 **Meta Weight (only when metaTier === 1):**
+
 > `"{name} is a tier-1 {role} used in a wide variety of endgame team compositions."`
 
 **Weapon Mismatch:**
+
 > `"{name} is equipped with {weaponName} (Level {wLevel}) but is only Level {cLevel} — ascending the character will let their weapon's stats land properly."`
 
-**Level Cap Hit:** *(no bullet — the ascension sub-score already covers this)*
+**Level Cap Hit:** _(no bullet — the ascension sub-score already covers this)_
 
 ---
 

@@ -1,11 +1,13 @@
 # ADR 0011: Intelligence Engine Architecture (Calculator vs Explainer)
 
 ## Context
-Phase 4 of Project Celestia introduces the "Intelligence Core," which analyzes user accounts to provide recommendations (e.g., Character priorities, Team compositions). Generating accurate, trustworthy, and actionable recommendations requires complex logic. If not properly structured, this logic can quickly become a tangled mess of arbitrary heuristics and hardcoded strings, making the system difficult to test, debug, and expand. 
 
-Furthermore, the user must understand *why* a recommendation was made. A black-box AI or arbitrary scoring system violates the core principle of Celestia: "explainable, personalized recommendations."
+Phase 4 of Project Celestia introduces the "Intelligence Core," which analyzes user accounts to provide recommendations (e.g., Character priorities, Team compositions). Generating accurate, trustworthy, and actionable recommendations requires complex logic. If not properly structured, this logic can quickly become a tangled mess of arbitrary heuristics and hardcoded strings, making the system difficult to test, debug, and expand.
+
+Furthermore, the user must understand _why_ a recommendation was made. A black-box AI or arbitrary scoring system violates the core principle of Celestia: "explainable, personalized recommendations."
 
 ## Decision
+
 All Intelligence Engines within Phase 4 will adhere to a strict **Calculator vs Explainer** separation pattern:
 
 1. **The Calculator (Pure Math & Logic)**
@@ -26,10 +28,12 @@ All Intelligence Engines within Phase 4 will adhere to a strict **Calculator vs 
 ## Consequences
 
 **Positive:**
+
 - **Testability**: Pure functions without side-effects or external dependencies are trivial to unit test, ensuring the engine remains mathematically accurate as the game evolves.
 - **Maintainability**: Changing how a score is calculated does not break the explanation logic, and updating the tone of an explanation does not risk breaking the recommendation sorting.
 - **Trust**: Users see exactly how their account data influenced the recommendation, building trust in the platform.
 
 **Negative:**
+
 - Requires writing boilerplate interfaces to bridge the Calculator and Explainer.
 - Slight redundancy in passing character state to both functions.

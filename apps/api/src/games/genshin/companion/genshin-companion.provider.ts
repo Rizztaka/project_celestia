@@ -1,6 +1,10 @@
 import { createRequire } from 'module';
 
-import type { EventsFileData, ICompanionProvider, WeeklyBossesFileData } from '@/core/contracts/companion.interfaces.js';
+import type {
+  EventsFileData,
+  ICompanionProvider,
+  WeeklyBossesFileData,
+} from '@/core/contracts/companion.interfaces.js';
 
 const require = createRequire(import.meta.url);
 

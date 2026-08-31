@@ -102,12 +102,12 @@ function WeaponCard({ weapon }: { weapon: InventoryWeapon }) {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div
-          className={`font-display relative flex h-11 w-11 shrink-0 select-none items-center justify-center rounded-xl border-2 text-sm font-bold overflow-hidden ${ref.border} ${ref.text}`}
+          className={`font-display relative flex h-11 w-11 shrink-0 select-none items-center justify-center overflow-hidden rounded-xl border-2 text-sm font-bold ${ref.border} ${ref.text}`}
         >
-          <img 
-            src={`https://enka.network/ui/UI_EquipIcon_${ASSET_MAPPING.weapons[weapon.weaponKey] || weapon.weaponKey}.png`} 
-            alt={displayName} 
-            className="absolute inset-0 w-full h-full object-cover z-10"
+          <img
+            src={`https://enka.network/ui/UI_EquipIcon_${ASSET_MAPPING.weapons[weapon.weaponKey] || weapon.weaponKey}.png`}
+            alt={displayName}
+            className="absolute inset-0 z-10 h-full w-full object-cover"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = 'none';
             }}

@@ -20,9 +20,9 @@ import { explainTeamScore } from './team-intelligence.explainer.js';
 
 const require = createRequire(import.meta.url);
 
-const { templates: META_TEMPLATES } = require(
-  '../../static/team-templates.json',
-) as { templates: TeamTemplate[] };
+const { templates: META_TEMPLATES } = require('../../static/team-templates.json') as {
+  templates: TeamTemplate[];
+};
 
 // -------------------------------------------------------
 // Response types
@@ -80,9 +80,7 @@ export class TeamIntelligenceService {
     // ── 1. Verify account exists ──────────────────────────────────────────
     const account = await prisma.genshinAccount.findUnique({ where: { userId } });
     if (!account) {
-      throw new NotFoundError(
-        'No Genshin Impact account found. Please import your data first.',
-      );
+      throw new NotFoundError('No Genshin Impact account found. Please import your data first.');
     }
 
     // ── 2. Fetch roster ───────────────────────────────────────────────────
@@ -114,9 +112,7 @@ export class TeamIntelligenceService {
     }));
 
     // Build lookup map for the Explainer.
-    const rosterMap = new Map<string, CharacterInput>(
-      roster.map((c) => [c.characterKey, c]),
-    );
+    const rosterMap = new Map<string, CharacterInput>(roster.map((c) => [c.characterKey, c]));
 
     // ── 4. Score all templates ─────────────────────────────────────────────
     const allBreakdowns: TeamScoreBreakdown[] = scoreAllTemplates(META_TEMPLATES, roster);
@@ -134,26 +130,22 @@ export class TeamIntelligenceService {
     const top3 = buildable.slice(0, 3);
 
     // ── 6. Attach template metadata and explanations ──────────────────────
-    const templateById = new Map<string, TeamTemplate>(
-      META_TEMPLATES.map((t) => [t.id, t]),
-    );
+    const templateById = new Map<string, TeamTemplate>(META_TEMPLATES.map((t) => [t.id, t]));
 
     const recommendations: TeamRecommendation[] = top3.map((breakdown, index) => {
       const template = templateById.get(breakdown.templateId)!;
 
       const explanations = explainTeamScore(breakdown, template, rosterMap);
 
-      const rosterSlots: TeamRosterSlot[] = breakdown.roles.map(
-        (role: TemplateRoleResult) => ({
-          roleId: role.roleId,
-          label: role.label,
-          element: role.element,
-          characterKey: role.filledBy,
-          investmentScore: role.investmentScore,
-          isRequired: role.isRequired,
-          flex: role.flex,
-        }),
-      );
+      const rosterSlots: TeamRosterSlot[] = breakdown.roles.map((role: TemplateRoleResult) => ({
+        roleId: role.roleId,
+        label: role.label,
+        element: role.element,
+        characterKey: role.filledBy,
+        investmentScore: role.investmentScore,
+        isRequired: role.isRequired,
+        flex: role.flex,
+      }));
 
       return {
         rank: index + 1,

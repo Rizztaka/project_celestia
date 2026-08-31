@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { beforeEach,describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { prisma } from '@/core/db/prisma.js';
 import { NotFoundError, UnprocessableError } from '@/core/errors/app-error.js';
 
-import { type ArtifactInput, type ArtifactWeightProfile,calculateArtifactScore, calculateSlotScore } from './artifact-intelligence.calculator.js';
+import {
+  type ArtifactInput,
+  type ArtifactWeightProfile,
+  calculateArtifactScore,
+  calculateSlotScore,
+} from './artifact-intelligence.calculator.js';
 import { ArtifactIntelligenceService } from './artifact-intelligence.service.js';
 
 // Mock Prisma
@@ -60,22 +65,32 @@ describe('ArtifactIntelligenceService', () => {
       expect(res.recommendations).toHaveLength(2);
       expect(res.recommendations[0].rank).toBe(1);
       expect(res.recommendations[1].rank).toBe(2);
-      expect(res.recommendations[0].recommendationScore).toBeGreaterThanOrEqual(res.recommendations[1].recommendationScore);
+      expect(res.recommendations[0].recommendationScore).toBeGreaterThanOrEqual(
+        res.recommendations[1].recommendationScore,
+      );
     });
 
     it('characters with AES >= 60 go to skipped', async () => {
       vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValue({ id: 'acc-1' } as any);
       // Mocking a perfect artifact loadout for HuTao
       vi.mocked(prisma.genshinCharacter.findMany).mockResolvedValue([
-        { 
-          characterKey: 'HuTao', 
+        {
+          characterKey: 'HuTao',
           equippedArtifacts: [
             { slotKey: 'flower', mainStatKey: 'hp', subStats: [{ key: 'critRate_', value: 20 }] },
             { slotKey: 'plume', mainStatKey: 'atk', subStats: [{ key: 'critDMG_', value: 40 }] },
             { slotKey: 'sands', mainStatKey: 'hp_', subStats: [{ key: 'critRate_', value: 20 }] },
-            { slotKey: 'goblet', mainStatKey: 'pyro_dmg_', subStats: [{ key: 'critDMG_', value: 40 }] },
-            { slotKey: 'circlet', mainStatKey: 'critRate_', subStats: [{ key: 'critDMG_', value: 40 }] }
-          ] 
+            {
+              slotKey: 'goblet',
+              mainStatKey: 'pyro_dmg_',
+              subStats: [{ key: 'critDMG_', value: 40 }],
+            },
+            {
+              slotKey: 'circlet',
+              mainStatKey: 'critRate_',
+              subStats: [{ key: 'critDMG_', value: 40 }],
+            },
+          ],
         } as any,
       ]);
       const res = await service.getRecommendations('user-1');
@@ -97,17 +112,35 @@ describe('ArtifactIntelligenceService', () => {
   describe('Calculator Logic', () => {
     const profile: ArtifactWeightProfile = {
       subStatWeights: { critRate_: 1.0, critDMG_: 1.0, hp_: 0.75 },
-      mainStatPriority: { sands: ['hp_'], goblet: ['pyro_dmg_'], circlet: ['critRate_', 'critDMG_'] }
+      mainStatPriority: {
+        sands: ['hp_'],
+        goblet: ['pyro_dmg_'],
+        circlet: ['critRate_', 'critDMG_'],
+      },
     };
 
     it('Single slot: all priority sub-stats = high score', () => {
-      const artifact: ArtifactInput = { slotKey: 'flower', mainStatKey: 'hp', subStats: [{ key: 'critRate_', value: 15.6 }, { key: 'critDMG_', value: 31.2 }] };
+      const artifact: ArtifactInput = {
+        slotKey: 'flower',
+        mainStatKey: 'hp',
+        subStats: [
+          { key: 'critRate_', value: 15.6 },
+          { key: 'critDMG_', value: 31.2 },
+        ],
+      };
       const res = calculateSlotScore(artifact, profile);
       expect(res.slotScore).toBeGreaterThan(80);
     });
 
     it('Single slot: all off-stat sub-stats = score 0', () => {
-      const artifact: ArtifactInput = { slotKey: 'flower', mainStatKey: 'hp', subStats: [{ key: 'def_', value: 20 }, { key: 'def', value: 40 }] };
+      const artifact: ArtifactInput = {
+        slotKey: 'flower',
+        mainStatKey: 'hp',
+        subStats: [
+          { key: 'def_', value: 20 },
+          { key: 'def', value: 40 },
+        ],
+      };
       const res = calculateSlotScore(artifact, profile);
       expect(res.slotScore).toBe(0);
     });
@@ -127,7 +160,11 @@ describe('ArtifactIntelligenceService', () => {
     });
 
     it('Single slot: unknown sub-stat key = treated as 0 contribution', () => {
-      const artifact: ArtifactInput = { slotKey: 'flower', mainStatKey: 'hp', subStats: [{ key: 'unknown', value: 100 }] };
+      const artifact: ArtifactInput = {
+        slotKey: 'flower',
+        mainStatKey: 'hp',
+        subStats: [{ key: 'unknown', value: 100 }],
+      };
       const res = calculateSlotScore(artifact, profile);
       expect(res.slotScore).toBe(0);
     });
@@ -139,15 +176,21 @@ describe('ArtifactIntelligenceService', () => {
 
     it('4★ artifact scores lower than equivalent 5★', () => {
       // simulated by lower values
-      const res4 = calculateSlotScore({ slotKey: 'flower', mainStatKey: 'hp', subStats: [{ key: 'critRate_', value: 2.6 }] }, profile);
-      const res5 = calculateSlotScore({ slotKey: 'flower', mainStatKey: 'hp', subStats: [{ key: 'critRate_', value: 3.9 }] }, profile);
+      const res4 = calculateSlotScore(
+        { slotKey: 'flower', mainStatKey: 'hp', subStats: [{ key: 'critRate_', value: 2.6 }] },
+        profile,
+      );
+      const res5 = calculateSlotScore(
+        { slotKey: 'flower', mainStatKey: 'hp', subStats: [{ key: 'critRate_', value: 3.9 }] },
+        profile,
+      );
       expect(res4.slotScore).toBeLessThan(res5.slotScore);
     });
 
     it('AES = mean of 5 slot scores', () => {
       const artifacts: ArtifactInput[] = [
         { slotKey: 'flower', mainStatKey: 'hp', subStats: [{ key: 'critRate_', value: 3.9 }] },
-        { slotKey: 'plume', mainStatKey: 'atk', subStats: [{ key: 'critRate_', value: 3.9 }] }
+        { slotKey: 'plume', mainStatKey: 'atk', subStats: [{ key: 'critRate_', value: 3.9 }] },
       ];
       const res = calculateArtifactScore(artifacts, profile);
       // only 2 slots filled, so mean is (Score + Score + 0 + 0 + 0) / 5
@@ -166,12 +209,16 @@ describe('ArtifactIntelligenceService', () => {
     });
 
     it('Determinism: same input = same output', () => {
-      const artifact: ArtifactInput = { slotKey: 'flower', mainStatKey: 'hp', subStats: [{ key: 'critRate_', value: 15.6 }] };
+      const artifact: ArtifactInput = {
+        slotKey: 'flower',
+        mainStatKey: 'hp',
+        subStats: [{ key: 'critRate_', value: 15.6 }],
+      };
       const res1 = calculateSlotScore(artifact, profile);
       const res2 = calculateSlotScore(artifact, profile);
       expect(res1).toEqual(res2);
     });
-    
+
     it('calculateArtifactScore handles mixed empty/filled slots correctly', () => {
       const artifacts: ArtifactInput[] = [
         { slotKey: 'sands', mainStatKey: 'hp_', subStats: [{ key: 'critRate_', value: 15.6 }] },

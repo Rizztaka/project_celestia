@@ -11,7 +11,7 @@ describe('Pull Simulator Service', () => {
       guaranteed5: false,
       guaranteed4: false,
     });
-    
+
     expect(result.pulls.length).toBe(1);
     expect(result.pulls[0].type).toBe('5_STAR');
     expect(result.endPity5).toBe(0);
@@ -26,7 +26,7 @@ describe('Pull Simulator Service', () => {
       guaranteed5: false,
       guaranteed4: false,
     });
-    
+
     expect(result.pulls.length).toBe(1);
     // Even if we hit a 5-star early, the test just checks the mechanism.
     // If it's a 5-star, 4-star pity isn't reset in our logic unless we hit 4-star.
@@ -46,7 +46,7 @@ describe('Pull Simulator Service', () => {
       guaranteed5: true,
       guaranteed4: false,
     });
-    
+
     expect(result.pulls[0].type).toBe('5_STAR');
     expect(result.pulls[0].itemKey).toBe('Odette');
     expect(result.pulls[0].isFeatured).toBe(true);
@@ -56,7 +56,7 @@ describe('Pull Simulator Service', () => {
   it('large scale test: 5-star rate should approach ~1.6%', () => {
     const totalPulls = 100000;
     let fiveStarCount = 0;
-    
+
     let pity5 = 0;
     let pity4 = 0;
     let g5 = false;
@@ -78,7 +78,7 @@ describe('Pull Simulator Service', () => {
       g5 = res.endGuaranteed5;
       g4 = res.endGuaranteed4;
 
-      fiveStarCount += res.pulls.filter(p => p.type === '5_STAR').length;
+      fiveStarCount += res.pulls.filter((p) => p.type === '5_STAR').length;
     }
 
     const rate = fiveStarCount / totalPulls;

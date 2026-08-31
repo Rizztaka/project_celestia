@@ -24,10 +24,10 @@ The Artifact Intelligence Engine analyses the artifacts **currently equipped** o
 
 ### 2.1 — Why RV (Roll Value) over CV (Crit Value)?
 
-| Method | Formula | Problem |
-|---|---|---|
-| Crit Value (CV) | `CR×2 + CD` | Ignores non-crit builds (healers, EM carries, HP scalers) |
-| Roll Value (RV) | `(substat value / max single-roll value) × weight × 100` | Weights every stat according to the character's build |
+| Method          | Formula                                                  | Problem                                                   |
+| --------------- | -------------------------------------------------------- | --------------------------------------------------------- |
+| Crit Value (CV) | `CR×2 + CD`                                              | Ignores non-crit builds (healers, EM carries, HP scalers) |
+| Roll Value (RV) | `(substat value / max single-roll value) × weight × 100` | Weights every stat according to the character's build     |
 
 **We use a weighted Roll Value (wRV) model.** It is the only correct approach for a platform that supports all character archetypes.
 
@@ -35,18 +35,18 @@ The Artifact Intelligence Engine analyses the artifacts **currently equipped** o
 
 These are fixed game constants for 5★ artifacts (the only meaningful target):
 
-| Sub-stat Key | Max Single Roll | Display Name |
-|---|---|---|
-| `critRate_` | 3.9% | Crit Rate |
-| `critDMG_` | 7.8% | Crit DMG |
-| `enerRech_` | 6.5% | Energy Recharge |
-| `eleMas` | 23 | Elemental Mastery |
-| `hp_` | 5.8% | HP% |
-| `atk_` | 5.8% | ATK% |
-| `def_` | 7.3% | DEF% |
-| `hp` | 298.75 | Flat HP |
-| `atk` | 19.45 | Flat ATK |
-| `def` | 23.15 | Flat DEF |
+| Sub-stat Key | Max Single Roll | Display Name      |
+| ------------ | --------------- | ----------------- |
+| `critRate_`  | 3.9%            | Crit Rate         |
+| `critDMG_`   | 7.8%            | Crit DMG          |
+| `enerRech_`  | 6.5%            | Energy Recharge   |
+| `eleMas`     | 23              | Elemental Mastery |
+| `hp_`        | 5.8%            | HP%               |
+| `atk_`       | 5.8%            | ATK%              |
+| `def_`       | 7.3%            | DEF%              |
+| `hp`         | 298.75          | Flat HP           |
+| `atk`        | 19.45           | Flat ATK          |
+| `def`        | 23.15           | Flat DEF          |
 
 ### 2.3 — Per-Artifact Score Formula
 
@@ -61,6 +61,7 @@ artifactScore = clamp( weightedRolls / maxPossibleRolls × 100, 0, 100 )
 ```
 
 The `maxPossibleRolls` constant of **6** is chosen because:
+
 - A fresh 5★ artifact has 4 sub-stats.
 - At +20, it gains 5 additional rolls (at +4, +8, +12, +16, +20).
 - Expecting all 9 rolls to land on priority stats is unrealistic. 6 is a balanced "excellent" threshold.
@@ -97,17 +98,17 @@ This preserves the convention from 4A and 4B where a higher score = a more urgen
 
 ```typescript
 interface StatWeight {
-  weight: number;  // 0.0 = irrelevant, 0.5 = situational, 1.0 = BiS priority
+  weight: number; // 0.0 = irrelevant, 0.5 = situational, 1.0 = BiS priority
 }
 
 interface SlotMainStats {
-  sands: string[];   // valid mainStatKeys for sands (e.g. ["hp_", "atk_", "enerRech_"])
-  goblet: string[];  // valid mainStatKeys for goblet (e.g. ["pyro_dmg_"])
+  sands: string[]; // valid mainStatKeys for sands (e.g. ["hp_", "atk_", "enerRech_"])
+  goblet: string[]; // valid mainStatKeys for goblet (e.g. ["pyro_dmg_"])
   circlet: string[]; // valid mainStatKeys for circlet (e.g. ["critRate_", "critDMG_"])
 }
 
 interface ArtifactWeightProfile {
-  subStatWeights: Record<string, number>;  // statKey → weight 0.0–1.0
+  subStatWeights: Record<string, number>; // statKey → weight 0.0–1.0
   mainStatPriority: SlotMainStats;
 }
 ```
@@ -141,18 +142,18 @@ interface ArtifactWeightProfile {
 
 ### 3.3 — Archetypes & Representative Characters to Seed on Day 1
 
-| Profile Key | Archetype | Priority Sub-stats | Priority Main Stats |
-|---|---|---|---|
-| `HuTao` | Pyro DPS (HP scaler) | CR, CD, HP%, EM | HP%, Pyro DMG, CR/CD |
-| `Arlecchino` | Pyro DPS (ATK scaler) | CR, CD, ATK% | ATK%, Pyro DMG, CR/CD |
-| `RaidenShogun` | Electro Sub-DPS | CR, CD, ER, ATK% | ER, Electro DMG, CR/CD |
-| `Furina` | Hydro Support (HP scaler) | HP%, ER, CR, CD | HP%, Hydro DMG/HP%, HP% |
-| `Kazuha` | Anemo Support (EM carry) | EM, ER, CR, CD | EM, Anemo DMG, EM |
-| `Bennett` | ATK Buffer / Healer | HP%, ER, CR | HP%, Pyro DMG/HP%, CR/HP% |
-| `Yelan` | Hydro Sub-DPS (HP scaler) | CR, CD, HP%, ER | HP%, Hydro DMG, CR/CD |
-| `Zhongli` | Geo Shield (HP scaler) | HP%, DEF%, ER | HP%, Geo DMG/HP%, HP% |
-| `XingQiu` | Hydro Off-fielder | CR, CD, ATK%, ER | ATK%, Hydro DMG, CR/CD |
-| `Nahida` | Dendro Support (EM carry) | EM, CR, CD | EM, Dendro DMG, CR/EM |
+| Profile Key    | Archetype                 | Priority Sub-stats | Priority Main Stats       |
+| -------------- | ------------------------- | ------------------ | ------------------------- |
+| `HuTao`        | Pyro DPS (HP scaler)      | CR, CD, HP%, EM    | HP%, Pyro DMG, CR/CD      |
+| `Arlecchino`   | Pyro DPS (ATK scaler)     | CR, CD, ATK%       | ATK%, Pyro DMG, CR/CD     |
+| `RaidenShogun` | Electro Sub-DPS           | CR, CD, ER, ATK%   | ER, Electro DMG, CR/CD    |
+| `Furina`       | Hydro Support (HP scaler) | HP%, ER, CR, CD    | HP%, Hydro DMG/HP%, HP%   |
+| `Kazuha`       | Anemo Support (EM carry)  | EM, ER, CR, CD     | EM, Anemo DMG, EM         |
+| `Bennett`      | ATK Buffer / Healer       | HP%, ER, CR        | HP%, Pyro DMG/HP%, CR/HP% |
+| `Yelan`        | Hydro Sub-DPS (HP scaler) | CR, CD, HP%, ER    | HP%, Hydro DMG, CR/CD     |
+| `Zhongli`      | Geo Shield (HP scaler)    | HP%, DEF%, ER      | HP%, Geo DMG/HP%, HP%     |
+| `XingQiu`      | Hydro Off-fielder         | CR, CD, ATK%, ER   | ATK%, Hydro DMG, CR/CD    |
+| `Nahida`       | Dendro Support (EM carry) | EM, CR, CD         | EM, Dendro DMG, CR/EM     |
 
 ---
 
@@ -182,9 +183,9 @@ interface ArtifactWeightProfile {
             "slotScore": 28,
             "subStats": [
               { "key": "critRate_", "value": 6.6, "weight": 1.0 },
-              { "key": "atk_",     "value": 5.2, "weight": 0.5 },
-              { "key": "hp",       "value": 209,  "weight": 0.0 },
-              { "key": "def",      "value": 19,   "weight": 0.0 }
+              { "key": "atk_", "value": 5.2, "weight": 0.5 },
+              { "key": "hp", "value": 209, "weight": 0.0 },
+              { "key": "def", "value": 19, "weight": 0.0 }
             ]
           }
         ],
@@ -196,7 +197,10 @@ interface ArtifactWeightProfile {
       }
     ],
     "skipped": [
-      { "characterKey": "HuTao", "reason": "Artifact efficiency is 76/100 — no significant improvement detected." }
+      {
+        "characterKey": "HuTao",
+        "reason": "Artifact efficiency is 76/100 — no significant improvement detected."
+      }
     ],
     "analysedAt": "2026-08-16T17:00:00Z"
   }
@@ -205,10 +209,10 @@ interface ArtifactWeightProfile {
 
 #### Error Responses
 
-| Status | `error.code` | Cause |
-|---|---|---|
-| 404 | `NOT_FOUND` | User has no `GenshinAccount` |
-| 422 | `UNPROCESSABLE_ENTITY` | Roster is empty, or no character has any equipped artifacts |
+| Status | `error.code`           | Cause                                                       |
+| ------ | ---------------------- | ----------------------------------------------------------- |
+| 404    | `NOT_FOUND`            | User has no `GenshinAccount`                                |
+| 422    | `UNPROCESSABLE_ENTITY` | Roster is empty, or no character has any equipped artifacts |
 
 ---
 
@@ -239,7 +243,7 @@ The `subStats` Prisma field is `Json`. At runtime it is cast to:
 
 ```typescript
 interface ArtifactSubStat {
-  key: string;   // e.g. "critRate_", "hp_", "eleMas"
+  key: string; // e.g. "critRate_", "hp_", "eleMas"
   value: number; // raw value (e.g. 6.6 for 6.6% CR)
 }
 ```
@@ -250,11 +254,11 @@ The service must safely cast: `char.equippedArtifacts[i].subStats as ArtifactSub
 
 ## 7. Edge Cases
 
-| Case | Handling |
-|---|---|
+| Case                                                              | Handling                                                                                                |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | Character has no artifact profile in `artifact-stat-weights.json` | Skip character — push to `skipped` with reason `"No artifact weight profile found for this character."` |
-| Character has 0 equipped artifacts | AES = 0, recommendationScore = 100 (highest urgency) |
-| Artifact is rarity < 5★ | Still scored normally; no special penalty. The scores will naturally be low due to fewer/smaller rolls. |
-| Sub-stat key not in `MAX_ROLL` table | Treat weight as 0, contribution = 0. Log a warning (does not throw). |
-| Main stat key matches a preferred sub-stat | Do NOT double-count. Main stat scoring is handled by the separate `mainStatPriority` check per slot. |
-| `AES >= 60` | Character is pushed to `skipped` — artifacts are good enough. |
+| Character has 0 equipped artifacts                                | AES = 0, recommendationScore = 100 (highest urgency)                                                    |
+| Artifact is rarity < 5★                                           | Still scored normally; no special penalty. The scores will naturally be low due to fewer/smaller rolls. |
+| Sub-stat key not in `MAX_ROLL` table                              | Treat weight as 0, contribution = 0. Log a warning (does not throw).                                    |
+| Main stat key matches a preferred sub-stat                        | Do NOT double-count. Main stat scoring is handled by the separate `mainStatPriority` check per slot.    |
+| `AES >= 60`                                                       | Character is pushed to `skipped` — artifacts are good enough.                                           |

@@ -222,7 +222,11 @@ export class GoalService {
    * Throws BadRequestError on invalid input.
    * Throws ConflictError if a duplicate goal already exists.
    */
-  async createGoal(userId: string, rawInput: unknown, gameId: string = 'genshin'): Promise<UpgradeGoal> {
+  async createGoal(
+    userId: string,
+    rawInput: unknown,
+    gameId: string = 'genshin',
+  ): Promise<UpgradeGoal> {
     const result = CreateGoalSchema.safeParse(rawInput);
     if (!result.success) {
       throw new BadRequestError(result.error.errors[0]?.message ?? 'Invalid goal input');

@@ -14,7 +14,9 @@ export class PlannerIntelligenceController {
   getRecommendations = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const data = await this.service.getRecommendations(req.user!.id);
-      res.json(successResponse(data, 'Planner intelligence recommendations retrieved successfully.'));
+      res.json(
+        successResponse(data, 'Planner intelligence recommendations retrieved successfully.'),
+      );
     } catch (err) {
       next(err);
     }

@@ -74,9 +74,7 @@ export class PullIntelligenceService {
     // ── 1. Verify Genshin account ─────────────────────────────────────────
     const account = await prisma.genshinAccount.findUnique({ where: { userId } });
     if (!account) {
-      throw new NotFoundError(
-        'No Genshin Impact account found. Please import your data first.',
-      );
+      throw new NotFoundError('No Genshin Impact account found. Please import your data first.');
     }
 
     // ── 2. Fetch user's roster for calculator input ───────────────────────
@@ -118,9 +116,7 @@ export class PullIntelligenceService {
 
     // ── 6. Filter banners to only non-expired ones ────────────────────────
     const now = new Date();
-    const activeBanners = ALL_BANNERS.filter(
-      (b) => new Date(b.endDate) > now,
-    );
+    const activeBanners = ALL_BANNERS.filter((b) => new Date(b.endDate) > now);
 
     // ── 7. Score and explain each banner ─────────────────────────────────
     const breakdowns: PullScoreBreakdown[] = activeBanners.map((banner) =>

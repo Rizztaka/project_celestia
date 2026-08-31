@@ -166,7 +166,10 @@ describe('EndgameService', () => {
       mockPrisma.genshinAccount.findUnique.mockResolvedValue(ACCOUNT);
       for (const floor of [9, 10, 11, 12]) {
         mockPrisma.spiralAbyssRun.upsert.mockResolvedValue(makeAbyssRun({ floor }));
-        const result = await service.logAbyssRun('user-xyz', { ...validAbyssInput, floor: floor as never });
+        const result = await service.logAbyssRun('user-xyz', {
+          ...validAbyssInput,
+          floor: floor as never,
+        });
         expect(result).toBeDefined();
       }
     });
@@ -270,7 +273,9 @@ describe('EndgameService', () => {
     it('throws NotFoundError when user has no Genshin account', async () => {
       mockPrisma.genshinAccount.findUnique.mockResolvedValue(null);
 
-      await expect(service.logTheaterRun('user-xyz', validTheaterInput)).rejects.toThrow(NotFoundError);
+      await expect(service.logTheaterRun('user-xyz', validTheaterInput)).rejects.toThrow(
+        NotFoundError,
+      );
       expect(mockPrisma.imaginariumTheaterRun.upsert).not.toHaveBeenCalled();
     });
 
@@ -317,7 +322,10 @@ describe('EndgameService', () => {
       mockPrisma.genshinAccount.findUnique.mockResolvedValue(ACCOUNT);
       for (const difficulty of ['EASY', 'NORMAL', 'HARD', 'VISIONARY'] as const) {
         mockPrisma.imaginariumTheaterRun.upsert.mockResolvedValue(makeTheaterRun({ difficulty }));
-        const result = await service.logTheaterRun('user-xyz', { ...validTheaterInput, difficulty });
+        const result = await service.logTheaterRun('user-xyz', {
+          ...validTheaterInput,
+          difficulty,
+        });
         expect(result.difficulty).toBe(difficulty);
       }
     });

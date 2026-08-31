@@ -10,7 +10,7 @@ export default tseslint.config(
   {
     plugins: {
       'simple-import-sort': simpleImportSort,
-      'boundaries': boundaries,
+      boundaries: boundaries,
     },
     languageOptions: {
       globals: globals.node,
@@ -21,9 +21,9 @@ export default tseslint.config(
         { type: 'core', pattern: 'core/*' },
         { type: 'games', pattern: 'games/*' },
         { type: 'genshin', pattern: 'games/genshin/*' },
-        { type: 'hsr', pattern: 'games/hsr/*' }
+        { type: 'hsr', pattern: 'games/hsr/*' },
       ],
-      'boundaries/include': ['src/**/*']
+      'boundaries/include': ['src/**/*'],
     },
     rules: {
       'simple-import-sort/imports': 'error',
@@ -35,28 +35,32 @@ export default tseslint.config(
           policies: [
             {
               from: { type: 'platform' },
-              disallow: [{ to: { type: 'games' } }, { to: { type: 'genshin' } }, { to: { type: 'hsr' } }],
-              message: 'Platform modules must never contain game-specific logic.'
+              disallow: [
+                { to: { type: 'games' } },
+                { to: { type: 'genshin' } },
+                { to: { type: 'hsr' } },
+              ],
+              message: 'Platform modules must never contain game-specific logic.',
             },
             {
               from: { type: 'genshin' },
               disallow: [{ to: { type: 'hsr' } }],
-              message: 'Genshin must not import from HSR'
+              message: 'Genshin must not import from HSR',
             },
             {
               from: { type: 'hsr' },
               disallow: [{ to: { type: 'genshin' } }],
-              message: 'HSR must not import from Genshin'
-            }
-          ]
-        }
-      ]
-    }
+              message: 'HSR must not import from Genshin',
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     files: ['**/*.test.ts', '**/*.test.tsx'],
     rules: {
-      'boundaries/dependencies': 'off'
-    }
-  }
+      'boundaries/dependencies': 'off',
+    },
+  },
 );

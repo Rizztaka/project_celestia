@@ -19,10 +19,10 @@ import { explainCharacterScore } from './character-intelligence.explainer.js';
 
 const require = createRequire(import.meta.url);
 
- 
-const characterProfiles: Record<string, StaticCharacterProfile> = require(
-  '../../static/character-profiles.json',
-);
+const characterProfiles: Record<
+  string,
+  StaticCharacterProfile
+> = require('../../static/character-profiles.json');
 
 const FALLBACK_PROFILE: StaticCharacterProfile = {
   metaTier: 3,
@@ -78,14 +78,11 @@ export class CharacterIntelligenceService {
     // ── 1. Verify account exists ──────────────────────────────────────────
     const account = await prisma.genshinAccount.findUnique({ where: { userId } });
     if (!account) {
-      throw new NotFoundError(
-        'No Genshin Impact account found. Please import your data first.',
-      );
+      throw new NotFoundError('No Genshin Impact account found. Please import your data first.');
     }
 
     // ── 2. Fetch roster ───────────────────────────────────────────────────
-    const roster: CharacterWithWeapon[] =
-      await this.characterService.getCharactersForUser(userId);
+    const roster: CharacterWithWeapon[] = await this.characterService.getCharactersForUser(userId);
 
     if (roster.length === 0) {
       throw new UnprocessableError(

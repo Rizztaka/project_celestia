@@ -19,9 +19,10 @@ import { explainArtifactScore } from './artifact-intelligence.explainer.js';
 
 const require = createRequire(import.meta.url);
 
-const artifactProfiles: Record<string, ArtifactWeightProfile> = require(
-  '../../static/artifact-stat-weights.json',
-);
+const artifactProfiles: Record<
+  string,
+  ArtifactWeightProfile
+> = require('../../static/artifact-stat-weights.json');
 
 // -------------------------------------------------------
 // Response types
@@ -126,22 +127,24 @@ export class ArtifactIntelligenceService {
           equippedArtifactsInput,
         );
 
-        const equippedArtifactsOutput: EquippedArtifactOutput[] = char.equippedArtifacts.map((a) => {
-          const subStats = (a.subStats as unknown as ArtifactSubStat[]) ?? [];
-          return {
-            slotKey: a.slotKey,
-            setKey: a.setKey,
-            level: a.level,
-            rarity: a.rarity,
-            mainStatKey: a.mainStatKey,
-            slotScore: breakdown.slotScores[a.slotKey]?.slotScore ?? 0,
-            subStats: subStats.map((sub) => ({
-              key: sub.key,
-              value: sub.value,
-              weight: profile.subStatWeights[sub.key] ?? 0,
-            })),
-          };
-        });
+        const equippedArtifactsOutput: EquippedArtifactOutput[] = char.equippedArtifacts.map(
+          (a) => {
+            const subStats = (a.subStats as unknown as ArtifactSubStat[]) ?? [];
+            return {
+              slotKey: a.slotKey,
+              setKey: a.setKey,
+              level: a.level,
+              rarity: a.rarity,
+              mainStatKey: a.mainStatKey,
+              slotScore: breakdown.slotScores[a.slotKey]?.slotScore ?? 0,
+              subStats: subStats.map((sub) => ({
+                key: sub.key,
+                value: sub.value,
+                weight: profile.subStatWeights[sub.key] ?? 0,
+              })),
+            };
+          },
+        );
 
         recommendations.push({
           characterKey: char.characterKey,

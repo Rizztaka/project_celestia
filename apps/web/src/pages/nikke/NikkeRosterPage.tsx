@@ -20,7 +20,7 @@ export const NikkeRosterPage: React.FC = () => {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="text-xl text-primary animate-pulse">Loading NIKKE Roster...</div>
+        <div className="text-primary animate-pulse text-xl">Loading NIKKE Roster...</div>
       </div>
     );
   }
@@ -36,28 +36,37 @@ export const NikkeRosterPage: React.FC = () => {
 
       {roster.length === 0 ? (
         <div className="glass-panel p-12 text-center">
-          <h2 className="text-2xl font-bold mb-2">No Nikkes Found</h2>
-          <p className="text-muted-foreground">Your roster is currently empty. Recruit some Nikkes to get started!</p>
+          <h2 className="mb-2 text-2xl font-bold">No Nikkes Found</h2>
+          <p className="text-muted-foreground">
+            Your roster is currently empty. Recruit some Nikkes to get started!
+          </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {roster.map((nikke) => (
-            <div key={nikke.id} className="glass-panel p-6 relative overflow-hidden group hover:border-pink-500/50 transition-colors">
-              <div className="absolute -right-10 -top-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl group-hover:bg-pink-500/20 transition-all"></div>
-              
-              <h3 className="text-xl font-bold text-white capitalize">{nikke.characterKey}</h3>
-              <div className="flex gap-4 mt-4">
+            <div
+              key={nikke.id}
+              className="glass-panel group relative overflow-hidden p-6 transition-colors hover:border-pink-500/50"
+            >
+              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-pink-500/10 blur-2xl transition-all group-hover:bg-pink-500/20"></div>
+
+              <h3 className="text-xl font-bold capitalize text-white">{nikke.characterKey}</h3>
+              <div className="mt-4 flex gap-4">
                 <div className="text-sm">
-                  <div className="text-muted-foreground text-xs uppercase tracking-wider">Level</div>
+                  <div className="text-muted-foreground text-xs uppercase tracking-wider">
+                    Level
+                  </div>
                   <div className="font-mono text-lg">{nikke.level}</div>
                 </div>
                 <div className="text-sm">
-                  <div className="text-muted-foreground text-xs uppercase tracking-wider">Limit Break</div>
+                  <div className="text-muted-foreground text-xs uppercase tracking-wider">
+                    Limit Break
+                  </div>
                   <div className="font-mono text-lg">★ {nikke.limitBreak}</div>
                 </div>
               </div>
-              
-              <div className="mt-4 pt-4 border-t border-white/10 flex justify-between text-sm font-mono text-muted-foreground">
+
+              <div className="text-muted-foreground mt-4 flex justify-between border-t border-white/10 pt-4 font-mono text-sm">
                 <span>S1: {nikke.skill1}</span>
                 <span>S2: {nikke.skill2}</span>
                 <span>Burst: {nikke.burstSkill}</span>

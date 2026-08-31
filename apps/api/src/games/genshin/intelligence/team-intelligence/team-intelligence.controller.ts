@@ -23,8 +23,6 @@ export class TeamIntelligenceController {
    */
   getRecommendations = async (req: Request, res: Response): Promise<void> => {
     const data = await this.service.getRecommendations(req.user!.id);
-    res
-      .status(200)
-      .json(successResponse(data, 'Team intelligence recommendations retrieved.'));
+    res.status(200).json(successResponse(data, 'Team intelligence recommendations retrieved.'));
   };
 }

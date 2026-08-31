@@ -1,5 +1,5 @@
 import cors from 'cors';
-import express, { type NextFunction,type Request, type Response } from 'express';
+import express, { type NextFunction, type Request, type Response } from 'express';
 import helmet from 'helmet';
 import { ZodError } from 'zod';
 
@@ -28,7 +28,12 @@ app.use(helmet());
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('vercel.app')) {
+      if (
+        !origin ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1') ||
+        origin.includes('vercel.app')
+      ) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));

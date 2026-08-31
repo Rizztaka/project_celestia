@@ -13,9 +13,7 @@ import type {
  * e.g. "RaidenShogun" → "Raiden Shogun", "HuTao" → "Hu Tao"
  */
 function toDisplayName(key: string): string {
-  return key
-    .replace(/([A-Z])/g, ' $1')
-    .trim();
+  return key.replace(/([A-Z])/g, ' $1').trim();
 }
 
 function toTalentLabel(talent: 'normal' | 'skill' | 'burst'): string {

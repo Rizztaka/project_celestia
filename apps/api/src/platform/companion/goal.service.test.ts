@@ -1,5 +1,5 @@
 import { GoalType } from '@prisma/client';
-import { beforeEach,describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BadRequestError, ConflictError } from '@/core/errors/app-error.js';
 

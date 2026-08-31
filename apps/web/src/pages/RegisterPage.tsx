@@ -10,7 +10,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { ApiError,fetchApi } from '../lib/api';
+import { ApiError, fetchApi } from '../lib/api';
 import type { AuthUser } from '../stores/auth.store';
 import { useAuthStore } from '../stores/auth.store';
 
@@ -44,11 +44,14 @@ function RegisterPage() {
     mutation.mutate();
   };
 
-  const errorMessage = mutation.error instanceof ApiError 
-    ? mutation.error.message 
-    : mutation.error instanceof Error 
-      ? mutation.error.message 
-      : mutation.error ? String(mutation.error) : null;
+  const errorMessage =
+    mutation.error instanceof ApiError
+      ? mutation.error.message
+      : mutation.error instanceof Error
+        ? mutation.error.message
+        : mutation.error
+          ? String(mutation.error)
+          : null;
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden p-4">

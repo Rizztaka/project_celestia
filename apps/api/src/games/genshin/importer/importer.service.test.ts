@@ -1,5 +1,5 @@
 import type { GenshinAccount } from '@prisma/client';
-import { beforeEach,describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BadRequestError } from '@/core/errors/app-error.js';
 
@@ -22,16 +22,18 @@ const mockTx = {
   genshinWeapon: {
     deleteMany: vi.fn(),
     create: vi.fn(),
+    createMany: vi.fn(),
   },
   genshinArtifact: {
     deleteMany: vi.fn(),
     create: vi.fn(),
+    createMany: vi.fn(),
     update: vi.fn(),
   },
-  // Phase 3B: material inventory step added to the importer transaction
   genshinMaterial: {
     deleteMany: vi.fn(),
     create: vi.fn(),
+    createMany: vi.fn(),
   },
 };
 
@@ -137,6 +139,10 @@ describe('GenshinImportService', () => {
     mockTx.genshinCharacter.updateMany.mockResolvedValue({ count: 0 });
     mockTx.genshinWeapon.deleteMany.mockResolvedValue({ count: 0 });
     mockTx.genshinArtifact.deleteMany.mockResolvedValue({ count: 0 });
+    mockTx.genshinMaterial.deleteMany.mockResolvedValue({ count: 0 });
+    mockTx.genshinWeapon.createMany.mockResolvedValue({ count: 1 });
+    mockTx.genshinArtifact.createMany.mockResolvedValue({ count: 1 });
+    mockTx.genshinMaterial.createMany.mockResolvedValue({ count: 0 });
     mockTx.genshinCharacter.upsert.mockResolvedValue({
       id: 'char-abc-123',
       accountId: mockAccount.id,
@@ -303,9 +309,11 @@ describe('GenshinImportService', () => {
     it('maps GOOD lock field to database locked field', async () => {
       await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
-      expect(mockTx.genshinWeapon.create).toHaveBeenCalledWith(
+      // Production uses createMany with a pre-generated UUID batch; validate
+      // the first element in the data array contains the expected locked flag.
+      expect(mockTx.genshinWeapon.createMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          data: expect.objectContaining({ locked: false }),
+          data: expect.arrayContaining([expect.objectContaining({ locked: false })]),
         }),
       );
     });
@@ -313,11 +321,13 @@ describe('GenshinImportService', () => {
     it('resolves weapon location to equippedWeaponId on the character', async () => {
       await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
-      // The character should have been updated with the weapon's DB id
+      // The character should have been updated with the weapon's DB id.
+      // The weapon ID is a randomUUID() generated at import time, so we
+      // check the shape rather than the exact value.
       expect(mockTx.genshinCharacter.update).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { id: 'char-abc-123' },
-          data: { equippedWeaponId: 'weapon-abc-123' },
+          data: { equippedWeaponId: expect.any(String) },
         }),
       );
     });
@@ -325,9 +335,11 @@ describe('GenshinImportService', () => {
     it('resolves artifact location to equippedCharacterId on the artifact', async () => {
       await service.importAccount('user-abc-123', VALID_GOOD_PAYLOAD);
 
+      // The artifact ID is a randomUUID() generated at import time, so we
+      // check the shape rather than the exact value.
       expect(mockTx.genshinArtifact.update).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { id: 'artifact-abc-123' },
+          where: { id: expect.any(String) },
           data: { equippedCharacterId: 'char-abc-123' },
         }),
       );
@@ -381,8 +393,8 @@ describe('GenshinImportService', () => {
 
       await service.importAccount('user-abc-123', payloadWithUnknownLocation);
 
-      // Weapon was created but character update for equipping was NOT called
-      expect(mockTx.genshinWeapon.create).toHaveBeenCalledOnce();
+      // Weapon was bulk-inserted but character update for equipping was NOT called
+      expect(mockTx.genshinWeapon.createMany).toHaveBeenCalledOnce();
       expect(mockTx.genshinCharacter.update).not.toHaveBeenCalled();
     });
 
@@ -408,7 +420,8 @@ describe('GenshinImportService', () => {
 
       await service.importAccount('user-abc-123', payloadWithUnknownLocation);
 
-      expect(mockTx.genshinArtifact.create).toHaveBeenCalledOnce();
+      // Artifact was bulk-inserted but the equip update was NOT called
+      expect(mockTx.genshinArtifact.createMany).toHaveBeenCalledOnce();
       expect(mockTx.genshinArtifact.update).not.toHaveBeenCalled();
     });
   });

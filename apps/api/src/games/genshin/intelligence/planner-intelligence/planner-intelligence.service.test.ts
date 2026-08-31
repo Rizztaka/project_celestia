@@ -1,10 +1,7 @@
 import { GoalType } from '@prisma/client';
 import { describe, expect, it } from 'vitest';
 
-import {
-  allocateResin,
-  filterAndScoreGoals,
-} from './planner-intelligence.calculator.js';
+import { allocateResin, filterAndScoreGoals } from './planner-intelligence.calculator.js';
 
 // -------------------------------------------------------
 // Helpers

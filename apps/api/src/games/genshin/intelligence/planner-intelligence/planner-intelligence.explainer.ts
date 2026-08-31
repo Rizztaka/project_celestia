@@ -18,9 +18,9 @@ export function explainRouteItem(item: RouteItem): string[] {
   // 1. Primary action bullet
   if (item.goalType === GoalType.CHARACTER_TALENT) {
     const talentLabel = item.talentType
-      ? { normal: 'Normal Attack', skill: 'Elemental Skill', burst: 'Elemental Burst' }[
+      ? ({ normal: 'Normal Attack', skill: 'Elemental Skill', burst: 'Elemental Burst' }[
           item.talentType
-        ] ?? 'talent'
+        ] ?? 'talent')
       : 'talent';
     explanations.push(
       `Farm ${item.domainName} today — ${item.targetKey}'s ${talentLabel} books (${item.resourceName}) are available.`,
@@ -38,9 +38,7 @@ export function explainRouteItem(item: RouteItem): string[] {
 
   // 2. Time-gating urgency
   if (item.isTimeGated) {
-    explanations.push(
-      `This domain is only open 3 days per week — do not miss today's window.`,
-    );
+    explanations.push(`This domain is only open 3 days per week — do not miss today's window.`);
   }
 
   // 3. Character priority weight

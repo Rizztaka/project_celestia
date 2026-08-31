@@ -9,9 +9,11 @@ The Planner Intelligence Engine is the fourth component of the Intelligence Core
 `GET /api/v1/games/genshin/intelligence/planner`
 
 ### Request Payload
+
 None. Uses the authenticated user's ID to fetch data.
 
 ### Response Schema
+
 ```json
 {
   "success": true,
@@ -45,12 +47,14 @@ The engine must strictly separate calculation logic from explanation string gene
 ### 1. The Calculator
 
 **Input:**
+
 - User's `UpgradeGoal` array.
 - Projected `resinAmount` from `DailyCompanion`.
 - Current day of the week (0=Mon, 6=Sun) based on UTC.
 - `IntelligenceResponse` from `CharacterIntelligenceService`.
 
 **Logic:**
+
 1. **Filter Valid Goals**: Iterate through `UpgradeGoal`s. Determine if the goal can be progressed today.
    - `CHARACTER_ASCENSION`: Bosses are available every day. (Valid)
    - `CHARACTER_TALENT`: Lookup the required book in `character-materials.json`. Check if the book drops today according to `domain-schedule.json`. (Valid if true, or if Sunday).
@@ -68,10 +72,12 @@ The engine must strictly separate calculation logic from explanation string gene
 ### 2. The Explainer
 
 **Input:**
+
 - The allocated route item from the Calculator.
 - The `CharacterRecommendation` data.
 
 **Logic:**
 Generate strings based on the goal type and priority:
+
 - "Farm [Domain] today because [Target]'s [Resource] is available."
 - If the character score was < 60: "[Target] needs significant investment (Score: [Score]/100), making this a top priority."

@@ -1,4 +1,8 @@
-import type { EventsFileData, StaticEvent, StaticRewardTier } from '@/core/contracts/companion.interfaces.js';
+import type {
+  EventsFileData,
+  StaticEvent,
+  StaticRewardTier,
+} from '@/core/contracts/companion.interfaces.js';
 import { BadRequestError, NotFoundError } from '@/core/errors/app-error.js';
 
 import { companionRegistry } from './companion-registry.service.js';

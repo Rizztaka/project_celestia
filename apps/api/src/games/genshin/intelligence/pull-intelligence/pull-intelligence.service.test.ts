@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import type { CharacterRecommendation } from '../character-intelligence/character-intelligence.service.js';
 import type { CharacterInput } from '../character-intelligence/character-intelligence.calculator.js';
-import type { TeamScoreBreakdown, TeamTemplate } from '../team-intelligence/team-intelligence.calculator.js';
-import {
-  calculatePullValue,
-  type ActiveBanner,
-} from './pull-intelligence.calculator.js';
+import type {
+  TeamScoreBreakdown,
+  TeamTemplate,
+} from '../team-intelligence/team-intelligence.calculator.js';
+import { calculatePullValue, type ActiveBanner } from './pull-intelligence.calculator.js';
 import { explainPullValue } from './pull-intelligence.explainer.js';
 
 // -------------------------------------------------------
@@ -35,14 +35,22 @@ const BANNER_NAHIDA: ActiveBanner = {
 const ROSTER_WITH_HUTAO: CharacterInput[] = [
   {
     characterKey: 'HuTao',
-    level: 90, ascension: 6, constellation: 0,
-    talentNormal: 1, talentSkill: 6, talentBurst: 8,
+    level: 90,
+    ascension: 6,
+    constellation: 0,
+    talentNormal: 1,
+    talentSkill: 6,
+    talentBurst: 8,
     equippedWeapon: null,
   },
   {
     characterKey: 'Xingqiu',
-    level: 80, ascension: 6, constellation: 0,
-    talentNormal: 1, talentSkill: 6, talentBurst: 8,
+    level: 80,
+    ascension: 6,
+    constellation: 0,
+    talentNormal: 1,
+    talentSkill: 6,
+    talentBurst: 8,
     equippedWeapon: null,
   },
 ];
@@ -145,8 +153,12 @@ describe('calculatePullValue', () => {
     const rosterWithXingqiuOnly: CharacterInput[] = [
       {
         characterKey: 'Xingqiu',
-        level: 80, ascension: 6, constellation: 0,
-        talentNormal: 1, talentSkill: 6, talentBurst: 8,
+        level: 80,
+        ascension: 6,
+        constellation: 0,
+        talentNormal: 1,
+        talentSkill: 6,
+        talentBurst: 8,
         equippedWeapon: null,
       },
     ];
@@ -187,7 +199,13 @@ describe('calculatePullValue', () => {
 
   it('applies +40 Synergy Bonus when the character shares a template with top invested chars', () => {
     const recs: CharacterRecommendation[] = [
-      { characterKey: 'Xingqiu', rank: 1, score: 20, recommendation: 'ASCEND_AND_LEVEL', explanations: [] },
+      {
+        characterKey: 'Xingqiu',
+        rank: 1,
+        score: 20,
+        recommendation: 'ASCEND_AND_LEVEL',
+        explanations: [],
+      },
     ];
 
     // HuTao and Xingqiu share the MOCK_TEMPLATES 'national' template
@@ -206,7 +224,13 @@ describe('calculatePullValue', () => {
 
   it('applies 0 Synergy Bonus when no top chars share a template', () => {
     const recs: CharacterRecommendation[] = [
-      { characterKey: 'Albedo', rank: 1, score: 20, recommendation: 'ASCEND_AND_LEVEL', explanations: [] },
+      {
+        characterKey: 'Albedo',
+        rank: 1,
+        score: 20,
+        recommendation: 'ASCEND_AND_LEVEL',
+        explanations: [],
+      },
     ];
 
     // Albedo doesn't appear in MOCK_TEMPLATES, so no synergy
@@ -240,8 +264,12 @@ describe('calculatePullValue', () => {
   it('applies 0 Four-Star Gap Bonus when user already owns all featured 4-stars', () => {
     const rosterWithAllFourStars: CharacterInput[] = ['Xingqiu', 'Thoma', 'Diona'].map((key) => ({
       characterKey: key,
-      level: 70, ascension: 4, constellation: 0,
-      talentNormal: 1, talentSkill: 1, talentBurst: 1,
+      level: 70,
+      ascension: 4,
+      constellation: 0,
+      talentNormal: 1,
+      talentSkill: 1,
+      talentBurst: 1,
       equippedWeapon: null,
     }));
 
@@ -259,7 +287,13 @@ describe('calculatePullValue', () => {
 
   it('clamps totalScore to 100 maximum', () => {
     const recs: CharacterRecommendation[] = [
-      { characterKey: 'Xingqiu', rank: 1, score: 10, recommendation: 'ASCEND_AND_LEVEL', explanations: [] },
+      {
+        characterKey: 'Xingqiu',
+        rank: 1,
+        score: 10,
+        recommendation: 'ASCEND_AND_LEVEL',
+        explanations: [],
+      },
     ];
 
     const result = calculatePullValue(
@@ -267,8 +301,12 @@ describe('calculatePullValue', () => {
       [
         {
           characterKey: 'Xingqiu',
-          level: 80, ascension: 6, constellation: 0,
-          talentNormal: 1, talentSkill: 6, talentBurst: 8,
+          level: 80,
+          ascension: 6,
+          constellation: 0,
+          talentNormal: 1,
+          talentSkill: 6,
+          talentBurst: 8,
           equippedWeapon: null,
         },
       ],
@@ -284,7 +322,13 @@ describe('calculatePullValue', () => {
 
   it('returns GOOD_VALUE for a mid-range score (35-69)', () => {
     const recs: CharacterRecommendation[] = [
-      { characterKey: 'Xingqiu', rank: 1, score: 10, recommendation: 'ASCEND_AND_LEVEL', explanations: [] },
+      {
+        characterKey: 'Xingqiu',
+        rank: 1,
+        score: 10,
+        recommendation: 'ASCEND_AND_LEVEL',
+        explanations: [],
+      },
     ];
 
     // Synergy only (40) + 4-star gap (20) = 60 → GOOD_VALUE if no team enabler

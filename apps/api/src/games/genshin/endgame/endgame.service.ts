@@ -236,9 +236,7 @@ export class EndgameService {
     // ── 2. Resolve account ────────────────────────────────────────────────
     const account = await prisma.genshinAccount.findUnique({ where: { userId } });
     if (!account) {
-      throw new NotFoundError(
-        'No Genshin Impact account found. Please import your data first.',
-      );
+      throw new NotFoundError('No Genshin Impact account found. Please import your data first.');
     }
 
     // ── 3. Upsert the run ─────────────────────────────────────────────────
@@ -272,9 +270,7 @@ export class EndgameService {
   async getAbyssHistory(userId: string): Promise<AbyssHistoryResponse> {
     const account = await prisma.genshinAccount.findUnique({ where: { userId } });
     if (!account) {
-      throw new NotFoundError(
-        'No Genshin Impact account found. Please import your data first.',
-      );
+      throw new NotFoundError('No Genshin Impact account found. Please import your data first.');
     }
 
     const records = await findAbyssRunsByAccount(account.id);
@@ -290,9 +286,7 @@ export class EndgameService {
   async getAbyssCycle(userId: string, cycleId: string): Promise<AbyssCycleResult | null> {
     const account = await prisma.genshinAccount.findUnique({ where: { userId } });
     if (!account) {
-      throw new NotFoundError(
-        'No Genshin Impact account found. Please import your data first.',
-      );
+      throw new NotFoundError('No Genshin Impact account found. Please import your data first.');
     }
 
     const records = await findAbyssRunsByCycle(account.id, cycleId);
@@ -326,19 +320,13 @@ export class EndgameService {
       throw new UnprocessableError('seasonId must not be empty.');
     }
     if (!VALID_DIFFICULTIES.includes(input.difficulty)) {
-      throw new UnprocessableError(
-        `difficulty must be one of: ${VALID_DIFFICULTIES.join(', ')}.`,
-      );
+      throw new UnprocessableError(`difficulty must be one of: ${VALID_DIFFICULTIES.join(', ')}.`);
     }
     if (input.actsCleared < 1 || input.actsCleared > MAX_ACTS_CLEARED) {
-      throw new UnprocessableError(
-        `actsCleared must be between 1 and ${MAX_ACTS_CLEARED}.`,
-      );
+      throw new UnprocessableError(`actsCleared must be between 1 and ${MAX_ACTS_CLEARED}.`);
     }
     if (input.stars < 0 || input.stars > MAX_THEATER_STARS) {
-      throw new UnprocessableError(
-        `stars must be between 0 and ${MAX_THEATER_STARS}.`,
-      );
+      throw new UnprocessableError(`stars must be between 0 and ${MAX_THEATER_STARS}.`);
     }
     if (input.cast.length > MAX_CAST_SIZE) {
       throw new UnprocessableError(`cast cannot exceed ${MAX_CAST_SIZE} characters.`);
@@ -350,9 +338,7 @@ export class EndgameService {
     // ── 2. Resolve account ────────────────────────────────────────────────
     const account = await prisma.genshinAccount.findUnique({ where: { userId } });
     if (!account) {
-      throw new NotFoundError(
-        'No Genshin Impact account found. Please import your data first.',
-      );
+      throw new NotFoundError('No Genshin Impact account found. Please import your data first.');
     }
 
     // ── 3. Upsert the run ─────────────────────────────────────────────────
@@ -378,9 +364,7 @@ export class EndgameService {
   async getTheaterHistory(userId: string): Promise<TheaterHistoryResponse> {
     const account = await prisma.genshinAccount.findUnique({ where: { userId } });
     if (!account) {
-      throw new NotFoundError(
-        'No Genshin Impact account found. Please import your data first.',
-      );
+      throw new NotFoundError('No Genshin Impact account found. Please import your data first.');
     }
 
     const records = await findTheaterRunsByAccount(account.id);

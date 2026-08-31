@@ -1,1 +1,1 @@
-$ tsc
+$ tsc && tsc-alias && node -e "require('fs').cpSync('src/games/genshin/static', 'dist/games/genshin/static', {recursive:true, force:true})"

@@ -38,7 +38,9 @@ const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const RosterPage = lazy(() => import('./pages/RosterPage'));
 const SimulatorsPage = lazy(() => import('./pages/SimulatorsPage'));
-const NikkeRosterPage = lazy(() => import('./pages/nikke/NikkeRosterPage').then(m => ({ default: m.NikkeRosterPage })));
+const NikkeRosterPage = lazy(() =>
+  import('./pages/nikke/NikkeRosterPage').then((m) => ({ default: m.NikkeRosterPage })),
+);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -56,7 +58,10 @@ const queryClient = new QueryClient({
 
 import React from 'react';
 
-class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean, error: Error | null }> {
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: Error | null }
+> {
   constructor(props: { children: React.ReactNode }) {
     super(props);
     this.state = { hasError: false, error: null };
@@ -77,8 +82,8 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
             {'\n\n'}
             {this.state.error?.stack}
           </pre>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="mt-8 rounded-lg bg-indigo-600 px-6 py-2 font-semibold text-white hover:bg-indigo-500"
           >
             Reload Page
@@ -95,29 +100,35 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <Suspense fallback={<div className="flex h-screen w-screen items-center justify-center bg-zinc-950"><div className="h-8 w-8 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" /></div>}>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+          <Suspense
+            fallback={
+              <div className="flex h-screen w-screen items-center justify-center bg-zinc-950">
+                <div className="border-accent-500 h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" />
+              </div>
+            }
+          >
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route path="/" element={<DashboardPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/import" element={<ImportPage />} />
-              <Route path="/roster" element={<RosterPage />} />
-              <Route path="/inventory" element={<InventoryPage />} />
-              <Route path="/planner" element={<PlannerPage />} />
-              <Route path="/intelligence" element={<IntelligencePage />} />
-              <Route path="/endgame" element={<EndgamePage />} />
-              <Route path="/simulators" element={<SimulatorsPage />} />
-              <Route path="/nikke/roster" element={<NikkeRosterPage />} />
-            </Route>
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<DashboardPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/import" element={<ImportPage />} />
+                <Route path="/roster" element={<RosterPage />} />
+                <Route path="/inventory" element={<InventoryPage />} />
+                <Route path="/planner" element={<PlannerPage />} />
+                <Route path="/intelligence" element={<IntelligencePage />} />
+                <Route path="/endgame" element={<EndgamePage />} />
+                <Route path="/simulators" element={<SimulatorsPage />} />
+                <Route path="/nikke/roster" element={<NikkeRosterPage />} />
+              </Route>
 
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
-    </QueryClientProvider>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }

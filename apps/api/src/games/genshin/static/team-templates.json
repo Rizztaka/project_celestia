@@ -6,24 +6,14 @@
       "name": "National Vaporize",
       "archetype": "VAPORIZE",
       "reaction": "Vaporize",
-      "reactionElements": [
-        "Pyro",
-        "Hydro"
-      ],
+      "reactionElements": ["Pyro", "Hydro"],
       "description": "A Pyro DPS triggers Vaporize off consistent Hydro application for 1.5× or 2× damage multipliers. Bennett provides a massive ATK buff via his burst, while an Anemo character groups enemies and shreds their Elemental Resistance.",
       "roles": [
         {
           "roleId": "pyro_dps",
           "label": "Pyro DPS",
           "element": "Pyro",
-          "candidates": [
-            "HuTao",
-            "Diluc",
-            "Yoimiya",
-            "Lyney",
-            "Klee",
-            "Arlecchino"
-          ],
+          "candidates": ["HuTao", "Diluc", "Yoimiya", "Lyney", "Klee", "Arlecchino"],
           "required": true,
           "flex": false,
           "weight": 35
@@ -32,13 +22,7 @@
           "roleId": "hydro_enabler",
           "label": "Hydro Enabler",
           "element": "Hydro",
-          "candidates": [
-            "Xingqiu",
-            "Yelan",
-            "Kokomi",
-            "Barbara",
-            "Furina"
-          ],
+          "candidates": ["Xingqiu", "Yelan", "Kokomi", "Barbara", "Furina"],
           "required": true,
           "flex": false,
           "weight": 30
@@ -47,9 +31,7 @@
           "roleId": "pyro_buffer",
           "label": "ATK Buffer / Pyro Resonance",
           "element": "Pyro",
-          "candidates": [
-            "Bennett"
-          ],
+          "candidates": ["Bennett"],
           "required": false,
           "flex": false,
           "weight": 20
@@ -58,11 +40,7 @@
           "roleId": "anemo_shred",
           "label": "Anemo Support",
           "element": "Anemo",
-          "candidates": [
-            "KaedeharaKazuha",
-            "Sucrose",
-            "Venti"
-          ],
+          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -74,22 +52,14 @@
       "name": "Freeze",
       "archetype": "FREEZE",
       "reaction": "Freeze",
-      "reactionElements": [
-        "Cryo",
-        "Hydro"
-      ],
+      "reactionElements": ["Cryo", "Hydro"],
       "description": "Hydro application freezes enemies when combined with Cryo, locking them in place for a Cryo DPS to deal consistent, uninterrupted damage. Blizzard Strayer artifacts stack Crit Rate to make the most of the frozen state.",
       "roles": [
         {
           "roleId": "cryo_dps",
           "label": "Cryo DPS",
           "element": "Cryo",
-          "candidates": [
-            "Ayaka",
-            "Ganyu",
-            "Eula",
-            "Rosaria"
-          ],
+          "candidates": ["Ayaka", "Ganyu", "Eula", "Rosaria"],
           "required": true,
           "flex": false,
           "weight": 35
@@ -98,13 +68,7 @@
           "roleId": "hydro_applier",
           "label": "Hydro Applier",
           "element": "Hydro",
-          "candidates": [
-            "Mona",
-            "Barbara",
-            "Kokomi",
-            "Xingqiu",
-            "Yelan"
-          ],
+          "candidates": ["Mona", "Barbara", "Kokomi", "Xingqiu", "Yelan"],
           "required": true,
           "flex": false,
           "weight": 30
@@ -113,12 +77,7 @@
           "roleId": "cryo_battery",
           "label": "Cryo Battery / Resonance",
           "element": "Cryo",
-          "candidates": [
-            "Diona",
-            "Shenhe",
-            "Layla",
-            "Kaeya"
-          ],
+          "candidates": ["Diona", "Shenhe", "Layla", "Kaeya"],
           "required": false,
           "flex": false,
           "weight": 20
@@ -127,12 +86,7 @@
           "roleId": "anemo_flex",
           "label": "Anemo / Flex Support",
           "element": "Anemo",
-          "candidates": [
-            "KaedeharaKazuha",
-            "Sucrose",
-            "Venti",
-            "Zhongli"
-          ],
+          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti", "Zhongli"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -144,25 +98,14 @@
       "name": "Hyperbloom",
       "archetype": "HYPERBLOOM",
       "reaction": "Hyperbloom",
-      "reactionElements": [
-        "Dendro",
-        "Hydro",
-        "Electro"
-      ],
+      "reactionElements": ["Dendro", "Hydro", "Electro"],
       "description": "Dendro and Hydro combine to create Dendro Cores (Bloom). An Electro trigger then detonates these cores as Hyperbloom seeds, dealing massive AoE Dendro damage that scales purely off the Electro trigger's Elemental Mastery — no CRIT needed.",
       "roles": [
         {
           "roleId": "dendro_enabler",
           "label": "Dendro Enabler",
           "element": "Dendro",
-          "candidates": [
-            "Nahida",
-            "Collei",
-            "Yaoyao",
-            "Kirara",
-            "Baizhu",
-            "Alhaitham"
-          ],
+          "candidates": ["Nahida", "Collei", "Yaoyao", "Kirara", "Baizhu", "Alhaitham"],
           "required": true,
           "flex": false,
           "weight": 30
@@ -171,13 +114,7 @@
           "roleId": "hydro_applier",
           "label": "Hydro Applier",
           "element": "Hydro",
-          "candidates": [
-            "Kokomi",
-            "Barbara",
-            "Xingqiu",
-            "Yelan",
-            "Furina"
-          ],
+          "candidates": ["Kokomi", "Barbara", "Xingqiu", "Yelan", "Furina"],
           "required": true,
           "flex": false,
           "weight": 25
@@ -186,13 +123,7 @@
           "roleId": "electro_trigger",
           "label": "Electro Trigger (EM build)",
           "element": "Electro",
-          "candidates": [
-            "KukiShinobu",
-            "RaidenShogun",
-            "Fischl",
-            "Beidou",
-            "Yae"
-          ],
+          "candidates": ["KukiShinobu", "RaidenShogun", "Fischl", "Beidou", "Yae"],
           "required": true,
           "flex": false,
           "weight": 30
@@ -201,14 +132,7 @@
           "roleId": "flex_healer",
           "label": "Healer / Flex",
           "element": null,
-          "candidates": [
-            "Kokomi",
-            "Barbara",
-            "Yaoyao",
-            "Baizhu",
-            "Diona",
-            "Layla"
-          ],
+          "candidates": ["Kokomi", "Barbara", "Yaoyao", "Baizhu", "Diona", "Layla"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -220,24 +144,14 @@
       "name": "Aggravate / Quicken",
       "archetype": "QUICKEN",
       "reaction": "Aggravate",
-      "reactionElements": [
-        "Dendro",
-        "Electro"
-      ],
+      "reactionElements": ["Dendro", "Electro"],
       "description": "Dendro creates a Quicken aura on enemies; Electro hits on a Quickened enemy trigger Aggravate, adding a flat Electro damage bonus based on the attacker's Elemental Mastery. The Electro DPS deals consistent high damage without relying on Crits for the Aggravate portion.",
       "roles": [
         {
           "roleId": "electro_dps",
           "label": "Electro DPS",
           "element": "Electro",
-          "candidates": [
-            "Cyno",
-            "Fischl",
-            "Yae",
-            "RaidenShogun",
-            "Beidou",
-            "Keqing"
-          ],
+          "candidates": ["Cyno", "Fischl", "Yae", "RaidenShogun", "Beidou", "Keqing"],
           "required": true,
           "flex": false,
           "weight": 35
@@ -246,13 +160,7 @@
           "roleId": "dendro_enabler",
           "label": "Dendro Enabler",
           "element": "Dendro",
-          "candidates": [
-            "Nahida",
-            "Alhaitham",
-            "Collei",
-            "Yaoyao",
-            "Baizhu"
-          ],
+          "candidates": ["Nahida", "Alhaitham", "Collei", "Yaoyao", "Baizhu"],
           "required": true,
           "flex": false,
           "weight": 30
@@ -261,12 +169,7 @@
           "roleId": "electro_support",
           "label": "Electro Support / Battery",
           "element": "Electro",
-          "candidates": [
-            "KukiShinobu",
-            "Fischl",
-            "Beidou",
-            "RaidenShogun"
-          ],
+          "candidates": ["KukiShinobu", "Fischl", "Beidou", "RaidenShogun"],
           "required": false,
           "flex": false,
           "weight": 20
@@ -275,12 +178,7 @@
           "roleId": "flex_anemo",
           "label": "Anemo / Flex",
           "element": "Anemo",
-          "candidates": [
-            "KaedeharaKazuha",
-            "Sucrose",
-            "Venti",
-            "Zhongli"
-          ],
+          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti", "Zhongli"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -292,24 +190,14 @@
       "name": "Bloom / Burgeon",
       "archetype": "BLOOM",
       "reaction": "Bloom",
-      "reactionElements": [
-        "Dendro",
-        "Hydro"
-      ],
+      "reactionElements": ["Dendro", "Hydro"],
       "description": "Dendro and Hydro combine to create Dendro Cores that explode dealing AoE Dendro damage (Bloom), or detonate as Burning Burgeon seeds when ignited by Pyro. A healer is essential to mitigate self-inflicted Bloom damage.",
       "roles": [
         {
           "roleId": "dendro_enabler",
           "label": "Dendro Enabler",
           "element": "Dendro",
-          "candidates": [
-            "Nahida",
-            "Collei",
-            "Yaoyao",
-            "Baizhu",
-            "Kirara",
-            "Alhaitham"
-          ],
+          "candidates": ["Nahida", "Collei", "Yaoyao", "Baizhu", "Kirara", "Alhaitham"],
           "required": true,
           "flex": false,
           "weight": 30
@@ -318,13 +206,7 @@
           "roleId": "hydro_applier",
           "label": "Hydro Applier",
           "element": "Hydro",
-          "candidates": [
-            "Kokomi",
-            "Barbara",
-            "Furina",
-            "Xingqiu",
-            "Yelan"
-          ],
+          "candidates": ["Kokomi", "Barbara", "Furina", "Xingqiu", "Yelan"],
           "required": true,
           "flex": false,
           "weight": 30
@@ -333,13 +215,7 @@
           "roleId": "healer",
           "label": "Healer (mitigates Bloom self-damage)",
           "element": null,
-          "candidates": [
-            "Kokomi",
-            "Barbara",
-            "Yaoyao",
-            "Baizhu",
-            "Diona"
-          ],
+          "candidates": ["Kokomi", "Barbara", "Yaoyao", "Baizhu", "Diona"],
           "required": false,
           "flex": false,
           "weight": 25
@@ -348,13 +224,7 @@
           "roleId": "flex",
           "label": "Flex DPS / Support",
           "element": null,
-          "candidates": [
-            "Thoma",
-            "Dehya",
-            "KukiShinobu",
-            "Fischl",
-            "Nahida"
-          ],
+          "candidates": ["Thoma", "Dehya", "KukiShinobu", "Fischl", "Nahida"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -366,23 +236,14 @@
       "name": "Taser / Electro-Charged",
       "archetype": "ELECTROCHARGED",
       "reaction": "Electro-Charged",
-      "reactionElements": [
-        "Hydro",
-        "Electro"
-      ],
+      "reactionElements": ["Hydro", "Electro"],
       "description": "Hydro and Electro characters simultaneously apply their respective elements, triggering continuous Electro-Charged tick damage. No dedicated on-field DPS is needed — every character contributes through off-field skills and bursts, making the team extremely flexible.",
       "roles": [
         {
           "roleId": "hydro_core",
           "label": "Hydro Core",
           "element": "Hydro",
-          "candidates": [
-            "Xingqiu",
-            "Yelan",
-            "Kokomi",
-            "Fischl",
-            "Barbara"
-          ],
+          "candidates": ["Xingqiu", "Yelan", "Kokomi", "Fischl", "Barbara"],
           "required": true,
           "flex": false,
           "weight": 30
@@ -391,13 +252,7 @@
           "roleId": "electro_core",
           "label": "Electro Core",
           "element": "Electro",
-          "candidates": [
-            "Beidou",
-            "Fischl",
-            "RaidenShogun",
-            "Yae",
-            "KukiShinobu"
-          ],
+          "candidates": ["Beidou", "Fischl", "RaidenShogun", "Yae", "KukiShinobu"],
           "required": true,
           "flex": false,
           "weight": 30
@@ -406,12 +261,7 @@
           "roleId": "electro_support",
           "label": "Electro Support",
           "element": "Electro",
-          "candidates": [
-            "Fischl",
-            "KukiShinobu",
-            "Beidou",
-            "RaidenShogun"
-          ],
+          "candidates": ["Fischl", "KukiShinobu", "Beidou", "RaidenShogun"],
           "required": false,
           "flex": false,
           "weight": 25
@@ -420,12 +270,7 @@
           "roleId": "flex_anemo",
           "label": "Anemo / Flex",
           "element": "Anemo",
-          "candidates": [
-            "KaedeharaKazuha",
-            "Sucrose",
-            "Venti",
-            "Zhongli"
-          ],
+          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti", "Zhongli"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -437,23 +282,14 @@
       "name": "Mono Pyro",
       "archetype": "MONO_PYRO",
       "reaction": "Pyro Resonance",
-      "reactionElements": [
-        "Pyro"
-      ],
+      "reactionElements": ["Pyro"],
       "description": "Four Pyro characters leverage double Pyro Resonance for a 25% ATK bonus to the whole party. Bennett's burst creates a massive ATK field, Xiangling deals off-field AoE Pyro damage, while a main DPS like Diluc or Yoimiya carries the team.",
       "roles": [
         {
           "roleId": "pyro_dps",
           "label": "Pyro Main DPS",
           "element": "Pyro",
-          "candidates": [
-            "HuTao",
-            "Yoimiya",
-            "Diluc",
-            "Klee",
-            "Lyney",
-            "Arlecchino"
-          ],
+          "candidates": ["HuTao", "Yoimiya", "Diluc", "Klee", "Lyney", "Arlecchino"],
           "required": true,
           "flex": false,
           "weight": 35
@@ -462,9 +298,7 @@
           "roleId": "bennett",
           "label": "Bennett (ATK Buffer)",
           "element": "Pyro",
-          "candidates": [
-            "Bennett"
-          ],
+          "candidates": ["Bennett"],
           "required": true,
           "flex": false,
           "weight": 30
@@ -473,9 +307,7 @@
           "roleId": "xiangling",
           "label": "Xiangling (Off-field Pyro)",
           "element": "Pyro",
-          "candidates": [
-            "Xiangling"
-          ],
+          "candidates": ["Xiangling"],
           "required": false,
           "flex": false,
           "weight": 20
@@ -484,11 +316,7 @@
           "roleId": "pyro_flex",
           "label": "Flex Pyro",
           "element": "Pyro",
-          "candidates": [
-            "Thoma",
-            "Yanfei",
-            "Dehya"
-          ],
+          "candidates": ["Thoma", "Yanfei", "Dehya"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -500,23 +328,14 @@
       "name": "Physical + Superconduct",
       "archetype": "SUPERCONDUCT",
       "reaction": "Superconduct",
-      "reactionElements": [
-        "Cryo",
-        "Electro"
-      ],
+      "reactionElements": ["Cryo", "Electro"],
       "description": "A Physical DPS benefits from Superconduct, which reduces enemy Physical RES by 40%. Cryo and Electro characters apply the reaction off-field while a healer or shielder keeps the on-field character safe for extended attack combos.",
       "roles": [
         {
           "roleId": "physical_dps",
           "label": "Physical DPS",
           "element": null,
-          "candidates": [
-            "Eula",
-            "Razor",
-            "Fischl",
-            "Xinyan",
-            "Rosaria"
-          ],
+          "candidates": ["Eula", "Razor", "Fischl", "Xinyan", "Rosaria"],
           "required": true,
           "flex": false,
           "weight": 35
@@ -525,13 +344,7 @@
           "roleId": "cryo_applier",
           "label": "Cryo Applier",
           "element": "Cryo",
-          "candidates": [
-            "Rosaria",
-            "Kaeya",
-            "Diona",
-            "Layla",
-            "Shenhe"
-          ],
+          "candidates": ["Rosaria", "Kaeya", "Diona", "Layla", "Shenhe"],
           "required": true,
           "flex": false,
           "weight": 25
@@ -540,12 +353,7 @@
           "roleId": "electro_applier",
           "label": "Electro Applier",
           "element": "Electro",
-          "candidates": [
-            "Fischl",
-            "Beidou",
-            "RaidenShogun",
-            "KukiShinobu"
-          ],
+          "candidates": ["Fischl", "Beidou", "RaidenShogun", "KukiShinobu"],
           "required": false,
           "flex": false,
           "weight": 25
@@ -554,13 +362,7 @@
           "roleId": "healer_shielder",
           "label": "Healer / Shielder",
           "element": null,
-          "candidates": [
-            "Diona",
-            "Zhongli",
-            "Bennett",
-            "Barbara",
-            "Kokomi"
-          ],
+          "candidates": ["Diona", "Zhongli", "Bennett", "Barbara", "Kokomi"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -572,22 +374,14 @@
       "name": "Odette Freeze",
       "archetype": "FREEZE",
       "reaction": "Freeze",
-      "reactionElements": [
-        "Cryo",
-        "Hydro"
-      ],
+      "reactionElements": ["Cryo", "Hydro"],
       "description": "Odette serves as the Cryo driver in a Freeze team, consistently applying Cryo to freeze enemies in place. Paired with a Hydro enabler like Furina or Kokomi, enemies are locked down and vulnerable to the full Cryo DPS burst. An Anemo support like Kazuha shreds Cryo resistance for maximum damage.",
       "roles": [
         {
           "roleId": "cryo_dps",
           "label": "Cryo DPS",
           "element": "Cryo",
-          "candidates": [
-            "Odette",
-            "KamisatoAyaka",
-            "Ganyu",
-            "Eula"
-          ],
+          "candidates": ["Odette", "KamisatoAyaka", "Ganyu", "Eula"],
           "required": true,
           "flex": false,
           "weight": 35
@@ -596,13 +390,7 @@
           "roleId": "hydro_enabler",
           "label": "Hydro Enabler",
           "element": "Hydro",
-          "candidates": [
-            "Furina",
-            "Kokomi",
-            "Xingqiu",
-            "Mona",
-            "Barbara"
-          ],
+          "candidates": ["Furina", "Kokomi", "Xingqiu", "Mona", "Barbara"],
           "required": true,
           "flex": false,
           "weight": 30
@@ -611,12 +399,7 @@
           "roleId": "cryo_support",
           "label": "Cryo Support / Resonance",
           "element": "Cryo",
-          "candidates": [
-            "Shenhe",
-            "Rosaria",
-            "Diona",
-            "Layla"
-          ],
+          "candidates": ["Shenhe", "Rosaria", "Diona", "Layla"],
           "required": false,
           "flex": true,
           "weight": 20
@@ -625,11 +408,7 @@
           "roleId": "anemo_shred",
           "label": "Anemo Support",
           "element": "Anemo",
-          "candidates": [
-            "KaedeharaKazuha",
-            "Venti",
-            "Sucrose"
-          ],
+          "candidates": ["KaedeharaKazuha", "Venti", "Sucrose"],
           "required": false,
           "flex": true,
           "weight": 15

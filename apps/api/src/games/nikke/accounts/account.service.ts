@@ -14,7 +14,11 @@ export class NikkeAccountService {
     return account;
   }
 
-  async createAccount(userId: string, commanderName?: string, commanderLevel?: number): Promise<NikkeAccount> {
+  async createAccount(
+    userId: string,
+    commanderName?: string,
+    commanderLevel?: number,
+  ): Promise<NikkeAccount> {
     const existing = await prisma.nikkeAccount.findUnique({
       where: { userId },
     });

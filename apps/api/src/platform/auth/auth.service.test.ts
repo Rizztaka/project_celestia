@@ -1,5 +1,5 @@
 import type { User } from '@prisma/client';
-import { beforeEach,describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ConflictError, UnauthorizedError } from '@/core/errors/app-error.js';
 

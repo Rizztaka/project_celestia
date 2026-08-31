@@ -1,4 +1,4 @@
-import { beforeEach,describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // ── Mock prisma before the service is imported ─────────────────────────────
 vi.mock('@/core/db/prisma.js', () => ({
@@ -152,10 +152,46 @@ describe('TeamIntelligenceService', () => {
   it('throws UnprocessableError (422) when no buildable team exists in the roster', async () => {
     // A roster of 4 characters where none match any required role candidates.
     const weirdRoster: CharacterInput[] = [
-      { characterKey: 'Amber', level: 20, ascension: 1, constellation: 0, talentNormal: 1, talentSkill: 1, talentBurst: 1, equippedWeapon: null },
-      { characterKey: 'Lisa', level: 20, ascension: 1, constellation: 0, talentNormal: 1, talentSkill: 1, talentBurst: 1, equippedWeapon: null },
-      { characterKey: 'Noelle', level: 20, ascension: 1, constellation: 0, talentNormal: 1, talentSkill: 1, talentBurst: 1, equippedWeapon: null },
-      { characterKey: 'Kaeya', level: 20, ascension: 1, constellation: 0, talentNormal: 1, talentSkill: 1, talentBurst: 1, equippedWeapon: null },
+      {
+        characterKey: 'Amber',
+        level: 20,
+        ascension: 1,
+        constellation: 0,
+        talentNormal: 1,
+        talentSkill: 1,
+        talentBurst: 1,
+        equippedWeapon: null,
+      },
+      {
+        characterKey: 'Lisa',
+        level: 20,
+        ascension: 1,
+        constellation: 0,
+        talentNormal: 1,
+        talentSkill: 1,
+        talentBurst: 1,
+        equippedWeapon: null,
+      },
+      {
+        characterKey: 'Noelle',
+        level: 20,
+        ascension: 1,
+        constellation: 0,
+        talentNormal: 1,
+        talentSkill: 1,
+        talentBurst: 1,
+        equippedWeapon: null,
+      },
+      {
+        characterKey: 'Kaeya',
+        level: 20,
+        ascension: 1,
+        constellation: 0,
+        talentNormal: 1,
+        talentSkill: 1,
+        talentBurst: 1,
+        equippedWeapon: null,
+      },
     ];
     vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
     mockGetCharactersForUser.mockResolvedValueOnce(weirdRoster);
@@ -240,9 +276,7 @@ describe('calculateTeamScore', () => {
     const sparseRoster = [huTao, xingqiu];
     const breakdown = calculateTeamScore(nationalTemplate, sparseRoster);
 
-    const filledKeys = breakdown.roles
-      .filter((r) => r.filledBy !== null)
-      .map((r) => r.filledBy);
+    const filledKeys = breakdown.roles.filter((r) => r.filledBy !== null).map((r) => r.filledBy);
     const uniqueKeys = new Set(filledKeys);
 
     expect(filledKeys.length).toBe(uniqueKeys.size);
@@ -282,8 +316,26 @@ describe('calculateTeamScore', () => {
 
   it('resonance bonus: no resonance when all characters are different elements', () => {
     // Freeze template with no resonance: Ayaka(Cryo), Mona(Hydro), KukiShinobu(Electro), Kazuha(Anemo)
-    const ayaka: CharacterInput = { characterKey: 'Ayaka', level: 80, ascension: 6, constellation: 0, talentNormal: 8, talentSkill: 8, talentBurst: 8, equippedWeapon: null };
-    const mona: CharacterInput = { characterKey: 'Mona', level: 70, ascension: 5, constellation: 0, talentNormal: 6, talentSkill: 6, talentBurst: 6, equippedWeapon: null };
+    const ayaka: CharacterInput = {
+      characterKey: 'Ayaka',
+      level: 80,
+      ascension: 6,
+      constellation: 0,
+      talentNormal: 8,
+      talentSkill: 8,
+      talentBurst: 8,
+      equippedWeapon: null,
+    };
+    const mona: CharacterInput = {
+      characterKey: 'Mona',
+      level: 70,
+      ascension: 5,
+      constellation: 0,
+      talentNormal: 6,
+      talentSkill: 6,
+      talentBurst: 6,
+      equippedWeapon: null,
+    };
     const roster = [ayaka, mona, kazuha];
     const breakdown = calculateTeamScore(freezeTemplate, roster);
     // Only Ayaka and Mona have defined elements in freeze template roles; they are different
@@ -338,7 +390,16 @@ describe('calculateTeamScore', () => {
 
   it('investment level: fully-built characters yield higher investmentLevel than low-level ones', () => {
     const wellBuiltRoster = [huTao, xingqiu, bennett, kazuha];
-    const poorly: CharacterInput = { characterKey: 'Diluc', level: 1, ascension: 0, constellation: 0, talentNormal: 1, talentSkill: 1, talentBurst: 1, equippedWeapon: null };
+    const poorly: CharacterInput = {
+      characterKey: 'Diluc',
+      level: 1,
+      ascension: 0,
+      constellation: 0,
+      talentNormal: 1,
+      talentSkill: 1,
+      talentBurst: 1,
+      equippedWeapon: null,
+    };
     const poorlyBuiltRoster = [
       poorly,
       { ...xingqiu, level: 1, ascension: 0 },

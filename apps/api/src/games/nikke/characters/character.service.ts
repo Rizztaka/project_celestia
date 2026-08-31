@@ -14,7 +14,13 @@ export class NikkeCharacterService {
     });
   }
 
-  async addCharacter(userId: string, characterKey: string, level = 1, limitBreak = 0, coreEnhance = 0): Promise<NikkeCharacter> {
+  async addCharacter(
+    userId: string,
+    characterKey: string,
+    level = 1,
+    limitBreak = 0,
+    coreEnhance = 0,
+  ): Promise<NikkeCharacter> {
     const account = await prisma.nikkeAccount.findUnique({
       where: { userId },
     });

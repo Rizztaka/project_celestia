@@ -70,7 +70,9 @@ export function explainArtifactScore(
   );
   if (missingSlots.length > 0) {
     const slotNames = missingSlots.map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(', ');
-    explanations.push(`Missing artifacts in: ${slotNames}. Equipping any 5★ piece here will instantly improve the build.`);
+    explanations.push(
+      `Missing artifacts in: ${slotNames}. Equipping any 5★ piece here will instantly improve the build.`,
+    );
   }
 
   // 3. Find highest priority stats for context
@@ -102,20 +104,24 @@ export function explainArtifactScore(
 
   if (worstSlot && worstSlot.score < 50) {
     const capitalizedSlot = worstSlot.key.charAt(0).toUpperCase() + worstSlot.key.slice(1);
-    explanations.push(`The ${capitalizedSlot} is currently the weakest piece (Score: ${worstSlot.score}/100). Focus on replacing this first.`);
+    explanations.push(
+      `The ${capitalizedSlot} is currently the weakest piece (Score: ${worstSlot.score}/100). Focus on replacing this first.`,
+    );
   }
 
   // 5. Wrong main stat detection (only on Sands, Goblet, Circlet)
   for (const slotKey of ['sands', 'goblet', 'circlet'] as const) {
     const artifact = equippedArtifacts.find((a) => a.slotKey === slotKey);
     const validMainStats = profile.mainStatPriority[slotKey];
-    
+
     if (artifact && validMainStats && validMainStats.length > 0) {
       if (!validMainStats.includes(artifact.mainStatKey)) {
         const capitalizedSlot = slotKey.charAt(0).toUpperCase() + slotKey.slice(1);
         const desiredStr = validMainStats.map(toStatName).join(' or ');
         const currentStr = toStatName(artifact.mainStatKey);
-        explanations.push(`The ${capitalizedSlot} has a ${currentStr} main stat. Switching to ${desiredStr} would yield a significant damage increase.`);
+        explanations.push(
+          `The ${capitalizedSlot} has a ${currentStr} main stat. Switching to ${desiredStr} would yield a significant damage increase.`,
+        );
       }
     }
   }
@@ -123,7 +129,9 @@ export function explainArtifactScore(
   // 6. Positive reinforcement (Best slot)
   if (bestSlot && bestSlot.score >= 70) {
     const capitalizedSlot = bestSlot.key.charAt(0).toUpperCase() + bestSlot.key.slice(1);
-    explanations.push(`On a positive note, the ${capitalizedSlot} is an excellent piece (Score: ${bestSlot.score}/100).`);
+    explanations.push(
+      `On a positive note, the ${capitalizedSlot} is an excellent piece (Score: ${bestSlot.score}/100).`,
+    );
   }
 
   return explanations;

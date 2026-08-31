@@ -5,7 +5,7 @@ import { ZodError } from 'zod';
 import { prisma } from '@/core/db/prisma.js';
 import { BadRequestError } from '@/core/errors/app-error.js';
 
-import { type GoodPayload,GoodPayloadSchema } from './importer.schema.js';
+import { type GoodPayload, GoodPayloadSchema } from './importer.schema.js';
 
 export interface ImportResult {
   charactersImported: number;
@@ -67,141 +67,141 @@ export class GenshinImportService {
           data: { equippedWeaponId: null },
         });
 
-      // 3b. Delete all weapons for this account (Replace strategy).
-      await tx.genshinWeapon.deleteMany({ where: { accountId } });
+        // 3b. Delete all weapons for this account (Replace strategy).
+        await tx.genshinWeapon.deleteMany({ where: { accountId } });
 
-      // 3c. Delete all artifacts for this account (Replace strategy).
-      //     FK is on the artifact side, so deleting artifacts is always safe.
-      await tx.genshinArtifact.deleteMany({ where: { accountId } });
+        // 3c. Delete all artifacts for this account (Replace strategy).
+        //     FK is on the artifact side, so deleting artifacts is always safe.
+        await tx.genshinArtifact.deleteMany({ where: { accountId } });
 
-      // 3d. Upsert characters.
-      //     Characters missing from the payload are left untouched — a player
-      //     can never lose a character they have pulled; omissions from GOOD
-      //     exports are always scanner artifacts, not real data loss.
-      const characterMap = new Map<string, string>(); // characterKey → DB id
+        // 3d. Upsert characters.
+        //     Characters missing from the payload are left untouched — a player
+        //     can never lose a character they have pulled; omissions from GOOD
+        //     exports are always scanner artifacts, not real data loss.
+        const characterMap = new Map<string, string>(); // characterKey → DB id
 
-      for (const char of payload.characters) {
-        const upserted = await tx.genshinCharacter.upsert({
-          where: {
-            accountId_characterKey: {
+        for (const char of payload.characters) {
+          const upserted = await tx.genshinCharacter.upsert({
+            where: {
+              accountId_characterKey: {
+                accountId,
+                characterKey: char.key,
+              },
+            },
+            create: {
               accountId,
               characterKey: char.key,
+              level: char.level,
+              ascension: char.ascension,
+              constellation: char.constellation,
+              talentNormal: char.talent.auto,
+              talentSkill: char.talent.skill,
+              talentBurst: char.talent.burst,
             },
-          },
-          create: {
+            update: {
+              level: char.level,
+              ascension: char.ascension,
+              constellation: char.constellation,
+              talentNormal: char.talent.auto,
+              talentSkill: char.talent.skill,
+              talentBurst: char.talent.burst,
+            },
+          });
+
+          characterMap.set(char.key, upserted.id);
+        }
+
+        // 3e. Bulk insert all weapons with pre-generated UUIDs
+        const weaponsToInsert = [];
+        const weaponLocations = []; // Map ID -> location
+
+        for (const weapon of payload.weapons) {
+          const weaponId = randomUUID();
+          weaponsToInsert.push({
+            id: weaponId,
             accountId,
-            characterKey: char.key,
-            level: char.level,
-            ascension: char.ascension,
-            constellation: char.constellation,
-            talentNormal: char.talent.auto,
-            talentSkill: char.talent.skill,
-            talentBurst: char.talent.burst,
-          },
-          update: {
-            level: char.level,
-            ascension: char.ascension,
-            constellation: char.constellation,
-            talentNormal: char.talent.auto,
-            talentSkill: char.talent.skill,
-            talentBurst: char.talent.burst,
-          },
-        });
-
-        characterMap.set(char.key, upserted.id);
-      }
-
-      // 3e. Bulk insert all weapons with pre-generated UUIDs
-      const weaponsToInsert = [];
-      const weaponLocations = []; // Map ID -> location
-
-      for (const weapon of payload.weapons) {
-        const weaponId = randomUUID();
-        weaponsToInsert.push({
-          id: weaponId,
-          accountId,
-          weaponKey: weapon.key,
-          level: weapon.level,
-          ascension: weapon.ascension,
-          refinement: weapon.refinement,
-          locked: weapon.lock,
-        });
-        if (weapon.location) {
-          weaponLocations.push({ id: weaponId, location: weapon.location });
+            weaponKey: weapon.key,
+            level: weapon.level,
+            ascension: weapon.ascension,
+            refinement: weapon.refinement,
+            locked: weapon.lock,
+          });
+          if (weapon.location) {
+            weaponLocations.push({ id: weaponId, location: weapon.location });
+          }
         }
-      }
 
-      if (weaponsToInsert.length > 0) {
-        await tx.genshinWeapon.createMany({ data: weaponsToInsert });
-      }
-
-      // 3f. Bulk insert all artifacts with pre-generated UUIDs
-      const artifactsToInsert = [];
-      const artifactLocations = []; // Map ID -> location
-
-      for (const artifact of payload.artifacts) {
-        const artifactId = randomUUID();
-        artifactsToInsert.push({
-          id: artifactId,
-          accountId,
-          setKey: artifact.setKey,
-          slotKey: artifact.slotKey,
-          level: artifact.level,
-          rarity: artifact.rarity,
-          mainStatKey: artifact.mainStatKey,
-          subStats: artifact.substats as unknown as Prisma.InputJsonValue,
-          locked: artifact.lock,
-        });
-        if (artifact.location) {
-          artifactLocations.push({ id: artifactId, location: artifact.location });
+        if (weaponsToInsert.length > 0) {
+          await tx.genshinWeapon.createMany({ data: weaponsToInsert });
         }
-      }
 
-      if (artifactsToInsert.length > 0) {
-        await tx.genshinArtifact.createMany({ data: artifactsToInsert });
-      }
+        // 3f. Bulk insert all artifacts with pre-generated UUIDs
+        const artifactsToInsert = [];
+        const artifactLocations = []; // Map ID -> location
 
-      // 3g. Resolve weapon equipment.
-      //     We update the character's equippedWeaponId for each location match.
-      for (const { id: weaponId, location } of weaponLocations) {
-        const characterId = characterMap.get(location);
-        if (!characterId) continue;
-        await tx.genshinCharacter.update({
-          where: { id: characterId },
-          data: { equippedWeaponId: weaponId },
-        });
-      }
+        for (const artifact of payload.artifacts) {
+          const artifactId = randomUUID();
+          artifactsToInsert.push({
+            id: artifactId,
+            accountId,
+            setKey: artifact.setKey,
+            slotKey: artifact.slotKey,
+            level: artifact.level,
+            rarity: artifact.rarity,
+            mainStatKey: artifact.mainStatKey,
+            subStats: artifact.substats as unknown as Prisma.InputJsonValue,
+            locked: artifact.lock,
+          });
+          if (artifact.location) {
+            artifactLocations.push({ id: artifactId, location: artifact.location });
+          }
+        }
 
-      // 3h. Resolve artifact equipment.
-      for (const { id: artifactId, location } of artifactLocations) {
-        const characterId = characterMap.get(location);
-        if (!characterId) continue;
-        await tx.genshinArtifact.update({
-          where: { id: artifactId },
-          data: { equippedCharacterId: characterId },
-        });
-      }
+        if (artifactsToInsert.length > 0) {
+          await tx.genshinArtifact.createMany({ data: artifactsToInsert });
+        }
 
-      // 3i. Replace the material inventory.
-      await tx.genshinMaterial.deleteMany({ where: { accountId } });
+        // 3g. Resolve weapon equipment.
+        //     We update the character's equippedWeaponId for each location match.
+        for (const { id: weaponId, location } of weaponLocations) {
+          const characterId = characterMap.get(location);
+          if (!characterId) continue;
+          await tx.genshinCharacter.update({
+            where: { id: characterId },
+            data: { equippedWeaponId: weaponId },
+          });
+        }
 
-      const materialEntries = Object.entries(payload.materials).filter(([, qty]) => qty > 0);
-      const materialsToInsert = materialEntries.map(([itemKey, quantity]) => ({
-        accountId,
-        itemKey,
-        quantity,
-      }));
+        // 3h. Resolve artifact equipment.
+        for (const { id: artifactId, location } of artifactLocations) {
+          const characterId = characterMap.get(location);
+          if (!characterId) continue;
+          await tx.genshinArtifact.update({
+            where: { id: artifactId },
+            data: { equippedCharacterId: characterId },
+          });
+        }
 
-      if (materialsToInsert.length > 0) {
-        await tx.genshinMaterial.createMany({ data: materialsToInsert });
-      }
+        // 3i. Replace the material inventory.
+        await tx.genshinMaterial.deleteMany({ where: { accountId } });
 
-      return {
-        charactersImported: payload.characters.length,
-        weaponsImported: payload.weapons.length,
-        artifactsImported: payload.artifacts.length,
-        materialsImported: materialEntries.length,
-      };
+        const materialEntries = Object.entries(payload.materials).filter(([, qty]) => qty > 0);
+        const materialsToInsert = materialEntries.map(([itemKey, quantity]) => ({
+          accountId,
+          itemKey,
+          quantity,
+        }));
+
+        if (materialsToInsert.length > 0) {
+          await tx.genshinMaterial.createMany({ data: materialsToInsert });
+        }
+
+        return {
+          charactersImported: payload.characters.length,
+          weaponsImported: payload.weapons.length,
+          artifactsImported: payload.artifacts.length,
+          materialsImported: materialEntries.length,
+        };
       },
       {
         maxWait: 10000, // wait up to 10s to acquire a connection

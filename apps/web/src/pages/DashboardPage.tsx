@@ -13,8 +13,8 @@
 
 import type { MeResponse } from '@celestia/api-contracts';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import { ApiError, fetchApi } from '../lib/api';
 import { useAuthStore } from '../stores/auth.store';

@@ -12,7 +12,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { type Banner, fetchBanners, type PullResultItem, simulatePulls } from '../lib/api';
@@ -447,19 +447,16 @@ export default function SimulatorsPage() {
   // Aggregate stats per selected banner
   const [statsMap, setStatsMap] = useState<Record<string, PullStats>>({});
 
-  // Auto-select first banner once loaded
-  useEffect(() => {
-    if (banners && banners.length > 0 && !selectedBannerId) {
-      setSelectedBannerId(banners[0].bannerId);
-    }
-  }, [banners, selectedBannerId]);
+  // Auto-select first banner once loaded using a derived initializer pattern
+  // instead of useEffect to avoid cascading renders (react-hooks/set-state-in-effect)
+  const effectiveBannerId = selectedBannerId ?? banners?.[0]?.bannerId ?? null;
 
-  const selectedBanner = banners?.find((b) => b.bannerId === selectedBannerId) ?? null;
-  const currentPity = selectedBannerId
-    ? (pityMap[selectedBannerId] ?? { pity5: 0, pity4: 0, guaranteed5: false, guaranteed4: false })
+  const selectedBanner = banners?.find((b) => b.bannerId === effectiveBannerId) ?? null;
+  const currentPity = effectiveBannerId
+    ? (pityMap[effectiveBannerId] ?? { pity5: 0, pity4: 0, guaranteed5: false, guaranteed4: false })
     : null;
-  const currentStats = selectedBannerId
-    ? (statsMap[selectedBannerId] ?? {
+  const currentStats = effectiveBannerId
+    ? (statsMap[effectiveBannerId] ?? {
         total: 0,
         fiveStars: 0,
         fourStars: 0,
@@ -469,12 +466,14 @@ export default function SimulatorsPage() {
     : null;
 
   async function handlePull(count: 1 | 10) {
-    if (!selectedBannerId || !currentPity || isSimulating) return;
+    if (!effectiveBannerId || !currentPity || isSimulating) return;
+    // Capture as non-null const — TS cannot narrow across setState callbacks
+    const bannerId: string = effectiveBannerId;
     setIsSimulating(true);
 
     try {
       const result = await simulatePulls({
-        bannerId: selectedBannerId,
+        bannerId,
         count,
         currentPity5: currentPity.pity5,
         currentPity4: currentPity.pity4,
@@ -485,7 +484,7 @@ export default function SimulatorsPage() {
       // Update pity
       setPityMap((prev) => ({
         ...prev,
-        [selectedBannerId]: {
+        [bannerId]: {
           pity5: result.endPity5,
           pity4: result.endPity4,
           guaranteed5: result.endGuaranteed5,
@@ -495,7 +494,7 @@ export default function SimulatorsPage() {
 
       // Update stats
       setStatsMap((prev) => {
-        const old = prev[selectedBannerId] ?? {
+        const old = prev[bannerId] ?? {
           total: 0,
           fiveStars: 0,
           fourStars: 0,
@@ -504,7 +503,7 @@ export default function SimulatorsPage() {
         };
         return {
           ...prev,
-          [selectedBannerId]: {
+          [bannerId]: {
             total: old.total + result.pulls.length,
             fiveStars: old.fiveStars + result.pulls.filter((p) => p.type === '5_STAR').length,
             fourStars: old.fourStars + result.pulls.filter((p) => p.type === '4_STAR').length,
@@ -519,7 +518,7 @@ export default function SimulatorsPage() {
       // Append to history with pull numbers
       const numbered = result.pulls.map((p) => {
         totalPullCounter.current += 1;
-        return { ...p, pullNumber: totalPullCounter.current, bannerId: selectedBannerId };
+        return { ...p, pullNumber: totalPullCounter.current, bannerId };
       });
       setPullHistory((prev) => [...numbered, ...prev]);
 

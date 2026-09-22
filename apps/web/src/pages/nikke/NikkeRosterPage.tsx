@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import { fetchNikkeRoster, type NikkeCharacter } from '../../lib/api';
 
 export const NikkeRosterPage: React.FC = () => {

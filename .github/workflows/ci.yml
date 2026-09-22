@@ -56,6 +56,9 @@ jobs:
 
       - name: Test
         run: pnpm run test
+        env:
+          DATABASE_URL: postgresql://localhost:5432/placeholder
+          JWT_SECRET: placeholder-jwt-secret-for-ci-at-least-32-chars
 
       - name: Build
         run: pnpm run build

@@ -10,7 +10,9 @@
     },
     "test": {
       "dependsOn": ["build"],
-      "outputs": ["coverage/**"]
+      "outputs": ["coverage/**"],
+      "cache": false,
+      "env": ["DATABASE_URL", "JWT_SECRET", "NODE_ENV"]
     },
     "lint": {},
     "format": {},

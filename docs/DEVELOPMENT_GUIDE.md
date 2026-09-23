@@ -408,6 +408,9 @@ A feature is considered complete only when:
 - **Authentication and authorization** must be treated separately.
 - **User-owned resources** must be strictly protected against cross-user access.
 - Production schema changes must be controlled and reviewable.
+- **Password hashing** must happen exactly once, in `AuthService.register`, before the hash is passed to `UserService.createUser`. The internal `CreateUserWithHashInput` type uses a `passwordHash` field (not `password`) to enforce this at the type level.
+- **JWT verification** must restrict algorithms explicitly (currently `HS256` only) and must runtime-validate that `sub` is a non-empty string before setting `req.user`.
+- **Profile endpoints** must enforce ownership before performing any database lookup — foreign requests must be rejected with the same response as a not-found to prevent ID enumeration.
 
 \---
 
@@ -432,7 +435,7 @@ A feature is considered complete only when:
 ## **AI-Agent & MCP Workflow**
 
 - We utilize a structured AI workflow: Gemini (Architect/Reviewer), Claude (Implementer), and ChatGPT (Independent Reviewer).
-- Planning happens Monday–Saturday; Implementation happens on Sunday.
+- Planning happens Monday–Saturday; Implementation happens on Wednesdays and Sundays.
 - For full details on agent handoffs, MCP server constraints, and artifact rules, refer to `.agents/AGENTS.md`.
 
 \---

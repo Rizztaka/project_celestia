@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
 
 import { UserRepository } from './user.repository.js';
-import { UserService } from './user.service.js';
+import { type CreateUserWithHashInput, UserService } from './user.service.js';
 
 // ============================================================
 // Mock the entire UserRepository module.
@@ -22,15 +22,20 @@ const mockUser: User = {
   id: 'test-user-id',
   email: 'rizzler@celestia.dev',
   username: 'rizzler',
-  password: 'hashed_password_value',
+  password: '$2a$12$hashedpasswordvalue.stored.in.db',
   createdAt: new Date('2026-01-01T00:00:00Z'),
   updatedAt: new Date('2026-01-01T00:00:00Z'),
 };
 
-const validInput = {
+/**
+ * Valid input for createUser.
+ * `passwordHash` must be a pre-computed hash — plain passwords are rejected
+ * by the TypeScript type and are never accepted by UserService.
+ */
+const validHashedInput: CreateUserWithHashInput = {
   email: 'rizzler@celestia.dev',
   username: 'rizzler',
-  password: 'securepassword123',
+  passwordHash: '$2a$12$hashedpasswordvalue.stored.in.db',
 };
 
 // ============================================================
@@ -75,17 +80,18 @@ describe('UserService', () => {
       mockRepository.findByUsername.mockResolvedValue(null);
       mockRepository.create.mockResolvedValue(mockUser);
 
-      const result = await userService.createUser(validInput);
+      const result = await userService.createUser(validHashedInput);
 
       expect(result).toEqual(mockUser);
-      expect(mockRepository.create).toHaveBeenCalledWith(validInput);
+      // Repository receives the CreateUserWithHashInput — it handles the mapping
+      expect(mockRepository.create).toHaveBeenCalledWith(validHashedInput);
     });
 
     it('throws ConflictError when the email is already registered', async () => {
       mockRepository.findByEmail.mockResolvedValue(mockUser);
 
-      await expect(userService.createUser(validInput)).rejects.toThrow(ConflictError);
-      await expect(userService.createUser(validInput)).rejects.toThrow(
+      await expect(userService.createUser(validHashedInput)).rejects.toThrow(ConflictError);
+      await expect(userService.createUser(validHashedInput)).rejects.toThrow(
         'Email is already registered.',
       );
     });
@@ -94,8 +100,8 @@ describe('UserService', () => {
       mockRepository.findByEmail.mockResolvedValue(null);
       mockRepository.findByUsername.mockResolvedValue(mockUser);
 
-      await expect(userService.createUser(validInput)).rejects.toThrow(ConflictError);
-      await expect(userService.createUser(validInput)).rejects.toThrow(
+      await expect(userService.createUser(validHashedInput)).rejects.toThrow(ConflictError);
+      await expect(userService.createUser(validHashedInput)).rejects.toThrow(
         'Username is already taken.',
       );
     });
@@ -103,7 +109,7 @@ describe('UserService', () => {
     it('does not call create when email is already taken', async () => {
       mockRepository.findByEmail.mockResolvedValue(mockUser);
 
-      await expect(userService.createUser(validInput)).rejects.toThrow();
+      await expect(userService.createUser(validHashedInput)).rejects.toThrow();
       expect(mockRepository.create).not.toHaveBeenCalled();
     });
   });
@@ -130,6 +136,52 @@ describe('UserService', () => {
 
       await expect(userService.getUserById('nonexistent-id')).rejects.toThrow(NotFoundError);
       await expect(userService.getUserById('nonexistent-id')).rejects.toThrow('User not found.');
+    });
+  });
+
+  // ----------------------------------------------------------
+  // getOwnProfile (Platform Account Security milestone)
+  //
+  // Ownership is enforced BEFORE any DB lookup so that no information
+  // about the target leaks through timing or error differentiation.
+  // ----------------------------------------------------------
+
+  describe('getOwnProfile', () => {
+    it('returns the safe profile when requester and target IDs match', async () => {
+      mockRepository.findById.mockResolvedValue(mockUser);
+
+      const result = await userService.getOwnProfile('test-user-id', 'test-user-id');
+
+      expect(result).not.toHaveProperty('password');
+      expect(result.id).toBe(mockUser.id);
+      expect(mockRepository.findById).toHaveBeenCalledWith('test-user-id');
+    });
+
+    it('throws NotFoundError when requester ID differs from target ID (foreign profile)', async () => {
+      await expect(
+        userService.getOwnProfile('requester-id', 'different-target-id'),
+      ).rejects.toThrow(NotFoundError);
+      await expect(
+        userService.getOwnProfile('requester-id', 'different-target-id'),
+      ).rejects.toThrow('User not found.');
+    });
+
+    it('does NOT call findById when the requester is requesting a foreign profile', async () => {
+      await userService.getOwnProfile('requester-id', 'different-target-id').catch(() => undefined); // suppress the expected error
+
+      // Ownership check short-circuits before any DB access
+      expect(mockRepository.findById).not.toHaveBeenCalled();
+    });
+
+    it('throws NotFoundError when the own profile does not exist in the database', async () => {
+      mockRepository.findById.mockResolvedValue(null);
+
+      await expect(userService.getOwnProfile('test-user-id', 'test-user-id')).rejects.toThrow(
+        NotFoundError,
+      );
+      await expect(userService.getOwnProfile('test-user-id', 'test-user-id')).rejects.toThrow(
+        'User not found.',
+      );
     });
   });
 });

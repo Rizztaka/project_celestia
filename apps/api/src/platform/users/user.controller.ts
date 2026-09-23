@@ -1,4 +1,3 @@
-import { createUserSchema } from '@celestia/api-contracts';
 import type { Request, Response } from 'express';
 
 import { successResponse } from '@/core/utils/response.js';
@@ -12,23 +11,20 @@ export class UserController {
     this.userService = new UserService();
   }
 
-  // Arrow functions automatically bind 'this' — no need for .bind() in routes
-  createUser = async (req: Request, res: Response) => {
-    // 1. Validate request body — Zod throws ZodError if invalid,
-    //    which the global error handler converts to a 400 response
-    const validatedData = createUserSchema.parse(req.body);
+  /**
+   * GET /api/v1/users/:id
+   *
+   * Protected by requireAuth.  Enforces self-only access: the authenticated
+   * user may only retrieve their own profile.  The ownership rule lives in
+   * UserService.getOwnProfile so it is independently testable and reusable.
+   *
+   * req.user.id is guaranteed to be set by requireAuth before this handler runs.
+   */
+  getUser = async (req: Request, res: Response): Promise<void> => {
+    const requesterId = req.user!.id; // set by requireAuth middleware
+    const targetId = req.params.id as string;
 
-    // 2. Delegate to service (business rules live there, not here)
-    const user = await this.userService.createUser(validatedData);
-
-    // 3. Return standardized success response
-    res.status(201).json(successResponse(user, 'User created successfully'));
-  };
-
-  getUser = async (req: Request, res: Response) => {
-    const userId = req.params.id as string;
-
-    const user = await this.userService.getUserById(userId);
+    const user = await this.userService.getOwnProfile(requesterId, targetId);
 
     res.status(200).json(successResponse(user, 'User retrieved successfully'));
   };

@@ -117,7 +117,7 @@ describe('AuthService', () => {
 
       expect(bcrypt.hash).toHaveBeenCalledWith('plainpassword', 12);
       expect(mockUserService.createUser).toHaveBeenCalledWith(
-        expect.objectContaining({ password: 'hashed_password' }),
+        expect.objectContaining({ passwordHash: 'hashed_password' }),
       );
     });
 

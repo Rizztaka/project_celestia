@@ -101,6 +101,83 @@ describe('requireAuth middleware', () => {
   });
 
   // ----------------------------------------------------------
+  // JWT payload runtime validation (new in Platform Account Security)
+  //
+  // A TypeScript cast alone does not protect against tokens whose `sub`
+  // is absent, empty, whitespace-only, or a non-string type.
+  // ----------------------------------------------------------
+
+  it('throws UnauthorizedError when the payload has no sub claim', () => {
+    // A valid signature but no sub — e.g. { userId: 'x' }
+    jwt.verify.mockReturnValue({ userId: 'some-id' });
+
+    const { req, res, next } = buildMocks('Bearer any.token.here');
+
+    expect(() => requireAuth(req, res, next)).toThrow(UnauthorizedError);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it('throws UnauthorizedError when sub is an empty string', () => {
+    jwt.verify.mockReturnValue({ sub: '' });
+
+    const { req, res, next } = buildMocks('Bearer any.token.here');
+
+    expect(() => requireAuth(req, res, next)).toThrow(UnauthorizedError);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it('throws UnauthorizedError when sub is a whitespace-only string', () => {
+    jwt.verify.mockReturnValue({ sub: '   ' });
+
+    const { req, res, next } = buildMocks('Bearer any.token.here');
+
+    expect(() => requireAuth(req, res, next)).toThrow(UnauthorizedError);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it('throws UnauthorizedError when sub is a number', () => {
+    jwt.verify.mockReturnValue({ sub: 12345 });
+
+    const { req, res, next } = buildMocks('Bearer any.token.here');
+
+    expect(() => requireAuth(req, res, next)).toThrow(UnauthorizedError);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it('throws UnauthorizedError when sub is null', () => {
+    jwt.verify.mockReturnValue({ sub: null });
+
+    const { req, res, next } = buildMocks('Bearer any.token.here');
+
+    expect(() => requireAuth(req, res, next)).toThrow(UnauthorizedError);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it('throws UnauthorizedError when the verified payload is a plain string (not an object)', () => {
+    // jwt.verify can return a string if the JWT payload was a plain string
+    jwt.verify.mockReturnValue('plain-string-payload');
+
+    const { req, res, next } = buildMocks('Bearer any.token.here');
+
+    expect(() => requireAuth(req, res, next)).toThrow(UnauthorizedError);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it('throws UnauthorizedError when the algorithm check rejects the token', () => {
+    // jwt.verify throws NotBeforeError/JsonWebTokenError for disallowed algorithms
+    jwt.verify.mockImplementation(() => {
+      const err = new Error('invalid algorithm');
+      err.name = 'JsonWebTokenError';
+      throw err;
+    });
+
+    const { req, res, next } = buildMocks('Bearer hs384.token.here');
+
+    expect(() => requireAuth(req, res, next)).toThrow(UnauthorizedError);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  // ----------------------------------------------------------
   // Authenticated requests pass through
   // ----------------------------------------------------------
 

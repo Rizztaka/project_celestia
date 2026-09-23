@@ -63,7 +63,7 @@ export class AuthService {
     const user = await this.userService.createUser({
       email: data.email,
       username: data.username,
-      password: hashedPassword,
+      passwordHash: hashedPassword, // explicit: already hashed exactly once above
     });
 
     const token = this.generateToken(user.id);

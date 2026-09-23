@@ -4,7 +4,7 @@
 **Priority:** P0  
 **Status:** Complete  
 **Phase:** 1B / 1C — Core Platform  
-**Last Updated:** 2026-08-03
+**Last Updated:** 2026-09-23 (Platform Account Security milestone)
 
 ---
 
@@ -95,11 +95,15 @@ Both endpoints return the standard success envelope:
 
 ## API Endpoints
 
-| Method | Path                  | Auth Required | Description                        |
-| ------ | --------------------- | ------------- | ---------------------------------- |
-| POST   | /api/v1/auth/register | No            | Create new account                 |
-| POST   | /api/v1/auth/login    | No            | Authenticate user                  |
-| GET    | /api/v1/auth/me       | Yes (Bearer)  | Return current user's safe profile |
+| Method | Path                  | Auth Required | Description                                                              |
+| ------ | --------------------- | ------------- | ------------------------------------------------------------------------ |
+| POST   | /api/v1/auth/register | No            | Create new account                                                       |
+| POST   | /api/v1/auth/login    | No            | Authenticate user                                                        |
+| GET    | /api/v1/auth/me       | Yes (Bearer)  | Return current user's safe profile                                       |
+| GET    | /api/v1/users/:id     | Yes (Bearer)  | Return **own** profile only (self-only — returns 404 for any foreign ID) |
+
+> The legacy `POST /api/v1/users` public route was removed in the Platform
+> Account Security milestone (2026-09-23). See `docs/api/authentication.md`.
 
 ---
 
@@ -109,9 +113,12 @@ Both endpoints return the standard success envelope:
 - `AuthRepository` — `findByEmail()` for login lookup
 - `AuthService` — `register()`, `login()`, `generateToken()`, `stripPassword()`
 - `AuthController` — thin HTTP adapter, validates input, delegates to service; `me()` handler delegates to `UserService.getUserById()`
-- `requireAuth` middleware in `core/middleware/` — verifies JWT on protected routes
+- `requireAuth` middleware in `core/middleware/` — verifies JWT on protected routes; enforces **HS256-only** algorithm restriction; performs **runtime `sub` validation** (must be a non-empty, non-whitespace string)
 - Cross-module: `AuthService` calls `UserService.createUser()` for registration
-  (avoids duplicating uniqueness rules); `AuthController.me()` calls `UserService.getUserById()`
+  (avoids duplicating uniqueness rules); the internal creation contract uses
+  `CreateUserWithHashInput` with an explicit `passwordHash` field
+- `AuthController.me()` calls `UserService.getUserById()`
+- `UserController.getUser()` calls `UserService.getOwnProfile(requesterId, targetId)` which enforces self-only access before any DB lookup
 
 ---
 
@@ -140,8 +147,12 @@ can be added in a later phase if refresh token rotation or rate limiting is need
 ## Testing Strategy
 
 - **Unit tests** for `AuthService` and `UserService` (bcrypt and JWT mocked)
+- **HTTP regression tests** in `src/platform/security.http.test.ts` — 22 Supertest cases
+  using real bcrypt and real JWT signing/verification; only Prisma is mocked.
+  These cover: removed route, hashing correctness, ownership enforcement,
+  JWT payload validation, algorithm restriction, duplicate registration.
 - **Manual tests** via HTTP client (Postman / curl) against the running API
-- **Integration tests** deferred to a later phase when a test database is configured
+- See `docs/api/authentication.md` for the full regression test evidence table.
 
 ---
 

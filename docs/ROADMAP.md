@@ -22,14 +22,14 @@ _Note: Do NOT assume every numbered Sunday is fixed. The roadmap must be depende
 4. **Good performance** without premature optimization.
 5. **Strong security and privacy.**
 6. **Maintainability** for a solo developer using AI-assisted development.
-7. **Weekly workflow**: Planning Monday–Saturday, Implementation primarily on Sunday.
+7. **Weekly workflow**: Planning Monday–Saturday, Implementation on Wednesdays and Sundays.
 
 ---
 
 ## **Development Principles**
 
 - Complete one milestone before beginning the next.
-- One Sunday should represent one coherent milestone, not an arbitrary collection of unrelated tasks.
+- One implementation session (Wednesday or Sunday) should represent one coherent milestone, not an arbitrary collection of unrelated tasks.
 - Prioritize quality over speed.
 - Keep every milestone independently functional.
 
@@ -44,6 +44,10 @@ Establish project vision, architecture, and documentation. Set up monorepo and C
 ### **Phase 1 — Security Foundation**
 
 Establish robust validation, input sanitization, error handling boundaries, and secure secret management.
+
+**Completed Milestones:**
+
+- **Platform Account Security** — Removed public registration route that bypassed password hashing; added self-only profile access enforcement (NotFoundError before DB lookup for foreign IDs); added JWT payload runtime validation and HS256 algorithm restriction. 33 regression tests added (287 total).
 
 ### **Phase 2 — Authentication + Guest Mode**
 

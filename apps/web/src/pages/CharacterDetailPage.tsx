@@ -32,7 +32,7 @@ export default function CharacterDetailPage() {
         tabIndex={-1}
         className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10"
       >
-        <div className="mb-6 flex items-center justify-between gap-3">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <Link to="/roster" className="text-sm text-indigo-300 hover:text-indigo-200">
             ← All characters
           </Link>

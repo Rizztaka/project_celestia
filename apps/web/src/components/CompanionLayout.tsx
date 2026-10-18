@@ -23,12 +23,144 @@ const secondary = [
   ['/nikke/roster', 'NIKKE'],
 ] as const;
 
+function MobileNavigation({ signOut, signingOut }: { signOut: () => void; signingOut: boolean }) {
+  const drawer = useRef<HTMLDialogElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+  useEffect(() => {
+    const wide = window.matchMedia('(min-width: 640px)');
+    const closeOnResize = () => {
+      if (wide.matches) drawer.current?.close();
+    };
+    wide.addEventListener('change', closeOnResize);
+    return () => wide.removeEventListener('change', closeOnResize);
+  }, []);
+  return (
+    <>
+      <button
+        ref={trigger}
+        type="button"
+        className="companion-menu-toggle"
+        aria-expanded={open}
+        aria-controls="mobile-nav-drawer"
+        onClick={() => {
+          if (drawer.current?.open) drawer.current.close();
+          else {
+            drawer.current?.showModal();
+            setOpen(true);
+          }
+        }}
+      >
+        <svg
+          aria-hidden="true"
+          className="mr-2 h-5 w-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d={open ? 'm6 6 12 12M6 18 18 6' : 'M4 6h16M4 12h16M4 18h16'} />
+        </svg>
+        Menu
+      </button>
+      <dialog
+        ref={drawer}
+        id="mobile-nav-drawer"
+        className="companion-drawer"
+        aria-labelledby="mobile-nav-title"
+        onKeyDown={(event) => {
+          if (event.key !== 'Tab') return;
+          const controls = Array.from(
+            event.currentTarget.querySelectorAll<HTMLElement>('a[href], button:not(:disabled)'),
+          );
+          const first = controls[0];
+          const last = controls.at(-1);
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last?.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first?.focus();
+          }
+        }}
+        onClose={() => {
+          setOpen(false);
+          trigger.current?.focus();
+        }}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <h2 id="mobile-nav-title" className="text-lg font-semibold">
+            Navigation
+          </h2>
+          <button
+            type="button"
+            onClick={() => drawer.current?.close()}
+            aria-label="Close navigation"
+          >
+            <svg
+              aria-hidden="true"
+              className="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="m6 6 12 12M6 18 18 6" />
+            </svg>
+          </button>
+        </div>
+        {(
+          [
+            ['Primary', primary],
+            ['Supporting', supporting],
+            ['Other tools', secondary],
+          ] as const
+        ).map(([label, links]) => (
+          <nav key={label} aria-label={`${label} mobile navigation`} className="mt-5 flex flex-col">
+            <h3 className="mb-1 px-3 text-xs uppercase tracking-wider text-indigo-200">{label}</h3>
+            {links.map(([to, name]) => (
+              <NavLink key={to} to={to} end={to === '/'} onClick={() => drawer.current?.close()}>
+                {name}
+              </NavLink>
+            ))}
+          </nav>
+        ))}
+        <button
+          type="button"
+          className="mt-5 w-full border border-zinc-600"
+          disabled={signingOut}
+          onClick={signOut}
+        >
+          {signingOut ? 'Signing out…' : 'Sign out'}
+        </button>
+      </dialog>
+    </>
+  );
+}
+
 export function CompanionNavigation() {
   const logout = useAuthStore((state) => state.logout);
   const [signingOut, setSigningOut] = useState(false);
   const [logoutError, setLogoutError] = useState('');
   const location = useLocation();
   const disclosure = useRef<HTMLDetailsElement>(null);
+  const signOut = () => {
+    if (signingOut) return;
+    setSigningOut(true);
+    setLogoutError('');
+    void fetchApi('/auth/logout', { method: 'POST', body: '{}' })
+      .then(() => logout())
+      .catch(() => setLogoutError('Could not sign out. Reconnect and try again.'))
+      .finally(() => setSigningOut(false));
+  };
   useEffect(() => {
     if (disclosure.current) disclosure.current.open = false;
   }, [location.pathname, location.search, location.hash]);
@@ -63,20 +195,14 @@ export function CompanionNavigation() {
         <Link to="/" className="font-display text-lg font-bold text-white">
           Project Celestia
         </Link>
-        <button
-          disabled={signingOut}
-          onClick={() => {
-            if (signingOut) return;
-            setSigningOut(true);
-            setLogoutError('');
-            void fetchApi('/auth/logout', { method: 'POST', body: '{}' })
-              .then(() => logout())
-              .catch(() => setLogoutError('Could not sign out. Reconnect and try again.'))
-              .finally(() => setSigningOut(false));
-          }}
-        >
+        <button className="companion-desktop-signout" disabled={signingOut} onClick={signOut}>
           {signingOut ? 'Signing out…' : 'Sign out'}
         </button>
+        <MobileNavigation
+          key={`${location.pathname}${location.search}${location.hash}`}
+          signOut={signOut}
+          signingOut={signingOut}
+        />
       </div>
       {logoutError && (
         <p role="alert" className="p-2 text-sm text-amber-200">

@@ -1,0 +1,320 @@
+{
+  "build": "production Vite preview",
+  "fixture": "Synthetic API interception; no backend writes",
+  "viewportChecks": [
+    {
+      "width": 1280,
+      "page": "Today",
+      "viewport": 1280,
+      "scroll": 1280,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 1280,
+      "page": "Characters",
+      "viewport": 1280,
+      "scroll": 1280,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 1280,
+      "page": "Inventory",
+      "viewport": 1280,
+      "scroll": 1280,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 1280,
+      "page": "Character equipment",
+      "viewport": 1280,
+      "scroll": 1280,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 1280,
+      "page": "Planner daily",
+      "viewport": 1280,
+      "scroll": 1280,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 1280,
+      "page": "Planner weekly",
+      "viewport": 1280,
+      "scroll": 1280,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 1280,
+      "page": "Planner farming",
+      "viewport": 1280,
+      "scroll": 1280,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 1280,
+      "page": "Planner events",
+      "viewport": 1280,
+      "scroll": 1280,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 1280,
+      "page": "Settings",
+      "viewport": 1280,
+      "scroll": 1280,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 1280,
+      "page": "Authorize account export",
+      "viewport": 1280,
+      "scroll": 1280,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 1280,
+      "page": "Confirm account deletion",
+      "viewport": 1280,
+      "scroll": 1280,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 640,
+      "page": "Today",
+      "viewport": 640,
+      "scroll": 640,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 640,
+      "page": "Characters",
+      "viewport": 640,
+      "scroll": 640,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 640,
+      "page": "Inventory",
+      "viewport": 640,
+      "scroll": 640,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 640,
+      "page": "Character equipment",
+      "viewport": 640,
+      "scroll": 640,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 640,
+      "page": "Planner daily",
+      "viewport": 640,
+      "scroll": 640,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 640,
+      "page": "Planner weekly",
+      "viewport": 640,
+      "scroll": 640,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 640,
+      "page": "Planner farming",
+      "viewport": 640,
+      "scroll": 640,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 640,
+      "page": "Planner events",
+      "viewport": 640,
+      "scroll": 640,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 640,
+      "page": "Settings",
+      "viewport": 640,
+      "scroll": 640,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 640,
+      "page": "Authorize account export",
+      "viewport": 640,
+      "scroll": 640,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 640,
+      "page": "Confirm account deletion",
+      "viewport": 640,
+      "scroll": 640,
+      "header": 185,
+      "clipping": []
+    },
+    {
+      "width": 320,
+      "page": "Today",
+      "viewport": 320,
+      "scroll": 320,
+      "header": 61,
+      "clipping": []
+    },
+    {
+      "width": 320,
+      "page": "Characters",
+      "viewport": 320,
+      "scroll": 320,
+      "header": 61,
+      "clipping": []
+    },
+    {
+      "width": 320,
+      "page": "Inventory",
+      "viewport": 320,
+      "scroll": 320,
+      "header": 61,
+      "clipping": []
+    },
+    {
+      "width": 320,
+      "page": "Character equipment",
+      "viewport": 320,
+      "scroll": 320,
+      "header": 61,
+      "clipping": []
+    },
+    {
+      "width": 320,
+      "page": "Planner daily",
+      "viewport": 320,
+      "scroll": 320,
+      "header": 61,
+      "clipping": []
+    },
+    {
+      "width": 320,
+      "page": "Planner weekly",
+      "viewport": 320,
+      "scroll": 320,
+      "header": 61,
+      "clipping": []
+    },
+    {
+      "width": 320,
+      "page": "Planner farming",
+      "viewport": 320,
+      "scroll": 320,
+      "header": 61,
+      "clipping": []
+    },
+    {
+      "width": 320,
+      "page": "Planner events",
+      "viewport": 320,
+      "scroll": 320,
+      "header": 61,
+      "clipping": []
+    },
+    {
+      "width": 320,
+      "page": "Settings",
+      "viewport": 320,
+      "scroll": 320,
+      "header": 61,
+      "clipping": []
+    },
+    {
+      "width": 320,
+      "page": "Authorize account export",
+      "viewport": 320,
+      "scroll": 320,
+      "header": 61,
+      "clipping": []
+    },
+    {
+      "width": 320,
+      "page": "Confirm account deletion",
+      "viewport": 320,
+      "scroll": 320,
+      "header": 61,
+      "clipping": []
+    }
+  ],
+  "interactions": [
+    "1280px account cancellations and Planner/Inventory tab keys passed",
+    "640px account cancellations and Planner/Inventory tab keys passed",
+    "320px native modal focus trap, Escape restore and route close passed",
+    "320px account cancellations and Planner/Inventory tab keys passed",
+    "Resin 119/120/159/160/200 thresholds and named meters passed; cap remains 200"
+  ],
+  "artwork": [
+    {
+      "scenario": "secondary",
+      "loaded": true,
+      "attempts": [
+        "https://enka.network/ui/UI_AvatarIcon_Bennett.png",
+        "https://enka.network/ui/UI_EquipIcon_Pole_Mori.png",
+        "https://api.ambr.top/assets/UI/UI_AvatarIcon_Bennett.png",
+        "https://api.ambr.top/assets/UI/UI_EquipIcon_Pole_Mori.png"
+      ],
+      "note": "Synthetic 1px PNG proves retry; not artwork fidelity"
+    },
+    {
+      "scenario": "blocked",
+      "loaded": false,
+      "attempts": [
+        "https://enka.network/ui/UI_AvatarIcon_Bennett.png",
+        "https://enka.network/ui/UI_EquipIcon_Pole_Mori.png",
+        "https://api.ambr.top/assets/UI/UI_AvatarIcon_Bennett.png",
+        "https://api.ambr.top/assets/UI/UI_EquipIcon_Pole_Mori.png"
+      ]
+    },
+    {
+      "scenario": "stalled",
+      "loaded": false,
+      "attempts": [
+        "https://enka.network/ui/UI_AvatarIcon_Bennett.png",
+        "https://enka.network/ui/UI_EquipIcon_Pole_Mori.png",
+        "https://api.ambr.top/assets/UI/UI_AvatarIcon_Bennett.png",
+        "https://api.ambr.top/assets/UI/UI_EquipIcon_Pole_Mori.png"
+      ]
+    },
+    {
+      "scenario": "live",
+      "loaded": true,
+      "attempts": [
+        "https://enka.network/ui/UI_AvatarIcon_Bennett.png",
+        "https://enka.network/ui/UI_EquipIcon_Pole_Mori.png"
+      ]
+    }
+  ],
+  "pageErrors": [],
+  "status": "passed"
+}

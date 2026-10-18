@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { AccessibleTabs, TabPanel } from '../components/AccessibleTabs';
 import EventCard from '../components/EventCard';
 import FarmingPanel from '../components/FarmingPanel';
 import GoalManager from '../components/GoalManager';
@@ -211,43 +212,39 @@ export default function PlannerPage() {
           import required to plan.
         </p>
         {/* ── Tab Switcher ───────────────────────────────── */}
-        <div className="animate-fade-in mb-8 flex w-fit max-w-full flex-wrap gap-1 rounded-xl bg-white/5 p-1">
-          {(['daily', 'weekly', 'farming', 'events'] as const).map((tab) => (
-            <button
-              key={tab}
-              id={`tab-${tab}`}
-              aria-pressed={activeTab === tab}
-              onClick={() => setActiveTab(tab)}
-              className={`relative rounded-lg px-3 py-2 text-sm font-semibold transition-all sm:px-5 ${
-                activeTab === tab
-                  ? 'bg-white/10 text-white shadow-sm'
-                  : 'text-zinc-500 hover:text-zinc-300'
-              }`}
-            >
-              {tab === 'daily' ? (
-                'Daily'
-              ) : tab === 'weekly' ? (
-                'Weekly'
-              ) : tab === 'farming' ? (
-                'Goals & materials'
-              ) : (
-                <span className="flex items-center gap-1.5">
+        <AccessibleTabs
+          label="Planner sections"
+          prefix="planner"
+          active={activeTab}
+          onChange={setActiveTab}
+          tabs={[
+            { id: 'daily', label: 'Daily' },
+            { id: 'weekly', label: 'Weekly' },
+            { id: 'farming', label: 'Goals & materials' },
+            {
+              id: 'events',
+              label: (
+                <span>
                   Events
-                  {eventsData && eventsData.totalUnclaimedPrimogems > 0 && (
-                    <span className="rounded-full border border-amber-500/30 bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-amber-400">
+                  {eventsData && eventsData.totalUnclaimedPrimogems > 0 ? (
+                    <span className="ml-2 text-amber-300">
                       {eventsData.totalUnclaimedPrimogems}✦
                     </span>
-                  )}
+                  ) : null}
                 </span>
-              )}
-            </button>
-          ))}
-        </div>
-
-        {(activeTab === 'daily' || activeTab === 'weekly') && <RoutinePanel view={activeTab} />}
+              ),
+            },
+          ]}
+        />
+        <TabPanel prefix="planner" id="daily" active={activeTab}>
+          <RoutinePanel view="daily" />
+        </TabPanel>
+        <TabPanel prefix="planner" id="weekly" active={activeTab}>
+          <RoutinePanel view="weekly" />
+        </TabPanel>
 
         {/* ── Farming Goals Tab ─────────────────────────── */}
-        {activeTab === 'farming' && (
+        <TabPanel prefix="planner" id="farming" active={activeTab}>
           <div className="animate-fade-in flex flex-col gap-8">
             <button
               className="self-start rounded-lg border border-white/20 px-3 py-2 text-sm"
@@ -269,7 +266,7 @@ export default function PlannerPage() {
               </p>
             )}
             {materialsData && (
-              <div className="glass-panel rounded-2xl p-5 text-sm text-zinc-400">
+              <div className="companion-info-card min-w-0 rounded-2xl p-5 text-sm text-zinc-400">
                 <p>
                   {materialsData.neededComplete
                     ? 'Declared-range costs for active supported goals'
@@ -292,7 +289,7 @@ export default function PlannerPage() {
             )}
             {/* Materials Delta Table */}
             {materialsLoading && (
-              <div className="glass-panel rounded-2xl p-6">
+              <div className="companion-info-card min-w-0 rounded-2xl p-6">
                 <div className="mb-6 h-4 w-40 rounded bg-white/5" />
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="mb-3 h-12 rounded-xl bg-white/5" />
@@ -301,7 +298,7 @@ export default function PlannerPage() {
             )}
 
             {!materialsLoading && materialRows.length > 0 && (
-              <div className="glass-panel rounded-2xl p-6">
+              <div className="companion-info-card min-w-0 rounded-2xl p-6">
                 <h2 className="mb-5 text-sm font-semibold uppercase tracking-widest text-zinc-500">
                   Upgrade Cost Totals
                 </h2>
@@ -323,7 +320,7 @@ export default function PlannerPage() {
               !materialsError &&
               goals.some((goal) => goal.status === 'active') &&
               materialRows.length === 0 && (
-                <div className="glass-panel rounded-2xl p-8 text-center">
+                <div className="companion-info-card min-w-0 rounded-2xl p-8 text-center">
                   <p className="font-semibold text-amber-300">Material advice unavailable</p>
                   <p className="mt-1 text-sm text-zinc-500">
                     Your goals are preserved. No supported cost totals are available for these
@@ -333,14 +330,14 @@ export default function PlannerPage() {
               )}
 
             {!materialsLoading && !materialsError && goals.length === 0 && (
-              <div className="glass-panel rounded-2xl p-8 text-center text-zinc-600">
+              <div className="companion-info-card min-w-0 rounded-2xl p-8 text-center text-zinc-600">
                 <p className="text-sm">Add a goal above to see the materials you need.</p>
               </div>
             )}
           </div>
-        )}
+        </TabPanel>
         {/* ── Events Tab ─────────────────────────────── */}
-        {activeTab === 'events' && (
+        <TabPanel prefix="planner" id="events" active={activeTab}>
           <div className="animate-fade-in flex flex-col gap-5">
             <button
               className="self-start rounded-lg border border-white/20 px-3 py-2 text-sm"
@@ -374,7 +371,7 @@ export default function PlannerPage() {
             )}
 
             {eventsData && !eventsError && eventsData.events.length === 0 && (
-              <div className="glass-panel rounded-2xl p-10 text-center text-zinc-600">
+              <div className="companion-info-card min-w-0 rounded-2xl p-10 text-center text-zinc-600">
                 <p className="text-sm">Current event advice unavailable.</p>
                 <p className="mt-1 text-xs">
                   {eventsData.availability.reason ?? 'No verified current events are available.'}
@@ -398,7 +395,7 @@ export default function PlannerPage() {
                 />
               ))}
           </div>
-        )}
+        </TabPanel>
       </main>
     </div>
   );

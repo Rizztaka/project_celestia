@@ -153,7 +153,7 @@ export default function AccountDataControls() {
       {mode && (
         <form
           onSubmit={submit}
-          className="space-y-4"
+          className="mx-auto w-full min-w-0 max-w-md space-y-4 rounded-2xl border border-zinc-700 bg-zinc-950/60 p-4 sm:p-6"
           aria-label={mode === 'delete' ? 'Confirm account deletion' : 'Authorize account export'}
         >
           <label className="block space-y-2">
@@ -167,7 +167,7 @@ export default function AccountDataControls() {
               value={password}
               disabled={mutation.isPending}
               onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded border border-zinc-600 bg-zinc-950 p-3"
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-900/90 px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 sm:text-base"
             />
           </label>
           {mode === 'delete' && (
@@ -183,7 +183,7 @@ export default function AccountDataControls() {
                 value={confirmation}
                 disabled={mutation.isPending}
                 onChange={(event) => setConfirmation(event.target.value)}
-                className="w-full rounded border border-red-800 bg-zinc-950 p-3"
+                className="w-full rounded-lg border border-red-800/60 bg-zinc-900/90 px-3.5 py-2.5 text-sm text-red-100 placeholder-red-900/50 shadow-sm transition-colors focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/20 sm:text-base"
               />
             </label>
           )}

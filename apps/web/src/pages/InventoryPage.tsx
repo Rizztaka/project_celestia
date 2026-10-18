@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { AccessibleTabs, TabPanel } from '../components/AccessibleTabs';
+import { GenshinWeaponIcon } from '../components/GenshinWeaponIcon';
 import {
   type ArtifactSubStat,
   fetchGenshinArtifacts,
@@ -9,7 +11,7 @@ import {
   type InventoryArtifact,
   type InventoryWeapon,
 } from '../lib/api';
-import { ASSET_MAPPING } from '../lib/asset-mapping';
+import { artworkDisplayName, weaponMetadata } from '../lib/artwork';
 
 // -------------------------------------------------------
 // Formatting utilities
@@ -17,7 +19,7 @@ import { ASSET_MAPPING } from '../lib/asset-mapping';
 
 /** PascalCase → spaced display name. "StaffOfHoma" → "Staff Of Homa" */
 function formatName(key: string): string {
-  return key.replace(/([A-Z])/g, ' $1').trim();
+  return artworkDisplayName(key);
 }
 
 const STAT_LABELS: Record<string, string> = {
@@ -85,34 +87,18 @@ function levelColor(level: number): string {
 // -------------------------------------------------------
 function WeaponCard({ weapon }: { weapon: InventoryWeapon }) {
   const displayName = formatName(weapon.weaponKey);
-  const initials = displayName
-    .split(' ')
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
+  const metadata = weaponMetadata[weapon.weaponKey];
   const ref = refinementClasses(weapon.refinement);
   const isEquipped = weapon.equippedCharacterId !== null;
 
   return (
     <div
-      className={`glass-panel hover-lift group flex flex-col gap-3 rounded-2xl border border-white/5 p-5 transition-all ${ref.glow}`}
+      aria-label={`${displayName}, ${metadata ? `${metadata.rarity} star weapon, ` : ''}Level ${weapon.level}, Refinement ${weapon.refinement}`}
+      className={`glass-panel hover-lift group flex min-w-0 flex-col gap-3 rounded-2xl border border-white/5 p-5 transition-all ${ref.glow}`}
     >
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div
-          className={`font-display relative flex h-11 w-11 shrink-0 select-none items-center justify-center overflow-hidden rounded-xl border-2 text-sm font-bold ${ref.border} ${ref.text}`}
-        >
-          <img
-            src={`https://enka.network/ui/UI_EquipIcon_${ASSET_MAPPING.weapons[weapon.weaponKey] || weapon.weaponKey}.png`}
-            alt={displayName}
-            className="absolute inset-0 z-10 h-full w-full object-cover"
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = 'none';
-            }}
-          />
-          <span className="relative z-0">{initials}</span>
-        </div>
+        <GenshinWeaponIcon weaponKey={weapon.weaponKey} />
         <div className="min-w-0 flex-1">
           <p className="font-display group-hover:text-accent-400 break-words text-sm font-bold text-white transition-colors">
             {displayName}
@@ -330,27 +316,13 @@ function TabBar({
   ];
 
   return (
-    <div className="glass-panel mb-8 flex w-fit max-w-full flex-wrap items-center gap-1 rounded-xl p-1">
-      {tabs.map(({ id, label, count }) => (
-        <button
-          key={id}
-          aria-pressed={active === id}
-          onClick={() => onChange(id)}
-          className={`flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all ${
-            active === id
-              ? 'bg-accent-500/20 text-accent-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]'
-              : 'text-zinc-500 hover:text-zinc-300'
-          }`}
-        >
-          {label}
-          <span
-            className={`rounded-full px-1.5 py-0.5 text-xs font-bold ${active === id ? 'bg-accent-500/30 text-accent-300' : 'bg-white/5 text-zinc-600'}`}
-          >
-            {count ?? 'Unknown'}
-          </span>
-        </button>
-      ))}
-    </div>
+    <AccessibleTabs
+      label="Inventory sections"
+      prefix="inventory"
+      tabs={tabs.map((tab) => ({ id: tab.id, label: `${tab.label} (${tab.count ?? 'Unknown'})` }))}
+      active={active}
+      onChange={onChange}
+    />
   );
 }
 
@@ -448,10 +420,10 @@ export default function InventoryPage() {
         )}
 
         {/* ── Weapons Tab ─────────────────────────────────────── */}
-        {activeTab === 'weapons' && (
+        <TabPanel prefix="inventory" id="weapons" active={activeTab}>
           <>
             {isWeaponsLoading && (
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {Array.from({ length: 8 }).map((_, i) => (
                   <WeaponSkeletonCard key={i} />
                 ))}
@@ -461,17 +433,17 @@ export default function InventoryPage() {
               <EmptyState type="weapons" />
             )}
             {!isWeaponsLoading && weapons.length > 0 && (
-              <div className="animate-fade-in grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="animate-fade-in grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {weapons.map((w) => (
                   <WeaponCard key={w.id} weapon={w} />
                 ))}
               </div>
             )}
           </>
-        )}
+        </TabPanel>
 
         {/* ── Artifacts Tab ────────────────────────────────────── */}
-        {activeTab === 'artifacts' && (
+        <TabPanel prefix="inventory" id="artifacts" active={activeTab}>
           <>
             {isArtifactsLoading && (
               <div className="flex flex-col gap-2">
@@ -499,7 +471,7 @@ export default function InventoryPage() {
               </div>
             )}
           </>
-        )}
+        </TabPanel>
       </main>
     </div>
   );

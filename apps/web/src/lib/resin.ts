@@ -24,3 +24,10 @@ export function formatRemaining(end: string, nowMs: number): string {
   const minutes = Math.max(0, Math.ceil((Date.parse(end) - nowMs) / 60000));
   return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
 }
+
+/** Announced at minute boundaries, rather than on every one-second clock tick. */
+export function describeRemaining(end: string, nowMs: number): string {
+  const minutes = Math.max(0, Math.ceil((Date.parse(end) - nowMs) / 60000));
+  const hours = Math.floor(minutes / 60);
+  return `${hours} ${hours === 1 ? 'hour' : 'hours'} and ${minutes % 60} ${minutes % 60 === 1 ? 'minute' : 'minutes'}`;
+}

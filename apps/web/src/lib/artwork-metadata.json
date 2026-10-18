@@ -1,0 +1,1904 @@
+{
+  "characters": {
+    "Aether": {
+      "name": "Aether",
+      "rarity": 5,
+      "element": "None",
+      "weapon": "Sword"
+    },
+    "Aino": {
+      "name": "Aino",
+      "rarity": 4,
+      "element": "Hydro",
+      "weapon": "Claymore"
+    },
+    "Albedo": {
+      "name": "Albedo",
+      "rarity": 5,
+      "element": "Geo",
+      "weapon": "Sword"
+    },
+    "Alhaitham": {
+      "name": "Alhaitham",
+      "rarity": 5,
+      "element": "Dendro",
+      "weapon": "Sword"
+    },
+    "Aloy": {
+      "name": "Aloy",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Bow"
+    },
+    "Alyosha": {
+      "name": "Alyosha",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Polearm"
+    },
+    "Amber": {
+      "name": "Amber",
+      "rarity": 4,
+      "element": "Pyro",
+      "weapon": "Bow"
+    },
+    "AratakiItto": {
+      "name": "Arataki Itto",
+      "rarity": 5,
+      "element": "Geo",
+      "weapon": "Claymore"
+    },
+    "Arlecchino": {
+      "name": "Arlecchino",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Polearm"
+    },
+    "Baizhu": {
+      "name": "Baizhu",
+      "rarity": 5,
+      "element": "Dendro",
+      "weapon": "Catalyst"
+    },
+    "Barbara": {
+      "name": "Barbara",
+      "rarity": 4,
+      "element": "Hydro",
+      "weapon": "Catalyst"
+    },
+    "Beidou": {
+      "name": "Beidou",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Claymore"
+    },
+    "Bennett": {
+      "name": "Bennett",
+      "rarity": 4,
+      "element": "Pyro",
+      "weapon": "Sword"
+    },
+    "Candace": {
+      "name": "Candace",
+      "rarity": 4,
+      "element": "Hydro",
+      "weapon": "Polearm"
+    },
+    "Charlotte": {
+      "name": "Charlotte",
+      "rarity": 4,
+      "element": "Cryo",
+      "weapon": "Catalyst"
+    },
+    "Chasca": {
+      "name": "Chasca",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Bow"
+    },
+    "Chevreuse": {
+      "name": "Chevreuse",
+      "rarity": 4,
+      "element": "Pyro",
+      "weapon": "Polearm"
+    },
+    "Chiori": {
+      "name": "Chiori",
+      "rarity": 5,
+      "element": "Geo",
+      "weapon": "Sword"
+    },
+    "Chongyun": {
+      "name": "Chongyun",
+      "rarity": 4,
+      "element": "Cryo",
+      "weapon": "Claymore"
+    },
+    "Citlali": {
+      "name": "Citlali",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Catalyst"
+    },
+    "Clorinde": {
+      "name": "Clorinde",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Sword"
+    },
+    "Collei": {
+      "name": "Collei",
+      "rarity": 4,
+      "element": "Dendro",
+      "weapon": "Bow"
+    },
+    "Columbina": {
+      "name": "Columbina",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Catalyst"
+    },
+    "Cyno": {
+      "name": "Cyno",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Polearm"
+    },
+    "Dahlia": {
+      "name": "Dahlia",
+      "rarity": 4,
+      "element": "Hydro",
+      "weapon": "Sword"
+    },
+    "Dehya": {
+      "name": "Dehya",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Claymore"
+    },
+    "Diluc": {
+      "name": "Diluc",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Claymore"
+    },
+    "Diona": {
+      "name": "Diona",
+      "rarity": 4,
+      "element": "Cryo",
+      "weapon": "Bow"
+    },
+    "Dori": {
+      "name": "Dori",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Claymore"
+    },
+    "Durin": {
+      "name": "Durin",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Sword"
+    },
+    "Emilie": {
+      "name": "Emilie",
+      "rarity": 5,
+      "element": "Dendro",
+      "weapon": "Polearm"
+    },
+    "Escoffier": {
+      "name": "Escoffier",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Polearm"
+    },
+    "Eula": {
+      "name": "Eula",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Claymore"
+    },
+    "Faruzan": {
+      "name": "Faruzan",
+      "rarity": 4,
+      "element": "Anemo",
+      "weapon": "Bow"
+    },
+    "Fischl": {
+      "name": "Fischl",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Bow"
+    },
+    "Flins": {
+      "name": "Flins",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Polearm"
+    },
+    "Freminet": {
+      "name": "Freminet",
+      "rarity": 4,
+      "element": "Cryo",
+      "weapon": "Claymore"
+    },
+    "Furina": {
+      "name": "Furina",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Sword"
+    },
+    "Gaming": {
+      "name": "Gaming",
+      "rarity": 4,
+      "element": "Pyro",
+      "weapon": "Claymore"
+    },
+    "Ganyu": {
+      "name": "Ganyu",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Bow"
+    },
+    "Gorou": {
+      "name": "Gorou",
+      "rarity": 4,
+      "element": "Geo",
+      "weapon": "Bow"
+    },
+    "HuTao": {
+      "name": "Hu Tao",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Polearm"
+    },
+    "Iansan": {
+      "name": "Iansan",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Polearm"
+    },
+    "Ifa": {
+      "name": "Ifa",
+      "rarity": 4,
+      "element": "Anemo",
+      "weapon": "Catalyst"
+    },
+    "Illuga": {
+      "name": "Illuga",
+      "rarity": 4,
+      "element": "Geo",
+      "weapon": "Polearm"
+    },
+    "Ineffa": {
+      "name": "Ineffa",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Polearm"
+    },
+    "Jahoda": {
+      "name": "Jahoda",
+      "rarity": 4,
+      "element": "Anemo",
+      "weapon": "Bow"
+    },
+    "Jean": {
+      "name": "Jean",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Sword"
+    },
+    "Kachina": {
+      "name": "Kachina",
+      "rarity": 4,
+      "element": "Geo",
+      "weapon": "Polearm"
+    },
+    "KaedeharaKazuha": {
+      "name": "Kaedehara Kazuha",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Sword"
+    },
+    "Kaeya": {
+      "name": "Kaeya",
+      "rarity": 4,
+      "element": "Cryo",
+      "weapon": "Sword"
+    },
+    "KamisatoAyaka": {
+      "name": "Kamisato Ayaka",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Sword"
+    },
+    "KamisatoAyato": {
+      "name": "Kamisato Ayato",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Sword"
+    },
+    "Kaveh": {
+      "name": "Kaveh",
+      "rarity": 4,
+      "element": "Dendro",
+      "weapon": "Claymore"
+    },
+    "Keqing": {
+      "name": "Keqing",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Sword"
+    },
+    "Kinich": {
+      "name": "Kinich",
+      "rarity": 5,
+      "element": "Dendro",
+      "weapon": "Claymore"
+    },
+    "Kirara": {
+      "name": "Kirara",
+      "rarity": 4,
+      "element": "Dendro",
+      "weapon": "Sword"
+    },
+    "Klee": {
+      "name": "Klee",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Catalyst"
+    },
+    "KujouSara": {
+      "name": "Kujou Sara",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Bow"
+    },
+    "KukiShinobu": {
+      "name": "Kuki Shinobu",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Sword"
+    },
+    "LanYan": {
+      "name": "Lan Yan",
+      "rarity": 4,
+      "element": "Anemo",
+      "weapon": "Catalyst"
+    },
+    "Lauma": {
+      "name": "Lauma",
+      "rarity": 5,
+      "element": "Dendro",
+      "weapon": "Catalyst"
+    },
+    "Layla": {
+      "name": "Layla",
+      "rarity": 4,
+      "element": "Cryo",
+      "weapon": "Sword"
+    },
+    "Linnea": {
+      "name": "Linnea",
+      "rarity": 5,
+      "element": "Geo",
+      "weapon": "Bow"
+    },
+    "Lisa": {
+      "name": "Lisa",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Catalyst"
+    },
+    "Lohen": {
+      "name": "Lohen",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Polearm"
+    },
+    "Lumine": {
+      "name": "Lumine",
+      "rarity": 5,
+      "element": "None",
+      "weapon": "Sword"
+    },
+    "Lynette": {
+      "name": "Lynette",
+      "rarity": 4,
+      "element": "Anemo",
+      "weapon": "Sword"
+    },
+    "Lyney": {
+      "name": "Lyney",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Bow"
+    },
+    "Manekin": {
+      "name": "Manekin",
+      "rarity": 5,
+      "element": "None",
+      "weapon": "Sword"
+    },
+    "Manekina": {
+      "name": "Manekina",
+      "rarity": 5,
+      "element": "None",
+      "weapon": "Sword"
+    },
+    "Mavuika": {
+      "name": "Mavuika",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Claymore"
+    },
+    "Mika": {
+      "name": "Mika",
+      "rarity": 4,
+      "element": "Cryo",
+      "weapon": "Polearm"
+    },
+    "Mona": {
+      "name": "Mona",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Catalyst"
+    },
+    "Mualani": {
+      "name": "Mualani",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Catalyst"
+    },
+    "Nahida": {
+      "name": "Nahida",
+      "rarity": 5,
+      "element": "Dendro",
+      "weapon": "Catalyst"
+    },
+    "Navia": {
+      "name": "Navia",
+      "rarity": 5,
+      "element": "Geo",
+      "weapon": "Claymore"
+    },
+    "Nefer": {
+      "name": "Nefer",
+      "rarity": 5,
+      "element": "Dendro",
+      "weapon": "Catalyst"
+    },
+    "Neuvillette": {
+      "name": "Neuvillette",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Catalyst"
+    },
+    "Nicole": {
+      "name": "Nicole",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Catalyst"
+    },
+    "Nilou": {
+      "name": "Nilou",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Sword"
+    },
+    "Ningguang": {
+      "name": "Ningguang",
+      "rarity": 4,
+      "element": "Geo",
+      "weapon": "Catalyst"
+    },
+    "Noelle": {
+      "name": "Noelle",
+      "rarity": 4,
+      "element": "Geo",
+      "weapon": "Claymore"
+    },
+    "Odette": {
+      "name": "Odette",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Sword"
+    },
+    "Ororon": {
+      "name": "Ororon",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Bow"
+    },
+    "Prune": {
+      "name": "Prune",
+      "rarity": 4,
+      "element": "Anemo",
+      "weapon": "Catalyst"
+    },
+    "Qiqi": {
+      "name": "Qiqi",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Sword"
+    },
+    "RaidenShogun": {
+      "name": "Raiden Shogun",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Polearm"
+    },
+    "Razor": {
+      "name": "Razor",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Claymore"
+    },
+    "Rosaria": {
+      "name": "Rosaria",
+      "rarity": 4,
+      "element": "Cryo",
+      "weapon": "Polearm"
+    },
+    "Sandrone": {
+      "name": "Sandrone",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Claymore"
+    },
+    "SangonomiyaKokomi": {
+      "name": "Sangonomiya Kokomi",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Catalyst"
+    },
+    "Sayu": {
+      "name": "Sayu",
+      "rarity": 4,
+      "element": "Anemo",
+      "weapon": "Claymore"
+    },
+    "Sethos": {
+      "name": "Sethos",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Bow"
+    },
+    "Shenhe": {
+      "name": "Shenhe",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Polearm"
+    },
+    "ShikanoinHeizou": {
+      "name": "Shikanoin Heizou",
+      "rarity": 4,
+      "element": "Anemo",
+      "weapon": "Catalyst"
+    },
+    "Sigewinne": {
+      "name": "Sigewinne",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Bow"
+    },
+    "Skirk": {
+      "name": "Skirk",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Sword"
+    },
+    "Sucrose": {
+      "name": "Sucrose",
+      "rarity": 4,
+      "element": "Anemo",
+      "weapon": "Catalyst"
+    },
+    "Tartaglia": {
+      "name": "Tartaglia",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Bow"
+    },
+    "Thoma": {
+      "name": "Thoma",
+      "rarity": 4,
+      "element": "Pyro",
+      "weapon": "Polearm"
+    },
+    "Tighnari": {
+      "name": "Tighnari",
+      "rarity": 5,
+      "element": "Dendro",
+      "weapon": "Bow"
+    },
+    "Varesa": {
+      "name": "Varesa",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Catalyst"
+    },
+    "Varka": {
+      "name": "Varka",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Claymore"
+    },
+    "Venti": {
+      "name": "Venti",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Bow"
+    },
+    "Vesna": {
+      "name": "Vesna",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Sword"
+    },
+    "Vodyanitsa": {
+      "name": "Vodyanitsa",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Catalyst"
+    },
+    "Wanderer": {
+      "name": "Wanderer",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Catalyst"
+    },
+    "Wriothesley": {
+      "name": "Wriothesley",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Catalyst"
+    },
+    "Xiangling": {
+      "name": "Xiangling",
+      "rarity": 4,
+      "element": "Pyro",
+      "weapon": "Polearm"
+    },
+    "Xianyun": {
+      "name": "Xianyun",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Catalyst"
+    },
+    "Xiao": {
+      "name": "Xiao",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Polearm"
+    },
+    "Xilonen": {
+      "name": "Xilonen",
+      "rarity": 5,
+      "element": "Geo",
+      "weapon": "Sword"
+    },
+    "Xingqiu": {
+      "name": "Xingqiu",
+      "rarity": 4,
+      "element": "Hydro",
+      "weapon": "Sword"
+    },
+    "Xinyan": {
+      "name": "Xinyan",
+      "rarity": 4,
+      "element": "Pyro",
+      "weapon": "Claymore"
+    },
+    "YaeMiko": {
+      "name": "Yae Miko",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Catalyst"
+    },
+    "Yanfei": {
+      "name": "Yanfei",
+      "rarity": 4,
+      "element": "Pyro",
+      "weapon": "Catalyst"
+    },
+    "Yaoyao": {
+      "name": "Yaoyao",
+      "rarity": 4,
+      "element": "Dendro",
+      "weapon": "Polearm"
+    },
+    "Yelan": {
+      "name": "Yelan",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Bow"
+    },
+    "Yoimiya": {
+      "name": "Yoimiya",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Bow"
+    },
+    "YumemizukiMizuki": {
+      "name": "Yumemizuki Mizuki",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Catalyst"
+    },
+    "YunJin": {
+      "name": "Yun Jin",
+      "rarity": 4,
+      "element": "Geo",
+      "weapon": "Polearm"
+    },
+    "Zhongli": {
+      "name": "Zhongli",
+      "rarity": 5,
+      "element": "Geo",
+      "weapon": "Polearm"
+    },
+    "Zibai": {
+      "name": "Zibai",
+      "rarity": 5,
+      "element": "Geo",
+      "weapon": "Sword"
+    },
+    "Traveler": {
+      "name": "Traveler",
+      "rarity": 5,
+      "element": "None",
+      "weapon": "Sword"
+    },
+    "TravelerAnemo": {
+      "name": "Traveler (Anemo)",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Sword"
+    },
+    "AetherAnemo": {
+      "name": "Aether (Anemo)",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Sword"
+    },
+    "LumineAnemo": {
+      "name": "Lumine (Anemo)",
+      "rarity": 5,
+      "element": "Anemo",
+      "weapon": "Sword"
+    },
+    "TravelerGeo": {
+      "name": "Traveler (Geo)",
+      "rarity": 5,
+      "element": "Geo",
+      "weapon": "Sword"
+    },
+    "AetherGeo": {
+      "name": "Aether (Geo)",
+      "rarity": 5,
+      "element": "Geo",
+      "weapon": "Sword"
+    },
+    "LumineGeo": {
+      "name": "Lumine (Geo)",
+      "rarity": 5,
+      "element": "Geo",
+      "weapon": "Sword"
+    },
+    "TravelerElectro": {
+      "name": "Traveler (Electro)",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Sword"
+    },
+    "AetherElectro": {
+      "name": "Aether (Electro)",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Sword"
+    },
+    "LumineElectro": {
+      "name": "Lumine (Electro)",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Sword"
+    },
+    "TravelerDendro": {
+      "name": "Traveler (Dendro)",
+      "rarity": 5,
+      "element": "Dendro",
+      "weapon": "Sword"
+    },
+    "AetherDendro": {
+      "name": "Aether (Dendro)",
+      "rarity": 5,
+      "element": "Dendro",
+      "weapon": "Sword"
+    },
+    "LumineDendro": {
+      "name": "Lumine (Dendro)",
+      "rarity": 5,
+      "element": "Dendro",
+      "weapon": "Sword"
+    },
+    "TravelerHydro": {
+      "name": "Traveler (Hydro)",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Sword"
+    },
+    "AetherHydro": {
+      "name": "Aether (Hydro)",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Sword"
+    },
+    "LumineHydro": {
+      "name": "Lumine (Hydro)",
+      "rarity": 5,
+      "element": "Hydro",
+      "weapon": "Sword"
+    },
+    "TravelerPyro": {
+      "name": "Traveler (Pyro)",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Sword"
+    },
+    "AetherPyro": {
+      "name": "Aether (Pyro)",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Sword"
+    },
+    "LuminePyro": {
+      "name": "Lumine (Pyro)",
+      "rarity": 5,
+      "element": "Pyro",
+      "weapon": "Sword"
+    },
+    "TravelerCryo": {
+      "name": "Traveler (Cryo)",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Sword"
+    },
+    "AetherCryo": {
+      "name": "Aether (Cryo)",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Sword"
+    },
+    "LumineCryo": {
+      "name": "Lumine (Cryo)",
+      "rarity": 5,
+      "element": "Cryo",
+      "weapon": "Sword"
+    },
+    "Kukishinobu": {
+      "name": "Kuki Shinobu",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Sword"
+    }
+  },
+  "weapons": {
+    "Absolution": {
+      "name": "Absolution",
+      "rarity": 5
+    },
+    "Akuoumaru": {
+      "name": "Akuoumaru",
+      "rarity": 4
+    },
+    "AlleyHunter": {
+      "name": "Alley Hunter",
+      "rarity": 4
+    },
+    "AmenomaKageuchi": {
+      "name": "Amenoma Kageuchi",
+      "rarity": 4
+    },
+    "AmosBow": {
+      "name": "Amos' Bow",
+      "rarity": 5
+    },
+    "AngelosHeptades": {
+      "name": "Angelos' Heptades",
+      "rarity": 5
+    },
+    "ApprenticesNotes": {
+      "name": "Apprentice's Notes",
+      "rarity": 1
+    },
+    "AquaSimulacra": {
+      "name": "Aqua Simulacra",
+      "rarity": 5
+    },
+    "AquilaFavonia": {
+      "name": "Aquila Favonia",
+      "rarity": 5
+    },
+    "AshGravenDrinkingHorn": {
+      "name": "Ash-Graven Drinking Horn",
+      "rarity": 4
+    },
+    "AstralVulturesCrimsonPlumage": {
+      "name": "Astral Vulture's Crimson Plumage",
+      "rarity": 5
+    },
+    "ATeaspoonOfTranscendence": {
+      "name": "A Teaspoon of Transcendence",
+      "rarity": 5
+    },
+    "AthameArtis": {
+      "name": "Athame Artis",
+      "rarity": 5
+    },
+    "AThousandBlazingSuns": {
+      "name": "A Thousand Blazing Suns",
+      "rarity": 5
+    },
+    "AThousandFloatingDreams": {
+      "name": "A Thousand Floating Dreams",
+      "rarity": 5
+    },
+    "Azurelight": {
+      "name": "Azurelight",
+      "rarity": 5
+    },
+    "BalladOfTheBoundlessBlue": {
+      "name": "Ballad of the Boundless Blue",
+      "rarity": 4
+    },
+    "BalladOfTheFjords": {
+      "name": "Ballad of the Fjords",
+      "rarity": 4
+    },
+    "BeaconOfTheReedSea": {
+      "name": "Beacon of the Reed Sea",
+      "rarity": 5
+    },
+    "BeginnersProtector": {
+      "name": "Beginner's Protector",
+      "rarity": 1
+    },
+    "BeyondTheChrysalis": {
+      "name": "Beyond the Chrysalis",
+      "rarity": 5
+    },
+    "BlackcliffAgate": {
+      "name": "Blackcliff Agate",
+      "rarity": 4
+    },
+    "BlackcliffLongsword": {
+      "name": "Blackcliff Longsword",
+      "rarity": 4
+    },
+    "BlackcliffPole": {
+      "name": "Blackcliff Pole",
+      "rarity": 4
+    },
+    "BlackcliffSlasher": {
+      "name": "Blackcliff Slasher",
+      "rarity": 4
+    },
+    "BlackcliffWarbow": {
+      "name": "Blackcliff Warbow",
+      "rarity": 4
+    },
+    "BlackmarrowLantern": {
+      "name": "Blackmarrow Lantern",
+      "rarity": 4
+    },
+    "BlackTassel": {
+      "name": "Black Tassel",
+      "rarity": 3
+    },
+    "BladeOfAtonement": {
+      "name": "Blade of Atonement",
+      "rarity": 4
+    },
+    "BloodsoakedRuins": {
+      "name": "Bloodsoaked Ruins",
+      "rarity": 5
+    },
+    "BloodtaintedGreatsword": {
+      "name": "Bloodtainted Greatsword",
+      "rarity": 3
+    },
+    "BreezeborneRefrain": {
+      "name": "Breezeborne Refrain",
+      "rarity": 4
+    },
+    "CalamityOfEshu": {
+      "name": "Calamity of Eshu",
+      "rarity": 4
+    },
+    "CalamityQueller": {
+      "name": "Calamity Queller",
+      "rarity": 5
+    },
+    "CashflowSupervision": {
+      "name": "Cashflow Supervision",
+      "rarity": 5
+    },
+    "ChainBreaker": {
+      "name": "Chain Breaker",
+      "rarity": 4
+    },
+    "CinnabarSpindle": {
+      "name": "Cinnabar Spindle",
+      "rarity": 4
+    },
+    "ClashOfKings": {
+      "name": "Clash of Kings",
+      "rarity": 4
+    },
+    "Cloudforged": {
+      "name": "Cloudforged",
+      "rarity": 4
+    },
+    "CompoundBow": {
+      "name": "Compound Bow",
+      "rarity": 4
+    },
+    "CoolSteel": {
+      "name": "Cool Steel",
+      "rarity": 3
+    },
+    "CovenantOfFrostAndSnow": {
+      "name": "Covenant of Frost and Snow",
+      "rarity": 4
+    },
+    "CranesEchoingCall": {
+      "name": "Crane's Echoing Call",
+      "rarity": 5
+    },
+    "CrescentPike": {
+      "name": "Crescent Pike",
+      "rarity": 4
+    },
+    "CrimsonMoonsSemblance": {
+      "name": "Crimson Moon's Semblance",
+      "rarity": 5
+    },
+    "DarkIronSword": {
+      "name": "Dark Iron Sword",
+      "rarity": 3
+    },
+    "DawningFrost": {
+      "name": "Dawning Frost",
+      "rarity": 4
+    },
+    "Deathmatch": {
+      "name": "Deathmatch",
+      "rarity": 4
+    },
+    "DebateClub": {
+      "name": "Debate Club",
+      "rarity": 3
+    },
+    "DialoguesOfTheDesertSages": {
+      "name": "Dialogues of the Desert Sages",
+      "rarity": 4
+    },
+    "DisasterAndRemorse": {
+      "name": "Disaster and Remorse",
+      "rarity": 5
+    },
+    "DodocoTales": {
+      "name": "Dodoco Tales",
+      "rarity": 4
+    },
+    "DragonsBane": {
+      "name": "Dragon's Bane",
+      "rarity": 4
+    },
+    "DragonspineSpear": {
+      "name": "Dragonspine Spear",
+      "rarity": 4
+    },
+    "DullBlade": {
+      "name": "Dull Blade",
+      "rarity": 1
+    },
+    "EarthShaker": {
+      "name": "Earth Shaker",
+      "rarity": 4
+    },
+    "EchoesOfTheHeart": {
+      "name": "Echoes of the Heart",
+      "rarity": 4
+    },
+    "ElegyForTheEnd": {
+      "name": "Elegy for the End",
+      "rarity": 5
+    },
+    "Emberwell": {
+      "name": "Emberwell",
+      "rarity": 4
+    },
+    "EmeraldOrb": {
+      "name": "Emerald Orb",
+      "rarity": 3
+    },
+    "EndOfTheLine": {
+      "name": "End of the Line",
+      "rarity": 4
+    },
+    "EngulfingLightning": {
+      "name": "Engulfing Lightning",
+      "rarity": 5
+    },
+    "EtherlightSpindlelute": {
+      "name": "Etherlight Spindlelute",
+      "rarity": 4
+    },
+    "EverlastingMoonglow": {
+      "name": "Everlasting Moonglow",
+      "rarity": 5
+    },
+    "ExaiphanesBlade": {
+      "name": "Exaiphanes Blade",
+      "rarity": 5
+    },
+    "EyeOfPerception": {
+      "name": "Eye of Perception",
+      "rarity": 4
+    },
+    "FadingTwilight": {
+      "name": "Fading Twilight",
+      "rarity": 4
+    },
+    "FangOfTheMountainKing": {
+      "name": "Fang of the Mountain King",
+      "rarity": 5
+    },
+    "FavoniusCodex": {
+      "name": "Favonius Codex",
+      "rarity": 4
+    },
+    "FavoniusGreatsword": {
+      "name": "Favonius Greatsword",
+      "rarity": 4
+    },
+    "FavoniusLance": {
+      "name": "Favonius Lance",
+      "rarity": 4
+    },
+    "FavoniusSword": {
+      "name": "Favonius Sword",
+      "rarity": 4
+    },
+    "FavoniusWarbow": {
+      "name": "Favonius Warbow",
+      "rarity": 4
+    },
+    "FerrousShadow": {
+      "name": "Ferrous Shadow",
+      "rarity": 3
+    },
+    "FesteringDesire": {
+      "name": "Festering Desire",
+      "rarity": 4
+    },
+    "FilletBlade": {
+      "name": "Fillet Blade",
+      "rarity": 3
+    },
+    "FinaleOfTheDeep": {
+      "name": "Finale of the Deep",
+      "rarity": 4
+    },
+    "FlameForgedInsight": {
+      "name": "Flame-Forged Insight",
+      "rarity": 4
+    },
+    "FleuveCendreFerryman": {
+      "name": "Fleuve Cendre Ferryman",
+      "rarity": 4
+    },
+    "FlowerWreathedFeathers": {
+      "name": "Flower-Wreathed Feathers",
+      "rarity": 4
+    },
+    "FlowingPurity": {
+      "name": "Flowing Purity",
+      "rarity": 4
+    },
+    "FluteOfEzpitzal": {
+      "name": "Flute of Ezpitzal",
+      "rarity": 4
+    },
+    "FootprintOfTheRainbow": {
+      "name": "Footprint of the Rainbow",
+      "rarity": 4
+    },
+    "ForestRegalia": {
+      "name": "Forest Regalia",
+      "rarity": 4
+    },
+    "ForgedByTheGoldenMelody": {
+      "name": "Forged by the Golden Melody",
+      "rarity": 4
+    },
+    "FracturedHalo": {
+      "name": "Fractured Halo",
+      "rarity": 5
+    },
+    "FreedomSworn": {
+      "name": "Freedom-Sworn",
+      "rarity": 5
+    },
+    "Frostbearer": {
+      "name": "Frostbearer",
+      "rarity": 4
+    },
+    "Frostbreath": {
+      "name": "Frostbreath",
+      "rarity": 4
+    },
+    "FruitfulHook": {
+      "name": "Fruitful Hook",
+      "rarity": 4
+    },
+    "FruitOfFulfillment": {
+      "name": "Fruit of Fulfillment",
+      "rarity": 4
+    },
+    "GestOfTheMightyWolf": {
+      "name": "Gest of the Mighty Wolf",
+      "rarity": 5
+    },
+    "GoldenFrostboundOath": {
+      "name": "Golden Frostbound Oath",
+      "rarity": 5
+    },
+    "HakushinRing": {
+      "name": "Hakushin Ring",
+      "rarity": 4
+    },
+    "Halberd": {
+      "name": "Halberd",
+      "rarity": 3
+    },
+    "Hamayumi": {
+      "name": "Hamayumi",
+      "rarity": 4
+    },
+    "HaranGeppakuFutsu": {
+      "name": "Haran Geppaku Futsu",
+      "rarity": 5
+    },
+    "HarbingerOfDawn": {
+      "name": "Harbinger of Dawn",
+      "rarity": 3
+    },
+    "HereticsMoltenBlade": {
+      "name": "Heretic's Molten Blade",
+      "rarity": 4
+    },
+    "HuntersBow": {
+      "name": "Hunter's Bow",
+      "rarity": 1
+    },
+    "HuntersPath": {
+      "name": "Hunter's Path",
+      "rarity": 5
+    },
+    "HymnOfTheMaelstrom": {
+      "name": "Hymn of the Maelstrom",
+      "rarity": 5
+    },
+    "IbisPiercer": {
+      "name": "Ibis Piercer",
+      "rarity": 4
+    },
+    "IronPoint": {
+      "name": "Iron Point",
+      "rarity": 2
+    },
+    "IronSting": {
+      "name": "Iron Sting",
+      "rarity": 4
+    },
+    "JadefallsSplendor": {
+      "name": "Jadefall's Splendor",
+      "rarity": 5
+    },
+    "JadeVista": {
+      "name": "Jade Vista",
+      "rarity": 4
+    },
+    "KagotsurubeIsshin": {
+      "name": "Kagotsurube Isshin",
+      "rarity": 4
+    },
+    "KagurasVerity": {
+      "name": "Kagura's Verity",
+      "rarity": 5
+    },
+    "KatsuragikiriNagamasa": {
+      "name": "Katsuragikiri Nagamasa",
+      "rarity": 4
+    },
+    "KeyOfKhajNisut": {
+      "name": "Key of Khaj-Nisut",
+      "rarity": 5
+    },
+    "KingsSquire": {
+      "name": "King's Squire",
+      "rarity": 4
+    },
+    "KitainCrossSpear": {
+      "name": "Kitain Cross Spear",
+      "rarity": 4
+    },
+    "LightbearingMoonshard": {
+      "name": "Lightbearing Moonshard",
+      "rarity": 5
+    },
+    "LightOfFoliarIncision": {
+      "name": "Light of Foliar Incision",
+      "rarity": 5
+    },
+    "LionsRoar": {
+      "name": "Lion's Roar",
+      "rarity": 4
+    },
+    "LithicBlade": {
+      "name": "Lithic Blade",
+      "rarity": 4
+    },
+    "LithicSpear": {
+      "name": "Lithic Spear",
+      "rarity": 4
+    },
+    "LostPrayerToTheSacredWinds": {
+      "name": "Lost Prayer to the Sacred Winds",
+      "rarity": 5
+    },
+    "LumidouceElegy": {
+      "name": "Lumidouce Elegy",
+      "rarity": 5
+    },
+    "LuxuriousSeaLord": {
+      "name": "Luxurious Sea-Lord",
+      "rarity": 4
+    },
+    "MagicGuide": {
+      "name": "Magic Guide",
+      "rarity": 3
+    },
+    "MailedFlower": {
+      "name": "Mailed Flower",
+      "rarity": 4
+    },
+    "MakhairaAquamarine": {
+      "name": "Makhaira Aquamarine",
+      "rarity": 4
+    },
+    "MappaMare": {
+      "name": "Mappa Mare",
+      "rarity": 4
+    },
+    "MasterKey": {
+      "name": "Master Key",
+      "rarity": 4
+    },
+    "MemoryOfDust": {
+      "name": "Memory of Dust",
+      "rarity": 5
+    },
+    "Messenger": {
+      "name": "Messenger",
+      "rarity": 3
+    },
+    "MissiveWindspear": {
+      "name": "Missive Windspear",
+      "rarity": 4
+    },
+    "MistsplitterReforged": {
+      "name": "Mistsplitter Reforged",
+      "rarity": 5
+    },
+    "MitternachtsWaltz": {
+      "name": "Mitternachts Waltz",
+      "rarity": 4
+    },
+    "Moonpiercer": {
+      "name": "Moonpiercer",
+      "rarity": 4
+    },
+    "MoonweaversDawn": {
+      "name": "Moonweaver's Dawn",
+      "rarity": 4
+    },
+    "MountainBracingBolt": {
+      "name": "Mountain-Bracing Bolt",
+      "rarity": 4
+    },
+    "MouunsMoon": {
+      "name": "Mouun's Moon",
+      "rarity": 4
+    },
+    "NewBough": {
+      "name": "New Bough",
+      "rarity": 4
+    },
+    "NightweaversLookingGlass": {
+      "name": "Nightweaver's Looking Glass",
+      "rarity": 5
+    },
+    "NocturnesCurtainCall": {
+      "name": "Nocturne's Curtain Call",
+      "rarity": 5
+    },
+    "OathswornEye": {
+      "name": "Oathsworn Eye",
+      "rarity": 4
+    },
+    "OldMercsPal": {
+      "name": "Old Merc's Pal",
+      "rarity": 2
+    },
+    "OtherworldlyStory": {
+      "name": "Otherworldly Story",
+      "rarity": 3
+    },
+    "PeakPatrolSong": {
+      "name": "Peak Patrol Song",
+      "rarity": 5
+    },
+    "PocketGrimoire": {
+      "name": "Pocket Grimoire",
+      "rarity": 2
+    },
+    "PolarStar": {
+      "name": "Polar Star",
+      "rarity": 5
+    },
+    "PortablePowerSaw": {
+      "name": "Portable Power Saw",
+      "rarity": 4
+    },
+    "Predator": {
+      "name": "Predator",
+      "rarity": 4
+    },
+    "PrimordialJadeCutter": {
+      "name": "Primordial Jade Cutter",
+      "rarity": 5
+    },
+    "PrimordialJadeWingedSpear": {
+      "name": "Primordial Jade Winged-Spear",
+      "rarity": 5
+    },
+    "PrizedIsshinBlade": {
+      "name": "Prized Isshin Blade",
+      "rarity": 4
+    },
+    "ProspectorsDrill": {
+      "name": "Prospector's Drill",
+      "rarity": 4
+    },
+    "ProspectorsShovel": {
+      "name": "Prospector's Shovel",
+      "rarity": 4
+    },
+    "PrototypeAmber": {
+      "name": "Prototype Amber",
+      "rarity": 4
+    },
+    "PrototypeArchaic": {
+      "name": "Prototype Archaic",
+      "rarity": 4
+    },
+    "PrototypeCrescent": {
+      "name": "Prototype Crescent",
+      "rarity": 4
+    },
+    "PrototypeRancour": {
+      "name": "Prototype Rancour",
+      "rarity": 4
+    },
+    "PrototypeStarglitter": {
+      "name": "Prototype Starglitter",
+      "rarity": 4
+    },
+    "RainbowSerpentsRainBow": {
+      "name": "Rainbow Serpent's Rain Bow",
+      "rarity": 4
+    },
+    "Rainslasher": {
+      "name": "Rainslasher",
+      "rarity": 4
+    },
+    "RangeGauge": {
+      "name": "Range Gauge",
+      "rarity": 4
+    },
+    "RavenBow": {
+      "name": "Raven Bow",
+      "rarity": 3
+    },
+    "RecurveBow": {
+      "name": "Recurve Bow",
+      "rarity": 3
+    },
+    "RedhornStonethresher": {
+      "name": "Redhorn Stonethresher",
+      "rarity": 5
+    },
+    "ReliquaryOfTruth": {
+      "name": "Reliquary of Truth",
+      "rarity": 5
+    },
+    "RightfulReward": {
+      "name": "Rightful Reward",
+      "rarity": 4
+    },
+    "RingOfYaxche": {
+      "name": "Ring of Yaxche",
+      "rarity": 4
+    },
+    "RoyalBow": {
+      "name": "Royal Bow",
+      "rarity": 4
+    },
+    "RoyalGreatsword": {
+      "name": "Royal Greatsword",
+      "rarity": 4
+    },
+    "RoyalGrimoire": {
+      "name": "Royal Grimoire",
+      "rarity": 4
+    },
+    "RoyalLongsword": {
+      "name": "Royal Longsword",
+      "rarity": 4
+    },
+    "RoyalSpear": {
+      "name": "Royal Spear",
+      "rarity": 4
+    },
+    "Rust": {
+      "name": "Rust",
+      "rarity": 4
+    },
+    "SacrificersStaff": {
+      "name": "Sacrificer's Staff",
+      "rarity": 4
+    },
+    "SacrificialBow": {
+      "name": "Sacrificial Bow",
+      "rarity": 4
+    },
+    "SacrificialFragments": {
+      "name": "Sacrificial Fragments",
+      "rarity": 4
+    },
+    "SacrificialGreatsword": {
+      "name": "Sacrificial Greatsword",
+      "rarity": 4
+    },
+    "SacrificialJade": {
+      "name": "Sacrificial Jade",
+      "rarity": 4
+    },
+    "SacrificialSword": {
+      "name": "Sacrificial Sword",
+      "rarity": 4
+    },
+    "SapwoodBlade": {
+      "name": "Sapwood Blade",
+      "rarity": 4
+    },
+    "ScionOfTheBlazingSun": {
+      "name": "Scion of the Blazing Sun",
+      "rarity": 4
+    },
+    "SeasonedHuntersBow": {
+      "name": "Seasoned Hunter's Bow",
+      "rarity": 2
+    },
+    "SequenceOfSolitude": {
+      "name": "Sequence of Solitude",
+      "rarity": 4
+    },
+    "SerenitysCall": {
+      "name": "Serenity's Call",
+      "rarity": 4
+    },
+    "SerpentSpine": {
+      "name": "Serpent Spine",
+      "rarity": 4
+    },
+    "SharpshootersOath": {
+      "name": "Sharpshooter's Oath",
+      "rarity": 3
+    },
+    "SilverLight": {
+      "name": "Silver Light",
+      "rarity": 4
+    },
+    "SilvershowerHeartstrings": {
+      "name": "Silvershower Heartstrings",
+      "rarity": 5
+    },
+    "SilverSword": {
+      "name": "Silver Sword",
+      "rarity": 2
+    },
+    "SkyriderGreatsword": {
+      "name": "Skyrider Greatsword",
+      "rarity": 3
+    },
+    "SkyriderSword": {
+      "name": "Skyrider Sword",
+      "rarity": 3
+    },
+    "SkywardAtlas": {
+      "name": "Skyward Atlas",
+      "rarity": 5
+    },
+    "SkywardBlade": {
+      "name": "Skyward Blade",
+      "rarity": 5
+    },
+    "SkywardHarp": {
+      "name": "Skyward Harp",
+      "rarity": 5
+    },
+    "SkywardPride": {
+      "name": "Skyward Pride",
+      "rarity": 5
+    },
+    "SkywardSpine": {
+      "name": "Skyward Spine",
+      "rarity": 5
+    },
+    "Slingshot": {
+      "name": "Slingshot",
+      "rarity": 3
+    },
+    "SnareHook": {
+      "name": "Snare Hook",
+      "rarity": 4
+    },
+    "SnowTombedStarsilver": {
+      "name": "Snow-Tombed Starsilver",
+      "rarity": 4
+    },
+    "SolarPearl": {
+      "name": "Solar Pearl",
+      "rarity": 4
+    },
+    "SongOfBrokenPines": {
+      "name": "Song of Broken Pines",
+      "rarity": 5
+    },
+    "SongOfStillness": {
+      "name": "Song of Stillness",
+      "rarity": 4
+    },
+    "SongOfTheVigil": {
+      "name": "Song of the Vigil",
+      "rarity": 4
+    },
+    "SplendorOfTranquilWaters": {
+      "name": "Splendor of Tranquil Waters",
+      "rarity": 5
+    },
+    "StaffOfHoma": {
+      "name": "Staff of Homa",
+      "rarity": 5
+    },
+    "StaffOfTheScarletSands": {
+      "name": "Staff of the Scarlet Sands",
+      "rarity": 5
+    },
+    "StarcallersWatch": {
+      "name": "Starcaller's Watch",
+      "rarity": 5
+    },
+    "SturdyBone": {
+      "name": "Sturdy Bone",
+      "rarity": 4
+    },
+    "SummitShaper": {
+      "name": "Summit Shaper",
+      "rarity": 5
+    },
+    "SunnyMorningSleepIn": {
+      "name": "Sunny Morning Sleep-In",
+      "rarity": 5
+    },
+    "SurfsUp": {
+      "name": "Surf's Up",
+      "rarity": 5
+    },
+    "SwordOfDescension": {
+      "name": "Sword of Descension",
+      "rarity": 4
+    },
+    "SwordOfNarzissenkreuz": {
+      "name": "Sword of Narzissenkreuz",
+      "rarity": 4
+    },
+    "SymphonistOfScents": {
+      "name": "Symphonist of Scents",
+      "rarity": 5
+    },
+    "TalkingStick": {
+      "name": "Talking Stick",
+      "rarity": 4
+    },
+    "TamayurateiNoOhanashi": {
+      "name": "Tamayuratei no Ohanashi",
+      "rarity": 4
+    },
+    "TheAlleyFlash": {
+      "name": "The Alley Flash",
+      "rarity": 4
+    },
+    "TheBell": {
+      "name": "The Bell",
+      "rarity": 4
+    },
+    "TheBlackSword": {
+      "name": "The Black Sword",
+      "rarity": 4
+    },
+    "TheCatch": {
+      "name": "\"The Catch\"",
+      "rarity": 4
+    },
+    "TheDaybreakChronicles": {
+      "name": "The Daybreak Chronicles",
+      "rarity": 5
+    },
+    "TheDockhandsAssistant": {
+      "name": "The Dockhand's Assistant",
+      "rarity": 4
+    },
+    "TheFirstGreatMagic": {
+      "name": "The First Great Magic",
+      "rarity": 5
+    },
+    "TheFlute": {
+      "name": "The Flute",
+      "rarity": 4
+    },
+    "TheStringless": {
+      "name": "The Stringless",
+      "rarity": 4
+    },
+    "TheUnforged": {
+      "name": "The Unforged",
+      "rarity": 5
+    },
+    "TheViridescentHunt": {
+      "name": "The Viridescent Hunt",
+      "rarity": 4
+    },
+    "TheWidsith": {
+      "name": "The Widsith",
+      "rarity": 4
+    },
+    "ThrillingTalesOfDragonSlayers": {
+      "name": "Thrilling Tales of Dragon Slayers",
+      "rarity": 3
+    },
+    "ThunderingPulse": {
+      "name": "Thundering Pulse",
+      "rarity": 5
+    },
+    "TidalShadow": {
+      "name": "Tidal Shadow",
+      "rarity": 4
+    },
+    "TomeOfTheEternalFlow": {
+      "name": "Tome of the Eternal Flow",
+      "rarity": 5
+    },
+    "ToukabouShigure": {
+      "name": "Toukabou Shigure",
+      "rarity": 4
+    },
+    "TravelersHandySword": {
+      "name": "Traveler's Handy Sword",
+      "rarity": 3
+    },
+    "TulaytullahsRemembrance": {
+      "name": "Tulaytullah's Remembrance",
+      "rarity": 5
+    },
+    "TwinNephrite": {
+      "name": "Twin Nephrite",
+      "rarity": 3
+    },
+    "UltimateOverlordsMegaMagicSword": {
+      "name": "\"Ultimate Overlord's Mega Magic Sword\"",
+      "rarity": 4
+    },
+    "UrakuMisugiri": {
+      "name": "Uraku Misugiri",
+      "rarity": 5
+    },
+    "Verdict": {
+      "name": "Verdict",
+      "rarity": 5
+    },
+    "VividNotions": {
+      "name": "Vivid Notions",
+      "rarity": 5
+    },
+    "VortexVanquisher": {
+      "name": "Vortex Vanquisher",
+      "rarity": 5
+    },
+    "WanderingEvenstar": {
+      "name": "Wandering Evenstar",
+      "rarity": 4
+    },
+    "WasterGreatsword": {
+      "name": "Waster Greatsword",
+      "rarity": 1
+    },
+    "WavebreakersFin": {
+      "name": "Wavebreaker's Fin",
+      "rarity": 4
+    },
+    "WaveridingWhirl": {
+      "name": "Waveriding Whirl",
+      "rarity": 4
+    },
+    "Whiteblind": {
+      "name": "Whiteblind",
+      "rarity": 4
+    },
+    "WhiteIronGreatsword": {
+      "name": "White Iron Greatsword",
+      "rarity": 3
+    },
+    "WhitelakeFrostfeather": {
+      "name": "Whitelake Frostfeather",
+      "rarity": 5
+    },
+    "WhiteTassel": {
+      "name": "White Tassel",
+      "rarity": 3
+    },
+    "WindblumeOde": {
+      "name": "Windblume Ode",
+      "rarity": 4
+    },
+    "WineAndSong": {
+      "name": "Wine and Song",
+      "rarity": 4
+    },
+    "WintersHeavyHeart": {
+      "name": "Winter's Heavy Heart",
+      "rarity": 4
+    },
+    "WolfFang": {
+      "name": "Wolf-Fang",
+      "rarity": 4
+    },
+    "WolfsGravestone": {
+      "name": "Wolf's Gravestone",
+      "rarity": 5
+    },
+    "XiphosMoonlight": {
+      "name": "Xiphos' Moonlight",
+      "rarity": 4
+    },
+    "Widsith": {
+      "name": "The Widsith",
+      "rarity": 4
+    }
+  }
+}

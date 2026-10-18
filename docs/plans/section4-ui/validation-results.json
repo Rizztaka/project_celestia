@@ -1,0 +1,289 @@
+{
+  "date": "2026-10-18",
+  "status": "passed-local-with-native-zoom-and-reader-limits",
+  "rootCommands": {
+    "lint": "passed",
+    "checkTypes": "passed",
+    "build": "passed",
+    "verify": "passed"
+  },
+  "tests": {
+    "passed": 1206,
+    "files": 72,
+    "failed": 0,
+    "skipped": 0,
+    "postgresCases": 118,
+    "integration": {
+      "src/platform/companion/plan.integration.test.ts": 36,
+      "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+      "src/platform/companion/routine.integration.test.ts": 16,
+      "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+      "src/games/genshin/importer/importer.integration.test.ts": 16,
+      "src/platform/companion/catalog-advice.integration.test.ts": 9
+    },
+    "actualPostgresCases": 171,
+    "postgresFiles": [
+      {
+        "file": "apps/api/tooling/account-data.integration.test.js",
+        "passed": 20
+      },
+      {
+        "file": "apps/api/tooling/request-safety.integration.test.js",
+        "passed": 7
+      },
+      {
+        "file": "apps/api/src/platform/auth/security.integration.test.ts",
+        "passed": 26
+      },
+      {
+        "file": "apps/api/src/platform/companion/catalog-advice.integration.test.ts",
+        "passed": 9
+      },
+      {
+        "file": "apps/api/src/platform/companion/goal-lifecycle.integration.test.ts",
+        "passed": 28
+      },
+      {
+        "file": "apps/api/src/platform/companion/plan.integration.test.ts",
+        "passed": 36
+      },
+      {
+        "file": "apps/api/src/platform/companion/routine.integration.test.ts",
+        "passed": 16
+      },
+      {
+        "file": "apps/api/src/games/genshin/characters/character-equipment.integration.test.ts",
+        "passed": 13
+      },
+      {
+        "file": "apps/api/src/games/genshin/importer/importer.integration.test.ts",
+        "passed": 16
+      }
+    ]
+  },
+  "focusedTests": {
+    "passed": 34,
+    "files": 4
+  },
+  "guardedVerification": {
+    "command": "pnpm run verify",
+    "exit": 0,
+    "evidenceDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp/celestia-verification-tCEoHt",
+    "steps": [
+      {
+        "id": "shared-types-and-build",
+        "package": "typescript",
+        "binary": "tsc",
+        "arguments": [
+          "-p",
+          "D:\\Genshin Personal\\project-celestia\\packages\\api-contracts\\tsconfig.json"
+        ],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "disposable-postgres-ready",
+        "exit": 0
+      },
+      {
+        "id": "prisma-generate",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": ["generate"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "disposable-migrations",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": ["migrate", "deploy"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "prisma-validate",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": ["validate"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "schema-diff",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": [
+          "migrate",
+          "diff",
+          "--from-config-datasource",
+          "--to-schema",
+          "prisma/schema.prisma",
+          "--exit-code"
+        ],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "full-suite",
+        "package": "vitest",
+        "binary": "vitest",
+        "arguments": [
+          "run",
+          "--no-file-parallelism",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-tCEoHt\\vitest.json"
+        ],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "api-lint",
+        "package": "eslint",
+        "binary": "eslint",
+        "arguments": [".", "--max-warnings", "0"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "api-types-and-build",
+        "package": "typescript",
+        "binary": "tsc",
+        "arguments": [],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "api-aliases",
+        "package": "tsc-alias",
+        "binary": "tsc-alias",
+        "arguments": [],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "web-lint",
+        "package": "eslint",
+        "binary": "eslint",
+        "arguments": ["."],
+        "cwd": "apps\\web",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "web-types",
+        "package": "typescript",
+        "binary": "tsc",
+        "arguments": ["-b"],
+        "cwd": "apps\\web",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "web-build",
+        "package": "vite",
+        "binary": "vite",
+        "arguments": ["build"],
+        "cwd": "apps\\web",
+        "nodeEnv": "production",
+        "exit": 0
+      },
+      {
+        "id": "repository-format",
+        "package": "prettier",
+        "binary": "prettier",
+        "arguments": [
+          "--check",
+          "**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,yml,yaml,css,html}",
+          "!apps/api/src/core/ai/openrouter.ts",
+          "!docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+          "!apps/web/index.html",
+          "!apps/web/src/App.css",
+          "!apps/web/src/index.css",
+          "!docs/plans/c5-companion-beta/endgame-focus-final.json",
+          "!docs/plans/c5-companion-beta/primary-reflow.json",
+          "!docs/plans/c5-companion-beta/reimport-after.json",
+          "!docs/plans/c5-companion-beta/reimport-before.json",
+          "!docs/plans/c5-companion-beta/rendered-style-check.json",
+          "!docs/plans/c5-companion-beta/secondary-reflow.json",
+          "!docs/plans/c5-companion-beta/starting-state.json"
+        ],
+        "cwd": ".",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "diff-check",
+        "exit": 0
+      }
+    ]
+  },
+  "browser": {
+    "status": "passed",
+    "viewportWidths": [1280, 640, 320],
+    "height": 900,
+    "checks": 33,
+    "horizontalOverflowCases": 0,
+    "clippedContentCases": 0,
+    "mobileHeaderHeight": 61,
+    "interactions": [
+      "1280px account cancellations and Planner/Inventory tab keys passed",
+      "640px account cancellations and Planner/Inventory tab keys passed",
+      "320px native modal focus trap, Escape restore and route close passed",
+      "320px account cancellations and Planner/Inventory tab keys passed",
+      "Resin 119/120/159/160/200 thresholds and named meters passed; cap remains 200"
+    ],
+    "artwork": [
+      {
+        "scenario": "secondary",
+        "loaded": true,
+        "note": "Synthetic 1px PNG proves retry; not artwork fidelity"
+      },
+      {
+        "scenario": "blocked",
+        "loaded": false
+      },
+      {
+        "scenario": "stalled",
+        "loaded": false
+      },
+      {
+        "scenario": "live",
+        "loaded": true
+      }
+    ],
+    "pageErrors": [],
+    "screenshotDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp/celestia-section4-ui"
+  },
+  "nativeZoom": {
+    "status": "not-performed",
+    "attempted": true,
+    "blocker": "Computer Use could not determine the current browser URL with enough confidence to enforce policy. No native input was issued.",
+    "computerUseSkill": "C:/Users/inuzu/.codex/plugins/cache/openai-bundled/computer-use/26.1013.40934/skills/computer-use/SKILL.md",
+    "note": "Width-based reflow equivalent to a 1280px surface at 100/200/400 percent was checked; no actual native zoom or reduced viewport-height claim."
+  },
+  "screenReader": {
+    "status": "not-performed",
+    "note": "ARIA semantics and keyboard behavior checked; no experienced screen-reader operator used."
+  },
+  "cleanup": {
+    "testDatabaseDropped": true,
+    "ownedPostgresStopped": true,
+    "ownedBrowserAndPreviewStopped": true,
+    "temporaryEvidenceRetained": true
+  },
+  "evidenceHashes": {
+    "verification.json": "1fe1870c9d82392422568ce7be2baaca4b3ed0180d34a9e289d575cd2d880a7c",
+    "vitest.json": "51d700a25cefe80dbc394e2787bdbb8407d4b1adb13675a2969f0fc0ec558725"
+  }
+}

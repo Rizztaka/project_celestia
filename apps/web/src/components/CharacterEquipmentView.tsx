@@ -5,42 +5,12 @@ import {
   type EquipmentSectionReceipt,
   type RecordedArtifact,
 } from '@celestia/api-contracts';
-import { useState } from 'react';
 
-import { ASSET_MAPPING } from '../lib/asset-mapping';
+import { artworkDisplayName } from '../lib/artwork';
+import { GenshinAvatar } from './GenshinAvatar';
+import { GenshinWeaponIcon } from './GenshinWeaponIcon';
 
-function recordedName(key: string): string {
-  return (
-    key
-      .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-      .replace(/_/g, ' ')
-      .trim() || key
-  );
-}
-function RecordedImage({
-  asset,
-  kind,
-  name,
-}: {
-  asset?: string;
-  kind: 'Avatar' | 'Equip';
-  name: string;
-}) {
-  const [failed, setFailed] = useState(false);
-  return (
-    <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white/5 text-xl font-semibold text-zinc-400">
-      <span aria-hidden="true">{name.slice(0, 2).toUpperCase()}</span>
-      {asset && !failed && (
-        <img
-          src={`https://enka.network/ui/UI_${kind}Icon_${asset}.png`}
-          alt={name}
-          className="absolute inset-0 h-full w-full object-contain"
-          onError={() => setFailed(true)}
-        />
-      )}
-    </div>
-  );
-}
+const recordedName = artworkDisplayName;
 function Receipt({
   receipt,
   merged = false,
@@ -153,12 +123,7 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
         aria-labelledby="character-title"
       >
         <div className="flex items-center gap-4">
-          <RecordedImage
-            key={c.characterKey}
-            asset={ASSET_MAPPING.characters[c.characterKey]}
-            kind="Avatar"
-            name={name}
-          />
+          <GenshinAvatar characterKey={c.characterKey} size="lg" constellation={c.constellation} />
           <div className="min-w-0">
             <p className="mb-1 text-xs uppercase tracking-widest text-indigo-300">
               Recorded character
@@ -172,7 +137,7 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
             <p className="mt-1 break-all text-xs text-zinc-500">{c.characterKey}</p>
           </div>
         </div>
-        <dl className="mt-6 grid grid-cols-3 gap-3">
+        <dl className="mt-6 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-3">
           {[
             ['Level', c.level],
             ['Ascension', c.ascension],
@@ -185,7 +150,7 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
           ))}
         </dl>
         <h2 className="mt-6 text-sm font-semibold text-zinc-200">Stored talents</h2>
-        <dl className="mt-3 grid grid-cols-3 gap-3">
+        <dl className="mt-3 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-3">
           {[
             ['Normal attack', c.talents.normal],
             ['Skill', c.talents.skill],
@@ -212,12 +177,7 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
         </h2>
         {data.weapon.state === 'recorded_assigned' ? (
           <div className="flex items-start gap-4">
-            <RecordedImage
-              key={data.weapon.item.weaponKey}
-              asset={ASSET_MAPPING.weapons[data.weapon.item.weaponKey]}
-              kind="Equip"
-              name={recordedName(data.weapon.item.weaponKey)}
-            />
+            <GenshinWeaponIcon weaponKey={data.weapon.item.weaponKey} size="lg" />
             <div className="min-w-0">
               <p className="break-words font-semibold text-white">
                 {recordedName(data.weapon.item.weaponKey)}

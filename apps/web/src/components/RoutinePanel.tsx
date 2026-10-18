@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { captureSession, isCurrentSession } from '../lib/account-session';
 import { fetchRoutine, patchRoutine, type RoutineCommand } from '../lib/api';
-import { formatRemaining, projectResin } from '../lib/resin';
+import { describeRemaining, formatRemaining, projectResin } from '../lib/resin';
 import {
   newestRoutine,
   type ReceivedRoutine,
@@ -173,6 +173,20 @@ export default function RoutinePanel({
     dailyPeriodId: snapshot.period?.dailyPeriodId ?? null,
   };
   const resin = projectResin(snapshot.resin, now);
+  const resinColor =
+    resin === null
+      ? 'text-zinc-300'
+      : resin >= 160
+        ? 'text-rose-300'
+        : resin >= 120
+          ? 'text-amber-300'
+          : 'text-emerald-300';
+  const dailyTasks = snapshot.tasks.filter(
+    (task) =>
+      (task.cadence === 'daily' || task.cadence === 'daily_reminder') &&
+      (!enabledKinds || enabledKinds.includes(task.id as PlanRoutineKind)),
+  );
+  const completed = expired ? 0 : dailyTasks.filter((task) => task.done === true).length;
   const transformer = snapshot.tasks.find((task) => task.id === 'transformer');
 
   return (
@@ -230,10 +244,19 @@ export default function RoutinePanel({
         </p>
       </div>
       {snapshot.period && (
-        <p className="text-sm font-medium text-indigo-100">
-          {SERVER_POLICIES[snapshot.period.serverId].label} · Next daily reset in{' '}
-          {expired ? 'refresh required' : formatRemaining(snapshot.period.dailyEnd, now)} · Weekly
-          reset in {expired ? 'refresh required' : formatRemaining(snapshot.period.weeklyEnd, now)}
+        <p className="text-sm font-medium text-indigo-100" aria-live="polite" aria-atomic="true">
+          <span aria-hidden="true">
+            {SERVER_POLICIES[snapshot.period.serverId].label} · Next daily reset in{' '}
+            {expired ? 'refresh required' : formatRemaining(snapshot.period.dailyEnd, now)} · Weekly
+            reset in{' '}
+            {expired ? 'refresh required' : formatRemaining(snapshot.period.weeklyEnd, now)}
+          </span>
+          <span className="sr-only">
+            {SERVER_POLICIES[snapshot.period.serverId].label}.{' '}
+            {expired
+              ? 'Reset period ended. Refresh required.'
+              : `Daily reset in ${describeRemaining(snapshot.period.dailyEnd, now)}. Weekly reset in ${describeRemaining(snapshot.period.weeklyEnd, now)}.`}
+          </span>
         </p>
       )}
       <p className="text-sm text-zinc-400">
@@ -271,26 +294,63 @@ export default function RoutinePanel({
       )}
 
       {view === 'daily' ? (
-        <div className="grid gap-5 md:grid-cols-2">
-          <div className="glass-panel space-y-4 rounded-2xl p-6">
+        <div className="grid min-w-0 grid-cols-1 gap-5 md:grid-cols-2">
+          <div className="companion-priority-card space-y-4 rounded-2xl p-4 sm:p-6">
+            <span className="inline-flex rounded-full border border-indigo-400/30 bg-indigo-500/10 px-2 py-1 text-xs font-medium text-indigo-200">
+              Daily resource
+            </span>
             <h2 className="text-lg font-semibold text-white">Original Resin</h2>
-            <p className="text-4xl font-bold tabular-nums text-indigo-200">
+            <p
+              className={`flex flex-wrap items-center gap-2 text-4xl font-bold tabular-nums ${resinColor}`}
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {resin !== null && resin >= 160 && (
+                <span
+                  aria-hidden="true"
+                  className="resin-alert-dot h-2 w-2 rounded-full bg-rose-400"
+                />
+              )}
+              <span className="sr-only">Estimated resin: </span>
               {resin === null
                 ? 'Unknown'
                 : `${resin} / ${snapshot.resin.known ? snapshot.resin.cap : 200}`}
             </p>
+            {snapshot.resin.known && resin !== null && (
+              <meter
+                aria-label="Estimated Original Resin"
+                className={`h-2 w-full ${resinColor}`}
+                style={{
+                  accentColor: resin >= 160 ? '#fda4af' : resin >= 120 ? '#fcd34d' : '#6ee7b7',
+                }}
+                min={0}
+                max={snapshot.resin.cap}
+                value={resin}
+              >
+                {resin} of {snapshot.resin.cap}
+              </meter>
+            )}
             <p className="text-sm text-zinc-400">
               {resin === null
                 ? 'Enter your current in-game amount to start an estimate.'
                 : 'Estimate from your last manual entry. Spending resin in-game is not tracked.'}
             </p>
             {snapshot.resin.known && resin !== null && (
-              <p className="text-sm text-zinc-400">
-                {resin >= snapshot.resin.cap
-                  ? 'At cap'
-                  : snapshot.resin.capAt
-                    ? `Full in ${formatRemaining(snapshot.resin.capAt, now)}`
-                    : ''}
+              <p className={`text-sm ${resinColor}`} aria-live="polite" aria-atomic="true">
+                <span aria-hidden="true">
+                  {resin >= snapshot.resin.cap
+                    ? 'At cap'
+                    : snapshot.resin.capAt
+                      ? `Full in ${formatRemaining(snapshot.resin.capAt, now)}`
+                      : ''}
+                </span>
+                <span className="sr-only">
+                  {resin >= snapshot.resin.cap
+                    ? 'Resin is at capacity.'
+                    : snapshot.resin.capAt
+                      ? `Resin will cap in ${describeRemaining(snapshot.resin.capAt, now)}.`
+                      : 'Resin recovery time unavailable.'}
+                </span>
               </p>
             )}
             <form
@@ -322,10 +382,35 @@ export default function RoutinePanel({
           </div>
           {(!enabledKinds ||
             enabledKinds.some((kind) => kind === 'commissions' || kind === 'teapot')) && (
-            <div className="glass-panel space-y-4 rounded-2xl p-6">
+            <div
+              className={`${completed < dailyTasks.length ? 'companion-priority-card' : 'companion-info-card'} space-y-4 rounded-2xl p-4 sm:p-6`}
+            >
+              <span className="inline-flex rounded-full border border-indigo-400/30 bg-indigo-500/10 px-2 py-1 text-xs font-medium text-indigo-200">
+                {completed < dailyTasks.length ? 'Active routine' : 'Recorded routine'}
+              </span>
               <h2 className="text-lg font-semibold text-white">Daily reminders</h2>
+              <p
+                className={`text-sm font-medium ${completed === dailyTasks.length ? 'text-emerald-300' : 'text-amber-300'}`}
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {expired
+                  ? 'Refresh required to confirm reminders'
+                  : `${completed} of ${dailyTasks.length} reminders recorded`}
+              </p>
+              {!expired && dailyTasks.length > 0 && (
+                <meter
+                  aria-label="Daily reminders recorded"
+                  className="h-2 w-full accent-emerald-400"
+                  min={0}
+                  max={dailyTasks.length}
+                  value={completed}
+                >
+                  {completed} of {dailyTasks.length}
+                </meter>
+              )}
               {snapshot.period && (
-                <p className="text-sm text-zinc-400">
+                <p className="text-sm text-zinc-400" aria-live="polite" aria-atomic="true">
                   Reset in {formatRemaining(snapshot.period.dailyEnd, now)}
                 </p>
               )}

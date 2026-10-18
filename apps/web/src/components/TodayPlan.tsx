@@ -152,7 +152,7 @@ export default function TodayPlan() {
     plan && advice.data && adviceMatches(plan, advice.data) && !expired ? advice.data : null;
   const enabled = plan?.routines.filter((item) => !item.dismissed).map((item) => item.kind) ?? [];
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6">
       <section id="session-recording" className="space-y-4" aria-label="Manual session recording">
         <h2 className="text-xl font-semibold text-white">Your routine</h2>
         <p className="text-sm text-zinc-400">
@@ -195,10 +195,15 @@ export default function TodayPlan() {
 
       <section
         aria-label="Today's goals and choices"
-        className="glass-panel min-w-0 space-y-5 rounded-2xl p-4 sm:p-6"
+        className="companion-priority-card min-w-0 space-y-5 rounded-2xl p-4 sm:p-6"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-xl font-semibold text-white">Your next few goals</h2>
+          <div>
+            <span className="mb-2 inline-flex rounded-full border border-indigo-400/30 bg-indigo-500/10 px-2 py-1 text-xs font-medium text-indigo-200">
+              Focus goals
+            </span>
+            <h2 className="text-xl font-semibold text-white">Your next few goals</h2>
+          </div>
           <button
             className={planButton}
             disabled={saving || query.isFetching}
@@ -252,12 +257,12 @@ export default function TodayPlan() {
               <p>Your active goals are set aside for this period. Restore one whenever you want.</p>
             )}
             <ol className="space-y-3">
-              {shown.map(({ goal }) => {
+              {shown.map(({ goal }, index) => {
                 const demand = matchingAdvice?.goalDemand.find((item) => item.goalId === goal.id);
                 return (
                   <li
                     key={goal.id}
-                    className="min-w-0 space-y-3 rounded-xl border border-white/10 p-4"
+                    className={`${index === 0 ? 'companion-priority-card' : 'companion-info-card'} min-w-0 space-y-3 rounded-xl p-4`}
                   >
                     <div className="flex flex-wrap items-center gap-3">
                       <span className="rounded bg-indigo-400/10 px-2 py-1 text-xs text-indigo-200">
@@ -422,7 +427,10 @@ export default function TodayPlan() {
         )}
       </section>
 
-      <section aria-label="This week" className="glass-panel space-y-3 rounded-2xl p-4 sm:p-6">
+      <section
+        aria-label="This week"
+        className="companion-info-card space-y-3 rounded-2xl p-4 sm:p-6"
+      >
         <h2 className="text-xl font-semibold text-white">This week</h2>
         {!plan ? (
           <p>Load your plan to see the supported weekly period.</p>
@@ -461,7 +469,7 @@ export default function TodayPlan() {
 
       <section
         aria-label="Supporting material advice"
-        className="glass-panel space-y-3 rounded-2xl p-4 sm:p-6"
+        className="companion-info-card space-y-3 rounded-2xl p-4 sm:p-6"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-xl font-semibold text-white">Farm today</h2>

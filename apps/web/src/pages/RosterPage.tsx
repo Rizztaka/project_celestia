@@ -2,22 +2,15 @@ import { useQuery } from '@tanstack/react-query';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import { FocusButton } from '../components/FocusButton';
+import { GenshinAvatar } from '../components/GenshinAvatar';
+import { GenshinWeaponIcon } from '../components/GenshinWeaponIcon';
 import type { RosterCharacter, RosterWeapon } from '../lib/api';
 import { fetchFocus, fetchGenshinRoster } from '../lib/api';
-import { ASSET_MAPPING } from '../lib/asset-mapping';
+import { artworkDisplayName, characterMetadata } from '../lib/artwork';
+import { getElementTheme } from '../lib/element-colors';
 
-// -------------------------------------------------------
-// Utility: format a GOOD PascalCase character key into a
-// readable display name.
-// Examples:
-//   "HuTao"            → "Hu Tao"
-//   "RaidenShogun"     → "Raiden Shogun"
-//   "KaedeharaKazuha"  → "Kaedehara Kazuha"
-// A full static lookup table is planned for Phase 4.
-// -------------------------------------------------------
-function formatName(key: string): string {
-  return key.replace(/([A-Z])/g, ' $1').trim();
-}
+// Catalog names, with a readable fallback for unrecognized imported keys.
+const formatName = artworkDisplayName;
 
 // -------------------------------------------------------
 // Constellation-tier color mapping
@@ -29,48 +22,24 @@ function constellationColor(c: number): string {
   return 'text-amber-400 border-amber-500/50';
 }
 
-function constellationGlow(c: number): string {
-  if (c === 0) return '';
-  if (c <= 2) return 'shadow-[0_0_16px_rgba(99,102,241,0.4)]';
-  if (c <= 4) return 'shadow-[0_0_16px_rgba(167,139,250,0.4)]';
-  return 'shadow-[0_0_16px_rgba(251,191,36,0.4)]';
-}
-
 // -------------------------------------------------------
 // CharacterCard
 // -------------------------------------------------------
 function CharacterCard({ character }: { character: RosterCharacter }) {
   const displayName = formatName(character.characterKey);
-  // Generate initials from the display name
-  const initials = displayName
-    .split(' ')
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
-
+  const metadata = characterMetadata[character.characterKey];
+  const theme = getElementTheme(character.characterKey);
   const c = character.constellation;
   const colorClass = constellationColor(c);
-  const glowClass = constellationGlow(c);
 
   return (
-    <div className="glass-panel hover-lift group flex flex-col gap-4 rounded-2xl border border-white/5 p-5">
+    <article
+      aria-label={`${displayName}, ${metadata ? `${metadata.rarity} star ${theme.element} ${metadata.weapon} character, ` : ''}Level ${character.level}, Constellation ${c}`}
+      className={`group flex min-w-0 flex-col gap-4 rounded-2xl border border-t-2 bg-zinc-900/40 p-4 transition-colors hover:bg-zinc-900/70 sm:p-5 ${metadata?.rarity === 5 ? 'border-amber-500/30' : metadata?.rarity === 4 ? 'border-purple-500/30' : 'border-zinc-700'}`}
+    >
       {/* Header: avatar + name + constellation */}
       <div className="flex items-center gap-4">
-        {/* Avatar circle */}
-        <div
-          className={`font-display relative flex h-12 w-12 shrink-0 select-none items-center justify-center overflow-hidden rounded-xl border-2 text-sm font-bold transition-all ${colorClass} ${glowClass}`}
-        >
-          <img
-            src={`https://enka.network/ui/UI_AvatarIcon_${ASSET_MAPPING.characters[character.characterKey] || character.characterKey}.png`}
-            alt={displayName}
-            className="absolute inset-0 h-full w-full object-cover"
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = 'none';
-            }}
-          />
-          <span>{initials}</span>
-        </div>
+        <GenshinAvatar characterKey={character.characterKey} constellation={c} />
 
         {/* Name + level */}
         <div className="min-w-0 flex-1">
@@ -85,6 +54,13 @@ function CharacterCard({ character }: { character: RosterCharacter }) {
           </p>
         </div>
 
+        {metadata && (
+          <span
+            className={`text-xs font-semibold ${metadata.rarity === 5 ? 'text-amber-300' : 'text-purple-300'}`}
+          >
+            {metadata.rarity}★
+          </span>
+        )}
         {/* Constellation badge */}
         <span
           className={`shrink-0 rounded-full border bg-black/30 px-2 py-0.5 text-xs font-bold ${colorClass}`}
@@ -133,7 +109,7 @@ function CharacterCard({ character }: { character: RosterCharacter }) {
       >
         View recorded equipment
       </Link>
-    </div>
+    </article>
   );
 }
 
@@ -159,29 +135,7 @@ function WeaponChip({ weapon }: { weapon: RosterWeapon | null }) {
 
   return (
     <div className="flex items-center gap-2">
-      <div className="relative flex h-5 w-5 shrink-0 items-center justify-center">
-        <img
-          src={`https://enka.network/ui/UI_EquipIcon_${ASSET_MAPPING.weapons[weapon.weaponKey] || weapon.weaponKey}.png`}
-          alt={weapon.weaponKey}
-          className="absolute inset-0 z-10 h-full w-full object-contain"
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = 'none';
-          }}
-        />
-        <svg
-          className="relative z-0 h-4 w-4 shrink-0 text-amber-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M14.25 2.25L21.75 9.75M19.5 4.5L4.5 19.5M4.5 19.5l-2.25 2.25M4.5 19.5l7.5-7.5"
-          />
-        </svg>
-      </div>
+      <GenshinWeaponIcon weaponKey={weapon.weaponKey} size="sm" />
       <div className="flex flex-col">
         <span className="font-display text-sm font-bold text-white transition-colors group-hover:text-amber-400">
           {formatName(weapon.weaponKey)}
@@ -437,7 +391,7 @@ export default function RosterPage() {
 
         {/* Loading state: 6 skeleton cards */}
         {isLoading && (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {Array.from({ length: 6 }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
@@ -449,7 +403,7 @@ export default function RosterPage() {
 
         {/* Populated state: character grid */}
         {!isLoading && characters.length > 0 && (
-          <div className="animate-fade-in grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="animate-fade-in grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {visibleCharacters.map((character) => (
               <CharacterCard key={character.id} character={character} />
             ))}

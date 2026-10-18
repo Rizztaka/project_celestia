@@ -1,3 +1,56 @@
+import type {
+  CreateGoalRequest,
+  FarmingIntelligenceResponse,
+  FocusCommand,
+  FocusRecord,
+  GoalCommand,
+  GoalRecord,
+  GoalWriteResponse,
+  PlanAdvice,
+  PlanCommand,
+  PlanSnapshot,
+} from '@celestia/api-contracts';
+
+export function fetchFarmingIntelligence(
+  options: {
+    talentTier?: string;
+    weaponTier?: string;
+    includeRoute?: string;
+    materialKey?: string;
+    startPointId?: string;
+    maxStops: string;
+  },
+  signal?: AbortSignal,
+  session?: AccountSession,
+) {
+  const params = new URLSearchParams({ contractVersion: '1', maxStops: options.maxStops });
+  for (const [key, value] of Object.entries(options)) if (value) params.set(key, value);
+  return fetchApi<FarmingIntelligenceResponse>(
+    `/games/genshin/intelligence/farming?${params}`,
+    { signal },
+    session,
+  );
+}
+
+export function fetchPlan(signal?: AbortSignal, session?: AccountSession) {
+  return fetchApi<PlanSnapshot>('/companion/plan?contractVersion=1', { signal }, session);
+}
+export function fetchPlanAdvice(signal?: AbortSignal, session?: AccountSession) {
+  return fetchApi<PlanAdvice>('/companion/plan/advice?contractVersion=1', { signal }, session);
+}
+export function patchPlan(command: PlanCommand, session: AccountSession) {
+  return fetchApi<PlanSnapshot>(
+    '/companion/plan',
+    { method: 'PATCH', body: JSON.stringify(command) },
+    session,
+  );
+}
+import type { AdviceAvailability, MaterialAdviceResponse } from '@celestia/api-contracts';
+import type { CharacterEquipmentResponse } from '@celestia/api-contracts';
+
+import { useAuthStore } from '../stores/auth.store';
+import { type AccountSession, assertCurrentSession, captureSession } from './account-session';
+import { accessSessionId, API_BASE, refreshAccessToken } from './auth-client';
 /**
  * api.ts — Centralized API client for @celestia/web
  *
@@ -9,8 +62,6 @@
  * Usage:
  *   const data = await fetchApi<MeResponse>("/auth/me");
  */
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api/v1';
 
 export class ApiError extends Error {
   public readonly code: string;
@@ -24,7 +75,24 @@ export class ApiError extends Error {
   }
 }
 
-import { useAuthStore } from '../stores/auth.store';
+import type {
+  ImportCommitRequest,
+  ImportPreview,
+  ImportPreviewRequest,
+  ImportResult,
+  ImportStatus,
+  PatchChecklistBody,
+  PatchResinBody,
+  PatchSettingsBody,
+  PatchWeeklyClaimsBody,
+  RoutineSnapshotV2,
+} from '@celestia/api-contracts';
+
+export type { ImportResult } from '@celestia/api-contracts';
+
+export async function fetchImportStatus(signal?: AbortSignal): Promise<ImportStatus> {
+  return fetchApi<ImportStatus>('/games/genshin/import/status', { signal });
+}
 
 /**
  * fetchApi — typed wrapper around the browser Fetch API.
@@ -37,8 +105,13 @@ import { useAuthStore } from '../stores/auth.store';
  * Throws ApiError for non-2xx responses, parsed from the standard
  * { success: false, error: { code, message } } response shape.
  */
-export async function fetchApi<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = useAuthStore.getState().token;
+export async function fetchApi<T>(
+  path: string,
+  options: RequestInit = {},
+  session: AccountSession = captureSession(),
+): Promise<T> {
+  assertCurrentSession(session);
+  let token = useAuthStore.getState().token;
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -49,12 +122,36 @@ export async function fetchApi<T>(path: string, options: RequestInit = {}): Prom
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE}${path}`, {
+  let response = await fetch(`${API_BASE}${path}`, {
     ...options,
+    credentials: 'include',
     headers,
   });
+  assertCurrentSession(session);
+  let json = await response.json();
+  assertCurrentSession(session);
+  // This error code is returned before protected handlers run. Retry once after rotation,
+  // preserving the originating account and never replaying a stream body.
+  if (
+    response.status === 401 &&
+    json.error?.code === 'AUTH_SESSION_INVALID' &&
+    accessSessionId(token) &&
+    (options.body === undefined || typeof options.body === 'string')
+  ) {
+    try {
+      token = await refreshAccessToken();
+    } catch {
+      assertCurrentSession(session);
+      useAuthStore.getState().logout();
+      throw new ApiError('UNAUTHORIZED', 'Your session ended. Sign in again.', 401);
+    }
+    assertCurrentSession(session);
+    headers.Authorization = `Bearer ${token}`;
+    response = await fetch(`${API_BASE}${path}`, { ...options, credentials: 'include', headers });
+    json = await response.json();
+  }
 
-  const json = await response.json();
+  assertCurrentSession(session);
 
   if (!response.ok || !json.success) {
     throw new ApiError(
@@ -71,25 +168,38 @@ export async function fetchApi<T>(path: string, options: RequestInit = {}): Prom
 // Genshin Impact API Functions
 // ============================================================
 
-export interface ImportResult {
-  charactersImported: number;
-  weaponsImported: number;
-  artifactsImported: number;
-}
-
 /**
  * importGenshinAccount — POST /games/genshin/import
  *
- * Sends a parsed GOOD-format payload to the backend importer.
- * The caller is responsible for JSON.parse()-ing the raw textarea string
- * before passing it here. If JSON.parse() throws, catch it in the UI and
- * show an inline error — do NOT call this function with invalid JSON.
+ * Commits exactly the versioned request used for preview, with its token
+ * and explicit empty-section confirmations. Never retries automatically.
  */
-export async function importGenshinAccount(goodPayload: unknown): Promise<ImportResult> {
-  return fetchApi<ImportResult>('/games/genshin/import', {
-    method: 'POST',
-    body: JSON.stringify(goodPayload),
-  });
+export async function importGenshinAccount(
+  request: ImportCommitRequest,
+  session?: AccountSession,
+): Promise<ImportResult> {
+  return fetchApi<ImportResult>(
+    '/games/genshin/import',
+    {
+      method: 'POST',
+      body: JSON.stringify(request),
+    },
+    session,
+  );
+}
+
+export async function previewGenshinImport(
+  request: ImportPreviewRequest,
+  session?: AccountSession,
+): Promise<ImportPreview> {
+  return fetchApi<ImportPreview>(
+    '/games/genshin/import/preview',
+    {
+      method: 'POST',
+      body: JSON.stringify(request),
+    },
+    session,
+  );
 }
 
 // ============================================================
@@ -128,8 +238,16 @@ export interface RosterResponse {
  * Always returns a RosterResponse, even if the user has no data yet
  * (server returns an empty array, not a 404).
  */
-export async function fetchGenshinRoster(): Promise<RosterResponse> {
-  return fetchApi<RosterResponse>('/games/genshin/characters');
+export async function fetchGenshinRoster(signal?: AbortSignal): Promise<RosterResponse> {
+  return fetchApi<RosterResponse>('/games/genshin/characters', { signal });
+}
+export function fetchCharacterEquipment(
+  characterKey: string,
+  signal?: AbortSignal,
+): Promise<CharacterEquipmentResponse> {
+  return fetchApi(`/games/genshin/characters/${encodeURIComponent(characterKey)}/equipment`, {
+    signal,
+  });
 }
 
 // ============================================================
@@ -178,8 +296,8 @@ export interface ArtifactsResponse {
  * Returns the authenticated user's full weapon inventory, ordered level desc.
  * Always returns a WeaponsResponse, even if the user has no data yet.
  */
-export async function fetchGenshinWeapons(): Promise<WeaponsResponse> {
-  return fetchApi<WeaponsResponse>('/games/genshin/weapons');
+export async function fetchGenshinWeapons(signal?: AbortSignal): Promise<WeaponsResponse> {
+  return fetchApi<WeaponsResponse>('/games/genshin/weapons', { signal });
 }
 
 /**
@@ -189,71 +307,31 @@ export async function fetchGenshinWeapons(): Promise<WeaponsResponse> {
  * level desc then rarity desc.
  * Always returns an ArtifactsResponse, even if the user has no data yet.
  */
-export async function fetchGenshinArtifacts(): Promise<ArtifactsResponse> {
-  return fetchApi<ArtifactsResponse>('/games/genshin/artifacts');
+export async function fetchGenshinArtifacts(signal?: AbortSignal): Promise<ArtifactsResponse> {
+  return fetchApi<ArtifactsResponse>('/games/genshin/artifacts', { signal });
 }
 
-// ============================================================
-// Daily Companion Types & Functions (Milestone 3A)
-// ============================================================
-
-/**
- * Mirrors the DailyCompanion Prisma model returned by the backend.
- *
- * NOTE: `resinAmount` is the checkpoint value at `resinUpdatedAt`.
- * Use computeCurrentResin() from lib/resin.ts to get the effective current amount.
- */
-export interface DailyState {
-  id: string;
-  userId: string;
-  resinAmount: number; // checkpoint value — project forward with resin.ts
-  resinUpdatedAt: string; // ISO 8601 UTC timestamp
-  commissionsDone: boolean;
-  teapotClaimed: boolean;
-  transformerClaimed: boolean;
-  dailyResetAt: string; // ISO 8601 UTC timestamp of last reset
-  createdAt: string;
-  updatedAt: string;
+// Companion V2: every mutation returns the complete shared revision.
+export function fetchRoutine(signal?: AbortSignal): Promise<RoutineSnapshotV2> {
+  return fetchApi('/companion/routine?contractVersion=2', { signal });
 }
-
-/**
- * fetchDailyState — GET /companion/daily
- *
- * Returns the authenticated user's daily companion state.
- * Creates the record with safe defaults on the user's first call.
- */
-export async function fetchDailyState(): Promise<DailyState> {
-  return fetchApi<DailyState>('/companion/daily');
-}
-
-/**
- * patchResin — PATCH /companion/resin
- *
- * Updates the user's resin checkpoint. The backend stores the given amount
- * and refreshes resinUpdatedAt to now(). The frontend then projects forward
- * from this new checkpoint.
- *
- * @param amount Integer in [0, 200].
- */
-export async function patchResin(amount: number): Promise<DailyState> {
-  return fetchApi<DailyState>('/companion/resin', {
-    method: 'PATCH',
-    body: JSON.stringify({ amount }),
-  });
-}
-
-/**
- * patchChecklist — PATCH /companion/checklist
- *
- * Updates one or more daily checklist flags. At least one field is required.
- */
-export async function patchChecklist(
-  input: Partial<Pick<DailyState, 'commissionsDone' | 'teapotClaimed' | 'transformerClaimed'>>,
-): Promise<DailyState> {
-  return fetchApi<DailyState>('/companion/checklist', {
-    method: 'PATCH',
-    body: JSON.stringify(input),
-  });
+export type RoutineCommand =
+  | { kind: 'settings'; body: PatchSettingsBody }
+  | { kind: 'checklist'; body: PatchChecklistBody }
+  | { kind: 'resin'; body: PatchResinBody }
+  | { kind: 'weekly-claims'; body: PatchWeeklyClaimsBody };
+export function patchRoutine(
+  command: RoutineCommand,
+  session?: AccountSession,
+): Promise<RoutineSnapshotV2> {
+  return fetchApi(
+    `/companion/routine/${command.kind}`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify(command.body),
+    },
+    session,
+  );
 }
 
 // ============================================================
@@ -263,23 +341,9 @@ export async function patchChecklist(
 export type GoalType = 'CHARACTER_ASCENSION' | 'CHARACTER_TALENT' | 'WEAPON_ASCENSION';
 export type TalentType = 'normal' | 'skill' | 'burst';
 
-export interface UpgradeGoal {
-  id: string;
-  userId: string;
-  goalType: GoalType;
-  targetKey: string;
-  fromPhase: number;
-  toPhase: number;
-  talentType: TalentType | null;
-  createdAt: string;
-  updatedAt: string;
-}
+export type UpgradeGoal = GoalRecord;
 
-export interface MaterialDelta {
-  needed: Record<string, number>;
-  inventory: Record<string, number>;
-  delta: Record<string, number>;
-}
+export type MaterialDelta = MaterialAdviceResponse;
 
 export interface TodayDomain {
   domainKey: string;
@@ -291,39 +355,55 @@ export interface TodayDomain {
 }
 
 export interface TodayResult {
+  goals: AdviceAvailability[];
+  availability: { available: boolean; reason: string | null };
   serverDay: string;
+  serverId: string | null;
   domains: TodayDomain[];
 }
 
-export interface CreateGoalInput {
-  goalType: GoalType;
-  targetKey: string;
-  fromPhase: number;
-  toPhase: number;
-  talentType: TalentType | null;
+export type CreateGoalInput = CreateGoalRequest;
+export async function fetchGoals(signal?: AbortSignal): Promise<UpgradeGoal[]> {
+  return fetchApi('/companion/goals', { signal });
+}
+export async function createGoal(
+  input: CreateGoalInput,
+  session?: AccountSession,
+): Promise<UpgradeGoal> {
+  return fetchApi('/companion/goals', { method: 'POST', body: JSON.stringify(input) }, session);
+}
+export async function updateGoal(
+  id: string,
+  command: GoalCommand,
+  session?: AccountSession,
+): Promise<GoalWriteResponse> {
+  return fetchApi(
+    `/companion/goals/${encodeURIComponent(id)}`,
+    { method: 'PATCH', body: JSON.stringify(command) },
+    session,
+  );
+}
+export async function fetchFocus(signal?: AbortSignal): Promise<FocusRecord[]> {
+  return fetchApi('/games/genshin/focus', { signal });
+}
+export async function setFocus(
+  key: string,
+  command: FocusCommand,
+  session?: AccountSession,
+): Promise<FocusRecord> {
+  return fetchApi(
+    `/games/genshin/characters/${encodeURIComponent(key)}/focus`,
+    { method: 'PATCH', body: JSON.stringify(command) },
+    session,
+  );
 }
 
-export async function fetchGoals(): Promise<UpgradeGoal[]> {
-  return fetchApi<UpgradeGoal[]>('/companion/goals');
+export async function fetchMaterialDelta(signal?: AbortSignal): Promise<MaterialDelta> {
+  return fetchApi<MaterialDelta>('/companion/goals/materials', { signal });
 }
 
-export async function createGoal(input: CreateGoalInput): Promise<UpgradeGoal> {
-  return fetchApi<UpgradeGoal>('/companion/goals', {
-    method: 'POST',
-    body: JSON.stringify(input),
-  });
-}
-
-export async function deleteGoal(id: string): Promise<void> {
-  await fetchApi<void>(`/companion/goals/${id}`, { method: 'DELETE' });
-}
-
-export async function fetchMaterialDelta(): Promise<MaterialDelta> {
-  return fetchApi<MaterialDelta>('/companion/goals/materials');
-}
-
-export async function fetchTodayDomains(): Promise<TodayResult> {
-  return fetchApi<TodayResult>('/companion/goals/today');
+export async function fetchTodayDomains(signal?: AbortSignal): Promise<TodayResult> {
+  return fetchApi<TodayResult>('/companion/goals/today', { signal });
 }
 
 // ============================================================
@@ -356,6 +436,7 @@ export interface GenshinEvent {
 }
 
 export interface EventsResponse {
+  availability: { available: boolean; reason: string | null };
   patch: string;
   totalUnclaimedPrimogems: number;
   events: GenshinEvent[];
@@ -367,19 +448,24 @@ export interface TierUpdateResult {
   claimed: boolean;
 }
 
-export async function fetchEvents(): Promise<EventsResponse> {
-  return fetchApi<EventsResponse>('/companion/events');
+export async function fetchEvents(signal?: AbortSignal): Promise<EventsResponse> {
+  return fetchApi<EventsResponse>('/companion/events', { signal });
 }
 
 export async function patchEventTier(
   eventKey: string,
   tierId: string,
   claimed: boolean,
+  session?: AccountSession,
 ): Promise<TierUpdateResult> {
-  return fetchApi<TierUpdateResult>(`/companion/events/${eventKey}/tiers/${tierId}`, {
-    method: 'PATCH',
-    body: JSON.stringify({ claimed }),
-  });
+  return fetchApi<TierUpdateResult>(
+    `/companion/events/${eventKey}/tiers/${tierId}`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify({ claimed }),
+    },
+    session,
+  );
 }
 
 // ============================================================
@@ -394,34 +480,6 @@ export interface HydratedWeeklyBoss {
   dropKeys: string[];
   wikiUrl: string | null;
   defeated: boolean;
-}
-
-export interface WeeklyBossesResponse {
-  weeklyResetAt: string;
-  nextResetAt: string;
-  defeatedCount: number;
-  discountedRemaining: number;
-  nextFightCost: number;
-  bosses: HydratedWeeklyBoss[];
-}
-
-export interface BossUpdateResult {
-  bossKey: string;
-  defeated: boolean;
-}
-
-export async function fetchWeeklyBosses(): Promise<WeeklyBossesResponse> {
-  return fetchApi<WeeklyBossesResponse>('/companion/weekly-bosses');
-}
-
-export async function patchWeeklyBoss(
-  bossKey: string,
-  defeated: boolean,
-): Promise<BossUpdateResult> {
-  return fetchApi<BossUpdateResult>(`/companion/weekly-bosses/${bossKey}`, {
-    method: 'PATCH',
-    body: JSON.stringify({ defeated }),
-  });
 }
 
 // ============================================================
@@ -578,6 +636,8 @@ export interface PlannerRouteItem {
 }
 
 export interface PlannerIntelligenceResponse {
+  goals: AdviceAvailability[];
+  allocationBasis: 'resin_budget';
   currentResin: number;
   timeUntilCapped: string;
   route: PlannerRouteItem[];
@@ -930,8 +990,8 @@ export async function createNikkeAccount(payload: {
   });
 }
 
-export async function fetchNikkeRoster(): Promise<NikkeCharacter[]> {
-  return fetchApi<NikkeCharacter[]>('/games/nikke/characters');
+export async function fetchNikkeRoster(signal?: AbortSignal): Promise<NikkeCharacter[]> {
+  return fetchApi<NikkeCharacter[]>('/games/nikke/characters', { signal });
 }
 
 export async function addNikkeToRoster(payload: {

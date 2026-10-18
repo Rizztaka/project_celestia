@@ -20,11 +20,14 @@
  *   - TanStack Query           → server data (profile, future game data)
  */
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { lazy, Suspense } from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
+import CompanionLayout from './components/CompanionLayout';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { bindAccountCache, createAccountQueryClient } from './lib/account-cache';
+import { useAuthStore } from './stores/auth.store';
 
 // Lazy loaded page components
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
@@ -36,27 +39,32 @@ const LoginPage = lazy(() => import('./pages/LoginPage'));
 const PlannerPage = lazy(() => import('./pages/PlannerPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
+const PasswordRecoveryPage = lazy(() => import('./pages/PasswordRecoveryPage'));
+const OAuthCallbackPage = lazy(() => import('./pages/OAuthCallbackPage'));
 const RosterPage = lazy(() => import('./pages/RosterPage'));
+const CharacterDetailPage = lazy(() => import('./pages/CharacterDetailPage'));
 const SimulatorsPage = lazy(() => import('./pages/SimulatorsPage'));
 const NikkeRosterPage = lazy(() =>
   import('./pages/nikke/NikkeRosterPage').then((m) => ({ default: m.NikkeRosterPage })),
 );
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: (failureCount, error) => {
-        if (error instanceof Error && 'status' in error) {
-          const status = (error as { status: number }).status;
-          if (status >= 400 && status < 500) return false;
-        }
-        return failureCount < 2;
-      },
-    },
-  },
-});
+function AccountQueryProvider({ children }: { children: React.ReactNode }) {
+  const [client] = useState(createAccountQueryClient);
+  useEffect(() => {
+    const unsubscribe = bindAccountCache(client);
+    return () => {
+      unsubscribe();
+      client.clear();
+    };
+  }, [client]);
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+}
 
 import React from 'react';
+
+import { restoreCookieSession } from './lib/auth-client';
 
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
@@ -96,39 +104,64 @@ class ErrorBoundary extends React.Component<
 }
 
 function App() {
+  const epoch = useAuthStore((state) => state.sessionEpoch);
+  const [ready, setReady] = useState(() => !!useAuthStore.getState().token);
+  const restoring = useRef(false);
+  useEffect(() => {
+    if (useAuthStore.getState().token || restoring.current) return;
+    restoring.current = true;
+    void restoreCookieSession()
+      .catch(() => undefined)
+      .finally(() => setReady(true));
+  }, []);
+  if (!ready)
+    return (
+      <p role="status" className="p-6 text-zinc-300">
+        Restoring your session…
+      </p>
+    );
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
+      <AccountQueryProvider key={epoch}>
         <BrowserRouter>
           <Suspense
             fallback={
               <div className="flex h-screen w-screen items-center justify-center bg-zinc-950">
-                <div className="border-accent-500 h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" />
+                <p role="status" className="text-zinc-300">
+                  Loading page…
+                </p>
               </div>
             }
           >
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
+              <Route path="/verify-email" element={<PasswordRecoveryPage mode="verify" />} />
+              <Route path="/auth/callback" element={<OAuthCallbackPage />} />
 
               <Route element={<ProtectedRoute />}>
-                <Route path="/" element={<DashboardPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/import" element={<ImportPage />} />
-                <Route path="/roster" element={<RosterPage />} />
-                <Route path="/inventory" element={<InventoryPage />} />
-                <Route path="/planner" element={<PlannerPage />} />
-                <Route path="/intelligence" element={<IntelligencePage />} />
-                <Route path="/endgame" element={<EndgamePage />} />
-                <Route path="/simulators" element={<SimulatorsPage />} />
-                <Route path="/nikke/roster" element={<NikkeRosterPage />} />
+                <Route element={<CompanionLayout />}>
+                  <Route path="/" element={<DashboardPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/import" element={<ImportPage />} />
+                  <Route path="/roster" element={<RosterPage />} />
+                  <Route path="/roster/:characterKey" element={<CharacterDetailPage />} />
+                  <Route path="/inventory" element={<InventoryPage />} />
+                  <Route path="/planner" element={<PlannerPage />} />
+                  <Route path="/intelligence" element={<IntelligencePage />} />
+                  <Route path="/endgame" element={<EndgamePage />} />
+                  <Route path="/simulators" element={<SimulatorsPage />} />
+                  <Route path="/nikke/roster" element={<NikkeRosterPage />} />
+                </Route>
               </Route>
 
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
         </BrowserRouter>
-      </QueryClientProvider>
+      </AccountQueryProvider>
     </ErrorBoundary>
   );
 }

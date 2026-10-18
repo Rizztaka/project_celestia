@@ -10,6 +10,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import SocialLogin from '../components/SocialLogin';
 import { ApiError, fetchApi } from '../lib/api';
 import type { AuthUser } from '../stores/auth.store';
 import { useAuthStore } from '../stores/auth.store';
@@ -162,6 +163,7 @@ function RegisterPage() {
               {mutation.isPending ? 'Creating account…' : 'Create account'}
             </button>
           </form>
+          <SocialLogin />
         </div>
 
         {/* Footer link */}

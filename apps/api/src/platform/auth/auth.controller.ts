@@ -5,6 +5,8 @@ import { successResponse } from '@/core/utils/response.js';
 
 import { UserService } from '../users/user.service.js';
 import { AuthService } from './auth.service.js';
+import { checkCookieOrigin, setRefreshCookie } from './auth-cookies.js';
+import { PasswordResetService } from './password-reset.service.js';
 
 export class AuthController {
   private authService: AuthService;
@@ -26,8 +28,21 @@ export class AuthController {
    */
   register = async (req: Request, res: Response) => {
     const validatedData = registerSchema.parse(req.body);
-    const result = await this.authService.register(validatedData);
-    res.status(201).json(successResponse(result, 'Registration successful'));
+    if (req.headers.origin) checkCookieOrigin(req);
+    const { refreshToken, ...result } = await this.authService.register(validatedData, {
+      userAgent: req.get('user-agent'),
+      ipAddress: req.socket.remoteAddress,
+    });
+    setRefreshCookie(res, refreshToken);
+    await new PasswordResetService().sendVerification(result.user.id);
+    res
+      .status(201)
+      .json(
+        successResponse(
+          { ...result, ...(req.headers.origin ? {} : { refreshToken }) },
+          'Registration successful',
+        ),
+      );
   };
 
   /**
@@ -38,8 +53,20 @@ export class AuthController {
    */
   login = async (req: Request, res: Response) => {
     const validatedData = loginSchema.parse(req.body);
-    const result = await this.authService.login(validatedData);
-    res.status(200).json(successResponse(result, 'Login successful'));
+    if (req.headers.origin) checkCookieOrigin(req);
+    const { refreshToken, ...result } = await this.authService.login(validatedData, {
+      userAgent: req.get('user-agent'),
+      ipAddress: req.socket.remoteAddress,
+    });
+    setRefreshCookie(res, refreshToken);
+    res
+      .status(200)
+      .json(
+        successResponse(
+          { ...result, ...(req.headers.origin ? {} : { refreshToken }) },
+          'Login successful',
+        ),
+      );
   };
 
   /**

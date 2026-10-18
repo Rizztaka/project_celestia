@@ -14,6 +14,14 @@ export {
   loginSchema,
   type RegisterInput,
   type LoginInput,
+  forgotPasswordSchema,
+  newPasswordSchema,
+  resetPasswordSchema,
+  verifyEmailSchema,
+  refreshTokenSchema,
+  oauthProviderSchema,
+  type OAuthProvider,
+  type SessionInfo,
 } from './auth/auth.schema.js';
 export { meResponseSchema, type MeResponse } from './auth/me.schema.js';
 export {

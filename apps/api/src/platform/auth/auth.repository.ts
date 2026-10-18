@@ -10,6 +10,16 @@ import { prisma } from '@/core/db/prisma.js';
  * user-management concern, so it lives here rather than in UserRepository.
  */
 export class AuthRepository {
+  async subjectExists(id: string, sessionId?: string): Promise<boolean> {
+    if (!sessionId) return false;
+    return (
+      (await prisma.user.findUnique({ where: { id }, select: { id: true } }))?.id === id &&
+      !!(await prisma.session.findFirst({
+        where: { id: sessionId, userId: id, revokedAt: null, expiresAt: { gt: new Date() } },
+        select: { id: true },
+      }))
+    );
+  }
   async findByEmail(email: string): Promise<User | null> {
     return prisma.user.findUnique({
       where: { email },

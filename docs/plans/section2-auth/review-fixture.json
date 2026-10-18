@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "syntheticOnly": true,
+  "exclusive": true,
+  "host": "127.0.0.1",
+  "port": 55457,
+  "adminDatabase": "celestia_test_section2",
+  "adminRole": "celestia_test_section2",
+  "dataDir": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-caL0ze/data",
+  "pgBin": "D:/PostgreSQL/bin",
+  "osOwner": "nitro\\inuzu",
+  "systemIdentifier": "7697718586869086192",
+  "provenance": "docs/plans/section2-auth/fixture-provenance.md"
+}

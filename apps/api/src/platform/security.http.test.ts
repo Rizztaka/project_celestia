@@ -27,6 +27,11 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import supertest from 'supertest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+vi.mock('@/platform/auth/password-reset.service.js', () => ({
+  PasswordResetService: class {
+    async sendVerification() {}
+  },
+}));
 
 // ============================================================
 // vi.hoisted() — creates values that are available inside
@@ -64,6 +69,7 @@ vi.mock('@/core/config/env.js', () => ({
 vi.mock('@/core/db/prisma.js', () => ({
   prisma: {
     user: mockPrismaUser,
+    session: { findFirst: async () => ({ id: 'fixture-session' }) },
   },
 }));
 
@@ -71,7 +77,7 @@ vi.mock('@/core/db/prisma.js', () => ({
 // App import — after mocks are registered.
 // ============================================================
 
-import { app } from '@/app.js';
+import { createApp } from '@/app.js';
 
 // ============================================================
 // Test-only constants and helpers
@@ -80,7 +86,7 @@ import { app } from '@/app.js';
 // Must match the literal inside the vi.mock('@/core/config/env.js') factory.
 const TEST_JWT_SECRET = 'test-only-jwt-secret-exactly-40-chars!!!';
 
-const api = supertest(app);
+let api = supertest(createApp());
 
 const BASE_REGISTER_PAYLOAD = {
   email: 'alice@example.com',
@@ -116,11 +122,15 @@ const signToken = (
   opts: jwt.SignOptions & { algorithm?: jwt.Algorithm } = {},
 ): string => {
   const { algorithm = 'HS256', ...rest } = opts;
-  return jwt.sign(typeof sub === 'string' ? { sub } : (sub as object), TEST_JWT_SECRET, {
-    algorithm,
-    expiresIn: '1h',
-    ...rest,
-  });
+  return jwt.sign(
+    typeof sub === 'string' ? { sub, sid: 'fixture-session' } : (sub as object),
+    TEST_JWT_SECRET,
+    {
+      algorithm,
+      expiresIn: '1h',
+      ...rest,
+    },
+  );
 };
 
 // ============================================================
@@ -131,7 +141,11 @@ const signToken = (
 // ============================================================
 
 beforeEach(() => {
+  api = supertest(createApp());
   vi.resetAllMocks();
+  mockPrismaUser.findUnique.mockImplementation(async ({ where, select }) =>
+    select?.id === true && [USER_A_ID, USER_B_ID].includes(where.id) ? { id: where.id } : null,
+  );
 });
 
 // ============================================================
@@ -382,8 +396,7 @@ describe('Regression: self-only profile access', () => {
 
   it('User A cannot read User B profile (returns 404)', async () => {
     // Token identifies as User A — requesting User B's profile.
-    // The ownership check rejects before any DB lookup, so findUnique
-    // must not be called regardless of what it is configured to return.
+    // C5d checks the verified subject, then rejects before any target lookup.
     const tokenForA = signToken(USER_A_ID);
 
     const res = await api
@@ -391,7 +404,9 @@ describe('Regression: self-only profile access', () => {
       .set('Authorization', `Bearer ${tokenForA}`);
 
     expect(res.status).toBe(404);
-    expect(mockPrismaUser.findUnique).not.toHaveBeenCalled();
+    expect(mockPrismaUser.findUnique.mock.calls).toEqual([
+      [{ where: { id: USER_A_ID }, select: { id: true } }],
+    ]);
   });
 });
 
@@ -421,8 +436,10 @@ describe('Regression: nonexistent foreign ID behaves identically to an existing 
     // Complete error response must be identical — no information leak
     expect(existingForeignRes.body.error).toEqual(nonexistentForeignRes.body.error);
 
-    // Ownership check must reject before any DB access for either request
-    expect(mockPrismaUser.findUnique).not.toHaveBeenCalled();
+    // Only the authenticated identity is read; neither foreign target is queried.
+    expect(mockPrismaUser.findUnique.mock.calls).toEqual(
+      Array(2).fill([{ where: { id: USER_A_ID }, select: { id: true } }]),
+    );
   });
 });
 
@@ -432,13 +449,14 @@ describe('Regression: nonexistent foreign ID behaves identically to an existing 
 // ============================================================
 
 describe('Regression: ownership check short-circuits before any DB lookup for the target', () => {
-  it('User A requesting User B profile performs NO findUnique call', async () => {
+  it('User A requesting User B profile performs only the verified-subject lookup', async () => {
     const tokenForA = signToken(USER_A_ID);
 
     await api.get(`/api/v1/users/${USER_B_ID}`).set('Authorization', `Bearer ${tokenForA}`);
 
-    // The ownership check must reject before any DB lookup
-    expect(mockPrismaUser.findUnique).not.toHaveBeenCalled();
+    expect(mockPrismaUser.findUnique.mock.calls).toEqual([
+      [{ where: { id: USER_A_ID }, select: { id: true } }],
+    ]);
   });
 });
 
@@ -496,3 +514,11 @@ describe('Regression: duplicate registration returns 409 Conflict', () => {
     expect(res.body.error?.code).toBe('CONFLICT');
   });
 });
+
+vi.mock('@/platform/auth/session.repository.js', () => ({
+  SessionRepository: class {
+    async create(data: { userId: string }) {
+      return { ...data, id: 'fixture-session' };
+    }
+  },
+}));

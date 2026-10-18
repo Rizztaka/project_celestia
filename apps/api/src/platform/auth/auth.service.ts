@@ -1,14 +1,13 @@
 import type { LoginInput, RegisterInput } from '@celestia/api-contracts';
 import type { User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 
-import { env } from '@/core/config/env.js';
 import { UnauthorizedError } from '@/core/errors/app-error.js';
 
 import type { SafeUser } from '../users/user.service.js';
 import { UserService } from '../users/user.service.js';
 import { AuthRepository } from './auth.repository.js';
+import { type DeviceInfo, SessionService } from './session.service.js';
 
 // ============================================================
 // Types
@@ -21,6 +20,8 @@ export type { SafeUser };
 export interface AuthResult {
   user: SafeUser;
   token: string;
+  refreshToken: string;
+  expiresIn: number;
 }
 
 // ============================================================
@@ -39,6 +40,7 @@ const SALT_ROUNDS = 12;
 // ============================================================
 
 export class AuthService {
+  private sessions = new SessionService();
   private authRepository: AuthRepository;
   private userService: UserService;
 
@@ -57,7 +59,7 @@ export class AuthService {
    * delegating to UserService. UserService handles uniqueness enforcement
    * (email, username) and will throw ConflictError if violated.
    */
-  async register(data: RegisterInput): Promise<AuthResult> {
+  async register(data: RegisterInput, device: DeviceInfo = {}): Promise<AuthResult> {
     const hashedPassword = await bcrypt.hash(data.password, SALT_ROUNDS);
 
     const user = await this.userService.createUser({
@@ -66,10 +68,10 @@ export class AuthService {
       passwordHash: hashedPassword, // explicit: already hashed exactly once above
     });
 
-    const token = this.generateToken(user.id);
+    const tokens = await this.sessions.create(user.id, device, user.password);
     const safeUser = this.stripPassword(user);
 
-    return { user: safeUser, token };
+    return { user: safeUser, ...tokens };
   }
 
   /**
@@ -78,23 +80,22 @@ export class AuthService {
    * Both "user not found" and "wrong password" produce the same error message
    * to prevent email-enumeration attacks.
    */
-  async login(data: LoginInput): Promise<AuthResult> {
+  async login(data: LoginInput, device: DeviceInfo = {}): Promise<AuthResult> {
     const user = await this.authRepository.findByEmail(data.email);
 
-    if (!user) {
+    const isPasswordValid = await bcrypt.compare(
+      data.password,
+      user?.password ?? '$2b$12$C6UzMDM.H6dfI/f/IKcEe.5W6zOXwvbeStW5SAoFhuLhUmWzjDxVS',
+    );
+
+    if (!user || !isPasswordValid) {
       throw new UnauthorizedError('Invalid email or password.');
     }
 
-    const isPasswordValid = await bcrypt.compare(data.password, user.password);
-
-    if (!isPasswordValid) {
-      throw new UnauthorizedError('Invalid email or password.');
-    }
-
-    const token = this.generateToken(user.id);
+    const tokens = await this.sessions.create(user.id, device, user.password);
     const safeUser = this.stripPassword(user);
 
-    return { user: safeUser, token };
+    return { user: safeUser, ...tokens };
   }
 
   // ============================================================
@@ -102,20 +103,12 @@ export class AuthService {
   // ============================================================
 
   /**
-   * Signs a JWT with the user's ID as the subject claim.
-   * Uses the HS256 algorithm (symmetric, suitable for a single-service backend).
-   */
-  private generateToken(userId: string): string {
-    return jwt.sign({ sub: userId }, env.JWT_SECRET, {
-      expiresIn: env.JWT_EXPIRY as jwt.SignOptions['expiresIn'],
-    });
-  }
-
-  /**
    * Returns the user object without the password hash.
    * This is called before every response — passwords never leave the server.
    */
   private stripPassword(user: User): SafeUser {
+    // Omit the password hash while preserving every other profile field.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _password, ...safeUser } = user;
     return safeUser;
   }

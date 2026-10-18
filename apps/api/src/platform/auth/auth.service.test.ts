@@ -30,6 +30,13 @@ vi.mock('jsonwebtoken', () => ({
 }));
 
 vi.mock('./auth.repository.js');
+vi.mock('./session.service.js', () => ({
+  SessionService: class {
+    async create() {
+      return { token: 'mock.jwt.token', refreshToken: 'synthetic-refresh', expiresIn: 900 };
+    }
+  },
+}));
 vi.mock('../users/user.service.js');
 
 // ============================================================
@@ -41,12 +48,14 @@ const mockUser: User = {
   email: 'traveler@celestia.dev',
   username: 'traveler',
   password: '$2a$12$hashedpasswordvalue',
+  emailVerifiedAt: null,
   createdAt: new Date('2026-01-01T00:00:00Z'),
   updatedAt: new Date('2026-01-01T00:00:00Z'),
 };
 
 // What gets returned to clients — password is stripped
 const mockSafeUser = {
+  emailVerifiedAt: null,
   id: mockUser.id,
   email: mockUser.email,
   username: mockUser.username,

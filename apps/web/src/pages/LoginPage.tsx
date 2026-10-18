@@ -11,9 +11,10 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import SocialLogin from '../components/SocialLogin';
 import { ApiError, fetchApi } from '../lib/api';
 import type { AuthUser } from '../stores/auth.store';
 import { useAuthStore } from '../stores/auth.store';
@@ -24,11 +25,15 @@ interface LoginResponse {
 }
 
 function LoginPage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  useEffect(() => {
+    document.title = 'Sign in · Project Celestia';
+  }, []);
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -57,7 +62,7 @@ function LoginPage() {
           : null;
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden p-4">
+    <main className="companion-shell relative flex min-h-screen items-center justify-center overflow-hidden p-4">
       {/* Background ambient glow */}
       <div className="bg-accent-500/10 pointer-events-none absolute left-1/4 top-1/4 h-96 w-96 rounded-full mix-blend-screen blur-3xl"></div>
       <div className="pointer-events-none absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-indigo-500/10 mix-blend-screen blur-3xl"></div>
@@ -73,7 +78,19 @@ function LoginPage() {
 
         {/* Card */}
         <div className="glass-panel rounded-2xl p-8">
+          {location.state?.accountDeleted === true && (
+            <p role="status" className="mb-4 text-zinc-200">
+              Your Celestia account and its active application records were deleted. You are signed
+              out. Downloaded files and historical backups were not erased.
+            </p>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
+            {new URLSearchParams(location.search).get('oauth') === 'failed' && (
+              <p role="alert" className="text-sm text-amber-200">
+                Social sign-in could not finish. Try again, or sign in with your password and
+                connect the provider in your profile.
+              </p>
+            )}
             <div className="space-y-1">
               <label
                 htmlFor="email"
@@ -113,6 +130,9 @@ function LoginPage() {
             </div>
 
             {/* Error message — preserved after failure */}
+            <Link to="/forgot-password" className="inline-block text-sm text-indigo-200 underline">
+              Forgot password?
+            </Link>
             {errorMessage && (
               <div
                 role="alert"
@@ -143,6 +163,7 @@ function LoginPage() {
               {mutation.isPending ? 'Signing in…' : 'Sign in'}
             </button>
           </form>
+          <SocialLogin />
         </div>
 
         {/* Footer link */}
@@ -156,7 +177,7 @@ function LoginPage() {
           </Link>
         </p>
       </div>
-    </div>
+    </main>
   );
 }
 

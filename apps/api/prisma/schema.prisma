@@ -15,9 +15,14 @@ model User {
   email     String   @unique
   username  String   @unique
   password  String
+  emailVerifiedAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  sessions Session[]
+  oauthAccounts OAuthAccount[]
+  passwordResetTokens PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
 
   // Back-relation to Genshin domain — no column is added to the users table.
   // One user has at most one Genshin account in Phase 2.
@@ -44,6 +49,72 @@ model User {
   weeklyBossState WeeklyBossState?
 
   @@map("users")
+}
+
+model Session {
+  id String @id @default(uuid())
+  userId String
+  tokenHash String @unique
+  userAgent String?
+  ipAddress String?
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rotatedTokens RotatedRefreshToken[]
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+// Retained hashes associate replayed tokens with the session/user after rotation.
+model RotatedRefreshToken {
+  tokenHash String @id
+  sessionId String
+  expiresAt DateTime
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  @@index([sessionId])
+  @@index([expiresAt])
+  @@map("rotated_refresh_tokens")
+}
+
+model OAuthAccount {
+  id String @id @default(uuid())
+  userId String
+  provider String
+  providerAccountId String
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("oauth_accounts")
+}
+
+model PasswordResetToken {
+  id String @id @default(uuid())
+  userId String
+  tokenHash String @unique
+  expiresAt DateTime
+  usedAt DateTime?
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
+}
+
+model EmailVerificationToken {
+  id String @id @default(uuid())
+  userId String
+  tokenHash String @unique
+  expiresAt DateTime
+  usedAt DateTime?
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("email_verification_tokens")
 }
 
 // ==========================================

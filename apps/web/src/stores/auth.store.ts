@@ -27,9 +27,13 @@ export interface AuthUser {
   username: string;
   createdAt: string;
   updatedAt: string;
+  emailVerifiedAt?: string | null;
 }
 
 interface AuthState {
+  sessionEpoch: number;
+  tokenRotation: number;
+  rotate: (token: string) => void;
   /** The JWT access token. Null when not authenticated. */
   token: string | null;
   /** Minimal user info stored on login. Used for immediate UI feedback. */
@@ -45,16 +49,29 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
+      sessionEpoch: 0,
+      tokenRotation: 0,
+      rotate: (token) => set((state) => ({ token, tokenRotation: state.tokenRotation + 1 })),
       token: null,
       user: null,
       isAuthenticated: false,
 
       login: (token, user) => {
-        set({ token, user, isAuthenticated: true });
+        set((state) => ({
+          token,
+          user,
+          isAuthenticated: true,
+          sessionEpoch: state.sessionEpoch + 1,
+        }));
       },
 
       logout: () => {
-        set({ token: null, user: null, isAuthenticated: false });
+        set((state) => ({
+          token: null,
+          user: null,
+          isAuthenticated: false,
+          sessionEpoch: state.sessionEpoch + 1,
+        }));
       },
     }),
     {

@@ -4,6 +4,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UnauthorizedError } from '@/core/errors/app-error.js';
 
 import { requireAuth } from './auth.middleware.js';
+const subjectExists = vi.hoisted(() => vi.fn());
+vi.mock('@/platform/auth/auth.repository.js', () => ({
+  AuthRepository: class {
+    subjectExists = subjectExists;
+  },
+}));
 
 // ============================================================
 // Mocks
@@ -54,6 +60,7 @@ describe('requireAuth middleware', () => {
 
   beforeEach(async () => {
     vi.clearAllMocks();
+    subjectExists.mockResolvedValue(true);
     const jwtModule = await import('jsonwebtoken');
     jwt = jwtModule.default as unknown as typeof jwt;
   });
@@ -127,7 +134,7 @@ describe('requireAuth middleware', () => {
   });
 
   it('throws UnauthorizedError when sub is a whitespace-only string', () => {
-    jwt.verify.mockReturnValue({ sub: '   ' });
+    jwt.verify.mockReturnValue({ sub: '   ', sid: 'test-session' });
 
     const { req, res, next } = buildMocks('Bearer any.token.here');
 
@@ -181,16 +188,28 @@ describe('requireAuth middleware', () => {
   // Authenticated requests pass through
   // ----------------------------------------------------------
 
-  it('attaches req.user and calls next() when token is valid', () => {
-    jwt.verify.mockReturnValue({ sub: 'user-abc-123' });
+  it('attaches req.user and calls next() when token and stored subject are valid', async () => {
+    jwt.verify.mockReturnValue({ sub: 'user-abc-123', sid: 'test-session' });
 
     const { req, res, next } = buildMocks('Bearer valid.token.here');
 
-    requireAuth(req, res, next);
+    await requireAuth(req, res, next);
 
     expect(req.user).toEqual({ id: 'user-abc-123' });
     expect(next).toHaveBeenCalledOnce();
   });
+
+  it.each([false, 'failure'])(
+    'denies a verified token when subject lookup is %s',
+    async (result) => {
+      jwt.verify.mockReturnValue({ sub: 'deleted-subject', sid: 'test-session' });
+      const { req, res, next } = buildMocks('Bearer valid.token.here');
+      if (result === false) subjectExists.mockResolvedValue(false);
+      else subjectExists.mockRejectedValue(new Error('unavailable'));
+      await expect(requireAuth(req, res, next)).rejects.toThrow(UnauthorizedError);
+      expect(next).not.toHaveBeenCalled();
+    },
+  );
 
   it('does not attach req.user if token verification fails', () => {
     jwt.verify.mockImplementation(() => {

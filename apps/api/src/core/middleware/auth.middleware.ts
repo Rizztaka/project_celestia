@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import { env } from '@/core/config/env.js';
 import { UnauthorizedError } from '@/core/errors/app-error.js';
+import { AuthRepository } from '@/platform/auth/auth.repository.js';
 
 // ============================================================
 // Express Request Augmentation
@@ -18,6 +19,7 @@ declare global {
   namespace Express {
     interface Request {
       user?: { id: string };
+      authSessionId?: string;
     }
   }
 }
@@ -54,7 +56,7 @@ declare global {
  * Usage:
  *   router.get("/protected", requireAuth, controller.handler);
  */
-export const requireAuth = (req: Request, _res: Response, next: NextFunction): void => {
+export const verifyBearer = (req: Request, _res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader?.startsWith('Bearer ')) {
@@ -75,14 +77,14 @@ export const requireAuth = (req: Request, _res: Response, next: NextFunction): v
     // jwt.verify can return a string when the payload is a plain string JWT.
     // We require an object payload so we can validate `sub`.
     if (typeof verified !== 'object' || verified === null) {
-      throw new UnauthorizedError('Invalid or expired token.');
+      throw new UnauthorizedError('Invalid or expired token.', 'AUTH_SESSION_INVALID');
     }
 
     payload = verified;
   } catch {
     // jwt.verify throws on expiry, bad signature, malformed token,
     // or disallowed algorithm — all treated identically.
-    throw new UnauthorizedError('Invalid or expired token.');
+    throw new UnauthorizedError('Invalid or expired token.', 'AUTH_SESSION_INVALID');
   }
 
   // Runtime validation of the `sub` claim.
@@ -90,10 +92,33 @@ export const requireAuth = (req: Request, _res: Response, next: NextFunction): v
   // whose `sub` is absent, null, a number, an empty string, or whitespace.
   const sub = payload.sub;
 
-  if (typeof sub !== 'string' || sub.trim() === '') {
-    throw new UnauthorizedError('Invalid or expired token.');
+  if (
+    typeof sub !== 'string' ||
+    sub.trim() === '' ||
+    typeof payload.sid !== 'string' ||
+    !payload.sid.trim()
+  ) {
+    throw new UnauthorizedError('Invalid or expired token.', 'AUTH_SESSION_INVALID');
   }
 
   req.user = { id: sub };
+  req.authSessionId = payload.sid;
   next();
+};
+
+/** No positive cache: deletion takes effect on the next protected request. */
+export async function requireExistingSubject(owner: string, sessionId?: string): Promise<void> {
+  try {
+    if (await new AuthRepository().subjectExists(owner, sessionId)) return;
+  } catch {
+    /* Fail closed; never expose database diagnostics. */
+  }
+  throw new UnauthorizedError('Invalid or expired token.', 'AUTH_SESSION_INVALID');
+}
+
+export const requireAuth = (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  verifyBearer(req, res, () => undefined);
+  return requireExistingSubject(req.user!.id, req.authSessionId).then(() => {
+    next();
+  });
 };

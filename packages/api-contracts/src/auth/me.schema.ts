@@ -15,6 +15,7 @@ export const meResponseSchema = z.object({
   username: z.string(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
+  emailVerifiedAt: z.string().datetime().nullable().optional(),
 });
 
 export type MeResponse = z.infer<typeof meResponseSchema>;

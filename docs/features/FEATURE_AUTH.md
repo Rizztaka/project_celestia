@@ -1,8 +1,17 @@
 # Feature Specification: Authentication
 
+> **Current implementation — 2026-10-18.** Section 2 adds 15-minute access JWTs, persisted rotating refresh sessions, recovery, verification, Discord/Google OAuth and device management. See [current API architecture](../api/authentication.md) and the [implementation walkthrough](../plans/section2-auth/walkthrough.md). The milestone specification below is historical; its seven-day stateless token and synchronous-only middleware descriptions no longer apply.
+
+> **Companion scope update — 2026-09-25.** Keep authentication and ownership protections. The Platform Account Security milestone is complete; do not rebuild it. The current roadmap places backend lint coverage next. Optional onboarding/demo work must preserve these protections.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 **Feature ID:** FEAT-001  
 **Priority:** P0  
-**Status:** Complete  
+**Historical status:** Complete
+
 **Phase:** 1B / 1C — Core Platform  
 **Last Updated:** 2026-09-23 (Platform Account Security milestone)
 

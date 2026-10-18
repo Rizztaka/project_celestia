@@ -1,10 +1,27 @@
 # **Project Celestia Feature Specifications**
 
+## Current feature portfolio — 2026-09-25
+
+Use [Roadmap](ROADMAP.md) for ordering and [Genshin Companion](features/FEATURE_GENSHIN_COMPANION.md) for the chosen product scope. Older feature files have scope notices; their phase numbers and historical status labels do not define today's backlog.
+
+### Required additions to every new milestone specification
+
+- **Player outcome:** the concrete daily or character-building task made easier.
+- **Existing coverage:** what is reused, what is only present in code, and what has independent verification.
+- **Data trust:** source, observation/import times, supported version/server, unknown/stale handling, maintainer, and expiry behavior.
+- **User control:** priorities, opt-out, pause/dismiss, and manual input burden.
+- **Persistence:** ownership, import-surviving intent, replacement policy, and rollback/migration behavior.
+- **Bounded delivery:** one coherent Wednesday/Sunday milestone, dependencies, acceptance scenarios, and explicit deferrals.
+- **Recommendation limits:** facts versus estimates; no optimality claim from an unvalidated heuristic.
+- **Status discipline:** “Planned” is not shipped; “present in code” is not verified; old checkboxes are historical.
+
+The template below remains useful for detailed implementation specifications. Apply these requirements before adding new engines or screens.
+
 **Document Version:** 1.0
 
 **Status:** Living Document
 
-**Last Updated:** July 2026
+**Last Updated:** 2026-09-25
 
 \---
 

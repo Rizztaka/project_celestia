@@ -1,8 +1,3 @@
-import type {
-  EventsFileData,
-  StaticEvent,
-  StaticRewardTier,
-} from '@/core/contracts/companion.interfaces.js';
 import { BadRequestError, NotFoundError } from '@/core/errors/app-error.js';
 
 import { companionRegistry } from './companion-registry.service.js';
@@ -38,6 +33,7 @@ export interface HydratedEvent {
 }
 
 export interface EventsResponse {
+  availability: { available: boolean; reason: string | null };
   patch: string;
   totalUnclaimedPrimogems: number;
   events: HydratedEvent[];
@@ -149,6 +145,7 @@ export class EventService {
       .reduce((sum, e) => sum + (e.totalPrimogems - e.claimedPrimogems), 0);
 
     return {
+      availability: eventsFile.availability ?? { available: true, reason: null },
       patch: eventsFile.patch,
       totalUnclaimedPrimogems,
       events: hydratedEvents,
@@ -179,7 +176,7 @@ export class EventService {
 
     // Validate eventKey exists in the static file
     const staticEvent = eventsFile.events.find((e) => e.key === eventKey);
-    if (!staticEvent) {
+    if (!staticEvent || new Date(staticEvent.endUtc) <= new Date()) {
       throw new NotFoundError(`Event "${eventKey}" was not found in the current patch data.`);
     }
 

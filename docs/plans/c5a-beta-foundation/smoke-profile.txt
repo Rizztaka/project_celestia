@@ -1,0 +1,44 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#companion-content"
+  - link "Project Celestia":
+    - /url: /
+  - button "Sign out"
+  - navigation "Primary navigation":
+    - link "Today":
+      - /url: /
+    - link "Characters":
+      - /url: /roster
+    - link "Planner":
+      - /url: /planner
+  - navigation "Supporting navigation":
+    - link "Import":
+      - /url: /import
+    - link "Inventory":
+      - /url: /inventory
+    - link "Settings & profile":
+      - /url: /profile
+    - generic "Other tools +"
+- main [active]:
+  - heading "Settings & profile" [level=1]
+  - paragraph: Adjust your companion using the same controls you use day to day.
+  - region "Companion settings":
+    - heading "Your companion" [level=2]
+    - link "Server & manual records":
+      - /url: /planner?tab=daily#routine-settings
+    - link "Routine choices & resin ceiling":
+      - /url: /#plan-choices
+    - link "Import observations":
+      - /url: /import
+    - paragraph: Only Asia reset tracking is supported. Other servers remain unavailable. Imports are optional and preserve focus, declared goals and plan choices.
+  - region "Account profile":
+    - heading "Your account" [level=2]
+    - button "Refresh profile"
+    - term: Username
+    - definition: c5a-smoke
+    - term: Email
+    - definition: c5a-smoke@test.invalid
+    - term: Account ID
+    - definition: 406a52a4-5a9c-4b24-8e8d-30297ba6d324
+    - term: Member since
+    - definition: 10/10/2026

@@ -1,0 +1,61 @@
+{
+  "checked": "2026-10-05",
+  "checkout": "D:/Genshin Personal/project-celestia",
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "files": {
+    "apps/api/.turbo/turbo-test.log": {
+      "unchangedFromReviewStart": true,
+      "sha256": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED"
+    },
+    "apps/api/.env.example": {
+      "unchangedFromReviewStart": true,
+      "sha256": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647"
+    },
+    "apps/api/src/core/config/env.ts": {
+      "unchangedFromReviewStart": true,
+      "sha256": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734"
+    },
+    "apps/api/src/core/ai/openrouter.ts": {
+      "unchangedFromReviewStart": true,
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B"
+    },
+    "apps/api/package.json": {
+      "unchangedFromReviewStart": true,
+      "sha256": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2"
+    },
+    "pnpm-lock.yaml": {
+      "unchangedFromReviewStart": true,
+      "sha256": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A"
+    },
+    "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md": {
+      "unchangedFromReviewStart": true,
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B"
+    },
+    "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql": {
+      "unchangedFromReviewStart": true,
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8"
+    }
+  },
+  "c3bMigration": {
+    "path": "apps/api/prisma/migrations/20261003180000_add_focus_goal_lifecycle/migration.sql",
+    "sha256": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329",
+    "note": "Recorded for future preservation; no migration edit was part of this review."
+  },
+  "formatterExceptions": [
+    "apps/api/src/core/ai/openrouter.ts",
+    "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+    "apps/web/index.html",
+    "apps/web/src/App.css",
+    "apps/web/src/index.css"
+  ],
+  "stagedFiles": [],
+  "trackedHistoricalMigrationChanges": [],
+  "stoppedReviewPorts": [45446, 45447, 55446],
+  "validation": {
+    "tests": 601,
+    "files": 39,
+    "postgresqlCases": 78,
+    "failed": 0,
+    "skipped": 0
+  }
+}

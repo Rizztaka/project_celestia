@@ -1,191 +1,104 @@
-# **Project Celestia**
+# Project Celestia — Genshin Companion
 
-**Document Version:** 1.0
+**Version:** 2.0
 
-**Status:** Active
+**Updated:** 2026-09-25
 
-**Last Updated:** July 2026
+**Status:** Current product direction; implementation follows the roadmap.
 
-\---
+## Purpose
 
-## **Vision**
+Help a Genshin Impact player decide what to do next, remember their chosen goals, and see progress without maintaining a second job's worth of records.
 
-Project Celestia aims to become the most intelligent and comprehensive companion platform for Genshin Impact, helping players make informed decisions through personalized analysis, explainable recommendations, and intelligent planning.
+Celestia is a personal companion for daily play and character building. Its core loop is:
 
-Rather than replacing existing community resources, Project Celestia brings together the strengths of popular tools into a unified experience while introducing capabilities that adapt to each individual player's account, goals, progression, and playstyle.
+**Choose a focus → see the next useful actions → play → record or import progress → adjust the plan.**
 
-Although the project begins with Genshin Impact, its architecture is intentionally designed to support additional games in the future. Project Celestia serves as the foundation of a broader Game Intelligence Platform built around personalization, scalability, and long-term maintainability.
+## Who we serve first
 
-\---
+- Regular players building a few favorite characters or a team.
+- Returning players who need to recover their place and choose a manageable next step.
+- Players who want a reliable daily/weekly overview and a record of their equipment.
 
-## **Problem Statement**
+Advanced players can use the same tracking alongside specialist tools. Theorycrafting and exhaustive optimization are outside the product's focus.
 
-Today's Genshin ecosystem is filled with excellent individual tools. Some specialize in optimization, others provide build guides, databases, calculators, planning utilities, or theorycrafting resources.
+## The questions we answer
 
-However, players often need to switch between multiple websites to answer a single question.
+- What did I choose to work on?
+- What can I advance today with the resources I have?
+- Which of my selected tasks or verified events are due soon?
+- What does this character currently have equipped?
+- What changed since my last reliable update?
+- What is still unknown or needs refreshing?
 
-For example:
+The player sets the destination. Celestia helps organize the work.
 
-- Which team should I build?
-- Which artifacts are worth upgrading?
-- Which character benefits my account the most?
-- What should I spend my Resin on today?
-- Should I pull for the current banner?
-- What should I farm next?
+## Product pillars
 
-Existing tools generally solve individual problems.
+1. **A calm Today view.** A short, editable plan, estimated resin, selected daily/weekly tasks, and verified deadlines.
+2. **My characters and equipment.** Imported roster, weapons, and all five equipped artifact slots, with source and freshness information.
+3. **Goals and farming.** Explicit targets, remaining known materials, availability by supported server, and a budget the player controls.
+4. **Progress and continuity.** Goals survive imports; recent progress can be understood without inventing historical data.
+5. **Trustworthy assistance.** Facts, estimates, user targets, and suggestions have visibly different meanings.
 
-Project Celestia aims to solve the player's entire decision-making process by connecting those pieces into one intelligent platform.
+## Artifact scope
 
-\---
+Keep artifact inventory, equipped-character relationships, set/slot/level/main-stat/substat records, and browsing. Make a character's current equipment easy to inspect.
 
-## **Mission**
+Do not build a combinatorial artifact optimizer, damage simulator, automatic gear redistribution, artifact keep/discard engine, or universal build-quality score. Specialist tools can handle optimization. A simple external link is sufficient initially; interoperability work must have its own verified contract.
 
-Help every player answer the questions that matter most:
+The existing Artifact Intelligence score is a legacy heuristic. Its 0–100 result is not damage efficiency, team suitability, or proof a build is complete. Replace its product role with **Equipment & Build Progress** through a separately reviewed migration. Do not delete existing records or silently break its API.
 
-- What should I do today?
-- Which character should I build next?
-- Which team should I use?
-- Which artifacts should I keep or discard?
-- Which talents or weapons deserve investment?
-- Which banner provides the greatest value for my account?
-- How can I improve my endgame performance?
-- Why is this recommendation the best choice?
+## Feature selection rules
 
-Every recommendation should include a clear explanation so players understand both the answer and the reasoning behind it.
+Include a feature when it makes the daily loop easier, reuses reliable data, has a manageable upkeep cost, and can be delivered in a bounded milestone.
 
-\---
+Prefer:
 
-## **What Intelligence Means**
+- Player-selected focus over ranking the whole account.
+- Concrete progress over opaque scores.
+- A few useful next actions over an exhaustive checklist.
+- Imported or optional input over mandatory manual bookkeeping.
+- Honest missing-data states over fabricated precision.
+- User-controlled reminders over guilt, streak pressure, or spending prompts.
 
-Within Project Celestia, intelligence does not simply mean using artificial intelligence.
+An empty plan can be a successful outcome. Players may pause goals, mark them good enough, or ignore a suggestion.
 
-Intelligence is the combination of:
+## Boundaries
 
-- Accurate game knowledge.
-- Deterministic calculations.
-- Account-specific analysis.
-- Optimization algorithms.
-- Planning systems.
-- Explainable recommendations.
+**In scope:** a Genshin companion with one Genshin account per Celestia user initially; selected supported server rules made explicit; equipment records; daily/weekly tracking; build goals; material planning; curated links.
 
-The goal is not only to produce correct answers, but to help players understand why those answers are correct.
+**Later, after the core loop works:** saved teams, limited progress snapshots, lightweight endgame journals, optional event tracking with maintained data, and a personal wish savings plan.
 
-\---
+**On hold:** additional games, multi-account expansion, advanced endgame drafting, interactive maps, exhaustive databases, social features/leaderboards, AI chat, push/email infrastructure, and new pull-simulator features. Existing NIKKE and simulator code is retained pending a deliberate product transition.
 
-## **Core Principles**
+**Excluded from the roadmap:** Celestia-owned artifact optimization, exact damage optimization, automatic artifact disposal advice, and “must pull” verdicts.
 
-Every feature developed for Project Celestia should follow these principles:
+## Data honesty and maintenance
 
-- Personalization over generic recommendations.
-- Explainability over unexplained scores.
-- Accuracy over popularity.
-- Maintainability over shortcuts.
-- Scalability from the beginning.
-- Performance without unnecessary complexity.
-- Modularity that supports future expansion.
-- Consistency across every feature.
-- Respect for player choice by presenting reasoning rather than forcing decisions.
+Account imports are snapshots, not live game synchronization. Estimated resin is based on the player's last checkpoint and cannot observe unrecorded spending. Missing inventory is not zero inventory; missing equipment data is not a confirmed empty slot.
 
-\---
+Every game-data feature must define its supported scope, verification source, last review/version, expiry behavior, and maintenance owner. Placeholder or expired event/banner data must not generate current recommendations. Unsupported characters remain visible even when tailored guidance is unavailable.
 
-## **Design Values**
+No HoYoverse password, session cookie, or automatic game-account access is required for the core experience.
 
-Project Celestia should always feel:
+## Success measures
 
-- Clean
-- Fast
-- Consistent
-- Reliable
-- Accessible
-- Professional
-- Transparent
-- Easy to understand
+Treat these as beta evaluation targets, not claims already achieved:
 
-Complex calculations should never result in a confusing user experience.
+- A player can identify their chosen next action from Today in about 30 seconds.
+- A returning player can update a routine session in under a minute, excluding an optional import.
+- Re-import preserves goals and preferences and clearly states what changed.
+- Users can distinguish current observations, stale snapshots, estimates, and unknown values.
+- A small beta group finds the plan useful across a week without feeling required to maintain every field.
+- The developer can keep the supported data current within the Wednesday/Sunday cadence.
 
-\---
+Measure task completion and clarity through voluntary feedback and usability sessions first. Do not add account-content telemetry to satisfy metrics.
 
-## **Target Audience**
+## Delivery
 
-##### **Primary Audience**
+The modular monolith, ownership checks, deterministic calculations, and calculator/explainer separation remain. Genshin focus does not require rewriting the platform.
 
-- Endgame Genshin Impact players.
-- Players focused on optimization.
-- Theorycrafters.
-- Players preparing for Spiral Abyss, Imaginarium Theater, Stygian Onslaught, and future endgame modes.
+Implementation sessions are Wednesday and Sunday. Planning and review can happen on other days. Backend lint coverage remains the next engineering milestone; the completed Platform Account Security work is preserved.
 
-##### **Secondary Audience**
-
-- Intermediate players.
-- Returning players.
-- New players reaching Adventure Rank 45 and above.
-- Players planning future pulls and resource investments.
-
-\---
-
-## **Long-Term Goals**
-
-Project Celestia aims to become a daily companion rather than a website used only occasionally.
-
-Future objectives include:
-
-- Support additional games through the same platform.
-- Intelligent account progression analysis.
-- AI-assisted explanations.
-- Advanced planning and simulation tools.
-- Cross-game account management.
-- Modular intelligence systems that continue expanding over time.
-
-\---
-
-## **Product Philosophy**
-
-Project Celestia is not intended to be another database, build guide, or calculator.
-
-Its purpose is to function as an intelligent companion that understands a player's account, explains its reasoning, and provides recommendations that evolve as the account evolves.
-
-Every feature should answer one question:
-
-"Will this make the player's next decision easier, smarter, or more informed?"
-
-If the answer is no, the feature should be reconsidered.
-
-\---
-
-## **Non-Goals**
-
-Project Celestia is not intended to:
-
-- Replace community theorycrafting efforts.
-- Become a social media platform.
-- Prioritize leaderboards over useful analysis.
-- Encourage unnecessary spending.
-- Hide important reasoning behind recommendations.
-- Sacrifice maintainability for short-term development speed.
-
-\---
-
-## **Success Criteria**
-
-Project Celestia succeeds when a player can:
-
-- Import their account with minimal effort.
-- Understand their current progression.
-- Receive personalized recommendations.
-- Build stronger teams.
-- Improve characters efficiently.
-- Plan future investments confidently.
-- Return regularly because the platform continues to provide meaningful value.
-
-\---
-
-## **Guiding Principle**
-
-«Every recommendation should improve the player's understanding, not just their account.»
-
-\---
-
-## **Motto**
-
-From Data to Decisions.
+See [Roadmap](ROADMAP.md), [Companion specification](features/FEATURE_GENSHIN_COMPANION.md), and [review findings](plans/genshin-companion/document_review.md).

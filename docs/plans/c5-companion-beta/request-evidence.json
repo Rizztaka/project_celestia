@@ -1,0 +1,109 @@
+{
+  "note": "Synthetic fixture only; method/path/status/UTC timestamps, no tokens or bodies. Finish-only logging does not record aborted reads.",
+  "oldOwnerWrite": [
+    {
+      "method": "PATCH",
+      "path": "/api/v1/companion/plan",
+      "started": "2026-10-09T09:22:53.589Z",
+      "status": 200,
+      "ended": "2026-10-09T09:23:23.703Z"
+    }
+  ],
+  "newOwnerLogin": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "started": "2026-10-09T09:22:59.758Z",
+      "status": 200,
+      "ended": "2026-10-09T09:23:00.104Z"
+    }
+  ],
+  "failures": [
+    {
+      "method": "PATCH",
+      "path": "/api/v1/companion/plan",
+      "started": "2026-10-08T13:55:41.157Z",
+      "status": 503,
+      "ended": "2026-10-08T13:55:41.157Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/companion/plan",
+      "started": "2026-10-08T13:55:56.332Z",
+      "status": 503,
+      "ended": "2026-10-08T13:55:56.334Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/companion/plan/advice",
+      "started": "2026-10-09T09:22:03.743Z",
+      "status": 503,
+      "ended": "2026-10-09T09:22:03.745Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/companion/plan/advice",
+      "started": "2026-10-09T09:22:04.351Z",
+      "status": 503,
+      "ended": "2026-10-09T09:22:04.353Z"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/companion/plan",
+      "started": "2026-10-09T09:22:30.593Z",
+      "status": 409,
+      "ended": "2026-10-09T09:22:30.603Z"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/companion/routine/weekly-claims",
+      "started": "2026-10-09T09:25:43.552Z",
+      "status": 409,
+      "ended": "2026-10-09T09:26:03.597Z"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/companion/plan",
+      "started": "2026-10-09T09:26:37.303Z",
+      "status": 409,
+      "ended": "2026-10-09T09:26:57.355Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/genshin/characters",
+      "started": "2026-10-09T09:28:27.727Z",
+      "status": 503,
+      "ended": "2026-10-09T09:28:27.727Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/companion/plan/advice",
+      "started": "2026-10-09T09:33:31.602Z",
+      "status": 503,
+      "ended": "2026-10-09T09:33:31.603Z"
+    }
+  ],
+  "delayedCompletedRequests": [
+    {
+      "method": "PATCH",
+      "path": "/api/v1/companion/plan",
+      "started": "2026-10-09T09:22:53.589Z",
+      "status": 200,
+      "ended": "2026-10-09T09:23:23.703Z"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/companion/routine/weekly-claims",
+      "started": "2026-10-09T09:25:43.552Z",
+      "status": 409,
+      "ended": "2026-10-09T09:26:03.597Z"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/companion/plan",
+      "started": "2026-10-09T09:26:37.303Z",
+      "status": 409,
+      "ended": "2026-10-09T09:26:57.355Z"
+    }
+  ]
+}

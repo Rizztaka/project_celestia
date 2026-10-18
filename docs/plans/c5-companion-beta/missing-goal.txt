@@ -1,0 +1,77 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#companion-content"
+  - link "Project Celestia":
+    - /url: /
+  - button "Sign out"
+  - navigation "Primary navigation":
+    - link "Today":
+      - /url: /
+    - link "Characters":
+      - /url: /roster
+    - link "Planner":
+      - /url: /planner
+  - navigation "Supporting navigation":
+    - link "Import":
+      - /url: /import
+    - link "Inventory":
+      - /url: /inventory
+    - link "Settings & profile":
+      - /url: /profile
+    - generic "Other tools +"
+- main [active]:
+  - heading "Planner" [level=1]
+  - paragraph: Your routine, manual checkpoints, and farming goals.
+  - paragraph: Manual routines and goals work without an import. Material costs cover only HuTao base talents 1–6; all farming routes remain unavailable.
+  - button "Daily"
+  - button "Weekly"
+  - button "Goals & materials" [pressed]
+  - button "Events":
+    - generic: Events
+  - button "Refresh material advice"
+  - region "Goal management":
+    - heading "Your goals" [level=2]
+    - button "Add goal"
+    - button "Refresh goals"
+    - paragraph: Priority 1 first; ties use creation time then ID. Focus membership is independent. Completion is your decision.
+    - text: Goal status
+    - combobox "Goal status":
+      - option "All history" [selected]
+      - option "active"
+      - option "paused"
+      - option "completed"
+      - option "archived"
+    - paragraph:
+      - text: Filtered to linked goal.
+      - button "Show all goals"
+    - paragraph: Linked goal not found in this account. Use Show all goals to return to your records.
+    - paragraph: No goals match this filter.
+  - heading "Today" [level=2]
+  - paragraph: Friday · Asia server
+  - paragraph: No verified farming sources are available for these goals today. Cost totals remain available for supported upgrades.
+  - paragraph: "HuTao: Route advice unavailable: source location, weekdays and resin per claim have not all been verified."
+  - paragraph: "HuTao: No primary or owner evidence covers these upgrade costs."
+  - paragraph: Partial costs — unavailable goals are excluded from totals.
+  - paragraph: Costs use your declared from → target range; re-import does not measure a new remaining-upgrade cost. Stock is recorded from imports; it is not live inventory. Missing items remain unknown.
+  - paragraph: "Import basis: C5 partial synthetic · 10/8/2026, 7:24:40 PM."
+  - heading "Upgrade Cost Totals" [level=2]
+  - generic: Common
+  - paragraph: Mora
+  - paragraph: 30000/122500
+  - paragraph: −92500
+  - generic: Talent Book
+  - paragraph: Guide to Diligence
+  - paragraph: 7/21
+  - paragraph: −14
+  - generic: Common
+  - paragraph: Shimmering Nectar
+  - paragraph: Unknown/22
+  - paragraph: Deficit unknown
+  - generic: Common
+  - paragraph: Whopperflower Nectar
+  - paragraph: Unknown/6
+  - paragraph: Deficit unknown
+  - generic: Talent Book
+  - paragraph: Teachings of Diligence
+  - paragraph: Unknown/3
+  - paragraph: Deficit unknown

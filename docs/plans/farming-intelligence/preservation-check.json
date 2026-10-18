@@ -1,0 +1,326 @@
+{
+  "checkedAtUtc": "2026-10-17T18:17:23.528Z",
+  "baseline": {
+    "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-farming-8JXUDN\\starting-state.json",
+    "sha256": "63A36372D4C753878CF4829D305D08E3FF95E42C1DA5353BF86BB12D0DE812A2"
+  },
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "branch": "master",
+  "index": [],
+  "startingFiles": 991,
+  "unchangedFiles": 980,
+  "changes": [
+    {
+      "path": "apps/api/src/games/genshin/genshin.routes.ts",
+      "before": "F6B500509DA5E0D5B8F2306DC4AF82C0BB9DAE531F16E729D9F4F76CF688DEA5",
+      "after": "D97CBD22E5848694965AA60B1489E8BFAAC650263DAF20888EE9751EB315BECE",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan.integration.test.ts",
+      "before": "078E666B9F38B2A1D7FC69D033E5B102C95079DAAF2CFA8363F3CE1D20F00159",
+      "after": "747E985DFDEB96687C1DD3CE3919B069BC675C56FD55EC9DBB1E2AEC566BCE74",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/components/TodayPlan.tsx",
+      "before": "2751E58AA0983E3EE8B6E00130FAAE52FC091FCFC1A2097817D7772F4D6363D3",
+      "after": "C026C353F42EEE659E9E9853DA786D8CE9662E75FD31F337BE69B67C68A8848C",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/lib/api.ts",
+      "before": "9486573F902759AF34FFF692B219B11F597A40D8CDDD9B87FB771BDD6855C862",
+      "after": "8F707349AC9C55069CC1127A92565BB5E4E3E47C68448235AEBFCC7BF92ACC50",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/pages/PlannerPage.tsx",
+      "before": "2B9048121F9ACC853C3D8FD3F10C41D3483EFEBD22458D5C652F8D8EAA59C56F",
+      "after": "630E4E53CC67721FEF31A4DA6CAFD9BD03F97986E56541B204ACA9B28ED14F2F",
+      "expected": true
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "before": "30B63B206F81C4382D304FF1EA2B5AFE64CD5BEB0BB95EF7E3E141B4444DEEB7",
+      "after": "1A1C7C54D001E2D025D77FE482D3126E94334D145DA67D0078D3C1EC4E64C30F",
+      "expected": true
+    },
+    {
+      "path": "docs/api/catalog-advice.md",
+      "before": "E598FF9A7F8FE219D4F95AB6DE76561F6220C8226A3A2C39BB4E21A285FD9FC1",
+      "after": "FAF0152D8AEE9F59E92342D45A5850C7A040FF558EFF2D76686D65FA98DB52D2",
+      "expected": true
+    },
+    {
+      "path": "docs/api/today-plan.md",
+      "before": "FD6CDC143B01C9831A49F096AFFEF55E000BE1EE64070C12B18CB481D3E6DDBF",
+      "after": "F8EBE8B1E5A82F9D77C7AE8024013484AA833609DA11F16104723073B9132A2E",
+      "expected": true
+    },
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "before": "DCE1A0CC97B820B40C0D65B7467A32F0536AD386912BF91441330AD97042BE70",
+      "after": "9E1A6F2B87EC2D89574A57DF2CCB0CB90EF6458771616CF5BEF1C9B7F9BE1315",
+      "expected": true
+    },
+    {
+      "path": "docs/plans/production-readiness/remaining-readiness.md",
+      "before": "552CC2668A198217360DB123755E1ADBB5CAFB9463011B05022EFE68E90B0B12",
+      "after": "BF4A0B13D3198696FAA3C17230F87358F4C1C2757AF022FFD22CAA3987E68484",
+      "expected": true
+    },
+    {
+      "path": "packages/api-contracts/src/index.ts",
+      "before": "568C24069A86EFF4B488A1092677433E2F85B3CE503E4049CF152678FE57BE54",
+      "after": "15E45E241097EC5959592C27E29CDFB53D5DF10C543CF0B5968F9060041A9A72",
+      "expected": true
+    }
+  ],
+  "missing": [],
+  "unexpected": [],
+  "addedFiles": [
+    ".agents/skills/reverse-engineer-anything/SKILL.md",
+    "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-data.ts",
+    "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.calculator.test.ts",
+    "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.calculator.ts",
+    "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.controller.ts",
+    "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.explainer.ts",
+    "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.repository.test.ts",
+    "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.repository.ts",
+    "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.routes.ts",
+    "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.schema.ts",
+    "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.service.test.ts",
+    "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.service.ts",
+    "apps/api/src/games/genshin/static/farming-data.json",
+    "apps/api/tooling/build-farming-data.mjs",
+    "apps/web/src/components/FarmingPanel.tsx",
+    "docs/api/farming-intelligence.md",
+    "docs/plans/farming-intelligence/browser-observations.md",
+    "docs/plans/farming-intelligence/cleanup.json",
+    "docs/plans/farming-intelligence/implementation_plan.md",
+    "docs/plans/farming-intelligence/post-handoff-checks.json",
+    "docs/plans/farming-intelligence/preservation-check.json",
+    "docs/plans/farming-intelligence/sources.md",
+    "docs/plans/farming-intelligence/task.md",
+    "docs/plans/farming-intelligence/validation-results.json",
+    "docs/plans/farming-intelligence/verification-attempts.json",
+    "docs/plans/farming-intelligence/walkthrough.md",
+    "docs/third-party/canvas-genshin-maps-LICENSE.txt",
+    "docs/third-party/paimon-moe-LICENSE.txt",
+    "packages/api-contracts/src/genshin/farming.ts"
+  ],
+  "unexpectedAdded": [],
+  "ownerAddition": {
+    "observedAtUtc": "2026-10-17T18:03:16.922Z",
+    "path": ".agents/skills/reverse-engineer-anything/SKILL.md",
+    "sha256": "91CBE84604802F57703C9DCA467DB798CED3A07AEAACF562E92B44FAB364C268",
+    "attribution": "Owner added this skill during the task and explicitly announced it. Agent read but did not edit it.",
+    "unchanged": true
+  },
+  "protectedFiles": [
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/src/core/config/env.ts",
+      "sha256": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/package.json",
+      "sha256": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "pnpm-lock.yaml",
+      "sha256": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/.turbo/turbo-test.log",
+      "sha256": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/.env.example",
+      "sha256": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260813154603_add_event_progress/migration.sql",
+      "sha256": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260819152839_add_spiral_abyss_runs/migration.sql",
+      "sha256": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260805151029_add_genshin_foundation/migration.sql",
+      "sha256": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20261005150000_add_today_plan_choices/migration.sql",
+      "sha256": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260731140723_init/migration.sql",
+      "sha256": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260811141938_add_daily_companion/migration.sql",
+      "sha256": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20261003180000_add_focus_goal_lifecycle/migration.sql",
+      "sha256": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260823132547_add_imaginarium_theater_run/migration.sql",
+      "sha256": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260812155306_add_materials_and_upgrade_goals/migration.sql",
+      "sha256": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260814135049_add_weekly_boss_state/migration.sql",
+      "sha256": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260926173000_add_import_section_provenance/migration.sql",
+      "sha256": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260823150154_add_nikke_models/migration.sql",
+      "sha256": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/index.html",
+      "sha256": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/src/App.css",
+      "sha256": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/src/index.css",
+      "sha256": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/endgame-focus-final.json",
+      "sha256": "84143358C0180ECDC5964B10EA1A81799631DDCBCF9E32446862310FD11AFFF1",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/primary-reflow.json",
+      "sha256": "3B1F37E5F3A8D5072DA63DC8CF4B6E12B06FD74FCF912D7DB1F14A329569BDA2",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/reimport-after.json",
+      "sha256": "ACD3739A342C8283992D6153AA909B8C472EE5CD0CA3EA9530BBEF76E262156D",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/reimport-before.json",
+      "sha256": "63A182044F80074DA87EBCF314F2C2979EB178E9187B06FCAA823A41A144B9F2",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/rendered-style-check.json",
+      "sha256": "BDDB3BBAAF791A1DC6EEE1BCAA76DE527647CB2EF330DF3B04E2567B7EBD39B9",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/secondary-reflow.json",
+      "sha256": "11DF232CAE6F12C765A091B443806D2E04D2A22109C0D60CA067F6EBB6B71191",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/starting-state.json",
+      "sha256": "F1A7A653C71A6694DC544498E9E3D8498F3EE385F4E756C046AF0AB1EC6ADFBE",
+      "unchanged": true
+    }
+  ],
+  "notes": [
+    "All fourteen inherited migrations and all previous source/data/evidence artifacts are preserved unless the explicit current-scope list records a dated documentation update.",
+    "No dependency, lockfile, environment, test discovery/floor or guard changes.",
+    "Self hash omitted; private final-state.json records the complete final manifest."
+  ]
+}

@@ -1,8 +1,15 @@
 # Feature Specification: Genshin Inventory Browsing UI (Milestone 2E)
 
+> **Companion scope update — 2026-09-25.** Retain full inventory browsing and equipped artifacts. C3 connects inventory to character equipment views; optimization and keep/discard advice are excluded. Weapon equipment is represented by the character's equippedWeaponId relationship, not a scalar equippedCharacterId on GenshinWeapon. Use a scoped relation/query for equipped-by display. Later detail deep links may use ADR 0008's URL exception.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 **Feature ID:** FEAT-006  
 **Priority:** P0  
-**Status:** Completed  
+**Historical status:** Completed
+
 **Phase:** 2E — Weapon & Artifact Browsing UI  
 **Last Updated:** 2026-08-30
 

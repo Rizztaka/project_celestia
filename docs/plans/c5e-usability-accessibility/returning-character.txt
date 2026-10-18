@@ -1,0 +1,177 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#companion-content"
+  - link "Project Celestia":
+    - /url: /
+  - button "Sign out"
+  - navigation "Primary navigation":
+    - link "Today":
+      - /url: /
+    - link "Characters":
+      - /url: /roster
+    - link "Planner":
+      - /url: /planner
+  - navigation "Supporting navigation":
+    - link "Import":
+      - /url: /import
+    - link "Inventory":
+      - /url: /inventory
+    - link "Settings & profile":
+      - /url: /profile
+    - generic "Other tools +"
+- main [active]:
+  - link "← All characters":
+    - /url: /roster
+  - button "Refresh"
+  - region "Focus and goals":
+    - button "Remove from focus" [pressed]
+    - link "Manage character goals":
+      - /url: /planner?tab=farming&target=HuTao
+    - link "Add ascension goal":
+      - /url: /planner?tab=farming&newType=CHARACTER_ASCENSION&key=HuTao
+    - link "Add base talent goal":
+      - /url: /planner?tab=farming&newType=CHARACTER_TALENT&key=HuTao
+    - link "Add weapon type goal (StaffOfHoma)":
+      - /url: /planner?tab=farming&newType=WEAPON_ASCENSION&key=StaffOfHoma
+    - paragraph: Weapon goals retain the selected type key after equipment changes; they do not track a physical copy. Raw talent values cannot be compared to base talent targets.
+    - paragraph:
+      - link "completed · Priority 1 · Declared 1 → 3":
+        - /url: /planner?tab=farming&goal=cb500000-0000-4000-8000-000000000010
+      - text: · Base-level comparison unknown.
+    - paragraph:
+      - link "active · Priority 1 · Declared 3 → 6":
+        - /url: /planner?tab=farming&goal=cb500000-0000-4000-8000-000000000011
+      - text: · Base-level comparison unknown.
+    - paragraph:
+      - link "archived · Priority 2 · Declared 1 → 6":
+        - /url: /planner?tab=farming&goal=cb500000-0000-4000-8000-000000000013
+      - text: · Base-level comparison unknown.
+    - paragraph:
+      - link "paused · Priority 5 · Declared 1 → 6":
+        - /url: /planner?tab=farming&goal=cb500000-0000-4000-8000-000000000012
+      - text: · Base-level comparison unknown.
+    - paragraph: Stored progression has no per-character observation timestamp. Section receipts describe imports.
+  - region "Hu Tao":
+    - generic: HU
+    - img "Hu Tao"
+    - paragraph: Recorded character
+    - heading "Hu Tao" [level=1]
+    - paragraph: HuTao
+    - term: Level
+    - definition: "80"
+    - term: Ascension
+    - definition: "6"
+    - term: Constellation
+    - definition: "0"
+    - heading "Stored talents" [level=2]
+    - term: Normal attack
+    - definition: "6"
+    - term: Skill
+    - definition: "6"
+    - term: Burst
+    - definition: "6"
+    - paragraph: Values are stored as supplied. Base versus constellation-adjusted talent levels cannot be established from these records. Legacy/default origin is not recorded per value.
+    - paragraph:
+      - text: "Section received:"
+      - time: 10/15/2026, 11:57:21 AM
+    - paragraph: "Source label: C5e synthetic · Supplied entries: 1"
+    - paragraph: Characters were merged. This receipt does not date each retained character.
+  - region "Recorded weapon assignment":
+    - heading "Recorded weapon assignment" [level=2]
+    - generic: ST
+    - img "Staff Of Homa"
+    - paragraph: Staff Of Homa
+    - paragraph: StaffOfHoma
+    - paragraph: Level 90 · Ascension 6 · Refinement 2 · Locked
+    - paragraph:
+      - text: "Section received:"
+      - time: 10/2/2026, 8:34:05 AM
+    - paragraph: "Source label: C5b synthetic fixture · Supplied entries: 2"
+    - paragraph: Recorded section replacement. This receipt does not prove a complete game scan.
+  - region "Recorded artifact assignments":
+    - heading "Recorded artifact assignments" [level=2]
+    - paragraph:
+      - text: "Section received:"
+      - time: 10/3/2026, 8:34:05 AM
+    - paragraph: "Source label: Not supplied · Supplied entries: 5"
+    - paragraph: Recorded section replacement. This receipt does not prove a complete game scan.
+    - article:
+      - heading "flower" [level=3]:
+        - generic: f
+        - text: flower
+      - paragraph: Opaque Synthetic Set
+      - paragraph: OpaqueSyntheticSet
+      - paragraph: 5★ · Level +0 · Locked
+      - paragraph: Main stat key
+      - paragraph: hp
+      - paragraph: Amount unavailable — not stored.
+      - paragraph: Stored substats
+      - term: critRate_
+      - definition: "6.6"
+      - term: opaque
+      - definition: "0"
+    - article:
+      - heading "plume" [level=3]:
+        - generic: p
+        - text: plume
+      - paragraph: Opaque Synthetic Set
+      - paragraph: OpaqueSyntheticSet
+      - paragraph: 5★ · Level +20
+      - paragraph: Main stat key
+      - paragraph: hp
+      - paragraph: Amount unavailable — not stored.
+      - paragraph: Stored substats
+      - term: critRate_
+      - definition: "6.6"
+      - term: opaque
+      - definition: "0"
+    - article:
+      - heading "sands" [level=3]:
+        - generic: s
+        - text: sands
+      - paragraph: Opaque Synthetic Set
+      - paragraph: OpaqueSyntheticSet
+      - paragraph: 5★ · Level +20
+      - paragraph: Main stat key
+      - paragraph: hp
+      - paragraph: Amount unavailable — not stored.
+      - paragraph: Stored substats
+      - term: critRate_
+      - definition: "6.6"
+      - term: opaque
+      - definition: "0"
+    - article:
+      - heading "goblet" [level=3]:
+        - generic: g
+        - text: goblet
+      - paragraph: Opaque Synthetic Set
+      - paragraph: OpaqueSyntheticSet
+      - paragraph: 5★ · Level +20
+      - paragraph: Main stat key
+      - paragraph: hp
+      - paragraph: Amount unavailable — not stored.
+      - paragraph: Stored substats
+      - term: critRate_
+      - definition: "6.6"
+      - term: opaque
+      - definition: "0"
+    - article:
+      - heading "circlet" [level=3]:
+        - generic: c
+        - text: circlet
+      - paragraph: Opaque Synthetic Set
+      - paragraph: OpaqueSyntheticSet
+      - paragraph: 5★ · Level +20
+      - paragraph: Main stat key
+      - paragraph: hp
+      - paragraph: Amount unavailable — not stored.
+      - paragraph: Stored substats
+      - term: critRate_
+      - definition: "6.6"
+      - term: opaque
+      - definition: "0"
+    - paragraph: Recorded set counts
+    - list:
+      - listitem: "Opaque Synthetic Set: 5 recorded pieces"
+    - paragraph: Counts describe these records; set effects and build quality are not evaluated.
+  - paragraph: Import receipts describe when Celestia received a section, not when items were observed in the game. Equipment is recorded data, with no live game connection or acquisition dates. Explicit empty-slot observations are not stored.

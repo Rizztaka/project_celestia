@@ -1,0 +1,1583 @@
+{
+  "capturedAt": null,
+  "reviewedBy": "Codex",
+  "requests": [
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 1,
+            "id": 4631,
+            "level_target": 2
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104313,
+              "name": "Teachings of Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+              "num": 3,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/76",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112038,
+              "name": "Whopperflower Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+              "num": 6,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/1876",
+              "level": 1,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 12500,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104313,
+                  "name": "Teachings of Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+                  "num": 3,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/76",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112038,
+                  "name": "Whopperflower Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+                  "num": 6,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/1876",
+                  "level": 1,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 12500,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4631",
+                "level_current": "1",
+                "level_target": "2"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 2,
+            "id": 4631,
+            "level_target": 3
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 2,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 3,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 17500,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 2,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 3,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 17500,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4631",
+                "level_current": "2",
+                "level_target": "3"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 3,
+            "id": 4631,
+            "level_target": 4
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 4,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 4,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 25000,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 4,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 4,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 25000,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4631",
+                "level_current": "3",
+                "level_target": "4"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 4,
+            "id": 4631,
+            "level_target": 5
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 6,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 6,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 30000,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 6,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 6,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 30000,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4631",
+                "level_current": "4",
+                "level_target": "5"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 5,
+            "id": 4631,
+            "level_target": 6
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 9,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 9,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 37500,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 9,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 9,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 37500,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4631",
+                "level_current": "5",
+                "level_target": "6"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 1,
+            "id": 4632,
+            "level_target": 2
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104313,
+              "name": "Teachings of Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+              "num": 3,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/76",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112038,
+              "name": "Whopperflower Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+              "num": 6,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/1876",
+              "level": 1,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 12500,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104313,
+                  "name": "Teachings of Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+                  "num": 3,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/76",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112038,
+                  "name": "Whopperflower Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+                  "num": 6,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/1876",
+                  "level": 1,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 12500,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4632",
+                "level_current": "1",
+                "level_target": "2"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 2,
+            "id": 4632,
+            "level_target": 3
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 2,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 3,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 17500,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 2,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 3,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 17500,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4632",
+                "level_current": "2",
+                "level_target": "3"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 3,
+            "id": 4632,
+            "level_target": 4
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 4,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 4,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 25000,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 4,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 4,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 25000,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4632",
+                "level_current": "3",
+                "level_target": "4"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 4,
+            "id": 4632,
+            "level_target": 5
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 6,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 6,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 30000,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 6,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 6,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 30000,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4632",
+                "level_current": "4",
+                "level_target": "5"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 5,
+            "id": 4632,
+            "level_target": 6
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 9,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 9,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 37500,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 9,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 9,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 37500,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4632",
+                "level_current": "5",
+                "level_target": "6"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 1,
+            "id": 4639,
+            "level_target": 2
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104313,
+              "name": "Teachings of Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+              "num": 3,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/76",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112038,
+              "name": "Whopperflower Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+              "num": 6,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/1876",
+              "level": 1,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 12500,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104313,
+                  "name": "Teachings of Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+                  "num": 3,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/76",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/7c9e8963b8d95130a0f12e27d8bb5970.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112038,
+                  "name": "Whopperflower Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+                  "num": 6,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/1876",
+                  "level": 1,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/34a11c1cb7c361e1c6eacc59b83ae797.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 12500,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4639",
+                "level_current": "1",
+                "level_target": "2"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 2,
+            "id": 4639,
+            "level_target": 3
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 2,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 3,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 17500,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 2,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 3,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 17500,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4639",
+                "level_current": "2",
+                "level_target": "3"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 3,
+            "id": 4639,
+            "level_target": 4
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 4,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 4,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 25000,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 4,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 4,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 25000,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4639",
+                "level_current": "3",
+                "level_target": "4"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 4,
+            "id": 4639,
+            "level_target": 5
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 6,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 6,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 30000,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 6,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 6,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 30000,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4639",
+                "level_current": "4",
+                "level_target": "5"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    },
+    {
+      "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+      "request": {
+        "lang": "en-us",
+        "avatar_level_target": 20,
+        "avatar_level_current": 20,
+        "avatar_id": 10000046,
+        "skill_list": [
+          {
+            "level_current": 5,
+            "id": 4639,
+            "level_target": 6
+          }
+        ]
+      },
+      "response": {
+        "retcode": 0,
+        "message": "OK",
+        "data": {
+          "avatar_consume": [],
+          "avatar_skill_consume": [
+            {
+              "id": 104314,
+              "name": "Guide to Diligence",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "num": 9,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+              "lack_num": 0
+            },
+            {
+              "id": 112039,
+              "name": "Shimmering Nectar",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "num": 9,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+              "level": 2,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+              "lack_num": 0
+            },
+            {
+              "id": 202,
+              "name": "Mora",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "num": 37500,
+              "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+              "level": 3,
+              "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+              "lack_num": 0
+            }
+          ],
+          "weapon_consume": [],
+          "reliquary_consume": [],
+          "skills_consume": [
+            {
+              "consume_list": [
+                {
+                  "id": 104314,
+                  "name": "Guide to Diligence",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "num": 9,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/75",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/cb09b286ac18ddc4bc4ab485507faa35.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 112039,
+                  "name": "Shimmering Nectar",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "num": 9,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/722",
+                  "level": 2,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/58fad31b17b03d31a6c5cab9d7d075ad.png",
+                  "lack_num": 0
+                },
+                {
+                  "id": 202,
+                  "name": "Mora",
+                  "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "num": 37500,
+                  "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/757",
+                  "level": 3,
+                  "icon_url": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/fb7fc53d0cdd0ddeefda020fb16f92e7.png",
+                  "lack_num": 0
+                }
+              ],
+              "skill_info": {
+                "id": "4639",
+                "level_current": "5",
+                "level_target": "6"
+              }
+            }
+          ],
+          "calendar": {
+            "dungeon_name": "Taishan Mansion",
+            "drop_day": ["1", "4", "6"],
+            "calendar_link": "https://wiki.hoyolab.com/pc/genshin/home_module/calendar",
+            "has_data": true
+          },
+          "lineup_recommend": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html?bbs_presentation_style=fullscreen&utm_source=hoyolab&utm_medium=tools&utm_campaign=battlechronicle&utm_id=2&aid=10000046"
+        }
+      }
+    }
+  ],
+  "gameVersion": null,
+  "retrievedOn": "2026-10-02"
+}

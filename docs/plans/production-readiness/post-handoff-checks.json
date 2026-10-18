@@ -1,0 +1,16 @@
+{
+  "recordedAtUtc": "2026-10-17T13:49:36.226Z",
+  "scope": "Documentation and preservation only after the final passing full run",
+  "documentationFormatCheck": {
+    "exit": 0
+  },
+  "repositoryConfiguredDiffCheck": {
+    "exit": 0,
+    "diagnosticLines": 0
+  },
+  "diagnosticWithOverriddenAutocrlf": {
+    "reason": "An extra read-only git -c core.autocrlf=false diff --check treated inherited CRLF bytes in the protected historical turbo log as trailing whitespace. No file was edited. The repository-configured check passes and the protected log hash remains unchanged.",
+    "result": "Reported trailing whitespace; individual exit code was not captured by the surrounding PowerShell sequence"
+  },
+  "applicationChangesAfterFinalFullRun": false
+}

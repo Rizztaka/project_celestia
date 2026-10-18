@@ -1,86 +1,111 @@
-# **Project Celestia Master Roadmap**
+# Project Celestia Roadmap
 
-**Document Version:** 2.0
-**Status:** Living Document
-**Last Updated:** August 2026
+> **2026-10-18 owner clarification — domain farming focus complete locally:** Planner now prioritizes all 48 talent/weapon material families with weekday/Today filters, search, goal relevance, full drop schedules and selected-server current/next availability. Browsing works without stock, difficulty or server selection; current-day claims require the selected server. Coordinate controls and duplicate Today sidebar are removed; the compatible route API/data remain preserved, and the main view skips coordinate calculations. Optional resin estimates are collapsed. REA's prior failure was resolved by using supported Node 24.11.0 instead of unsupported 22.14.0; static analysis passes with integrity checks enabled. The local REA skill's runtime/CLI/evidence guidance is corrected; no upstream patch or system/runtime configuration change. Final guarded recovery/full verification passes **1082 / 61 / 145 actual PostgreSQL cases**, zero failures/skips. [Walkthrough](plans/domain-farming/walkthrough.md), [validation](plans/domain-farming/validation-results.json), [browser evidence](plans/domain-farming/browser-observations.md), [REA review](plans/domain-farming/rea-review.json), [cleanup](plans/domain-farming/cleanup.json), [preservation](plans/domain-farming/preservation-check.json). Inherited dirty work, master/HEAD, empty index and all fourteen migrations preserved. No repeated owner walkthrough, human acceptance, staging, commit, push, deployment or next phase. Earlier dated notes are historical.
 
----
+> **2026-10-17 owner-authorized farming follow-up:** [Farming intelligence](plans/farming-intelligence/walkthrough.md) adds explicit difficulty/mean-drop estimates, shared-budget weekday pacing and selectable coordinate-stop routes. Source coverage is historical and routes optimize planar order, with terrain/spawn/yield uncertainty exposed. Final guarded recovery/full verification passes **1,080 / 61 / 145 actual PostgreSQL cases**, no failed/skipped tests. [Evidence](plans/farming-intelligence/validation-results.json), [sources/REA limits](plans/farming-intelligence/sources.md). All work remains local; no deployment, new migration, C6/C7 expansion or human acceptance is implied.
 
-## **Purpose**
+> **2026-10-17 owner-authorized functional core expansion:** The owner replaced bounded C5h with useful progression and production-readiness work. All four servers, 122 character ascensions, 120 base talent tables through 10, 252 weapon ascensions, 48 weekday material sources and Seelie-inspired calm Today/planner interactions are implemented locally. Fresh guarded recovery and the full verification chain pass **1,038 tests / 58 files / 140 actual PostgreSQL cases**, zero failures/skips. [Walkthrough](plans/production-readiness/walkthrough.md), [validation](plans/production-readiness/validation-results.json), [community provenance/exceptions](plans/production-readiness/sources.md), [remaining scope/release evidence](plans/production-readiness/remaining-readiness.md). Optimized walking routes, statistical yield/finish-time estimates and exceptional targets remain explicit; no deployment, reader acceptance or C6/C7 expansion is implied. Earlier dated checkpoints below are historical.
 
-This roadmap defines the long-term development plan for Project Celestia. It captures major phases and milestones.
+> **2026-10-14 C5d implementation checkpoint:** [Account-data controls](plans/c5d-account-data/walkthrough.md) add current-password, self-only export and deliberate atomic deletion with deleted-token denial. Exact stored owner data spans all twenty application tables; other-owner preservation, rollback and concurrency are exercised on disposable PostgreSQL. Synthetic browser acceptance passed. Final unchanged recovery and full verification passed **1,004 tests / 55 files / 133 actual PostgreSQL cases**, zero failures/skips; see [validation](plans/c5d-account-data/validation-results.json); [limits](plans/c5d-account-data/contract.md) and [readiness](plans/c5d-account-data/beta-readiness.md) retain unsupported-account, backup/restore, operator/revocation, proxy/origin/CI, accessibility and voluntary-beta gates. All work remains local and uncommitted. C6/C7 still require useful real-use evidence and a separate product decision; no expansion or release is authorized.
 
-_Note: Do NOT assume every numbered Sunday is fixed. The roadmap must be dependency-aware and allowed to change after audits, implementation results, measurements, and beta feedback._
+> **2026-10-13 C5c review / C5d proposal:** [Follow-up review](plans/c5c-request-safety/implementation_review.md) identifies no new blocking application-code finding. Fresh recovery/full verification passes **950 tests / 51 files / 113 actual PostgreSQL cases**, no failures/skips. The old synthetic fixture has missing catalog files; a new separate [owned fixture](plans/c5c-request-safety/review-fixture-provenance.md) is recorded for the unchanged recovery command, with historical evidence preserved. Next proposed C5 foundation: [C5d account export and deliberate deletion](plans/c5d-account-data/implementation-prompt.md), including current-password confirmation, bounded work, other-owner preservation and deleted-token denial. **C5d implementation has not started.** This does not authorize release or C6/C7; real-use evidence and a separate product decision remain required for feature expansion.
 
----
+> **2026-10-12 C5c local completion:** [Request safety](plans/c5c-request-safety/walkthrough.md) bounds auth/ordinary/GOOD JSON, maps safe parser errors, throttles direct-peer auth and verified-owner imports with bounded memory/concurrency, and rejects oversized import/state resources without partial writes. Fresh unchanged recovery plus full verification passes **950/51**, no failures/skips, with **113 PostgreSQL cases (106 preserved + 7 new)**. Actual local browser rejection/retry and owner-switch evidence is recorded. [Policy/runbook](plans/c5c-request-safety/runbook.md) and [remaining gates](plans/c5c-request-safety/beta-readiness.md) distinguish local process safeguards from deployment/provider/distributed protection. No release, invitation, commit, push or C6/C7 work occurred; real-use evidence and a separate product decision still gate C6/C7. Earlier checkpoints remain historical.
 
-## **Project Goals**
+> **2026-10-11 C5b reviewed / C5c proposed:** Fresh recovery and full-suite verification pass **875/47/106**, zero failed/skipped; [C5b review](plans/c5b-recovery-foundation/implementation_review.md) found no new blocking finding in its scope. [C5c bounded API request and abuse controls](plans/c5c-request-safety/implementation-prompt.md) is the next proposed engineering milestone and has not started. Existing global 50 MB parsing and unthrottled auth/import routes justify this scope. This is not production/beta approval; accessibility, account-data/operational controls, source upkeep, remote CI/deployed origins and voluntary human feedback remain open. C6/C7 remain gated.
 
-1. **Zero-cost operation** for the foreseeable future.
-2. **Enterprise-level engineering quality** without unnecessary enterprise complexity.
-3. **High calculation accuracy and reproducibility.**
-4. **Good performance** without premature optimization.
-5. **Strong security and privacy.**
-6. **Maintainability** for a solo developer using AI-assisted development.
-7. **Weekly workflow**: Planning Monday–Saturday, Implementation on Wednesdays and Sundays.
+> **2026-10-11 C5b local recovery checkpoint:** [Reproducible synthetic recovery](plans/c5b-recovery-foundation/walkthrough.md) is implemented with real PostgreSQL dump/restore, exact all-table/history comparisons, authenticated application reads and safe negative cases. [Actual verification](plans/c5b-recovery-foundation/validation-results.json) passes **875 tests / 47 files / 106 PostgreSQL cases**, none failed/skipped, through the preserved full entry point on a separate disposable database. This establishes local Windows evidence only; [production operator/policy/provider/cadence/recovery objectives and representative restore](plans/c5b-recovery-foundation/beta-readiness.md) remain unresolved alongside accessibility, abuse/data controls, source upkeep, remote CI/deployed origins and real-use beta evidence. No release or C6/C7 work is authorized. Earlier proposal/checkpoint banners are retained historical records.
 
----
+> **2026-10-10 review / next bounded proposal:** [C5a follow-up review](plans/c5a-beta-foundation/implementation_review.md) found no new blocking finding; fresh full verification passes **799/46/106**, zero failed/skipped. [C5b recovery rehearsal](plans/c5b-recovery-foundation/implementation-prompt.md) is proposed for owner execution and has not started. It would establish synthetic local restore evidence, not production recovery or beta approval. C6/C7 still require real-use evidence; all unresolved operational/accessibility/release gates remain.
 
-## **Development Principles**
+> **2026-10-10 C5a local closure:** Reproducible guarded verification and exact-origin CORS are implemented. The complete direct entry point passes **799 tests / 46 files / 106 PostgreSQL cases**, none failed/skipped, plus package/schema/format checks and synthetic browser smoke. [Evidence](plans/c5a-beta-foundation/walkthrough.md), [configuration runbook](plans/c5a-beta-foundation/runbook.md), and [remaining gates](plans/c5a-beta-foundation/beta-readiness.md). Remote CI has not run; operational/accessibility, configured deployed origins and real-user beta evidence remain open. No release or C6/C7 is authorized. Earlier checkpoints below are historical.
 
-- Complete one milestone before beginning the next.
-- One implementation session (Wednesday or Sunday) should represent one coherent milestone, not an arbitrary collection of unrelated tasks.
-- Prioritize quality over speed.
-- Keep every milestone independently functional.
+> **2026-10-09 C5 local checkpoint:** Shared companion navigation, first-use/returning journeys and bounded readiness assessment are implemented. Direct validation passes **708 tests / 44 files / 106 PostgreSQL cases**, none failed/skipped. Functional synthetic acceptance passed; actual zoom/reduced-motion/assistive checks and operational/human beta gates remain open. See [C5 walkthrough](plans/c5-companion-beta/walkthrough.md) and [readiness](plans/c5-companion-beta/beta-readiness.md). C5 beta exit evidence is not complete, no release is authorized, and C6/C7 remain gated. Earlier banners are historical.
 
----
+> **2026-10-07 review:** Bounded C4 has no blocking review finding; fresh verification passes 691 tests / 43 files, including 106 PostgreSQL cases. See the [review](plans/c4-today-weekly-plan/implementation_review.md). The [C5 journey and beta-readiness prompt](plans/c5-companion-beta/implementation-prompt.md) is prepared for owner execution. C5 has not started; release and real-user feedback remain separate gates.
 
-## **Roadmap Phases**
+> **2026-10-06 checkpoint:** Bounded C4 Today/weekly is implemented and validated locally: opt-in routines, stable goal shortlist, persistent ceiling/dismissals, honest weekly/material states and session/reset-safe writes. Final evidence: 691 tests / 43 files, including 106 PostgreSQL cases. All production routes remain unavailable; positive allocation uses synthetic tests only. See [C4 walkthrough](plans/c4-today-weekly-plan/walkthrough.md). C5 and release remain separate. Earlier checkpoint banners below are historical.
 
-### **Phase 0 — Engineering Baseline**
+> **2026-10-05 review:** Bounded C3b review and corrective fixes pass 601 tests / 39 files, including all 78 PostgreSQL cases. See the [review](plans/c3b-focus-goals/implementation_review.md). The [C4 Today/weekly prompt](plans/c4-today-weekly-plan/implementation-prompt.md) is prepared; C4 implementation remains pending owner execution.
 
-Establish project vision, architecture, and documentation. Set up monorepo and CI/CD pipelines. Ensure AI agent workflows and standards are correctly defined.
+> **2026-10-04 checkpoint:** C3a equipment reads and bounded C3b focus/priority/goal lifecycle are implemented and validated locally; C1/C2 behavior and the enabled Asia clock are preserved. The focused-character/re-import/known-progress exit criterion below is met. Artifact targets, higher talent ranges, presets and C4 remain deferred. Read [CURRENT_HANDOFF](plans/CURRENT_HANDOFF.md) for evidence; older counts below are historical. No release or deployment is implied.
 
-### **Phase 1 — Security Foundation**
+**Version:** 3.0
 
-Establish robust validation, input sanitization, error handling boundaries, and secure secret management.
+**Updated:** 2026-09-25
 
-**Completed Milestones:**
+**Direction:** Genshin companion. This roadmap supersedes the earlier broad platform phase sequence.
 
-- **Platform Account Security** — Removed public registration route that bypassed password hashing; added self-only profile access enforcement (NotFoundError before DB lookup for foreign IDs); added JWT payload runtime validation and HS256 algorithm restriction. 33 regression tests added (287 total).
+## Delivery rules
 
-### **Phase 2 — Authentication + Guest Mode**
+- **Wednesday/Sunday:** Antigravity Sonnet 4.6 implements; Codex plans and reviews in a new conversation. **Other days:** Codex also implements. Read [the current handoff](plans/CURRENT_HANDOFF.md).
+- One milestone at a time. Split a milestone across sessions when necessary; dates are not completion promises.
+- Reuse existing implementations. A document marked “Designing” may describe code that already exists.
+- “Present in code” is not equivalent to independently verified or production-ready.
+- Prefer no new paid services and no infrastructure expansion without a measured need.
+- Documentation decisions here do not authorize a push, deployment, or production migration.
 
-Implement user authentication, account creation, and a read-only or limited "guest mode" for easy onboarding. Treat authentication and authorization separately.
+## Starting evidence
 
-### **Phase 3 — Data Foundation**
+Platform Account Security is reviewed and pushed at `2d8820a48db83d7c62feebd849f2f1c2d3488bb6`. The prior verification supplied by the user records GitHub master, successful CI run 35900358093, 287 tests across 21 files (including 22 security HTTP tests), Vercel success, and production HTTP checks. Do not repeat that implementation.
 
-Static game data structures, dynamic user data schemas, database migrations, and bulk data import functionality.
+**Open release evidence:** Render's deployed backend SHA is unverified. Available access reached the Render login page. Inspect the existing deployment when authenticated access becomes available; do not redeploy or create hosting to obtain evidence. Local planning can proceed while this item is open.
 
-### **Phase 4 — Intelligence Core**
+The checkout already contains imports, roster/inventory, daily/weekly tracking, goals/materials, events, intelligence modules, endgame records, and a pull simulator. NIKKE also has an existing module. These are reuse candidates, not a new backlog to implement from scratch.
 
-Build the deterministic calculation engines. Ensure calculations and explanations are separated. Implement independent reference/regression tests for critical logic.
+## Ordered milestones
 
-### **Phase 5 — Recommendation Engine**
+New identifiers C1–C7 avoid confusion with historical phase numbers. “3A backend lint” below retains the user's existing task name; it is distinct from historical Daily Companion 3A.
 
-Consume the Intelligence Core to provide personalized, explainable recommendations to the user based on their specific account state.
+| Order | Milestone                             | Bounded outcome                                                                                                           | Exit evidence                                                                                                              |
+| ----- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Next  | **3A backend lint coverage**          | Add API lint coverage and fix the measured maintained-code baseline without broad rule suppression                        | API and root lint execute successfully; types/tests/build pass; original Turbo test log preserved                          |
+| C1a   | **Safe import semantics**             | Distinguish omitted sections from intentional replacement; validate equipment relationships; make import scope reviewable | Omitted sections preserved; explicit empty replacement confirmed; rollback and ownership tests                             |
+| C1b   | **Import freshness and continuity**   | Source/import metadata and section completeness; preserve goals across re-import; invalidate derived views                | Failed imports do not advance freshness; unsupported values remain visible; stale/unknown states distinguishable           |
+| C2a   | **Reliable companion time**           | One tested server-clock contract; correct task cadence; read-only projections with explicit writes                        | Reset-boundary, first-use, direct-write-after-reset, stale-client and concurrent-update tests                              |
+| C2b   | **Game-data trust gate**              | Typed supported-data catalog with sources, review/version, and unavailable/placeholder states                             | Unverified event/banner/material data cannot produce live advice; independent fixtures for supported material calculations |
+| C3    | **My Focus and Build Progress**       | Select characters, set targets, inspect equipped weapon/artifacts, track active/paused/done goals                         | A focused character's goal survives re-import and shows known progress without a universal score                           |
+| C4    | **Today and Weekly Plan**             | Home becomes a short goal-based plan; combine existing daily/weekly/farming workflows                                     | Deterministic budget-respecting suggestions, dismiss/pause controls, no mandatory import for basic tracking                |
+| C5    | **Companion beta and polish**         | Complete the routine journey on mobile and desktop; simplify primary navigation                                           | Usability evidence, trustworthy empty states, preservation/ownership checks, data upkeep and recovery review               |
+| Later | **C6 Saved Teams & Progress Journal** | User-saved teams, limited opt-in snapshots, endgame result notes                                                          | Only after the core loop is useful and snapshot retention/identity contracts are reviewed                                  |
+| Later | **C7 Optional Events & Wish Savings** | Maintained event deadlines and player-defined savings targets                                                             | Only where verified data and maintenance capacity exist; no “must pull” scoring                                            |
 
-### **Phase 6 — Frontend/Product Experience**
+For C2b, shipping an honest “data unavailable” state is acceptable. Do not delay the core companion to build a complete game database. Event presentation in C4 is conditional on this gate; richer event tracking waits until C7.
 
-UI/UX polish. Implement TanStack Query for server state and Zustand for local UI state. Ensure responsive, accessible, and fast interactions.
+C3's bounded slices are complete locally: [C3a](plans/c3a-character-equipment/walkthrough.md) supplies character/equipment reads and [C3b](plans/c3b-focus-goals/walkthrough.md) supplies focus, priority and durable goal lifecycle. Actual browser acceptance preserved a focused HuTao goal through re-import and showed stored ascension 6 beside its unchanged active 5→6 target without a score. [C4](plans/c4-today-weekly-plan/walkthrough.md) now supplies the bounded Today/weekly home and tested session accounting. Bounded [C5 journey implementation](plans/c5-companion-beta/walkthrough.md) now passes local functional checks. Broader product aspirations, accessibility sign-off, operational readiness and real-human beta evidence remain outstanding; no release action is authorized.
 
-### **Phase 7 — Performance**
+## Immediate engineering handoff
 
-Measure bottlenecks. Apply optimizations only where justified by metrics. Avoid premature optimization (e.g., Redis, BullMQ) unless absolutely necessary.
+September 27 checkpoint: 3A, C1a, and C1b are implemented and validated **locally**, with 346 tests passing across 26 files. They are uncommitted/unpushed and have not been deployed. Read [current handoff](plans/CURRENT_HANDOFF.md) and the milestone walkthroughs before review or C2a work. The measured lint baseline below remains historical evidence.
 
-### **Phase 8 — Reliability**
+Use [the existing 3A lint plan](plans/3a-backend-lint/implementation_plan.md). Maintained baseline: **63 errors in 36 files**, across 123 examined source/config files. Existing generated `dist` adds 72 errors and 7 warnings; it is not the remediation target. No source exclusions or blanket rule weakening.
 
-Comprehensive testing, monitoring strategies, database backup procedures, and failover mechanisms.
+The companion redesign does not expand that lint task. Import, reset, static-data, goal, or UI behavior changes belong in C1 and later.
 
-### **Phase 9 — Beta Testing**
+## Feature disposition
 
-Limited release to gather user feedback, identify edge cases, and validate calculation accuracy against real-world data.
+| Feature                                                        | Decision                                                                                                      |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Authentication and account isolation                           | Preserve; completed security milestone remains baseline                                                       |
+| GOOD imports, roster, full inventory, equipment associations   | Keep and improve reliability                                                                                  |
+| Daily checklist and resin estimate                             | Core; optional tasks, explicit checkpoint, supported server                                                   |
+| Goals, material delta, farm availability, weekly boss tracking | Core; user priorities and verified data first                                                                 |
+| Artifact Intelligence/AES                                      | Replace product presentation with Equipment & Build Progress; retain compatibility until caller migration     |
+| Character/Planner Intelligence                                 | Adapt to explicit targets and resource budgets; remove automatic meta-led priorities from the core experience |
+| Team Intelligence                                              | Reuse later as qualified assistance around user-saved teams; no claim of optimal damage                       |
+| Progression/Knowledge Intelligence                             | Secondary factual summaries; no invented artifact age or performance superiority                              |
+| Pull Value/MUST_PULL                                           | Retire verdicts from the target experience; optional savings goals later                                      |
+| Endgame center                                                 | Retain current records; simplify into optional journal; defer automatic rotation-specific drafting            |
+| Pull simulator                                                 | Freeze expansion; move out of primary navigation in C5 after caller review                                    |
+| NIKKE and future games                                         | Maintenance only; no new expansion; preserve existing records/routes                                          |
+| Artifact/damage optimizer, gear auto-allocation                | Excluded                                                                                                      |
+| Guest demo                                                     | Optional isolated sample view in C5 if onboarding needs it; no shared writable guest account                  |
+| AI chat, notifications, maps, social, multi-account            | Deferred until a separate evidence-based decision                                                             |
 
-### **Phase 10 — Continuous Improvement**
+## Release gate and deferrals
 
-Iterative polish, new game support, AI system refinements, and ongoing maintenance.
+Before advertising the redesigned companion, verify the deployed backend commit, import continuity, supported clock/data behavior, root lint coverage, and the end-to-end core journey. Review existing auth abuse controls, backup/restore readiness, and user-data recovery for broader beta as separate bounded checks; this is not a request to reimplement account security.
+
+No stale placeholder events, unverified deadlines, or score-based build verdicts should be promoted as trustworthy current guidance. If a feature cannot meet its data upkeep requirement, keep it unavailable or secondary.
+
+See [Companion specification](features/FEATURE_GENSHIN_COMPANION.md) for behavior and [implementation handoff](plans/genshin-companion/implementation_plan.md) for dependencies and verification.

@@ -1,6 +1,7 @@
+import type { NikkeAccount } from '@prisma/client';
+
 import { prisma } from '@/core/db/prisma.js';
 import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
-import type { NikkeAccount } from '@prisma/client';
 
 export class NikkeAccountService {
   async getAccountByUserId(userId: string): Promise<NikkeAccount> {

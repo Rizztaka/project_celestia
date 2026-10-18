@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-16T07:45:01.549Z",
+  "interruptedRun": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-99lkgU",
+  "id": "8de717facead3761",
+  "priorProcessIdsAbsent": [15468, 24468, 31816],
+  "systemIdentifier": "7695828306638942480",
+  "database": "celestia_test_8de717facead3761_source",
+  "oid": 41854,
+  "resourcesRemaining": 0,
+  "resourcesRemoved": true,
+  "stoppedOwnedProcess": true,
+  "leaseRemoved": true,
+  "ordinaryWebBuildRestored": false,
+  "note": "Normal web output will be restored by the subsequent guarded browser/full verification run."
+}

@@ -1,0 +1,414 @@
+{
+  "checkedAt": "2026-10-11T13:35:54.863Z",
+  "checkout": "D:\\Genshin Personal\\project-celestia",
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "branch": "master",
+  "index": "",
+  "manifestEntries": 34,
+  "preservationEntries": 26,
+  "rawEntries": 7,
+  "files": [
+    {
+      "path": "apps/api/tooling/recovery.test.js",
+      "expected": "183CEA6198991091620A2A0063EF4CC49BC1102FDB8511EB13838888A9E363F9",
+      "actual": "183CEA6198991091620A2A0063EF4CC49BC1102FDB8511EB13838888A9E363F9",
+      "matches": true
+    },
+    {
+      "path": "apps/api/tooling/recovery/cli.mjs",
+      "expected": "59FD376382A32B0C38F4CB993657F5696D9246B97117C36147D73E4B7496B0E5",
+      "actual": "59FD376382A32B0C38F4CB993657F5696D9246B97117C36147D73E4B7496B0E5",
+      "matches": true
+    },
+    {
+      "path": "apps/api/tooling/recovery/fixture.mjs",
+      "expected": "E61A9B93BC3B9D0C97719295518A9BBDFE58A797C84A09741C44A3538DCE7361",
+      "actual": "E61A9B93BC3B9D0C97719295518A9BBDFE58A797C84A09741C44A3538DCE7361",
+      "matches": true
+    },
+    {
+      "path": "apps/api/tooling/recovery/policy.mjs",
+      "expected": "A87FFFCFE2E61A453B55AEACA310A91CD6AEE79B66C9918759B11EECCC1505FF",
+      "actual": "A87FFFCFE2E61A453B55AEACA310A91CD6AEE79B66C9918759B11EECCC1505FF",
+      "matches": true
+    },
+    {
+      "path": "apps/api/tooling/recovery/probe.mjs",
+      "expected": "D2787CA5509E466693CC04227026738A013C5B5CC25EF4B02E73161B170F67AC",
+      "actual": "D2787CA5509E466693CC04227026738A013C5B5CC25EF4B02E73161B170F67AC",
+      "matches": true
+    },
+    {
+      "path": "apps/api/tooling/recovery/process.mjs",
+      "expected": "6831A8A8072DE4AAF947020693B0B6DD25015163BF9CC61BB2FA17985542B0C3",
+      "actual": "6831A8A8072DE4AAF947020693B0B6DD25015163BF9CC61BB2FA17985542B0C3",
+      "matches": true
+    },
+    {
+      "path": "apps/api/tooling/recovery/rehearse.mjs",
+      "expected": "810320C50BC8855F906D8D494873D7664FC3203769AA6428826D732C51B492BC",
+      "actual": "810320C50BC8855F906D8D494873D7664FC3203769AA6428826D732C51B492BC",
+      "matches": true
+    },
+    {
+      "path": "apps/api/tooling/recovery/seed.mjs",
+      "expected": "32F72C3D8FB702333D1FD9AF9787AADA15328F2F0519763FBB96FE6BA4846285",
+      "actual": "32F72C3D8FB702333D1FD9AF9787AADA15328F2F0519763FBB96FE6BA4846285",
+      "matches": true
+    },
+    {
+      "path": "apps/api/tooling/recovery/snapshot.mjs",
+      "expected": "F444DA6B3D64ADCC8ECFDCE4415EBD69044D1B66FB75808CC4D694AAD93CA3EB",
+      "actual": "F444DA6B3D64ADCC8ECFDCE4415EBD69044D1B66FB75808CC4D694AAD93CA3EB",
+      "matches": true
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "expected": "39E0DCE760A5DB672B6F7809D65CC118730EAF8BAB1515C9E315044E985AC0AB",
+      "actual": "39E0DCE760A5DB672B6F7809D65CC118730EAF8BAB1515C9E315044E985AC0AB",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "expected": "3B822DFAEAB3210B3E3E51735E2F49AB286DABAE0D4A8F789D757A4033E4D9BB",
+      "actual": "3B822DFAEAB3210B3E3E51735E2F49AB286DABAE0D4A8F789D757A4033E4D9BB",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/beta-readiness.md",
+      "expected": "9223C7C4FEBD627E3352D58EFEF634A0095E6D15E995B34FBBF0DFA95D81D890",
+      "actual": "9223C7C4FEBD627E3352D58EFEF634A0095E6D15E995B34FBBF0DFA95D81D890",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/cleanup.json",
+      "expected": "AC28A804F7C9700A3D21C6446DA3414F5FD6B207D955E3822E90FC3128EB3878",
+      "actual": "AC28A804F7C9700A3D21C6446DA3414F5FD6B207D955E3822E90FC3128EB3878",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/entrypoint-results.json",
+      "expected": "E48C30E385447C67A27F6811B8805838507ACE131D1998E4A636C2155FED0EAB",
+      "actual": "E48C30E385447C67A27F6811B8805838507ACE131D1998E4A636C2155FED0EAB",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/execution-attempts.json",
+      "expected": "9C16D4A8E13B46E5C83F360E7FC0463F3DCFB93A3CE7F3B7D8F97E859DE82C92",
+      "actual": "9C16D4A8E13B46E5C83F360E7FC0463F3DCFB93A3CE7F3B7D8F97E859DE82C92",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/finalization-checks.json",
+      "expected": "9637B82FC94CDCC014C369DE1E939C3EB65151EC137E2AD6A0D4C57083A2A8C4",
+      "actual": "9637B82FC94CDCC014C369DE1E939C3EB65151EC137E2AD6A0D4C57083A2A8C4",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/implementation_plan.md",
+      "expected": "49C2A246176D4A72E7F30740D072040091A8504475E542DBD61B8F9121CB8E64",
+      "actual": "49C2A246176D4A72E7F30740D072040091A8504475E542DBD61B8F9121CB8E64",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/local-fixture.json",
+      "expected": "AAC665FF66B1B4FDE8488D8BA4EF4039C98F70DAB5910E45EFCE728A5A67F097",
+      "actual": "AAC665FF66B1B4FDE8488D8BA4EF4039C98F70DAB5910E45EFCE728A5A67F097",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/preservation-check.json",
+      "expected": "3D0F146B0D22AA61D835A265E8760091713C6A8501434185CDFACDF2749369F5",
+      "actual": "3D0F146B0D22AA61D835A265E8760091713C6A8501434185CDFACDF2749369F5",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runbook.md",
+      "expected": "90F84FBBFCF6F76A2B76A01E04EE9B193061544C0ADEB962DFBC83FDA5B3DDE5",
+      "actual": "90F84FBBFCF6F76A2B76A01E04EE9B193061544C0ADEB962DFBC83FDA5B3DDE5",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/identity-failure.json",
+      "expected": "79D3C91B0ACE0C2724C18751C510146C2F3FBA2C2AD1F32E972E27883BCD912F",
+      "actual": "79D3C91B0ACE0C2724C18751C510146C2F3FBA2C2AD1F32E972E27883BCD912F",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/nonempty-rejected.json",
+      "expected": "ADDDD79904C1AB517671118ED40B5D44D50CCE6238B75A3D1060008196EAFB75",
+      "actual": "ADDDD79904C1AB517671118ED40B5D44D50CCE6238B75A3D1060008196EAFB75",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/probe-failure.json",
+      "expected": "CB9A4E7F4DC412488638FC235BDF4D1C6BEB2DCF24967E32427DCBFD5B4000EA",
+      "actual": "CB9A4E7F4DC412488638FC235BDF4D1C6BEB2DCF24967E32427DCBFD5B4000EA",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/startup-failure.json",
+      "expected": "C8FD7A365A77B776931C5821191F728919172F810E281C6CB6764799F3FA80E1",
+      "actual": "C8FD7A365A77B776931C5821191F728919172F810E281C6CB6764799F3FA80E1",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/success-1.json",
+      "expected": "A8E4E2E481CA9CA599C094BF4E2BA21A7212C7537CA4AE2C075D110BB3E5EC53",
+      "actual": "A8E4E2E481CA9CA599C094BF4E2BA21A7212C7537CA4AE2C075D110BB3E5EC53",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/success-2-verify.json",
+      "expected": "D5091905819373C5E84C3C0395A084FCB2C5454DF6A6657052B6522E1FD6E5CB",
+      "actual": "D5091905819373C5E84C3C0395A084FCB2C5454DF6A6657052B6522E1FD6E5CB",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/success-3-final.json",
+      "expected": "73EA47F6D2CA3532891D09B13A18D96EF160C2C108814BA9E11D9192A642DA7C",
+      "actual": "73EA47F6D2CA3532891D09B13A18D96EF160C2C108814BA9E11D9192A642DA7C",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/truncated-rejected.json",
+      "expected": "D46C8172ADC671A42DB0546DAC1DF075EA2517B6D95B62C059FA3428627C691C",
+      "actual": "D46C8172ADC671A42DB0546DAC1DF075EA2517B6D95B62C059FA3428627C691C",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/starting-state.json",
+      "expected": "2D88517F85BB4AA87B72E5A0AE88D3FEF82EA430B60F5EF4FBCE5240509DA84B",
+      "actual": "2D88517F85BB4AA87B72E5A0AE88D3FEF82EA430B60F5EF4FBCE5240509DA84B",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/task.md",
+      "expected": "CE77FE276E52A1DCFE16BA53E9A7AFA8D6BC99080F9D69752DD7CE05DF0BED79",
+      "actual": "CE77FE276E52A1DCFE16BA53E9A7AFA8D6BC99080F9D69752DD7CE05DF0BED79",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/test-results-summary.json",
+      "expected": "E2A69A5896A543DBC16A3800D9900651C8E5BA12E44A8AF21F4B98D6D1B6587D",
+      "actual": "E2A69A5896A543DBC16A3800D9900651C8E5BA12E44A8AF21F4B98D6D1B6587D",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/validation-results.json",
+      "expected": "BD60991B2715B3E88E46F804EA5F031981C1D5679581D47E4C22811FEF9E42CA",
+      "actual": "BD60991B2715B3E88E46F804EA5F031981C1D5679581D47E4C22811FEF9E42CA",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/walkthrough.md",
+      "expected": "D8027CA38D8A5600D76FC2AAFC12BC6E3D011A9319206662684DD3680CFBFE89",
+      "actual": "D8027CA38D8A5600D76FC2AAFC12BC6E3D011A9319206662684DD3680CFBFE89",
+      "matches": true
+    },
+    {
+      "path": "package.json",
+      "expected": "06AC48BF24112580605C6CAA85A5C4BE6C6E23FA70AFCB69979A9519C5ADB5D6",
+      "actual": "06AC48BF24112580605C6CAA85A5C4BE6C6E23FA70AFCB69979A9519C5ADB5D6",
+      "matches": true
+    },
+    {
+      "path": "apps/api/src/core/config/env.ts",
+      "expected": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734",
+      "actual": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734",
+      "matches": true
+    },
+    {
+      "path": "apps/api/package.json",
+      "expected": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2",
+      "actual": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "expected": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "actual": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "matches": true
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "expected": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A",
+      "actual": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "expected": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "actual": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "matches": true
+    },
+    {
+      "path": "apps/api/.turbo/turbo-test.log",
+      "expected": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED",
+      "actual": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED",
+      "matches": true
+    },
+    {
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "expected": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "actual": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "matches": true
+    },
+    {
+      "path": "apps/api/.env.example",
+      "expected": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647",
+      "actual": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260813154603_add_event_progress/migration.sql",
+      "expected": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281",
+      "actual": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260819152839_add_spiral_abyss_runs/migration.sql",
+      "expected": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E",
+      "actual": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260805151029_add_genshin_foundation/migration.sql",
+      "expected": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31",
+      "actual": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20261005150000_add_today_plan_choices/migration.sql",
+      "expected": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A",
+      "actual": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260731140723_init/migration.sql",
+      "expected": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B",
+      "actual": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260811141938_add_daily_companion/migration.sql",
+      "expected": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA",
+      "actual": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20261003180000_add_focus_goal_lifecycle/migration.sql",
+      "expected": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329",
+      "actual": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "expected": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "actual": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260823132547_add_imaginarium_theater_run/migration.sql",
+      "expected": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7",
+      "actual": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260812155306_add_materials_and_upgrade_goals/migration.sql",
+      "expected": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8",
+      "actual": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260814135049_add_weekly_boss_state/migration.sql",
+      "expected": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C",
+      "actual": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260926173000_add_import_section_provenance/migration.sql",
+      "expected": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310",
+      "actual": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260823150154_add_nikke_models/migration.sql",
+      "expected": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910",
+      "actual": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910",
+      "matches": true
+    },
+    {
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "expected": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "actual": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "expected": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "actual": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "matches": true
+    },
+    {
+      "path": "apps/web/index.html",
+      "expected": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8",
+      "actual": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8",
+      "matches": true
+    },
+    {
+      "path": "apps/web/src/App.css",
+      "expected": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C",
+      "actual": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C",
+      "matches": true
+    },
+    {
+      "path": "apps/web/src/index.css",
+      "expected": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E",
+      "actual": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/endgame-focus-final.json",
+      "expected": "84143358C0180ECDC5964B10EA1A81799631DDCBCF9E32446862310FD11AFFF1",
+      "actual": "84143358C0180ECDC5964B10EA1A81799631DDCBCF9E32446862310FD11AFFF1",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/primary-reflow.json",
+      "expected": "3B1F37E5F3A8D5072DA63DC8CF4B6E12B06FD74FCF912D7DB1F14A329569BDA2",
+      "actual": "3B1F37E5F3A8D5072DA63DC8CF4B6E12B06FD74FCF912D7DB1F14A329569BDA2",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/reimport-after.json",
+      "expected": "ACD3739A342C8283992D6153AA909B8C472EE5CD0CA3EA9530BBEF76E262156D",
+      "actual": "ACD3739A342C8283992D6153AA909B8C472EE5CD0CA3EA9530BBEF76E262156D",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/reimport-before.json",
+      "expected": "63A182044F80074DA87EBCF314F2C2979EB178E9187B06FCAA823A41A144B9F2",
+      "actual": "63A182044F80074DA87EBCF314F2C2979EB178E9187B06FCAA823A41A144B9F2",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/rendered-style-check.json",
+      "expected": "BDDB3BBAAF791A1DC6EEE1BCAA76DE527647CB2EF330DF3B04E2567B7EBD39B9",
+      "actual": "BDDB3BBAAF791A1DC6EEE1BCAA76DE527647CB2EF330DF3B04E2567B7EBD39B9",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/secondary-reflow.json",
+      "expected": "11DF232CAE6F12C765A091B443806D2E04D2A22109C0D60CA067F6EBB6B71191",
+      "actual": "11DF232CAE6F12C765A091B443806D2E04D2A22109C0D60CA067F6EBB6B71191",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/starting-state.json",
+      "expected": "F1A7A653C71A6694DC544498E9E3D8498F3EE385F4E756C046AF0AB1EC6ADFBE",
+      "actual": "F1A7A653C71A6694DC544498E9E3D8498F3EE385F4E756C046AF0AB1EC6ADFBE",
+      "matches": true
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "checkedAtUtc": "2026-10-17T07:57:54.6321580Z",
+  "phase": "C5h preflight only",
+  "baseline": {
+    "sha256": "6C9348C49EA933ED66CFEBE4D7828979AF7F0568210B50BBF27D68ED485588BD",
+    "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-c5h-preflight-d7e4a80e5e694d85ab36244b0848661a.json"
+  },
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "branch": "master",
+  "index": [],
+  "startingFiles": 965,
+  "unchangedFiles": 964,
+  "changes": [
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "before": "8F27FEF3AC8C9319E7C675D2F1A6B0FC32B493D070DF19C3F2A3E4DABDC067B8",
+      "after": "D4D000278E8772FC51C42843450BCBD5775168BE50CE411F4454998B22E77E3E",
+      "expected": true
+    }
+  ],
+  "missing": [],
+  "unexpected": [],
+  "addedFiles": [
+    "docs/plans/c5h-targeted-accessibility/preflight-evidence.json",
+    "docs/plans/c5h-targeted-accessibility/preflight.md",
+    "docs/plans/c5h-targeted-accessibility/preservation-check.json"
+  ],
+  "unexpectedAdded": [],
+  "previousHandoffContentByteIdentical": true,
+  "applicationAndHistoricalEvidenceUnchanged": true,
+  "documentationLinks": {
+    "localTargets": 112,
+    "brokenTargets": [],
+    "files": 2
+  },
+  "note": "Only preflight documentation and a dated handoff insertion. No execution acceptance/cleanup claims or application test rerun. Manifest excludes self-hashing."
+}

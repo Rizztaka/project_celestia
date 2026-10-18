@@ -1,0 +1,88 @@
+{
+  "recordedAtUtc": "2026-10-17T18:16:36.012Z",
+  "attempts": [
+    {
+      "scope": "Initial generator run",
+      "result": "failed before writing snapshot",
+      "reason": "Treated domain object as an array; corrected to Object.values before normalization."
+    },
+    {
+      "scope": "Initial focused tests",
+      "passed": 30,
+      "failed": 1,
+      "files": 2,
+      "reason": "Test expected five days but its own Friday schedule was day four. Corrected test expectation; implementation unchanged."
+    },
+    {
+      "scope": "Focused final backend suite",
+      "evidence": {
+        "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-farming-8JXUDN\\focused-final.json",
+        "sha256": "44E731E58AA30F0F750E055B551E1CEEDAFCF80B15671FBF55D020616FC781E2"
+      },
+      "passed": 37,
+      "failed": 0,
+      "skipped": 0,
+      "files": 3
+    },
+    {
+      "scope": "First full recovery/verification",
+      "evidence": {
+        "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-tsmxdX\\result.json",
+        "sha256": "2B417A507F7F89F550102BC49B940706E2BF9DCB1A9C8C55B08BE8C3240561A1"
+      },
+      "result": "passed",
+      "tests": {
+        "passed": 1080,
+        "files": 61,
+        "failed": 0,
+        "skipped": 0,
+        "postgresCases": 118,
+        "integration": {
+          "src/platform/companion/plan.integration.test.ts": 36,
+          "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+          "src/platform/companion/routine.integration.test.ts": 16,
+          "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+          "src/games/genshin/importer/importer.integration.test.ts": 16,
+          "src/platform/companion/catalog-advice.integration.test.ts": 9
+        }
+      },
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      },
+      "note": "Passed. Later browser inspection exposed control recreation/focus loss on route changes; frontend corrected and full verification repeated."
+    },
+    {
+      "scope": "Final full recovery/verification",
+      "evidence": {
+        "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-FmyQ6F\\result.json",
+        "sha256": "8B4CB1E9FCAE2A66396812B846848BE3457D3D8422DB244F2AC651E9C454C70B"
+      },
+      "result": "passed",
+      "tests": {
+        "passed": 1080,
+        "files": 61,
+        "failed": 0,
+        "skipped": 0,
+        "postgresCases": 118,
+        "integration": {
+          "src/platform/companion/plan.integration.test.ts": 36,
+          "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+          "src/platform/companion/routine.integration.test.ts": 16,
+          "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+          "src/games/genshin/importer/importer.integration.test.ts": 16,
+          "src/platform/companion/catalog-advice.integration.test.ts": 9
+        }
+      },
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      },
+      "note": "After same-session previous-data/focus correction."
+    }
+  ]
+}

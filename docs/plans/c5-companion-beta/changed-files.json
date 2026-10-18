@@ -1,0 +1,164 @@
+{
+  "changedFromPreC5": [
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "beforeSha256": "4E8CA68094C844843ABD02F72215BFE3E94E02F71EE2227962F88DC5AD2E9B54",
+      "afterSha256": "D95DD46FE7D6D4B671949058FB7BF26D2AB76AE7E3AEDCE7F51DF1A8D38BDB3B"
+    },
+    {
+      "path": "apps/web/src/pages/RosterPage.tsx",
+      "beforeSha256": "9873B2D0BE100239E14B8A923DE52E21D69A1EC9B22459900BD7695DC124884E",
+      "afterSha256": "390554DFE426FE1EC11786E33E75147F9F95D1FDFA1C870022B05721761F84FD"
+    },
+    {
+      "path": "apps/web/src/pages/IntelligencePage.tsx",
+      "beforeSha256": "98AD3AC7D3C6B610AB0A5D8117C993855D30001F99D9FB7AF2EFD38205CBFB0F",
+      "afterSha256": "0185B216358425EE7C102CCB6089D6FE293413ADBFDB587EE85ECF90F6457A88"
+    },
+    {
+      "path": "apps/web/src/App.tsx",
+      "beforeSha256": "CFD6B237967F6D55AD41BB0DCD7CD0B0FE22A87F0E15A3246C1585B213154815",
+      "afterSha256": "9BE7C79A5C14B064CD0422910418A35CF2D62659B60C4A1F95FE5A4846BA0A33"
+    },
+    {
+      "path": "apps/web/src/pages/nikke/NikkeRosterPage.tsx",
+      "beforeSha256": "AE49D4EB9CFE1D77DF2B72CEE0AE4BBF69828B2DD75AE989EDE84011CF65ADA7",
+      "afterSha256": "7D626A73BB475D958DAF1CD49CBF76901A7B54C2C4B553621F7B9808096E6F5A"
+    },
+    {
+      "path": "apps/web/src/components/GoalManager.tsx",
+      "beforeSha256": "56568640A89EFCA1AA293B57AEE16558FA52B1D8B301BA60ACB95902E326F2C8",
+      "afterSha256": "6E85AB006877731968CD304D7BBCA7E6F592049F05B336E5190CDA6BBD99A1B8"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "beforeSha256": "31EDE6892419477C4A8DBF4467076EE219947A1C4B5E3477681E7534662490F5",
+      "afterSha256": "B7F5C082815809B2F21110FC721F18BE8763689F3475243D3AA0F5CA375E187A"
+    },
+    {
+      "path": "apps/web/src/components/TodayPlan.tsx",
+      "beforeSha256": "586B8586570925DD860C6F391F3E6C8CC7360B328775C0166909A37F2C30902A",
+      "afterSha256": "A0AA932FBCFCBED9057527F00EA0CF2345A8582C99586C2861833523D22F1288"
+    },
+    {
+      "path": "apps/web/src/lib/api.ts",
+      "beforeSha256": "BAE618966C81B4F2D892E9E10A7D1B79C583903BFE149CC7725CD354431A60A6",
+      "afterSha256": "B810A8A96BE4ACDFE8945D489C59BCFA8FEBBDB62E9198D008E46DF89E94C474"
+    },
+    {
+      "path": "apps/web/src/components/ImportStatus.tsx",
+      "beforeSha256": "2B967C7F136C686CFBC0499F501E09173B192B9C8F5FE97A9E8DD4D2D2C745B8",
+      "afterSha256": "B6E24C29B46CA0AEA08205E044C59B9310554552B323DC23A062D2208691F782"
+    },
+    {
+      "path": "apps/web/src/components/RoutinePanel.tsx",
+      "beforeSha256": "75FC382AE1800025F4B7FB0CD92E9F1BB6CAE44E977D3CB0CFAB80F52DA87762",
+      "afterSha256": "37D0B0D8838B1D6F0CE860CE3F2E7DA7CB2D94E43D92AB7FD75ECF82714C62C2"
+    },
+    {
+      "path": "apps/web/src/pages/InventoryPage.tsx",
+      "beforeSha256": "A633DAFC649C4736A8C3A8F51CF1E79CA66B5B58B5ED164BD5AD2501F13F9F7E",
+      "afterSha256": "3CCC83DE6EA03FF1FB9353592ABBA1AEDD9B0AB731C5F546E8B35F57E4585690"
+    },
+    {
+      "path": "apps/web/src/pages/EndgamePage.tsx",
+      "beforeSha256": "CD5D0DE13A81B6FC2F4814C320857F1CA790D5D29AEF532062684510B4A37735",
+      "afterSha256": "26EB6931FCC5B2AB74033D23556CB9BFBAD9EA2768DFA607CA21EA32B0FEC1D2"
+    },
+    {
+      "path": "apps/web/src/pages/ProfilePage.tsx",
+      "beforeSha256": "BA2484320CCBACF6F917F4F383B892B935FF7FCA8FCCEC33FB1714B7CEF7A13D",
+      "afterSha256": "E8023E3BA7B2492A00EB27AD324BDFC9794D23A119E891272ADF6A056A356C60"
+    },
+    {
+      "path": "apps/web/src/pages/DashboardPage.tsx",
+      "beforeSha256": "32854D989A1674888A83CF2491A42CD1E5DBC30F138EBCBE3C9D47EF20BB5675",
+      "afterSha256": "3DEABC7FA85DFD8A6C34C7E7A87591ED3DDF734B3E26AAE2498AA8929AA2EA88"
+    },
+    {
+      "path": "apps/web/src/pages/ImportPage.tsx",
+      "beforeSha256": "035BCB9C1B0C49C7DEA476A0FED46CD67B50FB64D199024B48FEC3B2EAEC9C0C",
+      "afterSha256": "A15ECFDF04117F74EA7F2399D7CE3FE10BFA18CA629973FD3861A37C5CB7D9F1"
+    },
+    {
+      "path": "apps/web/src/pages/PlannerPage.tsx",
+      "beforeSha256": "53B28025BF2BC36C18ED7A4CDA52E8D6015F8D92CECDB9645339456A5DD26F73",
+      "afterSha256": "7AE1171E6A7D58913AC60416CE464E542C3D76F8B11E9ADEA21A70C13AC5BA3D"
+    },
+    {
+      "path": "docs/features/FEATURE_GENSHIN_COMPANION.md",
+      "beforeSha256": "22081878FB53E3323D053F7EF93991C8258EEB9C46094F026508AFC1C4D4410F",
+      "afterSha256": "26D26876E2DC4307CB69C2054CACD1EA19A73D770235421E16D36A098A1E995E"
+    },
+    {
+      "path": "docs/plans/genshin-companion/implementation_plan.md",
+      "beforeSha256": "F6E7F69398E73DA48B56826577C1364E270FAB1F7636B56330A8CECC886C398D",
+      "afterSha256": "134D3768EE264EF801B13DCED1701E8F7EE5D238054AC3A34BCE04593DE4D50B"
+    },
+    {
+      "path": "apps/web/src/pages/CharacterDetailPage.tsx",
+      "beforeSha256": "515E721AFCFF664B176C2BBCBF82CC6ED2825EE8F9EC6A160775287E7CF5B7B5",
+      "afterSha256": "F691863F615B4D5C659CAD5208E92D2D04AE132DD830599F755337CE0CE6D3AC"
+    },
+    {
+      "path": "apps/web/src/pages/SimulatorsPage.tsx",
+      "beforeSha256": "DB7AEFBD9528FB04E0EF1E666A657B08EE7D193FC86D942C050BCCDDA4B0AD6B",
+      "afterSha256": "1D0E0B9DF62DD068617B7FF2B3C39F6FEB9D3059DE1961CF728EBA21CDE6899A"
+    }
+  ],
+  "newCode": [
+    {
+      "path": "apps/web/src/components/CompanionLayout.tsx",
+      "sha256": "C2CAB0E3C2B0FB8BAB38A6BA74F76D7A3D880693FB875788E1AC32C7788BAB4D"
+    },
+    {
+      "path": "apps/web/src/styles/companion.css",
+      "sha256": "A6FFCC6E90A1EDE819312737D5A772346A74586E44A4207946A3DD9111BDC0BA"
+    },
+    {
+      "path": "apps/api/tooling/journey-client.test.js",
+      "sha256": "7A1B4ACF2945F1D219E0ECFD1C8D5D7E34CB21F0E657C3E01626BA30691E8658"
+    },
+    {
+      "path": "apps/api/tooling/journey-browser-fixture.mjs",
+      "sha256": "C6C1796F7B5350EF78C93EDF11F4A930895D8933A6A014CF569DD07B0A6BF6E1"
+    }
+  ],
+  "focusedFormatFiles": [
+    "docs/plans/CURRENT_HANDOFF.md",
+    "apps/web/src/pages/RosterPage.tsx",
+    "apps/web/src/pages/IntelligencePage.tsx",
+    "apps/web/src/App.tsx",
+    "apps/web/src/pages/nikke/NikkeRosterPage.tsx",
+    "apps/web/src/components/GoalManager.tsx",
+    "docs/ROADMAP.md",
+    "apps/web/src/components/TodayPlan.tsx",
+    "apps/web/src/lib/api.ts",
+    "apps/web/src/components/ImportStatus.tsx",
+    "apps/web/src/components/RoutinePanel.tsx",
+    "apps/web/src/pages/InventoryPage.tsx",
+    "apps/web/src/pages/EndgamePage.tsx",
+    "apps/web/src/pages/ProfilePage.tsx",
+    "apps/web/src/pages/DashboardPage.tsx",
+    "apps/web/src/pages/ImportPage.tsx",
+    "apps/web/src/pages/PlannerPage.tsx",
+    "docs/features/FEATURE_GENSHIN_COMPANION.md",
+    "docs/plans/genshin-companion/implementation_plan.md",
+    "apps/web/src/pages/CharacterDetailPage.tsx",
+    "apps/web/src/pages/SimulatorsPage.tsx",
+    "apps/web/src/components/CompanionLayout.tsx",
+    "apps/web/src/styles/companion.css",
+    "apps/api/tooling/journey-client.test.js",
+    "apps/api/tooling/journey-browser-fixture.mjs",
+    "docs/plans/c5-companion-beta/implementation_plan.md",
+    "docs/plans/c5-companion-beta/task.md",
+    "docs/plans/c5-companion-beta/acceptance.md",
+    "docs/plans/c5-companion-beta/beta-readiness.md",
+    "docs/plans/c5-companion-beta/usability.md",
+    "docs/plans/c5-companion-beta/walkthrough.md",
+    "docs/plans/c5-companion-beta/validation-results.json",
+    "docs/plans/c5-companion-beta/cleanup.json",
+    "docs/plans/c5-companion-beta/preservation-check.json",
+    "docs/plans/c5-companion-beta/changed-files.json"
+  ]
+}

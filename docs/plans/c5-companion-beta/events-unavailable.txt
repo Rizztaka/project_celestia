@@ -1,0 +1,33 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#companion-content"
+  - link "Project Celestia":
+    - /url: /
+  - button "Sign out"
+  - navigation "Primary navigation":
+    - link "Today":
+      - /url: /
+    - link "Characters":
+      - /url: /roster
+    - link "Planner":
+      - /url: /planner
+  - navigation "Supporting navigation":
+    - link "Import":
+      - /url: /import
+    - link "Inventory":
+      - /url: /inventory
+    - link "Settings & profile":
+      - /url: /profile
+    - generic "Other tools +"
+- main:
+  - heading "Planner" [level=1]
+  - paragraph: Your routine, manual checkpoints, and farming goals.
+  - paragraph: Manual routines and goals work without an import. Material costs cover only HuTao base talents 1–6; all farming routes remain unavailable.
+  - button "Daily"
+  - button "Weekly"
+  - button "Goals & materials"
+  - button "Events" [active] [pressed]:
+    - generic: Events
+  - button "Refresh events"
+  - paragraph: Current event advice unavailable.
+  - paragraph: Current events and rewards have not been verified.

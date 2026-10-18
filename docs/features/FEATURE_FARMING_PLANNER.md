@@ -1,6 +1,12 @@
 # Feature Specification: Farming & Material Planner (Milestone 3B)
 
-**Status:** Draft — Pending User Approval
+> **Companion scope update — 2026-09-25.** Keep goals, material deltas, and availability. Materials are already persisted/imported; the old Option A/B question is resolved by the existing implementation. C2 verifies material keys, costs, supported ranges, and sources; the sample material/domain associations below are historical and must not be copied as reference truth. C3 separates talent targets from ascension ranges. C4 uses player priorities and unknown-inventory states; no stock double counting or guaranteed random-drop completion dates.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
+**Historical status:** Draft — Pending User Approval
 **Phase:** 3 — Daily Companion
 **Depends On:** Milestone 3A (DailyCompanion model), Phase 2 (GenshinCharacter, GenshinWeapon)
 

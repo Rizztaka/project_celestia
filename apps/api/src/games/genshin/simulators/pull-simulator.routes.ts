@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { pullSimulatorController } from './pull-simulator.controller.js';
+
 import { requireAuth } from '../../../core/middleware/auth.middleware.js';
+import { pullSimulatorController } from './pull-simulator.controller.js';
 
 const router = Router();
 

@@ -1,10 +1,30 @@
 # **Project Celestia Architecture**
 
+## Current scope — September 2026
+
+The active product is the [Genshin companion](features/FEATURE_GENSHIN_COMPANION.md). Existing modular boundaries remain; multi-game expansion and artifact optimization are not current delivery commitments. [ADR 0012](adr/0012-genshin-companion-direction.md) records the transition.
+
+### Current implementation versus target ownership
+
+Existing companion services and user-owned tables live under platform; the Genshin companion provider supplies game datasets. Some legacy platform services still contain Genshin-specific constants. Preserve existing endpoints while moving newly touched game rules into the Genshin domain/provider through bounded changes. Do not perform a wholesale directory migration as part of lint cleanup.
+
+Platform owns identity, generic preferences, and reusable orchestration. Genshin owns server-clock policy, task cadence, equipment interpretation, materials, and build targets. Cross-domain communication uses public contracts. Any new target model must document account ownership and survive imports; it must not rely on replaceable equipment IDs.
+
+### Data and time contracts
+
+Imported observations, user intent, derived estimates, and optional immutable snapshots have separate semantics. Re-import must not overwrite goals. Unknown inputs must not become numeric zero. Current import/reset limitations are documented in C1/C2, not fixed by this document.
+
+C2 adopts safe GET projections and explicit atomic period writes. No background scheduler is required. C1 defines reviewed replacement scope and import metadata; C6 snapshots cannot point at regenerated artifact UUIDs.
+
+### Architecture illustrations
+
+The package/module lists below describe architectural possibilities and legacy organization. They are not evidence that every package or feature exists or is scheduled. Current deployed behavior must be checked in code and release evidence.
+
 **Document Version:** 1.0
 
 **Status:** Active
 
-**Last Updated:** July 2026
+**Last Updated:** 2026-09-25
 
 \---
 
@@ -248,12 +268,12 @@ It consists of specialized modules.
 
 - Team Intelligence
 - Character Intelligence
-- Artifact Intelligence
+- Equipment observations and build progress (legacy Artifact Intelligence callers require migration)
 - Planner Intelligence
-- Pull Intelligence
+- Optional personal wish planning (later)
 - Endgame Intelligence
 - Knowledge Intelligence
-- AI Interface
+- AI interface deferred
 
 The Intelligence Core must always explain the reasoning behind every recommendation.
 
@@ -414,7 +434,7 @@ Every architectural decision should prioritize:
 - Correctness before optimization
 - Accuracy before feature quantity
 - Honest incompleteness over false precision
-- One Sunday represents one coherent milestone
+- Each Wednesday/Sunday implementation session focuses on one coherent milestone
 
 \---
 

@@ -1,8 +1,17 @@
 # Feature Specification: Daily Companion (Milestone 3A)
 
+> **C2a checkpoint — 2026-10-02:** The local [V2 routine API](../api/companion-routine.md) and Planner replace the historical daily API. Reads are safe projections; resin starts unknown; Transformer is manual. Asia daily tracking is enabled at 04:00 UTC+8. See the [walkthrough](../plans/c2a-clock-task-reliability/walkthrough.md) for source attribution and controlled-time acceptance. Not deployed.
+
+> **Companion scope update — 2026-09-25.** Reuse the existing daily/resin workflow. C2 supersedes this document's conflicting reset times and read-time writes with a verified supported-server clock and read-only period projection. Current code uses a 20:00 UTC boundary; that is code evidence, not a claim of support for every server. Each task needs its own verified cadence. Resin is an estimate from a checkpoint, and no checkpoint means unknown. New Genshin rules belong in the Genshin domain/provider, even though legacy companion persistence lives under platform. C4 adopts Today as the primary experience.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 **Feature ID:** FEAT-007  
 **Priority:** P0  
-**Status:** Designing  
+**Historical status:** Designing
+
 **Phase:** 3A — Daily Dashboard & Resin Planner  
 **Last Updated:** 2026-08-11
 

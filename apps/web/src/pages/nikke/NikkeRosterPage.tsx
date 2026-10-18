@@ -1,46 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import React from 'react';
 
-import { fetchNikkeRoster, type NikkeCharacter } from '../../lib/api';
+import { fetchNikkeRoster } from '../../lib/api';
 
 export const NikkeRosterPage: React.FC = () => {
-  const [roster, setRoster] = useState<NikkeCharacter[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchNikkeRoster()
-      .then((data) => {
-        setRoster(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Failed to fetch Nikke roster', err);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="text-primary animate-pulse text-xl">Loading NIKKE Roster...</div>
-      </div>
-    );
-  }
-
+  const query = useQuery({
+    queryKey: ['nikke', 'roster'],
+    queryFn: ({ signal }) => fetchNikkeRoster(signal),
+    retry: false,
+  });
+  const roster = query.data ?? [];
   return (
-    <div className="space-y-6">
+    <main id="companion-content" tabIndex={-1} className="mx-auto max-w-5xl space-y-6 px-4 py-8">
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white">NIKKE Roster</h1>
-          <p className="text-muted-foreground mt-1">Manage your Goddess of Victory: NIKKE squad.</p>
+          <p className="text-muted-foreground mt-1">
+            Secondary roster records. NIKKE expansion is deferred.
+          </p>
         </div>
       </header>
 
-      {roster.length === 0 ? (
+      <button
+        className="rounded-lg border border-white/20 px-3 py-2"
+        disabled={query.isFetching}
+        onClick={() => void query.refetch()}
+      >
+        Refresh NIKKE records
+      </button>
+      {query.isPending && <p role="status">Loading NIKKE records…</p>}
+      {query.error && (
+        <p role="alert">
+          Could not refresh NIKKE records. {query.data && 'Last confirmed records remain below.'}
+        </p>
+      )}
+      {!query.isPending && !query.error && roster.length === 0 ? (
         <div className="glass-panel p-12 text-center">
           <h2 className="mb-2 text-2xl font-bold">No Nikkes Found</h2>
-          <p className="text-muted-foreground">
-            Your roster is currently empty. Recruit some Nikkes to get started!
-          </p>
+          <p className="text-muted-foreground">No NIKKE records are saved for this account.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -76,6 +73,6 @@ export const NikkeRosterPage: React.FC = () => {
           ))}
         </div>
       )}
-    </div>
+    </main>
   );
 };

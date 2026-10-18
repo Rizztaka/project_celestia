@@ -1,0 +1,318 @@
+{
+  "checkedAtUtc": "2026-10-17T18:33:19.281Z",
+  "baseline": {
+    "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-domain-days-UtNKZV\\starting-state.json",
+    "sha256": "df68f2cc2f0479c1d3b1155239af99f8857ed530ff31006f2b05d7683bd7dee5"
+  },
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "branch": "master",
+  "index": "",
+  "startingFiles": 1020,
+  "unchangedFiles": 1006,
+  "changes": [
+    {
+      "path": ".agents/skills/reverse-engineer-anything/SKILL.md",
+      "sha256": "91cbe84604802f57703c9dca467db798ced3a07aeaacf562e92b44fab364c268",
+      "after": "5002e4722978a4e946d9aae0eb62ea2aba95254a61c07453528511d715660b23",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.explainer.ts",
+      "sha256": "cdb2bb889745955ee8dc4e1fa4d4fd0844fc98da811ff203739d55e50d74585d",
+      "after": "8069d39e09924caa8335c9fa1fb18d6a105114de160797a16f4f991706d6f719",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.service.test.ts",
+      "sha256": "2d03f1ab0a57827b80b6b1ddb7b378b4907e56412f1f214d5b495ca62cbbd9fa",
+      "after": "07e8ce9f87a24810b46437f45b51cd0ff39de12402e7b551623f13a03db30b0a",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/farming-intelligence/farming-intelligence.service.ts",
+      "sha256": "8e9bf4dd6dcd54c1f47a5966a7962b0e25b8cce84cbfdc75f11438a3c06d84f5",
+      "after": "0e43347ef88481c9b6f3d0154a27be0821633326c220b27151513fa604f149d0",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan.integration.test.ts",
+      "sha256": "747e985dfdeb96687c1dd3ce3919b069bc675c56fd55ec9dbb1e2aec566bce74",
+      "after": "7a94a04f8bd0d2c3c17abd672d2dc009f5c9ea3d744357c3e4e21bc77a793dbd",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/components/FarmingPanel.tsx",
+      "sha256": "ffc1477d8daea54c07c0aa61f949b2791ba8ea4182859cf40965d3c122f50dcb",
+      "after": "8e1f90ec28dcced3179fa8b60ca61cba1f6e2c168d1dbef33e9959c72979b911",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/components/TodayPlan.tsx",
+      "sha256": "c026c353f42eee659e9e9853da786d8ce9662e75fd31f337be69b67c68a8848c",
+      "after": "62077128f26dac9b54d66f1dcda81ff28bbb67946b37d44982dc5ec34a7db25a",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/lib/api.ts",
+      "sha256": "8f707349ac9c55069cc1127a92565bb5e4e3e47c68448235aebfcc7bf92acc50",
+      "after": "5e953644b734f0367d264635fe972f3f88f02e45e578ff8077e25950ce62f205",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/lib/catalog.ts",
+      "sha256": "0d0fcf56304c94ea40891bec7e039cb0b7ce8b4b718ef4c996a9802650326cf3",
+      "after": "e515f9748352f53d9d14b2f52d231625eac12f72a2d2075b68f78e4bfd990d80",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/pages/PlannerPage.tsx",
+      "sha256": "630e4e53cc67721fef31a4da6cafd9bd03f97986e56541b204aca9b28ed14f2f",
+      "after": "33d8fcc0e030f53aa75ac9899dc4a6970f32d36442254f9d77765d4984b3eca8",
+      "expected": true
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "sha256": "1a1c7c54d001e2d025d77fe482d3126e94334d145da67d0078d3c1ec4e64c30f",
+      "after": "26ee49a32f9b1fe0c69902dfc0c3b4a5a9ee49a978fb1f23c1c2a4e3820a0178",
+      "expected": true
+    },
+    {
+      "path": "docs/api/farming-intelligence.md",
+      "sha256": "28663f0cdea3fa6b01323abb52b7241106d2719705b0b0c47dc83e9d6f9e3d55",
+      "after": "f62ae096a6e9e333a80a533179f7e935f90b7f0ccf446daff3e0ad7c0d54f02a",
+      "expected": true
+    },
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "sha256": "9e1a6f2b87ec2d89574a57df2ccb0cb90ef6458771616cf5bef1c9b7f9be1315",
+      "after": "25b987dc9b3238a08620a232645376636bbf3bb8dd7567a4290de8dbaee3abc3",
+      "expected": true
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/farming.ts",
+      "sha256": "20b477782f7877f25a1da5148cf35d8922bfcd6782358e65ffb291bd36dd619d",
+      "after": "3a8f58fc1a8253cd705af4a34c8fd4db220ddabf37f683d93c145d6e133aca74",
+      "expected": true
+    }
+  ],
+  "addedFiles": [
+    "apps/web/src/components/DomainSchedule.tsx",
+    "docs/plans/domain-farming/browser-observations.md",
+    "docs/plans/domain-farming/cleanup.json",
+    "docs/plans/domain-farming/implementation_plan.md",
+    "docs/plans/domain-farming/post-handoff-checks.json",
+    "docs/plans/domain-farming/preservation-check.json",
+    "docs/plans/domain-farming/rea-review.json",
+    "docs/plans/domain-farming/task.md",
+    "docs/plans/domain-farming/validation-results.json",
+    "docs/plans/domain-farming/walkthrough.md"
+  ],
+  "missing": [],
+  "unexpectedAdded": [],
+  "protectedFiles": [
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/src/core/config/env.ts",
+      "sha256": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/package.json",
+      "sha256": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "pnpm-lock.yaml",
+      "sha256": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/.turbo/turbo-test.log",
+      "sha256": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/.env.example",
+      "sha256": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260813154603_add_event_progress/migration.sql",
+      "sha256": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260819152839_add_spiral_abyss_runs/migration.sql",
+      "sha256": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260805151029_add_genshin_foundation/migration.sql",
+      "sha256": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20261005150000_add_today_plan_choices/migration.sql",
+      "sha256": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260731140723_init/migration.sql",
+      "sha256": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260811141938_add_daily_companion/migration.sql",
+      "sha256": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20261003180000_add_focus_goal_lifecycle/migration.sql",
+      "sha256": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260823132547_add_imaginarium_theater_run/migration.sql",
+      "sha256": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260812155306_add_materials_and_upgrade_goals/migration.sql",
+      "sha256": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260814135049_add_weekly_boss_state/migration.sql",
+      "sha256": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260926173000_add_import_section_provenance/migration.sql",
+      "sha256": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260823150154_add_nikke_models/migration.sql",
+      "sha256": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/index.html",
+      "sha256": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/src/App.css",
+      "sha256": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/src/index.css",
+      "sha256": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/endgame-focus-final.json",
+      "sha256": "84143358C0180ECDC5964B10EA1A81799631DDCBCF9E32446862310FD11AFFF1",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/primary-reflow.json",
+      "sha256": "3B1F37E5F3A8D5072DA63DC8CF4B6E12B06FD74FCF912D7DB1F14A329569BDA2",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/reimport-after.json",
+      "sha256": "ACD3739A342C8283992D6153AA909B8C472EE5CD0CA3EA9530BBEF76E262156D",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/reimport-before.json",
+      "sha256": "63A182044F80074DA87EBCF314F2C2979EB178E9187B06FCAA823A41A144B9F2",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/rendered-style-check.json",
+      "sha256": "BDDB3BBAAF791A1DC6EEE1BCAA76DE527647CB2EF330DF3B04E2567B7EBD39B9",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/secondary-reflow.json",
+      "sha256": "11DF232CAE6F12C765A091B443806D2E04D2A22109C0D60CA067F6EBB6B71191",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/starting-state.json",
+      "sha256": "F1A7A653C71A6694DC544498E9E3D8498F3EE385F4E756C046AF0AB1EC6ADFBE",
+      "unchanged": true
+    }
+  ],
+  "notes": [
+    "All inherited data, migration, dependency, lock, environment, AI and historical evidence files remain unchanged unless an explicit scoped file above records the current correction.",
+    "Owner explicitly authorized relevant REA skill improvements; its modification is recorded above.",
+    "No staging, commit, push or deployment.",
+    "Self hash omitted; private final-state.json includes the final complete manifest."
+  ]
+}

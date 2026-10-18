@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "syntheticOnly": true,
+  "exclusive": true,
+  "host": "127.0.0.1",
+  "port": 55448,
+  "adminDatabase": "celestia_test_c5c_review",
+  "adminRole": "celestia_test_c5c_review",
+  "dataDir": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-UgVWJu/data",
+  "pgBin": "D:/PostgreSQL/bin",
+  "osOwner": "nitro\\inuzu",
+  "systemIdentifier": "7695828306638942480",
+  "provenance": "docs/plans/c5c-request-safety/review-fixture-provenance.md"
+}

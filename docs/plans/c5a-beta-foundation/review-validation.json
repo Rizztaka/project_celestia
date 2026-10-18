@@ -1,0 +1,241 @@
+{
+  "date": "2026-10-10",
+  "checkout": "D:\\Genshin Personal\\project-celestia",
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "branch": "master",
+  "index": [],
+  "scope": "Focused C5a code review, C1-C5 evidence reconciliation and complete regression run; not an exhaustive audit or independent human acceptance",
+  "finding": "No new blocking finding identified",
+  "command": "pnpm run verify",
+  "exit": 0,
+  "tests": {
+    "passed": 799,
+    "files": 46,
+    "failed": 0,
+    "skipped": 0,
+    "postgresCases": 106,
+    "integration": {
+      "src/platform/companion/plan.integration.test.ts": 28,
+      "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+      "src/platform/companion/routine.integration.test.ts": 12,
+      "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+      "src/games/genshin/importer/importer.integration.test.ts": 16,
+      "src/platform/companion/catalog-advice.integration.test.ts": 9
+    }
+  },
+  "vitestDurationSeconds": 54.31,
+  "checks": [
+    {
+      "id": "shared-types-and-build",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": [
+        "-p",
+        "D:\\Genshin Personal\\project-celestia\\packages\\api-contracts\\tsconfig.json"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "disposable-postgres-ready",
+      "exit": 0
+    },
+    {
+      "id": "prisma-generate",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["generate"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "disposable-migrations",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["migrate", "deploy"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "prisma-validate",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["validate"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "schema-diff",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": [
+        "migrate",
+        "diff",
+        "--from-config-datasource",
+        "--to-schema",
+        "prisma/schema.prisma",
+        "--exit-code"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "full-suite",
+      "package": "vitest",
+      "binary": "vitest",
+      "arguments": [
+        "run",
+        "--no-file-parallelism",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-8bmSOX\\vitest.json"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-lint",
+      "package": "eslint",
+      "binary": "eslint",
+      "arguments": [".", "--max-warnings", "0"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-types-and-build",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": [],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-aliases",
+      "package": "tsc-alias",
+      "binary": "tsc-alias",
+      "arguments": [],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-lint",
+      "package": "eslint",
+      "binary": "eslint",
+      "arguments": ["."],
+      "cwd": "apps\\web",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-types",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": ["-b"],
+      "cwd": "apps\\web",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-build",
+      "package": "vite",
+      "binary": "vite",
+      "arguments": ["build"],
+      "cwd": "apps\\web",
+      "nodeEnv": "production",
+      "exit": 0
+    },
+    {
+      "id": "repository-format",
+      "package": "prettier",
+      "binary": "prettier",
+      "arguments": [
+        "--check",
+        "**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,yml,yaml,css,html}",
+        "!apps/api/src/core/ai/openrouter.ts",
+        "!docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+        "!apps/web/index.html",
+        "!apps/web/src/App.css",
+        "!apps/web/src/index.css",
+        "!docs/plans/c5-companion-beta/endgame-focus-final.json",
+        "!docs/plans/c5-companion-beta/primary-reflow.json",
+        "!docs/plans/c5-companion-beta/reimport-after.json",
+        "!docs/plans/c5-companion-beta/reimport-before.json",
+        "!docs/plans/c5-companion-beta/rendered-style-check.json",
+        "!docs/plans/c5-companion-beta/secondary-reflow.json",
+        "!docs/plans/c5-companion-beta/starting-state.json"
+      ],
+      "cwd": ".",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "diff-check",
+      "exit": 0
+    }
+  ],
+  "platform": "win32",
+  "remoteCIObserved": false,
+  "releaseApproved": false,
+  "c5bStarted": false,
+  "preservation": {
+    "inheritedPathsChecked": 757,
+    "unexpectedChanges": 0,
+    "protectedEntriesMatched": 26,
+    "sourceSchemaDependenciesCI": "unchanged during review",
+    "intentionalExistingEdits": ["docs/plans/CURRENT_HANDOFF.md", "docs/ROADMAP.md"],
+    "historicalManifests": "unchanged; handoff/roadmap hashes predate review notes"
+  },
+  "browser": "Prior C5a evidence reconciled; no new browser, zoom, reduced-motion, assistive or real-user run",
+  "cleanup": {
+    "ownedPostgresPid": 37756,
+    "stopped": true,
+    "closedPorts": [55448, 45448, 45449],
+    "normalDatabaseTouched": false
+  },
+  "artifacts": [
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "sha256": "9E8AE5048DD6CFD10230FB49775211B4C17AC8933E1724531821F756E108C35B"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "sha256": "F3BF281CD6D286D28F9B5AAF4EDDBA01CD010F5BE75326B21C054AF9DE0A05A6"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/implementation_review.md",
+      "sha256": "2765BA6B4D445E34411F288886FA092FDB33CDCEE78EA38D9C1E225D5BCF43C9"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/review-starting-state.json",
+      "sha256": "5DAC1BC32D959DAA4E8F55AA05F3153E77A590161390EF260583B2A12A18CFB8"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/review-entrypoint-results.json",
+      "sha256": "EA423A37095B66755B3D517BA908BAC264DBC17102292D8FC1BB9FD1C612D179"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/review-test-results.json",
+      "sha256": "FF79DE7730C95DDDAE48434C166570037D075C850A915921FEA605B271C74B19"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/review-verification.log",
+      "sha256": "47527AECD20ACFA5AD07073067518FC6132AAD8CC33B52E5334D9023099ED55E"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/implementation-prompt.md",
+      "sha256": "844DFC03B5718C65AB7CB118C8DD3D2E77D136AB391237CB6C0FE6B460F2CA52"
+    }
+  ],
+  "format": "Passed; review-format.log",
+  "diffCheck": "Passed; review-diff-check.log",
+  "selfHashExcluded": true
+}

@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-14",
+  "ports": [
+    {
+      "port": 45448,
+      "closed": true
+    },
+    {
+      "port": 45449,
+      "closed": true
+    },
+    {
+      "port": 55448,
+      "closed": true
+    }
+  ],
+  "finalRecovery": {
+    "databasesAndRolesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "privateFilesRetained": true,
+    "credentialsRemoved": true
+  },
+  "allFreshRecoveryResourcesRemoved": true,
+  "browser": {
+    "resourcesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "ordinaryWebBuildRestored": true,
+    "portsClosed": true,
+    "createdTabClosed": true,
+    "temporaryViewportReset": true
+  },
+  "privateRawEvidence": "Retained outside Git under verified current-user-only ACLs; ordinary game/user data never accessed.",
+  "inheritedFixtureDirectoryRemoved": false
+}

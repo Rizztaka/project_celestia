@@ -14,5 +14,8 @@ const characterController = new GenshinCharacterController();
  * Requires a valid JWT — userId is always taken from the verified token.
  */
 router.get('/characters', requireAuth, characterController.listCharacters);
+router.get('/focus', requireAuth, characterController.listFocus);
+router.patch('/characters/:characterKey/focus', requireAuth, characterController.setFocus);
+router.get('/characters/:characterKey/equipment', requireAuth, characterController.getEquipment);
 
 export { router as characterRoutes };

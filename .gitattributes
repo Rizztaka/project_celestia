@@ -1,0 +1,14 @@
+# Preserve exact historical evidence/exception hashes across Windows and Linux.
+# These are specific immutable files, not a repository-wide line-ending policy.
+/apps/api/src/core/ai/openrouter.ts -text
+/docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md -text
+/apps/web/index.html -text
+/apps/web/src/App.css -text
+/apps/web/src/index.css -text
+/docs/plans/c5-companion-beta/endgame-focus-final.json -text
+/docs/plans/c5-companion-beta/primary-reflow.json -text
+/docs/plans/c5-companion-beta/reimport-after.json -text
+/docs/plans/c5-companion-beta/reimport-before.json -text
+/docs/plans/c5-companion-beta/rendered-style-check.json -text
+/docs/plans/c5-companion-beta/secondary-reflow.json -text
+/docs/plans/c5-companion-beta/starting-state.json -text

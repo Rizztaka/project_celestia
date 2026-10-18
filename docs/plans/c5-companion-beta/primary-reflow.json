@@ -1,0 +1,56 @@
+[
+  {
+    "route": "http://127.0.0.1:45449/",
+    "active": "companion-content",
+    "client": 305,
+    "h1": 1,
+    "main": 1,
+    "scroll": 305,
+    "width": 320
+  },
+  {
+    "route": "http://127.0.0.1:45449/roster",
+    "active": "companion-content",
+    "client": 305,
+    "h1": 1,
+    "main": 1,
+    "scroll": 305,
+    "width": 320
+  },
+  {
+    "route": "http://127.0.0.1:45449/planner",
+    "active": "companion-content",
+    "client": 305,
+    "h1": 1,
+    "main": 1,
+    "scroll": 305,
+    "width": 320
+  },
+  {
+    "route": "http://127.0.0.1:45449/import",
+    "active": "companion-content",
+    "client": 305,
+    "h1": 1,
+    "main": 1,
+    "scroll": 305,
+    "width": 320
+  },
+  {
+    "route": "http://127.0.0.1:45449/inventory",
+    "active": "companion-content",
+    "client": 305,
+    "h1": 1,
+    "main": 1,
+    "scroll": 305,
+    "width": 320
+  },
+  {
+    "route": "http://127.0.0.1:45449/profile",
+    "active": "companion-content",
+    "client": 305,
+    "h1": 1,
+    "main": 1,
+    "scroll": 305,
+    "width": 320
+  }
+]

@@ -1,10 +1,26 @@
 # **Project Celestia UI \& UX Guidelines**
 
+## Companion experience — 2026-09-25
+
+The [Companion specification](features/FEATURE_GENSHIN_COMPANION.md) controls the target navigation and interaction model.
+
+- Lead with Today, selected character goals, and a short next-action list. Put raw inventory and legacy intelligence tools in supporting views.
+- Display “estimated,” “last imported,” “unknown,” and “your target” where each distinction changes a decision. Do not call snapshot data live.
+- A goal may be paused or marked good enough. An empty plan is a valid outcome, not a prompt to invent work.
+- Use actionable facts instead of AES gauges or universal build grades. No MUST_PULL wording, spending urgency, guilt, or streak-loss pressure.
+- Track routine completion without requiring every reward tier, commission, artifact, or material to be manually recorded.
+- Show equipped artifacts in character context. Never equate an unobserved slot with a confirmed empty slot.
+- Preserve existing route access during navigation changes; use deep links for character/goal destinations from Today.
+- Mobile and keyboard access are acceptance requirements. Honor reduced motion; avoid constant pulsing resin warnings.
+- Demo content is visibly separate. Placeholder or expired events cannot populate live deadlines or reward totals.
+
+These rules supersede historical feature-specific color, animation, score, and dashboard-card proposals where they conflict.
+
 **Document Version:** 1.0
 
 **Status:** Active
 
-**Last Updated:** July 2026
+**Last Updated:** 2026-09-25
 
 \---
 

@@ -1,3 +1,4 @@
+import type { GenshinAccount } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // ── Mock prisma before the service is imported ─────────────────────────────
@@ -25,7 +26,16 @@ import { CharacterIntelligenceService } from './character-intelligence.service.j
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 
-const mockAccount = { id: 'account-1', userId: 'user-1' };
+const mockAccount = {
+  id: 'account-1',
+  userId: 'user-1',
+  uid: null,
+  nickname: null,
+  adventureRank: null,
+  worldLevel: null,
+  createdAt: new Date('2026-01-01T00:00:00Z'),
+  updatedAt: new Date('2026-01-01T00:00:00Z'),
+} satisfies GenshinAccount;
 
 /** Level 60, Ascension 2 — gap of 3 phases. Tier-1, burst at level 1. */
 const raidenNeglected = {
@@ -97,7 +107,7 @@ describe('CharacterIntelligenceService', () => {
   });
 
   it('throws UnprocessableError (422) when the account roster is empty', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     mockGetCharactersForUser.mockResolvedValueOnce([]);
 
     await expect(service.getRecommendations('user-1')).rejects.toMatchObject({
@@ -109,7 +119,7 @@ describe('CharacterIntelligenceService', () => {
   // ── Ranking & filtering ──────────────────────────────────────────────────
 
   it('ranks HuTao (weapon mismatch + talent gap = 70) above RaidenShogun (ascension gap + talent gap = 67)', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     mockGetCharactersForUser.mockResolvedValueOnce([raidenNeglected, huTaoWeaponMismatch]);
 
     const result = await service.getRecommendations('user-1');
@@ -123,16 +133,11 @@ describe('CharacterIntelligenceService', () => {
   });
 
   it('places a fully-built character in the skipped array', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
 
     // Furina with talents at level 9 so metaTier score (20) does not push her over the threshold.
     // score = 0 (asc) + 0 (talent, 9 >= 8) + 20 (meta) + 0 = 20 exactly → score < 20 is false.
     // Use a truly complete char: no gap anywhere, metaTier 3 so meta weight = 0.
-    const trulyComplete = {
-      ...furinaComplete,
-      characterKey: 'Zhongli', // metaTier 1, priorityTalent skill
-      talentSkill: 9, // above target 8, gap = 0 → sub2 = 0
-    };
     // Zhongli: sub1=0 + sub2=0 (skill 9>=8) + sub3=20 + 0 = 20 → not skipped.
     // We need someone that genuinely scores < 20. Use metaTier 3 unknown with all talents >= 8.
     const genuinelyComplete = {
@@ -150,7 +155,7 @@ describe('CharacterIntelligenceService', () => {
   });
 
   it('caps recommendations at 5 even with a larger roster', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     // All have identical large gaps — 8 characters should yield only 5 recommendations.
     const bigRoster = Array.from({ length: 8 }, (_, i) => ({
       ...raidenNeglected,
@@ -163,7 +168,7 @@ describe('CharacterIntelligenceService', () => {
   });
 
   it('assigns sequential ranks (1, 2, 3 …) to the sorted recommendations', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     mockGetCharactersForUser.mockResolvedValueOnce([raidenNeglected, huTaoWeaponMismatch]);
 
     const result = await service.getRecommendations('user-1');
@@ -175,7 +180,7 @@ describe('CharacterIntelligenceService', () => {
   // ── Unknown character fallback ───────────────────────────────────────────
 
   it('handles a character missing from character-profiles.json without crashing', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     mockGetCharactersForUser.mockResolvedValueOnce([unknownChar]);
 
     const result = await service.getRecommendations('user-1');
@@ -196,7 +201,7 @@ describe('CharacterIntelligenceService', () => {
   // ── Weapon mismatch explanation ──────────────────────────────────────────
 
   it('includes the weapon name and levels in the explanation for a weapon-mismatch character', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     mockGetCharactersForUser.mockResolvedValueOnce([huTaoWeaponMismatch]);
 
     const result = await service.getRecommendations('user-1');

@@ -1,0 +1,27 @@
+
+ RUN  v3.2.7 D:/Genshin Personal/project-celestia/apps/api
+
+ ✓ src/core/middleware/request-safety.http.test.ts (38 tests) 452ms
+{"level":30,"time":1791793890360,"pid":34732,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791793890376,"pid":34732,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791793890385,"pid":34732,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793890390,"pid":34732,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793890396,"pid":34732,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793890416,"pid":34732,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793890425,"pid":34732,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793890432,"pid":34732,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793890438,"pid":34732,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793890446,"pid":34732,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793890451,"pid":34732,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793890456,"pid":34732,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793890461,"pid":34732,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+ ✓ src/games/genshin/importer/importer.http.test.ts (10 tests) 117ms
+ ✓ src/games/genshin/importer/importer.service.test.ts (28 tests) 44ms
+ ✓ src/games/genshin/importer/importer.limits.test.ts (11 tests) 29ms
+ ✓ src/core/middleware/request-admission.test.ts (19 tests) 108ms
+
+ Test Files  5 passed (5)
+      Tests  106 passed (106)
+   Start at  14:01:25
+   Duration  6.74s (transform 844ms, setup 0ms, collect 4.11s, tests 748ms, environment 1ms, prepare 974ms)
+

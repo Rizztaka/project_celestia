@@ -1,6 +1,7 @@
+import type { NikkeCharacter } from '@prisma/client';
+
 import { prisma } from '@/core/db/prisma.js';
 import { ConflictError, NotFoundError } from '@/core/errors/app-error.js';
-import type { NikkeCharacter } from '@prisma/client';
 
 export class NikkeCharacterService {
   async getCharactersForUser(userId: string): Promise<NikkeCharacter[]> {

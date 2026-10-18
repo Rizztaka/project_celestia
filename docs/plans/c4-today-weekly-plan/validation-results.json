@@ -1,0 +1,40 @@
+{
+  "checked": "2026-10-07",
+  "baseline": {
+    "failed": 0,
+    "date": "2026-10-05",
+    "skipped": 0,
+    "tests": 601,
+    "files": 39,
+    "postgresCases": 78
+  },
+  "final": {
+    "failed": 0,
+    "startedLocal": "14:55:03 Asia/Calcutta",
+    "files": 43,
+    "postgresCases": 106,
+    "tests": 691,
+    "skipped": 0,
+    "date": "2026-10-06",
+    "durationSeconds": 40.8
+  },
+  "added": {
+    "actualClientCacheForm": 12,
+    "pureContracts": 40,
+    "postgres": 28,
+    "databaseGuard": 10
+  },
+  "checks": {
+    "browser": "pass; see walkthrough",
+    "guardedSchemaDiff": "No difference detected",
+    "apiTypesBuild": "pass",
+    "sharedTypes": "pass",
+    "webTypesBuild": "pass",
+    "webLint": "pass",
+    "preservation": "pass",
+    "prismaValidate": "pass",
+    "apiLint": "pass"
+  },
+  "warning": "Existing pg overlapping client.query deprecation; not suppressed",
+  "scope": "Local synthetic application fixtures. Production route coverage unchanged and unavailable."
+}

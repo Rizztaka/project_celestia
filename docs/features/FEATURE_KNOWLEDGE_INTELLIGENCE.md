@@ -1,5 +1,11 @@
 # Feature: Knowledge Intelligence Engine (Milestone 4F)
 
+> **Companion scope update — 2026-09-25.** Keep only optional, factual summaries supported by recorded data. Artifact IDs and replacement timestamps cannot establish acquisition age; gear snapshots alone do not establish damage superiority. This module is secondary, not a prerequisite for Today. Seeded presentation must not change calculation truth.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 ## Overview
 
 The **Knowledge Intelligence Engine** is the final module of the Phase 4 Intelligence Core. Unlike the other engines that focus on strict optimization and recommendations, this engine focuses on **Player Insights & Trivia**.

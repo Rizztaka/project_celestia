@@ -1,0 +1,47 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#companion-content"
+  - link "Project Celestia":
+    - /url: /
+  - button "Sign out"
+  - navigation "Primary navigation":
+    - link "Today":
+      - /url: /
+    - link "Characters":
+      - /url: /roster
+    - link "Planner":
+      - /url: /planner
+  - navigation "Supporting navigation":
+    - link "Import":
+      - /url: /import
+    - link "Inventory":
+      - /url: /inventory
+    - link "Settings & profile":
+      - /url: /profile
+    - generic "Other tools +"
+- main:
+  - heading "Planner" [level=1]
+  - paragraph: Your routine, manual checkpoints, and farming goals.
+  - paragraph: Manual routines and goals work without an import. Material costs cover only HuTao base talents 1–6; all farming routes remain unavailable.
+  - button "Daily"
+  - button "Weekly" [pressed]
+  - button "Goals & materials"
+  - button "Events":
+    - generic: Events
+  - region "weekly routine":
+    - generic: Game server
+    - combobox "Game server":
+      - option "Not selected"
+      - option "Asia" [selected]
+    - button "Refresh"
+    - paragraph: Changes save after confirmation from the server.
+    - paragraph: "Asia reset tracking: daily at 04:00 UTC+8, weekly Monday at 04:00 UTC+8. Other servers are unavailable; leave the server unselected if you play elsewhere. Manual resin and Transformer records remain usable in Planner."
+    - heading "Weekly reward claims" [level=2]
+    - paragraph: "2"
+    - paragraph: Enter the total rewards you claimed this game week. Defeating a boss without claiming rewards does not count. This does not spend resin or add materials.
+    - paragraph: Weekly reset in 168h 0m
+    - text: Rewards claimed
+    - spinbutton "Rewards claimed": "2"
+    - button "Save total"
+    - button "Mark unknown"
+    - paragraph: Discount and claim-cost estimates are unavailable pending verification.

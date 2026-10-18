@@ -1,0 +1,211 @@
+{
+  "reviewPerformed": "2026-10-09",
+  "handoffFinalized": "2026-10-10",
+  "timezone": "Asia/Calcutta",
+  "checkout": "D:/Genshin Personal/project-celestia",
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "headUnchanged": true,
+  "staged": [],
+  "tests": {
+    "passed": 708,
+    "files": 44,
+    "postgresCases": 106,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 83.34,
+    "startedLocal": "2026-10-09 21:02:52 Asia/Calcutta",
+    "command": "node node_modules/vitest/vitest.mjs run --no-file-parallelism",
+    "log": "review-direct-test.log"
+  },
+  "boundaryProbes": {
+    "ciGuard": "rejected documented incomplete integration-step environment",
+    "cors": "three unrelated origins reflected with credentials; negative control rejected as 500",
+    "log": "review-boundary-probes.log",
+    "remoteServicesAccessed": false
+  },
+  "preservation": [
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/src/core/config/env.ts",
+      "sha256": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734",
+      "matches": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/package.json",
+      "sha256": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2",
+      "matches": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "matches": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "pnpm-lock.yaml",
+      "sha256": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A",
+      "matches": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "matches": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/.turbo/turbo-test.log",
+      "sha256": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED",
+      "matches": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "matches": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/.env.example",
+      "sha256": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260813154603_add_event_progress/migration.sql",
+      "sha256": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260819152839_add_spiral_abyss_runs/migration.sql",
+      "sha256": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260805151029_add_genshin_foundation/migration.sql",
+      "sha256": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20261005150000_add_today_plan_choices/migration.sql",
+      "sha256": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260731140723_init/migration.sql",
+      "sha256": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260811141938_add_daily_companion/migration.sql",
+      "sha256": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20261003180000_add_focus_goal_lifecycle/migration.sql",
+      "sha256": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260823132547_add_imaginarium_theater_run/migration.sql",
+      "sha256": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260812155306_add_materials_and_upgrade_goals/migration.sql",
+      "sha256": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260814135049_add_weekly_boss_state/migration.sql",
+      "sha256": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260926173000_add_import_section_provenance/migration.sql",
+      "sha256": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310",
+      "matches": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260823150154_add_nikke_models/migration.sql",
+      "sha256": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910",
+      "matches": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "matches": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "matches": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/index.html",
+      "sha256": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8",
+      "matches": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/src/App.css",
+      "sha256": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C",
+      "matches": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/src/index.css",
+      "sha256": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E",
+      "matches": true
+    }
+  ],
+  "sourceBaseline": {
+    "files": 455,
+    "unchanged": 434,
+    "matchesC5Checkpoint": 20,
+    "intentionalReviewHandoffEdit": 1,
+    "newC5CodeHashesMatched": 4,
+    "unexpected": []
+  },
+  "handoffSha256": "0A5A97385CB2B4B919F4B13C272EFCE479B4720C1015DD2705849FF4CDD0567A",
+  "priorChecks": "C5 lint/build/schema/browser evidence reviewed against matching source; not rerun in review",
+  "cleanup": {
+    "fixture": "Existing owned OS-temp C4 PostgreSQL fixture; path, owner and startup args verified before restart",
+    "normalDatabaseAccessed": false,
+    "migrationsRun": 0,
+    "ports": {
+      "45448": "closed",
+      "45449": "closed",
+      "55448": "closed"
+    },
+    "finalStatus": "Fixture already stopped when resumed; all three ports verified closed; no arbitrary process terminated",
+    "browserStartedInReview": false,
+    "webBuildOverrideInReview": false
+  },
+  "scope": "Only new review/prompt/evidence artifacts and CURRENT_HANDOFF review banner",
+  "betaReady": false,
+  "c5aImplemented": false,
+  "releaseActionsPerformed": false
+}

@@ -13,10 +13,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { type Banner, fetchBanners, type PullResultItem, simulatePulls } from '../lib/api';
-import { useAuthStore } from '../stores/auth.store';
 
 // -------------------------------------------------------
 // Utilities
@@ -373,39 +371,6 @@ function BannerSkeleton() {
 // Nav
 // -------------------------------------------------------
 
-function Nav({ onLogout }: { onLogout: () => void }) {
-  return (
-    <nav className="glass-panel sticky top-0 z-50 flex items-center justify-between border-b-0 border-white/10 px-6 py-4">
-      <Link
-        to="/"
-        className="font-display text-gradient text-lg font-bold tracking-tight transition-opacity hover:opacity-80"
-      >
-        Project Celestia
-      </Link>
-      <div className="flex items-center gap-6">
-        <Link
-          to="/intelligence"
-          className="text-sm font-medium text-zinc-400 transition-colors hover:text-white"
-        >
-          Intelligence
-        </Link>
-        <Link
-          to="/endgame"
-          className="text-sm font-medium text-zinc-400 transition-colors hover:text-white"
-        >
-          Endgame
-        </Link>
-        <button
-          onClick={onLogout}
-          className="hover:text-danger-400 text-sm font-medium text-zinc-500 transition-colors"
-        >
-          Sign out
-        </button>
-      </div>
-    </nav>
-  );
-}
-
 // -------------------------------------------------------
 // Main Page
 // -------------------------------------------------------
@@ -418,8 +383,6 @@ interface PityState {
 }
 
 export default function SimulatorsPage() {
-  const logout = useAuthStore((s) => s.logout);
-
   // Banner data
   const { data: banners, isLoading: bannersLoading } = useQuery({
     queryKey: ['simulators', 'banners'],
@@ -557,16 +520,20 @@ export default function SimulatorsPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden text-zinc-300">
-      <Nav onLogout={logout} />
-
-      <main className="animate-fade-in relative z-10 mx-auto max-w-5xl px-6 py-10">
+      <main
+        id="companion-content"
+        tabIndex={-1}
+        className="animate-fade-in relative z-10 mx-auto max-w-5xl px-6 py-10"
+      >
         {/* Page header */}
         <div className="mb-8">
           <h1 className="font-display text-3xl font-bold tracking-tight text-white">
             Pull <span className="text-gradient">Simulator</span>
           </h1>
           <p className="mt-2 text-base text-zinc-400">
-            Test your luck on the current Snezhnaya banners. Pity resets when you leave the page.
+            Explore legacy simulated pulls. Banner and probability assumptions are not verified
+            current game guidance; results are fictional and do not predict your account. Pity
+            resets when you leave the page.
           </p>
         </div>
 

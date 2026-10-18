@@ -1,8 +1,15 @@
 # Feature Specification: Genshin Account Import Parser (Milestone 2B)
 
+> **Companion scope update — 2026-09-25.** Existing importer code already supports materials and bulk insertion. C1 supersedes blanket replacement of omitted inventory sections: omitted means preserve; explicit replacement must be reviewable. Equipment UUIDs change on import, and the current location map only includes incoming characters. Current account creation is outside the inventory transaction, so the historical all-or-nothing claim needs a C1 repair before it can cover account creation.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 **Feature ID:** FEAT-003  
 **Priority:** P0  
-**Status:** Designing  
+**Historical status:** Designing
+
 **Phase:** 2B — Account Import Parser  
 **Last Updated:** 2026-08-07
 

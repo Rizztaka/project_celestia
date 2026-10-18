@@ -1,0 +1,2833 @@
+{
+  "commit": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "date": "2026-09-24",
+  "node": "22.14.0",
+  "eslint": "10.8.0",
+  "wholeDirectory": {
+    "warnings": 7,
+    "errors": 135,
+    "files": 245,
+    "fixableErrors": 83
+  },
+  "maintainedScope": {
+    "failingFiles": 36,
+    "warnings": 0,
+    "errors": 63,
+    "files": 123,
+    "fixableErrors": 23
+  },
+  "consoleWarning": "boundaries/dependencies: legacy entity selectors in policies 0, 1, 2",
+  "files": [
+    {
+      "path": "apps/api/dist/app.js",
+      "errors": 2,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        },
+        {
+          "line": 69,
+          "column": 26,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'_next' is defined but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/config/env.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/core/config/env.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/core/contracts/companion.interfaces.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/core/db/prisma.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/core/errors/app-error.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/core/logger/logger.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/core/middleware/auth.middleware.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/core/middleware/auth.middleware.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/core/utils/response.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/accounts/account.repository.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/accounts/account.service.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/accounts/account.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/artifacts/artifact.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/artifacts/artifact.repository.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/artifacts/artifact.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/artifacts/artifact.service.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/artifacts/artifact.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/characters/character.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/characters/character.repository.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/characters/character.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/characters/character.service.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/characters/character.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/companion/genshin-companion.provider.js",
+      "errors": 0,
+      "warnings": 6,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 5,
+          "column": 1,
+          "severity": 1,
+          "ruleId": null,
+          "message": "Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')."
+        },
+        {
+          "line": 7,
+          "column": 1,
+          "severity": 1,
+          "ruleId": null,
+          "message": "Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')."
+        },
+        {
+          "line": 9,
+          "column": 1,
+          "severity": 1,
+          "ruleId": null,
+          "message": "Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')."
+        },
+        {
+          "line": 19,
+          "column": 5,
+          "severity": 1,
+          "ruleId": null,
+          "message": "Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')."
+        },
+        {
+          "line": 23,
+          "column": 5,
+          "severity": 1,
+          "ruleId": null,
+          "message": "Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')."
+        },
+        {
+          "line": 27,
+          "column": 5,
+          "severity": 1,
+          "ruleId": null,
+          "message": "Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/endgame/endgame.controller.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/endgame/endgame.repository.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/endgame/endgame.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/endgame/endgame.service.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/endgame/endgame.service.test.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/genshin.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/importer/importer.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/importer/importer.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/importer/importer.schema.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/importer/importer.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/importer/importer.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.calculator.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.explainer.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.service.test.js",
+      "errors": 1,
+      "warnings": 1,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 1,
+          "ruleId": null,
+          "message": "Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')."
+        },
+        {
+          "line": 2,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/character-intelligence/character-intelligence.calculator.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/character-intelligence/character-intelligence.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/character-intelligence/character-intelligence.explainer.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/character-intelligence/character-intelligence.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/character-intelligence/character-intelligence.service.js",
+      "errors": 2,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        },
+        {
+          "line": 90,
+          "column": 69,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'_' is defined but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/character-intelligence/character-intelligence.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 107,
+          "column": 15,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'trulyComplete' is assigned a value but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.calculator.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.explainer.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/planner-intelligence/planner-intelligence.calculator.js",
+      "errors": 4,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 93,
+          "column": 13,
+          "severity": 2,
+          "ruleId": "no-useless-assignment",
+          "message": "The value assigned to 'sourceName' is not used in subsequent statements."
+        },
+        {
+          "line": 94,
+          "column": 13,
+          "severity": 2,
+          "ruleId": "no-useless-assignment",
+          "message": "The value assigned to 'resinPerRun' is not used in subsequent statements."
+        },
+        {
+          "line": 95,
+          "column": 13,
+          "severity": 2,
+          "ruleId": "no-useless-assignment",
+          "message": "The value assigned to 'isTimeGated' is not used in subsequent statements."
+        },
+        {
+          "line": 97,
+          "column": 13,
+          "severity": 2,
+          "ruleId": "no-useless-assignment",
+          "message": "The value assigned to 'resourceName' is not used in subsequent statements."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/planner-intelligence/planner-intelligence.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/planner-intelligence/planner-intelligence.explainer.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/planner-intelligence/planner-intelligence.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/progression-intelligence/progression-intelligence.controller.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/progression-intelligence/progression-intelligence.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/pull-intelligence/pull-intelligence.calculator.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/pull-intelligence/pull-intelligence.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/pull-intelligence/pull-intelligence.explainer.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/pull-intelligence/pull-intelligence.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.test.js",
+      "errors": 2,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        },
+        {
+          "line": 80,
+          "column": 7,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'MOCK_BREAKDOWN_S_TIER' is assigned a value but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/team-intelligence/team-intelligence.calculator.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/team-intelligence/team-intelligence.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/team-intelligence/team-intelligence.explainer.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 32,
+          "column": 55,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'rosterMap' is defined but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/team-intelligence/team-intelligence.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/team-intelligence/team-intelligence.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/intelligence/team-intelligence/team-intelligence.service.test.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/simulators/pull-simulator.controller.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/simulators/pull-simulator.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/simulators/pull-simulator.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 117,
+          "column": 21,
+          "severity": 2,
+          "ruleId": "no-useless-assignment",
+          "message": "The value assigned to 'itemKey' is not used in subsequent statements."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/simulators/pull-simulator.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/weapons/weapon.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/weapons/weapon.repository.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/weapons/weapon.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/genshin/weapons/weapon.service.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/genshin/weapons/weapon.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/nikke/accounts/account.controller.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/nikke/accounts/account.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/nikke/accounts/account.service.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/nikke/characters/character.controller.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/nikke/characters/character.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/games/nikke/characters/character.service.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/games/nikke/nikke.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/index.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/auth/auth.controller.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/auth/auth.repository.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/auth/auth.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/auth/auth.service.js",
+      "errors": 2,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        },
+        {
+          "line": 83,
+          "column": 27,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'_password' is assigned a value but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/auth/auth.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/companion/companion-registry.service.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/companion/companion.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/companion/companion.repository.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/companion/companion.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/companion/companion.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/companion/companion.types.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/companion/event.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/companion/event.repository.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/companion/event.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/companion/event.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/companion/goal.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/companion/goal.repository.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/companion/goal.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/companion/goal.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/companion/weekly-boss.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/companion/weekly-boss.repository.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/companion/weekly-boss.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/companion/weekly-boss.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/security.http.test.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/users/user.controller.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/users/user.repository.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/dist/platform/users/user.routes.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/users/user.service.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 61,
+          "column": 27,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'_password' is assigned a value but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/platform/users/user.service.test.js",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/dist/utils/logger.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/eslint.config.js",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/prisma.config.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/app.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 87,
+          "column": 54,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'_next' is defined but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/core/config/env.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/core/contracts/companion.interfaces.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/core/db/prisma.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/core/errors/app-error.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/core/logger/logger.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/core/middleware/auth.middleware.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/core/middleware/auth.middleware.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 18,
+          "column": 3,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-namespace",
+          "message": "ES2015 module syntax is preferred over namespaces."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/core/utils/response.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/accounts/account.repository.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/accounts/account.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/accounts/account.service.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/artifacts/artifact.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/artifacts/artifact.repository.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/artifacts/artifact.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/artifacts/artifact.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/artifacts/artifact.service.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character.repository.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character.service.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/genshin-companion.provider.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/endgame/endgame.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/endgame/endgame.repository.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/endgame/endgame.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/endgame/endgame.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/endgame/endgame.service.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/genshin.routes.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.schema.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.service.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.calculator.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.explainer.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.service.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.calculator.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.explainer.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.service.test.ts",
+      "errors": 8,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 100,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 112,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 126,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 131,
+          "column": 11,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'trulyComplete' is assigned a value but never used."
+        },
+        {
+          "line": 153,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 166,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 178,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 199,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.service.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 147,
+          "column": 65,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'_' is defined but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.calculator.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.explainer.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.service.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.calculator.ts",
+      "errors": 4,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 199,
+          "column": 9,
+          "severity": 2,
+          "ruleId": "no-useless-assignment",
+          "message": "The value assigned to 'sourceName' is not used in subsequent statements."
+        },
+        {
+          "line": 200,
+          "column": 9,
+          "severity": 2,
+          "ruleId": "no-useless-assignment",
+          "message": "The value assigned to 'resinPerRun' is not used in subsequent statements."
+        },
+        {
+          "line": 201,
+          "column": 9,
+          "severity": 2,
+          "ruleId": "no-useless-assignment",
+          "message": "The value assigned to 'isTimeGated' is not used in subsequent statements."
+        },
+        {
+          "line": 203,
+          "column": 9,
+          "severity": 2,
+          "ruleId": "no-useless-assignment",
+          "message": "The value assigned to 'resourceName' is not used in subsequent statements."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.controller.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.explainer.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.controller.ts",
+      "errors": 2,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        },
+        {
+          "line": 15,
+          "column": 19,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.routes.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.test.ts",
+      "errors": 7,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        },
+        {
+          "line": 31,
+          "column": 42,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 35,
+          "column": 42,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 43,
+          "column": 64,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 69,
+          "column": 64,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 87,
+          "column": 64,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 105,
+          "column": 64,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.ts",
+      "errors": 2,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        },
+        {
+          "line": 57,
+          "column": 49,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.calculator.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 5,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.explainer.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.test.ts",
+      "errors": 2,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        },
+        {
+          "line": 94,
+          "column": 7,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'MOCK_BREAKDOWN_S_TIER' is assigned a value but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.calculator.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.explainer.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 47,
+          "column": 3,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'rosterMap' is defined but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.service.test.ts",
+      "errors": 6,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 143,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 196,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 206,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 223,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 235,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        },
+        {
+          "line": 246,
+          "column": 86,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.service.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/simulators/pull-simulator.controller.ts",
+      "errors": 2,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        },
+        {
+          "line": 41,
+          "column": 19,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/simulators/pull-simulator.routes.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/simulators/pull-simulator.service.test.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/simulators/pull-simulator.service.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 159,
+          "column": 13,
+          "severity": 2,
+          "ruleId": "no-useless-assignment",
+          "message": "The value assigned to 'itemKey' is not used in subsequent statements."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/genshin/weapons/weapon.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/weapons/weapon.repository.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/weapons/weapon.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/weapons/weapon.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/genshin/weapons/weapon.service.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/games/nikke/accounts/account.controller.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/nikke/accounts/account.routes.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/nikke/accounts/account.service.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/nikke/characters/character.controller.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/nikke/characters/character.routes.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/nikke/characters/character.service.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/games/nikke/nikke.routes.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/index.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.repository.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.service.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 119,
+          "column": 23,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'_password' is assigned a value but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion-registry.service.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion.repository.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 1,
+          "column": 31,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'Prisma' is defined but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion.service.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 6,
+          "column": 15,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'CompanionScalars' is defined but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion.types.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/event.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/event.repository.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/event.service.test.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/platform/companion/event.service.ts",
+      "errors": 3,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 2,
+          "column": 3,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'EventsFileData' is defined but never used."
+        },
+        {
+          "line": 3,
+          "column": 3,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'StaticEvent' is defined but never used."
+        },
+        {
+          "line": 4,
+          "column": 3,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'StaticRewardTier' is defined but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal.repository.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal.service.test.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 1,
+      "messages": [
+        {
+          "line": 1,
+          "column": 1,
+          "severity": 2,
+          "ruleId": "simple-import-sort/imports",
+          "message": "Run autofix to sort these imports!"
+        }
+      ]
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal.service.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/weekly-boss.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/weekly-boss.repository.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/weekly-boss.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/companion/weekly-boss.service.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/security.http.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/users/user.controller.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/users/user.repository.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/users/user.routes.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/users/user.service.test.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    },
+    {
+      "path": "apps/api/src/platform/users/user.service.ts",
+      "errors": 1,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": [
+        {
+          "line": 104,
+          "column": 23,
+          "severity": 2,
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "'_password' is assigned a value but never used."
+        }
+      ]
+    },
+    {
+      "path": "apps/api/vitest.config.ts",
+      "errors": 0,
+      "warnings": 0,
+      "fixableErrors": 0,
+      "messages": []
+    }
+  ]
+}

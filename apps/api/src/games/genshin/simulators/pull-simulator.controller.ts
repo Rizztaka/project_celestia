@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { pullSimulatorService } from './pull-simulator.service.js';
 import { createRequire } from 'module';
+
+import { pullSimulatorService } from './pull-simulator.service.js';
 
 const require = createRequire(import.meta.url);
 const activeBannersData = require('../static/active-banners.json');
@@ -38,10 +39,17 @@ export const pullSimulatorController = {
         success: true,
         data: result,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       res.status(400).json({
         success: false,
-        error: err.message || 'Unknown error occurred in simulation',
+        error:
+          err !== null &&
+          typeof err === 'object' &&
+          'message' in err &&
+          typeof err.message === 'string' &&
+          err.message
+            ? err.message
+            : 'Unknown error occurred in simulation',
       });
     }
   },

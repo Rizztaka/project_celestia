@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-11",
+  "checkedAt": "2026-10-11T13:31:24.410Z",
+  "result": "passed",
+  "runtimeEvidence": "runs/success-3-final.json",
+  "postRuntimeEdits": "Documentation and evidence only; all nine tooling/test files and root package bytes match testedCode hashes.",
+  "checks": {
+    "changedFilePrettierCheck": {
+      "method": "Installed Prettier API check with resolved repository configuration; only changed/new milestone paths",
+      "files": 33,
+      "passed": true
+    },
+    "jsonEvidenceParseAndCredentialPatternCheck": {
+      "passed": true,
+      "note": "No connection URL, bcrypt hash or bearer token in milestone JSON artifacts"
+    },
+    "originalPrivateRunResultHashes": { "runs": 8, "passed": true },
+    "testedCodeHashes": { "files": 10, "passed": true },
+    "gitDiffCheck": {
+      "exit": 0,
+      "lineEndingWarnings": "Existing LF-to-CRLF advisory warnings are retained behavior, not diff errors"
+    },
+    "preservation": {
+      "baselineFiles": 770,
+      "unchanged": 767,
+      "authorizedChanges": 3,
+      "unexpected": 0,
+      "protectedEntries": 26,
+      "rawEvidenceFiles": 7,
+      "headUnchanged": true,
+      "indexEmpty": true,
+      "branch": "master"
+    }
+  },
+  "manifestPolicy": "changed-files.json hashes every milestone new/changed file except itself. This record and manifest are formatted and checked with installed Prettier during generation; manifest digests are subsequently reconciled.",
+  "scope": {
+    "remoteCI": false,
+    "productionDatabase": false,
+    "commit": false,
+    "push": false,
+    "release": false,
+    "C6C7": false
+  }
+}

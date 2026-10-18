@@ -1,0 +1,86 @@
+{
+  "recordedAtUtc": "2026-10-17T13:48:07.136Z",
+  "attempts": [
+    {
+      "evidence": {
+        "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-Q2qvuj\\result.json",
+        "sha256": "B7E1958A517EDAE4499DDDE48306F5FEF306A232D0211BAE4252D94EF8B3729E"
+      },
+      "startedAt": "2026-10-17T13:30:19.972Z",
+      "finishedAt": "2026-10-17T13:30:35.539Z",
+      "result": "failed",
+      "failure": {
+        "stage": "source-snapshot",
+        "code": "MIGRATION_HISTORY_INCOMPATIBLE"
+      },
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      },
+      "explanation": "Old exact thirteen-migration snapshot inventory rejected the authorized four-server forward migration. Updated to exact fourteen names/checksums; all receipt checks retained."
+    },
+    {
+      "evidence": {
+        "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-zDJRxf\\result.json",
+        "sha256": "E94369D0EAEC3DFE733F37B8109AED860BE29BE4F664937E130E684F5F114AD4"
+      },
+      "startedAt": "2026-10-17T13:31:45.086Z",
+      "finishedAt": "2026-10-17T13:33:48.761Z",
+      "result": "failed",
+      "failure": {
+        "stage": "full-verification",
+        "code": "SUBPROCESS_FAILED",
+        "tool": "node",
+        "exit": 1
+      },
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      },
+      "explanation": "Full suite: 1030 passed, 8 failed, 0 skipped, 58 files. Corrected stale assertions for expanded supported servers, targets, talent bounds, errorCode and routes; no tests removed."
+    },
+    {
+      "evidence": {
+        "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-Q5Cdve\\result.json",
+        "sha256": "342687FF62730F6A418D163952C304E85258C1BFC919A7B003F20C0A056BBB30"
+      },
+      "startedAt": "2026-10-17T13:37:13.055Z",
+      "finishedAt": "2026-10-17T13:39:56.613Z",
+      "result": "failed",
+      "failure": {
+        "stage": "full-verification",
+        "code": "SUBPROCESS_FAILED",
+        "tool": "node",
+        "exit": 1
+      },
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      },
+      "explanation": "Full suite: 1038 passed, 0 failed/skipped, 58 files. Subsequent formatter failure in build-progression-catalog.mjs; applied formatter. Independent lint/types passed."
+    },
+    {
+      "evidence": {
+        "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-syzens\\result.json",
+        "sha256": "52DD8EC143357A31296C1A19E60A00AAA579F02F63BE58AAA1BD8457FF2C70F8"
+      },
+      "startedAt": "2026-10-17T13:44:19.789Z",
+      "finishedAt": "2026-10-17T13:47:06.561Z",
+      "result": "passed",
+      "failure": null,
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      },
+      "explanation": "Final recovery and all verification steps passed after corrections."
+    }
+  ]
+}

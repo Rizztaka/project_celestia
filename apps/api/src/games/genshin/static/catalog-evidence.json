@@ -1,0 +1,1038 @@
+[
+  {
+    "targetKey": "HuTao",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 6,
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..6]",
+      "materials.commonT1",
+      "materials.commonT2",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "6ac1e0e781ad8e7b6ca9bc2c8b6bfc34f6694abb461c4eeb905456a735a84f85",
+    "sources": [
+      {
+        "authority": "primary",
+        "reference": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v2/compute",
+        "localEvidence": "docs/plans/c2b-data-trust/evidence/hutao-talents-primary.json",
+        "verifier": "Codex",
+        "reviewedOn": "2026-10-02",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "HuTao",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "ca4f523fe7b9c8ae0ec294189a2863dfa9ff490ed5674d54dee6c305100fed55",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "HuTao",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "1ac4776795677a73cfa35c7baf88d9e5c1a5ebe126a188f826286be91a06c34d",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Venti",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "3e415383212acdaf8e59346c8a7b3e32438bd1055fbcf8a16b1f59e24ac5cc40",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Venti",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "c51f889bdeaedaa26bbac83c67a4c7cebe8db76901fd8f40760316e084e668a9",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "RaidenShogun",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "5b58939a2477f70c032de3d5e16dd52face7e7668d424b65f0e85fc6bb33b61f",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "RaidenShogun",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "3d6eff41325af16335f66c2be01db9d8948ac57d52d2c1e5ccffa7b2342928fa",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Zhongli",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "aecf2e06dec2c93fe0f5c720cce2278b2ea8c7ffac822d7211e665be4725fa33",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Zhongli",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "20efb2279a63c0f9c972f8c2db3545aaa52baa50754ca173460e6c42da8faa66",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Furina",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "bbfe25db756a29d98f3935353baaca8cd3bf3d71b36c033a6486e0e9717d8cd2",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Furina",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "c71ac89681f23aa3bdaaaac3f3c0602bc637b924b9d637bad093da5a86708c31",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Clorinde",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "5f186dd2002526bc34039c7db7f224e2e58950e40383b3dbf68fcf6736c366ac",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Clorinde",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "a7c203213322ed0b40be35bdab9b9c907d6691530cea7c997c86f7cfee4927b1",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Sethos",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "01efa05c52c3590f27c3268722c454725339dec041d6d218e10987f2f8f6447d",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Sethos",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "da1523923c98c94e3cd119678949ce3072ad4610928e2c8c5c7598cb3bab1eab",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Emilie",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "c6dbaef3c93c7bba4842b6b1fdca6c79e3451c481a89ed05f07f4d1a25aadad0",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Emilie",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "ec8813107b7b5704690fb1cb4c1441ec33e8d9f773b86bf5247bc66fdbef14ba",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Mualani",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "1a22cdf02c84075afd9a8653f119da8357074b45d4fce0ca2051a681891aaa6a",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Mualani",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "7b7c8ea4273971e8420d345cee87f26c8fd05d79d858c49413f3c8a982bfee78",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Kachina",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "74eecc1f8a3a448b304138a1626778cbaca443d62321507042b9abed0b7e215e",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Kachina",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "b5b1eaeff014856a259c7794bfc43b8cbd3ccb6f610b0a6886e742c58ac7b0ed",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Kinich",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "0a9f5004bab0fb59cea832e386d6809b35b8915eb761e0529d5f5b7232150af1",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Kinich",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "8e80adea7b302a5202455e4eab4e0d4011803798094b258cf5bde053ab1cf0aa",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Xilonen",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "10c157c3490d846577a5ea0916093a3c0fc7b4914b3e4e979b11c35787fa29b0",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Xilonen",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "8dc2e0b49edc5019d3339818953f83d292cd8e3b77dedb49aa4927390042ee6a",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Chasca",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "eee80e562eb627bf27655dd038bae47d2f0eaacc17a6da1f3a38dd78f05745df",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Chasca",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "a22a14abf78bcc2ce2863d1427e18aa0f2ec5c8c19dada195227ccb120e30c10",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Mavuika",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "9d255d278c24de4e981fb031c7390dabdf340ded777cf090ed1c32fd5ad9f80f",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Mavuika",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "b0a84b29bcd36207186df1da21e396083fe2f8d220ff601b3c22997442cad210",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Citlali",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "bc3956da7edc910636f410d8f4893c921c8b7e9c3972bee4fa99b0188eb6eead",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Citlali",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "62b14ef838635a71b5cb9d3afe7be0548961330a30a9d68e383824afb38ea9ee",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Odette",
+    "goalType": "CHARACTER_TALENT",
+    "from": 1,
+    "to": 10,
+    "materialReferences": "local_keys",
+    "fields": [
+      "talent.book",
+      "talent.costs[tier=2..10]",
+      "talent.bossWeekly",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "a60394c0d904d93e0024b209e169c8783e8f717a0ca19a8d7346a7bf6e902e77",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  },
+  {
+    "targetKey": "Odette",
+    "goalType": "CHARACTER_ASCENSION",
+    "from": 0,
+    "to": 6,
+    "materialReferences": "local_keys",
+    "fields": [
+      "ascension[phase=1..6]",
+      "materials.gem",
+      "materials.boss",
+      "materials.local",
+      "materials.commonT1",
+      "materials.commonT2",
+      "materials.commonT3",
+      "material-references[consumed keys]"
+    ],
+    "fingerprint": "b86cd30c603581d005f492fee4257fbf24554bd7158aae2a65101ebbefac4cc7",
+    "sources": [
+      {
+        "authority": "owner",
+        "reference": "Section 1 — Game Data & Multi-Server Engine implementation directive",
+        "localEvidence": "apps/api/src/games/genshin/static/character-materials.json",
+        "verifier": "Owner-selected local catalog; offline schema and range validation",
+        "reviewedOn": "2026-10-18",
+        "observedOn": null,
+        "gameVersion": null
+      }
+    ],
+    "conflicts": [],
+    "routeFingerprint": null,
+    "routeSources": []
+  }
+]

@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
+import { FocusButton } from '../components/FocusButton';
 import type { RosterCharacter, RosterWeapon } from '../lib/api';
-import { fetchGenshinRoster } from '../lib/api';
+import { fetchFocus, fetchGenshinRoster } from '../lib/api';
 import { ASSET_MAPPING } from '../lib/asset-mapping';
-import { useAuthStore } from '../stores/auth.store';
 
 // -------------------------------------------------------
 // Utility: format a GOOD PascalCase character key into a
@@ -69,14 +69,17 @@ function CharacterCard({ character }: { character: RosterCharacter }) {
               (e.target as HTMLImageElement).style.display = 'none';
             }}
           />
-          <span className="relative z-[-1]">{initials}</span>
+          <span>{initials}</span>
         </div>
 
         {/* Name + level */}
         <div className="min-w-0 flex-1">
-          <p className="font-display group-hover:text-accent-400 truncate text-base font-bold text-white transition-colors">
+          <Link
+            to={`/roster/${encodeURIComponent(character.characterKey)}`}
+            className="font-display group-hover:text-accent-400 block break-words text-base font-bold text-white transition-colors"
+          >
             {displayName}
-          </p>
+          </Link>
           <p className="mt-0.5 text-xs text-zinc-500">
             Lv.{character.level} · A{character.ascension}
           </p>
@@ -123,6 +126,13 @@ function CharacterCard({ character }: { character: RosterCharacter }) {
 
       {/* Equipped weapon */}
       <WeaponChip weapon={character.equippedWeapon} />
+      <FocusButton characterKey={character.characterKey} />
+      <Link
+        to={`/roster/${encodeURIComponent(character.characterKey)}`}
+        className="rounded-lg border border-indigo-500/20 px-3 py-2 text-center text-sm text-indigo-300 hover:bg-indigo-500/10"
+      >
+        View recorded equipment
+      </Link>
     </div>
   );
 }
@@ -142,7 +152,7 @@ function WeaponChip({ weapon }: { weapon: RosterWeapon | null }) {
             d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
           />
         </svg>
-        <span>No weapon equipped</span>
+        <span>No weapon assignment recorded</span>
       </div>
     );
   }
@@ -234,16 +244,24 @@ function EmptyState() {
           />
         </svg>
       </div>
-      <h2 className="font-display mb-3 text-2xl font-bold text-white">Your roster is empty</h2>
+      <h2 className="font-display mb-3 text-2xl font-bold text-white">
+        No character observations yet
+      </h2>
       <p className="mb-8 max-w-sm text-base leading-relaxed text-zinc-400">
-        Import your Genshin account data to populate your roster with your characters, weapons, and
-        artifacts.
+        An optional import adds recorded characters and equipment here. You can use Today routines
+        and create catalog goals before importing.
       </p>
       <Link
         to="/import"
         className="from-accent-500 hover:from-accent-400 shadow-accent-glow/30 rounded-xl bg-gradient-to-r to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition-all hover:to-indigo-500"
       >
-        Import Account
+        Import observations
+      </Link>
+      <Link
+        to="/planner?tab=farming&newType=CHARACTER_TALENT"
+        className="mt-4 text-indigo-200 underline"
+      >
+        Create a goal without importing
       </Link>
     </div>
   );
@@ -252,65 +270,69 @@ function EmptyState() {
 // -------------------------------------------------------
 // Nav bar (same pattern as ImportPage)
 // -------------------------------------------------------
-function Nav({ onLogout }: { onLogout: () => void }) {
-  return (
-    <nav className="glass-panel sticky top-0 z-50 flex items-center justify-between border-b-0 border-white/10 px-6 py-4">
-      <Link
-        to="/"
-        className="font-display text-gradient text-lg font-bold tracking-tight transition-opacity hover:opacity-80"
-      >
-        Project Celestia
-      </Link>
-      <div className="flex items-center gap-6">
-        <Link
-          to="/import"
-          className="text-sm font-medium text-zinc-400 transition-colors hover:text-white"
-        >
-          Import
-        </Link>
-        <button
-          onClick={onLogout}
-          className="hover:text-danger-400 text-sm font-medium text-zinc-500 transition-colors"
-        >
-          Sign out
-        </button>
-      </div>
-    </nav>
-  );
-}
 
 // -------------------------------------------------------
 // RosterPage — main export
 // -------------------------------------------------------
-export default function RosterPage() {
-  const logout = useAuthStore((s) => s.logout);
+import { ImportStatus } from '../components/ImportStatus';
 
-  const { data, isLoading, isError, error } = useQuery({
+export default function RosterPage() {
+  const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
     queryKey: ['genshin', 'characters'],
-    queryFn: fetchGenshinRoster,
+    queryFn: ({ signal }) => fetchGenshinRoster(signal),
     retry: false,
   });
 
+  const [params, setParams] = useSearchParams();
+  const focusOnly = params.get('focus') === 'true';
+  const search = params.get('q') ?? '';
+  function setFilter(key: string, value: string, replace = false) {
+    const next = new URLSearchParams(params);
+    if (value) next.set(key, value);
+    else next.delete(key);
+    setParams(next, { replace });
+  }
+  const focus = useQuery({
+    queryKey: ['genshin', 'focus'],
+    queryFn: ({ signal }) => fetchFocus(signal),
+    retry: false,
+  });
   const characters = data?.characters ?? [];
+  const focusedCharacters = focusOnly
+    ? characters.filter((character) =>
+        focus.data?.some((row) => row.characterKey === character.characterKey && row.focused),
+      )
+    : characters;
+  const visibleCharacters = focusedCharacters.filter((character) =>
+    formatName(character.characterKey)
+      .toLocaleLowerCase()
+      .replace(/\s/g, '')
+      .includes(search.toLocaleLowerCase().replace(/\s/g, '')),
+  );
 
   return (
     <div className="relative min-h-screen overflow-hidden text-zinc-300">
-      <Nav onLogout={logout} />
-
       {/* Background ambient glow */}
       <div className="bg-accent-500/5 pointer-events-none absolute left-1/3 top-0 h-[400px] w-[600px] rounded-full mix-blend-screen blur-[120px]" />
 
-      <main className="relative z-10 mx-auto max-w-7xl px-6 py-12">
+      <main
+        id="companion-content"
+        tabIndex={-1}
+        className="relative z-10 mx-auto max-w-7xl px-6 py-12"
+      >
+        <ImportStatus />
         {/* Page heading */}
-        <div className="animate-fade-in mb-10 flex items-end justify-between">
+        <div className="animate-fade-in mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="font-display text-4xl font-bold tracking-tight text-white">
-              Your Roster
+              Characters
             </h1>
             <p className="mt-2 text-base text-zinc-400">
               {isLoading
                 ? 'Loading your characters…'
-                : `${data?.total ?? 0} character${(data?.total ?? 0) === 1 ? '' : 's'} in your roster`}
+                : data
+                  ? `${data.total} recorded character${data.total === 1 ? '' : 's'}`
+                  : 'Character count unavailable'}
             </p>
           </div>
           {!isLoading && characters.length > 0 && (
@@ -331,6 +353,67 @@ export default function RosterPage() {
           )}
         </div>
 
+        <p className="mb-4 text-sm text-zinc-400">
+          Focus is an optional shortlist, independent of goal status. Open a character for recorded
+          equipment and goals. Stored talent values may include adjustments; they do not establish
+          base-level progress.
+        </p>
+        <div className="mb-4 flex flex-wrap items-end gap-3">
+          <label className="flex flex-col gap-2 text-sm">
+            Search characters
+            <input
+              type="search"
+              value={search}
+              onChange={(event) => setFilter('q', event.target.value, true)}
+              className="rounded-lg border border-white/20 bg-zinc-900 px-3 py-2"
+            />
+          </label>
+          <button
+            className="rounded-lg border border-white/20 px-3 py-2 text-sm"
+            disabled={isFetching}
+            onClick={() => void refetch()}
+          >
+            {isFetching ? 'Refreshing characters…' : 'Refresh characters'}
+          </button>
+        </div>
+        <label className="mb-6 flex items-center gap-3">
+          <input
+            type="checkbox"
+            checked={focusOnly}
+            onChange={(event) => setFilter('focus', event.target.checked ? 'true' : '')}
+          />
+          Focus characters only
+        </label>
+        {focusOnly && focus.isPending && <p role="status">Loading focus…</p>}
+        {focusOnly && focus.error && (
+          <p role="alert">
+            {focus.error.message}{' '}
+            <button className="underline" onClick={() => void focus.refetch()}>
+              Retry focus
+            </button>
+          </p>
+        )}
+        {!isLoading &&
+          data &&
+          (!focusOnly || (focus.data && !focus.error)) &&
+          characters.length > 0 &&
+          visibleCharacters.length === 0 && (
+            <p className="mb-6">
+              No characters match these filters.{' '}
+              <button
+                className="underline"
+                onClick={() => {
+                  const next = new URLSearchParams(params);
+                  next.delete('q');
+                  next.delete('focus');
+                  setParams(next);
+                }}
+              >
+                Show all characters
+              </button>
+              .
+            </p>
+          )}
         {/* Error state */}
         {isError && (
           <div
@@ -348,6 +431,7 @@ export default function RosterPage() {
             {error instanceof Error
               ? error.message
               : 'Failed to load your roster. Please try again.'}
+            {data && ' Showing last confirmed character records; refresh failed.'}
           </div>
         )}
 
@@ -364,9 +448,9 @@ export default function RosterPage() {
         {!isLoading && !isError && characters.length === 0 && <EmptyState />}
 
         {/* Populated state: character grid */}
-        {!isLoading && !isError && characters.length > 0 && (
+        {!isLoading && characters.length > 0 && (
           <div className="animate-fade-in grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {characters.map((character) => (
+            {visibleCharacters.map((character) => (
               <CharacterCard key={character.id} character={character} />
             ))}
           </div>

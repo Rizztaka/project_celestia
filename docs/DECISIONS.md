@@ -1,5 +1,25 @@
 # **Project Celestia Decisions Log**
 
+> **2026-10-02:** [ADR 0013](adr/0013-versioned-routine-snapshots.md) records the locally implemented routine snapshot, compatibility, concurrency, and conservative migration decisions. The Asia clock evidence is accepted and the default provider is enabled locally; no release is implied.
+
+## DEC-009 — Genshin companion product focus
+
+**Date:** 2026-09-25
+
+**Status:** Accepted direction under the owner's request to revise documents and select features.
+
+**Decision:** Focus on Today, player-selected character goals, equipped artifacts, material planning, and progress. Exclude artifact/damage optimization. Defer further multi-game, simulator, AI-chat, and advanced endgame expansion. Reuse current code and retain existing data/contracts until reviewed migrations.
+
+**Reasoning:** A coherent daily loop and reliable observations provide a maintainable solo-developer scope. The broad optimization suite requires substantially more mechanics and data maintenance. A bare checklist would miss the value of connecting goals to equipment and materials.
+
+**Consequences:** Safer imports, freshness, reset semantics, and verified data become prerequisites. Legacy AES and pull verdicts require a product transition. Existing features are not deleted by this decision. Backend lint remains the immediate milestone.
+
+**Review:** C5 companion beta and demonstrated demand. See [ADR 0012](adr/0012-genshin-companion-direction.md).
+
+**Delegation note:** The owner explicitly delegated feature selection for this documentation task, qualifying DEC-006 for this request. Deployment and publication remain outside the request.
+
+The earlier entries below remain historical decision records.
+
 **Document Version:** 1.0
 
 **Status:** Living Document

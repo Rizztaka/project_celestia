@@ -1,7 +1,12 @@
 # ADR 0009: Lazy Daily Reset Pattern
 
+> **2026-10-02 implementation:** Routed daily/weekly reads now use read-only V2 projections; legacy endpoints fail closed. This lazy-write decision is superseded locally by [ADR 0013](0013-versioned-routine-snapshots.md). The verified Asia clock is enabled locally; nothing is deployed.
+
+> **2026-09-25 amendment:** The read-time reset decision is superseded for the planned C2 transition by ADR 0012: safe read projections plus explicit atomic period writes. Existing code still writes on GET until that milestone is implemented. See [ADR 0012](0012-genshin-companion-direction.md).
+
 **Status:** Accepted  
-**Date:** 2026-08-11  
+**Date:** 2026-08-11
+
 **Context:**  
 Phase 3 introduces daily tracking features (e.g., daily commissions, teapot claims) that must be reset at a specific time each day. For Genshin Impact (Asia Server), this reset occurs at 04:00 AM UTC+8 (which is 20:00 UTC the previous day).
 

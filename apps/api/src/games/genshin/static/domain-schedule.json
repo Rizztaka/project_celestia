@@ -1,191 +1,554 @@
 {
-  "_comment": "Domain rotation schedule. Days use 0=Monday through 5=Saturday. Sunday (6) all talent/weapon domains are open. talentBook values match the 'book' field in character-materials.json.",
+  "_comment": "Derived offline from progression-catalog.json. 0=Monday through 6=Sunday; every material family opens Sunday.",
   "talentDomains": [
     {
-      "domainKey": "ForsakenRift",
-      "name": "Forsaken Rift",
-      "location": "Mondstadt",
-      "days": [0, 3],
-      "drops": ["Freedom"],
-      "dropKeys": ["TeachingsOfFreedom", "GuidesToFreedom", "PhilosophiesOfFreedom"]
+      "domainKey": "LightlessCapitalDomainOfMasteryShadowedLegacy",
+      "name": "Lightless Capital · Shadowed Legacy",
+      "location": "Lightless Capital, Nod-Krai",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Mastery: Shadowed Legacy"],
+      "dropKeys": ["GuideToElysium", "PhilosophiesOfElysium", "TeachingsOfElysium"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "ForsakenRift",
-      "name": "Forsaken Rift",
-      "location": "Mondstadt",
-      "days": [1, 4],
-      "drops": ["Resistance"],
-      "dropKeys": ["TeachingsOfResistance", "GuidesToResistance", "PhilosophiesOfResistance"]
+      "domainKey": "ForsakenRiftDomainOfMasteryRealmOfSlumber",
+      "name": "Forsaken Rift · Realm of Slumber",
+      "location": "Forsaken Rift, Mondstadt",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Mastery: Realm of Slumber"],
+      "dropKeys": ["GuideToBallad", "PhilosophiesOfBallad", "TeachingsOfBallad"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "ForsakenRift",
-      "name": "Forsaken Rift",
-      "location": "Mondstadt",
-      "days": [2, 5],
-      "drops": ["Ballad"],
-      "dropKeys": ["TeachingsOfBallad", "GuidesToBallad", "PhilosophiesOfBallad"]
+      "domainKey": "SteepleOfIgnoranceDomainOfMasteryWitticism",
+      "name": "Steeple of Ignorance · Witticism",
+      "location": "Steeple of Ignorance, Sumeru",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Mastery: Witticism"],
+      "dropKeys": ["GuideToIngenuity", "PhilosophiesOfIngenuity", "TeachingsOfIngenuity"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "CeciliaGarden",
-      "name": "Cecilia Garden",
-      "location": "Mondstadt",
-      "days": [0, 3],
-      "drops": ["Transience"],
-      "dropKeys": ["TeachingsOfTransience", "GuidesToTransience", "PhilosophiesOfTransience"]
+      "domainKey": "ForsakenRiftDomainOfMasteryFrostedAltar",
+      "name": "Forsaken Rift · Frosted Altar",
+      "location": "Forsaken Rift, Mondstadt",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Mastery: Frosted Altar"],
+      "dropKeys": ["GuideToFreedom", "PhilosophiesOfFreedom", "TeachingsOfFreedom"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "CeciliaGarden",
-      "name": "Cecilia Garden",
-      "location": "Mondstadt",
-      "days": [1, 4],
-      "drops": ["Elegance"],
-      "dropKeys": ["TeachingsOfElegance", "GuidesToElegance", "PhilosophiesOfElegance"]
+      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryHermitage",
+      "name": "Relics of the Fallen Grace · Hermitage",
+      "location": "Relics of the Fallen Grace, Snezhnaya",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Mastery: Hermitage"],
+      "dropKeys": ["GuideToFortitude", "PhilosophiesOfFortitude", "TeachingsOfFortitude"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "CeciliaGarden",
-      "name": "Cecilia Garden",
-      "location": "Mondstadt",
-      "days": [2, 5],
-      "drops": ["Light"],
-      "dropKeys": ["TeachingsOfLight", "GuidesToLight", "PhilosophiesOfLight"]
+      "domainKey": "VioletCourtDomainOfMasteryThunderingValley",
+      "name": "Violet Court · Thundering Valley",
+      "location": "Violet Court, Inazuma",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Mastery: Thundering Valley"],
+      "dropKeys": ["GuideToElegance", "PhilosophiesOfElegance", "TeachingsOfElegance"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "TaishanMansion",
-      "name": "Taishan Mansion",
-      "location": "Liyue",
-      "days": [0, 3],
-      "drops": ["Prosperity"],
-      "dropKeys": ["TeachingsOfProsperity", "GuidesToProsperity", "PhilosophiesOfProsperity"]
+      "domainKey": "PaleForgottenGloryDomainOfMasteryChimingRecitation",
+      "name": "Pale Forgotten Glory · Chiming Recitation",
+      "location": "Pale Forgotten Glory, Fontaine",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Mastery: Chiming Recitation"],
+      "dropKeys": ["GuideToOrder", "PhilosophiesOfOrder", "TeachingsOfOrder"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "TaishanMansion",
-      "name": "Taishan Mansion",
-      "location": "Liyue",
-      "days": [1, 4],
-      "drops": ["Diligence"],
-      "dropKeys": ["TeachingsOfDiligence", "GuidesToDiligence", "PhilosophiesOfDiligence"]
+      "domainKey": "TaishanMansionDomainOfMasteryCircleOfEmbers",
+      "name": "Taishan Mansion · Circle of Embers",
+      "location": "Taishan Mansion, Liyue",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Mastery: Circle of Embers"],
+      "dropKeys": ["GuideToGold", "PhilosophiesOfGold", "TeachingsOfGold"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "TaishanMansion",
-      "name": "Taishan Mansion",
-      "location": "Liyue",
-      "days": [2, 5],
-      "drops": ["Gold"],
-      "dropKeys": ["TeachingsOfGold", "GuidesToGold", "PhilosophiesOfGold"]
+      "domainKey": "ForsakenRiftDomainOfMasteryFrozenAbyss",
+      "name": "Forsaken Rift · Frozen Abyss",
+      "location": "Forsaken Rift, Mondstadt",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Mastery: Frozen Abyss"],
+      "dropKeys": ["GuideToResistance", "PhilosophiesOfResistance", "TeachingsOfResistance"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "HiddenPalaceOfZhouFormula",
-      "name": "Hidden Palace of Zhou Formula",
-      "location": "Liyue",
-      "days": [0, 3],
-      "drops": ["Gold"],
-      "dropKeys": ["TeachingsOfGold", "GuidesToGold", "PhilosophiesOfGold"]
+      "domainKey": "SteepleOfIgnoranceDomainOfMasteryFullMoon",
+      "name": "Steeple of Ignorance · Full Moon",
+      "location": "Steeple of Ignorance, Sumeru",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Mastery: Full Moon"],
+      "dropKeys": ["GuideToAdmonition", "PhilosophiesOfAdmonition", "TeachingsOfAdmonition"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "VioletCourt",
-      "name": "Violet Court",
-      "location": "Inazuma",
-      "days": [0, 3],
-      "drops": ["Transience"],
-      "dropKeys": ["TeachingsOfTransience", "GuidesToTransience", "PhilosophiesOfTransience"]
+      "domainKey": "PaleForgottenGloryDomainOfMasteryAdmonishingEngraving",
+      "name": "Pale Forgotten Glory · Admonishing Engraving",
+      "location": "Pale Forgotten Glory, Fontaine",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Mastery: Admonishing Engraving"],
+      "dropKeys": ["GuideToJustice", "PhilosophiesOfJustice", "TeachingsOfJustice"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "VioletCourt",
-      "name": "Violet Court",
-      "location": "Inazuma",
-      "days": [1, 4],
-      "drops": ["Elegance"],
-      "dropKeys": ["TeachingsOfElegance", "GuidesToElegance", "PhilosophiesOfElegance"]
+      "domainKey": "BlazingRuinsDomainOfMasteryReturn",
+      "name": "Blazing Ruins · Return",
+      "location": "Blazing Ruins, Natlan",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Mastery: Return"],
+      "dropKeys": ["GuideToConflict", "PhilosophiesOfConflict", "TeachingsOfConflict"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "VioletCourt",
-      "name": "Violet Court",
-      "location": "Inazuma",
-      "days": [2, 5],
-      "drops": ["Light"],
-      "dropKeys": ["TeachingsOfLight", "GuidesToLight", "PhilosophiesOfLight"]
+      "domainKey": "VioletCourtDomainOfMasteryVineInfestedRuins",
+      "name": "Violet Court · Vine-Infested Ruins",
+      "location": "Violet Court, Inazuma",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Mastery: Vine-Infested Ruins"],
+      "dropKeys": ["GuideToLight", "PhilosophiesOfLight", "TeachingsOfLight"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "ChallengeOfElites",
-      "name": "Court of Flowing Sand",
-      "location": "Sumeru",
-      "days": [0, 3],
-      "drops": ["Ingenuity"],
-      "dropKeys": ["TeachingsOfIngenuity", "GuidesToIngenuity", "PhilosophiesOfIngenuity"]
+      "domainKey": "TaishanMansionDomainOfMasteryHeartOfTheFlames",
+      "name": "Taishan Mansion · Heart of the Flames",
+      "location": "Taishan Mansion, Liyue",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Mastery: Heart of the Flames"],
+      "dropKeys": ["GuideToDiligence", "PhilosophiesOfDiligence", "TeachingsOfDiligence"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "ChallengeOfElites",
-      "name": "Court of Flowing Sand",
-      "location": "Sumeru",
-      "days": [1, 4],
-      "drops": ["Praxis"],
-      "dropKeys": ["TeachingsOfPraxis", "GuidesToPraxis", "PhilosophiesOfPraxis"]
+      "domainKey": "BlazingRuinsDomainOfMasteryMyriadIllusions",
+      "name": "Blazing Ruins · Myriad Illusions",
+      "location": "Blazing Ruins, Natlan",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Mastery: Myriad Illusions"],
+      "dropKeys": ["GuideToKindling", "PhilosophiesOfKindling", "TeachingsOfKindling"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "ChallengeOfElites",
-      "name": "Court of Flowing Sand",
-      "location": "Sumeru",
-      "days": [2, 5],
-      "drops": ["Admonition"],
-      "dropKeys": ["TeachingsOfAdmonition", "GuidesToAdmonition", "PhilosophiesOfAdmonition"]
+      "domainKey": "SteepleOfIgnoranceDomainOfMasteryBasketOfDiscipline",
+      "name": "Steeple of Ignorance · Basket of Discipline",
+      "location": "Steeple of Ignorance, Sumeru",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Mastery: Basket of Discipline"],
+      "dropKeys": ["GuideToPraxis", "PhilosophiesOfPraxis", "TeachingsOfPraxis"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "PalaceOfHeart",
-      "name": "Pale Forgotten Glory",
-      "location": "Fontaine",
-      "days": [0, 3],
-      "drops": ["Order"],
-      "dropKeys": ["TeachingsOfOrder", "GuidesToOrder", "PhilosophiesOfOrder"]
+      "domainKey": "LightlessCapitalDomainOfMasteryFallenCity",
+      "name": "Lightless Capital · Fallen City",
+      "location": "Lightless Capital, Nod-Krai",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Mastery: Fallen City"],
+      "dropKeys": ["GuideToMoonlight", "PhilosophiesOfMoonlight", "TeachingsOfMoonlight"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "PalaceOfHeart",
-      "name": "Pale Forgotten Glory",
-      "location": "Fontaine",
-      "days": [1, 4],
-      "drops": ["Justice"],
-      "dropKeys": ["TeachingsOfJustice", "GuidesToJustice", "PhilosophiesOfJustice"]
+      "domainKey": "LightlessCapitalDomainOfMasteryOverturnedRoost",
+      "name": "Lightless Capital · Overturned Roost",
+      "location": "Lightless Capital, Nod-Krai",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Mastery: Overturned Roost"],
+      "dropKeys": ["GuideToVagrancy", "PhilosophiesOfVagrancy", "TeachingsOfVagrancy"],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "PalaceOfHeart",
-      "name": "Pale Forgotten Glory",
-      "location": "Fontaine",
-      "days": [2, 5],
-      "drops": ["Kindling"],
-      "dropKeys": ["TeachingsOfKindling", "GuidesToKindling", "PhilosophiesOfKindling"]
+      "domainKey": "TaishanMansionDomainOfMasteryAltarOfFlames",
+      "name": "Taishan Mansion · Altar of Flames",
+      "location": "Taishan Mansion, Liyue",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Mastery: Altar of Flames"],
+      "dropKeys": ["GuideToProsperity", "PhilosophiesOfProsperity", "TeachingsOfProsperity"],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "BlazingRuinsDomainOfMasterySublimeTurning",
+      "name": "Blazing Ruins · Sublime Turning",
+      "location": "Blazing Ruins, Natlan",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Mastery: Sublime Turning"],
+      "dropKeys": ["GuideToContention", "PhilosophiesOfContention", "TeachingsOfContention"],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "VioletCourtDomainOfMasteryReignOfViolet",
+      "name": "Violet Court · Reign of Violet",
+      "location": "Violet Court, Inazuma",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Mastery: Reign of Violet"],
+      "dropKeys": ["GuideToTransience", "PhilosophiesOfTransience", "TeachingsOfTransience"],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "PaleForgottenGloryDomainOfMasteryRhymingRhythm",
+      "name": "Pale Forgotten Glory · Rhyming Rhythm",
+      "location": "Pale Forgotten Glory, Fontaine",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Mastery: Rhyming Rhythm"],
+      "dropKeys": ["GuideToEquity", "PhilosophiesOfEquity", "TeachingsOfEquity"],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation",
+      "name": "Relics of the Fallen Grace · Contemplation",
+      "location": "Relics of the Fallen Grace, Snezhnaya",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Mastery: Contemplation"],
+      "dropKeys": ["GuideToCharity", "PhilosophiesOfCharity", "TeachingsOfCharity"],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "RelicsOfTheFallenGraceDomainOfMasterySharedVision",
+      "name": "Relics of the Fallen Grace · Shared Vision",
+      "location": "Relics of the Fallen Grace, Snezhnaya",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Mastery: Shared Vision"],
+      "dropKeys": ["GuideToGlory", "PhilosophiesOfGlory", "TeachingsOfGlory"],
+      "resinPerClaim": 20
     }
   ],
   "weaponDomains": [
     {
-      "domainKey": "ClearPoolAndMountainCavern",
-      "name": "Clear Pool and Mountain Cavern",
-      "location": "Mondstadt",
-      "days": [0, 3],
-      "materialGroup": "Decarabian",
-      "dropKeys": ["FragmentOfDecarabianEpic", "DecarabiansTower", "LithicSpear"]
+      "domainKey": "EchoesOfTheDeepTidesDomainOfForgeryRoboticRuse",
+      "name": "Echoes of the Deep Tides · Robotic Ruse",
+      "location": "Echoes of the Deep Tides, Fontaine",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Forgery: Robotic Ruse"],
+      "dropKeys": [
+        "ChapterOfAnAncientChord",
+        "EchoOfAnAncientChord",
+        "FragmentOfAnAncientChord",
+        "MovementOfAnAncientChord"
+      ],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "CeciliaGardenWeapon",
-      "name": "Cecilia Garden (Weapons)",
-      "location": "Mondstadt",
-      "days": [1, 4],
-      "materialGroup": "WolfsTooth",
-      "dropKeys": ["TilesOfTalisman", "ThunderingPoise", "AerialAerosiderite"]
+      "domainKey": "CourtOfFlowingSandDomainOfForgerySunkenSands",
+      "name": "Court of Flowing Sand · Sunken Sands",
+      "location": "Court of Flowing Sand, Inazuma",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Forgery: Sunken Sands"],
+      "dropKeys": [
+        "CoralBranchOfADistantSea",
+        "GoldenBranchOfADistantSea",
+        "JadeBranchOfADistantSea",
+        "JeweledBranchOfADistantSea"
+      ],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "HiddenPalaceOfLianshanFormula",
-      "name": "Hidden Palace of Lianshan Formula",
-      "location": "Liyue",
-      "days": [0, 3],
-      "materialGroup": "Guyun",
-      "dropKeys": ["ChaoticOrigin", "TalentLordly", "MistVeiled"]
+      "domainKey": "CeciliaGardenDomainOfForgeryRuinsOfThirstingCapital",
+      "name": "Cecilia Garden · Ruins of Thirsting Capital",
+      "location": "Cecilia Garden, Mondstadt",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Forgery: Ruins of Thirsting Capital"],
+      "dropKeys": [
+        "ChainsOfTheDandelionGladiator",
+        "DreamOfTheDandelionGladiator",
+        "FettersOfTheDandelionGladiator",
+        "ShacklesOfTheDandelionGladiator"
+      ],
+      "resinPerClaim": 20
     },
     {
-      "domainKey": "HiddenPalaceOfLianshanFormulaWeapon",
-      "name": "Hidden Palace of Lianshan Formula",
-      "location": "Liyue",
-      "days": [2, 5],
-      "materialGroup": "Aerosiderite",
-      "dropKeys": ["TilesOfTalisman", "ThunderingPoise", "AerialAerosiderite"]
+      "domainKey": "LostMooncourtDomainOfForgeryRadiantSplendor",
+      "name": "Lost Mooncourt · Radiant Splendor",
+      "location": "Lost Mooncourt, Nod-Krai",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Forgery: Radiant Splendor"],
+      "dropKeys": [
+        "ArtfulDeviceFragment",
+        "ArtfulDeviceInheritance",
+        "ArtfulDeviceReplica",
+        "ArtfulDeviceWish"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "CeciliaGardenDomainOfForgeryCityOfReflections",
+      "name": "Cecilia Garden · City of Reflections",
+      "location": "Cecilia Garden, Mondstadt",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Forgery: City of Reflections"],
+      "dropKeys": [
+        "DebrisOfDecarabiansCity",
+        "FragmentOfDecarabiansEpic",
+        "ScatteredPieceOfDecarabiansDream",
+        "TileOfDecarabiansTower"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "HiddenPalaceOfLianshanFormulaDomainOfForgeryThundercloudAltar",
+      "name": "Hidden Palace of Lianshan Formula · Thundercloud Altar",
+      "location": "Hidden Palace of Lianshan Formula, Liyue",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Forgery: Thundercloud Altar"],
+      "dropKeys": [
+        "DivineBodyFromGuyun",
+        "LuminousSandsFromGuyun",
+        "LustrousStoneFromGuyun",
+        "RelicFromGuyun"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "AncientWatchtowerDomainOfForgeryEstimation",
+      "name": "Ancient Watchtower · Estimation",
+      "location": "Ancient Watchtower, Natlan",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Forgery: Estimation"],
+      "dropKeys": [
+        "NightWindsMysticAugury",
+        "NightWindsMysticConsideration",
+        "NightWindsMysticPremonition",
+        "NightWindsMysticRevelation"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "LostMooncourtDomainOfForgeryLunarOblation",
+      "name": "Lost Mooncourt · Lunar Oblation",
+      "location": "Lost Mooncourt, Nod-Krai",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Forgery: Lunar Oblation"],
+      "dropKeys": [
+        "AureateRadianceOfTheFarNorthScions",
+        "OblationOfTheFarNorthScions",
+        "SunderedGloryOfTheFarNorthScions",
+        "UnyieldingDelusionOfTheFarNorthScions"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "AncientWatchtowerDomainOfForgeryScryingShadows",
+      "name": "Ancient Watchtower · Scrying Shadows",
+      "location": "Ancient Watchtower, Natlan",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Forgery: Scrying Shadows"],
+      "dropKeys": [
+        "BlazingSacrificialHeartsHesitance",
+        "BlazingSacrificialHeartsResolve",
+        "BlazingSacrificialHeartsSplendor",
+        "BlazingSacrificialHeartsTerror"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "TowerOfAbjectPrideDomainOfForgeryObsession",
+      "name": "Tower of Abject Pride · Obsession",
+      "location": "Tower of Abject Pride, Sumeru",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Forgery: Obsession"],
+      "dropKeys": [
+        "OasisGardensKindness",
+        "OasisGardensMourning",
+        "OasisGardensReminiscence",
+        "OasisGardensTruth"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "CeciliaGardenDomainOfForgerySubmergedValley",
+      "name": "Cecilia Garden · Submerged Valley",
+      "location": "Cecilia Garden, Mondstadt",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Forgery: Submerged Valley"],
+      "dropKeys": [
+        "BorealWolfsBrokenFang",
+        "BorealWolfsCrackedTooth",
+        "BorealWolfsMilkTooth",
+        "BorealWolfsNostalgia"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "EchoesOfTheDeepTidesDomainOfForgeryCuriousContraptions",
+      "name": "Echoes of the Deep Tides · Curious Contraptions",
+      "location": "Echoes of the Deep Tides, Fontaine",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Forgery: Curious Contraptions"],
+      "dropKeys": [
+        "BrokenGobletOfThePristineSea",
+        "GoldenGobletOfThePristineSea",
+        "SilverGobletOfThePristineSea",
+        "WineGobletOfThePristineSea"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "TowerOfAbjectPrideDomainOfForgeryLeadingKarma",
+      "name": "Tower of Abject Pride · Leading Karma",
+      "location": "Tower of Abject Pride, Sumeru",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Forgery: Leading Karma"],
+      "dropKeys": [
+        "DreamOfScorchingMight",
+        "EchoOfScorchingMight",
+        "OldenDaysOfScorchingMight",
+        "RemnantGlowOfScorchingMight"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "ScarsOfCursedObsessionDomainOfForgeryCastIron",
+      "name": "Scars of Cursed Obsession · Cast Iron",
+      "location": "Scars of Cursed Obsession, Snezhnaya",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Forgery: Cast Iron"],
+      "dropKeys": [
+        "ClarionOfThePaleStarArmy",
+        "MusterOfThePaleStarArmy",
+        "RiseOfThePaleStarArmy",
+        "TriumphOfThePaleStarArmy"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "HiddenPalaceOfLianshanFormulaDomainOfForgeryThunderingRuins",
+      "name": "Hidden Palace of Lianshan Formula · Thundering Ruins",
+      "location": "Hidden Palace of Lianshan Formula, Liyue",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Forgery: Thundering Ruins"],
+      "dropKeys": [
+        "MistVeiledGoldElixir",
+        "MistVeiledLeadElixir",
+        "MistVeiledMercuryElixir",
+        "MistVeiledPrimoElixir"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "HiddenPalaceOfLianshanFormulaDomainOfForgeryTrialGroundsOfThunder",
+      "name": "Hidden Palace of Lianshan Formula · Trial Grounds of Thunder",
+      "location": "Hidden Palace of Lianshan Formula, Liyue",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Forgery: Trial Grounds of Thunder"],
+      "dropKeys": [
+        "BitOfAerosiderite",
+        "ChunkOfAerosiderite",
+        "GrainOfAerosiderite",
+        "PieceOfAerosiderite"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "LostMooncourtDomainOfForgeryPrayersSung",
+      "name": "Lost Mooncourt · Prayers Sung",
+      "location": "Lost Mooncourt, Nod-Krai",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Forgery: Prayers Sung"],
+      "dropKeys": [
+        "AfterglowOfLongNightFlint",
+        "BlazeOfLongNightFlint",
+        "EmberOfLongNightFlint",
+        "FlareOfLongNightFlint"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "ScarsOfCursedObsessionDomainOfForgerySeveredSteel",
+      "name": "Scars of Cursed Obsession · Severed Steel",
+      "location": "Scars of Cursed Obsession, Snezhnaya",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Forgery: Severed Steel"],
+      "dropKeys": [
+        "TheFrostEmperorsCeremony",
+        "TheFrostEmperorsFarewell",
+        "TheFrostEmperorsLament",
+        "TheFrostEmperorsRevival"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "AncientWatchtowerDomainOfForgeryAttentiveObservation",
+      "name": "Ancient Watchtower · Attentive Observation",
+      "location": "Ancient Watchtower, Natlan",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Forgery: Attentive Observation"],
+      "dropKeys": [
+        "DeliriousDecadenceOfTheSacredLord",
+        "DeliriousDemeanorOfTheSacredLord",
+        "DeliriousDesolationOfTheSacredLord",
+        "DeliriousDivinityOfTheSacredLord"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "TowerOfAbjectPrideDomainOfForgeryTaintedClouds",
+      "name": "Tower of Abject Pride · Tainted Clouds",
+      "location": "Tower of Abject Pride, Sumeru",
+      "days": [0, 3, 6],
+      "drops": ["Domain of Forgery: Tainted Clouds"],
+      "dropKeys": [
+        "CopperTalismanOfTheForestDew",
+        "GoldenTalismanOfTheForestDew",
+        "IronTalismanOfTheForestDew",
+        "SilverTalismanOfTheForestDew"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "CourtOfFlowingSandDomainOfForgerySandBurial",
+      "name": "Court of Flowing Sand · Sand Burial",
+      "location": "Court of Flowing Sand, Inazuma",
+      "days": [2, 5, 6],
+      "drops": ["Domain of Forgery: Sand Burial"],
+      "dropKeys": [
+        "MaskOfTheKijin",
+        "MaskOfTheOneHorned",
+        "MaskOfTheTigersBite",
+        "MaskOfTheWickedLieutenant"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "EchoesOfTheDeepTidesDomainOfForgeryArtisanship",
+      "name": "Echoes of the Deep Tides · Artisanship",
+      "location": "Echoes of the Deep Tides, Fontaine",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Forgery: Artisanship"],
+      "dropKeys": [
+        "DrossOfPureSacredDewdrop",
+        "EssenceOfPureSacredDewdrop",
+        "SpringOfPureSacredDewdrop",
+        "SublimationOfPureSacredDewdrop"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "ScarsOfCursedObsessionDomainOfForgeryChainTrack",
+      "name": "Scars of Cursed Obsession · Chain Track",
+      "location": "Scars of Cursed Obsession, Snezhnaya",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Forgery: Chain Track"],
+      "dropKeys": [
+        "ExhilarationOfTheCellaredSpiritualNectar",
+        "IntoxicationOfTheCellaredSpiritualNectar",
+        "MeasuredPourOfTheCellaredSpiritualNectar",
+        "RevelryOfTheCellaredSpiritualNectar"
+      ],
+      "resinPerClaim": 20
+    },
+    {
+      "domainKey": "CourtOfFlowingSandDomainOfForgeryAltarOfSands",
+      "name": "Court of Flowing Sand · Altar of Sands",
+      "location": "Court of Flowing Sand, Inazuma",
+      "days": [1, 4, 6],
+      "drops": ["Domain of Forgery: Altar of Sands"],
+      "dropKeys": ["NarukamisAffection", "NarukamisJoy", "NarukamisValor", "NarukamisWisdom"],
+      "resinPerClaim": 20
     }
   ]
 }

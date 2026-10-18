@@ -1,6 +1,8 @@
 import { GoalType } from '@prisma/client';
 import { describe, expect, it } from 'vitest';
 
+import { companionRegistry } from '../../../../platform/companion/companion-registry.service.js';
+import { GenshinCompanionProvider } from '../../companion/genshin-companion.provider.js';
 import { allocateResin, filterAndScoreGoals } from './planner-intelligence.calculator.js';
 
 // -------------------------------------------------------
@@ -9,6 +11,13 @@ import { allocateResin, filterAndScoreGoals } from './planner-intelligence.calcu
 
 function makeGoal(overrides: Partial<Parameters<typeof filterAndScoreGoals>[0][0]> = {}) {
   return {
+    status: 'active' as const,
+    priority: 3,
+    revision: 0,
+    completedAt: null,
+    completionReason: null,
+    predecessorId: null,
+    createRequestId: null,
     id: 'goal-1',
     userId: 'user-1',
     goalType: GoalType.CHARACTER_TALENT,
@@ -36,76 +45,46 @@ function makeRanking(characterKey: string, score: number) {
 // filterAndScoreGoals
 // -------------------------------------------------------
 
+companionRegistry.register(new GenshinCompanionProvider());
 describe('filterAndScoreGoals', () => {
-  it('returns an empty array if no goals are provided', () => {
-    const result = filterAndScoreGoals([], 1, []);
-    expect(result).toHaveLength(0);
+  it('uses sourced weekday domains and leaves unknown or non-domain targets unrouted', () => {
+    const open = filterAndScoreGoals([makeGoal({ fromPhase: 1 })], 1, []);
+    expect(open).toHaveLength(1);
+    expect(open[0]?.resinPerRun).toBe(20);
+    expect(open[0]?.sourceName).toContain('Taishan Mansion');
+    expect(filterAndScoreGoals([makeGoal({ fromPhase: 1 })], 0, [])).toEqual([]);
+    expect(
+      filterAndScoreGoals([makeGoal({ targetKey: 'UnknownCharacter', fromPhase: 1 })], 1, []),
+    ).toEqual([]);
+    expect(
+      filterAndScoreGoals([makeGoal({ goalType: GoalType.CHARACTER_ASCENSION })], 0, []),
+    ).toEqual([]);
   });
-
-  it('includes CHARACTER_ASCENSION goals on any day (day 0 = Monday)', () => {
-    const goal = makeGoal({ goalType: GoalType.CHARACTER_ASCENSION });
-    const result = filterAndScoreGoals([goal], 0, []);
-    expect(result).toHaveLength(1);
-    expect(result[0].resinPerRun).toBe(40);
-    expect(result[0].isTimeGated).toBe(false);
-  });
-
-  it('includes CHARACTER_TALENT goals when the book drops today (Monday = day 0 for "Freedom")', () => {
-    // HuTao uses "Ballad" books. Ballad drops on Wednesday (day 2) & Saturday (day 5).
-    // Venti also uses "Ballad". Let's test with a character that uses "Freedom" (Monday/Thursday).
-    // We don't have a character with "Freedom" in our materials.json without knowing exact data,
-    // so we use HuTao (Ballad) and assert it is NOT available on Monday (day 0).
-    const goal = makeGoal({ goalType: GoalType.CHARACTER_TALENT, targetKey: 'HuTao' });
-    const resultMonday = filterAndScoreGoals([goal], 0, []); // Monday — Ballad not available
-    expect(resultMonday).toHaveLength(0);
-
-    const resultWednesday = filterAndScoreGoals([goal], 2, []); // Wednesday — Ballad available
-    expect(resultWednesday).toHaveLength(1);
-  });
-
-  it('includes all CHARACTER_TALENT goals on Sunday (day 6)', () => {
-    const goal = makeGoal({ goalType: GoalType.CHARACTER_TALENT, targetKey: 'HuTao' });
-    const result = filterAndScoreGoals([goal], 6, []); // Sunday — all domains open
-    expect(result).toHaveLength(1);
-    expect(result[0].isTimeGated).toBe(false); // Sunday is not time-gated
-  });
-
-  it('skips CHARACTER_TALENT goals for characters with no material profile', () => {
-    const goal = makeGoal({ goalType: GoalType.CHARACTER_TALENT, targetKey: 'UnknownChar' });
-    const result = filterAndScoreGoals([goal], 6, []);
-    expect(result).toHaveLength(0);
-  });
-
-  it('applies TIME_GATE_BONUS (+20) for domain goals available today', () => {
-    const goal = makeGoal({ goalType: GoalType.CHARACTER_TALENT, targetKey: 'HuTao' });
-    const result = filterAndScoreGoals([goal], 2, []); // Wednesday — Ballad available
-    expect(result).toHaveLength(1);
-    expect(result[0].timeGatedBonus).toBe(20);
-    expect(result[0].totalScore).toBeGreaterThan(50);
-  });
-
-  it('does NOT apply TIME_GATE_BONUS for CHARACTER_ASCENSION (boss) goals', () => {
-    const goal = makeGoal({ goalType: GoalType.CHARACTER_ASCENSION });
-    const result = filterAndScoreGoals([goal], 0, []);
-    expect(result[0].timeGatedBonus).toBe(0);
-  });
-
-  it('applies characterPriorityWeight correctly — lower score = higher priority', () => {
-    const goal = makeGoal({ goalType: GoalType.CHARACTER_ASCENSION });
-    const lowPriority = filterAndScoreGoals([goal], 0, [makeRanking('HuTao', 90)]);
-    const highPriority = filterAndScoreGoals([goal], 0, [makeRanking('HuTao', 10)]);
-
-    // Low character score (10) means high farming priority → higher weight
-    expect(highPriority[0].characterPriorityWeight).toBeGreaterThan(
-      lowPriority[0].characterPriorityWeight,
-    );
-    expect(highPriority[0].totalScore).toBeGreaterThan(lowPriority[0].totalScore);
-  });
-
-  it('falls back to neutral weight (50) if character has no ranking', () => {
-    const goal = makeGoal({ goalType: GoalType.CHARACTER_ASCENSION });
-    const result = filterAndScoreGoals([goal], 0, []); // no rankings
-    expect(result[0].characterPriorityWeight).toBe(50); // 100 - 50 fallback
+  it('retains neutral priority even with legacy rankings, using an explicit test-only route fixture', () => {
+    const provider = new GenshinCompanionProvider();
+    provider.getGoalAdvice = () => ({
+      available: true,
+      costs: { Mora: 12500 },
+      sources: [],
+      route: {
+        available: true,
+        domain: {
+          domainKey: 'TestDomain',
+          name: 'Test source',
+          location: 'test-only',
+          days: [1, 4, 6],
+          drops: ['Diligence'],
+          dropKeys: ['TeachingsOfDiligence'],
+          resinPerClaim: 20,
+        },
+      },
+    });
+    const goal = makeGoal({ fromPhase: 1 });
+    const low = filterAndScoreGoals([goal], 1, [makeRanking('HuTao', 90)], provider);
+    const high = filterAndScoreGoals([goal], 1, [makeRanking('HuTao', 10)], provider);
+    expect(low).toEqual(high);
+    expect(high[0]).toMatchObject({ characterPriorityWeight: 50, totalScore: 120 });
+    expect(filterAndScoreGoals([goal], 0, [], provider)).toEqual([]);
   });
 });
 
@@ -122,8 +101,8 @@ describe('allocateResin', () => {
 
   it('allocates resin to the highest-priority goal first', () => {
     const highPriority = {
-      goal: makeGoal({ id: 'goal-high' }),
-      totalScore: 150,
+      goal: makeGoal({ id: 'goal-high', priority: 1 }),
+      totalScore: 10,
       baseScore: 50,
       timeGatedBonus: 20,
       characterPriorityWeight: 80,
@@ -136,8 +115,8 @@ describe('allocateResin', () => {
     };
 
     const lowPriority = {
-      goal: makeGoal({ id: 'goal-low', targetKey: 'Venti' }),
-      totalScore: 80,
+      goal: makeGoal({ id: 'goal-low', targetKey: 'Venti', priority: 5 }),
+      totalScore: 999,
       baseScore: 50,
       timeGatedBonus: 20,
       characterPriorityWeight: 10,

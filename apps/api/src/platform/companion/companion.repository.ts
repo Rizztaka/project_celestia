@@ -1,4 +1,4 @@
-import type { DailyCompanion, Prisma } from '@prisma/client';
+import type { DailyCompanion } from '@prisma/client';
 
 import { prisma } from '@/core/db/prisma.js';
 

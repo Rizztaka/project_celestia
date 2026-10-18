@@ -156,7 +156,7 @@ export class PullSimulatorService {
       if (Math.random() <= prob4) {
         // We got a 4-star!
         const win5050 = guaranteed4 || Math.random() < 0.5;
-        let itemKey = '';
+        let itemKey: string;
         if (win5050) {
           itemKey = banner.fourStarKeys[Math.floor(Math.random() * banner.fourStarKeys.length)];
         } else {

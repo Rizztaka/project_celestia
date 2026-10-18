@@ -1,0 +1,955 @@
+{
+  "date": "2026-10-13",
+  "freshExecutionDate": "2026-10-12",
+  "result": "No new blocking application-code finding in reviewed scope; next bounded local milestone proposed",
+  "reviewScope": "C1-C5c roadmap/evidence reconciliation, focused C5c code/tests review and fresh complete recovery plus verification; not a line-by-line historical audit, separate reviewer, new browser run or production certification.",
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "branch": "master",
+  "index": "empty",
+  "applicationAndToolingChanged": false,
+  "baseline": {
+    "files": 846,
+    "unchanged": 844,
+    "intentionalDocumentationChanges": 2,
+    "deleted": 0,
+    "unexpected": 0
+  },
+  "tests": {
+    "date": "2026-10-12",
+    "passed": 950,
+    "failed": 0,
+    "skipped": 0,
+    "files": 51,
+    "inheritedPostgresFloorCases": 106,
+    "additionalPostgresCases": 7,
+    "totalActualPostgresCases": 113,
+    "rawReport": "C:/Users/inuzu/AppData/Local/Temp/celestia-verification-wg4gTE/vitest.json",
+    "rawReportSha256": "95B66C4B6BEC6CAAFF4C7B251B35F89027F42C5ADD379C925F18117B0AE6F601",
+    "rawReportKeptOutsideGit": "Inherited test names contain synthetic database URLs; only counts and relative file paths copied.",
+    "perFile": [
+      { "path": "tooling/account-cache.test.js", "passed": 5, "failed": 0, "skipped": 0 },
+      { "path": "tooling/character-equipment.test.js", "passed": 6, "failed": 0, "skipped": 0 },
+      { "path": "tooling/eslint-config.test.js", "passed": 10, "failed": 0, "skipped": 0 },
+      { "path": "tooling/goal-session.test.js", "passed": 14, "failed": 0, "skipped": 0 },
+      { "path": "tooling/journey-client.test.js", "passed": 17, "failed": 0, "skipped": 0 },
+      { "path": "tooling/plan-client.test.js", "passed": 12, "failed": 0, "skipped": 0 },
+      { "path": "tooling/recovery.test.js", "passed": 76, "failed": 0, "skipped": 0 },
+      {
+        "path": "tooling/request-safety.integration.test.js",
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0
+      },
+      { "path": "tooling/routine-client.test.js", "passed": 5, "failed": 0, "skipped": 0 },
+      { "path": "tooling/verification.test.js", "passed": 33, "failed": 0, "skipped": 0 },
+      { "path": "src/platform/security.http.test.ts", "passed": 22, "failed": 0, "skipped": 0 },
+      {
+        "path": "src/core/middleware/auth.middleware.test.ts",
+        "passed": 13,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/core/middleware/origin.middleware.test.ts",
+        "passed": 58,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/core/middleware/request-admission.test.ts",
+        "passed": 19,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/core/middleware/request-safety.http.test.ts",
+        "passed": 38,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/core/db/disposable-test-database.test.ts",
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0
+      },
+      { "path": "src/platform/auth/auth.service.test.ts", "passed": 8, "failed": 0, "skipped": 0 },
+      {
+        "path": "src/games/genshin/accounts/account.service.test.ts",
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/platform/users/user.service.test.ts",
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/artifacts/artifact.service.test.ts",
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/platform/companion/catalog-advice.integration.test.ts",
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/platform/companion/event.service.test.ts",
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/platform/companion/goal-lifecycle.integration.test.ts",
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/platform/companion/goal.service.test.ts",
+        "passed": 31,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/platform/companion/plan-composition.test.ts",
+        "passed": 40,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/platform/companion/plan.integration.test.ts",
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/platform/companion/routine.http.test.ts",
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/platform/companion/routine.integration.test.ts",
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/platform/companion/routine.service.test.ts",
+        "passed": 23,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/platform/companion/weekly-boss.service.test.ts",
+        "passed": 19,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/characters/character-equipment.integration.test.ts",
+        "passed": 13,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/characters/character.service.test.ts",
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/companion/catalog-trust.test.ts",
+        "passed": 37,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/companion/routine-consumers.test.ts",
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/companion/routine-policy.test.ts",
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/companion/server-clock.test.ts",
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/endgame/endgame.service.test.ts",
+        "passed": 31,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/importer/importer.http.test.ts",
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/importer/importer.integration.test.ts",
+        "passed": 16,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/importer/importer.limits.test.ts",
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/importer/importer.service.test.ts",
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/simulators/pull-simulator.controller.test.ts",
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/simulators/pull-simulator.service.test.ts",
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/weapons/weapon.service.test.ts",
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.service.test.ts",
+        "passed": 18,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/intelligence/character-intelligence/character-intelligence.service.test.ts",
+        "passed": 14,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.service.test.ts",
+        "passed": 22,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.test.ts",
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.test.ts",
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/intelligence/team-intelligence/team-intelligence.service.test.ts",
+        "passed": 22,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "path": "src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.test.ts",
+        "passed": 13,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "entrypoint": "review-entrypoint-results.json",
+  "recovery": "review-recovery-results.json",
+  "failure": "review-initial-recovery-failure.json",
+  "fixture": "review-fixture.json",
+  "fixtureProvenance": "review-fixture-provenance.md",
+  "cleanup": {
+    "date": "2026-10-12",
+    "failedHistoricalFixtureAttempt": {
+      "databasesAndRolesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "privateFilesRetained": true,
+      "credentialsRemoved": true
+    },
+    "successfulRun": {
+      "databasesAndRolesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "privateFilesRetained": true,
+      "credentialsRemoved": true
+    },
+    "resourcesRemoved": true,
+    "ports": [
+      { "port": 55448, "exclusiveLoopbackBindPassed": true },
+      { "port": 45448, "exclusiveLoopbackBindPassed": true },
+      { "port": 45449, "exclusiveLoopbackBindPassed": true }
+    ],
+    "normalWebBuildRestored": true,
+    "newFixtureRetainedStopped": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-UgVWJu/data",
+    "privateRunDirectories": [
+      "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-JAVMGG",
+      "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-c18wNm"
+    ],
+    "bootstrapAclAttempt": {
+      "result": "PRIVATE_ACL_NOT_ESTABLISHED",
+      "databaseWorkStarted": false,
+      "emptyNewDirectoryRemoved": true,
+      "resolution": "Use unchanged isolatedEnvironment helper; same privateDirectory guard then passed."
+    },
+    "ordinaryDatabaseConnected": false,
+    "browserAcceptanceRepeated": false,
+    "unownedProcessesStopped": false
+  },
+  "protectedAndRaw": [
+    {
+      "path": "apps/api/src/core/config/env.ts",
+      "expectedSha256": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734",
+      "sha256": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734",
+      "matches": true
+    },
+    {
+      "path": "apps/api/package.json",
+      "expectedSha256": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2",
+      "sha256": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "expectedSha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "matches": true
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "expectedSha256": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A",
+      "sha256": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "expectedSha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "matches": true
+    },
+    {
+      "path": "apps/api/.turbo/turbo-test.log",
+      "expectedSha256": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED",
+      "sha256": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED",
+      "matches": true
+    },
+    {
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "expectedSha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "matches": true
+    },
+    {
+      "path": "apps/api/.env.example",
+      "expectedSha256": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647",
+      "sha256": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260813154603_add_event_progress/migration.sql",
+      "expectedSha256": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281",
+      "sha256": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260819152839_add_spiral_abyss_runs/migration.sql",
+      "expectedSha256": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E",
+      "sha256": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260805151029_add_genshin_foundation/migration.sql",
+      "expectedSha256": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31",
+      "sha256": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20261005150000_add_today_plan_choices/migration.sql",
+      "expectedSha256": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A",
+      "sha256": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260731140723_init/migration.sql",
+      "expectedSha256": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B",
+      "sha256": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260811141938_add_daily_companion/migration.sql",
+      "expectedSha256": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA",
+      "sha256": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20261003180000_add_focus_goal_lifecycle/migration.sql",
+      "expectedSha256": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329",
+      "sha256": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "expectedSha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260823132547_add_imaginarium_theater_run/migration.sql",
+      "expectedSha256": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7",
+      "sha256": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260812155306_add_materials_and_upgrade_goals/migration.sql",
+      "expectedSha256": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8",
+      "sha256": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260814135049_add_weekly_boss_state/migration.sql",
+      "expectedSha256": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C",
+      "sha256": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260926173000_add_import_section_provenance/migration.sql",
+      "expectedSha256": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310",
+      "sha256": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310",
+      "matches": true
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260823150154_add_nikke_models/migration.sql",
+      "expectedSha256": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910",
+      "sha256": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910",
+      "matches": true
+    },
+    {
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "expectedSha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "expectedSha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "matches": true
+    },
+    {
+      "path": "apps/web/index.html",
+      "expectedSha256": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8",
+      "sha256": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8",
+      "matches": true
+    },
+    {
+      "path": "apps/web/src/App.css",
+      "expectedSha256": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C",
+      "sha256": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C",
+      "matches": true
+    },
+    {
+      "path": "apps/web/src/index.css",
+      "expectedSha256": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E",
+      "sha256": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/endgame-focus-final.json",
+      "expectedSha256": "84143358C0180ECDC5964B10EA1A81799631DDCBCF9E32446862310FD11AFFF1",
+      "sha256": "84143358C0180ECDC5964B10EA1A81799631DDCBCF9E32446862310FD11AFFF1",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/primary-reflow.json",
+      "expectedSha256": "3B1F37E5F3A8D5072DA63DC8CF4B6E12B06FD74FCF912D7DB1F14A329569BDA2",
+      "sha256": "3B1F37E5F3A8D5072DA63DC8CF4B6E12B06FD74FCF912D7DB1F14A329569BDA2",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/reimport-after.json",
+      "expectedSha256": "ACD3739A342C8283992D6153AA909B8C472EE5CD0CA3EA9530BBEF76E262156D",
+      "sha256": "ACD3739A342C8283992D6153AA909B8C472EE5CD0CA3EA9530BBEF76E262156D",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/reimport-before.json",
+      "expectedSha256": "63A182044F80074DA87EBCF314F2C2979EB178E9187B06FCAA823A41A144B9F2",
+      "sha256": "63A182044F80074DA87EBCF314F2C2979EB178E9187B06FCAA823A41A144B9F2",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/rendered-style-check.json",
+      "expectedSha256": "BDDB3BBAAF791A1DC6EEE1BCAA76DE527647CB2EF330DF3B04E2567B7EBD39B9",
+      "sha256": "BDDB3BBAAF791A1DC6EEE1BCAA76DE527647CB2EF330DF3B04E2567B7EBD39B9",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/secondary-reflow.json",
+      "expectedSha256": "11DF232CAE6F12C765A091B443806D2E04D2A22109C0D60CA067F6EBB6B71191",
+      "sha256": "11DF232CAE6F12C765A091B443806D2E04D2A22109C0D60CA067F6EBB6B71191",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/starting-state.json",
+      "expectedSha256": "F1A7A653C71A6694DC544498E9E3D8498F3EE385F4E756C046AF0AB1EC6ADFBE",
+      "sha256": "F1A7A653C71A6694DC544498E9E3D8498F3EE385F4E756C046AF0AB1EC6ADFBE",
+      "matches": true
+    }
+  ],
+  "historicalManifestReconciliation": [
+    {
+      "path": "apps/api/src/app.ts",
+      "beforeSha256": "73481A94322C1FEF62CA97630F6AAF5D87DEB10F1BB0374E1C9137335A47F566",
+      "afterSha256": "73481A94322C1FEF62CA97630F6AAF5D87DEB10F1BB0374E1C9137335A47F566",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/core/config/request-safety.ts",
+      "beforeSha256": "E801EAD8DFB9437673DC5F873081BCE111EB6BDBCBE400EB26B1774D5BE81B50",
+      "afterSha256": "E801EAD8DFB9437673DC5F873081BCE111EB6BDBCBE400EB26B1774D5BE81B50",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/core/middleware/bounded-json.ts",
+      "beforeSha256": "6B09D3FB057758DC0F1642795FC2139B728EB8696BA73AF4B0EF141E9DD4CF6D",
+      "afterSha256": "6B09D3FB057758DC0F1642795FC2139B728EB8696BA73AF4B0EF141E9DD4CF6D",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/core/middleware/request-admission.test.ts",
+      "beforeSha256": "7DFA822C25F520369367D675CF80F03CF68C213BCE65959CBB03BD5D14AE2D20",
+      "afterSha256": "7DFA822C25F520369367D675CF80F03CF68C213BCE65959CBB03BD5D14AE2D20",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/core/middleware/request-admission.ts",
+      "beforeSha256": "74DDF53A9970F275D59A0BD7734B9F4276A12B984530551C1FF52EF2C972538A",
+      "afterSha256": "74DDF53A9970F275D59A0BD7734B9F4276A12B984530551C1FF52EF2C972538A",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/core/middleware/request-safety.http.test.ts",
+      "beforeSha256": "CB7F87A4D7807780873CBFDDBC3995D800C67B5B85932117CC48EB171AB2F031",
+      "afterSha256": "CB7F87A4D7807780873CBFDDBC3995D800C67B5B85932117CC48EB171AB2F031",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/games/genshin/genshin.routes.ts",
+      "beforeSha256": "F6B500509DA5E0D5B8F2306DC4AF82C0BB9DAE531F16E729D9F4F76CF688DEA5",
+      "afterSha256": "F6B500509DA5E0D5B8F2306DC4AF82C0BB9DAE531F16E729D9F4F76CF688DEA5",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.http.test.ts",
+      "beforeSha256": "DA4893F725C5E3146773DF54875BCD330B7F8FEC469E138C1C34A2093B4C4808",
+      "afterSha256": "DA4893F725C5E3146773DF54875BCD330B7F8FEC469E138C1C34A2093B4C4808",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.limits.test.ts",
+      "beforeSha256": "98965CBAB508F7B2335D8918043327EFB3B69D66F7799DE9AC590609C537451F",
+      "afterSha256": "98965CBAB508F7B2335D8918043327EFB3B69D66F7799DE9AC590609C537451F",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.limits.ts",
+      "beforeSha256": "02C6B3FE75B0D16B21E3640D0C6782BDBA8D15023A78A87AEF9C9B341E379157",
+      "afterSha256": "02C6B3FE75B0D16B21E3640D0C6782BDBA8D15023A78A87AEF9C9B341E379157",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.repository.ts",
+      "beforeSha256": "B2632D526AF1F4AE48C6D8E334E8129BCA58A66356DD5124891C150679318C64",
+      "afterSha256": "B2632D526AF1F4AE48C6D8E334E8129BCA58A66356DD5124891C150679318C64",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.routes.ts",
+      "beforeSha256": "1CC369F5E8F91579D45FE2A49D37A47B2CB8F5B63080ACC4D9EE239BB355359C",
+      "afterSha256": "1CC369F5E8F91579D45FE2A49D37A47B2CB8F5B63080ACC4D9EE239BB355359C",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.schema.ts",
+      "beforeSha256": "00C341155A8CCF59A363626C0EA5FCD742C6E2286A57BBCF0C7D751199AC3884",
+      "afterSha256": "00C341155A8CCF59A363626C0EA5FCD742C6E2286A57BBCF0C7D751199AC3884",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.service.ts",
+      "beforeSha256": "68F98CCEC6404825CDE42DBA414213A1DEE2B274C4DA123B33D13C7194382084",
+      "afterSha256": "68F98CCEC6404825CDE42DBA414213A1DEE2B274C4DA123B33D13C7194382084",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.routes.ts",
+      "beforeSha256": "3F0951B1AA125FA4F47F4D732356B36AB9CAF3A95F51063510E2363D666743BD",
+      "afterSha256": "3F0951B1AA125FA4F47F4D732356B36AB9CAF3A95F51063510E2363D666743BD",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/src/platform/security.http.test.ts",
+      "beforeSha256": "1911A123B32D9DA5F1222E49F01CC1F3CB02E853AF0772A5CEEC4DC524845A57",
+      "afterSha256": "1911A123B32D9DA5F1222E49F01CC1F3CB02E853AF0772A5CEEC4DC524845A57",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/tooling/request-safety-browser.mjs",
+      "beforeSha256": "8E0628E909BB9E83DCDF091011AD8A3E26F4164E1708D16720B69DAEE1336BDB",
+      "afterSha256": "8E0628E909BB9E83DCDF091011AD8A3E26F4164E1708D16720B69DAEE1336BDB",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "apps/api/tooling/request-safety.integration.test.js",
+      "beforeSha256": "B328886BA8C7FD29534EC6CFBE6A1C64D65DFB16212DAB66839C973721802AEE",
+      "afterSha256": "B328886BA8C7FD29534EC6CFBE6A1C64D65DFB16212DAB66839C973721802AEE",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/acceptance.md",
+      "beforeSha256": "3D55EF2B5A69F57A0418ECD2CCB4C5F7378816D1F5A0875D377C540E375DB4FC",
+      "afterSha256": "3D55EF2B5A69F57A0418ECD2CCB4C5F7378816D1F5A0875D377C540E375DB4FC",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/beta-readiness.md",
+      "beforeSha256": "E9B9AF1FAF7581E3913FE64C2CDA472B4ECACF5760CAF20F4BF14710C9D0764D",
+      "afterSha256": "E9B9AF1FAF7581E3913FE64C2CDA472B4ECACF5760CAF20F4BF14710C9D0764D",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-fixture-results.json",
+      "beforeSha256": "7B33C5809BB037AEFB566FFA9F039D7AF5C05549ACF721CE92E02C5BD6877745",
+      "afterSha256": "7B33C5809BB037AEFB566FFA9F039D7AF5C05549ACF721CE92E02C5BD6877745",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-import-429.jpg",
+      "beforeSha256": "ADB23511334671C5C1B692937E7E0403AC03CD5B363757E8BAD6EA186140C5FE",
+      "afterSha256": "ADB23511334671C5C1B692937E7E0403AC03CD5B363757E8BAD6EA186140C5FE",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-import-retry.jpg",
+      "beforeSha256": "53D43CB3DD4F7F9D61D6F09C62A3502DDFFB81A9125F08CA3C552047A974B82A",
+      "afterSha256": "53D43CB3DD4F7F9D61D6F09C62A3502DDFFB81A9125F08CA3C552047A974B82A",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-login-429.jpg",
+      "beforeSha256": "CDC3B4D24F5AC2FAA94C176BF533265302A11773EA0B09737814DEDD07C38FB8",
+      "afterSha256": "CDC3B4D24F5AC2FAA94C176BF533265302A11773EA0B09737814DEDD07C38FB8",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-no-import.jpg",
+      "beforeSha256": "D0A41CC241D655CDBE2750E9A9E49C6AE0FB783DC14D42099825EC82E30C860B",
+      "afterSha256": "D0A41CC241D655CDBE2750E9A9E49C6AE0FB783DC14D42099825EC82E30C860B",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-owner-switch.jpg",
+      "beforeSha256": "8F58857B0A4999A941D4B4B5F292524D4E344FC69D441326ED9B3322B2119347",
+      "afterSha256": "8F58857B0A4999A941D4B4B5F292524D4E344FC69D441326ED9B3322B2119347",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-register-429.jpg",
+      "beforeSha256": "2B5569B3D8E4615EA45047F9BD9A2C20A899063DA8DAB70AEE40BD8E29D5AF87",
+      "afterSha256": "2B5569B3D8E4615EA45047F9BD9A2C20A899063DA8DAB70AEE40BD8E29D5AF87",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/cleanup.json",
+      "beforeSha256": "636C4314C90F827F92C0B2D31C9B1A9A43CCDFEFF8A6E5B8B29A6DACD93D2E6E",
+      "afterSha256": "636C4314C90F827F92C0B2D31C9B1A9A43CCDFEFF8A6E5B8B29A6DACD93D2E6E",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/endpoint-policy.md",
+      "beforeSha256": "593131B64E20B51E43915396397416A90622AA59E17DB0320AE6FCC1E337186E",
+      "afterSha256": "593131B64E20B51E43915396397416A90622AA59E17DB0320AE6FCC1E337186E",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/entrypoint-results.json",
+      "beforeSha256": "5E8ED2D4AB83B82B9FA435995F38ABDD9DA767E3E12841BDA17694904CED019E",
+      "afterSha256": "5E8ED2D4AB83B82B9FA435995F38ABDD9DA767E3E12841BDA17694904CED019E",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/execution-attempts.json",
+      "beforeSha256": "7362F09C1DF1F47BA6721ECFAA8F58030DBC1B56C48B560775DA67A6E9FE6050",
+      "afterSha256": "7362F09C1DF1F47BA6721ECFAA8F58030DBC1B56C48B560775DA67A6E9FE6050",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/final-checks.json",
+      "beforeSha256": "80791C88FA4546699CF5CCD2B446D1546141858529063B20F7F90E3690841F73",
+      "afterSha256": "80791C88FA4546699CF5CCD2B446D1546141858529063B20F7F90E3690841F73",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/focused-initial.log",
+      "beforeSha256": "DA3154B411ADD302FF2B1AAB14EFE107B7DCB40553C641F429C1CFAA58BC335B",
+      "afterSha256": "DA3154B411ADD302FF2B1AAB14EFE107B7DCB40553C641F429C1CFAA58BC335B",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/focused-results.log",
+      "beforeSha256": "F21DD70F27655F6142B69CF98BE043CF0A6121FFD4F195FB015EF1EE96632242",
+      "afterSha256": "F21DD70F27655F6142B69CF98BE043CF0A6121FFD4F195FB015EF1EE96632242",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/implementation_plan.md",
+      "beforeSha256": "492051907F3E55E21357FAFC2602B93DC069C3980667F008A71B6DC06B61DCAC",
+      "afterSha256": "492051907F3E55E21357FAFC2602B93DC069C3980667F008A71B6DC06B61DCAC",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/preservation-check.json",
+      "beforeSha256": "E68CC29C62149C727C82BE36CF8709089AC8ADD31363A719AAC452700872FF28",
+      "afterSha256": "E68CC29C62149C727C82BE36CF8709089AC8ADD31363A719AAC452700872FF28",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/recovery-initial-failure.json",
+      "beforeSha256": "800F01244CC4A5A19C6AFF88322267D40F4AB2F994C128173D7BE5C769C311A0",
+      "afterSha256": "800F01244CC4A5A19C6AFF88322267D40F4AB2F994C128173D7BE5C769C311A0",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/recovery-results.json",
+      "beforeSha256": "BB62A54C3302C36542CFC637AC999FA21DB472EEFF00E7429403D55E9C57D1B6",
+      "afterSha256": "BB62A54C3302C36542CFC637AC999FA21DB472EEFF00E7429403D55E9C57D1B6",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/runbook.md",
+      "beforeSha256": "43C1682DE2969A0CAED234D20A0FB9F8421480BEAC5E8BEBC88EFEEF01AA9D71",
+      "afterSha256": "43C1682DE2969A0CAED234D20A0FB9F8421480BEAC5E8BEBC88EFEEF01AA9D71",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/security-isolation-results.log",
+      "beforeSha256": "D886D79BACD734C8ADC2756BF8CEDD98041AAB4C0628FB3A743D3056200DCBC4",
+      "afterSha256": "D886D79BACD734C8ADC2756BF8CEDD98041AAB4C0628FB3A743D3056200DCBC4",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/starting-state.json",
+      "beforeSha256": "48AAA382474C2887A3D7B70AB73C8146C6D653654205F16B4BDDB018A07A8538",
+      "afterSha256": "48AAA382474C2887A3D7B70AB73C8146C6D653654205F16B4BDDB018A07A8538",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/task.md",
+      "beforeSha256": "9D4596EDE962548C840836A6CA5FB8DC31E53B2C7009A4E1F9249EACEC226684",
+      "afterSha256": "9D4596EDE962548C840836A6CA5FB8DC31E53B2C7009A4E1F9249EACEC226684",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/test-results-summary.json",
+      "beforeSha256": "EB34C49C16C4D5EA69F402E6C4737901B8FCCD97A08F82A5ED4B87D2B9D62D8F",
+      "afterSha256": "EB34C49C16C4D5EA69F402E6C4737901B8FCCD97A08F82A5ED4B87D2B9D62D8F",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/validation-results.json",
+      "beforeSha256": "A3E164321A59A7888F4C6E60937C24F395F10084B6DCBBC5617A7FFF32F1B7DD",
+      "afterSha256": "A3E164321A59A7888F4C6E60937C24F395F10084B6DCBBC5617A7FFF32F1B7DD",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/walkthrough.md",
+      "beforeSha256": "149815568B6A87F7107CA8D379336081CF8290E3BCC48934657F24948776F598",
+      "afterSha256": "149815568B6A87F7107CA8D379336081CF8290E3BCC48934657F24948776F598",
+      "unchanged": true,
+      "intentionalReviewUpdate": false
+    },
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "beforeSha256": "F120E5DEA40726D9D224D0CC3F403C1EDC5ABF98309AA5D91C755CE3F59C70EE",
+      "afterSha256": "1C2205EC3C188EC19CE53D17A2D046DF572DB8614DAA5F2708BBCCFF99CA5BDE",
+      "unchanged": false,
+      "intentionalReviewUpdate": true
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "beforeSha256": "690900388F925FDF0A3C0A9001387E6A483869AE5161DB823E656EB11DFE7D6A",
+      "afterSha256": "54A109D95742CAAB537F1BF22B5C50E036EF7890A6FFBB95C29C9EC9BBD89649",
+      "unchanged": false,
+      "intentionalReviewUpdate": true
+    }
+  ],
+  "historicalManifestFileUnchanged": true,
+  "reviewFiles": [
+    {
+      "path": "docs/ROADMAP.md",
+      "beforeSha256": "690900388F925FDF0A3C0A9001387E6A483869AE5161DB823E656EB11DFE7D6A",
+      "sha256": "54A109D95742CAAB537F1BF22B5C50E036EF7890A6FFBB95C29C9EC9BBD89649"
+    },
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "beforeSha256": "F120E5DEA40726D9D224D0CC3F403C1EDC5ABF98309AA5D91C755CE3F59C70EE",
+      "sha256": "1C2205EC3C188EC19CE53D17A2D046DF572DB8614DAA5F2708BBCCFF99CA5BDE"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/implementation_review.md",
+      "beforeSha256": null,
+      "sha256": "F99FB2FFB2505CD1E9DC123BF9BF3F3D7BDFA2796BB7426F329DDEAD87E2D962"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/review-cleanup.json",
+      "beforeSha256": null,
+      "sha256": "0C11E95FE270C0589578C5A01C02094809ABD567428D8C5F5D9AD155B12E59D4"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/review-entrypoint-results.json",
+      "beforeSha256": null,
+      "sha256": "775E6ABFFC9D2BF2C82B3DAA72103EBADB2DE9363EA5FF5FD2174E5D03B9452B"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/review-fixture-provenance.md",
+      "beforeSha256": null,
+      "sha256": "E35051B44FE9556F8AB782E4BBADAD124CC30C0E797EA3709DF057A3F120CBD4"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/review-fixture.json",
+      "beforeSha256": null,
+      "sha256": "D153B0A54E861FF4E880941D5DE2812D9C99976196D929A44D72C3953365F77A"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/review-initial-recovery-failure.json",
+      "beforeSha256": null,
+      "sha256": "7919879FE23E5907A6A08DDC7C3F82E8A2354B47E02A5D0FDDCD658F6EB72C11"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/review-recovery-results.json",
+      "beforeSha256": null,
+      "sha256": "D65AE5435D86D043A13334D091C843CE45E8983AEFB50EDEE6B75E3785CE9A76"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/review-starting-state.json",
+      "beforeSha256": null,
+      "sha256": "5F5D4453DB6553A82CF669B907F68F6DE21202C01F92997894F7FDD15BEBDBB9"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/review-test-results-summary.json",
+      "beforeSha256": null,
+      "sha256": "E5561BA583268A980AAC1FE485B02DAC809D8259E5D719B63C3252EC8D0F7410"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/implementation-prompt.md",
+      "beforeSha256": null,
+      "sha256": "9032E2C46CC9FBCA33EA6179256CA869590B0E304B2A76CBE060BD95F31F0E88"
+    }
+  ],
+  "selfHashExcluded": "docs/plans/c5c-request-safety/review-validation.json",
+  "checks": {
+    "prettier": [
+      { "path": "docs/ROADMAP.md", "passed": true },
+      { "path": "docs/plans/CURRENT_HANDOFF.md", "passed": true },
+      { "path": "docs/plans/c5c-request-safety/implementation_review.md", "passed": true },
+      { "path": "docs/plans/c5c-request-safety/review-cleanup.json", "passed": true },
+      { "path": "docs/plans/c5c-request-safety/review-entrypoint-results.json", "passed": true },
+      { "path": "docs/plans/c5c-request-safety/review-fixture-provenance.md", "passed": true },
+      { "path": "docs/plans/c5c-request-safety/review-fixture.json", "passed": true },
+      {
+        "path": "docs/plans/c5c-request-safety/review-initial-recovery-failure.json",
+        "passed": true
+      },
+      { "path": "docs/plans/c5c-request-safety/review-recovery-results.json", "passed": true },
+      { "path": "docs/plans/c5c-request-safety/review-starting-state.json", "passed": true },
+      { "path": "docs/plans/c5c-request-safety/review-test-results-summary.json", "passed": true },
+      { "path": "docs/plans/c5d-account-data/implementation-prompt.md", "passed": true }
+    ],
+    "diffCheckExit": 0,
+    "gitWarnings": "Only inherited checkout line-ending warnings; no configuration/normalization change."
+  },
+  "nextPhase": {
+    "name": "C5d account export and deliberate deletion",
+    "prompt": "docs/plans/c5d-account-data/implementation-prompt.md",
+    "started": false,
+    "model": "GPT-6 Astra",
+    "effort": "Extra high (xhigh)"
+  },
+  "remoteCIObserved": false,
+  "productionDatabaseConnected": false,
+  "browserAcceptanceRepeated": false,
+  "settingsChanged": false,
+  "committed": false,
+  "pushed": false,
+  "released": false,
+  "C6C7Started": false
+}

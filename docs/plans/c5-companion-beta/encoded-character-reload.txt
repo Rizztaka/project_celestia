@@ -1,0 +1,115 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#companion-content"
+  - link "Project Celestia":
+    - /url: /
+  - button "Sign out"
+  - navigation "Primary navigation":
+    - link "Today":
+      - /url: /
+    - link "Characters":
+      - /url: /roster
+    - link "Planner":
+      - /url: /planner
+  - navigation "Supporting navigation":
+    - link "Import":
+      - /url: /import
+    - link "Inventory":
+      - /url: /inventory
+    - link "Settings & profile":
+      - /url: /profile
+    - generic "Other tools +"
+- main [active]:
+  - link "← All characters":
+    - /url: /roster
+  - button "Refresh"
+  - region "Focus and goals":
+    - button "Add to focus"
+    - link "Manage character goals":
+      - /url: /planner?tab=farming&target=Opaque%20%2F%20%E5%AD%97
+    - link "Add ascension goal":
+      - /url: /planner?tab=farming&newType=CHARACTER_ASCENSION&key=Opaque%20%2F%20%E5%AD%97
+    - link "Add base talent goal":
+      - /url: /planner?tab=farming&newType=CHARACTER_TALENT&key=Opaque%20%2F%20%E5%AD%97
+    - paragraph: Weapon goals retain the selected type key after equipment changes; they do not track a physical copy. Raw talent values cannot be compared to base talent targets.
+    - paragraph: Stored progression has no per-character observation timestamp. Section receipts describe imports.
+  - region "Opaque / 字":
+    - generic: OP
+    - paragraph: Recorded character
+    - heading "Opaque / 字" [level=1]
+    - paragraph: Opaque / 字
+    - term: Level
+    - definition: "20"
+    - term: Ascension
+    - definition: "0"
+    - term: Constellation
+    - definition: "0"
+    - heading "Stored talents" [level=2]
+    - term: Normal attack
+    - definition: "1"
+    - term: Skill
+    - definition: "1"
+    - term: Burst
+    - definition: "1"
+    - paragraph: Values are stored as supplied. Base versus constellation-adjusted talent levels cannot be established from these records. Legacy/default origin is not recorded per value.
+    - paragraph:
+      - text: "Section received:"
+      - time: 10/8/2026, 7:24:40 PM
+    - paragraph: "Source label: C5 partial synthetic · Supplied entries: 1"
+    - paragraph: Characters were merged. This receipt does not date each retained character.
+  - region "Recorded weapon assignment":
+    - heading "Recorded weapon assignment" [level=2]
+    - paragraph: No assignment in recorded data
+    - paragraph: No piece is assigned here in the stored section.
+    - paragraph: This does not confirm an empty in-game slot.
+    - paragraph:
+      - text: "Section received:"
+      - time: 10/8/2026, 7:18:39 PM
+    - paragraph: "Source label: C5 synthetic initial · Supplied entries: 1"
+    - paragraph: Recorded section replacement. This receipt does not prove a complete game scan.
+  - region "Recorded artifact assignments":
+    - heading "Recorded artifact assignments" [level=2]
+    - paragraph:
+      - text: "Section received:"
+      - time: 10/8/2026, 7:18:39 PM
+    - paragraph: "Source label: C5 synthetic initial · Supplied entries: 1"
+    - paragraph: Recorded section replacement. This receipt does not prove a complete game scan.
+    - article:
+      - heading "flower" [level=3]:
+        - generic: f
+        - text: flower
+      - paragraph: No assignment in recorded data
+      - paragraph: No piece is assigned here in the stored section.
+      - paragraph: This does not confirm an empty in-game slot.
+    - article:
+      - heading "plume" [level=3]:
+        - generic: p
+        - text: plume
+      - paragraph: No assignment in recorded data
+      - paragraph: No piece is assigned here in the stored section.
+      - paragraph: This does not confirm an empty in-game slot.
+    - article:
+      - heading "sands" [level=3]:
+        - generic: s
+        - text: sands
+      - paragraph: No assignment in recorded data
+      - paragraph: No piece is assigned here in the stored section.
+      - paragraph: This does not confirm an empty in-game slot.
+    - article:
+      - heading "goblet" [level=3]:
+        - generic: g
+        - text: goblet
+      - paragraph: No assignment in recorded data
+      - paragraph: No piece is assigned here in the stored section.
+      - paragraph: This does not confirm an empty in-game slot.
+    - article:
+      - heading "circlet" [level=3]:
+        - generic: c
+        - text: circlet
+      - paragraph: No assignment in recorded data
+      - paragraph: No piece is assigned here in the stored section.
+      - paragraph: This does not confirm an empty in-game slot.
+    - paragraph: Recorded set counts
+    - paragraph: No pieces assigned in the five recorded slots.
+    - paragraph: Counts describe these records; set effects and build quality are not evaluated.
+  - paragraph: Import receipts describe when Celestia received a section, not when items were observed in the game. Equipment is recorded data, with no live game connection or acquisition dates. Explicit empty-slot observations are not stored.

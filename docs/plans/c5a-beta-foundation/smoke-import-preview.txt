@@ -1,0 +1,87 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#companion-content"
+  - link "Project Celestia":
+    - /url: /
+  - button "Sign out"
+  - navigation "Primary navigation":
+    - link "Today":
+      - /url: /
+    - link "Characters":
+      - /url: /roster
+    - link "Planner":
+      - /url: /planner
+  - navigation "Supporting navigation":
+    - link "Import":
+      - /url: /import
+    - link "Inventory":
+      - /url: /inventory
+    - link "Settings & profile":
+      - /url: /profile
+    - generic "Other tools +"
+- main:
+  - heading "Import account data" [level=1]
+  - paragraph: Bring a GOOD export from Genshin Optimizer or Inventory Kamera into your companion. Choose what to update, review the changes, then confirm. Nothing is saved during preview. Imports update observations; focus, declared goals, history and plan choices stay yours.
+  - paragraph:
+    - text: Importing is optional.
+    - link "Use Today without an import":
+      - /url: /
+    - text: . Receipts date this import, not a live game observation.
+  - generic "Saved data freshness"
+  - generic: GOOD JSON export
+  - textbox "GOOD JSON export":
+    - /placeholder: "{ \"format\": \"GOOD\", \"version\": 2, \"characters\": [...] }"
+    - text: "{\"format\":\"GOOD\",\"version\":2,\"source\":\"C5a synthetic smoke\",\"materials\":{\"Mora\":1000}}"
+  - group "Choose sections to update":
+    - generic: Choose sections to update
+    - paragraph: Unselected or missing sections stay as they are. Characters merge into your roster; selected inventories replace the saved lists.
+    - checkbox "Characters Not in export · preserved" [disabled]
+    - generic: Characters
+    - generic: Not in export · preserved
+    - checkbox "Weapons Not in export · preserved" [disabled]
+    - generic: Weapons
+    - generic: Not in export · preserved
+    - checkbox "Artifacts Not in export · preserved" [disabled]
+    - generic: Artifacts
+    - generic: Not in export · preserved
+    - checkbox "Materials" [checked]
+    - generic: Materials
+  - button "Preview changes"
+  - region "Import preview":
+    - heading "Review your changes" [level=2]
+    - paragraph: Preview expires at 11:48:29 PM. Changing your export or selection requires a new preview.
+    - table "Counts are saved entries, not total material quantities.":
+      - caption: Counts are saved entries, not total material quantities.
+      - rowgroup:
+        - row "Section Action Saved Incoming After":
+          - columnheader "Section"
+          - columnheader "Action"
+          - columnheader "Saved"
+          - columnheader "Incoming"
+          - columnheader "After"
+      - rowgroup:
+        - row "Characters preserve 0 Not provided 0":
+          - rowheader "Characters"
+          - cell "preserve"
+          - cell "0"
+          - cell "Not provided"
+          - cell "0"
+        - row "Weapons preserve 0 Not provided 0":
+          - rowheader "Weapons"
+          - cell "preserve"
+          - cell "0"
+          - cell "Not provided"
+          - cell "0"
+        - row "Artifacts preserve 0 Not provided 0":
+          - rowheader "Artifacts"
+          - cell "preserve"
+          - cell "0"
+          - cell "Not provided"
+          - cell "0"
+        - row "Materials replace 0 1 1":
+          - rowheader "Materials"
+          - cell "replace"
+          - cell "0"
+          - cell "1"
+          - cell "1"
+    - button "Confirm import"

@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
-import { progressionIntelligenceService } from './progression-intelligence.service.js';
+
 import { NotFoundError } from '@/core/errors/app-error.js';
+
+import { progressionIntelligenceService } from './progression-intelligence.service.js';
 
 export const progressionIntelligenceController = {
   async getProgressionAnalysis(req: Request, res: Response) {
@@ -12,7 +14,7 @@ export const progressionIntelligenceController = {
         success: true,
         data: result,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (err instanceof NotFoundError) {
         res.status(404).json({ success: false, error: err.message });
       } else {

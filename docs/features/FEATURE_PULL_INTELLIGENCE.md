@@ -1,5 +1,11 @@
 # Feature: Pull Intelligence Engine (Milestone 4E)
 
+> **Companion scope update — 2026-09-25.** MUST_PULL/GOOD_VALUE/SKIP banner verdicts are outside the target companion experience. Freeze expansion and review UI/API callers before retirement. C7 may add a personal wishlist and savings plan; it does not promise banner superiority, spending advice, or a new pull simulator. Preserve existing records and compatibility during transition.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 ## Goal
 
 Evaluate the current character and weapon banners to provide a personalized "Pull Value Score" for the user, based exclusively on their current roster, investments, and team gaps.

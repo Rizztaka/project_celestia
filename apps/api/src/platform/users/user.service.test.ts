@@ -23,6 +23,7 @@ const mockUser: User = {
   email: 'rizzler@celestia.dev',
   username: 'rizzler',
   password: '$2a$12$hashedpasswordvalue.stored.in.db',
+  emailVerifiedAt: null,
   createdAt: new Date('2026-01-01T00:00:00Z'),
   updatedAt: new Date('2026-01-01T00:00:00Z'),
 };

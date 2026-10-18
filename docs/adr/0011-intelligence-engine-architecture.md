@@ -1,5 +1,7 @@
 # ADR 0011: Intelligence Engine Architecture (Calculator vs Explainer)
 
+> **2026-09-25 amendment:** The calculator/explainer separation remains active. ADR 0012 and the companion specification narrow the product scope: existing engine names and scores are not commitments to optimization or primary navigation. See [ADR 0012](0012-genshin-companion-direction.md).
+
 ## Context
 
 Phase 4 of Project Celestia introduces the "Intelligence Core," which analyzes user accounts to provide recommendations (e.g., Character priorities, Team compositions). Generating accurate, trustworthy, and actionable recommendations requires complex logic. If not properly structured, this logic can quickly become a tangled mess of arbitrary heuristics and hardcoded strings, making the system difficult to test, debug, and expand.

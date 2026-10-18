@@ -1,0 +1,215 @@
+{
+  "date": "2026-10-11",
+  "startingState": "starting-state.json",
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "branch": "master",
+  "index": [],
+  "scope": "C5b delta relative to 770-file inherited starting manifest, not the much larger dirty Git diff.",
+  "selfHashExcluded": "This manifest excludes its own content hash to avoid a circular digest.",
+  "files": [
+    {
+      "path": "apps/api/tooling/recovery.test.js",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "183CEA6198991091620A2A0063EF4CC49BC1102FDB8511EB13838888A9E363F9"
+    },
+    {
+      "path": "apps/api/tooling/recovery/cli.mjs",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "59FD376382A32B0C38F4CB993657F5696D9246B97117C36147D73E4B7496B0E5"
+    },
+    {
+      "path": "apps/api/tooling/recovery/fixture.mjs",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "E61A9B93BC3B9D0C97719295518A9BBDFE58A797C84A09741C44A3538DCE7361"
+    },
+    {
+      "path": "apps/api/tooling/recovery/policy.mjs",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "A87FFFCFE2E61A453B55AEACA310A91CD6AEE79B66C9918759B11EECCC1505FF"
+    },
+    {
+      "path": "apps/api/tooling/recovery/probe.mjs",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "D2787CA5509E466693CC04227026738A013C5B5CC25EF4B02E73161B170F67AC"
+    },
+    {
+      "path": "apps/api/tooling/recovery/process.mjs",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "6831A8A8072DE4AAF947020693B0B6DD25015163BF9CC61BB2FA17985542B0C3"
+    },
+    {
+      "path": "apps/api/tooling/recovery/rehearse.mjs",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "810320C50BC8855F906D8D494873D7664FC3203769AA6428826D732C51B492BC"
+    },
+    {
+      "path": "apps/api/tooling/recovery/seed.mjs",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "32F72C3D8FB702333D1FD9AF9787AADA15328F2F0519763FBB96FE6BA4846285"
+    },
+    {
+      "path": "apps/api/tooling/recovery/snapshot.mjs",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "F444DA6B3D64ADCC8ECFDCE4415EBD69044D1B66FB75808CC4D694AAD93CA3EB"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "change": "modified-inherited",
+      "beforeSha256": "F3BF281CD6D286D28F9B5AAF4EDDBA01CD010F5BE75326B21C054AF9DE0A05A6",
+      "sha256": "39E0DCE760A5DB672B6F7809D65CC118730EAF8BAB1515C9E315044E985AC0AB"
+    },
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "change": "modified-inherited",
+      "beforeSha256": "9E8AE5048DD6CFD10230FB49775211B4C17AC8933E1724531821F756E108C35B",
+      "sha256": "3B822DFAEAB3210B3E3E51735E2F49AB286DABAE0D4A8F789D757A4033E4D9BB"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/beta-readiness.md",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "9223C7C4FEBD627E3352D58EFEF634A0095E6D15E995B34FBBF0DFA95D81D890"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/cleanup.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "AC28A804F7C9700A3D21C6446DA3414F5FD6B207D955E3822E90FC3128EB3878"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/entrypoint-results.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "E48C30E385447C67A27F6811B8805838507ACE131D1998E4A636C2155FED0EAB"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/execution-attempts.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "9C16D4A8E13B46E5C83F360E7FC0463F3DCFB93A3CE7F3B7D8F97E859DE82C92"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/finalization-checks.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "9637B82FC94CDCC014C369DE1E939C3EB65151EC137E2AD6A0D4C57083A2A8C4"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/implementation_plan.md",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "49C2A246176D4A72E7F30740D072040091A8504475E542DBD61B8F9121CB8E64"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/local-fixture.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "AAC665FF66B1B4FDE8488D8BA4EF4039C98F70DAB5910E45EFCE728A5A67F097"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/preservation-check.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "3D0F146B0D22AA61D835A265E8760091713C6A8501434185CDFACDF2749369F5"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runbook.md",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "90F84FBBFCF6F76A2B76A01E04EE9B193061544C0ADEB962DFBC83FDA5B3DDE5"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/identity-failure.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "79D3C91B0ACE0C2724C18751C510146C2F3FBA2C2AD1F32E972E27883BCD912F"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/nonempty-rejected.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "ADDDD79904C1AB517671118ED40B5D44D50CCE6238B75A3D1060008196EAFB75"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/probe-failure.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "CB9A4E7F4DC412488638FC235BDF4D1C6BEB2DCF24967E32427DCBFD5B4000EA"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/startup-failure.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "C8FD7A365A77B776931C5821191F728919172F810E281C6CB6764799F3FA80E1"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/success-1.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "A8E4E2E481CA9CA599C094BF4E2BA21A7212C7537CA4AE2C075D110BB3E5EC53"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/success-2-verify.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "D5091905819373C5E84C3C0395A084FCB2C5454DF6A6657052B6522E1FD6E5CB"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/success-3-final.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "73EA47F6D2CA3532891D09B13A18D96EF160C2C108814BA9E11D9192A642DA7C"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/truncated-rejected.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "D46C8172ADC671A42DB0546DAC1DF075EA2517B6D95B62C059FA3428627C691C"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/starting-state.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "2D88517F85BB4AA87B72E5A0AE88D3FEF82EA430B60F5EF4FBCE5240509DA84B"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/task.md",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "CE77FE276E52A1DCFE16BA53E9A7AFA8D6BC99080F9D69752DD7CE05DF0BED79"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/test-results-summary.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "E2A69A5896A543DBC16A3800D9900651C8E5BA12E44A8AF21F4B98D6D1B6587D"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/validation-results.json",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "BD60991B2715B3E88E46F804EA5F031981C1D5679581D47E4C22811FEF9E42CA"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/walkthrough.md",
+      "change": "new",
+      "beforeSha256": null,
+      "sha256": "D8027CA38D8A5600D76FC2AAFC12BC6E3D011A9319206662684DD3680CFBFE89"
+    },
+    {
+      "path": "package.json",
+      "change": "modified-inherited",
+      "beforeSha256": "BCD9C27627577751BE5438CBFA482A59A2F55B537386AB3339D9513ADD8B7BED",
+      "sha256": "06AC48BF24112580605C6CAA85A5C4BE6C6E23FA70AFCB69979A9519C5ADB5D6"
+    }
+  ]
+}

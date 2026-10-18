@@ -1,8 +1,15 @@
 # Feature Specification: Genshin Roster HTTP API & Import UI (Milestone 2C)
 
+> **Companion scope update — 2026-09-25.** Reuse the existing HTTP import endpoint and ImportPage. C1 adds section-scope preview, freshness, safe replacement semantics, and cache invalidation. Its target import contract supersedes these historical examples. Do not recreate the existing route or UI.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 **Feature ID:** FEAT-004  
 **Priority:** P0  
-**Status:** Designing  
+**Historical status:** Designing
+
 **Phase:** 2C — HTTP API Layer & Frontend Import UI  
 **Last Updated:** 2026-08-07
 

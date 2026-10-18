@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "id": "0f185d7f5a6bf78c",
+  "startedAt": "2026-10-12T17:01:47.215Z",
+  "platform": "win32",
+  "node": "v22.14.0",
+  "fixture": {
+    "dataDir": "C:/Users/inuzu/AppData/Local/Temp/celestia-c4-6d547b9077534faa9ea7871b1017b2f6/data",
+    "host": "127.0.0.1",
+    "port": 55448,
+    "adminDatabase": "celestia_test_c4",
+    "provenance": "docs/plans/c5a-beta-foundation/walkthrough.md",
+    "versions": {
+      "pg_dump": "pg_dump (PostgreSQL) 18.4",
+      "pg_restore": "pg_restore (PostgreSQL) 18.4",
+      "postgres": "postgres (PostgreSQL) 18.4",
+      "pg_ctl": "pg_ctl (PostgreSQL) 18.4"
+    },
+    "owner": "NITRO\\inuzu",
+    "major": 18,
+    "systemIdentifier": "7693191646738863628",
+    "pid": 31724,
+    "serverVersion": "18.4"
+  },
+  "permissions": {
+    "mechanism": "Windows protected ACL",
+    "currentUserOnly": true,
+    "verified": true
+  },
+  "fault": null,
+  "stages": [
+    { "stage": "fixture-start", "result": "passed", "elapsedMs": 2344 },
+    {
+      "stage": "fresh-resources",
+      "result": "failed",
+      "elapsedMs": 143,
+      "code": "UNEXPECTED_FAILURE_DETAILS_WITHHELD"
+    }
+  ],
+  "result": "failed",
+  "failure": { "stage": "fresh-resources", "code": "UNEXPECTED_FAILURE_DETAILS_WITHHELD" },
+  "cleanup": {
+    "databasesAndRolesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "privateFilesRetained": true,
+    "credentialsRemoved": true
+  },
+  "resources": [
+    {
+      "database": "celestia_test_0f185d7f5a6bf78c_source",
+      "role": "celestia_test_0f185d7f5a6bf78c_source",
+      "oid": null,
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-JAVMGG\\celestia_test_0f185d7f5a6bf78c_source",
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    },
+    {
+      "database": "celestia_test_0f185d7f5a6bf78c_restore",
+      "role": "celestia_test_0f185d7f5a6bf78c_restore",
+      "oid": null,
+      "directory": null,
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    },
+    {
+      "database": "celestia_test_0f185d7f5a6bf78c_verify",
+      "role": "celestia_test_0f185d7f5a6bf78c_verify",
+      "oid": null,
+      "directory": null,
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    }
+  ],
+  "elapsedMs": 3215,
+  "finishedAt": "2026-10-12T17:01:50.437Z"
+}

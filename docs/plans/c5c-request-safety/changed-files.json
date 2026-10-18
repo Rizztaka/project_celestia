@@ -1,0 +1,293 @@
+{
+  "date": "2026-10-12",
+  "startingState": "starting-state.json",
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "branch": "master",
+  "index": "empty",
+  "scope": "C5c delta relative to captured inherited checkout; unrelated pre-existing Git changes are preserved.",
+  "selfHashExcluded": "docs/plans/c5c-request-safety/changed-files.json",
+  "files": [
+    {
+      "path": "apps/api/src/app.ts",
+      "beforeSha256": "B6AECC35908FB0C3DF12054BB31F9061B5131E758CCD9707776E56E27E4919CB",
+      "sha256": "73481A94322C1FEF62CA97630F6AAF5D87DEB10F1BB0374E1C9137335A47F566",
+      "change": "modified inherited file"
+    },
+    {
+      "path": "apps/api/src/core/config/request-safety.ts",
+      "beforeSha256": null,
+      "sha256": "E801EAD8DFB9437673DC5F873081BCE111EB6BDBCBE400EB26B1774D5BE81B50",
+      "change": "new C5c file"
+    },
+    {
+      "path": "apps/api/src/core/middleware/bounded-json.ts",
+      "beforeSha256": null,
+      "sha256": "6B09D3FB057758DC0F1642795FC2139B728EB8696BA73AF4B0EF141E9DD4CF6D",
+      "change": "new C5c file"
+    },
+    {
+      "path": "apps/api/src/core/middleware/request-admission.test.ts",
+      "beforeSha256": null,
+      "sha256": "7DFA822C25F520369367D675CF80F03CF68C213BCE65959CBB03BD5D14AE2D20",
+      "change": "new C5c file"
+    },
+    {
+      "path": "apps/api/src/core/middleware/request-admission.ts",
+      "beforeSha256": null,
+      "sha256": "74DDF53A9970F275D59A0BD7734B9F4276A12B984530551C1FF52EF2C972538A",
+      "change": "new C5c file"
+    },
+    {
+      "path": "apps/api/src/core/middleware/request-safety.http.test.ts",
+      "beforeSha256": null,
+      "sha256": "CB7F87A4D7807780873CBFDDBC3995D800C67B5B85932117CC48EB171AB2F031",
+      "change": "new C5c file"
+    },
+    {
+      "path": "apps/api/src/games/genshin/genshin.routes.ts",
+      "beforeSha256": "01EFBD25C5B14F7E5780BBBC6E7E72FBE227F29F2ADC3C9D744E2BCFB340ABC2",
+      "sha256": "F6B500509DA5E0D5B8F2306DC4AF82C0BB9DAE531F16E729D9F4F76CF688DEA5",
+      "change": "modified inherited file"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.http.test.ts",
+      "beforeSha256": "A07F2FD3077BB8CE9A5502952B3C20A4C884F5E2D2E46E5AB4FB6BF726CB5C6B",
+      "sha256": "DA4893F725C5E3146773DF54875BCD330B7F8FEC469E138C1C34A2093B4C4808",
+      "change": "modified inherited file"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.limits.test.ts",
+      "beforeSha256": null,
+      "sha256": "98965CBAB508F7B2335D8918043327EFB3B69D66F7799DE9AC590609C537451F",
+      "change": "new C5c file"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.limits.ts",
+      "beforeSha256": null,
+      "sha256": "02C6B3FE75B0D16B21E3640D0C6782BDBA8D15023A78A87AEF9C9B341E379157",
+      "change": "new C5c file"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.repository.ts",
+      "beforeSha256": "CDE6F3004016532EA5F5D6CD33A4BE0ABA504BC8127C39D681F3667D522D07C8",
+      "sha256": "B2632D526AF1F4AE48C6D8E334E8129BCA58A66356DD5124891C150679318C64",
+      "change": "modified inherited file"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.routes.ts",
+      "beforeSha256": "709EF286344B9B888A61F7C252F9971723DB75F213FEC39431ECB14931FB209A",
+      "sha256": "1CC369F5E8F91579D45FE2A49D37A47B2CB8F5B63080ACC4D9EE239BB355359C",
+      "change": "modified inherited file"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.schema.ts",
+      "beforeSha256": "69B83B69C7614DFB8721FD93C235E2080AC099BC62D3EA4216C99F48FCB292A1",
+      "sha256": "00C341155A8CCF59A363626C0EA5FCD742C6E2286A57BBCF0C7D751199AC3884",
+      "change": "modified inherited file"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.service.ts",
+      "beforeSha256": "5E2CC0334282F738E2900097DF20EC3FB1538451725853B60A2D3FA673FDB72D",
+      "sha256": "68F98CCEC6404825CDE42DBA414213A1DEE2B274C4DA123B33D13C7194382084",
+      "change": "modified inherited file"
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.routes.ts",
+      "beforeSha256": "63E5762FF94389CD3569E6D2B1B789312BF9A6D314F3D8C48DD63A3E1BBC1AEF",
+      "sha256": "3F0951B1AA125FA4F47F4D732356B36AB9CAF3A95F51063510E2363D666743BD",
+      "change": "modified inherited file"
+    },
+    {
+      "path": "apps/api/src/platform/security.http.test.ts",
+      "beforeSha256": "118C2EB7EAEF83572363B7A0C8626ED5BB1A5E7A52B27A7406B1EB03742B6410",
+      "sha256": "1911A123B32D9DA5F1222E49F01CC1F3CB02E853AF0772A5CEEC4DC524845A57",
+      "change": "modified inherited file"
+    },
+    {
+      "path": "apps/api/tooling/request-safety-browser.mjs",
+      "beforeSha256": null,
+      "sha256": "8E0628E909BB9E83DCDF091011AD8A3E26F4164E1708D16720B69DAEE1336BDB",
+      "change": "new C5c file"
+    },
+    {
+      "path": "apps/api/tooling/request-safety.integration.test.js",
+      "beforeSha256": null,
+      "sha256": "B328886BA8C7FD29534EC6CFBE6A1C64D65DFB16212DAB66839C973721802AEE",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/acceptance.md",
+      "beforeSha256": null,
+      "sha256": "3D55EF2B5A69F57A0418ECD2CCB4C5F7378816D1F5A0875D377C540E375DB4FC",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/beta-readiness.md",
+      "beforeSha256": null,
+      "sha256": "E9B9AF1FAF7581E3913FE64C2CDA472B4ECACF5760CAF20F4BF14710C9D0764D",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-fixture-results.json",
+      "beforeSha256": null,
+      "sha256": "7B33C5809BB037AEFB566FFA9F039D7AF5C05549ACF721CE92E02C5BD6877745",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-import-429.jpg",
+      "beforeSha256": null,
+      "sha256": "ADB23511334671C5C1B692937E7E0403AC03CD5B363757E8BAD6EA186140C5FE",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-import-retry.jpg",
+      "beforeSha256": null,
+      "sha256": "53D43CB3DD4F7F9D61D6F09C62A3502DDFFB81A9125F08CA3C552047A974B82A",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-login-429.jpg",
+      "beforeSha256": null,
+      "sha256": "CDC3B4D24F5AC2FAA94C176BF533265302A11773EA0B09737814DEDD07C38FB8",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-no-import.jpg",
+      "beforeSha256": null,
+      "sha256": "D0A41CC241D655CDBE2750E9A9E49C6AE0FB783DC14D42099825EC82E30C860B",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-owner-switch.jpg",
+      "beforeSha256": null,
+      "sha256": "8F58857B0A4999A941D4B4B5F292524D4E344FC69D441326ED9B3322B2119347",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/browser-register-429.jpg",
+      "beforeSha256": null,
+      "sha256": "2B5569B3D8E4615EA45047F9BD9A2C20A899063DA8DAB70AEE40BD8E29D5AF87",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/cleanup.json",
+      "beforeSha256": null,
+      "sha256": "636C4314C90F827F92C0B2D31C9B1A9A43CCDFEFF8A6E5B8B29A6DACD93D2E6E",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/endpoint-policy.md",
+      "beforeSha256": null,
+      "sha256": "593131B64E20B51E43915396397416A90622AA59E17DB0320AE6FCC1E337186E",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/entrypoint-results.json",
+      "beforeSha256": null,
+      "sha256": "5E8ED2D4AB83B82B9FA435995F38ABDD9DA767E3E12841BDA17694904CED019E",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/execution-attempts.json",
+      "beforeSha256": null,
+      "sha256": "7362F09C1DF1F47BA6721ECFAA8F58030DBC1B56C48B560775DA67A6E9FE6050",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/final-checks.json",
+      "beforeSha256": null,
+      "sha256": "80791C88FA4546699CF5CCD2B446D1546141858529063B20F7F90E3690841F73",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/focused-initial.log",
+      "beforeSha256": null,
+      "sha256": "DA3154B411ADD302FF2B1AAB14EFE107B7DCB40553C641F429C1CFAA58BC335B",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/focused-results.log",
+      "beforeSha256": null,
+      "sha256": "F21DD70F27655F6142B69CF98BE043CF0A6121FFD4F195FB015EF1EE96632242",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/implementation_plan.md",
+      "beforeSha256": null,
+      "sha256": "492051907F3E55E21357FAFC2602B93DC069C3980667F008A71B6DC06B61DCAC",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/preservation-check.json",
+      "beforeSha256": null,
+      "sha256": "E68CC29C62149C727C82BE36CF8709089AC8ADD31363A719AAC452700872FF28",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/recovery-initial-failure.json",
+      "beforeSha256": null,
+      "sha256": "800F01244CC4A5A19C6AFF88322267D40F4AB2F994C128173D7BE5C769C311A0",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/recovery-results.json",
+      "beforeSha256": null,
+      "sha256": "BB62A54C3302C36542CFC637AC999FA21DB472EEFF00E7429403D55E9C57D1B6",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/runbook.md",
+      "beforeSha256": null,
+      "sha256": "43C1682DE2969A0CAED234D20A0FB9F8421480BEAC5E8BEBC88EFEEF01AA9D71",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/security-isolation-results.log",
+      "beforeSha256": null,
+      "sha256": "D886D79BACD734C8ADC2756BF8CEDD98041AAB4C0628FB3A743D3056200DCBC4",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/starting-state.json",
+      "beforeSha256": null,
+      "sha256": "48AAA382474C2887A3D7B70AB73C8146C6D653654205F16B4BDDB018A07A8538",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/task.md",
+      "beforeSha256": null,
+      "sha256": "9D4596EDE962548C840836A6CA5FB8DC31E53B2C7009A4E1F9249EACEC226684",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/test-results-summary.json",
+      "beforeSha256": null,
+      "sha256": "EB34C49C16C4D5EA69F402E6C4737901B8FCCD97A08F82A5ED4B87D2B9D62D8F",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/validation-results.json",
+      "beforeSha256": null,
+      "sha256": "A3E164321A59A7888F4C6E60937C24F395F10084B6DCBBC5617A7FFF32F1B7DD",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/walkthrough.md",
+      "beforeSha256": null,
+      "sha256": "149815568B6A87F7107CA8D379336081CF8290E3BCC48934657F24948776F598",
+      "change": "new C5c file"
+    },
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "beforeSha256": "73EC71CC22AC1939B75EE0BDE0465719CE81FDC6CAFF9A40CC4EDD7FF205B892",
+      "sha256": "F120E5DEA40726D9D224D0CC3F403C1EDC5ABF98309AA5D91C755CE3F59C70EE",
+      "change": "modified inherited file"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "beforeSha256": "F1E3FC3B6DCB3FD762B02758AB6840887DE061935700AC9A20B3C78F03FECD70",
+      "sha256": "690900388F925FDF0A3C0A9001387E6A483869AE5161DB823E656EB11DFE7D6A",
+      "change": "modified inherited file"
+    }
+  ]
+}

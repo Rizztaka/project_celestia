@@ -1,0 +1,23 @@
+{
+  "Mora": { "key": "Mora", "name": "Mora", "gameItemId": 202 },
+  "TeachingsOfDiligence": {
+    "key": "TeachingsOfDiligence",
+    "name": "Teachings of Diligence",
+    "gameItemId": 104313
+  },
+  "GuideToDiligence": {
+    "key": "GuideToDiligence",
+    "name": "Guide to Diligence",
+    "gameItemId": 104314
+  },
+  "WhopperflowerNectar": {
+    "key": "WhopperflowerNectar",
+    "name": "Whopperflower Nectar",
+    "gameItemId": 112038
+  },
+  "ShimmeringNectar": {
+    "key": "ShimmeringNectar",
+    "name": "Shimmering Nectar",
+    "gameItemId": 112039
+  }
+}

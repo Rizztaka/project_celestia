@@ -1,4 +1,4 @@
-import { BadRequestError, NotFoundError } from '@/core/errors/app-error.js';
+import { BadRequestError, NotFoundError, UnprocessableError } from '@/core/errors/app-error.js';
 
 import { companionRegistry } from './companion-registry.service.js';
 import { WeeklyBossRepository } from './weekly-boss.repository.js';
@@ -106,6 +106,11 @@ export class WeeklyBossService {
     const lastBoundary = getLastWeeklyResetBoundary(now);
     const nextBoundary = getNextWeeklyResetBoundary(now);
     const weeklybossesFile = companionRegistry.getProvider(gameId).getWeeklyBossesData();
+    if (weeklybossesFile.bosses.length === 0) {
+      throw new UnprocessableError(
+        'Weekly boss advice is unavailable. Use the routine’s manual aggregate reward-claim record.',
+      );
+    }
 
     let row = await this.repository.findByUserId(userId);
 

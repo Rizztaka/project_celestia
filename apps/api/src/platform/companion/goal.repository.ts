@@ -1,34 +1,46 @@
-import type { GoalType, UpgradeGoal } from '@prisma/client';
+import { Prisma, type PrismaClient } from '@prisma/client';
 
 import { prisma } from '@/core/db/prisma.js';
-
-export interface CreateGoalData {
-  goalType: GoalType;
-  targetKey: string;
-  fromPhase: number;
-  toPhase: number;
-  talentType: string | null;
-}
+import { ConflictError, UnauthorizedError } from '@/core/errors/app-error.js';
 
 export class GoalRepository {
-  async findAllByUserId(userId: string): Promise<UpgradeGoal[]> {
-    return prisma.upgradeGoal.findMany({
+  constructor(private readonly db: PrismaClient = prisma) {}
+  findAllByUserId(userId: string, db: Prisma.TransactionClient = this.db) {
+    return db.upgradeGoal.findMany({
       where: { userId },
-      orderBy: { createdAt: 'asc' },
+      orderBy: [{ priority: 'asc' }, { createdAt: 'asc' }, { id: 'asc' }],
     });
   }
 
-  async findByIdAndUserId(id: string, userId: string): Promise<UpgradeGoal | null> {
-    return prisma.upgradeGoal.findFirst({ where: { id, userId } });
+  findByIdAndUserId(id: string, userId: string) {
+    return this.db.upgradeGoal.findFirst({ where: { id, userId } });
   }
 
-  async create(userId: string, data: CreateGoalData): Promise<UpgradeGoal> {
-    return prisma.upgradeGoal.create({
-      data: { userId, ...data },
-    });
-  }
-
-  async deleteById(id: string): Promise<void> {
-    await prisma.upgradeGoal.delete({ where: { id } });
+  async write<T>(userId: string, apply: (tx: Prisma.TransactionClient) => Promise<T>): Promise<T> {
+    try {
+      return await this.db.$transaction(
+        async (tx) => {
+          const owners = await tx.$queryRaw<
+            { id: string }[]
+          >`SELECT id FROM users WHERE id = ${userId} FOR UPDATE`;
+          if (owners.length !== 1) throw new UnauthorizedError();
+          return apply(tx);
+        },
+        {
+          isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted,
+          maxWait: 10000,
+          timeout: 20000,
+        },
+      );
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        ['P2002', 'P2034'].includes(error.code)
+      )
+        throw new ConflictError(
+          'This intent changed or the request was already used. Refresh and review before saving again.',
+        );
+      throw error;
+    }
   }
 }

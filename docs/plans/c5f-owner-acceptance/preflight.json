@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-10-15T17:18:43.1957612Z",
+  "baselineFiles": 935,
+  "branch": "master",
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "index": [],
+  "expectedC5eFinalFiles": 919,
+  "c5eFinalMismatches": [],
+  "protectedRecords": 33,
+  "protectedMismatches": [],
+  "historicalArtifacts": 12,
+  "historicalArtifactMismatches": [],
+  "priorFullReportHashesMatched": 3,
+  "preStartListeners": [],
+  "preStartLeasePresent": false,
+  "fixture": "docs/plans/c5c-request-safety/review-fixture.json",
+  "fixtureProvenance": "docs/plans/c5c-request-safety/review-fixture-provenance.md",
+  "browserHarnessReady": true,
+  "privateRunRoot": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-99lkgU",
+  "initialBrowser": {
+    "cssViewport": {
+      "height": 722,
+      "width": 767
+    },
+    "viewportOverrideApplied": false,
+    "name": "Chrome",
+    "motionChanged": false,
+    "dpr": 1.25,
+    "version": "Awaiting owner report",
+    "zoom": "Not yet observed in browser menu"
+  },
+  "limitations": [
+    "Browser API exposes viewport but no actual zoom or reduced-motion control. Owner will operate actual settings.",
+    "Read-only DOM evaluator does not expose navigator.userAgent; version requested from owner.",
+    "Owner reports no competent screen-reader operator; unperformed."
+  ],
+  "authorization": {
+    "agentBrowserInputPaused": true,
+    "ownerAvailable": true,
+    "browserHandedToOwner": true
+  }
+}

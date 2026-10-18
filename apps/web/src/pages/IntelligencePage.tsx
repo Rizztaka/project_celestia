@@ -27,7 +27,6 @@ import {
   type TeamRosterSlot,
 } from '../lib/api';
 import { ApiError } from '../lib/api';
-import { useAuthStore } from '../stores/auth.store';
 
 // -------------------------------------------------------
 // Utilities
@@ -632,39 +631,6 @@ function TeamSkeletonCard() {
 // -------------------------------------------------------
 // Nav
 // -------------------------------------------------------
-
-function Nav({ onLogout }: { onLogout: () => void }) {
-  return (
-    <nav className="glass-panel sticky top-0 z-50 flex items-center justify-between border-b-0 border-white/10 px-6 py-4">
-      <Link
-        to="/"
-        className="font-display text-gradient text-lg font-bold tracking-tight transition-opacity hover:opacity-80"
-      >
-        Project Celestia
-      </Link>
-      <div className="flex items-center gap-6">
-        <Link
-          to="/roster"
-          className="text-sm font-medium text-zinc-400 transition-colors hover:text-white"
-        >
-          Roster
-        </Link>
-        <Link
-          to="/planner"
-          className="text-sm font-medium text-zinc-400 transition-colors hover:text-white"
-        >
-          Planner
-        </Link>
-        <button
-          onClick={onLogout}
-          className="hover:text-danger-400 text-sm font-medium text-zinc-500 transition-colors"
-        >
-          Sign out
-        </button>
-      </div>
-    </nav>
-  );
-}
 
 // -------------------------------------------------------
 // Empty / error state
@@ -1468,7 +1434,7 @@ function ArtifactTab() {
               <p className="font-display text-2xl font-bold text-red-400">
                 {recommendations[0].artifactEfficiencyScore}
               </p>
-              <p className="text-xs text-zinc-500">Lowest AES (most urgent)</p>
+              <p className="text-xs text-zinc-500">Lowest legacy AES</p>
             </div>
           )}
         </div>
@@ -1675,7 +1641,7 @@ function PlannerRouteCard({ item, rank }: { item: PlannerRouteItem; rank: number
 
 function PlannerTab() {
   const { data, isLoading, isError, error } = usePlannerIntelligence();
-  const errorCode = isError && error instanceof ApiError ? error.code : null;
+
   const route = (data as PlannerIntelligenceResponse | undefined)?.route ?? [];
 
   // Resin bar: clamp to 0–200
@@ -1747,7 +1713,14 @@ function PlannerTab() {
       )}
 
       {/* Error state */}
-      {isError && <EmptyState errorCode={errorCode} tab="planner" />}
+      {isError && (
+        <div role="alert" className="glass-panel rounded-2xl p-6 text-sm text-amber-200">
+          <p>{error instanceof Error ? error.message : 'Planner guidance is unavailable.'}</p>
+          <Link to="/planner" className="mt-3 inline-block text-indigo-300 underline">
+            Open Daily Planner
+          </Link>
+        </div>
+      )}
 
       {/* Empty — all goals cleared for today */}
       {!isLoading && !isError && route.length === 0 && (
@@ -1768,15 +1741,27 @@ function PlannerTab() {
             </svg>
           </div>
           <h2 className="font-display mb-3 text-2xl font-bold text-white">
-            Nothing Left to Farm Today
+            No route budget available
           </h2>
           <p className="max-w-sm text-base leading-relaxed text-zinc-400">
-            All priority domains have been allocated. Either you've run them already, or today's
-            resin can't cover any more runs. Check back after reset!
+            Verified farming sources may be unavailable, or your resin budget may be too small. This
+            does not establish that your upgrades are complete.
           </p>
         </div>
       )}
 
+      {!isLoading && !isError && data && (
+        <div className="glass-panel rounded-2xl p-5 text-sm text-zinc-400">
+          <p>Allocations are resin budgets. Drops and upgrade completion are not guaranteed.</p>
+          {data.goals
+            .filter((g) => !g.available)
+            .map((g) => (
+              <p key={g.goalId} className="mt-2 text-amber-300">
+                {g.targetKey}: {g.reason}
+              </p>
+            ))}
+        </div>
+      )}
       {/* Route cards */}
       {!isLoading && !isError && route.length > 0 && (
         <section
@@ -2375,29 +2360,31 @@ function AccountProgressionSection() {
 // -------------------------------------------------------
 
 export default function IntelligencePage() {
-  const logout = useAuthStore((s) => s.logout);
   const [activeTab, setActiveTab] = useState<Tab>('characters');
 
   return (
     <div className="relative min-h-screen overflow-hidden text-zinc-300">
-      <Nav onLogout={logout} />
-
       {/* Background ambient glows */}
       <div className="pointer-events-none absolute left-1/4 top-0 h-[500px] w-[700px] rounded-full bg-violet-600/5 mix-blend-screen blur-[140px]" />
       <div className="bg-accent-500/5 pointer-events-none absolute right-1/4 top-1/3 h-[400px] w-[600px] rounded-full mix-blend-screen blur-[120px]" />
 
-      <main className="relative z-10 mx-auto max-w-5xl px-6 py-12">
+      <main
+        id="companion-content"
+        tabIndex={-1}
+        className="relative z-10 mx-auto max-w-5xl px-6 py-12"
+      >
         {/* Page heading */}
         <header className="animate-fade-in mb-10">
           <p className="text-accent-400 mb-2 text-xs font-semibold uppercase tracking-widest">
-            Phase 4 · Intelligence Core
+            Secondary tools · Legacy estimates
           </p>
           <h1 className="font-display text-4xl font-bold tracking-tight text-white">
             Intelligence Engine
           </h1>
           <p className="mt-2 max-w-xl text-base text-zinc-400">
-            Your personal analyst — surfaces the highest-ROI character investments and the best team
-            compositions your roster can assemble right now.
+            Legacy scores and model assumptions are not verified build progress, damage predictions
+            or spending advice. They do not rank your Today plan. Use Characters for recorded
+            equipment and Planner for your declared goals.
           </p>
         </header>
 
@@ -2406,7 +2393,7 @@ export default function IntelligencePage() {
 
         {/* Tab bar */}
         <div
-          className="animate-fade-in mb-8 flex gap-1 rounded-2xl border border-white/5 bg-white/[0.03] p-1"
+          className="animate-fade-in mb-8 flex flex-wrap gap-1 rounded-2xl border border-white/5 bg-white/[0.03] p-1"
           role="tablist"
           aria-label="Intelligence views"
           id="intelligence-tablist"

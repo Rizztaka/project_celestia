@@ -101,6 +101,8 @@ export class UserService {
     if (!user) {
       throw new NotFoundError('User not found.');
     }
+    // Omit the password hash while preserving every other profile field.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _password, ...safeUser } = user;
     return safeUser;
   }

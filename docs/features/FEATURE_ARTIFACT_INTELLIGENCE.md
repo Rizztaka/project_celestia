@@ -1,5 +1,11 @@
 # Feature: Artifact Intelligence Engine
 
+> **Companion scope update — 2026-09-25.** Superseded product role: Equipment & Build Progress in C3. Retain artifact records, equipment relationships, and API compatibility until callers migrate. Do not expand AES, optimization, auto-disposal, or universal build grading. The historical weighted-roll formula is a heuristic, not damage efficiency or proof a build is good enough; missing equipment data must not automatically score zero.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 **Milestone:** 4C — Artifact Intelligence  
 **Endpoint:** `GET /api/v1/games/genshin/intelligence/artifacts`  
 **Location:** `apps/api/src/games/genshin/intelligence/artifact-intelligence/`

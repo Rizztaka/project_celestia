@@ -1,0 +1,13 @@
+
+ RUN  v3.2.7 D:/Genshin Personal/project-celestia/apps/api
+
+ ✓ src/platform/account-data/account-data.http.test.ts (24 tests) 366ms
+ ✓ src/core/middleware/request-admission.test.ts (19 tests) 91ms
+ ✓ tooling/account-data-client.test.js (5 tests) 87ms
+ ✓ tooling/account-data.test.js (3 tests) 27ms
+
+ Test Files  4 passed (4)
+      Tests  51 passed (51)
+   Start at  12:01:25
+   Duration  4.12s (transform 659ms, setup 0ms, collect 2.26s, tests 571ms, environment 1ms, prepare 646ms)
+

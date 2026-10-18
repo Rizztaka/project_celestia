@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "syntheticOnly": true,
+  "exclusive": true,
+  "host": "127.0.0.1",
+  "port": 55448,
+  "adminDatabase": "celestia_test_c4",
+  "adminRole": "celestia_test",
+  "dataDir": "C:/Users/inuzu/AppData/Local/Temp/celestia-c4-6d547b9077534faa9ea7871b1017b2f6/data",
+  "pgBin": "D:/PostgreSQL/bin",
+  "osOwner": "NITRO\\inuzu",
+  "systemIdentifier": "7693191646738863628",
+  "provenance": "docs/plans/c5a-beta-foundation/walkthrough.md"
+}

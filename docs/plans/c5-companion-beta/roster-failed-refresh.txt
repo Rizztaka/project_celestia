@@ -1,0 +1,73 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#companion-content"
+  - link "Project Celestia":
+    - /url: /
+  - button "Sign out"
+  - navigation "Primary navigation":
+    - link "Today":
+      - /url: /
+    - link "Characters":
+      - /url: /roster
+    - link "Planner":
+      - /url: /planner
+  - navigation "Supporting navigation":
+    - link "Import":
+      - /url: /import
+    - link "Inventory":
+      - /url: /inventory
+    - link "Settings & profile":
+      - /url: /profile
+    - generic "Other tools +"
+- main:
+  - generic "Saved data freshness"
+  - heading "Characters" [level=1]
+  - paragraph: 2 recorded characters
+  - link "Re-import":
+    - /url: /import
+    - text: Re-import
+  - paragraph: Focus is an optional shortlist, independent of goal status. Open a character for recorded equipment and goals. Stored talent values may include adjustments; they do not establish base-level progress.
+  - text: Search characters
+  - searchbox "Search characters"
+  - button "Refresh characters" [active]
+  - checkbox "Focus characters only"
+  - text: Focus characters only
+  - alert:
+    - text: Synthetic fixture failure Showing last confirmed character records; refresh failed.
+  - img "Hu Tao"
+  - generic: HT
+  - link "Hu Tao":
+    - /url: /roster/HuTao
+  - paragraph: Lv.90 · A6
+  - generic: C0
+  - generic: Talents
+  - generic: "N"
+  - generic: "9"
+  - generic: S
+  - generic: "12"
+  - generic: B
+  - generic: "15"
+  - img "StaffOfHoma"
+  - generic: Staff Of Homa
+  - generic: Lv.80
+  - generic: ·
+  - generic: R1
+  - button "Remove from focus" [pressed]
+  - link "View recorded equipment":
+    - /url: /roster/HuTao
+  - generic: O/
+  - link "Opaque / 字":
+    - /url: /roster/Opaque%20%2F%20%E5%AD%97
+  - paragraph: Lv.20 · A0
+  - generic: C0
+  - generic: Talents
+  - generic: "N"
+  - generic: "1"
+  - generic: S
+  - generic: "1"
+  - generic: B
+  - generic: "1"
+  - generic: No weapon assignment recorded
+  - button "Add to focus"
+  - link "View recorded equipment":
+    - /url: /roster/Opaque%20%2F%20%E5%AD%97

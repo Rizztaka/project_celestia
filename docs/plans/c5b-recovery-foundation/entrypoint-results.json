@@ -1,0 +1,177 @@
+{
+  "tests": {
+    "passed": 875,
+    "files": 47,
+    "failed": 0,
+    "skipped": 0,
+    "postgresCases": 106,
+    "integration": {
+      "src/platform/companion/plan.integration.test.ts": 28,
+      "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+      "src/platform/companion/routine.integration.test.ts": 12,
+      "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+      "src/games/genshin/importer/importer.integration.test.ts": 16,
+      "src/platform/companion/catalog-advice.integration.test.ts": 9
+    }
+  },
+  "steps": [
+    {
+      "id": "shared-types-and-build",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": [
+        "-p",
+        "D:\\Genshin Personal\\project-celestia\\packages\\api-contracts\\tsconfig.json"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "disposable-postgres-ready",
+      "exit": 0
+    },
+    {
+      "id": "prisma-generate",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["generate"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "disposable-migrations",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["migrate", "deploy"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "prisma-validate",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["validate"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "schema-diff",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": [
+        "migrate",
+        "diff",
+        "--from-config-datasource",
+        "--to-schema",
+        "prisma/schema.prisma",
+        "--exit-code"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "full-suite",
+      "package": "vitest",
+      "binary": "vitest",
+      "arguments": [
+        "run",
+        "--no-file-parallelism",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-qFbMe6\\vitest.json"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-lint",
+      "package": "eslint",
+      "binary": "eslint",
+      "arguments": [".", "--max-warnings", "0"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-types-and-build",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": [],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-aliases",
+      "package": "tsc-alias",
+      "binary": "tsc-alias",
+      "arguments": [],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-lint",
+      "package": "eslint",
+      "binary": "eslint",
+      "arguments": ["."],
+      "cwd": "apps\\web",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-types",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": ["-b"],
+      "cwd": "apps\\web",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-build",
+      "package": "vite",
+      "binary": "vite",
+      "arguments": ["build"],
+      "cwd": "apps\\web",
+      "nodeEnv": "production",
+      "exit": 0
+    },
+    {
+      "id": "repository-format",
+      "package": "prettier",
+      "binary": "prettier",
+      "arguments": [
+        "--check",
+        "**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,yml,yaml,css,html}",
+        "!apps/api/src/core/ai/openrouter.ts",
+        "!docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+        "!apps/web/index.html",
+        "!apps/web/src/App.css",
+        "!apps/web/src/index.css",
+        "!docs/plans/c5-companion-beta/endgame-focus-final.json",
+        "!docs/plans/c5-companion-beta/primary-reflow.json",
+        "!docs/plans/c5-companion-beta/reimport-after.json",
+        "!docs/plans/c5-companion-beta/reimport-before.json",
+        "!docs/plans/c5-companion-beta/rendered-style-check.json",
+        "!docs/plans/c5-companion-beta/secondary-reflow.json",
+        "!docs/plans/c5-companion-beta/starting-state.json"
+      ],
+      "cwd": ".",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "diff-check",
+      "exit": 0
+    }
+  ],
+  "platform": "win32",
+  "remoteCIObserved": false
+}

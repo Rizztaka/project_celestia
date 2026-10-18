@@ -1,0 +1,616 @@
+{
+  "kind": "C5c browser acceptance",
+  "controlledRateClock": true,
+  "root": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-5HgmP5",
+  "permissions": {
+    "mechanism": "Windows protected ACL",
+    "currentUserOnly": true,
+    "verified": true
+  },
+  "commands": [
+    {
+      "name": "exhaust-login",
+      "rateClock": 0,
+      "statuses": [400, 400, 400, 400, 400, 400, 400, 400, 400, 429, 429]
+    },
+    {
+      "name": "advance",
+      "rateClock": 0
+    },
+    {
+      "name": "snapshot",
+      "rateClock": 900000,
+      "snapshot": {
+        "tables": [
+          {
+            "name": "NikkeAccount",
+            "rows": 1,
+            "columns": 6,
+            "sha256": "f6310cdd250ac74eee5468480cb0474f5ce3afc949b7e5ada1c9cf77d3e19e8f"
+          },
+          {
+            "name": "NikkeCharacter",
+            "rows": 1,
+            "columns": 11,
+            "sha256": "8ba3ad1c3413a605477324ac33ca9b474c47389b5b2dc903787084d29bf41972"
+          },
+          {
+            "name": "NikkeEquipment",
+            "rows": 1,
+            "columns": 9,
+            "sha256": "9cbc594a7c68870bb0efab8aac1d8aa5a517e3c2a2e3cb922d227fc001b7459e"
+          },
+          {
+            "name": "_prisma_migrations",
+            "rows": 13,
+            "columns": 8,
+            "sha256": "ba7902e025285218a8529b978fb8448e1be0751ddf0a1badc0b41c57520aaa4b"
+          },
+          {
+            "name": "daily_companion",
+            "rows": 1,
+            "columns": 10,
+            "sha256": "55e4df867d677e1e3100b0bc94e2cb52db0f543720c820796f48a88056a4126f"
+          },
+          {
+            "name": "event_progress",
+            "rows": 1,
+            "columns": 7,
+            "sha256": "dd73b9da52ea9baaead5ba3f3f683b9a07ac44f5bd5fb6e11939a2ebd57ee3ae"
+          },
+          {
+            "name": "genshin_accounts",
+            "rows": 2,
+            "columns": 8,
+            "sha256": "f97b6fb721e8964257718ec74ffd34ba8a7870c510493c6935295ae429797bc7"
+          },
+          {
+            "name": "genshin_artifacts",
+            "rows": 6,
+            "columns": 12,
+            "sha256": "15823132d6294bc3d565b6fdee3a3d9a248f67a943e928f9418d807d42a14640"
+          },
+          {
+            "name": "genshin_character_focus",
+            "rows": 2,
+            "columns": 4,
+            "sha256": "0ba624187f086567070f96067eff6b603ca9420f132a9453f7743befd8f38672"
+          },
+          {
+            "name": "genshin_characters",
+            "rows": 3,
+            "columns": 12,
+            "sha256": "a09724632c249bb771bc12d4fe69971b090a3f942368b7e50a4b127c49277c7b"
+          },
+          {
+            "name": "genshin_import_sections",
+            "rows": 5,
+            "columns": 6,
+            "sha256": "7150b1f546d4dc3258f905697ad4b1cfb8bad6dda9b78d8fa160f86d687a696a"
+          },
+          {
+            "name": "genshin_materials",
+            "rows": 3,
+            "columns": 6,
+            "sha256": "01672faa9fafbed8b387535e94e15e4cf84d69f9847e822e223b9c7935dad60f"
+          },
+          {
+            "name": "genshin_plan_dismissals",
+            "rows": 2,
+            "columns": 8,
+            "sha256": "9f1af5153de5eadaa6fe2419db929354f444863a30904a19b2076d84a35695ef"
+          },
+          {
+            "name": "genshin_plan_preferences",
+            "rows": 2,
+            "columns": 7,
+            "sha256": "050bf43d8ab7693c6ed8878e2096fde303c75c2184e9b700c8c3cb477374ef93"
+          },
+          {
+            "name": "genshin_routine_state",
+            "rows": 2,
+            "columns": 13,
+            "sha256": "1331137200c6226b58862732cf3fea04dc0c4bdaf50a6b1cd9d6c7f52d963068"
+          },
+          {
+            "name": "genshin_weapons",
+            "rows": 2,
+            "columns": 9,
+            "sha256": "15eb2837a731d3f4691d1062d6969097b3ec712babe3e3c4e52965cc15978efe"
+          },
+          {
+            "name": "imaginarium_theater_runs",
+            "rows": 1,
+            "columns": 9,
+            "sha256": "5d06a7fc780816e7fd43b9018b40bfc743bb3bfbfd0b97676540ca4948d8a11f"
+          },
+          {
+            "name": "spiral_abyss_runs",
+            "rows": 1,
+            "columns": 10,
+            "sha256": "cfd27f2e2828b5496c11ba1f2732cd0c856c887fed4f4f4cd568521866b1cebc"
+          },
+          {
+            "name": "upgrade_goals",
+            "rows": 6,
+            "columns": 16,
+            "sha256": "340b76ea48977ff39efe124881d616e7485d7d4ef45414edfcfef849ed19316a"
+          },
+          {
+            "name": "users",
+            "rows": 3,
+            "columns": 6,
+            "sha256": "87b068cd1c6386338416bdd28f4b43a0f40d96e22bb8314405efef8b362099bb"
+          },
+          {
+            "name": "weekly_boss_state",
+            "rows": 1,
+            "columns": 6,
+            "sha256": "c26f62e98a56d660212b08c0c476b163a0de876631d3316710290434ad01069c"
+          }
+        ],
+        "sequences": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "constraints": {
+          "count": 214,
+          "sha256": "8a4c856b4901836a4d9d87b42ad75219352bedec61b5e1fff0358e3882010838"
+        },
+        "sha256": "a47a678d657debb93a85a54640735fa9ff6d6703649c1c2fe464e8a11e20b2c7"
+      }
+    },
+    {
+      "name": "exhaust-import",
+      "rateClock": 900000,
+      "statuses": [400, 400, 400, 400, 400, 429, 429]
+    },
+    {
+      "name": "snapshot",
+      "rateClock": 900000,
+      "snapshot": {
+        "tables": [
+          {
+            "name": "NikkeAccount",
+            "rows": 1,
+            "columns": 6,
+            "sha256": "f6310cdd250ac74eee5468480cb0474f5ce3afc949b7e5ada1c9cf77d3e19e8f"
+          },
+          {
+            "name": "NikkeCharacter",
+            "rows": 1,
+            "columns": 11,
+            "sha256": "8ba3ad1c3413a605477324ac33ca9b474c47389b5b2dc903787084d29bf41972"
+          },
+          {
+            "name": "NikkeEquipment",
+            "rows": 1,
+            "columns": 9,
+            "sha256": "9cbc594a7c68870bb0efab8aac1d8aa5a517e3c2a2e3cb922d227fc001b7459e"
+          },
+          {
+            "name": "_prisma_migrations",
+            "rows": 13,
+            "columns": 8,
+            "sha256": "ba7902e025285218a8529b978fb8448e1be0751ddf0a1badc0b41c57520aaa4b"
+          },
+          {
+            "name": "daily_companion",
+            "rows": 1,
+            "columns": 10,
+            "sha256": "55e4df867d677e1e3100b0bc94e2cb52db0f543720c820796f48a88056a4126f"
+          },
+          {
+            "name": "event_progress",
+            "rows": 1,
+            "columns": 7,
+            "sha256": "dd73b9da52ea9baaead5ba3f3f683b9a07ac44f5bd5fb6e11939a2ebd57ee3ae"
+          },
+          {
+            "name": "genshin_accounts",
+            "rows": 2,
+            "columns": 8,
+            "sha256": "f97b6fb721e8964257718ec74ffd34ba8a7870c510493c6935295ae429797bc7"
+          },
+          {
+            "name": "genshin_artifacts",
+            "rows": 6,
+            "columns": 12,
+            "sha256": "15823132d6294bc3d565b6fdee3a3d9a248f67a943e928f9418d807d42a14640"
+          },
+          {
+            "name": "genshin_character_focus",
+            "rows": 2,
+            "columns": 4,
+            "sha256": "0ba624187f086567070f96067eff6b603ca9420f132a9453f7743befd8f38672"
+          },
+          {
+            "name": "genshin_characters",
+            "rows": 3,
+            "columns": 12,
+            "sha256": "a09724632c249bb771bc12d4fe69971b090a3f942368b7e50a4b127c49277c7b"
+          },
+          {
+            "name": "genshin_import_sections",
+            "rows": 5,
+            "columns": 6,
+            "sha256": "7150b1f546d4dc3258f905697ad4b1cfb8bad6dda9b78d8fa160f86d687a696a"
+          },
+          {
+            "name": "genshin_materials",
+            "rows": 3,
+            "columns": 6,
+            "sha256": "01672faa9fafbed8b387535e94e15e4cf84d69f9847e822e223b9c7935dad60f"
+          },
+          {
+            "name": "genshin_plan_dismissals",
+            "rows": 2,
+            "columns": 8,
+            "sha256": "9f1af5153de5eadaa6fe2419db929354f444863a30904a19b2076d84a35695ef"
+          },
+          {
+            "name": "genshin_plan_preferences",
+            "rows": 2,
+            "columns": 7,
+            "sha256": "050bf43d8ab7693c6ed8878e2096fde303c75c2184e9b700c8c3cb477374ef93"
+          },
+          {
+            "name": "genshin_routine_state",
+            "rows": 2,
+            "columns": 13,
+            "sha256": "1331137200c6226b58862732cf3fea04dc0c4bdaf50a6b1cd9d6c7f52d963068"
+          },
+          {
+            "name": "genshin_weapons",
+            "rows": 2,
+            "columns": 9,
+            "sha256": "15eb2837a731d3f4691d1062d6969097b3ec712babe3e3c4e52965cc15978efe"
+          },
+          {
+            "name": "imaginarium_theater_runs",
+            "rows": 1,
+            "columns": 9,
+            "sha256": "5d06a7fc780816e7fd43b9018b40bfc743bb3bfbfd0b97676540ca4948d8a11f"
+          },
+          {
+            "name": "spiral_abyss_runs",
+            "rows": 1,
+            "columns": 10,
+            "sha256": "cfd27f2e2828b5496c11ba1f2732cd0c856c887fed4f4f4cd568521866b1cebc"
+          },
+          {
+            "name": "upgrade_goals",
+            "rows": 6,
+            "columns": 16,
+            "sha256": "340b76ea48977ff39efe124881d616e7485d7d4ef45414edfcfef849ed19316a"
+          },
+          {
+            "name": "users",
+            "rows": 3,
+            "columns": 6,
+            "sha256": "87b068cd1c6386338416bdd28f4b43a0f40d96e22bb8314405efef8b362099bb"
+          },
+          {
+            "name": "weekly_boss_state",
+            "rows": 1,
+            "columns": 6,
+            "sha256": "c26f62e98a56d660212b08c0c476b163a0de876631d3316710290434ad01069c"
+          }
+        ],
+        "sequences": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "constraints": {
+          "count": 214,
+          "sha256": "8a4c856b4901836a4d9d87b42ad75219352bedec61b5e1fff0358e3882010838"
+        },
+        "sha256": "a47a678d657debb93a85a54640735fa9ff6d6703649c1c2fe464e8a11e20b2c7"
+      }
+    },
+    {
+      "name": "advance",
+      "rateClock": 900000
+    },
+    {
+      "name": "lock-owner",
+      "rateClock": 1800000
+    },
+    {
+      "name": "release-owner",
+      "rateClock": 1800000
+    },
+    {
+      "name": "snapshot",
+      "rateClock": 1800000,
+      "snapshot": {
+        "tables": [
+          {
+            "name": "NikkeAccount",
+            "rows": 1,
+            "columns": 6,
+            "sha256": "f6310cdd250ac74eee5468480cb0474f5ce3afc949b7e5ada1c9cf77d3e19e8f"
+          },
+          {
+            "name": "NikkeCharacter",
+            "rows": 1,
+            "columns": 11,
+            "sha256": "8ba3ad1c3413a605477324ac33ca9b474c47389b5b2dc903787084d29bf41972"
+          },
+          {
+            "name": "NikkeEquipment",
+            "rows": 1,
+            "columns": 9,
+            "sha256": "9cbc594a7c68870bb0efab8aac1d8aa5a517e3c2a2e3cb922d227fc001b7459e"
+          },
+          {
+            "name": "_prisma_migrations",
+            "rows": 13,
+            "columns": 8,
+            "sha256": "ba7902e025285218a8529b978fb8448e1be0751ddf0a1badc0b41c57520aaa4b"
+          },
+          {
+            "name": "daily_companion",
+            "rows": 1,
+            "columns": 10,
+            "sha256": "55e4df867d677e1e3100b0bc94e2cb52db0f543720c820796f48a88056a4126f"
+          },
+          {
+            "name": "event_progress",
+            "rows": 1,
+            "columns": 7,
+            "sha256": "dd73b9da52ea9baaead5ba3f3f683b9a07ac44f5bd5fb6e11939a2ebd57ee3ae"
+          },
+          {
+            "name": "genshin_accounts",
+            "rows": 2,
+            "columns": 8,
+            "sha256": "1b74122973e458d279a34ad657041d0d6bebe2d587e3f82574db2146d0947b4c"
+          },
+          {
+            "name": "genshin_artifacts",
+            "rows": 6,
+            "columns": 12,
+            "sha256": "15823132d6294bc3d565b6fdee3a3d9a248f67a943e928f9418d807d42a14640"
+          },
+          {
+            "name": "genshin_character_focus",
+            "rows": 2,
+            "columns": 4,
+            "sha256": "0ba624187f086567070f96067eff6b603ca9420f132a9453f7743befd8f38672"
+          },
+          {
+            "name": "genshin_characters",
+            "rows": 3,
+            "columns": 12,
+            "sha256": "a09724632c249bb771bc12d4fe69971b090a3f942368b7e50a4b127c49277c7b"
+          },
+          {
+            "name": "genshin_import_sections",
+            "rows": 5,
+            "columns": 6,
+            "sha256": "0d612e76a001b6b2d1b22ec1a4e76b13098ede0c3c676cda810ba8c33691d119"
+          },
+          {
+            "name": "genshin_materials",
+            "rows": 2,
+            "columns": 6,
+            "sha256": "26f2b034e07b91e4bce1b6fd65be685ae09e37ce6eb9af2890f70bcf0b067645"
+          },
+          {
+            "name": "genshin_plan_dismissals",
+            "rows": 2,
+            "columns": 8,
+            "sha256": "9f1af5153de5eadaa6fe2419db929354f444863a30904a19b2076d84a35695ef"
+          },
+          {
+            "name": "genshin_plan_preferences",
+            "rows": 2,
+            "columns": 7,
+            "sha256": "050bf43d8ab7693c6ed8878e2096fde303c75c2184e9b700c8c3cb477374ef93"
+          },
+          {
+            "name": "genshin_routine_state",
+            "rows": 2,
+            "columns": 13,
+            "sha256": "1331137200c6226b58862732cf3fea04dc0c4bdaf50a6b1cd9d6c7f52d963068"
+          },
+          {
+            "name": "genshin_weapons",
+            "rows": 2,
+            "columns": 9,
+            "sha256": "15eb2837a731d3f4691d1062d6969097b3ec712babe3e3c4e52965cc15978efe"
+          },
+          {
+            "name": "imaginarium_theater_runs",
+            "rows": 1,
+            "columns": 9,
+            "sha256": "5d06a7fc780816e7fd43b9018b40bfc743bb3bfbfd0b97676540ca4948d8a11f"
+          },
+          {
+            "name": "spiral_abyss_runs",
+            "rows": 1,
+            "columns": 10,
+            "sha256": "cfd27f2e2828b5496c11ba1f2732cd0c856c887fed4f4f4cd568521866b1cebc"
+          },
+          {
+            "name": "upgrade_goals",
+            "rows": 6,
+            "columns": 16,
+            "sha256": "340b76ea48977ff39efe124881d616e7485d7d4ef45414edfcfef849ed19316a"
+          },
+          {
+            "name": "users",
+            "rows": 3,
+            "columns": 6,
+            "sha256": "87b068cd1c6386338416bdd28f4b43a0f40d96e22bb8314405efef8b362099bb"
+          },
+          {
+            "name": "weekly_boss_state",
+            "rows": 1,
+            "columns": 6,
+            "sha256": "c26f62e98a56d660212b08c0c476b163a0de876631d3316710290434ad01069c"
+          }
+        ],
+        "sequences": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "constraints": {
+          "count": 214,
+          "sha256": "8a4c856b4901836a4d9d87b42ad75219352bedec61b5e1fff0358e3882010838"
+        },
+        "sha256": "6a0295107efec38fbb75abfd30597aeb85c6ea0d6001544031f6ab41928a949a"
+      }
+    },
+    {
+      "name": "snapshot",
+      "rateClock": 1800000,
+      "snapshot": {
+        "tables": [
+          {
+            "name": "NikkeAccount",
+            "rows": 1,
+            "columns": 6,
+            "sha256": "f6310cdd250ac74eee5468480cb0474f5ce3afc949b7e5ada1c9cf77d3e19e8f"
+          },
+          {
+            "name": "NikkeCharacter",
+            "rows": 1,
+            "columns": 11,
+            "sha256": "8ba3ad1c3413a605477324ac33ca9b474c47389b5b2dc903787084d29bf41972"
+          },
+          {
+            "name": "NikkeEquipment",
+            "rows": 1,
+            "columns": 9,
+            "sha256": "9cbc594a7c68870bb0efab8aac1d8aa5a517e3c2a2e3cb922d227fc001b7459e"
+          },
+          {
+            "name": "_prisma_migrations",
+            "rows": 13,
+            "columns": 8,
+            "sha256": "ba7902e025285218a8529b978fb8448e1be0751ddf0a1badc0b41c57520aaa4b"
+          },
+          {
+            "name": "daily_companion",
+            "rows": 1,
+            "columns": 10,
+            "sha256": "55e4df867d677e1e3100b0bc94e2cb52db0f543720c820796f48a88056a4126f"
+          },
+          {
+            "name": "event_progress",
+            "rows": 1,
+            "columns": 7,
+            "sha256": "dd73b9da52ea9baaead5ba3f3f683b9a07ac44f5bd5fb6e11939a2ebd57ee3ae"
+          },
+          {
+            "name": "genshin_accounts",
+            "rows": 2,
+            "columns": 8,
+            "sha256": "1b74122973e458d279a34ad657041d0d6bebe2d587e3f82574db2146d0947b4c"
+          },
+          {
+            "name": "genshin_artifacts",
+            "rows": 6,
+            "columns": 12,
+            "sha256": "15823132d6294bc3d565b6fdee3a3d9a248f67a943e928f9418d807d42a14640"
+          },
+          {
+            "name": "genshin_character_focus",
+            "rows": 2,
+            "columns": 4,
+            "sha256": "0ba624187f086567070f96067eff6b603ca9420f132a9453f7743befd8f38672"
+          },
+          {
+            "name": "genshin_characters",
+            "rows": 3,
+            "columns": 12,
+            "sha256": "a09724632c249bb771bc12d4fe69971b090a3f942368b7e50a4b127c49277c7b"
+          },
+          {
+            "name": "genshin_import_sections",
+            "rows": 5,
+            "columns": 6,
+            "sha256": "0d612e76a001b6b2d1b22ec1a4e76b13098ede0c3c676cda810ba8c33691d119"
+          },
+          {
+            "name": "genshin_materials",
+            "rows": 2,
+            "columns": 6,
+            "sha256": "26f2b034e07b91e4bce1b6fd65be685ae09e37ce6eb9af2890f70bcf0b067645"
+          },
+          {
+            "name": "genshin_plan_dismissals",
+            "rows": 2,
+            "columns": 8,
+            "sha256": "9f1af5153de5eadaa6fe2419db929354f444863a30904a19b2076d84a35695ef"
+          },
+          {
+            "name": "genshin_plan_preferences",
+            "rows": 2,
+            "columns": 7,
+            "sha256": "050bf43d8ab7693c6ed8878e2096fde303c75c2184e9b700c8c3cb477374ef93"
+          },
+          {
+            "name": "genshin_routine_state",
+            "rows": 3,
+            "columns": 13,
+            "sha256": "4e51a50abad6d28fbc8e5a04cd9c7aa4798479e2893a65d6717d1a9c922e4864"
+          },
+          {
+            "name": "genshin_weapons",
+            "rows": 2,
+            "columns": 9,
+            "sha256": "15eb2837a731d3f4691d1062d6969097b3ec712babe3e3c4e52965cc15978efe"
+          },
+          {
+            "name": "imaginarium_theater_runs",
+            "rows": 1,
+            "columns": 9,
+            "sha256": "5d06a7fc780816e7fd43b9018b40bfc743bb3bfbfd0b97676540ca4948d8a11f"
+          },
+          {
+            "name": "spiral_abyss_runs",
+            "rows": 1,
+            "columns": 10,
+            "sha256": "cfd27f2e2828b5496c11ba1f2732cd0c856c887fed4f4f4cd568521866b1cebc"
+          },
+          {
+            "name": "upgrade_goals",
+            "rows": 6,
+            "columns": 16,
+            "sha256": "340b76ea48977ff39efe124881d616e7485d7d4ef45414edfcfef849ed19316a"
+          },
+          {
+            "name": "users",
+            "rows": 4,
+            "columns": 6,
+            "sha256": "c67a731f883e361a15c489fb262c583229d65a7bf758ab39bcba87c77fc5e0e2"
+          },
+          {
+            "name": "weekly_boss_state",
+            "rows": 1,
+            "columns": 6,
+            "sha256": "c26f62e98a56d660212b08c0c476b163a0de876631d3316710290434ad01069c"
+          }
+        ],
+        "sequences": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "constraints": {
+          "count": 214,
+          "sha256": "8a4c856b4901836a4d9d87b42ad75219352bedec61b5e1fff0358e3882010838"
+        },
+        "sha256": "67f21bb698dc3d9a3ec8ed1083600b325d11a92989ca714630c847bdc59c2f1b"
+      }
+    }
+  ],
+  "startedAt": "2026-10-12T08:36:02.631Z",
+  "resourcesRemoved": true,
+  "stoppedOwnedProcess": true,
+  "ordinaryWebBuildRestored": true,
+  "browserPortsClosed": true,
+  "finishedAt": "2026-10-12T08:41:34.121Z"
+}

@@ -1,6 +1,8 @@
-import type { Request, Response, NextFunction } from 'express';
-import { nikkeAccountService } from './account.service.js';
+import type { NextFunction, Request, Response } from 'express';
+
 import { successResponse } from '@/core/utils/response.js';
+
+import { nikkeAccountService } from './account.service.js';
 
 export class NikkeAccountController {
   async getMyAccount(req: Request, res: Response, next: NextFunction) {

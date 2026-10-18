@@ -1,8 +1,14 @@
 # FEATURE_CHARACTER_INTELLIGENCE.md
 
+> **Companion scope update — 2026-09-25.** Adapt existing logic to progress toward player-selected goals in C3/C4. The historic meta weights, fixed talent target, and roster-wide top-five ranking are not the companion's default priority policy. Do not describe a heuristic score as measured account-wide improvement. Calculator/explainer separation remains.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 **Feature:** Character Intelligence Engine (Milestone 4A)
 **Phase:** 4 — Intelligence Core
-**Status:** Specification — Approved
+**Historical status:** Specification — Approved
 **Last Updated:** August 2026
 
 ---

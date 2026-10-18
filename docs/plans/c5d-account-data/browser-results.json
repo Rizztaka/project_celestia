@@ -1,0 +1,723 @@
+{
+  "kind": "C5d browser acceptance",
+  "controlledRateClock": true,
+  "root": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-4VpGWI",
+  "permissions": {
+    "mechanism": "Windows protected ACL",
+    "currentUserOnly": true,
+    "verified": true
+  },
+  "commands": [
+    {
+      "name": "snapshot",
+      "rateClock": 0,
+      "snapshot": [
+        {
+          "table": "NikkeAccount",
+          "rows": 1,
+          "sha256": "98aef1b0c9cb8b5866981c8b257b04da64ba5f7a799cb0a409d1f1cb8cc9f7cf"
+        },
+        {
+          "table": "NikkeCharacter",
+          "rows": 1,
+          "sha256": "199928b8ebacee5c27b54a90724083b195e78e3ee0c254d27a88e8ae6a05557a"
+        },
+        {
+          "table": "NikkeEquipment",
+          "rows": 1,
+          "sha256": "36eace0afcf7bff494f4e549792b50fc2585318a4c56a45fa94c5ecb1d013e6e"
+        },
+        {
+          "table": "daily_companion",
+          "rows": 1,
+          "sha256": "86fb804f329fc1904271e5c5f6801cb2342e4db0c4b94a5bf44cd44b20d21941"
+        },
+        {
+          "table": "event_progress",
+          "rows": 1,
+          "sha256": "4d4a87c94b71f20ef12f3a905276aa30fab0a27be1050cf794f977dc044f366f"
+        },
+        {
+          "table": "genshin_accounts",
+          "rows": 2,
+          "sha256": "e72cb123a7bf1b6b0a287d5838fb730a891ae86e1a58270368a73947afde623a"
+        },
+        {
+          "table": "genshin_artifacts",
+          "rows": 6,
+          "sha256": "5db1a27e1262aa65f6bfcc45c51d094f670bf348f0e7b6d4f5e58afbd5bf9676"
+        },
+        {
+          "table": "genshin_character_focus",
+          "rows": 2,
+          "sha256": "c2e41c14a177d9e3b111115f727e2588fde6a4e4aa5aa9d30a87a8a893a5f56d"
+        },
+        {
+          "table": "genshin_characters",
+          "rows": 3,
+          "sha256": "56093c3b5ec65e526e32cebb15c1d0ed9cc2c12dc16740c9751bdfaea7e406db"
+        },
+        {
+          "table": "genshin_import_sections",
+          "rows": 5,
+          "sha256": "e9ad4bd93252efca8c364491f59464b9e5e367b5ea9b3d0f494c489d17719ff1"
+        },
+        {
+          "table": "genshin_materials",
+          "rows": 3,
+          "sha256": "9a733fcb56ac5433b49e65538a0c47e48fd38b3e28f33a499e4334f491733832"
+        },
+        {
+          "table": "genshin_plan_dismissals",
+          "rows": 2,
+          "sha256": "fff93174ae5dbb8893fd81c53399476deb46de48e9ae0731bd3391792f7e41af"
+        },
+        {
+          "table": "genshin_plan_preferences",
+          "rows": 2,
+          "sha256": "cc3053b57c00f7707d7de1361ebfdadaf095b29d61c2cb19600433edd055542e"
+        },
+        {
+          "table": "genshin_routine_state",
+          "rows": 2,
+          "sha256": "10ae7e0d6a0eeccf9f0a1f8a9ecb9e1c99a522dabae9bee661fd8d1b1d0f1107"
+        },
+        {
+          "table": "genshin_weapons",
+          "rows": 2,
+          "sha256": "e03f84f84f0c0dafe1a23b48b6a473be3685fab8500a21a5188c44ae0484a97a"
+        },
+        {
+          "table": "imaginarium_theater_runs",
+          "rows": 1,
+          "sha256": "504647971e7e6356b125884b97138dd9c8a81638fa781f973b3ced0088cb96fe"
+        },
+        {
+          "table": "spiral_abyss_runs",
+          "rows": 1,
+          "sha256": "a57eb36c96bc6882efd9624ae144291f26bb961f5a2f7ca5c70eb649f60c4aa0"
+        },
+        {
+          "table": "upgrade_goals",
+          "rows": 6,
+          "sha256": "f03b68836fd14bd4244da135f3104ffc4d2ad6a795880d2c3270435f4a2f81ec"
+        },
+        {
+          "table": "users",
+          "rows": 3,
+          "sha256": "3e88ea7a72c6038d62b96291f3075c1c72a82475a29bc2396506bf6b34f08160"
+        },
+        {
+          "table": "weekly_boss_state",
+          "rows": 1,
+          "sha256": "836314a75831caca3a015fb203ab404c81c2d4667ffa75b10493b90be17df4d8"
+        },
+        {
+          "table": "_prisma_migrations",
+          "rows": 13,
+          "sha256": "faeacc4067ac3c86803a0684cd15c90a47f98b2356ed58628fee755a6bbfc1f1"
+        }
+      ]
+    },
+    {
+      "name": "exhaust-account",
+      "rateClock": 0,
+      "statuses": [400, 429, 429, 429]
+    },
+    {
+      "name": "advance",
+      "rateClock": 0
+    },
+    {
+      "name": "snapshot",
+      "rateClock": 900000,
+      "snapshot": [
+        {
+          "table": "NikkeAccount",
+          "rows": 1,
+          "sha256": "98aef1b0c9cb8b5866981c8b257b04da64ba5f7a799cb0a409d1f1cb8cc9f7cf"
+        },
+        {
+          "table": "NikkeCharacter",
+          "rows": 1,
+          "sha256": "199928b8ebacee5c27b54a90724083b195e78e3ee0c254d27a88e8ae6a05557a"
+        },
+        {
+          "table": "NikkeEquipment",
+          "rows": 1,
+          "sha256": "36eace0afcf7bff494f4e549792b50fc2585318a4c56a45fa94c5ecb1d013e6e"
+        },
+        {
+          "table": "daily_companion",
+          "rows": 1,
+          "sha256": "86fb804f329fc1904271e5c5f6801cb2342e4db0c4b94a5bf44cd44b20d21941"
+        },
+        {
+          "table": "event_progress",
+          "rows": 1,
+          "sha256": "4d4a87c94b71f20ef12f3a905276aa30fab0a27be1050cf794f977dc044f366f"
+        },
+        {
+          "table": "genshin_accounts",
+          "rows": 2,
+          "sha256": "e72cb123a7bf1b6b0a287d5838fb730a891ae86e1a58270368a73947afde623a"
+        },
+        {
+          "table": "genshin_artifacts",
+          "rows": 6,
+          "sha256": "5db1a27e1262aa65f6bfcc45c51d094f670bf348f0e7b6d4f5e58afbd5bf9676"
+        },
+        {
+          "table": "genshin_character_focus",
+          "rows": 2,
+          "sha256": "c2e41c14a177d9e3b111115f727e2588fde6a4e4aa5aa9d30a87a8a893a5f56d"
+        },
+        {
+          "table": "genshin_characters",
+          "rows": 3,
+          "sha256": "56093c3b5ec65e526e32cebb15c1d0ed9cc2c12dc16740c9751bdfaea7e406db"
+        },
+        {
+          "table": "genshin_import_sections",
+          "rows": 5,
+          "sha256": "e9ad4bd93252efca8c364491f59464b9e5e367b5ea9b3d0f494c489d17719ff1"
+        },
+        {
+          "table": "genshin_materials",
+          "rows": 3,
+          "sha256": "9a733fcb56ac5433b49e65538a0c47e48fd38b3e28f33a499e4334f491733832"
+        },
+        {
+          "table": "genshin_plan_dismissals",
+          "rows": 2,
+          "sha256": "fff93174ae5dbb8893fd81c53399476deb46de48e9ae0731bd3391792f7e41af"
+        },
+        {
+          "table": "genshin_plan_preferences",
+          "rows": 2,
+          "sha256": "cc3053b57c00f7707d7de1361ebfdadaf095b29d61c2cb19600433edd055542e"
+        },
+        {
+          "table": "genshin_routine_state",
+          "rows": 2,
+          "sha256": "10ae7e0d6a0eeccf9f0a1f8a9ecb9e1c99a522dabae9bee661fd8d1b1d0f1107"
+        },
+        {
+          "table": "genshin_weapons",
+          "rows": 2,
+          "sha256": "e03f84f84f0c0dafe1a23b48b6a473be3685fab8500a21a5188c44ae0484a97a"
+        },
+        {
+          "table": "imaginarium_theater_runs",
+          "rows": 1,
+          "sha256": "504647971e7e6356b125884b97138dd9c8a81638fa781f973b3ced0088cb96fe"
+        },
+        {
+          "table": "spiral_abyss_runs",
+          "rows": 1,
+          "sha256": "a57eb36c96bc6882efd9624ae144291f26bb961f5a2f7ca5c70eb649f60c4aa0"
+        },
+        {
+          "table": "upgrade_goals",
+          "rows": 6,
+          "sha256": "f03b68836fd14bd4244da135f3104ffc4d2ad6a795880d2c3270435f4a2f81ec"
+        },
+        {
+          "table": "users",
+          "rows": 3,
+          "sha256": "3e88ea7a72c6038d62b96291f3075c1c72a82475a29bc2396506bf6b34f08160"
+        },
+        {
+          "table": "weekly_boss_state",
+          "rows": 1,
+          "sha256": "836314a75831caca3a015fb203ab404c81c2d4667ffa75b10493b90be17df4d8"
+        },
+        {
+          "table": "_prisma_migrations",
+          "rows": 13,
+          "sha256": "faeacc4067ac3c86803a0684cd15c90a47f98b2356ed58628fee755a6bbfc1f1"
+        }
+      ]
+    },
+    {
+      "name": "verify-download",
+      "rateClock": 900000,
+      "tables": [
+        {
+          "table": "users",
+          "rows": 1,
+          "sha256": "892eb1b7b67446d2fcc5428fc673a64ea77a831ab4626685810c16b5fc141a63"
+        },
+        {
+          "table": "genshin_accounts",
+          "rows": 1,
+          "sha256": "0f3187344c38a5a8c9900ab143de2d1fcedc3811c440b0e0133a855617743369"
+        },
+        {
+          "table": "genshin_characters",
+          "rows": 2,
+          "sha256": "badc65f35c436702583c160019ee406ff31736c330ec04ff65fcac01d03a6da4"
+        },
+        {
+          "table": "genshin_weapons",
+          "rows": 2,
+          "sha256": "e03f84f84f0c0dafe1a23b48b6a473be3685fab8500a21a5188c44ae0484a97a"
+        },
+        {
+          "table": "genshin_artifacts",
+          "rows": 5,
+          "sha256": "09b6044273abfe08195f98bb5e2a7e32be99464528ccd3dece3bf8942b0c7591"
+        },
+        {
+          "table": "genshin_materials",
+          "rows": 2,
+          "sha256": "effc50b7b7059f70dc44364b7745b421152a16c8634e0fc023bc58a404f82642"
+        },
+        {
+          "table": "genshin_import_sections",
+          "rows": 4,
+          "sha256": "82bd476aeabe3622420ce9f88bf1e7244223b49fe406e63ace68f82cce6bec0e"
+        },
+        {
+          "table": "genshin_character_focus",
+          "rows": 2,
+          "sha256": "c2e41c14a177d9e3b111115f727e2588fde6a4e4aa5aa9d30a87a8a893a5f56d"
+        },
+        {
+          "table": "upgrade_goals",
+          "rows": 5,
+          "sha256": "a912f60d100349d73162880e5a9957d702b639cde05c5c0dcc4b664ca5f3c2d8"
+        },
+        {
+          "table": "genshin_routine_state",
+          "rows": 1,
+          "sha256": "699308259951bfecec6a47a8de10ba6c71b28f47bce9adc4a1c5b85b206246fd"
+        },
+        {
+          "table": "genshin_plan_preferences",
+          "rows": 1,
+          "sha256": "ffba8f8164265dd8737d830aa0470bfa00024918e8200f3e34b7727fce1b745e"
+        },
+        {
+          "table": "genshin_plan_dismissals",
+          "rows": 2,
+          "sha256": "fff93174ae5dbb8893fd81c53399476deb46de48e9ae0731bd3391792f7e41af"
+        },
+        {
+          "table": "daily_companion",
+          "rows": 1,
+          "sha256": "86fb804f329fc1904271e5c5f6801cb2342e4db0c4b94a5bf44cd44b20d21941"
+        },
+        {
+          "table": "weekly_boss_state",
+          "rows": 1,
+          "sha256": "836314a75831caca3a015fb203ab404c81c2d4667ffa75b10493b90be17df4d8"
+        },
+        {
+          "table": "event_progress",
+          "rows": 1,
+          "sha256": "4d4a87c94b71f20ef12f3a905276aa30fab0a27be1050cf794f977dc044f366f"
+        },
+        {
+          "table": "spiral_abyss_runs",
+          "rows": 1,
+          "sha256": "a57eb36c96bc6882efd9624ae144291f26bb961f5a2f7ca5c70eb649f60c4aa0"
+        },
+        {
+          "table": "imaginarium_theater_runs",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "NikkeAccount",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "NikkeCharacter",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "NikkeEquipment",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ],
+      "complete": true,
+      "bytes": 10648
+    },
+    {
+      "name": "measure-substantial",
+      "rateClock": 900000,
+      "measurement": {
+        "inputItems": 9500,
+        "outputBytes": 2686705,
+        "rows": 9523,
+        "elapsedMs": 143,
+        "sha256": "2156ec72c434cd0926b80ccaa16e3a9c3037a4dbf73faf1033110bab31d65956"
+      }
+    },
+    {
+      "name": "hold-export",
+      "rateClock": 1800000
+    },
+    {
+      "name": "release-response",
+      "rateClock": 1800000,
+      "started": true
+    },
+    {
+      "name": "advance",
+      "rateClock": 1800000
+    },
+    {
+      "name": "hold-delete",
+      "rateClock": 2700000
+    },
+    {
+      "name": "snapshot",
+      "rateClock": 2700000,
+      "snapshot": [
+        {
+          "table": "NikkeAccount",
+          "rows": 1,
+          "sha256": "98aef1b0c9cb8b5866981c8b257b04da64ba5f7a799cb0a409d1f1cb8cc9f7cf"
+        },
+        {
+          "table": "NikkeCharacter",
+          "rows": 1,
+          "sha256": "199928b8ebacee5c27b54a90724083b195e78e3ee0c254d27a88e8ae6a05557a"
+        },
+        {
+          "table": "NikkeEquipment",
+          "rows": 1,
+          "sha256": "36eace0afcf7bff494f4e549792b50fc2585318a4c56a45fa94c5ecb1d013e6e"
+        },
+        {
+          "table": "daily_companion",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "event_progress",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_accounts",
+          "rows": 1,
+          "sha256": "3eb53f9ed16d9d9b535aa79d37749c85442853132990343902a5c94e68505a8a"
+        },
+        {
+          "table": "genshin_artifacts",
+          "rows": 1,
+          "sha256": "fed59bc8b4de1d114a5333db0a34b3f642e859008e6491db25eaa065fb9df0ed"
+        },
+        {
+          "table": "genshin_character_focus",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_characters",
+          "rows": 1,
+          "sha256": "0009267a038fec6c7fe857c41efc30788f08b8f3b0cbc7ad21cd9fd36ff3f22b"
+        },
+        {
+          "table": "genshin_import_sections",
+          "rows": 1,
+          "sha256": "c3396bb1fe019b8f47cf0591e1776521b0b86d639a31ed5c479ee4d491593ac3"
+        },
+        {
+          "table": "genshin_materials",
+          "rows": 1,
+          "sha256": "fa65199e8ff838a1209bed020a9ae81904533b807ee2c55f798878805a18715c"
+        },
+        {
+          "table": "genshin_plan_dismissals",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_plan_preferences",
+          "rows": 1,
+          "sha256": "422fb4c6c31dbf102722c6d85a5fc31ec6f6e38448f01e8a7dd641311fee1224"
+        },
+        {
+          "table": "genshin_routine_state",
+          "rows": 1,
+          "sha256": "0be21093cab788bc8e5b363bf76e63e2b9882ec6194445a65621e4f66662b5c6"
+        },
+        {
+          "table": "genshin_weapons",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "imaginarium_theater_runs",
+          "rows": 1,
+          "sha256": "504647971e7e6356b125884b97138dd9c8a81638fa781f973b3ced0088cb96fe"
+        },
+        {
+          "table": "spiral_abyss_runs",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "upgrade_goals",
+          "rows": 1,
+          "sha256": "6f5325861d8d8bcbc5e1b57e35ac64b5f1577973a7fdbb64cce1eefc6038326e"
+        },
+        {
+          "table": "users",
+          "rows": 2,
+          "sha256": "2657a8b5c527f4c37f12a1f6b4cf4dd82a149c8173dc16385932a3aaf90fc1fe"
+        },
+        {
+          "table": "weekly_boss_state",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "_prisma_migrations",
+          "rows": 13,
+          "sha256": "faeacc4067ac3c86803a0684cd15c90a47f98b2356ed58628fee755a6bbfc1f1"
+        }
+      ]
+    },
+    {
+      "name": "release-response",
+      "rateClock": 2700000,
+      "started": true
+    },
+    {
+      "name": "snapshot",
+      "rateClock": 2700000,
+      "snapshot": [
+        {
+          "table": "NikkeAccount",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "NikkeCharacter",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "NikkeEquipment",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "daily_companion",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "event_progress",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_accounts",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_artifacts",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_character_focus",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_characters",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_import_sections",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_materials",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_plan_dismissals",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_plan_preferences",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_routine_state",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_weapons",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "imaginarium_theater_runs",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "spiral_abyss_runs",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "upgrade_goals",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "users",
+          "rows": 1,
+          "sha256": "f5015a7396e84f7c320a2291720ef54cb3a002d05f1de061734999b0aeb66559"
+        },
+        {
+          "table": "weekly_boss_state",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "_prisma_migrations",
+          "rows": 13,
+          "sha256": "faeacc4067ac3c86803a0684cd15c90a47f98b2356ed58628fee755a6bbfc1f1"
+        }
+      ]
+    },
+    {
+      "name": "snapshot",
+      "rateClock": 2700000,
+      "snapshot": [
+        {
+          "table": "NikkeAccount",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "NikkeCharacter",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "NikkeEquipment",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "daily_companion",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "event_progress",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_accounts",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_artifacts",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_character_focus",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_characters",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_import_sections",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_materials",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_plan_dismissals",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_plan_preferences",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_routine_state",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "genshin_weapons",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "imaginarium_theater_runs",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "spiral_abyss_runs",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "upgrade_goals",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "users",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "weekly_boss_state",
+          "rows": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "table": "_prisma_migrations",
+          "rows": 13,
+          "sha256": "faeacc4067ac3c86803a0684cd15c90a47f98b2356ed58628fee755a6bbfc1f1"
+        }
+      ]
+    }
+  ],
+  "startedAt": "2026-10-14T06:25:04.879Z",
+  "resourcesRemoved": true,
+  "stoppedOwnedProcess": true,
+  "ordinaryWebBuildRestored": true,
+  "browserPortsClosed": true,
+  "finishedAt": "2026-10-14T06:30:39.186Z"
+}

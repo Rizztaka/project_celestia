@@ -1,0 +1,104 @@
+{
+  "date": "2026-10-10",
+  "timezone": "Asia/Calcutta",
+  "checkout": "D:/Genshin Personal/project-celestia",
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "conclusions": {
+    "localImplementation": "pass",
+    "remoteCI": "not run; no push/dispatch authorized or performed",
+    "betaRelease": "not approved; operational/accessibility/real-user gates remain open"
+  },
+  "tests": {
+    "passed": 799,
+    "files": 46,
+    "failed": 0,
+    "skipped": 0,
+    "postgresCases": 106,
+    "integration": {
+      "src/platform/companion/plan.integration.test.ts": 28,
+      "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+      "src/platform/companion/routine.integration.test.ts": 12,
+      "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+      "src/games/genshin/importer/importer.integration.test.ts": 16,
+      "src/platform/companion/catalog-advice.integration.test.ts": 9
+    }
+  },
+  "vitestDurationSeconds": 67.87,
+  "newTests": {
+    "originAndAuth": 58,
+    "verificationHelper": 33,
+    "total": 91
+  },
+  "entrypoint": {
+    "command": "pnpm run verify",
+    "exit": 0,
+    "log": "verification-run-2.log",
+    "actualReport": "test-results.json",
+    "steps": "entrypoint-results.json",
+    "platform": "win32",
+    "linuxExecutionObserved": false
+  },
+  "freshMigrations": {
+    "count": 13,
+    "target": "127.0.0.1:55448/celestia_test_c5a",
+    "guarded": true,
+    "log": "verification-run-1.log",
+    "subsequentDeploy": "no pending migrations"
+  },
+  "unsafeProbe": {
+    "exit": 1,
+    "beforeAnySubprocess": true,
+    "log": "unsafe-entrypoint.log"
+  },
+  "workflow": {
+    "yaml": "parse with unique keys passed",
+    "structure": "matching env, health service, frozen install, direct entry and artifact path inspected",
+    "log": "workflow-validation.log",
+    "remoteRun": false
+  },
+  "format": {
+    "prettier": "pass for all relevant files except five byte-preserved exceptions and seven explicit raw captures",
+    "originalExceptions": 5,
+    "rawEvidence": "seven exact JSON paths parsed and SHA256 checked, not reformatted",
+    "gitBytePreservation": "12 exact paths; git-byte-preservation.json",
+    "wholeTreeFormattingPerformed": false
+  },
+  "browser": {
+    "login": "pass",
+    "today": "pass",
+    "importPreview": "pass; not committed",
+    "authenticatedRead": "pass",
+    "consoleErrors": 0,
+    "configuredOrigin": "http://127.0.0.1:45449",
+    "wrapperCorsUsed": false,
+    "httpProbes": 10,
+    "zoom200400": "not exercised",
+    "osReducedMotion": "not exercised",
+    "assistiveTechnology": "not exercised",
+    "realParticipants": 0
+  },
+  "attempts": [
+    {
+      "name": "focused-tests.log",
+      "result": "85 pass, 1 incorrect test expectation; corrected to existing foreign-user 404 contract"
+    },
+    {
+      "name": "verification-run-1.log",
+      "result": "794/46/106 pass; format failed on seven raw C5 captures; preserved via explicit integrity policy"
+    },
+    {
+      "name": "verification-run-2.log",
+      "result": "complete pass; 799/46/106"
+    }
+  ],
+  "warnings": [
+    "Inherited pg overlapping-query deprecation retained",
+    "Prisma update notice retained; no update",
+    "Git CRLF warnings retained"
+  ],
+  "cleanup": "cleanup.json",
+  "preservation": "preservation-check.json",
+  "remainingGates": "beta-readiness.md",
+  "staged": [],
+  "commitPushDeploy": false
+}

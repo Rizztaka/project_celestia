@@ -35,8 +35,11 @@ export class BadRequestError extends AppError {
 // ============================================================
 
 export class UnauthorizedError extends AppError {
-  constructor(message = 'Authentication is required to access this resource.') {
-    super(message, 401, 'UNAUTHORIZED');
+  constructor(
+    message = 'Authentication is required to access this resource.',
+    code = 'UNAUTHORIZED',
+  ) {
+    super(message, 401, code);
   }
 }
 

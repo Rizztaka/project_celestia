@@ -1,0 +1,69 @@
+{
+  "baselineSha256": "22245d804b555cae1c6740a6ccb32b8f8f0ca627f2af33903105d4588c3493d5",
+  "finalSha256": "22245d804b555cae1c6740a6ccb32b8f8f0ca627f2af33903105d4588c3493d5",
+  "results": [
+    {
+      "name": "abort-leaks-owner-permit",
+      "expected": "partial-body test fails",
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "sourceRestored": true,
+      "summary": [
+        "     → expected 429 to be 200 // Object.is equality",
+        " Test Files  1 failed (1)",
+        "      Tests  1 failed | 1 passed | 24 skipped (26)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯",
+        " FAIL  src/platform/account-data/account-data.http.test.ts > C5d actual composed account-data routes > releases permits after an aborted partial JSON body before password work",
+        "AssertionError: expected 429 to be 200 // Object.is equality"
+      ]
+    },
+    {
+      "name": "response-close-releases-running-work",
+      "expected": "deadline test fails",
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "sourceRestored": true,
+      "summary": [
+        "     → expected 200 to be 429 // Object.is equality",
+        " Test Files  1 failed (1)",
+        "      Tests  1 failed | 1 passed | 24 skipped (26)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯",
+        " FAIL  src/platform/account-data/account-data.http.test.ts > C5d actual composed account-data routes > closes on the 30s response deadline and retains permits until work settles",
+        "AssertionError: expected 200 to be 429 // Object.is equality"
+      ]
+    },
+    {
+      "name": "deadline-callback-does-not-close",
+      "expected": "deadline test times out; runner must exit cleanly",
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "sourceRestored": true,
+      "summary": [
+        " Test Files  1 failed (1)",
+        "      Tests  1 failed | 1 passed | 24 skipped (26)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯",
+        " FAIL  src/platform/account-data/account-data.http.test.ts > C5d actual composed account-data routes > closes on the 30s response deadline and retains permits until work settles",
+        "Error: Test timed out in 5000ms."
+      ]
+    },
+    {
+      "name": "shared-auth-permit-never-released",
+      "expected": "potential blind spot: both tests may still pass with one shared slot leaked",
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "sourceRestored": true,
+      "summary": [
+        "     → expected 429 to be 400 // Object.is equality",
+        " Test Files  1 failed (1)",
+        "      Tests  1 failed | 1 passed | 24 skipped (26)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯",
+        " FAIL  src/platform/account-data/account-data.http.test.ts > C5d actual composed account-data routes > releases permits after an aborted partial JSON body before password work",
+        "AssertionError: expected 429 to be 400 // Object.is equality"
+      ]
+    }
+  ]
+}

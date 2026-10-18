@@ -1,0 +1,97 @@
+{
+  "checkedAt": "2026-10-15T11:34:02.1585442Z",
+  "browserRuns": [
+    {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-n86g3S/c5d-browser-result.json",
+      "sha256": "50C577A630C62AB933F2F31DAF2F8667493E273B4A893F76C86D9965DD5F7C45",
+      "startedAt": "2026-10-14T17:53:05.022Z",
+      "finishedAt": "2026-10-14T17:53:34.826Z",
+      "resourcesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "ordinaryWebBuildRestored": true,
+      "browserPortsClosed": true
+    },
+    {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-SFa3PO/c5d-browser-result.json",
+      "sha256": "CF9D8CA8FAA66BC8F06B5F4F03ADCDB0932AC2C78C7326543D39F4FC00A1D06D",
+      "startedAt": "2026-10-15T06:21:09.207Z",
+      "finishedAt": "2026-10-15T06:28:39.922Z",
+      "resourcesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "ordinaryWebBuildRestored": true,
+      "browserPortsClosed": true
+    },
+    {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-wuAdPs/c5d-browser-result.json",
+      "sha256": "ADDDAB21A571C75DFC5056DCA73D96C2D3C3A65A590DC6D6CE6CADB2406B210F",
+      "startedAt": "2026-10-15T11:27:16.183Z",
+      "finishedAt": "2026-10-15T11:29:26.2Z",
+      "resourcesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "ordinaryWebBuildRestored": true,
+      "browserPortsClosed": true
+    }
+  ],
+  "interruptedRun": {
+    "interruptedRun": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-Y4qSIJ",
+    "id": "7bfbf079533db907",
+    "priorProcessAbsent": true,
+    "systemIdentifier": "7695828306638942480",
+    "resourcesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "leaseRemoved": true,
+    "ordinaryWebBuildRestored": false
+  },
+  "interruptedBuildNote": "The interrupted reconciliation did not itself restore web output. Subsequent successful harness cleanup restored the ordinary build, most recently wuAdPs.",
+  "recovery": {
+    "resources": [
+      {
+        "database": "celestia_test_95c615c1ad347461_source",
+        "role": "celestia_test_95c615c1ad347461_source",
+        "oid": 38292,
+        "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-rkihud\\celestia_test_95c615c1ad347461_source",
+        "databaseRemaining": false,
+        "tablespaceRemaining": false,
+        "roleRemaining": false
+      },
+      {
+        "database": "celestia_test_95c615c1ad347461_restore",
+        "role": "celestia_test_95c615c1ad347461_restore",
+        "oid": 38295,
+        "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-rkihud\\celestia_test_95c615c1ad347461_restore",
+        "databaseRemaining": false,
+        "tablespaceRemaining": false,
+        "roleRemaining": false
+      },
+      {
+        "database": "celestia_test_95c615c1ad347461_verify",
+        "role": "celestia_test_95c615c1ad347461_verify",
+        "oid": 38298,
+        "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-rkihud\\celestia_test_95c615c1ad347461_verify",
+        "databaseRemaining": false,
+        "tablespaceRemaining": false,
+        "roleRemaining": false
+      }
+    ],
+    "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-rkihud/result.json",
+    "cleanup": {
+      "databasesAndRolesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "privateFilesRetained": true,
+      "credentialsRemoved": true
+    }
+  },
+  "finalListeners": [],
+  "checkedPorts": [45448, 45449, 55448],
+  "leasePath": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-UgVWJu/data/celestia-recovery.lock",
+  "leasePresent": false,
+  "browser": {
+    "earlierChromeTabClosed": "owner-confirmed after extension blocked automation",
+    "nativeAttempt": "Available helper blocked twice by user-input conflicts before zoom/menu input established.",
+    "osMotionPreferenceChanged": false,
+    "laterChromeTabClosedAndViewportReset": "tool-observed",
+    "inAppTabClosedAndViewportReset": "tool-observed",
+    "actualZoomChanged": false
+  },
+  "retained": "Private synthetic raw archives and run metadata remain outside Git. Inherited cluster directories remain intact; owned run resources were removed."
+}

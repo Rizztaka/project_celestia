@@ -1,0 +1,13 @@
+# Domain farming focus
+
+Completed locally following the owner clarification on 2026-10-18 (Asia/Calcutta). Earlier route work is preserved as a compatible API; it is no longer presented or calculated in the main Planner. No additional game data or formulas were invented.
+
+Planner now starts with the pinned 48 talent/weapon material families. Whole-week, Today and individual weekday filters show named materials, domain/location, full drop days and current/next opening based on the selected server's authoritative game weekday. Search and active-goal filtering work without known inventory or a selected difficulty. Empty accounts can browse schedules without choosing a server; open-now claims remain unavailable until server selection. Sunday selection and in-game material navigation are explained.
+
+Removed the duplicate Today-domain sidebar and coordinate controls; Today links directly to domain days. Optional mean-drop resin estimates remain initially collapsed. The route API defaults are preserved, while the main view sends includeRoute=false to skip route ordering and coordinate payloads. The existing four-server reset and cache invalidation mechanisms remain in use.
+
+REA 6.5.0's earlier integrity failure was reproduced as a path/handle device-ID difference on unsupported Node 22.14.0. On supported Node 24.11.0 the same input passed static analysis with integrity policy fail and no contradictions. The official source needs no patch for this reproducer. Updated the local REA skill with runtime preflight, isolated pinned commands, correct JSON/HAR syntax and accurate evidence/review guidance. System Node, project dependencies and agent configuration remain unchanged. See [REA evidence](rea-review.json); official [source](https://github.com/morluto/rea).
+
+Final guarded backup/restore and all verification steps pass **1082 tests / 61 files / 145 actual PostgreSQL cases**, zero failed/skipped/todo tests. Focused backend checks pass 39/3. Actual synthetic [browser observations](browser-observations.md) cover goal and catalog filters, closed days, Sunday, weapon materials, empty-account browsing and the retained optional estimate. [Validation](validation-results.json), [cleanup](cleanup.json) and [preservation](preservation-check.json) record the exact runs and inherited work.
+
+The schedule is attributed community snapshot data; its original game capture date is unknown. Estimates retain their existing statistical limitations. No owner walkthrough, human acceptance, accessibility completion, deployment, commit, push or next phase is inferred. Stop after this bounded correction.

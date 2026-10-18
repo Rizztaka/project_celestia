@@ -1,0 +1,24 @@
+{
+  "baselineSha256": "22245d804b555cae1c6740a6ccb32b8f8f0ca627f2af33903105d4588c3493d5",
+  "finalSha256": "22245d804b555cae1c6740a6ccb32b8f8f0ca627f2af33903105d4588c3493d5",
+  "results": [
+    {
+      "name": "shared-auth-leak-only-after-abort",
+      "expected": "check single shared-slot leak on partial-body abort",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "sourceRestored": true,
+      "summary": [" Test Files  1 passed (1)", "      Tests  2 passed | 24 skipped (26)"]
+    },
+    {
+      "name": "shared-auth-leak-only-after-destroy",
+      "expected": "check single shared-slot leak on destroyed response",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "sourceRestored": true,
+      "summary": [" Test Files  1 passed (1)", "      Tests  2 passed | 24 skipped (26)"]
+    }
+  ]
+}

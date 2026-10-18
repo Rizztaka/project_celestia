@@ -1,0 +1,108 @@
+
+ RUN  v3.2.7 D:/Genshin Personal/project-celestia/apps/api
+
+ ❯ src/core/middleware/origin.middleware.test.ts (55 tests | 1 failed) 28442ms
+   ✓ Actual application origin policy > allows configured origin https://trusted.example  3969ms
+   ✓ Actual application origin policy > allows configured origin HTTPS://TRUSTED.EXAMPLE:443  595ms
+   ✓ Actual application origin policy > allows configured origin https://preview-42.vercel.app  565ms
+   ✓ Actual application origin policy > deliberately denies https://safe.example  502ms
+   ✓ Actual application origin policy > deliberately denies https://localhost.attacker.example  512ms
+   ✓ Actual application origin policy > deliberately denies https://127.0.0.1.attacker.example  513ms
+   ✓ Actual application origin policy > deliberately denies http://127.0.0.10:5173  503ms
+   ✓ Actual application origin policy > deliberately denies https://vercel.app.attacker.example  508ms
+   ✓ Actual application origin policy > deliberately denies https://unrelated.vercel.app  563ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example.attacker.example  523ms
+   ✓ Actual application origin policy > deliberately denies http://trusted.example  456ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example:444  493ms
+   ✓ Actual application origin policy > deliberately denies null  504ms
+   ✓ Actual application origin policy > deliberately denies not-an-origin  469ms
+   ✓ Actual application origin policy > deliberately denies file://trusted.example  423ms
+   ✓ Actual application origin policy > deliberately denies https://user@trusted.example  456ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example/  463ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example/path  596ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example?x=1  414ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example#x  394ms
+   ✓ Actual application origin policy > deliberately denies https://safe.example/https://trusted.example  521ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example, https://safe.example  396ms
+   ✓ Actual application origin policy > deliberately denies http://localhost:5173  454ms
+   ✓ Actual application origin policy > permits absent Origin without granting cross-origin browser access  575ms
+   ✓ Actual application origin policy > permits GET preflight with required headers  471ms
+   ✓ Actual application origin policy > permits HEAD preflight with required headers  424ms
+   ✓ Actual application origin policy > permits POST preflight with required headers  568ms
+   ✓ Actual application origin policy > permits PUT preflight with required headers  590ms
+   ✓ Actual application origin policy > permits PATCH preflight with required headers  705ms
+   ✓ Actual application origin policy > permits DELETE preflight with required headers  410ms
+   ✓ Actual application origin policy > permits OPTIONS preflight with required headers  377ms
+   ✓ Actual application origin policy > denies untrusted preflight before any route runs  415ms
+   ✓ Actual application origin policy > allowed origin still requires authentication (undefined)  841ms
+   ✓ Actual application origin policy > allowed origin still requires authentication (invalid-token)  554ms
+   × Actual application origin policy > an allowed authenticated origin cannot read another owner 390ms
+     → expected 404 to be 403 // Object.is equality
+   ✓ Actual application origin policy > supports only documented local defaults in development  401ms
+   ✓ Actual application origin policy > supports only documented local defaults in test  572ms
+   ✓ Actual application origin policy > explicit configuration replaces development defaults  549ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration undefined  568ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration   382ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration    367ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration *  347ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://*.vercel.app  410ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration null  337ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://user:password@example.com  361ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration file://example.com  480ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com/  340ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com?x  313ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com#x  336ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com,  384ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com:99999  335ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com\path  327ms
+   ✓ Actual application origin policy > rejects malformed supplied development configuration  486ms
+   ✓ Actual application origin policy > does not bypass existing required-secret validation 29ms
+   ✓ Actual application origin policy > normalizes case/default ports and trims configuration entries only 1ms
+stdout | tooling/verification.test.js > Guarded verification orchestration > safe input reaches ordered readiness, migration, full-suite and package checks
+CHECK disposable-postgres-ready
+
+stdout | tooling/verification.test.js > Guarded verification orchestration > safe input reaches ordered readiness, migration, full-suite and package checks
+VERIFIED {"passed":708,"files":44,"failed":0,"skipped":0,"postgresCases":106,"integration":{"src/platform/companion/plan.integration.test.ts":28,"src/platform/companion/goal-lifecycle.integration.test.ts":28,"src/platform/companion/routine.integration.test.ts":12,"src/games/genshin/characters/character-equipment.integration.test.ts":13,"src/games/genshin/importer/importer.integration.test.ts":16,"src/platform/companion/catalog-advice.integration.test.ts":9}}
+Verification evidence: synthetic-output
+
+stdout | tooling/verification.test.js > Guarded verification orchestration > stops at an unavailable fixture before migrations
+CHECK disposable-postgres-ready
+
+stdout | tooling/verification.test.js > Guarded verification orchestration > propagates migration failures without running the suite or reporting green
+CHECK disposable-postgres-ready
+
+stdout | tooling/verification.test.js > Guarded verification orchestration > rejects actual skipped report evidence before downstream green checks
+CHECK disposable-postgres-ready
+
+ ✓ tooling/verification.test.js (31 tests) 100ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/core/middleware/origin.middleware.test.ts > Actual application origin policy > an allowed authenticated origin cannot read another owner
+AssertionError: expected 404 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 404
+
+ ❯ src/core/middleware/origin.middleware.test.ts:166:24
+    164|       .set('Origin', 'https://trusted.example')
+    165|       .auth(jwt.sign({}, secret, { subject: 'owner' }), { type: 'beare…
+    166|     expect(res.status).toBe(403);
+       |                        ^
+    167|     expect(res.body.error.code).toBe('FORBIDDEN');
+    168|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 85 passed (86)
+   Start at  17:23:45
+   Duration  31.22s (transform 2.04s, setup 0ms, collect 964ms, tests 28.54s, environment 0ms, prepare 976ms)
+
+undefined
+D:\Genshin Personal\project-celestia\apps\api:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run src/core/middleware/origin.middleware.test.ts tooling/verification.test.js --no-file-parallelism

@@ -1,0 +1,39 @@
+{
+  "infiniteAnimations": 0,
+  "reducedMotionMatches": false,
+  "reducedMotionRules": [
+    "@media (prefers-reduced-motion: reduce) {\n  .companion-shell *, .companion-shell ::before, .companion-shell ::after { scroll-behavior: auto !important; transition: none !important; animation: auto ease 0s 1 normal none running none !important; }\n  .companion-shell .hover-lift:hover { transform: none; }\n}"
+  ],
+  "samples": [
+    {
+      "background": "rgb(16, 16, 24)",
+      "color": "rgb(212, 212, 216)",
+      "fontSize": "16px",
+      "selector": ".companion-header"
+    },
+    {
+      "background": "rgb(39, 39, 53)",
+      "color": "rgb(238, 242, 255)",
+      "fontSize": "16px",
+      "selector": ".companion-primary [aria-current]"
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "rgb(161, 161, 170)",
+      "fontSize": "12px",
+      "selector": ".companion-shell .text-zinc-500"
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.705 0.015 286.067)",
+      "fontSize": "14px",
+      "selector": ".companion-shell .text-zinc-400"
+    },
+    {
+      "background": "oklab(0.184038 0.00218353 -0.00779904 / 0.6)",
+      "color": "oklch(0.871 0.006 286.286)",
+      "fontSize": "14px",
+      "selector": ".glass-panel"
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "checkedAt": "2026-10-17T07:32:55.7241321Z",
+  "interruptedRun": {
+    "report": {
+      "path": "docs/plans/c5g-accessibility-closeout/interrupted-cleanup.json",
+      "sha256": "F503E688E7F2215FAE257202AD4E1D06A55288BB331E41D76BDAC7F3A0F1DF0E"
+    },
+    "resourcesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "leaseRemoved": true,
+    "note": "Exact owned interrupted resources reconciled once under existing guards; do not rerun historical reconciliation scripts. Ordinary web output was restored by the subsequent fresh harness and full verification."
+  },
+  "browserRun": {
+    "report": {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-Gwsf8Z/c5d-browser-result.json",
+      "sha256": "7161320DC95C903E0B17D8FCE7973855125706B3C7C10DDAEF7BA419D8527055"
+    },
+    "startedAt": "2026-10-17T07:21:22.991Z",
+    "finishedAt": "2026-10-17T07:22:40.629Z",
+    "resourcesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "ordinaryWebBuildRestored": true,
+    "browserPortsClosed": true,
+    "newAcceptancePathCompleted": false
+  },
+  "recovery": {
+    "report": {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-GVBCDc/result.json",
+      "sha256": "F430555443ABB6A47882CC3864D5C81641926391D30E57018F20D9EAEF6CC726"
+    },
+    "resources": [
+      {
+        "database": "celestia_test_609e09f1a3bdf713_source",
+        "role": "celestia_test_609e09f1a3bdf713_source",
+        "oid": 62335,
+        "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-GVBCDc\\celestia_test_609e09f1a3bdf713_source",
+        "databaseRemaining": false,
+        "tablespaceRemaining": false,
+        "roleRemaining": false
+      },
+      {
+        "database": "celestia_test_609e09f1a3bdf713_restore",
+        "role": "celestia_test_609e09f1a3bdf713_restore",
+        "oid": 62338,
+        "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-GVBCDc\\celestia_test_609e09f1a3bdf713_restore",
+        "databaseRemaining": false,
+        "tablespaceRemaining": false,
+        "roleRemaining": false
+      },
+      {
+        "database": "celestia_test_609e09f1a3bdf713_verify",
+        "role": "celestia_test_609e09f1a3bdf713_verify",
+        "oid": 62341,
+        "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-GVBCDc\\celestia_test_609e09f1a3bdf713_verify",
+        "databaseRemaining": false,
+        "tablespaceRemaining": false,
+        "roleRemaining": false
+      }
+    ],
+    "cleanup": {
+      "databasesAndRolesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "privateFilesRetained": true,
+      "credentialsRemoved": true
+    },
+    "fixturePid": 36828,
+    "fixturePidAbsent": true
+  },
+  "portChecks": [
+    {
+      "host": "127.0.0.1",
+      "port": 45448,
+      "exclusiveBindSucceeded": true
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 45449,
+      "exclusiveBindSucceeded": true
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 55448,
+      "exclusiveBindSucceeded": true
+    }
+  ],
+  "leasePath": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-UgVWJu\\data\\celestia-recovery.lock",
+  "leasePresent": false,
+  "postmasterPidPresent": false,
+  "generatedCredentialFiles": [
+    {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-F5UFOp/pgpass",
+      "present": false
+    },
+    {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-Gwsf8Z/pgpass",
+      "present": false
+    },
+    {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-GVBCDc/pgpass",
+      "present": false
+    }
+  ],
+  "ordinaryWebBuild": {
+    "freshHarnessRestored": true,
+    "fullVerificationBuildExit": 0
+  },
+  "browser": {
+    "originalZoom": "100%, agent native menu observation",
+    "finalZoomAndTabClosure": "Owner reported already 100% and closed test tab",
+    "finalAgentVerification": false,
+    "reason": "Computer Use URL-policy stop",
+    "viewportOverrideApplied": false,
+    "osMotionPreferenceChanged": false,
+    "geometryRestored": "Unverified; observed outer-window size changed without agent resize during the session, cause unknown. Owner closed final tab."
+  },
+  "retained": "Private synthetic reports/archive/screenshots and stopped review fixture retained outside Git. No normal or production database used."
+}

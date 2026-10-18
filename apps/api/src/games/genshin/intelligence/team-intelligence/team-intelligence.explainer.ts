@@ -1,5 +1,4 @@
 import type {
-  CharacterInput,
   TeamScoreBreakdown,
   TeamTemplate,
   TemplateRoleResult,
@@ -41,11 +40,7 @@ function formatInvestment(role: TemplateRoleResult): string {
  * - Bullets are only generated when they add information.
  * - Order: description → reaction → missing roles → investment → resonance.
  */
-export function explainTeamScore(
-  breakdown: TeamScoreBreakdown,
-  template: TeamTemplate,
-  rosterMap: Map<string, CharacterInput>,
-): string[] {
+export function explainTeamScore(breakdown: TeamScoreBreakdown, template: TeamTemplate): string[] {
   const explanations: string[] = [];
   const { subScores, roles } = breakdown;
 

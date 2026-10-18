@@ -1,6 +1,12 @@
 # Feature Specification: Event Planner (Milestone 3C)
 
-**Status:** Draft — Pending User Approval
+> **Companion scope update — 2026-09-25.** Keep event tracking optional and gated by C2 data verification. Current events.json is explicitly placeholder data; do not show it as live deadlines or rewards. Stale rows are preserved/ignored on reads, not deleted. C7 expands the feature only if the maintainer can keep supported event data current; no scraper or admin platform is committed.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
+**Historical status:** Draft — Pending User Approval
 **Phase:** 3 — Daily Companion
 **Depends On:** Milestone 3A (DailyCompanion, PlannerPage tab structure), Milestone 3B (goal/tab pattern)
 **ADR References:** ADR-0005 (static vs dynamic data), ADR-0008 (frontend subview navigation), ADR-0009 (lazy reset pattern)

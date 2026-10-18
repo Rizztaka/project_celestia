@@ -1,0 +1,55 @@
+
+ RUN  v3.2.7 D:/Genshin Personal/project-celestia/apps/api
+
+ ❯ src/platform/account-data/account-data.http.test.ts (26 tests | 1 failed | 24 skipped) 5084ms
+   ↓ C5d actual composed account-data routes > authenticates before parsing or domain/password work
+   ↓ C5d actual composed account-data routes > requires current password and returns an honest no-store attachment
+   ↓ C5d actual composed account-data routes > rejects invalid deletion intent before credentials (0)
+   ↓ C5d actual composed account-data routes > rejects invalid deletion intent before credentials (1)
+   ↓ C5d actual composed account-data routes > rejects invalid deletion intent before credentials (2)
+   ↓ C5d actual composed account-data routes > rejects invalid deletion intent before credentials (3)
+   ↓ C5d actual composed account-data routes > rejects invalid deletion intent before credentials (4)
+   ↓ C5d actual composed account-data routes > requires the password as well as fixed confirmation for deletion
+   ↓ C5d actual composed account-data routes > rejects ownership/password extras before bcrypt (0)
+   ↓ C5d actual composed account-data routes > rejects ownership/password extras before bcrypt (1)
+   ↓ C5d actual composed account-data routes > rejects ownership/password extras before bcrypt (2)
+   ↓ C5d actual composed account-data routes > rejects query ownership and counts it in the shared budget
+   ↓ C5d actual composed account-data routes > safely rejects malformed without password work
+   ↓ C5d actual composed account-data routes > safely rejects oversized without password work
+   ↓ C5d actual composed account-data routes > safely rejects media without password work
+   ↓ C5d actual composed account-data routes > safely rejects compressed without password work
+   ↓ C5d actual composed account-data routes > safely rejects charset without password work
+   ↓ C5d actual composed account-data routes > enforces shared default burst/refill before identity DB, bcrypt, read or serialization
+   ↓ C5d actual composed account-data routes > fails closed for missing subjects and unavailable identity lookup
+   ↓ C5d actual composed account-data routes > bounds malformed or high-cost stored hashes before bcrypt
+   ↓ C5d actual composed account-data routes > does not claim success after a repository failure; releases permit and omits diagnostics
+   ↓ C5d actual composed account-data routes > holds owner/global/shared auth permits until disconnected work settles
+   ↓ C5d actual composed account-data routes > caps simultaneous owners at two and shares password admission with login
+   ↓ C5d actual composed account-data routes > retains response buffer permit while the reader is paused, then releases on close
+   ✓ C5d actual composed account-data routes > releases permits after an aborted partial JSON body before password work 65ms
+   × C5d actual composed account-data routes > closes on the 30s response deadline and retains permits until work settles 5008ms
+     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 24 skipped (26)
+   Start at  18:47:10
+   Duration  7.17s (transform 654ms, setup 0ms, collect 1.75s, tests 5.08s, environment 0ms, prepare 156ms)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/platform/account-data/account-data.http.test.ts > C5d actual composed account-data routes > closes on the 30s response deadline and retains permits until work settles
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/platform/account-data/account-data.http.test.ts:354:3
+    352|     }
+    353|   });
+    354|   it('closes on the 30s response deadline and retains permits until wo…
+       |   ^
+    355|     const started = deferred(),
+    356|       pending = deferred(),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

@@ -4,9 +4,6 @@ class CompanionRegistry {
   private readonly providers = new Map<string, ICompanionProvider>();
 
   register(provider: ICompanionProvider): void {
-    if (this.providers.has(provider.gameId)) {
-      throw new Error(`CompanionProvider for gameId "${provider.gameId}" is already registered.`);
-    }
     this.providers.set(provider.gameId, provider);
   }
 

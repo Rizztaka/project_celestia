@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import type { CharacterRecommendation } from '../character-intelligence/character-intelligence.service.js';
 import type { CharacterInput } from '../character-intelligence/character-intelligence.calculator.js';
+import type { CharacterRecommendation } from '../character-intelligence/character-intelligence.service.js';
 import type {
   TeamScoreBreakdown,
   TeamTemplate,
 } from '../team-intelligence/team-intelligence.calculator.js';
-import { calculatePullValue, type ActiveBanner } from './pull-intelligence.calculator.js';
+import { type ActiveBanner, calculatePullValue } from './pull-intelligence.calculator.js';
 import { explainPullValue } from './pull-intelligence.explainer.js';
 
 // -------------------------------------------------------
@@ -89,15 +89,6 @@ const MOCK_TEMPLATES: TeamTemplate[] = [
     ],
   },
 ];
-
-/** Buildable breakdown (score >= 75 = S-tier) */
-const MOCK_BREAKDOWN_S_TIER: TeamScoreBreakdown = {
-  templateId: 'national',
-  score: 80,
-  subScores: { roleCoverage: 50, investmentLevel: 20, resonanceBonus: 6, reactionCompleteness: 4 },
-  roles: [],
-  isBuildable: true,
-};
 
 /** Non-buildable breakdown (score < 55 = untiered) */
 const MOCK_BREAKDOWN_LOW: TeamScoreBreakdown = {

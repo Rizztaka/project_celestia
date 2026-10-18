@@ -2,6 +2,7 @@ import { createRequire } from 'module';
 
 import { prisma } from '@/core/db/prisma.js';
 import { NotFoundError } from '@/core/errors/app-error.js';
+
 import { GenshinCharacterService } from '../../characters/character.service.js';
 
 const require = createRequire(import.meta.url);
@@ -54,7 +55,7 @@ export class ProgressionIntelligenceService {
 
     // 2. Ascension Maturity
     // Count characters with ascension >= 5 (meaning level 80+)
-    const highlyAscended = roster.filter((char: any) => char.ascension >= 5).length;
+    const highlyAscended = roster.filter((char) => char.ascension >= 5).length;
     const maturityPercentage = owned > 0 ? (highlyAscended / owned) * 100 : 0;
     let maturityRank = 'Trainee';
     if (maturityPercentage >= 80) maturityRank = 'Abyss Ready';

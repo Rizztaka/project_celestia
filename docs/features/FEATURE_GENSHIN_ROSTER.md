@@ -1,8 +1,15 @@
 # Feature Specification: Genshin Roster (Milestone 2A)
 
+> **Companion scope update — 2026-09-25.** Keep the existing roster, weapon, and artifact models and equipment relationships. Source code exists; this historical foundation plan is not a new implementation queue. C3 adds focus and equipment visibility. Multi-account support is deferred and would require an ownership review, not merely removing a unique constraint.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 **Feature ID:** FEAT-002  
 **Priority:** P0  
-**Status:** Designing  
+**Historical status:** Designing
+
 **Phase:** 2A — Genshin Foundation  
 **Last Updated:** 2026-08-05
 

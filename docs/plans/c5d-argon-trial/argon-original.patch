@@ -1,0 +1,119 @@
+--- a/apps/api/src/platform/account-data/account-data.http.test.ts
++++ b/apps/api/src/platform/account-data/account-data.http.test.ts
+@@ -296,6 +296,115 @@
+     releaseResponse();
+     await new Promise((done) => setTimeout(done, 30));
+     mocks.export.mockResolvedValue('{}');
+     expect((await post()).status).toBe(200);
+   });
++  it('releases permits after an aborted partial JSON body before password work', async () => {
++    const compare = vi.spyOn(bcrypt, 'compare');
++    const subjectChecked = deferred(),
++      aborted = deferred(),
++      closed = deferred();
++    mocks.subject.mockImplementationOnce(async ({ where }) => {
++      subjectChecked.resolve();
++      return { id: where.id };
++    });
++    const server = createApp({ clock: () => now }).listen(0, '127.0.0.1');
++    servers.push(server);
++    await new Promise<void>((done) => server.once('listening', done));
++    server.once('request', (incoming, res) => {
++      incoming.once('aborted', () => aborted.resolve());
++      res.once('close', () => closed.resolve());
++    });
++    const port = (server.address() as AddressInfo).port;
++    api = supertest(`http://127.0.0.1:${port}`);
++    const req = httpRequest({
++      host: '127.0.0.1',
++      port,
++      path: `${root}/export`,
++      method: 'POST',
++      headers: {
++        Authorization: `Bearer ${token()}`,
++        'Content-Type': 'application/json',
++        'Content-Length': '500',
++      },
++    });
++    req.on('error', () => {});
++    try {
++      req.write('{"requestVersion":1,');
++      await subjectChecked.promise;
++      await new Promise(setImmediate);
++      req.destroy();
++      await Promise.all([aborted.promise, closed.promise]);
++      await new Promise(setImmediate);
++      expect(mocks.subject).toHaveBeenCalledTimes(1);
++      expect(mocks.credential).not.toHaveBeenCalled();
++      expect(compare).not.toHaveBeenCalled();
++      expect(mocks.export).not.toHaveBeenCalled();
++      expect(mocks.delete).not.toHaveBeenCalled();
++      expect(mocks.error).not.toHaveBeenCalled();
++      expect((await post()).status).toBe(200);
++      expect(mocks.subject).toHaveBeenCalledTimes(2);
++      expect(mocks.credential).toHaveBeenCalledTimes(1);
++      expect(mocks.export).toHaveBeenCalledTimes(1);
++      expect((await api.post('/api/v1/auth/login').send({})).status).toBe(400);
++      expect(mocks.error).not.toHaveBeenCalled();
++    } finally {
++      req.destroy();
++    }
++  });
++  it('closes on the 30s response deadline and retains permits until work settles', async () => {
++    const started = deferred(),
++      pending = deferred(),
++      closed = deferred();
++    const realTimer = globalThis.setTimeout;
++    let deadline: (() => void) | undefined;
++    let deadlineMs: number | undefined;
++    const spy = ((callback: () => void, ms?: number) => {
++      if (ms === 30_000 && !deadline) {
++        deadlineMs = ms;
++        deadline = callback;
++      }
++      return realTimer(callback, ms);
++    }) as unknown as typeof setTimeout;
++    vi.spyOn(globalThis, 'setTimeout').mockImplementation(spy);
++    mocks.export.mockImplementationOnce(async () => {
++      started.resolve();
++      await pending.promise;
++      return '{}';
++    });
++    const server = createApp({ clock: () => now }).listen(0, '127.0.0.1');
++    servers.push(server);
++    await new Promise<void>((done) => server.once('listening', done));
++    const port = (server.address() as AddressInfo).port;
++    api = supertest(`http://127.0.0.1:${port}`);
++    const req = httpRequest({
++      host: '127.0.0.1',
++      port,
++      path: `${root}/export`,
++      method: 'POST',
++      headers: { Authorization: `Bearer ${token()}`, 'Content-Type': 'application/json' },
++    });
++    req.on('error', () => closed.resolve());
++    req.once('close', () => closed.resolve());
++    try {
++      req.end(JSON.stringify(input));
++      await started.promise;
++      expect(deadlineMs).toBe(30_000);
++      expect(deadline).toBeTypeOf('function');
++      expect(req.destroyed).toBe(false);
++      deadline!();
++      await closed.promise;
++      const busy = await remove();
++      expect(busy.status).toBe(429);
++      expect(busy.body.error.code).toBe('REQUEST_BUSY');
++      expect(busy.headers['retry-after']).toBe('1');
++      expect(mocks.delete).not.toHaveBeenCalled();
++      pending.resolve();
++      await new Promise(setImmediate);
++      expect((await post()).status).toBe(200);
++      expect(mocks.error).not.toHaveBeenCalled();
++    } finally {
++      pending.resolve();
++      req.destroy();
++    }
++  });
+ });
+

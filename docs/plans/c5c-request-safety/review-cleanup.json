@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-12",
+  "failedHistoricalFixtureAttempt": {
+    "databasesAndRolesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "privateFilesRetained": true,
+    "credentialsRemoved": true
+  },
+  "successfulRun": {
+    "databasesAndRolesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "privateFilesRetained": true,
+    "credentialsRemoved": true
+  },
+  "resourcesRemoved": true,
+  "ports": [
+    { "port": 55448, "exclusiveLoopbackBindPassed": true },
+    { "port": 45448, "exclusiveLoopbackBindPassed": true },
+    { "port": 45449, "exclusiveLoopbackBindPassed": true }
+  ],
+  "normalWebBuildRestored": true,
+  "newFixtureRetainedStopped": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-UgVWJu/data",
+  "privateRunDirectories": [
+    "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-JAVMGG",
+    "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-c18wNm"
+  ],
+  "bootstrapAclAttempt": {
+    "result": "PRIVATE_ACL_NOT_ESTABLISHED",
+    "databaseWorkStarted": false,
+    "emptyNewDirectoryRemoved": true,
+    "resolution": "Use unchanged isolatedEnvironment helper; same privateDirectory guard then passed."
+  },
+  "ordinaryDatabaseConnected": false,
+  "browserAcceptanceRepeated": false,
+  "unownedProcessesStopped": false
+}

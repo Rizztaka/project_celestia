@@ -1,0 +1,75 @@
+
+ RUN  v3.2.7 D:/Genshin Personal/project-celestia/apps/api
+
+ ❯ src/core/middleware/request-safety.http.test.ts (38 tests | 1 failed) 1078ms
+   ✓ Composed application request safety > bounds auth at 8192 bytes (-1)  411ms
+   ✓ Composed application request safety > bounds auth at 8192 bytes (0) 9ms
+   ✓ Composed application request safety > bounds auth at 8192 bytes (1) 10ms
+   ✓ Composed application request safety > bounds ordinary requests at 65536 bytes (-1) 8ms
+   ✓ Composed application request safety > bounds ordinary requests at 65536 bytes (0) 8ms
+   ✓ Composed application request safety > bounds ordinary requests at 65536 bytes (1) 7ms
+   ✓ Composed application request safety > bounds authenticated import at 4194304 bytes (-1) 56ms
+   ✓ Composed application request safety > bounds authenticated import at 4194304 bytes (0) 33ms
+   × Composed application request safety > bounds authenticated import at 4194304 bytes (1) 29ms
+     → read ECONNRESET
+   ✓ Composed application request safety > authenticates before malformed/large body at /api/v1/games/genshin/import 13ms
+   ✓ Composed application request safety > authenticates before malformed/large body at /api/v1/games/genshin/import/preview 13ms
+   ✓ Composed application request safety > authenticates before malformed/large body at /api/v1/games/genshin/import/preview/?caller=ignored 12ms
+   ✓ Composed application request safety > safely maps malformed/strict JSON 17ms
+   ✓ Composed application request safety > safely maps malformed/strict JSON 9ms
+   ✓ Composed application request safety > safely maps malformed/strict JSON 6ms
+   ✓ Composed application request safety > rejects media text/plain 5ms
+   ✓ Composed application request safety > rejects media application/x-www-form-urlencoded 6ms
+   ✓ Composed application request safety > rejects media application/json; charset=iso-8859-1 6ms
+   ✓ Composed application request safety > rejects media application/json; charset=utf-16 6ms
+   ✓ Composed application request safety > rejects content encoding gzip without inflation 7ms
+   ✓ Composed application request safety > rejects content encoding br without inflation 7ms
+   ✓ Composed application request safety > rejects content encoding deflate without inflation 7ms
+   ✓ Composed application request safety > rejects content encoding unknown without inflation 6ms
+   ✓ Composed application request safety > bounds actual chunked transfer at 8192 bytes 29ms
+   ✓ Composed application request safety > bounds actual chunked transfer at 8193 bytes 8ms
+   ✓ Composed application request safety > counts invalid attempts before parsing; forwarded headers cannot change the peer budget 29ms
+   ✓ Composed application request safety > keeps login/register budgets separate, accounts failed credentials, and isolates fresh apps 26ms
+   ✓ Composed application request safety > shares preview/commit budget using verified owners only; status, health and preflight stay usable 58ms
+   ✓ Composed application request safety > rejects new authenticated identities at capacity without growing or evicting active penalties 56ms
+   ✓ Composed application request safety > does not grant the large parser to unmatched path /api/v1/games/genshin/import/preview/extra 10ms
+   ✓ Composed application request safety > does not grant the large parser to unmatched path /api/v1/games/genshin/importx 11ms
+   ✓ Composed application request safety > does not grant the large parser to unmatched path /api/v1/games/genshin/import/%70review 10ms
+   ✓ Composed application request safety > does not grant the large parser to unmatched path /api/v1/auth/login/extra 22ms
+   ✓ Composed application request safety > does not run a POST handler via GET/PUT and retains NIKKE/endgame authentication 45ms
+   ✓ Composed application request safety > retains auth permit after disconnect until the password/service promise settles 19ms
+   ✓ Composed application request safety > holds shared import permits across preview/commit and releases after thrown service errors 28ms
+   ✓ Composed application request safety > releases permits for aborted partial bodies, parser and validation failures 24ms
+   ✓ Composed application request safety > does not classify arbitrary downstream parser-looking errors as client errors 7ms
+{"level":30,"time":1791793596890,"pid":21840,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791793596997,"pid":21840,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791793597034,"pid":21840,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793597070,"pid":21840,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793597101,"pid":21840,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793597246,"pid":21840,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793597292,"pid":21840,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793597311,"pid":21840,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793597335,"pid":21840,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793597369,"pid":21840,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793597398,"pid":21840,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793597425,"pid":21840,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791793597453,"pid":21840,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+ ✓ src/games/genshin/importer/importer.http.test.ts (10 tests) 637ms
+ ✓ src/games/genshin/importer/importer.service.test.ts (28 tests) 262ms
+ ✓ src/core/middleware/request-admission.test.ts (19 tests) 302ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/core/middleware/request-safety.http.test.ts > Composed application request safety > bounds authenticated import at 4194304 bytes (1)
+Error: read ECONNRESET
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 94 passed (95)
+   Start at  13:56:20
+   Duration  21.46s (transform 1.71s, setup 0ms, collect 14.95s, tests 2.28s, environment 1ms, prepare 2.08s)
+
+undefined
+D:\Genshin Personal\project-celestia\apps\api:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run src/core/middleware/request-admission.test.ts src/core/middleware/request-safety.http.test.ts src/games/genshin/importer/importer.http.test.ts src/games/genshin/importer/importer.service.test.ts --no-file-parallelism

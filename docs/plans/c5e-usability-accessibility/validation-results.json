@@ -1,0 +1,390 @@
+{
+  "date": "2026-10-15",
+  "scope": "C5e local implementation; no deployed evidence",
+  "command": "pnpm run recovery:rehearse --fixture 'D:\\Genshin Personal\\project-celestia\\docs\\plans\\c5c-request-safety\\review-fixture.json' --verify",
+  "environment": {
+    "NODE_ENV": "test",
+    "DOTENV_CONFIG_PATH": "NUL"
+  },
+  "exit": 0,
+  "startedAt": "2026-10-15T11:24:18.722Z",
+  "finishedAt": "2026-10-15T11:27:03.508Z",
+  "elapsedMs": 164782,
+  "tests": {
+    "passed": 1006,
+    "files": 55,
+    "failed": 0,
+    "skipped": 0,
+    "postgresCases": 106,
+    "integration": {
+      "src/platform/companion/plan.integration.test.ts": 28,
+      "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+      "src/platform/companion/routine.integration.test.ts": 12,
+      "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+      "src/games/genshin/importer/importer.integration.test.ts": 16,
+      "src/platform/companion/catalog-advice.integration.test.ts": 9
+    }
+  },
+  "actualPostgresCases": 133.0,
+  "actualIntegrationSuites": [
+    {
+      "file": "D:/Genshin Personal/project-celestia/apps/api/tooling/account-data.integration.test.js",
+      "passed": 20,
+      "total": 20,
+      "status": "passed"
+    },
+    {
+      "file": "D:/Genshin Personal/project-celestia/apps/api/tooling/request-safety.integration.test.js",
+      "passed": 7,
+      "total": 7,
+      "status": "passed"
+    },
+    {
+      "file": "D:/Genshin Personal/project-celestia/apps/api/src/platform/companion/catalog-advice.integration.test.ts",
+      "passed": 9,
+      "total": 9,
+      "status": "passed"
+    },
+    {
+      "file": "D:/Genshin Personal/project-celestia/apps/api/src/platform/companion/goal-lifecycle.integration.test.ts",
+      "passed": 28,
+      "total": 28,
+      "status": "passed"
+    },
+    {
+      "file": "D:/Genshin Personal/project-celestia/apps/api/src/platform/companion/plan.integration.test.ts",
+      "passed": 28,
+      "total": 28,
+      "status": "passed"
+    },
+    {
+      "file": "D:/Genshin Personal/project-celestia/apps/api/src/platform/companion/routine.integration.test.ts",
+      "passed": 12,
+      "total": 12,
+      "status": "passed"
+    },
+    {
+      "file": "D:/Genshin Personal/project-celestia/apps/api/src/games/genshin/characters/character-equipment.integration.test.ts",
+      "passed": 13,
+      "total": 13,
+      "status": "passed"
+    },
+    {
+      "file": "D:/Genshin Personal/project-celestia/apps/api/src/games/genshin/importer/importer.integration.test.ts",
+      "passed": 16,
+      "total": 16,
+      "status": "passed"
+    }
+  ],
+  "classifierNote": "The unchanged historical classifier counts 106 cases; actual Vitest assertions also include 7 request-safety and 20 account-data cases. All 133 passed.",
+  "steps": [
+    {
+      "id": "shared-types-and-build",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": [
+        "-p",
+        "D:\\Genshin Personal\\project-celestia\\packages\\api-contracts\\tsconfig.json"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "disposable-postgres-ready",
+      "exit": 0
+    },
+    {
+      "id": "prisma-generate",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["generate"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "disposable-migrations",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["migrate", "deploy"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "prisma-validate",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["validate"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "schema-diff",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": [
+        "migrate",
+        "diff",
+        "--from-config-datasource",
+        "--to-schema",
+        "prisma/schema.prisma",
+        "--exit-code"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "full-suite",
+      "package": "vitest",
+      "binary": "vitest",
+      "arguments": [
+        "run",
+        "--no-file-parallelism",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-3xjA2v\\vitest.json"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-lint",
+      "package": "eslint",
+      "binary": "eslint",
+      "arguments": [".", "--max-warnings", "0"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-types-and-build",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": [],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-aliases",
+      "package": "tsc-alias",
+      "binary": "tsc-alias",
+      "arguments": [],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-lint",
+      "package": "eslint",
+      "binary": "eslint",
+      "arguments": ["."],
+      "cwd": "apps\\web",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-types",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": ["-b"],
+      "cwd": "apps\\web",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-build",
+      "package": "vite",
+      "binary": "vite",
+      "arguments": ["build"],
+      "cwd": "apps\\web",
+      "nodeEnv": "production",
+      "exit": 0
+    },
+    {
+      "id": "repository-format",
+      "package": "prettier",
+      "binary": "prettier",
+      "arguments": [
+        "--check",
+        "**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,yml,yaml,css,html}",
+        "!apps/api/src/core/ai/openrouter.ts",
+        "!docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+        "!apps/web/index.html",
+        "!apps/web/src/App.css",
+        "!apps/web/src/index.css",
+        "!docs/plans/c5-companion-beta/endgame-focus-final.json",
+        "!docs/plans/c5-companion-beta/primary-reflow.json",
+        "!docs/plans/c5-companion-beta/reimport-after.json",
+        "!docs/plans/c5-companion-beta/reimport-before.json",
+        "!docs/plans/c5-companion-beta/rendered-style-check.json",
+        "!docs/plans/c5-companion-beta/secondary-reflow.json",
+        "!docs/plans/c5-companion-beta/starting-state.json"
+      ],
+      "cwd": ".",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "diff-check",
+      "exit": 0
+    }
+  ],
+  "recovery": {
+    "migrationReceipts": 13,
+    "result": "passed",
+    "stages": [
+      {
+        "stage": "fixture-start",
+        "result": "passed",
+        "elapsedMs": 2359
+      },
+      {
+        "stage": "fresh-resources",
+        "result": "passed",
+        "elapsedMs": 2218
+      },
+      {
+        "stage": "source-migrations",
+        "result": "passed",
+        "elapsedMs": 17366
+      },
+      {
+        "stage": "synthetic-seed",
+        "result": "passed",
+        "elapsedMs": 645
+      },
+      {
+        "stage": "freeze-source",
+        "result": "passed",
+        "elapsedMs": 7
+      },
+      {
+        "stage": "source-snapshot",
+        "result": "passed",
+        "elapsedMs": 665
+      },
+      {
+        "stage": "dump",
+        "result": "passed",
+        "elapsedMs": 310
+      },
+      {
+        "stage": "restore",
+        "result": "passed",
+        "elapsedMs": 927
+      },
+      {
+        "stage": "restored-fidelity",
+        "result": "passed",
+        "elapsedMs": 1772
+      },
+      {
+        "stage": "restored-schema",
+        "result": "passed",
+        "elapsedMs": 1865
+      },
+      {
+        "stage": "restored-application-reads",
+        "result": "passed",
+        "elapsedMs": 6814
+      },
+      {
+        "stage": "post-read-fidelity",
+        "result": "passed",
+        "elapsedMs": 1532
+      },
+      {
+        "stage": "full-verification",
+        "result": "passed",
+        "elapsedMs": 125420
+      }
+    ],
+    "applicationTables": 20,
+    "sourceAfterValidationUnchanged": true,
+    "sourceAfterDumpUnchanged": true,
+    "restoredReadsDidNotWrite": true,
+    "cleanup": {
+      "databasesAndRolesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "privateFilesRetained": true,
+      "credentialsRemoved": true
+    },
+    "constraints": 214,
+    "application": {
+      "passed": true,
+      "requests": 30,
+      "checks": [
+        "LOGIN_a",
+        "LOGIN_b",
+        "LOGIN_empty",
+        "UNAUTHENTICATED_DENIED",
+        "OWN_PROFILE",
+        "FOREIGN_OWNER_DENIED",
+        "ROSTER_OWNERSHIP",
+        "EQUIPMENT_ASSIGNED",
+        "EQUIPMENT_UNRECORDED_UNKNOWN",
+        "RECEIPT_EXACT_DATE",
+        "ZERO_RECEIPT_VERSUS_ABSENCE",
+        "FOCUS_REVISIONS",
+        "GOAL_HISTORY",
+        "LEGACY_NOT_NORMALIZED",
+        "GOAL_OWNER_FILTER",
+        "FOREIGN_GOAL_DENIED",
+        "MANUAL_CHECKPOINT",
+        "UNKNOWN_CHECKPOINT",
+        "PLAN_ZERO_NULL",
+        "PLAN_ACTIVE_ONLY",
+        "NO_FABRICATED_FARMING",
+        "ABSENT_STATE_REMAINS_ABSENT",
+        "OWN_ACCOUNT_SERVICE",
+        "RETAINED_NIKKE_READ",
+        "SAVED_WEEK_ZERO",
+        "SAVED_DISMISSALS",
+        "SELECT_ONLY"
+      ],
+      "queryCount": 59,
+      "onlySelect": true,
+      "productionRoutes": true,
+      "syntheticAuthentication": true,
+      "rawQueriesPersisted": false
+    }
+  },
+  "focused": {
+    "files": 3,
+    "passed": 34,
+    "command": "pnpm --filter @celestia/api exec vitest run tooling/journey-client.test.js tooling/account-data-client.test.js tooling/plan-client.test.js --no-file-parallelism",
+    "exit": 0,
+    "note": "Final exact invocation passed. An earlier invocation also named nonexistent goal-client.test.js; it ran the same three available suites, not a fourth."
+  },
+  "evidence": [
+    {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-rkihud/result.json",
+      "sha256": "87D21A8DE5CC3115DCE6C221D2D8354F0D48EB3431A0919C8A382E6C4276824F"
+    },
+    {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-verification-3xjA2v/verification.json",
+      "sha256": "7BD1F75B9669D888D800182655CDC379E7364DA0AEED4CBDD106DC751607D07D"
+    },
+    {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-verification-3xjA2v/vitest.json",
+      "sha256": "1920C7F938AB2292A4B8C41872095AA57A14244B9F8B4C4E02C62F6A0173908E"
+    }
+  ],
+  "browserEvidence": "acceptance.md",
+  "unperformed": [
+    "Actual 200%/400% browser zoom",
+    "Reduced-motion execution",
+    "Screen-reader execution",
+    "Human usefulness/comprehension observations"
+  ],
+  "sourceChangesAfterFullVerification": false,
+  "remoteCIObserved": false,
+  "warnings": ["Inherited pg query concurrency deprecation did not fail the run."],
+  "finalDocumentationChecks": "After evidence finalization: targeted Prettier and git diff --check; results in preservation-check.json."
+}

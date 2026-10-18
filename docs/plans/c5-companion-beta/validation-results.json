@@ -1,0 +1,124 @@
+{
+  "checked": "2026-10-09",
+  "checkout": "D:/Genshin Personal/project-celestia",
+  "baseline": {
+    "date": "2026-10-07",
+    "startedLocal": "21:17:45 Asia/Calcutta",
+    "tests": 691,
+    "files": 43,
+    "postgresCases": 106,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 39.07,
+    "rawLog": "%TEMP%/celestia-c5-baseline.log"
+  },
+  "final": {
+    "date": "2026-10-09",
+    "startedLocal": "20:43:36 Asia/Calcutta",
+    "tests": 708,
+    "files": 44,
+    "postgresCases": 106,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 107.88,
+    "rawLog": "direct-test.log",
+    "postgresSuites": {
+      "plan": 28,
+      "goalLifecycle": 28,
+      "routine": 12,
+      "equipment": 13,
+      "importer": 16,
+      "catalogAdvice": 9
+    },
+    "addedJourneyClientTests": 17
+  },
+  "commands": [
+    {
+      "cwd": "apps/api",
+      "command": "node node_modules/vitest/vitest.mjs run --no-file-parallelism",
+      "result": "pass"
+    },
+    {
+      "cwd": "apps/api",
+      "command": "pnpm lint",
+      "result": "pass, zero warnings"
+    },
+    {
+      "cwd": "apps/api",
+      "command": "pnpm build",
+      "result": "pass"
+    },
+    {
+      "cwd": "packages/api-contracts",
+      "command": "pnpm exec tsc --noEmit",
+      "result": "pass"
+    },
+    {
+      "cwd": "apps/web",
+      "command": "pnpm lint",
+      "result": "pass"
+    },
+    {
+      "cwd": "apps/web",
+      "command": "pnpm build",
+      "result": "pass; final ordinary build with VITE_API_URL removed from command environment"
+    },
+    {
+      "cwd": "apps/api",
+      "command": "pnpm exec prisma validate",
+      "result": "schema valid"
+    },
+    {
+      "cwd": "apps/api",
+      "command": "pnpm exec prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --exit-code",
+      "result": "No difference detected; exit 0; guarded fixture only"
+    },
+    {
+      "cwd": ".",
+      "command": "pnpm exec prettier --check <explicit C5 source and documentation manifest>",
+      "result": "pass; exact explicit list in changed-files.json; five inherited exceptions excluded"
+    },
+    {
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "databaseSafety": {
+    "target": "127.0.0.1:55448/celestia_test_c4",
+    "role": "celestia_test",
+    "NODE_ENV": "test",
+    "DOTENV_CONFIG_PATH": "NUL",
+    "matchingDatabaseVariables": true,
+    "applicationSecrets": "synthetic dummy values only",
+    "guard": "node --input-type=module -e \"import { disposableTestDatabase } from './dist/core/db/disposable-test-database.js'; if (!disposableTestDatabase()) throw Error('Missing fixture');\"",
+    "guardBeforeApplicationConnectionOrPrisma": true,
+    "migrationsAddedOrAppliedByC5": 0
+  },
+  "browser": {
+    "functionalAcceptance": "pass for exercised ten-scenario matrix; see acceptance.md",
+    "viewports": ["1440x1000", "390x844", "320x844"],
+    "controlledTime": "actual services, injected clock and bounded request delay; not live game reset or database lock simulation",
+    "humanParticipants": 0,
+    "unverified": [
+      "Actual 200%/400% browser zoom; Ctrl+Equal had no effect in available browser tool",
+      "Rendered behavior with OS reduced-motion preference enabled; shipped media rules inspected",
+      "Screen reader and all legacy tool modal workflows"
+    ],
+    "viewportRestored": true,
+    "syntheticSessionSignedOut": true,
+    "temporaryTabsClosed": true
+  },
+  "warnings": [
+    "Inherited pg deprecation: client.query while already executing a query; visible in direct-test.log, not suppressed",
+    "Prisma printed update notice 7.9.1 to 8.0.0-rc.22; no dependency changes",
+    "git diff --check exited 0 with inherited LF-to-CRLF notices; bytes verified unchanged for protected files"
+  ],
+  "resolvedDuringValidation": [
+    "Initial navigation SSR tests mixed CJS/ESM QueryClient contexts; corrected test to use the actual web ESM provider",
+    "Initial lint found an escaped regex string in the new test; changed to String.raw and final lint/tests passed",
+    "Browser found Endgame main replacement lost route focus; stable outer main was implemented, built and rechecked"
+  ],
+  "releaseReady": false,
+  "releaseActionsPerformed": false
+}

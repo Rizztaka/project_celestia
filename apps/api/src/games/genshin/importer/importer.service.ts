@@ -1,241 +1,185 @@
-import { randomUUID } from 'node:crypto';
-import type { Prisma } from '@prisma/client';
-import { ZodError } from 'zod';
+import {
+  importCommitRequestSchema,
+  type ImportPreview,
+  importPreviewRequestSchema,
+  type ImportResult,
+  type ImportSectionPreview,
+  importSections,
+  type ImportStatus,
+} from '@celestia/api-contracts';
 
-import { prisma } from '@/core/db/prisma.js';
-import { BadRequestError } from '@/core/errors/app-error.js';
+import { BadRequestError, ConflictError } from '@/core/errors/app-error.js';
 
-import { type GoodPayload, GoodPayloadSchema } from './importer.schema.js';
-
-export interface ImportResult {
-  charactersImported: number;
-  weaponsImported: number;
-  artifactsImported: number;
-  materialsImported: number;
-}
+import { assertImportCounts, assertImportResources } from './importer.limits.js';
+import { fingerprint, issuePreview, verifyPreview } from './importer.preview.js';
+import {
+  GenshinImportRepository,
+  type ImportSelection,
+  type ImportSnapshot,
+} from './importer.repository.js';
+import { GoodPayloadSchema } from './importer.schema.js';
 
 export class GenshinImportService {
-  /**
-   * Parses a GOOD-format JSON string and imports the account data.
-   *
-   * Characters are upserted (existing records updated, missing ones untouched).
-   * Weapons and artifacts are fully replaced on every import.
-   * All DB operations run inside a single interactive Prisma transaction.
-   *
-   * Throws BadRequestError if the JSON is invalid or fails schema validation.
-   */
-  async importAccount(userId: string, rawJson: string): Promise<ImportResult> {
-    // -------------------------------------------------------
-    // Step 1 — Validate the GOOD payload
-    // -------------------------------------------------------
-    const payload = this.parseAndValidate(rawJson);
+  constructor(
+    private readonly repository: Pick<
+      GenshinImportRepository,
+      'readSnapshot' | 'commit' | 'readMetadata'
+    > = new GenshinImportRepository(),
+  ) {}
 
-    // -------------------------------------------------------
-    // Step 2 — Find or create the user's GenshinAccount
-    // -------------------------------------------------------
-    let account = await prisma.genshinAccount.findUnique({
-      where: { userId },
-    });
-
-    if (!account) {
-      account = await prisma.genshinAccount.create({
-        data: { user: { connect: { id: userId } } },
-      });
-    }
-
-    const { id: accountId } = account;
-
-    // -------------------------------------------------------
-    // Step 3 — Execute all DB work inside a single transaction
-    //
-    // Using the interactive form (async callback) instead of the
-    // batch form ([op1, op2, ...]) because we need to chain results
-    // across steps (e.g., character IDs from step 3d are needed
-    // when resolving equipment in steps 3g and 3h).
-    //
-    // If any step throws, PostgreSQL rolls back the entire transaction
-    // and the database is left in its pre-import state.
-    // -------------------------------------------------------
-    const result = await prisma.$transaction(
-      async (tx) => {
-        // 3a. Clear equippedWeaponId on all existing characters for this account.
-        //     Required before deleting weapons: GenshinCharacter.equippedWeaponId
-        //     is a FK to GenshinWeapon. Deleting weapons while a character still
-        //     references them causes a FK constraint violation.
-        await tx.genshinCharacter.updateMany({
-          where: { accountId },
-          data: { equippedWeaponId: null },
-        });
-
-        // 3b. Delete all weapons for this account (Replace strategy).
-        await tx.genshinWeapon.deleteMany({ where: { accountId } });
-
-        // 3c. Delete all artifacts for this account (Replace strategy).
-        //     FK is on the artifact side, so deleting artifacts is always safe.
-        await tx.genshinArtifact.deleteMany({ where: { accountId } });
-
-        // 3d. Upsert characters.
-        //     Characters missing from the payload are left untouched — a player
-        //     can never lose a character they have pulled; omissions from GOOD
-        //     exports are always scanner artifacts, not real data loss.
-        const characterMap = new Map<string, string>(); // characterKey → DB id
-
-        for (const char of payload.characters) {
-          const upserted = await tx.genshinCharacter.upsert({
-            where: {
-              accountId_characterKey: {
-                accountId,
-                characterKey: char.key,
-              },
-            },
-            create: {
-              accountId,
-              characterKey: char.key,
-              level: char.level,
-              ascension: char.ascension,
-              constellation: char.constellation,
-              talentNormal: char.talent.auto,
-              talentSkill: char.talent.skill,
-              talentBurst: char.talent.burst,
-            },
-            update: {
-              level: char.level,
-              ascension: char.ascension,
-              constellation: char.constellation,
-              talentNormal: char.talent.auto,
-              talentSkill: char.talent.skill,
-              talentBurst: char.talent.burst,
-            },
-          });
-
-          characterMap.set(char.key, upserted.id);
-        }
-
-        // 3e. Bulk insert all weapons with pre-generated UUIDs
-        const weaponsToInsert = [];
-        const weaponLocations = []; // Map ID -> location
-
-        for (const weapon of payload.weapons) {
-          const weaponId = randomUUID();
-          weaponsToInsert.push({
-            id: weaponId,
-            accountId,
-            weaponKey: weapon.key,
-            level: weapon.level,
-            ascension: weapon.ascension,
-            refinement: weapon.refinement,
-            locked: weapon.lock,
-          });
-          if (weapon.location) {
-            weaponLocations.push({ id: weaponId, location: weapon.location });
-          }
-        }
-
-        if (weaponsToInsert.length > 0) {
-          await tx.genshinWeapon.createMany({ data: weaponsToInsert });
-        }
-
-        // 3f. Bulk insert all artifacts with pre-generated UUIDs
-        const artifactsToInsert = [];
-        const artifactLocations = []; // Map ID -> location
-
-        for (const artifact of payload.artifacts) {
-          const artifactId = randomUUID();
-          artifactsToInsert.push({
-            id: artifactId,
-            accountId,
-            setKey: artifact.setKey,
-            slotKey: artifact.slotKey,
-            level: artifact.level,
-            rarity: artifact.rarity,
-            mainStatKey: artifact.mainStatKey,
-            subStats: artifact.substats as unknown as Prisma.InputJsonValue,
-            locked: artifact.lock,
-          });
-          if (artifact.location) {
-            artifactLocations.push({ id: artifactId, location: artifact.location });
-          }
-        }
-
-        if (artifactsToInsert.length > 0) {
-          await tx.genshinArtifact.createMany({ data: artifactsToInsert });
-        }
-
-        // 3g. Resolve weapon equipment.
-        //     We update the character's equippedWeaponId for each location match.
-        for (const { id: weaponId, location } of weaponLocations) {
-          const characterId = characterMap.get(location);
-          if (!characterId) continue;
-          await tx.genshinCharacter.update({
-            where: { id: characterId },
-            data: { equippedWeaponId: weaponId },
-          });
-        }
-
-        // 3h. Resolve artifact equipment.
-        for (const { id: artifactId, location } of artifactLocations) {
-          const characterId = characterMap.get(location);
-          if (!characterId) continue;
-          await tx.genshinArtifact.update({
-            where: { id: artifactId },
-            data: { equippedCharacterId: characterId },
-          });
-        }
-
-        // 3i. Replace the material inventory.
-        await tx.genshinMaterial.deleteMany({ where: { accountId } });
-
-        const materialEntries = Object.entries(payload.materials).filter(([, qty]) => qty > 0);
-        const materialsToInsert = materialEntries.map(([itemKey, quantity]) => ({
-          accountId,
-          itemKey,
-          quantity,
-        }));
-
-        if (materialsToInsert.length > 0) {
-          await tx.genshinMaterial.createMany({ data: materialsToInsert });
-        }
-
+  async status(userId: string): Promise<ImportStatus> {
+    const metadata = await this.repository.readMetadata(userId);
+    return {
+      sections: importSections.map((section) => {
+        const row = metadata.find((entry) => entry.section === section);
         return {
-          charactersImported: payload.characters.length,
-          weaponsImported: payload.weapons.length,
-          artifactsImported: payload.artifacts.length,
-          materialsImported: materialEntries.length,
+          section,
+          status: row ? 'imported' : 'unknown',
+          importedAt: row?.importedAt.toISOString() ?? null,
+          source: row?.source ?? null,
+          entryCount: row?.entryCount ?? null,
+          scope: section === 'characters' ? 'merged_entries' : 'replacement_section',
         };
-      },
-      {
-        maxWait: 10000, // wait up to 10s to acquire a connection
-        timeout: 120000, // 2 minutes for the transaction to complete
-      },
-    );
-
-    return result;
+      }),
+    };
   }
 
-  /**
-   * Parses and validates the raw JSON string against the GOOD schema.
-   * Throws BadRequestError with a user-friendly message on failure.
-   * Private — callers always go through importAccount().
-   */
-  private parseAndValidate(rawJson: string): GoodPayload {
-    let parsed: unknown;
+  async preview(userId: string, input: unknown): Promise<ImportPreview> {
+    const selection = this.selection(input);
+    const state = await this.repository.readSnapshot(userId);
+    const sections = this.describe(selection, state);
+    return {
+      ...issuePreview(userId, fingerprint(selection), fingerprint(state)),
+      sections,
+      clearSections: sections
+        .filter((section) => section.action === 'clear')
+        .map(({ section }) => section),
+    };
+  }
 
-    try {
-      parsed = JSON.parse(rawJson);
-    } catch {
-      throw new BadRequestError('Invalid GOOD format: the provided string is not valid JSON.');
-    }
-
-    try {
-      return GoodPayloadSchema.parse(parsed);
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const firstIssue = error.issues[0];
-        const path = firstIssue?.path.join('.') ?? 'unknown field';
-        const message = firstIssue?.message ?? 'Validation failed.';
-        throw new BadRequestError(`Invalid GOOD format: ${path} — ${message}`);
+  async importAccount(userId: string, input: unknown): Promise<ImportResult> {
+    assertImportResources(input);
+    const parsed = importCommitRequestSchema.safeParse(input);
+    if (!parsed.success)
+      throw new BadRequestError(
+        'Preview your import first, then submit the versioned request with its preview token and clearing confirmations.',
+      );
+    const { previewToken, confirmClear, ...request } = parsed.data;
+    const selection = this.selection(request);
+    const expectedState = verifyPreview(previewToken, userId, fingerprint(selection));
+    await this.repository.commit(userId, (state) => {
+      if (fingerprint(state) !== expectedState)
+        throw new ConflictError(
+          'Your account changed since this preview. Preview your import again.',
+        );
+      const clears = this.describe(selection, state)
+        .filter((section) => section.action === 'clear')
+        .map(({ section }) => section);
+      if (
+        clears.length !== confirmClear.length ||
+        clears.some((section) => !confirmClear.includes(section))
+      ) {
+        throw new BadRequestError(
+          'Explicitly confirm each empty inventory section that will be cleared.',
+        );
       }
-      throw new BadRequestError('Invalid GOOD format: validation failed.');
+      return selection;
+    });
+    const { payload, sections } = selection;
+    return {
+      charactersImported: sections.includes('characters') ? payload.characters!.length : 0,
+      weaponsImported: sections.includes('weapons') ? payload.weapons!.length : 0,
+      artifactsImported: sections.includes('artifacts') ? payload.artifacts!.length : 0,
+      materialsImported: sections.includes('materials')
+        ? Object.values(payload.materials!).filter((quantity) => quantity > 0).length
+        : 0,
+      sections,
+    };
+  }
+
+  private selection(input: unknown): ImportSelection {
+    assertImportResources(input);
+    const request = importPreviewRequestSchema.parse(input);
+    const payload = GoodPayloadSchema.parse(request.payload);
+    for (const section of request.sections) {
+      if (payload[section] === undefined)
+        throw new BadRequestError(
+          `The export has no ${section} section. Leave it unselected to preserve your saved data.`,
+        );
     }
+    return {
+      payload,
+      sections: importSections.filter((section) => request.sections.includes(section)),
+    };
+  }
+
+  private describe(
+    { payload, sections }: ImportSelection,
+    state: ImportSnapshot,
+  ): ImportSectionPreview[] {
+    const selected = new Set(sections);
+    const knownCharacters = new Set(state?.characters.map((character) => character.characterKey));
+    const incomingKeys = new Set<string>();
+    if (selected.has('characters')) {
+      for (const character of payload.characters!) {
+        if (incomingKeys.has(character.key))
+          throw new BadRequestError(`Duplicate character: ${character.key}.`);
+        incomingKeys.add(character.key);
+        knownCharacters.add(character.key);
+      }
+    }
+    for (const section of ['weapons', 'artifacts'] as const) {
+      if (!selected.has(section)) continue;
+      const occupied = new Set<string>();
+      for (const item of payload[section]!) {
+        if (!item.location) continue;
+        if (!knownCharacters.has(item.location))
+          throw new BadRequestError(
+            `Unresolved ${section} location: ${item.location}. Include that character in the selected roster or correct the export.`,
+          );
+        const slot = 'slotKey' in item ? `${item.location}:${item.slotKey}` : item.location;
+        if (occupied.has(slot))
+          throw new BadRequestError(
+            `Multiple ${section} claim the same equipment location: ${slot}.`,
+          );
+        occupied.add(slot);
+      }
+    }
+    const descriptions = importSections.map<ImportSectionPreview>((section) => {
+      const currentCount = state?.[section].length ?? 0;
+      const data = payload[section];
+      const incomingCount =
+        data === undefined
+          ? null
+          : section === 'materials'
+            ? Object.values(payload.materials!).filter((quantity) => quantity > 0).length
+            : (data as unknown[]).length;
+      if (!selected.has(section))
+        return {
+          section,
+          action: 'preserve',
+          currentCount,
+          incomingCount,
+          resultingCount: currentCount,
+        };
+      return {
+        section,
+        action: section === 'characters' ? 'merge' : incomingCount === 0 ? 'clear' : 'replace',
+        currentCount,
+        incomingCount,
+        resultingCount: section === 'characters' ? knownCharacters.size : incomingCount!,
+      };
+    });
+    assertImportCounts({
+      characters: knownCharacters.size,
+      weapons: selected.has('weapons') ? payload.weapons!.length : (state?.weapons.length ?? 0),
+      artifacts: selected.has('artifacts')
+        ? payload.artifacts!.length
+        : (state?.artifacts.length ?? 0),
+      materials: selected.has('materials')
+        ? Object.keys(payload.materials!).length
+        : (state?.materials.length ?? 0),
+    });
+    return descriptions;
   }
 }

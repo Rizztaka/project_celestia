@@ -1,0 +1,42 @@
+[
+  {
+    "route": "http://127.0.0.1:45449/intelligence",
+    "active": "companion-content",
+    "client": 305,
+    "h1": 1,
+    "main": 1,
+    "scroll": 305,
+    "width": 320,
+    "text": "SECONDARY TOOLS · LEGACY ESTIMATES\n\nIntelligence Engine\n\nLegacy scores and model assumptions are not verified build progress, damage predictions or spending advice. They do not rank your Today plan. Use Characters for recorded equipment and Planner for your declared goals.\n\nCharacter Focus\nTeam Assembly\nArtifact Assembly\nResin Planner\nPull Value\nAccount Insights"
+  },
+  {
+    "route": "http://127.0.0.1:45449/simulators",
+    "active": "companion-content",
+    "client": 305,
+    "h1": 1,
+    "main": 1,
+    "scroll": 305,
+    "width": 320,
+    "text": "Pull Simulator\n\nExplore legacy simulated pulls. Banner and probability assumptions are not verified current game guidance; results are fictional and do not predict your account. Pity resets when you leave the page.\n\nSELECT BANNER\n\nSong on the Frozen Wind\n\nLimited Character Event Wish\n\nO\n\nOdette\n\n5★ Featured\n\nShenhe\nRosaria\nLayla\nEnded\nPITY TRACKER — SONG ON THE FROZEN WIND\nReset\n5★ PITY\n0 / 90\n4★ PITY\n0 / 10\nWish ×1\nWish ×10"
+  },
+  {
+    "route": "http://127.0.0.1:45449/endgame",
+    "active": "",
+    "client": 305,
+    "h1": 1,
+    "main": 1,
+    "scroll": 305,
+    "width": 320,
+    "text": "SECONDARY TOOLS · SAVED ENDGAME RECORDS\n\nSpiral Abyss\n\nTrack your teams and star ratings for each chamber.\n\nSaved records remain available. Legacy scoring, rotation and team assumptions are not verified current-game guidance.\n\nSpiral Abyss\nImaginarium Theater\nCycle\nNo cycles yet\nAdd Cycle\nNo Cycle Selected\n\nAdd your first Abyss cycle to start tracking your teams and star ratings.\n\nAdd First Cycle"
+  },
+  {
+    "route": "http://127.0.0.1:45449/nikke/roster",
+    "active": "companion-content",
+    "client": 320,
+    "h1": 1,
+    "main": 1,
+    "scroll": 320,
+    "width": 320,
+    "text": "NIKKE Roster\n\nSecondary roster records. NIKKE expansion is deferred.\n\nRefresh NIKKE records\nNo Nikkes Found\n\nNo NIKKE records are saved for this account."
+  }
+]

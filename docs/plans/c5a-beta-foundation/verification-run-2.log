@@ -1,0 +1,514 @@
+$ pnpm --filter @celestia/api exec tsx tooling/verify.mjs
+Verification evidence directory: C:\Users\inuzu\AppData\Local\Temp\celestia-verification-BMq8gp
+CHECK shared-types-and-build
+CHECK disposable-postgres-ready
+CHECK prisma-generate
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+
+✔ Generated Prisma Client (v7.9.1) to .\..\..\node_modules\.pnpm\@prisma+client@7.9.1_prisma_7fc42eace29aa58f123b9d8984ba41e0\node_modules\@prisma\client in 262ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+
+CHECK disposable-migrations
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Datasource "db": PostgreSQL database "celestia_test_c5a", schema "public" at "127.0.0.1:55448"
+
+13 migrations found in prisma/migrations
+
+
+No pending migrations to apply.
+CHECK prisma-validate
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+The schema at prisma\schema.prisma is valid 🚀
+CHECK schema-diff
+Loaded Prisma config from prisma.config.ts.
+
+No difference detected.
+
+CHECK full-suite
+
+ RUN  v3.2.7 D:/Genshin Personal/project-celestia/apps/api
+
+ ✓ src/core/middleware/origin.middleware.test.ts (58 tests) 22170ms
+   ✓ Actual application origin policy > allows configured origin https://trusted.example  1939ms
+   ✓ Actual application origin policy > allows configured origin HTTPS://TRUSTED.EXAMPLE:443  429ms
+   ✓ Actual application origin policy > allows configured origin https://preview-42.vercel.app  388ms
+   ✓ Actual application origin policy > deliberately denies https://safe.example  424ms
+   ✓ Actual application origin policy > deliberately denies https://localhost.attacker.example  447ms
+   ✓ Actual application origin policy > deliberately denies https://127.0.0.1.attacker.example  356ms
+   ✓ Actual application origin policy > deliberately denies http://127.0.0.10:5173  420ms
+   ✓ Actual application origin policy > deliberately denies https://vercel.app.attacker.example  455ms
+   ✓ Actual application origin policy > deliberately denies https://unrelated.vercel.app  363ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example.attacker.example  439ms
+   ✓ Actual application origin policy > deliberately denies http://trusted.example  420ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example:444  463ms
+   ✓ Actual application origin policy > deliberately denies null  357ms
+   ✓ Actual application origin policy > deliberately denies not-an-origin  344ms
+   ✓ Actual application origin policy > deliberately denies file://trusted.example  383ms
+   ✓ Actual application origin policy > deliberately denies https://user@trusted.example  427ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example/  385ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example/path  469ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example?x=1  314ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example#x  350ms
+   ✓ Actual application origin policy > deliberately denies https://safe.example/https://trusted.example  362ms
+   ✓ Actual application origin policy > deliberately denies https://trusted.example, https://safe.example  375ms
+   ✓ Actual application origin policy > deliberately denies http://localhost:5173  399ms
+   ✓ Actual application origin policy > permits absent Origin without granting cross-origin browser access  417ms
+   ✓ Actual application origin policy > permits GET preflight with required headers  381ms
+   ✓ Actual application origin policy > permits HEAD preflight with required headers  365ms
+   ✓ Actual application origin policy > permits POST preflight with required headers  374ms
+   ✓ Actual application origin policy > permits PUT preflight with required headers  381ms
+   ✓ Actual application origin policy > permits PATCH preflight with required headers  358ms
+   ✓ Actual application origin policy > permits DELETE preflight with required headers  314ms
+   ✓ Actual application origin policy > permits OPTIONS preflight with required headers  308ms
+   ✓ Actual application origin policy > denies untrusted preflight before any route runs  353ms
+   ✓ Actual application origin policy > allowed origin still requires authentication (undefined)  457ms
+   ✓ Actual application origin policy > allowed origin still requires authentication (invalid-token)  439ms
+   ✓ Actual application origin policy > an allowed authenticated origin cannot read another owner  411ms
+   ✓ Actual application origin policy > supports only documented local defaults in development  340ms
+   ✓ Actual application origin policy > supports only documented local defaults in test  383ms
+   ✓ Actual application origin policy > explicit configuration replaces development defaults  373ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration undefined  304ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration   307ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration *  341ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://*.vercel.app  318ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration null  361ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://user:password@example.com  313ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration file://example.com  367ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com/  315ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com?x  308ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com#x  308ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com,  349ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com:99999  312ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://bad..example  301ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://-example.com  320ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://.  341ms
+   ✓ Actual application origin policy > fails production startup for invalid configuration https://example.com\path  314ms
+   ✓ Actual application origin policy > rejects malformed supplied development configuration  304ms
+(node:36604) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"level":30,"time":1791633574311,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633574370,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1791633574378,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan","msg":"Incoming request"}
+{"level":30,"time":1791633574411,"pid":36604,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/plan","msg":"Incoming request"}
+{"level":30,"time":1791633574418,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1791633574430,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan/advice?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1791633574441,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals","msg":"Incoming request"}
+{"level":30,"time":1791633574451,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633574462,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1791633574496,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1791633574503,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan/advice?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1791633574513,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals","msg":"Incoming request"}
+{"level":30,"time":1791633574521,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633574530,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1791633574539,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791633574547,"pid":36604,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791633574560,"pid":36604,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/plan","msg":"Incoming request"}
+ ✓ src/platform/companion/plan.integration.test.ts (28 tests) 3018ms
+   ✓ C4 actual PostgreSQL plan choices and reset boundaries > upgrades populated C3b losslessly with neutral absent preferences and no dismissal backfill  360ms
+{"level":30,"time":1791633577089,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633577101,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791633577109,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791633577142,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791633577259,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals","msg":"Incoming request"}
+{"level":30,"time":1791633577279,"pid":33004,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/goals/19c59ba6-02d6-464c-aab9-84db4199e24c","msg":"Incoming request"}
+{"level":30,"time":1791633577285,"pid":33004,"hostname":"Nitro","method":"DELETE","url":"/api/v1/companion/goals/19c59ba6-02d6-464c-aab9-84db4199e24c","msg":"Incoming request"}
+{"level":30,"time":1791633577291,"pid":33004,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/goals/25177836-8eea-4450-9b63-863912bc4734","msg":"Incoming request"}
+{"level":30,"time":1791633577298,"pid":33004,"hostname":"Nitro","method":"DELETE","url":"/api/v1/companion/goals/25177836-8eea-4450-9b63-863912bc4734","msg":"Incoming request"}
+{"level":30,"time":1791633577304,"pid":33004,"hostname":"Nitro","method":"DELETE","url":"/api/v1/companion/goals/19c59ba6-02d6-464c-aab9-84db4199e24c","msg":"Incoming request"}
+{"level":30,"time":1791633577309,"pid":33004,"hostname":"Nitro","method":"POST","url":"/api/v1/companion/goals","msg":"Incoming request"}
+(node:33004) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"level":30,"time":1791633577725,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals","msg":"Incoming request"}
+{"level":30,"time":1791633577731,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633577738,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791633577748,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/focus","msg":"Incoming request"}
+{"level":30,"time":1791633577755,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791633577770,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633577780,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals","msg":"Incoming request"}
+{"level":30,"time":1791633577786,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633577793,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791633577799,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/focus","msg":"Incoming request"}
+{"level":30,"time":1791633577804,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791633577809,"pid":33004,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+ ✓ src/platform/companion/goal-lifecycle.integration.test.ts (28 tests) 2182ms
+   ✓ C3b actual PostgreSQL lifecycle/focus > database constraints enforce lifecycle metadata, priority and revisions  300ms
+   ✓ C3b actual PostgreSQL lifecycle/focus > upgrades populated C3a with nullable duplicates, unsupported ranges, two owners and no accounts losslessly  394ms
+{"level":30,"time":1791633579968,"pid":16580,"hostname":"Nitro","method":"POST","url":"/api/v1/users","msg":"Incoming request"}
+{"level":30,"time":1791633579979,"pid":16580,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/register","msg":"Incoming request"}
+{"level":30,"time":1791633580467,"pid":16580,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/register","msg":"Incoming request"}
+{"level":30,"time":1791633580703,"pid":16580,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/login","msg":"Incoming request"}
+{"level":30,"time":1791633580712,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791633580719,"pid":16580,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/register","msg":"Incoming request"}
+{"level":30,"time":1791633580952,"pid":16580,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/login","msg":"Incoming request"}
+{"level":30,"time":1791633581185,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791633581190,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791633581195,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791633581200,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791633581205,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791633581208,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791633581213,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791633581219,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791633581222,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791633581229,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791633581234,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-b-id-111111","msg":"Incoming request"}
+{"level":30,"time":1791633581238,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-b-id-111111","msg":"Incoming request"}
+{"level":30,"time":1791633581241,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/completely-nonexistent-id-xyz","msg":"Incoming request"}
+{"level":30,"time":1791633581246,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-b-id-111111","msg":"Incoming request"}
+{"level":30,"time":1791633581254,"pid":16580,"hostname":"Nitro","method":"GET","url":"/api/v1/auth/me","msg":"Incoming request"}
+{"level":30,"time":1791633581260,"pid":16580,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/register","msg":"Incoming request"}
+{"level":30,"time":1791633581518,"pid":16580,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/register","msg":"Incoming request"}
+ ✓ src/platform/security.http.test.ts (22 tests) 1857ms
+   ✓ Regression: canonical registration stores a hash, not the plain password > stores a bcrypt hash and the hash verifies against the original password (real bcrypt)  488ms
+   ✓ Regression: login works against the hash produced by registration > login succeeds after registration (real bcrypt round-trip)  465ms
+(node:36324) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"level":30,"time":1791633584277,"pid":36324,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1791633584288,"pid":36324,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791633584304,"pid":36324,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791633584314,"pid":36324,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/daily","msg":"Incoming request"}
+{"level":30,"time":1791633584318,"pid":36324,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/weekly-bosses","msg":"Incoming request"}
+{"level":30,"time":1791633584337,"pid":36324,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/resin","msg":"Incoming request"}
+{"level":30,"time":1791633584343,"pid":36324,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/checklist","msg":"Incoming request"}
+{"level":30,"time":1791633584348,"pid":36324,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/weekly-bosses/Dvalin","msg":"Incoming request"}
+ ✓ src/platform/companion/routine.integration.test.ts (12 tests) 1388ms
+   ✓ Routine transactions on disposable PostgreSQL > enforces database checks for revision, server, paired checkpoints and input ranges  401ms
+{"level":30,"time":1791633586258,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586274,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586352,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586364,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586370,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/bad%0Akey/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586388,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/Legacy%20%2F%20'%20OR%201%3D1%20--%20%3F%20%E5%AD%97/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586395,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/NotOwned/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586439,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586484,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586513,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+(node:32096) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"level":30,"time":1791633586540,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586565,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586623,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586630,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters","msg":"Incoming request"}
+{"level":30,"time":1791633586638,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/PrivateCharacter/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586663,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586700,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586757,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586788,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586810,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586837,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586860,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586924,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586953,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586979,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791633586984,"pid":32096,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+ ✓ src/games/genshin/characters/character-equipment.integration.test.ts (13 tests) 913ms
+(node:11856) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ src/games/genshin/importer/importer.integration.test.ts (16 tests) 1070ms
+{"level":30,"time":1791633590315,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590397,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590462,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590488,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590515,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590553,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590563,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590573,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590582,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590593,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590603,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590634,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590640,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791633590649,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791633590668,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/events","msg":"Incoming request"}
+{"level":30,"time":1791633590676,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1791633590696,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+(node:8556) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"level":30,"time":1791633590719,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791633590778,"pid":8556,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+ ✓ src/platform/companion/catalog-advice.integration.test.ts (9 tests) 656ms
+ ✓ tooling/journey-client.test.js (17 tests) 400ms
+ ✓ tooling/eslint-config.test.js (10 tests) 377ms
+ ✓ tooling/goal-session.test.js (14 tests) 244ms
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/daily","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/weekly-bosses","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/settings","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/weekly-claims","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/weekly-bosses/Dvalin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2&userId=victim","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/settings","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/weekly-claims","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/daily","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/weekly-bosses","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":39616,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/weekly-bosses/Dvalin","msg":"Incoming request"}
+ ✓ src/platform/companion/routine.http.test.ts (30 tests) 248ms
+ ✓ tooling/character-equipment.test.js (6 tests) 135ms
+{"level":30,"time":1791633598796,"pid":36248,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/import/status","msg":"Incoming request"}
+{"level":30,"time":1791633598818,"pid":36248,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/import/status?userId=victim","msg":"Incoming request"}
+{"level":30,"time":1791633598847,"pid":36248,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791633598853,"pid":36248,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import","msg":"Incoming request"}
+{"level":30,"time":1791633598860,"pid":36248,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791633598874,"pid":36248,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import","msg":"Incoming request"}
+{"level":30,"time":1791633598884,"pid":36248,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791633598891,"pid":36248,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791633598898,"pid":36248,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import","msg":"Incoming request"}
+{"level":30,"time":1791633598907,"pid":36248,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791633598913,"pid":36248,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791633598920,"pid":36248,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import","msg":"Incoming request"}
+{"level":30,"time":1791633598926,"pid":36248,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+ ✓ src/games/genshin/importer/importer.http.test.ts (10 tests) 150ms
+ ✓ tooling/account-cache.test.js (5 tests) 124ms
+ ✓ src/games/genshin/companion/catalog-trust.test.ts (37 tests) 60ms
+ ✓ src/games/genshin/simulators/pull-simulator.controller.test.ts (5 tests) 54ms
+ ✓ src/games/genshin/simulators/pull-simulator.service.test.ts (4 tests) 29ms
+ ✓ src/platform/companion/plan-composition.test.ts (40 tests) 30ms
+ ✓ src/games/genshin/importer/importer.service.test.ts (28 tests) 40ms
+stdout | tooling/verification.test.js > Guarded verification orchestration > safe input reaches ordered readiness, migration, full-suite and package checks
+Verification evidence directory: synthetic-output
+CHECK disposable-postgres-ready
+
+stdout | tooling/verification.test.js > Guarded verification orchestration > safe input reaches ordered readiness, migration, full-suite and package checks
+VERIFIED {"passed":708,"files":44,"failed":0,"skipped":0,"postgresCases":106,"integration":{"src/platform/companion/plan.integration.test.ts":28,"src/platform/companion/goal-lifecycle.integration.test.ts":28,"src/platform/companion/routine.integration.test.ts":12,"src/games/genshin/characters/character-equipment.integration.test.ts":13,"src/games/genshin/importer/importer.integration.test.ts":16,"src/platform/companion/catalog-advice.integration.test.ts":9}}
+Verification evidence: synthetic-output
+
+stdout | tooling/verification.test.js > Guarded verification orchestration > stops at an unavailable fixture before migrations
+Verification evidence directory: synthetic-output
+CHECK disposable-postgres-ready
+
+stdout | tooling/verification.test.js > Guarded verification orchestration > propagates migration failures without running the suite or reporting green
+Verification evidence directory: synthetic-output
+CHECK disposable-postgres-ready
+
+stdout | tooling/verification.test.js > Guarded verification orchestration > rejects actual skipped report evidence before downstream green checks
+Verification evidence directory: synthetic-output
+CHECK disposable-postgres-ready
+
+ ✓ tooling/verification.test.js (33 tests) 48ms
+ ✓ src/core/middleware/auth.middleware.test.ts (13 tests) 19ms
+ ✓ tooling/plan-client.test.js (12 tests) 21ms
+ ✓ src/platform/companion/routine.service.test.ts (23 tests) 19ms
+ ✓ src/games/genshin/companion/routine-policy.test.ts (27 tests) 8ms
+ ✓ src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.test.ts (6 tests) 16ms
+ ✓ src/platform/auth/auth.service.test.ts (8 tests) 18ms
+ ✓ src/platform/companion/goal.service.test.ts (31 tests) 14ms
+ ✓ src/games/genshin/companion/routine-consumers.test.ts (5 tests) 14ms
+ ✓ src/platform/companion/weekly-boss.service.test.ts (19 tests) 14ms
+ ✓ src/games/genshin/intelligence/team-intelligence/team-intelligence.service.test.ts (22 tests) 12ms
+ ✓ src/platform/companion/event.service.test.ts (11 tests) 14ms
+ ✓ src/games/genshin/endgame/endgame.service.test.ts (31 tests) 11ms
+ ✓ src/platform/users/user.service.test.ts (10 tests) 9ms
+ ✓ src/games/genshin/intelligence/character-intelligence/character-intelligence.service.test.ts (14 tests) 8ms
+ ✓ src/games/genshin/artifacts/artifact.service.test.ts (12 tests) 9ms
+ ✓ src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.service.test.ts (18 tests) 10ms
+ ✓ src/games/genshin/weapons/weapon.service.test.ts (12 tests) 11ms
+ ✓ src/games/genshin/characters/character.service.test.ts (11 tests) 9ms
+ ✓ src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.test.ts (5 tests) 7ms
+ ✓ src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.service.test.ts (22 tests) 6ms
+ ✓ src/games/genshin/companion/server-clock.test.ts (28 tests) 6ms
+ ✓ src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.test.ts (13 tests) 6ms
+ ✓ tooling/routine-client.test.js (5 tests) 7ms
+ ✓ src/games/genshin/accounts/account.service.test.ts (6 tests) 6ms
+ ✓ src/core/db/disposable-test-database.test.ts (10 tests) 5ms
+
+ Test Files  46 passed (46)
+      Tests  799 passed (799)
+   Start at  17:29:07
+   Duration  67.87s (transform 2.40s, setup 0ms, collect 15.82s, tests 35.47s, environment 7ms, prepare 8.53s)
+
+JSON report written to C:/Users/inuzu/AppData/Local/Temp/celestia-verification-BMq8gp/vitest.json
+VERIFIED {"passed":799,"files":46,"failed":0,"skipped":0,"postgresCases":106,"integration":{"src/platform/companion/plan.integration.test.ts":28,"src/platform/companion/goal-lifecycle.integration.test.ts":28,"src/platform/companion/routine.integration.test.ts":12,"src/games/genshin/characters/character-equipment.integration.test.ts":13,"src/games/genshin/importer/importer.integration.test.ts":16,"src/platform/companion/catalog-advice.integration.test.ts":9}}
+CHECK api-lint
+CHECK api-types-and-build
+CHECK api-aliases
+CHECK web-lint
+CHECK web-types
+CHECK web-build
+vite v8.2.0 building client environment for production...
+[2K
+transforming...✓ 132 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                1.02 kB │ gzip:  0.48 kB
+dist/assets/index-u7-GkqxM.css               102.45 kB │ gzip: 14.32 kB
+dist/assets/plan-view-Dhd0AIdw.js              0.42 kB │ gzip:  0.26 kB
+dist/assets/asset-mapping-D6u5ZlNF.js          1.28 kB │ gzip:  0.66 kB
+dist/assets/FocusButton-B3lyJ7UI.js            1.55 kB │ gzip:  0.82 kB
+dist/assets/ImportStatus-DRizLmtC.js           1.96 kB │ gzip:  0.93 kB
+dist/assets/useMutation-DqxFcNRB.js            2.24 kB │ gzip:  0.94 kB
+dist/assets/NikkeRosterPage-Cg4N7RjQ.js        2.68 kB │ gzip:  1.08 kB
+dist/assets/ProfilePage-NYS8eN0x.js            2.76 kB │ gzip:  1.21 kB
+dist/assets/LoginPage-CUmTI5nP.js              3.80 kB │ gzip:  1.54 kB
+dist/assets/api-C6qM5Bj2.js                    3.92 kB │ gzip:  1.20 kB
+dist/assets/RegisterPage-TxbQFFmC.js           4.39 kB │ gzip:  1.67 kB
+dist/assets/ImportPage-acGa4Gzi.js             6.90 kB │ gzip:  2.70 kB
+dist/assets/useQuery-DzzJWEBh.js               8.78 kB │ gzip:  3.21 kB
+dist/assets/RosterPage-AIQ8cH7v.js            11.64 kB │ gzip:  3.73 kB
+dist/assets/InventoryPage-D7YrqF-q.js         12.18 kB │ gzip:  3.85 kB
+dist/assets/RoutinePanel-nfpfL6S_.js          12.54 kB │ gzip:  4.13 kB
+dist/assets/CharacterDetailPage-BOTknngY.js   13.61 kB │ gzip:  4.14 kB
+dist/assets/SimulatorsPage-C7sSOBHe.js        15.16 kB │ gzip:  4.29 kB
+dist/assets/auth.store-yBAYiUn6.js            18.93 kB │ gzip:  7.11 kB
+dist/assets/DashboardPage-BLRcGE2a.js         20.87 kB │ gzip:  6.03 kB
+dist/assets/EndgamePage-BnaiuBLM.js           27.02 kB │ gzip:  6.64 kB
+dist/assets/PlannerPage-Dlx_8lq3.js           29.37 kB │ gzip:  8.94 kB
+dist/assets/dist-pt68oJqz.js                  60.52 kB │ gzip: 14.30 kB
+dist/assets/IntelligencePage-DgAqTyuK.js      62.48 kB │ gzip: 11.43 kB
+dist/assets/index-BFkqyx06.js                247.32 kB │ gzip: 78.53 kB
+
+✓ built in 791ms
+CHECK repository-format
+Checking formatting...
+All matched files use Prettier code style!
+CHECK diff-check
+warning: in the working copy of '.github/workflows/ci.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/.env.example', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/eslint.config.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/prisma/schema.prisma', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/app.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/core/config/env.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/core/contracts/companion.interfaces.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/characters/character.controller.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/characters/character.routes.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/characters/character.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/companion/genshin-companion.provider.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/endgame/endgame.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/genshin.routes.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/importer/importer.controller.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/importer/importer.routes.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/importer/importer.schema.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/importer/importer.service.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/importer/importer.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.service.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.calculator.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.controller.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.explainer.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.controller.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.routes.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.calculator.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.explainer.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.service.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/simulators/pull-simulator.controller.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/simulators/pull-simulator.routes.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/simulators/pull-simulator.service.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/simulators/pull-simulator.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/genshin/static/character-materials.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/nikke/accounts/account.controller.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/nikke/accounts/account.routes.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/nikke/accounts/account.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/nikke/characters/character.controller.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/nikke/characters/character.routes.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/nikke/characters/character.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/games/nikke/nikke.routes.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/auth/auth.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/companion/companion.repository.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/companion/companion.routes.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/companion/companion.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/companion/event.service.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/companion/event.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/companion/goal.controller.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/companion/goal.repository.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/companion/goal.service.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/companion/goal.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/companion/weekly-boss.service.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/companion/weekly-boss.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/src/platform/users/user.service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/api/vitest.config.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/App.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/components/GoalForm.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/components/MaterialRow.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/lib/api.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/lib/resin.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/lib/static.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/pages/DashboardPage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/pages/EndgamePage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/pages/ImportPage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/pages/IntelligencePage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/pages/InventoryPage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/pages/PlannerPage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/pages/ProfilePage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/pages/RosterPage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/pages/SimulatorsPage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/web/src/pages/nikke/NikkeRosterPage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/ARCHITECTURE.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/DECISIONS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/DEVELOPMENT_GUIDE.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/FEATURE_SPECIFICATIONS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/PROJECT_VISION.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/ROADMAP.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/UI_UX_GUIDELINES.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/adr/0006-bulk-data-import-and-deduplication.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/adr/0009-lazy-daily-reset-pattern.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/adr/0010-get-must-not-mutate-state.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/adr/0011-intelligence-engine-architecture.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/api/authentication.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_ARTIFACT_INTELLIGENCE.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_AUTH.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_CHARACTER_INTELLIGENCE.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_DAILY_COMPANION.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_ENDGAME_CENTER.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_EVENT_PLANNER.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_FARMING_PLANNER.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_GENSHIN_IMPORTER.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_GENSHIN_INVENTORY_UI.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_GENSHIN_ROSTER.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_GENSHIN_ROSTER_UI.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_GENSHIN_ROSTER_UI_READ.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_KNOWLEDGE_INTELLIGENCE.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_PLANNER_INTELLIGENCE.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_PULL_INTELLIGENCE.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/features/FEATURE_WEEKLY_BOSS_PLANNER.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'packages/api-contracts/src/index.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'pnpm-lock.yaml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'pnpm-workspace.yaml', LF will be replaced by CRLF the next time Git touches it
+Verification evidence: C:\Users\inuzu\AppData\Local\Temp\celestia-verification-BMq8gp

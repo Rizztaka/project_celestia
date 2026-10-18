@@ -1,0 +1,474 @@
+{
+  "checkedAtUtc": "2026-10-17T13:49:47.263Z",
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "branch": "master",
+  "index": [],
+  "baseline": {
+    "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-production-300a96498202497babfec0d3d4887d7f\\starting-state.json",
+    "sha256": "CE57E4ABB18998A1F055A380FD0749B605FB405A6C95667EBAA72EFB8248B3A0"
+  },
+  "startingFiles": 969,
+  "unchangedFiles": 931,
+  "changes": [
+    {
+      "path": "apps/api/prisma/schema.prisma",
+      "before": "C9A883DFA12BF16382D205C7988A06A17153DE683C0E49974FB67F6D76C7EDB0",
+      "after": "F0012B3D6FCC352E900E0063226A68CB96A119EC40D23288CF327B5ACB586BC0",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/genshin-companion.provider.ts",
+      "before": "ABF5EA2450330C843E59B08DED42D78C5C8AD23AC0CBB337530D3D6814A677DA",
+      "after": "EADD5CC292E5E115A594526B49896E23041F324ED4759648EA1C7A45318B8CF0",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/routine-policy.ts",
+      "before": "239412DC20EF8CCD6AA0742567B2F83B663592741586E3429FA1F2FD8E42C7C6",
+      "after": "78BBF49E51B5E0F015B5441B279CFD25A6BEC6A738F24146D2D11ED376FAEA23",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/server-clock.ts",
+      "before": "F2F75EB4306CA8FD4AE68A5D71B31092904E030FBEA0EAF8F78099E9926F2E9F",
+      "after": "3A4E27DC8A9E9D1A56953BE5E6A33FDB2C9449CFD20901F9A46B895C82AC9438",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.test.ts",
+      "before": "335DF81AB127C83814A4DD44A53B3C37AA9D2078C861F4F5770B34F6F673ABDB",
+      "after": "12A8BEFD90C31378C23737EA44047A8B2450F59CE98859ECB93FF5F7FE79D9B7",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/platform/companion/catalog-advice.integration.test.ts",
+      "before": "1F07F89517014D397CBD86DA728E74FD6FFC5E541BEA7475333EADC704AD1F14",
+      "after": "9C7DFD2681AF4C1DF259BA1E1709566659EE8CA48641187D4CC16B2E693656BC",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal.service.test.ts",
+      "before": "D65CAB2164FB613B1F41749A83B6EDD4B7F7A373BDF7E4EB9095A7D212D38A00",
+      "after": "A9101033939334C647E496938261070B07498FCFC576169501F17F127A41EF8D",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal.service.ts",
+      "before": "F2CE46355FA8275427F59CBAEDCF8DAA2DF84F3ABC319978214D11DEACE745DE",
+      "after": "C21986E5271CEA4D4FDBFB08BBAF30AA07A8D14E203276FE4503CB3B2261A605",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan-composition.ts",
+      "before": "E37FD5C9F0ACA40442FAB5C87EE21959E466B79B7147CD25EB0F170387EBD39D",
+      "after": "BB7FE904EFC858A117CFD3F4B8C9C9B388EE0554742702ED9D260E5ECD78C92F",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan.integration.test.ts",
+      "before": "82EE3E6BE3A6BF7931F02673D746EAFFDDEC5E9C697A14452D99312AB54E0330",
+      "after": "078E666B9F38B2A1D7FC69D033E5B102C95079DAAF2CFA8363F3CE1D20F00159",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.http.test.ts",
+      "before": "777CB8ED34AEE38A734B2077414DB3CC4C78D4C67584CFC826D748D2534536AC",
+      "after": "09C4E0BE4AF7214F02C9948D3F2E93F6F9B215607C9A76E4CE1EEDC7D954E9ED",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.integration.test.ts",
+      "before": "0BE68B5AA8BAC5A56890D06C777C8B05084DF7C1CA30DC008A08DD72C7FDDCB8",
+      "after": "1DEB91199A26733E15A30867240A2754698EEABDA389BBA826B15B3D8A76D82C",
+      "expected": true
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.service.ts",
+      "before": "273EFA0AF15B1F476995AA4BB760F7BC191467838CF40D961C9EC51AB0AF8BC6",
+      "after": "50C968D0399B9E9EEDA8EBA37ADF7541BEE222A123024A55672163FCDDD44EB7",
+      "expected": true
+    },
+    {
+      "path": "apps/api/tooling/goal-session.test.js",
+      "before": "7426FD446D089833CFEC82A6AD681D8C58E66A356FCC8494209034E7C35DDDC1",
+      "after": "8082F42CFC87423885DEC31D3C5ACC217F2951398911B4D5CB8D1A7EAFA7A2AB",
+      "expected": true
+    },
+    {
+      "path": "apps/api/tooling/recovery/snapshot.mjs",
+      "before": "F444DA6B3D64ADCC8ECFDCE4415EBD69044D1B66FB75808CC4D694AAD93CA3EB",
+      "after": "2ED076936C0B2C39633B61736F12625F762C7C2AD977BB76C0812B28F789CE90",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/components/GoalForm.tsx",
+      "before": "AB829CAC193E5529F3A234402B7DD79780FB97E52EBEE919E54F93CDF64CBAAB",
+      "after": "E473EE0C79D3B921FD3215100276970A2D3976E201B58EE163C1B8C785DA77EE",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/components/GoalManager.tsx",
+      "before": "24DDDB04D375F238D58CA2407914FD6F7C8D311B98C0E184C0A205EA4740629F",
+      "after": "D598815DB7A23BC089EA3647FAB407CB843AB9247724A37D2F99A0550B9A3C4E",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/components/MaterialRow.tsx",
+      "before": "DD5B22B1AEA7BD040BBB185FDFB9C36807A3DC9D12C45333718704909FC15399",
+      "after": "39CA7B5DAAC1BE9DA86D663171290B876AD89F5A71817D95CA4199D42CC9E3DE",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/components/RoutinePanel.tsx",
+      "before": "143C9C1EFE7CAE217909976F0FB95B8ADC32AC270E9DFBF76228FE419DEADAC2",
+      "after": "21240B3D26FEB318D39CB717FFE206F138C7C0F16E39C3C8971D9AF43C2370E6",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/components/TodayPlan.tsx",
+      "before": "FDCFF68EE21B73CD491563BD75D0E8AAC08E3E926BEC774FDBFFB3D8ED902060",
+      "after": "2751E58AA0983E3EE8B6E00130FAAE52FC091FCFC1A2097817D7772F4D6363D3",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/lib/api.ts",
+      "before": "B810A8A96BE4ACDFE8945D489C59BCFA8FEBBDB62E9198D008E46DF89E94C474",
+      "after": "9486573F902759AF34FFF692B219B11F597A40D8CDDD9B87FB771BDD6855C862",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/lib/routine-state.ts",
+      "before": "E041C96EB4D2B12868946BBBF078B34730D9646C81B31C93477CF8C9A912D87C",
+      "after": "0A832AC817172B79298558B72A651011452A2D78753F08F43A8202DA408491B9",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/pages/DashboardPage.tsx",
+      "before": "3DEABC7FA85DFD8A6C34C7E7A87591ED3DDF734B3E26AAE2498AA8929AA2EA88",
+      "after": "8E4FCE3F0BCAA9E8E48D381F73020EA677D07D115A51AA39CF66A3328478F8C6",
+      "expected": true
+    },
+    {
+      "path": "apps/web/src/pages/PlannerPage.tsx",
+      "before": "7AE1171E6A7D58913AC60416CE464E542C3D76F8B11E9ADEA21A70C13AC5BA3D",
+      "after": "2B9048121F9ACC853C3D8FD3F10C41D3483EFEBD22458D5C652F8D8EAA59C56F",
+      "expected": true
+    },
+    {
+      "path": "docs/api/catalog-advice.md",
+      "before": "0E90C1910732653A5E38F359360542017F7A0A0EB62598AC3505C23B0295A4F7",
+      "after": "E598FF9A7F8FE219D4F95AB6DE76561F6220C8226A3A2C39BB4E21A285FD9FC1",
+      "expected": true
+    },
+    {
+      "path": "docs/api/companion-routine.md",
+      "before": "B81718D5E6EDA3C5095F562F33063EC77677F42BDB89FA15D33E4269947EECB2",
+      "after": "7598A84D15B3FB1730BC67958AD612E820AD0965ABB1C022F490FB1C501397F6",
+      "expected": true
+    },
+    {
+      "path": "docs/api/focus-goals.md",
+      "before": "0A2FE1CDEB000F1B92859D6A2192E85514860B7AAA2BBD36BDF3B7CB408C5783",
+      "after": "9AB8CEBFF7AE34A4D8A0475311AA0A9096089F9B1B903E759667FCE7FBD6D1D7",
+      "expected": true
+    },
+    {
+      "path": "docs/api/today-plan.md",
+      "before": "D46A36C49A79609457E149D48166F7B3FC0452D9A0E1131F07F8E53E7F699599",
+      "after": "FD6CDC143B01C9831A49F096AFFEF55E000BE1EE64070C12B18CB481D3E6DDBF",
+      "expected": true
+    },
+    {
+      "path": "docs/features/FEATURE_GENSHIN_COMPANION.md",
+      "before": "26D26876E2DC4307CB69C2054CACD1EA19A73D770235421E16D36A098A1E995E",
+      "after": "79BDCF2CC2F2F9B7C2F40E734A5B690B9EABF2446B23357FAF1F9504D04C4BBB",
+      "expected": true
+    },
+    {
+      "path": "docs/plans/c5h-targeted-accessibility/implementation-prompt.md",
+      "before": "8649BAE283E6E4B8655E663FB21C6CDCCB2114D4A5911DF9D6C17BE31F952EFB",
+      "after": "AFF9607B12AED1BDB57FDE89A62ECA46853D1C180F989DB80A9BA6A22ED9D3DC",
+      "expected": true
+    },
+    {
+      "path": "docs/plans/c5h-targeted-accessibility/preflight.md",
+      "before": "4284865C2DB7DB5913EB3832058C7F043CA4F4B6787A192906263973A0B34AF1",
+      "after": "26D3E990B3E29981FE0CB04DCB877A6AE671237DBCE873B9325DE791EADB9442",
+      "expected": true
+    },
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "before": "D4D000278E8772FC51C42843450BCBD5775168BE50CE411F4454998B22E77E3E",
+      "after": "DCE1A0CC97B820B40C0D65B7467A32F0536AD386912BF91441330AD97042BE70",
+      "expected": true
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "before": "0375BA1305D7DDC5B71929BD990874024A89E4B1103AF8F21318AEF74344CDCA",
+      "after": "30B63B206F81C4382D304FF1EA2B5AFE64CD5BEB0BB95EF7E3E141B4444DEEB7",
+      "expected": true
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/advice.ts",
+      "before": "7A5BB75C5870F9DFF3C39716C2397906C3FD183B7D8FAAF149AA28C470996CAD",
+      "after": "69A0CD81C5624DAFFDDF0DE659D3665420C1F88E9571E7482E21D437A46F390E",
+      "expected": true
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/companion.ts",
+      "before": "C7D42B548B86DAA4179468E7D0D2CD5AB9126F82C42C79DE7CB466B5D0E857C7",
+      "after": "FFF4BEEC308A7AAB2B3F070C4F83F0D11D63F78C381286EC3032EE45A69604A2",
+      "expected": true
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/goals.ts",
+      "before": "F4B7ACAC9EE35BDB5E9174781836689D979CE8855C5F1E637F10AE374BD44F19",
+      "after": "1EA85225075EEEB7F92A2F8B01BEC698F63932E9B7E1797AF0A494DE923311B0",
+      "expected": true
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/plan.ts",
+      "before": "7C7F5926A7982C84CA47DF4FB7F3E70F85C4241770F83ABA7D944A3DB9377886",
+      "after": "088D48D59A4477FF3DC5FC1C1C05441E9E7725D0C6A88C54F8FD6422FDC7B36B",
+      "expected": true
+    },
+    {
+      "path": "packages/api-contracts/src/index.ts",
+      "before": "0D7C0DA47A710635F4EB0307825AC24FFE6EEFF40F763FC076AAEE97CD54A8DA",
+      "after": "568C24069A86EFF4B488A1092677433E2F85B3CE503E4049CF152678FE57BE54",
+      "expected": true
+    }
+  ],
+  "missing": [],
+  "unexpected": [],
+  "addedFiles": [
+    "apps/api/prisma/migrations/20261017150000_support_genshin_servers/migration.sql",
+    "apps/api/src/games/genshin/companion/all-server-clock.test.ts",
+    "apps/api/src/games/genshin/companion/progression-catalog.test.ts",
+    "apps/api/src/games/genshin/companion/progression-catalog.ts",
+    "apps/api/src/games/genshin/static/progression-catalog.json",
+    "apps/api/tooling/build-progression-catalog.mjs",
+    "apps/api/tooling/server-calendar-client.test.js",
+    "apps/api/tooling/sync-progression-catalog.mjs",
+    "apps/web/src/lib/catalog.ts",
+    "apps/web/src/lib/progression-targets.json",
+    "docs/plans/production-readiness/browser-observations.md",
+    "docs/plans/production-readiness/cleanup.json",
+    "docs/plans/production-readiness/implementation_plan.md",
+    "docs/plans/production-readiness/post-handoff-checks.json",
+    "docs/plans/production-readiness/preservation-check.json",
+    "docs/plans/production-readiness/remaining-readiness.md",
+    "docs/plans/production-readiness/sources.md",
+    "docs/plans/production-readiness/task.md",
+    "docs/plans/production-readiness/validation-results.json",
+    "docs/plans/production-readiness/verification-attempts.json",
+    "docs/plans/production-readiness/walkthrough.md",
+    "docs/third-party/genshin-db-LICENSE.txt"
+  ],
+  "unexpectedAdded": [],
+  "preserved": [
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/src/core/config/env.ts",
+      "sha256": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/package.json",
+      "sha256": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "pnpm-lock.yaml",
+      "sha256": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/.turbo/turbo-test.log",
+      "sha256": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "unchanged": true
+    },
+    {
+      "group": "protectedFiles",
+      "path": "apps/api/.env.example",
+      "sha256": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260813154603_add_event_progress/migration.sql",
+      "sha256": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260819152839_add_spiral_abyss_runs/migration.sql",
+      "sha256": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260805151029_add_genshin_foundation/migration.sql",
+      "sha256": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20261005150000_add_today_plan_choices/migration.sql",
+      "sha256": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260731140723_init/migration.sql",
+      "sha256": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260811141938_add_daily_companion/migration.sql",
+      "sha256": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20261003180000_add_focus_goal_lifecycle/migration.sql",
+      "sha256": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260823132547_add_imaginarium_theater_run/migration.sql",
+      "sha256": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260812155306_add_materials_and_upgrade_goals/migration.sql",
+      "sha256": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260814135049_add_weekly_boss_state/migration.sql",
+      "sha256": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260926173000_add_import_section_provenance/migration.sql",
+      "sha256": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310",
+      "unchanged": true
+    },
+    {
+      "group": "migrations",
+      "path": "apps/api/prisma/migrations/20260823150154_add_nikke_models/migration.sql",
+      "sha256": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/index.html",
+      "sha256": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/src/App.css",
+      "sha256": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C",
+      "unchanged": true
+    },
+    {
+      "group": "formatterExceptions",
+      "path": "apps/web/src/index.css",
+      "sha256": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/endgame-focus-final.json",
+      "sha256": "84143358C0180ECDC5964B10EA1A81799631DDCBCF9E32446862310FD11AFFF1",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/primary-reflow.json",
+      "sha256": "3B1F37E5F3A8D5072DA63DC8CF4B6E12B06FD74FCF912D7DB1F14A329569BDA2",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/reimport-after.json",
+      "sha256": "ACD3739A342C8283992D6153AA909B8C472EE5CD0CA3EA9530BBEF76E262156D",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/reimport-before.json",
+      "sha256": "63A182044F80074DA87EBCF314F2C2979EB178E9187B06FCAA823A41A144B9F2",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/rendered-style-check.json",
+      "sha256": "BDDB3BBAAF791A1DC6EEE1BCAA76DE527647CB2EF330DF3B04E2567B7EBD39B9",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/secondary-reflow.json",
+      "sha256": "11DF232CAE6F12C765A091B443806D2E04D2A22109C0D60CA067F6EBB6B71191",
+      "unchanged": true
+    },
+    {
+      "group": "immutableRawEvidence",
+      "path": "docs/plans/c5-companion-beta/starting-state.json",
+      "sha256": "F1A7A653C71A6694DC544498E9E3D8498F3EE385F4E756C046AF0AB1EC6ADFBE",
+      "unchanged": true
+    }
+  ],
+  "notes": [
+    "Relative to the owner-authorized production expansion baseline, not HEAD.",
+    "Self hash omitted; added artifact hashes are captured in the private final manifest.",
+    "All thirteen original migrations, protected files, formatter exceptions and historical raw evidence retained."
+  ]
+}

@@ -1,0 +1,652 @@
+{
+  "version": 1,
+  "id": "22c148eb0a70b3c5",
+  "startedAt": "2026-10-11T08:04:43.433Z",
+  "platform": "win32",
+  "node": "v22.14.0",
+  "fixture": {
+    "dataDir": "C:/Users/inuzu/AppData/Local/Temp/celestia-c4-6d547b9077534faa9ea7871b1017b2f6/data",
+    "host": "127.0.0.1",
+    "port": 55448,
+    "adminDatabase": "celestia_test_c4",
+    "provenance": "docs/plans/c5a-beta-foundation/walkthrough.md",
+    "versions": {
+      "pg_dump": "pg_dump (PostgreSQL) 18.4",
+      "pg_restore": "pg_restore (PostgreSQL) 18.4",
+      "postgres": "postgres (PostgreSQL) 18.4",
+      "pg_ctl": "pg_ctl (PostgreSQL) 18.4"
+    },
+    "owner": "NITRO\\inuzu",
+    "major": 18,
+    "systemIdentifier": "7693191646738863628",
+    "pid": 33584,
+    "serverVersion": "18.4"
+  },
+  "permissions": {
+    "mechanism": "Windows protected ACL",
+    "currentUserOnly": true,
+    "verified": true
+  },
+  "fault": null,
+  "stages": [
+    {
+      "stage": "fixture-start",
+      "result": "passed",
+      "elapsedMs": 1859
+    },
+    {
+      "stage": "fresh-resources",
+      "result": "passed",
+      "elapsedMs": 1740
+    },
+    {
+      "stage": "source-migrations",
+      "result": "passed",
+      "elapsedMs": 9383
+    },
+    {
+      "stage": "synthetic-seed",
+      "result": "passed",
+      "elapsedMs": 1028
+    },
+    {
+      "stage": "freeze-source",
+      "result": "passed",
+      "elapsedMs": 5
+    },
+    {
+      "stage": "source-snapshot",
+      "result": "passed",
+      "elapsedMs": 1095
+    },
+    {
+      "stage": "dump",
+      "result": "passed",
+      "elapsedMs": 346
+    },
+    {
+      "stage": "restore",
+      "result": "passed",
+      "elapsedMs": 1249
+    },
+    {
+      "stage": "restored-fidelity",
+      "result": "passed",
+      "elapsedMs": 2223
+    },
+    {
+      "stage": "restored-schema",
+      "result": "passed",
+      "elapsedMs": 2253
+    },
+    {
+      "stage": "restored-application-reads",
+      "result": "passed",
+      "elapsedMs": 2893
+    },
+    {
+      "stage": "post-read-fidelity",
+      "result": "passed",
+      "elapsedMs": 1649
+    },
+    {
+      "stage": "full-verification",
+      "result": "passed",
+      "elapsedMs": 129091
+    }
+  ],
+  "result": "passed",
+  "databaseFiles": "New databases use per-run private tablespaces; reused fixture WAL/catalogs remain at the recorded owned dataDir.",
+  "coverage": {
+    "tables": [
+      {
+        "name": "NikkeAccount",
+        "rows": 1,
+        "columns": 6,
+        "sha256": "f6310cdd250ac74eee5468480cb0474f5ce3afc949b7e5ada1c9cf77d3e19e8f"
+      },
+      {
+        "name": "NikkeCharacter",
+        "rows": 1,
+        "columns": 11,
+        "sha256": "8ba3ad1c3413a605477324ac33ca9b474c47389b5b2dc903787084d29bf41972"
+      },
+      {
+        "name": "NikkeEquipment",
+        "rows": 1,
+        "columns": 9,
+        "sha256": "9cbc594a7c68870bb0efab8aac1d8aa5a517e3c2a2e3cb922d227fc001b7459e"
+      },
+      {
+        "name": "_prisma_migrations",
+        "rows": 13,
+        "columns": 8,
+        "sha256": "9c8a1437b8b582cac02fb3dc6e8a11e6d4b4a8c3b27356d4e2baa4f2d1c9e5ed"
+      },
+      {
+        "name": "daily_companion",
+        "rows": 1,
+        "columns": 10,
+        "sha256": "55e4df867d677e1e3100b0bc94e2cb52db0f543720c820796f48a88056a4126f"
+      },
+      {
+        "name": "event_progress",
+        "rows": 1,
+        "columns": 7,
+        "sha256": "dd73b9da52ea9baaead5ba3f3f683b9a07ac44f5bd5fb6e11939a2ebd57ee3ae"
+      },
+      {
+        "name": "genshin_accounts",
+        "rows": 2,
+        "columns": 8,
+        "sha256": "f97b6fb721e8964257718ec74ffd34ba8a7870c510493c6935295ae429797bc7"
+      },
+      {
+        "name": "genshin_artifacts",
+        "rows": 6,
+        "columns": 12,
+        "sha256": "15823132d6294bc3d565b6fdee3a3d9a248f67a943e928f9418d807d42a14640"
+      },
+      {
+        "name": "genshin_character_focus",
+        "rows": 2,
+        "columns": 4,
+        "sha256": "0ba624187f086567070f96067eff6b603ca9420f132a9453f7743befd8f38672"
+      },
+      {
+        "name": "genshin_characters",
+        "rows": 3,
+        "columns": 12,
+        "sha256": "a09724632c249bb771bc12d4fe69971b090a3f942368b7e50a4b127c49277c7b"
+      },
+      {
+        "name": "genshin_import_sections",
+        "rows": 5,
+        "columns": 6,
+        "sha256": "7150b1f546d4dc3258f905697ad4b1cfb8bad6dda9b78d8fa160f86d687a696a"
+      },
+      {
+        "name": "genshin_materials",
+        "rows": 3,
+        "columns": 6,
+        "sha256": "01672faa9fafbed8b387535e94e15e4cf84d69f9847e822e223b9c7935dad60f"
+      },
+      {
+        "name": "genshin_plan_dismissals",
+        "rows": 2,
+        "columns": 8,
+        "sha256": "9f1af5153de5eadaa6fe2419db929354f444863a30904a19b2076d84a35695ef"
+      },
+      {
+        "name": "genshin_plan_preferences",
+        "rows": 2,
+        "columns": 7,
+        "sha256": "050bf43d8ab7693c6ed8878e2096fde303c75c2184e9b700c8c3cb477374ef93"
+      },
+      {
+        "name": "genshin_routine_state",
+        "rows": 2,
+        "columns": 13,
+        "sha256": "1331137200c6226b58862732cf3fea04dc0c4bdaf50a6b1cd9d6c7f52d963068"
+      },
+      {
+        "name": "genshin_weapons",
+        "rows": 2,
+        "columns": 9,
+        "sha256": "15eb2837a731d3f4691d1062d6969097b3ec712babe3e3c4e52965cc15978efe"
+      },
+      {
+        "name": "imaginarium_theater_runs",
+        "rows": 1,
+        "columns": 9,
+        "sha256": "5d06a7fc780816e7fd43b9018b40bfc743bb3bfbfd0b97676540ca4948d8a11f"
+      },
+      {
+        "name": "spiral_abyss_runs",
+        "rows": 1,
+        "columns": 10,
+        "sha256": "cfd27f2e2828b5496c11ba1f2732cd0c856c887fed4f4f4cd568521866b1cebc"
+      },
+      {
+        "name": "upgrade_goals",
+        "rows": 6,
+        "columns": 16,
+        "sha256": "340b76ea48977ff39efe124881d616e7485d7d4ef45414edfcfef849ed19316a"
+      },
+      {
+        "name": "users",
+        "rows": 3,
+        "columns": 6,
+        "sha256": "8497548d8bc10ed665b894f2628e8b04e4caee7f164acea5f83f2996445695ef"
+      },
+      {
+        "name": "weekly_boss_state",
+        "rows": 1,
+        "columns": 6,
+        "sha256": "c26f62e98a56d660212b08c0c476b163a0de876631d3316710290434ad01069c"
+      }
+    ],
+    "sequences": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "constraints": {
+      "count": 214,
+      "sha256": "8a4c856b4901836a4d9d87b42ad75219352bedec61b5e1fff0358e3882010838"
+    },
+    "sha256": "73dddd36c707a61ac9e85675014982878646b92f71959fbbdd37ff74b0c6b4c5"
+  },
+  "migrations": {
+    "applied": 13,
+    "checksumsMatch": true,
+    "restoredMigrationsApplied": false
+  },
+  "archive": {
+    "file": "application.dump",
+    "bytes": 57563,
+    "sha256": "5cd6c0710070c482d9b823d617d1bf0348d37835d0247933376236e56d23668c",
+    "format": "PostgreSQL custom"
+  },
+  "restored": {
+    "tables": [
+      {
+        "name": "NikkeAccount",
+        "rows": 1,
+        "columns": 6,
+        "sha256": "f6310cdd250ac74eee5468480cb0474f5ce3afc949b7e5ada1c9cf77d3e19e8f"
+      },
+      {
+        "name": "NikkeCharacter",
+        "rows": 1,
+        "columns": 11,
+        "sha256": "8ba3ad1c3413a605477324ac33ca9b474c47389b5b2dc903787084d29bf41972"
+      },
+      {
+        "name": "NikkeEquipment",
+        "rows": 1,
+        "columns": 9,
+        "sha256": "9cbc594a7c68870bb0efab8aac1d8aa5a517e3c2a2e3cb922d227fc001b7459e"
+      },
+      {
+        "name": "_prisma_migrations",
+        "rows": 13,
+        "columns": 8,
+        "sha256": "9c8a1437b8b582cac02fb3dc6e8a11e6d4b4a8c3b27356d4e2baa4f2d1c9e5ed"
+      },
+      {
+        "name": "daily_companion",
+        "rows": 1,
+        "columns": 10,
+        "sha256": "55e4df867d677e1e3100b0bc94e2cb52db0f543720c820796f48a88056a4126f"
+      },
+      {
+        "name": "event_progress",
+        "rows": 1,
+        "columns": 7,
+        "sha256": "dd73b9da52ea9baaead5ba3f3f683b9a07ac44f5bd5fb6e11939a2ebd57ee3ae"
+      },
+      {
+        "name": "genshin_accounts",
+        "rows": 2,
+        "columns": 8,
+        "sha256": "f97b6fb721e8964257718ec74ffd34ba8a7870c510493c6935295ae429797bc7"
+      },
+      {
+        "name": "genshin_artifacts",
+        "rows": 6,
+        "columns": 12,
+        "sha256": "15823132d6294bc3d565b6fdee3a3d9a248f67a943e928f9418d807d42a14640"
+      },
+      {
+        "name": "genshin_character_focus",
+        "rows": 2,
+        "columns": 4,
+        "sha256": "0ba624187f086567070f96067eff6b603ca9420f132a9453f7743befd8f38672"
+      },
+      {
+        "name": "genshin_characters",
+        "rows": 3,
+        "columns": 12,
+        "sha256": "a09724632c249bb771bc12d4fe69971b090a3f942368b7e50a4b127c49277c7b"
+      },
+      {
+        "name": "genshin_import_sections",
+        "rows": 5,
+        "columns": 6,
+        "sha256": "7150b1f546d4dc3258f905697ad4b1cfb8bad6dda9b78d8fa160f86d687a696a"
+      },
+      {
+        "name": "genshin_materials",
+        "rows": 3,
+        "columns": 6,
+        "sha256": "01672faa9fafbed8b387535e94e15e4cf84d69f9847e822e223b9c7935dad60f"
+      },
+      {
+        "name": "genshin_plan_dismissals",
+        "rows": 2,
+        "columns": 8,
+        "sha256": "9f1af5153de5eadaa6fe2419db929354f444863a30904a19b2076d84a35695ef"
+      },
+      {
+        "name": "genshin_plan_preferences",
+        "rows": 2,
+        "columns": 7,
+        "sha256": "050bf43d8ab7693c6ed8878e2096fde303c75c2184e9b700c8c3cb477374ef93"
+      },
+      {
+        "name": "genshin_routine_state",
+        "rows": 2,
+        "columns": 13,
+        "sha256": "1331137200c6226b58862732cf3fea04dc0c4bdaf50a6b1cd9d6c7f52d963068"
+      },
+      {
+        "name": "genshin_weapons",
+        "rows": 2,
+        "columns": 9,
+        "sha256": "15eb2837a731d3f4691d1062d6969097b3ec712babe3e3c4e52965cc15978efe"
+      },
+      {
+        "name": "imaginarium_theater_runs",
+        "rows": 1,
+        "columns": 9,
+        "sha256": "5d06a7fc780816e7fd43b9018b40bfc743bb3bfbfd0b97676540ca4948d8a11f"
+      },
+      {
+        "name": "spiral_abyss_runs",
+        "rows": 1,
+        "columns": 10,
+        "sha256": "cfd27f2e2828b5496c11ba1f2732cd0c856c887fed4f4f4cd568521866b1cebc"
+      },
+      {
+        "name": "upgrade_goals",
+        "rows": 6,
+        "columns": 16,
+        "sha256": "340b76ea48977ff39efe124881d616e7485d7d4ef45414edfcfef849ed19316a"
+      },
+      {
+        "name": "users",
+        "rows": 3,
+        "columns": 6,
+        "sha256": "8497548d8bc10ed665b894f2628e8b04e4caee7f164acea5f83f2996445695ef"
+      },
+      {
+        "name": "weekly_boss_state",
+        "rows": 1,
+        "columns": 6,
+        "sha256": "c26f62e98a56d660212b08c0c476b163a0de876631d3316710290434ad01069c"
+      }
+    ],
+    "sequences": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "constraints": {
+      "count": 214,
+      "sha256": "8a4c856b4901836a4d9d87b42ad75219352bedec61b5e1fff0358e3882010838"
+    },
+    "sha256": "73dddd36c707a61ac9e85675014982878646b92f71959fbbdd37ff74b0c6b4c5"
+  },
+  "sourceAfterDumpUnchanged": true,
+  "rolePortability": {
+    "distinctSourceRestoreRoles": true,
+    "allRestoredRelationsOwnedByDestinationRole": true,
+    "sourceACLsRestored": false
+  },
+  "application": {
+    "passed": true,
+    "requests": 30,
+    "checks": [
+      "LOGIN_a",
+      "LOGIN_b",
+      "LOGIN_empty",
+      "UNAUTHENTICATED_DENIED",
+      "OWN_PROFILE",
+      "FOREIGN_OWNER_DENIED",
+      "ROSTER_OWNERSHIP",
+      "EQUIPMENT_ASSIGNED",
+      "EQUIPMENT_UNRECORDED_UNKNOWN",
+      "RECEIPT_EXACT_DATE",
+      "ZERO_RECEIPT_VERSUS_ABSENCE",
+      "FOCUS_REVISIONS",
+      "GOAL_HISTORY",
+      "LEGACY_NOT_NORMALIZED",
+      "GOAL_OWNER_FILTER",
+      "FOREIGN_GOAL_DENIED",
+      "MANUAL_CHECKPOINT",
+      "UNKNOWN_CHECKPOINT",
+      "PLAN_ZERO_NULL",
+      "PLAN_ACTIVE_ONLY",
+      "NO_FABRICATED_FARMING",
+      "ABSENT_STATE_REMAINS_ABSENT",
+      "OWN_ACCOUNT_SERVICE",
+      "RETAINED_NIKKE_READ",
+      "SAVED_WEEK_ZERO",
+      "SAVED_DISMISSALS",
+      "SELECT_ONLY"
+    ],
+    "queryCount": 39,
+    "onlySelect": true,
+    "productionRoutes": true,
+    "syntheticAuthentication": true,
+    "rawQueriesPersisted": false
+  },
+  "restoredReadsDidNotWrite": true,
+  "sourceAfterValidationUnchanged": true,
+  "verification": {
+    "tests": {
+      "passed": 874,
+      "files": 47,
+      "failed": 0,
+      "skipped": 0,
+      "postgresCases": 106,
+      "integration": {
+        "src/platform/companion/plan.integration.test.ts": 28,
+        "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+        "src/platform/companion/routine.integration.test.ts": 12,
+        "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+        "src/games/genshin/importer/importer.integration.test.ts": 16,
+        "src/platform/companion/catalog-advice.integration.test.ts": 9
+      }
+    },
+    "steps": [
+      {
+        "id": "shared-types-and-build",
+        "package": "typescript",
+        "binary": "tsc",
+        "arguments": [
+          "-p",
+          "D:\\Genshin Personal\\project-celestia\\packages\\api-contracts\\tsconfig.json"
+        ],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "disposable-postgres-ready",
+        "exit": 0
+      },
+      {
+        "id": "prisma-generate",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": ["generate"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "disposable-migrations",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": ["migrate", "deploy"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "prisma-validate",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": ["validate"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "schema-diff",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": [
+          "migrate",
+          "diff",
+          "--from-config-datasource",
+          "--to-schema",
+          "prisma/schema.prisma",
+          "--exit-code"
+        ],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "full-suite",
+        "package": "vitest",
+        "binary": "vitest",
+        "arguments": [
+          "run",
+          "--no-file-parallelism",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-WXSvd8\\vitest.json"
+        ],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "api-lint",
+        "package": "eslint",
+        "binary": "eslint",
+        "arguments": [".", "--max-warnings", "0"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "api-types-and-build",
+        "package": "typescript",
+        "binary": "tsc",
+        "arguments": [],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "api-aliases",
+        "package": "tsc-alias",
+        "binary": "tsc-alias",
+        "arguments": [],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "web-lint",
+        "package": "eslint",
+        "binary": "eslint",
+        "arguments": ["."],
+        "cwd": "apps\\web",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "web-types",
+        "package": "typescript",
+        "binary": "tsc",
+        "arguments": ["-b"],
+        "cwd": "apps\\web",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "web-build",
+        "package": "vite",
+        "binary": "vite",
+        "arguments": ["build"],
+        "cwd": "apps\\web",
+        "nodeEnv": "production",
+        "exit": 0
+      },
+      {
+        "id": "repository-format",
+        "package": "prettier",
+        "binary": "prettier",
+        "arguments": [
+          "--check",
+          "**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,yml,yaml,css,html}",
+          "!apps/api/src/core/ai/openrouter.ts",
+          "!docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+          "!apps/web/index.html",
+          "!apps/web/src/App.css",
+          "!apps/web/src/index.css",
+          "!docs/plans/c5-companion-beta/endgame-focus-final.json",
+          "!docs/plans/c5-companion-beta/primary-reflow.json",
+          "!docs/plans/c5-companion-beta/reimport-after.json",
+          "!docs/plans/c5-companion-beta/reimport-before.json",
+          "!docs/plans/c5-companion-beta/rendered-style-check.json",
+          "!docs/plans/c5-companion-beta/secondary-reflow.json",
+          "!docs/plans/c5-companion-beta/starting-state.json"
+        ],
+        "cwd": ".",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "diff-check",
+        "exit": 0
+      }
+    ],
+    "platform": "win32",
+    "remoteCIObserved": false
+  },
+  "verificationEvidence": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-WXSvd8",
+  "verificationCommand": "pnpm run verify",
+  "recoveryDatabasesUnchangedByVerificationSuite": true,
+  "cleanup": {
+    "databasesAndRolesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "privateFilesRetained": true,
+    "credentialsRemoved": true
+  },
+  "resources": [
+    {
+      "database": "celestia_test_22c148eb0a70b3c5_source",
+      "role": "celestia_test_22c148eb0a70b3c5_source",
+      "oid": 60323,
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-5r15LF\\celestia_test_22c148eb0a70b3c5_source",
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    },
+    {
+      "database": "celestia_test_22c148eb0a70b3c5_restore",
+      "role": "celestia_test_22c148eb0a70b3c5_restore",
+      "oid": 60326,
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-5r15LF\\celestia_test_22c148eb0a70b3c5_restore",
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    },
+    {
+      "database": "celestia_test_22c148eb0a70b3c5_verify",
+      "role": "celestia_test_22c148eb0a70b3c5_verify",
+      "oid": 60329,
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-5r15LF\\celestia_test_22c148eb0a70b3c5_verify",
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    }
+  ],
+  "elapsedMs": 158464,
+  "finishedAt": "2026-10-11T08:07:21.899Z"
+}

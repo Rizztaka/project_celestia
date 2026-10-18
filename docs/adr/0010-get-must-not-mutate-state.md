@@ -1,5 +1,9 @@
 # ADR 0010: HTTP Semantics Preservation — GET Must Not Mutate State
 
+> **2026-09-30 implementation:** [ADR 0013](0013-versioned-routine-snapshots.md) now enforces this rule for routine, Today Domains, and Planner Intelligence reads. SELECT-only PostgreSQL checks passed. Historical text below remains context; the legacy daily-read exception is no longer routed.
+
+> **2026-09-25 amendment:** The safe GET rule remains. ADR 0012 retires the legacy daily-reset exception as the C2 target; current services have not yet migrated. Idempotency alone does not make a database write a safe read. See [ADR 0012](0012-genshin-companion-direction.md).
+
 **Date:** 2026-08-13
 **Status:** Accepted
 **Phase:** 3C — Event Planner

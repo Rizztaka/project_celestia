@@ -1,73 +1,23 @@
-# React + TypeScript + Vite
+# Project Celestia web app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React, TypeScript, and Vite frontend for the Genshin companion.
 
-Currently, two official plugins are available:
+Start with the [documentation index](../../docs/README.md), [vision](../../docs/PROJECT_VISION.md), and [roadmap](../../docs/ROADMAP.md). The [companion specification](../../docs/features/FEATURE_GENSHIN_COMPANION.md) describes planned product changes; it does not imply they are already implemented.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Existing application
 
-## React Compiler
+The current router includes login/register, dashboard, profile, import, roster, inventory, planner, intelligence, endgame, simulator, and NIKKE roster pages. The roadmap reuses these foundations and narrows future development to the Genshin companion. No page or API was removed by the documentation update.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+TanStack Query owns server data. Zustand/local state owns client state. Follow the shared architecture and ownership requirements.
 
-## Expanding the ESLint configuration
+## Local scripts
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+From the repository root, after the documented workspace setup:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- `pnpm --filter @celestia/web dev`
+- `pnpm --filter @celestia/web lint`
+- `pnpm --filter @celestia/web build`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+See [Development Guide](../../docs/DEVELOPMENT_GUIDE.md) for project standards. API lint coverage is a separate [open milestone](../../docs/plans/3a-backend-lint/implementation_plan.md); do not assume a successful root lint currently covers the backend.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+Implementation sessions are Wednesday and Sunday. Deployment is a separate reviewed action.

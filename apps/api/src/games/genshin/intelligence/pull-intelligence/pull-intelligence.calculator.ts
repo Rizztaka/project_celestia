@@ -3,11 +3,11 @@
 // -------------------------------------------------------
 
 import type { CharacterInput } from '../character-intelligence/character-intelligence.calculator.js';
+import type { CharacterRecommendation } from '../character-intelligence/character-intelligence.service.js';
 import type {
   TeamScoreBreakdown,
   TeamTemplate,
 } from '../team-intelligence/team-intelligence.calculator.js';
-import type { CharacterRecommendation } from '../character-intelligence/character-intelligence.service.js';
 
 // Re-export for convenience
 export type { CharacterInput };

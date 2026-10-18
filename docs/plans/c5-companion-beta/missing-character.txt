@@ -1,0 +1,29 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#companion-content"
+  - link "Project Celestia":
+    - /url: /
+  - button "Sign out"
+  - navigation "Primary navigation":
+    - link "Today":
+      - /url: /
+    - link "Characters":
+      - /url: /roster
+    - link "Planner":
+      - /url: /planner
+  - navigation "Supporting navigation":
+    - link "Import":
+      - /url: /import
+    - link "Inventory":
+      - /url: /inventory
+    - link "Settings & profile":
+      - /url: /profile
+    - generic "Other tools +"
+- main [active]:
+  - link "← All characters":
+    - /url: /roster
+  - button "Refresh"
+  - heading "Character not found" [level=1]
+  - paragraph: This character is not in your recorded roster.
+  - link "Import character data":
+    - /url: /import

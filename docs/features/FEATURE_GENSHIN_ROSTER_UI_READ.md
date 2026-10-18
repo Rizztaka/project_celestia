@@ -1,8 +1,17 @@
 # Feature Specification: Genshin Roster Browsing UI (Milestone 2D)
 
+> **Companion scope update — 2026-09-25.** Reuse the roster view. C3 adds selected focus, URL-addressable character details, equipment observations, and user targets. A missing import must not be presented as confirmed missing equipment. Historical phase numbers and pending checkboxes are not current status.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+>
+> **2026-10-03 checkpoint:** C3a's owned character/equipment read view and roster links are complete locally. [Acceptance](../plans/c3a-character-equipment/walkthrough.md) records stored values, five slot states, independent section receipts and preserved URLs. Focus/priority/goal lifecycle remains C3b.
+
+## Historical milestone specification
+
 **Feature ID:** FEAT-005  
 **Priority:** P0  
-**Status:** Designing  
+**Historical status:** Designing
+
 **Phase:** 2D — Roster Browsing UI  
 **Last Updated:** 2026-08-07
 

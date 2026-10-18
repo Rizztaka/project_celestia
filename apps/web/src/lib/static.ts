@@ -84,6 +84,7 @@ export const CATEGORY_COLORS: Record<MaterialCategory, string> = {
 const GEM_SUFFIXES = ['Sliver', 'Fragment', 'Chunk', 'Gemstone'];
 const BILLET_SUFFIXES = ['Billet', 'Prism'];
 const BOOK_PREFIXES = [
+  'GuideToDiligence',
   'Teachings',
   'Guides',
   'Philosophies',
@@ -139,6 +140,14 @@ export function categoriseMaterial(itemKey: string): MaterialCategory {
  *      "TeachingsOfBallad"    → "Teachings Of Ballad"
  */
 export function materialDisplayName(itemKey: string): string {
+  const supportedNames: Record<string, string> = {
+    Mora: 'Mora',
+    TeachingsOfDiligence: 'Teachings of Diligence',
+    GuideToDiligence: 'Guide to Diligence',
+    WhopperflowerNectar: 'Whopperflower Nectar',
+    ShimmeringNectar: 'Shimmering Nectar',
+  };
+  if (supportedNames[itemKey]) return supportedNames[itemKey];
   return itemKey
     .replace(/([A-Z])/g, ' $1')
     .replace(/^_/, '')

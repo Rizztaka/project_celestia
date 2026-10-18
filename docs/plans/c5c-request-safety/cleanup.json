@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-12",
+  "recovery": {
+    "databasesAndRolesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "privateFilesRetained": true,
+    "credentialsRemoved": true
+  },
+  "browser": {
+    "resourcesRemoved": true,
+    "viewportOverrideApplied": false,
+    "createdTabClosed": true,
+    "ordinaryWebBuildRestored": true,
+    "stoppedOwnedProcess": true,
+    "browserPortsClosed": true
+  },
+  "browserRejectedCommitFullSnapshotUnchanged": true,
+  "retainedPrivateDirectories": [
+    "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-FpUeA4",
+    "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-5HgmP5",
+    "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-VcyBbN"
+  ],
+  "privateFiles": "Synthetic archives/logs retained outside Git under verified private ACL; no raw rows, URLs, JWTs or password hashes copied.",
+  "ordinaryDatabaseAccess": false,
+  "unownedProcessesStopped": false,
+  "finalExclusiveLoopbackBindChecks": [
+    {
+      "host": "127.0.0.1",
+      "port": 55448,
+      "exclusiveBindAndClosePassed": true
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 45448,
+      "exclusiveBindAndClosePassed": true
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 45449,
+      "exclusiveBindAndClosePassed": true
+    }
+  ]
+}

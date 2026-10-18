@@ -1,0 +1,187 @@
+{
+  "changedFromPreC5a": [
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "beforeSha256": "0A5A97385CB2B4B919F4B13C272EFCE479B4720C1015DD2705849FF4CDD0567A",
+      "afterSha256": "008F498878727A64F84EA294D47198B954A0FCD48B1AD8434F33C628FA58DF12"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "beforeSha256": "2F161B97F471926546F4A79DF8CFB58AEAB310B15F73F46AF02FF44586952283",
+      "afterSha256": "788ED3201DDF0576F9BBBD3C2253049303ADB9F5291E9E5F877537BBC1B9DF58"
+    },
+    {
+      "path": "apps/api/src/app.ts",
+      "beforeSha256": "CE3224EF826BCCB3E10BB57C8AC0052D646CB83CEB5A9F8C38A0DC4F048B5E30",
+      "afterSha256": "B6AECC35908FB0C3DF12054BB31F9061B5131E758CCD9707776E56E27E4919CB"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "beforeSha256": "B7F5C082815809B2F21110FC721F18BE8763689F3475243D3AA0F5CA375E187A",
+      "afterSha256": "DAD8BC0F1937A2AA7D9705A78FA691D4F0123EE1495D5B5FE883234FCC459083"
+    },
+    {
+      "path": "package.json",
+      "beforeSha256": "C493CF07AD37D53329E3DAB79597780C4BCF6A03C51C62B77FE3613AEDB3F343",
+      "afterSha256": "BCD9C27627577751BE5438CBFA482A59A2F55B537386AB3339D9513ADD8B7BED"
+    }
+  ],
+  "newFiles": [
+    {
+      "path": ".gitattributes",
+      "sha256": "93FEF663A8B11AB35952411A2B676C084A4132BAB0C76C847DECAB345EB8B2D0"
+    },
+    {
+      "path": "apps/api/src/core/config/cors.ts",
+      "sha256": "32BA7C083AA7A9B87FE6EEB325DFFF52DF9B182960BE863D6F0000757E8798D6"
+    },
+    {
+      "path": "apps/api/src/core/middleware/origin.middleware.test.ts",
+      "sha256": "44D90FC91B0D0F01D9146859DDFBCB03DA896EEFFE61A4A3A560402CDEAE9CA5"
+    },
+    {
+      "path": "apps/api/src/core/middleware/origin.middleware.ts",
+      "sha256": "E010F3329DEBF91E20404A2BE3FAAEF64BFECBA500FFA38750DA00A2874F6B48"
+    },
+    {
+      "path": "apps/api/tooling/origin-browser-fixture.mjs",
+      "sha256": "B36363B26F115FCFEE29953AFB2217A2893A241D3BED3840244C25790F375FFB"
+    },
+    {
+      "path": "apps/api/tooling/raw-evidence.json",
+      "sha256": "08C7961CD8C689FD02664473BEA0D5542B546C01DD25880DBB3593A64E64C9EC"
+    },
+    {
+      "path": "apps/api/tooling/verification.mjs",
+      "sha256": "5B165A1B39A3FBC938D4B259EEF33868A7D924FF3E3D9C45DC92DE43AB704F18"
+    },
+    {
+      "path": "apps/api/tooling/verification.test.js",
+      "sha256": "32C2304B7792D85D4CFBF44763081D63FBA3184BC4CCF7CB84CA920C8746EC93"
+    },
+    {
+      "path": "apps/api/tooling/verify.mjs",
+      "sha256": "54BFF607FFA3A6F42BD8CE433FD21EBCB9FBBE7BCE4D75D31C3A675410B58314"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/beta-readiness.md",
+      "sha256": "8C6E7D26830806816F262278DB9587F926C578D87E81F6BE7C94A046E432D476"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/cleanup.json",
+      "sha256": "2B465C8AE04D7A03503DB47A8FBFBD25C474485261E38A3E11B1DE37D8458CEE"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/entrypoint-results.json",
+      "sha256": "55426D8CCAD401EA86BF39AF4070EF5FD4ACC58E3D6079914851011B02D3604A"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/fixture-create.log",
+      "sha256": "BECC505F7723649FB62DEAD640417BADE35DE2F497D55894F39B82B46A3C570F"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/focused-tests.log",
+      "sha256": "E1C88A9755FE18DD9423391050AE0483F4CC74DA14628B9133A30A4341BF19BD"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/git-byte-preservation.json",
+      "sha256": "FDE2E44DD22C8E7413DC4F26A3026F546E87C8E20458C61AEFE1E475AC0E7FBD"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/http-smoke.json",
+      "sha256": "7C5359D18E72559612B36DA31BF673CF47B9EB99DD072625D92608C6D28EFB27"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/implementation_plan.md",
+      "sha256": "BB7AE19461D64C8CB1B75EC28DA9982704E9FBB5C23457428D31A2C0B8B523F2"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/owned-processes.json",
+      "sha256": "BEA9792924A6AABA4643C3A86E0944DD4507E485476850E886A0005052162E66"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/reproduced-findings.log",
+      "sha256": "FCA06F963FB018D36EA015AFC3C0796D8188BE3ABE89E6A66FD1063B7451DFCB"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/restored-web-build.log",
+      "sha256": "ED46B84F6AE510AF00C42A08E580760D925ECF6BC2DCB885C9829EE9041EC2BB"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/runbook.md",
+      "sha256": "3CE89310C2CC75F1D5E34FC2E7C4E91846E3BA4C12E7B2FA351E5C5B2D35E404"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-import-preview.txt",
+      "sha256": "C499E6A8C97216DB8919D8217B438855759553D51C1C11ABA6F8A1BC7C22F68C"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-logout.txt",
+      "sha256": "F87C1408EA4FF1082383C3627414079F489EA9342FA4B2209FBC9DE877764C33"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-profile.txt",
+      "sha256": "2A03D23A3ADDC7E6AB97C806E2C767F9D403EC086E33E7B995772EED9DFCB4CB"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-today.jpg",
+      "sha256": "CB4B5329F156E3A150960A10DC91A87C968AC886B0D90BAE621C7B22274863C1"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-today.txt",
+      "sha256": "06FB95455528AFB765D0B0CEF1B0BA5D8C865F2DDF8BE59D7B2436AC12D441CB"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-web-build.log",
+      "sha256": "1629163085D03693C1B8AA26AE14BD055CF697098ED44091C29A34FE0CE19784"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/starting-state.json",
+      "sha256": "642763C3CF9D5AA7AFE47F41829CA9D2844200CD9B57FA82B0021E2C3A56E05E"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/task.md",
+      "sha256": "4914B624ABCD95CCBFBFA2F6A86472C50BD3F3B3E72694507C2C84787440569E"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/test-results.json",
+      "sha256": "503AEA67E714DD9382F89157FFDE7F5BED939EECDD9FBAB3A24E0D84E43E61D6"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/unsafe-entrypoint.log",
+      "sha256": "7CD2309685C153475A74BE228C35E8CEDB880CDA77208C180D44EFACB247E56B"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/validation-results.json",
+      "sha256": "13EDB450C454EA3A279432BEF60B0BA6FD4AFF7BB255CEDBD2D0437BAC00B904"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/verification-run-1.log",
+      "sha256": "1B7FCA920AC132F862AC87CEA4A92FE61BCF04197E33F602E8B1887FD538D24E"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/verification-run-2.log",
+      "sha256": "7AD912C55F3AAB4F7CC5966F4D1C66D8ABD19A0A15AD6218E30C79F7738F15FF"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/walkthrough.md",
+      "sha256": "324CDF1CCBBF8646592C2C99176CC1A3F777EE0258EEBB56D6E0C76CA18A92D1"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/workflow-validation.log",
+      "sha256": "558F48E230254A7ACBD406E559326065E84C1C59332D85273896CF5E548A149E"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/final-format.log",
+      "sha256": "AC952C260E912AF5585FE05226DF37953B38BF5C1FC659B4216B3BAEC7ED11C0"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/final-diff-check.log",
+      "sha256": "F8C9F1E39A9353A4B0C1C7E126B48B02886BC755EC157119E72D03BDAD1DD2A3"
+    }
+  ],
+  "selfReferentialEvidenceExcluded": [
+    "docs/plans/c5a-beta-foundation/preservation-check.json",
+    "docs/plans/c5a-beta-foundation/changed-files.json"
+  ]
+}

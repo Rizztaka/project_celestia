@@ -1,0 +1,37 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#companion-content"
+  - link "Project Celestia":
+    - /url: /
+  - button "Sign out"
+  - navigation "Primary navigation":
+    - link "Today":
+      - /url: /
+    - link "Characters":
+      - /url: /roster
+    - link "Planner":
+      - /url: /planner
+  - navigation "Supporting navigation":
+    - link "Import":
+      - /url: /import
+    - link "Inventory":
+      - /url: /inventory
+    - link "Settings & profile":
+      - /url: /profile
+    - generic "Other tools +"
+- main [active]:
+  - generic "Saved data freshness"
+  - heading "Characters" [level=1]
+  - paragraph: 0 recorded characters
+  - paragraph: Focus is an optional shortlist, independent of goal status. Open a character for recorded equipment and goals. Stored talent values may include adjustments; they do not establish base-level progress.
+  - text: Search characters
+  - searchbox "Search characters"
+  - button "Refresh characters"
+  - checkbox "Focus characters only"
+  - text: Focus characters only
+  - heading "No character observations yet" [level=2]
+  - paragraph: An optional import adds recorded characters and equipment here. You can use Today routines and create catalog goals before importing.
+  - link "Import observations":
+    - /url: /import
+  - link "Create a goal without importing":
+    - /url: /planner?tab=farming&newType=CHARACTER_TALENT

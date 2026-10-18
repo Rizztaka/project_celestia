@@ -1,0 +1,147 @@
+{
+  "retrievedOn": "2026-10-02",
+  "capturedAt": null,
+  "response": {
+    "retcode": 0,
+    "message": "OK",
+    "data": {
+      "list": [
+        {
+          "id": 10000046,
+          "name": "Hu Tao",
+          "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/699e3449/fbb8dbc972616d4b5004c2042e96c5c5.png",
+          "weapon_cat_id": 13,
+          "avatar_level": 5,
+          "element_attr_id": 1,
+          "max_level": 90,
+          "item_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/699e3449/06415bd39a58de5597566341384a5757.png",
+          "talent_icons": [
+            "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/b68156ebbc2b4d280a1dcb85a13c4f99.png",
+            "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/efbcf69944c154861fbd756b86ff9134.png",
+            "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/1975e9ed5e86c3c15665040c1d79d3ec.png",
+            "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/ae4b27db76afef6e0597243d744d5dad.png",
+            "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/79640d30c1e989413fc5e21486d932d8.png",
+            "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/69f6def4e9eff822510a873ec8ef3612.png"
+          ],
+          "side_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f727/97776d0a29dc809c20f535f1185c3887.png",
+          "profile_pictures": [
+            {
+              "avatar_id": "10000046",
+              "costume_id": "0",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/699e3449/f3547b49d4103fc1ee16dfb8b8907e98.png",
+              "profile_picture_id": "2900"
+            },
+            {
+              "avatar_id": "10000046",
+              "costume_id": "204601",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/3b914ff89107dff5aa42762067d33646.png",
+              "profile_picture_id": "2901"
+            }
+          ],
+          "talents": [
+            {
+              "id": 461,
+              "name": "Crimson Bouquet",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/b68156ebbc2b4d280a1dcb85a13c4f99.png"
+            },
+            {
+              "id": 462,
+              "name": "Ominous Rainfall",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/efbcf69944c154861fbd756b86ff9134.png"
+            },
+            {
+              "id": 463,
+              "name": "Lingering Carmine",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/1975e9ed5e86c3c15665040c1d79d3ec.png"
+            },
+            {
+              "id": 464,
+              "name": "Garden of Eternal Rest",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/ae4b27db76afef6e0597243d744d5dad.png"
+            },
+            {
+              "id": 465,
+              "name": "Floral Incense",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/79640d30c1e989413fc5e21486d932d8.png"
+            },
+            {
+              "id": 466,
+              "name": "Butterfly's Embrace",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/69f6def4e9eff822510a873ec8ef3612.png"
+            }
+          ],
+          "skill_list": [
+            {
+              "id": 10461,
+              "group_id": 4631,
+              "name": "Secret Spear of Wangsheng",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f71a/0a4af4ecb63b4741aa3e42d18a2a0c21.png",
+              "max_level": 10,
+              "is_proud": false,
+              "pos_name": "普通攻击"
+            },
+            {
+              "id": 10462,
+              "group_id": 4632,
+              "name": "Guide to Afterlife",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f71a/182383b02bd5992e180947f87eed93cf.png",
+              "max_level": 10,
+              "is_proud": false,
+              "pos_name": "元素战技"
+            },
+            {
+              "id": 10463,
+              "group_id": 4639,
+              "name": "Spirit Soother",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f71a/9a900326d04bafaa5c75cc534bbd1163.png",
+              "max_level": 10,
+              "is_proud": false,
+              "pos_name": "元素爆发"
+            },
+            {
+              "id": 4621,
+              "group_id": 4621,
+              "name": "Flutter By",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/04c717e74d11e69077731b25cad72017.png",
+              "max_level": 1,
+              "is_proud": true,
+              "pos_name": ""
+            },
+            {
+              "id": 4622,
+              "group_id": 4622,
+              "name": "Sanguine Rouge",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/a508582381463415a54da832f07c0671.png",
+              "max_level": 1,
+              "is_proud": true,
+              "pos_name": ""
+            },
+            {
+              "id": 4623,
+              "group_id": 4623,
+              "name": "The More the Merrier",
+              "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f721/ac5b93acd192be4e03010a1f5c7e8d6f.png",
+              "max_level": 1,
+              "is_proud": true,
+              "pos_name": ""
+            }
+          ],
+          "wiki_url": "https://wiki.hoyolab.com/pc/genshin/entry/34",
+          "wiki_recommend_weapon_url": "https://wiki.hoyolab.com/pc/genshin/entry/34",
+          "wiki_reliquary_url": "",
+          "wiki_recommend_skill_url": ""
+        }
+      ],
+      "total": 1
+    }
+  },
+  "request": {
+    "lang": "en-us",
+    "page": 1,
+    "keywords": "Hu Tao",
+    "size": 2
+  },
+  "endpoint": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v1/avatar/list",
+  "reviewedBy": "Codex",
+  "gameVersion": null
+}

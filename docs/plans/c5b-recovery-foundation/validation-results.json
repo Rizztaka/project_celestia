@@ -1,0 +1,237 @@
+{
+  "date": "2026-10-11",
+  "milestone": "C5b local synthetic recovery",
+  "platform": "Windows win32; no POSIX execution claimed",
+  "result": "passed",
+  "finalRecoveryEvidence": "runs/success-3-final.json",
+  "finalCommand": "pnpm run recovery:rehearse --fixture \"D:\\Genshin Personal\\project-celestia\\docs\\plans\\c5b-recovery-foundation\\local-fixture.json\" --verify",
+  "environment": {
+    "NODE_ENV": "test",
+    "DOTENV_CONFIG_PATH": "NUL",
+    "databaseURLs": "Generated internally for each newly created guarded database; never supplied in command arguments",
+    "secrets": "Synthetic and isolated; no ordinary dotenv or inherited connection/runtime overrides"
+  },
+  "versions": {
+    "node": "v22.14.0",
+    "pnpm": "11.18.0",
+    "postgres": {
+      "pg_dump": "pg_dump (PostgreSQL) 18.4",
+      "pg_restore": "pg_restore (PostgreSQL) 18.4",
+      "postgres": "postgres (PostgreSQL) 18.4",
+      "pg_ctl": "pg_ctl (PostgreSQL) 18.4"
+    }
+  },
+  "realRuns": {
+    "successes": 3,
+    "expectedFailures": 2,
+    "earlyFailedRuns": 3,
+    "ledger": "execution-attempts.json"
+  },
+  "fullVerification": {
+    "command": "pnpm run verify",
+    "separateDatabase": true,
+    "tests": {
+      "passed": 875,
+      "files": 47,
+      "failed": 0,
+      "skipped": 0,
+      "postgresCases": 106,
+      "integration": {
+        "src/platform/companion/plan.integration.test.ts": 28,
+        "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+        "src/platform/companion/routine.integration.test.ts": 12,
+        "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+        "src/games/genshin/importer/importer.integration.test.ts": 16,
+        "src/platform/companion/catalog-advice.integration.test.ts": 9
+      }
+    },
+    "allStepsExitZero": true,
+    "steps": "entrypoint-results.json",
+    "safeTests": "test-results-summary.json"
+  },
+  "focusedRecoveryTests": {
+    "command": "pnpm --filter @celestia/api exec vitest run tooling/recovery.test.js",
+    "passed": 76,
+    "failed": 0,
+    "skipped": 0,
+    "files": 1,
+    "observedDurationMs": 3210
+  },
+  "fidelity": {
+    "applicationTables": 20,
+    "applicationRows": 46,
+    "migrationRows": 13,
+    "constraints": 214,
+    "sequences": 0,
+    "allCanonicalValuesCompared": true,
+    "sourceBeforeAfterUnchanged": true,
+    "restoredReadsDidNotWrite": true,
+    "recoveryDatabasesUnchangedByVerificationSuite": true
+  },
+  "application": {
+    "passed": true,
+    "requests": 30,
+    "checks": [
+      "LOGIN_a",
+      "LOGIN_b",
+      "LOGIN_empty",
+      "UNAUTHENTICATED_DENIED",
+      "OWN_PROFILE",
+      "FOREIGN_OWNER_DENIED",
+      "ROSTER_OWNERSHIP",
+      "EQUIPMENT_ASSIGNED",
+      "EQUIPMENT_UNRECORDED_UNKNOWN",
+      "RECEIPT_EXACT_DATE",
+      "ZERO_RECEIPT_VERSUS_ABSENCE",
+      "FOCUS_REVISIONS",
+      "GOAL_HISTORY",
+      "LEGACY_NOT_NORMALIZED",
+      "GOAL_OWNER_FILTER",
+      "FOREIGN_GOAL_DENIED",
+      "MANUAL_CHECKPOINT",
+      "UNKNOWN_CHECKPOINT",
+      "PLAN_ZERO_NULL",
+      "PLAN_ACTIVE_ONLY",
+      "NO_FABRICATED_FARMING",
+      "ABSENT_STATE_REMAINS_ABSENT",
+      "OWN_ACCOUNT_SERVICE",
+      "RETAINED_NIKKE_READ",
+      "SAVED_WEEK_ZERO",
+      "SAVED_DISMISSALS",
+      "SELECT_ONLY"
+    ],
+    "queryCount": 39,
+    "onlySelect": true,
+    "productionRoutes": true,
+    "syntheticAuthentication": true,
+    "rawQueriesPersisted": false
+  },
+  "finalTimings": {
+    "totalMs": 178495,
+    "stages": [
+      {
+        "stage": "fixture-start",
+        "result": "passed",
+        "elapsedMs": 3344
+      },
+      {
+        "stage": "fresh-resources",
+        "result": "passed",
+        "elapsedMs": 2832
+      },
+      {
+        "stage": "source-migrations",
+        "result": "passed",
+        "elapsedMs": 30363
+      },
+      {
+        "stage": "synthetic-seed",
+        "result": "passed",
+        "elapsedMs": 1073
+      },
+      {
+        "stage": "freeze-source",
+        "result": "passed",
+        "elapsedMs": 9
+      },
+      {
+        "stage": "source-snapshot",
+        "result": "passed",
+        "elapsedMs": 1146
+      },
+      {
+        "stage": "dump",
+        "result": "passed",
+        "elapsedMs": 609
+      },
+      {
+        "stage": "restore",
+        "result": "passed",
+        "elapsedMs": 1429
+      },
+      {
+        "stage": "restored-fidelity",
+        "result": "passed",
+        "elapsedMs": 3063
+      },
+      {
+        "stage": "restored-schema",
+        "result": "passed",
+        "elapsedMs": 2825
+      },
+      {
+        "stage": "restored-application-reads",
+        "result": "passed",
+        "elapsedMs": 8248
+      },
+      {
+        "stage": "post-read-fidelity",
+        "result": "passed",
+        "elapsedMs": 1699
+      },
+      {
+        "stage": "full-verification",
+        "result": "passed",
+        "elapsedMs": 117834
+      }
+    ]
+  },
+  "archive": {
+    "file": "application.dump",
+    "bytes": 57559,
+    "sha256": "2197ecf7f3a7dc3d6224eb7b566a35d8c78f666f0463633b042e1db76cef5fc6",
+    "format": "PostgreSQL custom"
+  },
+  "permissions": {
+    "mechanism": "Windows protected ACL",
+    "currentUserOnly": true,
+    "verified": true
+  },
+  "testedCode": [
+    {
+      "path": "package.json",
+      "sha256": "06ac48bf24112580605c6caa85a5c4be6c6e23fa70afcb69979a9519c5adb5d6"
+    },
+    {
+      "path": "apps/api/tooling/recovery/cli.mjs",
+      "sha256": "59fd376382a32b0c38f4cb993657f5696d9246b97117c36147d73e4b7496b0e5"
+    },
+    {
+      "path": "apps/api/tooling/recovery/fixture.mjs",
+      "sha256": "e61a9b93bc3b9d0c97719295518a9bbdfe58a797c84a09741c44a3538dce7361"
+    },
+    {
+      "path": "apps/api/tooling/recovery/policy.mjs",
+      "sha256": "a87fffcfe2e61a453b55aeaca310a91cd6aee79b66c9918759b11eeccc1505ff"
+    },
+    {
+      "path": "apps/api/tooling/recovery/probe.mjs",
+      "sha256": "d2787ca5509e466693cc04227026738a013c5b5cc25ef4b02e73161b170f67ac"
+    },
+    {
+      "path": "apps/api/tooling/recovery/process.mjs",
+      "sha256": "6831a8a8072de4aaf947020693b0b6dd25015163bf9cc61bb2fa17985542b0c3"
+    },
+    {
+      "path": "apps/api/tooling/recovery/rehearse.mjs",
+      "sha256": "810320c50bc8855f906d8d494873d7664fc3203769aa6428826d732c51b492bc"
+    },
+    {
+      "path": "apps/api/tooling/recovery/seed.mjs",
+      "sha256": "32f72c3d8fb702333d1fd9af9787aada15328f2f0519763fbb96fe6ba4846285"
+    },
+    {
+      "path": "apps/api/tooling/recovery/snapshot.mjs",
+      "sha256": "f444da6b3d64adcc8ecfdce4415ebd69044d1b66fb75808cc4d694aad93ca3eb"
+    },
+    {
+      "path": "apps/api/tooling/recovery.test.js",
+      "sha256": "183cea6198991091620a2a0063ef4cc49bc1102fdb8511eb13838888a9e363f9"
+    }
+  ],
+  "remoteCIObserved": false,
+  "productionConnected": false,
+  "releaseAuthorized": false,
+  "C6C7Started": false,
+  "postRunEvidence": "Final documentation/manifests were completed after the runtime check; final focused formatting/diff/hash reconciliation is recorded separately."
+}

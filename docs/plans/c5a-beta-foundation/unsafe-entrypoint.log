@@ -1,0 +1,6 @@
+$ pnpm --filter @celestia/api exec tsx tooling/verify.mjs
+Explicit disposable loopback celestia_test_* database and isolated test environment required.
+undefined
+D:\Genshin Personal\project-celestia\apps\api:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: tsx tooling/verify.mjs
+[ELIFECYCLE] Command failed with exit code 1.

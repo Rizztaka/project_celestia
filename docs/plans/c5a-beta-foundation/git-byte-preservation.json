@@ -1,0 +1,86 @@
+[
+  {
+    "path": "apps/api/src/core/ai/openrouter.ts",
+    "attributes": "apps/api/src/core/ai/openrouter.ts: text: unset",
+    "rawObject": "24772dc18b17555e4a0b6acc197a12735a64a77a",
+    "cleanObject": "24772dc18b17555e4a0b6acc197a12735a64a77a",
+    "identical": true
+  },
+  {
+    "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+    "attributes": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md: text: unset",
+    "rawObject": "128f51f25cb62d854deddaabd64569c2fb38f846",
+    "cleanObject": "128f51f25cb62d854deddaabd64569c2fb38f846",
+    "identical": true
+  },
+  {
+    "path": "apps/web/index.html",
+    "attributes": "apps/web/index.html: text: unset",
+    "rawObject": "c22c5981db2e37007a7ce4aeac14c470c9e5cb89",
+    "cleanObject": "c22c5981db2e37007a7ce4aeac14c470c9e5cb89",
+    "identical": true
+  },
+  {
+    "path": "apps/web/src/App.css",
+    "attributes": "apps/web/src/App.css: text: unset",
+    "rawObject": "f90339d8f765fa2c69d9a341959a8ddb9fff5720",
+    "cleanObject": "f90339d8f765fa2c69d9a341959a8ddb9fff5720",
+    "identical": true
+  },
+  {
+    "path": "apps/web/src/index.css",
+    "attributes": "apps/web/src/index.css: text: unset",
+    "rawObject": "d97e518f27ce8c0c4db744b5f78d9db9e7d73ce0",
+    "cleanObject": "d97e518f27ce8c0c4db744b5f78d9db9e7d73ce0",
+    "identical": true
+  },
+  {
+    "path": "docs/plans/c5-companion-beta/endgame-focus-final.json",
+    "attributes": "docs/plans/c5-companion-beta/endgame-focus-final.json: text: unset",
+    "rawObject": "46cf613d3b83a36132e53e8cacb9e6c7d1e9f741",
+    "cleanObject": "46cf613d3b83a36132e53e8cacb9e6c7d1e9f741",
+    "identical": true
+  },
+  {
+    "path": "docs/plans/c5-companion-beta/primary-reflow.json",
+    "attributes": "docs/plans/c5-companion-beta/primary-reflow.json: text: unset",
+    "rawObject": "7915f2bb878465b2db51322f642a91bf81c83d63",
+    "cleanObject": "7915f2bb878465b2db51322f642a91bf81c83d63",
+    "identical": true
+  },
+  {
+    "path": "docs/plans/c5-companion-beta/reimport-after.json",
+    "attributes": "docs/plans/c5-companion-beta/reimport-after.json: text: unset",
+    "rawObject": "8758a10b79e12d6170525cd1abe194f07b063f8f",
+    "cleanObject": "8758a10b79e12d6170525cd1abe194f07b063f8f",
+    "identical": true
+  },
+  {
+    "path": "docs/plans/c5-companion-beta/reimport-before.json",
+    "attributes": "docs/plans/c5-companion-beta/reimport-before.json: text: unset",
+    "rawObject": "12ce7664af1331258ba179cd270712324a1d48dd",
+    "cleanObject": "12ce7664af1331258ba179cd270712324a1d48dd",
+    "identical": true
+  },
+  {
+    "path": "docs/plans/c5-companion-beta/rendered-style-check.json",
+    "attributes": "docs/plans/c5-companion-beta/rendered-style-check.json: text: unset",
+    "rawObject": "967d30a05c0e2201896f2a082cf534d567b62e67",
+    "cleanObject": "967d30a05c0e2201896f2a082cf534d567b62e67",
+    "identical": true
+  },
+  {
+    "path": "docs/plans/c5-companion-beta/secondary-reflow.json",
+    "attributes": "docs/plans/c5-companion-beta/secondary-reflow.json: text: unset",
+    "rawObject": "862f2c4b928c1eed210bf0117204bf9f22d22785",
+    "cleanObject": "862f2c4b928c1eed210bf0117204bf9f22d22785",
+    "identical": true
+  },
+  {
+    "path": "docs/plans/c5-companion-beta/starting-state.json",
+    "attributes": "docs/plans/c5-companion-beta/starting-state.json: text: unset",
+    "rawObject": "0cae2254bce0fa99ccf00bceab7faa5ac3e85c3b",
+    "cleanObject": "0cae2254bce0fa99ccf00bceab7faa5ac3e85c3b",
+    "identical": true
+  }
+]

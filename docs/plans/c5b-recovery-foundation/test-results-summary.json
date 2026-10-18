@@ -1,0 +1,350 @@
+{
+  "date": "2026-10-11",
+  "rawReportRetainedOutsideRepository": true,
+  "rawReportPath": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-qFbMe6\\vitest.json",
+  "rawReportSha256": "435a1f3979e68bcbd98dfd169090eac8e2252bea5bc0ed9d96441d7d28bd306e",
+  "reason": "Historical guard test names contain synthetic URLs, so no raw test names are copied to C5b evidence.",
+  "passed": 875,
+  "files": [
+    {
+      "path": "apps/api/tooling/account-cache.test.js",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/tooling/character-equipment.test.js",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/tooling/eslint-config.test.js",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/tooling/goal-session.test.js",
+      "status": "passed",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/tooling/journey-client.test.js",
+      "status": "passed",
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/tooling/plan-client.test.js",
+      "status": "passed",
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/tooling/recovery.test.js",
+      "status": "passed",
+      "passed": 76,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/tooling/routine-client.test.js",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/tooling/verification.test.js",
+      "status": "passed",
+      "passed": 33,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/security.http.test.ts",
+      "status": "passed",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/core/db/disposable-test-database.test.ts",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/core/middleware/auth.middleware.test.ts",
+      "status": "passed",
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/core/middleware/origin.middleware.test.ts",
+      "status": "passed",
+      "passed": 58,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.service.test.ts",
+      "status": "passed",
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/companion/catalog-advice.integration.test.ts",
+      "status": "passed",
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/companion/event.service.test.ts",
+      "status": "passed",
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal-lifecycle.integration.test.ts",
+      "status": "passed",
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal.service.test.ts",
+      "status": "passed",
+      "passed": 31,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan-composition.test.ts",
+      "status": "passed",
+      "passed": 40,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan.integration.test.ts",
+      "status": "passed",
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.http.test.ts",
+      "status": "passed",
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.integration.test.ts",
+      "status": "passed",
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.service.test.ts",
+      "status": "passed",
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/companion/weekly-boss.service.test.ts",
+      "status": "passed",
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/platform/users/user.service.test.ts",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/accounts/account.service.test.ts",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/artifacts/artifact.service.test.ts",
+      "status": "passed",
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character-equipment.integration.test.ts",
+      "status": "passed",
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character.service.test.ts",
+      "status": "passed",
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/endgame/endgame.service.test.ts",
+      "status": "passed",
+      "passed": 31,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.http.test.ts",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.integration.test.ts",
+      "status": "passed",
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.service.test.ts",
+      "status": "passed",
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/catalog-trust.test.ts",
+      "status": "passed",
+      "passed": 37,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/routine-consumers.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/routine-policy.test.ts",
+      "status": "passed",
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/server-clock.test.ts",
+      "status": "passed",
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/simulators/pull-simulator.controller.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/simulators/pull-simulator.service.test.ts",
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/weapons/weapon.service.test.ts",
+      "status": "passed",
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.service.test.ts",
+      "status": "passed",
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.service.test.ts",
+      "status": "passed",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.service.test.ts",
+      "status": "passed",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.test.ts",
+      "status": "passed",
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.test.ts",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.service.test.ts",
+      "status": "passed",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "failed": 0,
+  "skipped": 0,
+  "postgresCases": 106,
+  "integration": {
+    "src/platform/companion/plan.integration.test.ts": 28,
+    "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+    "src/platform/companion/routine.integration.test.ts": 12,
+    "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+    "src/games/genshin/importer/importer.integration.test.ts": 16,
+    "src/platform/companion/catalog-advice.integration.test.ts": 9
+  }
+}

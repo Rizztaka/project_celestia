@@ -1,0 +1,180 @@
+{
+  "date": "2026-10-11",
+  "platform": "win32",
+  "observedUnpersistedPreflights": [
+    {
+      "failure": "inherited NODE_PATH rejected",
+      "correction": "Discard pnpm injected NODE_PATH through allowlist; connection overrides remain rejected",
+      "databaseOperations": false
+    },
+    {
+      "failure": "icacls numeric SID exit 1332",
+      "directories": ["celestia-recovery-6Nd26l", "celestia-recovery-kYa6YS"],
+      "correction": "Numeric SID requires * prefix; both newly allocated empty directories safely removed nonrecursively",
+      "databaseOperations": false
+    }
+  ],
+  "runs": [
+    {
+      "name": "startup-failure",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-HDQxNv",
+      "evidence": "runs/startup-failure.json",
+      "sourceResultSha256": "c8fd7a365a77b776931c5821191f728919172f810e281c6cb6764799f3fa80e1",
+      "id": "942bcac93e896387",
+      "result": "failed",
+      "failure": {
+        "stage": "fixture-start",
+        "code": "UNEXPECTED_FAILURE_DETAILS_WITHHELD"
+      },
+      "elapsedMs": 90470,
+      "successArtifactPresent": false,
+      "cleanup": {
+        "databasesAndRolesRemoved": false,
+        "stoppedOwnedProcess": false,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true,
+        "processError": {
+          "code": "UNEXPECTED_FAILURE_DETAILS_WITHHELD"
+        }
+      }
+    },
+    {
+      "name": "identity-failure",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-4U0wmP",
+      "evidence": "runs/identity-failure.json",
+      "sourceResultSha256": "79d3c91b0ace0c2724c18751c510146c2f3fba2c2ad1f32e972e27883bcd912f",
+      "id": "167f07bef97b4493",
+      "result": "failed",
+      "failure": {
+        "stage": "fixture-start",
+        "code": "DATABASE_IDENTITY_MISMATCH"
+      },
+      "elapsedMs": 3223,
+      "successArtifactPresent": false,
+      "cleanup": {
+        "databasesAndRolesRemoved": false,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "name": "probe-failure",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-zfYHxN",
+      "evidence": "runs/probe-failure.json",
+      "sourceResultSha256": "cb9a4e7f4dc412488638fc235bdf4d1c6beb2dcf24967e32427dcbfd5b4000ea",
+      "id": "675c4b9451281912",
+      "result": "failed",
+      "failure": {
+        "stage": "restored-application-reads",
+        "code": "SUBPROCESS_FAILED",
+        "tool": "node",
+        "exit": 1
+      },
+      "elapsedMs": 47526,
+      "successArtifactPresent": false,
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "name": "success-1",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-al0rcO",
+      "evidence": "runs/success-1.json",
+      "sourceResultSha256": "a8e4e2e481ca9ca599c094bf4e2ba21a7212c7537ca4ae2c075d110bb3e5ec53",
+      "id": "bc75898c5d30c312",
+      "result": "passed",
+      "failure": null,
+      "elapsedMs": 26176,
+      "successArtifactPresent": true,
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "name": "nonempty-rejected",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-9UvGg0",
+      "evidence": "runs/nonempty-rejected.json",
+      "sourceResultSha256": "adddd79904c1ab517671118ed40b5d44d50cce6238b75a3d1060008196eafb75",
+      "id": "bf2ea4c6883af8c4",
+      "result": "failed",
+      "failure": {
+        "stage": "restore",
+        "code": "NONEMPTY_RESTORE_TARGET"
+      },
+      "elapsedMs": 18368,
+      "successArtifactPresent": false,
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "name": "truncated-rejected",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-oTPGMq",
+      "evidence": "runs/truncated-rejected.json",
+      "sourceResultSha256": "d46c8172adc671a42db0546dac1df075ea2517b6d95b62c059fa3428627c691c",
+      "id": "fc31ec021d9d9631",
+      "result": "failed",
+      "failure": {
+        "stage": "restore",
+        "code": "SUBPROCESS_FAILED"
+      },
+      "elapsedMs": 17518,
+      "successArtifactPresent": false,
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "name": "success-2-verify",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-5r15LF",
+      "evidence": "runs/success-2-verify.json",
+      "sourceResultSha256": "24a66fd5d34b8f163b4484462c01085c00b3d25fc8a520e9e18b76cb16d795d9",
+      "id": "22c148eb0a70b3c5",
+      "result": "passed",
+      "failure": null,
+      "elapsedMs": 158464,
+      "successArtifactPresent": true,
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "name": "success-3-final",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-ORrSKF",
+      "evidence": "runs/success-3-final.json",
+      "sourceResultSha256": "f34f88a4cc7dbd0da55d17e341a47fdd8266ec84895977a4e80e45f82e098283",
+      "id": "385837c1cfcaa705",
+      "result": "passed",
+      "failure": null,
+      "elapsedMs": 178495,
+      "successArtifactPresent": true,
+      "cleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    }
+  ],
+  "notes": [
+    "These are safe stage reports, not archives, raw subprocess logs, raw queries or raw test names.",
+    "Copied JSON formatting may differ from private original; sourceResultSha256 authenticates its original bytes.",
+    "Startup failure cleanup was subsequently reconciled; preserve its original failed result."
+  ]
+}

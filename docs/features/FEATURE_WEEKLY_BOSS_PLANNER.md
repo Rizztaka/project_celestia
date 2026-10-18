@@ -1,6 +1,14 @@
 # Feature Specification: Weekly Boss Planner (Milestone 3D)
 
-**Status:** Draft — Pending User Approval
+> **C2a checkpoint — 2026-10-02:** The local V2 Planner records aggregate weekly reward-claim totals, with unknown distinct from zero. Asia weekly editing is enabled with Monday 04:00 UTC+8 rollover. Legacy defeats are read-only; cost/discount estimates remain unavailable. See [ADR 0013](../adr/0013-versioned-routine-snapshots.md) and the [walkthrough](../plans/c2a-clock-task-reliability/walkthrough.md). Not deployed.
+
+> **Companion scope update — 2026-09-25.** Keep weekly tracking, subject to C2 verification of task semantics, costs, reset, and reward mapping. The sample drop lists, ascension claims, and per-boss cost assumptions below are historical and not approved game-data references. Current code exposes a global nextFightCost, not per-boss historical cost. A defeat does not establish a reward claim; do not silently reinterpret saved defeat flags. C2 replaces write-on-GET resets; UPDATE is still a state mutation and does not satisfy safe GET merely because it avoids DELETE.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
+**Historical status:** Draft — Pending User Approval
 **Phase:** 3 — Daily Companion
 **Depends On:** Milestone 3A (DailyCompanion, PlannerPage tab structure), Milestone 3B (goal/tab pattern), Milestone 3C (EventProgress pattern)
 **ADR References:** ADR-0005 (static vs dynamic data), ADR-0008 (frontend subview navigation), ADR-0009 (lazy reset pattern), ADR-0010 (GET must not mutate state)

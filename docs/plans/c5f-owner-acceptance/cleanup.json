@@ -1,0 +1,99 @@
+{
+  "checkedAt": "2026-10-16T07:58:42.302Z",
+  "browserRun": {
+    "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-BXUuIE/c5d-browser-result.json",
+    "sha256": "43800D77F3927707E72E71375EDBDDBBD70309E2384730789A228D9C5C9A8298",
+    "startedAt": "2026-10-16T07:46:09.900Z",
+    "finishedAt": "2026-10-16T07:51:25.298Z",
+    "resourcesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "ordinaryWebBuildRestored": true,
+    "browserPortsClosed": true
+  },
+  "interruptedRun": {
+    "checkedAt": "2026-10-16T07:45:01.549Z",
+    "interruptedRun": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-99lkgU",
+    "id": "8de717facead3761",
+    "priorProcessIdsAbsent": [15468, 24468, 31816],
+    "systemIdentifier": "7695828306638942480",
+    "database": "celestia_test_8de717facead3761_source",
+    "oid": 41854,
+    "resourcesRemaining": 0,
+    "resourcesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "leaseRemoved": true,
+    "ordinaryWebBuildRestored": false,
+    "note": "Normal web output will be restored by the subsequent guarded browser/full verification run."
+  },
+  "interruptedNote": "Original session disappeared after interruption; ports closed, prior PIDs absent, stale lease/PID record remained. Exact owned resources reconciled with existing guards and ordinary WAL recovery. No normal original harness result. The one-run reconciliation is historical and must not be rerun. Subsequent browser cleanup and full verification restored normal web output.",
+  "recovery": {
+    "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-WN6cu9/result.json",
+    "sha256": "B088F3F89DC42493BBE5F8FC06C5F70DBE23F9B86057944C237E1654EDE607E4",
+    "resources": [
+      {
+        "database": "celestia_test_da10137ce85e0fbc_source",
+        "role": "celestia_test_da10137ce85e0fbc_source",
+        "oid": 50584,
+        "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-WN6cu9\\celestia_test_da10137ce85e0fbc_source",
+        "databaseRemaining": false,
+        "tablespaceRemaining": false,
+        "roleRemaining": false
+      },
+      {
+        "database": "celestia_test_da10137ce85e0fbc_restore",
+        "role": "celestia_test_da10137ce85e0fbc_restore",
+        "oid": 50587,
+        "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-WN6cu9\\celestia_test_da10137ce85e0fbc_restore",
+        "databaseRemaining": false,
+        "tablespaceRemaining": false,
+        "roleRemaining": false
+      },
+      {
+        "database": "celestia_test_da10137ce85e0fbc_verify",
+        "role": "celestia_test_da10137ce85e0fbc_verify",
+        "oid": 50590,
+        "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-WN6cu9\\celestia_test_da10137ce85e0fbc_verify",
+        "databaseRemaining": false,
+        "tablespaceRemaining": false,
+        "roleRemaining": false
+      }
+    ],
+    "cleanup": {
+      "databasesAndRolesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "privateFilesRetained": true,
+      "credentialsRemoved": true
+    },
+    "fixturePid": 38816,
+    "fixturePidAbsent": true
+  },
+  "portChecks": [
+    {
+      "host": "127.0.0.1",
+      "port": 45448,
+      "exclusiveBindSucceeded": true
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 45449,
+      "exclusiveBindSucceeded": true
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 55448,
+      "exclusiveBindSucceeded": true
+    }
+  ],
+  "leasePath": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-UgVWJu/data/celestia-recovery.lock",
+  "leasePresent": false,
+  "postmasterPidPresent": false,
+  "pgpassPresent": false,
+  "browser": {
+    "originalTab": "426110502 absent in fresh inventory after interruption; closure mechanism unobserved",
+    "finalTab": "426110625 closed by agent, then empty Chrome tab inventory observed",
+    "viewportOverrideApplied": false,
+    "zoom": "Owner reported 100%; native showed 110%. Agent Ctrl+0 then native Zoom 100%, Reset disabled. No later zoom change.",
+    "osMotionPreferenceChanged": false
+  },
+  "retained": "Private synthetic raw reports/archives and stopped review fixture retained outside Git. No normal/production database used."
+}

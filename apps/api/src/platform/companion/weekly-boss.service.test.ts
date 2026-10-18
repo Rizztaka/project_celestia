@@ -1,4 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createRequire } from 'node:module';
+
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BadRequestError, NotFoundError } from '@/core/errors/app-error.js';
 
@@ -10,7 +12,12 @@ import {
   WeeklyBossService,
 } from './weekly-boss.service.js';
 
-companionRegistry.register(new GenshinCompanionProvider());
+const provider = new GenshinCompanionProvider();
+companionRegistry.register(provider);
+// These archived helper fixtures are never exposed by the production provider or V2 routes.
+const fixtureBosses = createRequire(import.meta.url)(
+  '../../games/genshin/static/weekly-bosses.json',
+);
 
 // -------------------------------------------------------
 // Mock repository
@@ -93,9 +100,20 @@ describe('getNextWeeklyResetBoundary', () => {
 
 describe('WeeklyBossService', () => {
   let service: WeeklyBossService;
+  afterEach(() => {
+    if (vi.isMockFunction(provider.getWeeklyBossesData))
+      vi.mocked(provider.getWeeklyBossesData).mockRestore();
+  });
+  it('production provider prevents placeholder advice and read-time writes', async () => {
+    vi.mocked(provider.getWeeklyBossesData).mockRestore();
+    await expect(service.getWeeklyBosses('user-1')).rejects.toMatchObject({ statusCode: 422 });
+    expect(mockFindByUserId).not.toHaveBeenCalled();
+    expect(mockUpsert).not.toHaveBeenCalled();
+  });
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(provider, 'getWeeklyBossesData').mockReturnValue(fixtureBosses);
     service = new WeeklyBossService();
     // Default: upsert returns what was given
     mockUpsert.mockImplementation((userId, defeatedBossKeys, weeklyResetAt) =>

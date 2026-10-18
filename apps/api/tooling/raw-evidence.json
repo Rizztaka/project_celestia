@@ -1,0 +1,12 @@
+{
+  "reason": "Immutable raw C5 evidence: parse JSON and verify exact bytes instead of rewriting historical captures. All seven were discovered by the C5a whole-repository check; no source/documentation directory is exempted.",
+  "files": {
+    "docs/plans/c5-companion-beta/endgame-focus-final.json": "84143358C0180ECDC5964B10EA1A81799631DDCBCF9E32446862310FD11AFFF1",
+    "docs/plans/c5-companion-beta/primary-reflow.json": "3B1F37E5F3A8D5072DA63DC8CF4B6E12B06FD74FCF912D7DB1F14A329569BDA2",
+    "docs/plans/c5-companion-beta/reimport-after.json": "ACD3739A342C8283992D6153AA909B8C472EE5CD0CA3EA9530BBEF76E262156D",
+    "docs/plans/c5-companion-beta/reimport-before.json": "63A182044F80074DA87EBCF314F2C2979EB178E9187B06FCAA823A41A144B9F2",
+    "docs/plans/c5-companion-beta/rendered-style-check.json": "BDDB3BBAAF791A1DC6EEE1BCAA76DE527647CB2EF330DF3B04E2567B7EBD39B9",
+    "docs/plans/c5-companion-beta/secondary-reflow.json": "11DF232CAE6F12C765A091B443806D2E04D2A22109C0D60CA067F6EBB6B71191",
+    "docs/plans/c5-companion-beta/starting-state.json": "F1A7A653C71A6694DC544498E9E3D8498F3EE385F4E756C046AF0AB1EC6ADFBE"
+  }
+}

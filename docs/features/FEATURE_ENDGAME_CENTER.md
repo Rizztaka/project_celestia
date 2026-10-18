@@ -1,5 +1,11 @@
 # Feature: Endgame Center (Phase 5)
 
+> **Companion scope update — 2026-09-25.** Retain existing Abyss/Theater records as optional journal data. C6 considers saved teams and progress notes after the core companion beta. Current scoring/cycle limits need verification before new analytics. In particular, review half-chamber star aggregation rather than treating each half as independent earned stars. Automatic rotation-aware team/draft optimization is deferred.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 ## Overview
 
 The **Endgame Center** is Phase 5 of Project Celestia. It focuses on tracking and analyzing the user's performance in Genshin Impact's permanent endgame modes: the Spiral Abyss and the Imaginarium Theater.

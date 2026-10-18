@@ -18,6 +18,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+
   // Back-relation to Genshin domain — no column is added to the users table.
   // One user has at most one Genshin account in Phase 2.
   genshinAccount GenshinAccount?
@@ -25,8 +26,13 @@ model User {
   // Back-relation to NIKKE domain (Phase 7).
   nikkeAccount NikkeAccount?
 
-  // Back-relation to the Daily Companion (Phase 3).
+  // Back-relation to the Daily Companion (Phase 3). Frozen after C2a cutover.
   dailyCompanion DailyCompanion?
+
+  // Back-relation to the C2a routine state. Owned by userId, no game FK.
+  genshinRoutineState GenshinRoutineState?
+  genshinPlanPreferences GenshinPlanPreferences?
+  genshinPlanDismissals GenshinPlanDismissal[]
 
   // Back-relation to upgrade goals (Phase 3B).
   upgradeGoals   UpgradeGoal[]
@@ -34,10 +40,91 @@ model User {
   // Back-relation to event progress (Phase 3C).
   eventProgress  EventProgress[]
 
-  // Back-relation to weekly boss state (Phase 3D).
+  // Back-relation to weekly boss state (Phase 3D). Frozen after C2a cutover.
   weeklyBossState WeeklyBossState?
 
   @@map("users")
+}
+
+// ==========================================
+// PLATFORM COMPANION (C2a)
+// ==========================================
+
+/// Authoritative routine state for a user's Genshin companion.
+/// One-to-one with User. Created only on the first explicit PATCH — never on GET.
+/// No GenshinAccount or equipment foreign keys; useful before any import.
+///
+/// Database CHECK constraints (applied in the migration):
+///   revision >= 0
+///   server_id IN ('asia') OR server_id IS NULL
+///   (resin_amount IS NULL) = (resin_recorded_at IS NULL)
+///   resin_amount IS NULL OR (resin_amount >= 0 AND resin_amount <= 200)
+///   weekly_reward_claims IS NULL OR weekly_reward_claims >= 0
+///
+/// Period fields store the exact UTC boundary of the period for which the
+/// stored flags/claims are valid. A period mismatch projects flags as false
+/// (daily) or claims as null (weekly) — no reset write occurs on GET.
+model GenshinRoutineState {
+  /// Primary key and owner — no separate synthetic ID.
+  userId String @id
+
+  /// Monotonically increasing; 0 = default in-memory value (no row yet).
+  /// Every accepted mutation increments exactly once.
+  revision Int @default(0)
+
+  /// Selected game server. Only 'asia' is supported in C2a.
+  /// null = user has not completed setup.
+  serverId String?
+
+  // ── Daily state ──────────────────────────────────────────────────────────
+
+  /// UTC boundary that defines the period for the stored daily flags.
+  /// null = no period has been saved yet.
+  dailyPeriodStart DateTime?
+
+  /// Daily commissions completed. Only meaningful when dailyPeriodStart
+  /// matches the current period; projected as false on mismatch.
+  commissionsDone Boolean @default(false)
+
+  /// Teapot reminder checked. Same semantics as commissionsDone.
+  teapotChecked Boolean @default(false)
+
+  // ── Transformer (manual) ─────────────────────────────────────────────────
+
+  /// UTC timestamp of the last explicit "Record use now" action.
+  /// null = never recorded or explicitly cleared.
+  /// Never modified by period resets.
+  transformerLastUsedAt DateTime?
+
+  // ── Resin checkpoint ─────────────────────────────────────────────────────
+
+  /// Resin amount at the time it was recorded. 0–200.
+  /// null when resinRecordedAt is null (paired nullability enforced in DB).
+  resinAmount Int?
+
+  /// UTC timestamp of when resinAmount was recorded.
+  /// null when resinAmount is null.
+  resinRecordedAt DateTime?
+
+  // ── Weekly state ──────────────────────────────────────────────────────────
+
+  /// UTC boundary that defines the period for the stored weekly claim total.
+  /// null = no period has been saved yet.
+  weeklyPeriodStart DateTime?
+
+  /// User-confirmed count of boss reward claims collected this week.
+  /// null = unknown for this week (new week or never entered).
+  /// 0 = user has explicitly confirmed zero claims.
+  weeklyRewardClaims Int?
+
+  // ── Timestamps ───────────────────────────────────────────────────────────
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("genshin_routine_state")
 }
 
 // ==========================================
@@ -62,16 +149,39 @@ model GenshinAccount {
   weapons         GenshinWeapon[]
   artifacts       GenshinArtifact[]
   materials       GenshinMaterial[]       // Phase 3B — material inventory from GOOD import
+  importStates    GenshinImportSectionState[]
   spiralAbyssRuns SpiralAbyssRun[]        // Phase 5A — endgame abyss tracking
   theaterRuns     ImaginariumTheaterRun[] // Phase 5C — endgame theater tracking
 
   @@map("genshin_accounts")
 }
 
+enum GenshinImportSection {
+  characters
+  weapons
+  artifacts
+  materials
+}
+
+/// Latest successful import per section. Missing rows mean unknown provenance.
+/// importedAt is receipt time in Celestia, not observation time in the game.
+model GenshinImportSectionState {
+  id         String @id @default(uuid())
+  accountId  String
+  section    GenshinImportSection
+  importedAt DateTime
+  source     String?
+  entryCount Int
+  account    GenshinAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, section])
+  @@map("genshin_import_sections")
+}
+
 /// A single character owned by the player.
 /// characterKey maps to static game data JSON (e.g. "hutao", "raiden_shogun").
-/// Talent levels are base values (1–10) before constellation C3/C5 bonuses —
-/// effective level is computed in the Intelligence Core (Phase 4).
+/// Talent values are stored as supplied. Persistence does not establish their
+/// base/effective convention or whether an individual value came from a default.
 model GenshinCharacter {
   id               String  @id @default(uuid())
   accountId        String
@@ -90,6 +200,7 @@ model GenshinCharacter {
   account           GenshinAccount    @relation(fields: [accountId], references: [id], onDelete: Cascade)
   equippedWeapon    GenshinWeapon?    @relation(fields: [equippedWeaponId], references: [id])
   equippedArtifacts GenshinArtifact[] // up to 5 (one per slot), enforced by unique index below
+  focus             GenshinCharacterFocus?
 
   @@unique([accountId, characterKey]) // a character can only appear once per account
   @@map("genshin_characters")
@@ -281,9 +392,28 @@ enum GoalType {
   WEAPON_ASCENSION
 }
 
+enum GoalStatus {
+  active
+  paused
+  completed
+  archived
+}
+
+/// False rows retain revision after unfocus; no import or GET writes membership.
+model GenshinCharacterFocus {
+  accountId    String
+  characterKey String
+  focused      Boolean @default(false)
+  revision     Int @default(0)
+  character    GenshinCharacter @relation(fields: [accountId, characterKey], references: [accountId, characterKey], onDelete: Cascade)
+
+  @@id([accountId, characterKey])
+  @@map("genshin_character_focus")
+}
+
 /// Records a user's intent to upgrade a character or weapon.
 /// Goals belong to User (not GenshinAccount) so they survive GOOD re-imports.
-/// targetKey references the static seed data — it is NOT a database foreign key.
+/// targetKey is a catalog or owned imported natural/type key, not a database foreign key.
 model UpgradeGoal {
   id        String   @id @default(uuid())
   userId    String
@@ -292,16 +422,58 @@ model UpgradeGoal {
 
   goalType   GoalType
   targetKey  String   // e.g. "HuTao", "StaffOfHoma" — references static seed data
-  fromPhase  Int      // inclusive lower bound (0–5)
-  toPhase    Int      // inclusive upper bound (1–6)
+  fromPhase  Int      // ascension 0–5; base talent 1–9
+  toPhase    Int      // ascension 1–6; base talent 2–10
   talentType String?  // "normal" | "skill" | "burst" — required for CHARACTER_TALENT, else null
+
+  status           GoalStatus @default(active)
+  priority         Int @default(3)
+  revision         Int @default(0)
+  completedAt      DateTime?
+  completionReason String?
+  createRequestId  String?
+  predecessorId    String? @unique
+  predecessor      UpgradeGoal? @relation("GoalSuccessor", fields: [predecessorId], references: [id], onDelete: NoAction)
+  successor        UpgradeGoal? @relation("GoalSuccessor")
+  planDismissals   GenshinPlanDismissal[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Prevents duplicate goals for the same upgrade target + slot per user.
-  // talentType is included so a user can track all three talents independently.
-  @@unique([userId, goalType, targetKey, talentType])
+  // Current-intent checks serialize under the owner lock, retaining legacy duplicates.
+  @@unique([userId, createRequestId])
+  @@unique([userId, id])
+  @@index([userId, status, priority, createdAt, id])
   @@map("upgrade_goals")
+}
+
+model GenshinPlanPreferences {
+  userId String @id
+  revision Int @default(0)
+  dailyResinBudget Int?
+  commissions Boolean @default(false)
+  teapot Boolean @default(false)
+  transformer Boolean @default(false)
+  weeklyClaims Boolean @default(false)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("genshin_plan_preferences")
+}
+
+model GenshinPlanDismissal {
+  userId String
+  sourceKey String
+  scope String
+  serverId String
+  periodId String
+  goalId String?
+  goalRevision Int?
+  routineKind String?
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal UpgradeGoal? @relation(fields: [userId, goalId], references: [userId, id], onDelete: Cascade)
+
+  @@id([userId, sourceKey, scope])
+  @@index([userId, goalId])
+  @@map("genshin_plan_dismissals")
 }
 
 // ==========================================

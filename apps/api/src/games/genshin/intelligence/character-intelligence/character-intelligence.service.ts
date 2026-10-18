@@ -144,7 +144,9 @@ export class CharacterIntelligenceService {
     // ── 4. Sort and return top 5 ──────────────────────────────────────────
     recommendations.sort((a, b) => b._sortScore - a._sortScore);
 
-    const top5 = recommendations.slice(0, 5).map(({ _sortScore: _, ...rec }, index) => ({
+    // Keep the internal sorting field out of the response.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const top5 = recommendations.slice(0, 5).map(({ _sortScore, ...rec }, index) => ({
       ...rec,
       rank: index + 1,
     }));

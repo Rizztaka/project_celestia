@@ -1,0 +1,169 @@
+{
+  "date": "2026-10-11",
+  "checkedAt": "2026-10-11T13:29:55.807Z",
+  "fixture": {
+    "dataDir": "C:/Users/inuzu/AppData/Local/Temp/celestia-c4-6d547b9077534faa9ea7871b1017b2f6/data",
+    "port": 55448,
+    "postmasterPidFilePresent": false,
+    "leasePresent": false,
+    "exclusiveLoopbackPortBindSucceeded": true,
+    "originalOwnedClusterAndAdminDatabaseRetained": true
+  },
+  "runs": [
+    {
+      "id": "942bcac93e896387",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-HDQxNv",
+      "resultEvidence": "runs/startup-failure.json",
+      "remainingDatabases": 0,
+      "remainingTablespaces": 0,
+      "remainingRoles": 0,
+      "passfilePresent": false,
+      "privateFilesRetained": true,
+      "recordedCleanup": {
+        "databasesAndRolesRemoved": false,
+        "stoppedOwnedProcess": false,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true,
+        "processError": {
+          "code": "UNEXPECTED_FAILURE_DETAILS_WITHHELD"
+        }
+      }
+    },
+    {
+      "id": "167f07bef97b4493",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-4U0wmP",
+      "resultEvidence": "runs/identity-failure.json",
+      "remainingDatabases": 0,
+      "remainingTablespaces": 0,
+      "remainingRoles": 0,
+      "passfilePresent": false,
+      "privateFilesRetained": true,
+      "recordedCleanup": {
+        "databasesAndRolesRemoved": false,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "id": "675c4b9451281912",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-zfYHxN",
+      "resultEvidence": "runs/probe-failure.json",
+      "remainingDatabases": 0,
+      "remainingTablespaces": 0,
+      "remainingRoles": 0,
+      "passfilePresent": false,
+      "privateFilesRetained": true,
+      "recordedCleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "id": "bc75898c5d30c312",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-al0rcO",
+      "resultEvidence": "runs/success-1.json",
+      "remainingDatabases": 0,
+      "remainingTablespaces": 0,
+      "remainingRoles": 0,
+      "passfilePresent": false,
+      "privateFilesRetained": true,
+      "recordedCleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "id": "bf2ea4c6883af8c4",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-9UvGg0",
+      "resultEvidence": "runs/nonempty-rejected.json",
+      "remainingDatabases": 0,
+      "remainingTablespaces": 0,
+      "remainingRoles": 0,
+      "passfilePresent": false,
+      "privateFilesRetained": true,
+      "recordedCleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "id": "fc31ec021d9d9631",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-oTPGMq",
+      "resultEvidence": "runs/truncated-rejected.json",
+      "remainingDatabases": 0,
+      "remainingTablespaces": 0,
+      "remainingRoles": 0,
+      "passfilePresent": false,
+      "privateFilesRetained": true,
+      "recordedCleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "id": "22c148eb0a70b3c5",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-5r15LF",
+      "resultEvidence": "runs/success-2-verify.json",
+      "remainingDatabases": 0,
+      "remainingTablespaces": 0,
+      "remainingRoles": 0,
+      "passfilePresent": false,
+      "privateFilesRetained": true,
+      "recordedCleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    },
+    {
+      "id": "385837c1cfcaa705",
+      "privateDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-ORrSKF",
+      "resultEvidence": "runs/success-3-final.json",
+      "remainingDatabases": 0,
+      "remainingTablespaces": 0,
+      "remainingRoles": 0,
+      "passfilePresent": false,
+      "privateFilesRetained": true,
+      "recordedCleanup": {
+        "databasesAndRolesRemoved": true,
+        "stoppedOwnedProcess": true,
+        "privateFilesRetained": true,
+        "credentialsRemoved": true
+      }
+    }
+  ],
+  "manualStartupReconciliation": {
+    "run": "942bcac93e896387",
+    "originalEvidence": "runs/startup-failure.json",
+    "originalOwnedPid": 22592,
+    "action": "Verified executable/command line and exact recorded data path, then pg_ctl stop -D for that fixture; removed only matching lease after PID file absent.",
+    "originalFailureRecordPreserved": true,
+    "subsequentFreshRunsAndFinalPortCheckConfirmStopped": true
+  },
+  "removedEmptySetupDirectories": [
+    {
+      "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-6Nd26l",
+      "exists": false,
+      "removal": "Exact-path empty-directory check and native nonrecursive Remove-Item after correcting ACL; no database work had begun"
+    },
+    {
+      "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-kYa6YS",
+      "exists": false,
+      "removal": "Exact-path empty-directory check and native nonrecursive Remove-Item after correcting ACL; no database work had begun"
+    }
+  ],
+  "archivesAndPrivateLogs": "Intentionally retained outside repository for inspection under verified current-user ACL; this is not a retention policy.",
+  "ordinaryBuild": "Full verification web-build uses NODE_ENV=production with no inherited Vite/API override",
+  "recursiveFilesystemDeletion": false,
+  "unrelatedServicesTouched": false
+}

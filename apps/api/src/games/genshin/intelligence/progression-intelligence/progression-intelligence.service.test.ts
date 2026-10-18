@@ -1,10 +1,13 @@
+import type { GenshinAccount } from '@prisma/client';
+import { createRequire } from 'module';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { prisma } from '@/core/db/prisma.js';
 import { NotFoundError } from '@/core/errors/app-error.js';
+
+import type { CharacterWithWeapon } from '../../characters/character.repository.js';
 import { GenshinCharacterService } from '../../characters/character.service.js';
 import { progressionIntelligenceService } from './progression-intelligence.service.js';
-import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
 const ELEMENT_MAP: Record<string, string> = require('../../static/character-elements.json');
@@ -23,16 +26,47 @@ vi.mock('../../characters/character.service.js', () => {
   return { GenshinCharacterService };
 });
 
+const mockAccount = {
+  id: 'account-1',
+  userId: 'test-user-123',
+  uid: null,
+  nickname: null,
+  adventureRank: null,
+  worldLevel: null,
+  createdAt: new Date('2026-01-01T00:00:00Z'),
+  updatedAt: new Date('2026-01-01T00:00:00Z'),
+} satisfies GenshinAccount;
+
+function character(
+  input: Pick<CharacterWithWeapon, 'characterKey'> & Partial<CharacterWithWeapon>,
+): CharacterWithWeapon {
+  return {
+    id: input.characterKey,
+    accountId: mockAccount.id,
+    level: 1,
+    ascension: 0,
+    constellation: 0,
+    talentNormal: 1,
+    talentSkill: 1,
+    talentBurst: 1,
+    equippedWeaponId: null,
+    equippedWeapon: null,
+    createdAt: mockAccount.createdAt,
+    updatedAt: mockAccount.updatedAt,
+    ...input,
+  };
+}
+
 describe('Progression Intelligence Service', () => {
   const MOCK_USER_ID = 'test-user-123';
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (prisma.genshinAccount.findUnique as any).mockResolvedValue({ userId: MOCK_USER_ID });
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValue(mockAccount);
   });
 
   it('should throw NotFoundError if account does not exist', async () => {
-    (prisma.genshinAccount.findUnique as any).mockResolvedValue(null);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValue(null);
 
     await expect(progressionIntelligenceService.analyzeProgression(MOCK_USER_ID)).rejects.toThrow(
       NotFoundError,
@@ -40,7 +74,7 @@ describe('Progression Intelligence Service', () => {
   });
 
   it('should handle an empty roster safely (no divide by zero)', async () => {
-    (GenshinCharacterService.prototype.getCharactersForUser as any).mockResolvedValue([]);
+    vi.mocked(GenshinCharacterService.prototype.getCharactersForUser).mockResolvedValue([]);
 
     const result = await progressionIntelligenceService.analyzeProgression(MOCK_USER_ID);
 
@@ -66,7 +100,9 @@ describe('Progression Intelligence Service', () => {
       element: 'Pyro',
     }));
 
-    (GenshinCharacterService.prototype.getCharactersForUser as any).mockResolvedValue(mockRoster);
+    vi.mocked(GenshinCharacterService.prototype.getCharactersForUser).mockResolvedValue(
+      mockRoster.map(character),
+    );
 
     const result = await progressionIntelligenceService.analyzeProgression(MOCK_USER_ID);
 
@@ -84,7 +120,9 @@ describe('Progression Intelligence Service', () => {
       { characterKey: 'Amber', ascension: 4 },
       { characterKey: 'Kaeya', ascension: 0 },
     ];
-    (GenshinCharacterService.prototype.getCharactersForUser as any).mockResolvedValue(mockRoster);
+    vi.mocked(GenshinCharacterService.prototype.getCharactersForUser).mockResolvedValue(
+      mockRoster.map(character),
+    );
 
     const result = await progressionIntelligenceService.analyzeProgression(MOCK_USER_ID);
 
@@ -102,7 +140,9 @@ describe('Progression Intelligence Service', () => {
       { characterKey: 'Jean' }, // Anemo
       { characterKey: 'MissingNo' }, // Unknown
     ];
-    (GenshinCharacterService.prototype.getCharactersForUser as any).mockResolvedValue(mockRoster);
+    vi.mocked(GenshinCharacterService.prototype.getCharactersForUser).mockResolvedValue(
+      mockRoster.map(character),
+    );
 
     const result = await progressionIntelligenceService.analyzeProgression(MOCK_USER_ID);
 

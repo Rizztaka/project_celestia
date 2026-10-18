@@ -3,8 +3,27 @@ import type { Request, Response } from 'express';
 import { successResponse } from '@/core/utils/response.js';
 
 import { GenshinCharacterService } from './character.service.js';
+import { GenshinCharacterEquipmentService } from './character-equipment.service.js';
+import { GenshinCharacterFocusService } from './character-focus.service.js';
 
 export class GenshinCharacterController {
+  private focusService = new GenshinCharacterFocusService();
+  listFocus = async (req: Request, res: Response) => {
+    res.json(successResponse(await this.focusService.list(req.user!.id), 'Focus retrieved.'));
+  };
+  setFocus = async (req: Request, res: Response) => {
+    res.json(
+      successResponse(
+        await this.focusService.set(req.user!.id, req.params.characterKey, req.body),
+        'Focus saved.',
+      ),
+    );
+  };
+  private equipmentService = new GenshinCharacterEquipmentService();
+  getEquipment = async (req: Request, res: Response) => {
+    const equipment = await this.equipmentService.read(req.user!.id, req.params.characterKey);
+    res.status(200).json(successResponse(equipment, 'Recorded equipment retrieved.'));
+  };
   private characterService: GenshinCharacterService;
 
   constructor() {

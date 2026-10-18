@@ -10,7 +10,6 @@ import {
   type InventoryWeapon,
 } from '../lib/api';
 import { ASSET_MAPPING } from '../lib/asset-mapping';
-import { useAuthStore } from '../stores/auth.store';
 
 // -------------------------------------------------------
 // Formatting utilities
@@ -115,7 +114,7 @@ function WeaponCard({ weapon }: { weapon: InventoryWeapon }) {
           <span className="relative z-0">{initials}</span>
         </div>
         <div className="min-w-0 flex-1">
-          <p className="font-display group-hover:text-accent-400 truncate text-sm font-bold text-white transition-colors">
+          <p className="font-display group-hover:text-accent-400 break-words text-sm font-bold text-white transition-colors">
             {displayName}
           </p>
           <p className="mt-0.5 text-xs text-zinc-500">
@@ -138,7 +137,7 @@ function WeaponCard({ weapon }: { weapon: InventoryWeapon }) {
           className={`h-1.5 w-1.5 shrink-0 rounded-full ${isEquipped ? 'bg-emerald-400' : 'bg-zinc-600'}`}
         />
         <span className={isEquipped ? 'text-emerald-400' : 'text-zinc-600'}>
-          {isEquipped ? 'Equipped' : 'Unequipped'}
+          {isEquipped ? 'Assignment recorded' : 'No assignment recorded'}
         </span>
         {weapon.locked && (
           <svg
@@ -171,14 +170,14 @@ function ArtifactRow({ artifact }: { artifact: InventoryArtifact }) {
   const stars = '★'.repeat(artifact.rarity);
 
   return (
-    <div className="group flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3 transition-colors hover:bg-white/[0.05]">
+    <div className="companion-artifact-row group items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3 transition-colors hover:bg-white/[0.05]">
       {/* Slot badge */}
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/5 text-xs font-bold text-zinc-400">
         {slot.letter}
       </div>
 
       {/* Set + slot */}
-      <div className="w-44 min-w-0 shrink-0">
+      <div className="artifact-name min-w-0">
         <p className="group-hover:text-accent-400 truncate text-sm font-medium text-white transition-colors">
           {setName}
         </p>
@@ -199,7 +198,7 @@ function ArtifactRow({ artifact }: { artifact: InventoryArtifact }) {
       </div>
 
       {/* Sub-stats */}
-      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+      <div className="artifact-stats flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
         {subStats.map((sub, i) => (
           <span
             key={i}
@@ -321,20 +320,21 @@ function TabBar({
   onChange,
 }: {
   active: Tab;
-  weaponsTotal: number;
-  artifactsTotal: number;
+  weaponsTotal: number | null;
+  artifactsTotal: number | null;
   onChange: (tab: Tab) => void;
 }) {
-  const tabs: { id: Tab; label: string; count: number }[] = [
+  const tabs: { id: Tab; label: string; count: number | null }[] = [
     { id: 'weapons', label: 'Weapons', count: weaponsTotal },
     { id: 'artifacts', label: 'Artifacts', count: artifactsTotal },
   ];
 
   return (
-    <div className="glass-panel mb-8 flex w-fit items-center gap-1 rounded-xl p-1">
+    <div className="glass-panel mb-8 flex w-fit max-w-full flex-wrap items-center gap-1 rounded-xl p-1">
       {tabs.map(({ id, label, count }) => (
         <button
           key={id}
+          aria-pressed={active === id}
           onClick={() => onChange(id)}
           className={`flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all ${
             active === id
@@ -346,7 +346,7 @@ function TabBar({
           <span
             className={`rounded-full px-1.5 py-0.5 text-xs font-bold ${active === id ? 'bg-accent-500/30 text-accent-300' : 'bg-white/5 text-zinc-600'}`}
           >
-            {count}
+            {count ?? 'Unknown'}
           </span>
         </button>
       ))}
@@ -357,55 +357,24 @@ function TabBar({
 // -------------------------------------------------------
 // Nav bar
 // -------------------------------------------------------
-function Nav({ onLogout }: { onLogout: () => void }) {
-  return (
-    <nav className="glass-panel sticky top-0 z-50 flex items-center justify-between border-b-0 border-white/10 px-6 py-4">
-      <Link
-        to="/"
-        className="font-display text-gradient text-lg font-bold tracking-tight transition-opacity hover:opacity-80"
-      >
-        Project Celestia
-      </Link>
-      <div className="flex items-center gap-6">
-        <Link
-          to="/roster"
-          className="text-sm font-medium text-zinc-400 transition-colors hover:text-white"
-        >
-          Roster
-        </Link>
-        <Link
-          to="/import"
-          className="text-sm font-medium text-zinc-400 transition-colors hover:text-white"
-        >
-          Import
-        </Link>
-        <button
-          onClick={onLogout}
-          className="hover:text-danger-400 text-sm font-medium text-zinc-500 transition-colors"
-        >
-          Sign out
-        </button>
-      </div>
-    </nav>
-  );
-}
 
 // -------------------------------------------------------
 // InventoryPage — main export
 // -------------------------------------------------------
+import { ImportStatus } from '../components/ImportStatus';
+
 export default function InventoryPage() {
-  const logout = useAuthStore((s) => s.logout);
   const [activeTab, setActiveTab] = useState<Tab>('weapons');
 
   const weaponsQuery = useQuery({
     queryKey: ['genshin', 'weapons'],
-    queryFn: fetchGenshinWeapons,
+    queryFn: ({ signal }) => fetchGenshinWeapons(signal),
     retry: false,
   });
 
   const artifactsQuery = useQuery({
     queryKey: ['genshin', 'artifacts'],
-    queryFn: fetchGenshinArtifacts,
+    queryFn: ({ signal }) => fetchGenshinArtifacts(signal),
     retry: false,
   });
 
@@ -414,31 +383,46 @@ export default function InventoryPage() {
 
   const isWeaponsLoading = weaponsQuery.isLoading;
   const isArtifactsLoading = artifactsQuery.isLoading;
+  const activeQuery = activeTab === 'weapons' ? weaponsQuery : artifactsQuery;
   const activeError = activeTab === 'weapons' ? weaponsQuery.error : artifactsQuery.error;
 
   return (
     <div className="relative min-h-screen overflow-hidden text-zinc-300">
-      <Nav onLogout={logout} />
-
       {/* Background ambient glow */}
       <div className="pointer-events-none absolute right-1/4 top-0 h-[400px] w-[600px] rounded-full bg-violet-500/5 mix-blend-screen blur-[120px]" />
 
-      <main className="relative z-10 mx-auto max-w-7xl px-6 py-12">
+      <main
+        id="companion-content"
+        tabIndex={-1}
+        className="relative z-10 mx-auto max-w-7xl px-6 py-12"
+      >
+        <ImportStatus />
         {/* Page heading */}
         <div className="animate-fade-in mb-8">
           <h1 className="font-display text-4xl font-bold tracking-tight text-white">Inventory</h1>
           <p className="mt-2 text-base text-zinc-400">
             {isWeaponsLoading || isArtifactsLoading
               ? 'Loading your inventory…'
-              : `${weaponsQuery.data?.total ?? 0} weapon${(weaponsQuery.data?.total ?? 0) === 1 ? '' : 's'} · ${artifactsQuery.data?.total ?? 0} artifact${(artifactsQuery.data?.total ?? 0) === 1 ? '' : 's'}`}
+              : `Recorded weapons: ${weaponsQuery.data?.total ?? 'unknown'} · artifacts: ${artifactsQuery.data?.total ?? 'unknown'}`}
           </p>
         </div>
 
+        <p className="mb-4 text-sm text-zinc-400">
+          These are imported records, not live equipment. An absent assignment does not confirm an
+          empty in-game slot.
+        </p>
+        <button
+          className="mb-4 rounded-lg border border-white/20 px-3 py-2 text-sm"
+          disabled={activeQuery.isFetching}
+          onClick={() => void activeQuery.refetch()}
+        >
+          {activeQuery.isFetching ? 'Refreshing inventory…' : 'Refresh inventory'}
+        </button>
         {/* Tab bar — rendered with live counts once data arrives */}
         <TabBar
           active={activeTab}
-          weaponsTotal={weaponsQuery.data?.total ?? 0}
-          artifactsTotal={artifactsQuery.data?.total ?? 0}
+          weaponsTotal={weaponsQuery.data?.total ?? null}
+          artifactsTotal={artifactsQuery.data?.total ?? null}
           onChange={setActiveTab}
         />
 
@@ -459,6 +443,7 @@ export default function InventoryPage() {
             {activeError instanceof Error
               ? activeError.message
               : 'Failed to load inventory. Please try again.'}
+            {activeQuery.data && ' Showing last confirmed inventory; refresh failed.'}
           </div>
         )}
 
@@ -475,7 +460,7 @@ export default function InventoryPage() {
             {!isWeaponsLoading && !weaponsQuery.isError && weapons.length === 0 && (
               <EmptyState type="weapons" />
             )}
-            {!isWeaponsLoading && !weaponsQuery.isError && weapons.length > 0 && (
+            {!isWeaponsLoading && weapons.length > 0 && (
               <div className="animate-fade-in grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {weapons.map((w) => (
                   <WeaponCard key={w.id} weapon={w} />
@@ -498,10 +483,10 @@ export default function InventoryPage() {
             {!isArtifactsLoading && !artifactsQuery.isError && artifacts.length === 0 && (
               <EmptyState type="artifacts" />
             )}
-            {!isArtifactsLoading && !artifactsQuery.isError && artifacts.length > 0 && (
+            {!isArtifactsLoading && artifacts.length > 0 && (
               <div className="animate-fade-in flex flex-col gap-2">
                 {/* Artifact list header */}
-                <div className="flex items-center gap-3 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-600">
+                <div className="hidden items-center gap-3 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-600 md:flex">
                   <div className="w-8 shrink-0" />
                   <div className="w-44 shrink-0">Set · Slot</div>
                   <div className="w-20 shrink-0">Rarity · Lv</div>

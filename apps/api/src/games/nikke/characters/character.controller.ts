@@ -1,6 +1,8 @@
-import type { Request, Response, NextFunction } from 'express';
-import { nikkeCharacterService } from './character.service.js';
+import type { NextFunction, Request, Response } from 'express';
+
 import { successResponse } from '@/core/utils/response.js';
+
+import { nikkeCharacterService } from './character.service.js';
 
 export class NikkeCharacterController {
   async getMyRoster(req: Request, res: Response, next: NextFunction) {

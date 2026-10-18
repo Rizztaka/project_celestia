@@ -1,0 +1,291 @@
+{
+  "date": "2026-10-14",
+  "comparison": "C5d starting-state, not Git HEAD; inherited dirty work remains.",
+  "changed": [
+    {
+      "path": "apps/api/src/app.ts",
+      "beforeSha256": "73481A94322C1FEF62CA97630F6AAF5D87DEB10F1BB0374E1C9137335A47F566",
+      "afterSha256": "0133A5D51F6A3E4C37073D890BAF08C038C893A56EA996DB72EA7E0CA6A10B4D",
+      "unchanged": false,
+      "reason": "Compose account-data routes before ordinary parser with game-owned mappings."
+    },
+    {
+      "path": "apps/api/src/core/middleware/auth.middleware.test.ts",
+      "beforeSha256": "D6AA6E27CCA2691373BDD7FDE5C4FFB81412BFC3CADCD65CA9D0418F19197AE5",
+      "afterSha256": "90B0820B8818CAB432064BFF399D7C15BCB6F3B1AF6D99C2C0BAD6F353F79588",
+      "unchanged": false,
+      "reason": "Preserve JWT cases; add missing/failing subject assertions."
+    },
+    {
+      "path": "apps/api/src/core/middleware/auth.middleware.ts",
+      "beforeSha256": "2C793860027305CB03728FF454B9FEAA48AE71F2A376E2FEBF29FEE7D357F804",
+      "afterSha256": "7EBD8E09517FFE2741B3E87E0F74A8F40624819A12DE269601C6D8D2B22317E2",
+      "unchanged": false,
+      "reason": "Preserve JWT validation; add fail-closed uncached subject existence."
+    },
+    {
+      "path": "apps/api/src/core/middleware/origin.middleware.test.ts",
+      "beforeSha256": "44D90FC91B0D0F01D9146859DDFBCB03DA896EEFFE61A4A3A560402CDEAE9CA5",
+      "afterSha256": "68E1B3574B91653DE163F8DC8BF6FAD4F1AD04013B9DCB2F77499FA35CFA9324",
+      "unchanged": false,
+      "reason": "Supply self identity lookup while retaining foreign-origin/no-domain-work assertions."
+    },
+    {
+      "path": "apps/api/src/core/middleware/request-admission.ts",
+      "beforeSha256": "74DDF53A9970F275D59A0BD7734B9F4276A12B984530551C1FF52EF2C972538A",
+      "afterSha256": "22245D804B555CAE1C6740A6CCB32B8F8F0CA627F2AF33903105D4588C3493D5",
+      "unchanged": false,
+      "reason": "Account-data budget and response/work lifecycle; import subject check after admission."
+    },
+    {
+      "path": "apps/api/src/core/middleware/request-safety.http.test.ts",
+      "beforeSha256": "CB7F87A4D7807780873CBFDDBC3995D800C67B5B85932117CC48EB171AB2F031",
+      "afterSha256": "3905A9110D9100FE7A54157881F435EAE0414E83B2C3F46C0406615F62B69D96",
+      "unchanged": false,
+      "reason": "Supply authenticated existing subject to inherited parser/admission tests."
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character-equipment.integration.test.ts",
+      "beforeSha256": "F1C7C68AB063566167BA4970DB086532917104FA6790690F924B8AD686229E58",
+      "afterSha256": "C3E7AD9829716FE9BBDE11BB02885F77027025267DAA76654A8B6A5D7A9DD273",
+      "unchanged": false,
+      "reason": "Two additional id-only SELECTs; retain two original domain reads and read-only state assertions."
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.http.test.ts",
+      "beforeSha256": "DA4893F725C5E3146773DF54875BCD330B7F8FEC469E138C1C34A2093B4C4808",
+      "afterSha256": "652E4AB30E9D17D897E30C3CD45B4B1602AA670348AA87C9DC405F6783D74646",
+      "unchanged": false,
+      "reason": "Supply authenticated existing subject to preserved import tests."
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.routes.ts",
+      "beforeSha256": "1CC369F5E8F91579D45FE2A49D37A47B2CB8F5B63080ACC4D9EE239BB355359C",
+      "afterSha256": "FD8D169A8FBF3202B9017B98E6BC5F30CE3BD8C340379B622C83C4351795581C",
+      "unchanged": false,
+      "reason": "Verify JWT first; existing subject lookup follows import admission."
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.repository.ts",
+      "beforeSha256": "1007B16780F185C5B34BD0C6643C871A0CE69B7E9CC9187C79F9018803A2FEE6",
+      "afterSha256": "89A4E5A35099BDDA80BAE1BCC89E181BBAB4C6F9BD1960DB40EE7AB10ED973DF",
+      "unchanged": false,
+      "reason": "Minimal id-only subject existence read."
+    },
+    {
+      "path": "apps/api/src/platform/companion/catalog-advice.integration.test.ts",
+      "beforeSha256": "301726B0BF825859B363C2CE85EEAEFCA5E516F6D5E2906167BAA6BB80643FA2",
+      "afterSha256": "1F07F89517014D397CBD86DA728E74FD6FFC5E541BEA7475333EADC704AD1F14",
+      "unchanged": false,
+      "reason": "One additional id-only SELECT; preserve two domain queries and SELECT-only checks."
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.http.test.ts",
+      "beforeSha256": "CF64F205907CF8AD97BE3D2313EBDDA8B98B080F71ACFE9BF86D7D9EC2CB2F0B",
+      "afterSha256": "777CB8ED34AEE38A734B2077414DB3CC4C78D4C67584CFC826D748D2534536AC",
+      "unchanged": false,
+      "reason": "Supply authenticated existing subject to preserved routine tests."
+    },
+    {
+      "path": "apps/api/src/platform/security.http.test.ts",
+      "beforeSha256": "1911A123B32D9DA5F1222E49F01CC1F3CB02E853AF0772A5CEEC4DC524845A57",
+      "afterSha256": "D473CCF3CA3DE663E8F784EB75050A4A37A4DC7A49806434D3695AED5DEFA4BD",
+      "unchanged": false,
+      "reason": "Retain all 22 cases; require exact self-only identity lookup without target domain access."
+    },
+    {
+      "path": "apps/web/src/pages/LoginPage.tsx",
+      "beforeSha256": "E5864AC61AC88F601BE5E0815AE31315778A42C95C867C545FB6E4C885BB442A",
+      "afterSha256": "277F7CE631718EDC475FFAC6DE18194B72FFCF28C2BED7CADE436B792C6ADB91",
+      "unchanged": false,
+      "reason": "Accurate confirmed deletion result."
+    },
+    {
+      "path": "apps/web/src/pages/ProfilePage.tsx",
+      "beforeSha256": "E8023E3BA7B2492A00EB27AD324BDFC9794D23A119E891272ADF6A056A356C60",
+      "afterSha256": "EA43D2B46D3A7AE18CECBC326BF4AD4D9D592738042E6B3BB6336F2FEAFD7DF4",
+      "unchanged": false,
+      "reason": "Add account-data controls to existing Settings."
+    },
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "beforeSha256": "1C2205EC3C188EC19CE53D17A2D046DF572DB8614DAA5F2708BBCCFF99CA5BDE",
+      "afterSha256": "9FE3F4D234E91C4344578BD3BA5F667AE478C79CF299097BDBF47DCB4F76E2D4",
+      "unchanged": false,
+      "reason": "Prepend dated C5d checkpoint; preserve historical checkpoints."
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "beforeSha256": "54A109D95742CAAB537F1BF22B5C50E036EF7890A6FFBB95C29C9EC9BBD89649",
+      "afterSha256": "0375BA1305D7DDC5B71929BD990874024A89E4B1103AF8F21318AEF74344CDCA",
+      "unchanged": false,
+      "reason": "Prepend dated C5d checkpoint; preserve historical checkpoints."
+    },
+    {
+      "path": "packages/api-contracts/src/index.ts",
+      "beforeSha256": "FAB2A1008A403A89B551C846E7693E43CCB3D88E2846894C24FE9026EE8F9C22",
+      "afterSha256": "0D7C0DA47A710635F4EB0307825AC24FFE6EEFF40F763FC076AAEE97CD54A8DA",
+      "unchanged": false,
+      "reason": "Export additive V1 account-data contracts."
+    }
+  ],
+  "added": [
+    {
+      "path": "apps/api/src/core/contracts/account-data.ts",
+      "sha256": "85952B933AB9CA5B1B577FDED10F33181AF472C43F8207423FD7759ED9E43ABF"
+    },
+    {
+      "path": "apps/api/src/games/genshin/account-data/genshin-account-data.ts",
+      "sha256": "7DC30D68B91D1496DFD61295F0385DCA11C3CEF15B62B424ACA40992D99520B2"
+    },
+    {
+      "path": "apps/api/src/games/nikke/account-data/nikke-account-data.ts",
+      "sha256": "8F87FBC753DA34396F0CB6448FC275C665C37380EBB0AF3234FBCB7193FA926C"
+    },
+    {
+      "path": "apps/api/src/platform/account-data/account-data.controller.ts",
+      "sha256": "C314B376B7174C9435F3BAAFCF14026BE6B7E3E4FD7A18762EB9345033ED6041"
+    },
+    {
+      "path": "apps/api/src/platform/account-data/account-data.http.test.ts",
+      "sha256": "EB2974D4CDF694DA10077ED361353DBE67EAF08A2D4FF062A416E1CEA5FBD82E"
+    },
+    {
+      "path": "apps/api/src/platform/account-data/account-data.policy.ts",
+      "sha256": "7568CB3B35761141665FDA47EB75E23EDF269E13CCF85556D792655AB8F4511D"
+    },
+    {
+      "path": "apps/api/src/platform/account-data/account-data.repository.ts",
+      "sha256": "4B4F59459B4C342B19C533F4994FBD8BAE8510F82A03CAD6B6A9E28B2AD3A40F"
+    },
+    {
+      "path": "apps/api/src/platform/account-data/account-data.routes.ts",
+      "sha256": "7CD84E706E2326C34DD255E2B3C6C2BB52A1EAB861C37A517B7C7D569465DD2F"
+    },
+    {
+      "path": "apps/api/src/platform/account-data/account-data.schema.ts",
+      "sha256": "078041339B0A299E0BDFE54B3D945EB4C38ACD9968C2BD90A89C414528FCC100"
+    },
+    {
+      "path": "apps/api/src/platform/account-data/account-data.service.ts",
+      "sha256": "EBF8DAB3D730D9FE1A5DF0091FA7206B8B3EDC931EBAB14590DA475312DF4C7B"
+    },
+    {
+      "path": "apps/api/tooling/account-data-browser.mjs",
+      "sha256": "D4C31282D6CCD9918C904B119DB691F79BBAE72C06F9096F2F6C0FCB87FC5CF4"
+    },
+    {
+      "path": "apps/api/tooling/account-data-client.test.js",
+      "sha256": "FAF79D4E60A8F7BDFF40B1BD52541E001F710EAD5FB9AC7340F90825A990241D"
+    },
+    {
+      "path": "apps/api/tooling/account-data.integration.test.js",
+      "sha256": "3A8165CE627C6327D00136C04805DB9E54FA07986A9431438F799DF03074CDCF"
+    },
+    {
+      "path": "apps/api/tooling/account-data.test.js",
+      "sha256": "3CD65C855CF55E169C4BEFDAB4C4E34E18021C3FBB47317F6A918AF3E5AA8E6A"
+    },
+    {
+      "path": "apps/web/src/components/AccountDataControls.tsx",
+      "sha256": "9234EBFAC908B93ABC8469A362BBBAFC925C8AC312BBBDAAED430F9B9551B61E"
+    },
+    {
+      "path": "apps/web/src/lib/account-data.ts",
+      "sha256": "10E8A82E7FED108FB06885CAC0C89212E96B5B203279734BE96B54F769D627A5"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/api-files.txt",
+      "sha256": "E4E9F2E50671AC7D802F839EAEF69A2EE437F85011135F81264F353B49F35A16"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/beta-readiness.md",
+      "sha256": "6A19DFEC56F8690B0DC781780F1F26DE4D666859EDA0C5C9646C59D7C6B4FD70"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/browser-acceptance.md",
+      "sha256": "CCC6F291728AE88B5A2D50CA716546B9B6832E433F7A9F65814C11F3284BF984"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/browser-deleted.jpg",
+      "sha256": "9E3F25CA954F76C83B8FA75AEA515349ACF966BFEBB70509C5E06D8B4C5BB649"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/browser-narrow.jpg",
+      "sha256": "2154B83C89D7E4EA495A9795F9CCBDAB57058DC145E19B87904F7A9D34333595"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/browser-owner-switch.jpg",
+      "sha256": "5A3242014053EC331B4CCD2752B3D19BB3EF77FFD935D61B61FB98B3E400B386"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/browser-results.json",
+      "sha256": "215CE3F7B9BE13A52C473135B13CAB964B138461085AB02D1605AEC6A387606E"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/cleanup.json",
+      "sha256": "D474C05979851296F3D53A45CAB7769F95AE47782E0E4C3C2E6A93C69CCD81CB"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/commands-and-cleanup.md",
+      "sha256": "6B82D12B9F0B8F22F6C9FED910ED9C4D7B70B9B4427BC0C6772470B4097C2173"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/contract.md",
+      "sha256": "39C91368FBF69B7C6D7F4B4E955A6E91A502EDDB1578C9BB3579A4D0100EC546"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/focused-account-data-final.log",
+      "sha256": "AA58B3E6D44B48706EBF2FC2F160D51AF629033236AD9B4FB9FDD62AEAD952A6"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/focused-account-data.log",
+      "sha256": "740F8C9A14A3BA1E91977BEE7B7641D55881AC1C5345117D860058783F70A240"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/focused-final.log",
+      "sha256": "E8A751A47C5EF8BB8EEECD5EDB9962F7790C24302927757127AC7133EC0A947F"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/focused-initial.log",
+      "sha256": "073BA51881E9EF95911F9F357AA2577A4C497F13350D44F4BCA0A8DDA8D52D98"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/implementation_plan.md",
+      "sha256": "6F47303ED524A5B4842AF5CAD2CF07298792AE4F844DEEF5B18C090B14931E8D"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/owner-data-matrix.md",
+      "sha256": "D931C34A4A2C172F150EBD7277E5A1A60C08B4D244DFC5989C941EE9D08F344F"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/record-evidence.mjs",
+      "sha256": "FBA55A185F89400B8FF1E49FADBFB98D57785A9EFE74A7593780959E1493CED1"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/starting-state.json",
+      "sha256": "D074EE0ED68475DE3276E2AD6B1C59871830F61B291FD5DDEAB7BB3B6BECF514"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/task.md",
+      "sha256": "5D9CE503C8DF7FF3F589A2D38747FA8E3327B8F55813DF5DC707C13F79C3F82F"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/validation-results.json",
+      "sha256": "9B65D40B17E979773EE5A955A2BF743D2191661894EF9110DDC24FFF47FE0BBB"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/verification-attempts.json",
+      "sha256": "F9BA6B74C443390882E55655F5697B7877A2604B06E8E4AD2D6413BF1A91D552"
+    },
+    {
+      "path": "docs/plans/c5d-account-data/walkthrough.md",
+      "sha256": "CAFA7FBFBA5F66C7901B8E602090A4CE2147C4EC8DE2D079317845CA2862F868"
+    },
+    {
+      "path": "packages/api-contracts/src/account-data.ts",
+      "sha256": "8DD409527B974F0061DEBD9B1EFC77568AB2FF22AB739391D0812E7B66AC2866"
+    }
+  ],
+  "selfReferentialExclusions": ["changed-files.json", "preservation-check.json"]
+}

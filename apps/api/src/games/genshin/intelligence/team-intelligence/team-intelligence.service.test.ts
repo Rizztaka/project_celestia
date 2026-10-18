@@ -1,3 +1,4 @@
+import type { GenshinAccount } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // ── Mock prisma before the service is imported ─────────────────────────────
@@ -30,7 +31,16 @@ import { TeamIntelligenceService } from './team-intelligence.service.js';
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 
-const mockAccount = { id: 'account-1', userId: 'user-1' };
+const mockAccount = {
+  id: 'account-1',
+  userId: 'user-1',
+  uid: null,
+  nickname: null,
+  adventureRank: null,
+  worldLevel: null,
+  createdAt: new Date('2026-01-01T00:00:00Z'),
+  updatedAt: new Date('2026-01-01T00:00:00Z'),
+} satisfies GenshinAccount;
 
 // ── Character fixtures ──────────────────────────────────────────────────────
 
@@ -140,7 +150,7 @@ describe('TeamIntelligenceService', () => {
   });
 
   it('throws UnprocessableError (422) when the roster has fewer than 4 characters', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     mockGetCharactersForUser.mockResolvedValueOnce(tinyRoster);
 
     await expect(service.getRecommendations('user-1')).rejects.toMatchObject({
@@ -193,7 +203,7 @@ describe('TeamIntelligenceService', () => {
         equippedWeapon: null,
       },
     ];
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     mockGetCharactersForUser.mockResolvedValueOnce(weirdRoster);
 
     await expect(service.getRecommendations('user-1')).rejects.toMatchObject({
@@ -203,7 +213,7 @@ describe('TeamIntelligenceService', () => {
   });
 
   it('returns top 3 buildable teams for a good roster', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     mockGetCharactersForUser.mockResolvedValueOnce(fullNationalRoster);
 
     const result = await service.getRecommendations('user-1');
@@ -220,7 +230,7 @@ describe('TeamIntelligenceService', () => {
   });
 
   it('ranks recommendations in descending score order', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     mockGetCharactersForUser.mockResolvedValueOnce(fullNationalRoster);
 
     const result = await service.getRecommendations('user-1');
@@ -232,7 +242,7 @@ describe('TeamIntelligenceService', () => {
   });
 
   it('each recommendation includes at least one explanation', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     mockGetCharactersForUser.mockResolvedValueOnce(fullNationalRoster);
 
     const result = await service.getRecommendations('user-1');
@@ -243,7 +253,7 @@ describe('TeamIntelligenceService', () => {
   });
 
   it('attaches a valid ISO analysedAt timestamp', async () => {
-    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount as any);
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
     mockGetCharactersForUser.mockResolvedValueOnce(fullNationalRoster);
 
     const result = await service.getRecommendations('user-1');

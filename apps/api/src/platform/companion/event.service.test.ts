@@ -1,12 +1,17 @@
+import { createRequire } from 'node:module';
+
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BadRequestError, NotFoundError } from '@/core/errors/app-error.js';
 
-import { EventService } from './event.service.js';
-import { companionRegistry } from './companion-registry.service.js';
 import { GenshinCompanionProvider } from '../../games/genshin/companion/genshin-companion.provider.js';
+import { companionRegistry } from './companion-registry.service.js';
+import { EventService } from './event.service.js';
 
-companionRegistry.register(new GenshinCompanionProvider());
+const provider = new GenshinCompanionProvider();
+companionRegistry.register(provider);
+// Unit hydration fixtures only; production placeholder exclusion is tested separately.
+const fixtureEvents = createRequire(import.meta.url)('../../games/genshin/static/events.json');
 
 // -------------------------------------------------------
 // Mock repository
@@ -36,12 +41,14 @@ describe('EventService', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-08-10T12:00:00Z'));
     vi.clearAllMocks();
+    vi.spyOn(provider, 'getEventsData').mockReturnValue(fixtureEvents);
     service = new EventService();
   });
 
   afterEach(() => {
     // Restore real timers to prevent leakage into other test files.
     vi.useRealTimers();
+    vi.mocked(provider.getEventsData).mockRestore();
   });
 
   // ─────────────────────────────────────────────────────

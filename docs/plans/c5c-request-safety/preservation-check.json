@@ -1,0 +1,938 @@
+{
+  "date": "2026-10-12",
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "branch": "master",
+  "index": "",
+  "startingState": "starting-state.json",
+  "baseline": {
+    "files": 809,
+    "unchanged": 798,
+    "changed": 11,
+    "deleted": 0,
+    "unexpected": 0
+  },
+  "intentionalChanges": [
+    {
+      "path": "apps/api/src/app.ts",
+      "beforeSha256": "B6AECC35908FB0C3DF12054BB31F9061B5131E758CCD9707776E56E27E4919CB",
+      "sha256": "73481A94322C1FEF62CA97630F6AAF5D87DEB10F1BB0374E1C9137335A47F566"
+    },
+    {
+      "path": "apps/api/src/games/genshin/genshin.routes.ts",
+      "beforeSha256": "01EFBD25C5B14F7E5780BBBC6E7E72FBE227F29F2ADC3C9D744E2BCFB340ABC2",
+      "sha256": "F6B500509DA5E0D5B8F2306DC4AF82C0BB9DAE531F16E729D9F4F76CF688DEA5"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.http.test.ts",
+      "beforeSha256": "A07F2FD3077BB8CE9A5502952B3C20A4C884F5E2D2E46E5AB4FB6BF726CB5C6B",
+      "sha256": "DA4893F725C5E3146773DF54875BCD330B7F8FEC469E138C1C34A2093B4C4808"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.repository.ts",
+      "beforeSha256": "CDE6F3004016532EA5F5D6CD33A4BE0ABA504BC8127C39D681F3667D522D07C8",
+      "sha256": "B2632D526AF1F4AE48C6D8E334E8129BCA58A66356DD5124891C150679318C64"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.routes.ts",
+      "beforeSha256": "709EF286344B9B888A61F7C252F9971723DB75F213FEC39431ECB14931FB209A",
+      "sha256": "1CC369F5E8F91579D45FE2A49D37A47B2CB8F5B63080ACC4D9EE239BB355359C"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.schema.ts",
+      "beforeSha256": "69B83B69C7614DFB8721FD93C235E2080AC099BC62D3EA4216C99F48FCB292A1",
+      "sha256": "00C341155A8CCF59A363626C0EA5FCD742C6E2286A57BBCF0C7D751199AC3884"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.service.ts",
+      "beforeSha256": "5E2CC0334282F738E2900097DF20EC3FB1538451725853B60A2D3FA673FDB72D",
+      "sha256": "68F98CCEC6404825CDE42DBA414213A1DEE2B274C4DA123B33D13C7194382084"
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.routes.ts",
+      "beforeSha256": "63E5762FF94389CD3569E6D2B1B789312BF9A6D314F3D8C48DD63A3E1BBC1AEF",
+      "sha256": "3F0951B1AA125FA4F47F4D732356B36AB9CAF3A95F51063510E2363D666743BD"
+    },
+    {
+      "path": "apps/api/src/platform/security.http.test.ts",
+      "beforeSha256": "118C2EB7EAEF83572363B7A0C8626ED5BB1A5E7A52B27A7406B1EB03742B6410",
+      "sha256": "1911A123B32D9DA5F1222E49F01CC1F3CB02E853AF0772A5CEEC4DC524845A57"
+    },
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "beforeSha256": "73EC71CC22AC1939B75EE0BDE0465719CE81FDC6CAFF9A40CC4EDD7FF205B892",
+      "sha256": "F120E5DEA40726D9D224D0CC3F403C1EDC5ABF98309AA5D91C755CE3F59C70EE"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "beforeSha256": "F1E3FC3B6DCB3FD762B02758AB6840887DE061935700AC9A20B3C78F03FECD70",
+      "sha256": "690900388F925FDF0A3C0A9001387E6A483869AE5161DB823E656EB11DFE7D6A"
+    }
+  ],
+  "preserved": [
+    {
+      "path": "apps/api/src/core/config/env.ts",
+      "sha256": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734",
+      "matches": true,
+      "group": "protectedFiles",
+      "expectedSha256": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734"
+    },
+    {
+      "path": "apps/api/package.json",
+      "sha256": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2",
+      "matches": true,
+      "group": "protectedFiles",
+      "expectedSha256": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "matches": true,
+      "group": "protectedFiles",
+      "expectedSha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A",
+      "matches": true,
+      "group": "protectedFiles",
+      "expectedSha256": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "matches": true,
+      "group": "protectedFiles",
+      "expectedSha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8"
+    },
+    {
+      "path": "apps/api/.turbo/turbo-test.log",
+      "sha256": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED",
+      "matches": true,
+      "group": "protectedFiles",
+      "expectedSha256": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED"
+    },
+    {
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "matches": true,
+      "group": "protectedFiles",
+      "expectedSha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B"
+    },
+    {
+      "path": "apps/api/.env.example",
+      "sha256": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647",
+      "matches": true,
+      "group": "protectedFiles",
+      "expectedSha256": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260813154603_add_event_progress/migration.sql",
+      "sha256": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260819152839_add_spiral_abyss_runs/migration.sql",
+      "sha256": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260805151029_add_genshin_foundation/migration.sql",
+      "sha256": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20261005150000_add_today_plan_choices/migration.sql",
+      "sha256": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260731140723_init/migration.sql",
+      "sha256": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260811141938_add_daily_companion/migration.sql",
+      "sha256": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20261003180000_add_focus_goal_lifecycle/migration.sql",
+      "sha256": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260823132547_add_imaginarium_theater_run/migration.sql",
+      "sha256": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260812155306_add_materials_and_upgrade_goals/migration.sql",
+      "sha256": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260814135049_add_weekly_boss_state/migration.sql",
+      "sha256": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260926173000_add_import_section_provenance/migration.sql",
+      "sha256": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260823150154_add_nikke_models/migration.sql",
+      "sha256": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910",
+      "matches": true,
+      "group": "migrations",
+      "expectedSha256": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910"
+    },
+    {
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "matches": true,
+      "group": "formatterExceptions",
+      "expectedSha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "matches": true,
+      "group": "formatterExceptions",
+      "expectedSha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B"
+    },
+    {
+      "path": "apps/web/index.html",
+      "sha256": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8",
+      "matches": true,
+      "group": "formatterExceptions",
+      "expectedSha256": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8"
+    },
+    {
+      "path": "apps/web/src/App.css",
+      "sha256": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C",
+      "matches": true,
+      "group": "formatterExceptions",
+      "expectedSha256": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C"
+    },
+    {
+      "path": "apps/web/src/index.css",
+      "sha256": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E",
+      "matches": true,
+      "group": "formatterExceptions",
+      "expectedSha256": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E"
+    }
+  ],
+  "rawEvidence": [
+    {
+      "path": "docs/plans/c5-companion-beta/endgame-focus-final.json",
+      "expectedSha256": "84143358C0180ECDC5964B10EA1A81799631DDCBCF9E32446862310FD11AFFF1",
+      "sha256": "84143358C0180ECDC5964B10EA1A81799631DDCBCF9E32446862310FD11AFFF1",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/primary-reflow.json",
+      "expectedSha256": "3B1F37E5F3A8D5072DA63DC8CF4B6E12B06FD74FCF912D7DB1F14A329569BDA2",
+      "sha256": "3B1F37E5F3A8D5072DA63DC8CF4B6E12B06FD74FCF912D7DB1F14A329569BDA2",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/reimport-after.json",
+      "expectedSha256": "ACD3739A342C8283992D6153AA909B8C472EE5CD0CA3EA9530BBEF76E262156D",
+      "sha256": "ACD3739A342C8283992D6153AA909B8C472EE5CD0CA3EA9530BBEF76E262156D",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/reimport-before.json",
+      "expectedSha256": "63A182044F80074DA87EBCF314F2C2979EB178E9187B06FCAA823A41A144B9F2",
+      "sha256": "63A182044F80074DA87EBCF314F2C2979EB178E9187B06FCAA823A41A144B9F2",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/rendered-style-check.json",
+      "expectedSha256": "BDDB3BBAAF791A1DC6EEE1BCAA76DE527647CB2EF330DF3B04E2567B7EBD39B9",
+      "sha256": "BDDB3BBAAF791A1DC6EEE1BCAA76DE527647CB2EF330DF3B04E2567B7EBD39B9",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/secondary-reflow.json",
+      "expectedSha256": "11DF232CAE6F12C765A091B443806D2E04D2A22109C0D60CA067F6EBB6B71191",
+      "sha256": "11DF232CAE6F12C765A091B443806D2E04D2A22109C0D60CA067F6EBB6B71191",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/starting-state.json",
+      "expectedSha256": "F1A7A653C71A6694DC544498E9E3D8498F3EE385F4E756C046AF0AB1EC6ADFBE",
+      "sha256": "F1A7A653C71A6694DC544498E9E3D8498F3EE385F4E756C046AF0AB1EC6ADFBE",
+      "matches": true
+    }
+  ],
+  "groups": {
+    "schemaMigrations": {
+      "files": 15,
+      "unchanged": true
+    },
+    "contracts": {
+      "files": 12,
+      "unchanged": true
+    },
+    "dependencies": {
+      "files": 6,
+      "unchanged": true
+    },
+    "disposableGuard": {
+      "files": 2,
+      "unchanged": true
+    },
+    "inheritedApiTooling": {
+      "files": 26,
+      "unchanged": true
+    },
+    "historicalC5Evidence": {
+      "files": 129,
+      "unchanged": true
+    },
+    "web": {
+      "files": 58,
+      "unchanged": true
+    }
+  },
+  "historicalManifestReconciliation": {
+    "c5a": [
+      {
+        "path": "docs/plans/CURRENT_HANDOFF.md",
+        "historicalSha256": "008F498878727A64F84EA294D47198B954A0FCD48B1AD8434F33C628FA58DF12",
+        "baselineSha256": "73EC71CC22AC1939B75EE0BDE0465719CE81FDC6CAFF9A40CC4EDD7FF205B892",
+        "currentSha256": "F120E5DEA40726D9D224D0CC3F403C1EDC5ABF98309AA5D91C755CE3F59C70EE",
+        "classification": "intentional C5c delta from captured baseline"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "historicalSha256": "788ED3201DDF0576F9BBBD3C2253049303ADB9F5291E9E5F877537BBC1B9DF58",
+        "baselineSha256": "788ED3201DDF0576F9BBBD3C2253049303ADB9F5291E9E5F877537BBC1B9DF58",
+        "currentSha256": "788ED3201DDF0576F9BBBD3C2253049303ADB9F5291E9E5F877537BBC1B9DF58",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/src/app.ts",
+        "historicalSha256": "B6AECC35908FB0C3DF12054BB31F9061B5131E758CCD9707776E56E27E4919CB",
+        "baselineSha256": "B6AECC35908FB0C3DF12054BB31F9061B5131E758CCD9707776E56E27E4919CB",
+        "currentSha256": "73481A94322C1FEF62CA97630F6AAF5D87DEB10F1BB0374E1C9137335A47F566",
+        "classification": "intentional C5c delta from captured baseline"
+      },
+      {
+        "path": "docs/ROADMAP.md",
+        "historicalSha256": "DAD8BC0F1937A2AA7D9705A78FA691D4F0123EE1495D5B5FE883234FCC459083",
+        "baselineSha256": "F1E3FC3B6DCB3FD762B02758AB6840887DE061935700AC9A20B3C78F03FECD70",
+        "currentSha256": "690900388F925FDF0A3C0A9001387E6A483869AE5161DB823E656EB11DFE7D6A",
+        "classification": "intentional C5c delta from captured baseline"
+      },
+      {
+        "path": "package.json",
+        "historicalSha256": "BCD9C27627577751BE5438CBFA482A59A2F55B537386AB3339D9513ADD8B7BED",
+        "baselineSha256": "06AC48BF24112580605C6CAA85A5C4BE6C6E23FA70AFCB69979A9519C5ADB5D6",
+        "currentSha256": "06AC48BF24112580605C6CAA85A5C4BE6C6E23FA70AFCB69979A9519C5ADB5D6",
+        "classification": "inherited pre-C5c change preserved"
+      },
+      {
+        "path": ".gitattributes",
+        "historicalSha256": "93FEF663A8B11AB35952411A2B676C084A4132BAB0C76C847DECAB345EB8B2D0",
+        "baselineSha256": "93FEF663A8B11AB35952411A2B676C084A4132BAB0C76C847DECAB345EB8B2D0",
+        "currentSha256": "93FEF663A8B11AB35952411A2B676C084A4132BAB0C76C847DECAB345EB8B2D0",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/src/core/config/cors.ts",
+        "historicalSha256": "32BA7C083AA7A9B87FE6EEB325DFFF52DF9B182960BE863D6F0000757E8798D6",
+        "baselineSha256": "32BA7C083AA7A9B87FE6EEB325DFFF52DF9B182960BE863D6F0000757E8798D6",
+        "currentSha256": "32BA7C083AA7A9B87FE6EEB325DFFF52DF9B182960BE863D6F0000757E8798D6",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/src/core/middleware/origin.middleware.test.ts",
+        "historicalSha256": "44D90FC91B0D0F01D9146859DDFBCB03DA896EEFFE61A4A3A560402CDEAE9CA5",
+        "baselineSha256": "44D90FC91B0D0F01D9146859DDFBCB03DA896EEFFE61A4A3A560402CDEAE9CA5",
+        "currentSha256": "44D90FC91B0D0F01D9146859DDFBCB03DA896EEFFE61A4A3A560402CDEAE9CA5",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/src/core/middleware/origin.middleware.ts",
+        "historicalSha256": "E010F3329DEBF91E20404A2BE3FAAEF64BFECBA500FFA38750DA00A2874F6B48",
+        "baselineSha256": "E010F3329DEBF91E20404A2BE3FAAEF64BFECBA500FFA38750DA00A2874F6B48",
+        "currentSha256": "E010F3329DEBF91E20404A2BE3FAAEF64BFECBA500FFA38750DA00A2874F6B48",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/origin-browser-fixture.mjs",
+        "historicalSha256": "B36363B26F115FCFEE29953AFB2217A2893A241D3BED3840244C25790F375FFB",
+        "baselineSha256": "B36363B26F115FCFEE29953AFB2217A2893A241D3BED3840244C25790F375FFB",
+        "currentSha256": "B36363B26F115FCFEE29953AFB2217A2893A241D3BED3840244C25790F375FFB",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/raw-evidence.json",
+        "historicalSha256": "08C7961CD8C689FD02664473BEA0D5542B546C01DD25880DBB3593A64E64C9EC",
+        "baselineSha256": "08C7961CD8C689FD02664473BEA0D5542B546C01DD25880DBB3593A64E64C9EC",
+        "currentSha256": "08C7961CD8C689FD02664473BEA0D5542B546C01DD25880DBB3593A64E64C9EC",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/verification.mjs",
+        "historicalSha256": "5B165A1B39A3FBC938D4B259EEF33868A7D924FF3E3D9C45DC92DE43AB704F18",
+        "baselineSha256": "5B165A1B39A3FBC938D4B259EEF33868A7D924FF3E3D9C45DC92DE43AB704F18",
+        "currentSha256": "5B165A1B39A3FBC938D4B259EEF33868A7D924FF3E3D9C45DC92DE43AB704F18",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/verification.test.js",
+        "historicalSha256": "32C2304B7792D85D4CFBF44763081D63FBA3184BC4CCF7CB84CA920C8746EC93",
+        "baselineSha256": "32C2304B7792D85D4CFBF44763081D63FBA3184BC4CCF7CB84CA920C8746EC93",
+        "currentSha256": "32C2304B7792D85D4CFBF44763081D63FBA3184BC4CCF7CB84CA920C8746EC93",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/verify.mjs",
+        "historicalSha256": "54BFF607FFA3A6F42BD8CE433FD21EBCB9FBBE7BCE4D75D31C3A675410B58314",
+        "baselineSha256": "54BFF607FFA3A6F42BD8CE433FD21EBCB9FBBE7BCE4D75D31C3A675410B58314",
+        "currentSha256": "54BFF607FFA3A6F42BD8CE433FD21EBCB9FBBE7BCE4D75D31C3A675410B58314",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/beta-readiness.md",
+        "historicalSha256": "8C6E7D26830806816F262278DB9587F926C578D87E81F6BE7C94A046E432D476",
+        "baselineSha256": "8C6E7D26830806816F262278DB9587F926C578D87E81F6BE7C94A046E432D476",
+        "currentSha256": "8C6E7D26830806816F262278DB9587F926C578D87E81F6BE7C94A046E432D476",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/cleanup.json",
+        "historicalSha256": "2B465C8AE04D7A03503DB47A8FBFBD25C474485261E38A3E11B1DE37D8458CEE",
+        "baselineSha256": "2B465C8AE04D7A03503DB47A8FBFBD25C474485261E38A3E11B1DE37D8458CEE",
+        "currentSha256": "2B465C8AE04D7A03503DB47A8FBFBD25C474485261E38A3E11B1DE37D8458CEE",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/entrypoint-results.json",
+        "historicalSha256": "55426D8CCAD401EA86BF39AF4070EF5FD4ACC58E3D6079914851011B02D3604A",
+        "baselineSha256": "55426D8CCAD401EA86BF39AF4070EF5FD4ACC58E3D6079914851011B02D3604A",
+        "currentSha256": "55426D8CCAD401EA86BF39AF4070EF5FD4ACC58E3D6079914851011B02D3604A",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/fixture-create.log",
+        "historicalSha256": "BECC505F7723649FB62DEAD640417BADE35DE2F497D55894F39B82B46A3C570F",
+        "baselineSha256": "BECC505F7723649FB62DEAD640417BADE35DE2F497D55894F39B82B46A3C570F",
+        "currentSha256": "BECC505F7723649FB62DEAD640417BADE35DE2F497D55894F39B82B46A3C570F",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/focused-tests.log",
+        "historicalSha256": "E1C88A9755FE18DD9423391050AE0483F4CC74DA14628B9133A30A4341BF19BD",
+        "baselineSha256": "E1C88A9755FE18DD9423391050AE0483F4CC74DA14628B9133A30A4341BF19BD",
+        "currentSha256": "E1C88A9755FE18DD9423391050AE0483F4CC74DA14628B9133A30A4341BF19BD",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/git-byte-preservation.json",
+        "historicalSha256": "FDE2E44DD22C8E7413DC4F26A3026F546E87C8E20458C61AEFE1E475AC0E7FBD",
+        "baselineSha256": "FDE2E44DD22C8E7413DC4F26A3026F546E87C8E20458C61AEFE1E475AC0E7FBD",
+        "currentSha256": "FDE2E44DD22C8E7413DC4F26A3026F546E87C8E20458C61AEFE1E475AC0E7FBD",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/http-smoke.json",
+        "historicalSha256": "7C5359D18E72559612B36DA31BF673CF47B9EB99DD072625D92608C6D28EFB27",
+        "baselineSha256": "7C5359D18E72559612B36DA31BF673CF47B9EB99DD072625D92608C6D28EFB27",
+        "currentSha256": "7C5359D18E72559612B36DA31BF673CF47B9EB99DD072625D92608C6D28EFB27",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/implementation_plan.md",
+        "historicalSha256": "BB7AE19461D64C8CB1B75EC28DA9982704E9FBB5C23457428D31A2C0B8B523F2",
+        "baselineSha256": "BB7AE19461D64C8CB1B75EC28DA9982704E9FBB5C23457428D31A2C0B8B523F2",
+        "currentSha256": "BB7AE19461D64C8CB1B75EC28DA9982704E9FBB5C23457428D31A2C0B8B523F2",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/owned-processes.json",
+        "historicalSha256": "BEA9792924A6AABA4643C3A86E0944DD4507E485476850E886A0005052162E66",
+        "baselineSha256": "BEA9792924A6AABA4643C3A86E0944DD4507E485476850E886A0005052162E66",
+        "currentSha256": "BEA9792924A6AABA4643C3A86E0944DD4507E485476850E886A0005052162E66",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/reproduced-findings.log",
+        "historicalSha256": "FCA06F963FB018D36EA015AFC3C0796D8188BE3ABE89E6A66FD1063B7451DFCB",
+        "baselineSha256": "FCA06F963FB018D36EA015AFC3C0796D8188BE3ABE89E6A66FD1063B7451DFCB",
+        "currentSha256": "FCA06F963FB018D36EA015AFC3C0796D8188BE3ABE89E6A66FD1063B7451DFCB",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/restored-web-build.log",
+        "historicalSha256": "ED46B84F6AE510AF00C42A08E580760D925ECF6BC2DCB885C9829EE9041EC2BB",
+        "baselineSha256": "ED46B84F6AE510AF00C42A08E580760D925ECF6BC2DCB885C9829EE9041EC2BB",
+        "currentSha256": "ED46B84F6AE510AF00C42A08E580760D925ECF6BC2DCB885C9829EE9041EC2BB",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/runbook.md",
+        "historicalSha256": "3CE89310C2CC75F1D5E34FC2E7C4E91846E3BA4C12E7B2FA351E5C5B2D35E404",
+        "baselineSha256": "3CE89310C2CC75F1D5E34FC2E7C4E91846E3BA4C12E7B2FA351E5C5B2D35E404",
+        "currentSha256": "3CE89310C2CC75F1D5E34FC2E7C4E91846E3BA4C12E7B2FA351E5C5B2D35E404",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/smoke-import-preview.txt",
+        "historicalSha256": "C499E6A8C97216DB8919D8217B438855759553D51C1C11ABA6F8A1BC7C22F68C",
+        "baselineSha256": "C499E6A8C97216DB8919D8217B438855759553D51C1C11ABA6F8A1BC7C22F68C",
+        "currentSha256": "C499E6A8C97216DB8919D8217B438855759553D51C1C11ABA6F8A1BC7C22F68C",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/smoke-logout.txt",
+        "historicalSha256": "F87C1408EA4FF1082383C3627414079F489EA9342FA4B2209FBC9DE877764C33",
+        "baselineSha256": "F87C1408EA4FF1082383C3627414079F489EA9342FA4B2209FBC9DE877764C33",
+        "currentSha256": "F87C1408EA4FF1082383C3627414079F489EA9342FA4B2209FBC9DE877764C33",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/smoke-profile.txt",
+        "historicalSha256": "2A03D23A3ADDC7E6AB97C806E2C767F9D403EC086E33E7B995772EED9DFCB4CB",
+        "baselineSha256": "2A03D23A3ADDC7E6AB97C806E2C767F9D403EC086E33E7B995772EED9DFCB4CB",
+        "currentSha256": "2A03D23A3ADDC7E6AB97C806E2C767F9D403EC086E33E7B995772EED9DFCB4CB",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/smoke-today.jpg",
+        "historicalSha256": "CB4B5329F156E3A150960A10DC91A87C968AC886B0D90BAE621C7B22274863C1",
+        "baselineSha256": "CB4B5329F156E3A150960A10DC91A87C968AC886B0D90BAE621C7B22274863C1",
+        "currentSha256": "CB4B5329F156E3A150960A10DC91A87C968AC886B0D90BAE621C7B22274863C1",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/smoke-today.txt",
+        "historicalSha256": "06FB95455528AFB765D0B0CEF1B0BA5D8C865F2DDF8BE59D7B2436AC12D441CB",
+        "baselineSha256": "06FB95455528AFB765D0B0CEF1B0BA5D8C865F2DDF8BE59D7B2436AC12D441CB",
+        "currentSha256": "06FB95455528AFB765D0B0CEF1B0BA5D8C865F2DDF8BE59D7B2436AC12D441CB",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/smoke-web-build.log",
+        "historicalSha256": "1629163085D03693C1B8AA26AE14BD055CF697098ED44091C29A34FE0CE19784",
+        "baselineSha256": "1629163085D03693C1B8AA26AE14BD055CF697098ED44091C29A34FE0CE19784",
+        "currentSha256": "1629163085D03693C1B8AA26AE14BD055CF697098ED44091C29A34FE0CE19784",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/starting-state.json",
+        "historicalSha256": "642763C3CF9D5AA7AFE47F41829CA9D2844200CD9B57FA82B0021E2C3A56E05E",
+        "baselineSha256": "642763C3CF9D5AA7AFE47F41829CA9D2844200CD9B57FA82B0021E2C3A56E05E",
+        "currentSha256": "642763C3CF9D5AA7AFE47F41829CA9D2844200CD9B57FA82B0021E2C3A56E05E",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/task.md",
+        "historicalSha256": "4914B624ABCD95CCBFBFA2F6A86472C50BD3F3B3E72694507C2C84787440569E",
+        "baselineSha256": "4914B624ABCD95CCBFBFA2F6A86472C50BD3F3B3E72694507C2C84787440569E",
+        "currentSha256": "4914B624ABCD95CCBFBFA2F6A86472C50BD3F3B3E72694507C2C84787440569E",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/test-results.json",
+        "historicalSha256": "503AEA67E714DD9382F89157FFDE7F5BED939EECDD9FBAB3A24E0D84E43E61D6",
+        "baselineSha256": "503AEA67E714DD9382F89157FFDE7F5BED939EECDD9FBAB3A24E0D84E43E61D6",
+        "currentSha256": "503AEA67E714DD9382F89157FFDE7F5BED939EECDD9FBAB3A24E0D84E43E61D6",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/unsafe-entrypoint.log",
+        "historicalSha256": "7CD2309685C153475A74BE228C35E8CEDB880CDA77208C180D44EFACB247E56B",
+        "baselineSha256": "7CD2309685C153475A74BE228C35E8CEDB880CDA77208C180D44EFACB247E56B",
+        "currentSha256": "7CD2309685C153475A74BE228C35E8CEDB880CDA77208C180D44EFACB247E56B",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/validation-results.json",
+        "historicalSha256": "13EDB450C454EA3A279432BEF60B0BA6FD4AFF7BB255CEDBD2D0437BAC00B904",
+        "baselineSha256": "13EDB450C454EA3A279432BEF60B0BA6FD4AFF7BB255CEDBD2D0437BAC00B904",
+        "currentSha256": "13EDB450C454EA3A279432BEF60B0BA6FD4AFF7BB255CEDBD2D0437BAC00B904",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/verification-run-1.log",
+        "historicalSha256": "1B7FCA920AC132F862AC87CEA4A92FE61BCF04197E33F602E8B1887FD538D24E",
+        "baselineSha256": "1B7FCA920AC132F862AC87CEA4A92FE61BCF04197E33F602E8B1887FD538D24E",
+        "currentSha256": "1B7FCA920AC132F862AC87CEA4A92FE61BCF04197E33F602E8B1887FD538D24E",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/verification-run-2.log",
+        "historicalSha256": "7AD912C55F3AAB4F7CC5966F4D1C66D8ABD19A0A15AD6218E30C79F7738F15FF",
+        "baselineSha256": "7AD912C55F3AAB4F7CC5966F4D1C66D8ABD19A0A15AD6218E30C79F7738F15FF",
+        "currentSha256": "7AD912C55F3AAB4F7CC5966F4D1C66D8ABD19A0A15AD6218E30C79F7738F15FF",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/walkthrough.md",
+        "historicalSha256": "324CDF1CCBBF8646592C2C99176CC1A3F777EE0258EEBB56D6E0C76CA18A92D1",
+        "baselineSha256": "324CDF1CCBBF8646592C2C99176CC1A3F777EE0258EEBB56D6E0C76CA18A92D1",
+        "currentSha256": "324CDF1CCBBF8646592C2C99176CC1A3F777EE0258EEBB56D6E0C76CA18A92D1",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/workflow-validation.log",
+        "historicalSha256": "558F48E230254A7ACBD406E559326065E84C1C59332D85273896CF5E548A149E",
+        "baselineSha256": "558F48E230254A7ACBD406E559326065E84C1C59332D85273896CF5E548A149E",
+        "currentSha256": "558F48E230254A7ACBD406E559326065E84C1C59332D85273896CF5E548A149E",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/final-format.log",
+        "historicalSha256": "AC952C260E912AF5585FE05226DF37953B38BF5C1FC659B4216B3BAEC7ED11C0",
+        "baselineSha256": "AC952C260E912AF5585FE05226DF37953B38BF5C1FC659B4216B3BAEC7ED11C0",
+        "currentSha256": "AC952C260E912AF5585FE05226DF37953B38BF5C1FC659B4216B3BAEC7ED11C0",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5a-beta-foundation/final-diff-check.log",
+        "historicalSha256": "F8C9F1E39A9353A4B0C1C7E126B48B02886BC755EC157119E72D03BDAD1DD2A3",
+        "baselineSha256": "F8C9F1E39A9353A4B0C1C7E126B48B02886BC755EC157119E72D03BDAD1DD2A3",
+        "currentSha256": "F8C9F1E39A9353A4B0C1C7E126B48B02886BC755EC157119E72D03BDAD1DD2A3",
+        "classification": "historical bytes preserved"
+      }
+    ],
+    "c5b": [
+      {
+        "path": "apps/api/tooling/recovery.test.js",
+        "historicalSha256": "183CEA6198991091620A2A0063EF4CC49BC1102FDB8511EB13838888A9E363F9",
+        "baselineSha256": "183CEA6198991091620A2A0063EF4CC49BC1102FDB8511EB13838888A9E363F9",
+        "currentSha256": "183CEA6198991091620A2A0063EF4CC49BC1102FDB8511EB13838888A9E363F9",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/recovery/cli.mjs",
+        "historicalSha256": "59FD376382A32B0C38F4CB993657F5696D9246B97117C36147D73E4B7496B0E5",
+        "baselineSha256": "59FD376382A32B0C38F4CB993657F5696D9246B97117C36147D73E4B7496B0E5",
+        "currentSha256": "59FD376382A32B0C38F4CB993657F5696D9246B97117C36147D73E4B7496B0E5",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/recovery/fixture.mjs",
+        "historicalSha256": "E61A9B93BC3B9D0C97719295518A9BBDFE58A797C84A09741C44A3538DCE7361",
+        "baselineSha256": "E61A9B93BC3B9D0C97719295518A9BBDFE58A797C84A09741C44A3538DCE7361",
+        "currentSha256": "E61A9B93BC3B9D0C97719295518A9BBDFE58A797C84A09741C44A3538DCE7361",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/recovery/policy.mjs",
+        "historicalSha256": "A87FFFCFE2E61A453B55AEACA310A91CD6AEE79B66C9918759B11EECCC1505FF",
+        "baselineSha256": "A87FFFCFE2E61A453B55AEACA310A91CD6AEE79B66C9918759B11EECCC1505FF",
+        "currentSha256": "A87FFFCFE2E61A453B55AEACA310A91CD6AEE79B66C9918759B11EECCC1505FF",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/recovery/probe.mjs",
+        "historicalSha256": "D2787CA5509E466693CC04227026738A013C5B5CC25EF4B02E73161B170F67AC",
+        "baselineSha256": "D2787CA5509E466693CC04227026738A013C5B5CC25EF4B02E73161B170F67AC",
+        "currentSha256": "D2787CA5509E466693CC04227026738A013C5B5CC25EF4B02E73161B170F67AC",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/recovery/process.mjs",
+        "historicalSha256": "6831A8A8072DE4AAF947020693B0B6DD25015163BF9CC61BB2FA17985542B0C3",
+        "baselineSha256": "6831A8A8072DE4AAF947020693B0B6DD25015163BF9CC61BB2FA17985542B0C3",
+        "currentSha256": "6831A8A8072DE4AAF947020693B0B6DD25015163BF9CC61BB2FA17985542B0C3",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/recovery/rehearse.mjs",
+        "historicalSha256": "810320C50BC8855F906D8D494873D7664FC3203769AA6428826D732C51B492BC",
+        "baselineSha256": "810320C50BC8855F906D8D494873D7664FC3203769AA6428826D732C51B492BC",
+        "currentSha256": "810320C50BC8855F906D8D494873D7664FC3203769AA6428826D732C51B492BC",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/recovery/seed.mjs",
+        "historicalSha256": "32F72C3D8FB702333D1FD9AF9787AADA15328F2F0519763FBB96FE6BA4846285",
+        "baselineSha256": "32F72C3D8FB702333D1FD9AF9787AADA15328F2F0519763FBB96FE6BA4846285",
+        "currentSha256": "32F72C3D8FB702333D1FD9AF9787AADA15328F2F0519763FBB96FE6BA4846285",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "apps/api/tooling/recovery/snapshot.mjs",
+        "historicalSha256": "F444DA6B3D64ADCC8ECFDCE4415EBD69044D1B66FB75808CC4D694AAD93CA3EB",
+        "baselineSha256": "F444DA6B3D64ADCC8ECFDCE4415EBD69044D1B66FB75808CC4D694AAD93CA3EB",
+        "currentSha256": "F444DA6B3D64ADCC8ECFDCE4415EBD69044D1B66FB75808CC4D694AAD93CA3EB",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/ROADMAP.md",
+        "historicalSha256": "39E0DCE760A5DB672B6F7809D65CC118730EAF8BAB1515C9E315044E985AC0AB",
+        "baselineSha256": "F1E3FC3B6DCB3FD762B02758AB6840887DE061935700AC9A20B3C78F03FECD70",
+        "currentSha256": "690900388F925FDF0A3C0A9001387E6A483869AE5161DB823E656EB11DFE7D6A",
+        "classification": "intentional C5c delta from captured baseline"
+      },
+      {
+        "path": "docs/plans/CURRENT_HANDOFF.md",
+        "historicalSha256": "3B822DFAEAB3210B3E3E51735E2F49AB286DABAE0D4A8F789D757A4033E4D9BB",
+        "baselineSha256": "73EC71CC22AC1939B75EE0BDE0465719CE81FDC6CAFF9A40CC4EDD7FF205B892",
+        "currentSha256": "F120E5DEA40726D9D224D0CC3F403C1EDC5ABF98309AA5D91C755CE3F59C70EE",
+        "classification": "intentional C5c delta from captured baseline"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/beta-readiness.md",
+        "historicalSha256": "9223C7C4FEBD627E3352D58EFEF634A0095E6D15E995B34FBBF0DFA95D81D890",
+        "baselineSha256": "9223C7C4FEBD627E3352D58EFEF634A0095E6D15E995B34FBBF0DFA95D81D890",
+        "currentSha256": "9223C7C4FEBD627E3352D58EFEF634A0095E6D15E995B34FBBF0DFA95D81D890",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/cleanup.json",
+        "historicalSha256": "AC28A804F7C9700A3D21C6446DA3414F5FD6B207D955E3822E90FC3128EB3878",
+        "baselineSha256": "AC28A804F7C9700A3D21C6446DA3414F5FD6B207D955E3822E90FC3128EB3878",
+        "currentSha256": "AC28A804F7C9700A3D21C6446DA3414F5FD6B207D955E3822E90FC3128EB3878",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/entrypoint-results.json",
+        "historicalSha256": "E48C30E385447C67A27F6811B8805838507ACE131D1998E4A636C2155FED0EAB",
+        "baselineSha256": "E48C30E385447C67A27F6811B8805838507ACE131D1998E4A636C2155FED0EAB",
+        "currentSha256": "E48C30E385447C67A27F6811B8805838507ACE131D1998E4A636C2155FED0EAB",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/execution-attempts.json",
+        "historicalSha256": "9C16D4A8E13B46E5C83F360E7FC0463F3DCFB93A3CE7F3B7D8F97E859DE82C92",
+        "baselineSha256": "9C16D4A8E13B46E5C83F360E7FC0463F3DCFB93A3CE7F3B7D8F97E859DE82C92",
+        "currentSha256": "9C16D4A8E13B46E5C83F360E7FC0463F3DCFB93A3CE7F3B7D8F97E859DE82C92",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/finalization-checks.json",
+        "historicalSha256": "9637B82FC94CDCC014C369DE1E939C3EB65151EC137E2AD6A0D4C57083A2A8C4",
+        "baselineSha256": "9637B82FC94CDCC014C369DE1E939C3EB65151EC137E2AD6A0D4C57083A2A8C4",
+        "currentSha256": "9637B82FC94CDCC014C369DE1E939C3EB65151EC137E2AD6A0D4C57083A2A8C4",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/implementation_plan.md",
+        "historicalSha256": "49C2A246176D4A72E7F30740D072040091A8504475E542DBD61B8F9121CB8E64",
+        "baselineSha256": "49C2A246176D4A72E7F30740D072040091A8504475E542DBD61B8F9121CB8E64",
+        "currentSha256": "49C2A246176D4A72E7F30740D072040091A8504475E542DBD61B8F9121CB8E64",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/local-fixture.json",
+        "historicalSha256": "AAC665FF66B1B4FDE8488D8BA4EF4039C98F70DAB5910E45EFCE728A5A67F097",
+        "baselineSha256": "AAC665FF66B1B4FDE8488D8BA4EF4039C98F70DAB5910E45EFCE728A5A67F097",
+        "currentSha256": "AAC665FF66B1B4FDE8488D8BA4EF4039C98F70DAB5910E45EFCE728A5A67F097",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/preservation-check.json",
+        "historicalSha256": "3D0F146B0D22AA61D835A265E8760091713C6A8501434185CDFACDF2749369F5",
+        "baselineSha256": "3D0F146B0D22AA61D835A265E8760091713C6A8501434185CDFACDF2749369F5",
+        "currentSha256": "3D0F146B0D22AA61D835A265E8760091713C6A8501434185CDFACDF2749369F5",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/runbook.md",
+        "historicalSha256": "90F84FBBFCF6F76A2B76A01E04EE9B193061544C0ADEB962DFBC83FDA5B3DDE5",
+        "baselineSha256": "90F84FBBFCF6F76A2B76A01E04EE9B193061544C0ADEB962DFBC83FDA5B3DDE5",
+        "currentSha256": "90F84FBBFCF6F76A2B76A01E04EE9B193061544C0ADEB962DFBC83FDA5B3DDE5",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/runs/identity-failure.json",
+        "historicalSha256": "79D3C91B0ACE0C2724C18751C510146C2F3FBA2C2AD1F32E972E27883BCD912F",
+        "baselineSha256": "79D3C91B0ACE0C2724C18751C510146C2F3FBA2C2AD1F32E972E27883BCD912F",
+        "currentSha256": "79D3C91B0ACE0C2724C18751C510146C2F3FBA2C2AD1F32E972E27883BCD912F",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/runs/nonempty-rejected.json",
+        "historicalSha256": "ADDDD79904C1AB517671118ED40B5D44D50CCE6238B75A3D1060008196EAFB75",
+        "baselineSha256": "ADDDD79904C1AB517671118ED40B5D44D50CCE6238B75A3D1060008196EAFB75",
+        "currentSha256": "ADDDD79904C1AB517671118ED40B5D44D50CCE6238B75A3D1060008196EAFB75",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/runs/probe-failure.json",
+        "historicalSha256": "CB9A4E7F4DC412488638FC235BDF4D1C6BEB2DCF24967E32427DCBFD5B4000EA",
+        "baselineSha256": "CB9A4E7F4DC412488638FC235BDF4D1C6BEB2DCF24967E32427DCBFD5B4000EA",
+        "currentSha256": "CB9A4E7F4DC412488638FC235BDF4D1C6BEB2DCF24967E32427DCBFD5B4000EA",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/runs/startup-failure.json",
+        "historicalSha256": "C8FD7A365A77B776931C5821191F728919172F810E281C6CB6764799F3FA80E1",
+        "baselineSha256": "C8FD7A365A77B776931C5821191F728919172F810E281C6CB6764799F3FA80E1",
+        "currentSha256": "C8FD7A365A77B776931C5821191F728919172F810E281C6CB6764799F3FA80E1",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/runs/success-1.json",
+        "historicalSha256": "A8E4E2E481CA9CA599C094BF4E2BA21A7212C7537CA4AE2C075D110BB3E5EC53",
+        "baselineSha256": "A8E4E2E481CA9CA599C094BF4E2BA21A7212C7537CA4AE2C075D110BB3E5EC53",
+        "currentSha256": "A8E4E2E481CA9CA599C094BF4E2BA21A7212C7537CA4AE2C075D110BB3E5EC53",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/runs/success-2-verify.json",
+        "historicalSha256": "D5091905819373C5E84C3C0395A084FCB2C5454DF6A6657052B6522E1FD6E5CB",
+        "baselineSha256": "D5091905819373C5E84C3C0395A084FCB2C5454DF6A6657052B6522E1FD6E5CB",
+        "currentSha256": "D5091905819373C5E84C3C0395A084FCB2C5454DF6A6657052B6522E1FD6E5CB",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/runs/success-3-final.json",
+        "historicalSha256": "73EA47F6D2CA3532891D09B13A18D96EF160C2C108814BA9E11D9192A642DA7C",
+        "baselineSha256": "73EA47F6D2CA3532891D09B13A18D96EF160C2C108814BA9E11D9192A642DA7C",
+        "currentSha256": "73EA47F6D2CA3532891D09B13A18D96EF160C2C108814BA9E11D9192A642DA7C",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/runs/truncated-rejected.json",
+        "historicalSha256": "D46C8172ADC671A42DB0546DAC1DF075EA2517B6D95B62C059FA3428627C691C",
+        "baselineSha256": "D46C8172ADC671A42DB0546DAC1DF075EA2517B6D95B62C059FA3428627C691C",
+        "currentSha256": "D46C8172ADC671A42DB0546DAC1DF075EA2517B6D95B62C059FA3428627C691C",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/starting-state.json",
+        "historicalSha256": "2D88517F85BB4AA87B72E5A0AE88D3FEF82EA430B60F5EF4FBCE5240509DA84B",
+        "baselineSha256": "2D88517F85BB4AA87B72E5A0AE88D3FEF82EA430B60F5EF4FBCE5240509DA84B",
+        "currentSha256": "2D88517F85BB4AA87B72E5A0AE88D3FEF82EA430B60F5EF4FBCE5240509DA84B",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/task.md",
+        "historicalSha256": "CE77FE276E52A1DCFE16BA53E9A7AFA8D6BC99080F9D69752DD7CE05DF0BED79",
+        "baselineSha256": "CE77FE276E52A1DCFE16BA53E9A7AFA8D6BC99080F9D69752DD7CE05DF0BED79",
+        "currentSha256": "CE77FE276E52A1DCFE16BA53E9A7AFA8D6BC99080F9D69752DD7CE05DF0BED79",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/test-results-summary.json",
+        "historicalSha256": "E2A69A5896A543DBC16A3800D9900651C8E5BA12E44A8AF21F4B98D6D1B6587D",
+        "baselineSha256": "E2A69A5896A543DBC16A3800D9900651C8E5BA12E44A8AF21F4B98D6D1B6587D",
+        "currentSha256": "E2A69A5896A543DBC16A3800D9900651C8E5BA12E44A8AF21F4B98D6D1B6587D",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/validation-results.json",
+        "historicalSha256": "BD60991B2715B3E88E46F804EA5F031981C1D5679581D47E4C22811FEF9E42CA",
+        "baselineSha256": "BD60991B2715B3E88E46F804EA5F031981C1D5679581D47E4C22811FEF9E42CA",
+        "currentSha256": "BD60991B2715B3E88E46F804EA5F031981C1D5679581D47E4C22811FEF9E42CA",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/walkthrough.md",
+        "historicalSha256": "D8027CA38D8A5600D76FC2AAFC12BC6E3D011A9319206662684DD3680CFBFE89",
+        "baselineSha256": "D8027CA38D8A5600D76FC2AAFC12BC6E3D011A9319206662684DD3680CFBFE89",
+        "currentSha256": "D8027CA38D8A5600D76FC2AAFC12BC6E3D011A9319206662684DD3680CFBFE89",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "package.json",
+        "historicalSha256": "06AC48BF24112580605C6CAA85A5C4BE6C6E23FA70AFCB69979A9519C5ADB5D6",
+        "baselineSha256": "06AC48BF24112580605C6CAA85A5C4BE6C6E23FA70AFCB69979A9519C5ADB5D6",
+        "currentSha256": "06AC48BF24112580605C6CAA85A5C4BE6C6E23FA70AFCB69979A9519C5ADB5D6",
+        "classification": "historical bytes preserved"
+      }
+    ],
+    "c5bReview": [
+      {
+        "path": "docs/plans/c5b-recovery-foundation/review-starting-state.json",
+        "historicalSha256": "3F0595DD85C0D4D07A88892E75D3446D987BEB2F1ED5282ED9B07C6F6617117C",
+        "baselineSha256": "3F0595DD85C0D4D07A88892E75D3446D987BEB2F1ED5282ED9B07C6F6617117C",
+        "currentSha256": "3F0595DD85C0D4D07A88892E75D3446D987BEB2F1ED5282ED9B07C6F6617117C",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/review-recovery-results.json",
+        "historicalSha256": "A9290F6E1D19FA50C2F3B2CDA1FA2290DF749265B6BDE6F7E7976EE83A6C6A4C",
+        "baselineSha256": "A9290F6E1D19FA50C2F3B2CDA1FA2290DF749265B6BDE6F7E7976EE83A6C6A4C",
+        "currentSha256": "A9290F6E1D19FA50C2F3B2CDA1FA2290DF749265B6BDE6F7E7976EE83A6C6A4C",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/review-entrypoint-results.json",
+        "historicalSha256": "B74073EBBAA00F289C437E12DDA6382AECEBB8367CF047247ECAB788393D44CA",
+        "baselineSha256": "B74073EBBAA00F289C437E12DDA6382AECEBB8367CF047247ECAB788393D44CA",
+        "currentSha256": "B74073EBBAA00F289C437E12DDA6382AECEBB8367CF047247ECAB788393D44CA",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/review-test-results-summary.json",
+        "historicalSha256": "2F5139A17853A1ED505E29B7CF503C747D956781482E4C18CE886A99BF3E2C5F",
+        "baselineSha256": "2F5139A17853A1ED505E29B7CF503C747D956781482E4C18CE886A99BF3E2C5F",
+        "currentSha256": "2F5139A17853A1ED505E29B7CF503C747D956781482E4C18CE886A99BF3E2C5F",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5b-recovery-foundation/implementation_review.md",
+        "historicalSha256": "E10A0E61D209764A73EA6C087832D93A7C08A5C2B4DD8AE9CF4BDFE5F2CB2E5C",
+        "baselineSha256": "E10A0E61D209764A73EA6C087832D93A7C08A5C2B4DD8AE9CF4BDFE5F2CB2E5C",
+        "currentSha256": "E10A0E61D209764A73EA6C087832D93A7C08A5C2B4DD8AE9CF4BDFE5F2CB2E5C",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/c5c-request-safety/implementation-prompt.md",
+        "historicalSha256": "BAA5BC197A1B5B6D28DFE15293E00CB1B198BE1F744E5771E560E3BF635ECF1B",
+        "baselineSha256": "BAA5BC197A1B5B6D28DFE15293E00CB1B198BE1F744E5771E560E3BF635ECF1B",
+        "currentSha256": "BAA5BC197A1B5B6D28DFE15293E00CB1B198BE1F744E5771E560E3BF635ECF1B",
+        "classification": "historical bytes preserved"
+      },
+      {
+        "path": "docs/plans/CURRENT_HANDOFF.md",
+        "historicalSha256": "73EC71CC22AC1939B75EE0BDE0465719CE81FDC6CAFF9A40CC4EDD7FF205B892",
+        "baselineSha256": "73EC71CC22AC1939B75EE0BDE0465719CE81FDC6CAFF9A40CC4EDD7FF205B892",
+        "currentSha256": "F120E5DEA40726D9D224D0CC3F403C1EDC5ABF98309AA5D91C755CE3F59C70EE",
+        "classification": "intentional C5c delta from captured baseline"
+      },
+      {
+        "path": "docs/ROADMAP.md",
+        "historicalSha256": "F1E3FC3B6DCB3FD762B02758AB6840887DE061935700AC9A20B3C78F03FECD70",
+        "baselineSha256": "F1E3FC3B6DCB3FD762B02758AB6840887DE061935700AC9A20B3C78F03FECD70",
+        "currentSha256": "690900388F925FDF0A3C0A9001387E6A483869AE5161DB823E656EB11DFE7D6A",
+        "classification": "intentional C5c delta from captured baseline"
+      }
+    ]
+  },
+  "reconciliationNote": "Historical manifest bytes remain unchanged. Handoff and roadmap already included the C5b follow-up review at the captured baseline and now contain dated C5c checkpoints. App/auth/import route hashes intentionally change for C5c. All other differences from older C5a hashes were inherited and preserved.",
+  "normalEnvRead": false,
+  "staged": false,
+  "committed": false,
+  "pushed": false,
+  "deployed": false
+}

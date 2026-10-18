@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-17T18:27:36.687Z",
+  "officialRepository": "https://github.com/morluto/rea",
+  "inspectedCommit": "300905c11be1c25b98fda9e2b71dfa899fc2831c",
+  "version": "6.5.0",
+  "declaredNodeEngines": "^22.19.0 || ^24.11.0 || >=26.0.0",
+  "unsupportedRuntime": "v22.14.0",
+  "supportedRuntime": "v24.11.0",
+  "input": {
+    "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-farming-8JXUDN/rea-upstream/dropRates.js",
+    "sha256": "0c28845d0adea8ccdf1a8b620c9743c8b201209f0d705c70ffd072df97e57626"
+  },
+  "observedFileIdentity": {
+    "unsupported": {
+      "pathDevice": "0",
+      "handleDevice": "2932496268",
+      "otherComparedFieldsEqual": true
+    },
+    "supported": {
+      "pathDevice": "2932496268",
+      "handleDevice": "2932496268",
+      "otherComparedFieldsEqual": true
+    },
+    "fields": ["device", "inode", "size", "mode", "mtimeNs", "ctimeNs"]
+  },
+  "supportedCommand": "pnpm --package=node@24.11.0 --package=rea-agents@6.5.0 dlx rea analyze-javascript-application <private-app-directory> --source-path dropRates.js --analysis-timeout-ms 30000 --format json",
+  "result": {
+    "exit": 0,
+    "evidenceId": "ev_e02270d41179e5a840b4e4850a77ac29d33f446f42dd31dff8cfb9bad1fe8485",
+    "integrityPolicy": "fail",
+    "integrityContradictions": [],
+    "statistics": {
+      "relevant_files": 2,
+      "nested_asar_containers": 0,
+      "text_bytes_read": 597,
+      "invalid_utf8_files": 0,
+      "parsed_javascript_files": 1,
+      "visited_ast_nodes": 106,
+      "findings": 1,
+      "modules": 0,
+      "parse_failures": 0
+    },
+    "limitations": [
+      "Caller-selected source analysis leaves 1 inventoried files outside analysis scope. Inventory identity covers the complete artifact; relationships through unselected sources remain unknown.",
+      "CommonJS and ESM binding relationships were recovered from inert syntax and resolved only within the inventoried artifact container.",
+      "Graph coverage is incomplete; unavailable facts remain explicit and must not be read as absence.",
+      "JavaScript and HTML were parsed as inert text; bundle bootstrap code was never executed.",
+      "Static imports, entrypoints, workers, endpoints, and storage relationships do not prove runtime execution.",
+      "Static paths and relationships may remain unresolved when expressions are dynamic or obfuscated.",
+      "Webpack/Rspack factories were recovered from AST literals; REA did not invoke push handlers or bundle bootstrap code."
+    ]
+  },
+  "rawEvidence": {
+    "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-domain-days-UtNKZV/rea-supported-node.json",
+    "sha256": "c11f9df90b1d893a1ce4065cfc287325786708a890824a114db58609ccb02296"
+  },
+  "changes": [
+    "Local Celestia skill runtime preflight and supported isolated runtime commands",
+    "Correct --format json syntax and positional HAR arguments",
+    "Evidence/review wording now distinguishes tested behavior, source evidence and assumptions"
+  ],
+  "upstreamSourcePatch": false,
+  "systemNodeChanged": false,
+  "projectDependenciesChanged": false,
+  "agentSetupRun": false,
+  "publication": false,
+  "conclusion": "Observed failure is resolved under a supported runtime; no integrity weakening or upstream patch is warranted for this reproducer."
+}

@@ -1,0 +1,282 @@
+Here is the independent C5d engineering review and the two-test unified diff for `apps/api/src/platform/account-data/account-data.http.test.ts` based on the attached source snapshot.
+
+### 1. Snapshot Check
+
+#### Readable vs. Missing Files in the Supplied Archive
+
+* **Identified snapshot metadata**: `SNAPSHOT_INFO.md` and `UPLOAD_MANIFEST.json` identify snapshot `b9eaae3559697142b24ae086f403cfbb9165698aea843cbac0b4e61d27a0a7e2` created at `2026-10-14T12:47:15.419Z` from branch `master` (`HEAD` `2d8820a48db83d7c62feebd849f2f1c2d3488bb6`, current working tree including uncommitted files).
+* **Verified present files**: Both generated root files (`ARGON_PROMPT.md`, `SNAPSHOT_INFO.md`) and **487 of the 703** entries listed in `UPLOAD_MANIFEST.json` under `sourceFiles` are present and match their manifest byte lengths and SHA-256 digests exactly. All application, contract, Prisma schema/migration, tooling, and C5d documentation files required for the review and patch (`docs/ARCHITECTURE.md`, `docs/plans/c5d-account-data/*`, `packages/api-contracts/src/*`, `apps/api/src/*`, `apps/api/prisma/*`, `apps/api/tooling/*`, and `apps/web/src/*`) were read directly.
+* **Missing manifest-listed files (dot-directory archive omission)**: **216 files** listed in `UPLOAD_MANIFEST.json` under `sourceFiles` are absent from the ZIP archive because `.agents/`, `.github/`, `.vscode/`, `apps/api/.agents/`, `apps/api/.claude/`, and `apps/api/.windsurf/` were archived as empty directory entries (`0` bytes):
+* `.agents/rules/architecture.md` (referenced in `ARGON_PROMPT.md` reading step 1), `.agents/AGENTS.md`, `.agents/rules/claude-implementer.md`, `.agents/rules/gemini-architect.md`, `.agents/skills/build-intelligence-engine/SKILL.md`, and `.agents/skills/scaffold-domain-feature/SKILL.md`
+* `.github/workflows/ci.yml`, `.vscode/extensions.json`, and `.vscode/settings.json`
+* 207 Prisma skill reference files duplicated across `apps/api/.agents/skills/prisma-*/**`, `apps/api/.claude/skills/prisma-*/**`, and `apps/api/.windsurf/skills/prisma-*/**` (69 files per directory)
+
+
+* **Intentionally excluded files**: `UPLOAD_MANIFEST.json` records 198 excluded paths (raw logs, browser screenshots/JSON results, recovery fixtures, and trial evaluation scripts), and `SNAPSHOT_INFO.md` notes that `node_modules`, `.env*`, `.git`, build artifacts, and the local PostgreSQL data directory are omitted. Note that although `.agents/rules/architecture.md` is missing from the archive, the module boundary rules are directly codified and enforced in `docs/ARCHITECTURE.md` and `apps/api/eslint.config.js` (`eslint-plugin-boundaries` lines 26–66).
+
+#### Three Grounded Implementation Details from Source
+
+1. **Incremental UTF-8 export streaming and SQL-level TOAST/compression preflight (`apps/api/src/platform/account-data/account-data.repository.ts:26-37, 103-145`)**: `AccountExportWriter` never calls `JSON.stringify` on the full export payload at once; it appends the envelope prefix `{"success":true,"data":`, splices `JSON.stringify(metadata).slice(0, -1)`, and appends each table array and row incrementally while tracking `Buffer.byteLength(value, 'utf8')` against `limits.outputBytes` (`16,777,216`). Before casting any column to `::text`, lines 113–121 evaluate `CASE WHEN pg_column_compression("field") IS NOT NULL THEN 262145::bigint ELSE GREATEST(64, COALESCE(pg_column_size("field"), 0))::bigint END` to reject compressed varlena values and oversized physical rows in PostgreSQL prior to decompression.
+2. **Deferred dynamic import of `requireExistingSubject` inside `protect()` (`apps/api/src/core/middleware/request-admission.ts:172-175`)**: Rather than importing `requireExistingSubject` at the top level of `request-admission.ts` (which would eagerly load `auth.middleware.ts` -> `env.ts` during pure unit tests of `BoundedRateStore` and `ConcurrencyPool`), `protect()` performs `const { requireExistingSubject } = await import('./auth.middleware.js')` dynamically after rate-bucket and concurrency-pool admission when `options.existingSubject` is `true`.
+3. **One-use ref-backed mutation closure and ordered post-delete navigation (`apps/web/src/components/AccountDataControls.tsx:27-36, 62-110`)**: To keep passwords and export payloads out of TanStack Query's `mutation.variables` and cache (`gcTime: 0`), `submit()` captures the password in a local closure assigned to `job.current`, clears React state immediately via `setPassword('')`, and nulls `job.current` inside `mutationFn` before awaiting execution. On confirmed deletion (lines 97–100), `navigate('/login', { replace: true, state: { accountDeleted: true } })` executes *before* `useAuthStore.getState().logout()` so `window.history` already holds `{ accountDeleted: true }` when `App.tsx` (`line 104`, `<AccountQueryProvider key={token ?? 'signed-out'}>`) remounts the router tree.
+
+#### Request and Deletion Path Summary
+
+* **Request admission & authentication**: `createApp` (`apps/api/src/app.ts:61`) mounts `createAccountDataRoutes` at `/api/v1/users` ahead of `v1Router.use(safety.ordinaryJson)`. On `POST /api/v1/users/me/export` and `DELETE /api/v1/users/me/account`, `noStore` sets `Cache-Control: no-store`, and `verifyBearer` (`apps/api/src/core/middleware/auth.middleware.ts:58-100`) synchronously validates the `Bearer` header, HS256 JWT signature, and non-empty string `sub` before touching rate limits or the database. Next, `safety.accountData` (`apps/api/src/core/middleware/request-admission.ts:120-186, 216-222`) charges the owner's `BoundedRateStore` (`sha256(req.user.id)`, burst 3, refill 60,000 ms, capacity 1,024), acquires the account-data `ConcurrencyPool` permit (2 global / 1 per owner) and the shared `auth` `ConcurrencyPool` permit (4 global / 2 per normalized direct socket IP), starts a 30,000 ms `res.destroy()` timer, verifies uncached subject existence (`AuthRepository.subjectExists`), parses the body with `boundedJson(8192)`, and invokes `AccountDataController`.
+* **Credential verification & atomic deletion**: `AccountDataController` (`apps/api/src/platform/account-data/account-data.controller.ts:14-30`) validates an empty query object (`z.object({}).strict()`) and strict body schema (`requestVersion: 1`, `password` 1–128 chars and $\le 72$ UTF-8 bytes, plus `confirmation: "DELETE MY CELESTIA ACCOUNT"` for deletion). `AccountDataService.reauthenticate` (`apps/api/src/platform/account-data/account-data.service.ts:10-21`) reads the user's password hash in a bounded read-only transaction (`octet_length(password) <= 60`), verifies it matches `/^\$2[aby]\$(0[4-9]|1[0-2])\$[./A-Za-z0-9]{53}$/`, and runs `bcrypt.compare` outside database locks. `AccountDataRepository.delete` (`apps/api/src/platform/account-data/account-data.repository.ts:154-176`) then opens a `ReadCommitted` transaction (`statement_timeout = '5s'`, `lock_timeout = '2s'`, `maxWait: 2000`, `timeout: 15000`), locks `SELECT id FROM users WHERE id=${owner} FOR UPDATE`, rechecks the exact credential string, checks per-table (`maxRows + 1`) and total (`30,000`) row caps across all 20 tables, runs domain `lockAndCheckDeletion` (`FOR UPDATE` on owned `genshin_accounts`, `upgrade_goals`, `genshin_characters`, `genshin_weapons`, and `NikkeAccount`, plus bidirectional cross-owner SQL checks for `upgrade_goals.predecessorId`, `genshin_characters.equippedWeaponId`, and `genshin_artifacts.equippedCharacterId`), runs a second `counts` pass to catch child rows committed before parent locks were acquired, nulls owned `upgrade_goals.predecessorId` links, deletes owned `upgrade_goals`, and deletes the `users` row—cascading all remaining owned rows across the 20 application tables.
+
+### 2. Findings
+
+#### Confirmed Actionable Findings
+
+No confirmed correctness, security, or regression defects were found in the production C5d implementation across the seven reviewed paths. However, static analysis of the test and admission layers identified one **Low-severity test-determinism gap** in the PostgreSQL concurrency test suite and one **Low-severity admission-ordering behavioral edge case** worth noting:
+
+##### 1. [Low — Test Determinism] Concurrent delete-vs-import/goal-write PostgreSQL test does not deterministically exercise the `delete-locks-first` interleaving
+
+* **Path and function**: `apps/api/tooling/account-data.integration.test.js`, test `'coordinates deletion with an actual import and another owner-locked write'` (lines 465–487), calling `AccountDataService.prototype.delete` (`apps/api/src/platform/account-data/account-data.service.ts:40-45`).
+* **Trigger and observable result**: Line 472 launches `Promise.allSettled([service.delete(ids.a, password), importer.importAccount(ids.a, ...), new GoalRepository(db).write(ids.a, ...)])`. Because `service.delete` first runs `reauthenticate()` (a separate read-only database transaction `this.repository.credential(owner)` followed by CPU-bound `await bcrypt.compare(password, credential)`) before starting the deletion transaction, whereas `importer.importAccount` and `GoalRepository.write` immediately begin their transactions and execute `SELECT id FROM users WHERE id = ${userId} FOR UPDATE`, the import and goal write nearly always acquire the `users` lock and commit *before* `repository.delete` begins its transaction. The test only asserts `expect(outcomes[0].status).toBe('fulfilled')` (line 483) and does not verify the case where `importer.importAccount` and `GoalRepository.write` block behind an already-acquired deletion lock and reject after `delete` commits.
+* **Source reasoning**: In production (`apps/api/src/games/genshin/importer/importer.repository.ts:53-56` and `apps/api/src/platform/companion/goal.repository.ts:23-26`), if `repository.delete` acquires `SELECT id FROM users WHERE id = ${owner} FOR UPDATE` first and commits `tx.user.delete`, a blocked `SELECT id FROM users WHERE id = ${userId} FOR UPDATE` in `importer.repository.ts` or `goal.repository.ts` wakes up, returns `owners.length === 0`, and throws `UnauthorizedError`. Because `service.delete` performs `bcrypt.compare` before locking `users`, an uncoordinated `Promise.allSettled` tests the `write-then-delete` order rather than the `delete-then-blocked-write` order.
+* **Existing tests/guards checked**: `account-data.integration.test.js:488-513` tests post-delete rejection for `nikkeAccountService`, `nikkeCharacterService`, `upsertAbyssRun`, and `eventProgress`, but runs them sequentially *after* `await service.delete(ids.b, password)` completes rather than while blocked on the `FOR UPDATE` lock.
+* **Minimal correction / regression test**: If deterministic coverage of the `delete-locks-first` path is desired in `account-data.integration.test.js`, hold the transaction inside `repository.delete` after `SELECT id FROM users WHERE id=${owner} FOR UPDATE` (using the same `$transaction` proxy pattern already used in `account-data.integration.test.js:423-449`), start `importer.importAccount` and `GoalRepository.write`, release the deletion gate, and assert that `delete` fulfills while both concurrent owner-locked writes reject with `statusCode: 401` and leave zero surviving rows.
+
+##### 2. [Low — Admission Ordering] `REQUEST_BUSY` concurrency rejections consume the owner's 60-second rate-limit tokens
+
+* **Path and function**: `apps/api/src/core/middleware/request-admission.ts`, `protect()` (lines 129–148).
+* **Trigger and observable result**: In `protect()`, `const retry = store.take(key)` (line 130) executes *before* `const release = pool.acquire(key)` (line 142) and `const sharedRelease = options.sharedPool?.acquire(socketIdentity(req))` (line 144). When the global account-data pool (`global: 2`) or shared auth pool (`global: 4` / `perIdentity: 2`) is saturated by other requests, an owner whose request is rejected with `429 REQUEST_BUSY` (`Retry-After: 1`) still has 1 token deducted from their 60-second `BoundedRateStore` (`burst: 3, refillMs: 60_000`). If the client retries after the advertised 1-second `Retry-After` interval while the pool remains busy across three attempts, the owner's rate bucket is exhausted and subsequent requests fail with `429 RATE_LIMITED` (`Retry-After: 60`) even after the concurrency pool frees up.
+* **Source reasoning**: `store.take(key)` unconditionally mutates `this.entries.set(key, fullAt + this.policy.refillMs)` on line 67 of `request-admission.ts`, and `protect()` does not refund or defer `store.take(key)` when `pool.acquire(key)` or `sharedPool.acquire(...)` returns `null`.
+* **Existing tests/guards checked**: `account-data.http.test.ts:197-226` and `227-252` test at most two same-owner requests after a busy rejection (staying within `burst: 3`), so the third request still succeeds without hitting `RATE_LIMITED`.
+* **Minimal correction (if undesired)**: Keeping `store.take(key)` first is defensible as a deliberate DoS guard against tight `REQUEST_BUSY` polling loops, and `ARGON_PROMPT.md` explicitly notes that test controls must account for the owner's rate budget. If product policy prefers not penalizing an owner when global/shared concurrency is held by *other* owners, `BoundedRateStore` could either take tokens only when `pool.acquire` succeeds or use a separate short-window limit for busy retries (do not change this without an explicit policy decision, as existing C5c/C5d contracts document admission before work).
+
+#### Hypotheses and Non-Resurrecting Race Observations
+
+* **Pre-authenticated non-owner-locked writes racing across the deletion commit instant return `500` instead of `401`/`404**`:
+* **Paths**: `apps/api/src/games/genshin/endgame/endgame.service.ts` (`logAbyssRun` lines 237–253, `logTheaterRun` lines 339–352), `apps/api/src/platform/companion/event.repository.ts` (`upsertTier` lines 18–29), and `apps/api/src/games/nikke/characters/character.service.ts` (`addCharacter` lines 25–52).
+* **Analysis**: Unlike imports, goals, routines, focus, and plan writes (which acquire `SELECT id FROM users WHERE id = ${userId} FOR UPDATE` and map a missing user to `401` or `404`), these retained routes perform `requireAuth` (and for endgame/NIKKE character writes, `findUnique` on `genshinAccount`/`nikkeAccount`) outside a transaction before executing `upsert`/`create`. If account deletion commits in the narrow window *after* `requireAuth`/`findUnique` succeeds and *before* `upsert`/`create` executes, PostgreSQL's `FOR KEY SHARE` foreign-key check rejects the write with Prisma error `P2003` (foreign key violation). As proven in `account-data.integration.test.js:488-513`, this **cannot resurrect any deleted parent or child row**. However, because `P2003` is not caught in those services, the global error handler in `apps/api/src/app.ts:99-104` logs `Unhandled server error` via `logger.error` and returns HTTP `500 INTERNAL_SERVER_ERROR` rather than `401`/`404`.
+
+
+* **Future `NikkeEquipment` writer lock granularity**:
+* **Path**: `apps/api/src/games/nikke/account-data/nikke-account-data.ts:54-56`.
+* **Analysis**: `nikkeAccountData.lockAndCheckDeletion` locks `SELECT id FROM "NikkeAccount" WHERE "userId" = ${owner} FOR UPDATE`, which blocks concurrent `NikkeCharacter` inserts via their foreign key to `NikkeAccount`, but does not lock `"NikkeCharacter" FOR UPDATE` (which is the immediate parent of `"NikkeEquipment"`). Under the current codebase, no route or service ever writes to `NikkeEquipment`, so no race is reachable today; if a future milestone adds `NikkeEquipment` writes, it should either lock `users`/`NikkeAccount` `FOR UPDATE` or `lockAndCheckDeletion` should also lock `"NikkeCharacter" FOR UPDATE`.
+
+
+
+#### Documented Limitations and Product Tradeoffs (Verified Consistent with Contract)
+
+* **Uncached identity existence read (`AuthRepository.subjectExists`) runs outside transaction-local SQL timeouts**: Documented in `docs/plans/c5d-account-data/contract.md:70-77`. On account-data routes, if `subjectExists` stalls, the 30,000 ms response deadline destroys `res` while holding the concurrency permits until the Prisma query settles.
+* **Conservative rejection of compressed PostgreSQL varlena columns (`422 ACCOUNT_DATA_LIMIT`)**: Documented in `contract.md:88-93` and implemented in `account-data.repository.ts:113-121` (`pg_column_compression(field) IS NOT NULL`). Prevents decompression bombs before `::text` conversion at the cost of rejecting large TOAST-compressed legacy JSONB rows.
+* **Single-process in-memory admission stores and backup-restore token validity**: Rate and concurrency pools (`request-admission.ts`) live in process memory (`trust proxy: false`), and stateless JWT revocation after deletion relies on `AuthRepository.subjectExists` returning `false` (`auth.middleware.ts:103-110`). Restoring an old database backup would recreate the `users` row and make an unexpired pre-deletion JWT valid again, which `contract.md:127-129` and `beta-readiness.md:12` explicitly track as an open production gate.
+
+#### High-Risk Paths Checked with Zero Defects Found
+
+* **SQL injection & identifier safety**: All table and column names in `AccountDataRepository` (`account-data.repository.ts:16, 109-110`) come from frozen code-owned allowlists (`profileTable`, `genshinAccountTables`, `nikkeAccountTables`) quoted via `identifier()`, while `owner` is bound exclusively as a parameterized `$1` value from `req.user.id`.
+* **Snapshot isolation & scalar fidelity**: `AccountDataRepository.export` runs in a `REPEATABLE READ`, `READ ONLY` transaction with `timezone = 'UTC'`, `datestyle = 'ISO,YMD'`, and `extra_float_digits = 3`, casting every allowlisted column to `::text` so large integers, JSONB text, timestamps, and nulls are exported without JS number coercion or live Companion projections.
+* **Cross-owner `ON DELETE SET NULL` / `NO ACTION` protection**: `checkGenshinOwnership` (`genshin-account-data.ts:192-208`) runs after `FOR UPDATE` locks on owned `genshin_accounts`, `upgrade_goals`, `genshin_characters`, and `genshin_weapons`, checking both directions (`s.userId = owner OR p.userId = owner`, etc.) and rejecting with `409 ACCOUNT_RELATIONSHIPS_UNSUPPORTED` before `prepareDeletion` or `tx.user.delete` can trigger `SET NULL` on a foreign owner's character or artifact.
+* **Browser session isolation, URL revocation & focus management**: `downloadAccount` and `deleteAccount` (`apps/web/src/lib/account-data.ts`) enforce `assertCurrentSession(session)` and `signal.aborted` before and after network/DOM steps, always call `anchor.remove()` and `URL.revokeObjectURL(url)` in `finally`, and `AccountDataControls.tsx` restores focus only after `mutation.isPending` settles (`lines 45-52`).
+
+### 3. Unified Diff (`apps/api/src/platform/account-data/account-data.http.test.ts`)
+
+```diff
+--- a/apps/api/src/platform/account-data/account-data.http.test.ts
++++ b/apps/api/src/platform/account-data/account-data.http.test.ts
+@@ -296,6 +296,115 @@
+     releaseResponse();
+     await new Promise((done) => setTimeout(done, 30));
+     mocks.export.mockResolvedValue('{}');
+     expect((await post()).status).toBe(200);
+   });
++  it('releases permits after an aborted partial JSON body before password work', async () => {
++    const compare = vi.spyOn(bcrypt, 'compare');
++    const subjectChecked = deferred(),
++      aborted = deferred(),
++      closed = deferred();
++    mocks.subject.mockImplementationOnce(async ({ where }) => {
++      subjectChecked.resolve();
++      return { id: where.id };
++    });
++    const server = createApp({ clock: () => now }).listen(0, '127.0.0.1');
++    servers.push(server);
++    await new Promise<void>((done) => server.once('listening', done));
++    server.once('request', (incoming, res) => {
++      incoming.once('aborted', () => aborted.resolve());
++      res.once('close', () => closed.resolve());
++    });
++    const port = (server.address() as AddressInfo).port;
++    api = supertest(`http://127.0.0.1:${port}`);
++    const req = httpRequest({
++      host: '127.0.0.1',
++      port,
++      path: `${root}/export`,
++      method: 'POST',
++      headers: {
++        Authorization: `Bearer ${token()}`,
++        'Content-Type': 'application/json',
++        'Content-Length': '500',
++      },
++    });
++    req.on('error', () => {});
++    try {
++      req.write('{"requestVersion":1,');
++      await subjectChecked.promise;
++      await new Promise(setImmediate);
++      req.destroy();
++      await Promise.all([aborted.promise, closed.promise]);
++      await new Promise(setImmediate);
++      expect(mocks.subject).toHaveBeenCalledTimes(1);
++      expect(mocks.credential).not.toHaveBeenCalled();
++      expect(compare).not.toHaveBeenCalled();
++      expect(mocks.export).not.toHaveBeenCalled();
++      expect(mocks.delete).not.toHaveBeenCalled();
++      expect(mocks.error).not.toHaveBeenCalled();
++      expect((await post()).status).toBe(200);
++      expect(mocks.subject).toHaveBeenCalledTimes(2);
++      expect(mocks.credential).toHaveBeenCalledTimes(1);
++      expect(mocks.export).toHaveBeenCalledTimes(1);
++      expect((await api.post('/api/v1/auth/login').send({})).status).toBe(400);
++      expect(mocks.error).not.toHaveBeenCalled();
++    } finally {
++      req.destroy();
++    }
++  });
++  it('closes on the 30s response deadline and retains permits until work settles', async () => {
++    const started = deferred(),
++      pending = deferred(),
++      closed = deferred();
++    const realTimer = globalThis.setTimeout;
++    let deadline: (() => void) | undefined;
++    let deadlineMs: number | undefined;
++    const spy = ((callback: () => void, ms?: number) => {
++      if (ms === 30_000 && !deadline) {
++        deadlineMs = ms;
++        deadline = callback;
++      }
++      return realTimer(callback, ms);
++    }) as unknown as typeof setTimeout;
++    vi.spyOn(globalThis, 'setTimeout').mockImplementation(spy);
++    mocks.export.mockImplementationOnce(async () => {
++      started.resolve();
++      await pending.promise;
++      return '{}';
++    });
++    const server = createApp({ clock: () => now }).listen(0, '127.0.0.1');
++    servers.push(server);
++    await new Promise<void>((done) => server.once('listening', done));
++    const port = (server.address() as AddressInfo).port;
++    api = supertest(`http://127.0.0.1:${port}`);
++    const req = httpRequest({
++      host: '127.0.0.1',
++      port,
++      path: `${root}/export`,
++      method: 'POST',
++      headers: { Authorization: `Bearer ${token()}`, 'Content-Type': 'application/json' },
++    });
++    req.on('error', () => closed.resolve());
++    req.once('close', () => closed.resolve());
++    try {
++      req.end(JSON.stringify(input));
++      await started.promise;
++      expect(deadlineMs).toBe(30_000);
++      expect(deadline).toBeTypeOf('function');
++      expect(req.destroyed).toBe(false);
++      deadline!();
++      await closed.promise;
++      const busy = await remove();
++      expect(busy.status).toBe(429);
++      expect(busy.body.error.code).toBe('REQUEST_BUSY');
++      expect(busy.headers['retry-after']).toBe('1');
++      expect(mocks.delete).not.toHaveBeenCalled();
++      pending.resolve();
++      await new Promise(setImmediate);
++      expect((await post()).status).toBe(200);
++      expect(mocks.error).not.toHaveBeenCalled();
++    } finally {
++      pending.resolve();
++      req.destroy();
++    }
++  });
+ });
+
+```
+
+#### New Test Assertions and Defects/Mutations Caught
+
+| Test Case | Key Assertions | Defects / Mutations Caught |
+| --- | --- | --- |
+| **1. `releases permits after an aborted partial JSON body before password work**` | • `subjectChecked.promise` + `setImmediate` confirms the request entered `protect()`, completed `requireExistingSubject` (`mocks.subject` called once), and entered `readBody` before `req.destroy()` is called.<br>
+
+<br>• `mocks.credential`, `bcrypt.compare`, `mocks.export`, `mocks.delete`, and `mocks.error` are all `not.toHaveBeenCalled()`.<br>
+
+<br>• Subsequent `await post()` for the same owner `'a'` returns `200` (with `mocks.subject` = 2, `mocks.credential` = 1, `mocks.export` = 1), and `POST /api/v1/auth/login` returns `400` rather than `429`. | • Catches any permit leak in `readBody` or `protect()` when `options.responseMs` is enabled (`responseDone` / `workDone` coordination on `req` `'aborted'` and `res` `'close'`).<br>
+
+<br>• Catches any mutation that skips `readBody` completion checks and invokes `operation(req, res)` (`credential` / `bcrypt.compare` / `export`) on an aborted stream.<br>
+
+<br>• Catches unhandled parser abort errors reaching `logger.error` (`app.ts` line 86 `if (res.destroyed |
+| **2. `closes on the 30s response deadline and retains permits until work settles**` | • Captures the `setTimeout` callback registered with `ms === 30_000` (`expect(deadlineMs).toBe(30_000)`, `expect(deadline).toBeTypeOf('function')`) while leaving all HTTP/socket timers on the real `setTimeout`.<br>
+
+<br>• Verifies `expect(req.destroyed).toBe(false)` before invoking `deadline!()`, and awaits `closed.promise` on the client request to prove the server's deadline callback (`() => res.destroy()`) closed the connection.<br>
+
+<br>• While `pending.promise` is still unresolved, `await remove()` for the same owner returns `429` with `code: 'REQUEST_BUSY'`, `Retry-After: 1`, and `mocks.delete` not called.<br>
+
+<br>• After `pending.resolve()` and `setImmediate`, `await post()` (using the 3rd of 3 burst tokens for owner `'a'`) returns `200`, and `mocks.error` is not called. | • Catches removal or misconfiguration of `options.responseMs` (`30_000`) or failure of the deadline callback to call `res.destroy()`.<br>
+
+<br>• Catches premature permit release on `res` `'close'` when the 30-second deadline fires while repository work (`pending.promise`) is still running.<br>
+
+<br>• Catches failure to release the owner/global/shared permits in `finally` after an already-destroyed response's repository promise settles, or controller attempts to write headers/body to a deadline-destroyed response (`if (!res.destroyed)`). |
+
+### 4. Validation
+
+#### What Was Actually Executed in This Review Environment
+
+* **Manifest integrity verification (`python3` + `sha256` against extracted ZIP)**: Executed a byte-count and SHA-256 verification of all 703 `sourceFiles` and 2 `generatedFiles` in `UPLOAD_MANIFEST.json`, confirming 487 `sourceFiles` + 2 `generatedFiles` match byte-for-byte and identifying the 216 dot-directory files omitted from the ZIP archive.
+* **Patch applicability and formatting checks (`git apply --check` + `python3`)**: Executed `git apply --check` against the extracted `apps/api/src/platform/account-data/account-data.http.test.ts` (exited `0`) and verified that every added line in the diff is $\le 96$ characters (within `.prettierrc`'s `printWidth: 100`) and adheres to `.prettierrc` and `apps/api/eslint.config.js`.
+* **Standalone Node.js HTTP stream/timer mechanics check (`node -e`)**: Executed standalone Node.js `node:http` harnesses verifying that (a) pausing an `IncomingMessage` without a premature `'data'` listener preserves the initial JSON chunk until after an async `subjectExists` step and cleanly fires `'aborted'` + `'close'` on `req.destroy()`, and (b) invoking a server-side `res.destroy()` deadline callback while work is pending immediately closes the client `httpRequest` socket without client-side `req.destroy()`.
+
+#### What Was NOT Executed (Requires Local Checkout with `node_modules` and Disposable PostgreSQL)
+
+Because the attached archive is a static source bundle without `node_modules` or the local PostgreSQL fixture, Vitest, TypeScript (`tsc`), ESLint, Prettier, and PostgreSQL integration/recovery tests were **not** executed during this review. The prior 1,004-test / 55-file / 133-PostgreSQL result in `docs/plans/c5d-account-data/validation-results.json` is historical pre-patch evidence and does not validate the new patch until the local agent runs the commands below.
+
+#### Proposed Local Validation Commands and Expected Outcomes
+
+1. **Apply the patch from the repository root**:
+```powershell
+git apply account-data-http-tests.patch
+
+```
+
+
+*Expected outcome*: Applies cleanly to `apps/api/src/platform/account-data/account-data.http.test.ts` with zero warnings or whitespace errors.
+2. **Run focused C5d unit and composed HTTP tests (from `apps/api`)**:
+```powershell
+$env:NODE_ENV='test'
+$env:DOTENV_CONFIG_PATH='NUL'
+pnpm exec vitest run src/platform/account-data/account-data.http.test.ts tooling/account-data-client.test.js tooling/account-data.test.js src/core/middleware/request-admission.test.ts --no-file-parallelism
+
+```
+
+
+*Expected outcome*: **53/53 passing tests** across 4 files (`account-data.http.test.ts` increases from 24 to **26 passing cases**).
+3. **Run API lint, typecheck, and Prettier format check**:
+```powershell
+pnpm --filter @celestia/api run lint
+pnpm --filter @celestia/api run check-types
+pnpm exec prettier --check apps/api/src/platform/account-data/account-data.http.test.ts
+
+```
+
+
+*Expected outcome*: Zero ESLint warnings/errors, zero TypeScript errors, and Prettier reports the file is formatted properly.
+4. **Run full recovery rehearsal and verification suite (from repository root)**:
+```powershell
+$env:NODE_ENV='test'
+$env:DOTENV_CONFIG_PATH='NUL'
+pnpm run recovery:rehearse --fixture 'D:\Genshin Personal\project-celestia\docs\plans\c5c-request-safety\review-fixture.json' --verify
+
+```
+
+
+*Expected outcome*: Passes dump/restore and full verification with **1,006 passing tests across 55 files** (zero failed/skipped) and **133 actual PostgreSQL cases**.
+
+### 5. Open Questions
+
+1. **Archive packaging of dot-directories (`.agents/`, `.github/`, `.vscode/`)**: Was the omission of the 216 files inside dot-directories from `celestia-argon-review-2026-10-14.zip` (while still listing them in `UPLOAD_MANIFEST.json` under `sourceFiles`) an unintended glob/archiver filter in `docs/plans/c5d-argon-trial/prepare-upload.mjs`?
+2. **`REQUEST_BUSY` rate-budget accounting (`apps/api/src/core/middleware/request-admission.ts:130-148`)**: Is it intentional product policy that requests rejected with `429 REQUEST_BUSY` (`Retry-After: 1`) due to global or shared-socket concurrency contention still consume one of the owner's three 60-second rate-limit tokens?
+3. **Pre-authenticated non-owner-locked writes racing with deletion (`endgame`, `event_progress`, `NikkeAccount`/`NikkeCharacter`)**: When an already-authenticated request on those routes loses a race with account deletion and hits a PostgreSQL foreign-key violation (`P2003`), is returning the generic `500 INTERNAL_SERVER_ERROR` (and logging `P2003` via `logger.error`) acceptable because the race is rare and non-resurrecting, or should `P2003` be mapped to `401`/`404` or serialized under the `users` lock like imports, goals, routines, focus, and plan writes?

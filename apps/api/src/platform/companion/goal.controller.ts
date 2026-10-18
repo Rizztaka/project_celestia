@@ -5,6 +5,14 @@ import { successResponse } from '@/core/utils/response.js';
 import { GoalService } from './goal.service.js';
 
 export class GoalController {
+  updateGoal = async (req: Request, res: Response) => {
+    res.json(
+      successResponse(
+        await this.goalService.updateGoal(req.user!.id, req.params['id'] as string, req.body),
+        'Goal saved.',
+      ),
+    );
+  };
   private readonly goalService: GoalService;
 
   constructor() {

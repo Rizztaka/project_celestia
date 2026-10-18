@@ -1,5 +1,7 @@
 import { Router } from 'express';
+
 import { requireAuth } from '@/core/middleware/auth.middleware.js';
+
 import accountRoutes from './accounts/account.routes.js';
 import characterRoutes from './characters/character.routes.js';
 

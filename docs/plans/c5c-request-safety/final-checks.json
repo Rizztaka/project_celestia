@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-12",
+  "fullValidation": "entrypoint-results.json",
+  "sourceChangesAfterFullValidation": false,
+  "focusedPrettierCheck": {
+    "exitCode": 0,
+    "scope": "All C5c modified/new TypeScript, JavaScript, MJS, JSON and Markdown plus changed-files.json",
+    "message": "All matched files use Prettier code style!"
+  },
+  "gitDiffCheck": {
+    "exitCode": 0,
+    "notes": "Only inherited LF-to-CRLF checkout-policy warnings; no whitespace errors. No Git configuration or tracked bytes were normalized."
+  },
+  "preservation": {
+    "baselineFiles": 809,
+    "unchanged": 798,
+    "intentionalModified": 11,
+    "deleted": 0,
+    "unexpected": 0,
+    "protected": 26,
+    "rawEvidence": 7,
+    "hashMismatches": 0
+  },
+  "headUnchanged": true,
+  "branchUnchanged": true,
+  "indexEmpty": true,
+  "cleanup": "cleanup.json",
+  "finalization": "Only documentation and evidence were finalized after the successful complete recovery --verify run. Manifest excludes its own hash and is verified after final serialization."
+}

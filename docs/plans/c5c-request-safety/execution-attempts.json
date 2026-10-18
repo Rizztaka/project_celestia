@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-12",
+  "attempts": [
+    {
+      "stage": "initial focused application tests",
+      "result": "failed",
+      "passed": 94,
+      "failed": 1,
+      "evidence": "focused-initial.log",
+      "reason": "Immediate declared-length 413 raced the client's ongoing 4 MiB upload (ECONNRESET).",
+      "resolution": "Use the installed bounded body reader's length check and drain before callback; do not buffer excessive input."
+    },
+    {
+      "stage": "focused parser/admission/import regression",
+      "result": "passed",
+      "passed": 106,
+      "files": 5,
+      "evidence": "focused-results.log"
+    },
+    {
+      "stage": "first real recovery with full verification",
+      "result": "failed",
+      "recoveryAndRestoredReadsPassed": true,
+      "testsPassed": 947,
+      "testsFailed": 2,
+      "skipped": 0,
+      "reason": "Two existing duplicate-registration cases reused one application bucket across tests and received 429 instead of their expected 409.",
+      "resolution": "Create fresh app instances in beforeEach. Preserve original assertions and default policies.",
+      "ownedCleanupPassed": true,
+      "evidence": "recovery-initial-failure.json"
+    },
+    {
+      "stage": "isolated existing platform security suite",
+      "result": "passed",
+      "passed": 22,
+      "evidence": "security-isolation-results.log"
+    },
+    {
+      "stage": "synthetic browser acceptance",
+      "result": "passed",
+      "admissionClockInjected": true,
+      "realPostgreSQL": true,
+      "evidence": "acceptance.md",
+      "ownedCleanupPassed": true
+    },
+    {
+      "stage": "final real recovery and complete verification after stored-state bounds",
+      "result": "passed",
+      "passed": 950,
+      "files": 51,
+      "failed": 0,
+      "skipped": 0,
+      "postgresCases": 113,
+      "allPackageSchemaFormatIntegrityChecksPassed": true,
+      "ownedCleanupPassed": true,
+      "evidence": "recovery-results.json"
+    }
+  ],
+  "diagnosticPolicy": "No historical raw evidence replaced. Raw whole-suite report retained privately because inherited test names contain synthetic connection URLs.",
+  "inheritedWarning": "The existing pg overlapping-query deprecation remains; no suppression or dependency change was introduced."
+}

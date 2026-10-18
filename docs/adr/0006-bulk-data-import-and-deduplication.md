@@ -1,5 +1,7 @@
 # **# ADR 0006: Bulk Data Import and Deduplication Strategy (Milestone 2B)**
 
+> **2026-09-25 amendment:** C1 in ADR 0012 supersedes blanket replacement for omitted sections as a target design. Current code still replaces defaulted empty equipment/material inventories. Account creation precedes its inventory transaction. Do not infer complete rollback or stable equipment identity from this historical design. See [ADR 0012](0012-genshin-companion-direction.md).
+
 **Status:** Accepted
 
 **Date:** 2026-08-07

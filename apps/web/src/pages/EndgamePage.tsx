@@ -1119,7 +1119,7 @@ export default function EndgamePage() {
 
   const { data: rosterData, isLoading: rosterLoading } = useQuery({
     queryKey: ['roster'],
-    queryFn: fetchGenshinRoster,
+    queryFn: ({ signal }) => fetchGenshinRoster(signal),
   });
 
   // We also need abyssHistory to check for 404 (no account)
@@ -1130,18 +1130,24 @@ export default function EndgamePage() {
 
   if (abyssLoading || rosterLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
+      <main id="companion-content" tabIndex={-1} className="p-6">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent" />
-          <p className="text-sm text-zinc-500">Loading Endgame Center…</p>
+          <h1 className="text-xl font-bold text-white">Endgame records</h1>
+          <p role="status" className="mt-4 text-sm text-zinc-500">
+            Loading Endgame Center…
+          </p>
         </div>
-      </div>
+      </main>
     );
   }
 
   if (abyssError && abyssError instanceof ApiError && abyssError.status === 404) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-zinc-950 px-6 text-center">
+      <main
+        id="companion-content"
+        tabIndex={-1}
+        className="flex flex-col items-center gap-4 p-6 text-center"
+      >
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-400">
           <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
@@ -1152,7 +1158,7 @@ export default function EndgamePage() {
             />
           </svg>
         </div>
-        <h2 className="font-display text-xl font-bold text-white">No Account Found</h2>
+        <h1 className="font-display text-xl font-bold text-white">Endgame records</h1>
         <p className="max-w-sm text-sm text-zinc-400">
           Import your game data first before using the Endgame Center.
         </p>
@@ -1162,47 +1168,29 @@ export default function EndgamePage() {
         >
           Go to Import
         </Link>
-      </div>
+      </main>
     );
   }
 
   const roster = rosterData?.characters ?? [];
 
   return (
-    <div className="relative min-h-screen bg-zinc-950 text-zinc-300">
+    <main
+      id="companion-content"
+      tabIndex={-1}
+      className="relative min-h-screen bg-zinc-950 text-zinc-300"
+    >
       {/* Background glow */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-64 -top-64 h-[600px] w-[600px] rounded-full bg-violet-900/10 blur-[120px]" />
         <div className="bg-amber-900/8 absolute -bottom-64 -right-64 h-[600px] w-[600px] rounded-full blur-[120px]" />
       </div>
 
-      {/* Nav */}
-      <nav className="glass-panel sticky top-0 z-40 flex items-center justify-between border-b-0 border-white/10 px-6 py-4">
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-white"
-        >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Dashboard
-        </Link>
-        <span className="font-display text-gradient text-lg font-bold tracking-tight">
-          Endgame Center
-        </span>
-        <div className="w-24" />
-      </nav>
-
-      <main className="relative z-10 mx-auto max-w-5xl px-4 py-8 sm:px-6">
+      <div className="relative z-10 mx-auto max-w-5xl px-4 py-8 sm:px-6">
         {/* Header */}
         <div className="mb-6">
           <p className="text-xs font-semibold uppercase tracking-widest text-violet-400">
-            Phase 5 · Endgame Center
+            Secondary tools · Saved endgame records
           </p>
           <h1 className="font-display mt-1 text-3xl font-bold tracking-tight text-white">
             {MODE_CONFIG[activeMode].label}
@@ -1214,6 +1202,10 @@ export default function EndgamePage() {
           </p>
         </div>
 
+        <p className="mb-6 text-sm text-zinc-400">
+          Saved records remain available. Legacy scoring, rotation and team assumptions are not
+          verified current-game guidance.
+        </p>
         {/* Mode Tab Bar */}
         <div className="bg-white/3 mb-8 flex gap-2 rounded-2xl border border-white/10 p-1.5">
           {(Object.keys(MODE_CONFIG) as ActiveMode[]).map((mode) => {
@@ -1245,7 +1237,7 @@ export default function EndgamePage() {
 
         {/* Active View */}
         {activeMode === 'ABYSS' ? <AbyssView roster={roster} /> : <TheaterView roster={roster} />}
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

@@ -1,0 +1,149 @@
+{
+  "date": "2026-10-18",
+  "status": "passed-local",
+  "command": "pnpm run verify",
+  "environment": {
+    "NODE_ENV": "test",
+    "DOTENV_CONFIG_PATH": "NUL",
+    "platform": "win32",
+    "disposablePostgreSQL": true
+  },
+  "tests": {
+    "passed": 1121,
+    "files": 63,
+    "failed": 0,
+    "skipped": 0,
+    "postgresCases": 118,
+    "integration": {
+      "src/platform/companion/plan.integration.test.ts": 36,
+      "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+      "src/platform/companion/routine.integration.test.ts": 16,
+      "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+      "src/games/genshin/importer/importer.integration.test.ts": 16,
+      "src/platform/companion/catalog-advice.integration.test.ts": 9
+    },
+    "actualPostgresCases": 145,
+    "integrationFiles": [
+      {
+        "file": "tooling/account-data.integration.test.js",
+        "passed": 20
+      },
+      {
+        "file": "tooling/request-safety.integration.test.js",
+        "passed": 7
+      },
+      {
+        "file": "src/platform/companion/catalog-advice.integration.test.ts",
+        "passed": 9
+      },
+      {
+        "file": "src/platform/companion/goal-lifecycle.integration.test.ts",
+        "passed": 28
+      },
+      {
+        "file": "src/platform/companion/plan.integration.test.ts",
+        "passed": 36
+      },
+      {
+        "file": "src/platform/companion/routine.integration.test.ts",
+        "passed": 16
+      },
+      {
+        "file": "src/games/genshin/characters/character-equipment.integration.test.ts",
+        "passed": 13
+      },
+      {
+        "file": "src/games/genshin/importer/importer.integration.test.ts",
+        "passed": 16
+      }
+    ]
+  },
+  "checks": [
+    {
+      "id": "shared-types-and-build",
+      "exit": 0
+    },
+    {
+      "id": "disposable-postgres-ready",
+      "exit": 0
+    },
+    {
+      "id": "prisma-generate",
+      "exit": 0
+    },
+    {
+      "id": "disposable-migrations",
+      "exit": 0
+    },
+    {
+      "id": "prisma-validate",
+      "exit": 0
+    },
+    {
+      "id": "schema-diff",
+      "exit": 0
+    },
+    {
+      "id": "full-suite",
+      "exit": 0
+    },
+    {
+      "id": "api-lint",
+      "exit": 0
+    },
+    {
+      "id": "api-types-and-build",
+      "exit": 0
+    },
+    {
+      "id": "api-aliases",
+      "exit": 0
+    },
+    {
+      "id": "web-lint",
+      "exit": 0
+    },
+    {
+      "id": "web-types",
+      "exit": 0
+    },
+    {
+      "id": "web-build",
+      "exit": 0
+    },
+    {
+      "id": "repository-format",
+      "exit": 0
+    },
+    {
+      "id": "diff-check",
+      "exit": 0
+    }
+  ],
+  "evidence": {
+    "recovery": {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-29WJ6z/result.json",
+      "sha256": "c404f9205d197d9009ee44968816452e27c1f3e36eca80f45267f9955f49a5c9"
+    },
+    "verification": {
+      "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-v0frSc/verification.json",
+      "sha256": "b5dd77311daa840721c9f8e3cb9e40c7e52a63882e002b60d854d5df7bdd1e80"
+    },
+    "vitest": {
+      "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-v0frSc/vitest.json",
+      "sha256": "8cc76f63d7f3c8832f76bc77e89ee84862a23bc65e8e10d70f73ed8fce347ee9"
+    },
+    "rea": {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-section1-reference-dZ9rE5-rea-analysis.json",
+      "sha256": "f3da80b04c03e3ade9b125cff5e49abcc0800cee2d1c373ccdd2fec81e62fa00"
+    }
+  },
+  "cleanup": {
+    "databasesAndRolesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "privateFilesRetained": true,
+    "credentialsRemoved": true
+  },
+  "remoteCIObserved": false,
+  "deploymentObserved": false
+}

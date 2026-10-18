@@ -1,0 +1,149 @@
+{
+  "checkedAt": "2026-10-17T07:43:25.8760502Z",
+  "scope": "C5g follow-up review and conditional C5h prompt; application unchanged; no new UI acceptance",
+  "baseline": {
+    "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-c5g-review-edf30997b638/starting-state.json",
+    "sha256": "15B962BA81E579DAD95DF794E8FF0049503CCAD1FAA2106ABBCF647777D6F4E8"
+  },
+  "baselineFiles": 962,
+  "findings": [],
+  "reviewConclusion": "No new blocking application-code finding in scoped one-line layout change; prior accessibility gaps remain.",
+  "freshFocused": {
+    "command": "pnpm --filter @celestia/api exec vitest run tooling/goal-session.test.js tooling/journey-client.test.js --no-file-parallelism --reporter=default --reporter=json --outputFile.json=C:/Users/inuzu/AppData/Local/Temp/celestia-c5g-review-edf30997b638/vitest.json",
+    "environment": {
+      "NODE_ENV": "test",
+      "DOTENV_CONFIG_PATH": "NUL"
+    },
+    "exit": 0,
+    "passed": 31,
+    "files": 2,
+    "failed": 0,
+    "skipped": 0,
+    "report": {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-c5g-review-edf30997b638/vitest.json",
+      "sha256": "1D4FE5ECD6D1C3F6AF5ABB5248148A2920DB4D92F109EFD549C89BF2B9334EB6"
+    },
+    "limit": "Goal/session and journey behavior only; not a visual reflow or human reader test."
+  },
+  "inheritedFull": {
+    "phase": "C5g",
+    "rerunDuringReview": false,
+    "passed": 1006,
+    "files": 55,
+    "failed": 0,
+    "skipped": 0,
+    "actualPostgresCases": 133,
+    "historicalClassifier": 106,
+    "reports": [
+      {
+        "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-GVBCDc/result.json",
+        "sha256": "F430555443ABB6A47882CC3864D5C81641926391D30E57018F20D9EAEF6CC726",
+        "matches": true
+      },
+      {
+        "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-verification-yYLbwO/verification.json",
+        "sha256": "BA2A381FF21F834E2A4EF3D048B50E7B55938E3F370BC4CCBBB2D75F95B5905D",
+        "matches": true
+      },
+      {
+        "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-verification-yYLbwO/vitest.json",
+        "sha256": "9B9AF363F8157B2483D800E0C100E8F3D488BBFF86A87934BB9D1AE34BD0F230",
+        "matches": true
+      }
+    ],
+    "rawReportRead": true
+  },
+  "inheritedCleanup": {
+    "reports": [
+      {
+        "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-Gwsf8Z/c5d-browser-result.json",
+        "sha256": "7161320DC95C903E0B17D8FCE7973855125706B3C7C10DDAEF7BA419D8527055",
+        "matches": true
+      },
+      {
+        "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-GVBCDc/result.json",
+        "sha256": "F430555443ABB6A47882CC3864D5C81641926391D30E57018F20D9EAEF6CC726",
+        "matches": true
+      },
+      {
+        "path": "docs/plans/c5g-accessibility-closeout/interrupted-cleanup.json",
+        "sha256": "F503E688E7F2215FAE257202AD4E1D06A55288BB331E41D76BDAC7F3A0F1DF0E",
+        "matches": true
+      }
+    ],
+    "harnessStartedDuringReview": false,
+    "historicalReconciliationExecuted": false
+  },
+  "c5gBaselineAudit": {
+    "files": 951,
+    "unchangedAtReviewStart": 949,
+    "recordedChangesMatch": [
+      "apps/web/src/components/GoalForm.tsx",
+      "docs/plans/CURRENT_HANDOFF.md"
+    ],
+    "unexpected": [],
+    "protectedGroups": [
+      {
+        "group": "formatterExceptions",
+        "count": 5,
+        "allHashesMatch": true
+      },
+      {
+        "group": "immutableRawEvidence",
+        "count": 7,
+        "allHashesMatch": true
+      },
+      {
+        "group": "migrations",
+        "count": 13,
+        "allHashesMatch": true
+      },
+      {
+        "group": "protectedFiles",
+        "count": 8,
+        "allHashesMatch": true
+      }
+    ]
+  },
+  "nextPhase": {
+    "name": "C5h targeted accessibility verification",
+    "status": "Prepared, not started; prerequisite-dependent",
+    "prompt": "docs/plans/c5h-targeted-accessibility/implementation-prompt.md",
+    "model": "GPT-6 Astra",
+    "effort": "Extra High",
+    "recommendationNotBenchmark": true,
+    "appSettingsChanged": false
+  },
+  "preservation": {
+    "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+    "branch": "master",
+    "index": [],
+    "startingFiles": 962,
+    "unchangedFiles": 961,
+    "changes": [
+      {
+        "path": "docs/plans/CURRENT_HANDOFF.md",
+        "before": "C85421BDFB1C9FA97DD101C1558E1CDFC54C2B13F1029C8779442472AA7E2968",
+        "after": "8F27FEF3AC8C9319E7C675D2F1A6B0FC32B493D070DF19C3F2A3E4DABDC067B8",
+        "expected": true
+      }
+    ],
+    "missing": [],
+    "unexpected": [],
+    "addedFiles": [
+      "docs/plans/c5g-accessibility-closeout/implementation_review.md",
+      "docs/plans/c5g-accessibility-closeout/review-validation.json",
+      "docs/plans/c5h-targeted-accessibility/implementation-prompt.md"
+    ],
+    "previousHandoffContentByteIdentical": true,
+    "applicationAndHistoricalEvidenceUnchanged": true
+  },
+  "documentationChecks": {
+    "localMarkdownFiles": 3,
+    "localTargets": 107,
+    "brokenTargets": [],
+    "gitDiffCheckExit": 0,
+    "formatting": "Final targeted Prettier check passed for review, validation, proposed prompt and handoff.",
+    "targetedPrettierCheckExit": 0
+  }
+}

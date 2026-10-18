@@ -1,0 +1,17 @@
+{
+  "checked": "2026-10-09",
+  "ownedApiPid": 16820,
+  "ownedWebPid": 35888,
+  "ownedPostgresPid": 38984,
+  "temporaryPorts": {
+    "45449": "closed",
+    "55448": "closed",
+    "45448": "closed"
+  },
+  "controlFileCleared": true,
+  "viewportRestored": true,
+  "browserSignedOut": true,
+  "temporaryTabsClosed": true,
+  "normalWebBuildRestored": true,
+  "fixtureDataRetained": true
+}

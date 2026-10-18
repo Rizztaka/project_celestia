@@ -1,0 +1,191 @@
+{
+  "checkedAtUtc": "2026-10-17T18:16:36.024Z",
+  "status": "passed",
+  "finalRecovery": {
+    "databasesAndRolesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "privateFilesRetained": true,
+    "credentialsRemoved": true
+  },
+  "resources": [
+    {
+      "database": "celestia_test_7aa11a468c3fc783_source",
+      "role": "celestia_test_7aa11a468c3fc783_source",
+      "oid": 80714,
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-FmyQ6F\\celestia_test_7aa11a468c3fc783_source",
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    },
+    {
+      "database": "celestia_test_7aa11a468c3fc783_restore",
+      "role": "celestia_test_7aa11a468c3fc783_restore",
+      "oid": 80717,
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-FmyQ6F\\celestia_test_7aa11a468c3fc783_restore",
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    },
+    {
+      "database": "celestia_test_7aa11a468c3fc783_verify",
+      "role": "celestia_test_7aa11a468c3fc783_verify",
+      "oid": 80720,
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-FmyQ6F\\celestia_test_7aa11a468c3fc783_verify",
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    }
+  ],
+  "browserRuns": [
+    {
+      "evidence": {
+        "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-qTuXrf\\c5d-browser-result.json",
+        "sha256": "B2910FD3A6E085582165E434DC0880156420BC3F2491B3087C815DB8F0140F67"
+      },
+      "kind": "C5d browser acceptance",
+      "controlledRateClock": true,
+      "root": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-qTuXrf",
+      "permissions": {
+        "mechanism": "Windows protected ACL",
+        "currentUserOnly": true,
+        "verified": true
+      },
+      "commands": [],
+      "startedAt": "2026-10-17T14:07:12.118Z",
+      "resourcesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "ordinaryWebBuildRestored": true,
+      "browserPortsClosed": true,
+      "finishedAt": "2026-10-17T14:07:23.681Z"
+    },
+    {
+      "evidence": {
+        "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-1llL9c\\c5d-browser-result.json",
+        "sha256": "8EDB3A958279576C24387588000DC21AAEC1292786A721808591341F484CF206"
+      },
+      "kind": "C5d browser acceptance",
+      "controlledRateClock": true,
+      "root": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-1llL9c",
+      "permissions": {
+        "mechanism": "Windows protected ACL",
+        "currentUserOnly": true,
+        "verified": true
+      },
+      "commands": [],
+      "startedAt": "2026-10-17T14:08:05.917Z",
+      "resourcesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "ordinaryWebBuildRestored": true,
+      "browserPortsClosed": true,
+      "finishedAt": "2026-10-17T17:59:58.341Z"
+    },
+    {
+      "evidence": {
+        "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-Sikliq\\c5d-browser-result.json",
+        "sha256": "68F022C5867ED81E95DB0CCE420C2B2C481D13E0FFC274D3534847C066EB3999"
+      },
+      "kind": "C5d browser acceptance",
+      "controlledRateClock": true,
+      "root": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-Sikliq",
+      "permissions": {
+        "mechanism": "Windows protected ACL",
+        "currentUserOnly": true,
+        "verified": true
+      },
+      "commands": [],
+      "startedAt": "2026-10-17T18:04:38.377Z",
+      "resourcesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "ordinaryWebBuildRestored": true,
+      "browserPortsClosed": true,
+      "finishedAt": "2026-10-17T18:06:53.959Z"
+    },
+    {
+      "evidence": {
+        "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-D6zxFo\\c5d-browser-result.json",
+        "sha256": "AA381E517E10BB1E4B2D1022A672FC394D27BC6422DD4AEEF0E5B23B52CEF77B"
+      },
+      "kind": "C5d browser acceptance",
+      "controlledRateClock": true,
+      "root": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-D6zxFo",
+      "permissions": {
+        "mechanism": "Windows protected ACL",
+        "currentUserOnly": true,
+        "verified": true
+      },
+      "commands": [],
+      "startedAt": "2026-10-17T18:07:30.596Z",
+      "resourcesRemoved": true,
+      "stoppedOwnedProcess": true,
+      "ordinaryWebBuildRestored": true,
+      "browserPortsClosed": true,
+      "finishedAt": "2026-10-17T18:12:01.982Z"
+    }
+  ],
+  "ownedTabsClosed": true,
+  "finalBrowserInventory": "empty",
+  "nativeSettingsChanged": false,
+  "viewportOverrideApplied": false,
+  "fixtureLeaseAbsent": true,
+  "fixturePidFileAbsent": true,
+  "ports": [
+    {
+      "host": "127.0.0.1",
+      "port": 45448,
+      "exclusiveBindSucceeded": true
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 45449,
+      "exclusiveBindSucceeded": true
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 55448,
+      "exclusiveBindSucceeded": true
+    }
+  ],
+  "credentials": [
+    {
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-qTuXrf",
+      "pgpassAbsent": true
+    },
+    {
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-1llL9c",
+      "pgpassAbsent": true
+    },
+    {
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-Sikliq",
+      "pgpassAbsent": true
+    },
+    {
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-D6zxFo",
+      "pgpassAbsent": true
+    },
+    {
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-tsmxdX",
+      "pgpassAbsent": true
+    },
+    {
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-FmyQ6F",
+      "pgpassAbsent": true
+    }
+  ],
+  "ordinaryWebBuildRestored": true,
+  "finalProductionBuildPassed": true,
+  "screenshots": [
+    {
+      "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-farming-8JXUDN\\farming-review.jpg",
+      "sha256": "660C61E23B4F399B027A20D1EBF61DE9F2F8F61112565DF18054E4BE79895DB3"
+    },
+    {
+      "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-farming-8JXUDN\\farming-route-review.jpg",
+      "sha256": "CFB5561289AAF7BF9D7E172AE50F8DB60BAFF2EE70316ACAD0313B5C4CDB2088"
+    }
+  ],
+  "notes": [
+    "Private synthetic reports/dumps remain; credentials removed.",
+    "Only resources owned by the named guarded runs were removed.",
+    "No ordinary database, real account or external deployment was changed."
+  ]
+}

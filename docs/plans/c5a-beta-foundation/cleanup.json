@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-10",
+  "apiSession": 44533,
+  "webSession": 78552,
+  "apiPid": 6188,
+  "webPid": 33528,
+  "postgresPid": 20340,
+  "foregroundSessionsStopped": true,
+  "postgresStop": "pg_ctl stop exact verified data directory -m fast -w; exit 0",
+  "ports": {
+    "45448": "closed",
+    "45449": "closed",
+    "55448": "closed"
+  },
+  "browserSignedOut": true,
+  "createdTabClosed": true,
+  "viewportOverrideUsed": false,
+  "ordinaryWebBuildRestored": true,
+  "fixtureApiAbsentFromBuild": true,
+  "normalDatabaseAccessed": false,
+  "newDisposableDatabase": "celestia_test_c5a",
+  "releaseActions": false
+}

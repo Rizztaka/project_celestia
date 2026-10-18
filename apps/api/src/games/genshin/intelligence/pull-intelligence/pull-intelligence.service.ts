@@ -5,7 +5,10 @@ import { NotFoundError } from '@/core/errors/app-error.js';
 
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
 import { GenshinCharacterService } from '../../characters/character.service.js';
+import type { CharacterInput } from '../character-intelligence/character-intelligence.calculator.js';
 import { CharacterIntelligenceService } from '../character-intelligence/character-intelligence.service.js';
+import type { TeamTemplate } from '../team-intelligence/team-intelligence.calculator.js';
+import { scoreAllTemplates } from '../team-intelligence/team-intelligence.calculator.js';
 import {
   type ActiveBanner,
   calculatePullValue,
@@ -13,9 +16,6 @@ import {
   type PullScoreBreakdown,
 } from './pull-intelligence.calculator.js';
 import { explainPullValue } from './pull-intelligence.explainer.js';
-import type { TeamTemplate } from '../team-intelligence/team-intelligence.calculator.js';
-import { scoreAllTemplates } from '../team-intelligence/team-intelligence.calculator.js';
-import type { CharacterInput } from '../character-intelligence/character-intelligence.calculator.js';
 
 // -------------------------------------------------------
 // Static data — loaded once at module init

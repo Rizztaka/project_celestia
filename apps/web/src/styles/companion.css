@@ -1,0 +1,162 @@
+/* Scoped journey refinements; inherited global styles remain unchanged. */
+.companion-shell {
+  color: #d4d4d8;
+  overflow-wrap: anywhere;
+}
+.companion-header {
+  position: relative;
+  z-index: 1;
+  border-bottom: 1px solid #3f3f46;
+  background: #101018;
+  padding: 1rem max(1rem, calc((100% - 76rem) / 2));
+}
+.companion-brand-row,
+.companion-primary,
+.companion-supporting {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.companion-brand-row {
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.companion-primary {
+  margin-bottom: 0.5rem;
+}
+.companion-header a,
+.companion-header button,
+.companion-header summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.65rem;
+  color: #d4d4d8;
+}
+.companion-primary a {
+  font-weight: 650;
+}
+.companion-header [aria-current='page'] {
+  background: #312e81;
+  color: #eef2ff;
+  box-shadow: inset 0 -2px #a5b4fc;
+}
+.companion-header a:hover,
+.companion-header button:hover,
+.companion-header summary:hover {
+  background: #272735;
+}
+.companion-supporting {
+  font-size: 0.875rem;
+}
+.companion-tools {
+  flex: 1 1 auto;
+}
+.companion-tools summary {
+  cursor: pointer;
+  list-style: none;
+}
+.companion-tools summary::after {
+  content: ' +';
+  margin-left: 0.5rem;
+}
+.companion-tools[open] summary::after {
+  content: ' −';
+}
+.companion-tool-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+.companion-header .companion-skip {
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  transform: translateY(-200%);
+  background: #312e81;
+  color: white;
+  z-index: 1;
+}
+.companion-header .companion-skip:focus {
+  transform: none;
+}
+.companion-shell :focus-visible {
+  outline: 2px solid #c7d2fe;
+  outline-offset: 3px;
+}
+.companion-shell main {
+  min-width: 0;
+  scroll-margin-top: 1rem;
+}
+.companion-shell main:focus {
+  outline: none;
+}
+.companion-shell :is(input, select, textarea) {
+  max-width: 100%;
+}
+.companion-shell :is(button, summary, select, input:not([type='checkbox']):not([type='radio'])) {
+  min-height: 44px;
+}
+.companion-shell label:has(input[type='checkbox']) {
+  min-height: 44px;
+}
+.companion-shell input:is([type='checkbox'], [type='radio']) {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
+  accent-color: #818cf8;
+}
+.companion-shell :is(.text-zinc-500, .text-zinc-600) {
+  color: #a1a1aa;
+}
+.companion-shell .animate-pulse,
+.companion-shell .animate-spin {
+  animation: none;
+}
+.companion-shell [id] {
+  scroll-margin-top: 1rem;
+}
+.companion-artifact-row {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+}
+.companion-artifact-row .artifact-name {
+  width: auto;
+}
+.companion-artifact-row .artifact-stats {
+  grid-column: 2 / -1;
+}
+@media (min-width: 768px) {
+  .companion-artifact-row {
+    grid-template-columns: 2rem minmax(8rem, 11rem) 5rem 5rem minmax(0, 1fr) 1rem;
+  }
+  .companion-artifact-row .artifact-stats {
+    grid-column: auto;
+  }
+}
+@media (max-width: 480px) {
+  .companion-shell main {
+    padding: 1.5rem 1rem;
+  }
+  .companion-shell .companion-header {
+    padding: 0.5rem;
+  }
+  .companion-shell h1 {
+    font-size: 2rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .companion-shell *,
+  .companion-shell *::before,
+  .companion-shell *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .companion-shell .hover-lift:hover {
+    transform: none;
+  }
+}

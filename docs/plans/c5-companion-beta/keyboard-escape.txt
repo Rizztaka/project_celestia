@@ -1,0 +1,97 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#companion-content"
+  - link "Project Celestia":
+    - /url: /
+  - button "Sign out"
+  - navigation "Primary navigation":
+    - link "Today":
+      - /url: /
+    - link "Characters":
+      - /url: /roster
+    - link "Planner":
+      - /url: /planner
+  - navigation "Supporting navigation":
+    - link "Import":
+      - /url: /import
+    - link "Inventory":
+      - /url: /inventory
+    - link "Settings & profile":
+      - /url: /profile
+    - generic "Other tools +" [active]
+- main:
+  - paragraph: Genshin companion
+  - heading "Today" [level=1]
+  - paragraph: A few things you chose to work on. Make room for as much—or as little—as you want.
+  - link "Record my session":
+    - /url: "#session-recording"
+  - link "Import observations":
+    - /url: /import
+  - link "Manage goals":
+    - /url: /planner?tab=farming
+  - region "Start at your own pace":
+    - paragraph: Start at your own pace
+    - paragraph: "No import needed: select Asia for reset tracking, choose any optional routines, and record what you did. Goals and imports are optional."
+    - link "Choose server":
+      - /url: /#routine-settings
+    - link "Choose routines":
+      - /url: /#plan-choices
+    - link "Create a manual goal":
+      - /url: /planner?tab=farming&newType=CHARACTER_TALENT
+  - region "Today's goals and choices":
+    - heading "Your next few goals" [level=2]
+    - button "Refresh plan"
+    - paragraph: Your priority first. Declared ranges stay the same until you edit them; completing a goal is always your decision.
+    - list:
+      - generic: Priority 3
+      - heading "HuTao · ascension 5 → 6" [level=3]
+      - paragraph: No primary or owner evidence covers these upgrade costs.
+      - link "Edit priority, pause or complete":
+        - /url: /planner?tab=farming&goal=b0359516-e8b4-491d-9940-f9769b0b2471
+      - link "Character details":
+        - /url: /roster/HuTao
+      - button "Dismiss for today"
+      - button "Dismiss for this week"
+    - link "View all goals and history":
+      - /url: /planner?tab=farming
+    - generic "Plan choices · 88 resin / day"
+    - generic "Dismissed work · 1"
+  - region "Manual session recording":
+    - heading "Your routine" [level=2]
+    - paragraph: Record what you did, or update a resin checkpoint. These actions do not grant drops, change inventory or complete goals.
+    - button "Dismiss Daily commissions for today"
+    - region "daily routine":
+      - generic: Game server
+      - combobox "Game server":
+        - option "Not selected"
+        - option "Asia" [selected]
+      - button "Refresh"
+      - paragraph: Changes save after confirmation from the server.
+      - paragraph: "Asia reset tracking: daily at 04:00 UTC+8, weekly Monday at 04:00 UTC+8. Other servers are unavailable; leave the server unselected if you play elsewhere. Manual resin and Transformer records remain usable in Planner."
+      - heading "Original Resin" [level=2]
+      - paragraph: 80 / 200
+      - paragraph: Estimate from your last manual entry. Spending resin in-game is not tracked.
+      - paragraph: Full in 15h 54m
+      - text: Current resin
+      - spinbutton "Current resin"
+      - button "Record resin"
+      - heading "Daily reminders" [level=2]
+      - paragraph: Reset in 10h 32m
+      - checkbox "Daily Commissions"
+      - text: Daily Commissions
+      - paragraph: Teapot is a reminder to check today. It does not estimate currency capacity.
+  - region "This week":
+    - heading "This week" [level=2]
+    - paragraph: Asia server week · 10/5/2026 – 10/12/2026
+    - paragraph: Weekly reward-claim tracking is optional. Enable it in Plan choices or restore its dismissal.
+    - link "Record weekly claims":
+      - /url: /planner?tab=weekly
+    - paragraph: No forecast of future resin, discounts, deadlines or guaranteed upgrades.
+  - region "Supporting material advice":
+    - heading "Materials & session budget" [level=2]
+    - button "Refresh advice"
+    - paragraph: No qualifying verified farming routes for selected work. This does not mean your goals are finished.
+    - paragraph: "Daily ceiling: 88 · Estimated resin at this snapshot: 80 · Allocated: 0 Original Resin."
+    - generic "All active demand · partial cost coverage"
+    - link "Update inventory by import":
+      - /url: /import

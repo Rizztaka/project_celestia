@@ -111,9 +111,6 @@ export class TeamIntelligenceService {
         : null,
     }));
 
-    // Build lookup map for the Explainer.
-    const rosterMap = new Map<string, CharacterInput>(roster.map((c) => [c.characterKey, c]));
-
     // ── 4. Score all templates ─────────────────────────────────────────────
     const allBreakdowns: TeamScoreBreakdown[] = scoreAllTemplates(META_TEMPLATES, roster);
 
@@ -135,7 +132,7 @@ export class TeamIntelligenceService {
     const recommendations: TeamRecommendation[] = top3.map((breakdown, index) => {
       const template = templateById.get(breakdown.templateId)!;
 
-      const explanations = explainTeamScore(breakdown, template, rosterMap);
+      const explanations = explainTeamScore(breakdown, template);
 
       const rosterSlots: TeamRosterSlot[] = breakdown.roles.map((role: TemplateRoleResult) => ({
         roleId: role.roleId,

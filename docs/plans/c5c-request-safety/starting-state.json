@@ -1,0 +1,3625 @@
+{
+  "normalEnvRead": false,
+  "rawEvidence": [
+    {
+      "path": "docs/plans/c5-companion-beta/endgame-focus-final.json",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/primary-reflow.json",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/reimport-after.json",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/reimport-before.json",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/rendered-style-check.json",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/secondary-reflow.json",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/starting-state.json",
+      "matches": true
+    }
+  ],
+  "preservation": [
+    {
+      "path": "apps/api/src/core/config/env.ts",
+      "sha256": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734",
+      "matches": true,
+      "group": "protectedFiles"
+    },
+    {
+      "path": "apps/api/package.json",
+      "sha256": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2",
+      "matches": true,
+      "group": "protectedFiles"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "matches": true,
+      "group": "protectedFiles"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A",
+      "matches": true,
+      "group": "protectedFiles"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "matches": true,
+      "group": "protectedFiles"
+    },
+    {
+      "path": "apps/api/.turbo/turbo-test.log",
+      "sha256": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED",
+      "matches": true,
+      "group": "protectedFiles"
+    },
+    {
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "matches": true,
+      "group": "protectedFiles"
+    },
+    {
+      "path": "apps/api/.env.example",
+      "sha256": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647",
+      "matches": true,
+      "group": "protectedFiles"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260813154603_add_event_progress/migration.sql",
+      "sha256": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260819152839_add_spiral_abyss_runs/migration.sql",
+      "sha256": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260805151029_add_genshin_foundation/migration.sql",
+      "sha256": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20261005150000_add_today_plan_choices/migration.sql",
+      "sha256": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260731140723_init/migration.sql",
+      "sha256": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260811141938_add_daily_companion/migration.sql",
+      "sha256": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20261003180000_add_focus_goal_lifecycle/migration.sql",
+      "sha256": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260823132547_add_imaginarium_theater_run/migration.sql",
+      "sha256": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260812155306_add_materials_and_upgrade_goals/migration.sql",
+      "sha256": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260814135049_add_weekly_boss_state/migration.sql",
+      "sha256": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260926173000_add_import_section_provenance/migration.sql",
+      "sha256": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260823150154_add_nikke_models/migration.sql",
+      "sha256": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910",
+      "matches": true,
+      "group": "migrations"
+    },
+    {
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B",
+      "matches": true,
+      "group": "formatterExceptions"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B",
+      "matches": true,
+      "group": "formatterExceptions"
+    },
+    {
+      "path": "apps/web/index.html",
+      "sha256": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8",
+      "matches": true,
+      "group": "formatterExceptions"
+    },
+    {
+      "path": "apps/web/src/App.css",
+      "sha256": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C",
+      "matches": true,
+      "group": "formatterExceptions"
+    },
+    {
+      "path": "apps/web/src/index.css",
+      "sha256": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E",
+      "matches": true,
+      "group": "formatterExceptions"
+    }
+  ],
+  "files": [
+    {
+      "path": ".agents/AGENTS.md",
+      "sha256": "97F9B380C87C022014FCD5A63589B9FF7D1A96607DEEC5A0DD6669BFD39D8136"
+    },
+    {
+      "path": ".agents/rules/architecture.md",
+      "sha256": "82BEEC137979A4658BD8B9F2AEFD801F6A35793035E950AD96928B811744C031"
+    },
+    {
+      "path": ".agents/rules/claude-implementer.md",
+      "sha256": "F24C675428D2C207DD091717632FBA4659FA6DA8707E003E1696107C9ADA5BB9"
+    },
+    {
+      "path": ".agents/rules/gemini-architect.md",
+      "sha256": "0872B74E8608519478EB18F606A036967614A412B34943B4AAAD862F56223178"
+    },
+    {
+      "path": ".agents/skills/build-intelligence-engine/SKILL.md",
+      "sha256": "44C3D82001F13B3F60F2002E1BC8A062DBA5034C269826095121DBCE6B81D588"
+    },
+    {
+      "path": ".agents/skills/scaffold-domain-feature/SKILL.md",
+      "sha256": "0BBCB2C2CDB857CF1A2BC4CA0F1643CDF553729654733831CCEF66C4603B9416"
+    },
+    {
+      "path": ".cursorrules",
+      "sha256": "2A9E85BF0FCA321694A8B03998D08999B0C1DC66C8B494C6B263BBA3677E1B20"
+    },
+    {
+      "path": ".editorconfig",
+      "sha256": "7977DE2AF9A93208A81C360F2DAFA66425AA664FF06DFD93B165B5ACFC0145BA"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "93FEF663A8B11AB35952411A2B676C084A4132BAB0C76C847DECAB345EB8B2D0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "788ED3201DDF0576F9BBBD3C2253049303ADB9F5291E9E5F877537BBC1B9DF58"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "9045AA9257E1A2A6F8AA5F6900F249B2580D66ECC039D78824231236363DF535"
+    },
+    {
+      "path": ".prettierignore",
+      "sha256": "F40523AD09D311F36B7A94A20675D9FABA0936A08D9B5CBF1CB91CD4C7DA9E07"
+    },
+    {
+      "path": ".prettierrc",
+      "sha256": "3D937BE38E29DF4D8B4E2E78ECB87DCC85293EAAC93AE94B496225918D0611B8"
+    },
+    {
+      "path": ".vscode/extensions.json",
+      "sha256": "BE274D90CC8003E29317C74D2037BD232BE1F743BDD77BFBA6DD63D6975A0F76"
+    },
+    {
+      "path": ".vscode/settings.json",
+      "sha256": "9099BFF47EA8DC87C107182D67001B09D72A254B020C372522576571B7FE4013"
+    },
+    {
+      "path": ".windsurfrules",
+      "sha256": "2A9E85BF0FCA321694A8B03998D08999B0C1DC66C8B494C6B263BBA3677E1B20"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/db-execute.md",
+      "sha256": "AE3C03317B4EC557E0E1C0130E5673DBDB29C7BDB783D2A37D907222305758F1"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/db-pull.md",
+      "sha256": "157FF62BB97D34311E9AAB0DDFB922DF0CEADF99BF35F65F7F405119E5DBFD1D"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/db-push.md",
+      "sha256": "CBEDB4E443C5810EF769931BCF390C5A84F484CD2D85FB62F5D09012C9FD285E"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/db-seed.md",
+      "sha256": "E714190EDFA3AB262C6E819B65D8FCB99330131E23F1B8B64D3A5D96904B5021"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/debug.md",
+      "sha256": "B56A1EF65BEF75A56DD118FD547E4EFFB727AF23830C1047987B404345F40C9D"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/dev.md",
+      "sha256": "C572E9A226995A91BA4C91A80CFEBD46251FFEEAADEEAD426318861997A4B733"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/format.md",
+      "sha256": "479F19AD1206EC711574E264A03237DB47EFDF069086B667F9ACE179613A7CC9"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/generate.md",
+      "sha256": "6D8F1A0F482D9287B8C38262662C91B9E69B7FC0BDCED244679FE7E73EEF9F95"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/init.md",
+      "sha256": "EA456F7C68D5ECFAC1B439166CD52046CDFEBBFA38AC6EC1487A7FE0E9619D1A"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/mcp.md",
+      "sha256": "3FD19009A8A964B7B1B1966B235BAB58C95C3CD3F245EAA8F39FB48ABD8A73D8"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/migrate-deploy.md",
+      "sha256": "2B74EF0D72F698B928D0CA86B375AEFC8D477C7517ED367D2143418E8D8C8B8B"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/migrate-dev.md",
+      "sha256": "8B2A06BAC6459CEC2A061FD4E5F9BE64FF9445CAC785FB5D6F0072FE2916FDDC"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/migrate-diff.md",
+      "sha256": "DF75C632DBA0CCDB61CD748EE215356DE78497241B177766F74DE8EBCDDDF0DE"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/migrate-reset.md",
+      "sha256": "F2B103FCE8A29FBC68218F9F8285163ABE3BE79E6B6C7BC39DDE6D6EBE1FD293"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/migrate-resolve.md",
+      "sha256": "C4D2CA9D305D456A72E0CF4A7F06D65D2E777CDE45B3C8EB3C03A22514092F0F"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/migrate-status.md",
+      "sha256": "B5968D4ABDD500C73D543B00851726B57989CD24491990A03D919E68B5A2FA36"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/studio.md",
+      "sha256": "4F7E2F7B319B256F84CC7965C25C700787EBE18F2EB3343DC40AF6E6CC3E0BE4"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/references/validate.md",
+      "sha256": "5E73D1B769520E798D2DE512680C9FA6FEB53782AFC93E4F46222703EA120C0B"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-cli/SKILL.md",
+      "sha256": "4B5F044CD93C4AB2EA1B71BD2AD65D69F31B4FC23BD838AC2760DF319C16BF92"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-client-api/references/client-methods.md",
+      "sha256": "EB672A297CB408F8A866502A7FCFCD2BEF21ECCAEF28B3DE274BC1519E100B4A"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-client-api/references/constructor.md",
+      "sha256": "20A4D623DF6F910E58DB76B1CB8321210582064CF7377EBFC541D27A1272F10B"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-client-api/references/filters.md",
+      "sha256": "78C2ABD5DD47810BB849E6742776B50553A7DEE796B368235D1A0B7E9CC442B9"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-client-api/references/model-queries.md",
+      "sha256": "C2186B4912F292108BD94C7BD4EEF1D5CA0D7EE3542C575D717E7F85A02E43E1"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-client-api/references/query-options.md",
+      "sha256": "28573915F8626EED65C3BC97293406F692EE8D3FCEB9C95AE0793C561A08D254"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-client-api/references/raw-queries.md",
+      "sha256": "0244EB0E0E6F4F736E571574397C3FFC5F0CE1B3D6EF74497DBBE7A6B8D10A55"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-client-api/references/relations.md",
+      "sha256": "EFE4C5528B1A5AC6D77BA099EDCD23D034B7F3F90C88ED6A0461AB24EF93F406"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-client-api/references/transactions.md",
+      "sha256": "E636D2438EC81A0976F0756C0A68929F7FD152FC31A623B4993BD83F1A3757D3"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-client-api/SKILL.md",
+      "sha256": "16C4D9267557708BE05F258973F6C60A92F92F05A93C1CAC3C343AFA3AFE2500"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-compute/references/app-deploy-cli.md",
+      "sha256": "FC7F2B06E18CCA0116DCAAC0950EB7DF52555E7A6EAFB4B66258F491B3AC8A47"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-compute/references/compute-config.md",
+      "sha256": "482BB7C0DCEA2CAB9D01952312D261C49ED01F5182D6F7F1B09138AF7A6290E5"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-compute/references/create-prisma.md",
+      "sha256": "5D72B41EE00E4DAF7780153E27207156AAD33B758F968D45CA4C1323CDE5D79F"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-compute/references/frameworks.md",
+      "sha256": "87CC0E6C28CCA991BEB21FA4CF20D5A39F22F4034EE35D215556F37C2B75FECC"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-compute/references/sdk-api.md",
+      "sha256": "7C69CAC21C356AA7EB382D073EB420D0B1BEDDA1F95EF681669A1D8467AF47F9"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-compute/references/troubleshooting.md",
+      "sha256": "42E0061EE32D973A3B122C2D2A18D40F2AFBC6E5D33B0134D2DE35F01D19B4C2"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-compute/SKILL.md",
+      "sha256": "BC176C6264249E27181B8E8E71FF0C6A7C8A90E34EC40AAE7E41DBBA7F8DDB7D"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-database-setup/references/cockroachdb.md",
+      "sha256": "DD64733BE36B2315FAD55BD56888FF7A4857DA7958FFAE8A6398A1449F769AA6"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-database-setup/references/mongodb.md",
+      "sha256": "7738FF0D4EAF1C1C772664E7A91EE3138318D812F79A8174B6F544B03264FE3E"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-database-setup/references/mysql.md",
+      "sha256": "AB21A4C983DBA712593DF4C7432F70097EE5CE49996C326C3EA75E4BA322904B"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-database-setup/references/postgresql.md",
+      "sha256": "9301D865FDFF9931DE5884034D3C15E8292588B98659EEBF15D797444C1598B1"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-database-setup/references/prisma-client-setup.md",
+      "sha256": "263D571642BAF16D4F6B52E10F1C94ACE7A5994713B1C61DEA7AFEE55127CDB1"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-database-setup/references/prisma-postgres.md",
+      "sha256": "A81C1475AC7D5AC83E3CDF597C5EE9DBA6AA4AE6AFF888BB63F77C030E4603DA"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-database-setup/references/sqlite.md",
+      "sha256": "DB77A4ECDC511004A6F2D2CFD6E90E3220E55E43037EB00D304F41AA5DE1B9EC"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-database-setup/references/sqlserver.md",
+      "sha256": "CB594E95981336DBD13FD265AC03298AA35A25BF3A051856294FD74046C21333"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-database-setup/SKILL.md",
+      "sha256": "B0E9EE3E9DA18C272A2A8E5C34630309548A49ABD06875A84E574AE441826724"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-driver-adapter-implementation/SKILL.md",
+      "sha256": "E6BE4176C4DDC3B2283C123E39BA743B404314237A91300F8C6F658254522DB9"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-mongodb-upgrade/references/client-api-mapping.md",
+      "sha256": "9D23B44619762B8D904EE25DF68CE08514B3B6AA6D60812184F90879594C69A0"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-mongodb-upgrade/references/decision-stay-or-migrate.md",
+      "sha256": "CB6F3B4F6B2E4CD52319BC35516BD05CCE99118A52822F20CCAA0BBDA20AD406"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-mongodb-upgrade/references/migrations-mapping.md",
+      "sha256": "BFCC750FC5880F220278DDFA4F30FE0115488679B81E314D577903627E392628"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-mongodb-upgrade/references/schema-contract-mapping.md",
+      "sha256": "E6AD7A592954A48EB48B1C639CC3AABD51052D7D8AE4DC6C83620A337C5BC93B"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-mongodb-upgrade/references/verify-cutover-checklist.md",
+      "sha256": "9FE1D7550B3F9CD2FD3D6E4AECF34BD107238CED5097A454102A0B3D7B4D784E"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-mongodb-upgrade/SKILL.md",
+      "sha256": "99933CA306B554F27432A35DC5E27EE81322BB148BBC90127C3A54E7F84E6C24"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-postgres-setup/references/api-basics.md",
+      "sha256": "903BCE6890A55B0DCD9CEC1FE5D37F525C16F13F101978427D81F2C946798D12"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-postgres-setup/references/auth.md",
+      "sha256": "30329D4EC0EDC37346D84C9B801243EA8CA87FE4FA51CA3D8281C6DA3383A39F"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-postgres-setup/references/endpoints.md",
+      "sha256": "7CDC36DEDF50D6C54A3ED81B622C2E1A5C2A3E180554DBD120D53454D102AAB9"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-postgres-setup/references/prisma7-client.md",
+      "sha256": "141A15876A2741E2B8BF6411E2F16A845F1D2AB8648A3581092A05599AEBF7C0"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-postgres-setup/SKILL.md",
+      "sha256": "EA4F662FD76526FA3C07C5FC141DEE76A79AC72038C0A069D3EA88CAAC4B4FD8"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-postgres/references/console-and-connections.md",
+      "sha256": "1FE4F545F58F443B07AA60AF6C7075E1B834762466948F0BF4ECA80595A83FE6"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-postgres/references/create-db-cli.md",
+      "sha256": "AE4A5A3344D455666878F2EB8B34719096CF3E791A0B40066416FD03F42D5E9C"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-postgres/references/management-api-sdk.md",
+      "sha256": "84ECF5F15C1C2AE1B3C46B9590C2A591F55C219839B72C74893F685C7BD75ADD"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-postgres/references/management-api.md",
+      "sha256": "F51178BBD66A981A7DC9B3E942EC8AFBE33A335BA4F2D87E46E710B70C0D667C"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-postgres/SKILL.md",
+      "sha256": "BC0019401894B4FD76A7A8DEEB427116C9A9C54F1A2FD9C82F7BA77B162860E2"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-upgrade-v7/references/accelerate-users.md",
+      "sha256": "8C984F09C5B69C1286B0445DB9BE8CACC8281B234F3A4FD02A8769BD67D5298F"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-upgrade-v7/references/driver-adapters.md",
+      "sha256": "4DCCEA1E1F6195FE1168EE8FF338553419050B4FC7596F76E6390AA47666A737"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-upgrade-v7/references/env-variables.md",
+      "sha256": "413D564C9067A7F026A7C4989E604C7C5EEC7E664528CE93DEEB9B589D775F1A"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-upgrade-v7/references/esm-support.md",
+      "sha256": "E516430E7262076FDA0B66B061F54A602CE621564EDD2360D33DBBE07B98C57B"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-upgrade-v7/references/prisma-config.md",
+      "sha256": "AFF4EB55E4D3F51531379D531E154904477D7CC16C3C31D705E91ED54871E8A5"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-upgrade-v7/references/removed-features.md",
+      "sha256": "F28EE12D7A626024C6E538C7C58F68D66D1B7B8E5F79CE09F13E22D6C2E15C37"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-upgrade-v7/references/schema-changes.md",
+      "sha256": "85206F1581CC61C4AF966FE57EBDDF7F7A451E8FBBDB73689D388D41CF1EA35F"
+    },
+    {
+      "path": "apps/api/.agents/skills/prisma-upgrade-v7/SKILL.md",
+      "sha256": "D353CB03FAF74750A89F225B58EAC0F70CEA238621641973C5F4A3CE9ACEDC43"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/db-execute.md",
+      "sha256": "AE3C03317B4EC557E0E1C0130E5673DBDB29C7BDB783D2A37D907222305758F1"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/db-pull.md",
+      "sha256": "157FF62BB97D34311E9AAB0DDFB922DF0CEADF99BF35F65F7F405119E5DBFD1D"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/db-push.md",
+      "sha256": "CBEDB4E443C5810EF769931BCF390C5A84F484CD2D85FB62F5D09012C9FD285E"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/db-seed.md",
+      "sha256": "E714190EDFA3AB262C6E819B65D8FCB99330131E23F1B8B64D3A5D96904B5021"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/debug.md",
+      "sha256": "B56A1EF65BEF75A56DD118FD547E4EFFB727AF23830C1047987B404345F40C9D"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/dev.md",
+      "sha256": "C572E9A226995A91BA4C91A80CFEBD46251FFEEAADEEAD426318861997A4B733"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/format.md",
+      "sha256": "479F19AD1206EC711574E264A03237DB47EFDF069086B667F9ACE179613A7CC9"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/generate.md",
+      "sha256": "6D8F1A0F482D9287B8C38262662C91B9E69B7FC0BDCED244679FE7E73EEF9F95"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/init.md",
+      "sha256": "EA456F7C68D5ECFAC1B439166CD52046CDFEBBFA38AC6EC1487A7FE0E9619D1A"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/mcp.md",
+      "sha256": "3FD19009A8A964B7B1B1966B235BAB58C95C3CD3F245EAA8F39FB48ABD8A73D8"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/migrate-deploy.md",
+      "sha256": "2B74EF0D72F698B928D0CA86B375AEFC8D477C7517ED367D2143418E8D8C8B8B"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/migrate-dev.md",
+      "sha256": "8B2A06BAC6459CEC2A061FD4E5F9BE64FF9445CAC785FB5D6F0072FE2916FDDC"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/migrate-diff.md",
+      "sha256": "DF75C632DBA0CCDB61CD748EE215356DE78497241B177766F74DE8EBCDDDF0DE"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/migrate-reset.md",
+      "sha256": "F2B103FCE8A29FBC68218F9F8285163ABE3BE79E6B6C7BC39DDE6D6EBE1FD293"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/migrate-resolve.md",
+      "sha256": "C4D2CA9D305D456A72E0CF4A7F06D65D2E777CDE45B3C8EB3C03A22514092F0F"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/migrate-status.md",
+      "sha256": "B5968D4ABDD500C73D543B00851726B57989CD24491990A03D919E68B5A2FA36"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/studio.md",
+      "sha256": "4F7E2F7B319B256F84CC7965C25C700787EBE18F2EB3343DC40AF6E6CC3E0BE4"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/references/validate.md",
+      "sha256": "5E73D1B769520E798D2DE512680C9FA6FEB53782AFC93E4F46222703EA120C0B"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-cli/SKILL.md",
+      "sha256": "4B5F044CD93C4AB2EA1B71BD2AD65D69F31B4FC23BD838AC2760DF319C16BF92"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-client-api/references/client-methods.md",
+      "sha256": "EB672A297CB408F8A866502A7FCFCD2BEF21ECCAEF28B3DE274BC1519E100B4A"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-client-api/references/constructor.md",
+      "sha256": "20A4D623DF6F910E58DB76B1CB8321210582064CF7377EBFC541D27A1272F10B"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-client-api/references/filters.md",
+      "sha256": "78C2ABD5DD47810BB849E6742776B50553A7DEE796B368235D1A0B7E9CC442B9"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-client-api/references/model-queries.md",
+      "sha256": "C2186B4912F292108BD94C7BD4EEF1D5CA0D7EE3542C575D717E7F85A02E43E1"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-client-api/references/query-options.md",
+      "sha256": "28573915F8626EED65C3BC97293406F692EE8D3FCEB9C95AE0793C561A08D254"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-client-api/references/raw-queries.md",
+      "sha256": "0244EB0E0E6F4F736E571574397C3FFC5F0CE1B3D6EF74497DBBE7A6B8D10A55"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-client-api/references/relations.md",
+      "sha256": "EFE4C5528B1A5AC6D77BA099EDCD23D034B7F3F90C88ED6A0461AB24EF93F406"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-client-api/references/transactions.md",
+      "sha256": "E636D2438EC81A0976F0756C0A68929F7FD152FC31A623B4993BD83F1A3757D3"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-client-api/SKILL.md",
+      "sha256": "16C4D9267557708BE05F258973F6C60A92F92F05A93C1CAC3C343AFA3AFE2500"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-compute/references/app-deploy-cli.md",
+      "sha256": "FC7F2B06E18CCA0116DCAAC0950EB7DF52555E7A6EAFB4B66258F491B3AC8A47"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-compute/references/compute-config.md",
+      "sha256": "482BB7C0DCEA2CAB9D01952312D261C49ED01F5182D6F7F1B09138AF7A6290E5"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-compute/references/create-prisma.md",
+      "sha256": "5D72B41EE00E4DAF7780153E27207156AAD33B758F968D45CA4C1323CDE5D79F"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-compute/references/frameworks.md",
+      "sha256": "87CC0E6C28CCA991BEB21FA4CF20D5A39F22F4034EE35D215556F37C2B75FECC"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-compute/references/sdk-api.md",
+      "sha256": "7C69CAC21C356AA7EB382D073EB420D0B1BEDDA1F95EF681669A1D8467AF47F9"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-compute/references/troubleshooting.md",
+      "sha256": "42E0061EE32D973A3B122C2D2A18D40F2AFBC6E5D33B0134D2DE35F01D19B4C2"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-compute/SKILL.md",
+      "sha256": "BC176C6264249E27181B8E8E71FF0C6A7C8A90E34EC40AAE7E41DBBA7F8DDB7D"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-database-setup/references/cockroachdb.md",
+      "sha256": "DD64733BE36B2315FAD55BD56888FF7A4857DA7958FFAE8A6398A1449F769AA6"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-database-setup/references/mongodb.md",
+      "sha256": "7738FF0D4EAF1C1C772664E7A91EE3138318D812F79A8174B6F544B03264FE3E"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-database-setup/references/mysql.md",
+      "sha256": "AB21A4C983DBA712593DF4C7432F70097EE5CE49996C326C3EA75E4BA322904B"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-database-setup/references/postgresql.md",
+      "sha256": "9301D865FDFF9931DE5884034D3C15E8292588B98659EEBF15D797444C1598B1"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-database-setup/references/prisma-client-setup.md",
+      "sha256": "263D571642BAF16D4F6B52E10F1C94ACE7A5994713B1C61DEA7AFEE55127CDB1"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-database-setup/references/prisma-postgres.md",
+      "sha256": "A81C1475AC7D5AC83E3CDF597C5EE9DBA6AA4AE6AFF888BB63F77C030E4603DA"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-database-setup/references/sqlite.md",
+      "sha256": "DB77A4ECDC511004A6F2D2CFD6E90E3220E55E43037EB00D304F41AA5DE1B9EC"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-database-setup/references/sqlserver.md",
+      "sha256": "CB594E95981336DBD13FD265AC03298AA35A25BF3A051856294FD74046C21333"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-database-setup/SKILL.md",
+      "sha256": "B0E9EE3E9DA18C272A2A8E5C34630309548A49ABD06875A84E574AE441826724"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-driver-adapter-implementation/SKILL.md",
+      "sha256": "E6BE4176C4DDC3B2283C123E39BA743B404314237A91300F8C6F658254522DB9"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-mongodb-upgrade/references/client-api-mapping.md",
+      "sha256": "9D23B44619762B8D904EE25DF68CE08514B3B6AA6D60812184F90879594C69A0"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-mongodb-upgrade/references/decision-stay-or-migrate.md",
+      "sha256": "CB6F3B4F6B2E4CD52319BC35516BD05CCE99118A52822F20CCAA0BBDA20AD406"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-mongodb-upgrade/references/migrations-mapping.md",
+      "sha256": "BFCC750FC5880F220278DDFA4F30FE0115488679B81E314D577903627E392628"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-mongodb-upgrade/references/schema-contract-mapping.md",
+      "sha256": "E6AD7A592954A48EB48B1C639CC3AABD51052D7D8AE4DC6C83620A337C5BC93B"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-mongodb-upgrade/references/verify-cutover-checklist.md",
+      "sha256": "9FE1D7550B3F9CD2FD3D6E4AECF34BD107238CED5097A454102A0B3D7B4D784E"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-mongodb-upgrade/SKILL.md",
+      "sha256": "99933CA306B554F27432A35DC5E27EE81322BB148BBC90127C3A54E7F84E6C24"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-postgres-setup/references/api-basics.md",
+      "sha256": "903BCE6890A55B0DCD9CEC1FE5D37F525C16F13F101978427D81F2C946798D12"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-postgres-setup/references/auth.md",
+      "sha256": "30329D4EC0EDC37346D84C9B801243EA8CA87FE4FA51CA3D8281C6DA3383A39F"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-postgres-setup/references/endpoints.md",
+      "sha256": "7CDC36DEDF50D6C54A3ED81B622C2E1A5C2A3E180554DBD120D53454D102AAB9"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-postgres-setup/references/prisma7-client.md",
+      "sha256": "141A15876A2741E2B8BF6411E2F16A845F1D2AB8648A3581092A05599AEBF7C0"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-postgres-setup/SKILL.md",
+      "sha256": "EA4F662FD76526FA3C07C5FC141DEE76A79AC72038C0A069D3EA88CAAC4B4FD8"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-postgres/references/console-and-connections.md",
+      "sha256": "1FE4F545F58F443B07AA60AF6C7075E1B834762466948F0BF4ECA80595A83FE6"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-postgres/references/create-db-cli.md",
+      "sha256": "AE4A5A3344D455666878F2EB8B34719096CF3E791A0B40066416FD03F42D5E9C"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-postgres/references/management-api-sdk.md",
+      "sha256": "84ECF5F15C1C2AE1B3C46B9590C2A591F55C219839B72C74893F685C7BD75ADD"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-postgres/references/management-api.md",
+      "sha256": "F51178BBD66A981A7DC9B3E942EC8AFBE33A335BA4F2D87E46E710B70C0D667C"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-postgres/SKILL.md",
+      "sha256": "BC0019401894B4FD76A7A8DEEB427116C9A9C54F1A2FD9C82F7BA77B162860E2"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-upgrade-v7/references/accelerate-users.md",
+      "sha256": "8C984F09C5B69C1286B0445DB9BE8CACC8281B234F3A4FD02A8769BD67D5298F"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-upgrade-v7/references/driver-adapters.md",
+      "sha256": "4DCCEA1E1F6195FE1168EE8FF338553419050B4FC7596F76E6390AA47666A737"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-upgrade-v7/references/env-variables.md",
+      "sha256": "413D564C9067A7F026A7C4989E604C7C5EEC7E664528CE93DEEB9B589D775F1A"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-upgrade-v7/references/esm-support.md",
+      "sha256": "E516430E7262076FDA0B66B061F54A602CE621564EDD2360D33DBBE07B98C57B"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-upgrade-v7/references/prisma-config.md",
+      "sha256": "AFF4EB55E4D3F51531379D531E154904477D7CC16C3C31D705E91ED54871E8A5"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-upgrade-v7/references/removed-features.md",
+      "sha256": "F28EE12D7A626024C6E538C7C58F68D66D1B7B8E5F79CE09F13E22D6C2E15C37"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-upgrade-v7/references/schema-changes.md",
+      "sha256": "85206F1581CC61C4AF966FE57EBDDF7F7A451E8FBBDB73689D388D41CF1EA35F"
+    },
+    {
+      "path": "apps/api/.claude/skills/prisma-upgrade-v7/SKILL.md",
+      "sha256": "D353CB03FAF74750A89F225B58EAC0F70CEA238621641973C5F4A3CE9ACEDC43"
+    },
+    {
+      "path": "apps/api/.env.example",
+      "sha256": "3D4941BC3CF9F8ED782CCD48EB695DB69339AD0F42CF7EBF170D708DD5A01647"
+    },
+    {
+      "path": "apps/api/.gitignore",
+      "sha256": "2A9A650161DA203CA2618570E02BC4396682DD3654BAD5CFA1B992D76E44F0A7"
+    },
+    {
+      "path": "apps/api/.turbo/turbo-build.log",
+      "sha256": "DE44011F68D00507483083503AA708AC7265C133D6520871CBBE70BC09E0B7EC"
+    },
+    {
+      "path": "apps/api/.turbo/turbo-check-types.log",
+      "sha256": "8366207267355D3E3D5BF3BF6E8C94C5F93F6078C34F08973FA2B38CDDA6CC92"
+    },
+    {
+      "path": "apps/api/.turbo/turbo-test.log",
+      "sha256": "790D929247252D64703A67C561419E28206DA7A37D2A49F6253CFEEB3ECB0AED"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/db-execute.md",
+      "sha256": "AE3C03317B4EC557E0E1C0130E5673DBDB29C7BDB783D2A37D907222305758F1"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/db-pull.md",
+      "sha256": "157FF62BB97D34311E9AAB0DDFB922DF0CEADF99BF35F65F7F405119E5DBFD1D"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/db-push.md",
+      "sha256": "CBEDB4E443C5810EF769931BCF390C5A84F484CD2D85FB62F5D09012C9FD285E"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/db-seed.md",
+      "sha256": "E714190EDFA3AB262C6E819B65D8FCB99330131E23F1B8B64D3A5D96904B5021"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/debug.md",
+      "sha256": "B56A1EF65BEF75A56DD118FD547E4EFFB727AF23830C1047987B404345F40C9D"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/dev.md",
+      "sha256": "C572E9A226995A91BA4C91A80CFEBD46251FFEEAADEEAD426318861997A4B733"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/format.md",
+      "sha256": "479F19AD1206EC711574E264A03237DB47EFDF069086B667F9ACE179613A7CC9"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/generate.md",
+      "sha256": "6D8F1A0F482D9287B8C38262662C91B9E69B7FC0BDCED244679FE7E73EEF9F95"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/init.md",
+      "sha256": "EA456F7C68D5ECFAC1B439166CD52046CDFEBBFA38AC6EC1487A7FE0E9619D1A"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/mcp.md",
+      "sha256": "3FD19009A8A964B7B1B1966B235BAB58C95C3CD3F245EAA8F39FB48ABD8A73D8"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/migrate-deploy.md",
+      "sha256": "2B74EF0D72F698B928D0CA86B375AEFC8D477C7517ED367D2143418E8D8C8B8B"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/migrate-dev.md",
+      "sha256": "8B2A06BAC6459CEC2A061FD4E5F9BE64FF9445CAC785FB5D6F0072FE2916FDDC"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/migrate-diff.md",
+      "sha256": "DF75C632DBA0CCDB61CD748EE215356DE78497241B177766F74DE8EBCDDDF0DE"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/migrate-reset.md",
+      "sha256": "F2B103FCE8A29FBC68218F9F8285163ABE3BE79E6B6C7BC39DDE6D6EBE1FD293"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/migrate-resolve.md",
+      "sha256": "C4D2CA9D305D456A72E0CF4A7F06D65D2E777CDE45B3C8EB3C03A22514092F0F"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/migrate-status.md",
+      "sha256": "B5968D4ABDD500C73D543B00851726B57989CD24491990A03D919E68B5A2FA36"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/studio.md",
+      "sha256": "4F7E2F7B319B256F84CC7965C25C700787EBE18F2EB3343DC40AF6E6CC3E0BE4"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/references/validate.md",
+      "sha256": "5E73D1B769520E798D2DE512680C9FA6FEB53782AFC93E4F46222703EA120C0B"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-cli/SKILL.md",
+      "sha256": "4B5F044CD93C4AB2EA1B71BD2AD65D69F31B4FC23BD838AC2760DF319C16BF92"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-client-api/references/client-methods.md",
+      "sha256": "EB672A297CB408F8A866502A7FCFCD2BEF21ECCAEF28B3DE274BC1519E100B4A"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-client-api/references/constructor.md",
+      "sha256": "20A4D623DF6F910E58DB76B1CB8321210582064CF7377EBFC541D27A1272F10B"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-client-api/references/filters.md",
+      "sha256": "78C2ABD5DD47810BB849E6742776B50553A7DEE796B368235D1A0B7E9CC442B9"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-client-api/references/model-queries.md",
+      "sha256": "C2186B4912F292108BD94C7BD4EEF1D5CA0D7EE3542C575D717E7F85A02E43E1"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-client-api/references/query-options.md",
+      "sha256": "28573915F8626EED65C3BC97293406F692EE8D3FCEB9C95AE0793C561A08D254"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-client-api/references/raw-queries.md",
+      "sha256": "0244EB0E0E6F4F736E571574397C3FFC5F0CE1B3D6EF74497DBBE7A6B8D10A55"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-client-api/references/relations.md",
+      "sha256": "EFE4C5528B1A5AC6D77BA099EDCD23D034B7F3F90C88ED6A0461AB24EF93F406"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-client-api/references/transactions.md",
+      "sha256": "E636D2438EC81A0976F0756C0A68929F7FD152FC31A623B4993BD83F1A3757D3"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-client-api/SKILL.md",
+      "sha256": "16C4D9267557708BE05F258973F6C60A92F92F05A93C1CAC3C343AFA3AFE2500"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-compute/references/app-deploy-cli.md",
+      "sha256": "FC7F2B06E18CCA0116DCAAC0950EB7DF52555E7A6EAFB4B66258F491B3AC8A47"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-compute/references/compute-config.md",
+      "sha256": "482BB7C0DCEA2CAB9D01952312D261C49ED01F5182D6F7F1B09138AF7A6290E5"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-compute/references/create-prisma.md",
+      "sha256": "5D72B41EE00E4DAF7780153E27207156AAD33B758F968D45CA4C1323CDE5D79F"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-compute/references/frameworks.md",
+      "sha256": "87CC0E6C28CCA991BEB21FA4CF20D5A39F22F4034EE35D215556F37C2B75FECC"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-compute/references/sdk-api.md",
+      "sha256": "7C69CAC21C356AA7EB382D073EB420D0B1BEDDA1F95EF681669A1D8467AF47F9"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-compute/references/troubleshooting.md",
+      "sha256": "42E0061EE32D973A3B122C2D2A18D40F2AFBC6E5D33B0134D2DE35F01D19B4C2"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-compute/SKILL.md",
+      "sha256": "BC176C6264249E27181B8E8E71FF0C6A7C8A90E34EC40AAE7E41DBBA7F8DDB7D"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-database-setup/references/cockroachdb.md",
+      "sha256": "DD64733BE36B2315FAD55BD56888FF7A4857DA7958FFAE8A6398A1449F769AA6"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-database-setup/references/mongodb.md",
+      "sha256": "7738FF0D4EAF1C1C772664E7A91EE3138318D812F79A8174B6F544B03264FE3E"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-database-setup/references/mysql.md",
+      "sha256": "AB21A4C983DBA712593DF4C7432F70097EE5CE49996C326C3EA75E4BA322904B"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-database-setup/references/postgresql.md",
+      "sha256": "9301D865FDFF9931DE5884034D3C15E8292588B98659EEBF15D797444C1598B1"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-database-setup/references/prisma-client-setup.md",
+      "sha256": "263D571642BAF16D4F6B52E10F1C94ACE7A5994713B1C61DEA7AFEE55127CDB1"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-database-setup/references/prisma-postgres.md",
+      "sha256": "A81C1475AC7D5AC83E3CDF597C5EE9DBA6AA4AE6AFF888BB63F77C030E4603DA"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-database-setup/references/sqlite.md",
+      "sha256": "DB77A4ECDC511004A6F2D2CFD6E90E3220E55E43037EB00D304F41AA5DE1B9EC"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-database-setup/references/sqlserver.md",
+      "sha256": "CB594E95981336DBD13FD265AC03298AA35A25BF3A051856294FD74046C21333"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-database-setup/SKILL.md",
+      "sha256": "B0E9EE3E9DA18C272A2A8E5C34630309548A49ABD06875A84E574AE441826724"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-driver-adapter-implementation/SKILL.md",
+      "sha256": "E6BE4176C4DDC3B2283C123E39BA743B404314237A91300F8C6F658254522DB9"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-mongodb-upgrade/references/client-api-mapping.md",
+      "sha256": "9D23B44619762B8D904EE25DF68CE08514B3B6AA6D60812184F90879594C69A0"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-mongodb-upgrade/references/decision-stay-or-migrate.md",
+      "sha256": "CB6F3B4F6B2E4CD52319BC35516BD05CCE99118A52822F20CCAA0BBDA20AD406"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-mongodb-upgrade/references/migrations-mapping.md",
+      "sha256": "BFCC750FC5880F220278DDFA4F30FE0115488679B81E314D577903627E392628"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-mongodb-upgrade/references/schema-contract-mapping.md",
+      "sha256": "E6AD7A592954A48EB48B1C639CC3AABD51052D7D8AE4DC6C83620A337C5BC93B"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-mongodb-upgrade/references/verify-cutover-checklist.md",
+      "sha256": "9FE1D7550B3F9CD2FD3D6E4AECF34BD107238CED5097A454102A0B3D7B4D784E"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-mongodb-upgrade/SKILL.md",
+      "sha256": "99933CA306B554F27432A35DC5E27EE81322BB148BBC90127C3A54E7F84E6C24"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-postgres-setup/references/api-basics.md",
+      "sha256": "903BCE6890A55B0DCD9CEC1FE5D37F525C16F13F101978427D81F2C946798D12"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-postgres-setup/references/auth.md",
+      "sha256": "30329D4EC0EDC37346D84C9B801243EA8CA87FE4FA51CA3D8281C6DA3383A39F"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-postgres-setup/references/endpoints.md",
+      "sha256": "7CDC36DEDF50D6C54A3ED81B622C2E1A5C2A3E180554DBD120D53454D102AAB9"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-postgres-setup/references/prisma7-client.md",
+      "sha256": "141A15876A2741E2B8BF6411E2F16A845F1D2AB8648A3581092A05599AEBF7C0"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-postgres-setup/SKILL.md",
+      "sha256": "EA4F662FD76526FA3C07C5FC141DEE76A79AC72038C0A069D3EA88CAAC4B4FD8"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-postgres/references/console-and-connections.md",
+      "sha256": "1FE4F545F58F443B07AA60AF6C7075E1B834762466948F0BF4ECA80595A83FE6"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-postgres/references/create-db-cli.md",
+      "sha256": "AE4A5A3344D455666878F2EB8B34719096CF3E791A0B40066416FD03F42D5E9C"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-postgres/references/management-api-sdk.md",
+      "sha256": "84ECF5F15C1C2AE1B3C46B9590C2A591F55C219839B72C74893F685C7BD75ADD"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-postgres/references/management-api.md",
+      "sha256": "F51178BBD66A981A7DC9B3E942EC8AFBE33A335BA4F2D87E46E710B70C0D667C"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-postgres/SKILL.md",
+      "sha256": "BC0019401894B4FD76A7A8DEEB427116C9A9C54F1A2FD9C82F7BA77B162860E2"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-upgrade-v7/references/accelerate-users.md",
+      "sha256": "8C984F09C5B69C1286B0445DB9BE8CACC8281B234F3A4FD02A8769BD67D5298F"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-upgrade-v7/references/driver-adapters.md",
+      "sha256": "4DCCEA1E1F6195FE1168EE8FF338553419050B4FC7596F76E6390AA47666A737"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-upgrade-v7/references/env-variables.md",
+      "sha256": "413D564C9067A7F026A7C4989E604C7C5EEC7E664528CE93DEEB9B589D775F1A"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-upgrade-v7/references/esm-support.md",
+      "sha256": "E516430E7262076FDA0B66B061F54A602CE621564EDD2360D33DBBE07B98C57B"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-upgrade-v7/references/prisma-config.md",
+      "sha256": "AFF4EB55E4D3F51531379D531E154904477D7CC16C3C31D705E91ED54871E8A5"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-upgrade-v7/references/removed-features.md",
+      "sha256": "F28EE12D7A626024C6E538C7C58F68D66D1B7B8E5F79CE09F13E22D6C2E15C37"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-upgrade-v7/references/schema-changes.md",
+      "sha256": "85206F1581CC61C4AF966FE57EBDDF7F7A451E8FBBDB73689D388D41CF1EA35F"
+    },
+    {
+      "path": "apps/api/.windsurf/skills/prisma-upgrade-v7/SKILL.md",
+      "sha256": "D353CB03FAF74750A89F225B58EAC0F70CEA238621641973C5F4A3CE9ACEDC43"
+    },
+    {
+      "path": "apps/api/eslint.config.js",
+      "sha256": "4A179785E793A23032A1E333256DDAC1449BE7DF059F95B4002BB294694620DC"
+    },
+    {
+      "path": "apps/api/package.json",
+      "sha256": "ED12550960851129DC82B1D2471D8D81CDCA6582BD7A504BD4BBF90AD84A0FF2"
+    },
+    {
+      "path": "apps/api/prisma.config.ts",
+      "sha256": "53CDEA13B912EE6F018AD61C6798056E7474B15CB241C0C3DBDC5A1928A5C2A1"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260731140723_init/migration.sql",
+      "sha256": "8E1B82362D061C91D710A0A83942C0248DAD347CC6895C8790D59FB98BD3A28B"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260805151029_add_genshin_foundation/migration.sql",
+      "sha256": "916467F17954CBE662A6DE88C163B4D27A992792519D15E6E4642993DE47DD31"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260811141938_add_daily_companion/migration.sql",
+      "sha256": "500B79832F8588FCFBD37F41866B0CB01769B045060C283E2355579F15C9D8CA"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260812155306_add_materials_and_upgrade_goals/migration.sql",
+      "sha256": "731E4352C67633C7255A7DF566C428D27E085D0D99F68F43E0F79BC1F2A69FA8"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260813154603_add_event_progress/migration.sql",
+      "sha256": "1AE8F55FE5AC2E6CB06AB9BACA3BFD429858F36D003303CE34D4515A80299281"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260814135049_add_weekly_boss_state/migration.sql",
+      "sha256": "C9110F4BFCD4CC1AD3269CD42AB6E2A5E03DE2664E28F5B3A3244BC5E980246C"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260819152839_add_spiral_abyss_runs/migration.sql",
+      "sha256": "96203DB708FB38CB4331A6F720903590D2A5266087859B2F2F4E75BC24767B4E"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260823132547_add_imaginarium_theater_run/migration.sql",
+      "sha256": "BD505D0B63DA70664292E1771FD6DE2EBB88B4856FD23F2A78BE8107771329A7"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260823150154_add_nikke_models/migration.sql",
+      "sha256": "F9129145E3700505B45622092BB39C5FD5AF8FA92202CEF65288E85A3E705910"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260926173000_add_import_section_provenance/migration.sql",
+      "sha256": "B1A5E13C71898693A61E9D74C15AC079BD3D883BA484C1F700355C16F1737310"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql",
+      "sha256": "4F6DDC6A4DFE0DD5295087EFBCB1EECD3178213CA466CD564590700C1728FDA8"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20261003180000_add_focus_goal_lifecycle/migration.sql",
+      "sha256": "FDA56E9E69F00743B62741EA8A66C8DE3F3ED8EAF4E48854C83C8BEDD2901329"
+    },
+    {
+      "path": "apps/api/prisma/migrations/20261005150000_add_today_plan_choices/migration.sql",
+      "sha256": "C8C8908FA361174AF4DC9017540E9D29D4CB5EF5C99F13D001AF21B85669F39A"
+    },
+    {
+      "path": "apps/api/prisma/migrations/migration_lock.toml",
+      "sha256": "99836963713B4F5B269AD49AF0ED3D7B0B2E336115C2F92DC9AC683D139D0900"
+    },
+    {
+      "path": "apps/api/prisma/schema.prisma",
+      "sha256": "C9A883DFA12BF16382D205C7988A06A17153DE683C0E49974FB67F6D76C7EDB0"
+    },
+    {
+      "path": "apps/api/skills-lock.json",
+      "sha256": "4C5B50D1175449236DB22A6BBA98A5368E23894140340820C35A275A6E302D0A"
+    },
+    {
+      "path": "apps/api/src/app.ts",
+      "sha256": "B6AECC35908FB0C3DF12054BB31F9061B5131E758CCD9707776E56E27E4919CB"
+    },
+    {
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "6070FB1B045F45ADA12AFFD80CA3836EC1B04B76BB1ABF5A957382259E11CB8B"
+    },
+    {
+      "path": "apps/api/src/core/config/cors.ts",
+      "sha256": "32BA7C083AA7A9B87FE6EEB325DFFF52DF9B182960BE863D6F0000757E8798D6"
+    },
+    {
+      "path": "apps/api/src/core/config/env.ts",
+      "sha256": "EEAD450672FD643CB8F1E9103F9EB8A7E19F479182827049CCB3B9CD1541D734"
+    },
+    {
+      "path": "apps/api/src/core/contracts/companion.interfaces.ts",
+      "sha256": "F037AF3FC6FF9761B76FB69E4DD4412B4D52A58F8B8587A1B66F7758FF3D1B47"
+    },
+    {
+      "path": "apps/api/src/core/db/disposable-test-database.test.ts",
+      "sha256": "A655502C8E20A315F0D425A8E59260D038CA93DA8BCAC856E2B552E64E7981D1"
+    },
+    {
+      "path": "apps/api/src/core/db/disposable-test-database.ts",
+      "sha256": "EBE6084350F67B23000C81FBB87585AB622EEF0EFE7553FB16E7F72746BF4508"
+    },
+    {
+      "path": "apps/api/src/core/db/prisma.ts",
+      "sha256": "A17011F9DDAD74DFAF668B9500BB4565CF77D4E7B314FF276558C562A5EDE7CE"
+    },
+    {
+      "path": "apps/api/src/core/errors/app-error.ts",
+      "sha256": "B01A2862C3665B5EE549A511CE093D2E379B0AF40C19D16695CB12D812FAAB93"
+    },
+    {
+      "path": "apps/api/src/core/logger/logger.ts",
+      "sha256": "1E3C90AAFE6BCBA316FC4F30EEB4B8CCA7C41DB60ADD96CA74E97A338860AC2A"
+    },
+    {
+      "path": "apps/api/src/core/middleware/auth.middleware.test.ts",
+      "sha256": "D6AA6E27CCA2691373BDD7FDE5C4FFB81412BFC3CADCD65CA9D0418F19197AE5"
+    },
+    {
+      "path": "apps/api/src/core/middleware/auth.middleware.ts",
+      "sha256": "2C793860027305CB03728FF454B9FEAA48AE71F2A376E2FEBF29FEE7D357F804"
+    },
+    {
+      "path": "apps/api/src/core/middleware/origin.middleware.test.ts",
+      "sha256": "44D90FC91B0D0F01D9146859DDFBCB03DA896EEFFE61A4A3A560402CDEAE9CA5"
+    },
+    {
+      "path": "apps/api/src/core/middleware/origin.middleware.ts",
+      "sha256": "E010F3329DEBF91E20404A2BE3FAAEF64BFECBA500FFA38750DA00A2874F6B48"
+    },
+    {
+      "path": "apps/api/src/core/utils/response.ts",
+      "sha256": "3D1A3536603C90FF0B8E3F4CFF1E1B13C7A008EF6C1F5D3F22BE3C9C0EC967D9"
+    },
+    {
+      "path": "apps/api/src/games/genshin/accounts/account.repository.ts",
+      "sha256": "388462519FEAF3144FD3D764A0F803CFA848E19E10AB5ADFD54EF069F3DECDBF"
+    },
+    {
+      "path": "apps/api/src/games/genshin/accounts/account.service.test.ts",
+      "sha256": "3A3B365C2891FDA2B7306C6BF9BF2C9E5E2D1DC6DBF3E87DC9ED6E74BE5957CD"
+    },
+    {
+      "path": "apps/api/src/games/genshin/accounts/account.service.ts",
+      "sha256": "FE344C16C1FF202F4787051E447754EE24D677225AA35119C92336C402A76002"
+    },
+    {
+      "path": "apps/api/src/games/genshin/artifacts/artifact.controller.ts",
+      "sha256": "D9A99A6B7FFDA9EEC37CA3EA591CA2C5A193E30F7C5503C6E4ACB3C9AE63621F"
+    },
+    {
+      "path": "apps/api/src/games/genshin/artifacts/artifact.repository.ts",
+      "sha256": "D27916ED4ED8C3273D888CE8C38A91CAB537D5B3C21B171EFDC3384B77E11D6D"
+    },
+    {
+      "path": "apps/api/src/games/genshin/artifacts/artifact.routes.ts",
+      "sha256": "B0E95061CAD76670BDBE99FA467E24605C6FBEDD52EF30E48EE2D5997E926EB1"
+    },
+    {
+      "path": "apps/api/src/games/genshin/artifacts/artifact.service.test.ts",
+      "sha256": "B455753D0783987FBFFD1346C56723EED8024B83ADFB80D27353151FF6AAF82D"
+    },
+    {
+      "path": "apps/api/src/games/genshin/artifacts/artifact.service.ts",
+      "sha256": "5965A051744575F20ACBDFA3F90560D0F35597E4DF26E7304A37851FE22CF542"
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character-equipment.integration.test.ts",
+      "sha256": "F1C7C68AB063566167BA4970DB086532917104FA6790690F924B8AD686229E58"
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character-equipment.repository.ts",
+      "sha256": "84B93475B7D7CD14616C9F909346A8D00573AB002734713B7A5141188BF5CC77"
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character-equipment.service.ts",
+      "sha256": "3F9CE4BB297E7AC573472A88F797837D39B07E7042545D5CEB66AEB0DA771E76"
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character-focus.service.ts",
+      "sha256": "8C85357B4B79056DAD06698D12C78D7B459A7E75B0259FDED967C01E9A10447D"
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character.controller.ts",
+      "sha256": "1CD5D813723BA1E7045545FF4F3A29D9DE499854B71E66BC53F3B8ED5531728A"
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character.repository.ts",
+      "sha256": "42E2238D476FB2D81898AA8B39ACBB04611024EED4043A3BBC949B0F5D52C7E6"
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character.routes.ts",
+      "sha256": "9DAD229704A66A7899EC06BA0095D1BAF2D80E5F3705E82BB02605A04001A5F4"
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character.service.test.ts",
+      "sha256": "179345058D8F08D331A39F53A0529804F3E8C780E6BB14D0EED31AD08252C2E0"
+    },
+    {
+      "path": "apps/api/src/games/genshin/characters/character.service.ts",
+      "sha256": "5AF2D6AE1E91E519135CCD89D348F80454A143568997967A5AE107E458928D72"
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/catalog-trust.test.ts",
+      "sha256": "15C540C1C150973797A36DDC15E66E05ABA65396E828C61C0CDDFF923EE649D8"
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/catalog-trust.ts",
+      "sha256": "23191CDE463FD68A8C5CECABEFEBDF348781D6CB2B0271DA945BD85F204EDCD0"
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/genshin-companion.provider.ts",
+      "sha256": "ABF5EA2450330C843E59B08DED42D78C5C8AD23AC0CBB337530D3D6814A677DA"
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/recorded-stock.repository.ts",
+      "sha256": "B740C0F8BB4B8A3A280789B4DEF8D50BC0B3B5C4FF286549325F99D12D6CEAF6"
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/routine-consumers.test.ts",
+      "sha256": "37617AA6AD0CD3EB9A11E7256AA777BAE7D0AA4DB901ACC3914AB9B608AA2A16"
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/routine-policy.test.ts",
+      "sha256": "E020639F408FD16BC56C835636755715DDF16D894AD5FCA6DD5E83694AA9CD1B"
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/routine-policy.ts",
+      "sha256": "239412DC20EF8CCD6AA0742567B2F83B663592741586E3429FA1F2FD8E42C7C6"
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/server-clock.test.ts",
+      "sha256": "665EBC0CCBD616BE228E77D949E79304DF5B4CF23FB034229E0F1493DE3C65B5"
+    },
+    {
+      "path": "apps/api/src/games/genshin/companion/server-clock.ts",
+      "sha256": "F2F75EB4306CA8FD4AE68A5D71B31092904E030FBEA0EAF8F78099E9926F2E9F"
+    },
+    {
+      "path": "apps/api/src/games/genshin/endgame/endgame.controller.ts",
+      "sha256": "E7A64D2AEBA776B37092AE7E36B133525DE71DAE247EBE4E61922B1F61145351"
+    },
+    {
+      "path": "apps/api/src/games/genshin/endgame/endgame.repository.ts",
+      "sha256": "8D4EE4A1D6C06B253E934B86952A5AE9A66D6FC5CF014F6F0670602716A82530"
+    },
+    {
+      "path": "apps/api/src/games/genshin/endgame/endgame.routes.ts",
+      "sha256": "411CCBF8E3D3A78E66B2E9B7CE09318EC3FFFA9B6476FF21998CAC107525DC88"
+    },
+    {
+      "path": "apps/api/src/games/genshin/endgame/endgame.service.test.ts",
+      "sha256": "0823833FBC3C90C6118FAD4A2699D1EE825298D3826AA399C3D71B643AD32B5D"
+    },
+    {
+      "path": "apps/api/src/games/genshin/endgame/endgame.service.ts",
+      "sha256": "582852B74644486FE05E68928E87B94E8CB593E0D2EEABD99A27229DD61F9FBE"
+    },
+    {
+      "path": "apps/api/src/games/genshin/genshin.routes.ts",
+      "sha256": "01EFBD25C5B14F7E5780BBBC6E7E72FBE227F29F2ADC3C9D744E2BCFB340ABC2"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.controller.ts",
+      "sha256": "E86AE4800135B7F7A97B2046148C063F9DCD837115901DBCAD7D085C53B52202"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.http.test.ts",
+      "sha256": "A07F2FD3077BB8CE9A5502952B3C20A4C884F5E2D2E46E5AB4FB6BF726CB5C6B"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.integration.test.ts",
+      "sha256": "FE3D645B4D6C9B0C4D549CC84FB2C9BAB9EF358A063037FBC0F9B25C842C48C3"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.preview.ts",
+      "sha256": "FD60FC371CCDC565C36BA758A0B7470C3DD6BA9BE0145A594DD8F9E1FB28B69F"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.repository.ts",
+      "sha256": "CDE6F3004016532EA5F5D6CD33A4BE0ABA504BC8127C39D681F3667D522D07C8"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.routes.ts",
+      "sha256": "709EF286344B9B888A61F7C252F9971723DB75F213FEC39431ECB14931FB209A"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.schema.ts",
+      "sha256": "69B83B69C7614DFB8721FD93C235E2080AC099BC62D3EA4216C99F48FCB292A1"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.service.test.ts",
+      "sha256": "EBF1739B8D78F4684310E0C1FC2539A25501D069DF9A1DFE0C159A886E12E7BB"
+    },
+    {
+      "path": "apps/api/src/games/genshin/importer/importer.service.ts",
+      "sha256": "5E2CC0334282F738E2900097DF20EC3FB1538451725853B60A2D3FA673FDB72D"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.calculator.ts",
+      "sha256": "EB0122EB8C073F78E64495CA4AAC9CA9971A114F798EA4D8F04898B907865DC0"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.controller.ts",
+      "sha256": "381488098C438C0957FBBBD65A102D01029C746B47A754346E50F92F872C3949"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.explainer.ts",
+      "sha256": "F2BA3A6843F7B229A76BF89B2E851C460DECA264258D77D24F17896CD2725443"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.routes.ts",
+      "sha256": "86503C6E87797AA32D21683C09CF6507B08FB7A838C5F93AB367425B8B7879E4"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.service.test.ts",
+      "sha256": "7767EEAB44EE1BC229A0113A90D2AE7A6A74616A8582DE1DCD77BD56A5E61CA7"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.service.ts",
+      "sha256": "71DBFA0EC46DC03FA7062BBAD13A8F34C26997D982F9ADB88C5C5192A938FF86"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.calculator.ts",
+      "sha256": "FF62D9A7077F74AD1B18A3D3F8EF66A19DC324B5E99682A961111DF7E94F63C6"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.controller.ts",
+      "sha256": "F3D555A8169481B86862628975C9C8AB448216917CCB66F0CF12BD1E95837418"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.explainer.ts",
+      "sha256": "27ADB642B6C65B8CA9B608FB8BD2B19871E8FE3E28739E9EAC0009E0F2A1C823"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.routes.ts",
+      "sha256": "D2F3BE4CB35C5AF42DB06BD44F120BDDAF41FE0E90EF20C7EC57D726299FC73D"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.service.test.ts",
+      "sha256": "82F66AF145C363F7708CBC9966E6973A4374F57A1553571F2236F809E3686F11"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.service.ts",
+      "sha256": "4851B6E64FE8EB4F7A54B6D54708A5F9B4328418A3211E4402DA36DB435470D7"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.calculator.ts",
+      "sha256": "18FF37B6ED32E6447663F32C268876D761F552C071006EB991D2FFA39D8F3BDB"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.controller.ts",
+      "sha256": "DDF1DB3CECEA994E15D740BEDF311E7244C64735EB552511347EACCB7B17E923"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.explainer.ts",
+      "sha256": "2BBD7170FAD2F7425A956430D3540F9DC43E9E5E0F7857FF3267B052218941E0"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.routes.ts",
+      "sha256": "D70AC765E5E089DA3380A0B7BBB8BF1BCC52DCE184863254181E6EE4FAB4FEC5"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.service.test.ts",
+      "sha256": "5038C76E8C001AAEEF5C359768F5D8131A260032DE4444596C7A74937A62A266"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.service.ts",
+      "sha256": "497D4CD82FF041178100AE0D6E76B0A2A213F42724AD44849542B2EA0AAEFF3F"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.calculator.ts",
+      "sha256": "B5E7C39B26D81EB28F9212F631B0832567199F371033904B71F9C1CB01771E9F"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.controller.ts",
+      "sha256": "8186779CB8C3874F9BAA9899B16E88FA96BB08BD423B3DA34376C0095ECBDEE6"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.explainer.ts",
+      "sha256": "1BFF9AFB2C199D9B469082D96EE7C3F788E31AFED6B00108285CDF27E94FB3F8"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.routes.ts",
+      "sha256": "570645FBB65FE1634B27C9641B59D554235FCA1122D1C60FFECB1C02CE03C1C6"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.test.ts",
+      "sha256": "335DF81AB127C83814A4DD44A53B3C37AA9D2078C861F4F5770B34F6F673ABDB"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.ts",
+      "sha256": "4D3F75964F4F3540AE48F013BFB99F55477CAAE46E51D775E136A999B636AFAC"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.controller.ts",
+      "sha256": "D8B6DB95D8F9FC3941767B72ADA4C4440BCF152AF7F58BE9749E4C45AA695DDC"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.routes.ts",
+      "sha256": "2B5B284585CF38EFF1325737BF08876DD843B98E75945B99D4C319D1AD226655"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.test.ts",
+      "sha256": "43930CCA3D1C6B5EA6C7C35354ECB53FEFF99DB9F961B599FAF070FB9BFD767C"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.ts",
+      "sha256": "DBEC24A1788277799DE9D52611B3F7AC229DF23BF9DF4D977150C509AD138878"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.calculator.ts",
+      "sha256": "81D84DCE80F88D77BAE9D44454E6F77D0E8C26F47A5D70FBCC3ADA37A2D32A88"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.controller.ts",
+      "sha256": "B7BC54FEEA8A034B07CB4B6F1EA5AE6CF3B0C751653DF6623014C12A2E43D575"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.explainer.ts",
+      "sha256": "D67E196678DE506048089F236889CD435E5281504242B6439763191BDB8DB03E"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.routes.ts",
+      "sha256": "AEA6AF8DAA81B1802E65F5C09754211EEEDCE62AC5723FFA790830BA4B162B5B"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.test.ts",
+      "sha256": "FD602D9C66546410E74AFBC73DC20F2E6C495F14BF8EE314EFA370E11A63A2F4"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.ts",
+      "sha256": "145BF129312D2EEFFEF209725FBDA66CC9F24FB51D5A9833F03E8B9C0E46409E"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.calculator.ts",
+      "sha256": "D896F12C22C1EA7C5219987DA608D6195DECD86B7D08B791D1FA16F22B9BAC22"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.controller.ts",
+      "sha256": "01C1F1FCEF026873B226E1C4AFBABF331E257FAC69B5E2238B260C4AEBB72E5D"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.explainer.ts",
+      "sha256": "7A751FFE9B555295424D18D0607FF9F6EE99280333D282289A4FA98F62BE0D0D"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.routes.ts",
+      "sha256": "5A69333B8DE57C541B7D3CB2B2FF6250AB34724BB994BA7FEC374F75FC7639C1"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.service.test.ts",
+      "sha256": "CD092A15A895E215087F834431752CE0DB4B1EA92F3109FE482576C03CE2919B"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.service.ts",
+      "sha256": "068554A1C1825A2E721EC023F5FF8A79DC338E8674EF22AB819582B92084EFAD"
+    },
+    {
+      "path": "apps/api/src/games/genshin/simulators/pull-simulator.controller.test.ts",
+      "sha256": "E8364CABEB04082205EFC411581C1FCAD4B598A2A22114AA089B02823B78F925"
+    },
+    {
+      "path": "apps/api/src/games/genshin/simulators/pull-simulator.controller.ts",
+      "sha256": "FA64C2F1BC8029F986070081E1C98446EB539C085F0D713CF5DF59E37B0DB126"
+    },
+    {
+      "path": "apps/api/src/games/genshin/simulators/pull-simulator.routes.ts",
+      "sha256": "86609E31EBB6DD703C263128776BBC0571A1D6686233E73922C9FD658FC55AA5"
+    },
+    {
+      "path": "apps/api/src/games/genshin/simulators/pull-simulator.service.test.ts",
+      "sha256": "1FED000243B76AEEEBC79610B80BAAB4C2C4351692063229B3965FD1B4C8F0BA"
+    },
+    {
+      "path": "apps/api/src/games/genshin/simulators/pull-simulator.service.ts",
+      "sha256": "29428B849C301E3A07BDD6BECCCAD77C88FA020FF1D624C5BCE0B5472E7397B7"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/active-banners.json",
+      "sha256": "C8CC39834F7F97226CA32651C305AD74EFF080390F4E28E8DC6F2F1E0E1EC7DD"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/advice-domains.json",
+      "sha256": "CA3D163BAB055381827226140568F3BEF7EAAC187CEBD76878E0B63E9E442356"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/artifact-stat-weights.json",
+      "sha256": "A30B0904E511BD83D87E2D366D5BEAA4A7F195898437924274493BBFE38B67AD"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/catalog-evidence.json",
+      "sha256": "E0FF7EC4FB935E8EC6888EFF4947C884DB3E771A6CB9CB8EA17319636EE4781B"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/character-elements.json",
+      "sha256": "BB64D5E7383808D5BD5D6364716D7AEE89E649F7E2D58D4B53D8AFBBF956BBFF"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/character-materials.json",
+      "sha256": "69AB20CBA46AD8565F50BA47D46956EA96550AA3FB1DBCA22B99C924EEC4BB18"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/character-profiles.json",
+      "sha256": "B2B591B7D3D68CF1B8F356451DB0252BC793F23A70D685DCA3B91A258F71EC61"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/domain-schedule.json",
+      "sha256": "48E7FF84ACD0040915744B0728082687D2BECD35A8EB191DADD379824A021881"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/events.json",
+      "sha256": "495D77E0183883609BEA23B8B97A3C42A83849A2DABD0893B17BBC2A768F7B8E"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/material-references.json",
+      "sha256": "EDC14E19162051BEDCD998CA2251B330F0705B719AAB4DD32BB5CB729539F861"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/team-templates.json",
+      "sha256": "4A33AD61500E01478F4BA6361F9915AA8D257FFFD7097BD5DA69E4A7758ED025"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/weapon-materials.json",
+      "sha256": "56C2482917A61163C242208F2D8AB288F18BE15CEB0C9B574927C700333DCC5A"
+    },
+    {
+      "path": "apps/api/src/games/genshin/static/weekly-bosses.json",
+      "sha256": "5AB3F55CFD74EADA48F30AC176D5E750D0F5924F368A0CEE023B3E135BAB0323"
+    },
+    {
+      "path": "apps/api/src/games/genshin/weapons/weapon.controller.ts",
+      "sha256": "9A9CCE2CD9CD6B2BDC4C69097C6AC3A472A9275BE34E3F0525CF948884946D23"
+    },
+    {
+      "path": "apps/api/src/games/genshin/weapons/weapon.repository.ts",
+      "sha256": "28AA6C1C67F0950D7561781B117BD54651DEF0DC065D51D4B87E02489E52C552"
+    },
+    {
+      "path": "apps/api/src/games/genshin/weapons/weapon.routes.ts",
+      "sha256": "955AE9FF347F0257714D526934A837489E1D0975BE92015B3C49A5FB4B774779"
+    },
+    {
+      "path": "apps/api/src/games/genshin/weapons/weapon.service.test.ts",
+      "sha256": "8D99C1AE4B89EE9C65F43CF2A993CFFB4A18EE7207ACED508B753EB878C30F10"
+    },
+    {
+      "path": "apps/api/src/games/genshin/weapons/weapon.service.ts",
+      "sha256": "534802CC2CD4C34352DE3E7998CA3B46C0C805488A3FD3B1D02EC1509C7D8FBF"
+    },
+    {
+      "path": "apps/api/src/games/nikke/accounts/account.controller.ts",
+      "sha256": "93418A265A3768CCB21A760B203613121509F7112C7E411539AD4C431C26109C"
+    },
+    {
+      "path": "apps/api/src/games/nikke/accounts/account.routes.ts",
+      "sha256": "1009CCA93D3438F24168CC29D6EB48795E5DD93EE9A63808DA9F958A18798DAB"
+    },
+    {
+      "path": "apps/api/src/games/nikke/accounts/account.service.ts",
+      "sha256": "6283BF12B6B7C239BCA31575ABED09457E60DEB24220076F7BE44B415E063D27"
+    },
+    {
+      "path": "apps/api/src/games/nikke/characters/character.controller.ts",
+      "sha256": "55296DAF7CF6B0B8E3323A55B006E4F75DF29642C58D4C0F5A36302C6682C587"
+    },
+    {
+      "path": "apps/api/src/games/nikke/characters/character.routes.ts",
+      "sha256": "BE1CD84B0357AB1799324F9C884A09F245F7D0E538EE3648A9E7BF09EDF7EAE7"
+    },
+    {
+      "path": "apps/api/src/games/nikke/characters/character.service.ts",
+      "sha256": "82C19F49A6AE209CD32CE29F213347D85B19E1B544573BCE938463FE80498BA5"
+    },
+    {
+      "path": "apps/api/src/games/nikke/nikke.routes.ts",
+      "sha256": "436392FC3B88BFC627FD9E2F8DEFE5CDFEFD3C5C10811181DCE4F0B18ED2E245"
+    },
+    {
+      "path": "apps/api/src/index.ts",
+      "sha256": "AB2F37E1331A44FF7A17C70B96180D2F35B0F837BA64E1CC8382428F218CCF92"
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.controller.ts",
+      "sha256": "A4EF13FA09E48DCBD3588D3F6E747DFBD8A3ACD51C7602B107083421303D3A2E"
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.repository.ts",
+      "sha256": "1007B16780F185C5B34BD0C6643C871A0CE69B7E9CC9187C79F9018803A2FEE6"
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.routes.ts",
+      "sha256": "63E5762FF94389CD3569E6D2B1B789312BF9A6D314F3D8C48DD63A3E1BBC1AEF"
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.service.test.ts",
+      "sha256": "4A8464B9E5BF5C5B970BF4308149B9ECB76D068E2501C96E7F8211053A2FE481"
+    },
+    {
+      "path": "apps/api/src/platform/auth/auth.service.ts",
+      "sha256": "266C52DE0A9095E74C5F7F42718BC712EE2036A0A267DF279926426AB1B6B4C0"
+    },
+    {
+      "path": "apps/api/src/platform/companion/catalog-advice.integration.test.ts",
+      "sha256": "301726B0BF825859B363C2CE85EEAEFCA5E516F6D5E2906167BAA6BB80643FA2"
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion-registry.service.ts",
+      "sha256": "359EE2252CC2DDEB402E66E402301526451BE619137AABAAC1893AC27794257D"
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion.controller.ts",
+      "sha256": "66FE359587888C3EC0F9DC557E80BEBE2F970767330E7BB2EC779B1567494229"
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion.repository.ts",
+      "sha256": "AF35B922F7C1401CA6E3D914DA5098456D13DC644CEDC6FFDC0866CFCFE1083C"
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion.routes.ts",
+      "sha256": "AA3A51EE762032093422F57D631B73E83DCE1373A4F65C62EF704AF9E47FDB0B"
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion.service.ts",
+      "sha256": "43C0A40AD4574482E06F68490EB3BCBD41A5674EE685168F0D34F7D347297F73"
+    },
+    {
+      "path": "apps/api/src/platform/companion/companion.types.ts",
+      "sha256": "D1C3578B28B88219CADE075ABCE3265EC0A27F8AD51B0C6DF0440DB962A809CF"
+    },
+    {
+      "path": "apps/api/src/platform/companion/event.controller.ts",
+      "sha256": "601809A98C0BD3E2AD5BE7EBE71DAD83E2DDBCDB7A78FFE600588325853DF652"
+    },
+    {
+      "path": "apps/api/src/platform/companion/event.repository.ts",
+      "sha256": "77F6CF92E2036D8A8E2D1693CDD78EAC44D73F7E2D84FECA5D1616F47241BBB6"
+    },
+    {
+      "path": "apps/api/src/platform/companion/event.service.test.ts",
+      "sha256": "706530D00D18C39B015587C51DC1925916274B6558F5380858C5958944AD6E3E"
+    },
+    {
+      "path": "apps/api/src/platform/companion/event.service.ts",
+      "sha256": "67EEC8D3F3BB95FFCFA9148DEBA358620C91FCE4DFE23D77EF8B4A5ABF2F1E28"
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal-lifecycle.integration.test.ts",
+      "sha256": "6126E9ED7782F000DABF23FF5BC0DCCF48FA5DDBE45D0F64CC90C884CC9F37A7"
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal-policy.ts",
+      "sha256": "EDE61698C1BFD10FC14F53C76C7B6CF6A9279630E6393DCB4E875CE437A23B13"
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal.controller.ts",
+      "sha256": "EBFD7B82820DBC31BB6B6FC500849C19B34AE7C2C0A5DBEC708EB19DE070D913"
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal.repository.ts",
+      "sha256": "9210935BA3E714C6EC9EAA9707B6E56FE9CC6028C536056BE3BF5187EC4DA5AD"
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal.service.test.ts",
+      "sha256": "D65CAB2164FB613B1F41749A83B6EDD4B7F7A373BDF7E4EB9095A7D212D38A00"
+    },
+    {
+      "path": "apps/api/src/platform/companion/goal.service.ts",
+      "sha256": "F2CE46355FA8275427F59CBAEDCF8DAA2DF84F3ABC319978214D11DEACE745DE"
+    },
+    {
+      "path": "apps/api/src/platform/companion/material-advice.ts",
+      "sha256": "689320516058ECB6A524BF7F5D88D7B54A9B9B464B355031B53039281BEC7151"
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan-composition.test.ts",
+      "sha256": "514682C0FD08B2F0020C4EA31E3559CBFF3CEDA505D4B77D2E0D3198EBCDA949"
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan-composition.ts",
+      "sha256": "E37FD5C9F0ACA40442FAB5C87EE21959E466B79B7147CD25EB0F170387EBD39D"
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan.controller.ts",
+      "sha256": "DC0C90FD3C97EDD69998E498F2542A8CA6CDA5C791E13D2EEA429DF5DFE03224"
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan.integration.test.ts",
+      "sha256": "82EE3E6BE3A6BF7931F02673D746EAFFDDEC5E9C697A14452D99312AB54E0330"
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan.repository.ts",
+      "sha256": "5C97A2A6F956E9824CC4EB3E0CEAA755366F215B32A978514A98729568F68E86"
+    },
+    {
+      "path": "apps/api/src/platform/companion/plan.service.ts",
+      "sha256": "5DD098E8EC22BD9F6E18D5F6515A412CAA59FEA9FF6DA513F11762D8C21C776E"
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.controller.ts",
+      "sha256": "451F8169BFDEE348B53193E7C74A9AA7003E7CF575D1C2698DF1670096870D34"
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.http.test.ts",
+      "sha256": "CF64F205907CF8AD97BE3D2313EBDDA8B98B080F71ACFE9BF86D7D9EC2CB2F0B"
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.integration.test.ts",
+      "sha256": "0BE68B5AA8BAC5A56890D06C777C8B05084DF7C1CA30DC008A08DD72C7FDDCB8"
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.repository.ts",
+      "sha256": "4B132607DB9B58A12CE1FEF0D0AC97C20C32E5F31249E84D914101DA85C4092F"
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.service.test.ts",
+      "sha256": "6598B68E3F8A81EFFD6452D75102EECDFCBB3E5D1608C447E288FC2341D33347"
+    },
+    {
+      "path": "apps/api/src/platform/companion/routine.service.ts",
+      "sha256": "273EFA0AF15B1F476995AA4BB760F7BC191467838CF40D961C9EC51AB0AF8BC6"
+    },
+    {
+      "path": "apps/api/src/platform/companion/weekly-boss.controller.ts",
+      "sha256": "1D66B6D12969DE82EEE374970E3D7A7B4CCF17ADBC20F6AF8863123BBF3A6DB6"
+    },
+    {
+      "path": "apps/api/src/platform/companion/weekly-boss.repository.ts",
+      "sha256": "A4E2D60CA8BC6D0C490D1250F19681636B9CD1990FB5542E0B3F70AD4DED2E1D"
+    },
+    {
+      "path": "apps/api/src/platform/companion/weekly-boss.service.test.ts",
+      "sha256": "3B30D04537EC2E95F0467E28DCAF2AE29D040C08C279B5E90E279BA7F3C98ACB"
+    },
+    {
+      "path": "apps/api/src/platform/companion/weekly-boss.service.ts",
+      "sha256": "900AD0CE30266A3C97A5C37BF0FD97E66314B5DDCD9E4927A2B939806ADC41EA"
+    },
+    {
+      "path": "apps/api/src/platform/security.http.test.ts",
+      "sha256": "118C2EB7EAEF83572363B7A0C8626ED5BB1A5E7A52B27A7406B1EB03742B6410"
+    },
+    {
+      "path": "apps/api/src/platform/users/user.controller.ts",
+      "sha256": "68C4D32EBB3AC86477EF5F8127BFF0AD0C15195C87E279C5B1E8810EF1B53DC3"
+    },
+    {
+      "path": "apps/api/src/platform/users/user.repository.ts",
+      "sha256": "D9C3AAA8968CD8ADD02E7F6013581349E4E3A90933F244B6154979B01827FE57"
+    },
+    {
+      "path": "apps/api/src/platform/users/user.routes.ts",
+      "sha256": "606B59EDF4E019A988D10B87D8CB0714932550C3F3916EB981AFBB7321D569D2"
+    },
+    {
+      "path": "apps/api/src/platform/users/user.service.test.ts",
+      "sha256": "3B965C94DA3318B256A263216C3BDF88051AE247C9539799E34BFDA6AD8398B1"
+    },
+    {
+      "path": "apps/api/src/platform/users/user.service.ts",
+      "sha256": "081A80E319E0E0DE8E71193881BB85443D73F8CFCC7B93B6230CA063EB6EEAFA"
+    },
+    {
+      "path": "apps/api/tooling/account-cache.test.js",
+      "sha256": "7EA59CEB5EADAB2DB973CA3191EE09A30D7D4ADB52EA1628DB7B3E97A6AB35F0"
+    },
+    {
+      "path": "apps/api/tooling/character-equipment-browser-fixture.mjs",
+      "sha256": "CB81B6AE6B12643A64EA79D6F38721C72F8FFB2A401973240039D343CF914FBF"
+    },
+    {
+      "path": "apps/api/tooling/character-equipment.test.js",
+      "sha256": "045145041161955EE8E01B36809A387E5B59FF55B71749332E85B642A1BBB1F2"
+    },
+    {
+      "path": "apps/api/tooling/eslint-config.test.js",
+      "sha256": "D9CF98BE837AB181B394E1F64B34D24336EF1A9A1F9EDEFE23F43C7978F9B108"
+    },
+    {
+      "path": "apps/api/tooling/goal-browser-fixture.mjs",
+      "sha256": "966A4D1F82CAECCFB4C71D7949443EEEC55DC60DC07119D0781DAA154F345547"
+    },
+    {
+      "path": "apps/api/tooling/goal-session.test.js",
+      "sha256": "7426FD446D089833CFEC82A6AD681D8C58E66A356FCC8494209034E7C35DDDC1"
+    },
+    {
+      "path": "apps/api/tooling/journey-browser-fixture.mjs",
+      "sha256": "C6C1796F7B5350EF78C93EDF11F4A930895D8933A6A014CF569DD07B0A6BF6E1"
+    },
+    {
+      "path": "apps/api/tooling/journey-client.test.js",
+      "sha256": "7A1B4ACF2945F1D219E0ECFD1C8D5D7E34CB21F0E657C3E01626BA30691E8658"
+    },
+    {
+      "path": "apps/api/tooling/origin-browser-fixture.mjs",
+      "sha256": "B36363B26F115FCFEE29953AFB2217A2893A241D3BED3840244C25790F375FFB"
+    },
+    {
+      "path": "apps/api/tooling/plan-browser-fixture.mjs",
+      "sha256": "0FB7BA452E2870C10FAA55391A332744DB4D99243D1F58B29A14CC576FEBC0CA"
+    },
+    {
+      "path": "apps/api/tooling/plan-client.test.js",
+      "sha256": "FA908FCFEE7372B1B6D457BB1F4C69564A4C6A1A26F1ADB98DC0D419CAC6D3E1"
+    },
+    {
+      "path": "apps/api/tooling/raw-evidence.json",
+      "sha256": "08C7961CD8C689FD02664473BEA0D5542B546C01DD25880DBB3593A64E64C9EC"
+    },
+    {
+      "path": "apps/api/tooling/recovery.test.js",
+      "sha256": "183CEA6198991091620A2A0063EF4CC49BC1102FDB8511EB13838888A9E363F9"
+    },
+    {
+      "path": "apps/api/tooling/recovery/cli.mjs",
+      "sha256": "59FD376382A32B0C38F4CB993657F5696D9246B97117C36147D73E4B7496B0E5"
+    },
+    {
+      "path": "apps/api/tooling/recovery/fixture.mjs",
+      "sha256": "E61A9B93BC3B9D0C97719295518A9BBDFE58A797C84A09741C44A3538DCE7361"
+    },
+    {
+      "path": "apps/api/tooling/recovery/policy.mjs",
+      "sha256": "A87FFFCFE2E61A453B55AEACA310A91CD6AEE79B66C9918759B11EECCC1505FF"
+    },
+    {
+      "path": "apps/api/tooling/recovery/probe.mjs",
+      "sha256": "D2787CA5509E466693CC04227026738A013C5B5CC25EF4B02E73161B170F67AC"
+    },
+    {
+      "path": "apps/api/tooling/recovery/process.mjs",
+      "sha256": "6831A8A8072DE4AAF947020693B0B6DD25015163BF9CC61BB2FA17985542B0C3"
+    },
+    {
+      "path": "apps/api/tooling/recovery/rehearse.mjs",
+      "sha256": "810320C50BC8855F906D8D494873D7664FC3203769AA6428826D732C51B492BC"
+    },
+    {
+      "path": "apps/api/tooling/recovery/seed.mjs",
+      "sha256": "32F72C3D8FB702333D1FD9AF9787AADA15328F2F0519763FBB96FE6BA4846285"
+    },
+    {
+      "path": "apps/api/tooling/recovery/snapshot.mjs",
+      "sha256": "F444DA6B3D64ADCC8ECFDCE4415EBD69044D1B66FB75808CC4D694AAD93CA3EB"
+    },
+    {
+      "path": "apps/api/tooling/routine-browser-fixture.mjs",
+      "sha256": "97F8725E5C93BD51E9F2A3C1E81DFB29018D0420AC631F98D015F3B81C3C4A81"
+    },
+    {
+      "path": "apps/api/tooling/routine-client.test.js",
+      "sha256": "05FBD8DADC1927C486FD3D400E691BAB9BC0A6A36DD5DE24E7E8236F4A6586BF"
+    },
+    {
+      "path": "apps/api/tooling/verification.mjs",
+      "sha256": "5B165A1B39A3FBC938D4B259EEF33868A7D924FF3E3D9C45DC92DE43AB704F18"
+    },
+    {
+      "path": "apps/api/tooling/verification.test.js",
+      "sha256": "32C2304B7792D85D4CFBF44763081D63FBA3184BC4CCF7CB84CA920C8746EC93"
+    },
+    {
+      "path": "apps/api/tooling/verify.mjs",
+      "sha256": "54BFF607FFA3A6F42BD8CE433FD21EBCB9FBBE7BCE4D75D31C3A675410B58314"
+    },
+    {
+      "path": "apps/api/tsconfig.eslint.json",
+      "sha256": "B477B7A496A1005CD072921C19BE73A1C58CFC0A94640D2150CB6B7E57733FB4"
+    },
+    {
+      "path": "apps/api/tsconfig.json",
+      "sha256": "BE8741241502000BB3FFC193B4BD264C1B7D7EB60DFB45FBEE6B54FCBBECA555"
+    },
+    {
+      "path": "apps/api/tsconfig.node.json",
+      "sha256": "0F7142795087A70BB736CEEBEBCDF68225274F3AB620198EA90978F1CB9E04C6"
+    },
+    {
+      "path": "apps/api/tsconfig.node.tsbuildinfo",
+      "sha256": "42DEA9D6FC1EFFAEC698F6FA4D5C14D6EE7364EB3232373138F9E1AA634897CE"
+    },
+    {
+      "path": "apps/api/tsconfig.tsbuildinfo",
+      "sha256": "B35E1643EDA248154C29C2A90A2777553771EC35EBCEC61CA714CF142A2E5D6C"
+    },
+    {
+      "path": "apps/api/vitest.config.ts",
+      "sha256": "80EE0D87603844F9D76A182C6717275D9B90DBA15029BDC63235ECDD9D6FFDEB"
+    },
+    {
+      "path": "apps/web/.gitignore",
+      "sha256": "FE718E7BABB14F3CBAD2D97F08889B9CE5215ED3FE0E43B2B8CFBFB3B9B844E8"
+    },
+    {
+      "path": "apps/web/eslint.config.js",
+      "sha256": "0303AA1C513D8ADAE1FA1D450FC2938AB6B25BD9625A3EF98996CC5B2CC93ABA"
+    },
+    {
+      "path": "apps/web/index.html",
+      "sha256": "282B989A86BACB7DE93281D0481EB9818CD6D1EA1F3A1C46B6A8F2EE1F6400F8"
+    },
+    {
+      "path": "apps/web/package.json",
+      "sha256": "EC9050FDB24BA481338C55EB8D674636A9076A4D7E64BC605C07173394341E08"
+    },
+    {
+      "path": "apps/web/public/favicon.svg",
+      "sha256": "61BC9A161DE58248288E6905425D7180F0624C2865007B97D763FDAC12043A66"
+    },
+    {
+      "path": "apps/web/public/icons.svg",
+      "sha256": "B45FA506195CFCDEF406BA9F0C77B36DDC1A7C224040926EC70ABC2FDEA7B93A"
+    },
+    {
+      "path": "apps/web/README.md",
+      "sha256": "7CAD8CFD1B98D16AB43944F52BEE2AD85B75F34DF86ECEF3178398750C3E88AF"
+    },
+    {
+      "path": "apps/web/src/App.css",
+      "sha256": "6E25A776D3E8102DA5BACB3CB99F4A5FC662A2E01E6143140671A556D28C3D5C"
+    },
+    {
+      "path": "apps/web/src/App.tsx",
+      "sha256": "9BE7C79A5C14B064CD0422910418A35CF2D62659B60C4A1F95FE5A4846BA0A33"
+    },
+    {
+      "path": "apps/web/src/assets/hero.png",
+      "sha256": "881FFBCAAFC212E49ADDAD08846A5B82761355FA20624253AF3477BA33262C5C"
+    },
+    {
+      "path": "apps/web/src/assets/react.svg",
+      "sha256": "35EF61ED53B323AE94A16A8EC659B3D0AF3880698791133F23B084085AB1C2E5"
+    },
+    {
+      "path": "apps/web/src/assets/vite.svg",
+      "sha256": "5BE21ACD42EB7B896E517F4E0F0F11EB5C5D9E54FBBCEBE9453F033008FCCA6F"
+    },
+    {
+      "path": "apps/web/src/components/CharacterEquipmentView.tsx",
+      "sha256": "6DB48DD83367C743AD716C7AB8792AE88B585463FD1117636EF4A6E2223D0CBD"
+    },
+    {
+      "path": "apps/web/src/components/CompanionLayout.tsx",
+      "sha256": "C2CAB0E3C2B0FB8BAB38A6BA74F76D7A3D880693FB875788E1AC32C7788BAB4D"
+    },
+    {
+      "path": "apps/web/src/components/EventCard.tsx",
+      "sha256": "190051529CAE0E5CE6BCDCBD5BC1799F439419F2A2B215EF47072CA94B01A379"
+    },
+    {
+      "path": "apps/web/src/components/FocusButton.tsx",
+      "sha256": "2167510D96C4A62D6536C9CFEEF7E165EF399D0B426474D9CA50698BFAC54ABB"
+    },
+    {
+      "path": "apps/web/src/components/GoalForm.tsx",
+      "sha256": "6AB8EA3E9B9A750619C3D1559716F35206C0D95DD837E82D7B702D7C744B8C5D"
+    },
+    {
+      "path": "apps/web/src/components/GoalManager.tsx",
+      "sha256": "6E85AB006877731968CD304D7BBCA7E6F592049F05B336E5190CDA6BBD99A1B8"
+    },
+    {
+      "path": "apps/web/src/components/GoalPriorityForm.tsx",
+      "sha256": "BC628CA63484105B7DFF103E6F556239A9C0CC58BC685392EEEE4FCD0E9C10F5"
+    },
+    {
+      "path": "apps/web/src/components/ImportStatus.tsx",
+      "sha256": "B6E24C29B46CA0AEA08205E044C59B9310554552B323DC23A062D2208691F782"
+    },
+    {
+      "path": "apps/web/src/components/MaterialRow.tsx",
+      "sha256": "DD5B22B1AEA7BD040BBB185FDFB9C36807A3DC9D12C45333718704909FC15399"
+    },
+    {
+      "path": "apps/web/src/components/PlanPreferencesForm.tsx",
+      "sha256": "253680C7B80A3DB4A183F8D2228FAA1F4ABFEF03FA2E27EF46182E005D4D3993"
+    },
+    {
+      "path": "apps/web/src/components/ProtectedRoute.tsx",
+      "sha256": "07D2F34F84AFADFA13D26C7A96ABCF6E50790A2C29BE032D1FC3A4AC866D27D0"
+    },
+    {
+      "path": "apps/web/src/components/RoutinePanel.tsx",
+      "sha256": "37D0B0D8838B1D6F0CE860CE3F2E7DA7CB2D94E43D92AB7FD75ECF82714C62C2"
+    },
+    {
+      "path": "apps/web/src/components/TodayPlan.tsx",
+      "sha256": "A0AA932FBCFCBED9057527F00EA0CF2345A8582C99586C2861833523D22F1288"
+    },
+    {
+      "path": "apps/web/src/components/WeeklyBossCard.tsx",
+      "sha256": "EB3AAEADC095FD3A102F41ECBF9E1D95E0DD58EA25E155BB3A2AE1B8E839CC5F"
+    },
+    {
+      "path": "apps/web/src/index.css",
+      "sha256": "1819D402FFF8ED713026E70EAE4908CD1741F760C3A2A623342ED135FF84F15E"
+    },
+    {
+      "path": "apps/web/src/lib/account-cache.ts",
+      "sha256": "CB8F6A079FD7F299D34E8745AE02E6198485CFD2C802B110E92F7E2DCC92F27A"
+    },
+    {
+      "path": "apps/web/src/lib/account-session.ts",
+      "sha256": "8EF51CD4D2AB345981EFE42BC645ADA2FA7D138A54DAE16709477F5EE83A0680"
+    },
+    {
+      "path": "apps/web/src/lib/api.ts",
+      "sha256": "B810A8A96BE4ACDFE8945D489C59BCFA8FEBBDB62E9198D008E46DF89E94C474"
+    },
+    {
+      "path": "apps/web/src/lib/asset-mapping.ts",
+      "sha256": "F40E87433C056B05CB8107E45B588C25C4934586445A0CA08340E45AE977BAEA"
+    },
+    {
+      "path": "apps/web/src/lib/goal-state.ts",
+      "sha256": "FA62AC72006A599E07AA48DC56120D85F6BB8D2BD4EBB1AB58080B242D7EF088"
+    },
+    {
+      "path": "apps/web/src/lib/plan-state.ts",
+      "sha256": "CE12E4BCE56014869916F65AEAF4EADE10F88412F38B00B408AF6411457BA31A"
+    },
+    {
+      "path": "apps/web/src/lib/plan-view.ts",
+      "sha256": "5C25AC6036C37F9E126E36FC2C18644079AA3D30F668DC406FCD45958EB9B1B3"
+    },
+    {
+      "path": "apps/web/src/lib/resin.ts",
+      "sha256": "671C26F1B94C3BDDBF213C259228E5CEAABCE5809BE1D51908BAD01B8BC55DC9"
+    },
+    {
+      "path": "apps/web/src/lib/routine-state.ts",
+      "sha256": "E041C96EB4D2B12868946BBBF078B34730D9646C81B31C93477CF8C9A912D87C"
+    },
+    {
+      "path": "apps/web/src/lib/static.ts",
+      "sha256": "CA271D600AD74442FDF1D0F0952B9F25D190ABA267C3D2B2E383C9B8A5F0520D"
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "sha256": "3668B3F560C9E48379FE508B07A0B660E3706A21DD5201C6FFAC7633651A717E"
+    },
+    {
+      "path": "apps/web/src/pages/CharacterDetailPage.tsx",
+      "sha256": "F691863F615B4D5C659CAD5208E92D2D04AE132DD830599F755337CE0CE6D3AC"
+    },
+    {
+      "path": "apps/web/src/pages/DashboardPage.tsx",
+      "sha256": "3DEABC7FA85DFD8A6C34C7E7A87591ED3DDF734B3E26AAE2498AA8929AA2EA88"
+    },
+    {
+      "path": "apps/web/src/pages/EndgamePage.tsx",
+      "sha256": "26EB6931FCC5B2AB74033D23556CB9BFBAD9EA2768DFA607CA21EA32B0FEC1D2"
+    },
+    {
+      "path": "apps/web/src/pages/ImportPage.tsx",
+      "sha256": "A15ECFDF04117F74EA7F2399D7CE3FE10BFA18CA629973FD3861A37C5CB7D9F1"
+    },
+    {
+      "path": "apps/web/src/pages/IntelligencePage.tsx",
+      "sha256": "0185B216358425EE7C102CCB6089D6FE293413ADBFDB587EE85ECF90F6457A88"
+    },
+    {
+      "path": "apps/web/src/pages/InventoryPage.tsx",
+      "sha256": "3CCC83DE6EA03FF1FB9353592ABBA1AEDD9B0AB731C5F546E8B35F57E4585690"
+    },
+    {
+      "path": "apps/web/src/pages/LoginPage.tsx",
+      "sha256": "E5864AC61AC88F601BE5E0815AE31315778A42C95C867C545FB6E4C885BB442A"
+    },
+    {
+      "path": "apps/web/src/pages/nikke/NikkeRosterPage.tsx",
+      "sha256": "7D626A73BB475D958DAF1CD49CBF76901A7B54C2C4B553621F7B9808096E6F5A"
+    },
+    {
+      "path": "apps/web/src/pages/PlannerPage.tsx",
+      "sha256": "7AE1171E6A7D58913AC60416CE464E542C3D76F8B11E9ADEA21A70C13AC5BA3D"
+    },
+    {
+      "path": "apps/web/src/pages/ProfilePage.tsx",
+      "sha256": "E8023E3BA7B2492A00EB27AD324BDFC9794D23A119E891272ADF6A056A356C60"
+    },
+    {
+      "path": "apps/web/src/pages/RegisterPage.tsx",
+      "sha256": "40C924B61738AE09394AC9D674A2A896CAF9718AFA9C2F68B1FEB3F7D7A41691"
+    },
+    {
+      "path": "apps/web/src/pages/RosterPage.tsx",
+      "sha256": "390554DFE426FE1EC11786E33E75147F9F95D1FDFA1C870022B05721761F84FD"
+    },
+    {
+      "path": "apps/web/src/pages/SimulatorsPage.tsx",
+      "sha256": "1D0E0B9DF62DD068617B7FF2B3C39F6FEB9D3059DE1961CF728EBA21CDE6899A"
+    },
+    {
+      "path": "apps/web/src/stores/auth.store.ts",
+      "sha256": "261246D758B1CB41C5475C1A9FD3F9DC2C7D74B2AA94DF520A68179ACF829BCD"
+    },
+    {
+      "path": "apps/web/src/styles/companion.css",
+      "sha256": "A6FFCC6E90A1EDE819312737D5A772346A74586E44A4207946A3DD9111BDC0BA"
+    },
+    {
+      "path": "apps/web/tsconfig.app.json",
+      "sha256": "8E5D12BA330E7D86409EDEC74B95451E0DB22EE09B9426C94B5BF817571EDDB0"
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "sha256": "E8D6F7B50828DB3953E21C7E92584F9206B3CD2551B4012507372AFBB7FE9CE3"
+    },
+    {
+      "path": "apps/web/tsconfig.node.json",
+      "sha256": "D366CC0827139DB39C61815F22491BBFDA56C654354A42AD7795143D314E45E8"
+    },
+    {
+      "path": "apps/web/vercel.json",
+      "sha256": "0ECFF71CC2AD5DA02BA9CDAE5333431044F59C4B7F9376E50356E856FEC2E20A"
+    },
+    {
+      "path": "apps/web/vite.config.ts",
+      "sha256": "9BBFAAEA0112F443017FEF167DF9829D9D8E6E29325F4F49C3D10AFA675786FD"
+    },
+    {
+      "path": "docker-compose.yml",
+      "sha256": "D1EB68BD7C433636B0104D65540B3AB0C1C97614BAF200024E1205FBBC572A9B"
+    },
+    {
+      "path": "docs/adr/0001-adopt-modular-monolith-architecture.md",
+      "sha256": "AD033513EE7558DDA0E3DFD64E74B6EA14EF896C8337A0537242722EEF082C0B"
+    },
+    {
+      "path": "docs/adr/0002-stateless-jwt-authentication.md",
+      "sha256": "FAF9A970EC1EC18B569C8EC60C6797C9E3E64A34EF9B357D501D46F78EE39A37"
+    },
+    {
+      "path": "docs/adr/0003-centralized-domain-error-handling.md",
+      "sha256": "0E2B4DB1C56D37E80AD27659911D98E78EFE1D94FDE679E240AE6467D4686892"
+    },
+    {
+      "path": "docs/adr/0004-frontend-state-management-architecture.md",
+      "sha256": "781B1DAFBC0275A839038B2C426ED97DC5314AA2776EFC5490D14BCBF326CFD9"
+    },
+    {
+      "path": "docs/adr/0005-static-vs-dynamic-game-data-modeling.md",
+      "sha256": "B7F0AD77A5E5FC97F7B38716D878CA0D4B11F8284E04E844B9EAAD6B07A865F1"
+    },
+    {
+      "path": "docs/adr/0006-bulk-data-import-and-deduplication.md",
+      "sha256": "47703148D6DC322251E255684DFD21ECB975A9BFC8C7E227AE051AB5B9B157AD"
+    },
+    {
+      "path": "docs/adr/0007-api-route-aggregation-and-validation.md",
+      "sha256": "7582102AE742D0A99EACC529719DFB5076B1354DDD9586EA9C989E875771611D"
+    },
+    {
+      "path": "docs/adr/0008-frontend-subview-navigation-pattern.md",
+      "sha256": "7634F69410218DE0E6DC7DFBCFC127B5D303CA8B7A32C7221439B17AABF0F9FB"
+    },
+    {
+      "path": "docs/adr/0009-lazy-daily-reset-pattern.md",
+      "sha256": "A2454AA076F4322AE192CC76E68D94149C448A6E2D95095FD3FDF94D0A1903D5"
+    },
+    {
+      "path": "docs/adr/0010-get-must-not-mutate-state.md",
+      "sha256": "5420B920C1CE7C81C88859338984779459F01EEBE6605976944C00AC7964E7F4"
+    },
+    {
+      "path": "docs/adr/0011-intelligence-engine-architecture.md",
+      "sha256": "C92B2EADB53451804CE177F2244756A5237301CC941E0083B905B99CA0664991"
+    },
+    {
+      "path": "docs/adr/0012-genshin-companion-direction.md",
+      "sha256": "23787DF49582972AE85058D038888EE7E4A7B4FD27A48ABA604348628BE93512"
+    },
+    {
+      "path": "docs/adr/0013-versioned-routine-snapshots.md",
+      "sha256": "A9C27BCC80CD22CB8B64309CD61B0D766C91E7A06DBD1FF6B0B2BD3EE70F7C5C"
+    },
+    {
+      "path": "docs/api/authentication.md",
+      "sha256": "8205860CA7135E6C290158515F1974E246C75FB27F654BDFE2B4A6C58F6A3467"
+    },
+    {
+      "path": "docs/api/catalog-advice.md",
+      "sha256": "0E90C1910732653A5E38F359360542017F7A0A0EB62598AC3505C23B0295A4F7"
+    },
+    {
+      "path": "docs/api/character-equipment.md",
+      "sha256": "2C193BA81E7A2BAEE92A660CBD709D6F11C4313FB786C5848958CA2EB6A63E59"
+    },
+    {
+      "path": "docs/api/companion-routine.md",
+      "sha256": "B81718D5E6EDA3C5095F562F33063EC77677F42BDB89FA15D33E4269947EECB2"
+    },
+    {
+      "path": "docs/api/focus-goals.md",
+      "sha256": "0A2FE1CDEB000F1B92859D6A2192E85514860B7AAA2BBD36BDF3B7CB408C5783"
+    },
+    {
+      "path": "docs/api/genshin-import.md",
+      "sha256": "39089C54C945ACBB64220DC49BA61B5BD138E304D62320235A1C68D4EC2B156F"
+    },
+    {
+      "path": "docs/api/today-plan.md",
+      "sha256": "D46A36C49A79609457E149D48166F7B3FC0452D9A0E1131F07F8E53E7F699599"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "1F4166C3838354AB1F7D4DAA7D0598D9CB6B0A9BBB9C69DCF2BE1E76965209E3"
+    },
+    {
+      "path": "docs/DECISIONS.md",
+      "sha256": "2C60A1725C3CC81E3809D2DAFF0E6306C3368E9CEBF1C7033ACE88F1F5E98596"
+    },
+    {
+      "path": "docs/DEVELOPMENT_GUIDE.md",
+      "sha256": "9323B622A7B8A3517D1B5D1638848EDA9C24E4E649694456C0533577F5D4AACD"
+    },
+    {
+      "path": "docs/FEATURE_SPECIFICATIONS.md",
+      "sha256": "90344AADB8D54B568B9A7F5128C11D175AA3793A26F9F4789B52DC73C61FC77D"
+    },
+    {
+      "path": "docs/features/FEATURE_ARTIFACT_INTELLIGENCE.md",
+      "sha256": "89D512A3A81588CCEAB468673D957929328D76AFA54CAB62A1D6646E7712714C"
+    },
+    {
+      "path": "docs/features/FEATURE_AUTH.md",
+      "sha256": "85D3A4F8EE0B8634976EC9275AC91D78609253B216FBB2CA2F6284D26B2A49D0"
+    },
+    {
+      "path": "docs/features/FEATURE_CHARACTER_INTELLIGENCE.md",
+      "sha256": "0AF8EA41E5CF4FC0E73B4F8D5B90678F9CD79B0A0EE11526C135167C02CE427E"
+    },
+    {
+      "path": "docs/features/FEATURE_DAILY_COMPANION.md",
+      "sha256": "359DBB32ACD1EED09CEEE68B26ED5CFD57A055F9FF37AD0DFD1A4E9A365EEE78"
+    },
+    {
+      "path": "docs/features/FEATURE_ENDGAME_CENTER.md",
+      "sha256": "7911D94684A9545EBF946CD9E4CCACC1A5F89C2531A709F5E920298A24A476BA"
+    },
+    {
+      "path": "docs/features/FEATURE_EVENT_PLANNER.md",
+      "sha256": "EB608C34DFF0FBE2D53F6F34A47E5750B6BCFBE7C09D18864AC02E77DF7FD8D9"
+    },
+    {
+      "path": "docs/features/FEATURE_FARMING_PLANNER.md",
+      "sha256": "4AFB9445600460F61F20EBDA2F86DD56BD8B4F6ED0D3DFFA12247F085C7B0F1A"
+    },
+    {
+      "path": "docs/features/FEATURE_GENSHIN_COMPANION.md",
+      "sha256": "26D26876E2DC4307CB69C2054CACD1EA19A73D770235421E16D36A098A1E995E"
+    },
+    {
+      "path": "docs/features/FEATURE_GENSHIN_IMPORTER.md",
+      "sha256": "76A7D6625F832372E74532603C0119F71516ED85D0431148BA3ACD33F6C8041C"
+    },
+    {
+      "path": "docs/features/FEATURE_GENSHIN_INVENTORY_UI.md",
+      "sha256": "64FBD22E9100B0D861A03AF865D7F7D625578DCF81F6C9E946CC455BE73B70FF"
+    },
+    {
+      "path": "docs/features/FEATURE_GENSHIN_ROSTER_UI_READ.md",
+      "sha256": "56FBC9AE2CE2EE465A9B43C440148EC9FFA6B7B78936C21D5C76699C0AFB9408"
+    },
+    {
+      "path": "docs/features/FEATURE_GENSHIN_ROSTER_UI.md",
+      "sha256": "34DF036F19B3072228DDCF0B76913735269194F3FB217103EE6FF645A2F4B479"
+    },
+    {
+      "path": "docs/features/FEATURE_GENSHIN_ROSTER.md",
+      "sha256": "A5A58BA68EA52198ABE9503808CA0344CAECC83A47845118AAD2B7A825BBE588"
+    },
+    {
+      "path": "docs/features/FEATURE_KNOWLEDGE_INTELLIGENCE.md",
+      "sha256": "34E1F730C481FD4C9F99AD0873F5D6AAC5546CE008CA37DE8E1CB22DAE0CE0F6"
+    },
+    {
+      "path": "docs/features/FEATURE_PLANNER_INTELLIGENCE.md",
+      "sha256": "3964FC20CAC0EA0B5DA06EB3454B88ABE654FAD2345482083887A086FCA6F8FC"
+    },
+    {
+      "path": "docs/features/FEATURE_PULL_INTELLIGENCE.md",
+      "sha256": "2E9971CC282DA79BCAAE64DF483C95CD54F436C2545890289055D387B14DF0F3"
+    },
+    {
+      "path": "docs/features/FEATURE_WEEKLY_BOSS_PLANNER.md",
+      "sha256": "BAF3CC3701918FBAE53F9FFB61E2A2818259EFCDA0B2384D664A3BA71B2BDF21"
+    },
+    {
+      "path": "docs/plans/3a-backend-lint/baseline.json",
+      "sha256": "C139755CD41534A91E1A7C6FA7570C809A4C0BDE1EC117BC95CDAAA9FE76E8AE"
+    },
+    {
+      "path": "docs/plans/3a-backend-lint/implementation_plan.md",
+      "sha256": "7901A324F9617A65B50557A1BA74984189BBDF1DB8105DAB0E7720C5C63DDE16"
+    },
+    {
+      "path": "docs/plans/3a-backend-lint/task.md",
+      "sha256": "D2E312A2A4CD90F12ECE2863530C8188D2C0963150929C36AE44A2F4ECCECA16"
+    },
+    {
+      "path": "docs/plans/3a-backend-lint/walkthrough.md",
+      "sha256": "3A1D22F258AACEA355FDBE7E192367473B2B053E0ADB90E3B83DEF014B9CC885"
+    },
+    {
+      "path": "docs/plans/c1a-safe-imports/implementation_plan.md",
+      "sha256": "3B97A3A6E39C215BCA0A8A615E343D3EE7302E9743A1A126129298AF49938540"
+    },
+    {
+      "path": "docs/plans/c1a-safe-imports/task.md",
+      "sha256": "11034A41E1887A925E4368E49133A23AB2F132197D12D1F0B1B19B5090115418"
+    },
+    {
+      "path": "docs/plans/c1a-safe-imports/walkthrough.md",
+      "sha256": "E86107B9441C9446555A8099CA7F54C5895623DEF11D1B2F95BC26434148EB11"
+    },
+    {
+      "path": "docs/plans/c1b-import-provenance/implementation_plan.md",
+      "sha256": "47EAE266BBADBB3C922A9AC221560DD527F87D7CFE5431F6E64A9CEA74CD437B"
+    },
+    {
+      "path": "docs/plans/c1b-import-provenance/task.md",
+      "sha256": "AFD617633C0291086FF615919BD68B21CF9885ED7C19D2B6976674FBC3307485"
+    },
+    {
+      "path": "docs/plans/c1b-import-provenance/walkthrough.md",
+      "sha256": "F915E69FDCA8CF5A0BF560A1B5BB0226E4E42AB27E03E8C51A92FAB608211328"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/activated-daily-only-weekly.png",
+      "sha256": "DF040269D980C7A18A461587B7CE6CFB3515978DD6BA6319A55D098A2D14A24F"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/activated-daily-reset.png",
+      "sha256": "CC7522D494017ACC40719E34440449AEBE19D279F6B48F254D5E18617C704808"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/activated-weekly-reset.png",
+      "sha256": "BAAC23501E3EFDFC3474144B4ECE7E7BEAF824AF8F44F99A0AEF3E1A58A790F4"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/browser-check.png",
+      "sha256": "90C2A243547C9E99A8F4A301B9F0D8CFE49D67AEBD73F4C1AB9D9596FED891B0"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/checkpoint_review.md",
+      "sha256": "F7745DD6F018AAC15EA25463F3780F1FBE658ABDDCE0F4C43201332764AFD651"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/enabled-clock-test.png",
+      "sha256": "CC7522D494017ACC40719E34440449AEBE19D279F6B48F254D5E18617C704808"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/implementation_plan.md",
+      "sha256": "B31B050487D7128B3230F72B0894E16BAE63D4D628EDF6A3C1DA45432E17AF68"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/implementation_review.md",
+      "sha256": "763945805FE558ED21601AA5F0CC59E5468CBCFB8A721491C22EDA1CBB827C13"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/preservation-check.json",
+      "sha256": "7B5A82936773F16CE49979CF6028EEBA5499F95B66006BC10E385661BF568FDB"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-review-followup.md",
+      "sha256": "50DEA8AC864163C0B966281D3E7C79DC260295E3410519EBAEEE111C327431B9"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+      "sha256": "4907E64A59082D1884FC59D9C4881710B3F4A8100502AFCDC6C4B9DA85D7EC6B"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/sources.md",
+      "sha256": "FE271E06D55DCCC3F6625E21C55A6CCF103ABFA277EBFC8E26FC17E27B4E1043"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/task.md",
+      "sha256": "8094329AD525999C137ABDA4D96293D0D18BF240DB9EB1AFA105FABCBCCFC751"
+    },
+    {
+      "path": "docs/plans/c2a-clock-task-reliability/walkthrough.md",
+      "sha256": "96805061D3487F033659724985EAD53D501B16B2F8CDA3CF6195C344DC31F6CA"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/browser-events.png",
+      "sha256": "C46227E77C686FDCC29965131279FED2954BEF2DF77AA338BD0F4D6C06A320D1"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/browser-mixed-unknown.png",
+      "sha256": "6425B724C60C1CCE7C90A948441E675E74B1ABF072A8B130EB09812801975756"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/browser-recorded-stock.png",
+      "sha256": "3513DC37970B94BDB6A928DBCD4FEF6C8E036FB88FEBDB3CBC89AEAD2F40C9D8"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/browser-route-unavailable.png",
+      "sha256": "372C64F97EA4E8FA3C3C3818348070BE066A4B043909D3A94C28F3CC52BBF76B"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/catalog-inventory.md",
+      "sha256": "91D0370C3D4565C26CB9DE605C4F864E47D86DAEBDE860DDCFE854387B36C315"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/evidence/hutao-identity-primary.json",
+      "sha256": "4DC09678AD9BB1006E0446BA2A23E054F0C289CC59B3F6FB0719471015061883"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/evidence/hutao-talents-primary.json",
+      "sha256": "326DA7FCF56AA2B46B10E894C6879E000759F11DE784C1F9F78990959BDE48E5"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/implementation_plan.md",
+      "sha256": "D83E68434C0514FAEF3F41154F9F830340F88CCF92733604C8CA9EA5DE9A8EA0"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/implementation_review.md",
+      "sha256": "06C052BCB0B5B2249EFF7FAB92DA1F674FC37DBC0FF35B49B14A5A487495CFAA"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/implementation-prompt.md",
+      "sha256": "0F6C417F97501FBF0B71DF3489AB48E8E52DBA7D6F253D6BB6AA1E4200F2B0C4"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/preservation-check.json",
+      "sha256": "BB446FDC2D9B18B93C83CA44CCE0F6BF3464868B6437FAB81F62B43FEE578690"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/sources.md",
+      "sha256": "CDD73A9827CF96E5DC150EF2B7C9C6D9B59DC58E456D787BC024818576579435"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/task.md",
+      "sha256": "7BAC62644BED1B706A7F8C13CEF4E3988A0D3062EF07AE6E80D62D06610B557B"
+    },
+    {
+      "path": "docs/plans/c2b-data-trust/walkthrough.md",
+      "sha256": "8C1D2A44C5A75C6B9F7107C2DC5B755E93564BCF2A24097F0B59A742CDE07B6E"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-character-only-refresh.jpg",
+      "sha256": "33F80FD4F9F852797843BC3104C5A9088DDAE6EC577BC3DD1F353800AFD3D1EE"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-complete-desktop.jpg",
+      "sha256": "638E2879D2C8D4639B987168C6AAFC45BFC131B8EFB981F347A40466ED01DC3B"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-complete-mobile.jpg",
+      "sha256": "EC58F114B41AFBBED7A2BFD24E139483474782C2AA11AD9A55174CF7E3590976"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-failed-image.jpg",
+      "sha256": "BC313F59966425C52969BBDDBBAAF3DA6E1CFFF555522FEBC2BCBDDF085F0719"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-failed-preview.jpg",
+      "sha256": "8BFDBE9A40B3FE12C5CF7F8996E4FC4AC7C24D094135774E79B7BCF04F24C074"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-loading.jpg",
+      "sha256": "6222A28CE6D5F747402BA09EA56495E9F24D5B4F021487E102F77EA578D876B8"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-no-import.jpg",
+      "sha256": "DCF15095187CF3FEA50D85DA7E0E2294C73D8BC01D2DD87AA9A5697CB5E68FFB"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-not-found.jpg",
+      "sha256": "07EB653E340212127788BFA72AEE4A25314B0600EA37573B173828B6E50654E6"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-partial-desktop.jpg",
+      "sha256": "65354DA4881508E7EC99B77EDFF735859E65B53F8FDD9484DBEF563FD941258C"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-partial-mobile.jpg",
+      "sha256": "094CB019AD33FB5CAB03E4AA3E3C5E8F93CF653FC6BC389B5B16431FEF367BAB"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-refresh-error.jpg",
+      "sha256": "0748B72181855D26690A2E59761529E9C6CD52816CEE301B428B8A8CAB9C8FB8"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/browser-unknown-key.jpg",
+      "sha256": "ADF225847A0E2ADD12984BDE17E4BD53FC4DF979C106070447C7F8E6892456F4"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/implementation_plan.md",
+      "sha256": "D3ECB05100D59AFF22DED65155A2B4BAB0A34C9BDA21B5FE9518119A58423C78"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/implementation_review.md",
+      "sha256": "C6BC0860B474B284E59CD4CE8ABFDDACEB95CF98A71B77024FBBAFC6E777B5E6"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/implementation-prompt.md",
+      "sha256": "97DD4C65818E1D661E5A6E01165746421B272B8BD5557ABFE061BD956F010D85"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/preservation-check.json",
+      "sha256": "95CF3093D915E404D78068E513B868B4D12F46083618FF1E7D3771F208DBB93B"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/readiness-check.md",
+      "sha256": "9B98E08D1ACF6A98C39767EB05B33295DAFD2C21B13203600BC147FE585569DD"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/task.md",
+      "sha256": "1ECF6D1180C71AF73469EF5FE95E0916264332DAC0B96217ED07A4E204CD5891"
+    },
+    {
+      "path": "docs/plans/c3a-character-equipment/walkthrough.md",
+      "sha256": "58AF8AD726AD9749E6D1AF5B26786A008645ED53A14E723C53CC9DFAEEDB1108"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-account-switch-draft.jpg",
+      "sha256": "503F4F3037D77700DD49D4231870ED3E8FE3E69B30A93CC55D1682FAFC634CDB"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-failed-save-draft.jpg",
+      "sha256": "41DE8EB2C386D33C12F6DA9BF9DFE38EE5E6B03C89C2DE80137B45B09780813C"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-goal-desktop.jpg",
+      "sha256": "057160E94C23636F41A057FE4EEF4273BAA49C5A3255A6748A8309621F35A1AB"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-lifecycle-history.jpg",
+      "sha256": "EA10490282A280436AC15CC27DB83B92DAAB49F6BDE2C2B962AB62AD7593241F"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-mobile-detail.jpg",
+      "sha256": "D442DFB093F0C7E9237A0E6738B28C66BEC006A572E1368758C419C0E5E74D44"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-mobile-goal-form.jpg",
+      "sha256": "D6A2C39B1E05656CF5F5AEB3E1F5EB19BB6D4A6783D55AD8AD221ABE64D7DEF8"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-preimport-goal.jpg",
+      "sha256": "3E8545DC5F905DCC5D6E9164EB669E4B393B794481726D5BB645520555A24B3E"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-reimport-detail.jpg",
+      "sha256": "3E293E7359622CDDC788373A8EF4A25EF5754393C0E510311C19687771008CDB"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-review-legacy-priority.jpg",
+      "sha256": "A7E34A83B03B4D7ADA7684A70CA86B009D46931F5B44C4BD2655D892237AF425"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-review-legacy-slot.jpg",
+      "sha256": "0704D6AED99A8124EF4F16946277A23FDCB8D02925B9CAEB97F8C35D3B7FF26D"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-review-priority-failure.jpg",
+      "sha256": "70B92E24679D2682ACC786D18EDD175A3933F685A17E81222F014691654CC7AB"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/browser-stale-conflict.jpg",
+      "sha256": "F73D78DCBAE0EF6750AC073102CA31F3F5DFC1114E1E050AA1558A475FA7DB3B"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/implementation_plan.md",
+      "sha256": "9AA6C5104D2DB0EEBF09D66C07F15835815F5401ECF749E9C432F844FB0AEE1D"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/implementation_review.md",
+      "sha256": "32E5376FA9A629C26074D8BE20880395D8D90237F105849F1066E7A76365055A"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/implementation-prompt.md",
+      "sha256": "804896C72779B61BCF92A1EA5670DA1FFC1858C0A55FBB71A909C04282CA5CF3"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/preservation-check.json",
+      "sha256": "EBF950E7F19B91ED98E2A0702AC5706E92D5A3FF3B909ECA21A4A806ED458DC3"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/review-preservation-check.json",
+      "sha256": "2C9E3BAB8EA4E2DEFD644EE2D22DC0699101E2649BEF2D5F88D82567D0856A6F"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/review-starting-state.json",
+      "sha256": "3EF9DE074B241752BD727DB177F5ECB33CA768F8564FFB493DC88490C2D372DF"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/starting-state.json",
+      "sha256": "4478B72E73F02309CDD355195FFD4978B6725095620D5B36192D4F1F4018DB98"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/task.md",
+      "sha256": "DEB1CF20FE2CFC43E5E2CB6D953AFADD2DFDFA03BDBA44E85F880EB109EBCB0D"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/touched-files.json",
+      "sha256": "31FB995D3E9F7D96C4B60DC7E7B9880170FA402AB723800433DD9F0843674FC9"
+    },
+    {
+      "path": "docs/plans/c3b-focus-goals/walkthrough.md",
+      "sha256": "166CD7084AB20FC6B3C542DA1EE41917452BE430060ADC6A20A62A0EAC71E666"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-account-switch.jpg",
+      "sha256": "FED81701053E0206074820C0663784B7321E716092CECE746FFCD967CC18CDEC"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-advice-failure.jpg",
+      "sha256": "82310A2BBFA273A62E09DCDEBD0A3A134B692D1BD36A9BAE7C5759F1B2EF9621"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-conflict-retained.jpg",
+      "sha256": "38D4963E639ECF1F298A0073107D31B29BBBCA52170E05C1A02297FE8E059D70"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-failed-draft.jpg",
+      "sha256": "9A7C4F54DF0A18C9E011E1C60AF20CC5D1675190886EE8D3B971DA210A338D14"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-legacy-priority.jpg",
+      "sha256": "6B70B2C2E4B296AA052C402399F1686D6992AF8A969A80854446BA446B788588"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-no-import-goal.jpg",
+      "sha256": "F17499FE94E7672E7DE83E83A6F4E55F71975639C21B5AB2BD1F56D753C4C62F"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-no-import.jpg",
+      "sha256": "9A831A7650A553BD5B10BDB658B936EAFCBD9A7E8663A6C934895731A53B99CE"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-quiet-plan.jpg",
+      "sha256": "A0363256664BEBACA65792810100C41301A811A980283B5F0DCEA3E58FC0A3CE"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-reimport-receipt.jpg",
+      "sha256": "9435C394F432B3DB41B0BFAA36A0848A18FA60D00A60F47CF25A99582D3771CA"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-today-desktop-viewport.jpg",
+      "sha256": "1FA188931E54E8AFF116896944D1B15B91C17F260DFADE17EAFEA82B9DBD9D5D"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-today-desktop.jpg",
+      "sha256": "FD906E9130ECDC33EFBC1EFB781905062D15185102E61406E3C79ED7555E2E4E"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/browser-today-mobile.jpg",
+      "sha256": "B9F869C0FA26F41AE3232B60E31011E3042D067D8BF21004BA5641CD145E9C2F"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/fixture-path.txt",
+      "sha256": "E0472593718964D9A40ECABF0DFFC2A11B8E4C9E957D1476D8FB8A76A8ED520D"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/implementation_plan.md",
+      "sha256": "0146EE03C99DBF5CF6556DA4CD8D7D29243BBC887FEA2770479DD8E7075995DF"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/implementation_review.md",
+      "sha256": "872CBE82A53A5EFF5B5FF0199E9736B1755144825DDCF0DE43F4DB38208F7EA8"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/implementation-prompt.md",
+      "sha256": "42E0F5621A91FC5D97757E0EA253F3193D5C4230ECE8FE22B10F55DDF734F6D9"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/preservation-check.json",
+      "sha256": "0FDE56C5A708F76B780929276247DE54259F7B54515335AA21CE8DC93472E805"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/review-starting-state.json",
+      "sha256": "CA4D548EBB9F1961DE5129DFEA1CAA40C6007151DDBF5EBA39A1D50ADF3F6618"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/review-validation-results.json",
+      "sha256": "966BDD974068F233C1D8F1C9A60AB1F88F842AC2666864D211A21CBAFAC532AC"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/starting-state.json",
+      "sha256": "F2955010DD008A98030340739DD9884D7E0F53C4FC932268BDA11877722A0B83"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/task.md",
+      "sha256": "88533766D323D675A4372BA02BC4850F8AFA0C625F1B86B895D6FB2D04CA709B"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/touched-files.json",
+      "sha256": "B8E61B221931835E96ECB90CD9D5731AE0179347306FFB9CB7A3D2F16D891D42"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/validation-results.json",
+      "sha256": "911F0C73574BBDC5D258FB2C0A58D84D14AA157CF1D3CE4513793A777431BDC5"
+    },
+    {
+      "path": "docs/plans/c4-today-weekly-plan/walkthrough.md",
+      "sha256": "7243FA486FC62EA00EA7F4C62B12CD917D9A964221CA6AA0D21556BE21FDEE01"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/acceptance.md",
+      "sha256": "AF10683DD670F5BDAF8506B10BE7003357D4620F17CC861CACDFA06211974DC6"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/advice-failed-refresh-retained.txt",
+      "sha256": "4AF9C333E04BD929977981B850EA8B824078130AB2F615F5D619E5F2E3664DDF"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/advice-failure-manual-record.txt",
+      "sha256": "7891D5BCC087620FB1C0E82CF3CB7345C65936B9F4D42AD999E6238FA0867B2C"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/after-first-use-desktop.png",
+      "sha256": "7AB95D57A2889B38F56098EB1F65A61F7A5B2E05A935919C59C0C2B3BD705F57"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/after-quiet-mobile.png",
+      "sha256": "E54A0BC319D2F2E6B3D37E7AEA0655C6D6067BB510CA953D03F7C7A2210EB9C6"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/after-today-desktop.png",
+      "sha256": "29ECCBDF63B83C2324E5CF6EF98B847B4A514F904C4B5C787C8370982464DCED"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/after-today-mobile.png",
+      "sha256": "FA71FBD3F82DF1689B92A5DB31D6223CFA1C6FA2036E5A00DB9D626AE5E7BD94"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/before-today-desktop.png",
+      "sha256": "A55E86763ADC81D89D0D92C35EAEE90671102353DE47AA246C37CD45087A0476"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/before-today-mobile.png",
+      "sha256": "742CFB79EA0FF5922441275211953D6EFDF89A0288DB19AA29670972790F0F51"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/beta-readiness.md",
+      "sha256": "8CD672D0935BD057F74589D1511CA16D9DFE87718EDDF4059D47F40991C0F249"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/changed-files.json",
+      "sha256": "49CD837D62FEE95872A351F1F464D3B8FF7040BB6A8C8C02834B4A2FF13786BD"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/cleanup.json",
+      "sha256": "0054FD058C2F743C64D007D00F7D9F28A075206AEF65C0536EFE4FEED08D08D5"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/daily-reset-recovered.txt",
+      "sha256": "C075E6EC953BAC770ECB089954307F3F82158756911D5B77F750CDA035046118"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/daily-reset-rejected.txt",
+      "sha256": "16D9FC7F7029F78C362C6687A9B9B654FF07DA7C79D7E7268ACA538D9DAAA6C7"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/diff-check.log",
+      "sha256": "1FCEE9FB71CE6D629D231CCC3999CE693286FA6C10EBB06BC00369999AD0D924"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/direct-test.log",
+      "sha256": "32209C6AFE595C4EA617B498FE74E46EA0576D79A5440B97994285435D5AE748"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/dismissal-retains-demand.png",
+      "sha256": "FA793C55186FB65880755571E24034A72F2D18EB94FEE4E3502AE4047E8ABC47"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/encoded-character-reload.txt",
+      "sha256": "1DF2E2A8005B17597CD2B890CA387FA448D57B3EE5B887F9911D15880626AD68"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/endgame-focus-final.json",
+      "sha256": "84143358C0180ECDC5964B10EA1A81799631DDCBCF9E32446862310FD11AFFF1"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/equipment-mobile.png",
+      "sha256": "95C354D8B1B35EEC37B1229BBA10C39D56C8E67C12326A143EC0CC0D18F98D22"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/events-unavailable.txt",
+      "sha256": "865F99615DB34EA20A85BB5A558D4AB1BF678D39C9CFC236BCCAF88579D9A1D3"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/failed-plan-refresh.txt",
+      "sha256": "A024E092B7149B0821AD99818F57A7F08C869D1C5BD2A80BAD63048EF057EF87"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/failed-plan-save.png",
+      "sha256": "D1C221D9B4BBCD3C3215C2F5D9CAF6E0A73E363F01B5E6626A35F63A7FC5C0B9"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/focused-format.log",
+      "sha256": "F20510A9DA4717C51C4CFFEE6D0DD88D6C9A723D0A83711D01216F5B48961283"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/implementation_plan.md",
+      "sha256": "0178B5E32CEA8698FABA7E60638BBE17C15BB604A9A931D217A139A405AA501B"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/implementation_review.md",
+      "sha256": "3336EAC9E52D2714F87154E48D6A489ED5261BAE928DE4EBC35C60C47BE37E07"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/implementation-prompt.md",
+      "sha256": "BFD3688F846DB389A160AF2A5A5DB289D83349DE7D12A5EA87117C8A5F46FB18"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/import-preview-mobile.png",
+      "sha256": "C24309B3D3B5136665B090480D7B701EF3D530C7A6E280E43A2C941CC5CC2A8B"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/inventory-mobile.png",
+      "sha256": "1B207B3ABF83AAD56EE192E1862A0EFBEA3C6285E71DC89C17463580B3983862"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/keyboard-choices.png",
+      "sha256": "9A1FB803387D3C7EA100CB2E5728E7922AFB0E6C44873B3B65470C7C04173BE3"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/keyboard-escape.txt",
+      "sha256": "6DCD5C634F239D3AB8AFD3EE0EFC7CC17CF1E73BDDBF818C319D8D79876DBDC2"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/missing-character.txt",
+      "sha256": "652169DC37D4CF415BC10217E9115F1523B698D33E68D6377C7402B427E5F11B"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/missing-goal.txt",
+      "sha256": "6527B9801B64154CF2E76D44B211AE05A2338E62056C02412D3A53FE127C2BE7"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/old-owner-read-isolation.txt",
+      "sha256": "669A30194DE4454A4AE29D78E2F22F323A74644079B0A5430C294DA0D26B8D8D"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/old-owner-write-isolation.txt",
+      "sha256": "D5A6F19B9C135DFB7171BF159735E3EB85210052BE1B91943C5A2CCD9C524BAC"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/owner-b-empty-roster.txt",
+      "sha256": "810BFE305B3766BC609D6DEAE7A604F81D5A710254646A2BBF8352A523E4986F"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/partial-reimport-today.png",
+      "sha256": "1064E7DF9B813C59E91534A00F67D910DC749922D585725148819090A33AE2B1"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/preservation-check.json",
+      "sha256": "2257A8EDAF16E31160916FA196CEA0927A07064900121A5F0869F9CCF0453558"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/primary-reflow.json",
+      "sha256": "3B1F37E5F3A8D5072DA63DC8CF4B6E12B06FD74FCF912D7DB1F14A329569BDA2"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/reimport-after.json",
+      "sha256": "ACD3739A342C8283992D6153AA909B8C472EE5CD0CA3EA9530BBEF76E262156D"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/reimport-before.json",
+      "sha256": "63A182044F80074DA87EBCF314F2C2979EB178E9187B06FCAA823A41A144B9F2"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/rendered-style-check.json",
+      "sha256": "BDDB3BBAAF791A1DC6EEE1BCAA76DE527647CB2EF330DF3B04E2567B7EBD39B9"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/request-evidence.json",
+      "sha256": "0A54B997B3BF34BBEBD06C7D4BA58865FAC47A769BEE4912C81DBABBA5CA077A"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/restored-demand-after-import.txt",
+      "sha256": "5B5040C9FA1C0A8B14377A95F13A3F516394BC30B6BB7A68EFDA071966291672"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/review-boundary-probes.log",
+      "sha256": "9625B95A96B209C08BF462F4DE6A5535EAB09B08528C8E6B532453A7BB1F76A4"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/review-diff-check.log",
+      "sha256": "21B8B966767E87FA8FBFD099530F97052827700CB4F57C18D0E27D312A621388"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/review-direct-test.log",
+      "sha256": "802517CF3D99902E6949284E866E04F76A4158761D0A0E8EA2D293FB95A965EB"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/review-validation.json",
+      "sha256": "A4F659B8CE0EC88F9F444666900A8629B5D201E15099E6D9FA1C1B749F9E5533"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/roster-failed-refresh.txt",
+      "sha256": "0766748EB03E51E1AA8D472025879F7577FDF09832C04298631ABD501D6470AE"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/secondary-reflow.json",
+      "sha256": "11DF232CAE6F12C765A091B443806D2E04D2A22109C0D60CA067F6EBB6B71191"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/settings-320.png",
+      "sha256": "56A52DB83B52C384588D6F310C5E042217652E190BAA04DE683BF726598FD28B"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/stale-conflict-recovery.txt",
+      "sha256": "63420176D6D13AE6719AEF7CFF85E509800ADC040AF2B366CD3BDCFC2196B67F"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/starting-state.json",
+      "sha256": "F1A7A653C71A6694DC544498E9E3D8498F3EE385F4E756C046AF0AB1EC6ADFBE"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/task.md",
+      "sha256": "9CF8EA3B1590BED7A157BFC79FA9FE6DF4E417CEBEDF233C2055DAF9358C758C"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/usability.md",
+      "sha256": "B97E3CC6C20858B163BACFD02CA66233958DBFB49C76D51C234229610971F8AC"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/validation-results.json",
+      "sha256": "9DB646D532F776BCBCD8E7A07DCD04B7BFAEBCA03A9C41EF0006AB3B8BA51DB4"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/walkthrough.md",
+      "sha256": "15B8B01AEC7B4E6716315FD157D36ABEDB37BCB6219F3AEEB45EA4F2DF6D6845"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/weekly-reset-recovered.txt",
+      "sha256": "22A1FF1327F52C62F9F80E300A90142D964818D7BBBCAC7AB5FDA41E88E8BBDD"
+    },
+    {
+      "path": "docs/plans/c5-companion-beta/weekly-reset-rejected.txt",
+      "sha256": "4673D2DA8018329467C17E95F6F161384ABE19ADDE940F437474F302B2A38105"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/beta-readiness.md",
+      "sha256": "8C6E7D26830806816F262278DB9587F926C578D87E81F6BE7C94A046E432D476"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/changed-files.json",
+      "sha256": "7CEF385BA112646B07BEE27EB9DFBEDBA3CC698F805FC4BA532ACC30B09CB5DF"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/cleanup.json",
+      "sha256": "2B465C8AE04D7A03503DB47A8FBFBD25C474485261E38A3E11B1DE37D8458CEE"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/entrypoint-results.json",
+      "sha256": "55426D8CCAD401EA86BF39AF4070EF5FD4ACC58E3D6079914851011B02D3604A"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/final-diff-check.log",
+      "sha256": "F8C9F1E39A9353A4B0C1C7E126B48B02886BC755EC157119E72D03BDAD1DD2A3"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/final-format.log",
+      "sha256": "AC952C260E912AF5585FE05226DF37953B38BF5C1FC659B4216B3BAEC7ED11C0"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/fixture-create.log",
+      "sha256": "BECC505F7723649FB62DEAD640417BADE35DE2F497D55894F39B82B46A3C570F"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/focused-tests.log",
+      "sha256": "E1C88A9755FE18DD9423391050AE0483F4CC74DA14628B9133A30A4341BF19BD"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/git-byte-preservation.json",
+      "sha256": "FDE2E44DD22C8E7413DC4F26A3026F546E87C8E20458C61AEFE1E475AC0E7FBD"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/http-smoke.json",
+      "sha256": "7C5359D18E72559612B36DA31BF673CF47B9EB99DD072625D92608C6D28EFB27"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/implementation_plan.md",
+      "sha256": "BB7AE19461D64C8CB1B75EC28DA9982704E9FBB5C23457428D31A2C0B8B523F2"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/implementation_review.md",
+      "sha256": "2765BA6B4D445E34411F288886FA092FDB33CDCEE78EA38D9C1E225D5BCF43C9"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/implementation-prompt.md",
+      "sha256": "9557763D3790300A411255B508A8DD67F36F611D11E6CDF8412AA28C0C28937D"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/owned-processes.json",
+      "sha256": "BEA9792924A6AABA4643C3A86E0944DD4507E485476850E886A0005052162E66"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/preservation-check.json",
+      "sha256": "687D61242162B7EEE70DC54C5681577226DA50FEA3F083116EF77FD49B35E452"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/reproduced-findings.log",
+      "sha256": "FCA06F963FB018D36EA015AFC3C0796D8188BE3ABE89E6A66FD1063B7451DFCB"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/restored-web-build.log",
+      "sha256": "ED46B84F6AE510AF00C42A08E580760D925ECF6BC2DCB885C9829EE9041EC2BB"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/review-diff-check.log",
+      "sha256": "F8C9F1E39A9353A4B0C1C7E126B48B02886BC755EC157119E72D03BDAD1DD2A3"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/review-entrypoint-results.json",
+      "sha256": "EA423A37095B66755B3D517BA908BAC264DBC17102292D8FC1BB9FD1C612D179"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/review-format.log",
+      "sha256": "F20510A9DA4717C51C4CFFEE6D0DD88D6C9A723D0A83711D01216F5B48961283"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/review-starting-state.json",
+      "sha256": "5DAC1BC32D959DAA4E8F55AA05F3153E77A590161390EF260583B2A12A18CFB8"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/review-test-results.json",
+      "sha256": "FF79DE7730C95DDDAE48434C166570037D075C850A915921FEA605B271C74B19"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/review-validation.json",
+      "sha256": "A0D13CBD9560F0D94AB32A99687DE882DE454B3A37D58AD70663AB5F0C323483"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/review-verification.log",
+      "sha256": "47527AECD20ACFA5AD07073067518FC6132AAD8CC33B52E5334D9023099ED55E"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/runbook.md",
+      "sha256": "3CE89310C2CC75F1D5E34FC2E7C4E91846E3BA4C12E7B2FA351E5C5B2D35E404"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-import-preview.txt",
+      "sha256": "C499E6A8C97216DB8919D8217B438855759553D51C1C11ABA6F8A1BC7C22F68C"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-logout.txt",
+      "sha256": "F87C1408EA4FF1082383C3627414079F489EA9342FA4B2209FBC9DE877764C33"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-profile.txt",
+      "sha256": "2A03D23A3ADDC7E6AB97C806E2C767F9D403EC086E33E7B995772EED9DFCB4CB"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-today.jpg",
+      "sha256": "CB4B5329F156E3A150960A10DC91A87C968AC886B0D90BAE621C7B22274863C1"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-today.txt",
+      "sha256": "06FB95455528AFB765D0B0CEF1B0BA5D8C865F2DDF8BE59D7B2436AC12D441CB"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/smoke-web-build.log",
+      "sha256": "1629163085D03693C1B8AA26AE14BD055CF697098ED44091C29A34FE0CE19784"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/starting-state.json",
+      "sha256": "642763C3CF9D5AA7AFE47F41829CA9D2844200CD9B57FA82B0021E2C3A56E05E"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/task.md",
+      "sha256": "4914B624ABCD95CCBFBFA2F6A86472C50BD3F3B3E72694507C2C84787440569E"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/test-results.json",
+      "sha256": "503AEA67E714DD9382F89157FFDE7F5BED939EECDD9FBAB3A24E0D84E43E61D6"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/unsafe-entrypoint.log",
+      "sha256": "7CD2309685C153475A74BE228C35E8CEDB880CDA77208C180D44EFACB247E56B"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/validation-results.json",
+      "sha256": "13EDB450C454EA3A279432BEF60B0BA6FD4AFF7BB255CEDBD2D0437BAC00B904"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/verification-run-1.log",
+      "sha256": "1B7FCA920AC132F862AC87CEA4A92FE61BCF04197E33F602E8B1887FD538D24E"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/verification-run-2.log",
+      "sha256": "7AD912C55F3AAB4F7CC5966F4D1C66D8ABD19A0A15AD6218E30C79F7738F15FF"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/walkthrough.md",
+      "sha256": "324CDF1CCBBF8646592C2C99176CC1A3F777EE0258EEBB56D6E0C76CA18A92D1"
+    },
+    {
+      "path": "docs/plans/c5a-beta-foundation/workflow-validation.log",
+      "sha256": "558F48E230254A7ACBD406E559326065E84C1C59332D85273896CF5E548A149E"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/beta-readiness.md",
+      "sha256": "9223C7C4FEBD627E3352D58EFEF634A0095E6D15E995B34FBBF0DFA95D81D890"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/changed-files.json",
+      "sha256": "25674D530AEF754A05E657646F322196EA92C9C0C993008B110F633FB526E7CE"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/cleanup.json",
+      "sha256": "AC28A804F7C9700A3D21C6446DA3414F5FD6B207D955E3822E90FC3128EB3878"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/entrypoint-results.json",
+      "sha256": "E48C30E385447C67A27F6811B8805838507ACE131D1998E4A636C2155FED0EAB"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/execution-attempts.json",
+      "sha256": "9C16D4A8E13B46E5C83F360E7FC0463F3DCFB93A3CE7F3B7D8F97E859DE82C92"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/finalization-checks.json",
+      "sha256": "9637B82FC94CDCC014C369DE1E939C3EB65151EC137E2AD6A0D4C57083A2A8C4"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/implementation_plan.md",
+      "sha256": "49C2A246176D4A72E7F30740D072040091A8504475E542DBD61B8F9121CB8E64"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/implementation_review.md",
+      "sha256": "E10A0E61D209764A73EA6C087832D93A7C08A5C2B4DD8AE9CF4BDFE5F2CB2E5C"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/implementation-prompt.md",
+      "sha256": "844DFC03B5718C65AB7CB118C8DD3D2E77D136AB391237CB6C0FE6B460F2CA52"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/local-fixture.json",
+      "sha256": "AAC665FF66B1B4FDE8488D8BA4EF4039C98F70DAB5910E45EFCE728A5A67F097"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/preservation-check.json",
+      "sha256": "3D0F146B0D22AA61D835A265E8760091713C6A8501434185CDFACDF2749369F5"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/review-entrypoint-results.json",
+      "sha256": "B74073EBBAA00F289C437E12DDA6382AECEBB8367CF047247ECAB788393D44CA"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/review-recovery-results.json",
+      "sha256": "A9290F6E1D19FA50C2F3B2CDA1FA2290DF749265B6BDE6F7E7976EE83A6C6A4C"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/review-starting-state.json",
+      "sha256": "3F0595DD85C0D4D07A88892E75D3446D987BEB2F1ED5282ED9B07C6F6617117C"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/review-test-results-summary.json",
+      "sha256": "2F5139A17853A1ED505E29B7CF503C747D956781482E4C18CE886A99BF3E2C5F"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/review-validation.json",
+      "sha256": "E0F92582B7A6F74625AF4D555F053D4DE4A13EE01AF4B28082C2F416609F3762"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runbook.md",
+      "sha256": "90F84FBBFCF6F76A2B76A01E04EE9B193061544C0ADEB962DFBC83FDA5B3DDE5"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/identity-failure.json",
+      "sha256": "79D3C91B0ACE0C2724C18751C510146C2F3FBA2C2AD1F32E972E27883BCD912F"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/nonempty-rejected.json",
+      "sha256": "ADDDD79904C1AB517671118ED40B5D44D50CCE6238B75A3D1060008196EAFB75"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/probe-failure.json",
+      "sha256": "CB9A4E7F4DC412488638FC235BDF4D1C6BEB2DCF24967E32427DCBFD5B4000EA"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/startup-failure.json",
+      "sha256": "C8FD7A365A77B776931C5821191F728919172F810E281C6CB6764799F3FA80E1"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/success-1.json",
+      "sha256": "A8E4E2E481CA9CA599C094BF4E2BA21A7212C7537CA4AE2C075D110BB3E5EC53"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/success-2-verify.json",
+      "sha256": "D5091905819373C5E84C3C0395A084FCB2C5454DF6A6657052B6522E1FD6E5CB"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/success-3-final.json",
+      "sha256": "73EA47F6D2CA3532891D09B13A18D96EF160C2C108814BA9E11D9192A642DA7C"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/runs/truncated-rejected.json",
+      "sha256": "D46C8172ADC671A42DB0546DAC1DF075EA2517B6D95B62C059FA3428627C691C"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/starting-state.json",
+      "sha256": "2D88517F85BB4AA87B72E5A0AE88D3FEF82EA430B60F5EF4FBCE5240509DA84B"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/task.md",
+      "sha256": "CE77FE276E52A1DCFE16BA53E9A7AFA8D6BC99080F9D69752DD7CE05DF0BED79"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/test-results-summary.json",
+      "sha256": "E2A69A5896A543DBC16A3800D9900651C8E5BA12E44A8AF21F4B98D6D1B6587D"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/validation-results.json",
+      "sha256": "BD60991B2715B3E88E46F804EA5F031981C1D5679581D47E4C22811FEF9E42CA"
+    },
+    {
+      "path": "docs/plans/c5b-recovery-foundation/walkthrough.md",
+      "sha256": "D8027CA38D8A5600D76FC2AAFC12BC6E3D011A9319206662684DD3680CFBFE89"
+    },
+    {
+      "path": "docs/plans/c5c-request-safety/implementation-prompt.md",
+      "sha256": "BAA5BC197A1B5B6D28DFE15293E00CB1B198BE1F744E5771E560E3BF635ECF1B"
+    },
+    {
+      "path": "docs/plans/CURRENT_HANDOFF.md",
+      "sha256": "73EC71CC22AC1939B75EE0BDE0465719CE81FDC6CAFF9A40CC4EDD7FF205B892"
+    },
+    {
+      "path": "docs/plans/genshin-companion/document_review.md",
+      "sha256": "66F17E72E9FC18018628E5AD7496AED0B1BD70C417089D919AC7A6AB159B5297"
+    },
+    {
+      "path": "docs/plans/genshin-companion/implementation_plan.md",
+      "sha256": "134D3768EE264EF801B13DCED1701E8F7EE5D238054AC3A34BCE04593DE4D50B"
+    },
+    {
+      "path": "docs/plans/genshin-companion/task.md",
+      "sha256": "E112967A36A4BEBDF2C216B50C8070D1F867482616422441838B6C9D3D624629"
+    },
+    {
+      "path": "docs/plans/sunday-sonnet-prompt.md",
+      "sha256": "373EB82D792B09D47D4B88E2F1AC5E15384D803B919623EE15DFE0BE06DFC492"
+    },
+    {
+      "path": "docs/PROJECT_VISION.md",
+      "sha256": "FFA6584B3B8DE2F5ECBFAA749AED788B59397E29B5292C3987FAA362DD386BB9"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "F1F44EB295482FF9CB37B63EE3B3B6FCF7AFE726976C09282C577060DE9647B6"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "sha256": "F1E3FC3B6DCB3FD762B02758AB6840887DE061935700AC9A20B3C78F03FECD70"
+    },
+    {
+      "path": "docs/UI_UX_GUIDELINES.md",
+      "sha256": "A9CC1F018B3D40558CAFE50FD385389E773BB25C7B916EFC879FD4F6F291C94F"
+    },
+    {
+      "path": "package.json",
+      "sha256": "06AC48BF24112580605C6CAA85A5C4BE6C6E23FA70AFCB69979A9519C5ADB5D6"
+    },
+    {
+      "path": "packages/api-contracts/package.json",
+      "sha256": "1112D14D49216FD8E2881CFA2714194AAADE0EFCAB0CDA75465852D8C1249513"
+    },
+    {
+      "path": "packages/api-contracts/src/auth/auth.schema.ts",
+      "sha256": "3F653D8ECB26890D5E209CEF3EAA4A796CE1F94D8F695896542A21A85B500D1D"
+    },
+    {
+      "path": "packages/api-contracts/src/auth/me.schema.ts",
+      "sha256": "892126C42AE656F19DA4F78E150834E411BB3F9B0AF850D5DF62E91BA1669B45"
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/advice.ts",
+      "sha256": "7A5BB75C5870F9DFF3C39716C2397906C3FD183B7D8FAAF149AA28C470996CAD"
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/character-equipment.ts",
+      "sha256": "4B554BDC833329F20C7DDB31AA73653B5407725D51F3D4C515758DF463822444"
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/companion.ts",
+      "sha256": "C7D42B548B86DAA4179468E7D0D2CD5AB9126F82C42C79DE7CB466B5D0E857C7"
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/goals.ts",
+      "sha256": "F4B7ACAC9EE35BDB5E9174781836689D979CE8855C5F1E637F10AE374BD44F19"
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/import.schema.ts",
+      "sha256": "DBA1D2563C738B20EC7694131E66CBFEB4ADF3A54046C1E47F9924C9D6DBEDAB"
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/plan.ts",
+      "sha256": "7C7F5926A7982C84CA47DF4FB7F3E70F85C4241770F83ABA7D944A3DB9377886"
+    },
+    {
+      "path": "packages/api-contracts/src/index.ts",
+      "sha256": "FAB2A1008A403A89B551C846E7693E43CCB3D88E2846894C24FE9026EE8F9C22"
+    },
+    {
+      "path": "packages/api-contracts/src/users/user.schema.ts",
+      "sha256": "ADC01F6E3967E908975A4C024153DEB60B2D2636BD422AB4F582ED968B483427"
+    },
+    {
+      "path": "packages/api-contracts/tsconfig.json",
+      "sha256": "F27B5A81F6608EFAA045BE3D005A5FB8BF2DC72F2467C00CAAED8BC6184019DA"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "DF0E24AC51A61FF5415F4B72BC2CC18781421A4957A84FD88761D6C5BAE7D25A"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "sha256": "218A6ED4CC6E8AE4314E5801602B50636A1C5570A2FF96AF603A701B23E52413"
+    },
+    {
+      "path": "turbo.json",
+      "sha256": "15EFC075C22A75829622F7524C68713C321B7D5D909A12D044D3ED66E17D6BC4"
+    }
+  ],
+  "head": "2d8820a48db83d7c62feebd849f2f1c2d3488bb6",
+  "status": [
+    " M .github/workflows/ci.yml",
+    " M apps/api/.env.example",
+    " M apps/api/.turbo/turbo-test.log",
+    " M apps/api/eslint.config.js",
+    " M apps/api/package.json",
+    " M apps/api/prisma/schema.prisma",
+    " M apps/api/src/app.ts",
+    " M apps/api/src/core/config/env.ts",
+    " M apps/api/src/core/contracts/companion.interfaces.ts",
+    " M apps/api/src/games/genshin/characters/character.controller.ts",
+    " M apps/api/src/games/genshin/characters/character.routes.ts",
+    " M apps/api/src/games/genshin/characters/character.service.ts",
+    " M apps/api/src/games/genshin/companion/genshin-companion.provider.ts",
+    " M apps/api/src/games/genshin/endgame/endgame.service.ts",
+    " M apps/api/src/games/genshin/genshin.routes.ts",
+    " M apps/api/src/games/genshin/importer/importer.controller.ts",
+    " M apps/api/src/games/genshin/importer/importer.routes.ts",
+    " M apps/api/src/games/genshin/importer/importer.schema.ts",
+    " M apps/api/src/games/genshin/importer/importer.service.test.ts",
+    " M apps/api/src/games/genshin/importer/importer.service.ts",
+    " M apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.service.test.ts",
+    " M apps/api/src/games/genshin/intelligence/character-intelligence/character-intelligence.service.ts",
+    " M apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.calculator.ts",
+    " M apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.controller.ts",
+    " M apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.explainer.ts",
+    " M apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.test.ts",
+    " M apps/api/src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.ts",
+    " M apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.controller.ts",
+    " M apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.routes.ts",
+    " M apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.test.ts",
+    " M apps/api/src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.ts",
+    " M apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.calculator.ts",
+    " M apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.test.ts",
+    " M apps/api/src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.ts",
+    " M apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.explainer.ts",
+    " M apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.service.test.ts",
+    " M apps/api/src/games/genshin/intelligence/team-intelligence/team-intelligence.service.ts",
+    " M apps/api/src/games/genshin/simulators/pull-simulator.controller.ts",
+    " M apps/api/src/games/genshin/simulators/pull-simulator.routes.ts",
+    " M apps/api/src/games/genshin/simulators/pull-simulator.service.test.ts",
+    " M apps/api/src/games/genshin/simulators/pull-simulator.service.ts",
+    " M apps/api/src/games/genshin/static/character-materials.json",
+    " M apps/api/src/games/nikke/accounts/account.controller.ts",
+    " M apps/api/src/games/nikke/accounts/account.routes.ts",
+    " M apps/api/src/games/nikke/accounts/account.service.ts",
+    " M apps/api/src/games/nikke/characters/character.controller.ts",
+    " M apps/api/src/games/nikke/characters/character.routes.ts",
+    " M apps/api/src/games/nikke/characters/character.service.ts",
+    " M apps/api/src/games/nikke/nikke.routes.ts",
+    " M apps/api/src/platform/auth/auth.service.ts",
+    " M apps/api/src/platform/companion/companion.repository.ts",
+    " M apps/api/src/platform/companion/companion.routes.ts",
+    " M apps/api/src/platform/companion/companion.service.ts",
+    " M apps/api/src/platform/companion/event.service.test.ts",
+    " M apps/api/src/platform/companion/event.service.ts",
+    " M apps/api/src/platform/companion/goal.controller.ts",
+    " M apps/api/src/platform/companion/goal.repository.ts",
+    " M apps/api/src/platform/companion/goal.service.test.ts",
+    " M apps/api/src/platform/companion/goal.service.ts",
+    " M apps/api/src/platform/companion/weekly-boss.service.test.ts",
+    " M apps/api/src/platform/companion/weekly-boss.service.ts",
+    " M apps/api/src/platform/users/user.service.ts",
+    " M apps/api/vitest.config.ts",
+    " M apps/web/README.md",
+    " M apps/web/src/App.tsx",
+    " M apps/web/src/components/GoalForm.tsx",
+    " M apps/web/src/components/MaterialRow.tsx",
+    " M apps/web/src/lib/api.ts",
+    " M apps/web/src/lib/resin.ts",
+    " M apps/web/src/lib/static.ts",
+    " M apps/web/src/pages/DashboardPage.tsx",
+    " M apps/web/src/pages/EndgamePage.tsx",
+    " M apps/web/src/pages/ImportPage.tsx",
+    " M apps/web/src/pages/IntelligencePage.tsx",
+    " M apps/web/src/pages/InventoryPage.tsx",
+    " M apps/web/src/pages/PlannerPage.tsx",
+    " M apps/web/src/pages/ProfilePage.tsx",
+    " M apps/web/src/pages/RosterPage.tsx",
+    " M apps/web/src/pages/SimulatorsPage.tsx",
+    " M apps/web/src/pages/nikke/NikkeRosterPage.tsx",
+    " M docs/ARCHITECTURE.md",
+    " M docs/DECISIONS.md",
+    " M docs/DEVELOPMENT_GUIDE.md",
+    " M docs/FEATURE_SPECIFICATIONS.md",
+    " M docs/PROJECT_VISION.md",
+    " M docs/ROADMAP.md",
+    " M docs/UI_UX_GUIDELINES.md",
+    " M docs/adr/0006-bulk-data-import-and-deduplication.md",
+    " M docs/adr/0009-lazy-daily-reset-pattern.md",
+    " M docs/adr/0010-get-must-not-mutate-state.md",
+    " M docs/adr/0011-intelligence-engine-architecture.md",
+    " M docs/api/authentication.md",
+    " M docs/features/FEATURE_ARTIFACT_INTELLIGENCE.md",
+    " M docs/features/FEATURE_AUTH.md",
+    " M docs/features/FEATURE_CHARACTER_INTELLIGENCE.md",
+    " M docs/features/FEATURE_DAILY_COMPANION.md",
+    " M docs/features/FEATURE_ENDGAME_CENTER.md",
+    " M docs/features/FEATURE_EVENT_PLANNER.md",
+    " M docs/features/FEATURE_FARMING_PLANNER.md",
+    " M docs/features/FEATURE_GENSHIN_IMPORTER.md",
+    " M docs/features/FEATURE_GENSHIN_INVENTORY_UI.md",
+    " M docs/features/FEATURE_GENSHIN_ROSTER.md",
+    " M docs/features/FEATURE_GENSHIN_ROSTER_UI.md",
+    " M docs/features/FEATURE_GENSHIN_ROSTER_UI_READ.md",
+    " M docs/features/FEATURE_KNOWLEDGE_INTELLIGENCE.md",
+    " M docs/features/FEATURE_PLANNER_INTELLIGENCE.md",
+    " M docs/features/FEATURE_PULL_INTELLIGENCE.md",
+    " M docs/features/FEATURE_WEEKLY_BOSS_PLANNER.md",
+    " M package.json",
+    " M packages/api-contracts/src/index.ts",
+    " M pnpm-lock.yaml",
+    " M pnpm-workspace.yaml",
+    "?? .gitattributes",
+    "?? apps/api/prisma/migrations/20260926173000_add_import_section_provenance/",
+    "?? apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/",
+    "?? apps/api/prisma/migrations/20261003180000_add_focus_goal_lifecycle/",
+    "?? apps/api/prisma/migrations/20261005150000_add_today_plan_choices/",
+    "?? apps/api/src/core/ai/",
+    "?? apps/api/src/core/config/cors.ts",
+    "?? apps/api/src/core/db/disposable-test-database.test.ts",
+    "?? apps/api/src/core/db/disposable-test-database.ts",
+    "?? apps/api/src/core/middleware/origin.middleware.test.ts",
+    "?? apps/api/src/core/middleware/origin.middleware.ts",
+    "?? apps/api/src/games/genshin/characters/character-equipment.integration.test.ts",
+    "?? apps/api/src/games/genshin/characters/character-equipment.repository.ts",
+    "?? apps/api/src/games/genshin/characters/character-equipment.service.ts",
+    "?? apps/api/src/games/genshin/characters/character-focus.service.ts",
+    "?? apps/api/src/games/genshin/companion/catalog-trust.test.ts",
+    "?? apps/api/src/games/genshin/companion/catalog-trust.ts",
+    "?? apps/api/src/games/genshin/companion/recorded-stock.repository.ts",
+    "?? apps/api/src/games/genshin/companion/routine-consumers.test.ts",
+    "?? apps/api/src/games/genshin/companion/routine-policy.test.ts",
+    "?? apps/api/src/games/genshin/companion/routine-policy.ts",
+    "?? apps/api/src/games/genshin/companion/server-clock.test.ts",
+    "?? apps/api/src/games/genshin/companion/server-clock.ts",
+    "?? apps/api/src/games/genshin/importer/importer.http.test.ts",
+    "?? apps/api/src/games/genshin/importer/importer.integration.test.ts",
+    "?? apps/api/src/games/genshin/importer/importer.preview.ts",
+    "?? apps/api/src/games/genshin/importer/importer.repository.ts",
+    "?? apps/api/src/games/genshin/simulators/pull-simulator.controller.test.ts",
+    "?? apps/api/src/games/genshin/static/advice-domains.json",
+    "?? apps/api/src/games/genshin/static/catalog-evidence.json",
+    "?? apps/api/src/games/genshin/static/material-references.json",
+    "?? apps/api/src/platform/companion/catalog-advice.integration.test.ts",
+    "?? apps/api/src/platform/companion/goal-lifecycle.integration.test.ts",
+    "?? apps/api/src/platform/companion/goal-policy.ts",
+    "?? apps/api/src/platform/companion/material-advice.ts",
+    "?? apps/api/src/platform/companion/plan-composition.test.ts",
+    "?? apps/api/src/platform/companion/plan-composition.ts",
+    "?? apps/api/src/platform/companion/plan.controller.ts",
+    "?? apps/api/src/platform/companion/plan.integration.test.ts",
+    "?? apps/api/src/platform/companion/plan.repository.ts",
+    "?? apps/api/src/platform/companion/plan.service.ts",
+    "?? apps/api/src/platform/companion/routine.controller.ts",
+    "?? apps/api/src/platform/companion/routine.http.test.ts",
+    "?? apps/api/src/platform/companion/routine.integration.test.ts",
+    "?? apps/api/src/platform/companion/routine.repository.ts",
+    "?? apps/api/src/platform/companion/routine.service.test.ts",
+    "?? apps/api/src/platform/companion/routine.service.ts",
+    "?? apps/api/tooling/",
+    "?? apps/api/tsconfig.eslint.json",
+    "?? apps/web/src/components/CharacterEquipmentView.tsx",
+    "?? apps/web/src/components/CompanionLayout.tsx",
+    "?? apps/web/src/components/FocusButton.tsx",
+    "?? apps/web/src/components/GoalManager.tsx",
+    "?? apps/web/src/components/GoalPriorityForm.tsx",
+    "?? apps/web/src/components/ImportStatus.tsx",
+    "?? apps/web/src/components/PlanPreferencesForm.tsx",
+    "?? apps/web/src/components/RoutinePanel.tsx",
+    "?? apps/web/src/components/TodayPlan.tsx",
+    "?? apps/web/src/lib/account-cache.ts",
+    "?? apps/web/src/lib/account-session.ts",
+    "?? apps/web/src/lib/goal-state.ts",
+    "?? apps/web/src/lib/plan-state.ts",
+    "?? apps/web/src/lib/plan-view.ts",
+    "?? apps/web/src/lib/routine-state.ts",
+    "?? apps/web/src/pages/CharacterDetailPage.tsx",
+    "?? apps/web/src/styles/",
+    "?? docs/README.md",
+    "?? docs/adr/0012-genshin-companion-direction.md",
+    "?? docs/adr/0013-versioned-routine-snapshots.md",
+    "?? docs/api/catalog-advice.md",
+    "?? docs/api/character-equipment.md",
+    "?? docs/api/companion-routine.md",
+    "?? docs/api/focus-goals.md",
+    "?? docs/api/genshin-import.md",
+    "?? docs/api/today-plan.md",
+    "?? docs/features/FEATURE_GENSHIN_COMPANION.md",
+    "?? docs/plans/",
+    "?? packages/api-contracts/src/genshin/"
+  ],
+  "date": "2026-10-11",
+  "branch": "master",
+  "index": []
+}

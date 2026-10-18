@@ -1,0 +1,57 @@
+
+ RUN  v3.2.7 D:/Genshin Personal/project-celestia/apps/api
+
+ ❯ src/platform/account-data/account-data.http.test.ts (23 tests | 1 failed) 665ms
+   ✓ C5d actual composed account-data routes > authenticates before parsing or domain/password work 38ms
+   ✓ C5d actual composed account-data routes > requires current password and returns an honest no-store attachment 204ms
+   ✓ C5d actual composed account-data routes > rejects invalid deletion intent before credentials (0) 11ms
+   ✓ C5d actual composed account-data routes > rejects invalid deletion intent before credentials (1) 11ms
+   ✓ C5d actual composed account-data routes > rejects invalid deletion intent before credentials (2) 11ms
+   ✓ C5d actual composed account-data routes > rejects invalid deletion intent before credentials (3) 10ms
+   ✓ C5d actual composed account-data routes > rejects invalid deletion intent before credentials (4) 9ms
+   ✓ C5d actual composed account-data routes > requires the password as well as fixed confirmation for deletion 28ms
+   ✓ C5d actual composed account-data routes > rejects ownership/password extras before bcrypt (0) 12ms
+   ✓ C5d actual composed account-data routes > rejects ownership/password extras before bcrypt (1) 10ms
+   ✓ C5d actual composed account-data routes > rejects ownership/password extras before bcrypt (2) 9ms
+   ✓ C5d actual composed account-data routes > rejects query ownership and counts it in the shared budget 31ms
+   ✓ C5d actual composed account-data routes > safely rejects malformed without password work 15ms
+   ✓ C5d actual composed account-data routes > safely rejects oversized without password work 10ms
+   ✓ C5d actual composed account-data routes > safely rejects media without password work 8ms
+   ✓ C5d actual composed account-data routes > safely rejects compressed without password work 9ms
+   ✓ C5d actual composed account-data routes > safely rejects charset without password work 8ms
+   ✓ C5d actual composed account-data routes > enforces shared default burst/refill before identity DB, bcrypt, read or serialization 52ms
+   ✓ C5d actual composed account-data routes > fails closed for missing subjects and unavailable identity lookup 15ms
+   ✓ C5d actual composed account-data routes > bounds malformed or high-cost stored hashes before bcrypt 10ms
+   ✓ C5d actual composed account-data routes > does not claim success after a repository failure; releases permit and omits diagnostics 19ms
+   ✓ C5d actual composed account-data routes > holds owner/global/shared auth permits until disconnected work settles 47ms
+   × C5d actual composed account-data routes > retains response buffer permit while the reader is paused, then releases on close 70ms
+     → expected 200 to be 429 // Object.is equality
+ ✓ tooling/account-data-client.test.js (5 tests) 177ms
+ ✓ src/core/middleware/request-admission.test.ts (19 tests) 92ms
+ ✓ tooling/account-data.test.js (3 tests) 29ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/platform/account-data/account-data.http.test.ts > C5d actual composed account-data routes > retains response buffer permit while the reader is paused, then releases on close
+AssertionError: expected 200 to be 429 // Object.is equality
+
+- Expected
++ Received
+
+- 429
++ 200
+
+ ❯ src/platform/account-data/account-data.http.test.ts:129:37
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 49 passed (50)
+   Start at  20:02:16
+   Duration  8.42s (transform 1.39s, setup 0ms, collect 5.92s, tests 963ms, environment 1ms, prepare 827ms)
+
+undefined
+D:\Genshin Personal\project-celestia\apps\api:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run src/platform/account-data/account-data.http.test.ts tooling/account-data.test.js tooling/account-data-client.test.js src/core/middleware/request-admission.test.ts --no-file-parallelism

@@ -1,0 +1,307 @@
+{
+  "phase": "C5g",
+  "status": "Bounded C5g complete with explicit accessibility/comprehension gaps",
+  "applicationChanged": true,
+  "fullVerificationRerun": true,
+  "inheritedFull": {
+    "phase": "C5f",
+    "passed": 1006,
+    "files": 55,
+    "failed": 0,
+    "skipped": 0,
+    "actualPostgresCases": 133,
+    "historicalClassifier": 106,
+    "reports": [
+      {
+        "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-WN6cu9/result.json",
+        "sha256": "B088F3F89DC42493BBE5F8FC06C5F70DBE23F9B86057944C237E1654EDE607E4",
+        "matches": true
+      },
+      {
+        "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-verification-YewCOi/verification.json",
+        "sha256": "1B975E623D235C52B17D60BAE2317E702A6C3768511162BD664CA568A9673826",
+        "matches": true
+      },
+      {
+        "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-verification-YewCOi/vitest.json",
+        "sha256": "1E86A4D6CD7B109859C01AF9B118C9D4E00CB2C7EE15C471D33F16AFDF8289C2",
+        "matches": true
+      }
+    ]
+  },
+  "browserHarness": {
+    "root": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-F5UFOp",
+    "readyObserved": true,
+    "unchangedHarness": true
+  },
+  "screenReader": "Unperformed; inherited absence of competent operator remains; no installation or repeated availability question.",
+  "applicationFiles": ["apps/web/src/components/GoalForm.tsx"],
+  "focused": {
+    "environment": {
+      "DOTENV_CONFIG_PATH": "NUL",
+      "NODE_ENV": "test"
+    },
+    "failed": 0,
+    "command": "pnpm --filter @celestia/api exec vitest run tooling/goal-session.test.js tooling/journey-client.test.js --no-file-parallelism",
+    "skipped": 0,
+    "files": 2,
+    "passed": 31,
+    "exit": 0
+  },
+  "browserBuild": {
+    "isolatedEnvironment": true,
+    "override": "VITE_API_URL=http://127.0.0.1:45448/api/v1",
+    "result": "passed"
+  },
+  "ownerDecision": "Local CONTINUE with recorded gaps",
+  "agentRecommendation": "HOLD readiness progression",
+  "uiStop": "Native Computer Use could not determine current browser URL confidently enough for policy enforcement; no further UI route attempted.",
+  "checkedAt": "2026-10-17T07:32:55.6224246Z",
+  "full": {
+    "command": "pnpm run recovery:rehearse --fixture 'D:\\Genshin Personal\\project-celestia\\docs\\plans\\c5c-request-safety\\review-fixture.json' --verify",
+    "environment": {
+      "NODE_ENV": "test",
+      "DOTENV_CONFIG_PATH": "NUL"
+    },
+    "exit": 0,
+    "result": "passed",
+    "startedAt": "2026-10-17T07:27:56.23Z",
+    "finishedAt": "2026-10-17T07:32:07.581Z",
+    "elapsedMs": 251344,
+    "tests": {
+      "passed": 1006,
+      "files": 55,
+      "failed": 0,
+      "skipped": 0,
+      "postgresCases": 106,
+      "integration": {
+        "src/platform/companion/plan.integration.test.ts": 28,
+        "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+        "src/platform/companion/routine.integration.test.ts": 12,
+        "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+        "src/games/genshin/importer/importer.integration.test.ts": 16,
+        "src/platform/companion/catalog-advice.integration.test.ts": 9
+      }
+    },
+    "actualPostgresCases": 133.0,
+    "actualIntegrationSuites": [
+      {
+        "file": "apps/api/tooling/account-data.integration.test.js",
+        "passed": 20,
+        "total": 20,
+        "status": "passed"
+      },
+      {
+        "file": "apps/api/tooling/request-safety.integration.test.js",
+        "passed": 7,
+        "total": 7,
+        "status": "passed"
+      },
+      {
+        "file": "apps/api/src/platform/companion/catalog-advice.integration.test.ts",
+        "passed": 9,
+        "total": 9,
+        "status": "passed"
+      },
+      {
+        "file": "apps/api/src/platform/companion/goal-lifecycle.integration.test.ts",
+        "passed": 28,
+        "total": 28,
+        "status": "passed"
+      },
+      {
+        "file": "apps/api/src/platform/companion/plan.integration.test.ts",
+        "passed": 28,
+        "total": 28,
+        "status": "passed"
+      },
+      {
+        "file": "apps/api/src/platform/companion/routine.integration.test.ts",
+        "passed": 12,
+        "total": 12,
+        "status": "passed"
+      },
+      {
+        "file": "apps/api/src/games/genshin/characters/character-equipment.integration.test.ts",
+        "passed": 13,
+        "total": 13,
+        "status": "passed"
+      },
+      {
+        "file": "apps/api/src/games/genshin/importer/importer.integration.test.ts",
+        "passed": 16,
+        "total": 16,
+        "status": "passed"
+      }
+    ],
+    "classifierNote": "The unchanged historical classifier counts six integration files (106); the actual eight include account-data 20 and request-safety 7, totaling 133.",
+    "steps": [
+      {
+        "id": "shared-types-and-build",
+        "exit": 0
+      },
+      {
+        "id": "disposable-postgres-ready",
+        "exit": 0
+      },
+      {
+        "id": "prisma-generate",
+        "exit": 0
+      },
+      {
+        "id": "disposable-migrations",
+        "exit": 0
+      },
+      {
+        "id": "prisma-validate",
+        "exit": 0
+      },
+      {
+        "id": "schema-diff",
+        "exit": 0
+      },
+      {
+        "id": "full-suite",
+        "exit": 0
+      },
+      {
+        "id": "api-lint",
+        "exit": 0
+      },
+      {
+        "id": "api-types-and-build",
+        "exit": 0
+      },
+      {
+        "id": "api-aliases",
+        "exit": 0
+      },
+      {
+        "id": "web-lint",
+        "exit": 0
+      },
+      {
+        "id": "web-types",
+        "exit": 0
+      },
+      {
+        "id": "web-build",
+        "exit": 0
+      },
+      {
+        "id": "repository-format",
+        "exit": 0
+      },
+      {
+        "id": "diff-check",
+        "exit": 0
+      }
+    ],
+    "recoveryStages": [
+      {
+        "stage": "fixture-start",
+        "result": "passed",
+        "elapsedMs": 4108
+      },
+      {
+        "stage": "fresh-resources",
+        "result": "passed",
+        "elapsedMs": 2639
+      },
+      {
+        "stage": "source-migrations",
+        "result": "passed",
+        "elapsedMs": 29214
+      },
+      {
+        "stage": "synthetic-seed",
+        "result": "passed",
+        "elapsedMs": 930
+      },
+      {
+        "stage": "freeze-source",
+        "result": "passed",
+        "elapsedMs": 9
+      },
+      {
+        "stage": "source-snapshot",
+        "result": "passed",
+        "elapsedMs": 966
+      },
+      {
+        "stage": "dump",
+        "result": "passed",
+        "elapsedMs": 377
+      },
+      {
+        "stage": "restore",
+        "result": "passed",
+        "elapsedMs": 1202
+      },
+      {
+        "stage": "restored-fidelity",
+        "result": "passed",
+        "elapsedMs": 2166
+      },
+      {
+        "stage": "restored-schema",
+        "result": "passed",
+        "elapsedMs": 2304
+      },
+      {
+        "stage": "restored-application-reads",
+        "result": "passed",
+        "elapsedMs": 10286
+      },
+      {
+        "stage": "post-read-fidelity",
+        "result": "passed",
+        "elapsedMs": 1767
+      },
+      {
+        "stage": "full-verification",
+        "result": "passed",
+        "elapsedMs": 191502
+      }
+    ],
+    "sourceAfterDumpUnchanged": true,
+    "restoredReadsDidNotWrite": true,
+    "sourceAfterValidationUnchanged": true,
+    "recoveryDatabasesUnchangedByVerificationSuite": true,
+    "remoteCIObserved": false,
+    "reports": [
+      {
+        "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-GVBCDc/result.json",
+        "sha256": "F430555443ABB6A47882CC3864D5C81641926391D30E57018F20D9EAEF6CC726"
+      },
+      {
+        "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-verification-yYLbwO/verification.json",
+        "sha256": "BA2A381FF21F834E2A4EF3D048B50E7B55938E3F370BC4CCBBB2D75F95B5905D"
+      },
+      {
+        "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-verification-yYLbwO/vitest.json",
+        "sha256": "9B9AF363F8157B2483D800E0C100E8F3D488BBFF86A87934BB9D1AE34BD0F230"
+      }
+    ]
+  },
+  "screenshots": [
+    {
+      "kind": "Before correction only",
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-F5UFOp/c5g-400-goal-before.png",
+      "sha256": "D35260B232FFD5AE547852E213817324CF4914879A15F39F1F9BBFACFBF0457B",
+      "scope": "Agent native screenshot, 400%, 191px CSS width. After-correction screenshots observed in tool transcript only; original-width retest remains unperformed."
+    }
+  ],
+  "finalDocumentationChecks": {
+    "checkedAt": "2026-10-17T07:34:58.4611659Z",
+    "onlyCloseoutDocumentationEditedAfterFullRun": true,
+    "targetedPrettierCheckExit": 0,
+    "gitDiffCheckExit": 0,
+    "localMarkdownFiles": 7,
+    "localMarkdownTargets": 114,
+    "brokenLocalTargets": [],
+    "rawReportHashesMatch": true,
+    "preservationReport": "docs/plans/c5g-accessibility-closeout/preservation-check.json",
+    "note": "Full application verification was not repeated for subsequent closeout documentation. Final evidence metadata was then serialized and formatted."
+  }
+}

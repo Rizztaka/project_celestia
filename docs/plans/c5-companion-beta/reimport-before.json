@@ -1,0 +1,298 @@
+{
+  "goals": [
+    {
+      "id": "2cd7ced9-3cf4-4d6e-b22f-387576baf836",
+      "goalType": "CHARACTER_TALENT",
+      "targetKey": "HuTao",
+      "talentType": "normal",
+      "fromPhase": 1,
+      "toPhase": 6,
+      "status": "completed",
+      "priority": 1,
+      "revision": 2,
+      "createdAt": "2026-10-08T13:49:03.811Z",
+      "updatedAt": "2026-10-08T13:49:15.572Z",
+      "completedAt": "2026-10-08T13:49:04.106Z",
+      "completionReason": "good_enough",
+      "predecessorId": null,
+      "needsReview": false,
+      "limitations": []
+    },
+    {
+      "id": "0245a525-d12e-40cb-9759-0cb6f7bcf5ec",
+      "goalType": "CHARACTER_TALENT",
+      "targetKey": "HuTao",
+      "talentType": "normal",
+      "fromPhase": 1,
+      "toPhase": 6,
+      "status": "active",
+      "priority": 1,
+      "revision": 2,
+      "createdAt": "2026-10-08T13:49:15.569Z",
+      "updatedAt": "2026-10-08T13:49:42.753Z",
+      "completedAt": null,
+      "completionReason": null,
+      "predecessorId": "2cd7ced9-3cf4-4d6e-b22f-387576baf836",
+      "needsReview": false,
+      "limitations": []
+    },
+    {
+      "id": "b0359516-e8b4-491d-9940-f9769b0b2471",
+      "goalType": "CHARACTER_ASCENSION",
+      "targetKey": "HuTao",
+      "talentType": null,
+      "fromPhase": 5,
+      "toPhase": 6,
+      "status": "active",
+      "priority": 3,
+      "revision": 0,
+      "createdAt": "2026-10-08T13:49:16.704Z",
+      "updatedAt": "2026-10-08T13:49:16.704Z",
+      "completedAt": null,
+      "completionReason": null,
+      "predecessorId": null,
+      "needsReview": false,
+      "limitations": [
+        "No primary or owner evidence covers these upgrade costs."
+      ]
+    }
+  ],
+  "focus": [
+    {
+      "characterKey": "HuTao",
+      "focused": true,
+      "revision": 3
+    }
+  ],
+  "equipment": {
+    "contractVersion": 1,
+    "character": {
+      "characterKey": "HuTao",
+      "level": 80,
+      "ascension": 5,
+      "constellation": 0,
+      "talents": {
+        "normal": 1,
+        "skill": 1,
+        "burst": 1
+      },
+      "talentBasis": "stored_convention_unknown"
+    },
+    "provenance": {
+      "characters": {
+        "status": "imported",
+        "importedAt": "2026-10-08T13:48:39.185Z",
+        "source": "C5 synthetic initial",
+        "entryCount": 2,
+        "scope": "merged_entries"
+      },
+      "weapons": {
+        "status": "imported",
+        "importedAt": "2026-10-08T13:48:39.185Z",
+        "source": "C5 synthetic initial",
+        "entryCount": 1,
+        "scope": "replacement_section"
+      },
+      "artifacts": {
+        "status": "imported",
+        "importedAt": "2026-10-08T13:48:39.185Z",
+        "source": "C5 synthetic initial",
+        "entryCount": 1,
+        "scope": "replacement_section"
+      }
+    },
+    "weapon": {
+      "state": "recorded_assigned",
+      "item": {
+        "weaponKey": "StaffOfHoma",
+        "level": 80,
+        "ascension": 5,
+        "refinement": 1,
+        "locked": true
+      }
+    },
+    "artifacts": {
+      "flower": {
+        "state": "recorded_assigned",
+        "item": {
+          "setKey": "CrimsonWitchOfFlames",
+          "slotKey": "flower",
+          "level": 20,
+          "rarity": 5,
+          "mainStatKey": "hp",
+          "mainStatValue": null,
+          "subStats": [
+            {
+              "key": "critRate_",
+              "value": 3.1
+            }
+          ],
+          "locked": true
+        }
+      },
+      "plume": {
+        "state": "unrecorded",
+        "item": null,
+        "reason": "no_recorded_assignment"
+      },
+      "sands": {
+        "state": "unrecorded",
+        "item": null,
+        "reason": "no_recorded_assignment"
+      },
+      "goblet": {
+        "state": "unrecorded",
+        "item": null,
+        "reason": "no_recorded_assignment"
+      },
+      "circlet": {
+        "state": "unrecorded",
+        "item": null,
+        "reason": "no_recorded_assignment"
+      }
+    },
+    "unrecognizedSlots": [],
+    "artifactRelationsConsistent": true
+  },
+  "status": {
+    "sections": [
+      {
+        "section": "characters",
+        "status": "imported",
+        "importedAt": "2026-10-08T13:48:39.185Z",
+        "source": "C5 synthetic initial",
+        "entryCount": 2,
+        "scope": "merged_entries"
+      },
+      {
+        "section": "weapons",
+        "status": "imported",
+        "importedAt": "2026-10-08T13:48:39.185Z",
+        "source": "C5 synthetic initial",
+        "entryCount": 1,
+        "scope": "replacement_section"
+      },
+      {
+        "section": "artifacts",
+        "status": "imported",
+        "importedAt": "2026-10-08T13:48:39.185Z",
+        "source": "C5 synthetic initial",
+        "entryCount": 1,
+        "scope": "replacement_section"
+      },
+      {
+        "section": "materials",
+        "status": "unknown",
+        "importedAt": null,
+        "source": null,
+        "entryCount": null,
+        "scope": "replacement_section"
+      }
+    ]
+  },
+  "plan": {
+    "contractVersion": 1,
+    "revision": 4,
+    "serverNow": "2026-10-08T13:50:28.596Z",
+    "routineRevision": 1,
+    "serverId": "asia",
+    "period": {
+      "serverId": "asia",
+      "serverNow": "2026-10-08T13:50:28.596Z",
+      "policyVersion": "v1",
+      "dailyPeriodId": "genshin:asia:v1:daily:2026-10-07T20:00:00.000Z",
+      "dailyStart": "2026-10-07T20:00:00.000Z",
+      "dailyEnd": "2026-10-08T20:00:00.000Z",
+      "weeklyPeriodId": "genshin:asia:v1:weekly:2026-10-04T20:00:00.000Z",
+      "weeklyStart": "2026-10-04T20:00:00.000Z",
+      "weeklyEnd": "2026-10-11T20:00:00.000Z",
+      "serverWeekday": 3
+    },
+    "preferences": {
+      "enabledRoutineKinds": [
+        "commissions"
+      ],
+      "dailyResinBudget": 70
+    },
+    "goalRevisions": [
+      {
+        "id": "2cd7ced9-3cf4-4d6e-b22f-387576baf836",
+        "revision": 2
+      },
+      {
+        "id": "0245a525-d12e-40cb-9759-0cb6f7bcf5ec",
+        "revision": 2
+      },
+      {
+        "id": "b0359516-e8b4-491d-9940-f9769b0b2471",
+        "revision": 0
+      }
+    ],
+    "goals": [
+      {
+        "goal": {
+          "id": "0245a525-d12e-40cb-9759-0cb6f7bcf5ec",
+          "goalType": "CHARACTER_TALENT",
+          "targetKey": "HuTao",
+          "talentType": "normal",
+          "fromPhase": 1,
+          "toPhase": 6,
+          "status": "active",
+          "priority": 1,
+          "revision": 2,
+          "createdAt": "2026-10-08T13:49:15.569Z",
+          "updatedAt": "2026-10-08T13:49:42.753Z",
+          "completedAt": null,
+          "completionReason": null,
+          "predecessorId": "2cd7ced9-3cf4-4d6e-b22f-387576baf836",
+          "needsReview": false,
+          "limitations": []
+        },
+        "dismissed": [
+          "week"
+        ]
+      },
+      {
+        "goal": {
+          "id": "b0359516-e8b4-491d-9940-f9769b0b2471",
+          "goalType": "CHARACTER_ASCENSION",
+          "targetKey": "HuTao",
+          "talentType": null,
+          "fromPhase": 5,
+          "toPhase": 6,
+          "status": "active",
+          "priority": 3,
+          "revision": 0,
+          "createdAt": "2026-10-08T13:49:16.704Z",
+          "updatedAt": "2026-10-08T13:49:16.704Z",
+          "completedAt": null,
+          "completionReason": null,
+          "predecessorId": null,
+          "needsReview": false,
+          "limitations": [
+            "No primary or owner evidence covers these upgrade costs."
+          ]
+        },
+        "dismissed": []
+      }
+    ],
+    "routines": [
+      {
+        "kind": "commissions",
+        "scope": "day",
+        "task": {
+          "id": "commissions",
+          "label": "Daily Commissions",
+          "cadence": "daily",
+          "done": false,
+          "lastRecordedAt": null
+        },
+        "dismissed": false
+      }
+    ],
+    "weekly": {
+      "available": true,
+      "rewardClaims": null
+    }
+  }
+}

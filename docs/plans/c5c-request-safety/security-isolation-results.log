@@ -1,0 +1,36 @@
+
+ RUN  v3.2.7 D:/Genshin Personal/project-celestia/apps/api
+
+{"level":30,"time":1791794235936,"pid":28184,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791794236122,"pid":28184,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791794236611,"pid":28184,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791794236858,"pid":28184,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791794236870,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794236878,"pid":28184,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791794237130,"pid":28184,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791794237421,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237429,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237437,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237445,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237451,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237459,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237465,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237471,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237476,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237485,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237493,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237501,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237505,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237512,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237520,"pid":28184,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791794237529,"pid":28184,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791794237825,"pid":28184,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+ ✓ src/platform/security.http.test.ts (22 tests) 2176ms
+   ✓ Regression: canonical registration stores a hash, not the plain password > stores a bcrypt hash and the hash verifies against the original password (real bcrypt)  487ms
+   ✓ Regression: login works against the hash produced by registration > login succeeds after registration (real bcrypt round-trip)  541ms
+
+ Test Files  1 passed (1)
+      Tests  22 passed (22)
+   Start at  14:07:13
+   Duration  5.09s (transform 718ms, setup 0ms, collect 2.01s, tests 2.18s, environment 0ms, prepare 553ms)
+

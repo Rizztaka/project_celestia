@@ -1,5 +1,11 @@
 # Feature: Planner Intelligence Engine (Milestone 4D)
 
+> **Companion scope update — 2026-09-25.** C4 replaces the score-driven priority policy with explicit active goals, player order, verified availability, and a resin budget. The historical character score inversion has inconsistent semantics and must not be carried forward as player priority. Reuse deterministic allocation where correct; keep time/server calculations consistent with C2 and unknown stock explicit.
+>
+> Current scope: [Genshin Companion](FEATURE_GENSHIN_COMPANION.md) and [Roadmap](../ROADMAP.md). The remaining text records the earlier milestone design, not a statement that every example is current or verified.
+
+## Historical milestone specification
+
 ## Overview
 
 The Planner Intelligence Engine is the fourth component of the Intelligence Core (Phase 4). Its purpose is to optimize the player's daily resin usage by cross-referencing their active `UpgradeGoal`s (Phase 3B), today's open domains (`domain-schedule.json`), and the character priority weights from the `CharacterIntelligenceService`.

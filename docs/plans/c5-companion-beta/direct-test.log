@@ -1,0 +1,258 @@
+
+ RUN  v3.2.7 D:/Genshin Personal/project-celestia/apps/api
+
+(node:5696) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"level":30,"time":1791558828637,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558828742,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1791558828755,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan","msg":"Incoming request"}
+{"level":30,"time":1791558829328,"pid":5696,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/plan","msg":"Incoming request"}
+{"level":30,"time":1791558829368,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1791558829389,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan/advice?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1791558829407,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals","msg":"Incoming request"}
+{"level":30,"time":1791558829420,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558829439,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1791558829520,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1791558829535,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/plan/advice?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1791558829554,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals","msg":"Incoming request"}
+{"level":30,"time":1791558829567,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558829583,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1791558829600,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791558829618,"pid":5696,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791558829641,"pid":5696,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/plan","msg":"Incoming request"}
+ ✓ src/platform/companion/plan.integration.test.ts (28 tests) 8785ms
+   ✓ C4 actual PostgreSQL plan choices and reset boundaries > fresh defaults are SELECT-only, opt-in, budget-unset and usable before import  491ms
+   ✓ C4 actual PostgreSQL plan choices and reset boundaries > database constraints enforce budget, owner/goal ownership, routine kind and source identity  460ms
+   ✓ C4 actual PostgreSQL plan choices and reset boundaries > authenticated HTTP contracts and combined/indirect GETs remain SELECT-only at first use and rollover  924ms
+   ✓ C4 actual PostgreSQL plan choices and reset boundaries > upgrades populated C3b losslessly with neutral absent preferences and no dismissal backfill  1105ms
+{"level":30,"time":1791558834840,"pid":424,"hostname":"Nitro","method":"POST","url":"/api/v1/users","msg":"Incoming request"}
+{"level":30,"time":1791558834874,"pid":424,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/register","msg":"Incoming request"}
+{"level":30,"time":1791558835909,"pid":424,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/register","msg":"Incoming request"}
+{"level":30,"time":1791558836454,"pid":424,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/login","msg":"Incoming request"}
+{"level":30,"time":1791558836483,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791558836507,"pid":424,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/register","msg":"Incoming request"}
+{"level":30,"time":1791558836992,"pid":424,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/login","msg":"Incoming request"}
+{"level":30,"time":1791558837479,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791558837493,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791558837508,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791558837536,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791558837553,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791558837564,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791558837575,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791558837585,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791558837597,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791558837610,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-a-id-000000","msg":"Incoming request"}
+{"level":30,"time":1791558837622,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-b-id-111111","msg":"Incoming request"}
+{"level":30,"time":1791558837636,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-b-id-111111","msg":"Incoming request"}
+{"level":30,"time":1791558837647,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/completely-nonexistent-id-xyz","msg":"Incoming request"}
+{"level":30,"time":1791558837659,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/users/user-b-id-111111","msg":"Incoming request"}
+{"level":30,"time":1791558837677,"pid":424,"hostname":"Nitro","method":"GET","url":"/api/v1/auth/me","msg":"Incoming request"}
+{"level":30,"time":1791558837692,"pid":424,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/register","msg":"Incoming request"}
+{"level":30,"time":1791558838175,"pid":424,"hostname":"Nitro","method":"POST","url":"/api/v1/auth/register","msg":"Incoming request"}
+ ✓ src/platform/security.http.test.ts (22 tests) 3920ms
+   ✓ Regression: canonical registration stores a hash, not the plain password > stores a bcrypt hash and the hash verifies against the original password (real bcrypt)  1036ms
+   ✓ Regression: password field never appears in API responses > registration response does not contain a password field  541ms
+   ✓ Regression: login works against the hash produced by registration > login succeeds after registration (real bcrypt round-trip)  975ms
+   ✓ Regression: duplicate registration returns 409 Conflict > returns 409 with CONFLICT code when email is already registered  478ms
+   ✓ Regression: duplicate registration returns 409 Conflict > returns 409 with CONFLICT code when username is already taken  520ms
+{"level":30,"time":1791558844491,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558844519,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791558844539,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791558844610,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791558844901,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals","msg":"Incoming request"}
+{"level":30,"time":1791558844949,"pid":29912,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/goals/8d43c5bc-9a09-4299-b961-5c335d30fbcd","msg":"Incoming request"}
+{"level":30,"time":1791558844969,"pid":29912,"hostname":"Nitro","method":"DELETE","url":"/api/v1/companion/goals/8d43c5bc-9a09-4299-b961-5c335d30fbcd","msg":"Incoming request"}
+{"level":30,"time":1791558844984,"pid":29912,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/goals/f621da3c-5832-4199-811a-fa3e9c85d36a","msg":"Incoming request"}
+{"level":30,"time":1791558845001,"pid":29912,"hostname":"Nitro","method":"DELETE","url":"/api/v1/companion/goals/f621da3c-5832-4199-811a-fa3e9c85d36a","msg":"Incoming request"}
+{"level":30,"time":1791558845015,"pid":29912,"hostname":"Nitro","method":"DELETE","url":"/api/v1/companion/goals/8d43c5bc-9a09-4299-b961-5c335d30fbcd","msg":"Incoming request"}
+{"level":30,"time":1791558845032,"pid":29912,"hostname":"Nitro","method":"POST","url":"/api/v1/companion/goals","msg":"Incoming request"}
+(node:29912) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"level":30,"time":1791558845723,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals","msg":"Incoming request"}
+{"level":30,"time":1791558845735,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558845747,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791558845762,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/focus","msg":"Incoming request"}
+{"level":30,"time":1791558845772,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791558845798,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558845814,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals","msg":"Incoming request"}
+{"level":30,"time":1791558845826,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558845838,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791558845848,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/focus","msg":"Incoming request"}
+{"level":30,"time":1791558845856,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791558845865,"pid":29912,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+ ✓ src/platform/companion/goal-lifecycle.integration.test.ts (28 tests) 4294ms
+   ✓ C3b actual PostgreSQL lifecycle/focus > creates sourced catalog intent before import with neutral defaults and no account/focus  548ms
+   ✓ C3b actual PostgreSQL lifecycle/focus > database constraints enforce lifecycle metadata, priority and revisions  369ms
+   ✓ C3b actual PostgreSQL lifecycle/focus > upgrades populated C3a with nullable duplicates, unsupported ranges, two owners and no accounts losslessly  720ms
+(node:38292) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"level":30,"time":1791558852106,"pid":38292,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1791558852132,"pid":38292,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791558852161,"pid":38292,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791558852181,"pid":38292,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/daily","msg":"Incoming request"}
+{"level":30,"time":1791558852192,"pid":38292,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/weekly-bosses","msg":"Incoming request"}
+{"level":30,"time":1791558852240,"pid":38292,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/resin","msg":"Incoming request"}
+{"level":30,"time":1791558852266,"pid":38292,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/checklist","msg":"Incoming request"}
+{"level":30,"time":1791558852282,"pid":38292,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/weekly-bosses/Dvalin","msg":"Incoming request"}
+ ✓ src/platform/companion/routine.integration.test.ts (12 tests) 2658ms
+   ✓ Routine transactions on disposable PostgreSQL > GET defaults and expired projections issue SELECT only and leave all rows unchanged  351ms
+   ✓ Routine transactions on disposable PostgreSQL > enforces database checks for revision, server, paired checkpoints and input ranges  513ms
+   ✓ Routine transactions on disposable PostgreSQL > upgrades a populated C1b schema without changing legacy, inventory, provenance or goals  743ms
+{"level":30,"time":1791558857983,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858012,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858171,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858196,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858209,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/bad%0Akey/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858248,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/Legacy%20%2F%20'%20OR%201%3D1%20--%20%3F%20%E5%AD%97/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858267,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/NotOwned/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858357,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858433,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858476,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+(node:38144) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"level":30,"time":1791558858533,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858593,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858722,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858738,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters","msg":"Incoming request"}
+{"level":30,"time":1791558858757,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/PrivateCharacter/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858823,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558858905,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558859022,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558859104,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558859162,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558859220,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558859268,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558859431,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558859502,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558859566,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+{"level":30,"time":1791558859580,"pid":38144,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/characters/HuTao/equipment","msg":"Incoming request"}
+ ✓ src/games/genshin/characters/character-equipment.integration.test.ts (13 tests) 2069ms
+   ✓ C3a actual PostgreSQL owned equipment read > requires authentication and uses identical 404s without initializing an account  571ms
+(node:31364) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ src/games/genshin/importer/importer.integration.test.ts (16 tests) 1971ms
+   ✓ Import transactions on disposable PostgreSQL > creates all data atomically and preserves GOOD field mappings and equipment  556ms
+{"level":30,"time":1791558869145,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869273,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869379,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869428,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869473,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869551,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869568,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869583,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869600,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869615,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869631,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869692,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558869706,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/today","msg":"Incoming request"}
+{"level":30,"time":1791558869726,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/intelligence/planner","msg":"Incoming request"}
+{"level":30,"time":1791558869766,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/events","msg":"Incoming request"}
+{"level":30,"time":1791558869788,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1791558869839,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+(node:37240) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"level":30,"time":1791558869900,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+{"level":30,"time":1791558870023,"pid":37240,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/goals/materials","msg":"Incoming request"}
+ ✓ src/platform/companion/catalog-advice.integration.test.ts (9 tests) 1239ms
+   ✓ C2b actual PostgreSQL advice/import reads > returns independently known needed totals with unknown absent stock before import  400ms
+ ✓ tooling/journey-client.test.js (17 tests) 860ms
+ ✓ tooling/eslint-config.test.js (10 tests) 960ms
+   ✓ API lint configuration > resolves actual API source import ../../games/genshin/importer/importer.service.js  722ms
+ ✓ tooling/goal-session.test.js (14 tests) 490ms
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/daily","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/weekly-bosses","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/settings","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/weekly-claims","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/weekly-bosses/Dvalin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=1","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2&userId=victim","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/settings","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/weekly-claims","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/routine/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/routine?contractVersion=2","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/daily","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"GET","url":"/api/v1/companion/weekly-bosses","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/resin","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/checklist","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3512,"hostname":"Nitro","method":"PATCH","url":"/api/v1/companion/weekly-bosses/Dvalin","msg":"Incoming request"}
+ ✓ src/platform/companion/routine.http.test.ts (30 tests) 659ms
+ ✓ tooling/character-equipment.test.js (6 tests) 328ms
+{"level":30,"time":1791558890673,"pid":14332,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/import/status","msg":"Incoming request"}
+{"level":30,"time":1791558890697,"pid":14332,"hostname":"Nitro","method":"GET","url":"/api/v1/games/genshin/import/status?userId=victim","msg":"Incoming request"}
+{"level":30,"time":1791558890740,"pid":14332,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791558890749,"pid":14332,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import","msg":"Incoming request"}
+{"level":30,"time":1791558890760,"pid":14332,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791558890774,"pid":14332,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import","msg":"Incoming request"}
+{"level":30,"time":1791558890788,"pid":14332,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791558890797,"pid":14332,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791558890810,"pid":14332,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import","msg":"Incoming request"}
+{"level":30,"time":1791558890825,"pid":14332,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791558890838,"pid":14332,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+{"level":30,"time":1791558890847,"pid":14332,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import","msg":"Incoming request"}
+{"level":30,"time":1791558890859,"pid":14332,"hostname":"Nitro","method":"POST","url":"/api/v1/games/genshin/import/preview","msg":"Incoming request"}
+ ✓ src/games/genshin/importer/importer.http.test.ts (10 tests) 210ms
+ ✓ tooling/account-cache.test.js (5 tests) 254ms
+ ✓ src/games/genshin/companion/catalog-trust.test.ts (37 tests) 113ms
+ ✓ src/games/genshin/simulators/pull-simulator.controller.test.ts (5 tests) 94ms
+ ✓ src/games/genshin/importer/importer.service.test.ts (28 tests) 86ms
+ ✓ src/platform/companion/plan-composition.test.ts (40 tests) 54ms
+ ✓ src/games/genshin/simulators/pull-simulator.service.test.ts (4 tests) 63ms
+ ✓ tooling/plan-client.test.js (12 tests) 50ms
+ ✓ src/platform/companion/routine.service.test.ts (23 tests) 67ms
+ ✓ src/platform/companion/weekly-boss.service.test.ts (19 tests) 25ms
+ ✓ src/games/genshin/intelligence/planner-intelligence/planner-intelligence.service.test.ts (6 tests) 30ms
+ ✓ src/core/middleware/auth.middleware.test.ts (13 tests) 34ms
+ ✓ src/games/genshin/companion/routine-consumers.test.ts (5 tests) 27ms
+ ✓ src/platform/auth/auth.service.test.ts (8 tests) 30ms
+ ✓ src/platform/companion/goal.service.test.ts (31 tests) 27ms
+ ✓ src/games/genshin/endgame/endgame.service.test.ts (31 tests) 19ms
+ ✓ src/platform/companion/event.service.test.ts (11 tests) 26ms
+ ✓ src/games/genshin/intelligence/team-intelligence/team-intelligence.service.test.ts (22 tests) 22ms
+ ✓ src/games/genshin/intelligence/artifact-intelligence/artifact-intelligence.service.test.ts (18 tests) 19ms
+ ✓ src/games/genshin/artifacts/artifact.service.test.ts (12 tests) 22ms
+ ✓ src/games/genshin/weapons/weapon.service.test.ts (12 tests) 20ms
+ ✓ src/platform/users/user.service.test.ts (10 tests) 20ms
+ ✓ src/games/genshin/characters/character.service.test.ts (11 tests) 20ms
+ ✓ src/games/genshin/companion/routine-policy.test.ts (27 tests) 15ms
+ ✓ src/games/genshin/intelligence/character-intelligence/character-intelligence.service.test.ts (14 tests) 18ms
+ ✓ src/games/genshin/intelligence/progression-intelligence/progression-intelligence.service.test.ts (5 tests) 15ms
+ ✓ tooling/routine-client.test.js (5 tests) 10ms
+ ✓ src/games/genshin/accounts/account.service.test.ts (6 tests) 13ms
+ ✓ src/games/genshin/intelligence/knowledge-intelligence/knowledge-intelligence.service.test.ts (22 tests) 12ms
+ ✓ src/games/genshin/companion/server-clock.test.ts (28 tests) 13ms
+ ✓ src/games/genshin/intelligence/pull-intelligence/pull-intelligence.service.test.ts (13 tests) 14ms
+ ✓ src/core/db/disposable-test-database.test.ts (10 tests) 9ms
+
+ Test Files  44 passed (44)
+      Tests  708 passed (708)
+   Start at  20:43:36
+   Duration  107.88s (transform 4.22s, setup 0ms, collect 38.37s, tests 29.69s, environment 14ms, prepare 22.42s)
+

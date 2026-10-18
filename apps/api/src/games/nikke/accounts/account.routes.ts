@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { nikkeAccountController } from './account.controller.js';
 
 const router = Router();

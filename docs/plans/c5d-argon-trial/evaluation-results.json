@@ -1,0 +1,30 @@
+{
+  "evaluatedAt": "2026-10-14T13:20:16.093Z",
+  "snapshotId": "b9eaae3559697142b24ae086f403cfbb9165698aea843cbac0b4e61d27a0a7e2",
+  "sourceFileCount": 703,
+  "changedSourceFiles": [
+    {
+      "path": "apps/api/src/platform/account-data/account-data.http.test.ts",
+      "before": "eb2974d4cdf694da10077ed361353dbe67eaf08a2d4ff062a416e1cea5fbd82e",
+      "after": "827852631d6a0f67f05bb772335f053a306f39157173b904f3e4cbe770d21d62"
+    }
+  ],
+  "allOtherSnapshotSourceFilesUnchanged": true,
+  "originalResponsePreserved": true,
+  "originalPatchAppliedUnchanged": true,
+  "originalFocused": {
+    "files": 4,
+    "passed": 53
+  },
+  "apiLintExitCode": 0,
+  "apiTypesExitCode": 0,
+  "originalFormatExitCode": 1,
+  "repair": "Prettier formatting only; no test logic changes",
+  "finalFocused": {
+    "files": 4,
+    "passed": 53
+  },
+  "finalFormatExitCode": 0,
+  "fullRecoveryRun": false,
+  "productionMutationsRestored": true
+}

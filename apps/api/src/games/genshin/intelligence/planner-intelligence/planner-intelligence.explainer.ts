@@ -36,29 +36,15 @@ export function explainRouteItem(item: RouteItem): string[] {
     );
   }
 
-  // 2. Time-gating urgency
   if (item.isTimeGated) {
-    explanations.push(`This domain is only open 3 days per week — do not miss today's window.`);
+    explanations.push('This verified source is available on the selected server day.');
   }
 
-  // 3. Character priority weight
-  if (item.characterScore < 40) {
-    explanations.push(
-      `${item.characterKey} needs major investment (Character Score: ${item.characterScore}/100) — this is a critical farming priority.`,
-    );
-  } else if (item.characterScore < 60) {
-    explanations.push(
-      `${item.characterKey} still has meaningful gaps (Character Score: ${item.characterScore}/100) — progressing this goal will yield high returns.`,
-    );
-  } else if (item.characterScore < 80) {
-    explanations.push(
-      `${item.characterKey} is well-built (Character Score: ${item.characterScore}/100) — this is a secondary farming target.`,
-    );
-  }
+  explanations.push('Goals follow your priority (1 first), then creation time and ID.');
 
   // 4. Runs summary
   explanations.push(
-    `Recommended: ${item.runs} run${item.runs !== 1 ? 's' : ''} (${item.resinCost} Resin).`,
+    `Resin budget: ${item.runs} run${item.runs !== 1 ? 's' : ''} (${item.resinCost} Resin). Drops and upgrade completion are not guaranteed.`,
   );
 
   return explanations;

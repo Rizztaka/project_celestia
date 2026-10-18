@@ -76,7 +76,12 @@ export class GenshinCharacterService {
       where: { userId },
     });
     if (!account) return [];
-    return this.characterRepository.findByAccountIdWithWeapon(account.id);
+    const characters = await this.characterRepository.findByAccountIdWithWeapon(account.id);
+    return characters.map((character) =>
+      character.equippedWeapon && character.equippedWeapon.accountId !== account.id
+        ? { ...character, equippedWeapon: null, equippedWeaponId: null }
+        : character,
+    );
   }
 
   /**

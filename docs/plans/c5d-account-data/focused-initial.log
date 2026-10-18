@@ -1,0 +1,131 @@
+
+ RUN  v3.2.7 D:/Genshin Personal/project-celestia/apps/api
+
+ ✓ src/core/middleware/origin.middleware.test.ts (58 tests) 16857ms
+   ✓ Actual application origin policy > allows configured origin https://trusted.example  3279ms
+   ✓ Actual application origin policy > deliberately denies https://localhost.attacker.example  306ms
+   ✓ Actual application origin policy > allowed origin still requires authentication (undefined)  399ms
+{"level":30,"time":1791901507090,"pid":5284,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901507113,"pid":5284,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901507581,"pid":5284,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901507813,"pid":5284,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901507823,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901507830,"pid":5284,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901508056,"pid":5284,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901508281,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508287,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508293,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508299,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508304,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508309,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508313,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508318,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508323,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508329,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508334,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508339,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508343,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508349,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508355,"pid":5284,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901508361,"pid":5284,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901508594,"pid":5284,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+ ✓ src/platform/security.http.test.ts (22 tests) 1741ms
+   ✓ Regression: canonical registration stores a hash, not the plain password > stores a bcrypt hash and the hash verifies against the original password (real bcrypt)  467ms
+   ✓ Regression: login works against the hash produced by registration > login succeeds after registration (real bcrypt round-trip)  451ms
+ ✓ src/core/middleware/request-safety.http.test.ts (38 tests) 374ms
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+{"level":30,"time":1790539200000,"pid":3884,"hostname":"Nitro","method":"PATCH","msg":"Incoming request"}
+ ✓ src/platform/companion/routine.http.test.ts (30 tests) 230ms
+{"level":30,"time":1791901513261,"pid":39952,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901513275,"pid":39952,"hostname":"Nitro","method":"GET","msg":"Incoming request"}
+{"level":30,"time":1791901513284,"pid":39952,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901513288,"pid":39952,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901513294,"pid":39952,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901513314,"pid":39952,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901513323,"pid":39952,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901513330,"pid":39952,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901513335,"pid":39952,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901513343,"pid":39952,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901513348,"pid":39952,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901513354,"pid":39952,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+{"level":30,"time":1791901513360,"pid":39952,"hostname":"Nitro","method":"POST","msg":"Incoming request"}
+ ✓ src/games/genshin/importer/importer.http.test.ts (10 tests) 114ms
+ ✓ src/core/middleware/auth.middleware.test.ts (15 tests) 19ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/core/middleware/request-admission.test.ts [ src/core/middleware/request-admission.test.ts ]
+ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "DATABASE_URL"
+    ],
+    "message": "Required"
+  }
+]
+ ❯ Object.get error [as error] ../../../../Genshin%20Personal/project-celestia/node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/types.js:39:31
+ ❯ ZodObject.parse ../../../../Genshin%20Personal/project-celestia/node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/types.js:114:22
+ ❯ src/core/config/env.ts:14:30
+     12| });
+     13| 
+     14| export const env = envSchema.parse(process.env);
+       |                              ^
+     15| 
+ ❯ src/core/middleware/auth.middleware.ts:4:1
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  173 passed (173)
+   Start at  19:54:44
+   Duration  30.19s (transform 778ms, setup 0ms, collect 7.78s, tests 19.33s, environment 1ms, prepare 1.39s)
+
+undefined
+D:\Genshin Personal\project-celestia\apps\api:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run src/core/middleware/auth.middleware.test.ts src/core/middleware/request-admission.test.ts src/core/middleware/request-safety.http.test.ts src/core/middleware/origin.middleware.test.ts src/platform/security.http.test.ts src/platform/companion/routine.http.test.ts src/games/genshin/importer/importer.http.test.ts --no-file-parallelism

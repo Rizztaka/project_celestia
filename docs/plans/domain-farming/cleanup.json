@@ -1,0 +1,100 @@
+{
+  "checkedAtUtc": "2026-10-17T18:32:57.838Z",
+  "status": "passed",
+  "recovery": {
+    "databasesAndRolesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "privateFilesRetained": true,
+    "credentialsRemoved": true
+  },
+  "resources": [
+    {
+      "database": "celestia_test_8ca5773da302f30a_source",
+      "role": "celestia_test_8ca5773da302f30a_source",
+      "oid": 84284,
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-Ci85J8\\celestia_test_8ca5773da302f30a_source",
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    },
+    {
+      "database": "celestia_test_8ca5773da302f30a_restore",
+      "role": "celestia_test_8ca5773da302f30a_restore",
+      "oid": 84287,
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-Ci85J8\\celestia_test_8ca5773da302f30a_restore",
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    },
+    {
+      "database": "celestia_test_8ca5773da302f30a_verify",
+      "role": "celestia_test_8ca5773da302f30a_verify",
+      "oid": 84290,
+      "directory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-Ci85J8\\celestia_test_8ca5773da302f30a_verify",
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    }
+  ],
+  "browser": {
+    "evidence": {
+      "path": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-YlVOT6/c5d-browser-result.json",
+      "sha256": "fc3b7e574d3bff84b63813ed88329efdde27833ce2bad0b2afdf336a238578d8"
+    },
+    "kind": "C5d browser acceptance",
+    "controlledRateClock": true,
+    "root": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-recovery-YlVOT6",
+    "permissions": {
+      "mechanism": "Windows protected ACL",
+      "currentUserOnly": true,
+      "verified": true
+    },
+    "commands": [],
+    "startedAt": "2026-10-17T18:26:57.462Z",
+    "resourcesRemoved": true,
+    "stoppedOwnedProcess": true,
+    "ordinaryWebBuildRestored": true,
+    "browserPortsClosed": true,
+    "finishedAt": "2026-10-17T18:29:12.121Z"
+  },
+  "fixtureLeaseAbsent": true,
+  "fixturePidFileAbsent": true,
+  "credentials": [
+    {
+      "directory": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-YlVOT6",
+      "pgpassAbsent": true
+    },
+    {
+      "directory": "C:/Users/inuzu/AppData/Local/Temp/celestia-recovery-Ci85J8",
+      "pgpassAbsent": true
+    }
+  ],
+  "ports": [
+    {
+      "port": 45448,
+      "exclusiveBindSucceeded": true
+    },
+    {
+      "port": 45449,
+      "exclusiveBindSucceeded": true
+    },
+    {
+      "port": 55448,
+      "exclusiveBindSucceeded": true
+    }
+  ],
+  "ownedTabsClosed": true,
+  "finalBrowserInventory": "empty",
+  "nativeSettingsChanged": false,
+  "viewportOverrideApplied": false,
+  "ordinaryWebBuildRestored": true,
+  "screenshot": {
+    "path": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-domain-days-UtNKZV\\domain-schedule.jpg",
+    "sha256": "e9c58f241cf74bd7335f214ef88ed071af7500308b113e80201852a877b169d5"
+  },
+  "notes": [
+    "Private synthetic reports and dumps retained; per-run credentials removed.",
+    "Only the resources owned by the named guarded runs were removed.",
+    "System Node, project dependencies and agent integration configuration unchanged."
+  ]
+}

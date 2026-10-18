@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "id": "942bcac93e896387",
+  "startedAt": "2026-10-11T07:54:02.375Z",
+  "platform": "win32",
+  "node": "v22.14.0",
+  "fixture": {
+    "dataDir": "C:/Users/inuzu/AppData/Local/Temp/celestia-c4-6d547b9077534faa9ea7871b1017b2f6/data",
+    "host": "127.0.0.1",
+    "port": 55448,
+    "adminDatabase": "celestia_test_c4",
+    "provenance": "docs/plans/c5a-beta-foundation/walkthrough.md",
+    "versions": {
+      "pg_dump": "pg_dump (PostgreSQL) 18.4",
+      "pg_restore": "pg_restore (PostgreSQL) 18.4",
+      "postgres": "postgres (PostgreSQL) 18.4",
+      "pg_ctl": "pg_ctl (PostgreSQL) 18.4"
+    },
+    "owner": "NITRO\\inuzu",
+    "major": 18,
+    "systemIdentifier": "7693191646738863628"
+  },
+  "permissions": {
+    "mechanism": "Windows protected ACL",
+    "currentUserOnly": true,
+    "verified": true
+  },
+  "fault": null,
+  "stages": [
+    {
+      "stage": "fixture-start",
+      "result": "failed",
+      "elapsedMs": 90469,
+      "code": "UNEXPECTED_FAILURE_DETAILS_WITHHELD"
+    }
+  ],
+  "result": "failed",
+  "failure": {
+    "stage": "fixture-start",
+    "code": "UNEXPECTED_FAILURE_DETAILS_WITHHELD"
+  },
+  "cleanup": {
+    "databasesAndRolesRemoved": false,
+    "stoppedOwnedProcess": false,
+    "privateFilesRetained": true,
+    "credentialsRemoved": true,
+    "processError": {
+      "code": "UNEXPECTED_FAILURE_DETAILS_WITHHELD"
+    }
+  },
+  "resources": [
+    {
+      "database": "celestia_test_942bcac93e896387_source",
+      "role": "celestia_test_942bcac93e896387_source",
+      "oid": null,
+      "directory": null,
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    },
+    {
+      "database": "celestia_test_942bcac93e896387_restore",
+      "role": "celestia_test_942bcac93e896387_restore",
+      "oid": null,
+      "directory": null,
+      "databaseRemaining": false,
+      "tablespaceRemaining": false,
+      "roleRemaining": false
+    }
+  ],
+  "elapsedMs": 90470,
+  "finishedAt": "2026-10-11T07:55:32.847Z"
+}

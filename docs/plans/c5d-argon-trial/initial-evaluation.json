@@ -1,0 +1,17 @@
+{
+  "receivedAt": "2026-10-14T13:15:36.859Z",
+  "responseSha256": "e566bd5fb28f3d38ae449daeecb640248159264d96e0015dc3776c603e38f006",
+  "snapshotId": "b9eaae3559697142b24ae086f403cfbb9165698aea843cbac0b4e61d27a0a7e2",
+  "changedSourceFiles": [],
+  "missingFromPreparedFolder": [],
+  "originalPatchCheck": {
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "actualHunkCounts": {
+    "old": 6,
+    "new": 115
+  },
+  "originalHunkHeader": "@@ -296,6 +296,115 @@"
+}

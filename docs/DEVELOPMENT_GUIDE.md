@@ -1,10 +1,20 @@
 # **Project Celestia Development Guide**
 
+## Current delivery policy — 2026-09-25
+
+Use [Roadmap](ROADMAP.md) for current scope and [Companion specification](features/FEATURE_GENSHIN_COMPANION.md) for behavior. As of 2026-09-26, Codex implements on other days; Antigravity's Sonnet 4.6 implements on Wednesday/Sunday, with Codex planning and reviewing. The owner starts a new conversation for those sessions. Read [the current handoff](plans/CURRENT_HANDOFF.md) before work. This supersedes older agent roles and schedules.
+
+Finish [3A backend lint](plans/3a-backend-lint/implementation_plan.md) without mixing in import, goal, reset, or product changes. Preserve the completed security milestone and unrelated local changes.
+
+For companion features, test missing versus zero data, safe partial imports, period-boundary writes, stale-client conflicts, ownership, and failed optimistic updates. Verify supported game facts independently; tests using the same JSON as the implementation are not independent validation of that JSON.
+
+Store handoffs under `docs/plans/<milestone>/`: implementation plan, checklist, and walkthrough after execution. Distinguish “implemented,” “verified,” and “planned.” Preserve historical ADRs with explicit amendments instead of silently rewriting prior decisions.
+
 **Document Version:** 1.0
 
 **Status:** Active
 
-**Last Updated:** July 2026
+**Last Updated:** 2026-09-25
 
 \---
 
@@ -396,7 +406,7 @@ A feature is considered complete only when:
 - **Correctness before optimization.** Accuracy before feature quantity.
 - **Critical calculation logic** must have independent reference/regression tests.
 - **Coverage is a diagnostic metric**, not the definition of quality. Do not chase 100% coverage at the expense of meaningful tests.
-- Every important implementation should include appropriate tests in the same implementation cycle (the same Sunday).
+- Every important implementation should include appropriate tests in the same implementation cycle (the same Wednesday/Sunday implementation cycle).
 - CI should verify typechecking, linting, tests, builds, and other appropriate quality gates.
 
 \---
@@ -435,7 +445,7 @@ A feature is considered complete only when:
 ## **AI-Agent & MCP Workflow**
 
 - We utilize a structured AI workflow: Gemini (Architect/Reviewer), Claude (Implementer), and ChatGPT (Independent Reviewer).
-- Planning happens Monday–Saturday; Implementation happens on Wednesdays and Sundays.
+- Implementation happens on Wednesdays and Sundays; planning and review happen on other days as needed.
 - For full details on agent handoffs, MCP server constraints, and artifact rules, refer to `.agents/AGENTS.md`.
 
 \---

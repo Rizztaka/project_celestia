@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "recovery:rehearse": "pnpm --filter @celestia/api exec tsx tooling/recovery/cli.mjs",
+    "verify": "pnpm --filter @celestia/api exec tsx tooling/verify.mjs",
     "dev": "turbo run dev",
     "build": "turbo run build",
     "test": "turbo run test",

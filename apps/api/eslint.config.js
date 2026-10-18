@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url';
+
 import js from '@eslint/js';
 import boundaries from 'eslint-plugin-boundaries';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
@@ -5,6 +7,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
+  { ignores: ['dist/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -16,12 +19,17 @@ export default tseslint.config(
       globals: globals.node,
     },
     settings: {
+      'import/resolver': {
+        // Keep the source aliases: following tsconfig.node references loses them in this resolver.
+        typescript: { project: fileURLToPath(new URL('./tsconfig.eslint.json', import.meta.url)) },
+      },
       'boundaries/elements': [
         { type: 'platform', pattern: 'platform/*' },
         { type: 'core', pattern: 'core/*' },
-        { type: 'games', pattern: 'games/*' },
         { type: 'genshin', pattern: 'games/genshin/*' },
         { type: 'hsr', pattern: 'games/hsr/*' },
+        // Specific games must precede this fallback or cross-game policies never match.
+        { type: 'games', pattern: 'games/*' },
       ],
       'boundaries/include': ['src/**/*'],
     },
@@ -34,27 +42,34 @@ export default tseslint.config(
           default: 'allow',
           policies: [
             {
-              from: { type: 'platform' },
+              from: { element: { type: 'platform' } },
               disallow: [
-                { to: { type: 'games' } },
-                { to: { type: 'genshin' } },
-                { to: { type: 'hsr' } },
+                { to: { element: { type: 'games' } } },
+                { to: { element: { type: 'genshin' } } },
+                { to: { element: { type: 'hsr' } } },
               ],
               message: 'Platform modules must never contain game-specific logic.',
             },
             {
-              from: { type: 'genshin' },
-              disallow: [{ to: { type: 'hsr' } }],
+              from: { element: { type: 'genshin' } },
+              disallow: [{ to: { element: { type: 'hsr' } } }],
               message: 'Genshin must not import from HSR',
             },
             {
-              from: { type: 'hsr' },
-              disallow: [{ to: { type: 'genshin' } }],
+              from: { element: { type: 'hsr' } },
+              disallow: [{ to: { element: { type: 'genshin' } } }],
               message: 'HSR must not import from Genshin',
             },
           ],
         },
       ],
+    },
+  },
+  {
+    files: ['src/core/middleware/auth.middleware.ts'],
+    rules: {
+      // Express exposes its extensible Request interface in this ambient namespace.
+      '@typescript-eslint/no-namespace': ['error', { allowDeclarations: true }],
     },
   },
   {

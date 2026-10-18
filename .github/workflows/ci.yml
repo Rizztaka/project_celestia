@@ -9,6 +9,37 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      DOTENV_CONFIG_PATH: /dev/null
+      DATABASE_URL: postgresql://celestia_test:celestia_test@127.0.0.1:5432/celestia_test_ci
+      CELESTIA_TEST_DATABASE_URL: postgresql://celestia_test:celestia_test@127.0.0.1:5432/celestia_test_ci
+      JWT_SECRET: c5a-synthetic-verification-secret-at-least-32-characters
+      OPENROUTER_API_KEY: c5a-synthetic-unused-key
+
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: celestia_test
+          POSTGRES_PASSWORD: celestia_test
+          POSTGRES_DB: celestia_test_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U celestia_test -d celestia_test_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
 
     steps:
       - name: Checkout Repository
@@ -22,7 +53,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 11
+          version: 11.18.0
 
       - name: Get pnpm store directory
         shell: bash
@@ -38,27 +69,59 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
-      - name: Generate Prisma Client
-        run: pnpm --filter @celestia/api exec prisma generate
-        env:
-          DATABASE_URL: postgresql://localhost:5432/placeholder
+      - name: Guarded complete verification
+        run: pnpm run verify
 
-      - name: Check types
-        run: pnpm run check-types
-
-      - name: Lint
+      - name: Monorepo lint
         run: pnpm run lint
 
-      - name: Format Check
-        run: pnpm run format:check
+      - name: Monorepo typecheck
+        run: pnpm run check-types
 
-      - name: Test
-        run: pnpm run test
-        env:
-          DATABASE_URL: postgresql://localhost:5432/placeholder
-          JWT_SECRET: placeholder-jwt-secret-for-ci-at-least-32-chars
-
-      - name: Build
+      - name: Production builds
         run: pnpm run build
+        env:
+          NODE_ENV: production
+          npm_config_production: 'false'
+
+      - name: Verify frontend production bundle
+        run: pnpm --filter @celestia/web build
+        env:
+          NODE_ENV: production
+          npm_config_production: 'false'
+
+      - name: Live distributed admission and readiness
+        run: pnpm --filter @celestia/api exec tsx tooling/infrastructure-smoke.mjs
+        env:
+          REDIS_URL: redis://127.0.0.1:6379/15
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Validate API container
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/api/Dockerfile
+          push: false
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
+
+      - name: Validate web container
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          push: false
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web
+
+      - name: Preserve verification results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-results
+          path: ${{ runner.temp }}/celestia-verification-*/*.json
+          if-no-files-found: warn

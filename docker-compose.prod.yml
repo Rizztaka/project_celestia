@@ -1,0 +1,12 @@
+# Overlay: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+# A TLS ingress must front the loopback web port. The API has no published port.
+services:
+  db:
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a production database password}
+    ports: !reset []
+  api:
+    environment:
+      WEB_ORIGIN: ${WEB_ORIGIN:?Set the public HTTPS web origin}
+      API_ORIGIN: ${API_ORIGIN:?Set the public HTTPS API origin}
+      CORS_ALLOWED_ORIGINS: ${WEB_ORIGIN:?Set the public HTTPS web origin}

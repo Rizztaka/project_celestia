@@ -5,6 +5,8 @@ export const characterKeySchema = z
   .string()
   .min(1)
   .max(200)
+  // Control characters are deliberately forbidden in opaque imported keys.
+  // eslint-disable-next-line no-control-regex
   .refine((key) => !/[\u0000-\u001f\u007f]/.test(key), 'Invalid character key');
 export const artifactSlots = ['flower', 'plume', 'sands', 'goblet', 'circlet'] as const;
 export type ArtifactSlot = (typeof artifactSlots)[number];

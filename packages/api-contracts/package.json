@@ -5,9 +5,15 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src --max-warnings 0"
   },
   "dependencies": {
     "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "eslint": "^10.8.0",
+    "typescript": "~6.0.3"
   }
 }

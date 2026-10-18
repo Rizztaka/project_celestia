@@ -4,11 +4,12 @@ import { Pool } from 'pg';
 
 import { env } from '@/core/config/env.js';
 
-const pool = new Pool({ connectionString: env.DATABASE_URL });
-const adapter = new PrismaPg(pool);
-
 // Prevent multiple instances of Prisma Client in development due to hot reloading
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
+const globalForPrisma = global as unknown as { prisma?: PrismaClient; prismaPool?: Pool };
+const pool =
+  globalForPrisma.prismaPool ??
+  new Pool({ connectionString: env.DATABASE_URL, connectionTimeoutMillis: 2000 });
+const adapter = new PrismaPg(pool);
 
 export const prisma =
   globalForPrisma.prisma ||
@@ -17,4 +18,15 @@ export const prisma =
     log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
   });
 
-if (env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+if (env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma;
+  globalForPrisma.prismaPool = pool;
+}
+
+export async function disconnectDatabase(): Promise<void> {
+  try {
+    await prisma.$disconnect();
+  } finally {
+    await pool.end();
+  }
+}

@@ -1,0 +1,329 @@
+{
+  "date": "2026-10-18",
+  "status": "passed-local-with-container-validation-pending",
+  "platform": "win32",
+  "tests": {
+    "passed": 1200,
+    "files": 71,
+    "failed": 0,
+    "skipped": 0,
+    "postgresCases": 118,
+    "integration": {
+      "src/platform/companion/plan.integration.test.ts": 36,
+      "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+      "src/platform/companion/routine.integration.test.ts": 16,
+      "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+      "src/games/genshin/importer/importer.integration.test.ts": 16,
+      "src/platform/companion/catalog-advice.integration.test.ts": 9
+    },
+    "actualPostgresCases": 171,
+    "postgresFiles": [
+      {
+        "file": "apps/api/tooling/account-data.integration.test.js",
+        "passed": 20
+      },
+      {
+        "file": "apps/api/tooling/request-safety.integration.test.js",
+        "passed": 7
+      },
+      {
+        "file": "apps/api/src/platform/auth/security.integration.test.ts",
+        "passed": 26
+      },
+      {
+        "file": "apps/api/src/platform/companion/catalog-advice.integration.test.ts",
+        "passed": 9
+      },
+      {
+        "file": "apps/api/src/platform/companion/goal-lifecycle.integration.test.ts",
+        "passed": 28
+      },
+      {
+        "file": "apps/api/src/platform/companion/plan.integration.test.ts",
+        "passed": 36
+      },
+      {
+        "file": "apps/api/src/platform/companion/routine.integration.test.ts",
+        "passed": 16
+      },
+      {
+        "file": "apps/api/src/games/genshin/characters/character-equipment.integration.test.ts",
+        "passed": 13
+      },
+      {
+        "file": "apps/api/src/games/genshin/importer/importer.integration.test.ts",
+        "passed": 16
+      }
+    ]
+  },
+  "preservation": {
+    "initialTree": "94ad85b4cf17ff1cef5d4a12868670144db287a9",
+    "existingTestFilesUnchanged": 66,
+    "originalVerifierBlob": "67203f09a16d84f1502d85945850ea95f8a4bd15",
+    "currentVerifierBlob": "67203f09a16d84f1502d85945850ea95f8a4bd15"
+  },
+  "guardedVerification": {
+    "command": "pnpm run verify",
+    "exit": 0,
+    "evidenceDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-wkX7u7",
+    "checks": [
+      {
+        "id": "shared-types-and-build",
+        "package": "typescript",
+        "binary": "tsc",
+        "arguments": [
+          "-p",
+          "D:\\Genshin Personal\\project-celestia\\packages\\api-contracts\\tsconfig.json"
+        ],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "disposable-postgres-ready",
+        "exit": 0
+      },
+      {
+        "id": "prisma-generate",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": ["generate"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "disposable-migrations",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": ["migrate", "deploy"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "prisma-validate",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": ["validate"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "schema-diff",
+        "package": "prisma",
+        "binary": "prisma",
+        "arguments": [
+          "migrate",
+          "diff",
+          "--from-config-datasource",
+          "--to-schema",
+          "prisma/schema.prisma",
+          "--exit-code"
+        ],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "full-suite",
+        "package": "vitest",
+        "binary": "vitest",
+        "arguments": [
+          "run",
+          "--no-file-parallelism",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-wkX7u7\\vitest.json"
+        ],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "api-lint",
+        "package": "eslint",
+        "binary": "eslint",
+        "arguments": [".", "--max-warnings", "0"],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "api-types-and-build",
+        "package": "typescript",
+        "binary": "tsc",
+        "arguments": [],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "api-aliases",
+        "package": "tsc-alias",
+        "binary": "tsc-alias",
+        "arguments": [],
+        "cwd": "apps\\api",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "web-lint",
+        "package": "eslint",
+        "binary": "eslint",
+        "arguments": ["."],
+        "cwd": "apps\\web",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "web-types",
+        "package": "typescript",
+        "binary": "tsc",
+        "arguments": ["-b"],
+        "cwd": "apps\\web",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "web-build",
+        "package": "vite",
+        "binary": "vite",
+        "arguments": ["build"],
+        "cwd": "apps\\web",
+        "nodeEnv": "production",
+        "exit": 0
+      },
+      {
+        "id": "repository-format",
+        "package": "prettier",
+        "binary": "prettier",
+        "arguments": [
+          "--check",
+          "**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,yml,yaml,css,html}",
+          "!apps/api/src/core/ai/openrouter.ts",
+          "!docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+          "!apps/web/index.html",
+          "!apps/web/src/App.css",
+          "!apps/web/src/index.css",
+          "!docs/plans/c5-companion-beta/endgame-focus-final.json",
+          "!docs/plans/c5-companion-beta/primary-reflow.json",
+          "!docs/plans/c5-companion-beta/reimport-after.json",
+          "!docs/plans/c5-companion-beta/reimport-before.json",
+          "!docs/plans/c5-companion-beta/rendered-style-check.json",
+          "!docs/plans/c5-companion-beta/secondary-reflow.json",
+          "!docs/plans/c5-companion-beta/starting-state.json"
+        ],
+        "cwd": ".",
+        "nodeEnv": "test",
+        "exit": 0
+      },
+      {
+        "id": "diff-check",
+        "exit": 0
+      }
+    ]
+  },
+  "additionalChecks": {
+    "monorepoLint": {
+      "command": "pnpm run lint",
+      "exit": 0
+    },
+    "monorepoTypes": {
+      "command": "pnpm run check-types",
+      "exit": 0
+    },
+    "monorepoBuild": {
+      "command": "pnpm run build",
+      "exit": 0
+    },
+    "yamlParsing": ["docker-compose.yml", "docker-compose.prod.yml", ".github/workflows/ci.yml"],
+    "stagedDiffCheck": 0,
+    "migrationContainerCommand": {
+      "command": "node apps/api/node_modules/prisma/build/index.js migrate deploy --config apps/api/prisma.config.ts",
+      "exit": 0,
+      "result": "15 migrations found; none pending"
+    }
+  },
+  "productionPackageSmoke": {
+    "status": "passed",
+    "runtime": "pruned production pnpm deployment on Windows; not a Linux container",
+    "results": [
+      {
+        "kind": "healthy",
+        "liveness": 200,
+        "readiness": 200,
+        "checks": {
+          "database": "up",
+          "redis": "disabled"
+        },
+        "shutdownExit": 0
+      },
+      {
+        "kind": "database-down",
+        "liveness": 200,
+        "readiness": 503,
+        "checks": {
+          "database": "down",
+          "redis": "disabled"
+        },
+        "shutdownExit": 0
+      },
+      {
+        "kind": "redis-down",
+        "liveness": 200,
+        "readiness": 503,
+        "checks": {
+          "database": "up",
+          "redis": "down"
+        },
+        "shutdownExit": 0
+      }
+    ]
+  },
+  "redisSimulation": {
+    "backend": "fakeredis 2.40.0 with Lua 5.4 via lupa; not a live Redis server",
+    "assertions": 24,
+    "parallelRateAttempts": 30,
+    "parallelRateAdmitted": 5,
+    "parallelConcurrencyAttempts": 20,
+    "parallelConcurrencyAdmitted": 2,
+    "status": "passed",
+    "tcpSmoke": {
+      "command": "tsx tooling/infrastructure-smoke.mjs",
+      "exit": 0,
+      "backend": "fakeredis TCP server emulating Redis 7; INFO ready-check shim; actual ioredis, Express and PostgreSQL",
+      "liveRedis7Observed": false
+    }
+  },
+  "containerValidation": {
+    "apiImageBuild": "not-run",
+    "webImageBuild": "not-run",
+    "composeRuntime": "not-run",
+    "reason": "Docker executable, Docker daemon and WSL are unavailable on this host",
+    "addedCI": [
+      "Cached Buildx API image build",
+      "Cached Buildx web image build",
+      "Separate live Redis 7 admission/readiness smoke"
+    ],
+    "remoteCIObserved": false
+  },
+  "earlierAttempt": {
+    "testFiles": 71,
+    "passed": 1199,
+    "failed": 1,
+    "reason": "Existing origin test exceeded its unchanged 5-second timeout during competing build/lint checks; final complete run passed.",
+    "evidenceDirectory": "C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-QLQeU9"
+  },
+  "cleanup": {
+    "disposablePostgresStopped": true,
+    "redisSimulationStopped": true,
+    "temporaryFilesRetained": true,
+    "note": "The combined database/file cleanup command was rejected by automatic approval review without a specific reason. The owned PostgreSQL server was stopped separately; temporary database/deployment/simulation files remain."
+  },
+  "evidenceHashes": {
+    "verification.json": "3f6d938c02b939ff689d40a1554b75b6bacbd6f8496cac0826541a5c2de43831",
+    "vitest.json": "04147863978b73477d36258fe0811b48ce7bef60c4b73fd9a2909738820d95eb"
+  }
+}

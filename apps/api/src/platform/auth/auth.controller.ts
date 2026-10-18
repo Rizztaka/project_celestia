@@ -7,6 +7,7 @@ import { UserService } from '../users/user.service.js';
 import { AuthService } from './auth.service.js';
 import { checkCookieOrigin, setRefreshCookie } from './auth-cookies.js';
 import { PasswordResetService } from './password-reset.service.js';
+import { requestDevice } from './request-device.js';
 
 export class AuthController {
   private authService: AuthService;
@@ -29,10 +30,10 @@ export class AuthController {
   register = async (req: Request, res: Response) => {
     const validatedData = registerSchema.parse(req.body);
     if (req.headers.origin) checkCookieOrigin(req);
-    const { refreshToken, ...result } = await this.authService.register(validatedData, {
-      userAgent: req.get('user-agent'),
-      ipAddress: req.socket.remoteAddress,
-    });
+    const { refreshToken, ...result } = await this.authService.register(
+      validatedData,
+      requestDevice(req),
+    );
     setRefreshCookie(res, refreshToken);
     await new PasswordResetService().sendVerification(result.user.id);
     res
@@ -54,10 +55,10 @@ export class AuthController {
   login = async (req: Request, res: Response) => {
     const validatedData = loginSchema.parse(req.body);
     if (req.headers.origin) checkCookieOrigin(req);
-    const { refreshToken, ...result } = await this.authService.login(validatedData, {
-      userAgent: req.get('user-agent'),
-      ipAddress: req.socket.remoteAddress,
-    });
+    const { refreshToken, ...result } = await this.authService.login(
+      validatedData,
+      requestDevice(req),
+    );
     setRefreshCookie(res, refreshToken);
     res
       .status(200)

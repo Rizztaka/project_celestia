@@ -22,6 +22,7 @@ import {
 } from './auth-cookies.js';
 import { OAuthService } from './oauth/oauth.service.js';
 import { PasswordResetService } from './password-reset.service.js';
+import { requestDevice } from './request-device.js';
 import { SessionService } from './session.service.js';
 
 export class SecurityController {
@@ -124,10 +125,7 @@ export class SecurityController {
         throw new UnauthorizedError();
       if (!cookie) throw new UnauthorizedError();
       const user = await this.oauth.finish(provider, query.code, query.state, cookie);
-      const tokens = await this.sessions.create(user.id, {
-        userAgent: req.get('user-agent'),
-        ipAddress: req.socket.remoteAddress,
-      });
+      const tokens = await this.sessions.create(user.id, requestDevice(req));
       setRefreshCookie(res, tokens.refreshToken);
       res.redirect(`${web}/auth/callback`);
     } catch {

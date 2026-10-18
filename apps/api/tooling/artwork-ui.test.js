@@ -43,7 +43,7 @@ describe('Section 4 catalog artwork and accessible presentation', () => {
   it('renders named lazy artwork over a local crest, including constellation zero', () => {
     const html = render(h(GenshinAvatar, { characterKey: 'HuTao', constellation: 0 }));
     expect(html).toContain('UI_AvatarIcon_Hutao.png');
-    expect(html).toContain('alt="Hu Tao avatar"');
+    expect(html).toContain('alt="Hu Tao avatar, Pyro, Constellation 0"');
     expect(html).toContain('loading="lazy"');
     expect(html).toContain('decoding="async"');
     expect(html).toContain('Constellation 0');
@@ -55,7 +55,7 @@ describe('Section 4 catalog artwork and accessible presentation', () => {
   });
   it('styles weapons by rarity rather than refinement and supplies a local fallback', () => {
     const html = render(h(GenshinWeaponIcon, { weaponKey: 'StaffOfHoma' }));
-    expect(html).toContain('border-amber-500/40');
+    expect(html).toContain('border-amber-400/60');
     expect(html).toContain('Staff of Homa weapon icon');
     expect(html).toContain('5 star');
     const unknown = render(h(GenshinWeaponIcon, { weaponKey: 'UnknownWeapon' }));

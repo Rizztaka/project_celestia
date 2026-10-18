@@ -207,11 +207,11 @@ async function setup(width, artwork = 'blocked') {
   });
   const attempts = [];
   await context.route(
-    /https:\/\/(enka\.network\/ui|api\.ambr\.top\/assets\/UI)\//,
+    /https:\/\/(enka\.network\/ui|upload-os-bbs\.mihoyo\.com\/game_record\/genshin|gi\.yatta\.moe\/assets\/UI)\//,
     async (route) => {
       attempts.push(route.request().url());
       if (artwork === 'live') return route.continue();
-      if (artwork === 'secondary' && route.request().url().includes('api.ambr.top'))
+      if (artwork === 'secondary' && route.request().url().includes('upload-os-bbs.mihoyo.com'))
         return route.fulfill({
           contentType: 'image/png',
           body: Buffer.from(
@@ -429,18 +429,20 @@ try {
       const { context, page, attempts } = await setup(320, scenario);
       await visit(page, '/roster?q=Bennett');
       const avatar = page.getByRole('img', {
-        name: 'Bennett avatar, Pyro, Constellation 0',
+        name: 'Bennett avatar, Pyro, Constellation 0, 4 star',
         exact: true,
       });
       await avatar.scrollIntoViewIfNeeded();
       if (scenario === 'secondary') {
         await page.waitForFunction(() => {
-          const img = document.querySelector('img[alt="Bennett avatar"]');
-          return img?.complete && img.naturalWidth > 0 && img.src.includes('api.ambr.top');
+          const img = document.querySelector('img[alt^="Bennett avatar"]');
+          return (
+            img?.complete && img.naturalWidth > 0 && img.src.includes('upload-os-bbs.mihoyo.com')
+          );
         });
       } else if (scenario === 'blocked' || scenario === 'stalled') {
         await page.waitForFunction(
-          () => !document.querySelector('img[alt="Bennett avatar"]'),
+          () => !document.querySelector('img[alt^="Bennett avatar"]'),
           {},
           { timeout: 20000 },
         );
@@ -448,7 +450,7 @@ try {
       } else {
         await page.waitForFunction(
           () => {
-            const img = document.querySelector('img[alt="Bennett avatar"]');
+            const img = document.querySelector('img[alt^="Bennett avatar"]');
             return !img || (img.complete && img.naturalWidth > 0);
           },
           {},
@@ -471,7 +473,7 @@ try {
       });
       if (scenario === 'stalled')
         check(
-          attempts.some((url) => url.includes('api.ambr.top')),
+          attempts.some((url) => url.includes('upload-os-bbs.mihoyo.com')),
           'Stall timeout must attempt secondary',
         );
       if (scenario === 'blocked') {

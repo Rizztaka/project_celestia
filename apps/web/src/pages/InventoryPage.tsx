@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AccessibleTabs, TabPanel } from '../components/AccessibleTabs';
+import { GenshinArtifactIcon } from '../components/GenshinArtifactIcon';
 import { GenshinWeaponIcon } from '../components/GenshinWeaponIcon';
 import {
   type ArtifactSubStat,
@@ -98,7 +99,7 @@ function WeaponCard({ weapon }: { weapon: InventoryWeapon }) {
     >
       {/* Header */}
       <div className="flex items-center gap-3">
-        <GenshinWeaponIcon weaponKey={weapon.weaponKey} />
+        <GenshinWeaponIcon weaponKey={weapon.weaponKey} refinement={weapon.refinement} />
         <div className="min-w-0 flex-1">
           <p className="font-display group-hover:text-accent-400 break-words text-sm font-bold text-white transition-colors">
             {displayName}
@@ -158,9 +159,11 @@ function ArtifactRow({ artifact }: { artifact: InventoryArtifact }) {
   return (
     <div className="companion-artifact-row group items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3 transition-colors hover:bg-white/[0.05]">
       {/* Slot badge */}
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/5 text-xs font-bold text-zinc-400">
-        {slot.letter}
-      </div>
+      <GenshinArtifactIcon
+        setKey={artifact.setKey}
+        slotKey={artifact.slotKey}
+        rarity={artifact.rarity}
+      />
 
       {/* Set + slot */}
       <div className="artifact-name min-w-0">

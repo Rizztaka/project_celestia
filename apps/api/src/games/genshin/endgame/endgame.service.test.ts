@@ -309,11 +309,11 @@ describe('EndgameService', () => {
       ).rejects.toThrow(UnprocessableError);
     });
 
-    it('throws UnprocessableError when cast exceeds 12 characters', async () => {
+    it('throws UnprocessableError when cast exceeds 26 characters', async () => {
       await expect(
         service.logTheaterRun('user-xyz', {
           ...validTheaterInput,
-          cast: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'],
+          cast: Array.from({ length: 27 }, (_, i) => `Character${i}`),
         }),
       ).rejects.toThrow(UnprocessableError);
     });

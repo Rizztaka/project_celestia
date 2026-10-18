@@ -862,42 +862,21 @@ export async function logTheaterRun(payload: LogTheaterRunPayload): Promise<Thea
 // Pull Simulator (Milestone 6A)
 // ============================================================
 
-export interface Banner {
-  bannerId: string;
-  name: string;
-  type: string;
-  fiveStarKey: string;
-  fourStarKeys: string[];
-  endDate: string;
-}
-
-export interface PullResultItem {
-  id: string;
-  type: '3_STAR' | '4_STAR' | '5_STAR';
-  itemKey: string;
-  isFeatured: boolean;
-}
-
-export interface SimulatePullsPayload {
-  bannerId: string;
-  count: number;
-  currentPity5: number;
-  currentPity4: number;
-  guaranteed5: boolean;
-  guaranteed4: boolean;
-}
-
-export interface SimulatePullsResult {
-  pulls: PullResultItem[];
-  endPity5: number;
-  endPity4: number;
-  endGuaranteed5: boolean;
-  endGuaranteed4: boolean;
-}
+export type {
+  WishBanner as Banner,
+  WishResultItem as PullResultItem,
+  WishRequest as SimulatePullsPayload,
+  WishResult as SimulatePullsResult,
+} from '@celestia/api-contracts';
+import type {
+  WishBanner as Banner,
+  WishRequest as SimulatePullsPayload,
+  WishResult as SimulatePullsResult,
+} from '@celestia/api-contracts';
 
 /**
  * fetchBanners — GET /games/genshin/simulators/banners
- * Returns the list of currently active banners from static data.
+ * Returns historical wish scenarios from the pinned simulator library.
  */
 export async function fetchBanners(): Promise<Banner[]> {
   return fetchApi<Banner[]>('/games/genshin/simulators/banners');
@@ -1004,4 +983,20 @@ export async function addNikkeToRoster(payload: {
     method: 'POST',
     body: JSON.stringify(payload),
   });
+}
+
+export async function previewTheaterCast(
+  payload: import('@celestia/api-contracts').TheaterCastRequest,
+  signal?: AbortSignal,
+  session?: AccountSession,
+): Promise<import('@celestia/api-contracts').TheaterCastResponse> {
+  return fetchApi(
+    '/games/genshin/endgame/theater/cast-preview',
+    {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      signal,
+    },
+    session,
+  );
 }

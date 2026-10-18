@@ -3,6 +3,10 @@ import { useId, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { domainSchedule, materialCatalogEntry } from '../lib/catalog';
+import { visualAssets } from '../lib/cdn-resolver';
+import { regionalScenery } from '../lib/regional-scenery';
+import { GenshinMaterialIcon } from './GenshinMaterialIcon';
+import { RegionalScenery } from './RegionalScenery';
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const control = 'mt-1 w-full rounded-lg border border-white/15 bg-zinc-900 p-2 text-sm text-white';
@@ -129,26 +133,41 @@ export default function DomainSchedule({
           return (
             <li
               key={domain.domainKey}
-              className="rounded-xl border border-white/10 bg-white/[0.02] p-4 text-sm"
+              className="overflow-hidden rounded-2xl border border-white/15 bg-zinc-950/70 text-sm shadow-lg"
             >
-              <p className="font-medium text-white">
-                {domain.dropKeys.map((key) => materialCatalogEntry(key)?.name ?? key).join(' · ')}
-              </p>
-              <p className="mt-2 text-zinc-400">{domain.name}</p>
-              <p className="mt-1 text-xs text-zinc-400">{domain.location}</p>
-              <p className="mt-2 text-zinc-200">
-                {domain.days.map((value) => days[value]).join(' · ')}
-              </p>
-              {next && (
-                <p className={`mt-2 text-xs ${open ? 'text-emerald-300' : 'text-amber-200'}`}>
-                  {open
-                    ? 'Open today'
-                    : `Next open: ${days[next.day]}${next.offset === 1 ? ' (next game day)' : ` (in ${next.offset} game days)`}`}
+              <RegionalScenery
+                region={visualAssets.domains[domain.domainKey]?.region ?? 'Teyvat'}
+              />
+              <div className="p-4">
+                <div className="mb-3 flex flex-wrap items-center gap-2">
+                  {domain.dropKeys.map((key) => (
+                    <GenshinMaterialIcon key={key} itemKey={key} />
+                  ))}
+                  <span
+                    className={`rounded-full px-2 py-1 text-xs ${open ? 'bg-emerald-400/15 text-emerald-200' : 'bg-amber-400/10 text-amber-200'}`}
+                  >
+                    {weekday === null ? 'Choose server' : open ? 'Open today' : 'Closed today'}
+                  </span>
+                </div>
+                <p className="font-medium text-white">
+                  {domain.dropKeys.map((key) => materialCatalogEntry(key)?.name ?? key).join(' · ')}
                 </p>
-              )}
-              {goalDomainKeys?.includes(domain.domainKey) && (
-                <p className="mt-2 text-xs text-indigo-200">For your goals</p>
-              )}
+                <p className="mt-2 text-zinc-400">{domain.name}</p>
+                <p className="mt-1 text-xs text-zinc-400">{domain.location}</p>
+                <p className="mt-2 text-zinc-200">
+                  {domain.days.map((value) => days[value]).join(' · ')}
+                </p>
+                {next && (
+                  <p className={`mt-2 text-xs ${open ? 'text-emerald-300' : 'text-amber-200'}`}>
+                    {open
+                      ? 'Open today'
+                      : `Next open: ${days[next.day]}${next.offset === 1 ? ' (next game day)' : ` (in ${next.offset} game days)`}`}
+                  </p>
+                )}
+                {goalDomainKeys?.includes(domain.domainKey) && (
+                  <p className="mt-2 text-xs text-indigo-200">For your goals</p>
+                )}
+              </div>
             </li>
           );
         })}
@@ -160,7 +179,8 @@ export default function DomainSchedule({
       <details className="mt-3 text-xs text-zinc-400">
         <summary className="cursor-pointer">Schedule source</summary>
         <p className="mt-2">
-          Community catalog:{' '}
+          Domain cards show regional scenery; individual entrances are not verified. Community
+          catalog:{' '}
           <a
             className="text-indigo-200 underline"
             href="https://github.com/theBowja/genshin-db/tree/49a6544a6c6ae36089cb42fa591fc46f01de8bcf"
@@ -171,6 +191,21 @@ export default function DomainSchedule({
           </a>
           . This is a pinned snapshot; the original game capture date is unknown.
         </p>
+        <ul className="mt-2 space-y-1">
+          {Object.entries(regionalScenery).map(([region, photograph]) => (
+            <li key={region}>
+              <a
+                href={photograph.source}
+                target="_blank"
+                rel="noreferrer"
+                className="text-indigo-200 underline"
+              >
+                {region} photograph
+              </a>{' '}
+              · {photograph.credit}
+            </li>
+          ))}
+        </ul>
       </details>
     </div>
   );

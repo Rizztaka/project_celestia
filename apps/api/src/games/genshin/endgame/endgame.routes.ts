@@ -48,6 +48,7 @@ router.post('/endgame/abyss', requireAuth, controller.logAbyssRun);
  * @access Private (requireAuth)
  * @milestone 5C — Endgame Center: Imaginarium Theater Tracker
  */
+router.post('/endgame/theater/cast-preview', requireAuth, controller.previewTheaterCast);
 router.get('/endgame/theater', requireAuth, controller.getTheaterHistory);
 
 /**

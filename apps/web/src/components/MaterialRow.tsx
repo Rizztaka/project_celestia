@@ -1,5 +1,6 @@
 import { materialCatalogEntry } from '../lib/catalog';
 import { materialDisplayName } from '../lib/static';
+import { GenshinMaterialIcon } from './GenshinMaterialIcon';
 
 interface MaterialRowProps {
   itemKey: string;
@@ -27,7 +28,7 @@ export default function MaterialRow({
         isMet ? 'opacity-40' : ''
       }`}
     >
-      {/* Name + progress bar */}
+      <GenshinMaterialIcon itemKey={itemKey} />
       <div className="min-w-0 flex-1">
         <p className="break-words text-sm font-medium text-zinc-200">{displayName}</p>
         {entry && (entry.domain || entry.sources.length > 0) && (

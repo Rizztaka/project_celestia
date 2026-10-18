@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { type ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { GenshinArtifactIcon } from '../components/GenshinArtifactIcon';
+import { GenshinAvatar } from '../components/GenshinAvatar';
 import {
   type ArtifactRecommendation,
   type ArtifactSkippedCharacter,
@@ -34,15 +36,6 @@ import { ApiError } from '../lib/api';
 
 function formatName(key: string): string {
   return key.replace(/([A-Z])/g, ' $1').trim();
-}
-
-function getInitials(displayName: string): string {
-  return displayName
-    .split(' ')
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
 }
 
 // -------------------------------------------------------
@@ -266,7 +259,6 @@ function RosterSlotCard({ slot }: { slot: TeamRosterSlot }) {
   const elStyle = getElementStyle(slot.element);
   const isFilled = slot.characterKey !== null;
   const name = isFilled ? formatName(slot.characterKey!) : null;
-  const initials = name ? getInitials(name) : null;
 
   return (
     <div
@@ -292,7 +284,7 @@ function RosterSlotCard({ slot }: { slot: TeamRosterSlot }) {
         }`}
       >
         {isFilled ? (
-          initials
+          <GenshinAvatar characterKey={slot.characterKey!} size="sm" />
         ) : (
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
@@ -422,7 +414,6 @@ function TeamCard({ rec }: { rec: TeamRecommendation }) {
 
 function RecommendationCard({ rec }: { rec: CharacterRecommendation }) {
   const name = formatName(rec.characterKey);
-  const initials = getInitials(name);
   const meta = getLabelMeta(rec.recommendation);
   const barColor = getScoreBarColor(rec.score);
 
@@ -449,7 +440,7 @@ function RecommendationCard({ rec }: { rec: CharacterRecommendation }) {
         <div
           className={`font-display flex h-12 w-12 shrink-0 select-none items-center justify-center rounded-xl border text-sm font-bold transition-all ${meta.colorClass} ${meta.borderClass} ${meta.bgClass}`}
         >
-          {initials}
+          <GenshinAvatar characterKey={rec.characterKey} />
         </div>
 
         <div className="min-w-0 flex-1">
@@ -557,7 +548,7 @@ function SkippedAccordion({ skipped }: { skipped: SkippedCharacter[] }) {
               className="glass-panel flex items-center gap-3 rounded-xl border border-white/5 px-4 py-3"
             >
               <div className="border-success-400/20 bg-success-400/10 font-display text-success-400 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border text-xs font-bold">
-                {getInitials(formatName(s.characterKey))}
+                <GenshinAvatar characterKey={s.characterKey} size="sm" />
               </div>
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-white">
@@ -863,17 +854,8 @@ function AesGauge({ score }: { score: number }) {
 // Artifact Intelligence — single slot card
 // -------------------------------------------------------
 
-const SLOT_ICONS: Record<string, string> = {
-  flower: '❀',
-  plume: '🪶',
-  sands: '⌛',
-  goblet: '🏆',
-  circlet: '⭕',
-};
-
 function SlotBreakdown({ artifact }: { artifact: EquippedArtifactOutput }) {
   const slotLabel = artifact.slotKey.charAt(0).toUpperCase() + artifact.slotKey.slice(1);
-  const icon = SLOT_ICONS[artifact.slotKey] ?? '◆';
   const slotScore = artifact.slotScore;
   const barColor =
     slotScore >= 60
@@ -887,7 +869,12 @@ function SlotBreakdown({ artifact }: { artifact: EquippedArtifactOutput }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <span className="text-sm">{icon}</span>
+          <GenshinArtifactIcon
+            setKey={artifact.setKey}
+            slotKey={artifact.slotKey}
+            rarity={artifact.rarity}
+            size="sm"
+          />
           <span className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500">
             {slotLabel}
           </span>
@@ -954,7 +941,6 @@ function isPraise(text: string): boolean {
 
 function ArtifactCard({ rec }: { rec: ArtifactRecommendation }) {
   const name = formatName(rec.characterKey);
-  const initials = getInitials(name);
   const aes = rec.artifactEfficiencyScore;
   const urgency = aes < 30 ? 'CRITICAL' : aes < 50 ? 'NEEDS WORK' : 'IMPROVABLE';
   const urgencyColor =
@@ -1027,7 +1013,7 @@ function ArtifactCard({ rec }: { rec: ArtifactRecommendation }) {
         <div
           className={`font-display hidden h-12 w-12 shrink-0 select-none items-center justify-center rounded-xl border text-sm font-bold sm:flex ${urgencyColor.text} ${urgencyColor.bg} ${urgencyColor.border}`}
         >
-          {initials}
+          <GenshinAvatar characterKey={rec.characterKey} />
         </div>
       </div>
 
@@ -1128,7 +1114,7 @@ function ArtifactSkippedAccordion({ skipped }: { skipped: ArtifactSkippedCharact
               className="glass-panel flex items-center gap-3 rounded-xl border border-white/5 px-4 py-3"
             >
               <div className="font-display flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-green-400/20 bg-green-400/10 text-xs font-bold text-green-400">
-                {getInitials(formatName(s.characterKey))}
+                <GenshinAvatar characterKey={s.characterKey} size="sm" />
               </div>
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-white">

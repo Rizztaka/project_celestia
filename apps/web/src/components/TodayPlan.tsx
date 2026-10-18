@@ -23,6 +23,7 @@ import {
 import { planButton, routineLabels } from '../lib/plan-view';
 import { serverDateLabel } from '../lib/routine-state';
 import DomainSchedule from './DomainSchedule';
+import { GenshinMaterialIcon } from './GenshinMaterialIcon';
 import { PlanPreferencesForm } from './PlanPreferencesForm';
 import RoutinePanel from './RoutinePanel';
 
@@ -533,7 +534,8 @@ export default function TodayPlan() {
               </p>
               <div className="space-y-2">
                 {Object.entries(matchingAdvice.materials.needed).map(([key, amount]) => (
-                  <p key={key} className="break-words text-sm">
+                  <p key={key} className="flex flex-wrap items-center gap-2 break-words text-sm">
+                    <GenshinMaterialIcon itemKey={key} size="sm" />
                     {materialCatalogEntry(key)?.name ?? key}: needed {amount.toLocaleString()} ·
                     recorded{' '}
                     {matchingAdvice.materials.inventory[key]?.toLocaleString() ?? 'unknown'} ·

@@ -1,0 +1,50 @@
+{
+  "verifiedAt": "2026-10-18T18:35:00.974Z",
+  "scope": "Local visual/endgame/wish implementation; no new deployment receipt",
+  "sourceCommit": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+  "test": {
+    "command": "pnpm test",
+    "passed": 1130,
+    "skipped": 171,
+    "failed": 0,
+    "filesPassed": 72,
+    "filesSkipped": 9,
+    "limitation": "Database integration requires disposable loopback PostgreSQL; Docker and PostgreSQL tools unavailable on PATH."
+  },
+  "build": { "command": "pnpm run build", "status": "passed" },
+  "lint": { "command": "pnpm run lint", "status": "passed" },
+  "browser": {
+    "status": "passed",
+    "viewportChecks": [
+      { "label": "Weapon simulator", "width": 320, "scroll": 320 },
+      { "label": "Theater builder", "width": 320, "scroll": 320 },
+      { "label": "Domain cards", "width": 320, "scroll": 320 },
+      { "label": "Boss atlas", "width": 320, "scroll": 320 },
+      { "label": "Weapon simulator", "width": 1280, "scroll": 1280 },
+      { "label": "Theater builder", "width": 1280, "scroll": 1280 },
+      { "label": "Domain cards", "width": 1280, "scroll": 1280 },
+      { "label": "Boss atlas", "width": 1280, "scroll": 1280 }
+    ],
+    "interactions": [
+      "320px weapon path miss→1 Fate→target guarantee, target reset retains pity, failed request preserves pity, 1x/10x controls, independent Chronicled scenario passed",
+      "320px Theater eligibility, opening/guest badges, level cutoff, domain cards and boss atlas passed",
+      "1280px weapon path miss→1 Fate→target guarantee, target reset retains pity, failed request preserves pity, 1x/10x controls, independent Chronicled scenario passed",
+      "1280px Theater eligibility, opening/guest badges, level cutoff, domain cards and boss atlas passed",
+      "Live character splash, regional scenery, and boss CDN artwork loaded."
+    ],
+    "artwork": [
+      { "scenario": "secondary", "loaded": true },
+      { "scenario": "mirror", "loaded": true },
+      { "scenario": "blocked", "loaded": false },
+      { "scenario": "stalled", "loaded": false },
+      { "scenario": "live", "loaded": true }
+    ],
+    "pageErrors": []
+  },
+  "assumptions": [
+    "Theater: requested configurable planning preset, not verified current season.",
+    "Wishes: historical scenarios, approximate soft pity, character 50/50 baseline without Capturing Radiance.",
+    "Chronicled: regional character targets only.",
+    "Domain photographs depict regions; individual entrances not verified."
+  ]
+}

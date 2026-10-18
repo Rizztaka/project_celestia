@@ -1,3 +1,4 @@
+import { theaterCastRequestSchema } from '@celestia/api-contracts';
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
@@ -5,6 +6,7 @@ import { UnprocessableError } from '@/core/errors/app-error.js';
 import { successResponse } from '@/core/utils/response.js';
 
 import { EndgameService } from './endgame.service.js';
+import { TheaterCastService } from './theater-cast.service.js';
 
 // -------------------------------------------------------
 // Zod schemas
@@ -24,7 +26,7 @@ const LogTheaterRunSchema = z.object({
   difficulty: z.enum(['EASY', 'NORMAL', 'HARD', 'VISIONARY']),
   actsCleared: z.number().int().min(1).max(10),
   stars: z.number().int().min(0).max(10),
-  cast: z.array(z.string().min(1)).max(12).default([]),
+  cast: z.array(z.string().min(1)).max(26).default([]),
 });
 
 // -------------------------------------------------------
@@ -32,6 +34,21 @@ const LogTheaterRunSchema = z.object({
 // -------------------------------------------------------
 
 export class EndgameController {
+  previewTheaterCast = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const parsed = theaterCastRequestSchema.safeParse(req.body);
+      if (!parsed.success)
+        throw new UnprocessableError(parsed.error.errors.map((e) => e.message).join('; '));
+      res.json(
+        successResponse(
+          await new TheaterCastService().preview(req.user!.id, parsed.data),
+          'Theater cast planning preview.',
+        ),
+      );
+    } catch (err) {
+      next(err);
+    }
+  };
   private readonly service: EndgameService;
 
   constructor() {

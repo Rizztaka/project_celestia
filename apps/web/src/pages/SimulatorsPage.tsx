@@ -1,712 +1,425 @@
-/**
- * SimulatorsPage — Gacha Pull Simulator (Milestone 6A)
- *
- * Lets users simulate pulls on configured character banners without
- * spending real primogems. Tracks pity state in local component state
- * (Zustand is for UI preferences only — pity is session-ephemeral).
- *
- * Architecture:
- *   - fetchBanners  → GET /simulators/banners       (TanStack Query)
- *   - simulatePulls → POST /simulators/simulate-pulls (direct mutation, no cache)
- *   - Pity state   → useState (ephemeral, resets on page reload)
- */
-
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 
+import { CdnArtwork } from '../components/CdnArtwork';
 import { GenshinAvatar } from '../components/GenshinAvatar';
+import { GenshinWeaponIcon } from '../components/GenshinWeaponIcon';
 import { type Banner, fetchBanners, type PullResultItem, simulatePulls } from '../lib/api';
-
-// -------------------------------------------------------
-// Utilities
-// -------------------------------------------------------
-
-function formatName(key: string): string {
-  return key.replace(/([A-Z])/g, ' $1').trim();
-}
-
-function getDaysLeft(endDate: string): string {
-  const now = new Date();
-  const end = new Date(endDate);
-  const diff = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  if (diff <= 0) return 'Ended';
-  if (diff === 1) return '1 day left';
-  return `${diff} days left`;
-}
-
-// -------------------------------------------------------
-// Rarity colours and labels
-// -------------------------------------------------------
-
-const RARITY_META: Record<
-  PullResultItem['type'],
-  {
-    bg: string;
-    border: string;
-    text: string;
-    glow: string;
-    shimmer: string;
-    label: string;
-    stars: number;
-  }
-> = {
-  '5_STAR': {
-    bg: 'bg-amber-500/20',
-    border: 'border-amber-400/60',
-    text: 'text-amber-300',
-    glow: 'shadow-[0_0_24px_rgba(251,191,36,0.4)]',
-    shimmer: 'from-amber-400/0 via-amber-300/30 to-amber-400/0',
-    label: '5★',
-    stars: 5,
-  },
-  '4_STAR': {
-    bg: 'bg-violet-500/20',
-    border: 'border-violet-400/60',
-    text: 'text-violet-300',
-    glow: 'shadow-[0_0_18px_rgba(167,139,250,0.35)]',
-    shimmer: 'from-violet-400/0 via-violet-300/20 to-violet-400/0',
-    label: '4★',
-    stars: 4,
-  },
-  '3_STAR': {
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-400/30',
-    text: 'text-blue-400',
-    glow: '',
-    shimmer: 'from-blue-400/0 via-blue-300/10 to-blue-400/0',
-    label: '3★',
-    stars: 3,
-  },
-};
-
-// -------------------------------------------------------
-// PullCard — single result in the tray
-// -------------------------------------------------------
-
-function PullCard({ item, index }: { item: PullResultItem; index: number }) {
-  const meta = RARITY_META[item.type];
-  const name = formatName(item.itemKey);
-  const initials = name
-    .split(' ')
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
-  const isSpecial = item.type !== '3_STAR';
-
-  return (
-    <div
-      className={`relative flex flex-col items-center gap-2 rounded-xl border p-3 text-center transition-all duration-500 ${meta.bg} ${meta.border} ${meta.glow}`}
-      style={{ animationDelay: `${index * 60}ms` }}
-    >
-      {/* Shimmer sweep on 4/5-star */}
-      {isSpecial && (
-        <div
-          className={`pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_0.8s_ease-out_forwards] rounded-xl bg-gradient-to-r ${meta.shimmer}`}
-          style={{ animationDelay: `${index * 60}ms` }}
-        />
-      )}
-
-      {/* Featured badge */}
-      {item.isFeatured && item.type !== '3_STAR' && (
-        <span className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full border border-amber-500/40 bg-zinc-950 px-2 py-px text-[9px] font-bold uppercase tracking-widest text-amber-400">
-          Featured
-        </span>
-      )}
-
-      {/* Avatar */}
-      <div
-        className={`font-display flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border text-sm font-bold ${meta.bg} ${meta.border} ${meta.text}`}
-      >
-        {initials}
-      </div>
-
-      {/* Name */}
-      <p className={`w-full truncate text-[11px] font-semibold ${meta.text}`}>{name}</p>
-
-      {/* Star rating */}
-      <p className="text-[10px] font-bold tracking-widest text-zinc-600">{meta.label}</p>
-    </div>
-  );
-}
-
-// -------------------------------------------------------
-// PullHistory — full log beneath the simulator
-// -------------------------------------------------------
-
-function PullHistoryRow({ item, pullNumber }: { item: PullResultItem; pullNumber: number }) {
-  const meta = RARITY_META[item.type];
-  const name = formatName(item.itemKey);
-
-  if (item.type === '3_STAR') return null; // hide 3-stars from history
-
-  return (
-    <div
-      className={`flex items-center gap-3 rounded-xl border px-4 py-2.5 ${meta.bg} ${meta.border} ${meta.glow}`}
-    >
-      <span className={`font-display shrink-0 text-xs font-bold ${meta.text}`}>#{pullNumber}</span>
-      <div
-        className={`font-display flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border text-[10px] font-bold ${meta.bg} ${meta.border} ${meta.text}`}
-      >
-        {name
-          .split(' ')
-          .map((w) => w[0])
-          .slice(0, 2)
-          .join('')
-          .toUpperCase()}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className={`truncate text-sm font-semibold ${meta.text}`}>{name}</p>
-        {item.isFeatured && <p className="text-[10px] text-amber-500">Featured</p>}
-      </div>
-      <span className={`shrink-0 text-xs font-bold ${meta.text}`}>{meta.label}</span>
-    </div>
-  );
-}
-
-// -------------------------------------------------------
-// Pity tracker display
-// -------------------------------------------------------
-
-function PityBar({
-  label,
-  current,
-  max,
-  color,
-}: {
-  label: string;
-  current: number;
-  max: number;
-  color: string;
-}) {
-  const pct = Math.min((current / max) * 100, 100);
-  const isSoftPity = label === '5★' && current >= 74;
-
-  return (
-    <div className="flex flex-col gap-1.5">
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-          {label} Pity
-        </span>
-        <span
-          className={`font-display text-sm font-bold ${isSoftPity ? 'text-amber-400' : 'text-white'}`}
-        >
-          {current} / {max}
-          {isSoftPity && (
-            <span className="ml-1.5 text-[10px] font-semibold text-amber-500">Soft Pity!</span>
-          )}
-        </span>
-      </div>
-      <div className="h-2 w-full overflow-hidden rounded-full bg-white/5">
-        <div
-          className={`h-full rounded-full transition-all duration-500 ${color} ${isSoftPity ? 'animate-pulse' : ''}`}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
-// -------------------------------------------------------
-// Stats panel
-// -------------------------------------------------------
-
-interface PullStats {
-  total: number;
-  fiveStars: number;
-  fourStars: number;
-  threeStars: number;
-  featuredFiveStars: number;
-}
-
-function StatsPanel({ stats }: { stats: PullStats }) {
-  const fiveStarRate = stats.total > 0 ? ((stats.fiveStars / stats.total) * 100).toFixed(1) : '0.0';
-  const fourStarRate = stats.total > 0 ? ((stats.fourStars / stats.total) * 100).toFixed(1) : '0.0';
-
-  return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-      {[
-        { label: 'Total Pulls', value: stats.total, color: 'text-white' },
-        {
-          label: '5★ Pulled',
-          value: `${stats.fiveStars} (${fiveStarRate}%)`,
-          color: 'text-amber-400',
-        },
-        {
-          label: '4★ Pulled',
-          value: `${stats.fourStars} (${fourStarRate}%)`,
-          color: 'text-violet-400',
-        },
-        { label: 'Featured 5★', value: stats.featuredFiveStars, color: 'text-amber-300' },
-      ].map((stat) => (
-        <div
-          key={stat.label}
-          className="glass-panel flex flex-col gap-1 rounded-xl border border-white/5 p-4"
-        >
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
-            {stat.label}
-          </p>
-          <p className={`font-display text-xl font-bold ${stat.color}`}>{stat.value}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// -------------------------------------------------------
-// Banner selector card
-// -------------------------------------------------------
-
-function BannerCard({
-  banner,
-  selected,
-  onSelect,
-}: {
-  banner: Banner;
-  selected: boolean;
-  onSelect: () => void;
-}) {
-  const featuredName = formatName(banner.fiveStarKey);
-  const daysLeft = getDaysLeft(banner.endDate);
-  const isExpired = daysLeft === 'Ended';
-
-  return (
-    <button
-      onClick={onSelect}
-      aria-pressed={selected}
-      disabled={isExpired}
-      className={`glass-panel hover-lift relative w-full cursor-pointer rounded-2xl border p-5 text-left transition-all duration-300 ${
-        selected
-          ? 'border-accent-500/60 shadow-[0_0_24px_rgba(99,102,241,0.2)]'
-          : 'border-white/5 hover:border-white/15'
-      } ${isExpired ? 'cursor-not-allowed opacity-50' : ''}`}
-    >
-      {/* Selected indicator */}
-      {selected && (
-        <span className="bg-accent-500 absolute right-4 top-4 flex h-5 w-5 items-center justify-center rounded-full">
-          <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-          </svg>
-        </span>
-      )}
-
-      {/* Top row: name + days left */}
-      <div className="mb-3 flex items-start justify-between gap-2 pr-6">
-        <div>
-          <p className="font-display text-base font-bold text-white">{banner.name}</p>
-          <p className="mt-0.5 text-xs text-zinc-500">Limited Character Event Wish</p>
-        </div>
-      </div>
-
-      {/* 5-star highlight */}
-      <div className="mb-3 flex items-center gap-2.5 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2.5">
-        <GenshinAvatar characterKey={banner.fiveStarKey} />
-        <div>
-          <p className="text-sm font-bold text-amber-300">{featuredName}</p>
-          <p className="text-[10px] text-amber-600">5★ Featured</p>
-        </div>
-      </div>
-
-      {/* 4-stars */}
-      <div className="flex flex-wrap gap-1.5">
-        {banner.fourStarKeys.map((key) => (
-          <span
-            key={key}
-            className="rounded-full border border-violet-500/20 bg-violet-500/10 px-2 py-0.5 text-[10px] font-semibold text-violet-400"
-          >
-            <GenshinAvatar characterKey={key} size="sm" />
-            {formatName(key)}
-          </span>
-        ))}
-      </div>
-
-      {/* Days left */}
-      <div className="mt-3 flex items-center gap-1.5">
-        <svg
-          className="h-3 w-3 text-zinc-600"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-        <span
-          className={`text-[11px] font-semibold ${isExpired ? 'text-red-500' : 'text-zinc-500'}`}
-        >
-          {daysLeft}
-        </span>
-      </div>
-    </button>
-  );
-}
-
-// -------------------------------------------------------
-// Skeleton
-// -------------------------------------------------------
-
-function BannerSkeleton() {
-  return (
-    <div className="glass-panel animate-pulse rounded-2xl border border-white/5 p-5">
-      <div className="mb-3 h-5 w-3/4 rounded-lg bg-white/5" />
-      <div className="mb-3 h-14 rounded-xl bg-white/5" />
-      <div className="flex gap-1.5">
-        <div className="h-5 w-16 rounded-full bg-white/5" />
-        <div className="h-5 w-16 rounded-full bg-white/5" />
-        <div className="h-5 w-16 rounded-full bg-white/5" />
-      </div>
-    </div>
-  );
-}
-
-// -------------------------------------------------------
-// Nav
-// -------------------------------------------------------
-
-// -------------------------------------------------------
-// Main Page
-// -------------------------------------------------------
+import { artworkDisplayName } from '../lib/artwork';
+import { visualAssets } from '../lib/cdn-resolver';
 
 interface PityState {
   pity5: number;
   pity4: number;
   guaranteed5: boolean;
   guaranteed4: boolean;
+  fatePoints: 0 | 1;
+  pathTargetKey?: string;
 }
-
+interface PullStats {
+  total: number;
+  five: number;
+  four: number;
+  featured: number;
+}
+const emptyStats: PullStats = { total: 0, five: 0, four: 0, featured: 0 };
+function initialPity(banner: Banner): PityState {
+  return {
+    pity5: 0,
+    pity4: 0,
+    guaranteed5: false,
+    guaranteed4: false,
+    fatePoints: 0,
+    ...(banner.fatePointCap ? { pathTargetKey: banner.fiveStarKey } : {}),
+  };
+}
+function WishIcon({
+  itemKey,
+  weapon,
+  size = 'md',
+}: {
+  itemKey: string;
+  weapon: boolean;
+  size?: 'sm' | 'md' | 'lg';
+}) {
+  return weapon ? (
+    <GenshinWeaponIcon weaponKey={itemKey} size={size} />
+  ) : (
+    <GenshinAvatar characterKey={itemKey} size={size} />
+  );
+}
+function BannerCard({
+  banner,
+  selected,
+  disabled,
+  onSelect,
+}: {
+  banner: Banner;
+  selected: boolean;
+  disabled: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={selected}
+      disabled={disabled}
+      onClick={onSelect}
+      className={`group relative overflow-hidden rounded-2xl border text-left shadow-lg transition hover:-translate-y-0.5 disabled:opacity-60 ${selected ? 'border-amber-300/80 ring-1 ring-amber-300/40' : 'border-white/15 hover:border-amber-300/40'}`}
+    >
+      <div
+        className={`relative flex min-h-40 items-center justify-between gap-3 overflow-hidden bg-gradient-to-br p-5 ${banner.type === 'WEAPON' ? 'from-indigo-800 via-violet-950 to-zinc-950' : banner.type === 'CHRONICLED' ? 'from-teal-700 via-emerald-950 to-zinc-950' : 'from-amber-700 via-rose-950 to-zinc-950'}`}
+      >
+        {banner.type === 'CHARACTER' && visualAssets.characters[banner.fiveStarKey]?.file && (
+          <div aria-hidden="true" className="absolute inset-0 opacity-70">
+            <CdnArtwork
+              key={banner.fiveStarKey}
+              file={visualAssets.characters[banner.fiveStarKey]!.file!}
+              kind="character"
+              alt=""
+              className="object-cover object-right"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/90 via-zinc-950/35 to-transparent" />
+          </div>
+        )}
+        <div className="relative z-10 min-w-0">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200">
+            {banner.type === 'CHARACTER'
+              ? 'Character Event Wish'
+              : banner.type === 'WEAPON'
+                ? 'Weapon Event Wish'
+                : `${banner.region} Chronicled Wish`}
+          </p>
+          <h3 className="mt-2 text-lg font-bold leading-snug text-white">{banner.name}</h3>
+          <p className="mt-2 text-xs text-zinc-200">
+            {selected ? '✓ Selected scenario' : 'Explore this wish'}
+          </p>
+        </div>
+        <div className="flex shrink-0 -space-x-3">
+          {banner.fiveStarKeys.slice(0, 2).map((key) => (
+            <div key={key} className="rotate-3 shadow-xl transition group-hover:rotate-0">
+              <WishIcon itemKey={key} weapon={banner.type === 'WEAPON'} size="lg" />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="bg-zinc-950/80 p-4">
+        <div className="flex flex-wrap gap-2">
+          {(banner.fourStarKeys.length ? banner.fourStarKeys : banner.fiveStarKeys).map((key) => (
+            <span key={key} className="flex items-center gap-1.5 text-[10px] text-zinc-200">
+              <WishIcon itemKey={key} weapon={banner.type === 'WEAPON'} size="sm" />
+              <span>{artworkDisplayName(key)}</span>
+            </span>
+          ))}
+        </div>
+        <p className="mt-3 text-[11px] text-zinc-400">
+          Historical · {banner.startDate} — {banner.endDate}
+        </p>
+      </div>
+    </button>
+  );
+}
+function PityBar({ label, value, maximum }: { label: string; value: number; maximum: number }) {
+  return (
+    <div>
+      <div className="mb-2 flex justify-between text-sm text-zinc-200">
+        <span>{label} pity</span>
+        <strong>
+          {value} / {maximum}
+        </strong>
+      </div>
+      <div className="h-2 overflow-hidden rounded-full bg-white/10">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-violet-500 to-amber-300 transition-all"
+          style={{ width: `${Math.min(100, (value / maximum) * 100)}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+function PullCard({ item, index }: { item: PullResultItem; index: number }) {
+  return (
+    <div
+      className={`motion-safe:animate-fade-in relative flex min-w-0 flex-col items-center gap-2 overflow-hidden rounded-xl border p-2 text-center ${item.type === '5_STAR' ? 'border-amber-300/70 bg-amber-500/15 shadow-[0_0_24px_rgba(251,191,36,0.2)]' : item.type === '4_STAR' ? 'border-purple-400/60 bg-purple-500/10' : 'border-sky-500/25 bg-sky-500/5'}`}
+      style={{ animationDelay: `${index * 60}ms` }}
+    >
+      <WishIcon itemKey={item.itemKey} weapon={item.itemKind === 'weapon'} size="lg" />
+      <p className="w-full break-words text-xs font-semibold text-zinc-100">
+        {artworkDisplayName(item.itemKey)}
+      </p>
+      <span
+        className={`text-[10px] ${item.type === '5_STAR' ? 'text-amber-200' : 'text-purple-200'}`}
+      >
+        {item.type[0]}★{item.isFeatured ? ' · Featured' : ''}
+      </span>
+    </div>
+  );
+}
 export default function SimulatorsPage() {
-  // Banner data
-  const { data: banners, isLoading: bannersLoading } = useQuery({
+  const bannersQuery = useQuery({
     queryKey: ['simulators', 'banners'],
     queryFn: fetchBanners,
     staleTime: Infinity,
   });
-
-  // UI state
-  const [selectedBannerId, setSelectedBannerId] = useState<string | null>(null);
-  const [isSimulating, setIsSimulating] = useState(false);
-
-  // Pity per banner (keyed by bannerId)
+  const mutation = useMutation({ mutationFn: simulatePulls });
+  const lock = useRef(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [pityMap, setPityMap] = useState<Record<string, PityState>>({});
-
-  // All historical pull results (all sessions, all banners this page load)
-  const [pullHistory, setPullHistory] = useState<
-    (PullResultItem & { pullNumber: number; bannerId: string })[]
-  >([]);
-  const totalPullCounter = useRef(0);
-
-  // Latest batch (the 1 or 10 just pulled)
-  const [latestBatch, setLatestBatch] = useState<PullResultItem[]>([]);
-  const [latestBatchKey, setLatestBatchKey] = useState(0);
-
-  // Aggregate stats per selected banner
   const [statsMap, setStatsMap] = useState<Record<string, PullStats>>({});
-
-  // Auto-select first banner once loaded using a derived initializer pattern
-  // instead of useEffect to avoid cascading renders (react-hooks/set-state-in-effect)
-  const effectiveBannerId =
-    banners?.find((b) => b.bannerId === selectedBannerId && getDaysLeft(b.endDate) !== 'Ended')
-      ?.bannerId ??
-    banners?.find((b) => getDaysLeft(b.endDate) !== 'Ended')?.bannerId ??
-    null;
-
-  const selectedBanner = banners?.find((b) => b.bannerId === effectiveBannerId) ?? null;
-  const currentPity = effectiveBannerId
-    ? (pityMap[effectiveBannerId] ?? { pity5: 0, pity4: 0, guaranteed5: false, guaranteed4: false })
-    : null;
-  const currentStats = effectiveBannerId
-    ? (statsMap[effectiveBannerId] ?? {
-        total: 0,
-        fiveStars: 0,
-        fourStars: 0,
-        threeStars: 0,
-        featuredFiveStars: 0,
-      })
-    : null;
-
-  async function handlePull(count: 1 | 10) {
-    if (!effectiveBannerId || !currentPity || isSimulating) return;
-    // Capture as non-null const — TS cannot narrow across setState callbacks
-    const bannerId: string = effectiveBannerId;
-    setIsSimulating(true);
-
+  const [history, setHistory] = useState<(PullResultItem & { bannerId: string })[]>([]);
+  const [batch, setBatch] = useState<{ bannerId: string; items: PullResultItem[] } | null>(null);
+  const banner =
+    bannersQuery.data?.find((b) => b.bannerId === selectedId) ?? bannersQuery.data?.[0];
+  const pity = banner ? (pityMap[banner.bannerId] ?? initialPity(banner)) : null;
+  const stats = banner ? (statsMap[banner.bannerId] ?? emptyStats) : emptyStats;
+  async function pull(count: 1 | 10) {
+    if (!banner || !pity || lock.current) return;
+    lock.current = true;
+    const bannerId = banner.bannerId;
     try {
-      const result = await simulatePulls({
+      const result = await mutation.mutateAsync({
         bannerId,
         count,
-        currentPity5: currentPity.pity5,
-        currentPity4: currentPity.pity4,
-        guaranteed5: currentPity.guaranteed5,
-        guaranteed4: currentPity.guaranteed4,
+        currentPity5: pity.pity5,
+        currentPity4: pity.pity4,
+        guaranteed5: pity.guaranteed5,
+        guaranteed4: pity.guaranteed4,
+        fatePoints: pity.fatePoints,
+        ...(pity.pathTargetKey ? { pathTargetKey: pity.pathTargetKey } : {}),
       });
-
-      // Update pity
-      setPityMap((prev) => ({
-        ...prev,
+      setPityMap((previous) => ({
+        ...previous,
         [bannerId]: {
           pity5: result.endPity5,
           pity4: result.endPity4,
           guaranteed5: result.endGuaranteed5,
           guaranteed4: result.endGuaranteed4,
+          fatePoints: result.endFatePoints,
+          pathTargetKey: pity.pathTargetKey,
         },
       }));
-
-      // Update stats
-      setStatsMap((prev) => {
-        const old = prev[bannerId] ?? {
-          total: 0,
-          fiveStars: 0,
-          fourStars: 0,
-          threeStars: 0,
-          featuredFiveStars: 0,
-        };
+      setStatsMap((previous) => {
+        const old = previous[bannerId] ?? emptyStats;
         return {
-          ...prev,
+          ...previous,
           [bannerId]: {
             total: old.total + result.pulls.length,
-            fiveStars: old.fiveStars + result.pulls.filter((p) => p.type === '5_STAR').length,
-            fourStars: old.fourStars + result.pulls.filter((p) => p.type === '4_STAR').length,
-            threeStars: old.threeStars + result.pulls.filter((p) => p.type === '3_STAR').length,
-            featuredFiveStars:
-              old.featuredFiveStars +
-              result.pulls.filter((p) => p.type === '5_STAR' && p.isFeatured).length,
+            five: old.five + result.pulls.filter((p) => p.type === '5_STAR').length,
+            four: old.four + result.pulls.filter((p) => p.type === '4_STAR').length,
+            featured:
+              old.featured + result.pulls.filter((p) => p.type === '5_STAR' && p.isFeatured).length,
           },
         };
       });
-
-      // Append to history with pull numbers
-      const numbered = result.pulls.map((p) => {
-        totalPullCounter.current += 1;
-        return { ...p, pullNumber: totalPullCounter.current, bannerId };
-      });
-      setPullHistory((prev) => [...numbered, ...prev]);
-
-      // Show latest batch
-      setLatestBatch(result.pulls);
-      setLatestBatchKey((k) => k + 1);
-    } catch (err) {
-      console.error('Simulation failed:', err);
+      setHistory((previous) =>
+        [
+          ...result.pulls.filter((p) => p.type !== '3_STAR').map((p) => ({ ...p, bannerId })),
+          ...previous,
+        ].slice(0, 1000),
+      );
+      setBatch({ bannerId, items: result.pulls });
+    } catch {
+      /* TanStack Query exposes the error below; preserve the previous state. */
     } finally {
-      setIsSimulating(false);
+      lock.current = false;
     }
   }
-
-  function handleReset() {
-    if (!effectiveBannerId) return;
-    setPityMap((prev) => ({
-      ...prev,
-      [effectiveBannerId]: { pity5: 0, pity4: 0, guaranteed5: false, guaranteed4: false },
-    }));
-    setStatsMap((prev) => ({
-      ...prev,
-      [effectiveBannerId]: {
-        total: 0,
-        fiveStars: 0,
-        fourStars: 0,
-        threeStars: 0,
-        featuredFiveStars: 0,
-      },
-    }));
-    setPullHistory((prev) => prev.filter((p) => p.bannerId !== effectiveBannerId));
-    setLatestBatch([]);
+  function reset() {
+    if (!banner || lock.current) return;
+    setPityMap((previous) => ({ ...previous, [banner.bannerId]: initialPity(banner) }));
+    setStatsMap((previous) => ({ ...previous, [banner.bannerId]: emptyStats }));
+    setHistory((previous) => previous.filter((p) => p.bannerId !== banner.bannerId));
+    setBatch(null);
+    mutation.reset();
   }
-
-  const notableHistory = pullHistory.filter(
-    (p) => p.bannerId === effectiveBannerId && p.type !== '3_STAR',
-  );
-
   return (
-    <div className="relative min-h-screen overflow-hidden text-zinc-300">
-      <main
-        id="companion-content"
-        tabIndex={-1}
-        className="animate-fade-in relative z-10 mx-auto max-w-5xl px-6 py-10"
-      >
-        {/* Page header */}
-        <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold tracking-tight text-white">
-            Pull <span className="text-gradient">Simulator</span>
-          </h1>
-          <p className="mt-2 text-base text-zinc-400">
-            Explore simulated pulls. Banner and probability assumptions are not verified current
-            game guidance; results are fictional and do not predict your account. Pity resets when
-            you leave the page.
-          </p>
-        </div>
-
-        {/* Banner selection */}
-        <section className="mb-8">
-          <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">
-            Select Banner
-          </h2>
-          {bannersLoading ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <BannerSkeleton />
-              <BannerSkeleton />
-            </div>
-          ) : banners && banners.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {banners.map((b) => (
-                <BannerCard
-                  key={b.bannerId}
-                  banner={b}
-                  selected={effectiveBannerId === b.bannerId}
-                  onSelect={() => setSelectedBannerId(b.bannerId)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="glass-panel flex items-center justify-center rounded-2xl border border-white/5 py-12">
-              <p className="text-sm text-zinc-500">No active banners found.</p>
-            </div>
-          )}
-        </section>
-
-        {selectedBanner && currentPity && (
-          <>
-            {/* Pity state */}
-            <section className="glass-panel mb-6 rounded-2xl border border-white/5 p-6">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xs font-bold uppercase tracking-widest text-zinc-500">
-                  Pity Tracker — {selectedBanner.name}
-                </h2>
-                <div className="flex items-center gap-3">
-                  {currentPity.guaranteed5 && (
-                    <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-amber-400">
-                      5★ Guaranteed
-                    </span>
-                  )}
-                  {currentPity.guaranteed4 && (
-                    <span className="rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-violet-400">
-                      4★ Guaranteed
-                    </span>
-                  )}
-                  <button
-                    onClick={handleReset}
-                    className="text-[11px] font-semibold text-zinc-600 transition-colors hover:text-zinc-400"
-                  >
-                    Reset
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-col gap-4">
-                <PityBar
-                  label="5★"
-                  current={currentPity.pity5}
-                  max={90}
-                  color="bg-gradient-to-r from-amber-500 to-yellow-400"
-                />
-                <PityBar
-                  label="4★"
-                  current={currentPity.pity4}
-                  max={10}
-                  color="bg-gradient-to-r from-violet-500 to-indigo-400"
-                />
-              </div>
-            </section>
-
-            {/* Pull buttons */}
-            <section className="mb-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <button
-                id="btn-pull-1"
-                onClick={() => handlePull(1)}
-                disabled={isSimulating}
-                className="from-accent-500 font-display shadow-accent-500/25 hover:shadow-accent-500/40 group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r to-indigo-600 px-8 py-4 text-base font-bold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                    />
-                  </svg>
-                  {isSimulating ? 'Wishing…' : 'Wish ×1'}
-                </span>
-              </button>
-
-              <button
-                id="btn-pull-10"
-                onClick={() => handlePull(10)}
-                disabled={isSimulating}
-                className="font-display group relative w-full overflow-hidden rounded-2xl border border-amber-500/30 bg-amber-500/10 px-8 py-4 text-base font-bold text-amber-300 shadow-lg shadow-amber-500/10 transition-all duration-300 hover:scale-[1.02] hover:border-amber-400/50 hover:bg-amber-500/20 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                  {isSimulating ? 'Wishing…' : 'Wish ×10'}
-                </span>
-              </button>
-            </section>
-
-            {/* Latest batch result tray */}
-            {latestBatch.length > 0 && (
-              <section key={latestBatchKey} className="animate-fade-in mb-6">
-                <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-zinc-500">
-                  Latest Pull
-                </h2>
-                <div
-                  className={`grid gap-2 ${latestBatch.length === 1 ? 'mx-auto max-w-[120px] grid-cols-1' : 'grid-cols-5 sm:grid-cols-10'}`}
-                >
-                  {latestBatch.map((item, i) => (
-                    <PullCard key={item.id} item={item} index={i} />
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Stats */}
-            {currentStats && currentStats.total > 0 && (
-              <section className="animate-fade-in mb-6">
-                <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-zinc-500">
-                  Session Statistics
-                </h2>
-                <StatsPanel stats={currentStats} />
-              </section>
-            )}
-
-            {/* Notable history (4★ and 5★ only) */}
-            {notableHistory.length > 0 && (
-              <section className="animate-fade-in">
-                <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-zinc-500">
-                  Notable Pulls (4★ &amp; 5★)
-                </h2>
-                <div className="flex flex-col gap-2">
-                  {notableHistory.slice(0, 20).map((item) => (
-                    <PullHistoryRow
-                      key={`${item.id}-${item.pullNumber}`}
-                      item={item}
-                      pullNumber={item.pullNumber}
-                    />
-                  ))}
-                  {notableHistory.length > 20 && (
-                    <p className="text-center text-xs text-zinc-600">
-                      Showing most recent 20 of {notableHistory.length} notable pulls.
-                    </p>
-                  )}
-                </div>
-              </section>
-            )}
-          </>
+    <main
+      id="companion-content"
+      tabIndex={-1}
+      className="mx-auto max-w-6xl px-4 py-8 text-zinc-300 sm:px-6"
+    >
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
+        Wish workshop
+      </p>
+      <h1 className="mt-2 text-3xl font-bold text-white">Pull Simulator</h1>
+      <p className="mt-3 max-w-3xl text-sm text-zinc-400">
+        Explore historical Natlan wishes and a Mondstadt Chronicled character pool. Fictional
+        results use an approximate soft-pity model and a basic character 50/50 without Capturing
+        Radiance. Each scenario has independent session pity; leaving this page resets it.
+      </p>
+      <section aria-label="Select banner" className="mt-6 grid gap-4 md:grid-cols-2">
+        {bannersQuery.isPending && <p role="status">Loading wish scenarios…</p>}
+        {bannersQuery.isError && (
+          <div role="alert">
+            {bannersQuery.error.message}
+            <button className="ml-3 underline" onClick={() => void bannersQuery.refetch()}>
+              Retry
+            </button>
+          </div>
         )}
-      </main>
-
-      {/* Ambient gradient orbs */}
-      <div className="pointer-events-none fixed inset-0 z-0">
-        <div className="bg-accent-500/5 absolute -top-40 left-1/4 h-[500px] w-[500px] rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-1/4 h-[400px] w-[400px] rounded-full bg-amber-500/5 blur-[100px]" />
-      </div>
-    </div>
+        {bannersQuery.data?.map((b) => (
+          <BannerCard
+            key={b.bannerId}
+            banner={b}
+            selected={b.bannerId === banner?.bannerId}
+            disabled={mutation.isPending}
+            onSelect={() => {
+              setSelectedId(b.bannerId);
+              mutation.reset();
+            }}
+          />
+        ))}
+      </section>
+      {banner && pity && (
+        <>
+          <section
+            aria-label="Pity tracker"
+            className="mt-8 rounded-2xl border border-white/15 bg-zinc-950/70 p-5"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="text-lg font-semibold text-white">{banner.name}</h2>
+              <button
+                type="button"
+                disabled={mutation.isPending}
+                className="rounded-lg border border-white/20 px-3 py-2 text-xs disabled:opacity-50"
+                onClick={reset}
+              >
+                Reset scenario
+              </button>
+            </div>
+            <div className="mt-5 grid gap-5 sm:grid-cols-2">
+              <PityBar label="5★" value={pity.pity5} maximum={banner.hardPity} />
+              <PityBar label="4★" value={pity.pity4} maximum={banner.type === 'WEAPON' ? 9 : 10} />
+            </div>
+            {!!banner.fatePointCap && (
+              <div className="mt-5 rounded-xl border border-amber-400/25 bg-amber-500/5 p-4">
+                <label className="text-sm text-amber-100">
+                  {banner.type === 'WEAPON'
+                    ? 'Epitomized Path · 5.0+ rules'
+                    : 'Chronicled Path · Mondstadt characters'}
+                  <select
+                    aria-label="Path target"
+                    disabled={mutation.isPending}
+                    className="mt-2 w-full rounded-lg border border-white/20 bg-zinc-900 p-2 text-sm text-white"
+                    value={pity.pathTargetKey}
+                    onChange={(e) =>
+                      setPityMap((previous) => ({
+                        ...previous,
+                        [banner.bannerId]: {
+                          ...pity,
+                          pathTargetKey: e.target.value,
+                          fatePoints: 0,
+                        },
+                      }))
+                    }
+                  >
+                    {banner.fiveStarKeys.map((key) => (
+                      <option key={key} value={key}>
+                        {visualAssets.weapons[key]?.name ?? artworkDisplayName(key)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <p className="mt-2 text-sm text-amber-200">
+                  Fate Points: {pity.fatePoints} / 1
+                  {pity.fatePoints === 1 ? ' · Next 5★ guarantees your selected target' : ''}
+                </p>
+                <p className="mt-1 text-xs text-zinc-400">
+                  Changing your target clears Fate Points and retains pity. This simulator keeps
+                  scenarios separate.
+                </p>
+              </div>
+            )}
+            {banner.type !== 'CHRONICLED' && (
+              <p className="mt-3 text-xs text-zinc-300">
+                Next 5★:{' '}
+                {pity.guaranteed5
+                  ? 'featured guarantee'
+                  : banner.type === 'WEAPON'
+                    ? '75% featured pool'
+                    : '50/50 baseline'}{' '}
+                · Next 4★: {pity.guaranteed4 ? 'featured guarantee' : 'normal odds'}
+              </p>
+            )}
+            <a
+              href={banner.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-block text-xs text-indigo-200 underline"
+            >
+              Historical wish source
+            </a>
+          </section>
+          <div className="my-6 flex gap-3">
+            {([1, 10] as const).map((count) => (
+              <button
+                type="button"
+                id={`btn-pull-${count}`}
+                key={count}
+                disabled={mutation.isPending}
+                onClick={() => void pull(count)}
+                className={`flex-1 rounded-xl border py-4 text-lg font-bold transition disabled:opacity-50 ${count === 10 ? 'border-amber-300/50 bg-gradient-to-r from-amber-600 to-orange-800 text-white shadow-lg shadow-amber-600/10' : 'border-violet-400/40 bg-violet-500/15 text-violet-100'}`}
+              >
+                {mutation.isPending ? 'Wishing…' : `Wish ×${count}`}
+              </button>
+            ))}
+          </div>
+          {mutation.isError && (
+            <p
+              role="alert"
+              className="mb-5 rounded-xl border border-red-400/30 bg-red-500/10 p-4 text-red-200"
+            >
+              {mutation.error.message} Your pity was preserved; try again.
+            </p>
+          )}
+          {batch?.bannerId === banner.bannerId && (
+            <section aria-label="Latest pull" aria-live="polite">
+              <h2 className="mb-3 text-lg font-semibold text-white">
+                {batch.items.some((p) => p.type === '5_STAR')
+                  ? '✦ A golden wish!'
+                  : 'Your latest wish'}
+              </h2>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+                {batch.items.map((item, index) => (
+                  <PullCard key={item.id} item={item} index={index} />
+                ))}
+              </div>
+            </section>
+          )}
+          <dl className="my-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              ['Total wishes', stats.total],
+              ['5★ obtained', stats.five],
+              ['4★ obtained', stats.four],
+              ['Featured 5★', stats.featured],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                <dt className="text-xs text-zinc-400">{label}</dt>
+                <dd className="mt-1 text-2xl font-bold text-amber-100">{value}</dd>
+              </div>
+            ))}
+          </dl>
+          <details className="rounded-xl border border-white/10 p-4">
+            <summary className="cursor-pointer text-sm text-zinc-300">
+              Notable pulls · latest 20
+            </summary>
+            <div className="mt-3 space-y-2">
+              {history
+                .filter((p) => p.bannerId === banner.bannerId)
+                .slice(0, 20)
+                .map((p) => (
+                  <div key={p.id} className="flex items-center gap-3 rounded-lg bg-white/5 p-2">
+                    <WishIcon itemKey={p.itemKey} weapon={p.itemKind === 'weapon'} size="sm" />
+                    <span className="text-sm">
+                      {artworkDisplayName(p.itemKey)} · {p.type[0]}★
+                      {p.isFeatured ? ' · Featured' : ''}
+                    </span>
+                  </div>
+                ))}
+            </div>
+          </details>
+        </>
+      )}
+    </main>
   );
 }

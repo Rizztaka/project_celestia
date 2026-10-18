@@ -6,7 +6,9 @@ import { Link } from 'react-router-dom';
 import { captureSession } from '../lib/account-session';
 import { fetchFarmingIntelligence } from '../lib/api';
 import { materialCatalogEntry } from '../lib/catalog';
+import BossAtlas from './BossAtlas';
 import DomainSchedule from './DomainSchedule';
+import { GenshinMaterialIcon } from './GenshinMaterialIcon';
 
 const input = 'mt-1 w-full rounded-lg border border-white/15 bg-zinc-900 p-2 text-sm text-white';
 const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -84,6 +86,7 @@ export default function FarmingPanel() {
         weekday={result?.serverWeekday ?? null}
         goalDomainKeys={result?.estimates.map((estimate) => estimate.domain.domainKey)}
       />
+      <BossAtlas />
       <details className="mt-5 border-t border-white/10 pt-4">
         <summary className="cursor-pointer text-sm text-zinc-300">
           Optional resin estimates &amp; pacing
@@ -138,6 +141,11 @@ export default function FarmingPanel() {
                 <ul className="mt-3 divide-y divide-white/10">
                   {result.estimates.map((estimate) => (
                     <li key={estimate.domain.domainKey} className="py-3 text-sm">
+                      <div className="mb-2 flex flex-wrap gap-2">
+                        {estimate.materialKeys.map((key) => (
+                          <GenshinMaterialIcon key={key} itemKey={key} size="sm" />
+                        ))}
+                      </div>
                       <p className="font-medium text-zinc-200">{estimate.domain.name}</p>
                       <p className="mt-1 text-zinc-400">{projectionText(estimate.projection)}</p>
                       {!!estimate.unrecordedStockKeys?.length && (

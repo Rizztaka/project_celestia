@@ -5,7 +5,7 @@ import { pullSimulatorController } from './pull-simulator.controller.js';
 
 const router = Router();
 
-// Retrieve current active banners
+// Retrieve historical simulator scenarios
 router.get('/simulators/banners', requireAuth, pullSimulatorController.getBanners);
 
 // Run simulation

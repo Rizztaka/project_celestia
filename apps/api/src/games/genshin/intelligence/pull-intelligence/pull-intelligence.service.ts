@@ -24,7 +24,7 @@ import { explainPullValue } from './pull-intelligence.explainer.js';
 const require = createRequire(import.meta.url);
 
 const { banners: ALL_BANNERS } = require('../../static/active-banners.json') as {
-  banners: ActiveBanner[];
+  banners: (ActiveBanner & { historical?: boolean; startDate?: string })[];
 };
 
 const { templates: META_TEMPLATES } = require('../../static/team-templates.json') as {
@@ -114,9 +114,15 @@ export class PullIntelligenceService {
       // Non-fatal: if roster is empty or CI fails, synergy scores fall back to 0
     }
 
-    // ── 6. Filter banners to only non-expired ones ────────────────────────
+    // ── 6. Only currently available character wishes, excluding simulator history ────────────────────────
     const now = new Date();
-    const activeBanners = ALL_BANNERS.filter((b) => new Date(b.endDate) > now);
+    const activeBanners = ALL_BANNERS.filter(
+      (b) =>
+        !b.historical &&
+        b.type === 'CHARACTER' &&
+        (!b.startDate || new Date(b.startDate) <= now) &&
+        new Date(b.endDate) > now,
+    );
 
     // ── 7. Score and explain each banner ─────────────────────────────────
     const breakdowns: PullScoreBreakdown[] = activeBanners.map((banner) =>

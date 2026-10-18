@@ -16,10 +16,12 @@ export function artworkDisplayName(key: string): string {
 export const artworkSizes = { sm: 'h-9 w-9', md: 'h-12 w-12', lg: 'h-16 w-16', xl: 'h-24 w-24' };
 export function rarityTheme(rarity?: number): string {
   if (rarity === 5)
-    return 'border-amber-500/40 bg-gradient-to-br from-amber-600/30 to-zinc-950 text-amber-300';
+    return 'border-amber-400/60 bg-gradient-to-br from-amber-500/80 via-amber-700/60 to-zinc-950 text-amber-200 shadow-amber-500/15';
   if (rarity === 4)
-    return 'border-purple-500/40 bg-gradient-to-br from-purple-600/30 to-zinc-950 text-purple-300';
+    return 'border-purple-400/60 bg-gradient-to-br from-purple-500/80 via-purple-700/60 to-zinc-950 text-purple-200 shadow-purple-500/15';
   if (rarity === 3)
-    return 'border-sky-500/40 bg-gradient-to-br from-sky-600/30 to-zinc-950 text-sky-300';
-  return 'border-zinc-600 bg-gradient-to-br from-zinc-700 to-zinc-950 text-zinc-300';
+    return 'border-sky-400/60 bg-gradient-to-br from-sky-500/80 via-sky-800/60 to-zinc-950 text-sky-200';
+  if (rarity === 2)
+    return 'border-emerald-400/60 bg-gradient-to-br from-emerald-500/70 via-emerald-800/50 to-zinc-950 text-emerald-100';
+  return 'border-slate-400/50 bg-gradient-to-br from-slate-500/70 via-slate-700/50 to-zinc-950 text-slate-200';
 }

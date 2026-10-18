@@ -1,4 +1,6 @@
 import type { HydratedWeeklyBoss } from '../lib/api';
+import { GenshinBossIcon } from './GenshinBossIcon';
+import { GenshinMaterialIcon } from './GenshinMaterialIcon';
 
 // -------------------------------------------------------
 // Helpers
@@ -30,6 +32,7 @@ export default function WeeklyBossCard({ boss, isPending, onToggle }: WeeklyBoss
     >
       {/* Header row */}
       <div className="flex items-start justify-between gap-4">
+        <GenshinBossIcon bossKey={key} />
         <div className="min-w-0 flex-1">
           {/* Defeated badge */}
           {defeated && (
@@ -72,8 +75,9 @@ export default function WeeklyBossCard({ boss, isPending, onToggle }: WeeklyBoss
           {dropKeys.map((dk) => (
             <span
               key={dk}
-              className="rounded border border-white/5 bg-white/[0.02] px-2 py-0.5 text-[10px] text-zinc-600"
+              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.02] p-1 text-xs text-zinc-300"
             >
+              <GenshinMaterialIcon itemKey={dk} size="sm" />
               {formatDropKey(dk)}
             </span>
           ))}

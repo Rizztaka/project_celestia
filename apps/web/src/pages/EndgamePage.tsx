@@ -9,11 +9,12 @@
  *   - TanStack Query: owns server state (history, roster, mutations)
  *   - Local React state: UI state (selected season/cycle, pickers, etc.)
  */
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { GenshinAvatar } from '../components/GenshinAvatar';
+import TheaterCastBuilder from '../components/TheaterCastBuilder';
 import type {
   AbyssCycleResult,
   LogTheaterRunPayload,
@@ -182,9 +183,7 @@ function CharPickerModal({
                       : 'border-white/10 bg-white/5 text-zinc-300'
                   }`}
                 >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10 text-xs font-bold text-zinc-300">
-                    {c.characterKey.slice(0, 2).toUpperCase()}
-                  </span>
+                  <GenshinAvatar characterKey={c.characterKey} size="sm" />
                   <div className="min-w-0">
                     <p className="truncate font-medium">{formatName(c.characterKey)}</p>
                     <p className="text-xs text-zinc-500">Lv.{c.level}</p>
@@ -267,7 +266,7 @@ function TeamSlot({
     <button
       onClick={onClick}
       title={isEmpty ? 'Pick a character' : formatName(charKey)}
-      className={`group relative flex h-12 w-12 items-center justify-center rounded-xl border text-xs font-bold transition-all hover:scale-105 hover:shadow-lg ${
+      className={`group relative flex h-11 w-11 items-center justify-center rounded-xl border text-xs font-bold transition-all hover:scale-105 hover:shadow-lg ${
         saving
           ? 'animate-pulse border-violet-500/60 bg-violet-500/20 text-violet-400'
           : isEmpty
@@ -280,7 +279,7 @@ function TeamSlot({
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
         </svg>
       ) : (
-        <span>{charKey.slice(0, 2).toUpperCase()}</span>
+        <GenshinAvatar characterKey={charKey} size="sm" />
       )}
     </button>
   );
@@ -302,7 +301,7 @@ function HalfRow({
   saving: boolean;
 }) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex flex-col items-start gap-1.5">
       <span className="w-12 shrink-0 text-xs font-medium text-zinc-500">Half {half}</span>
       <div className="flex gap-2">
         {[0, 1, 2, 3].map((i) => (
@@ -411,7 +410,7 @@ function FloorSection({
         </div>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-3 lg:grid-cols-3">
         {CHAMBERS.map((chamber) => (
           <ChamberCard
             key={chamber}
@@ -535,9 +534,7 @@ function CastSlot({
         </svg>
       ) : (
         <>
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/10 text-[11px]">
-            {charKey.slice(0, 2).toUpperCase()}
-          </span>
+          <GenshinAvatar characterKey={charKey} size="sm" />
           <span className="max-w-[48px] truncate leading-none text-amber-300/80">
             {formatName(charKey).split(' ')[0]}
           </span>
@@ -699,8 +696,8 @@ function TheaterView({ roster }: { roster: RosterCharacter[] }) {
   }
 
   const activeDiff = DIFFICULTY_CONFIG[difficulty];
-  // Build 12 cast slots
-  const castSlots = Array.from({ length: 12 }, (_, i) => cast[i]);
+  // Expanded cast slots
+  const castSlots = Array.from({ length: 26 }, (_, i) => cast[i]);
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -793,6 +790,7 @@ function TheaterView({ roster }: { roster: RosterCharacter[] }) {
         </div>
       </div>
 
+      <TheaterCastBuilder roster={roster} />
       {/* Cast Grid */}
       <div className="glass-panel rounded-2xl p-5">
         <div className="mb-4 flex items-center justify-between">
@@ -800,10 +798,10 @@ function TheaterView({ roster }: { roster: RosterCharacter[] }) {
             Principal Cast
           </h3>
           <span className="text-xs text-zinc-600">
-            {cast.filter(Boolean).length} / 12 characters
+            {cast.filter(Boolean).length} / 26 characters
           </span>
         </div>
-        <div className="grid grid-cols-6 gap-2 sm:grid-cols-12">
+        <div className="grid grid-cols-3 gap-2 min-[420px]:grid-cols-4 sm:grid-cols-6 lg:grid-cols-12">
           {castSlots.map((charKey, i) => (
             <CastSlot
               key={i}

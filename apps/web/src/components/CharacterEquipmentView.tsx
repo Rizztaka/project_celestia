@@ -7,6 +7,7 @@ import {
 } from '@celestia/api-contracts';
 
 import { artworkDisplayName } from '../lib/artwork';
+import { GenshinArtifactIcon } from './GenshinArtifactIcon';
 import { GenshinAvatar } from './GenshinAvatar';
 import { GenshinWeaponIcon } from './GenshinWeaponIcon';
 
@@ -72,6 +73,12 @@ function MissingAssignment({
 function ArtifactPiece({ item }: { item: RecordedArtifact }) {
   return (
     <div className="space-y-3">
+      <GenshinArtifactIcon
+        setKey={item.setKey}
+        slotKey={item.slotKey}
+        rarity={item.rarity}
+        size="lg"
+      />
       <div>
         <p className="break-words font-semibold text-white">{recordedName(item.setKey)}</p>
         <p className="break-all text-xs text-zinc-500">{item.setKey}</p>
@@ -177,7 +184,11 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
         </h2>
         {data.weapon.state === 'recorded_assigned' ? (
           <div className="flex items-start gap-4">
-            <GenshinWeaponIcon weaponKey={data.weapon.item.weaponKey} size="lg" />
+            <GenshinWeaponIcon
+              weaponKey={data.weapon.item.weaponKey}
+              refinement={data.weapon.item.refinement}
+              size="lg"
+            />
             <div className="min-w-0">
               <p className="break-words font-semibold text-white">
                 {recordedName(data.weapon.item.weaponKey)}

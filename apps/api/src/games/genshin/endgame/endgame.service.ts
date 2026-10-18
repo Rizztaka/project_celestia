@@ -30,7 +30,7 @@ const MAX_TEAM_SIZE = 4;
 const VALID_DIFFICULTIES: TheaterDifficulty[] = ['EASY', 'NORMAL', 'HARD', 'VISIONARY'];
 const MAX_ACTS_CLEARED = 10;
 const MAX_THEATER_STARS = 10;
-const MAX_CAST_SIZE = 12; // up to 12 chars in a Theater cast
+const MAX_CAST_SIZE = 26; // supports the expanded Visionary cast
 
 // -------------------------------------------------------
 // Response types — Abyss

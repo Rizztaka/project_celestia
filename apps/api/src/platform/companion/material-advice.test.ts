@@ -76,6 +76,19 @@ describe('shared 3:1 material accounting', () => {
     expect(projectMaterialAdvice([entry({ High: 1 })], stock({ Low: 9 })).delta.High).toBe(0);
     expect(projectMaterialAdvice([entry({ High: 1 })], stock({})).delta.High).toBeNull();
   });
+  it('returns goal-first planning totals with no inventory and credits partial known stock once', () => {
+    const none = projectMaterialAdvice([entry({ High: 2, Mora: 100 })], stock({}));
+    expect(none.planningDelta).toEqual({ High: 2, Mora: 100 });
+    expect(none.delta).toEqual({ High: null, Mora: null });
+    expect(none.inventory).toEqual({});
+    const partial = projectMaterialAccounting(
+      [entry({ High: 2 }), entry({ High: 1 }, 'two')],
+      stock({ Low: 9 }),
+    );
+    expect(partial.materials.planningDelta).toEqual({ High: 2 });
+    expect(partial.materials.delta.High).toBeNull();
+    expect(partial.materials.inventory).toEqual({ Low: 9 });
+  });
   it('includes non-demanded lower inventory and leaves inputs unchanged across repeated reads', () => {
     const entries = [entry({ High: 2, Mora: 100 })];
     const recorded = stock({ Low: 27, Mora: 80 });

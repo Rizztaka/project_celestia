@@ -6,9 +6,16 @@ interface MaterialRowProps {
   needed: number;
   inventory: number | null;
   delta: number | null;
+  planningDelta?: number;
 }
 
-export default function MaterialRow({ itemKey, needed, inventory, delta }: MaterialRowProps) {
+export default function MaterialRow({
+  itemKey,
+  needed,
+  inventory,
+  delta,
+  planningDelta,
+}: MaterialRowProps) {
   const entry = materialCatalogEntry(itemKey);
   const displayName = entry?.name ?? materialDisplayName(itemKey);
   const fillPct = needed > 0 ? Math.min(((inventory ?? 0) / needed) * 100, 100) : 100;
@@ -73,7 +80,11 @@ export default function MaterialRow({ itemKey, needed, inventory, delta }: Mater
             Need {delta.toLocaleString()}
           </p>
         )}
-        {delta === null && <p className="mt-0.5 text-xs text-amber-300">Deficit unknown</p>}
+        {delta === null && (
+          <p className="mt-0.5 text-xs text-amber-300">
+            Plan {(planningDelta ?? needed).toLocaleString()} · no unrecorded stock credited
+          </p>
+        )}
         {isMet && <p className="mt-0.5 text-xs font-semibold text-emerald-400">✓</p>}
       </div>
     </div>

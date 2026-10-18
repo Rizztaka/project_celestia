@@ -95,7 +95,8 @@ export class CharacterIntelligenceService {
     const skipped: SkippedCharacter[] = [];
 
     for (const char of roster) {
-      const profile = characterProfiles[char.characterKey] ?? null;
+      const metadata = characterProfiles[char.characterKey];
+      const profile = metadata?.metaTier ? metadata : null;
       const hasFallbackProfile = profile === null;
       const resolvedProfile: StaticCharacterProfile = profile ?? FALLBACK_PROFILE;
 

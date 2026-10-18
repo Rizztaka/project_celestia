@@ -1,13 +1,9 @@
-import { createRequire } from 'node:module';
-
 import { UnprocessableError } from '@/core/errors/app-error.js';
 
 import { GenshinCharacterService } from '../../characters/character.service.js';
+import { characterElements as elements } from '../../companion/character-reference.js';
 import { calculateComposition, resonanceElements } from './team-composition.calculator.js';
 import { explainComposition } from './team-composition.explainer.js';
-
-const require = createRequire(import.meta.url);
-const elements = require('../../static/character-elements.json') as Record<string, string>;
 
 export function describeComposition(characterKeys: string[]) {
   if (

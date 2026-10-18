@@ -69,12 +69,14 @@ export function projectMaterialAccounting(goals: Entry[], stock: RecordedStockSn
     if (crafted > 0) take(previous!, crafted * 3, true);
     return direct + crafted;
   }
+  const planningDelta: Record<string, number> = {};
   const goalDeficits = goals.map(({ advice }) => {
     const deficits: Record<string, number | null> = {};
     if (!advice.available) return deficits;
     // Lower-tier reservations include later goals, regardless of object key order.
     for (const [key, amount] of Object.entries(advice.costs)) {
       const used = take(key, amount);
+      planningDelta[key] = (planningDelta[key] ?? 0) + amount - used;
       deficits[key] =
         used === amount ? 0 : Object.hasOwn(stock.inventory, key) ? amount - used : null;
       reserved[key] = (reserved[key] ?? 0) - amount;
@@ -90,6 +92,7 @@ export function projectMaterialAccounting(goals: Entry[], stock: RecordedStockSn
     ...stock,
     needed,
     delta,
+    planningDelta,
     goals: goals.map(({ goal, advice }) => ({
       goalId: goal.id,
       targetKey: goal.targetKey,

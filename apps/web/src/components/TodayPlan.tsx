@@ -537,7 +537,14 @@ export default function TodayPlan() {
                     {materialCatalogEntry(key)?.name ?? key}: needed {amount.toLocaleString()} ·
                     recorded{' '}
                     {matchingAdvice.materials.inventory[key]?.toLocaleString() ?? 'unknown'} ·
-                    deficit {matchingAdvice.materials.delta[key]?.toLocaleString() ?? 'unknown'}
+                    {matchingAdvice.materials.delta[key] === null ? 'plan ' : 'deficit '}
+                    {(
+                      matchingAdvice.materials.planningDelta?.[key] ??
+                      matchingAdvice.materials.delta[key] ??
+                      amount
+                    ).toLocaleString()}
+                    {matchingAdvice.materials.delta[key] === null &&
+                      ' (no unrecorded stock credited)'}
                   </p>
                 ))}
               </div>

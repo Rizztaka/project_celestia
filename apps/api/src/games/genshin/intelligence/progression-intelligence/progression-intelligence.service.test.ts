@@ -1,5 +1,4 @@
 import type { GenshinAccount } from '@prisma/client';
-import { createRequire } from 'module';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { prisma } from '@/core/db/prisma.js';
@@ -7,10 +6,8 @@ import { NotFoundError } from '@/core/errors/app-error.js';
 
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
 import { GenshinCharacterService } from '../../characters/character.service.js';
+import { collectibleCharacterCount } from '../../companion/character-reference.js';
 import { progressionIntelligenceService } from './progression-intelligence.service.js';
-
-const require = createRequire(import.meta.url);
-const ELEMENT_MAP: Record<string, string> = require('../../static/character-elements.json');
 
 vi.mock('@/core/db/prisma.js', () => ({
   prisma: {
@@ -88,8 +85,9 @@ describe('Progression Intelligence Service', () => {
     expect(result.elementalSpread.length).toBe(0);
   });
 
-  it('should calculate roster completion accurately based on static JSON size', async () => {
-    const totalChars = Object.keys(ELEMENT_MAP).length;
+  it('counts distinct source identities without aliases, comments or Traveler forms', async () => {
+    const totalChars = collectibleCharacterCount;
+    expect(totalChars).toBe(122);
 
     // Mock a roster that is exactly 50% of the total characters
     const mockRoster = Array.from({ length: Math.floor(totalChars / 2) }).map((_, i) => ({

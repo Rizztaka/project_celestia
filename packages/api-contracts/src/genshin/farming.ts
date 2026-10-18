@@ -48,6 +48,8 @@ export interface FarmingEstimate {
   kind: 'talent' | 'weapon';
   materialKeys: string[];
   difficulty: number | null;
+  /** Missing observations receive no stock credit in the goal-first planning scenario. */
+  unrecordedStockKeys?: string[];
   projection: YieldProjection;
   comparisons: { difficulty: number; projection: YieldProjection }[];
 }

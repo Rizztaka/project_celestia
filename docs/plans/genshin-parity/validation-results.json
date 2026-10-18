@@ -1,0 +1,73 @@
+{
+  "reviewedOn": "2026-10-18",
+  "sourceCommit": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+  "sourceFileCounts": {
+    "characters": 124,
+    "talents": 127,
+    "weapons": 255,
+    "materials": 921,
+    "domains": 284,
+    "enemies": 347,
+    "artifacts": 63,
+    "crafts": 295
+  },
+  "catalogContentFingerprint": "1b6ee33f1d1946fe312daf8083b7bdac7c13a84ae209ab20a37d27de4df86e81",
+  "catalogFileSha256": "a58715f82d8a19d5c1cf885fa8abde3ae32248f19084a145065cd54bcf7f6ec7",
+  "farmingContentFingerprint": "848a56125721c92fe3c92e8e0de1f4cee458b9ab508015baecbb62cb9b046a53",
+  "commands": [
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "passed": 1091,
+      "skipped": 171,
+      "failed": 0,
+      "passingFiles": 69,
+      "skippedFiles": 9,
+      "suiteSeconds": 48.94,
+      "totalSeconds": 61.012,
+      "log": "C:/Users/inuzu/.gemini/antigravity/brain/0b5394f7-f958-4e62-b071-5cfcba642644/scratch/parity-validation/tests.log",
+      "sha256": "046d9502f49dbfac6f6be4b6b83a8b54f33be0740c639503fd6239c3a26f593d"
+    },
+    {
+      "command": "pnpm --filter @celestia/web build",
+      "exitCode": 0,
+      "log": "C:/Users/inuzu/.gemini/antigravity/brain/0b5394f7-f958-4e62-b071-5cfcba642644/scratch/parity-validation/web-build.log",
+      "sha256": "1306b968aeabc6b4f67bc2ab5d4921498542014991ba662812ccc0983bd2e39d"
+    },
+    {
+      "command": "pnpm --filter @celestia/api build",
+      "exitCode": 0,
+      "log": "C:/Users/inuzu/.gemini/antigravity/brain/0b5394f7-f958-4e62-b071-5cfcba642644/scratch/parity-validation/api-build.log",
+      "sha256": "5900711a9c4869e1af0b59065e2d39baff3efb6641fb011cad03a0f390a3bc00"
+    },
+    {
+      "command": "pnpm --filter @celestia/api lint",
+      "exitCode": 0,
+      "log": "C:/Users/inuzu/.gemini/antigravity/brain/0b5394f7-f958-4e62-b071-5cfcba642644/scratch/parity-validation/api-lint.log",
+      "sha256": "9f55fa4f442193f038d9ed374e8109193ef8f404f0e87c8a57c77a8f64a3aa40"
+    },
+    {
+      "command": "pnpm --filter @celestia/web lint",
+      "exitCode": 0,
+      "log": "C:/Users/inuzu/.gemini/antigravity/brain/0b5394f7-f958-4e62-b071-5cfcba642644/scratch/parity-validation/web-lint.log",
+      "sha256": "9f55fa4f442193f038d9ed374e8109193ef8f404f0e87c8a57c77a8f64a3aa40"
+    }
+  ],
+  "offlineRegeneration": {
+    "identicalFiles": 10,
+    "result": "passed"
+  },
+  "fullFarmingRegeneration": {
+    "result": "passed",
+    "coordinateAndYieldPreservation": "passed",
+    "routes": 48,
+    "points": 6176,
+    "teleports": 247
+  },
+  "caveats": [
+    "Default pnpm test skipped 171 database-gated cases; no database integration or browser acceptance is claimed.",
+    "129 goal targets include 7 Traveler forms, with 122 distinct source character IDs.",
+    "Missing Manekin cost quantities, Traveler slot-specific talent costs and two later weekly-boss entrances remain unavailable.",
+    "Latest source commit was already pinned; source parity does not establish every record is live-game eligible."
+  ]
+}

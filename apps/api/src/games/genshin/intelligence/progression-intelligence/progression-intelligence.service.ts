@@ -1,12 +1,11 @@
-import { createRequire } from 'module';
-
 import { prisma } from '@/core/db/prisma.js';
 import { NotFoundError } from '@/core/errors/app-error.js';
 
 import { GenshinCharacterService } from '../../characters/character.service.js';
-
-const require = createRequire(import.meta.url);
-const ELEMENT_MAP: Record<string, string> = require('../../static/character-elements.json');
+import {
+  characterElements,
+  collectibleCharacterCount,
+} from '../../companion/character-reference.js';
 
 export interface ElementalSpread {
   element: string;
@@ -42,7 +41,7 @@ export class ProgressionIntelligenceService {
 
     const charService = new GenshinCharacterService();
     const roster = await charService.getCharactersForUser(userId);
-    const totalAvailableCharacters = Object.keys(ELEMENT_MAP).length;
+    const totalAvailableCharacters = collectibleCharacterCount;
     const owned = roster.length;
 
     // 1. Roster Completion
@@ -65,7 +64,7 @@ export class ProgressionIntelligenceService {
     // 3. Elemental Spread
     const counts: Record<string, number> = {};
     for (const char of roster) {
-      const element = ELEMENT_MAP[char.characterKey] || 'Unknown';
+      const element = characterElements[char.characterKey] || 'Unknown';
       counts[element] = (counts[element] || 0) + 1;
     }
 

@@ -1,101 +1,173 @@
 {
-  "_comment": "PLACEHOLDER DATA — Current as of Patch 5.8. Add new bosses as they are released. Key must not change once set.",
+  "_comment": "Reward joins from pinned genshin-db enemy previews. Unknown entrances remain explicit; no weekly yield or resin estimate is inferred.",
   "bosses": [
     {
-      "key": "Dvalin",
-      "name": "Stormterror Dvalin",
-      "location": "Mondstadt",
-      "domainName": "Confront Stormterror",
-      "dropKeys": ["HurricaneSeed", "CleansingHeart", "HoarfrostCore"],
-      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Confront_Stormterror"
-    },
-    {
-      "key": "Lupus",
-      "name": "Lupus Boreas, Dominator of Wolves",
-      "location": "Mondstadt",
-      "domainName": "Wolf of the North Challenge",
-      "dropKeys": ["WolfsGravestone", "RingedLeopardPetal", "IcecrystalMoth"],
-      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Wolf_of_the_North_Challenge"
-    },
-    {
-      "key": "Signora",
-      "name": "La Signora",
-      "location": "Mondstadt",
-      "domainName": "Enter the Golden House",
-      "dropKeys": ["TailOfBoreas", "RingOfBoreas", "SpiritLocketOfBoreas"],
-      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Enter_the_Golden_House"
-    },
-    {
-      "key": "Shogun",
-      "name": "Magatsu Mitake Narukami no Mikoto",
-      "location": "Inazuma",
-      "domainName": "End of the Oneiric Euthymia",
-      "dropKeys": ["MudraOfTheMalfeasantGeneral", "TearsOfTheCalamitousGod", "TheMeaningOfAeons"],
-      "wikiUrl": "https://genshin-impact.fandom.com/wiki/End_of_the_Oneiric_Euthymia"
-    },
-    {
-      "key": "Beisht",
-      "name": "Beisht (Everlasting Lord of Arcane Wisdom)",
-      "location": "Sumeru",
-      "domainName": "Twisted Realm of the Arcane",
-      "dropKeys": ["MirrorOfMushin", "LightGuardian", "PuppetStrings"],
-      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Twisted_Realm_of_the_Arcane"
-    },
-    {
-      "key": "Apep",
-      "name": "Apep, the Vines of Chaos",
-      "location": "Sumeru",
-      "domainName": "Khvarena of Good and Evil",
-      "dropKeys": ["PrimordialGreenbloom", "DestructiveCapacitor", "ForbiddenCurseScrolls"],
-      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Khvarena_of_Good_and_Evil"
+      "key": "Shoukumonegate",
+      "name": "All-Devouring Narwhal",
+      "location": "Fontaine",
+      "domainName": "Shadow of Another World",
+      "dropKeys": [
+        "LightlessSilkString",
+        "LightlessEyeOfTheMaelstrom",
+        "LightlessMass"
+      ],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Shadow_of_Another_World"
     },
     {
       "key": "Azhdaha",
       "name": "Azhdaha",
       "location": "Liyue",
       "domainName": "Beneath the Dragon-Queller",
-      "dropKeys": ["DragonLordsCrown", "BloodjadeBranch", "GildedScale"],
+      "dropKeys": [
+        "DragonLordsCrown",
+        "BloodjadeBranch",
+        "GildedScale"
+      ],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Beneath_the_Dragon-Queller"
     },
     {
       "key": "Childe",
-      "name": "Tartaglia",
+      "name": "Childe",
       "location": "Liyue",
       "domainName": "Enter the Golden House",
-      "dropKeys": ["ShadowOfTheWarrior", "ShardOfAFoulLegacy", "TheLilacStone"],
+      "dropKeys": [
+        "TuskOfMonocerosCaeli",
+        "ShardOfAFoulLegacy",
+        "ShadowOfTheWarrior"
+      ],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Enter_the_Golden_House"
     },
     {
-      "key": "Scaramouche",
-      "name": "Everlasting Lord of Arcane Wisdom (Scaramouche)",
+      "key": "Apep",
+      "name": "Guardian of Apep's Oasis",
       "location": "Sumeru",
-      "domainName": "Joururi Workshop",
-      "dropKeys": ["MirrorOfMushin", "LightGuardian", "PuppetStrings"],
-      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Joururi_Workshop"
-    },
-    {
-      "key": "Shoukumonegate",
-      "name": "All-Devouring Narwhal",
-      "location": "Fontaine",
       "domainName": "The Realm of Beginnings",
-      "dropKeys": ["FangOfTheMountainKing", "TotemOfTheCauldron", "EchoOfScorchingMight"],
+      "dropKeys": [
+        "WorldspanFern",
+        "PrimordialGreenbloom",
+        "Everamber"
+      ],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/The_Realm_of_Beginnings"
     },
     {
-      "key": "Chlothar",
-      "name": "Chlothar Hroswitha Augusta",
-      "location": "Fontaine",
-      "domainName": "The Realm of Conflict",
-      "dropKeys": ["SplinterOfDarkIron", "ScorchingHeat", "SpectralHusk"],
+      "key": "IlDottore",
+      "name": "Il Dottore",
+      "location": "Unknown",
+      "domainName": "Entrance not recorded in the pinned source",
+      "dropKeys": [
+        "CounterfeitResin",
+        "TwistedWitheredBranch",
+        "ProfanedSprout"
+      ],
       "wikiUrl": null
     },
     {
-      "key": "BabyLizard",
-      "name": "Iktomisaurus",
+      "key": "Signora",
+      "name": "La Signora",
+      "location": "Inazuma",
+      "domainName": "Narukami Island: Tenshukaku",
+      "dropKeys": [
+        "MoltenMoment",
+        "HellfireButterfly",
+        "AshenHeart"
+      ],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Narukami_Island:_Tenshukaku"
+    },
+    {
+      "key": "LordOfErodedPrimalFire",
+      "name": "Lord of Eroded Primal Fire",
       "location": "Natlan",
-      "domainName": "The Spiritseal Domain",
-      "dropKeys": ["IncandescenceShard", "CharredRemains", "CrystallineBloom"],
+      "domainName": "Stone Stele Records",
+      "dropKeys": [
+        "ErodedHorn",
+        "ErodedSunfire",
+        "ErodedScaleFeather"
+      ],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Stone_Stele_Records"
+    },
+    {
+      "key": "Lupus",
+      "name": "Lupus Boreas, Dominator of Wolves",
+      "location": "Mondstadt",
+      "domainName": "Wolf of the North Challenge",
+      "dropKeys": [
+        "TailOfBoreas",
+        "RingOfBoreas",
+        "SpiritLocketOfBoreas"
+      ],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Wolf_of_the_North_Challenge"
+    },
+    {
+      "key": "Shogun",
+      "name": "Magatsu Mitake Narukami no Mikoto",
+      "location": "Inazuma",
+      "domainName": "End of the Oneiric Euthymia",
+      "dropKeys": [
+        "MudraOfTheMaleficGeneral",
+        "TearsOfTheCalamitousGod",
+        "TheMeaningOfAeons"
+      ],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/End_of_the_Oneiric_Euthymia"
+    },
+    {
+      "key": "Scaramouche",
+      "name": "Shouki no Kami, the Prodigal",
+      "location": "Sumeru",
+      "domainName": "Joururi Workshop",
+      "dropKeys": [
+        "PuppetStrings",
+        "MirrorOfMushin",
+        "DakasBell"
+      ],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Joururi_Workshop"
+    },
+    {
+      "key": "Dvalin",
+      "name": "Stormterror",
+      "location": "Mondstadt",
+      "domainName": "Confront Stormterror",
+      "dropKeys": [
+        "DvalinsPlume",
+        "DvalinsClaw",
+        "DvalinsSigh"
+      ],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Confront_Stormterror"
+    },
+    {
+      "key": "TheDoctor",
+      "name": "The Doctor",
+      "location": "Unknown",
+      "domainName": "Entrance not recorded in the pinned source",
+      "dropKeys": [
+        "MaskOfTheVirtuousDoctor",
+        "MadmansRestraint",
+        "ElixirOfTheHeretic"
+      ],
       "wikiUrl": null
+    },
+    {
+      "key": "TheGameBeforeTheGate",
+      "name": "The Game Before the Gate",
+      "location": "Mondstadt",
+      "domainName": "Unresolved Chess Game",
+      "dropKeys": [
+        "AscendedSampleKnight",
+        "AscendedSampleRook",
+        "AscendedSampleQueen"
+      ],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Unresolved_Chess_Game"
+    },
+    {
+      "key": "TheKnave",
+      "name": "The Knave",
+      "location": "Fontaine",
+      "domainName": "Scattered Ruins",
+      "dropKeys": [
+        "FadingCandle",
+        "SilkenFeather",
+        "DenialAndJudgment"
+      ],
+      "wikiUrl": "https://genshin-impact.fandom.com/wiki/Scattered_Ruins"
     }
   ]
 }

@@ -5,6 +5,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { writeDomainSchedule } from './build-domain-schedule.mjs';
+import { buildGameReferences } from './build-game-references.mjs';
+import { refreshFarmingFamilies } from './refresh-farming-families.mjs';
 
 const cache = process.argv[2];
 if (!cache)
@@ -23,6 +25,12 @@ const materialsById = new Map(collected.materials.map((entry) => [entry.data.id,
 const domainsById = new Map(collected.domains.map((entry) => [entry.data.id, entry]));
 const sourceHashes = {};
 const useSource = (entry) => {
+  const bytes = readFileSync(resolve(cache, commit, entry.sourcePath.replaceAll('/', '__')));
+  if (
+    createHash('sha256').update(bytes).digest('hex') !== entry.sourceHash ||
+    JSON.stringify(JSON.parse(bytes.toString('utf8'))) !== JSON.stringify(entry.data)
+  )
+    throw new Error(`Source cache integrity mismatch: ${entry.sourcePath}`);
   sourceHashes[entry.sourcePath] = entry.sourceHash;
   return entry.data;
 };
@@ -39,7 +47,20 @@ function material(id) {
     key,
     gameItemId: id,
     name: data.name,
-    sources: data.sources ?? [],
+    sources: (data.sources ?? []).filter((source) => !source.startsWith('Placeholder')),
+    category: data.typeText?.startsWith('Local Specialty')
+      ? 'local_specialty'
+      : data.typeText === 'Character Talent Material' && data.dropDomainId
+        ? 'talent_book'
+        : data.typeText === 'Weapon Ascension Material'
+          ? 'weapon_material'
+          : data.typeText === 'Character Level-Up Material' && data.rarity === 5
+            ? 'weekly_boss'
+            : data.typeText === 'Character Level-Up Material' &&
+                data.id >= 113000 &&
+                data.id < 114000
+              ? 'world_boss'
+              : 'progression_support',
     domainKey: null,
   };
   return key;
@@ -98,6 +119,22 @@ for (const entry of collected.characters) {
       : 'Traveler talent costs require a verified per-slot source; ascension costs are available.',
   };
 }
+// Traveler forms share the verified protagonist ascension table. Their slot-specific
+// talent differences remain unavailable rather than applying one generic table.
+for (const entry of collected.talents.filter((entry) =>
+  /^traveler[a-z]+\.json$/.test(entry.file),
+)) {
+  const data = useSource(entry);
+  const key = keyOf(data.name);
+  characters[key] = {
+    ...characters.Aether,
+    key,
+    name: data.name,
+    talent: [],
+    talentUnavailableReason:
+      'Traveler talent costs require a verified per-slot source; ascension costs are available.',
+  };
+}
 const weapons = {};
 for (const entry of collected.weapons) {
   if (entry.data.name === 'Prized Isshin Blade') {
@@ -118,6 +155,49 @@ for (const entry of collected.weapons) {
     ascension: steps(data.costs, 'ascend').filter((row) => row.phase <= 6),
   };
 }
+// Include scheduled families even when no current target consumes one of their tiers.
+for (const entry of collected.materials) {
+  if (
+    entry.data.dropDomainId &&
+    ['Character Talent Material', 'Weapon Ascension Material'].includes(entry.data.typeText)
+  )
+    material(entry.data.id);
+}
+const references = buildGameReferences({ collected, root, keyOf, useSource, material });
+// Recipes, not consecutive item IDs, establish the exact 3:1 direction.
+const lower = new Map();
+const higher = new Map();
+for (const entry of collected.crafts) {
+  const data = entry.data;
+  const high = keyOf(data.name);
+  if (
+    data.resultCount !== 1 ||
+    data.recipe?.length !== 1 ||
+    data.recipe[0].count !== 3 ||
+    !materials[high]
+  )
+    continue;
+  const low = Object.values(materials).find((item) => item.gameItemId === data.recipe[0].id)?.key;
+  if (!low) continue;
+  if ((lower.has(high) && lower.get(high) !== low) || (higher.has(low) && higher.get(low) !== high))
+    throw new Error(`Conflicting 3:1 recipe ${high}`);
+  useSource(entry);
+  lower.set(high, low);
+  higher.set(low, high);
+}
+const conversionGroups = [];
+for (const first of higher.keys()) {
+  if (lower.has(first)) continue;
+  const group = [first];
+  while (higher.has(group.at(-1))) {
+    const next = higher.get(group.at(-1));
+    if (group.includes(next)) throw new Error('Cyclic 3:1 recipes');
+    group.push(next);
+  }
+  conversionGroups.push(group);
+}
+if (conversionGroups.reduce((sum, group) => sum + group.length - 1, 0) !== lower.size)
+  throw new Error('Unresolved cyclic 3:1 recipes');
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const domains = {};
 for (const reference of Object.values(materials)) {
@@ -155,7 +235,7 @@ const catalog = {
   source: {
     repository: 'https://github.com/theBowja/genshin-db',
     commit,
-    reviewedOn: '2026-10-17',
+    reviewedOn: '2026-10-18',
     authority: 'community',
     resinSource: 'https://genshin.hoyoverse.com/en/news/detail/159349',
     license: 'MIT',
@@ -166,6 +246,7 @@ const catalog = {
   characters,
   weapons,
   domains,
+  conversionGroups,
 };
 function stable(value) {
   if (Array.isArray(value)) return value.map(stable);
@@ -180,15 +261,17 @@ function stable(value) {
 catalog.contentFingerprint = createHash('sha256')
   .update(JSON.stringify(stable(catalog)))
   .digest('hex');
+refreshFarmingFamilies(catalog, collected, root);
 const output = resolve(root, 'apps/api/src/games/genshin/static/progression-catalog.json');
 const serialized = JSON.stringify(catalog, null, 2) + '\n';
 writeFileSync(output, serialized);
 const targets = {
-  materials: Object.values(materials).map(({ key, name, sources, domainKey }) => ({
+  materials: Object.values(materials).map(({ key, name, sources, domainKey, category }) => ({
     key,
     name,
     sources,
     domainKey,
+    category,
   })),
   domains: writeDomainSchedule(catalog),
   characters: Object.values(characters).map(({ key, name, talent }) => ({
@@ -201,6 +284,7 @@ const targets = {
     name,
     ascensionMax: ascension.at(-1).phase,
   })),
+  artifactSets: Object.values(references.artifactSets),
 };
 writeFileSync(
   resolve(root, 'apps/web/src/lib/progression-targets.json'),
@@ -216,6 +300,11 @@ console.log(
     weapons: Object.keys(weapons).length,
     materials: Object.keys(materials).length,
     domains: Object.keys(domains).length,
+    profiles: references.profileCount,
+    artifactSets: Object.keys(references.artifactSets).length,
+    weeklyBosses: references.bosses.length,
+    worldBosses: references.worldBosses.length,
+    craftingFamilies: conversionGroups.length,
     sha256: createHash('sha256').update(serialized).digest('hex'),
   }),
 );

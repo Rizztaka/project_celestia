@@ -291,8 +291,9 @@ export default function PlannerPage() {
                 <p className="mt-2">
                   Costs use your declared from → target range; re-import does not measure a new
                   remaining-upgrade cost. Stock is recorded from imports; it is not live inventory.
-                  Missing items remain unknown. Deficits include 3:1 crafting from surplus lower
-                  tiers.
+                  No inventory entry is required: planning counts the full requirement for
+                  unrecorded items, then credits recorded stock and 3:1 crafting from surplus lower
+                  tiers. Missing stock observations remain unknown.
                 </p>
                 <p className="mt-1">
                   Import basis: {materialsData.stockBasis.source ?? 'source unknown'} ·{' '}
@@ -326,6 +327,7 @@ export default function PlannerPage() {
                       needed={needed}
                       inventory={inventory}
                       delta={delta}
+                      planningDelta={materialsData?.planningDelta?.[key]}
                     />
                   ))}
                 </div>

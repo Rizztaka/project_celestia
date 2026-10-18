@@ -85,6 +85,11 @@ export function validateFarmingData(input: unknown) {
   const consumed = new Set<string>();
   for (const family of data.families) {
     if (
+      stableFingerprint(family.domain) !==
+      stableFingerprint(progression.domains[family.domain.domainKey])
+    )
+      throw new Error('Farming domain differs from the progression catalog.');
+    if (
       family.materialKeys.length !== (family.kind === 'talent' ? 3 : 4) ||
       new Set(family.materialKeys).size !== family.materialKeys.length ||
       JSON.stringify([...family.materialKeys].sort()) !==
@@ -92,7 +97,12 @@ export function validateFarmingData(input: unknown) {
     )
       throw new Error('Invalid farming family.');
     for (const key of family.materialKeys) {
-      if (consumed.has(key) || !Object.hasOwn(progression.materials, key))
+      if (
+        consumed.has(key) ||
+        !Object.hasOwn(progression.materials, key) ||
+        progression.materials[key].category !==
+          (family.kind === 'talent' ? 'talent_book' : 'weapon_material')
+      )
         throw new Error('Ambiguous farming material.');
       consumed.add(key);
     }

@@ -4,8 +4,9 @@ export function explainFarming(result: FarmingRecommendation, includeRoute = tru
   return [
     'Planning estimates use community mean drops per 20 Original Resin. Random rewards can take more or fewer runs; these are not guaranteed counts or confidence intervals.',
     'Select each domain difficulty you can clear. Three-to-one upward crafting is included; crafting Mora, character passives, bonuses and unrecorded surplus stock are not credited.',
+    'Goal-first planning needs no inventory entry. Unrecorded items receive no stock credit; their full required amount is planned. Recorded stock and craftable surplus reduce the estimate. These assumptions do not record zero inventory or complete goals.',
     result.unestimatedFamilies
-      ? `${result.unestimatedFamilies} domain families have no estimate. Required stock must be known and difficulty selected; totals and dates cover only the estimated subset.`
+      ? `${result.unestimatedFamilies} domain families have no estimate. Select difficulty to calculate planning runs; totals and dates cover only the estimated subset.`
       : 'Resin totals cover the modeled talent/weapon domains only. Bosses, Mora, EXP and gathering are separate.',
     'Calendar pacing starts at the next server reset, shares your daily budget across open domains, and assumes you choose to spend that budget on each eligible day. No streak or automatic spending is tracked.',
     ...(includeRoute

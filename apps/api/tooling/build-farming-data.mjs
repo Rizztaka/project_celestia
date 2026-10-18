@@ -14,7 +14,9 @@ const sources = {
     commit: '2154df87e9e4ac8a0733c7603120603cc1d489b6',
     file: 'data/maps-data.json',
     local: 'map-points.json',
-    sha256: 'cd70c18e9d237e09892bd8a98bcbe181b6c2744283deb77423c31691f32c8095',
+    // Raw bytes checked against pinned Git blob e7ee0a29c6ce399d12e7399fb29d15416c1063d9.
+    // The previous checksum represented LF-normalized text, not the repository's mixed line endings.
+    sha256: '46065214cad4f791585fce2db1a37683f3d04fb27315f7cb556bf208fa2a309f',
   },
   yields: {
     repository: 'https://github.com/MadeBaruna/paimon-moe',
@@ -241,7 +243,7 @@ for (const route of routes)
     throw new Error(`Invalid route join: ${route.key}`);
 const payload = {
   version: 1,
-  reviewedOn: '2026-10-17',
+  reviewedOn: '2026-10-18',
   sources,
   progressionFingerprint: catalog.contentFingerprint,
   yields: { talent: literal('book'), weapon: literal('weapon') },

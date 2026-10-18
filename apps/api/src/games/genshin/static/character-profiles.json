@@ -1,33 +1,2643 @@
 {
-  "_comment": "Meta profiles for the Character Intelligence Engine. Opinions current as of Patch 5.x. metaTier: 1=SS/S, 2=A, 3=B/C.",
+  "_comment": "Verified genshin-db metadata. Existing recommendation fields are legacy editorial opinions, not datamined mechanics; absent opinions remain unavailable.",
+  "Aether": {
+    "name": "Aether",
+    "gameId": 10000005,
+    "element": "Adaptive",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "",
+    "description": "A traveler from another world who had their only kin taken away, forcing them to embark on a journey to find The Seven.",
+    "birthday": null,
+    "affiliation": null,
+    "region": null,
+    "constellation": "Viator",
+    "voiceActors": {
+      "english": "Zach Aguilar & Various Artists",
+      "chinese": "鹿喑 & 多多poi",
+      "japanese": "堀江瞬 & 古賀葵",
+      "korean": "Lee Kyeong-tae & Kim Ka-ryoung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Aino": {
+    "name": "Aino",
+    "gameId": 10000121,
+    "element": "Hydro",
+    "weaponType": "Claymore",
+    "rarity": 4,
+    "title": "Clinky-Clank Gadgets-A-Gogo",
+    "description": "A genius mechanic and inventor from Nod-Krai who loves interesting machines and sweet treats.",
+    "birthday": "September 21",
+    "affiliation": "Clink-Clank Krumkake Craftshop",
+    "region": "Nod-Krai",
+    "constellation": "Cistellula Mira",
+    "voiceActors": {
+      "english": "Annabel Brook",
+      "chinese": "葛子瑞",
+      "japanese": "高森奈津美",
+      "korean": "Jo Kyeong-i"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Albedo": {
+    "name": "Albedo",
+    "gameId": 10000038,
+    "element": "Geo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Kreideprinz",
+    "description": "A genius known as the Kreideprinz, he is the Chief Alchemist and Captain of the Investigation Team of the Knights of Favonius.",
+    "birthday": "September 13",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Princeps Cretaceus",
+    "voiceActors": {
+      "english": "Khoi Dao",
+      "chinese": "Mace",
+      "japanese": "野島健児",
+      "korean": "Kim Myeong-joon"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Alhaitham": {
+    "name": "Alhaitham",
+    "gameId": 10000078,
+    "element": "Dendro",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Admonishing Instruction",
+    "description": "The current scribe of the Sumeru Akademiya, a man endowed with extraordinary intelligence and talent. He lives free — free from the searching eyes of ordinary people, anyway.",
+    "birthday": "February 11",
+    "affiliation": "Sumeru Akademiya",
+    "region": "Sumeru",
+    "constellation": "Vultur Volans",
+    "voiceActors": {
+      "english": "Nazeeh Tarsha",
+      "chinese": "杨超然",
+      "japanese": "梅原裕一郎",
+      "korean": "Jun Seung-hwa"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Aloy": {
+    "name": "Aloy",
+    "gameId": 10000062,
+    "element": "Cryo",
+    "weaponType": "Bow",
+    "rarity": 5,
+    "title": "Savior From Another World",
+    "description": "Formerly an outcast, now a hunter of unparalleled skill. Ready to do the right thing at any time.",
+    "birthday": "April 4",
+    "affiliation": "Wandering Heroine",
+    "region": null,
+    "constellation": "Nora Fortis",
+    "voiceActors": {
+      "english": "—",
+      "chinese": "沐霏",
+      "japanese": "高垣彩陽",
+      "korean": "Jo Hyeon-jung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Alyosha": {
+    "name": "Alyosha",
+    "gameId": 10000148,
+    "element": "Electro",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Swift-Striding Hound",
+    "description": "A \"professional hunter\" and master of the Snezhnayan snowfields. A fierce, distinct \"idealism\" burns beneath his calm demeanor.",
+    "birthday": "February 9",
+    "affiliation": "Snezhnaya",
+    "region": null,
+    "constellation": "Canis Borzoides",
+    "voiceActors": {
+      "english": "Kevin Andrew Rivera",
+      "chinese": "王辅平",
+      "japanese": "佐藤元",
+      "korean": "Kim Hye-sung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Amber": {
+    "name": "Amber",
+    "gameId": 10000021,
+    "element": "Pyro",
+    "weaponType": "Bow",
+    "rarity": 4,
+    "title": "Gliding Champion",
+    "description": "Always energetic and full of life, Amber's the best — albeit only — Outrider of the Knights of Favonius.",
+    "birthday": "August 10",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Lepus",
+    "voiceActors": {
+      "english": "Kelly Baskin",
+      "chinese": "蔡书瑾",
+      "japanese": "石見舞菜香",
+      "korean": "Kim Yeon-woo"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "AratakiItto": {
+    "name": "Arataki Itto",
+    "gameId": 10000057,
+    "element": "Geo",
+    "weaponType": "Claymore",
+    "rarity": 5,
+    "title": "Hanamizaka Heroics",
+    "description": "The first and greatest head of the Arataki Gang, famed throughout Inazuma City's Hanamizaka... Wait, what? You've never heard of them? Are you trying to be funny here?",
+    "birthday": "June 1",
+    "affiliation": "Arataki Gang",
+    "region": "Inazuma",
+    "constellation": "Taurus Iracundus",
+    "voiceActors": {
+      "english": "Max Mittelman",
+      "chinese": "刘照坤",
+      "japanese": "西川貴教",
+      "korean": "Song Jun-seok"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Arlecchino": {
+    "name": "Arlecchino",
+    "gameId": 10000096,
+    "element": "Pyro",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "Dire Balemoon",
+    "description": "\"The Knave,\" Fourth of the Fatui Harbingers. A poised, ruthless diplomat. To the children in the House of the Hearth, she is their feared yet dependable \"Father.\"",
+    "birthday": "August 22",
+    "affiliation": "Fatui",
+    "region": "Snezhnaya",
+    "constellation": "Ignis Purgatorius",
+    "voiceActors": {
+      "english": "Erin Yvette",
+      "chinese": "黄莺",
+      "japanese": "森なな子",
+      "korean": "Lee Myung-hi"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Baizhu": {
+    "name": "Baizhu",
+    "gameId": 10000082,
+    "element": "Dendro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Beyond Mortality",
+    "description": "The owner of Bubu Pharmacy, who is rarely seen without the white snake named Changsheng. His medicinal knowledge is encyclopedic, and his personal intrigues subtle.",
+    "birthday": "April 25",
+    "affiliation": "Bubu Pharmacy",
+    "region": "Liyue",
+    "constellation": "Lagenaria",
+    "voiceActors": {
+      "english": "Sean Durrie & Xanthe Huynh",
+      "chinese": "秦且歌 & 王晓彤",
+      "japanese": "遊佐浩二 & 庄子裕衣",
+      "korean": "Yi Ho-san & Jang Mi"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Barbara": {
+    "name": "Barbara",
+    "gameId": 10000014,
+    "element": "Hydro",
+    "weaponType": "Catalyst",
+    "rarity": 4,
+    "title": "Shining Idol",
+    "description": "Every citizen of Mondstadt adores Barbara. She learned the word \"idol\" from a magazine.",
+    "birthday": "July 5",
+    "affiliation": "Church of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Crater",
+    "voiceActors": {
+      "english": "Laura Stahl",
+      "chinese": "宋媛媛",
+      "japanese": "鬼頭明里",
+      "korean": "Yoon Ah-young"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Beidou": {
+    "name": "Beidou",
+    "gameId": 10000024,
+    "element": "Electro",
+    "weaponType": "Claymore",
+    "rarity": 4,
+    "title": "Uncrowned Lord of the Ocean",
+    "description": "Captain of her crew, The Crux. She's quite an unbound and forthright woman.",
+    "birthday": "February 14",
+    "affiliation": "The Crux",
+    "region": "Liyue",
+    "constellation": "Victor Mare",
+    "voiceActors": {
+      "english": "Allegra Clark",
+      "chinese": "唐雅菁",
+      "japanese": "小清水亜美",
+      "korean": "Jung Yoo-mi"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Bennett": {
+    "name": "Bennett",
+    "gameId": 10000032,
+    "element": "Pyro",
+    "weaponType": "Sword",
+    "rarity": 4,
+    "title": "Trial by Fire",
+    "description": "A good-natured adventurer from Mondstadt who's unfortunately extremely unlucky.",
+    "birthday": "February 29",
+    "affiliation": "Adventurers' Guild",
+    "region": "Mondstadt",
+    "constellation": "Rota Calamitas",
+    "voiceActors": {
+      "english": "Cristina Vee Valenzuela",
+      "chinese": "穆雪婷",
+      "japanese": "逢坂良太",
+      "korean": "Song Ha-rim"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Candace": {
+    "name": "Candace",
+    "gameId": 10000072,
+    "element": "Hydro",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Golden Vow",
+    "description": "A descendant of King Deshret with an amber left eye. The defender of Aaru Village.",
+    "birthday": "May 3",
+    "affiliation": "Aaru Village",
+    "region": "Sumeru",
+    "constellation": "Sagitta Scutum",
+    "voiceActors": {
+      "english": "Heather Gonzalez",
+      "chinese": "张琦",
+      "japanese": "柚木涼香",
+      "korean": "Jun Young-soo"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Charlotte": {
+    "name": "Charlotte",
+    "gameId": 10000088,
+    "element": "Cryo",
+    "weaponType": "Catalyst",
+    "rarity": 4,
+    "title": "Lens of Verity",
+    "description": "Indefatigable reporter of The Steambird, constantly on the hunt for the \"truth.\"",
+    "birthday": "April 10",
+    "affiliation": "The Steambird",
+    "region": "Fontaine",
+    "constellation": "Hualina Veritas",
+    "voiceActors": {
+      "english": "Rebecca Wang & Maya Aoki Tuttle",
+      "chinese": "阮从青",
+      "japanese": "和氣あず未",
+      "korean": "Shin On-yu"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Chasca": {
+    "name": "Chasca",
+    "gameId": 10000104,
+    "element": "Anemo",
+    "weaponType": "Bow",
+    "rarity": 5,
+    "title": "Skyborne Arbiter",
+    "description": "The Peacemaker of the Tlalocan, the ender of all disputes.",
+    "birthday": "December 10",
+    "affiliation": "Tlalocan",
+    "region": "Natlan",
+    "constellation": "Vultur Gryphus",
+    "voiceActors": {
+      "english": "Lauren Amante",
+      "chinese": "张若瑜",
+      "japanese": "甲斐田裕子",
+      "korean": "Soo-hyun"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Chevreuse": {
+    "name": "Chevreuse",
+    "gameId": 10000090,
+    "element": "Pyro",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Executor of Justice",
+    "description": "The captain of the Special Security and Surveillance Patrol, who wears justice as an ever-present seal upon her heart. Her musket shall only ever point at the guilty.",
+    "birthday": "January 10",
+    "affiliation": "Special Security and Surveillance Patrol",
+    "region": "Fontaine",
+    "constellation": "Sclopetum Ensiferum",
+    "voiceActors": {
+      "english": "Erica Lindbeck",
+      "chinese": "潘丹妮",
+      "japanese": "下地紫野",
+      "korean": "Chae Min-ji"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Chiori": {
+    "name": "Chiori",
+    "gameId": 10000094,
+    "element": "Geo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "The Thundering Seamstress",
+    "description": "The owner of Chioriya Boutique. A tailor renowned throughout Fontaine.",
+    "birthday": "August 17",
+    "affiliation": "Court of Fontaine",
+    "region": "Inazuma",
+    "constellation": "Cisoria",
+    "voiceActors": {
+      "english": "Brittany Lauda",
+      "chinese": "陈阳",
+      "japanese": "竹達彩奈",
+      "korean": "Lee Da-eun"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Chongyun": {
+    "name": "Chongyun",
+    "gameId": 10000036,
+    "element": "Cryo",
+    "weaponType": "Claymore",
+    "rarity": 4,
+    "title": "Frozen Ardor",
+    "description": "A young exorcist from a family of exorcists. He does everything he can to suppress his abundance of yang energy.",
+    "birthday": "September 7",
+    "affiliation": "Tianheng Thaumaturges",
+    "region": "Liyue",
+    "constellation": "Nubis Caesor",
+    "voiceActors": {
+      "english": "Beau Bridgland",
+      "chinese": "kinsen",
+      "japanese": "斉藤壮馬",
+      "korean": "Yang Jeong-hwa"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Citlali": {
+    "name": "Citlali",
+    "gameId": 10000107,
+    "element": "Cryo",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Obsidian Opalstar",
+    "description": "The great shaman from the Masters of the Night-Wind, the universally-revered Granny Itztli.",
+    "birthday": "January 20",
+    "affiliation": "Mictlan",
+    "region": "Natlan",
+    "constellation": "Patina Anavatlaca",
+    "voiceActors": {
+      "english": "Skyler Davenport",
+      "chinese": "柳知萧",
+      "japanese": "田野アサミ",
+      "korean": "Lee Eun-jo"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Clorinde": {
+    "name": "Clorinde",
+    "gameId": 10000098,
+    "element": "Electro",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Candlebearer, Shadowhunter",
+    "description": "An undefeated Champion Duelist. Sword in hand, she defends justice in the Court of Fontaine.",
+    "birthday": "September 20",
+    "affiliation": "Trial Court",
+    "region": "Fontaine",
+    "constellation": "Rapperia",
+    "voiceActors": {
+      "english": "Crystal Lee",
+      "chinese": "赵涵雨",
+      "japanese": "石川由依",
+      "korean": "Shin Na-ri"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Collei": {
+    "name": "Collei",
+    "gameId": 10000067,
+    "element": "Dendro",
+    "weaponType": "Bow",
+    "rarity": 4,
+    "title": "Sprout of Rebirth",
+    "description": "A trainee ranger active in Avidya Forest. Behind her enthusiastic words and actions hides a slightly introverted personality.",
+    "birthday": "May 8",
+    "affiliation": "Gandharva Ville",
+    "region": "Sumeru",
+    "constellation": "Leptailurus Cervarius",
+    "voiceActors": {
+      "english": "Christina Costello",
+      "chinese": "秦文静",
+      "japanese": "前川涼子",
+      "korean": "Bang Siu"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Columbina": {
+    "name": "Columbina",
+    "gameId": 10000125,
+    "element": "Hydro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Welkin Moon's Homecoming",
+    "description": "The Moon Maiden born in Nod-Krai, and also the welkin moon returning home.",
+    "birthday": "January 14",
+    "affiliation": "Silvermoon Hall",
+    "region": "Nod-Krai",
+    "constellation": "???",
+    "voiceActors": {
+      "english": "Emi Lo",
+      "chinese": "杨梦露",
+      "japanese": "Lynn",
+      "korean": "Yu Yeong"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Cyno": {
+    "name": "Cyno",
+    "gameId": 10000071,
+    "element": "Electro",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "Judicator of Secrets",
+    "description": "The General Mahamatra in charge of supervising the researchers of the Akademiya. It is said that when he gets down to work, the General Mahamatra is even more efficient than the \"Great Vayuvyastra\" made by the Kshahrewar.",
+    "birthday": "June 23",
+    "affiliation": "Temple of Silence",
+    "region": "Sumeru",
+    "constellation": "Lupus Aureus",
+    "voiceActors": {
+      "english": "Alejandro Saab",
+      "chinese": "李轻扬",
+      "japanese": "入野自由",
+      "korean": "Jung Eui-jin & Lee Woo-ri"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Dahlia": {
+    "name": "Dahlia",
+    "gameId": 10000115,
+    "element": "Hydro",
+    "weaponType": "Sword",
+    "rarity": 4,
+    "title": "Ode and Oblation",
+    "description": "Deacon of the Church of Favonius and the Anemo Archon's representative in the church.",
+    "birthday": "May 25",
+    "affiliation": "Church of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Cantus Choralis",
+    "voiceActors": {
+      "english": "Aileen Mythen",
+      "chinese": "风袖",
+      "japanese": "山本和臣",
+      "korean": "Seok Seung-hoon"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Dehya": {
+    "name": "Dehya",
+    "gameId": 10000079,
+    "element": "Pyro",
+    "weaponType": "Claymore",
+    "rarity": 5,
+    "title": "Flame-Mane",
+    "description": "A member of the Eremites, a mercenary organization that roams the sands of Sumeru. Valiant and powerful, she enjoys great fame amongst her fellow Eremites.",
+    "birthday": "April 7",
+    "affiliation": "The Eremites",
+    "region": "Sumeru",
+    "constellation": "Mantichora",
+    "voiceActors": {
+      "english": "Amber May",
+      "chinese": "陈雨",
+      "japanese": "福原綾香",
+      "korean": "Kim Hyeon-sim"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Diluc": {
+    "name": "Diluc",
+    "gameId": 10000016,
+    "element": "Pyro",
+    "weaponType": "Claymore",
+    "rarity": 5,
+    "title": "Dark Side of Dawn",
+    "description": "The tycoon of a winery empire in Mondstadt, unmatched in every possible way.",
+    "birthday": "April 30",
+    "affiliation": "Dawn Winery",
+    "region": "Mondstadt",
+    "constellation": "Noctua",
+    "voiceActors": {
+      "english": "Sean Chiplock",
+      "chinese": "马洋",
+      "japanese": "小野賢章",
+      "korean": "Choi Seung-hoon"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Diona": {
+    "name": "Diona",
+    "gameId": 10000039,
+    "element": "Cryo",
+    "weaponType": "Bow",
+    "rarity": 4,
+    "title": "Kätzlein Cocktail",
+    "description": "A young lady who has inherited trace amounts of non-human blood. She is the incredibly popular bartender of the Cat's Tail tavern.",
+    "birthday": "January 18",
+    "affiliation": "The Cat's Tail",
+    "region": "Mondstadt",
+    "constellation": "Feles",
+    "voiceActors": {
+      "english": "Dina Sherman",
+      "chinese": "诺亚",
+      "japanese": "井澤詩織",
+      "korean": "Woo Jeong-shin"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Dori": {
+    "name": "Dori",
+    "gameId": 10000068,
+    "element": "Electro",
+    "weaponType": "Claymore",
+    "rarity": 4,
+    "title": "Treasure of Dream Garden",
+    "description": "An elusive merchant who has a fondness for glittering Mora.",
+    "birthday": "December 21",
+    "affiliation": "The Palace of Alcazarzaray",
+    "region": "Sumeru",
+    "constellation": "Magicae Lucerna",
+    "voiceActors": {
+      "english": "Anjali Kunapaneni",
+      "chinese": "王晓彤",
+      "japanese": "金田朋子",
+      "korean": "Lee Myeong-ho"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Durin": {
+    "name": "Durin",
+    "gameId": 10000123,
+    "element": "Pyro",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "\"The Undying Fire\"",
+    "description": "A dragon born from M's pen, who came to alight in the human world. His \"story\" continues to unfold.",
+    "birthday": "March 14",
+    "affiliation": "Hexenzirkel",
+    "region": "Mondstadt",
+    "constellation": "Draco Rubedo",
+    "voiceActors": {
+      "english": "Laurie Kynaston",
+      "chinese": "陶典",
+      "japanese": "小林千晃",
+      "korean": "Kim Ji-yul"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Emilie": {
+    "name": "Emilie",
+    "gameId": 10000099,
+    "element": "Dendro",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "A Thousand Scents Traced",
+    "description": "A Fontainian perfumer, one who bottles secrets.",
+    "birthday": "September 22",
+    "affiliation": "Court of Fontaine",
+    "region": "Fontaine",
+    "constellation": "Pomum de Ambra",
+    "voiceActors": {
+      "english": "Amber Aviles",
+      "chinese": "木子橙",
+      "japanese": "日笠陽子",
+      "korean": "Kwon Da-ye"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Escoffier": {
+    "name": "Escoffier",
+    "gameId": 10000112,
+    "element": "Cryo",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "Tasteful Excellence",
+    "description": "The ex-head chef of Hotel Debord, renowned throughout Fontaine as the Patissiere Supreme and vanguard of precision gastronomy. Has incomparably strict standards when it comes to cooking.",
+    "birthday": "June 8",
+    "affiliation": "Fontaine",
+    "region": "Fontaine",
+    "constellation": "Dulciaria Structura",
+    "voiceActors": {
+      "english": "Emily Cass",
+      "chinese": "蔡海婷",
+      "japanese": "佐藤聡美",
+      "korean": "Son Jeong-min"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Eula": {
+    "name": "Eula",
+    "gameId": 10000051,
+    "element": "Cryo",
+    "weaponType": "Claymore",
+    "rarity": 5,
+    "title": "Dance of the Shimmering Wave",
+    "description": "The Spindrift Knight, a scion of the old aristocracy, and the Captain of the Knights of Favonius Reconnaissance Company. The reason for which a descendant of the ancient nobles might join the Knights remains a great mystery in Mondstadt to this very day.",
+    "birthday": "October 25",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Aphros Delos",
+    "voiceActors": {
+      "english": "Suzie Yeung",
+      "chinese": "子音",
+      "japanese": "佐藤利奈",
+      "korean": "Kim Hyeon-ji"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Faruzan": {
+    "name": "Faruzan",
+    "gameId": 10000076,
+    "element": "Anemo",
+    "weaponType": "Bow",
+    "rarity": 4,
+    "title": "Enigmatic Machinist",
+    "description": "A researcher from \"one hundred years ago.\" She enjoys self-identifying as everyone's senior, and has significant knowledge of ancient scripts and machines of all kinds.",
+    "birthday": "August 20",
+    "affiliation": "Haravatat",
+    "region": "Sumeru",
+    "constellation": "Flosculi Implexi",
+    "voiceActors": {
+      "english": "Chandni Parekh",
+      "chinese": "阎萌萌",
+      "japanese": "堀江由衣",
+      "korean": "Kim Yu-rim"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Fischl": {
+    "name": "Fischl",
+    "gameId": 10000031,
+    "element": "Electro",
+    "weaponType": "Bow",
+    "rarity": 4,
+    "title": "Prinzessin der Verurteilung!",
+    "description": "A mysterious girl who calls herself \"Prinzessin der Verurteilung\" and travels with a night raven named Oz.",
+    "birthday": "May 27",
+    "affiliation": "Adventurers' Guild",
+    "region": "Mondstadt",
+    "constellation": "Corvus",
+    "voiceActors": {
+      "english": "Brittany Cox & Ben Pronsky",
+      "chinese": "Mace & 赵悦程",
+      "japanese": "内田真礼 & 増谷康紀",
+      "korean": "Park Go-woon & Lee Hyeon"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Flins": {
+    "name": "Flins",
+    "gameId": 10000120,
+    "element": "Electro",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "Shadowy Lights, Stranger Wights",
+    "description": "A Lightkeeper of Nod-Krai, guardian of a lighthouse and graveyard on a northern isle. An enigmatic gentleman, cultured and courtly.",
+    "birthday": "October 31",
+    "affiliation": "Lightkeepers",
+    "region": "Nod-Krai",
+    "constellation": "Laterna Vigilis",
+    "voiceActors": {
+      "english": "Nic Olsen",
+      "chinese": "马正阳",
+      "japanese": "中村悠一",
+      "korean": "Shin Yong-woo"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Freminet": {
+    "name": "Freminet",
+    "gameId": 10000085,
+    "element": "Cryo",
+    "weaponType": "Claymore",
+    "rarity": 4,
+    "title": "Yearning for Unseen Depths",
+    "description": "A reserved young man who is well-versed in diving. Beneath his distant, icy demeanor lies a pure heart bereft of all flaws.",
+    "birthday": "September 24",
+    "affiliation": "Hotel Bouffes d'ete",
+    "region": "Fontaine",
+    "constellation": "Automaton",
+    "voiceActors": {
+      "english": "Paul Castro Jr.",
+      "chinese": "锦鲤",
+      "japanese": "土岐隼一",
+      "korean": "Lee Ju-seung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Furina": {
+    "name": "Furina",
+    "gameId": 10000089,
+    "element": "Hydro",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Endless Solo of Solitude",
+    "description": "The absolute focus of the stage of judgment, until the final applause sounds.",
+    "birthday": "October 13",
+    "affiliation": "Court of Fontaine",
+    "region": "Fontaine",
+    "constellation": "Animula Choragi",
+    "voiceActors": {
+      "english": "Amber Lee Connors",
+      "chinese": "钱琛",
+      "japanese": "水瀬いのり",
+      "korean": "Kim Ha-young"
+    },
+    "metaTier": 1,
+    "role": "support",
+    "priorityTalent": "burst",
+    "weaponRarity": 5,
+    "recommendationBasis": "legacy_editorial"
+  },
+  "Gaming": {
+    "name": "Gaming",
+    "gameId": 10000092,
+    "element": "Pyro",
+    "weaponType": "Claymore",
+    "rarity": 4,
+    "title": "Leonine Vanguard",
+    "description": "Guard of the Sword and Strongbox Secure Transport Agency, and the head of the \"Mighty Mythical Beasts\" Wushou troupe.",
+    "birthday": "December 22",
+    "affiliation": "Sword and Strongbox Secure Transport Agency",
+    "region": "Liyue",
+    "constellation": "Leo Expergiscens",
+    "voiceActors": {
+      "english": "Caleb Yen",
+      "chinese": "谢莹",
+      "japanese": "小松昌平",
+      "korean": "Kim Yoon-gi"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Ganyu": {
+    "name": "Ganyu",
+    "gameId": 10000037,
+    "element": "Cryo",
+    "weaponType": "Bow",
+    "rarity": 5,
+    "title": "Plenilune Gaze",
+    "description": "The secretary at Yuehai Pavilion. The blood of the qilin, an illuminated beast, flows within her veins.",
+    "birthday": "December 2",
+    "affiliation": "Yuehai Pavilion",
+    "region": "Liyue",
+    "constellation": "Sinae Unicornis",
+    "voiceActors": {
+      "english": "Rachel Lepore & Jennifer Losi",
+      "chinese": "林簌",
+      "japanese": "上田麗奈",
+      "korean": "Kim Seon-hye"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Gorou": {
+    "name": "Gorou",
+    "gameId": 10000055,
+    "element": "Geo",
+    "weaponType": "Bow",
+    "rarity": 4,
+    "title": "Canine Warrior",
+    "description": "The great general of Watatsumi Island's forces. He is deeply trusted by his subordinates.",
+    "birthday": "May 18",
+    "affiliation": "Watatsumi Island",
+    "region": "Inazuma",
+    "constellation": "Canis Bellatoris",
+    "voiceActors": {
+      "english": "Cory Yee",
+      "chinese": "杨昕燃",
+      "japanese": "畠中祐",
+      "korean": "Lee Sae-byeok"
+    },
+    "recommendationBasis": "unavailable"
+  },
   "HuTao": {
+    "name": "Hu Tao",
+    "gameId": 10000046,
+    "element": "Pyro",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "Fragrance in Thaw",
+    "description": "The 77th Director of the Wangsheng Funeral Parlor. She took over the business at a rather young age.",
+    "birthday": "July 15",
+    "affiliation": "Wangsheng Funeral Parlor",
+    "region": "Liyue",
+    "constellation": "Papilio Charontis",
+    "voiceActors": {
+      "english": "Brianna Knickerbocker",
+      "chinese": "陶典",
+      "japanese": "高橋李依",
+      "korean": "Kim Ha-ru"
+    },
     "metaTier": 1,
     "role": "dps",
     "priorityTalent": "skill",
-    "weaponRarity": 5
+    "weaponRarity": 5,
+    "recommendationBasis": "legacy_editorial"
   },
-  "Venti": {
-    "metaTier": 1,
-    "role": "support",
-    "priorityTalent": "burst",
-    "weaponRarity": 5
+  "Iansan": {
+    "name": "Iansan",
+    "gameId": 10000110,
+    "element": "Electro",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Tempered in Molten Stone",
+    "description": "Head coach of the fitness club at the Collective of Plenty, and a renowned Natlanese nutritionist.",
+    "birthday": "August 8",
+    "affiliation": "Teteocan",
+    "region": "Natlan",
+    "constellation": "Carnotaurus",
+    "voiceActors": {
+      "english": "Katrina Salisbury",
+      "chinese": "真理",
+      "japanese": "大橋彩香",
+      "korean": "Lee Jae-hyun"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Ifa": {
+    "name": "Ifa",
+    "gameId": 10000113,
+    "element": "Anemo",
+    "weaponType": "Catalyst",
+    "rarity": 4,
+    "title": "In the Wake of Wandering Winds",
+    "description": "A vet from the Flower-Feather Clan who cherishes the life he leads alongside all manner of living things — people, animals, you name it.",
+    "birthday": "March 23",
+    "affiliation": "Tlalocan",
+    "region": "Natlan",
+    "constellation": "Catena Opele",
+    "voiceActors": {
+      "english": "Jonny Loquasto & Dominic Catrambone",
+      "chinese": "吕书君",
+      "japanese": "寺島惇太&小松昌平",
+      "korean": "Park Ki-wook"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Illuga": {
+    "name": "Illuga",
+    "gameId": 10000127,
+    "element": "Geo",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Nightmare's Burning Heart",
+    "description": "Member of the investigation squad, the Nightmare Orioles. The youngest squad leader among the Lightkeepers.",
+    "birthday": "December 23",
+    "affiliation": "Lightkeepers",
+    "region": "Nod-Krai",
+    "constellation": "Oriolus",
+    "voiceActors": {
+      "english": "Jonathon Ha",
+      "chinese": "昱头",
+      "japanese": "梅田修一朗",
+      "korean": "Hwang Dong-hyun"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Ineffa": {
+    "name": "Ineffa",
+    "gameId": 10000116,
+    "element": "Electro",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "Boom Boom Thunderwave",
+    "description": "A multifunctional robot containing integrated mechanical components from various nations. The Source Core in her chest has endured the passage of countless years.",
+    "birthday": "April 2",
+    "affiliation": "Clink-Clank Krumkake Craftshop",
+    "region": "Nod-Krai",
+    "constellation": "Vanilla Planifolia",
+    "voiceActors": {
+      "english": "Angelina Danielle Cama",
+      "chinese": "美加",
+      "japanese": "中島愛",
+      "korean": "Sung Ye-won"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Jahoda": {
+    "name": "Jahoda",
+    "gameId": 10000124,
+    "element": "Anemo",
+    "weaponType": "Bow",
+    "rarity": 4,
+    "title": "Windthreading Shadow",
+    "description": "The Curatorium of Secrets' extremely reliable, do-it-all super employee (or so she claims).",
+    "birthday": "January 5",
+    "affiliation": "Curatorium of Secrets",
+    "region": "Nod-Krai",
+    "constellation": "Fragum",
+    "voiceActors": {
+      "english": "Sonya Krueger",
+      "chinese": "韩娇娇",
+      "japanese": "稲垣好",
+      "korean": "Oh Ro-ah"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Jean": {
+    "name": "Jean",
+    "gameId": 10000003,
+    "element": "Anemo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Dandelion Knight",
+    "description": "The righteous and rigorous Dandelion Knight, and Acting Grand Master of Mondstadt's Knights of Favonius.",
+    "birthday": "March 14",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Leo Minor",
+    "voiceActors": {
+      "english": "Stephanie Southerland",
+      "chinese": "林簌",
+      "japanese": "斎藤千和",
+      "korean": "Ahn Young-mi"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Kachina": {
+    "name": "Kachina",
+    "gameId": 10000100,
+    "element": "Geo",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Mottled Gold Yet Unsmelted",
+    "description": "A young warrior of the Nanatzcayan, given the Ancient Name of \"Uthabiti.\" Kind-hearted and insatiably persistent, she grows stronger and more capable with each setback she faces.",
+    "birthday": "April 22",
+    "affiliation": "Nanatzcayan",
+    "region": "Natlan",
+    "constellation": "Ochotona Princeps",
+    "voiceActors": {
+      "english": "Kristen McGuire",
+      "chinese": "静宸",
+      "japanese": "久保ユリカ",
+      "korean": "Son Sun-young"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "KaedeharaKazuha": {
+    "name": "Kaedehara Kazuha",
+    "gameId": 10000047,
+    "element": "Anemo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Scarlet Leaves Pursue Wild Waves",
+    "description": "A wandering samurai from Inazuma who is currently with Liyue's Crux Fleet. A gentle and carefree soul whose heart hides a great many burdens from the past.",
+    "birthday": "October 29",
+    "affiliation": "The Crux",
+    "region": "Inazuma",
+    "constellation": "Acer Palmatum",
+    "voiceActors": {
+      "english": "Mark Whitten",
+      "chinese": "斑马",
+      "japanese": "島﨑信長",
+      "korean": "Kim Shin-woo"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Kaeya": {
+    "name": "Kaeya",
+    "gameId": 10000015,
+    "element": "Cryo",
+    "weaponType": "Sword",
+    "rarity": 4,
+    "title": "Frostwind Swordsman",
+    "description": "An accomplished swordsman and a strategic thinker in the Knights of Favonius, rumored to hail from beyond Mondstadt.",
+    "birthday": "November 30",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Pavo Ocellus",
+    "voiceActors": {
+      "english": "Josey Montana McCoy",
+      "chinese": "孙晔",
+      "japanese": "鳥海浩輔",
+      "korean": "Jung Joo-won"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "KamisatoAyaka": {
+    "name": "Kamisato Ayaka",
+    "gameId": 10000002,
+    "element": "Cryo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Frostflake Heron",
+    "description": "Daughter of the Yashiro Commission's Kamisato Clan. Dignified and elegant, as well as wise and strong.",
+    "birthday": "September 28",
+    "affiliation": "Yashiro Commission",
+    "region": "Inazuma",
+    "constellation": "Grus Nivis",
+    "voiceActors": {
+      "english": "Erica Mendez",
+      "chinese": "小N",
+      "japanese": "早見沙織",
+      "korean": "Lee Yoo-ri"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "KamisatoAyato": {
+    "name": "Kamisato Ayato",
+    "gameId": 10000066,
+    "element": "Hydro",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Pillar of Fortitude",
+    "description": "The young but highly accomplished head of the Yashiro Commission's Kamisato Clan. Cultured and polite, he is a man of many ways and means.",
+    "birthday": "March 26",
+    "affiliation": "Yashiro Commission",
+    "region": "Inazuma",
+    "constellation": "Cypressus Custos",
+    "voiceActors": {
+      "english": "Chris Hackney",
+      "chinese": "赵路",
+      "japanese": "石田彰",
+      "korean": "Jang Min-hyeok"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Kaveh": {
+    "name": "Kaveh",
+    "gameId": 10000081,
+    "element": "Dendro",
+    "weaponType": "Claymore",
+    "rarity": 4,
+    "title": "Empyrean Reflection",
+    "description": "A renowned architect from Sumeru who perhaps cares a bit too much about too many things. He is an aesthete troubled by reality.",
+    "birthday": "July 9",
+    "affiliation": "Independent Design Studio",
+    "region": "Sumeru",
+    "constellation": "Paradisaea",
+    "voiceActors": {
+      "english": "Ben Balmaceda",
+      "chinese": "刘三木",
+      "japanese": "内田雄馬",
+      "korean": "Lee Jeong-min"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Keqing": {
+    "name": "Keqing",
+    "gameId": 10000042,
+    "element": "Electro",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Driving Thunder",
+    "description": "The Yuheng of the Liyue Qixing. Keqing has much to say about Rex Lapis's unilateral approach to policymaking in Liyue — but in truth, gods admire skeptics such as her quite a lot.",
+    "birthday": "November 20",
+    "affiliation": "Liyue Qixing",
+    "region": "Liyue",
+    "constellation": "Trulla Cementarii",
+    "voiceActors": {
+      "english": "Rosie Day",
+      "chinese": "谢莹",
+      "japanese": "喜多村英梨",
+      "korean": "Lee Bo-hee"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Kinich": {
+    "name": "Kinich",
+    "gameId": 10000101,
+    "element": "Dendro",
+    "weaponType": "Claymore",
+    "rarity": 5,
+    "title": "Turnfire Hunt",
+    "description": "A Huitztlan Saurian Hunter skilled at counting costs.",
+    "birthday": "November 11",
+    "affiliation": "Huitztlan",
+    "region": "Natlan",
+    "constellation": "Chimaera Alebriius",
+    "voiceActors": {
+      "english": "Jacob Takanashi & Abby Espiritu",
+      "chinese": "斑马 & 弭洋",
+      "japanese": "杉山紀彰 & 竹内順子",
+      "korean": "Kang Seong-woo & Park Li-na"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Kirara": {
+    "name": "Kirara",
+    "gameId": 10000061,
+    "element": "Dendro",
+    "weaponType": "Sword",
+    "rarity": 4,
+    "title": "Cat Upon the Eaves",
+    "description": "A courier for Komaniya Express, a delivery company in Inazuma. A nekomata who loves her job and human society.",
+    "birthday": "January 22",
+    "affiliation": "Komaniya Express",
+    "region": "Inazuma",
+    "constellation": "Arcella",
+    "voiceActors": {
+      "english": "Julia Gu",
+      "chinese": "孙艳琦",
+      "japanese": "鈴代紗弓",
+      "korean": "Kang Eun-ae"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Klee": {
+    "name": "Klee",
+    "gameId": 10000029,
+    "element": "Pyro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Fleeing Sunlight",
+    "description": "An explosives expert and a regular at the Knights of Favonius's confinement room. Also known as Fleeing Sunlight.",
+    "birthday": "July 27",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Trifolium",
+    "voiceActors": {
+      "english": "Poonam Basu",
+      "chinese": "花玲",
+      "japanese": "久野美咲",
+      "korean": "Bang Yeon-ji"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "KujouSara": {
+    "name": "Kujou Sara",
+    "gameId": 10000056,
+    "element": "Electro",
+    "weaponType": "Bow",
+    "rarity": 4,
+    "title": "Crowfeather Kaburaya",
+    "description": "A general of the Tenryou Commission. Bold, decisive, and skilled in battle.",
+    "birthday": "July 14",
+    "affiliation": "Tenryou Commission",
+    "region": "Inazuma",
+    "constellation": "Flabellum",
+    "voiceActors": {
+      "english": "Jeannie Tirado",
+      "chinese": "杨梦露",
+      "japanese": "瀬戸麻沙美",
+      "korean": "Moon Ji-young"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "KukiShinobu": {
+    "name": "Kuki Shinobu",
+    "gameId": 10000065,
+    "element": "Electro",
+    "weaponType": "Sword",
+    "rarity": 4,
+    "title": "Mender of Tribulations",
+    "description": "The capable and reliable Arataki Gang deputy leader. Please note: capable and reliable are not appellations for the \"Arataki Gang,\" but for their deputy leader in specific.",
+    "birthday": "July 27",
+    "affiliation": "Arataki Gang",
+    "region": "Inazuma",
+    "constellation": "Tribulatio Demptio",
+    "voiceActors": {
+      "english": "Kira Buckland",
+      "chinese": "杨凝",
+      "japanese": "水橋かおり",
+      "korean": "Kim Yool"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "LanYan": {
+    "name": "Lan Yan",
+    "gameId": 10000108,
+    "element": "Anemo",
+    "weaponType": "Catalyst",
+    "rarity": 4,
+    "title": "Spring Woven From Jade",
+    "description": "A rattan weaver from Chenyu Vale. Clear-minded and well-tempered, she is as lively as a mountain spring.",
+    "birthday": "January 6",
+    "affiliation": "Chenyu Vale",
+    "region": "Liyue",
+    "constellation": "Hirundo Lazuli",
+    "voiceActors": {
+      "english": "Anna Devlin",
+      "chinese": "刘十四",
+      "japanese": "若山詩音",
+      "korean": "Kim Soon-mi"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Lauma": {
+    "name": "Lauma",
+    "gameId": 10000119,
+    "element": "Dendro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Evermoon's Sacrament Song",
+    "description": "A Maiden blessed by moonlight and the grove alike, hope born to the Frostmoon Scions.",
+    "birthday": "March 1",
+    "affiliation": "Frostmoon Scions",
+    "region": "Nod-Krai",
+    "constellation": "Cerva Nivea",
+    "voiceActors": {
+      "english": "Alexandra Guelff",
+      "chinese": "张安琪",
+      "japanese": "桑島法子",
+      "korean": "Jang Chae-yeon"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Layla": {
+    "name": "Layla",
+    "gameId": 10000074,
+    "element": "Cryo",
+    "weaponType": "Sword",
+    "rarity": 4,
+    "title": "Fantastical Evening Star",
+    "description": "A Rtawahist student who specializes in Theoretical Astrology. Heavily prone to somnambulism and locked in a grinding war with sleep deprivation, the problem of restful slumber is a most troubling one to her.",
+    "birthday": "December 19",
+    "affiliation": "Rtawahist",
+    "region": "Sumeru",
+    "constellation": "Luscinia",
+    "voiceActors": {
+      "english": "Ashely Biski",
+      "chinese": "侯小菲",
+      "japanese": "富田美憂",
+      "korean": "Kang Sae-bom"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Linnea": {
+    "name": "Linnea",
+    "gameId": 10000130,
+    "element": "Geo",
+    "weaponType": "Bow",
+    "rarity": 5,
+    "title": "Augur of Wonders",
+    "description": "Naturalist and Advisor to the Nod-Krai Branch of the Adventurers' Guild.",
+    "birthday": "May 23",
+    "affiliation": "Adventurers' Guild",
+    "region": "Nod-Krai",
+    "constellation": "Alcyon",
+    "voiceActors": {
+      "english": "Savanna Menzel",
+      "chinese": "周侗",
+      "japanese": "白石晴香",
+      "korean": "Kim Yun-chae"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Lisa": {
+    "name": "Lisa",
+    "gameId": 10000006,
+    "element": "Electro",
+    "weaponType": "Catalyst",
+    "rarity": 4,
+    "title": "Witch of Purple Rose",
+    "description": "The languid but knowledgeable Librarian of the Knights of Favonius, deemed by Sumeru Akademiya to be their most distinguished graduate in the past two centuries.",
+    "birthday": "June 9",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Tempus Fugit",
+    "voiceActors": {
+      "english": "Mara Junot",
+      "chinese": "钟可",
+      "japanese": "田中理恵",
+      "korean": "Park Go-woon"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Lohen": {
+    "name": "Lohen",
+    "gameId": 10000129,
+    "element": "Cryo",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "Sharpened Arrowhead",
+    "description": "Vice Captain of the Knights of Favonius Ranged Company, a knight known for his unorthodox approach and fondness for unconventional tactics.",
+    "birthday": "April 3",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Lepus Miles",
+    "voiceActors": {
+      "english": "Nick Wolfhard",
+      "chinese": "林婧南",
+      "japanese": "天﨑滉平",
+      "korean": "Lee Sang-ho"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Lumine": {
+    "name": "Lumine",
+    "gameId": 10000007,
+    "element": "Adaptive",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "",
+    "description": "A traveler from another world who had their only kin taken away, forcing them to embark on a journey to find The Seven.",
+    "birthday": null,
+    "affiliation": null,
+    "region": null,
+    "constellation": "Viatrix",
+    "voiceActors": {
+      "english": "Sarah Miller-Crews & Various Artists",
+      "chinese": "宴宁 & 多多poi",
+      "japanese": "悠木碧 & 古賀葵",
+      "korean": "Lee Sae-ah & Kim Ka-ryoung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Lynette": {
+    "name": "Lynette",
+    "gameId": 10000083,
+    "element": "Anemo",
+    "weaponType": "Sword",
+    "rarity": 4,
+    "title": "Elegance in the Shadows",
+    "description": "A magic assistant of few words, her emotions are as inscrutable as any cat's.",
+    "birthday": "February 2",
+    "affiliation": "Hotel Bouffes d'ete",
+    "region": "Fontaine",
+    "constellation": "Felis Alba",
+    "voiceActors": {
+      "english": "Anairis Quiñones",
+      "chinese": "可可味",
+      "japanese": "篠原侑",
+      "korean": "Lee Serena"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Lyney": {
+    "name": "Lyney",
+    "gameId": 10000084,
+    "element": "Pyro",
+    "weaponType": "Bow",
+    "rarity": 5,
+    "title": "Spectacle of Phantasmagoria",
+    "description": "A famed Fontainian magician who possesses great stage presence as well as gift of the gab. Audiences are enthralled by his exquisite skills, and they hang on to his every clever word.",
+    "birthday": "February 2",
+    "affiliation": "Hotel Bouffes d'ete",
+    "region": "Fontaine",
+    "constellation": "Felis Fuscus",
+    "voiceActors": {
+      "english": "Daman Mills",
+      "chinese": "锦鲤",
+      "japanese": "下野紘",
+      "korean": "Park Seong-yeong"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Manekin": {
+    "name": "Manekin",
+    "gameId": 10000117,
+    "element": "Adaptive",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "",
+    "description": "A Manekin gifted to you and Paimon by a witch who uses the pseudonym \"Octavia.\" They are gifted at exploring the mysteries sealed within the Miliastra Wonderland.",
+    "birthday": null,
+    "affiliation": "——",
+    "region": null,
+    "constellation": "——",
+    "voiceActors": {
+      "english": "——",
+      "chinese": "——",
+      "japanese": "——",
+      "korean": "——"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Manekina": {
+    "name": "Manekina",
+    "gameId": 10000118,
+    "element": "Adaptive",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "",
+    "description": "A Manekin gifted to you and Paimon by a witch who uses the pseudonym \"Octavia.\" They are gifted at exploring the mysteries sealed within the Miliastra Wonderland.",
+    "birthday": null,
+    "affiliation": "——",
+    "region": null,
+    "constellation": "——",
+    "voiceActors": {
+      "english": "——",
+      "chinese": "——",
+      "japanese": "——",
+      "korean": "——"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Mavuika": {
+    "name": "Mavuika",
+    "gameId": 10000106,
+    "element": "Pyro",
+    "weaponType": "Claymore",
+    "rarity": 5,
+    "title": "Night-Igniting Flame",
+    "description": "The leader of Natlan who inherited the Ancient Name of \"Kiongozi.\" She made a vow to illuminate the future of the nation of war with the Sacred Flame.",
+    "birthday": "August 28",
+    "affiliation": "Huitztlan",
+    "region": "Natlan",
+    "constellation": "Sol Invictus",
+    "voiceActors": {
+      "english": "Katiana Sarkissian",
+      "chinese": "李晔",
+      "japanese": "小松未可子",
+      "korean": "Kim Na-yul"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Mika": {
+    "name": "Mika",
+    "gameId": 10000080,
+    "element": "Cryo",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Coordinates of Clear Frost",
+    "description": "A young knight born to an ordinary family. He serves as a Front-Line Surveyor in his Company. He is a low-key and cautious character.",
+    "birthday": "August 11",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Palumbus",
+    "voiceActors": {
+      "english": "Robb Moreira",
+      "chinese": "邓宥希",
+      "japanese": "三瓶由布子",
+      "korean": "Yoon Eun-seo"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Mona": {
+    "name": "Mona",
+    "gameId": 10000041,
+    "element": "Hydro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Astral Reflection",
+    "description": "A mysterious young astrologer who proclaims herself to be \"Astrologist Mona Megistus,\" and who possesses abilities to match the title. Erudite, but prideful.",
+    "birthday": "August 31",
+    "affiliation": "Mondstadt",
+    "region": "Mondstadt",
+    "constellation": "Astrolabos",
+    "voiceActors": {
+      "english": "Felecia Angelle",
+      "chinese": "陈婷婷",
+      "japanese": "小原好美",
+      "korean": "Woo Jeong-shin"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Mualani": {
+    "name": "Mualani",
+    "gameId": 10000102,
+    "element": "Hydro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Splish-Splash Wavechaser",
+    "description": "A well-known guide in Natlan who owns a watersports shop, and expert in all forms of wave-chasing.",
+    "birthday": "August 3",
+    "affiliation": "Meztli",
+    "region": "Natlan",
+    "constellation": "Phoca Neomonachus",
+    "voiceActors": {
+      "english": "Cassandra Lee Morris",
+      "chinese": "王晓彤",
+      "japanese": "東山奈央",
+      "korean": "Kim Do-hee"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Nahida": {
+    "name": "Nahida",
+    "gameId": 10000073,
+    "element": "Dendro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Physic of Purity",
+    "description": "A caged bird secluded within the confines of the Sanctuary of Surasthana who can only see the world in her dreams.",
+    "birthday": "October 27",
+    "affiliation": "Sumeru City",
+    "region": "Sumeru",
+    "constellation": "Sapientia Oromasdis",
+    "voiceActors": {
+      "english": "Kimberley Anne Campbell",
+      "chinese": "花玲",
+      "japanese": "田村ゆかり",
+      "korean": "Park Shi-yoon"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Navia": {
+    "name": "Navia",
+    "gameId": 10000091,
+    "element": "Geo",
+    "weaponType": "Claymore",
+    "rarity": 5,
+    "title": "Helm of the Radiant Rose",
+    "description": "The current President of Spina di Rosula, who is lovely, dutiful, and a great boss.",
+    "birthday": "August 16",
+    "affiliation": "Spina di Rosula",
+    "region": "Fontaine",
+    "constellation": "Rosa Multiflora",
+    "voiceActors": {
+      "english": "Brenna Larsen",
+      "chinese": "小敢",
+      "japanese": "豊崎愛生",
+      "korean": "Jeong Hae-eun"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Nefer": {
+    "name": "Nefer",
+    "gameId": 10000122,
+    "element": "Dendro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Secret Beneath the Sands",
+    "description": "The remarkably resourceful owner of the Curatorium of Secrets.",
+    "birthday": "May 9",
+    "affiliation": "Curatorium of Secrets",
+    "region": "Nod-Krai",
+    "constellation": "Ludus Latrunculorum",
+    "voiceActors": {
+      "english": "Ashleigh Haddad",
+      "chinese": "曾彤",
+      "japanese": "水樹奈々",
+      "korean": "Won Esther"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Neuvillette": {
+    "name": "Neuvillette",
+    "gameId": 10000087,
+    "element": "Hydro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Ordainer of Inexorable Judgment",
+    "description": "The Chief Justice of Fontaine, known as the Iudex, is renowned for his unassailable impartiality.",
+    "birthday": "December 18",
+    "affiliation": "Court of Fontaine",
+    "region": "Fontaine",
+    "constellation": "???",
+    "voiceActors": {
+      "english": "Ray Chase",
+      "chinese": "桑毓泽",
+      "japanese": "神谷浩史",
+      "korean": "Kwak Yoon-sang"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Nicole": {
+    "name": "Nicole",
+    "gameId": 10000131,
+    "element": "Pyro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Clamor Within",
+    "description": "The Silent \"Mage,\" the Voiceless \"Angel.\"",
+    "birthday": "September 29",
+    "affiliation": "Hexenzirkel",
+    "region": null,
+    "constellation": "Reliquiarium",
+    "voiceActors": {
+      "english": "Sophie Shad",
+      "chinese": "云鹤追",
+      "japanese": "豊口めぐみ",
+      "korean": "Lee So-eun"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Nilou": {
+    "name": "Nilou",
+    "gameId": 10000070,
+    "element": "Hydro",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Dance of Lotuslight",
+    "description": "The star of the Zubayr Theater. She is full of warmth and innocence, and her dances are lively and elegant.",
+    "birthday": "December 3",
+    "affiliation": "Zubayr Theater",
+    "region": "Sumeru",
+    "constellation": "Lotos Somno",
+    "voiceActors": {
+      "english": "Dani Chambers",
+      "chinese": "紫苏九月",
+      "japanese": "金元寿子",
+      "korean": "Chae Rim"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Ningguang": {
+    "name": "Ningguang",
+    "gameId": 10000027,
+    "element": "Geo",
+    "weaponType": "Catalyst",
+    "rarity": 4,
+    "title": "Eclipsing Star",
+    "description": "The Tianquan of the Liyue Qixing. Her wealth is unsurpassed in all of Teyvat.",
+    "birthday": "August 26",
+    "affiliation": "Liyue Qixing",
+    "region": "Liyue",
+    "constellation": "Opus Aequilibrium",
+    "voiceActors": {
+      "english": "Erin Ebers",
+      "chinese": "杜冥鸦",
+      "japanese": "大原さやか",
+      "korean": "Kwak Kyu-mi"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Noelle": {
+    "name": "Noelle",
+    "gameId": 10000034,
+    "element": "Geo",
+    "weaponType": "Claymore",
+    "rarity": 4,
+    "title": "Chivalric Blossom",
+    "description": "A maid who faithfully serves the Knights of Favonius. She dreams of joining their ranks someday.",
+    "birthday": "March 21",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Parma Cordis",
+    "voiceActors": {
+      "english": "Laura Faye Smith",
+      "chinese": "宴宁",
+      "japanese": "高尾奏音",
+      "korean": "Lee Bo-hee"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Odette": {
+    "name": "Odette",
+    "gameId": 10000150,
+    "element": "Cryo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Swirling Snow",
+    "description": "A famed Snezhnayan ballerina who blossoms against the frozen landscape with a beauty as sharp as frost.",
+    "birthday": "February 20",
+    "affiliation": "Korolevskiy Troupe",
+    "region": null,
+    "constellation": "Cygnus Olor",
+    "voiceActors": {
+      "english": "Alexis Tipton",
+      "chinese": "潘丹妮",
+      "japanese": "上坂堇",
+      "korean": "Choi Hyun-ji"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Ororon": {
+    "name": "Ororon",
+    "gameId": 10000105,
+    "element": "Electro",
+    "weaponType": "Bow",
+    "rarity": 4,
+    "title": "Shadow of the Night-Wind",
+    "description": "A young man from the Masters of the Night-Wind who instead lives in the wild alongside all manner of life.",
+    "birthday": "October 14",
+    "affiliation": "Mictlan",
+    "region": "Natlan",
+    "constellation": "Vampyrum Spectrum",
+    "voiceActors": {
+      "english": "Nathan Nokes",
+      "chinese": "梁达伟",
+      "japanese": "近藤隆",
+      "korean": "Seo Joung-ik"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Prune": {
+    "name": "Prune",
+    "gameId": 10000132,
+    "element": "Anemo",
+    "weaponType": "Catalyst",
+    "rarity": 4,
+    "title": "Childlike Dreams Cherished",
+    "description": "A diminutive Witch Hunter who has journeyed all the way from Nod-Krai with the singular purpose of rooting out a witch who, to hear her tell it, has committed every sin imaginable — including bullying little kids!",
+    "birthday": "November 20",
+    "affiliation": "Mondstadt",
+    "region": "Mondstadt",
+    "constellation": "Turris Venefica",
+    "voiceActors": {
+      "english": "Alice Himora",
+      "chinese": "宴宁",
+      "japanese": "長月あおい",
+      "korean": "Jang Ye-na"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Qiqi": {
+    "name": "Qiqi",
+    "gameId": 10000035,
+    "element": "Cryo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Icy Resurrection",
+    "description": "An apprentice and herb gatherer at Bubu Pharmacy. An undead with a bone-white complexion, she seldom has much in the way of words or emotion.",
+    "birthday": "March 3",
+    "affiliation": "Bubu Pharmacy",
+    "region": "Liyue",
+    "constellation": "Pristina Nola",
+    "voiceActors": {
+      "english": "Christie Cate",
+      "chinese": "宴宁",
+      "japanese": "田村ゆかり",
+      "korean": "Lee Seul"
+    },
+    "recommendationBasis": "unavailable"
   },
   "RaidenShogun": {
+    "name": "Raiden Shogun",
+    "gameId": 10000052,
+    "element": "Electro",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "Plane of Euthymia",
+    "description": "Her Excellency, the Almighty Narukami Ogosho, who promised the people of Inazuma an unchanging Eternity.",
+    "birthday": "June 26",
+    "affiliation": "Inazuma City",
+    "region": "Inazuma",
+    "constellation": "Imperatrix Umbrosa",
+    "voiceActors": {
+      "english": "Anne Yatco",
+      "chinese": "菊花花",
+      "japanese": "沢城みゆき",
+      "korean": "Park Ji-yoon"
+    },
     "metaTier": 1,
     "role": "sub_dps",
     "priorityTalent": "burst",
-    "weaponRarity": 5
+    "weaponRarity": 5,
+    "recommendationBasis": "legacy_editorial"
   },
-  "Zhongli": {
-    "metaTier": 1,
-    "role": "support",
-    "priorityTalent": "skill",
-    "weaponRarity": 5
+  "Razor": {
+    "name": "Razor",
+    "gameId": 10000020,
+    "element": "Electro",
+    "weaponType": "Claymore",
+    "rarity": 4,
+    "title": "Wolf Boy",
+    "description": "A boy who lives among the wolves in Wolvendom of Mondstadt, away from human civilization. As agile as lightning.",
+    "birthday": "September 9",
+    "affiliation": "Wolvendom",
+    "region": "Mondstadt",
+    "constellation": "Lupus Minor",
+    "voiceActors": {
+      "english": "Todd Haberkorn",
+      "chinese": "周帅",
+      "japanese": "内山昂輝",
+      "korean": "Kim Seo-young"
+    },
+    "recommendationBasis": "unavailable"
   },
-  "Furina": {
+  "Rosaria": {
+    "name": "Rosaria",
+    "gameId": 10000045,
+    "element": "Cryo",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Thorny Benevolence",
+    "description": "A sister of the church, though you wouldn't know it if it weren't for her attire. Known for her sharp, cold words and manner, she often works alone.",
+    "birthday": "January 24",
+    "affiliation": "Church of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Spinea Corona",
+    "voiceActors": {
+      "english": "Elizabeth Maxwell",
+      "chinese": "张安琪",
+      "japanese": "加隈亜衣",
+      "korean": "Kim Bo-na"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Sandrone": {
+    "name": "Sandrone",
+    "gameId": 10000133,
+    "element": "Cryo",
+    "weaponType": "Claymore",
+    "rarity": 5,
+    "title": "Mirrored Analysis",
+    "description": "The Seventh of the Fatui Harbingers, \"Marionette.\" Interprets all phenomena through the prism of mathematics, and is an elegant lady who is never absent from a tea party.",
+    "birthday": "January 13",
+    "affiliation": "Fatui",
+    "region": null,
+    "constellation": "Narcissorolegium",
+    "voiceActors": {
+      "english": "Deneen Melody",
+      "chinese": "洪海天",
+      "japanese": "本多真梨子",
+      "korean": "Kang Eun-ae"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "SangonomiyaKokomi": {
+    "name": "Sangonomiya Kokomi",
+    "gameId": 10000054,
+    "element": "Hydro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Pearl of Wisdom",
+    "description": "The Divine Priestess of Watatsumi Island. All of the island's affairs are at this young lady's fingertips.",
+    "birthday": "February 22",
+    "affiliation": "Watatsumi Island",
+    "region": "Inazuma",
+    "constellation": "Dracaena Somnolenta",
+    "voiceActors": {
+      "english": "Risa Mei",
+      "chinese": "龟娘",
+      "japanese": "三森すずこ",
+      "korean": "Yeo Yoon-mi"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Sayu": {
+    "name": "Sayu",
+    "gameId": 10000053,
+    "element": "Anemo",
+    "weaponType": "Claymore",
+    "rarity": 4,
+    "title": "Mujina Ninja",
+    "description": "A pint-sized ninja attached to the Shuumatsuban, who always seems sleep-deprived.",
+    "birthday": "October 19",
+    "affiliation": "Shuumatsuban",
+    "region": "Inazuma",
+    "constellation": "Nyctereutes Minor",
+    "voiceActors": {
+      "english": "Lilypichu (Lily Ki)",
+      "chinese": "Sakula小舞",
+      "japanese": "洲崎綾",
+      "korean": "Lee Ji-hyeon"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Sethos": {
+    "name": "Sethos",
+    "gameId": 10000097,
+    "element": "Electro",
+    "weaponType": "Bow",
+    "rarity": 4,
+    "title": "Wisdom's Measure",
+    "description": "The Temple of Silence's heir. Burdened with secrets, he comes from the sands.",
+    "birthday": "May 31",
+    "affiliation": "Temple of Silence",
+    "region": "Sumeru",
+    "constellation": "Basileos Delta",
+    "voiceActors": {
+      "english": "Zeno Robinson",
+      "chinese": "李兰陵",
+      "japanese": "千葉翔也",
+      "korean": "Kim Dong-hyun"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Shenhe": {
+    "name": "Shenhe",
+    "gameId": 10000063,
+    "element": "Cryo",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "Lonesome Transcendence",
+    "description": "An adepti disciple with a most unusual air about her. Having spent much time cultivating in isolation in Liyue's mountains, she has become every bit as cool and distant as the adepti themselves.",
+    "birthday": "March 10",
+    "affiliation": "Cloud Retainer's Abode",
+    "region": "Liyue",
+    "constellation": "Crista Doloris",
+    "voiceActors": {
+      "english": "Chelsea Kwoka",
+      "chinese": "秦紫翼",
+      "japanese": "川澄綾子",
+      "korean": "Lee Hyeon-jin"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "ShikanoinHeizou": {
+    "name": "Shikanoin Heizou",
+    "gameId": 10000059,
+    "element": "Anemo",
+    "weaponType": "Catalyst",
+    "rarity": 4,
+    "title": "Analytical Harmony",
+    "description": "A young prodigy detective from the Tenryou Commission. His senses are sharp and his thoughts are clear.",
+    "birthday": "July 24",
+    "affiliation": "Tenryou Commission",
+    "region": "Inazuma",
+    "constellation": "Cervus Minor",
+    "voiceActors": {
+      "english": "Kieran Regan",
+      "chinese": "林景",
+      "japanese": "井口祐一",
+      "korean": "Jung Eui-jin"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Sigewinne": {
+    "name": "Sigewinne",
+    "gameId": 10000095,
+    "element": "Hydro",
+    "weaponType": "Bow",
+    "rarity": 5,
+    "title": "Wondrous Dragonheir",
+    "description": "A Melusine and the Fortress of Meropide's head nurse. She cares equally for every convict locked in the undersea prison.",
+    "birthday": "March 30",
+    "affiliation": "Fortress of Meropide",
+    "region": "Fontaine",
+    "constellation": "Nereides",
+    "voiceActors": {
+      "english": "Sarah Williams",
+      "chinese": "赵爽",
+      "japanese": "木野日菜",
+      "korean": "Kim Chae-rin"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Skirk": {
+    "name": "Skirk",
+    "gameId": 10000114,
+    "element": "Cryo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Void Star",
+    "description": "A visitor who once appeared in an Abyssal rift and the Primordial Sea, this solitary warrior mentored Tartaglia in the martial arts.",
+    "birthday": "November 5",
+    "affiliation": "Cosmic Calamity",
+    "region": null,
+    "constellation": "Crystallina",
+    "voiceActors": {
+      "english": "Cat Protano",
+      "chinese": "谢莹",
+      "japanese": "能登麻美子",
+      "korean": "Seo Da-hye"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Sucrose": {
+    "name": "Sucrose",
+    "gameId": 10000043,
+    "element": "Anemo",
+    "weaponType": "Catalyst",
+    "rarity": 4,
+    "title": "Harmless Sweetie",
+    "description": "An alchemist filled with curiosity about all things. She researches bio-alchemy.",
+    "birthday": "November 26",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Ampulla",
+    "voiceActors": {
+      "english": "Maya Graydon",
+      "chinese": "小敢",
+      "japanese": "藤田茜",
+      "korean": "Kim Ha-young"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Tartaglia": {
+    "name": "Tartaglia",
+    "gameId": 10000033,
+    "element": "Hydro",
+    "weaponType": "Bow",
+    "rarity": 5,
+    "title": "Childe",
+    "description": "No. 11 of The Harbingers, also known as \"Childe.\" His name is highly feared on the battlefield.",
+    "birthday": "July 20",
+    "affiliation": "Fatui",
+    "region": "Snezhnaya",
+    "constellation": "Monoceros Caeli",
+    "voiceActors": {
+      "english": "Griffin Burns",
+      "chinese": "鱼冻",
+      "japanese": "木村良平",
+      "korean": "Nam Do-hyeong"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Thoma": {
+    "name": "Thoma",
+    "gameId": 10000050,
+    "element": "Pyro",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Protector From Afar",
+    "description": "The Kamisato Clan's housekeeper. A well-known \"fixer\" in Inazuma.",
+    "birthday": "January 9",
+    "affiliation": "Yashiro Commission",
+    "region": "Inazuma",
+    "constellation": "Rubeum Scutum",
+    "voiceActors": {
+      "english": "Christian Banas",
+      "chinese": "张沛",
+      "japanese": "森田成一",
+      "korean": "Ryu Seung-kon"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Tighnari": {
+    "name": "Tighnari",
+    "gameId": 10000069,
+    "element": "Dendro",
+    "weaponType": "Bow",
+    "rarity": 5,
+    "title": "Verdant Strider",
+    "description": "A young researcher well-versed in botany who currently serves as a Forest Watcher in Avidya Forest. He is a straight shooter with a warm heart — and a dab hand at guiding even the dullest of pupils.",
+    "birthday": "December 29",
+    "affiliation": "Gandharva Ville",
+    "region": "Sumeru",
+    "constellation": "Vulpes Zerda",
+    "voiceActors": {
+      "english": "Zachary Gordon",
+      "chinese": "莫然",
+      "japanese": "小林沙苗",
+      "korean": "Jung Ui-taek"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Varesa": {
+    "name": "Varesa",
+    "gameId": 10000111,
+    "element": "Electro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Strength in Serenity",
+    "description": "A laid-back orchard manager and warrior of the Collective of Plenty. An aspiring hero who hungers for justice... and lots and lots of food!",
+    "birthday": "November 15",
+    "affiliation": "Teteocan",
+    "region": "Natlan",
+    "constellation": "Mascara Luctatori",
+    "voiceActors": {
+      "english": "Jane Jackson",
+      "chinese": "乔苏",
+      "japanese": "M・A・O",
+      "korean": "Kim Yea-lim"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Varka": {
+    "name": "Varka",
+    "gameId": 10000128,
+    "element": "Anemo",
+    "weaponType": "Claymore",
+    "rarity": 5,
+    "title": "Knight of Boreas",
+    "description": "Grand Master of the Knights of Favonius. Knight of Boreas, protector of Mondstadt.",
+    "birthday": "February 17",
+    "affiliation": "Knights of Favonius",
+    "region": "Mondstadt",
+    "constellation": "Lupus Majoris",
+    "voiceActors": {
+      "english": "Joseph May",
+      "chinese": "郝祥海",
+      "japanese": "杉田智和",
+      "korean": "Park Sang-hoon"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Venti": {
+    "name": "Venti",
+    "gameId": 10000022,
+    "element": "Anemo",
+    "weaponType": "Bow",
+    "rarity": 5,
+    "title": "Windborne Bard",
+    "description": "One of the many bards of Mondstadt, who freely wanders the city's streets and alleys.",
+    "birthday": "June 16",
+    "affiliation": "Mondstadt",
+    "region": "Mondstadt",
+    "constellation": "Carmen Dei",
+    "voiceActors": {
+      "english": "Erika Harlacher",
+      "chinese": "喵酱",
+      "japanese": "村瀬歩",
+      "korean": "Jung Yoo-jung"
+    },
     "metaTier": 1,
     "role": "support",
     "priorityTalent": "burst",
-    "weaponRarity": 5
+    "weaponRarity": 5,
+    "recommendationBasis": "legacy_editorial"
+  },
+  "Vesna": {
+    "name": "Vesna",
+    "gameId": 10000143,
+    "element": "Anemo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Snowy Banquet's Sharp Blade",
+    "description": "Commander of the Druzhna and the Tsaritsa's keen blade.",
+    "birthday": "February 4",
+    "affiliation": "Druzhna",
+    "region": null,
+    "constellation": "Amentum Vernum",
+    "voiceActors": {
+      "english": "Ari Thrash",
+      "chinese": "龟娘",
+      "japanese": "平野綾",
+      "korean": "Joo Ye-jin"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Vodyanitsa": {
+    "name": "Vodyanitsa",
+    "gameId": 10000140,
+    "element": "Hydro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Lingering Siren-Song",
+    "description": "Prima Donna of the Korolevskiy Troupe and a Water Imp who has parted from her kin.",
+    "birthday": "March 29",
+    "affiliation": "Korolevskiy Troupe",
+    "region": null,
+    "constellation": "Piscicula Aurea",
+    "voiceActors": {
+      "english": "Suzie Yeung",
+      "chinese": "苏婉",
+      "japanese": "伊藤かな恵",
+      "korean": "Kim Ye-ryeong"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Wanderer": {
+    "name": "Wanderer",
+    "gameId": 10000075,
+    "element": "Anemo",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Eons Adrift",
+    "description": "A wayfaring figure whose identity is a mystery. He dresses like a mountain ascetic, but he certainly does not act the part.",
+    "birthday": "January 3",
+    "affiliation": "None",
+    "region": "Sumeru",
+    "constellation": "Peregrinus",
+    "voiceActors": {
+      "english": "Patrick Pedraza",
+      "chinese": "鹿喑",
+      "japanese": "柿原徹也",
+      "korean": "Min Seung-woo"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Wriothesley": {
+    "name": "Wriothesley",
+    "gameId": 10000086,
+    "element": "Cryo",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Emissary of Solitary Iniquity",
+    "description": "Duke of the Fortress of Meropide, Lord Incognito of the murky depths.",
+    "birthday": "November 23",
+    "affiliation": "Fortress of Meropide",
+    "region": "Fontaine",
+    "constellation": "Cerberus",
+    "voiceActors": {
+      "english": "Joe Zieja",
+      "chinese": "刘北辰",
+      "japanese": "小野大輔",
+      "korean": "Kwon Chang-wook"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Xiangling": {
+    "name": "Xiangling",
+    "gameId": 10000023,
+    "element": "Pyro",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Exquisite Delicacy",
+    "description": "A renowned chef from Liyue. She's extremely passionate about cooking and excels at making her signature hot and spicy dishes.",
+    "birthday": "November 2",
+    "affiliation": "Wanmin Restaurant",
+    "region": "Liyue",
+    "constellation": "Trulla",
+    "voiceActors": {
+      "english": "Jackie Lastra",
+      "chinese": "小N",
+      "japanese": "小澤亜李",
+      "korean": "Yoon Ah-young"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Xianyun": {
+    "name": "Xianyun",
+    "gameId": 10000093,
+    "element": "Anemo",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Passerine Herald",
+    "description": "One of the Mighty and Illuminated Adepti of Jueyun, known as \"Cloud Retainer.\" Expert in all kinds of mechanical contraptions, her heart now turns towards the affairs of the mortal world, through which she walks under the name \"Xianyun.\"",
+    "birthday": "April 11",
+    "affiliation": "Mt. Aocang",
+    "region": "Liyue",
+    "constellation": "Grus Serena",
+    "voiceActors": {
+      "english": "Stephanie Panisello",
+      "chinese": "秦紫翼",
+      "japanese": "中臣真菜",
+      "korean": "Kang Si-hyun"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Xiao": {
+    "name": "Xiao",
+    "gameId": 10000026,
+    "element": "Anemo",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "Vigilant Yaksha",
+    "description": "A yaksha adeptus who defends Liyue. Also heralded as the \"Conqueror of Demons\" and \"Vigilant Yaksha.\"",
+    "birthday": "April 17",
+    "affiliation": "Liyue Adeptus",
+    "region": "Liyue",
+    "constellation": "Alatus Nemeseos",
+    "voiceActors": {
+      "english": "Laila Berzins",
+      "chinese": "kinsen",
+      "japanese": "松岡禎丞",
+      "korean": "Shim Kyu-hyeok"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Xilonen": {
+    "name": "Xilonen",
+    "gameId": 10000103,
+    "element": "Geo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "Ardent Flames Forge the Soul",
+    "description": "A Name Engraver of the Nanatzcayan, she is especially skilled at finding a good balance between the heavy responsibilities of her job and living well.",
+    "birthday": "March 13",
+    "affiliation": "Nanatzcayan",
+    "region": "Natlan",
+    "constellation": "Panthera Ocelota",
+    "voiceActors": {
+      "english": "Elizabeth Dean",
+      "chinese": "弭洋",
+      "japanese": "ファイルーズあい",
+      "korean": "Kim I-an"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Xingqiu": {
+    "name": "Xingqiu",
+    "gameId": 10000025,
+    "element": "Hydro",
+    "weaponType": "Sword",
+    "rarity": 4,
+    "title": "Juvenile Galant",
+    "description": "A young man carrying a longsword who is frequently seen at book booths. He has a chivalrous heart and yearns for justice and fairness for all.",
+    "birthday": "October 9",
+    "affiliation": "Feiyun Commerce Guild",
+    "region": "Liyue",
+    "constellation": "Fabulae Textile",
+    "voiceActors": {
+      "english": "Cristina Vee Valenzuela",
+      "chinese": "唐雅菁",
+      "japanese": "皆川純子",
+      "korean": "Kwak Kyu-mi"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Xinyan": {
+    "name": "Xinyan",
+    "gameId": 10000044,
+    "element": "Pyro",
+    "weaponType": "Claymore",
+    "rarity": 4,
+    "title": "Blazing Riff",
+    "description": "Liyue's sole rock 'n' roll musician. She rebels against ossified prejudices using her music and passionate singing.",
+    "birthday": "October 16",
+    "affiliation": "\"The Red Strings\"",
+    "region": "Liyue",
+    "constellation": "Fila Ignium",
+    "voiceActors": {
+      "english": "Laura Stahl",
+      "chinese": "王雅欣",
+      "japanese": "たかはし智秋",
+      "korean": "Kim Chae-ha"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "YaeMiko": {
+    "name": "Yae Miko",
+    "gameId": 10000058,
+    "element": "Electro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Astute Amusement",
+    "description": "Lady Guuji of the Grand Narukami Shrine. Also serves as the editor-in-chief of Yae Publishing House. Unimaginable intelligence and cunning are hidden under her beautiful appearance.",
+    "birthday": "June 27",
+    "affiliation": "Grand Narukami Shrine",
+    "region": "Inazuma",
+    "constellation": "Divina Vulpes",
+    "voiceActors": {
+      "english": "Ratana",
+      "chinese": "杜冥鸦",
+      "japanese": "佐倉綾音",
+      "korean": "Moon Yoo-jung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Yanfei": {
+    "name": "Yanfei",
+    "gameId": 10000048,
+    "element": "Pyro",
+    "weaponType": "Catalyst",
+    "rarity": 4,
+    "title": "Wise Innocence",
+    "description": "A well-known legal adviser active in Liyue Harbor. A brilliant young lady in whose veins runs the blood of an illuminated beast.",
+    "birthday": "July 28",
+    "affiliation": "Yanfei Legal Consultancy",
+    "region": "Liyue",
+    "constellation": "Bestia Iustitia",
+    "voiceActors": {
+      "english": "Lizzie Freeman",
+      "chinese": "苏子芜",
+      "japanese": "花守ゆみり",
+      "korean": "Jo Kyeong-i"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Yaoyao": {
+    "name": "Yaoyao",
+    "gameId": 10000077,
+    "element": "Dendro",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Burgeoning Grace",
+    "description": "Streetward Rambler's youngest disciple. A gentle and caring \"little adult.\"",
+    "birthday": "March 6",
+    "affiliation": "Streetward Rambler's Abode",
+    "region": "Liyue",
+    "constellation": "Osmanthus",
+    "voiceActors": {
+      "english": "Kelsey Jaffer",
+      "chinese": "刘颐诺",
+      "japanese": "門脇舞以",
+      "korean": "Yu Hye-ji"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Yelan": {
+    "name": "Yelan",
+    "gameId": 10000060,
+    "element": "Hydro",
+    "weaponType": "Bow",
+    "rarity": 5,
+    "title": "Valley Orchid",
+    "description": "A mysterious person who claims to work for the Ministry of Civil Affairs, but is a \"non-entity\" on the Ministry of Civil Affairs' list.",
+    "birthday": "April 20",
+    "affiliation": "Yanshang Teahouse",
+    "region": "Liyue",
+    "constellation": "Umbrabilis Orchis",
+    "voiceActors": {
+      "english": "Laura Post",
+      "chinese": "徐慧",
+      "japanese": "遠藤綾",
+      "korean": "Min Ah"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Yoimiya": {
+    "name": "Yoimiya",
+    "gameId": 10000049,
+    "element": "Pyro",
+    "weaponType": "Bow",
+    "rarity": 5,
+    "title": "Frolicking Flames",
+    "description": "Owner of Naganohara Fireworks. Known as the \"Queen of the Summer Festival,\" she excels in her craft of creating fireworks that symbolize people's hopes and dreams.",
+    "birthday": "June 21",
+    "affiliation": "Naganohara Fireworks",
+    "region": "Inazuma",
+    "constellation": "Carassius Auratus",
+    "voiceActors": {
+      "english": "Jenny Yokobori",
+      "chinese": "金娜",
+      "japanese": "植田佳奈",
+      "korean": "Park Shin-hee"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "YumemizukiMizuki": {
+    "name": "Yumemizuki Mizuki",
+    "gameId": 10000109,
+    "element": "Anemo",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Embrace of Enchanting Dreams",
+    "description": "A shareholder of Aisa Bathhouse, a baku, and a clinical psychologist. Dedicated to the dispersal of nightmares, and to bringing people peace of mind.",
+    "birthday": "March 16",
+    "affiliation": "Inazuma",
+    "region": "Inazuma",
+    "constellation": "Tapirus Somniator",
+    "voiceActors": {
+      "english": "Naomi McDonald",
+      "chinese": "浮梦若薇",
+      "japanese": "会沢紗弥",
+      "korean": "Kim Seo-hyun"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "YunJin": {
+    "name": "Yun Jin",
+    "gameId": 10000064,
+    "element": "Geo",
+    "weaponType": "Polearm",
+    "rarity": 4,
+    "title": "Stage Lucida",
+    "description": "A renowned Liyue opera singer who is skilled in both playwriting and singing. Her style is one-of-a-kind, exquisite and delicate, much like the person herself.",
+    "birthday": "May 21",
+    "affiliation": "Yun-Han Opera Troupe",
+    "region": "Liyue",
+    "constellation": "Opera Grandis",
+    "voiceActors": {
+      "english": "Judy Alice Lee & Yang Yang",
+      "chinese": "贺文潇&杨扬",
+      "japanese": "小岩井ことり & Yang Yang",
+      "korean": "Sah Moon-young & Yang Yang"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "Zhongli": {
+    "name": "Zhongli",
+    "gameId": 10000030,
+    "element": "Geo",
+    "weaponType": "Polearm",
+    "rarity": 5,
+    "title": "Vago Mundo",
+    "description": "A mysterious expert contracted by the Wangsheng Funeral Parlor. Extremely knowledgeable in all things.",
+    "birthday": "December 31",
+    "affiliation": "Liyue Harbor",
+    "region": "Liyue",
+    "constellation": "Lapis Dei",
+    "voiceActors": {
+      "english": "Keith Silverstein",
+      "chinese": "彭博",
+      "japanese": "前野智昭",
+      "korean": "Pyo Young-jae"
+    },
+    "metaTier": 1,
+    "role": "support",
+    "priorityTalent": "skill",
+    "weaponRarity": 5,
+    "recommendationBasis": "legacy_editorial"
+  },
+  "Zibai": {
+    "name": "Zibai",
+    "gameId": 10000126,
+    "element": "Geo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "White Horse's Fleeting Spring",
+    "description": "The White Horse Adeptus from Liyue's legends, known as Zibai. The most mysterious figure in Liyue's myths.",
+    "birthday": "May 15",
+    "affiliation": "Liyue Harbor",
+    "region": null,
+    "constellation": "Equa Alba",
+    "voiceActors": {
+      "english": "Laura Welsh",
+      "chinese": "Mace",
+      "japanese": "福圓美里",
+      "korean": "Chun Song-e"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "TravelerAnemo": {
+    "name": "Traveler (Anemo)",
+    "gameId": 10000005,
+    "element": "Anemo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "",
+    "description": "A traveler from another world who had their only kin taken away, forcing them to embark on a journey to find The Seven.",
+    "birthday": null,
+    "affiliation": null,
+    "region": null,
+    "constellation": "Viator",
+    "voiceActors": {
+      "english": "Zach Aguilar & Various Artists",
+      "chinese": "鹿喑 & 多多poi",
+      "japanese": "堀江瞬 & 古賀葵",
+      "korean": "Lee Kyeong-tae & Kim Ka-ryoung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "TravelerCryo": {
+    "name": "Traveler (Cryo)",
+    "gameId": 10000005,
+    "element": "Cryo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "",
+    "description": "A traveler from another world who had their only kin taken away, forcing them to embark on a journey to find The Seven.",
+    "birthday": null,
+    "affiliation": null,
+    "region": null,
+    "constellation": "Viator",
+    "voiceActors": {
+      "english": "Zach Aguilar & Various Artists",
+      "chinese": "鹿喑 & 多多poi",
+      "japanese": "堀江瞬 & 古賀葵",
+      "korean": "Lee Kyeong-tae & Kim Ka-ryoung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "TravelerDendro": {
+    "name": "Traveler (Dendro)",
+    "gameId": 10000005,
+    "element": "Dendro",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "",
+    "description": "A traveler from another world who had their only kin taken away, forcing them to embark on a journey to find The Seven.",
+    "birthday": null,
+    "affiliation": null,
+    "region": null,
+    "constellation": "Viator",
+    "voiceActors": {
+      "english": "Zach Aguilar & Various Artists",
+      "chinese": "鹿喑 & 多多poi",
+      "japanese": "堀江瞬 & 古賀葵",
+      "korean": "Lee Kyeong-tae & Kim Ka-ryoung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "TravelerElectro": {
+    "name": "Traveler (Electro)",
+    "gameId": 10000005,
+    "element": "Electro",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "",
+    "description": "A traveler from another world who had their only kin taken away, forcing them to embark on a journey to find The Seven.",
+    "birthday": null,
+    "affiliation": null,
+    "region": null,
+    "constellation": "Viator",
+    "voiceActors": {
+      "english": "Zach Aguilar & Various Artists",
+      "chinese": "鹿喑 & 多多poi",
+      "japanese": "堀江瞬 & 古賀葵",
+      "korean": "Lee Kyeong-tae & Kim Ka-ryoung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "TravelerGeo": {
+    "name": "Traveler (Geo)",
+    "gameId": 10000005,
+    "element": "Geo",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "",
+    "description": "A traveler from another world who had their only kin taken away, forcing them to embark on a journey to find The Seven.",
+    "birthday": null,
+    "affiliation": null,
+    "region": null,
+    "constellation": "Viator",
+    "voiceActors": {
+      "english": "Zach Aguilar & Various Artists",
+      "chinese": "鹿喑 & 多多poi",
+      "japanese": "堀江瞬 & 古賀葵",
+      "korean": "Lee Kyeong-tae & Kim Ka-ryoung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "TravelerHydro": {
+    "name": "Traveler (Hydro)",
+    "gameId": 10000005,
+    "element": "Hydro",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "",
+    "description": "A traveler from another world who had their only kin taken away, forcing them to embark on a journey to find The Seven.",
+    "birthday": null,
+    "affiliation": null,
+    "region": null,
+    "constellation": "Viator",
+    "voiceActors": {
+      "english": "Zach Aguilar & Various Artists",
+      "chinese": "鹿喑 & 多多poi",
+      "japanese": "堀江瞬 & 古賀葵",
+      "korean": "Lee Kyeong-tae & Kim Ka-ryoung"
+    },
+    "recommendationBasis": "unavailable"
+  },
+  "TravelerPyro": {
+    "name": "Traveler (Pyro)",
+    "gameId": 10000005,
+    "element": "Pyro",
+    "weaponType": "Sword",
+    "rarity": 5,
+    "title": "",
+    "description": "A traveler from another world who had their only kin taken away, forcing them to embark on a journey to find The Seven.",
+    "birthday": null,
+    "affiliation": null,
+    "region": null,
+    "constellation": "Viator",
+    "voiceActors": {
+      "english": "Zach Aguilar & Various Artists",
+      "chinese": "鹿喑 & 多多poi",
+      "japanese": "堀江瞬 & 古賀葵",
+      "korean": "Lee Kyeong-tae & Kim Ka-ryoung"
+    },
+    "recommendationBasis": "unavailable"
   }
 }

@@ -94,13 +94,48 @@ describe('Farming source and projection boundaries', () => {
       farmingData.routes[0]!.points[0]!.x = 999;
     }).toThrow(TypeError);
   });
-  it('requires known required stock and explicit difficulty without assuming player level', async () => {
+  it('rejects a rehashed farming schedule that differs from the progression source', () => {
+    const copy = structuredClone(require('../../static/farming-data.json'));
+    copy.families[0].domain.days = [6];
+    const { contentFingerprint: _old, ...payload } = copy;
+    void _old;
+    copy.contentFingerprint = stableFingerprint(payload);
+    expect(() => validateFarmingData(copy)).toThrow(/domain differs/);
+  });
+  it('plans without inventory but requires explicit difficulty without assuming player level', async () => {
     const a = await run({ TeachingsOfDiligence: 10 }, {});
-    expect(a.response.recommendation.estimates[0]?.projection.state).toBe('unknown_stock');
+    expect(a.response.recommendation.estimates[0]?.projection.state).toBe('difficulty_required');
+    expect(a.response.recommendation.estimates[0]?.unrecordedStockKeys).toEqual([
+      'TeachingsOfDiligence',
+    ]);
     const b = await run({ TeachingsOfDiligence: 10 }, { TeachingsOfDiligence: 1 });
     expect(b.response.recommendation.estimates[0]?.projection.state).toBe('difficulty_required');
     expect(b.response.recommendation.schedule.calendarDays).toBeNull();
     expect(b.read).toHaveBeenCalledWith('only-owner');
+  });
+  it('estimates the full goal without stock and subtracts scanned stock and craftable surplus', async () => {
+    const total = await run({ TeachingsOfDiligence: 10 }, {}, { talentTier: '4' });
+    expect(total.response.recommendation.estimates[0]?.projection).toMatchObject({
+      state: 'estimated',
+      planningRuns: 5,
+      resin: 100,
+    });
+    const reduced = await run(
+      { TeachingsOfDiligence: 10 },
+      { TeachingsOfDiligence: 6 },
+      { talentTier: '4' },
+    );
+    expect(reduced.response.recommendation.estimates[0]?.projection.resin).toBe(40);
+    const crafted = await run(
+      { PhilosophiesOfDiligence: 1 },
+      { TeachingsOfDiligence: 9 },
+      { talentTier: '4' },
+    );
+    expect(crafted.response.recommendation.estimates[0]?.projection).toMatchObject({
+      state: 'covered',
+      resin: 0,
+    });
+    expect(crafted.response.explanations.join(' ')).toContain('do not record zero inventory');
   });
   it('estimates one shared family, credits stock once and keeps unrelated materials separate', async () => {
     const { response } = await run(
@@ -145,7 +180,7 @@ describe('Farming source and projection boundaries', () => {
     const result = response.recommendation;
     expect(result.serverWeekday).toBe(5);
     expect(result.estimates[0]?.domain.days).toEqual([1, 4, 6]);
-    expect(result.estimates[0]?.projection.state).toBe('unknown_stock');
+    expect(result.estimates[0]?.projection.state).toBe('difficulty_required');
     expect(result.route.available).toBe(false);
     expect(result.route.stops).toEqual([]);
     expect(result.routeMaterials).toEqual([]);

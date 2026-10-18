@@ -1,10 +1,9 @@
-import { createRequire } from 'module';
-
 import { prisma } from '@/core/db/prisma.js';
 import { NotFoundError } from '@/core/errors/app-error.js';
 
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
 import { GenshinCharacterService } from '../../characters/character.service.js';
+import { characterElements as ELEMENT_MAP } from '../../companion/character-reference.js';
 import type { CharacterInput } from '../character-intelligence/character-intelligence.calculator.js';
 import { type KnowledgeInsightData, runAllAnalyzers } from './knowledge-intelligence.calculator.js';
 import { explainInsight } from './knowledge-intelligence.explainer.js';
@@ -12,10 +11,6 @@ import { explainInsight } from './knowledge-intelligence.explainer.js';
 // -------------------------------------------------------
 // Static data — loaded once at module init
 // -------------------------------------------------------
-
-const require = createRequire(import.meta.url);
-
-const ELEMENT_MAP: Record<string, string> = require('../../static/character-elements.json');
 
 // -------------------------------------------------------
 // Constants

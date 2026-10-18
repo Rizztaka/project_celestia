@@ -14,7 +14,7 @@ const tiers = ['I', 'II', 'III', 'IV'];
 function projectionText(result: YieldProjection) {
   switch (result.state) {
     case 'unknown_stock':
-      return 'Required stock is unknown. Import recorded quantities to estimate.';
+      return 'No estimate is available for this stock scenario.';
     case 'difficulty_required':
       return 'Select a domain difficulty.';
     case 'limit':
@@ -89,7 +89,8 @@ export default function FarmingPanel() {
           Optional resin estimates &amp; pacing
         </summary>
         <p className="mt-2 text-xs text-zinc-400">
-          Mean-drop scenarios, with no streaks or automatic spending. Rewards can vary.
+          Choose a goal and a difficulty; inventory entry is optional. Recorded stock and craftable
+          surplus reduce these mean-drop estimates. Rewards can vary.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {(
@@ -130,7 +131,7 @@ export default function FarmingPanel() {
                 </p>
                 <p className="mt-1 text-xs text-zinc-400">
                   {result.unestimatedFamilies
-                    ? `${result.unestimatedFamilies} domain families still need stock or difficulty information. `
+                    ? `${result.unestimatedFamilies} domain families still need difficulty information. `
                     : ''}
                   Totals cover the modeled subset; bosses, Mora, EXP and gathering are separate.
                 </p>
@@ -139,6 +140,11 @@ export default function FarmingPanel() {
                     <li key={estimate.domain.domainKey} className="py-3 text-sm">
                       <p className="font-medium text-zinc-200">{estimate.domain.name}</p>
                       <p className="mt-1 text-zinc-400">{projectionText(estimate.projection)}</p>
+                      {!!estimate.unrecordedStockKeys?.length && (
+                        <p className="mt-1 text-xs text-zinc-400">
+                          Goal-first estimate: unrecorded stock receives no credit.
+                        </p>
+                      )}
                       <details className="mt-2 text-xs text-zinc-400">
                         <summary className="cursor-pointer">
                           Compare difficulty and mean rewards

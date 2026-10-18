@@ -35,15 +35,16 @@ export class FarmingIntelligenceService {
     const estimates: FarmingEstimate[] = models.map((family) => {
       const difficulty = (family.kind === 'talent' ? query.talentTier : query.weaponTier) ?? null;
       const costs = family.materialKeys.map((key) => needed[key] ?? 0);
-      const stock = family.materialKeys.map((key) =>
-        Object.hasOwn(inventory, key) ? inventory[key]! : null,
-      );
+      const stock = family.materialKeys.map((key) => inventory[key] ?? 0);
       const rates = farmingData.yields[family.kind];
       return {
         domain: family.domain,
         kind: family.kind,
         materialKeys: family.materialKeys,
         difficulty,
+        unrecordedStockKeys: family.materialKeys.filter(
+          (key) => (needed[key] ?? 0) > 0 && !Object.hasOwn(inventory, key),
+        ),
         projection: estimateYield(costs, stock, difficulty ? rates[difficulty - 1]! : null),
         comparisons: rates.map((profile, i) => ({
           difficulty: i + 1,

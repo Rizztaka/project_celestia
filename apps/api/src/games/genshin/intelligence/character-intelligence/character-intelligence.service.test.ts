@@ -197,6 +197,14 @@ describe('CharacterIntelligenceService', () => {
       expect(rec.explanations.some((e) => e.includes('No detailed meta profile'))).toBe(true);
     }
   });
+  it('does not treat sourced biography metadata as a verified build ranking', async () => {
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);
+    mockGetCharactersForUser.mockResolvedValueOnce([{ ...unknownChar, characterKey: 'Mavuika' }]);
+    const result = await service.getRecommendations('user-1');
+    const recommendation = result.recommendations.find((item) => item.characterKey === 'Mavuika');
+    expect(recommendation?.explanations.join(' ')).toContain('generic fallback values');
+    expect(recommendation?.explanations.join(' ')).not.toContain('top-tier');
+  });
 
   // ── Weapon mismatch explanation ──────────────────────────────────────────
 

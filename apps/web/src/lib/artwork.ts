@@ -1,4 +1,5 @@
 import metadata from './artwork-metadata.json';
+import targets from './progression-targets.json';
 
 type CharacterMetadata = { name: string; rarity: number; element: string; weapon: string };
 type WeaponMetadata = { name: string; rarity: number };
@@ -8,6 +9,7 @@ export function artworkDisplayName(key: string): string {
   return (
     characterMetadata[key]?.name ??
     weaponMetadata[key]?.name ??
+    targets.artifactSets.find((set) => set.key === key)?.name ??
     key.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/_/g, ' ')
   );
 }

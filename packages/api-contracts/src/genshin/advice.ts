@@ -56,6 +56,8 @@ export interface MaterialAdviceResponse {
   inventory: Record<string, number>;
   /** null means absent stock evidence, including after an empty replacement import. */
   delta: Record<string, number | null>;
+  /** Goal-first estimate: credits recorded stock/crafting; unrecorded stock contributes nothing. */
+  planningDelta?: Record<string, number>;
   goals: AdviceAvailability[];
   neededComplete: boolean;
   sources: AdviceSource[];

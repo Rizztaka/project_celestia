@@ -1,68 +1,107 @@
-// Fetch data only, never execute upstream code. Pin every source URL to one commit.
+// Fetch inert data only. Resolve every folder from one pinned commit, never independent trees.
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-const commit = '49a6544a6c6ae36089cb42fa591fc46f01de8bcf';
 const cache = process.argv[2];
+const commit = process.argv[3] ?? '49a6544a6c6ae36089cb42fa591fc46f01de8bcf';
 if (!cache) throw new Error('Supply an explicit source-cache directory.');
-mkdirSync(cache, { recursive: true });
+if (!/^[a-f0-9]{40}$/.test(commit)) throw new Error('Supply a full pinned commit SHA.');
+const revisionCache = resolve(cache, commit);
+mkdirSync(revisionCache, { recursive: true });
 const sha = (text) => createHash('sha256').update(text).digest('hex');
-async function download(path) {
-  const destination = resolve(cache, path.replaceAll('/', '__'));
-  if (existsSync(destination)) return readFileSync(destination, 'utf8');
-  const url = `https://raw.githubusercontent.com/theBowja/genshin-db/${commit}/${path}`;
+const gitBlob = (bytes) =>
+  createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+async function request(url) {
   const response = await fetch(url);
-  if (!response.ok) throw new Error(`Source retrieval failed: ${path} (${response.status})`);
-  const text = await response.text();
-  writeFileSync(destination, text);
-  return text;
+  if (!response.ok) throw new Error(`Source retrieval failed: ${url} (${response.status})`);
+  return response;
 }
-const trees = {
-  characters: 'd528e0998d5f4a8707f68af64238f358cf3fc3ae',
-  talents: 'b7c8db4ff8805da3bf07674fa29df9ccfc6b641f',
-  weapons: 'e99fa8d3a12d3fd019f9518f6492d33c171d1b3e',
-  materials: '8366578888b395b725d2f73d635fbad0f1e75379',
-  domains: 'dedb7deb57d00e2d92b5dd2eedbbb37f7ea306f5',
-};
+async function tree(ref) {
+  const path = resolve(revisionCache, `tree-${ref}.json`);
+  const listing = existsSync(path)
+    ? JSON.parse(readFileSync(path, 'utf8'))
+    : await (
+        await request(`https://api.github.com/repos/theBowja/genshin-db/git/trees/${ref}`)
+      ).json();
+  if (listing.truncated || !Array.isArray(listing.tree))
+    throw new Error('Incomplete source index.');
+  const bytes = Buffer.concat(
+    listing.tree.map((entry) =>
+      Buffer.concat([
+        Buffer.from(`${entry.mode.replace(/^0/, '')} ${entry.path}\0`),
+        Buffer.from(entry.sha, 'hex'),
+      ]),
+    ),
+  );
+  const actual = createHash('sha1').update(`tree ${bytes.length}\0`).update(bytes).digest('hex');
+  if (actual !== listing.sha || actual !== ref)
+    throw new Error(`Source tree integrity mismatch: ${ref}`);
+  writeFileSync(path, JSON.stringify(listing));
+  return listing.tree;
+}
+async function download(path, expectedBlob) {
+  const destination = resolve(revisionCache, path.replaceAll('/', '__'));
+  const bytes = existsSync(destination)
+    ? readFileSync(destination)
+    : Buffer.from(
+        await (
+          await request(`https://raw.githubusercontent.com/theBowja/genshin-db/${commit}/${path}`)
+        ).arrayBuffer(),
+      );
+  if (gitBlob(bytes) !== expectedBlob) throw new Error(`Source blob integrity mismatch: ${path}`);
+  writeFileSync(destination, bytes);
+  return bytes.toString('utf8');
+}
+const revision = await (
+  await request(`https://api.github.com/repos/theBowja/genshin-db/git/commits/${commit}`)
+).json();
+if (revision.sha !== commit) throw new Error('Source revision mismatch.');
+let entries = await tree(revision.tree.sha);
+const rootEntries = entries;
+for (const folder of ['src', 'data', 'English']) {
+  const entry = entries.find((entry) => entry.type === 'tree' && entry.path === folder);
+  if (!entry) throw new Error(`Missing source folder ${folder}`);
+  entries = await tree(entry.sha);
+}
 const collected = {};
-for (const [folder, tree] of Object.entries(trees)) {
-  const treeCache = resolve(cache, `${folder}-tree.json`);
-  let listing;
-  if (existsSync(treeCache)) listing = JSON.parse(readFileSync(treeCache, 'utf8'));
-  else {
-    const response = await fetch(
-      `https://api.github.com/repos/theBowja/genshin-db/git/trees/${tree}`,
-    );
-    if (!response.ok) throw new Error(`Source index failed (${response.status})`);
-    listing = await response.json();
-    writeFileSync(treeCache, JSON.stringify(listing));
-  }
-  if (listing.truncated) throw new Error('Incomplete source index.');
-  const paths = listing.tree.filter(
+for (const folder of [
+  'characters',
+  'talents',
+  'weapons',
+  'materials',
+  'domains',
+  'enemies',
+  'artifacts',
+  'crafts',
+]) {
+  const folderEntry = entries.find((entry) => entry.path === folder && entry.type === 'tree');
+  if (!folderEntry) throw new Error(`Missing source folder ${folder}`);
+  const paths = (await tree(folderEntry.sha)).filter(
     (entry) => entry.type === 'blob' && entry.path.endsWith('.json'),
   );
-  const entries = [];
+  const records = [];
   let cursor = 0;
   await Promise.all(
     Array.from({ length: 8 }, async () => {
       while (cursor < paths.length) {
         const entry = paths[cursor++];
-        const path = `src/data/English/${folder}/${entry.path}`;
-        const text = await download(path);
-        entries.push({
+        const sourcePath = `src/data/English/${folder}/${entry.path}`;
+        const text = await download(sourcePath, entry.sha);
+        records.push({
           file: entry.path,
-          sourcePath: path,
+          sourcePath,
           sourceHash: sha(text),
           data: JSON.parse(text),
         });
       }
     }),
   );
-  collected[folder] = entries.sort((a, b) => a.file.localeCompare(b.file, 'en'));
-  console.log(`${folder}: ${entries.length} pinned source files`);
+  collected[folder] = records.sort((a, b) => a.file.localeCompare(b.file, 'en'));
+  console.log(`${folder}: ${records.length} verified source files`);
 }
-const license = await download('LICENSE');
+const licenseEntry = rootEntries.find((entry) => entry.path === 'LICENSE');
+const license = await download('LICENSE', licenseEntry.sha);
 writeFileSync(resolve(cache, 'source-data.json'), JSON.stringify({ commit, collected }));
 writeFileSync(resolve(cache, 'LICENSE'), license);
 console.log(`Source data cached at ${resolve(cache, 'source-data.json')}`);

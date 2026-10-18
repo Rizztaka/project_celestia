@@ -58,6 +58,14 @@ const schema = z
           name: z.string().min(1),
           sources: z.array(z.string()),
           domainKey: key.nullable(),
+          category: z.enum([
+            'talent_book',
+            'weapon_material',
+            'weekly_boss',
+            'world_boss',
+            'local_specialty',
+            'progression_support',
+          ]),
         })
         .strict(),
     ),
@@ -68,6 +76,7 @@ const schema = z
     ),
     weapons: z.record(target.strict()),
     domains: z.record(domain),
+    conversionGroups: z.array(z.array(key).min(2)),
   })
   .strict();
 
@@ -196,7 +205,7 @@ export class GenshinProgressionCatalog {
         {
           authority: 'community',
           reference: `${source.repository}/tree/${source.commit}`,
-          localEvidence: 'docs/plans/production-readiness/sources.md',
+          localEvidence: 'docs/plans/genshin-parity/sources.md',
           verifier: 'Pinned catalog normalization and source-join validation',
           reviewedOn: source.reviewedOn,
           observedOn: null,

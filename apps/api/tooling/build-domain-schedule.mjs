@@ -1,6 +1,8 @@
 // Reuse the already pinned catalog; never fetch or scrape another dataset.
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+
+import { writeCatalogJson } from './catalog-json.mjs';
 
 export function normalizeDomainSchedule(domains) {
   const values = Object.values(domains);
@@ -15,11 +17,11 @@ export function normalizeDomainSchedule(domains) {
   };
 }
 
-export function writeDomainSchedule(catalog) {
+export async function writeDomainSchedule(catalog) {
   const schedule = normalizeDomainSchedule(catalog.domains);
-  writeFileSync(
+  await writeCatalogJson(
     new URL('../src/games/genshin/static/domain-schedule.json', import.meta.url),
-    JSON.stringify(schedule, null, 2) + '\n',
+    schedule,
   );
   return [...schedule.talentDomains, ...schedule.weaponDomains];
 }
@@ -31,5 +33,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       'utf8',
     ),
   );
-  writeDomainSchedule(catalog);
+  await writeDomainSchedule(catalog);
 }

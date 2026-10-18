@@ -6,11 +6,7 @@
       "name": "All-Devouring Narwhal",
       "location": "Fontaine",
       "domainName": "Shadow of Another World",
-      "dropKeys": [
-        "LightlessSilkString",
-        "LightlessEyeOfTheMaelstrom",
-        "LightlessMass"
-      ],
+      "dropKeys": ["LightlessSilkString", "LightlessEyeOfTheMaelstrom", "LightlessMass"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Shadow_of_Another_World"
     },
     {
@@ -18,11 +14,7 @@
       "name": "Azhdaha",
       "location": "Liyue",
       "domainName": "Beneath the Dragon-Queller",
-      "dropKeys": [
-        "DragonLordsCrown",
-        "BloodjadeBranch",
-        "GildedScale"
-      ],
+      "dropKeys": ["DragonLordsCrown", "BloodjadeBranch", "GildedScale"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Beneath_the_Dragon-Queller"
     },
     {
@@ -30,11 +22,7 @@
       "name": "Childe",
       "location": "Liyue",
       "domainName": "Enter the Golden House",
-      "dropKeys": [
-        "TuskOfMonocerosCaeli",
-        "ShardOfAFoulLegacy",
-        "ShadowOfTheWarrior"
-      ],
+      "dropKeys": ["TuskOfMonocerosCaeli", "ShardOfAFoulLegacy", "ShadowOfTheWarrior"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Enter_the_Golden_House"
     },
     {
@@ -42,11 +30,7 @@
       "name": "Guardian of Apep's Oasis",
       "location": "Sumeru",
       "domainName": "The Realm of Beginnings",
-      "dropKeys": [
-        "WorldspanFern",
-        "PrimordialGreenbloom",
-        "Everamber"
-      ],
+      "dropKeys": ["WorldspanFern", "PrimordialGreenbloom", "Everamber"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/The_Realm_of_Beginnings"
     },
     {
@@ -54,11 +38,7 @@
       "name": "Il Dottore",
       "location": "Unknown",
       "domainName": "Entrance not recorded in the pinned source",
-      "dropKeys": [
-        "CounterfeitResin",
-        "TwistedWitheredBranch",
-        "ProfanedSprout"
-      ],
+      "dropKeys": ["CounterfeitResin", "TwistedWitheredBranch", "ProfanedSprout"],
       "wikiUrl": null
     },
     {
@@ -66,11 +46,7 @@
       "name": "La Signora",
       "location": "Inazuma",
       "domainName": "Narukami Island: Tenshukaku",
-      "dropKeys": [
-        "MoltenMoment",
-        "HellfireButterfly",
-        "AshenHeart"
-      ],
+      "dropKeys": ["MoltenMoment", "HellfireButterfly", "AshenHeart"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Narukami_Island:_Tenshukaku"
     },
     {
@@ -78,11 +54,7 @@
       "name": "Lord of Eroded Primal Fire",
       "location": "Natlan",
       "domainName": "Stone Stele Records",
-      "dropKeys": [
-        "ErodedHorn",
-        "ErodedSunfire",
-        "ErodedScaleFeather"
-      ],
+      "dropKeys": ["ErodedHorn", "ErodedSunfire", "ErodedScaleFeather"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Stone_Stele_Records"
     },
     {
@@ -90,11 +62,7 @@
       "name": "Lupus Boreas, Dominator of Wolves",
       "location": "Mondstadt",
       "domainName": "Wolf of the North Challenge",
-      "dropKeys": [
-        "TailOfBoreas",
-        "RingOfBoreas",
-        "SpiritLocketOfBoreas"
-      ],
+      "dropKeys": ["TailOfBoreas", "RingOfBoreas", "SpiritLocketOfBoreas"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Wolf_of_the_North_Challenge"
     },
     {
@@ -102,11 +70,7 @@
       "name": "Magatsu Mitake Narukami no Mikoto",
       "location": "Inazuma",
       "domainName": "End of the Oneiric Euthymia",
-      "dropKeys": [
-        "MudraOfTheMaleficGeneral",
-        "TearsOfTheCalamitousGod",
-        "TheMeaningOfAeons"
-      ],
+      "dropKeys": ["MudraOfTheMaleficGeneral", "TearsOfTheCalamitousGod", "TheMeaningOfAeons"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/End_of_the_Oneiric_Euthymia"
     },
     {
@@ -114,11 +78,7 @@
       "name": "Shouki no Kami, the Prodigal",
       "location": "Sumeru",
       "domainName": "Joururi Workshop",
-      "dropKeys": [
-        "PuppetStrings",
-        "MirrorOfMushin",
-        "DakasBell"
-      ],
+      "dropKeys": ["PuppetStrings", "MirrorOfMushin", "DakasBell"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Joururi_Workshop"
     },
     {
@@ -126,11 +86,7 @@
       "name": "Stormterror",
       "location": "Mondstadt",
       "domainName": "Confront Stormterror",
-      "dropKeys": [
-        "DvalinsPlume",
-        "DvalinsClaw",
-        "DvalinsSigh"
-      ],
+      "dropKeys": ["DvalinsPlume", "DvalinsClaw", "DvalinsSigh"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Confront_Stormterror"
     },
     {
@@ -138,11 +94,7 @@
       "name": "The Doctor",
       "location": "Unknown",
       "domainName": "Entrance not recorded in the pinned source",
-      "dropKeys": [
-        "MaskOfTheVirtuousDoctor",
-        "MadmansRestraint",
-        "ElixirOfTheHeretic"
-      ],
+      "dropKeys": ["MaskOfTheVirtuousDoctor", "MadmansRestraint", "ElixirOfTheHeretic"],
       "wikiUrl": null
     },
     {
@@ -150,11 +102,7 @@
       "name": "The Game Before the Gate",
       "location": "Mondstadt",
       "domainName": "Unresolved Chess Game",
-      "dropKeys": [
-        "AscendedSampleKnight",
-        "AscendedSampleRook",
-        "AscendedSampleQueen"
-      ],
+      "dropKeys": ["AscendedSampleKnight", "AscendedSampleRook", "AscendedSampleQueen"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Unresolved_Chess_Game"
     },
     {
@@ -162,11 +110,7 @@
       "name": "The Knave",
       "location": "Fontaine",
       "domainName": "Scattered Ruins",
-      "dropKeys": [
-        "FadingCandle",
-        "SilkenFeather",
-        "DenialAndJudgment"
-      ],
+      "dropKeys": ["FadingCandle", "SilkenFeather", "DenialAndJudgment"],
       "wikiUrl": "https://genshin-impact.fandom.com/wiki/Scattered_Ruins"
     }
   ]

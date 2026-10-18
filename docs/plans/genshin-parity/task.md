@@ -16,4 +16,5 @@
 - [ ] Independently establish live-game availability for every later upstream record.
 - [ ] Obtain missing Manekin costs and verified Traveler per-slot talent tables.
 - [ ] Verify entrances/regions for the two later Doctor source records.
-- [ ] Run database-gated integration suites and live-browser acceptance in their configured environments.
+- [x] Observe all 1,262 tests, including database-gated integrations, passing in GitHub CI.
+- [ ] Run live-browser acceptance in its configured environment.

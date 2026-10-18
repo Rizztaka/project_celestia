@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { writeDomainSchedule } from './build-domain-schedule.mjs';
 import { buildGameReferences } from './build-game-references.mjs';
+import { writeCatalogJson } from './catalog-json.mjs';
 import { refreshFarmingFamilies } from './refresh-farming-families.mjs';
 
 const cache = process.argv[2];
@@ -163,7 +164,7 @@ for (const entry of collected.materials) {
   )
     material(entry.data.id);
 }
-const references = buildGameReferences({ collected, root, keyOf, useSource, material });
+const references = await buildGameReferences({ collected, root, keyOf, useSource, material });
 // Recipes, not consecutive item IDs, establish the exact 3:1 direction.
 const lower = new Map();
 const higher = new Map();
@@ -261,10 +262,9 @@ function stable(value) {
 catalog.contentFingerprint = createHash('sha256')
   .update(JSON.stringify(stable(catalog)))
   .digest('hex');
-refreshFarmingFamilies(catalog, collected, root);
+await refreshFarmingFamilies(catalog, collected, root);
 const output = resolve(root, 'apps/api/src/games/genshin/static/progression-catalog.json');
-const serialized = JSON.stringify(catalog, null, 2) + '\n';
-writeFileSync(output, serialized);
+const serialized = await writeCatalogJson(output, catalog);
 const targets = {
   materials: Object.values(materials).map(({ key, name, sources, domainKey, category }) => ({
     key,
@@ -273,7 +273,7 @@ const targets = {
     domainKey,
     category,
   })),
-  domains: writeDomainSchedule(catalog),
+  domains: await writeDomainSchedule(catalog),
   characters: Object.values(characters).map(({ key, name, talent }) => ({
     key,
     name,
@@ -286,10 +286,7 @@ const targets = {
   })),
   artifactSets: Object.values(references.artifactSets),
 };
-writeFileSync(
-  resolve(root, 'apps/web/src/lib/progression-targets.json'),
-  JSON.stringify(targets, null, 2) + '\n',
-);
+await writeCatalogJson(resolve(root, 'apps/web/src/lib/progression-targets.json'), targets);
 const notice = resolve(root, 'docs/third-party/genshin-db-LICENSE.txt');
 mkdirSync(dirname(notice), { recursive: true });
 writeFileSync(notice, readFileSync(resolve(cache, 'LICENSE'), 'utf8'));

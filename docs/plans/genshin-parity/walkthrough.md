@@ -72,7 +72,7 @@ node apps/api/tooling/build-farming-data.mjs <farming-cache> <source-cache>/sour
 Catalog content fingerprint:
 `1b6ee33f1d1946fe312daf8083b7bdac7c13a84ae209ab20a37d27de4df86e81`.
 Serialized catalog SHA-256:
-`a58715f82d8a19d5c1cf885fa8abde3ae32248f19084a145065cd54bcf7f6ec7`.
+`4b389e56e1bca82f260db5b1bfaee50d9dd9ac57896ed8f9592bd59b38564290`.
 
 ## Verification
 
@@ -107,3 +107,9 @@ See [sources.md](sources.md) for pinned URLs, counts, the raw-coordinate checksu
 correction, editorial assumptions and the distinction between seen and unknown
 evidence. Historical `character-materials.json` and Section 1 evidence are intact.
 No dependency, Prisma schema or migration change was needed.
+
+## CI and deployment follow-up
+
+GitHub CI for `9931e1d` ran all 1,262 tests, including database-gated cases, with zero failures or skips. Verification subsequently failed because seven generated JSON files did not match repository formatting. The generators now serialize through the repository Prettier configuration, so offline regeneration reproduces formatted snapshots. All ten generated JSON documents are semantically unchanged, and the catalog content fingerprint is unchanged. The serialized-file checksum above reflects formatted bytes.
+
+At inspection, Vercel reported that commit deployed, the public frontend served the refreshed catalog asset, Render deployment `dep-dbag37qvcj2c73a6q6bg` was live on the same commit, both direct and frontend-proxied API readiness returned HTTP 200 with database up, and Supabase reported `ACTIVE_HEALTHY`. Live deployment and CI completion are distinct observations.

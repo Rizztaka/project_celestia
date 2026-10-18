@@ -1400,12 +1400,7 @@
     "affiliation": "——",
     "region": null,
     "constellation": "——",
-    "voiceActors": {
-      "english": "——",
-      "chinese": "——",
-      "japanese": "——",
-      "korean": "——"
-    },
+    "voiceActors": { "english": "——", "chinese": "——", "japanese": "——", "korean": "——" },
     "recommendationBasis": "unavailable"
   },
   "Manekina": {
@@ -1420,12 +1415,7 @@
     "affiliation": "——",
     "region": null,
     "constellation": "——",
-    "voiceActors": {
-      "english": "——",
-      "chinese": "——",
-      "japanese": "——",
-      "korean": "——"
-    },
+    "voiceActors": { "english": "——", "chinese": "——", "japanese": "——", "korean": "——" },
     "recommendationBasis": "unavailable"
   },
   "Mavuika": {

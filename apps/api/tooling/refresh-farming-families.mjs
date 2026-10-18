@@ -1,7 +1,9 @@
 // Offline catalog refresh: preserve the independently fingerprinted historical coordinates/yields.
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+
+import { writeCatalogJson } from './catalog-json.mjs';
 
 const stable = (value) =>
   Array.isArray(value)
@@ -18,7 +20,7 @@ const fingerprint = (value) =>
     .update(JSON.stringify(stable(value)))
     .digest('hex');
 
-export function refreshFarmingFamilies(catalog, collected, root) {
+export async function refreshFarmingFamilies(catalog, collected, root) {
   const file = resolve(root, 'apps/api/src/games/genshin/static/farming-data.json');
   const { contentFingerprint, ...payload } = JSON.parse(readFileSync(file, 'utf8'));
   if (fingerprint(payload) !== contentFingerprint)
@@ -41,5 +43,5 @@ export function refreshFarmingFamilies(catalog, collected, root) {
     throw new Error('Historical coordinate material missing from refreshed catalog.');
   payload.progressionFingerprint = catalog.contentFingerprint;
   payload.contentFingerprint = fingerprint(payload);
-  writeFileSync(file, JSON.stringify(payload, null, 2) + '\n');
+  await writeCatalogJson(file, payload);
 }

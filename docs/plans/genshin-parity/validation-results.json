@@ -12,7 +12,7 @@
     "crafts": 295
   },
   "catalogContentFingerprint": "1b6ee33f1d1946fe312daf8083b7bdac7c13a84ae209ab20a37d27de4df86e81",
-  "catalogFileSha256": "a58715f82d8a19d5c1cf885fa8abde3ae32248f19084a145065cd54bcf7f6ec7",
+  "catalogFileSha256": "4b389e56e1bca82f260db5b1bfaee50d9dd9ac57896ed8f9592bd59b38564290",
   "farmingContentFingerprint": "848a56125721c92fe3c92e8e0de1f4cee458b9ab508015baecbb62cb9b046a53",
   "commands": [
     {
@@ -53,10 +53,7 @@
       "sha256": "9f55fa4f442193f038d9ed374e8109193ef8f404f0e87c8a57c77a8f64a3aa40"
     }
   ],
-  "offlineRegeneration": {
-    "identicalFiles": 10,
-    "result": "passed"
-  },
+  "offlineRegeneration": { "identicalFiles": 10, "result": "passed" },
   "fullFarmingRegeneration": {
     "result": "passed",
     "coordinateAndYieldPreservation": "passed",
@@ -69,5 +66,12 @@
     "129 goal targets include 7 Traveler forms, with 122 distinct source character IDs.",
     "Missing Manekin cost quantities, Traveler slot-specific talent costs and two later weekly-boss entrances remain unavailable.",
     "Latest source commit was already pinned; source parity does not establish every record is live-game eligible."
-  ]
+  ],
+  "ciObservation": {
+    "commit": "9931e1dbc87d83f04d84be15626c7c5158edcdd1",
+    "run": "https://github.com/Rizztaka/project_celestia/actions/runs/39149704998",
+    "fullTestResult": { "passed": 1262, "failed": 0, "skipped": 0, "files": 78 },
+    "conclusion": "failed at repository-format after tests, lint, typechecks and builds passed",
+    "resolution": "Generators now use the repository Prettier configuration; regenerated JSON changes whitespace only."
+  }
 }

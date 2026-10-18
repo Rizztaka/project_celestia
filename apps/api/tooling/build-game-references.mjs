@@ -1,11 +1,12 @@
 // Metadata is sourced; subjective build rankings are never inferred from a biography.
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-export function buildGameReferences({ collected, root, keyOf, useSource, material }) {
+import { writeCatalogJson } from './catalog-json.mjs';
+
+export async function buildGameReferences({ collected, root, keyOf, useSource, material }) {
   const directory = resolve(root, 'apps/api/src/games/genshin/static');
-  const write = (file, data) =>
-    writeFileSync(resolve(directory, file), JSON.stringify(data, null, 2) + '\n');
+  const write = (file, data) => writeCatalogJson(resolve(directory, file), data);
   const previous = JSON.parse(readFileSync(resolve(directory, 'character-profiles.json'), 'utf8'));
   const elements = {};
   const weapons = {};
@@ -53,9 +54,9 @@ export function buildGameReferences({ collected, root, keyOf, useSource, materia
     if (!element) throw new Error(`Unsupported Traveler form ${data.name}`);
     addCharacter({ ...traveler, name: data.name, elementText: element }, `Traveler${element}`);
   }
-  write('character-elements.json', elements);
-  write('character-weapon-types.json', weapons);
-  write('character-profiles.json', profiles);
+  await write('character-elements.json', elements);
+  await write('character-weapon-types.json', weapons);
+  await write('character-profiles.json', profiles);
 
   const artifactSets = {};
   for (const entry of collected.artifacts) {
@@ -79,7 +80,7 @@ export function buildGameReferences({ collected, root, keyOf, useSource, materia
   weights._comment =
     'Character stat weights are editorial planning heuristics. _sets contains sourced conditional set effects, not unconditional scoring multipliers.';
   weights._sets = artifactSets;
-  write('artifact-stat-weights.json', weights);
+  await write('artifact-stat-weights.json', weights);
 
   // Stable keys for real existing bosses are retained. Fictional placeholder rows are removed.
   // Entrance/region joins are reviewed separately in docs/plans/genshin-parity/sources.md.
@@ -129,11 +130,11 @@ export function buildGameReferences({ collected, root, keyOf, useSource, materia
       });
     } else worldBosses.push({ key: keyOf(data.name), gameId: data.id, name: data.name, dropKeys });
   }
-  write('weekly-bosses.json', {
+  await write('weekly-bosses.json', {
     _comment:
       'Reward joins from pinned genshin-db enemy previews. Unknown entrances remain explicit; no weekly yield or resin estimate is inferred.',
     bosses,
   });
-  write('world-bosses.json', { bosses: worldBosses });
+  await write('world-bosses.json', { bosses: worldBosses });
   return { artifactSets, profileCount: Object.keys(profiles).length - 1, bosses, worldBosses };
 }

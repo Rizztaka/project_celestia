@@ -4,161 +4,121 @@
       "key": "AeonblightDrake",
       "gameId": 24030301,
       "name": "Aeonblight Drake",
-      "dropKeys": [
-        "PerpetualCaliber"
-      ]
+      "dropKeys": ["PerpetualCaliber"]
     },
     {
       "key": "AlgorithmOfSemiIntransientMatrixOfOverseerNetwork",
       "gameId": 24050101,
       "name": "Algorithm of Semi-Intransient Matrix of Overseer Network",
-      "dropKeys": [
-        "LightGuidingTetrahedron"
-      ]
+      "dropKeys": ["LightGuidingTetrahedron"]
     },
     {
       "key": "AnemoHypostasis",
       "gameId": 20040201,
       "name": "Anemo Hypostasis",
-      "dropKeys": [
-        "HurricaneSeed"
-      ]
+      "dropKeys": ["HurricaneSeed"]
     },
     {
       "key": "BolteaterBathysmalVishap",
       "gameId": 26050801,
       "name": "Bolteater Bathysmal Vishap",
-      "dropKeys": [
-        "DragonheirsFalseFin"
-      ]
+      "dropKeys": ["DragonheirsFalseFin"]
     },
     {
       "key": "ChimericWingedLion",
       "gameId": 26310501,
       "name": "Chimeric Winged Lion",
-      "dropKeys": [
-        "SeveredTailOfTheSkyRoamer"
-      ]
+      "dropKeys": ["SeveredTailOfTheSkyRoamer"]
     },
     {
       "key": "CryoHypostasis",
       "gameId": 20040501,
       "name": "Cryo Hypostasis",
-      "dropKeys": [
-        "CrystallineBloom"
-      ]
+      "dropKeys": ["CrystallineBloom"]
     },
     {
       "key": "CryoRegisvine",
       "gameId": 26020101,
       "name": "Cryo Regisvine",
-      "dropKeys": [
-        "HoarfrostCore"
-      ]
+      "dropKeys": ["HoarfrostCore"]
     },
     {
       "key": "DendroHypostasis",
       "gameId": 20040701,
       "name": "Dendro Hypostasis",
-      "dropKeys": [
-        "QuelledCreeper"
-      ]
+      "dropKeys": ["QuelledCreeper"]
     },
     {
       "key": "ElectroHypostasis",
       "gameId": 20040101,
       "name": "Electro Hypostasis",
-      "dropKeys": [
-        "LightningPrism"
-      ]
+      "dropKeys": ["LightningPrism"]
     },
     {
       "key": "ElectroRegisvine",
       "gameId": 26020301,
       "name": "Electro Regisvine",
-      "dropKeys": [
-        "ThunderclapFruitcore"
-      ]
+      "dropKeys": ["ThunderclapFruitcore"]
     },
     {
       "key": "EmperorOfFireAndIron",
       "gameId": 26160302,
       "name": "Emperor of Fire and Iron",
-      "dropKeys": [
-        "EmperorsResolution"
-      ]
+      "dropKeys": ["EmperorsResolution"]
     },
     {
       "key": "ExperimentalFieldGenerator",
       "gameId": 24080101,
       "name": "Experimental Field Generator",
-      "dropKeys": [
-        "TourbillonDevice"
-      ]
+      "dropKeys": ["TourbillonDevice"]
     },
     {
       "key": "FrostnightHerra",
       "gameId": 20081001,
       "name": "Frostnight Herra",
-      "dropKeys": [
-        "RadiantAntler"
-      ]
+      "dropKeys": ["RadiantAntler"]
     },
     {
       "key": "GeoHypostasis",
       "gameId": 20040301,
       "name": "Geo Hypostasis",
-      "dropKeys": [
-        "BasaltPillar"
-      ]
+      "dropKeys": ["BasaltPillar"]
     },
     {
       "key": "GluttonousYumkasaurMountainKing",
       "gameId": 26220301,
       "name": "Gluttonous Yumkasaur Mountain King",
-      "dropKeys": [
-        "OverripeFlamegranate"
-      ]
+      "dropKeys": ["OverripeFlamegranate"]
     },
     {
       "key": "GoldenWolflord",
       "gameId": 22060101,
       "name": "Golden Wolflord",
-      "dropKeys": [
-        "RiftbornRegalia"
-      ]
+      "dropKeys": ["RiftbornRegalia"]
     },
     {
       "key": "GoldflameQucusaurTyrant",
       "gameId": 26230301,
       "name": "Goldflame Qucusaur Tyrant",
-      "dropKeys": [
-        "MarkOfTheBindingBlessing"
-      ]
+      "dropKeys": ["MarkOfTheBindingBlessing"]
     },
     {
       "key": "GuardianBladeOfDriftingSnow",
       "gameId": 25135202,
       "name": "Guardian Blade of Drifting Snow",
-      "dropKeys": [
-        "VagabondsCrackedArmor"
-      ]
+      "dropKeys": ["VagabondsCrackedArmor"]
     },
     {
       "key": "HydroHypostasis",
       "gameId": 20040401,
       "name": "Hydro Hypostasis",
-      "dropKeys": [
-        "DewOfRepudiation"
-      ]
+      "dropKeys": ["DewOfRepudiation"]
     },
     {
       "key": "HydroTulpa",
       "gameId": 20051201,
       "name": "Hydro Tulpa",
-      "dropKeys": [
-        "WaterThatFailedToTranscend"
-      ]
+      "dropKeys": ["WaterThatFailedToTranscend"]
     },
     {
       "key": "IcewindSuite",
@@ -173,217 +133,153 @@
       "key": "ImmortalConstruct",
       "gameId": 25140101,
       "name": "Immortal Construct",
-      "dropKeys": [
-        "UnscorchedBlossomBranch"
-      ]
+      "dropKeys": ["UnscorchedBlossomBranch"]
     },
     {
       "key": "IniquitousBaptist",
       "gameId": 22100501,
       "name": "Iniquitous Baptist",
-      "dropKeys": [
-        "EvergloomRing"
-      ]
+      "dropKeys": ["EvergloomRing"]
     },
     {
       "key": "JadeplumeTerrorshroom",
       "gameId": 26110101,
       "name": "Jadeplume Terrorshroom",
-      "dropKeys": [
-        "MajesticHookedBeak"
-      ]
+      "dropKeys": ["MajesticHookedBeak"]
     },
     {
       "key": "KnuckleDuckle",
       "gameId": 24100101,
       "name": "Knuckle Duckle",
-      "dropKeys": [
-        "PrecisionKuuvahkiStampingDie"
-      ]
+      "dropKeys": ["PrecisionKuuvahkiStampingDie"]
     },
     {
       "key": "LavaDragonStatue",
       "gameId": 26270301,
       "name": "Lava Dragon Statue",
-      "dropKeys": [
-        "SparklessStatueCore"
-      ]
+      "dropKeys": ["SparklessStatueCore"]
     },
     {
       "key": "LegatusGolem",
       "gameId": 26140101,
       "name": "Legatus Golem",
-      "dropKeys": [
-        "FragmentOfAGoldenMelody"
-      ]
+      "dropKeys": ["FragmentOfAGoldenMelody"]
     },
     {
       "key": "LordOfTheHiddenDepthsWhispererOfNightmares",
       "gameId": 22150101,
       "name": "Lord of the Hidden Depths: Whisperer of Nightmares",
-      "dropKeys": [
-        "RemnantOfTheDreadwing"
-      ]
+      "dropKeys": ["RemnantOfTheDreadwing"]
     },
     {
       "key": "MaguuKenki",
       "gameId": 25090101,
       "name": "Maguu Kenki",
-      "dropKeys": [
-        "MarionetteCore"
-      ]
+      "dropKeys": ["MarionetteCore"]
     },
     {
       "key": "MillennialPearlSeahorse",
       "gameId": 26180101,
       "name": "Millennial Pearl Seahorse",
-      "dropKeys": [
-        "FontemerUnihorn"
-      ]
+      "dropKeys": ["FontemerUnihorn"]
     },
-    {
-      "key": "Oceanid",
-      "gameId": 20050101,
-      "name": "Oceanid",
-      "dropKeys": [
-        "CleansingHeart"
-      ]
-    },
+    { "key": "Oceanid", "gameId": 20050101, "name": "Oceanid", "dropKeys": ["CleansingHeart"] },
     {
       "key": "PerpetualMechanicalArray",
       "gameId": 24021101,
       "name": "Perpetual Mechanical Array",
-      "dropKeys": [
-        "PerpetualHeart"
-      ]
+      "dropKeys": ["PerpetualHeart"]
     },
     {
       "key": "PrimoGeovishap",
       "gameId": 26050101,
       "name": "Primo Geovishap",
-      "dropKeys": [
-        "JuvenileJade"
-      ]
+      "dropKeys": ["JuvenileJade"]
     },
     {
       "key": "PyroHypostasis",
       "gameId": 20040601,
       "name": "Pyro Hypostasis",
-      "dropKeys": [
-        "SmolderingPearl"
-      ]
+      "dropKeys": ["SmolderingPearl"]
     },
     {
       "key": "PyroRegisvine",
       "gameId": 26020201,
       "name": "Pyro Regisvine",
-      "dropKeys": [
-        "EverflameSeed"
-      ]
+      "dropKeys": ["EverflameSeed"]
     },
     {
       "key": "RadiantMoonfly",
       "gameId": 26301101,
       "name": "Radiant Moonfly",
-      "dropKeys": [
-        "LightbearingScaleFeather"
-      ]
+      "dropKeys": ["LightbearingScaleFeather"]
     },
     {
       "key": "RadiantMoongecko",
       "gameId": 26302101,
       "name": "Radiant Moongecko",
-      "dropKeys": [
-        "PrismaticSeveredTail"
-      ]
+      "dropKeys": ["PrismaticSeveredTail"]
     },
     {
       "key": "RimebiterBathysmalVishap",
       "gameId": 26050701,
       "name": "Rimebiter Bathysmal Vishap",
-      "dropKeys": [
-        "DragonheirsFalseFin"
-      ]
+      "dropKeys": ["DragonheirsFalseFin"]
     },
-    {
-      "key": "RuinSerpent",
-      "gameId": 24010401,
-      "name": "Ruin Serpent",
-      "dropKeys": [
-        "RunicFang"
-      ]
-    },
+    { "key": "RuinSerpent", "gameId": 24010401, "name": "Ruin Serpent", "dropKeys": ["RunicFang"] },
     {
       "key": "SecretSourceAutomatonConfigurationDevice",
       "gameId": 24090201,
       "name": "Secret Source Automaton: Configuration Device",
-      "dropKeys": [
-        "GoldInscribedSecretSourceCore"
-      ]
+      "dropKeys": ["GoldInscribedSecretSourceCore"]
     },
     {
       "key": "SecretSourceAutomatonOverseerDevice",
       "gameId": 24090501,
       "name": "Secret Source Automaton: Overseer Device",
-      "dropKeys": [
-        "SecretSourceAirflowAccumulator"
-      ]
+      "dropKeys": ["SecretSourceAirflowAccumulator"]
     },
     {
       "key": "SetekhWenut",
       "gameId": 26130101,
       "name": "Setekh Wenut",
-      "dropKeys": [
-        "PseudoStamens"
-      ]
+      "dropKeys": ["PseudoStamens"]
     },
     {
       "key": "SolitarySuanni",
       "gameId": 26190101,
       "name": "Solitary Suanni",
-      "dropKeys": [
-        "CloudseamScale"
-      ]
+      "dropKeys": ["CloudseamScale"]
     },
     {
       "key": "SuperHeavyLandroverMechanizedFortress",
       "gameId": 23090101,
       "name": "Super-Heavy Landrover: Mechanized Fortress",
-      "dropKeys": [
-        "CyclicMilitaryKuuvahkiCore"
-      ]
+      "dropKeys": ["CyclicMilitaryKuuvahkiCore"]
     },
     {
       "key": "TenebrousPapillaTypeI",
       "gameId": 22120101,
       "name": "Tenebrous Papilla: Type I",
-      "dropKeys": [
-        "EnsnaringGaze"
-      ]
+      "dropKeys": ["EnsnaringGaze"]
     },
     {
       "key": "ThunderManifestation",
       "gameId": 20070101,
       "name": "Thunder Manifestation",
-      "dropKeys": [
-        "StormBeads"
-      ]
+      "dropKeys": ["StormBeads"]
     },
     {
       "key": "WatcherFallenVigil",
       "gameId": 24111101,
       "name": "Watcher: Fallen Vigil",
-      "dropKeys": [
-        "PlumeOfTheFallenWatcher"
-      ]
+      "dropKeys": ["PlumeOfTheFallenWatcher"]
     },
     {
       "key": "WaywardHermeticSpiritspeaker",
       "gameId": 25520101,
       "name": "Wayward Hermetic Spiritspeaker",
-      "dropKeys": [
-        "TalismanOfTheEnigmaticLand"
-      ]
+      "dropKeys": ["TalismanOfTheEnigmaticLand"]
     }
   ]
 }

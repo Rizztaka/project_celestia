@@ -3,6 +3,8 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { writeCatalogJson } from './catalog-json.mjs';
+
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const cache = process.argv[2];
 const progressionSource = process.argv[3];
@@ -264,7 +266,7 @@ function stable(value) {
 }
 payload.contentFingerprint = hash(JSON.stringify(stable(payload)));
 const destination = join(root, 'apps/api/src/games/genshin/static/farming-data.json');
-writeFileSync(destination, JSON.stringify(payload, null, 2) + '\n');
+await writeCatalogJson(destination, payload);
 for (const [info, file, out] of [
   [sources.coordinates, 'license', 'canvas-genshin-maps-LICENSE.txt'],
   [sources.yields, 'LICENSE', 'paimon-moe-LICENSE.txt'],

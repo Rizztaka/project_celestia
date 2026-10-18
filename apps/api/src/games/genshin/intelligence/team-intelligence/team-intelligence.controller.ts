@@ -2,9 +2,20 @@ import type { Request, Response } from 'express';
 
 import { successResponse } from '@/core/utils/response.js';
 
+import { evaluationSchema } from './team-composition.schema.js';
+import { evaluateOwnedTeam } from './team-composition.service.js';
 import { TeamIntelligenceService } from './team-intelligence.service.js';
 
 export class TeamIntelligenceController {
+  evaluate = async (req: Request, res: Response): Promise<void> => {
+    const { characterKeys } = evaluationSchema.parse(req.body);
+    res.json(
+      successResponse(
+        await evaluateOwnedTeam(req.user!.id, characterKeys),
+        'Team composition evaluated.',
+      ),
+    );
+  };
   private readonly service: TeamIntelligenceService;
 
   constructor() {

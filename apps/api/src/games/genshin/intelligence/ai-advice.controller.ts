@@ -1,0 +1,22 @@
+import type { Request, Response } from 'express';
+import { z } from 'zod';
+
+import { successResponse } from '@/core/utils/response.js';
+
+import { synthesizeAdvice } from './ai-advice.service.js';
+import { characterKeysSchema } from './team-intelligence/team-composition.schema.js';
+import { evaluateOwnedTeam } from './team-intelligence/team-composition.service.js';
+
+const schema = z
+  .object({
+    todayPlan: z.string().trim().max(2000).optional(),
+    teamComp: characterKeysSchema.optional(),
+  })
+  .strict();
+export async function aiSummary(req: Request, res: Response): Promise<void> {
+  const context = schema.parse(req.body);
+  if (context.teamComp?.length) await evaluateOwnedTeam(req.user!.id, context.teamComp);
+  res.json(
+    successResponse({ summary: await synthesizeAdvice(context) }, 'Planning summary retrieved.'),
+  );
+}

@@ -20,7 +20,6 @@ const secondary = [
   ['/intelligence', 'Intelligence'],
   ['/simulators', 'Pull simulator'],
   ['/endgame', 'Endgame records'],
-  ['/nikke/roster', 'NIKKE'],
 ] as const;
 
 function MobileNavigation({ signOut, signingOut }: { signOut: () => void; signingOut: boolean }) {
@@ -232,6 +231,10 @@ export function CompanionNavigation() {
                 {label}
               </NavLink>
             ))}
+            <details>
+              <summary>Archived Stubs</summary>
+              <NavLink to="/nikke/roster">NIKKE (legacy)</NavLink>
+            </details>
           </div>
         </details>
       </nav>

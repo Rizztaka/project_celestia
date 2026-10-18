@@ -255,12 +255,12 @@ describe('Actual application origin policy', () => {
       await expect(application()).rejects.toThrow(field);
     },
   );
-  it('does not bypass existing required-secret validation', async () => {
+  it('requires the JWT secret but starts without optional AI credentials', async () => {
     vi.stubEnv('JWT_SECRET', 'short');
     await expect(application()).rejects.toThrow('JWT_SECRET');
     vi.stubEnv('JWT_SECRET', secret);
     vi.stubEnv('OPENROUTER_API_KEY', '');
-    await expect(application()).rejects.toThrow('OPENROUTER_API_KEY');
+    await expect(application()).resolves.toBeDefined();
   });
   it('normalizes case/default ports and trims configuration entries only', () => {
     expect([

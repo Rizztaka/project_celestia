@@ -59,7 +59,7 @@ services:
       REDIS_URL: redis://redis:6379
       TRUST_PROXY: '1'
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET to at least 32 random characters}
-      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?Set OPENROUTER_API_KEY}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
       WEB_ORIGIN: ${WEB_ORIGIN:-https://localhost}
       API_ORIGIN: ${API_ORIGIN:-https://localhost}
       CORS_ALLOWED_ORIGINS: ${WEB_ORIGIN:-https://localhost}

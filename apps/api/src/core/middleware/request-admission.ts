@@ -360,6 +360,13 @@ export function createRequestSafety(
   const imports = concurrency('import', checked.importConcurrency);
   return {
     ordinaryJson: boundedJson(checked.ordinaryBytes),
+    aiSummary: protect(
+      rateStore('ai-summary', { burst: 3, refillMs: 20_000, capacity: 1_024 }),
+      concurrency('ai-summary', { global: 4, perIdentity: 1 }),
+      ownerIdentity,
+      boundedJson(checked.ordinaryBytes),
+      { existingSubject: true },
+    ),
     login: protect(
       rateStore('login', checked.login),
       auth,

@@ -6,6 +6,7 @@ import { artifactRoutes } from './artifacts/artifact.routes.js';
 import { characterRoutes } from './characters/character.routes.js';
 import { endgameRoutes } from './endgame/endgame.routes.js';
 import { createImporterRoutes } from './importer/importer.routes.js';
+import { createAiAdviceRoutes } from './intelligence/ai-advice.routes.js';
 import { artifactIntelligenceRoutes } from './intelligence/artifact-intelligence/artifact-intelligence.routes.js';
 import { characterIntelligenceRoutes } from './intelligence/character-intelligence/character-intelligence.routes.js';
 import { farmingIntelligenceRoutes } from './intelligence/farming-intelligence/farming-intelligence.routes.js';
@@ -41,6 +42,7 @@ export function createGenshinRoutes(safety: RequestSafety) {
    */
   // Only the import router can choose large-body parsing, after auth and admission.
   router.use(createImporterRoutes(safety));
+  router.use(createAiAdviceRoutes(safety));
   router.use(safety.ordinaryJson);
   router.use(characterRoutes);
   router.use(weaponRoutes);

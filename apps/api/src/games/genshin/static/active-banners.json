@@ -1,5 +1,5 @@
 {
-  "_comment": "Active and upcoming character/weapon banners. Update this file each patch cycle. CharacterKeys must match the keys used in character-materials.json and team-templates.json.",
+  "_comment": "Configured simulator scenarios, not a verified live wish schedule. Dates are scenario validity windows. The Odette legacy fixture is retained for compatibility.",
   "banners": [
     {
       "bannerId": "banner_odette_phase1",
@@ -8,6 +8,22 @@
       "fiveStarKey": "Odette",
       "fourStarKeys": ["Shenhe", "Rosaria", "Layla"],
       "endDate": "2026-09-10T23:59:59Z"
+    },
+    {
+      "bannerId": "banner_mavuika_phase1",
+      "name": "Ancient Flame of Natlan",
+      "type": "CHARACTER",
+      "fiveStarKey": "Mavuika",
+      "fourStarKeys": ["Citlali", "Bennett", "Kachina"],
+      "endDate": "2027-01-01T23:59:59Z"
+    },
+    {
+      "bannerId": "banner_raiden_phase1",
+      "name": "Reign of Serenity",
+      "type": "CHARACTER",
+      "fiveStarKey": "RaidenShogun",
+      "fourStarKeys": ["KujouSara", "Chevreuse", "Xiangling"],
+      "endDate": "2027-01-01T23:59:59Z"
     }
   ]
 }

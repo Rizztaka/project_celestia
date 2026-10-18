@@ -8,6 +8,8 @@ import FarmingPanel from '../components/FarmingPanel';
 import GoalManager from '../components/GoalManager';
 import MaterialRow from '../components/MaterialRow';
 import RoutinePanel from '../components/RoutinePanel';
+import TeamBuilder from '../components/TeamBuilder';
+import WishSavingsPlanner from '../components/WishSavingsPlanner';
 import { assertCurrentSession, captureSession, isCurrentSession } from '../lib/account-session';
 import {
   type EventsResponse,
@@ -37,11 +39,17 @@ export default function PlannerPage() {
   const [session] = useState(captureSession);
 
   // ── Tab state ─────────────────────────────────────────
-  type Tab = 'daily' | 'weekly' | 'farming' | 'events';
+  type Tab = 'daily' | 'weekly' | 'farming' | 'teams' | 'savings' | 'events';
   const [params, setParams] = useSearchParams();
   const rawTab = params.get('tab');
   const activeTab: Tab =
-    rawTab === 'weekly' || rawTab === 'farming' || rawTab === 'events' ? rawTab : 'daily';
+    rawTab === 'weekly' ||
+    rawTab === 'farming' ||
+    rawTab === 'teams' ||
+    rawTab === 'savings' ||
+    rawTab === 'events'
+      ? rawTab
+      : 'daily';
   const setActiveTab = (tab: Tab) => {
     const next = new URLSearchParams(params);
     next.set('tab', tab);
@@ -201,16 +209,10 @@ export default function PlannerPage() {
         <div className="animate-fade-in mb-8">
           <h1 className="font-display text-4xl font-bold tracking-tight text-white">Planner</h1>
           <p className="mt-2 text-base text-zinc-400">
-            Your routine, manual checkpoints, and farming goals.
+            Plan your routine, build teams, and budget your next wishes.
           </p>
         </div>
 
-        <p className="mb-6 text-sm text-zinc-400">
-          Set your targets and see the materials you need. Ascension costs cover{' '}
-          {progressionCoverage.characters} characters and {progressionCoverage.weapons} weapons;{' '}
-          {progressionCoverage.talents} characters have base talent costs through level 10. No
-          import required to plan.
-        </p>
         {/* ── Tab Switcher ───────────────────────────────── */}
         <AccessibleTabs
           label="Planner sections"
@@ -219,8 +221,9 @@ export default function PlannerPage() {
           onChange={setActiveTab}
           tabs={[
             { id: 'daily', label: 'Daily' },
-            { id: 'weekly', label: 'Weekly' },
-            { id: 'farming', label: 'Goals & materials' },
+            { id: 'farming', label: 'Farming' },
+            { id: 'teams', label: 'Teams' },
+            { id: 'savings', label: 'Wish Savings' },
             {
               id: 'events',
               label: (
@@ -234,6 +237,7 @@ export default function PlannerPage() {
                 </span>
               ),
             },
+            { id: 'weekly', label: 'Weekly Bosses' },
           ]}
         />
         <TabPanel prefix="planner" id="daily" active={activeTab}>
@@ -242,10 +246,22 @@ export default function PlannerPage() {
         <TabPanel prefix="planner" id="weekly" active={activeTab}>
           <RoutinePanel view="weekly" />
         </TabPanel>
+        <TabPanel prefix="planner" id="teams" active={activeTab}>
+          <TeamBuilder />
+        </TabPanel>
+        <TabPanel prefix="planner" id="savings" active={activeTab}>
+          <WishSavingsPlanner />
+        </TabPanel>
 
         {/* ── Farming Goals Tab ─────────────────────────── */}
         <TabPanel prefix="planner" id="farming" active={activeTab}>
           <div className="animate-fade-in flex flex-col gap-8">
+            <p className="text-sm text-zinc-400">
+              Set your targets and see the materials you need. Ascension costs cover{' '}
+              {progressionCoverage.characters} characters and {progressionCoverage.weapons} weapons;{' '}
+              {progressionCoverage.talents} characters have base talent costs through level 10. No
+              import required to plan.
+            </p>
             <button
               className="self-start rounded-lg border border-white/20 px-3 py-2 text-sm"
               disabled={materialsFetching}

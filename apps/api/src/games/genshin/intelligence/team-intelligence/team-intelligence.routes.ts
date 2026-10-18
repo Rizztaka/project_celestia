@@ -17,5 +17,6 @@ const controller = new TeamIntelligenceController();
  * @milestone 4B — Team Intelligence Engine
  */
 router.get('/intelligence/teams', requireAuth, controller.getRecommendations);
+router.post('/intelligence/teams/evaluate', requireAuth, controller.evaluate);
 
 export { router as teamIntelligenceRoutes };

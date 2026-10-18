@@ -1,0 +1,255 @@
+{
+  "date": "2026-10-18",
+  "status": "passed-local",
+  "rootCommands": {
+    "lint": "passed, zero errors or warnings",
+    "verify": "passed",
+    "build": "passed",
+    "checkTypes": "passed"
+  },
+  "tests": {
+    "passed": 1247,
+    "files": 75,
+    "failed": 0,
+    "skipped": 0,
+    "postgresCases": 118,
+    "integration": {
+      "src/platform/companion/plan.integration.test.ts": 36,
+      "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+      "src/platform/companion/routine.integration.test.ts": 16,
+      "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+      "src/games/genshin/importer/importer.integration.test.ts": 16,
+      "src/platform/companion/catalog-advice.integration.test.ts": 9
+    }
+  },
+  "verificationSteps": [
+    {
+      "id": "shared-types-and-build",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": [
+        "-p",
+        "D:\\Genshin Personal\\project-celestia\\packages\\api-contracts\\tsconfig.json"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "disposable-postgres-ready",
+      "exit": 0
+    },
+    {
+      "id": "prisma-generate",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["generate"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "disposable-migrations",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["migrate", "deploy"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "prisma-validate",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": ["validate"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "schema-diff",
+      "package": "prisma",
+      "binary": "prisma",
+      "arguments": [
+        "migrate",
+        "diff",
+        "--from-config-datasource",
+        "--to-schema",
+        "prisma/schema.prisma",
+        "--exit-code"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "full-suite",
+      "package": "vitest",
+      "binary": "vitest",
+      "arguments": [
+        "run",
+        "--no-file-parallelism",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=C:\\Users\\inuzu\\AppData\\Local\\Temp\\celestia-verification-PEFBnV\\vitest.json"
+      ],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-lint",
+      "package": "eslint",
+      "binary": "eslint",
+      "arguments": [".", "--max-warnings", "0"],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-types-and-build",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": [],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "api-aliases",
+      "package": "tsc-alias",
+      "binary": "tsc-alias",
+      "arguments": [],
+      "cwd": "apps\\api",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-lint",
+      "package": "eslint",
+      "binary": "eslint",
+      "arguments": ["."],
+      "cwd": "apps\\web",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-types",
+      "package": "typescript",
+      "binary": "tsc",
+      "arguments": ["-b"],
+      "cwd": "apps\\web",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "web-build",
+      "package": "vite",
+      "binary": "vite",
+      "arguments": ["build"],
+      "cwd": "apps\\web",
+      "nodeEnv": "production",
+      "exit": 0
+    },
+    {
+      "id": "repository-format",
+      "package": "prettier",
+      "binary": "prettier",
+      "arguments": [
+        "--check",
+        "**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,yml,yaml,css,html}",
+        "!docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md",
+        "!apps/web/index.html",
+        "!apps/web/src/App.css",
+        "!apps/web/src/index.css",
+        "!docs/plans/c5-companion-beta/endgame-focus-final.json",
+        "!docs/plans/c5-companion-beta/primary-reflow.json",
+        "!docs/plans/c5-companion-beta/reimport-after.json",
+        "!docs/plans/c5-companion-beta/reimport-before.json",
+        "!docs/plans/c5-companion-beta/rendered-style-check.json",
+        "!docs/plans/c5-companion-beta/secondary-reflow.json",
+        "!docs/plans/c5-companion-beta/starting-state.json"
+      ],
+      "cwd": ".",
+      "nodeEnv": "test",
+      "exit": 0
+    },
+    {
+      "id": "diff-check",
+      "exit": 0
+    }
+  ],
+  "verificationEvidence": "C:/Users/inuzu/AppData/Local/Temp/celestia-verification-PEFBnV/verification.json",
+  "verificationSha256": "01E6D61FB9DFABAEEF2D68D55F776412C3695228D83984162E2E147CC30010C3",
+  "browser": {
+    "status": "passed",
+    "backend": "real API, isolated PostgreSQL, no OpenRouter key",
+    "events": "synthetic active event and expired event",
+    "checks": [
+      "Real authenticated evaluation, duplicate and unowned character rejection, anonymous 401",
+      "Four roster picker slots, search/element filters, resonance explanation, save/reload/load, real AI fallback, JSON export/import and invalid import preservation",
+      "Savings reacts to inventory, Welkin and unclaimed event toggles; expired rewards excluded; weapon target artwork; 1280/640/320px reflow",
+      "Simulator defaults past preserved expired Odette to Mavuika; real ten-pull endpoint succeeds",
+      "Actual AI endpoint enforces per-owner request limit"
+    ],
+    "viewports": [
+      {
+        "surface": "Teams",
+        "width": 1280,
+        "viewport": 1280,
+        "scroll": 1280,
+        "clippedControls": 0
+      },
+      {
+        "surface": "Teams",
+        "width": 640,
+        "viewport": 640,
+        "scroll": 640,
+        "clippedControls": 0
+      },
+      {
+        "surface": "Teams",
+        "width": 320,
+        "viewport": 320,
+        "scroll": 320,
+        "clippedControls": 0
+      },
+      {
+        "surface": "Savings",
+        "width": 1280,
+        "viewport": 1280,
+        "scroll": 1280,
+        "clippedControls": 0
+      },
+      {
+        "surface": "Savings",
+        "width": 640,
+        "viewport": 640,
+        "scroll": 640,
+        "clippedControls": 0
+      },
+      {
+        "surface": "Savings",
+        "width": 320,
+        "viewport": 320,
+        "scroll": 320,
+        "clippedControls": 0
+      }
+    ],
+    "pageErrors": []
+  },
+  "browserEvidence": "C:/Users/inuzu/AppData/Local/Temp/celestia-section5-7f46424aff4e4831b7a0f009b5d47802/browser",
+  "cleanup": {
+    "postgresStopped": true,
+    "ownedPortsClosed": [45471, 45472, 55461],
+    "temporaryUsersDeleted": true,
+    "browserClosed": true,
+    "apiAndPreviewStopped": true
+  },
+  "limitations": [
+    "Remote model success/error paths mocked; no paid provider request",
+    "Event browser fixture synthetic; evaluation, simulator and authentication use the real API and disposable PostgreSQL",
+    "Banner dates, income reset calendars and soft-pity ramps are explicitly modeled scenarios",
+    "No remote CI or deployment performed"
+  ]
+}

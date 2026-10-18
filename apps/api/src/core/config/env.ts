@@ -27,7 +27,7 @@ const envSchema = z
     DISCORD_CLIENT_SECRET: optionalSecret,
     GOOGLE_CLIENT_ID: optionalSecret,
     GOOGLE_CLIENT_SECRET: optionalSecret,
-    OPENROUTER_API_KEY: z.string().min(1, 'OPENROUTER_API_KEY is required'),
+    OPENROUTER_API_KEY: optionalSecret,
   })
   .superRefine((settings, ctx) => {
     for (const field of ['WEB_ORIGIN', 'API_ORIGIN'] as const) {

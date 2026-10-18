@@ -231,9 +231,8 @@ describe('Narrow formatting preservation', () => {
       ),
     ).toThrow('Historical raw evidence changed');
   });
-  it('checks the five real exception hashes and only returns those paths', () => {
+  it('checks the four remaining exception hashes and retires modernized AI source', () => {
     expect(verifyFormatExceptions()).toEqual([
-      '!apps/api/src/core/ai/openrouter.ts',
       '!docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md',
       '!apps/web/index.html',
       '!apps/web/src/App.css',

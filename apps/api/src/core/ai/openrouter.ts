@@ -2,22 +2,17 @@ import OpenAI from 'openai';
 
 import { env } from '../config/env.js';
 
-/**
- * OpenRouter client instance configured via OpenAI SDK.
- * 
- * Usage:
- * ```ts
- * const response = await openRouterClient.chat.completions.create({
- *   model: 'anthropic/claude-3.5-sonnet',
- *   messages: [{ role: 'user', content: 'Hello!' }]
- * });
- * ```
- */
-export const openRouterClient = new OpenAI({
-  baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: env.OPENROUTER_API_KEY,
-  defaultHeaders: {
-    'HTTP-Referer': 'http://localhost:3000', // Update this to your production URL later
-    'X-Title': 'Project Celestia',
-  },
-});
+/** Optional synthesis must never prevent deterministic planning. */
+export const getOpenRouterClient = (): OpenAI | null => {
+  if (!env.OPENROUTER_API_KEY) return null;
+  return new OpenAI({
+    baseURL: 'https://openrouter.ai/api/v1',
+    apiKey: env.OPENROUTER_API_KEY,
+    timeout: 10_000,
+    maxRetries: 0,
+    defaultHeaders: {
+      'HTTP-Referer': env.API_ORIGIN || 'https://celestia.app',
+      'X-Title': 'Project Celestia',
+    },
+  });
+};

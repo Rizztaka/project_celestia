@@ -1,7 +1,7 @@
 /**
  * SimulatorsPage — Gacha Pull Simulator (Milestone 6A)
  *
- * Lets users simulate pulls on active Snezhnaya banners without
+ * Lets users simulate pulls on configured character banners without
  * spending real primogems. Tracks pity state in local component state
  * (Zustand is for UI preferences only — pity is session-ephemeral).
  *
@@ -14,6 +14,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 
+import { GenshinAvatar } from '../components/GenshinAvatar';
 import { type Banner, fetchBanners, type PullResultItem, simulatePulls } from '../lib/api';
 
 // -------------------------------------------------------
@@ -272,6 +273,7 @@ function BannerCard({
   return (
     <button
       onClick={onSelect}
+      aria-pressed={selected}
       disabled={isExpired}
       className={`glass-panel hover-lift relative w-full cursor-pointer rounded-2xl border p-5 text-left transition-all duration-300 ${
         selected
@@ -298,14 +300,7 @@ function BannerCard({
 
       {/* 5-star highlight */}
       <div className="mb-3 flex items-center gap-2.5 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2.5">
-        <div className="font-display flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/15 text-xs font-bold text-amber-400">
-          {featuredName
-            .split(' ')
-            .map((w) => w[0])
-            .slice(0, 2)
-            .join('')
-            .toUpperCase()}
-        </div>
+        <GenshinAvatar characterKey={banner.fiveStarKey} />
         <div>
           <p className="text-sm font-bold text-amber-300">{featuredName}</p>
           <p className="text-[10px] text-amber-600">5★ Featured</p>
@@ -319,6 +314,7 @@ function BannerCard({
             key={key}
             className="rounded-full border border-violet-500/20 bg-violet-500/10 px-2 py-0.5 text-[10px] font-semibold text-violet-400"
           >
+            <GenshinAvatar characterKey={key} size="sm" />
             {formatName(key)}
           </span>
         ))}
@@ -412,7 +408,11 @@ export default function SimulatorsPage() {
 
   // Auto-select first banner once loaded using a derived initializer pattern
   // instead of useEffect to avoid cascading renders (react-hooks/set-state-in-effect)
-  const effectiveBannerId = selectedBannerId ?? banners?.[0]?.bannerId ?? null;
+  const effectiveBannerId =
+    banners?.find((b) => b.bannerId === selectedBannerId && getDaysLeft(b.endDate) !== 'Ended')
+      ?.bannerId ??
+    banners?.find((b) => getDaysLeft(b.endDate) !== 'Ended')?.bannerId ??
+    null;
 
   const selectedBanner = banners?.find((b) => b.bannerId === effectiveBannerId) ?? null;
   const currentPity = effectiveBannerId
@@ -496,14 +496,14 @@ export default function SimulatorsPage() {
   }
 
   function handleReset() {
-    if (!selectedBannerId) return;
+    if (!effectiveBannerId) return;
     setPityMap((prev) => ({
       ...prev,
-      [selectedBannerId]: { pity5: 0, pity4: 0, guaranteed5: false, guaranteed4: false },
+      [effectiveBannerId]: { pity5: 0, pity4: 0, guaranteed5: false, guaranteed4: false },
     }));
     setStatsMap((prev) => ({
       ...prev,
-      [selectedBannerId]: {
+      [effectiveBannerId]: {
         total: 0,
         fiveStars: 0,
         fourStars: 0,
@@ -511,11 +511,12 @@ export default function SimulatorsPage() {
         featuredFiveStars: 0,
       },
     }));
-    setPullHistory((prev) => prev.filter((p) => p.bannerId !== selectedBannerId));
+    setPullHistory((prev) => prev.filter((p) => p.bannerId !== effectiveBannerId));
+    setLatestBatch([]);
   }
 
   const notableHistory = pullHistory.filter(
-    (p) => p.bannerId === selectedBannerId && p.type !== '3_STAR',
+    (p) => p.bannerId === effectiveBannerId && p.type !== '3_STAR',
   );
 
   return (
@@ -531,9 +532,9 @@ export default function SimulatorsPage() {
             Pull <span className="text-gradient">Simulator</span>
           </h1>
           <p className="mt-2 text-base text-zinc-400">
-            Explore legacy simulated pulls. Banner and probability assumptions are not verified
-            current game guidance; results are fictional and do not predict your account. Pity
-            resets when you leave the page.
+            Explore simulated pulls. Banner and probability assumptions are not verified current
+            game guidance; results are fictional and do not predict your account. Pity resets when
+            you leave the page.
           </p>
         </div>
 
@@ -553,7 +554,7 @@ export default function SimulatorsPage() {
                 <BannerCard
                   key={b.bannerId}
                   banner={b}
-                  selected={selectedBannerId === b.bannerId}
+                  selected={effectiveBannerId === b.bannerId}
                   onSelect={() => setSelectedBannerId(b.bannerId)}
                 />
               ))}

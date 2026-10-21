@@ -19,6 +19,10 @@ export class GenshinCharacterEquipmentRepository {
   constructor(private readonly db: PrismaClient = prisma) {}
 
   async readForUser(userId: string, characterKey: string): Promise<CharacterEquipmentRow | null> {
+    return (await this.readManyForUser(userId, [characterKey]))[0] ?? null;
+  }
+
+  async readManyForUser(userId: string, characterKeys: string[]): Promise<CharacterEquipmentRow[]> {
     // One SELECT = one MVCC snapshot, including every section receipt. No locks, writes or
     // account initialization; imports cannot interleave the constituent relation reads.
     const rows = await this.db.$queryRaw<CharacterEquipmentRow[]>`
@@ -36,8 +40,9 @@ export class GenshinCharacterEquipmentRepository {
         NOT EXISTS (SELECT 1 FROM genshin_artifacts ar
           WHERE ar."equippedCharacterId" = c.id AND ar."accountId" <> a.id) AS "artifactRelationsConsistent"
       FROM genshin_accounts a JOIN genshin_characters c ON c."accountId" = a.id
-      WHERE a."userId" = ${userId} AND c."characterKey" = ${characterKey}
+      WHERE a."userId" = ${userId} AND c."characterKey" = ANY(${characterKeys}::text[])
+      ORDER BY c."characterKey"
     `;
-    return rows[0] ?? null;
+    return rows;
   }
 }

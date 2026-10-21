@@ -1,0 +1,13 @@
+{
+  "id": "kqm-vv-trigger",
+  "url": "https://library.keqingmains.com/equipment/artifacts",
+  "version": "undated mechanics reference; observed 2026-10-19",
+  "sections": [
+    "Viridescent Venerer",
+    "Marechaussee Hunter"
+  ],
+  "observation": "Ordinary Swirl resistance debuff requires the wearer on field at trigger. MH does not gain stacks off field; leaving does not clear existing stacks. Max-HP-only changes do not trigger MH. Timing/hitlag are not simulated.",
+  "responseSha256": "17f3bf19983cf793a0abb7dbb51c1172f7e3f194d5354d2d9651bef86b42d24a",
+  "observedAt": "2026-10-19T07:55:33.532Z",
+  "reuse": "Attributed factual reference; no prose/artwork mirror or bulk reuse grant. Hash identifies response observed, not an immutable page revision."
+}

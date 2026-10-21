@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "k3-approved-k2-baseline",
+  "kind": "approved",
+  "base": null,
+  "files": {
+    "evidence/db-fischl.raw": "8bcb3f8fd6f110b20c447b040e779edd2ec382ad75fc3b893ce385521e77fa7d",
+    "evidence/db-goldentroupe.raw": "d656f4a8ec933a1bd2e6d12b614fe47b67e8a76d61840e2eb2fd1a34271bda39",
+    "evidence/db-kaedeharakazuha.raw": "cc382b6256f5b1bd1908090389f924a2ee75f45e2318485f9c09ebf1b46b211c",
+    "evidence/db-keqing.raw": "89ae2fdd659d0f4c12fb4e03cdbbb0e869be2aa4d51b4eda0e48c844b2cc54fe",
+    "evidence/db-marechausseehunter.raw": "ea038fbec55df2b68a39f0c722606a0b4de05da77ac5df6e2c603554d6a3f3ce",
+    "evidence/db-viridescentvenerer.raw": "1aac8319ca7336e400fbd3b623ac4cffdcb1b7852dcde36b04dab01bd2e5089f",
+    "evidence/go-fischl.raw": "ef44b18bf65e08ac3b04c73ad82b9e00ea18c99f245fc4b3497b49c48c0c7b0e",
+    "evidence/go-goldentroupe.raw": "7fc7be63c855a26aee3af1fba6c4b6a89aa4c6aebe78d831e3ffe060266a9138",
+    "evidence/go-kaedeharakazuha.raw": "f85e23d4f82b609f75aff4bf8e54a298a87bcb0663e4c5857eb1e2ed769e6979",
+    "evidence/go-marechausseehunter.raw": "559e8cb4a19436d2b2cd66c7d4b15b3996b195b11a565792f1ae3692df63396d",
+    "evidence/go-viridescentvenerer.raw": "19b02570062a2112a7b0996225ef5acd3be8f2b6b8e6e4380a4b8845f4875e3c",
+    "evidence/kqm-fischl-extended.raw": "537519dc0fceb653dd6a1c27afd0347982dbd79e4bebec2c5fc577e128027be8",
+    "evidence/kqm-fischl-quick.raw": "edbba0c9d9e330eb69f72154691208db407f3655dd55ab457fe0e881a6db8d32",
+    "evidence/kqm-kazuha-quick.raw": "299e42f873b04b6f46efaa14b621b53ceb8948f85172f57ea4434073a0b0f8fb",
+    "evidence/kqm-keqing-extended.raw": "e918ab841e86e627f5e1d77c4de1253d064a8a8e3be4b020636806d2a4a69f59",
+    "evidence/kqm-keqing-quick.raw": "6f591c58569b8cb1465589c55bfe1dad2bc58115331081f863f34363106c0015",
+    "evidence/kqm-vv-trigger.raw": "74175cf03864506761dd1880fa31a3d259798a4bb9e8bcadb8eef3ee8f867fdb",
+    "notices/genshin-db.txt": "9b4edf56612dd31a97ade0d2d408154eb2e3dcf620f5b832fefec036ba9b50e1",
+    "notices/optimizer.txt": "6c51d31f2009cda50d5112c2870e4a4d37696f2d5b29fa601b5ef186f4a5d11c",
+    "pack.json": "8c3d505c9c54a9dcf0820b2b1cf9b5a2196716a123fb313fb3a1ef88740c874a",
+    "registry.json": "3a76ad1af10fd7f25dcf8316c2ecead6a0aa5a180d80a1fb74caf5b800927559",
+    "reviews.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "tracking.json": "491e3646a158573e7bf0b35e775759a3f63e0b132f99f3a8ba14ed5dbe764c09"
+  },
+  "digest": "158816aef44417ecfd4bf29c7bdc2e08b08cc439085083b9143b320bbddb634e"
+}

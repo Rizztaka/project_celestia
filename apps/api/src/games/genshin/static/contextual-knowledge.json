@@ -1,0 +1,1184 @@
+{
+  "schemaVersion": 2,
+  "version": "k2-1",
+  "contentHash": "319d168130ededae60172dc7b708c04d57e641b5bf43d8112f020272ede90450",
+  "subjects": [
+    {
+      "key": "Keqing",
+      "roles": ["unknown", "on_field", "burst_swap"],
+      "externalReading": [
+        {
+          "label": "KQM Keqing Quick Guide (Luna I)",
+          "url": "https://keqingmains.com/q/keqing-quickguide/"
+        },
+        {
+          "label": "KQM Keqing extended (Luna VII)",
+          "url": "https://keqingmains.com/keqing/"
+        }
+      ]
+    },
+    {
+      "key": "Fischl",
+      "roles": ["unknown", "off_field", "on_field"],
+      "externalReading": [
+        {
+          "label": "KQM Fischl Quick Guide (4.0)",
+          "url": "https://keqingmains.com/q/fischl-quickguide/"
+        },
+        {
+          "label": "KQM Fischl extended (4.7)",
+          "url": "https://keqingmains.com/fischl/"
+        }
+      ]
+    },
+    {
+      "key": "KaedeharaKazuha",
+      "roles": ["unknown", "quickswap_support"],
+      "externalReading": [
+        {
+          "label": "KQM Kazuha Quick Guide (7.1; extended guide marked out-of-date)",
+          "url": "https://keqingmains.com/q/kazuha-quickguide/"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "db-keqing",
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/keqing.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "89ae2fdd659d0f4c12fb4e03cdbbb0e869be2aa4d51b4eda0e48c844b2cc54fe",
+      "kind": "mit_source",
+      "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+    },
+    {
+      "id": "db-fischl",
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/fischl.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "8bcb3f8fd6f110b20c447b040e779edd2ec382ad75fc3b893ce385521e77fa7d",
+      "kind": "mit_source",
+      "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+    },
+    {
+      "id": "db-kaedeharakazuha",
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/kaedeharakazuha.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "cc382b6256f5b1bd1908090389f924a2ee75f45e2318485f9c09ebf1b46b211c",
+      "kind": "mit_source",
+      "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+    },
+    {
+      "id": "db-marechausseehunter",
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/marechausseehunter.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "ea038fbec55df2b68a39f0c722606a0b4de05da77ac5df6e2c603554d6a3f3ce",
+      "kind": "mit_source",
+      "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+    },
+    {
+      "id": "db-goldentroupe",
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/goldentroupe.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "d656f4a8ec933a1bd2e6d12b614fe47b67e8a76d61840e2eb2fd1a34271bda39",
+      "kind": "mit_source",
+      "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+    },
+    {
+      "id": "db-viridescentvenerer",
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/viridescentvenerer.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "1aac8319ca7336e400fbd3b623ac4cffdcb1b7852dcde36b04dab01bd2e5089f",
+      "kind": "mit_source",
+      "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+    },
+    {
+      "id": "go-fischl",
+      "url": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/cbee3af79d465735736cfbfbeaa6a9f89bea46dd/libs/gi/sheets/src/Characters/Fischl/index.tsx",
+      "revision": "cbee3af79d465735736cfbfbeaa6a9f89bea46dd",
+      "sha256": "ef44b18bf65e08ac3b04c73ad82b9e00ea18c99f245fc4b3497b49c48c0c7b0e",
+      "kind": "mit_source",
+      "upstreamVersion": "pinned source revision; no independent game-version certification"
+    },
+    {
+      "id": "go-kaedeharakazuha",
+      "url": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/cbee3af79d465735736cfbfbeaa6a9f89bea46dd/libs/gi/sheets/src/Characters/KaedeharaKazuha/index.tsx",
+      "revision": "cbee3af79d465735736cfbfbeaa6a9f89bea46dd",
+      "sha256": "f85e23d4f82b609f75aff4bf8e54a298a87bcb0663e4c5857eb1e2ed769e6979",
+      "kind": "mit_source",
+      "upstreamVersion": "pinned source revision; no independent game-version certification"
+    },
+    {
+      "id": "go-goldentroupe",
+      "url": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/cbee3af79d465735736cfbfbeaa6a9f89bea46dd/libs/gi/sheets/src/Artifacts/GoldenTroupe/index.tsx",
+      "revision": "cbee3af79d465735736cfbfbeaa6a9f89bea46dd",
+      "sha256": "7fc7be63c855a26aee3af1fba6c4b6a89aa4c6aebe78d831e3ffe060266a9138",
+      "kind": "mit_source",
+      "upstreamVersion": "pinned source revision; no independent game-version certification"
+    },
+    {
+      "id": "go-viridescentvenerer",
+      "url": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/cbee3af79d465735736cfbfbeaa6a9f89bea46dd/libs/gi/sheets/src/Artifacts/ViridescentVenerer/index.tsx",
+      "revision": "cbee3af79d465735736cfbfbeaa6a9f89bea46dd",
+      "sha256": "19b02570062a2112a7b0996225ef5acd3be8f2b6b8e6e4380a4b8845f4875e3c",
+      "kind": "mit_source",
+      "upstreamVersion": "pinned source revision; no independent game-version certification"
+    },
+    {
+      "id": "go-marechausseehunter",
+      "url": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/cbee3af79d465735736cfbfbeaa6a9f89bea46dd/libs/gi/sheets/src/Artifacts/MarechausseeHunter/index.tsx",
+      "revision": "cbee3af79d465735736cfbfbeaa6a9f89bea46dd",
+      "sha256": "559e8cb4a19436d2b2cd66c7d4b15b3996b195b11a565792f1ae3692df63396d",
+      "kind": "mit_source",
+      "upstreamVersion": "pinned source revision; no independent game-version certification"
+    },
+    {
+      "id": "kqm-fischl-quick",
+      "url": "https://keqingmains.com/q/fischl-quickguide/",
+      "revision": "observed 2026-10-19 (4.0)",
+      "sha256": "edbba0c9d9e330eb69f72154691208db407f3655dd55ab457fe0e881a6db8d32",
+      "kind": "reference_observation",
+      "upstreamVersion": "4.0"
+    },
+    {
+      "id": "kqm-fischl-extended",
+      "url": "https://keqingmains.com/fischl/",
+      "revision": "observed 2026-10-19 (4.7)",
+      "sha256": "537519dc0fceb653dd6a1c27afd0347982dbd79e4bebec2c5fc577e128027be8",
+      "kind": "reference_observation",
+      "upstreamVersion": "4.7"
+    },
+    {
+      "id": "kqm-kazuha-quick",
+      "url": "https://keqingmains.com/q/kazuha-quickguide/",
+      "revision": "observed 2026-10-19 (7.1)",
+      "sha256": "299e42f873b04b6f46efaa14b621b53ceb8948f85172f57ea4434073a0b0f8fb",
+      "kind": "reference_observation",
+      "upstreamVersion": "7.1"
+    },
+    {
+      "id": "kqm-keqing-quick",
+      "url": "https://keqingmains.com/q/keqing-quickguide/",
+      "revision": "observed 2026-10-19 (Luna I)",
+      "sha256": "6f591c58569b8cb1465589c55bfe1dad2bc58115331081f863f34363106c0015",
+      "kind": "reference_observation",
+      "upstreamVersion": "Luna I"
+    },
+    {
+      "id": "kqm-keqing-extended",
+      "url": "https://keqingmains.com/keqing/",
+      "revision": "observed 2026-10-19 (Luna VII)",
+      "sha256": "e918ab841e86e627f5e1d77c4de1253d064a8a8e3be4b020636806d2a4a69f59",
+      "kind": "reference_observation",
+      "upstreamVersion": "Luna VII"
+    },
+    {
+      "id": "kqm-vv-trigger",
+      "url": "https://library.keqingmains.com/equipment/artifacts",
+      "revision": "observed 2026-10-19 (undated mechanics reference; observed 2026-10-19)",
+      "sha256": "74175cf03864506761dd1880fa31a3d259798a4bb9e8bcadb8eef3ee8f867fdb",
+      "kind": "reference_observation",
+      "upstreamVersion": "undated mechanics reference; observed 2026-10-19"
+    }
+  ],
+  "claims": [
+    {
+      "id": "talent-role-unknown",
+      "order": 0,
+      "subjects": ["Keqing", "Fischl", "KaedeharaKazuha"],
+      "topic": "talents",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Unknown role overview only; no talent neglect/base-level claim."
+      },
+      "sourceIds": ["db-keqing", "db-fischl", "db-kaedeharakazuha"],
+      "eligibility": {
+        "op": "not",
+        "arg": {
+          "op": "known",
+          "fact": "role"
+        }
+      },
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "known",
+          "fact": "role"
+        }
+      },
+      "effect": {
+        "kind": "talent_relevance",
+        "code": "role_unknown",
+        "relevant": []
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "talent-on-field",
+      "order": 10,
+      "subjects": ["Keqing", "Fischl"],
+      "topic": "talents",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Selected ability-use role; original qualitative interpretation of pinned kit and attributed guide sections, not a universal priority/ranking. Raw talent basis remains unknown."
+      },
+      "sourceIds": ["db-keqing", "db-fischl", "kqm-fischl-quick", "kqm-keqing-quick"],
+      "eligibility": {
+        "op": "equals",
+        "fact": "role",
+        "value": "on_field"
+      },
+      "condition": {
+        "op": "equals",
+        "fact": "role",
+        "value": "on_field"
+      },
+      "effect": {
+        "kind": "talent_relevance",
+        "code": "on_field_attacks",
+        "relevant": ["normal", "skill"]
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "talent-oz-off-field",
+      "order": 20,
+      "subjects": ["Fischl"],
+      "topic": "talents",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Selected ability-use role; original qualitative interpretation of pinned kit and attributed guide sections, not a universal priority/ranking. Raw talent basis remains unknown."
+      },
+      "sourceIds": ["db-fischl", "go-fischl", "kqm-fischl-quick"],
+      "eligibility": {
+        "op": "equals",
+        "fact": "role",
+        "value": "off_field"
+      },
+      "condition": {
+        "op": "equals",
+        "fact": "role",
+        "value": "off_field"
+      },
+      "effect": {
+        "kind": "talent_relevance",
+        "code": "oz_skill",
+        "relevant": ["skill"]
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "talent-burst-swap",
+      "order": 30,
+      "subjects": ["Keqing"],
+      "topic": "talents",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Selected ability-use role; original qualitative interpretation of pinned kit and attributed guide sections, not a universal priority/ranking. Raw talent basis remains unknown."
+      },
+      "sourceIds": ["db-keqing"],
+      "eligibility": {
+        "op": "equals",
+        "fact": "role",
+        "value": "burst_swap"
+      },
+      "condition": {
+        "op": "equals",
+        "fact": "role",
+        "value": "burst_swap"
+      },
+      "effect": {
+        "kind": "talent_relevance",
+        "code": "burst_swap",
+        "relevant": ["skill", "burst"]
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "talent-support-plunge",
+      "order": 40,
+      "subjects": ["KaedeharaKazuha"],
+      "topic": "talents",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Selected ability-use role; original qualitative interpretation of pinned kit and attributed guide sections, not a universal priority/ranking. Raw talent basis remains unknown."
+      },
+      "sourceIds": ["db-kaedeharakazuha", "go-kaedeharakazuha", "kqm-kazuha-quick"],
+      "eligibility": {
+        "op": "equals",
+        "fact": "role",
+        "value": "quickswap_support"
+      },
+      "condition": {
+        "op": "equals",
+        "fact": "role",
+        "value": "quickswap_support"
+      },
+      "effect": {
+        "kind": "talent_relevance",
+        "code": "plunge_support",
+        "relevant": ["normal", "skill"]
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "energy-keqing-unknown",
+      "order": 50,
+      "subjects": ["Keqing"],
+      "topic": "energy",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Qualitative chosen Burst plan only; missing rotation/particle data precludes personalized numeric ER, deficit or universal Burst cadence."
+      },
+      "sourceIds": ["db-keqing", "kqm-keqing-quick"],
+      "eligibility": {
+        "op": "not",
+        "arg": {
+          "op": "known",
+          "fact": "burst"
+        }
+      },
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "known",
+          "fact": "burst"
+        }
+      },
+      "effect": {
+        "kind": "energy_context",
+        "plan": "unknown",
+        "purpose": "personal_damage"
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "energy-keqing-use",
+      "order": 60,
+      "subjects": ["Keqing"],
+      "topic": "energy",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Qualitative chosen Burst plan only; missing rotation/particle data precludes personalized numeric ER, deficit or universal Burst cadence."
+      },
+      "sourceIds": ["db-keqing", "kqm-keqing-quick"],
+      "eligibility": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "use"
+      },
+      "condition": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "use"
+      },
+      "effect": {
+        "kind": "energy_context",
+        "plan": "use",
+        "purpose": "personal_damage"
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "energy-keqing-skip",
+      "order": 70,
+      "subjects": ["Keqing"],
+      "topic": "energy",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Qualitative chosen Burst plan only; missing rotation/particle data precludes personalized numeric ER, deficit or universal Burst cadence."
+      },
+      "sourceIds": ["db-keqing", "kqm-keqing-quick"],
+      "eligibility": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "skip"
+      },
+      "condition": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "skip"
+      },
+      "effect": {
+        "kind": "energy_context",
+        "plan": "skip",
+        "purpose": "personal_damage"
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "energy-fischl-unknown",
+      "order": 80,
+      "subjects": ["Fischl"],
+      "topic": "energy",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Qualitative chosen Burst plan only; missing rotation/particle data precludes personalized numeric ER, deficit or universal Burst cadence."
+      },
+      "sourceIds": ["db-fischl", "kqm-fischl-quick"],
+      "eligibility": {
+        "op": "not",
+        "arg": {
+          "op": "known",
+          "fact": "burst"
+        }
+      },
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "known",
+          "fact": "burst"
+        }
+      },
+      "effect": {
+        "kind": "energy_context",
+        "plan": "unknown",
+        "purpose": "oz_refresh"
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "energy-fischl-use",
+      "order": 90,
+      "subjects": ["Fischl"],
+      "topic": "energy",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Qualitative chosen Burst plan only; missing rotation/particle data precludes personalized numeric ER, deficit or universal Burst cadence."
+      },
+      "sourceIds": ["db-fischl", "kqm-fischl-quick"],
+      "eligibility": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "use"
+      },
+      "condition": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "use"
+      },
+      "effect": {
+        "kind": "energy_context",
+        "plan": "use",
+        "purpose": "oz_refresh"
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "energy-fischl-skip",
+      "order": 100,
+      "subjects": ["Fischl"],
+      "topic": "energy",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Qualitative chosen Burst plan only; missing rotation/particle data precludes personalized numeric ER, deficit or universal Burst cadence."
+      },
+      "sourceIds": ["db-fischl", "kqm-fischl-quick"],
+      "eligibility": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "skip"
+      },
+      "condition": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "skip"
+      },
+      "effect": {
+        "kind": "energy_context",
+        "plan": "skip",
+        "purpose": "oz_refresh"
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "energy-kaedeharakazuha-unknown",
+      "order": 110,
+      "subjects": ["KaedeharaKazuha"],
+      "topic": "energy",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Qualitative chosen Burst plan only; missing rotation/particle data precludes personalized numeric ER, deficit or universal Burst cadence."
+      },
+      "sourceIds": ["db-kaedeharakazuha", "kqm-kazuha-quick"],
+      "eligibility": {
+        "op": "not",
+        "arg": {
+          "op": "known",
+          "fact": "burst"
+        }
+      },
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "known",
+          "fact": "burst"
+        }
+      },
+      "effect": {
+        "kind": "energy_context",
+        "plan": "unknown",
+        "purpose": "application"
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "energy-kaedeharakazuha-use",
+      "order": 120,
+      "subjects": ["KaedeharaKazuha"],
+      "topic": "energy",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Qualitative chosen Burst plan only; missing rotation/particle data precludes personalized numeric ER, deficit or universal Burst cadence."
+      },
+      "sourceIds": ["db-kaedeharakazuha", "kqm-kazuha-quick"],
+      "eligibility": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "use"
+      },
+      "condition": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "use"
+      },
+      "effect": {
+        "kind": "energy_context",
+        "plan": "use",
+        "purpose": "application"
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "energy-kaedeharakazuha-skip",
+      "order": 130,
+      "subjects": ["KaedeharaKazuha"],
+      "topic": "energy",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Qualitative chosen Burst plan only; missing rotation/particle data precludes personalized numeric ER, deficit or universal Burst cadence."
+      },
+      "sourceIds": ["db-kaedeharakazuha", "kqm-kazuha-quick"],
+      "eligibility": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "skip"
+      },
+      "condition": {
+        "op": "equals",
+        "fact": "burst",
+        "value": "skip"
+      },
+      "effect": {
+        "kind": "energy_context",
+        "plan": "skip",
+        "purpose": "application"
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "mh-two-piece",
+      "order": 140,
+      "subjects": ["Keqing", "Fischl", "KaedeharaKazuha"],
+      "topic": "MarechausseeHunter",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Only Normal/Charged damage bonus from two matching pieces; no damage gain or set ranking."
+      },
+      "sourceIds": ["db-marechausseehunter", "go-marechausseehunter"],
+      "eligibility": {
+        "op": "atLeast",
+        "fact": "set.MarechausseeHunter",
+        "value": 2
+      },
+      "condition": {
+        "op": "atLeast",
+        "fact": "set.MarechausseeHunter",
+        "value": 2
+      },
+      "effect": {
+        "kind": "damage_bonus",
+        "unit": "damage_bonus_percent",
+        "amount": 15,
+        "target": "normal_charged"
+      },
+      "excludedReason": null,
+      "kind": "mechanical"
+    },
+    {
+      "id": "mh-four-piece-stacks",
+      "order": 150,
+      "subjects": ["Keqing", "Fischl", "KaedeharaKazuha"],
+      "topic": "MarechausseeHunter",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Reviewed selected current-HP-change stacks, within five seconds, wearer on field at trigger; no max-HP-only trigger or automatic activation/uptime from team membership."
+      },
+      "sourceIds": ["db-marechausseehunter", "go-marechausseehunter", "kqm-vv-trigger"],
+      "eligibility": {
+        "op": "atLeast",
+        "fact": "set.MarechausseeHunter",
+        "value": 4
+      },
+      "condition": {
+        "op": "all",
+        "args": [
+          {
+            "op": "atLeast",
+            "fact": "set.MarechausseeHunter",
+            "value": 4
+          },
+          {
+            "op": "equals",
+            "fact": "mh.hpChange",
+            "value": true
+          },
+          {
+            "op": "equals",
+            "fact": "mh.onField",
+            "value": true
+          },
+          {
+            "op": "equals",
+            "fact": "mh.window",
+            "value": "within_5s"
+          },
+          {
+            "op": "atLeast",
+            "fact": "mh.stacks",
+            "value": 1
+          }
+        ]
+      },
+      "effect": {
+        "kind": "crit_rate",
+        "unit": "crit_rate_percentage_points",
+        "perStack": 12,
+        "maxStacks": 3,
+        "stackFact": "mh.stacks",
+        "durationSeconds": 5
+      },
+      "excludedReason": null,
+      "kind": "mechanical"
+    },
+    {
+      "id": "gt-two-piece",
+      "order": 160,
+      "subjects": ["Keqing", "Fischl", "KaedeharaKazuha"],
+      "topic": "GoldenTroupe",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Two-piece Skill DMG Bonus component only."
+      },
+      "sourceIds": ["db-goldentroupe", "go-goldentroupe"],
+      "eligibility": {
+        "op": "atLeast",
+        "fact": "set.GoldenTroupe",
+        "value": 2
+      },
+      "condition": {
+        "op": "atLeast",
+        "fact": "set.GoldenTroupe",
+        "value": 2
+      },
+      "effect": {
+        "kind": "damage_bonus",
+        "unit": "damage_bonus_percent",
+        "amount": 20,
+        "target": "skill"
+      },
+      "excludedReason": null,
+      "kind": "mechanical"
+    },
+    {
+      "id": "gt-four-piece-base",
+      "order": 170,
+      "subjects": ["Keqing", "Fischl", "KaedeharaKazuha"],
+      "topic": "GoldenTroupe",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Four-piece unconditional additional Skill DMG Bonus component, independent of off-field timing."
+      },
+      "sourceIds": ["db-goldentroupe", "go-goldentroupe"],
+      "eligibility": {
+        "op": "atLeast",
+        "fact": "set.GoldenTroupe",
+        "value": 4
+      },
+      "condition": {
+        "op": "atLeast",
+        "fact": "set.GoldenTroupe",
+        "value": 4
+      },
+      "effect": {
+        "kind": "damage_bonus",
+        "unit": "damage_bonus_percent",
+        "amount": 25,
+        "target": "skill"
+      },
+      "excludedReason": null,
+      "kind": "mechanical"
+    },
+    {
+      "id": "gt-four-piece-field",
+      "order": 180,
+      "subjects": ["Keqing", "Fischl", "KaedeharaKazuha"],
+      "topic": "GoldenTroupe",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Additional off-field Skill DMG Bonus; carried bonus clears at two seconds after entering field. No Oz snapshot or sustained-uptime model."
+      },
+      "sourceIds": ["db-goldentroupe", "go-goldentroupe"],
+      "eligibility": {
+        "op": "atLeast",
+        "fact": "set.GoldenTroupe",
+        "value": 4
+      },
+      "condition": {
+        "op": "all",
+        "args": [
+          {
+            "op": "atLeast",
+            "fact": "set.GoldenTroupe",
+            "value": 4
+          },
+          {
+            "op": "any",
+            "args": [
+              {
+                "op": "equals",
+                "fact": "gt.field",
+                "value": "off_field"
+              },
+              {
+                "op": "equals",
+                "fact": "gt.field",
+                "value": "returned_under_2s_with_bonus"
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "kind": "damage_bonus",
+        "unit": "damage_bonus_percent",
+        "amount": 25,
+        "target": "skill"
+      },
+      "excludedReason": null,
+      "kind": "mechanical"
+    },
+    {
+      "id": "vv-two-piece",
+      "order": 190,
+      "subjects": ["Keqing", "Fischl", "KaedeharaKazuha"],
+      "topic": "ViridescentVenerer",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Two-piece Anemo damage bonus only; no benefit to unrelated damage targets is inferred."
+      },
+      "sourceIds": ["db-viridescentvenerer", "go-viridescentvenerer"],
+      "eligibility": {
+        "op": "atLeast",
+        "fact": "set.ViridescentVenerer",
+        "value": 2
+      },
+      "condition": {
+        "op": "atLeast",
+        "fact": "set.ViridescentVenerer",
+        "value": 2
+      },
+      "effect": {
+        "kind": "damage_bonus",
+        "unit": "damage_bonus_percent",
+        "amount": 15,
+        "target": "anemo"
+      },
+      "excludedReason": null,
+      "kind": "mechanical"
+    },
+    {
+      "id": "vv-four-piece-swirl",
+      "order": 200,
+      "subjects": ["KaedeharaKazuha"],
+      "topic": "ViridescentVenerer",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Ordinary Swirl reaction damage bonus only; Stellar Swirl excluded."
+      },
+      "sourceIds": ["db-viridescentvenerer", "go-viridescentvenerer"],
+      "eligibility": {
+        "op": "atLeast",
+        "fact": "set.ViridescentVenerer",
+        "value": 4
+      },
+      "condition": {
+        "op": "all",
+        "args": [
+          {
+            "op": "atLeast",
+            "fact": "set.ViridescentVenerer",
+            "value": 4
+          },
+          {
+            "op": "equals",
+            "fact": "vv.swirl",
+            "value": true
+          }
+        ]
+      },
+      "effect": {
+        "kind": "damage_bonus",
+        "unit": "damage_bonus_percent",
+        "amount": 60,
+        "target": "ordinary_swirl"
+      },
+      "excludedReason": null,
+      "kind": "mechanical"
+    },
+    {
+      "id": "vv-four-piece-resistance",
+      "order": 210,
+      "subjects": ["KaedeharaKazuha"],
+      "topic": "ViridescentVenerer",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Ordinary Swirl by wearer on field; matching Pyro/Hydro/Electro/Cryo target element within nominal ten seconds. Target-hit/hitlag and newer reaction extensions not simulated."
+      },
+      "sourceIds": ["db-viridescentvenerer", "go-viridescentvenerer", "kqm-vv-trigger"],
+      "eligibility": {
+        "op": "atLeast",
+        "fact": "set.ViridescentVenerer",
+        "value": 4
+      },
+      "condition": {
+        "op": "all",
+        "args": [
+          {
+            "op": "atLeast",
+            "fact": "set.ViridescentVenerer",
+            "value": 4
+          },
+          {
+            "op": "equals",
+            "fact": "vv.swirl",
+            "value": true
+          },
+          {
+            "op": "equals",
+            "fact": "vv.elementMatches",
+            "value": true
+          },
+          {
+            "op": "equals",
+            "fact": "vv.onField",
+            "value": true
+          },
+          {
+            "op": "equals",
+            "fact": "vv.window",
+            "value": "within_10s"
+          }
+        ]
+      },
+      "effect": {
+        "kind": "resistance_reduction",
+        "unit": "resistance_percentage_points",
+        "amount": 40,
+        "elementFact": "vv.targetElement",
+        "durationSeconds": 10
+      },
+      "excludedReason": null,
+      "kind": "mechanical"
+    },
+    {
+      "id": "team-fischl-oz-reaction",
+      "order": 220,
+      "subjects": ["Keqing", "Fischl", "KaedeharaKazuha"],
+      "topic": "team",
+      "status": "active",
+      "conflicted": false,
+      "support": "reviewed_scope",
+      "review": {
+        "state": "reviewed",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Fischl A4 qualitative trigger only, not damage/proc frequency/ICD/Hexerei modeling. Selected active reactor must belong to the scenario; members alone do not trigger it."
+      },
+      "sourceIds": ["db-fischl", "go-fischl", "kqm-fischl-extended"],
+      "eligibility": {
+        "op": "all",
+        "args": [
+          {
+            "op": "equals",
+            "fact": "team.fischl",
+            "value": true
+          },
+          {
+            "op": "atLeast",
+            "fact": "team.fischlAscension",
+            "value": 4
+          }
+        ]
+      },
+      "condition": {
+        "op": "all",
+        "args": [
+          {
+            "op": "equals",
+            "fact": "team.fischl",
+            "value": true
+          },
+          {
+            "op": "atLeast",
+            "fact": "team.fischlAscension",
+            "value": 4
+          },
+          {
+            "op": "equals",
+            "fact": "team.activeSelected",
+            "value": true
+          },
+          {
+            "op": "equals",
+            "fact": "team.oz",
+            "value": true
+          },
+          {
+            "op": "equals",
+            "fact": "team.electroReaction",
+            "value": true
+          }
+        ]
+      },
+      "effect": {
+        "kind": "team_context",
+        "code": "oz_reaction"
+      },
+      "excludedReason": null,
+      "kind": "editorial"
+    },
+    {
+      "id": "unmodeled-modern-interactions",
+      "order": 999,
+      "subjects": ["Keqing", "Fischl", "KaedeharaKazuha"],
+      "topic": "team",
+      "status": "excluded",
+      "conflicted": false,
+      "support": "unsupported_scope",
+      "review": {
+        "state": "unsupported",
+        "reviewer": "Codex (GPT-6), K2 agent implementor",
+        "type": "agent",
+        "date": "2026-10-19",
+        "scope": "Stellar Swirl, Hexerei enhancements, damage/proc and full runtime interactions remain outside K2."
+      },
+      "sourceIds": ["db-fischl", "go-fischl", "kqm-fischl-extended"],
+      "eligibility": {
+        "op": "all",
+        "args": [
+          {
+            "op": "equals",
+            "fact": "team.fischl",
+            "value": true
+          },
+          {
+            "op": "atLeast",
+            "fact": "team.fischlAscension",
+            "value": 4
+          }
+        ]
+      },
+      "condition": {
+        "op": "all",
+        "args": [
+          {
+            "op": "equals",
+            "fact": "team.fischl",
+            "value": true
+          },
+          {
+            "op": "atLeast",
+            "fact": "team.fischlAscension",
+            "value": 4
+          },
+          {
+            "op": "equals",
+            "fact": "team.activeSelected",
+            "value": true
+          },
+          {
+            "op": "equals",
+            "fact": "team.oz",
+            "value": true
+          },
+          {
+            "op": "equals",
+            "fact": "team.electroReaction",
+            "value": true
+          }
+        ]
+      },
+      "effect": {
+        "kind": "team_context",
+        "code": "oz_reaction"
+      },
+      "excludedReason": "Stellar Swirl, Hexerei enhancements, complete reaction/rotation/uptime and damage models are unsupported in this pack.",
+      "kind": "editorial"
+    }
+  ],
+  "limitations": [
+    "Agent source review only, not human acceptance, in-game testing, official live-patch verification or proof of source independence.",
+    "Pinned community mechanics and attributed guide scenarios; Fischl guides are 4.0/4.7, Keqing references have separate Luna labels, Kazuha quick 7.1 marks its extended guide out-of-date.",
+    "Artifact absence is unresolved, not an empty slot; set bounds are recorded evidence, hypothetical examples are assumptions. Team selection alone proves no trigger or uptime.",
+    "Skill/attack damage bonuses, CRIT Rate percentage points and resistance reduction are different effects and are never summed or treated as DPS gains.",
+    "Raw talent values have unknown base/effective convention. No deficit, goal creation, personalized ER target, total stats, ranking, damage or saved-team solver.",
+    "REA recovers selected syntax only; external helpers/imports and complete runtime semantics remain unresolved. Ongoing source maintenance ownership is unresolved."
+  ]
+}

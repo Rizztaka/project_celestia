@@ -12,3 +12,25 @@
 /docs/plans/c5-companion-beta/rendered-style-check.json -text
 /docs/plans/c5-companion-beta/secondary-reflow.json -text
 /docs/plans/c5-companion-beta/starting-state.json -text
+
+# Contextual knowledge: descriptors and pinned inputs identify exact bytes.
+# These are immutable data/captures, including upstream TSX retained as evidence.
+# Application source and ordinary authored documentation keep their existing behavior.
+/apps/api/src/games/genshin/static/knowledge-releases/** -text
+/apps/api/src/games/genshin/static/guide-knowledge-*-MIT.txt -text
+/docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/src/data/English/weapons/harbingerofdawn.json -text
+/docs/plans/contextual-guide-knowledge/evidence/frzyc--genshin-optimizer/libs/gi/sheets/src/Weapons/Sword/HarbingerOfDawn/index.tsx -text
+/docs/plans/contextual-guide-knowledge/evidence/frzyc--genshin-optimizer/libs/gi/sheets/src/Artifacts/MarechausseeHunter/index.tsx -text
+/docs/plans/contextual-guide-knowledge/evidence/*/LICENSE -text
+/docs/plans/contextual-guide-knowledge/evidence/*/package.json -text
+/docs/plans/contextual-guide-knowledge/k2-evidence/** -text
+
+# Byte-addressed machine records and optional historical run evidence, if selected
+# for a commit/archive. Attributes do not select these files for publication.
+/docs/plans/contextual-guide-knowledge/*.json -text
+/docs/plans/contextual-guide-knowledge/**/*.raw -text
+/docs/plans/contextual-guide-knowledge/evidence/*.json -text
+/docs/plans/contextual-guide-knowledge/evidence/*.txt -text
+/docs/plans/contextual-guide-knowledge/k3-evidence/** -text
+/docs/plans/contextual-guide-knowledge/k3-live-check/** -text
+/docs/plans/contextual-guide-knowledge/k3-fixture-workflow/** -text

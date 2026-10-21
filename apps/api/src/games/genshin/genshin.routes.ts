@@ -10,6 +10,7 @@ import { createAiAdviceRoutes } from './intelligence/ai-advice.routes.js';
 import { artifactIntelligenceRoutes } from './intelligence/artifact-intelligence/artifact-intelligence.routes.js';
 import { characterIntelligenceRoutes } from './intelligence/character-intelligence/character-intelligence.routes.js';
 import { farmingIntelligenceRoutes } from './intelligence/farming-intelligence/farming-intelligence.routes.js';
+import { guideKnowledgeRoutes } from './intelligence/guide-knowledge/guide-knowledge.routes.js';
 import { knowledgeIntelligenceRoutes } from './intelligence/knowledge-intelligence/knowledge-intelligence.routes.js';
 import { plannerIntelligenceRoutes } from './intelligence/planner-intelligence/planner-intelligence.routes.js';
 import { progressionIntelligenceRoutes } from './intelligence/progression-intelligence/progression-intelligence.routes.js';
@@ -45,6 +46,7 @@ export function createGenshinRoutes(safety: RequestSafety) {
   router.use(createAiAdviceRoutes(safety));
   router.use(safety.ordinaryJson);
   router.use(characterRoutes);
+  router.use(guideKnowledgeRoutes);
   router.use(weaponRoutes);
   router.use(artifactRoutes);
   router.use(characterIntelligenceRoutes);

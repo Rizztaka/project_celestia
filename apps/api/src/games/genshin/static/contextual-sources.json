@@ -1,0 +1,138 @@
+[
+  {
+    "id": "db-keqing",
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/keqing.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "89ae2fdd659d0f4c12fb4e03cdbbb0e869be2aa4d51b4eda0e48c844b2cc54fe",
+    "kind": "mit_source",
+    "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+  },
+  {
+    "id": "db-fischl",
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/fischl.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "8bcb3f8fd6f110b20c447b040e779edd2ec382ad75fc3b893ce385521e77fa7d",
+    "kind": "mit_source",
+    "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+  },
+  {
+    "id": "db-kaedeharakazuha",
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/kaedeharakazuha.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "cc382b6256f5b1bd1908090389f924a2ee75f45e2318485f9c09ebf1b46b211c",
+    "kind": "mit_source",
+    "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+  },
+  {
+    "id": "db-marechausseehunter",
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/marechausseehunter.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "ea038fbec55df2b68a39f0c722606a0b4de05da77ac5df6e2c603554d6a3f3ce",
+    "kind": "mit_source",
+    "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+  },
+  {
+    "id": "db-goldentroupe",
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/goldentroupe.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "d656f4a8ec933a1bd2e6d12b614fe47b67e8a76d61840e2eb2fd1a34271bda39",
+    "kind": "mit_source",
+    "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+  },
+  {
+    "id": "db-viridescentvenerer",
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/viridescentvenerer.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "1aac8319ca7336e400fbd3b623ac4cffdcb1b7852dcde36b04dab01bd2e5089f",
+    "kind": "mit_source",
+    "upstreamVersion": "5.2.14; package describes Genshin 7.1"
+  },
+  {
+    "id": "go-fischl",
+    "url": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/cbee3af79d465735736cfbfbeaa6a9f89bea46dd/libs/gi/sheets/src/Characters/Fischl/index.tsx",
+    "revision": "cbee3af79d465735736cfbfbeaa6a9f89bea46dd",
+    "sha256": "ef44b18bf65e08ac3b04c73ad82b9e00ea18c99f245fc4b3497b49c48c0c7b0e",
+    "kind": "mit_source",
+    "upstreamVersion": "pinned source revision; no independent game-version certification"
+  },
+  {
+    "id": "go-kaedeharakazuha",
+    "url": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/cbee3af79d465735736cfbfbeaa6a9f89bea46dd/libs/gi/sheets/src/Characters/KaedeharaKazuha/index.tsx",
+    "revision": "cbee3af79d465735736cfbfbeaa6a9f89bea46dd",
+    "sha256": "f85e23d4f82b609f75aff4bf8e54a298a87bcb0663e4c5857eb1e2ed769e6979",
+    "kind": "mit_source",
+    "upstreamVersion": "pinned source revision; no independent game-version certification"
+  },
+  {
+    "id": "go-goldentroupe",
+    "url": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/cbee3af79d465735736cfbfbeaa6a9f89bea46dd/libs/gi/sheets/src/Artifacts/GoldenTroupe/index.tsx",
+    "revision": "cbee3af79d465735736cfbfbeaa6a9f89bea46dd",
+    "sha256": "7fc7be63c855a26aee3af1fba6c4b6a89aa4c6aebe78d831e3ffe060266a9138",
+    "kind": "mit_source",
+    "upstreamVersion": "pinned source revision; no independent game-version certification"
+  },
+  {
+    "id": "go-viridescentvenerer",
+    "url": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/cbee3af79d465735736cfbfbeaa6a9f89bea46dd/libs/gi/sheets/src/Artifacts/ViridescentVenerer/index.tsx",
+    "revision": "cbee3af79d465735736cfbfbeaa6a9f89bea46dd",
+    "sha256": "19b02570062a2112a7b0996225ef5acd3be8f2b6b8e6e4380a4b8845f4875e3c",
+    "kind": "mit_source",
+    "upstreamVersion": "pinned source revision; no independent game-version certification"
+  },
+  {
+    "id": "go-marechausseehunter",
+    "url": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/cbee3af79d465735736cfbfbeaa6a9f89bea46dd/libs/gi/sheets/src/Artifacts/MarechausseeHunter/index.tsx",
+    "revision": "cbee3af79d465735736cfbfbeaa6a9f89bea46dd",
+    "sha256": "559e8cb4a19436d2b2cd66c7d4b15b3996b195b11a565792f1ae3692df63396d",
+    "kind": "mit_source",
+    "upstreamVersion": "pinned source revision; no independent game-version certification"
+  },
+  {
+    "id": "kqm-fischl-quick",
+    "url": "https://keqingmains.com/q/fischl-quickguide/",
+    "revision": "observed 2026-10-19 (4.0)",
+    "sha256": "edbba0c9d9e330eb69f72154691208db407f3655dd55ab457fe0e881a6db8d32",
+    "kind": "reference_observation",
+    "upstreamVersion": "4.0"
+  },
+  {
+    "id": "kqm-fischl-extended",
+    "url": "https://keqingmains.com/fischl/",
+    "revision": "observed 2026-10-19 (4.7)",
+    "sha256": "537519dc0fceb653dd6a1c27afd0347982dbd79e4bebec2c5fc577e128027be8",
+    "kind": "reference_observation",
+    "upstreamVersion": "4.7"
+  },
+  {
+    "id": "kqm-kazuha-quick",
+    "url": "https://keqingmains.com/q/kazuha-quickguide/",
+    "revision": "observed 2026-10-19 (7.1)",
+    "sha256": "299e42f873b04b6f46efaa14b621b53ceb8948f85172f57ea4434073a0b0f8fb",
+    "kind": "reference_observation",
+    "upstreamVersion": "7.1"
+  },
+  {
+    "id": "kqm-keqing-quick",
+    "url": "https://keqingmains.com/q/keqing-quickguide/",
+    "revision": "observed 2026-10-19 (Luna I)",
+    "sha256": "6f591c58569b8cb1465589c55bfe1dad2bc58115331081f863f34363106c0015",
+    "kind": "reference_observation",
+    "upstreamVersion": "Luna I"
+  },
+  {
+    "id": "kqm-keqing-extended",
+    "url": "https://keqingmains.com/keqing/",
+    "revision": "observed 2026-10-19 (Luna VII)",
+    "sha256": "e918ab841e86e627f5e1d77c4de1253d064a8a8e3be4b020636806d2a4a69f59",
+    "kind": "reference_observation",
+    "upstreamVersion": "Luna VII"
+  },
+  {
+    "id": "kqm-vv-trigger",
+    "url": "https://library.keqingmains.com/equipment/artifacts",
+    "revision": "observed 2026-10-19 (undated mechanics reference; observed 2026-10-19)",
+    "sha256": "74175cf03864506761dd1880fa31a3d259798a4bb9e8bcadb8eef3ee8f867fdb",
+    "kind": "reference_observation",
+    "upstreamVersion": "undated mechanics reference; observed 2026-10-19"
+  }
+]

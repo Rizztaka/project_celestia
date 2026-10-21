@@ -11,3 +11,51 @@ yarn.lock
 .windsurf
 .claude
 .agents
+
+# Exact upstream/REA research bytes; hashes are verified by validate-research.mjs.
+# Keep authored plans, manifests and all application source in formatting checks.
+docs/plans/contextual-guide-knowledge/evidence/KQM-git--TCL/README.md
+docs/plans/contextual-guide-knowledge/evidence/KQM-git--TCL/docs/characters/electro/keqing.md
+docs/plans/contextual-guide-knowledge/evidence/KQM-git--TCL/docs/combat-mechanics/energy.md
+docs/plans/contextual-guide-knowledge/evidence/KQM-git--TCL/docs/evidence/characters/electro/keqing.md
+docs/plans/contextual-guide-knowledge/evidence/KQM-git--TCL/docusaurus.config.js
+docs/plans/contextual-guide-knowledge/evidence/KQM-git--TCL/package.json
+docs/plans/contextual-guide-knowledge/evidence/frzyc--genshin-optimizer/LICENSE
+docs/plans/contextual-guide-knowledge/evidence/frzyc--genshin-optimizer/README.md
+docs/plans/contextual-guide-knowledge/evidence/frzyc--genshin-optimizer/libs/gi/formula/src/conditionalUtil.ts
+docs/plans/contextual-guide-knowledge/evidence/frzyc--genshin-optimizer/libs/gi/sheets/src/Artifacts/MarechausseeHunter/index.tsx
+docs/plans/contextual-guide-knowledge/evidence/frzyc--genshin-optimizer/libs/gi/sheets/src/Characters/Keqing/index.tsx
+docs/plans/contextual-guide-knowledge/evidence/frzyc--genshin-optimizer/libs/gi/sheets/src/Weapons/Sword/HarbingerOfDawn/index.tsx
+docs/plans/contextual-guide-knowledge/evidence/frzyc--genshin-optimizer/package.json
+docs/plans/contextual-guide-knowledge/evidence/genshinsim--gcsim/CONTRIBUTING.md
+docs/plans/contextual-guide-knowledge/evidence/genshinsim--gcsim/LICENSE
+docs/plans/contextual-guide-knowledge/evidence/genshinsim--gcsim/README.md
+docs/plans/contextual-guide-knowledge/evidence/rea-go-cli.json
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/LICENSE
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/package.json
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/readme.md
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/src/Options.js
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/src/altnames.js
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/src/data/English/weapons/harbingerofdawn.json
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/src/folder.js
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/src/getdata.js
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/src/helper.js
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/src/language.js
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/src/main.js
+docs/plans/contextual-guide-knowledge/evidence/theBowja--genshin-db/src/v4prop.js
+docs/plans/contextual-guide-knowledge/k2-evidence/frzyc--genshin-optimizer/libs/gi/sheets/src/Artifacts/GoldenTroupe/index.tsx
+docs/plans/contextual-guide-knowledge/k2-evidence/frzyc--genshin-optimizer/libs/gi/sheets/src/Artifacts/ViridescentVenerer/index.tsx
+docs/plans/contextual-guide-knowledge/k2-evidence/frzyc--genshin-optimizer/libs/gi/sheets/src/Characters/Fischl/index.tsx
+docs/plans/contextual-guide-knowledge/k2-evidence/frzyc--genshin-optimizer/libs/gi/sheets/src/Characters/KaedeharaKazuha/index.tsx
+docs/plans/contextual-guide-knowledge/k2-evidence/kqm-fischl-quick.json
+docs/plans/contextual-guide-knowledge/k2-evidence/kqm-fischl-extended.json
+docs/plans/contextual-guide-knowledge/k2-evidence/kqm-kazuha-quick.json
+docs/plans/contextual-guide-knowledge/k2-evidence/kqm-keqing-quick.json
+docs/plans/contextual-guide-knowledge/k2-evidence/kqm-keqing-extended.json
+docs/plans/contextual-guide-knowledge/k2-evidence/kqm-vv-trigger.json
+
+# K3 finalized serialized bundle bytes: validate every descriptor SHA-256 instead of reformatting.
+# These patterns cover generated release data only, not authored code or operator documentation.
+apps/api/src/games/genshin/static/knowledge-releases/releases/*/*.json
+docs/plans/contextual-guide-knowledge/k3-fixture-workflow/store/releases/*/*.json
+docs/plans/contextual-guide-knowledge/k3-evidence/failed-finalization-stage/releases/*/*.json

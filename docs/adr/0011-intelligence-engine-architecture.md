@@ -4,6 +4,34 @@
 
 ## Context
 
+### K1 applicability extension (2026-10-19)
+
+Contextual guide knowledge returns a versioned applicability response rather than
+the historical ranking wrapper. Its pure calculator returns true/false/unknown
+conditions, an ordered reasoning trace, a conclusion code, and nullable conditional
+and modeled passive contributions in explicit units. The pure explainer translates
+that result and cannot change decisions. The service composes owned equipment
+reads and a validated local reviewed knowledge pack. No numeric score is invented.
+This extension is bounded to the Keqing / Harbinger of Dawn mechanical example;
+existing engine scores and endpoint contracts remain compatible. See
+[K1 API](../api/guide-knowledge.md) for assumptions, provenance and coverage limits.
+
+### K2 applicability extension (2026-10-19)
+
+The separate version-2 path extends this score-free pattern to Keqing, Fischl and
+KaedeharaKazuha. A bounded multi-claim pack describes typed mechanical/editorial
+claims, reviewed dependencies, conflicts, exclusions and predicate trees. The
+pure calculator evaluates every relevant claim with three-valued logic, explicit
+units and complete composite/leaf traces; the pure explainer translates its
+codes without changing applicability. The service uses one coherent authenticated
+owned snapshot for current equipment and selected owned teammates. Missing
+assignments produce piece bounds, not assumed empty slots. Temporary roles,
+set/trigger/stack/team choices remain assumptions. Qualitative energy guidance
+has no numeric ER solver, deficits, ranking, writes or auto-created goals. This
+amendment preserves K1 v1, existing scores and legacy KQM contracts; it does not
+authorize K3 or broader modern-interaction coverage. See the version-2 section in
+[the guide API](../api/guide-knowledge.md).
+
 Phase 4 of Project Celestia introduces the "Intelligence Core," which analyzes user accounts to provide recommendations (e.g., Character priorities, Team compositions). Generating accurate, trustworthy, and actionable recommendations requires complex logic. If not properly structured, this logic can quickly become a tangled mess of arbitrary heuristics and hardcoded strings, making the system difficult to test, debug, and expand.
 
 Furthermore, the user must understand _why_ a recommendation was made. A black-box AI or arbitrary scoring system violates the core principle of Celestia: "explainable, personalized recommendations."

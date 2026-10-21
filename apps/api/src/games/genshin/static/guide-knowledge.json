@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "version": "k1-1",
+  "contentHash": "a9483e16b582e485c9b7ae4532d74525d7c9d4ca2d5021880ad1f3ce1fc797c0",
+  "review": {
+    "reviewer": "Codex (GPT-6), local K1 implementor",
+    "type": "agent",
+    "date": "2026-10-19",
+    "scope": "Source-level cross-check of the pinned weapon threshold and R1-R5 constants only. Original normalized mechanic and bounded scenario logic; no human review, live-patch certification, complete Optimizer runtime verification or in-game testing."
+  },
+  "sources": [
+    {
+      "id": "genshin-db-harbinger",
+      "url": "https://github.com/theBowja/genshin-db/blob/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/harbingerofdawn.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "90ed459a7126b086708e83dfc3d0ceee63637f41fcb8ec06edf0932201b662e3"
+    },
+    {
+      "id": "optimizer-harbinger",
+      "url": "https://github.com/frzyc/genshin-optimizer/blob/cbee3af79d465735736cfbfbeaa6a9f89bea46dd/libs/gi/sheets/src/Weapons/Sword/HarbingerOfDawn/index.tsx",
+      "revision": "cbee3af79d465735736cfbfbeaa6a9f89bea46dd",
+      "sha256": "3acd31920fcc0d7e515e544e730e822f4b70a19ce22a5fb073528743b11eaed4"
+    }
+  ],
+  "claims": [
+    {
+      "id": "harbinger-hp-crit-rate",
+      "review": "reviewed",
+      "conflicted": false,
+      "sourceIds": ["genshin-db-harbinger", "optimizer-harbinger"],
+      "condition": {
+        "all": [
+          {
+            "kind": "characterIs",
+            "key": "Keqing"
+          },
+          {
+            "kind": "weaponIs",
+            "key": "HarbingerOfDawn"
+          },
+          {
+            "kind": "hpAbove",
+            "percent": 90
+          },
+          {
+            "kind": "refinementKnown"
+          }
+        ]
+      },
+      "effect": {
+        "stat": "critRate",
+        "unit": "percentage_points",
+        "refinements": [1, 2, 3, 4, 5],
+        "values": [14, 17.5, 21, 24.5, 28]
+      }
+    }
+  ],
+  "limitations": [
+    "Coverage: Keqing with Harbinger of Dawn only. No team, rotation, total stats or damage comparison is modeled.",
+    "Pinned community sources agree on these constants; this does not prove official validation or source independence. Live-patch coverage is unverified.",
+    "REA recovered selected source syntax with partial graph and unknown semantic coverage; imported formula helpers were not executed.",
+    "Account imports are snapshots. HP assumptions do not observe combat or establish sustained passive uptime. Ongoing upkeep ownership remains unresolved."
+  ],
+  "externalReading": "https://keqingmains.com/q/keqing-quickguide/"
+}

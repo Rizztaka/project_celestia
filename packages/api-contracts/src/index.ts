@@ -62,8 +62,11 @@ export {
   type UnknownResinState,
   type WeeklyClaimsState,
 } from './genshin/companion.js';
+export * from './genshin/contextual-advice.js';
+export * from './genshin/contextual-release.js';
 export * from './genshin/farming.js';
 export * from './genshin/goals.js';
+export * from './genshin/guide-knowledge.js';
 export {
   type ImportCommitRequest,
   importCommitRequestSchema,

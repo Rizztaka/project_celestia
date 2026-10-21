@@ -2,7 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 
 import { CharacterEquipmentView } from '../components/CharacterEquipmentView';
+import { ContextualAdvicePanel } from '../components/ContextualAdvicePanel';
 import { FocusButton } from '../components/FocusButton';
+import { GuideAdviceCard } from '../components/GuideAdviceCard';
 import { ApiError, fetchCharacterEquipment, fetchGoals, fetchImportStatus } from '../lib/api';
 
 export default function CharacterDetailPage() {
@@ -157,7 +159,12 @@ export default function CharacterDetailPage() {
                     describe imports.
                   </p>
                 </section>
+                <ContextualAdvicePanel
+                  equipment={detail.data}
+                  onRefresh={() => void detail.refetch()}
+                />
                 <CharacterEquipmentView data={detail.data} />
+                <GuideAdviceCard equipment={detail.data} onRefresh={() => void detail.refetch()} />
               </>
             )}
           </>

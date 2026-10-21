@@ -1,0 +1,14 @@
+{
+  "id": "kqm-fischl-extended",
+  "url": "https://keqingmains.com/fischl/",
+  "version": "4.7",
+  "sections": [
+    "Talents",
+    "Oz",
+    "ER Requirements"
+  ],
+  "observation": "Skill and Burst can deploy or refresh Oz. The A4 trigger depends on an active character reaction while Oz is present. Old guide version is a bounded reference, not current meta certification.",
+  "responseSha256": "f66b73779a367ec91961062126f596fa638f4efa87a4a5b2739cf72e7aec7a8e",
+  "observedAt": "2026-10-19T07:55:30.227Z",
+  "reuse": "Attributed factual reference; no prose/artwork mirror or bulk reuse grant. Hash identifies response observed, not an immutable page revision."
+}

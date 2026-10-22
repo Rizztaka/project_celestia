@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "NewBough",
+  "gameId": 11437,
+  "name": "New Bough",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/newbough.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "5fa7b3174f29661b92d7d96ef15566715c9da11bafc28ab19c019a7b028dd497",
+    "license": "MIT"
+  },
+  "description": "A sword made from sacred wood, said to have once turned the tide of battle.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Wildgrowth",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "When the equipping character hits the opponent with an attack within 12s after using the Elemental Skill, they gain the \"Verdant\" effect, which increases their ATK by 4% and their Elemental Mastery by 20. This effect lasts 6s and can trigger once every second. Max 3 stacks. The aforementioned effects can still trigger even when the equipping character is not on the field.\nRadiance: Stellar Glimmer: The effect of \"Verdant\" is changed to: Increases ATK by 6% as well as Stellar Glimmer reaction DMG dealt by the equipping character by 8%."
+    },
+    {
+      "rank": 2,
+      "description": "When the equipping character hits the opponent with an attack within 12s after using the Elemental Skill, they gain the \"Verdant\" effect, which increases their ATK by 5% and their Elemental Mastery by 25. This effect lasts 6s and can trigger once every second. Max 3 stacks. The aforementioned effects can still trigger even when the equipping character is not on the field.\nRadiance: Stellar Glimmer: The effect of \"Verdant\" is changed to: Increases ATK by 7.5% as well as Stellar Glimmer reaction DMG dealt by the equipping character by 10%."
+    },
+    {
+      "rank": 3,
+      "description": "When the equipping character hits the opponent with an attack within 12s after using the Elemental Skill, they gain the \"Verdant\" effect, which increases their ATK by 6% and their Elemental Mastery by 30. This effect lasts 6s and can trigger once every second. Max 3 stacks. The aforementioned effects can still trigger even when the equipping character is not on the field.\nRadiance: Stellar Glimmer: The effect of \"Verdant\" is changed to: Increases ATK by 9% as well as Stellar Glimmer reaction DMG dealt by the equipping character by 12%."
+    },
+    {
+      "rank": 4,
+      "description": "When the equipping character hits the opponent with an attack within 12s after using the Elemental Skill, they gain the \"Verdant\" effect, which increases their ATK by 7% and their Elemental Mastery by 35. This effect lasts 6s and can trigger once every second. Max 3 stacks. The aforementioned effects can still trigger even when the equipping character is not on the field.\nRadiance: Stellar Glimmer: The effect of \"Verdant\" is changed to: Increases ATK by 10.5% as well as Stellar Glimmer reaction DMG dealt by the equipping character by 14%."
+    },
+    {
+      "rank": 5,
+      "description": "When the equipping character hits the opponent with an attack within 12s after using the Elemental Skill, they gain the \"Verdant\" effect, which increases their ATK by 8% and their Elemental Mastery by 40. This effect lasts 6s and can trigger once every second. Max 3 stacks. The aforementioned effects can still trigger even when the equipping character is not on the field.\nRadiance: Stellar Glimmer: The effect of \"Verdant\" is changed to: Increases ATK by 12% as well as Stellar Glimmer reaction DMG dealt by the equipping character by 16%."
+    }
+  ]
+}

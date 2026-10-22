@@ -1,0 +1,420 @@
+import type { KqmCharacterGuide } from '@celestia/api-contracts';
+import { useState } from 'react';
+
+import { GenshinArtifactIcon } from './GenshinArtifactIcon';
+import { GenshinAvatar } from './GenshinAvatar';
+import { GenshinWeaponIcon } from './GenshinWeaponIcon';
+
+export interface KqmGuideViewProps {
+  guide: KqmCharacterGuide;
+  className?: string;
+}
+
+export function KqmGuideView({ guide, className = '' }: KqmGuideViewProps) {
+  const [activeTab, setActiveTab] = useState<'build' | 'teams' | 'talents'>('build');
+
+  return (
+    <div className={`space-y-6 ${className}`}>
+      {/* Attribution & Provenance Banner */}
+      <div className="glass-panel relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-950/40 via-zinc-900/80 to-purple-950/40 p-5 md:p-6 shadow-xl">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/20 px-3 py-0.5 text-xs font-semibold text-amber-300 border border-amber-500/40">
+                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z" />
+                </svg>
+                KeqingMains (KQM) Theorycrafting
+              </span>
+              {guide.versionUpdated && (
+                <span className="rounded-full bg-zinc-800 px-2.5 py-0.5 text-xs text-zinc-300 border border-zinc-700">
+                  {guide.versionUpdated}
+                </span>
+              )}
+              <span className="rounded-full bg-emerald-950/70 text-emerald-400 px-2.5 py-0.5 text-xs border border-emerald-800">
+                Provenance: Verified Seen
+              </span>
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight text-white">
+              {guide.characterName} Theorycrafting & Build Guide
+            </h2>
+            {guide.credits.length > 0 && (
+              <p className="text-xs text-zinc-400">
+                Theorycrafted & authored by: <span className="text-zinc-200">{guide.credits.join(', ')}</span>
+              </p>
+            )}
+          </div>
+
+          <a
+            href={guide.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/50 px-4 py-2 text-xs font-medium transition-all hover:scale-105 shrink-0"
+          >
+            <span>Read on KeqingMains.com</span>
+            <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+            </svg>
+          </a>
+        </div>
+
+        {/* TL;DR Summary */}
+        {guide.tldr && (
+          <div className="mt-4 rounded-xl bg-zinc-950/50 border border-zinc-800/80 p-3.5 text-sm leading-relaxed text-zinc-300">
+            <span className="font-semibold text-amber-300 mr-2">TL;DR:</span>
+            {guide.tldr}
+          </div>
+        )}
+      </div>
+
+      {/* Pros & Cons Matrix */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {guide.pros.length > 0 && (
+          <div className="glass-panel rounded-xl border border-emerald-500/30 bg-emerald-950/10 p-4 space-y-2.5">
+            <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-emerald-400">
+              <svg className="h-4 w-4 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              Strengths & Advantages
+            </h3>
+            <ul className="space-y-1.5 text-xs text-zinc-300">
+              {guide.pros.map((pro, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-emerald-400 font-bold shrink-0 mt-0.5">•</span>
+                  <span>{pro}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {guide.cons.length > 0 && (
+          <div className="glass-panel rounded-xl border border-rose-500/30 bg-rose-950/10 p-4 space-y-2.5">
+            <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-rose-400">
+              <svg className="h-4 w-4 text-rose-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              Nuances & Limitations
+            </h3>
+            <ul className="space-y-1.5 text-xs text-zinc-300">
+              {guide.cons.map((con, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-rose-400 font-bold shrink-0 mt-0.5">•</span>
+                  <span>{con}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* View Switcher Tabs */}
+      <div className="flex border-b border-zinc-800 gap-2">
+        <button
+          onClick={() => setActiveTab('build')}
+          className={`pb-2.5 px-4 text-sm font-semibold transition-colors border-b-2 ${
+            activeTab === 'build'
+              ? 'border-amber-400 text-amber-300'
+              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+          }`}
+        >
+          Gearing & Weapons
+        </button>
+        <button
+          onClick={() => setActiveTab('teams')}
+          className={`pb-2.5 px-4 text-sm font-semibold transition-colors border-b-2 ${
+            activeTab === 'teams'
+              ? 'border-amber-400 text-amber-300'
+              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+          }`}
+        >
+          Teams & Rotations
+        </button>
+        <button
+          onClick={() => setActiveTab('talents')}
+          className={`pb-2.5 px-4 text-sm font-semibold transition-colors border-b-2 ${
+            activeTab === 'talents'
+              ? 'border-amber-400 text-amber-300'
+              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+          }`}
+        >
+          Talents & Constellations
+        </button>
+      </div>
+
+      {/* TAB 1: GEARING & WEAPONS */}
+      {activeTab === 'build' && (
+        <div className="space-y-6">
+          {/* Energy Recharge (ER) Requirements */}
+          {guide.erRequirements.length > 0 && (
+            <div className="glass-panel rounded-xl border border-zinc-800 p-5 space-y-3">
+              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-cyan-400" />
+                Energy Recharge (ER) Requirements
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {guide.erRequirements.map((er, idx) => (
+                  <div key={idx} className="rounded-lg bg-zinc-950/60 border border-zinc-800 p-3.5 space-y-1">
+                    <span className="text-xs text-zinc-400 font-medium">{er.teamContext}</span>
+                    <div className="text-lg font-bold font-mono text-cyan-300">{er.requirement}</div>
+                    {er.notes && <p className="text-[11px] text-zinc-400 leading-tight">{er.notes}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Artifact Stats & Priorities */}
+          <div className="glass-panel rounded-xl border border-zinc-800 p-5 space-y-4">
+            <h3 className="text-base font-semibold text-white flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-purple-400" />
+              Artifact Stats & Priority
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div className="rounded-lg bg-zinc-950/60 border border-zinc-800/80 p-3 space-y-1">
+                <span className="text-zinc-400 font-semibold uppercase tracking-wider text-[10px]">Sands of Eon</span>
+                <div className="text-zinc-200 font-medium">{guide.artifactStats.sands.join(' / ')}</div>
+              </div>
+              <div className="rounded-lg bg-zinc-950/60 border border-zinc-800/80 p-3 space-y-1">
+                <span className="text-zinc-400 font-semibold uppercase tracking-wider text-[10px]">Goblet of Eonothem</span>
+                <div className="text-zinc-200 font-medium">{guide.artifactStats.goblet.join(' / ')}</div>
+              </div>
+              <div className="rounded-lg bg-zinc-950/60 border border-zinc-800/80 p-3 space-y-1">
+                <span className="text-zinc-400 font-semibold uppercase tracking-wider text-[10px]">Circlet of Logos</span>
+                <div className="text-zinc-200 font-medium">{guide.artifactStats.circlet.join(' / ')}</div>
+              </div>
+            </div>
+
+            <div className="rounded-lg bg-zinc-950/40 border border-zinc-800/50 p-3 space-y-1 text-xs">
+              <span className="text-zinc-400 font-semibold uppercase tracking-wider text-[10px]">Substat Priority:</span>
+              <div className="text-amber-300 font-mono text-xs">{guide.artifactStats.substats.join(' > ')}</div>
+              {guide.artifactStats.notes && (
+                <p className="text-[11px] text-zinc-400 mt-1 italic">{guide.artifactStats.notes}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Artifact Sets */}
+          {guide.artifactSets.length > 0 && (
+            <div className="glass-panel rounded-xl border border-zinc-800 p-5 space-y-3">
+              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-violet-400" />
+                Artifact Sets Ranking
+              </h3>
+              <div className="space-y-2.5">
+                {guide.artifactSets.map((set, idx) => (
+                  <div
+                    key={idx}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg bg-zinc-950/60 border border-zinc-800 p-3 hover:border-zinc-700 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <GenshinArtifactIcon setKey={set.setKey} slotKey="flower" size="sm" />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold text-white">{set.setName}</span>
+                          <span className="rounded bg-zinc-800 px-1.5 py-0.5 text-[10px] font-mono text-zinc-300">
+                            {set.pieces}pc
+                          </span>
+                          {set.isRecommended && (
+                            <span className="rounded bg-amber-950/80 text-amber-400 px-1.5 py-0.5 text-[10px] font-semibold border border-amber-800">
+                              Top Pick
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-zinc-400 mt-0.5">{set.notes}</p>
+                      </div>
+                    </div>
+                    {set.relativeDpsPercentage !== undefined && (
+                      <div className="text-right sm:shrink-0">
+                        <span className="font-mono text-sm font-bold text-violet-300">
+                          {set.relativeDpsPercentage}%
+                        </span>
+                        <span className="block text-[10px] text-zinc-500">vs baseline</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Weapon Rankings */}
+          {guide.weapons.length > 0 && (
+            <div className="glass-panel rounded-xl border border-zinc-800 p-5 space-y-3">
+              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-amber-400" />
+                Weapon Rankings & Tier List
+              </h3>
+              <div className="space-y-2.5">
+                {guide.weapons.map((w, idx) => (
+                  <div
+                    key={idx}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg bg-zinc-950/60 border border-zinc-800 p-3 hover:border-zinc-700 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <GenshinWeaponIcon weaponKey={w.weaponKey} refinement={w.refinement} size="sm" />
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-semibold text-white">{w.weaponName}</span>
+                          <span className="rounded bg-zinc-800 px-1.5 py-0.5 text-[10px] font-mono text-zinc-300">
+                            R{w.refinement}
+                          </span>
+                          <span
+                            className={`rounded px-1.5 py-0.5 text-[10px] font-semibold border ${
+                              w.rankingTier === 'BiS'
+                                ? 'bg-amber-950/80 text-amber-300 border-amber-700'
+                                : w.rankingTier === 'Top Tier'
+                                ? 'bg-purple-950/80 text-purple-300 border-purple-700'
+                                : 'bg-zinc-800 text-zinc-300 border-zinc-700'
+                            }`}
+                          >
+                            {w.rankingTier}
+                          </span>
+                          {w.isF2p && (
+                            <span className="rounded bg-emerald-950/80 text-emerald-300 px-1.5 py-0.5 text-[10px] font-semibold border border-emerald-800">
+                              F2P Friendly
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-zinc-400 mt-0.5">{w.notes}</p>
+                      </div>
+                    </div>
+
+                    {w.relativeDpsPercentage !== undefined && (
+                      <div className="text-right sm:shrink-0">
+                        <span className="font-mono text-sm font-bold text-amber-300">
+                          {w.relativeDpsPercentage}%
+                        </span>
+                        <span className="block text-[10px] text-zinc-500">relative DPS</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* TAB 2: TEAMS & ROTATIONS */}
+      {activeTab === 'teams' && (
+        <div className="space-y-5">
+          {guide.teams.map((team, idx) => (
+            <div key={idx} className="glass-panel rounded-xl border border-zinc-800 p-5 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800/80 pb-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base font-bold text-white">{team.name}</h3>
+                    <span className="rounded-full bg-cyan-950/80 text-cyan-300 px-2 py-0.5 text-xs border border-cyan-800">
+                      {team.archetype}
+                    </span>
+                  </div>
+                  <p className="text-xs text-zinc-400 mt-1">{team.description}</p>
+                </div>
+              </div>
+
+              {/* Roster Slots */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                {team.slots.map((slot, sIdx) => (
+                  <div key={sIdx} className="rounded-lg bg-zinc-950/60 border border-zinc-800/80 p-3 space-y-2">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 block">
+                      {slot.role}
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {slot.characters.map((c, cIdx) => (
+                        <div key={cIdx} className="flex items-center gap-1.5" title={c.characterName}>
+                          <GenshinAvatar characterKey={c.characterKey} size="sm" />
+                          <span className={`text-xs ${c.isOptimal ? 'text-amber-300 font-semibold' : 'text-zinc-300'}`}>
+                            {c.characterName}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Sample Rotation */}
+              {team.sampleRotation && (
+                <div className="rounded-lg bg-zinc-950/90 border border-zinc-800 p-3.5 space-y-1">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-amber-400 block">
+                    Sample Rotation String:
+                  </span>
+                  <div className="font-mono text-xs text-zinc-200 bg-black/40 p-2 rounded border border-zinc-900 select-all overflow-x-auto">
+                    {team.sampleRotation}
+                  </div>
+                  {team.rotationNotes && (
+                    <p className="text-[11px] text-zinc-400 mt-1 italic">{team.rotationNotes}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* TAB 3: TALENTS & CONSTELLATIONS */}
+      {activeTab === 'talents' && (
+        <div className="space-y-6">
+          {/* Talent Priority */}
+          <div className="glass-panel rounded-xl border border-zinc-800 p-5 space-y-3">
+            <h3 className="text-base font-semibold text-white flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+              Talent Leveling Priority
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {guide.talentPriority.onField && (
+                <div className="rounded-lg bg-zinc-950/60 border border-zinc-800 p-3.5 space-y-1">
+                  <span className="text-xs text-zinc-400 font-semibold uppercase">On-Field Carry</span>
+                  <div className="text-sm font-bold font-mono text-emerald-300">{guide.talentPriority.onField}</div>
+                </div>
+              )}
+              {guide.talentPriority.offField && (
+                <div className="rounded-lg bg-zinc-950/60 border border-zinc-800 p-3.5 space-y-1">
+                  <span className="text-xs text-zinc-400 font-semibold uppercase">Off-Field Sub-DPS / Support</span>
+                  <div className="text-sm font-bold font-mono text-cyan-300">{guide.talentPriority.offField}</div>
+                </div>
+              )}
+            </div>
+            {guide.talentPriority.notes && (
+              <p className="text-xs text-zinc-400 italic mt-2">{guide.talentPriority.notes}</p>
+            )}
+          </div>
+
+          {/* Constellations */}
+          {guide.constellations && guide.constellations.length > 0 && (
+            <div className="glass-panel rounded-xl border border-zinc-800 p-5 space-y-3">
+              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-amber-400" />
+                Constellation Breakdown & Impact
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {guide.constellations.map((c) => (
+                  <div key={c.constellation} className="rounded-lg bg-zinc-950/60 border border-zinc-800 p-3.5 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-amber-300">
+                        C{c.constellation} — {c.name}
+                      </span>
+                      <span
+                        className={`rounded px-1.5 py-0.5 text-[10px] font-bold border ${
+                          c.rating === 'High'
+                            ? 'bg-emerald-950 text-emerald-300 border-emerald-700'
+                            : c.rating === 'Medium'
+                            ? 'bg-amber-950 text-amber-300 border-amber-700'
+                            : 'bg-zinc-800 text-zinc-400 border-zinc-700'
+                        }`}
+                      >
+                        {c.rating} Impact
+                      </span>
+                    </div>
+                    <p className="text-xs text-zinc-300 leading-relaxed">{c.summary}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

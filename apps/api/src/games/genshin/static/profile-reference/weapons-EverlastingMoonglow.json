@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "EverlastingMoonglow",
+  "gameId": 14506,
+  "name": "Everlasting Moonglow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/everlastingmoonglow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "8f843ced79786d5d8fc86f845dc64e6b438fe020b70141362e844cf320b316e7",
+    "license": "MIT"
+  },
+  "description": "A string of lovely jasper from the deep sea. It shines with a pure radiance like that of the moon, and just as ever-distant.",
+  "weaponType": "Catalyst",
+  "rarity": 5,
+  "effectName": "Byakuya Kougetsu",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Healing Bonus increased by 10%, Normal Attack DMG is increased by 1% of the Max HP of the character equipping this weapon. For 12s after using an Elemental Burst, Normal Attacks that hit opponents will restore 0.6 Energy. Energy can be restored this way once every 0.1s."
+    },
+    {
+      "rank": 2,
+      "description": "Healing Bonus increased by 12.5%, Normal Attack DMG is increased by 1.5% of the Max HP of the character equipping this weapon. For 12s after using an Elemental Burst, Normal Attacks that hit opponents will restore 0.6 Energy. Energy can be restored this way once every 0.1s."
+    },
+    {
+      "rank": 3,
+      "description": "Healing Bonus increased by 15%, Normal Attack DMG is increased by 2% of the Max HP of the character equipping this weapon. For 12s after using an Elemental Burst, Normal Attacks that hit opponents will restore 0.6 Energy. Energy can be restored this way once every 0.1s."
+    },
+    {
+      "rank": 4,
+      "description": "Healing Bonus increased by 17.5%, Normal Attack DMG is increased by 2.5% of the Max HP of the character equipping this weapon. For 12s after using an Elemental Burst, Normal Attacks that hit opponents will restore 0.6 Energy. Energy can be restored this way once every 0.1s."
+    },
+    {
+      "rank": 5,
+      "description": "Healing Bonus increased by 20%, Normal Attack DMG is increased by 3% of the Max HP of the character equipping this weapon. For 12s after using an Elemental Burst, Normal Attacks that hit opponents will restore 0.6 Energy. Energy can be restored this way once every 0.1s."
+    }
+  ]
+}

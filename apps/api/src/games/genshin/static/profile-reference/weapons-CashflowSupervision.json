@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "CashflowSupervision",
+  "gameId": 14513,
+  "name": "Cashflow Supervision",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/cashflowsupervision.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "9cb452a2815bf0eea46f0886097ea0ea2f1b0adc3bdae443cc53c79538386e3d",
+    "license": "MIT"
+  },
+  "description": "A floating device that can monitor certain phenomena. It was picked up and modified to serve other purposes following its abandonment.",
+  "weaponType": "Catalyst",
+  "rarity": 5,
+  "effectName": "Golden Blood-Tide",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "ATK is increased by 16%. When current HP increases or decreases, Normal Attack DMG is increased by 16%, Charged Attack DMG is increased by 14%, and Stellar-Conduct DMG is increased by 14% for 4s. Max 3 stacks. This effect can be triggered once every 0.3s. When the wielder has 3 stacks, ATK SPD will be increased by 8%."
+    },
+    {
+      "rank": 2,
+      "description": "ATK is increased by 20%. When current HP increases or decreases, Normal Attack DMG is increased by 20%, Charged Attack DMG is increased by 17.5%, and Stellar-Conduct DMG is increased by 17.5% for 4s. Max 3 stacks. This effect can be triggered once every 0.3s. When the wielder has 3 stacks, ATK SPD will be increased by 10%."
+    },
+    {
+      "rank": 3,
+      "description": "ATK is increased by 24%. When current HP increases or decreases, Normal Attack DMG is increased by 24%, Charged Attack DMG is increased by 21%, and Stellar-Conduct DMG is increased by 21% for 4s. Max 3 stacks. This effect can be triggered once every 0.3s. When the wielder has 3 stacks, ATK SPD will be increased by 12%."
+    },
+    {
+      "rank": 4,
+      "description": "ATK is increased by 28%. When current HP increases or decreases, Normal Attack DMG is increased by 28%, Charged Attack DMG is increased by 24.5%, and Stellar-Conduct DMG is increased by 24.5% for 4s. Max 3 stacks. This effect can be triggered once every 0.3s. When the wielder has 3 stacks, ATK SPD will be increased by 14%."
+    },
+    {
+      "rank": 5,
+      "description": "ATK is increased by 32%. When current HP increases or decreases, Normal Attack DMG is increased by 32%, Charged Attack DMG is increased by 28%, and Stellar-Conduct DMG is increased by 28% for 4s. Max 3 stacks. This effect can be triggered once every 0.3s. When the wielder has 3 stacks, ATK SPD will be increased by 16%."
+    }
+  ]
+}

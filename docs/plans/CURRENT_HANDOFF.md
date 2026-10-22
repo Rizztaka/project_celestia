@@ -1,3 +1,48 @@
+> **2026-10-22 premium UI commit review: passed; owner authorized local commit.**
+> Shared charcoal/ivory/gold design, sidebar/mobile navigation, portrait collection,
+> 129-entry canonical archive, character tabs, authentication and Build lab.
+> Retired legacy ranking dashboard, random simulator UI, duplicate KQM reader,
+> unavailable OAuth actions and unused starter assets; existing user data retained.
+> **157/157 tests** in an independent commit checkout; contracts/API/web builds,
+> web types, full web lint and changed API tooling lint pass.
+> Desktop and 390/320px synthetic browser acceptance includes focus restoration,
+> locked descriptions, read-only comparison, import validation and savings redirect.
+> [Read commit scope, verification and limits](premium-ui/commit-review.md).
+> Unrelated NIKKE/schema/source drafts stay separate. No push or deployment included.
+
+> **2026-10-22 commit-readiness review: passed for the scoped deterministic migration.**
+> A separate checkout of the proposed index passed **97/97 focused tests** (8 files),
+> API/web production builds, contracts build, web types and full API/web/contracts lint.
+> Explicit synthetic test settings were used; no live database or local secrets.
+> Includes required profile-reference catalog/presentation. The optional KQM guide
+> reader and unrelated NIKKE/schema/account-data changes remain outside this commit.
+> Mixed working changes are preserved. All model-era continuation is superseded.
+> Read [commit scope, checks and limits](deterministic-build-insights/commit-review.md).
+> The owner authorized a local commit; pushing and deployment remain separate.
+
+> **2026-10-22 OWNER DIRECTION: REMOVE AI; direct implementation completed.**
+> This supersedes ALL model-era continuation/promotion instructions below.
+> No eight-case live resume, 508-case model evaluation, quota wait or AI candidate
+> activation remains actionable. The owner explicitly asked this chat to edit code.
+> Removed provider SDK/clients/config/routes/chat and active model evaluation
+> tooling; preserved 39 exact retired files as historical `.raw` artifacts.
+> Character pages now use authenticated read-only **Build insights**, with pure
+> typed decisions and deterministic explanations, automatic recorded checks and
+> optional hypothetical equipment comparison. All 129 pinned catalog entries work.
+> Current executable scope: weapon compatibility, artifact piece bounds, Harbinger
+> HP/refinement and four source-bound artifact-set eligibility/activation rules.
+> Other effects retain complete source descriptions and explicit rule gaps;
+> broader build/team strategy is NOT claimed complete. No scenario questionnaire.
+> **100/100 tests**, final 19-test correction subset, API/web production builds,
+> contracts/web types, changed-code lint and browser fixture flow pass. Verified
+> 1,194 pinned data files unchanged; all archived source hashes match. Profiles,
+> descriptions/unlock presentation, historical releases/source data, ledgers and
+> unrelated work are preserved. Preview servers/temporary entries cleaned up.
+> Read [actual implementation, verification and next coverage](deterministic-build-insights/walkthrough.md).
+> No account/equipment writes, real model calls, secret-file edits, staging,
+> commit, push or deployment. Prior profile approval remains scoped history;
+> the changed UI/engine has its own tests now. Do not run retired model prompts.
+
 # Start here: Project Celestia
 
 > **2026-10-18 Section 4 — UI/artwork/accessibility implementation:** Shared artwork covers the pinned catalog with two-CDN retry and local element/rarity fallbacks. Priority cards, 320px compact modal navigation, responsive account confirmations, keyboard ARIA tabs and minute-based live timers are implemented. Production-bundle browser checks pass at 1280/640/320px. Native browser zoom was attempted but Computer Use stopped on URL-policy enforcement before input; experienced screen-reader evidence remains unperformed. See [walkthrough](section4-ui/walkthrough.md), [sources](section4-ui/sources.md), [browser checks](section4-ui/browser-results.json) and [validation](section4-ui/validation-results.json). The owner explicitly requested a local commit for this section; no push or deployment is implied.

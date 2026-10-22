@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "Scholar",
+  "gameId": 10012,
+  "name": "Scholar",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/scholar.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "f4addf7b00064412b6c98ecc7c4bbf6411f4e39f749fba58f188ba1587452589",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Scholar's Bookmark",
+      "description": "A dried flower used as a bookmark. It has absorbed the scent from the pages."
+    },
+    {
+      "slot": "plume",
+      "name": "Scholar's Quill Pen",
+      "description": "A bird's feather that serves as a quill pen. The tip has long been stained black."
+    },
+    {
+      "slot": "sands",
+      "name": "Scholar's Clock",
+      "description": "A small desktop clock, whose former owner was a scholar sat in a windowless room buried in books. This was probably the only reference they had to the time of day."
+    },
+    {
+      "slot": "goblet",
+      "name": "Scholar's Ink Cup",
+      "description": "Originally designed to hold drinking water, this cup was stained black after a scholar used it to wash their paint brushes."
+    },
+    {
+      "slot": "circlet",
+      "name": "Scholar's Lens",
+      "description": "This corrective lens helped restore the vision of one whose eyes were damaged from intensive studying."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Energy Recharge +20%" },
+    {
+      "pieces": 4,
+      "description": "Gaining Elemental Particles or Orbs gives 3 Energy to all party members who have a bow or a catalyst equipped. Can only occur once every 3s."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "contractVersion": 1,
+  "key": "SwordOfDescension",
+  "gameId": 11412,
+  "name": "Sword of Descension",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/swordofdescension.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "974c1b4474b4eb4b7353b3a2191eb3b0f181583f1bab6d38a9f3c80675239495",
+    "license": "MIT"
+  },
+  "description": "A sword of unique craftsmanship. It does not appear to belong to this world.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Descension",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Effective only on the following platform: \n\"PlayStation™Network\"\nHitting opponents with Normal and Charged Attacks grants a 50% chance to deal 200% ATK as DMG in a small AoE. This effect can only occur once every 10s. Additionally, if the Traveler equips the Sword of Descension, their ATK is increased by 66."
+    }
+  ]
+}

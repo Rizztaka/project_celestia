@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "TidalShadow",
+  "gameId": 12425,
+  "name": "Tidal Shadow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/tidalshadow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "b976d5da354ca89d1efdbb0370418bdde70b8a3b153be5674be472be18c104a9",
+    "license": "MIT"
+  },
+  "description": "An exquisitely-crafted, standard-model sword forged for the high-ranking officers and flagship captains of Fontaine's old navy.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "White Cruising Wave",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "After the wielder is healed, ATK will be increased by 24% for 8s. This can be triggered even when the character is not on the field."
+    },
+    {
+      "rank": 2,
+      "description": "After the wielder is healed, ATK will be increased by 30% for 8s. This can be triggered even when the character is not on the field."
+    },
+    {
+      "rank": 3,
+      "description": "After the wielder is healed, ATK will be increased by 36% for 8s. This can be triggered even when the character is not on the field."
+    },
+    {
+      "rank": 4,
+      "description": "After the wielder is healed, ATK will be increased by 42% for 8s. This can be triggered even when the character is not on the field."
+    },
+    {
+      "rank": 5,
+      "description": "After the wielder is healed, ATK will be increased by 48% for 8s. This can be triggered even when the character is not on the field."
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+const { ask } = vi.hoisted(() => ({ ask: vi.fn() }));
+vi.mock('./character-knowledge/advisor.service.js', () => ({
+  CharacterAdvisorService: class {
+    ask = ask;
+  },
+}));
+vi.mock('../characters/character.service.js', () => ({ GenshinCharacterService: class {} }));
+import { planningKnowledgeAdvice, synthesizeAdvice } from './ai-advice.service.js';
+describe('shared planning knowledge advice', () => {
+  beforeEach(() => vi.clearAllMocks());
+  it('preserves deterministic composition explanations for callers without an authenticated context', async () => {
+    const context = { teamComp: ['Bennett', 'Xiangling', 'Xingqiu', 'RaidenShogun'] };
+    const result = await synthesizeAdvice(context);
+    expect(result).toContain('Fervent Flames');
+    expect(result).toContain('Vaporize');
+    expect(result).toBe(await synthesizeAdvice(context));
+    expect(ask).not.toHaveBeenCalled();
+  });
+  it('helps a new player without a team without calling a model', async () => {
+    expect(await synthesizeAdvice({})).toContain('Fill all four slots');
+    expect(ask).not.toHaveBeenCalled();
+  });
+  it('uses the same grounded advisor with the originating user and selected team', async () => {
+    ask.mockResolvedValue({
+      status: 'answered',
+      reason: 'ok',
+      answer: { segments: [{ text: 'Test a conditional rotation.' }] },
+      citations: [{ id: 'source' }],
+    });
+    const result = await planningKnowledgeAdvice(
+      { todayPlan: 'Farm talents', teamComp: ['Bennett'] },
+      'owner',
+    );
+    expect(result.summary).toBe('Test a conditional rotation.');
+    expect(result.citations).toEqual([{ id: 'source' }]);
+    expect(ask).toHaveBeenCalledWith(
+      'owner',
+      expect.objectContaining({
+        characterKey: 'Bennett',
+        teamKeys: ['Bennett'],
+        question: 'Farm talents',
+        useRecordedContext: true,
+      }),
+    );
+  });
+  it.each(['missing_configuration', 'quota', 'ungrounded_answer'])(
+    'labels %s fallback as deterministic notes, not a model answer',
+    async (reason) => {
+      ask.mockResolvedValue({ status: 'unavailable', reason, answer: null, citations: [] });
+      expect(await synthesizeAdvice({ teamComp: ['Bennett'] }, 'owner')).toContain(
+        `AI unavailable (${reason}). Deterministic composition notes:`,
+      );
+    },
+  );
+});

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "DialoguesOfTheDesertSages",
+  "gameId": 13426,
+  "name": "Dialogues of the Desert Sages",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/dialoguesofthedesertsages.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "c7997cc84a7a3ec5fb78a2536a63dd2d6a33fa25dc1a489780afa819df37923f",
+    "license": "MIT"
+  },
+  "description": "A caduceus symbolizing the glory of alchemy, made from special alloys to match its special status. It is exceedingly rigid and heavy, and would probably hurt pretty bad if used as a cudgel.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Principle of Equilibrium",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "When the wielder performs healing, restore 8 Energy. This effect can be triggered once every 10s and can occur even when the character is not on the field."
+    },
+    {
+      "rank": 2,
+      "description": "When the wielder performs healing, restore 10 Energy. This effect can be triggered once every 10s and can occur even when the character is not on the field."
+    },
+    {
+      "rank": 3,
+      "description": "When the wielder performs healing, restore 12 Energy. This effect can be triggered once every 10s and can occur even when the character is not on the field."
+    },
+    {
+      "rank": 4,
+      "description": "When the wielder performs healing, restore 14 Energy. This effect can be triggered once every 10s and can occur even when the character is not on the field."
+    },
+    {
+      "rank": 5,
+      "description": "When the wielder performs healing, restore 16 Energy. This effect can be triggered once every 10s and can occur even when the character is not on the field."
+    }
+  ]
+}

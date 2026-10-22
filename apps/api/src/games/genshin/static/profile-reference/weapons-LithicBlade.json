@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "LithicBlade",
+  "gameId": 12410,
+  "name": "Lithic Blade",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/lithicblade.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "6f792922193f41c54ead92c58c4341c676101ac3a8638bdb194867ac84affc19",
+    "license": "MIT"
+  },
+  "description": "A greatsword carved and chiseled from the very bedrock of Liyue.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Lithic Axiom: Unity",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "For every character in the party who hails from Liyue, the character who equips this weapon gains a 7% ATK increase and a 3% CRIT Rate increase. This effect stacks up to 4 times."
+    },
+    {
+      "rank": 2,
+      "description": "For every character in the party who hails from Liyue, the character who equips this weapon gains a 8% ATK increase and a 4% CRIT Rate increase. This effect stacks up to 4 times."
+    },
+    {
+      "rank": 3,
+      "description": "For every character in the party who hails from Liyue, the character who equips this weapon gains a 9% ATK increase and a 5% CRIT Rate increase. This effect stacks up to 4 times."
+    },
+    {
+      "rank": 4,
+      "description": "For every character in the party who hails from Liyue, the character who equips this weapon gains a 10% ATK increase and a 6% CRIT Rate increase. This effect stacks up to 4 times."
+    },
+    {
+      "rank": 5,
+      "description": "For every character in the party who hails from Liyue, the character who equips this weapon gains a 11% ATK increase and a 7% CRIT Rate increase. This effect stacks up to 4 times."
+    }
+  ]
+}

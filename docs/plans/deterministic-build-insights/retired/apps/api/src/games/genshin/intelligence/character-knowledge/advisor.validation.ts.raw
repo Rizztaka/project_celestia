@@ -1,0 +1,123 @@
+import type { advisorSegmentSchema } from '@celestia/api-contracts';
+import type { z } from 'zod';
+
+import {
+  evidenceSemantics,
+  retainsPrerequisite,
+  sourcePrerequisites,
+} from './knowledge.evidence.js';
+import type { KnowledgeCorpus, KnowledgeDocument } from './knowledge.store.js';
+
+const tidy = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase();
+const plain = (s: string) =>
+  s
+    .normalize('NFKD')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+type Segment = z.infer<typeof advisorSegmentSchema>;
+
+export function validateAdvisorSegment(
+  segment: Segment,
+  documents: KnowledgeDocument[],
+  corpus: KnowledgeCorpus,
+  records: unknown,
+) {
+  const docs = segment.evidenceIds.map((id) => documents.find((d) => d.id === id));
+  if (docs.some((d) => !d) || !docs.some((d) => tidy(d!.text).includes(tidy(segment.support))))
+    return false;
+  if (
+    /\b\d[\d.,]*\s*(?:%?\s*(?:ER|energy recharge)|DPS|damage per second)\b/i.test(segment.text) ||
+    /\b(?:I|we) (?:equipped|saved|created|changed|upgraded|imported)\b/i.test(segment.text)
+  )
+    return false;
+  const numbers = segment.text.replace(/\b[Cc][0-6]\b/g, '').match(/\d+(?:\.\d+)?/g) ?? [];
+  const supportedText = docs.map((d) => d!.text).join(' ') + ' ' + JSON.stringify(records);
+  const typedTerms =
+    segment.text.match(
+      /\b(?:Pyro|Hydro|Electro|Cryo|Anemo|Geo|Dendro|Physical|Sword|Claymore|Bow|Polearm|Catalyst)\b/gi,
+    ) ?? [];
+  if (typedTerms.some((t) => !new RegExp(`\\b${t}\\b`, 'i').test(supportedText))) return false;
+  // Both sides use complete numeric atoms: decimals with attached units remain
+  // decimals, and sentence punctuation after 80. does not turn it into 80.x.
+  const supportedNumbers = new Set(supportedText.match(/\d+(?:\.\d+)?/g) ?? []);
+  if (numbers.some((n) => !supportedNumbers.has(n))) return false;
+  if (/\b(?:optimal|best)\b/i.test(segment.text) && !/\b(?:optimal|best)\b/i.test(supportedText))
+    return false;
+  const output = plain(segment.text);
+  if (/\b(?:on|off) field\b/.test(output) && !/\bfield\b/.test(plain(supportedText))) return false;
+  for (const doc of docs as KnowledgeDocument[]) {
+    const semantics = evidenceSemantics(doc, corpus);
+    if (semantics.abilityKind) {
+      const title = plain(doc.title),
+        at = output.indexOf(title);
+      if (at >= 0) {
+        const before = output.slice(Math.max(0, at - 65), at).trim();
+        const after = output.slice(at + title.length).trim();
+        const assigned =
+          before.match(/(?:elemental )?(skill|burst)$/)?.[1] ??
+          after.match(/^(?:is (?:an? )?(?:elemental )?)?(skill|burst)\b/)?.[1];
+        if (assigned && assigned !== doc.topic) return false;
+      }
+      // A paragraph citing only a Skill cannot borrow a different Burst's
+      // behavior. Mentions of a Burst buff actually in that Skill remain legal.
+      for (const kind of ['skill', 'burst'])
+        if (
+          new RegExp(`\\b${kind}\\b`).test(output) &&
+          kind !== doc.topic &&
+          !new RegExp(`\\b${kind}s?\\b`, 'i').test(supportedText) &&
+          !docs.some((d) => d!.topic === kind)
+        )
+          return false;
+    }
+    let conditionTexts: string[] = [];
+    if (semantics.itemType) {
+      const pieces = [...output.matchAll(/\b([124]) (?:piece|pieces|pc)\b/g)].map((m) => +m[1]!);
+      const units = semantics.effects.filter(
+        (e) =>
+          (e.pieceCount && pieces.includes(e.pieceCount)) ||
+          tidy(e.text).includes(tidy(segment.support)),
+      );
+      for (const unit of units) {
+        if (unit.pieceCount && !pieces.includes(unit.pieceCount)) return false;
+        conditionTexts.push(unit.text);
+      }
+    } else if (doc.review === 'agent_reviewed_note' || semantics.abilityKind) {
+      // A multi-talent kit or editorial note can contain unrelated conditional
+      // alternatives. Bind obligations to the complete supporting paragraph
+      // (kit) or sentence (editorial), rather than all alternatives in the doc.
+      conditionTexts = doc.text
+        .split(semantics.abilityKind ? /\n\s*\n/ : /(?<=[.!?])\s+/)
+        .filter((unit) => tidy(unit).includes(tidy(segment.support)));
+    }
+    for (const condition of conditionTexts.flatMap(sourcePrerequisites))
+      if (!retainsPrerequisite(segment.text, condition)) return false;
+  }
+  return true;
+}
+
+export function advisorCoverage(
+  subjects: {
+    key: string;
+    label: string;
+    aliases?: string[];
+    evidenceOnly?: boolean;
+    requiredTerms?: string[];
+    evidenceIds: string[];
+  }[],
+  segments: Segment[],
+) {
+  return subjects.map((s) => ({
+    subject: s.label,
+    covered: segments.some(
+      (segment) =>
+        segment.evidenceIds.some((id) => s.evidenceIds.includes(id)) &&
+        (s.evidenceOnly
+          ? !s.requiredTerms?.length ||
+            s.requiredTerms.some((term) => plain(segment.text).split(' ').includes(term))
+          : [s.label, ...(s.aliases ?? [])].some((label) =>
+              (' ' + plain(segment.text) + ' ').includes(' ' + plain(label) + ' '),
+            )),
+    ),
+  }));
+}

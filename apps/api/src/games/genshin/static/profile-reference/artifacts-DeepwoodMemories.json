@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "DeepwoodMemories",
+  "gameId": 15025,
+  "name": "Deepwood Memories",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/deepwoodmemories.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "e3577ca86c0d2609eb874cf3e9dc1367b65121da934bf1d34cd439174e67ed1c",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Labyrinth Wayfarer",
+      "description": "This lovely gold-plated flower was plucked from the crown of the ruler of the forest."
+    },
+    {
+      "slot": "plume",
+      "name": "Scholar of Vines",
+      "description": "An emerald leaf as fluffy as a feather. Plucked from the raiment of a forest scholar."
+    },
+    {
+      "slot": "sands",
+      "name": "A Time of Insight",
+      "description": "Such timepieces are used by those who dedicate themselves to the way of the wise. These timepieces do not contain lifeless sand, but instead play host to tiny mustard seeds."
+    },
+    {
+      "slot": "goblet",
+      "name": "Lamp of the Lost",
+      "description": "This was originally an oil lamp in the style of the desert realm, but has since sprouted fluorescent green leaves."
+    },
+    {
+      "slot": "circlet",
+      "name": "Laurel Coronet",
+      "description": "This crown was bestowed by the deity with dominion over plants and trees. It was an heirloom of the royal house of the labyrinth. It was, at last, made the inheritance of the king's attendant."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Dendro DMG Bonus +15%." },
+    {
+      "pieces": 4,
+      "description": "After Elemental Skills or Bursts hit opponents, the targets' Dendro RES will be decreased by 30% for 8s. This effect can be triggered even if the equipping character is not on the field."
+    }
+  ]
+}

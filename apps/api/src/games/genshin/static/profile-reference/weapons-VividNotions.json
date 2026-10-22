@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "VividNotions",
+  "gameId": 14519,
+  "name": "Vivid Notions",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/vividnotions.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "e79e85f562d8d18506b00764a775faffa22b34d7af40f195c26190bb3fa880d1",
+    "license": "MIT"
+  },
+  "description": "A trophy made from gemstones from the Collective of Plenty and crystals from the Flower-Feather Clan. It is said to have once belonged to a legendary wrestler.",
+  "weaponType": "Catalyst",
+  "rarity": 5,
+  "effectName": "Falling Rainbow's Wish",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "ATK is increased by 28%. When you use a Plunging Attack, you will gain the \"Dawn's First Hue\" effect: Plunging Attack CRIT DMG is increased by 28%. When you use an Elemental Skill or Burst, you will gain the \"Twilight's Splendor\" effect: Plunging Attack CRIT DMG is increased by 40%. The two effects above each last for 15s, and will be canceled 0.1s after the ground impact hits a target."
+    },
+    {
+      "rank": 2,
+      "description": "ATK is increased by 35%. When you use a Plunging Attack, you will gain the \"Dawn's First Hue\" effect: Plunging Attack CRIT DMG is increased by 35%. When you use an Elemental Skill or Burst, you will gain the \"Twilight's Splendor\" effect: Plunging Attack CRIT DMG is increased by 50%. The two effects above each last for 15s, and will be canceled 0.1s after the ground impact hits a target."
+    },
+    {
+      "rank": 3,
+      "description": "ATK is increased by 42%. When you use a Plunging Attack, you will gain the \"Dawn's First Hue\" effect: Plunging Attack CRIT DMG is increased by 42%. When you use an Elemental Skill or Burst, you will gain the \"Twilight's Splendor\" effect: Plunging Attack CRIT DMG is increased by 60%. The two effects above each last for 15s, and will be canceled 0.1s after the ground impact hits a target."
+    },
+    {
+      "rank": 4,
+      "description": "ATK is increased by 49%. When you use a Plunging Attack, you will gain the \"Dawn's First Hue\" effect: Plunging Attack CRIT DMG is increased by 49%. When you use an Elemental Skill or Burst, you will gain the \"Twilight's Splendor\" effect: Plunging Attack CRIT DMG is increased by 70%. The two effects above each last for 15s, and will be canceled 0.1s after the ground impact hits a target."
+    },
+    {
+      "rank": 5,
+      "description": "ATK is increased by 56%. When you use a Plunging Attack, you will gain the \"Dawn's First Hue\" effect: Plunging Attack CRIT DMG is increased by 56%. When you use an Elemental Skill or Burst, you will gain the \"Twilight's Splendor\" effect: Plunging Attack CRIT DMG is increased by 80%. The two effects above each last for 15s, and will be canceled 0.1s after the ground impact hits a target."
+    }
+  ]
+}

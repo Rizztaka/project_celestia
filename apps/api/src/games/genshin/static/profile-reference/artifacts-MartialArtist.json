@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "MartialArtist",
+  "gameId": 10006,
+  "name": "Martial Artist",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/martialartist.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "7a75a993e14e318a74824ae45237f2e40941f85f6132d9966ad8317074ab9782",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Martial Artist's Red Flower",
+      "description": "This particular kind of red flower was the only thing that could alleviate the Martial Artist's pain."
+    },
+    {
+      "slot": "plume",
+      "name": "Martial Artist's Feather Accessory",
+      "description": "A common bird feather. Experts use it to practice strength control, while rookies use it to make fans."
+    },
+    {
+      "slot": "sands",
+      "name": "Martial Artist's Water Hourglass",
+      "description": "A tool to keep track of time in endurance training. It is more accurate and reliable than a regular hourglass."
+    },
+    {
+      "slot": "goblet",
+      "name": "Martial Artist's Wine Cup",
+      "description": "A rather exquisite wine cup used in pre-combat rituals."
+    },
+    {
+      "slot": "circlet",
+      "name": "Martial Artist's Bandana",
+      "description": "The first lesson as an apprentice: Vigor, Strength, Will. These words are written on the bandana so you'll never forget them."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Normal and Charged Attack DMG +15%" },
+    {
+      "pieces": 4,
+      "description": "After using Elemental Skill, increases Normal Attack and Charged Attack DMG by 25% for 8s."
+    }
+  ]
+}

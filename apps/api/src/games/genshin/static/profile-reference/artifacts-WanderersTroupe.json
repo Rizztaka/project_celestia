@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "WanderersTroupe",
+  "gameId": 15003,
+  "name": "Wanderer's Troupe",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/wandererstroupe.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "6584b952788464ca49c13a71ff7c485b371677c159ff6815c0b7d58c00bea1d7",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Troupe's Dawnlight",
+      "description": "A small flower-shaped insignia. If you listen carefully, you can almost hear a flute playing and voices singing."
+    },
+    {
+      "slot": "plume",
+      "name": "Bard's Arrow Feather",
+      "description": "An azure arrow fletching that has neither faded nor splintered with the passage of time. The sound of running water seems to linger around it."
+    },
+    {
+      "slot": "sands",
+      "name": "Concert's Final Hour",
+      "description": "An hourglass used to keep time during a band performance. It once made a crisp sound, but their performance has since ended."
+    },
+    {
+      "slot": "goblet",
+      "name": "Wanderer's String-Kettle",
+      "description": "An ancient, strangely-shaped canteen. The interior is fitted with harp strings, which play a wondrous tune as the water flows out."
+    },
+    {
+      "slot": "circlet",
+      "name": "Conductor's Top Hat",
+      "description": "A top hat that has managed to retain its radiance despite braving the elements for time untold. An ancient tune still resonates within."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Increases Elemental Mastery by 80." },
+    {
+      "pieces": 4,
+      "description": "Increases Charged Attack DMG by 35% if the character uses a Catalyst or a Bow."
+    }
+  ]
+}

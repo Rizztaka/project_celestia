@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "ProspectorsShovel",
+  "gameId": 13433,
+  "name": "Prospector's Shovel",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/prospectorsshovel.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "359dbc933838990a78cdc3f9a801b75350458d8ca116ab65232148cecc7fe886",
+    "license": "MIT"
+  },
+  "description": "A polearm that appears to have been crafted from a metal agricultural tool. At first glance, it could not look more ordinary, yet its discreet design hides fittings that are both lavish and undeniably exquisite.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Swift and Sure",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Electro-Charged DMG is increased by 48%, and Lunar-Charged DMG is increased by 12%. Moonsign: Ascendant Gleam: Lunar-Charged DMG is increased by an additional 12%."
+    },
+    {
+      "rank": 2,
+      "description": "Electro-Charged DMG is increased by 60%, and Lunar-Charged DMG is increased by 15%. Moonsign: Ascendant Gleam: Lunar-Charged DMG is increased by an additional 15%."
+    },
+    {
+      "rank": 3,
+      "description": "Electro-Charged DMG is increased by 72%, and Lunar-Charged DMG is increased by 18%. Moonsign: Ascendant Gleam: Lunar-Charged DMG is increased by an additional 18%."
+    },
+    {
+      "rank": 4,
+      "description": "Electro-Charged DMG is increased by 84%, and Lunar-Charged DMG is increased by 21%. Moonsign: Ascendant Gleam: Lunar-Charged DMG is increased by an additional 21%."
+    },
+    {
+      "rank": 5,
+      "description": "Electro-Charged DMG is increased by 96%, and Lunar-Charged DMG is increased by 24%. Moonsign: Ascendant Gleam: Lunar-Charged DMG is increased by an additional 24%."
+    }
+  ]
+}

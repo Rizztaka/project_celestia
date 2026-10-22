@@ -1,0 +1,23 @@
+{
+  "contractVersion": 1,
+  "key": "WhiteIronGreatsword",
+  "gameId": 12303,
+  "name": "White Iron Greatsword",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/whiteirongreatsword.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "5fdd1235d0806b91ef3cf17d85d4feb4c27fac48ae12f0a9c313e6b84c56658e",
+    "license": "MIT"
+  },
+  "description": "A claymore made from white iron. Lightweight without compromising on power. Effective even when wielded by one of average strength, it is extremely deadly in the hands of a physically stronger wielder.",
+  "weaponType": "Claymore",
+  "rarity": 3,
+  "effectName": "Cull the Weak",
+  "refinements": [
+    { "rank": 1, "description": "Defeating an opponent restores 8% HP." },
+    { "rank": 2, "description": "Defeating an opponent restores 10% HP." },
+    { "rank": 3, "description": "Defeating an opponent restores 12% HP." },
+    { "rank": 4, "description": "Defeating an opponent restores 14% HP." },
+    { "rank": 5, "description": "Defeating an opponent restores 16% HP." }
+  ]
+}

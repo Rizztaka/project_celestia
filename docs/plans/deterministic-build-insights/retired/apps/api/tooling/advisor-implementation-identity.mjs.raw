@@ -1,0 +1,48 @@
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
+// Include dependencies that now carry policy/retrieval behavior. Historical
+// single-file identities remain historical, never silently reused as passes.
+export function advisorImplementationIdentity(project) {
+  const groups = {
+    policyDigest: [
+      'apps/api/src/games/genshin/intelligence/character-knowledge/advisor.service.ts',
+      'apps/api/src/games/genshin/intelligence/character-knowledge/advisor.validation.ts',
+      'apps/api/src/games/genshin/intelligence/character-knowledge/advisor.context.ts',
+    ],
+    retrievalDigest: [
+      'apps/api/src/games/genshin/intelligence/character-knowledge/knowledge.retrieval.ts',
+      'apps/api/src/games/genshin/intelligence/character-knowledge/knowledge.evidence.ts',
+    ],
+    providerDigest: ['apps/api/src/core/ai/advisor-provider.ts'],
+    contractDigest: ['packages/api-contracts/src/genshin/character-advisor.ts'],
+    observationDigest: [
+      'apps/api/src/games/genshin/intelligence/character-knowledge/advisor.controller.ts',
+      'apps/web/src/lib/character-advisor.ts',
+    ],
+    runnerDigest: [
+      'apps/api/tooling/run-advisor-acceptance.mjs',
+      'apps/api/tooling/advisor-acceptance-dispatch.mjs',
+      'apps/api/tooling/advisor-acceptance-ledger.mjs',
+    ],
+  };
+  const files = Object.fromEntries(
+    Object.values(groups)
+      .flat()
+      .map((path) => [path, hash(readFileSync(join(project, path)))]),
+  );
+  return {
+    identityVersion: 3,
+    signatures: Object.fromEntries(
+      Object.entries(groups).map(([name, paths]) => [
+        name,
+        paths.length === 1
+          ? files[paths[0]]
+          : hash(JSON.stringify(paths.map((path) => [path, files[path]]))),
+      ]),
+    ),
+    files,
+  };
+}

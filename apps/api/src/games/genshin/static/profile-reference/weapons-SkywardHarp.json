@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SkywardHarp",
+  "gameId": 15501,
+  "name": "Skyward Harp",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/skywardharp.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "a778659e7cd0ce574cf0125fcd0b2f1b3c3e227a0a81c1a21fd3535b69a63978",
+    "license": "MIT"
+  },
+  "description": "A greatbow that symbolizes Dvalin's affiliation with the Anemo Archon. The sound of the bow firing is music to the Anemo Archon's ears. It contains the power of the sky and wind within.",
+  "weaponType": "Bow",
+  "rarity": 5,
+  "effectName": "Echoing Ballad",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases CRIT DMG by 20%. Hits have a 60% chance to inflict a small AoE attack, dealing 125% Physical ATK DMG. Can only occur once every 4s."
+    },
+    {
+      "rank": 2,
+      "description": "Increases CRIT DMG by 25%. Hits have a 70% chance to inflict a small AoE attack, dealing 125% Physical ATK DMG. Can only occur once every 3.5s."
+    },
+    {
+      "rank": 3,
+      "description": "Increases CRIT DMG by 30%. Hits have a 80% chance to inflict a small AoE attack, dealing 125% Physical ATK DMG. Can only occur once every 3s."
+    },
+    {
+      "rank": 4,
+      "description": "Increases CRIT DMG by 35%. Hits have a 90% chance to inflict a small AoE attack, dealing 125% Physical ATK DMG. Can only occur once every 2.5s."
+    },
+    {
+      "rank": 5,
+      "description": "Increases CRIT DMG by 40%. Hits have a 100% chance to inflict a small AoE attack, dealing 125% Physical ATK DMG. Can only occur once every 2s."
+    }
+  ]
+}

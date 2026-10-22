@@ -1,0 +1,71 @@
+import { characterAdvisorRequestSchema } from '@celestia/api-contracts';
+import { describe, expect, it } from 'vitest';
+
+import { retrieveCharacterKnowledge } from './knowledge.retrieval.js';
+import { loadedCharacterKnowledge } from './knowledge.store.js';
+
+const retrieve = (extra: Record<string, unknown>) =>
+  retrieveCharacterKnowledge(
+    characterAdvisorRequestSchema.parse({ useRecordedContext: false, ...extra }),
+  );
+describe('independent review shared regressions', () => {
+  it('retains Skill evidence for off-field Hyperbloom Raiden within budget', () => {
+    const result = retrieve({
+      characterKey: 'RaidenShogun',
+      question:
+        'Use Raiden only as an off-field Hyperbloom trigger. What weapon and stats should I use?',
+    });
+    expect(result.documents.map((d) => d.id)).toContain('RaidenShogun:combat2');
+    expect(result.characters).toBeLessThanOrEqual(9000);
+    expect(result.documents.length).toBeLessThanOrEqual(12);
+    expect(
+      result.documents.filter((d) => d.text.includes('section inventory')).length,
+    ).toBeLessThanOrEqual(2);
+  });
+  it('prioritizes a proposed replacement over unchanged teammates with coherent context keys', () => {
+    const result = retrieve({
+      characterKey: 'Neuvillette',
+      question: 'Should I replace Zhongli with Xilonen?',
+      teamKeys: ['Neuvillette', 'Furina', 'KaedeharaKazuha', 'Zhongli'],
+    });
+    expect(result.entities).toHaveLength(5);
+    expect(result.entities).toEqual(expect.arrayContaining(['Neuvillette', 'Zhongli', 'Xilonen']));
+    expect(result.documents.some((d) => d.characterKey === 'Xilonen')).toBe(true);
+    expect(result.documents.every((d) => result.entities.includes(d.characterKey))).toBe(true);
+  });
+  it.each(['Aether', 'Lumine'])(
+    'retains explicit user form for %s and permits a later override',
+    (characterKey) => {
+      const history = [
+        { role: 'user', content: 'How do I use Dendro Traveler?' },
+        { role: 'assistant', content: 'Try Electro Traveler.' },
+      ];
+      expect(
+        retrieve({ characterKey, question: 'Which artifact stats should I use?', history }).primary
+          ?.key,
+      ).toBe('TravelerDendro');
+      expect(
+        retrieve({ characterKey, question: 'Switch to Electro Traveler instead', history }).primary
+          ?.key,
+      ).toBe('TravelerElectro');
+      expect(
+        retrieve({ characterKey, question: 'Can Traveler support Dendro teams?' }).primary?.forms,
+      ).toHaveLength(7);
+      expect(
+        retrieve({
+          characterKey,
+          question: 'Which stats?',
+          history: [{ role: 'assistant', content: 'Use Dendro Traveler.' }],
+        }).primary?.forms,
+      ).toHaveLength(7);
+    },
+  );
+  it('has no character identities typed as artifact options in the selected release', () => {
+    for (const doc of loadedCharacterKnowledge.corpus.documents) {
+      const names = doc.text.match(/Artifact options mentioned: ([^.]+)\./)?.[1]?.split(', ') ?? [];
+      expect(names).not.toEqual(expect.arrayContaining(['Furina']));
+      expect(names).not.toEqual(expect.arrayContaining(['Kazuha']));
+      expect(names).not.toEqual(expect.arrayContaining(['Zhongli']));
+    }
+  });
+});

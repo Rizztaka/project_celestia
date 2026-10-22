@@ -1,0 +1,17 @@
+{
+  "contractVersion": 1,
+  "key": "OldMercsPal",
+  "gameId": 12201,
+  "name": "Old Merc's Pal",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/oldmercspal.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "b5a15ed108290104d4c6ba5a23ec38d9ee8b6e451fb92ac78434575f43cf90e6",
+    "license": "MIT"
+  },
+  "description": "A battle-tested greatsword that has seen better days and worse.",
+  "weaponType": "Claymore",
+  "rarity": 2,
+  "effectName": "",
+  "refinements": []
+}

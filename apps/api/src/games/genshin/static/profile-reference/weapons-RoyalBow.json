@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "RoyalBow",
+  "gameId": 15404,
+  "name": "Royal Bow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/royalbow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "c244b444fad5b0017f4d762b6cc86b6220debbd2371d3a7d0a80a63a948504c6",
+    "license": "MIT"
+  },
+  "description": "An old longbow that belonged to the erstwhile aristocratic rulers of Mondstadt. Countless generations later, the bowstring is still tight and can still fire arrows with great force.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Focus",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 8%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 2,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 10%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 3,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 12%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 4,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 14%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 5,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 16%. Max 5 stacks. A CRIT Hit removes all stacks."
+    }
+  ]
+}

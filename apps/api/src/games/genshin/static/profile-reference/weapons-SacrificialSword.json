@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SacrificialSword",
+  "gameId": 11403,
+  "name": "Sacrificial Sword",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/sacrificialsword.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "e523db5275b400980e9025e50faeb7d5305a330859df7968e7562fc1bf00f541",
+    "license": "MIT"
+  },
+  "description": "A ceremonial sword that has become petrified over time. The trinkets on it are still visible. It grants the wielder the power to withstand the winds of time.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Composed",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 40% chance to end its own CD. Can only occur once every 30s."
+    },
+    {
+      "rank": 2,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 50% chance to end its own CD. Can only occur once every 26s."
+    },
+    {
+      "rank": 3,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 60% chance to end its own CD. Can only occur once every 22s."
+    },
+    {
+      "rank": 4,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 70% chance to end its own CD. Can only occur once every 19s."
+    },
+    {
+      "rank": 5,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 80% chance to end its own CD. Can only occur once every 16s."
+    }
+  ]
+}

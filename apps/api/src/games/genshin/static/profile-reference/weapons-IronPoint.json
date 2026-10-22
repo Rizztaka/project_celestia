@@ -1,0 +1,17 @@
+{
+  "contractVersion": 1,
+  "key": "IronPoint",
+  "gameId": 13201,
+  "name": "Iron Point",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/ironpoint.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "6f5a410ec3f6ddf61167d5cfb37ed353354dec12510fcabd28fe94390a802b7d",
+    "license": "MIT"
+  },
+  "description": "Sharp and pointy at one end, it is a balanced weapon that is quite popular among travelers.",
+  "weaponType": "Polearm",
+  "rarity": 2,
+  "effectName": "",
+  "refinements": []
+}

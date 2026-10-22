@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "CranesEchoingCall",
+  "gameId": 14515,
+  "name": "Crane's Echoing Call",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/cranesechoingcall.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "3fb1aa8c2e896d861d41cf9d1a144952c1df13ef6c4dc92fc869325ee3c88294",
+    "license": "MIT"
+  },
+  "description": "A fan carved from pure jade, around which swirls an ancient aura of adeptal energy.",
+  "weaponType": "Catalyst",
+  "rarity": 5,
+  "effectName": "Cloudfall Axiom",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "After the equipping character hits an opponent with a Plunging Attack, all nearby party members' Plunging Attacks will deal 28% increased DMG for 20s. When nearby party members hit opponents with Plunging Attacks, they will restore 2.5 Energy to the equipping character. Energy can be restored this way every 0.7s. This energy regain effect can be triggered even if the equipping character is not on the field."
+    },
+    {
+      "rank": 2,
+      "description": "After the equipping character hits an opponent with a Plunging Attack, all nearby party members' Plunging Attacks will deal 41% increased DMG for 20s. When nearby party members hit opponents with Plunging Attacks, they will restore 2.75 Energy to the equipping character. Energy can be restored this way every 0.7s. This energy regain effect can be triggered even if the equipping character is not on the field."
+    },
+    {
+      "rank": 3,
+      "description": "After the equipping character hits an opponent with a Plunging Attack, all nearby party members' Plunging Attacks will deal 54% increased DMG for 20s. When nearby party members hit opponents with Plunging Attacks, they will restore 3 Energy to the equipping character. Energy can be restored this way every 0.7s. This energy regain effect can be triggered even if the equipping character is not on the field."
+    },
+    {
+      "rank": 4,
+      "description": "After the equipping character hits an opponent with a Plunging Attack, all nearby party members' Plunging Attacks will deal 67% increased DMG for 20s. When nearby party members hit opponents with Plunging Attacks, they will restore 3.25 Energy to the equipping character. Energy can be restored this way every 0.7s. This energy regain effect can be triggered even if the equipping character is not on the field."
+    },
+    {
+      "rank": 5,
+      "description": "After the equipping character hits an opponent with a Plunging Attack, all nearby party members' Plunging Attacks will deal 80% increased DMG for 20s. When nearby party members hit opponents with Plunging Attacks, they will restore 3.5 Energy to the equipping character. Energy can be restored this way every 0.7s. This energy regain effect can be triggered even if the equipping character is not on the field."
+    }
+  ]
+}

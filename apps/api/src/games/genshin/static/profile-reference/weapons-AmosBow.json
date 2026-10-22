@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "AmosBow",
+  "gameId": 15502,
+  "name": "Amos' Bow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/amosbow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "5316537e61a4bd60b506aa5e449138e2a640245523b5da5c1d35529a9ab6191c",
+    "license": "MIT"
+  },
+  "description": "An extremely ancient bow that has retained its power despite its original master being long gone. It draws power from everyone and everything in the world, and the further away you are from that which your heart desires, the more powerful it is.",
+  "weaponType": "Bow",
+  "rarity": 5,
+  "effectName": "Strong-Willed",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Normal and Charged Attack DMG by 12%. After a Normal or Charged Attack is fired, DMG dealt increases by a further 8% every 0.1s the arrow is in the air for up to 5 times."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Normal and Charged Attack DMG by 15%. After a Normal or Charged Attack is fired, DMG dealt increases by a further 10% every 0.1s the arrow is in the air for up to 5 times."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Normal and Charged Attack DMG by 18%. After a Normal or Charged Attack is fired, DMG dealt increases by a further 12% every 0.1s the arrow is in the air for up to 5 times."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Normal and Charged Attack DMG by 21%. After a Normal or Charged Attack is fired, DMG dealt increases by a further 14% every 0.1s the arrow is in the air for up to 5 times."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Normal and Charged Attack DMG by 24%. After a Normal or Charged Attack is fired, DMG dealt increases by a further 16% every 0.1s the arrow is in the air for up to 5 times."
+    }
+  ]
+}

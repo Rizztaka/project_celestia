@@ -1,0 +1,23 @@
+{
+  "contractVersion": 1,
+  "key": "BlackTassel",
+  "gameId": 13303,
+  "name": "Black Tassel",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/blacktassel.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "1ad0d391c680877dd394f4bd4d54a5a53f7a29062e71245b3088ba4c34340ff8",
+    "license": "MIT"
+  },
+  "description": "An exceptionally powerful polearm that also offers a simple but elegant solution to the issue of the easily stained white tassel.",
+  "weaponType": "Polearm",
+  "rarity": 3,
+  "effectName": "Bane of the Soft",
+  "refinements": [
+    { "rank": 1, "description": "Increases DMG against slimes by 40%." },
+    { "rank": 2, "description": "Increases DMG against slimes by 50%." },
+    { "rank": 3, "description": "Increases DMG against slimes by 60%." },
+    { "rank": 4, "description": "Increases DMG against slimes by 70%." },
+    { "rank": 5, "description": "Increases DMG against slimes by 80%." }
+  ]
+}

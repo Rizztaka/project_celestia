@@ -1,0 +1,111 @@
+import OpenAI from 'openai';
+
+import { env } from '../config/env.js';
+
+export interface AdvisorProvider {
+  readonly provider: string;
+  readonly model: string;
+  complete(
+    messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
+    maxTokens: number,
+    signal?: AbortSignal,
+  ): Promise<string>;
+}
+export class AdvisorProviderFailure extends Error {
+  constructor(
+    public readonly reason: 'quota' | 'timeout' | 'provider_failure',
+    public readonly retryAfterSeconds: number | null = null,
+  ) {
+    super('AI provider unavailable');
+  }
+}
+export function configuredAdvisorProvider(): AdvisorProvider | null {
+  const provider = env.CELESTIA_AI_PROVIDER,
+    model = env.CELESTIA_AI_MODEL,
+    groqGptOss = provider === 'groq' && /^openai\/gpt-oss-(?:20b|120b)$/.test(model ?? '');
+  if (provider === 'disabled' || !model) return null;
+  const key = provider === 'groq' ? env.GROQ_API_KEY : env.OPENROUTER_API_KEY;
+  if (!key) return null;
+  const client = new OpenAI({
+    apiKey: key,
+    baseURL:
+      provider === 'groq' ? 'https://api.groq.com/openai/v1' : 'https://openrouter.ai/api/v1',
+    timeout: 12000,
+    maxRetries: 0,
+    ...(provider === 'openrouter'
+      ? {
+          defaultHeaders: {
+            'HTTP-Referer': env.API_ORIGIN || 'https://celestia.app',
+            'X-Title': 'Project Celestia',
+          },
+        }
+      : {}),
+  });
+  return {
+    provider,
+    model,
+    async complete(messages, maxTokens, signal) {
+      try {
+        const response = await client.chat.completions.create(
+          {
+            model,
+            messages,
+            max_tokens: maxTokens,
+            response_format: { type: 'json_object' },
+            ...(groqGptOss
+              ? {
+                  reasoning_effort: 'low' as const,
+                  include_reasoning: false,
+                }
+              : {}),
+            ...(provider === 'openrouter' ? { provider: { allow_fallbacks: false } } : {}),
+          },
+          { signal },
+        );
+        const text = response.choices[0]?.message.content;
+        if (!text) throw new AdvisorProviderFailure('provider_failure');
+        return text;
+      } catch (error) {
+        if (error instanceof AdvisorProviderFailure) throw error;
+        if (
+          signal?.aborted ||
+          (error instanceof Error && /timeout|abort/i.test(`${error.name} ${error.message}`))
+        )
+          throw new AdvisorProviderFailure('timeout');
+        const status = (error as { status?: number }).status;
+        if (status === 429) {
+          const raw = (error as { headers?: Headers }).headers?.get?.('retry-after');
+          const seconds = raw && /^\d+$/.test(raw) ? Math.min(86400, Math.max(1, Number(raw))) : 60;
+          throw new AdvisorProviderFailure('quota', seconds);
+        }
+        if (status === 408 || status === 504) {
+          throw new AdvisorProviderFailure('timeout');
+        }
+        throw new AdvisorProviderFailure('provider_failure');
+      }
+    },
+  };
+}
+// Additional local ceiling; existing admission remains authoritative across replicas.
+const usage = new Map<string, { day: string; count: number }>();
+let globalDay = '',
+  globalCount = 0;
+export function reserveAdvisorUsage(identity: string, now = new Date()) {
+  const day = now.toISOString().slice(0, 10);
+  if (globalDay !== day) {
+    globalDay = day;
+    globalCount = 0;
+    usage.clear();
+  }
+  const previous = usage.get(identity),
+    count = previous?.day === day ? previous.count : 0;
+  if (
+    globalCount >= env.CELESTIA_AI_DAILY_REQUESTS ||
+    count >= env.CELESTIA_AI_USER_DAILY_REQUESTS ||
+    (!previous && usage.size >= 1024)
+  )
+    return false;
+  globalCount++;
+  usage.set(identity, { day, count: count + 1 });
+  return true;
+}

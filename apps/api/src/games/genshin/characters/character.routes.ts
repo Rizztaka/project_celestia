@@ -17,5 +17,8 @@ router.get('/characters', requireAuth, characterController.listCharacters);
 router.get('/focus', requireAuth, characterController.listFocus);
 router.patch('/characters/:characterKey/focus', requireAuth, characterController.setFocus);
 router.get('/characters/:characterKey/equipment', requireAuth, characterController.getEquipment);
+router.get('/characters/:characterKey/reference', requireAuth, characterController.getReference);
+router.get('/references/weapons/:itemKey', requireAuth, characterController.getWeaponReference);
+router.get('/references/artifacts/:itemKey', requireAuth, characterController.getArtifactReference);
 
 export { router as characterRoutes };

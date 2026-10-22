@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "LionsRoar",
+  "gameId": 11405,
+  "name": "Lion's Roar",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/lionsroar.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "a8ad834ce4e43ed9aa13eceaa24afd6622a49e8ff9f64a6678c942fc3a28d4e3",
+    "license": "MIT"
+  },
+  "description": "A sharp blade with extravagant carvings that somehow does not compromise on durability and sharpness. It roars like a lion as it cuts through the air.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Bane of Fire and Thunder",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases DMG against opponents affected by Pyro or Electro by 20%."
+    },
+    {
+      "rank": 2,
+      "description": "Increases DMG against opponents affected by Pyro or Electro by 24%."
+    },
+    {
+      "rank": 3,
+      "description": "Increases DMG against opponents affected by Pyro or Electro by 28%."
+    },
+    {
+      "rank": 4,
+      "description": "Increases DMG against opponents affected by Pyro or Electro by 32%."
+    },
+    {
+      "rank": 5,
+      "description": "Increases DMG against opponents affected by Pyro or Electro by 36%."
+    }
+  ]
+}

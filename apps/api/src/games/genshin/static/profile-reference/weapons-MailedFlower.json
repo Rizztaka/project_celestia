@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "MailedFlower",
+  "gameId": 12418,
+  "name": "Mailed Flower",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/mailedflower.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "ddaec2efb885e364f2d3b3600cd8e02d293ae6569b92ed5363f7dd26c456a366",
+    "license": "MIT"
+  },
+  "description": "A graceful and elegant greatsword that is decorated with flowers and ribbons.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Whispers of Wind and Flower",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Within 8s after the character's Elemental Skill hits an opponent or the character triggers an Elemental Reaction, their ATK and Elemental Mastery will be increased by 12% and 48 respectively."
+    },
+    {
+      "rank": 2,
+      "description": "Within 8s after the character's Elemental Skill hits an opponent or the character triggers an Elemental Reaction, their ATK and Elemental Mastery will be increased by 15% and 60 respectively."
+    },
+    {
+      "rank": 3,
+      "description": "Within 8s after the character's Elemental Skill hits an opponent or the character triggers an Elemental Reaction, their ATK and Elemental Mastery will be increased by 18% and 72 respectively."
+    },
+    {
+      "rank": 4,
+      "description": "Within 8s after the character's Elemental Skill hits an opponent or the character triggers an Elemental Reaction, their ATK and Elemental Mastery will be increased by 21% and 84 respectively."
+    },
+    {
+      "rank": 5,
+      "description": "Within 8s after the character's Elemental Skill hits an opponent or the character triggers an Elemental Reaction, their ATK and Elemental Mastery will be increased by 24% and 96 respectively."
+    }
+  ]
+}

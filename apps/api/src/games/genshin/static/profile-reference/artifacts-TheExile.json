@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "TheExile",
+  "gameId": 10009,
+  "name": "The Exile",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/theexile.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "74a207f4ed5128454216c0b5b677a4c504226c9314ab7463cf8104baea19f40a",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Exile's Flower",
+      "description": "A withered flower worn on the shirt. Its former owner insisted on wearing it even in exile, so it must mean something."
+    },
+    {
+      "slot": "plume",
+      "name": "Exile's Feather",
+      "description": "Not an actual accessory per se. Just a random bird feather that was found somewhere in the wilderness by the exile."
+    },
+    {
+      "slot": "sands",
+      "name": "Exile's Pocket Watch",
+      "description": "Even after the crystal watch face was shattered and the hands lost, its former owner kept it until the end."
+    },
+    {
+      "slot": "goblet",
+      "name": "Exile's Goblet",
+      "description": "A dull goblet made of a heavy metal. It was once inlaid with gemstones, but they have since been stripped off."
+    },
+    {
+      "slot": "circlet",
+      "name": "Exile's Circlet",
+      "description": "A prestigious circlet. However, the royal insignia has been scratched out, and it is no longer the symbol of distinguished status that it once was."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Energy Recharge +20%" },
+    {
+      "pieces": 4,
+      "description": "Using an Elemental Burst regenerates 2 Energy for all party members (excluding the wearer) every 2s for 6s. This effect cannot stack."
+    }
+  ]
+}

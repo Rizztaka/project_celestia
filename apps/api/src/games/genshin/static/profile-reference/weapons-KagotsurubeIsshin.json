@@ -1,0 +1,22 @@
+{
+  "contractVersion": 1,
+  "key": "KagotsurubeIsshin",
+  "gameId": 11416,
+  "name": "Kagotsurube Isshin",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/kagotsurubeisshin.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "8ca6c03f78a02db464fd55d102e35278ee4880430cce4fae9a8371b29a5f14f3",
+    "license": "MIT"
+  },
+  "description": "This famed blade was born in a nation to the far north. But in the name of \"Isshin,\" it was stained with many a dark deed on its home-bound journey.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Isshin Art Clarity",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "When a Normal, Charged, or Plunging Attack hits an opponent, it will whip up a Hewing Gale, dealing AoE DMG equal to 180% of ATK and increasing ATK by 15% for 8s. This effect can be triggered once every 8s."
+    }
+  ]
+}

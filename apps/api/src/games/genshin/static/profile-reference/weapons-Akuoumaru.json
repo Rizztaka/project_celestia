@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "Akuoumaru",
+  "gameId": 12416,
+  "name": "Akuoumaru",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/akuoumaru.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "3b26a040093d508a5174105c86807e9d40a8f4afdbec6ad8f2d85135bf6ed408",
+    "license": "MIT"
+  },
+  "description": "The beloved sword of the legendary \"Akuou.\" The blade is huge and majestic, but is surprisingly easy to wield.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Watatsumi Wavewalker",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "For every point of the entire party's combined maximum Energy capacity, the Elemental Burst DMG of the character equipping this weapon is increased by 0.12%. A maximum of 40% increased Elemental Burst DMG can be achieved this way."
+    },
+    {
+      "rank": 2,
+      "description": "For every point of the entire party's combined maximum Energy capacity, the Elemental Burst DMG of the character equipping this weapon is increased by 0.15%. A maximum of 50% increased Elemental Burst DMG can be achieved this way."
+    },
+    {
+      "rank": 3,
+      "description": "For every point of the entire party's combined maximum Energy capacity, the Elemental Burst DMG of the character equipping this weapon is increased by 0.18%. A maximum of 60% increased Elemental Burst DMG can be achieved this way."
+    },
+    {
+      "rank": 4,
+      "description": "For every point of the entire party's combined maximum Energy capacity, the Elemental Burst DMG of the character equipping this weapon is increased by 0.21%. A maximum of 70% increased Elemental Burst DMG can be achieved this way."
+    },
+    {
+      "rank": 5,
+      "description": "For every point of the entire party's combined maximum Energy capacity, the Elemental Burst DMG of the character equipping this weapon is increased by 0.24%. A maximum of 80% increased Elemental Burst DMG can be achieved this way."
+    }
+  ]
+}

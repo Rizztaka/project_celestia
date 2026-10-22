@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "TheUnforged",
+  "gameId": 12504,
+  "name": "The Unforged",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/theunforged.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "3219b0be26287ece2fdb0bd39e07a80e306d0d69a50df981f77979b1dcfad65f",
+    "license": "MIT"
+  },
+  "description": "Capable of driving away evil spirits and wicked people alike, this edgeless claymore seems to possess divine might.",
+  "weaponType": "Claymore",
+  "rarity": 5,
+  "effectName": "Golden Majesty",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Shield Strength by 20%. Scoring hits on opponents increases ATK by 4% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Shield Strength by 25%. Scoring hits on opponents increases ATK by 5% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Shield Strength by 30%. Scoring hits on opponents increases ATK by 6% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Shield Strength by 35%. Scoring hits on opponents increases ATK by 7% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Shield Strength by 40%. Scoring hits on opponents increases ATK by 8% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%."
+    }
+  ]
+}

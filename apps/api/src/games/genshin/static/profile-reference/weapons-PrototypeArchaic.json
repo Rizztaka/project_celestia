@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "PrototypeArchaic",
+  "gameId": 12406,
+  "name": "Prototype Archaic",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/prototypearchaic.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "bde9f263ff4b781dbad0e847d8391c34059801ee008c087ed5eedf72e784bb96",
+    "license": "MIT"
+  },
+  "description": "An ancient greatsword discovered in the Blackcliff Forge. It swings with such an immense force that one feels it could cut straight through reality itself.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Crush",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "On hit, Normal or Charged Attacks have a 50% chance to deal an additional 240% ATK DMG to opponents within a small AoE. Can only occur once every 15s."
+    },
+    {
+      "rank": 2,
+      "description": "On hit, Normal or Charged Attacks have a 50% chance to deal an additional 300% ATK DMG to opponents within a small AoE. Can only occur once every 15s."
+    },
+    {
+      "rank": 3,
+      "description": "On hit, Normal or Charged Attacks have a 50% chance to deal an additional 360% ATK DMG to opponents within a small AoE. Can only occur once every 15s."
+    },
+    {
+      "rank": 4,
+      "description": "On hit, Normal or Charged Attacks have a 50% chance to deal an additional 420% ATK DMG to opponents within a small AoE. Can only occur once every 15s."
+    },
+    {
+      "rank": 5,
+      "description": "On hit, Normal or Charged Attacks have a 50% chance to deal an additional 480% ATK DMG to opponents within a small AoE. Can only occur once every 15s."
+    }
+  ]
+}

@@ -1,0 +1,257 @@
+// Provider-free integration probes. Controlled transport is never model acceptance.
+import assert from 'node:assert/strict';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+import { config } from 'dotenv';
+
+import { repoRoot } from './recovery/process.mjs';
+
+if (process.argv.length !== 2) throw Error('This probe sends no provider requests.');
+Object.assign(process.env, {
+  NODE_ENV: 'test',
+  DOTENV_CONFIG_PATH: process.platform === 'win32' ? 'NUL' : '/dev/null',
+  DATABASE_URL: 'postgresql://synthetic:synthetic@127.0.0.1:1/never_connected',
+  JWT_SECRET: 'connection-probe-synthetic-never-authenticated',
+  CELESTIA_AI_PROVIDER: 'disabled',
+});
+const [
+  { characterAdvisorRequestSchema },
+  store,
+  retrieval,
+  { CharacterAdvisorService },
+  mechanics,
+] = await Promise.all([
+  import('@celestia/api-contracts'),
+  import('../src/games/genshin/intelligence/character-knowledge/knowledge.store.ts'),
+  import('../src/games/genshin/intelligence/character-knowledge/knowledge.retrieval.ts'),
+  import('../src/games/genshin/intelligence/character-knowledge/advisor.service.ts'),
+  import('../src/games/genshin/intelligence/character-knowledge/knowledge.mechanics.ts'),
+]);
+const output = join(repoRoot, 'docs/plans/character-knowledge-assistant/api-connection');
+const json = (path) => JSON.parse(readFileSync(path, 'utf8'));
+const save = (name, data) =>
+  writeFileSync(join(output, name), JSON.stringify(data, null, 2) + '\n');
+const candidate = json(join(output, '../all-kqm-verification/candidate.json')).release;
+const active = store.loadCharacterKnowledge();
+const knowledge = store.loadCharacterKnowledge(store.defaultKnowledgeRoot, candidate);
+const cases = [
+  {
+    id: 'alhaitham-build-items',
+    characterKey: 'Alhaitham',
+    question:
+      'How should I build Alhaitham for Spread? Compare Deepwood Memories with Gilded Dreams, explaining piece counts and conditions.',
+    requireStrategy: true,
+    items: ['Deepwood Memories', 'Gilded Dreams'],
+  },
+  {
+    id: 'alhaitham-changed-context',
+    characterKey: 'Alhaitham',
+    question:
+      'I changed my goal: my team now has no Electro character. Which earlier Spread advice no longer applies? Do not assume I own any alternative teammates.',
+    previousCase: 'alhaitham-build-items',
+    history: [
+      {
+        role: 'user',
+        content: 'How should I build Alhaitham for Spread with an Electro teammate?',
+      },
+    ],
+    requireStrategy: true,
+  },
+  {
+    id: 'raiden-off-field',
+    characterKey: 'RaidenShogun',
+    question:
+      'How does Raiden work off-field for Hyperbloom with Nahida and Xingqiu? Explain the enabling Skill mechanic and role conditions.',
+    requireStrategy: true,
+  },
+  {
+    id: 'neuvillette-build',
+    characterKey: 'Neuvillette',
+    question:
+      'How should I build Neuvillette around charged attacks? Explain HP and artifact conditions without inventing my equipment.',
+    requireStrategy: true,
+  },
+  {
+    id: 'neuvillette-replacement',
+    characterKey: 'Neuvillette',
+    teamKeys: ['Neuvillette', 'Furina', 'KaedeharaKazuha', 'Zhongli'],
+    question:
+      'In a hypothetical Neuvillette, Furina, Kazuha, Zhongli team, should I replace Zhongli with Xilonen? Compare utility and defensive conditions without assuming ownership.',
+    replacement: 'Xilonen',
+  },
+  {
+    id: 'traveler-follow-up',
+    characterKey: 'Aether',
+    question: 'How does the Skill fit this role now?',
+    history: [{ role: 'user', content: 'I mean Dendro Traveler.' }],
+    expectedPrimary: 'TravelerDendro',
+  },
+];
+let transported;
+const provider = {
+  provider: 'controlled-connection-adapter',
+  model: 'not-live-ai',
+  async complete(messages) {
+    if (messages[0].content.startsWith('Audit'))
+      return JSON.stringify({ supported: true, issues: [] });
+    transported = JSON.parse(messages[1].content);
+    const doc =
+      transported.evidence.find((d) => d.id.endsWith(':combat2')) ?? transported.evidence[0];
+    return JSON.stringify({
+      segments: [
+        {
+          text: 'Controlled transport verified; the cited conditions bound any advice.',
+          basis: 'suggestion',
+          evidenceIds: [doc.id],
+          support: doc.text.slice(0, 100),
+        },
+      ],
+      followUp: 'What role do you want to use?',
+    });
+  },
+};
+const service = new CharacterAdvisorService(
+  { readManyForUser: async () => [] },
+  provider,
+  knowledge,
+  () => true,
+);
+const results = [];
+for (const entry of cases) {
+  const input = characterAdvisorRequestSchema.parse({
+    characterKey: entry.characterKey,
+    question: entry.question,
+    useRecordedContext: false,
+    teamKeys: entry.teamKeys ?? [],
+    history: entry.history ?? [],
+  });
+  const retrieved = retrieval.retrieveCharacterKnowledge(input, knowledge.corpus);
+  const response = await service.ask('connection-synthetic', input);
+  const checks = {
+    answered: response.status === 'answered',
+    releaseMatches: JSON.stringify(response.release) === JSON.stringify(candidate),
+    bounded: retrieved.characters <= 9000 && retrieved.documents.length <= 12,
+    skill: retrieved.documents.some((d) => d.id === retrieved.primary.key + ':combat2'),
+    strategy:
+      !entry.requireStrategy ||
+      retrieved.documents.some(
+        (d) =>
+          d.characterKey === retrieved.primary.key &&
+          (d.id.includes(':kqm:') || d.review === 'agent_reviewed_note'),
+      ),
+    items: (entry.items ?? []).every((name) =>
+      retrieved.documents.some((d) => d.id.includes(':item:') && d.title === name),
+    ),
+    replacement:
+      !entry.replacement || retrieved.documents.some((d) => d.characterKey === entry.replacement),
+    primary: !entry.expectedPrimary || response.characterKey === entry.expectedPrimary,
+    transport:
+      JSON.stringify(transported.evidence.map((d) => d.id)) ===
+      JSON.stringify(retrieved.documents.map((d) => d.id)),
+    citations:
+      response.citations.length > 0 &&
+      response.citations.every(
+        (c) =>
+          retrieved.documents.some((d) => d.id === c.id) &&
+          /^https:\/\//.test(c.url) &&
+          c.revision &&
+          c.sha256,
+      ),
+    noOwnershipAssumed: transported.SERVER_RECORDS === null,
+    historyPreserved: transported.history.length === input.history.length,
+  };
+  results.push({
+    id: entry.id,
+    input,
+    checks,
+    response,
+    contextDigest: retrieved.contextDigest,
+    evidence: retrieved.documents,
+    transportedCharacters: JSON.stringify(transported).length,
+  });
+}
+const numeric = mechanics.talentParameter(knowledge.mechanics, 'Aino', 'combat1', 'param1', 1);
+assert.equal(numeric.value, 0.664986);
+assert.equal(mechanics.talentParameter(knowledge.mechanics, 'Aino', 'combat1', 'param1', 16), null);
+assert.deepEqual(store.loadCharacterKnowledge().release, active.release);
+const settings = {};
+config({ path: join(repoRoot, 'apps/api/.env'), processEnv: settings, quiet: true });
+const queuePath = join(output, '../all-kqm-verification/model-queue.json');
+const queue = json(queuePath);
+const day = new Date().toISOString().slice(0, 10);
+const configured = {
+  provider: settings.CELESTIA_AI_PROVIDER ?? 'disabled',
+  model: settings.CELESTIA_AI_MODEL ?? null,
+  freeOnly: settings.CELESTIA_AI_FREE_ONLY !== 'false',
+  keyPresent: Boolean(
+    settings[settings.CELESTIA_AI_PROVIDER === 'groq' ? 'GROQ_API_KEY' : 'OPENROUTER_API_KEY'],
+  ),
+  dailyCeiling: Number(settings.CELESTIA_AI_DAILY_REQUESTS ?? 12),
+  userCeiling: Number(settings.CELESTIA_AI_USER_DAILY_REQUESTS ?? 5),
+};
+const reserved = queue.day === day ? queue.requestsReservedToday : 0;
+const failures = results.flatMap((r) =>
+  Object.entries(r.checks)
+    .filter(([, pass]) => !pass)
+    .map(([name]) => r.id + ':' + name),
+);
+save('controlled-results.json', {
+  kind: 'controlled-not-real-model',
+  active: active.release,
+  candidate,
+  profiles: knowledge.corpus.profiles.length,
+  documents: knowledge.corpus.documents.length,
+  numericalCharacters: Object.keys(knowledge.mechanics.characters).length,
+  items: knowledge.mechanics.items.length,
+  numericLookup: numeric,
+  cases: results,
+  failures,
+});
+save('provider-preflight.json', {
+  checkedAt: new Date().toISOString(),
+  configured,
+  ledger: {
+    path: queuePath,
+    day: queue.day,
+    requestsReservedToday: queue.requestsReservedToday,
+    userRequestsReservedToday: queue.userRequestsReservedToday ?? null,
+  },
+  actualRequestsSent: 0,
+  liveState:
+    reserved >= configured.dailyCeiling
+      ? 'blocked-persisted-daily-ceiling'
+      : 'requires-deliberate-paced-evaluation',
+  candidatePendingCases: queue.cases.filter((c) => c.state === 'model-evaluation-pending').length,
+});
+save('pending-live-cases.json', {
+  release: candidate,
+  state: 'pending-real-provider-quality-assessment',
+  cases: cases.filter((c) => c.id !== 'traveler-follow-up'),
+  priorQualityRegressions: json(join(output, '../all-kqm-verification/actual-model-results.json'))
+    .cases.filter((c) => c.assessment?.state === 'quality-failed')
+    .map((c) => ({
+      id: c.id,
+      input: c.input,
+      previousFinding: c.assessment.rationale,
+      state: 'must-retest-current-candidate-and-policy',
+    })),
+  requirements: [
+    'Use existing configured provider and shared persisted model-queue allowance; at most two advice attempts per invocation with existing pacing.',
+    'For changed-context case include the actual accepted preceding answer in history.',
+    'Assess useful output and citation entailment independently of the same-model audit.',
+    'Do not select candidate until these checks pass and prior live quality findings are addressed.',
+  ],
+});
+console.log(
+  JSON.stringify({
+    active: active.release,
+    candidate,
+    controlledCases: results.length,
+    failures,
+    liveRequests: 0,
+    reserved,
+    ceiling: configured.dailyCeiling,
+  }),
+);
+if (failures.length) process.exitCode = 1;

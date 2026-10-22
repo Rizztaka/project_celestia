@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "AlleyHunter",
+  "gameId": 15410,
+  "name": "Alley Hunter",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/alleyhunter.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "d36c2af00dc1be8c907ec6914cc4391c09149f7d4008d3afbedf22331cd60e73",
+    "license": "MIT"
+  },
+  "description": "An intricate, opulent longbow. It once belonged to a gentleman thief who was never caught.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Oppidan Ambush",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "While the character equipped with this weapon is in the party but not on the field, their DMG increases by 2% every second up to a max of 20%. When the character is on the field for more than 4s, the aforementioned DMG buff decreases by 4% per second until it reaches 0%."
+    },
+    {
+      "rank": 2,
+      "description": "While the character equipped with this weapon is in the party but not on the field, their DMG increases by 2.5% every second up to a max of 25%. When the character is on the field for more than 4s, the aforementioned DMG buff decreases by 5% per second until it reaches 0%."
+    },
+    {
+      "rank": 3,
+      "description": "While the character equipped with this weapon is in the party but not on the field, their DMG increases by 3% every second up to a max of 30%. When the character is on the field for more than 4s, the aforementioned DMG buff decreases by 6% per second until it reaches 0%."
+    },
+    {
+      "rank": 4,
+      "description": "While the character equipped with this weapon is in the party but not on the field, their DMG increases by 3.5% every second up to a max of 35%. When the character is on the field for more than 4s, the aforementioned DMG buff decreases by 7% per second until it reaches 0%."
+    },
+    {
+      "rank": 5,
+      "description": "While the character equipped with this weapon is in the party but not on the field, their DMG increases by 4% every second up to a max of 40%. When the character is on the field for more than 4s, the aforementioned DMG buff decreases by 8% per second until it reaches 0%."
+    }
+  ]
+}

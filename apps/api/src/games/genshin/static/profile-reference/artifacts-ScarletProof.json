@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "ScarletProof",
+  "gameId": 15047,
+  "name": "Scarlet Proof",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/scarletproof.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "66cb90e583acf603c6d46121db6a08c4a3bf5b129a5c09d7f6f7d5bc13745d01",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Honor to Your Devotion",
+      "description": "A bright red flower ornament that symbolizes blazing glory."
+    },
+    {
+      "slot": "plume",
+      "name": "Glory to Your Legacy",
+      "description": "A bright red quill pen, granted to the youngest blood."
+    },
+    {
+      "slot": "sands",
+      "name": "Time Gifted Unto You",
+      "description": "A bright red pocket watch marking the time allotted for a conversation."
+    },
+    {
+      "slot": "goblet",
+      "name": "Chalice of Your Blood and Sorrow",
+      "description": "A bright red wine bottle. May you never learn what's been in it."
+    },
+    {
+      "slot": "circlet",
+      "name": "Testament to Your Faith",
+      "description": "A bright red helmet. Hopefully it has, once upon a time, protected someone."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "ATK +18%." },
+    {
+      "pieces": 4,
+      "description": "Increases the equipping character's CRIT Rate by 16%, and their Stellar Swirl reaction DMG dealt by 40%, for 10s after they trigger a Stellar Swirl reaction."
+    }
+  ]
+}

@@ -70,22 +70,19 @@ describe('C5 real navigation, rendering and transport regressions', () => {
     ['/roster/Opaque%20%2F%20%E5%AD%97', 'Characters'],
     ['/planner?tab=farming&goal=opaque%2Fid&status=paused', 'Planner'],
     ['/profile', 'Settings &amp; profile'],
+    ['/intelligence', 'Build lab'],
+    ['/characters/Albedo', 'Characters'],
   ])(
-    'marks the correct destination for %s and preserves all legacy destinations',
+    'marks the correct destination for %s and preserves supported destinations',
     (route, label) => {
       const html = render(Navigation, route);
-      expect(html).toMatch(new RegExp(String.raw`aria-current="page"[^>]*>\s*${label}<`));
-      for (const path of [
-        '/import',
-        '/inventory',
-        '/profile',
-        '/intelligence',
-        '/simulators',
-        '/endgame',
-        '/nikke/roster',
-      ])
+      expect(html).toMatch(
+        new RegExp(String.raw`aria-current="page"[^>]*>(?:(?!</a>)[\s\S])*?${label}<`),
+      );
+      for (const path of ['/import', '/inventory', '/profile', '/intelligence', '/endgame'])
         expect(html).toContain(`href="${path}"`);
       expect(html).toContain('href="#companion-content"');
+      expect(html).not.toContain('href="/simulators"');
       expect(html).not.toContain('<main');
     },
   );

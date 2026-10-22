@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "MaidenBeloved",
+  "gameId": 14004,
+  "name": "Maiden Beloved",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/maidenbeloved.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "213b720882c3461b8f246ec7359a2f540b3417e73c6e35f064371846038eab4b",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Maiden's Distant Love",
+      "description": "A fragrant flower that will bloom for all eternity and never wither."
+    },
+    {
+      "slot": "plume",
+      "name": "Maiden's Heart-stricken Infatuation",
+      "description": "A feathered accessory that carries the longing for a certain someone, like a migratory bird on the wind."
+    },
+    {
+      "slot": "sands",
+      "name": "Maiden's Passing Youth",
+      "description": "The hands of time will never come to an end, but the same cannot not be said for those cherished years of the young maiden's life when she was doted upon."
+    },
+    {
+      "slot": "goblet",
+      "name": "Maiden's Fleeting Leisure",
+      "description": "A vessel made with sweet black tea in mind rather than bitter liquor."
+    },
+    {
+      "slot": "circlet",
+      "name": "Maiden's Fading Beauty",
+      "description": "A meticulously well-maintained woman's hat that keeps wrinkles safely out of sight."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Character Healing Effectiveness +15%" },
+    {
+      "pieces": 4,
+      "description": "Using an Elemental Skill or Burst increases healing received by all party members by 20% for 10s."
+    }
+  ]
+}

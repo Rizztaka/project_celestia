@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "WintersHeavyHeart",
+  "gameId": 14437,
+  "name": "Winter's Heavy Heart",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/wintersheavyheart.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "606f761d6b7cee3d8f726706742dd3542b82fce99951ab0a7019dc4f1811889e",
+    "license": "MIT"
+  },
+  "description": "A ceremonial artifact formed from the purest ice and snow. Legend has it that generations of Snegovik lords used it in coronation ceremonies until five hundred years ago.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Secrets of Frost",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "The equipping character gains \"Silver-Tinged Blood Pact\": The equipping character's Elemental Mastery is increased by 24 for every Cryo character present in the party. For every Electro character present in the party, the equipping character's ATK is increased by 4.8%. Up to 4 Cryo or Electro characters can provide the above buffs.\nRadiance: Stellar Glimmer: The effect of Silver-Tinged Blood Pact is changed to: For every Cryo or Electro character present in the party, the equipping character gains a 20-point Elemental Mastery boost and deals 6% increased Stellar Glimmer reaction DMG."
+    },
+    {
+      "rank": 2,
+      "description": "The equipping character gains \"Silver-Tinged Blood Pact\": The equipping character's Elemental Mastery is increased by 30 for every Cryo character present in the party. For every Electro character present in the party, the equipping character's ATK is increased by 6%. Up to 4 Cryo or Electro characters can provide the above buffs.\nRadiance: Stellar Glimmer: The effect of Silver-Tinged Blood Pact is changed to: For every Cryo or Electro character present in the party, the equipping character gains a 25-point Elemental Mastery boost and deals 7.5% increased Stellar Glimmer reaction DMG."
+    },
+    {
+      "rank": 3,
+      "description": "The equipping character gains \"Silver-Tinged Blood Pact\": The equipping character's Elemental Mastery is increased by 36 for every Cryo character present in the party. For every Electro character present in the party, the equipping character's ATK is increased by 7.2%. Up to 4 Cryo or Electro characters can provide the above buffs.\nRadiance: Stellar Glimmer: The effect of Silver-Tinged Blood Pact is changed to: For every Cryo or Electro character present in the party, the equipping character gains a 30-point Elemental Mastery boost and deals 9% increased Stellar Glimmer reaction DMG."
+    },
+    {
+      "rank": 4,
+      "description": "The equipping character gains \"Silver-Tinged Blood Pact\": The equipping character's Elemental Mastery is increased by 42 for every Cryo character present in the party. For every Electro character present in the party, the equipping character's ATK is increased by 8.4%. Up to 4 Cryo or Electro characters can provide the above buffs.\nRadiance: Stellar Glimmer: The effect of Silver-Tinged Blood Pact is changed to: For every Cryo or Electro character present in the party, the equipping character gains a 35-point Elemental Mastery boost and deals 10.5% increased Stellar Glimmer reaction DMG."
+    },
+    {
+      "rank": 5,
+      "description": "The equipping character gains \"Silver-Tinged Blood Pact\": The equipping character's Elemental Mastery is increased by 48 for every Cryo character present in the party. For every Electro character present in the party, the equipping character's ATK is increased by 9.6%. Up to 4 Cryo or Electro characters can provide the above buffs.\nRadiance: Stellar Glimmer: The effect of Silver-Tinged Blood Pact is changed to: For every Cryo or Electro character present in the party, the equipping character gains a 40-point Elemental Mastery boost and deals 12% increased Stellar Glimmer reaction DMG."
+    }
+  ]
+}

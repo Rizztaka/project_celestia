@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "Azurelight",
+  "gameId": 11517,
+  "name": "Azurelight",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/azurelight.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "e356805cddf45cc6d0211de835fcee3ba9f56bb12e94438815c0001a34c70081",
+    "license": "MIT"
+  },
+  "description": "This blade was once pure and pristine as a white dawn star, but it has since been tinted a deep, dark blue.",
+  "weaponType": "Sword",
+  "rarity": 5,
+  "effectName": "Whitehill's Bestowal",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Within 12s after an Elemental Skill is used, ATK is increased by 24%. During this time, when the equipping character has 0 Energy, ATK will be further increased by 24%, and CRIT DMG will be increased by 40%."
+    },
+    {
+      "rank": 2,
+      "description": "Within 12s after an Elemental Skill is used, ATK is increased by 30%. During this time, when the equipping character has 0 Energy, ATK will be further increased by 30%, and CRIT DMG will be increased by 50%."
+    },
+    {
+      "rank": 3,
+      "description": "Within 12s after an Elemental Skill is used, ATK is increased by 36%. During this time, when the equipping character has 0 Energy, ATK will be further increased by 36%, and CRIT DMG will be increased by 60%."
+    },
+    {
+      "rank": 4,
+      "description": "Within 12s after an Elemental Skill is used, ATK is increased by 42%. During this time, when the equipping character has 0 Energy, ATK will be further increased by 42%, and CRIT DMG will be increased by 70%."
+    },
+    {
+      "rank": 5,
+      "description": "Within 12s after an Elemental Skill is used, ATK is increased by 48%. During this time, when the equipping character has 0 Energy, ATK will be further increased by 48%, and CRIT DMG will be increased by 80%."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "contractVersion": 1,
+  "key": "TheStringless",
+  "gameId": 15402,
+  "name": "The Stringless",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/thestringless.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2f3ce5951a09b5d508dc03924cce7369982a5b3ef488f435878d3ecc7986b89c",
+    "license": "MIT"
+  },
+  "description": "A bow that once served as an extraordinary instrument. It is no longer capable of getting people up and dancing.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Arrowless Song",
+  "refinements": [
+    { "rank": 1, "description": "Increases Elemental Skill and Elemental Burst DMG by 24%." },
+    { "rank": 2, "description": "Increases Elemental Skill and Elemental Burst DMG by 30%." },
+    { "rank": 3, "description": "Increases Elemental Skill and Elemental Burst DMG by 36%." },
+    { "rank": 4, "description": "Increases Elemental Skill and Elemental Burst DMG by 42%." },
+    { "rank": 5, "description": "Increases Elemental Skill and Elemental Burst DMG by 48%." }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SkywardBlade",
+  "gameId": 11502,
+  "name": "Skyward Blade",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/skywardblade.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "5260ddd415e424d3b41aa447a91012dd8acc5be0d82dcb0b162a6de3d56e538c",
+    "license": "MIT"
+  },
+  "description": "The sword of a knight that symbolizes the restored honor of Dvalin. The blessings of the Anemo Archon rest on the fuller of the blade, imbuing the sword with the powers of the sky and the wind.",
+  "weaponType": "Sword",
+  "rarity": 5,
+  "effectName": "Sky-Piercing Fang",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "CRIT Rate increased by 4%. Gains Skypiercing Might upon using an Elemental Burst: Increases Movement SPD by 10%, increases ATK SPD by 10%, and Normal and Charged hits deal additional DMG equal to 20% of ATK. Skypiercing Might lasts for 12s."
+    },
+    {
+      "rank": 2,
+      "description": "CRIT Rate increased by 5%, Gains Skypiercing Might upon using an Elemental Burst: Increases Movement SPD by 10%, increases ATK SPD by 10%, and Normal and Charged hits deal additional DMG equal to 25% of ATK. Skypiercing Might lasts for 12s."
+    },
+    {
+      "rank": 3,
+      "description": "CRIT Rate increased by 6%. Gains Skypiercing Might upon using an Elemental Burst: Increases Movement SPD by 10%, increases ATK SPD by 10%, and Normal and Charged hits deal additional DMG equal to 30% of ATK. Skypiercing Might lasts for 12s."
+    },
+    {
+      "rank": 4,
+      "description": "CRIT Rate increased by 7%. Gains Skypiercing Might upon using an Elemental Burst: Increases Movement SPD by 10%, increases ATK SPD by 10%, and Normal and Charged hits deal additional DMG equal to 35% of ATK. Skypiercing Might lasts for 12s."
+    },
+    {
+      "rank": 5,
+      "description": "CRIT Rate increased by 8%. Gains Skypiercing Might upon using an Elemental Burst: Increases Movement SPD by 10%, increases ATK SPD by 10%, and Normal and Charged hits deal additional DMG equal to 40% of ATK. Skypiercing Might lasts for 12s."
+    }
+  ]
+}

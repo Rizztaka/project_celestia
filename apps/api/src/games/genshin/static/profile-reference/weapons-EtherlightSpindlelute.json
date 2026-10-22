@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "EtherlightSpindlelute",
+  "gameId": 14432,
+  "name": "Etherlight Spindlelute",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/etherlightspindlelute.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "1c754acfc28c867b231aa5aa93a1c612ce01ba93141cb064da5af1033ab72446",
+    "license": "MIT"
+  },
+  "description": "A lute whose golden strings are as radiant as sunlight. It appears to be a relic from the Seelie of old.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Last Singer",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "For 20s after using an Elemental Skill, the equipping character's Elemental Mastery is increased by 100."
+    },
+    {
+      "rank": 2,
+      "description": "For 20s after using an Elemental Skill, the equipping character's Elemental Mastery is increased by 125."
+    },
+    {
+      "rank": 3,
+      "description": "For 20s after using an Elemental Skill, the equipping character's Elemental Mastery is increased by 150."
+    },
+    {
+      "rank": 4,
+      "description": "For 20s after using an Elemental Skill, the equipping character's Elemental Mastery is increased by 175."
+    },
+    {
+      "rank": 5,
+      "description": "For 20s after using an Elemental Skill, the equipping character's Elemental Mastery is increased by 200."
+    }
+  ]
+}

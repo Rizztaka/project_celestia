@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "BlizzardStrayer",
+  "gameId": 14001,
+  "name": "Blizzard Strayer",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/blizzardstrayer.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "201365ac1e06c2974872efbcde50183d469df2355357b41cfee6919c2b055119",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Snowswept Memory",
+      "description": "A long-extinct flower, covered in beads of frost, that once grew on the glaciers. There was a time when even the proudest and most arrogant warriors bowed before it."
+    },
+    {
+      "slot": "plume",
+      "name": "Icebreaker's Resolve",
+      "description": "A feather that exudes a chilly aura. One can almost feel the turbulent winds that brought it here, wailing over snow-covered plains and between frosty peaks."
+    },
+    {
+      "slot": "sands",
+      "name": "Frozen Homeland's Demise",
+      "description": "A timepiece from a nation of old that waited for their warriors' return. What flows inside is not sand, but bits of ice that never melt."
+    },
+    {
+      "slot": "goblet",
+      "name": "Frost-Weaved Dignity",
+      "description": "A cup carved out of ice that is as chilly and biting as winter. Its former master would drink an unfreezable liquor from it."
+    },
+    {
+      "slot": "circlet",
+      "name": "Broken Rime's Echo",
+      "description": "The crown of an ancient hero who dreamt of conquering the cold. It is proof of its former master's bravery in facing the bone-chilling cold of winter."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Cryo DMG Bonus +15%" },
+    {
+      "pieces": 4,
+      "description": "When a character attacks an opponent affected by Cryo, their CRIT Rate is increased by 20%. If the opponent is Frozen, CRIT Rate is increased by an additional 20%."
+    }
+  ]
+}

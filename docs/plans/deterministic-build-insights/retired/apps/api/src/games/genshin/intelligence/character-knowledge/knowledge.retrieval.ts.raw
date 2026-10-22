@@ -1,0 +1,474 @@
+import { createRequire } from 'node:module';
+
+import { advisorParticipantLimit, type CharacterAdvisorRequest } from '@celestia/api-contracts';
+
+import { evidenceText, hasAssessedGuidance } from './knowledge.evidence.js';
+import {
+  type KnowledgeCorpus,
+  type KnowledgeDocument,
+  knowledgeHash,
+  loadedCharacterKnowledge,
+} from './knowledge.store.js';
+
+const normalized = (value: string) =>
+  value
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+const require = createRequire(import.meta.url);
+const baselineWeaponNames = Object.values(
+  (
+    require('../../static/progression-catalog.json') as {
+      weapons: Record<string, { name: string }>;
+    }
+  ).weapons,
+).map((w) => normalized(w.name));
+const baselineArtifactNames = Object.values(
+  (
+    require('../../static/artifact-stat-weights.json') as {
+      _sets: Record<string, { name: string }>;
+    }
+  )._sets,
+).map((set) => normalized(set.name));
+export function resolveKnowledgeCharacter(
+  raw: string,
+  corpus: KnowledgeCorpus = loadedCharacterKnowledge.corpus,
+) {
+  const name = normalized(raw);
+  return corpus.profiles.find((p) =>
+    [
+      p.key,
+      p.name,
+      ...p.aliases,
+      ...(p.key.startsWith('Traveler') ? [p.key.slice(8) + ' Traveler'] : []),
+    ].some((alias) => normalized(alias) === name),
+  );
+}
+export function retrieveCharacterKnowledge(
+  input: CharacterAdvisorRequest,
+  corpus: KnowledgeCorpus = loadedCharacterKnowledge.corpus,
+) {
+  let primary = resolveKnowledgeCharacter(input.characterKey, corpus);
+  if (primary?.forms.length) {
+    // Only user selections establish a form. Newest explicit selection wins;
+    // a team-element mention or an assistant's guess never establishes one.
+    for (const turn of [
+      input.question,
+      ...input.history
+        .filter((h) => h.role === 'user')
+        .reverse()
+        .map((h) => h.content),
+    ]) {
+      const question = normalized(turn);
+      const explicit = primary.forms.filter(
+        (k) =>
+          question === normalized(k.slice(8)) ||
+          [
+            normalized(k),
+            normalized(k.slice(8) + ' Traveler'),
+            normalized('Traveler ' + k.slice(8)),
+            normalized(k.slice(8) + ' form'),
+          ].some((n) => (' ' + question + ' ').includes(' ' + n + ' ')),
+      );
+      if (explicit.length > 1) break;
+      if (explicit.length === 1) {
+        primary = corpus.profiles.find((p) => p.key === explicit[0]);
+        break;
+      }
+    }
+  }
+  const text = normalized(
+    [input.question, ...input.history.filter((h) => h.role === 'user').map((h) => h.content)].join(
+      ' ',
+    ),
+  );
+  const mentions = (query: string) =>
+    corpus.profiles.filter((p) =>
+      [
+        p.key,
+        p.name,
+        ...p.aliases,
+        ...(p.key.startsWith('Traveler') ? [p.key.slice(8) + ' Traveler'] : []),
+      ].some((a) => {
+        const n = normalized(a);
+        return n.length >= 3 && (' ' + query + ' ').includes(' ' + n + ' ');
+      }),
+    );
+  const comparison = normalized(input.question).match(
+    /\b(?:replace|swap)\s+(.{1,160}?)\s+(?:with|for)\s+(.{1,160})/,
+  );
+  const proposed = comparison
+    ? mentions(comparison[2]!).filter((p) =>
+        [p.key, p.name, ...p.aliases].some(
+          (alias) =>
+            comparison[2]!.startsWith(normalized(alias) + ' ') ||
+            comparison[2] === normalized(alias),
+        ),
+      )
+    : [];
+  const outgoing = comparison ? mentions(comparison[1]!) : [];
+  const entities = [
+    ...new Set(
+      [
+        primary?.key,
+        ...proposed.map((p) => p.key),
+        ...outgoing.map((p) => p.key),
+        ...mentions(normalized(input.question)).map((p) => p.key),
+        ...input.teamKeys.map((k) => resolveKnowledgeCharacter(k, corpus)?.key),
+        ...mentions(text).map((p) => p.key),
+      ].filter((k): k is string => !!k),
+    ),
+  ].slice(0, advisorParticipantLimit);
+  const topics = new Set<string>();
+  const question = normalized(input.question);
+  const itemFacts = corpus.documents.filter((d) => d.id.includes(':item:'));
+  const weaponNames = [
+    ...new Set([
+      ...baselineWeaponNames,
+      ...itemFacts.filter((d) => d.topic === 'weapons').map((d) => normalized(d.title)),
+    ]),
+  ];
+  const artifactNames = [
+    ...new Set([
+      ...baselineArtifactNames,
+      ...itemFacts.filter((d) => d.topic === 'build').map((d) => normalized(d.title)),
+    ]),
+  ];
+  const namedWeapons = weaponNames.filter((name) =>
+    (' ' + question + ' ').includes(' ' + name + ' '),
+  );
+  const namedArtifacts = artifactNames.filter((name) =>
+    (' ' + question + ' ').includes(' ' + name + ' '),
+  );
+  if (namedWeapons.length) topics.add('weapons');
+  if (entities.length > 1) topics.add('teams');
+  if (namedArtifacts.length) ['build', 'skill', 'burst'].forEach((topic) => topics.add(topic));
+  for (const [test, values] of [
+    [
+      /build|artifact|stat|sands|goblet|circlet/,
+      ['build', 'skill', 'burst', 'attacks', 'passives'],
+    ],
+    [/weapon|\bsword\b|claymore|polearm|catalyst|\bbow\b/, ['weapons', 'skill', 'attacks']],
+    [/talent|skill|attack|plunge|charged/, ['attacks', 'skill', 'burst', 'roles']],
+    [/team|teammate|replace|substitut|without|reaction/, ['teams', 'skill', 'burst', 'passives']],
+    [/energy|burst|rotation|er\b/, ['energy', 'burst', 'rotation']],
+    [/constellation|\bc[0-6]\b/, ['constellations']],
+    [
+      /role|off field|on field|hyperbloom|spread|support|physical/,
+      ['roles', 'skill', 'passives', 'teams'],
+    ],
+  ] as const)
+    if (test.test(question)) values.forEach((t) => topics.add(t));
+  if (!topics.size)
+    ['attacks', 'skill', 'burst', 'roles', 'build', 'teams'].forEach((t) => topics.add(t));
+  const terms = text.split(' ').filter((w) => w.length > 3);
+  const scored = corpus.documents
+    .filter((d) => entities.includes(d.characterKey))
+    .map((d) => ({
+      doc: d,
+      score:
+        (d.characterKey === primary?.key ? 30 : 20) +
+        (topics.has(d.topic) ? 25 : 0) +
+        (d.review === 'agent_reviewed_note' ? 35 : 0) +
+        (d.id.includes(':kqm:') ? 25 : 0) +
+        (/\bstats?\b/.test(question) && /stats|sands|goblet|circlet/i.test(d.title) ? 35 : 0) +
+        // Role/reaction terms distinguish the requested strategy from a generic
+        // on-field guide inventory. Reviewed status never erases topic scope.
+        (question.includes('off field') && normalized(d.text).includes('off field') ? 25 : 0) +
+        (question.includes('off field') && /on field.*(?:dps|carry)/.test(normalized(d.title))
+          ? -45
+          : 0) +
+        (question.includes('hyperbloom') && normalized(d.text).includes('hyperbloom') ? 45 : 0) +
+        Math.min(
+          60,
+          [...namedWeapons, ...namedArtifacts].filter((name) => normalized(d.text).includes(name))
+            .length * 20,
+        ) +
+        (/\bc[1-6]\b/.test(question) &&
+        question.match(/\bc[1-6]\b/g)?.some((label) => d.id.toLowerCase().endsWith(':' + label))
+          ? 80
+          : 0) +
+        (d.topic === 'identity' ? 10 : 0) +
+        Math.min(
+          20,
+          terms.filter((t) => normalized(d.text + ' ' + d.title).includes(t)).length * 2,
+        ),
+    }))
+    .sort((a, b) => b.score - a.score || a.doc.id.localeCompare(b.doc.id));
+  const selected: KnowledgeDocument[] = [];
+  let size = 0;
+  // Item effects are shared facts even when extraction attached their document
+  // to a different character. Prefer the primary's copy, then reuse the pinned
+  // original (including its source ID) instead of relying on a guide mention.
+  const explicitItems = [...namedWeapons, ...namedArtifacts].map((name) => {
+    const matches = itemFacts.filter(
+      (d) => d.review === 'structured_source' && normalized(d.title) === name,
+    );
+    return matches.find((d) => d.characterKey === primary?.key) ?? matches[0];
+  });
+  // Protect the primary kit's enabling mechanics before guide options. Reserve
+  // cross-character mechanics too; neither inventory overlap nor a full team
+  // may displace a replacement or the Skill enabling an off-field role.
+  const candidates = [
+    ...['skill', 'burst']
+      .filter(
+        (topic) =>
+          topics.has(topic) &&
+          (!comparison || topic === 'skill' || /\bburst\b|energy|\ber\b/.test(question)),
+      )
+      .flatMap((topic) =>
+        scored
+          .filter(
+            (v) =>
+              v.doc.characterKey === primary?.key &&
+              v.doc.review === 'structured_source' &&
+              v.doc.topic === topic,
+          )
+          .slice(0, 1),
+      ),
+    ...explicitItems
+      .filter((doc): doc is KnowledgeDocument => !!doc)
+      .map((doc) => ({ doc, score: 0 })),
+    // One enabling kit unit for EVERY compared participant before optional
+    // primary guide overlaps. These are discussed alternatives, not party slots.
+    ...entities
+      .filter((k) => comparison && k !== primary?.key)
+      .flatMap((k) =>
+        scored
+          .filter(
+            (v) =>
+              v.doc.characterKey === k &&
+              v.doc.review === 'structured_source' &&
+              ['skill', 'burst'].includes(v.doc.topic),
+          )
+          .sort(
+            (a, b) =>
+              Number(
+                b.doc.topic ===
+                  (/\bburst\b/.test(question) && !/\bskill\b/.test(question) ? 'burst' : 'skill'),
+              ) -
+              Number(
+                a.doc.topic ===
+                  (/\bburst\b/.test(question) && !/\bskill\b/.test(question) ? 'burst' : 'skill'),
+              ),
+          )
+          .slice(0, 1),
+      ),
+    // Incoming alternatives need their activation/support prerequisites, not
+    // just a utility label. No particular character is special-cased.
+    ...proposed.flatMap((p) => {
+      const kit = scored.find(
+        (v) =>
+          v.doc.characterKey === p.key &&
+          v.doc.topic === 'skill' &&
+          v.doc.review === 'structured_source',
+      );
+      return [
+        ...scored.filter(
+          (v) =>
+            v.doc.characterKey === p.key &&
+            v.doc.review === 'structured_source' &&
+            v.doc.topic === 'passives' &&
+            kit &&
+            normalized(kit.doc.text).includes(normalized(v.doc.title)),
+        ),
+        ...scored
+          .filter(
+            (v) =>
+              v.doc.characterKey === p.key &&
+              v.doc.review === 'structured_source' &&
+              v.doc.topic === 'burst',
+          )
+          .slice(0, 1),
+      ];
+    }),
+    // Assessed notes first; candidate inventories never displace a relevant
+    // assessed relationship merely by containing many item mentions.
+    ...['weapons', 'build', 'roles', 'teams', 'rotation', 'constellations', 'passives']
+      .filter((topic) => topics.has(topic))
+      .flatMap((topic) =>
+        scored
+          .filter(
+            (v) =>
+              v.doc.characterKey === primary?.key &&
+              hasAssessedGuidance(v.doc, corpus) &&
+              v.doc.topic === topic,
+          )
+          .slice(0, 1),
+      ),
+    // Reserve both enabling talents for each mentioned teammate when the
+    // question concerns a team or reaction. A Skill-only seed misses Burst
+    // application and attack triggers (notably, but not only, Xingqiu).
+    ...['skill', 'burst'].flatMap((topic) =>
+      entities
+        .filter((k) => k !== primary?.key)
+        .flatMap((k) =>
+          scored
+            .filter(
+              (v) =>
+                v.doc.characterKey === k &&
+                v.doc.review === 'structured_source' &&
+                v.doc.topic === topic,
+            )
+            .slice(0, 1),
+        ),
+    ),
+    ...entities
+      .map(
+        (k) =>
+          scored.find(
+            (v) =>
+              v.doc.characterKey === k &&
+              v.doc.review === 'structured_source' &&
+              v.doc.topic === 'skill',
+          ) ??
+          scored.find(
+            (v) =>
+              v.doc.characterKey === k &&
+              v.doc.review === 'structured_source' &&
+              !v.doc.id.includes(':item:'),
+          ),
+      )
+      .filter((x): x is (typeof scored)[number] => !!x),
+    ...scored,
+  ];
+  const inventories = new Set<string>();
+  const omissions: string[] = [];
+  for (const { doc } of candidates) {
+    if (selected.some((d) => d.id === doc.id) || selected.length === 12) continue;
+    if (
+      /ignore (?:all |previous |system )?instructions|system prompt|reveal.{0,20}(?:secret|token|key)|execute (?:this |a )?(?:command|script)|<\/?(?:system|assistant)>/i.test(
+        doc.text,
+      )
+    )
+      continue;
+    const inventory =
+      doc.review === 'candidate_extraction' && doc.text.includes('section inventory');
+    const inventoryKey = doc.characterKey + ':' + doc.topic + ':' + normalized(doc.title);
+    if (inventory && (inventories.has(inventoryKey) || inventories.size >= 2)) continue;
+    // Unresolved scaling placeholders contribute no usable arithmetic. Retain
+    // the actual mechanic prose and conditions instead of spending its budget
+    // on those labels. The immutable source document itself is unchanged.
+    const excerpt = evidenceText(doc);
+    // Whole prose/effect units only. Current pinned documents fit this bound;
+    // a future longer document is omitted explicitly, never cut mid-condition.
+    if (excerpt.length > 4500 || size + excerpt.length + doc.scope.length > 9000) {
+      if (!omissions.includes(doc.title)) omissions.push(doc.title);
+      continue;
+    }
+    size += excerpt.length + doc.scope.length;
+    selected.push({ ...doc, text: excerpt });
+    if (inventory) inventories.add(inventoryKey);
+  }
+  const requestedCharacters = [
+    ...new Set([
+      ...mentions(question).map((p) => p.key),
+      ...input.teamKeys.flatMap((key) => resolveKnowledgeCharacter(key, corpus)?.key ?? []),
+    ]),
+  ].filter((key) => key !== primary?.key);
+  // A few explicit requested aspects complement named entities. A paragraph
+  // naming every item still cannot satisfy an explicit kit/HP/stats request
+  // using only a role heading. These are evidence categories, not answer rules.
+  const facets = [
+    {
+      test: /mechanic|abilit/,
+      label: 'Character mechanics',
+      topics: ['skill', 'burst', 'attacks'],
+      terms: [],
+    },
+    { test: /\bstats?\b/, label: 'Build stats', topics: ['build', 'weapons'], terms: [] },
+    { test: /\bskill\b/, label: 'Elemental Skill', topics: ['skill'], terms: [] },
+    { test: /\bburst\b/, label: 'Elemental Burst', topics: ['burst'], terms: [] },
+    {
+      test: /\bhp\b|health/,
+      label: 'HP conditions',
+      topics: ['skill', 'burst', 'attacks', 'build', 'passives'],
+      terms: ['hp', 'health'],
+    },
+    { test: /artifact/, label: 'Artifact conditions', topics: ['build'], terms: [] },
+  ]
+    .filter((facet) => facet.test.test(question))
+    .map((facet) => ({
+      key: 'facet:' + facet.label,
+      label: facet.label,
+      evidenceOnly: true,
+      requiredTerms: facet.terms,
+      evidenceIds: selected
+        .filter(
+          (d) =>
+            (d.characterKey === primary?.key || d.id.includes(':item:')) &&
+            facet.topics.includes(d.topic) &&
+            (!facet.terms.length ||
+              facet.terms.some((term) => normalized(d.text).split(' ').includes(term))),
+        )
+        .map((d) => d.id),
+    }));
+  const allSubjects = [
+    ...[...namedWeapons, ...namedArtifacts].map((name) => ({
+      key: 'item:' + name,
+      label: itemFacts.find((d) => normalized(d.title) === name)?.title ?? name,
+      evidenceIds: selected
+        .filter(
+          (d) =>
+            (d.review === 'structured_source' && normalized(d.title) === name) ||
+            (hasAssessedGuidance(d, corpus) && normalized(d.text).includes(name)),
+        )
+        .map((d) => d.id),
+    })),
+    ...requestedCharacters.map((key) => ({
+      key,
+      label: corpus.profiles.find((p) => p.key === key)!.name,
+      aliases: [key, ...corpus.profiles.find((p) => p.key === key)!.aliases],
+      evidenceIds: selected.filter((d) => d.characterKey === key).map((d) => d.id),
+    })),
+    ...facets,
+  ];
+  const subjects = allSubjects.slice(0, 8);
+  const strategyRequested =
+    /build|role|team|reaction|hyperbloom|spread|support|off field|on field/.test(question);
+  const assessedStrategy = selected.some(
+    (d) =>
+      d.characterKey === primary?.key &&
+      hasAssessedGuidance(d, corpus) &&
+      (!question.includes('hyperbloom') || normalized(d.text).includes('hyperbloom')),
+  );
+  const limitations = [
+    ...(selected.some((d) => d.review === 'candidate_extraction' && hasAssessedGuidance(d, corpus))
+      ? [
+          'KQM source-compared relationships retain qualitative conditions pending review. They support only the stated relationship; broader comparisons and exact team applicability require qualified inference.',
+        ]
+      : []),
+    ...(allSubjects.length > subjects.length
+      ? ['More requested subjects than this bounded context can assess; this is partial coverage.']
+      : []),
+    ...(strategyRequested && !assessedStrategy
+      ? [
+          `No assessed ${question.includes('hyperbloom') ? 'Hyperbloom ' : ''}strategy for ${primary?.name ?? input.characterKey} reaches this bounded context; kit facts allow qualified inference, and guide inventory mentions do not establish that strategy.`,
+        ]
+      : []),
+    ...subjects
+      .filter((s) => !s.evidenceIds.length)
+      .map((s) => `No applicable evidence for requested subject ${s.label} fits this context.`),
+    ...(omissions.length
+      ? [
+          `Complete evidence omitted by context budget: ${omissions.slice(0, 5).join(', ')}. No omitted conditions may be inferred.`.slice(
+            0,
+            400,
+          ),
+        ]
+      : []),
+  ];
+  return {
+    primary,
+    entities,
+    documents: selected,
+    subjects,
+    limitations,
+    strategyMissing: strategyRequested && !assessedStrategy,
+    coverageLimited: allSubjects.length > subjects.length,
+    characters: size,
+    contextDigest: knowledgeHash(JSON.stringify(selected)),
+  };
+}

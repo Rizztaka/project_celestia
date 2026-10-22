@@ -5,8 +5,31 @@ import { successResponse } from '@/core/utils/response.js';
 import { GenshinCharacterService } from './character.service.js';
 import { GenshinCharacterEquipmentService } from './character-equipment.service.js';
 import { GenshinCharacterFocusService } from './character-focus.service.js';
+import { ProfileReferenceService } from './profile-reference.service.js';
 
 export class GenshinCharacterController {
+  private references = new ProfileReferenceService();
+  getReference = async (req: Request, res: Response) => {
+    res.json(
+      successResponse(
+        this.references.character(req.params.characterKey),
+        'Character reference retrieved.',
+      ),
+    );
+  };
+  getWeaponReference = async (req: Request, res: Response) => {
+    res.json(
+      successResponse(this.references.weapon(req.params.itemKey), 'Weapon reference retrieved.'),
+    );
+  };
+  getArtifactReference = async (req: Request, res: Response) => {
+    res.json(
+      successResponse(
+        this.references.artifact(req.params.itemKey),
+        'Artifact reference retrieved.',
+      ),
+    );
+  };
   private focusService = new GenshinCharacterFocusService();
   listFocus = async (req: Request, res: Response) => {
     res.json(successResponse(await this.focusService.list(req.user!.id), 'Focus retrieved.'));

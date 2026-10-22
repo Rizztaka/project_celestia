@@ -1,0 +1,206 @@
+// Targeted real-provider acceptance; shares the full-roster ledger and identity.
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import {
+  closeSync,
+  existsSync,
+  openSync,
+  readFileSync,
+  renameSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { config } from 'dotenv';
+
+import { dispatchAdvisorAcceptance } from './advisor-acceptance-dispatch.mjs';
+import { rollUtcDay } from './advisor-acceptance-ledger.mjs';
+import { advisorImplementationIdentity } from './advisor-implementation-identity.mjs';
+
+const project = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const connection = join(project, 'docs/plans/character-knowledge-assistant/api-connection');
+const repair = process.argv.includes('--repair');
+const output = repair ? join(connection, '../quality-repair') : connection;
+const shared = join(output, '../all-kqm-verification/model-queue.json');
+const checkpoint = join(output, 'live-acceptance-checkpoint.json');
+const resultsPath = join(output, 'live-acceptance-results.json');
+const read = (path) => JSON.parse(readFileSync(path, 'utf8'));
+const hash = (value) => createHash('sha256').update(value).digest('hex');
+const save = (path, data) => {
+  const temporary = path + '.tmp';
+  writeFileSync(temporary, JSON.stringify(data, null, 2) + '\n');
+  renameSync(temporary, path);
+};
+const args = process.argv.slice(2);
+const live = args.includes('--live');
+if (args.some((arg) => !['--live', '--repair'].includes(arg) && !arg.startsWith('--case=')))
+  throw Error('Use --repair, --live and at most two --case=ID arguments');
+const ids = args.filter((arg) => arg.startsWith('--case=')).map((arg) => arg.slice(7));
+if (ids.length > 2 || new Set(ids).size !== ids.length || (live && !ids.length))
+  throw Error('Select one or two distinct cases per invocation');
+const pending = read(join(output, 'pending-live-cases.json'));
+const cases = [
+  ...pending.cases,
+  ...pending.priorQualityRegressions.map((c) => ({
+    ...c,
+    previousCase: c.id === 'Aino:changed-constraint-followup' ? 'Aino:build' : null,
+  })),
+];
+if (ids.some((id) => !cases.some((c) => c.id === id))) throw Error('Unknown acceptance case');
+// Only copy existing server settings, never print secrets or load a database.
+const settings = {};
+config({ path: join(project, 'apps/api/.env'), processEnv: settings, quiet: true });
+for (const key of [
+  'GROQ_API_KEY',
+  'CELESTIA_AI_PROVIDER',
+  'CELESTIA_AI_MODEL',
+  'CELESTIA_AI_FREE_ONLY',
+  'CELESTIA_AI_DAILY_REQUESTS',
+  'CELESTIA_AI_USER_DAILY_REQUESTS',
+])
+  if (settings[key] && !process.env[key]) process.env[key] = settings[key];
+Object.assign(process.env, {
+  NODE_ENV: 'test',
+  DOTENV_CONFIG_PATH: process.platform === 'win32' ? 'NUL' : '/dev/null',
+  DATABASE_URL: 'postgresql://synthetic:synthetic@127.0.0.1:1/never_connected',
+  JWT_SECRET: 'all-kqm-isolated-synthetic-never-authenticated',
+});
+const [contracts, store, advisor, adapter, { env }] = await Promise.all([
+  import('@celestia/api-contracts'),
+  import('../src/games/genshin/intelligence/character-knowledge/knowledge.store.ts'),
+  import('../src/games/genshin/intelligence/character-knowledge/advisor.service.ts'),
+  import('../src/core/ai/advisor-provider.ts'),
+  import('../src/core/config/env.ts'),
+]);
+assert.equal(env.CELESTIA_AI_PROVIDER, 'groq');
+assert.equal(env.CELESTIA_AI_FREE_ONLY, 'true');
+const selected = store.loadCharacterKnowledge();
+const candidate = read(
+  repair ? join(output, 'candidate.json') : join(output, '../all-kqm-verification/candidate.json'),
+);
+assert.deepEqual(candidate.release, pending.release);
+assert.deepEqual(selected.release, candidate.base);
+const knowledge = store.loadCharacterKnowledge(store.defaultKnowledgeRoot, candidate.release);
+const implementation = advisorImplementationIdentity(project);
+const identity = {
+  release: knowledge.release,
+  identityVersion: implementation.identityVersion,
+  ...implementation.signatures,
+};
+const limits = { daily: env.CELESTIA_AI_DAILY_REQUESTS, user: env.CELESTIA_AI_USER_DAILY_REQUESTS };
+const now = new Date();
+const ledgerBefore = read(shared);
+assert.deepEqual(ledgerBefore.release, repair ? candidate.parent : knowledge.release);
+const preview = rollUtcDay(structuredClone(ledgerBefore), now);
+const preflight = {
+  checkedAt: now.toISOString(),
+  identity,
+  implementation,
+  active: selected.release,
+  configured: {
+    provider: env.CELESTIA_AI_PROVIDER,
+    model: env.CELESTIA_AI_MODEL,
+    freeOnly: env.CELESTIA_AI_FREE_ONLY,
+    keyPresent: Boolean(env.GROQ_API_KEY),
+    limits,
+  },
+  persisted: {
+    day: ledgerBefore.day,
+    daily: ledgerBefore.requestsReservedToday,
+    user: ledgerBefore.userRequestsReservedToday ?? null,
+  },
+  effective: {
+    day: preview.day,
+    daily: preview.requestsReservedToday,
+    user: preview.userRequestsReservedToday ?? 0,
+  },
+  fullRoster: {
+    cases: ledgerBefore.cases.length,
+    states: [...new Set(ledgerBefore.cases.map((c) => c.state))],
+  },
+  actualRequestsSent: 0,
+  requests: [],
+};
+// Same preparation as actual dispatch, including serialization. Saved histories
+// are only preview inputs; accepted normal follow-up history is resolved again
+// inside the dispatch loop before its shared reservation.
+const previewService = new advisor.CharacterAdvisorService(
+  { readManyForUser: async () => [] },
+  null,
+  knowledge,
+  () => true,
+);
+for (const entry of cases.filter((c) => !ids.length || ids.includes(c.id))) {
+  const input = contracts.characterAdvisorRequestSchema.parse(
+    entry.input ?? {
+      characterKey: entry.characterKey,
+      question: entry.question,
+      useRecordedContext: false,
+      teamKeys: entry.teamKeys ?? [],
+      history: entry.history ?? [],
+    },
+  );
+  const prepared = await previewService.prepare('all-kqm-synthetic', input);
+  preflight.requests.push({
+    id: entry.id,
+    localReason: prepared.localReason,
+    contextCharacters: prepared.fit.serialized.length,
+    contextDigest: prepared.fit.digest,
+    contextKeys: prepared.keys,
+    missingSubjects: prepared.retrieved.subjects
+      .filter((s) => !s.evidenceIds.length)
+      .map((s) => s.label),
+    requiresAcceptedHistory: Boolean(entry.previousCase),
+    strategyMissing: prepared.retrieved.strategyMissing,
+    coverageLimited: prepared.retrieved.coverageLimited,
+  });
+}
+save(join(output, 'live-preflight.json'), preflight);
+console.log(JSON.stringify(preflight));
+if (!live) process.exit(0);
+const configured = adapter.configuredAdvisorProvider();
+if (!configured) throw Error('Existing provider is unavailable; no allowance reserved');
+const lock = shared + '.acceptance.lock';
+const lockHandle = openSync(lock, 'wx');
+writeFileSync(lockHandle, JSON.stringify({ pid: process.pid, startedAt: now.toISOString() }));
+let sharedHash = hash(readFileSync(shared));
+const updateShared = (queue) => {
+  assert.equal(hash(readFileSync(shared)), sharedHash, 'Shared ledger changed concurrently; stop');
+  save(shared, queue);
+  sharedHash = hash(readFileSync(shared));
+};
+try {
+  const queue = read(shared);
+  const records = existsSync(resultsPath)
+    ? read(resultsPath)
+    : { kind: 'actual-configured-model', cases: [] };
+  const progress = existsSync(checkpoint) ? read(checkpoint) : { cases: {}, attempts: [] };
+  await dispatchAdvisorAcceptance({
+    ids,
+    cases,
+    records,
+    progress,
+    queue,
+    identity,
+    configured,
+    knowledge,
+    limits,
+    hash,
+    save,
+    resultsPath,
+    checkpoint,
+    updateShared,
+    createService: (provider) =>
+      new advisor.CharacterAdvisorService(
+        { readManyForUser: async () => [] },
+        provider,
+        knowledge,
+        () => true,
+      ),
+  });
+} finally {
+  closeSync(lockHandle);
+  unlinkSync(lock);
+}

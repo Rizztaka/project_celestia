@@ -1,0 +1,968 @@
+import type {
+  CreateGoalRequest,
+  FarmingIntelligenceResponse,
+  FocusCommand,
+  FocusRecord,
+  GoalCommand,
+  GoalRecord,
+  GoalWriteResponse,
+  KqmCharacterGuide,
+  KqmGuideSummary,
+  PlanAdvice,
+  PlanCommand,
+  PlanSnapshot,
+} from '@celestia/api-contracts';
+
+export function fetchFarmingIntelligence(
+  options: {
+    talentTier?: string;
+    weaponTier?: string;
+    includeRoute?: string;
+    materialKey?: string;
+    startPointId?: string;
+    maxStops: string;
+  },
+  signal?: AbortSignal,
+  session?: AccountSession,
+) {
+  const params = new URLSearchParams({ contractVersion: '1', maxStops: options.maxStops });
+  for (const [key, value] of Object.entries(options)) if (value) params.set(key, value);
+  return fetchApi<FarmingIntelligenceResponse>(
+    `/games/genshin/intelligence/farming?${params}`,
+    { signal },
+    session,
+  );
+}
+
+export function fetchPlan(signal?: AbortSignal, session?: AccountSession) {
+  return fetchApi<PlanSnapshot>('/companion/plan?contractVersion=1', { signal }, session);
+}
+export function fetchPlanAdvice(signal?: AbortSignal, session?: AccountSession) {
+  return fetchApi<PlanAdvice>('/companion/plan/advice?contractVersion=1', { signal }, session);
+}
+export function patchPlan(command: PlanCommand, session: AccountSession) {
+  return fetchApi<PlanSnapshot>(
+    '/companion/plan',
+    { method: 'PATCH', body: JSON.stringify(command) },
+    session,
+  );
+}
+import type { AdviceAvailability, MaterialAdviceResponse } from '@celestia/api-contracts';
+import type { CharacterEquipmentResponse } from '@celestia/api-contracts';
+
+import { useAuthStore } from '../stores/auth.store';
+import { type AccountSession, assertCurrentSession, captureSession } from './account-session';
+import { accessSessionId, API_BASE, refreshAccessToken } from './auth-client';
+/**
+ * api.ts — Centralized API client for @celestia/web
+ *
+ * All server communication goes through fetchApi. This ensures:
+ *   - Every request includes the Authorization header when a token exists
+ *   - JSON parsing is handled in one place
+ *   - API errors follow the standard { success, error } shape from the server
+ *
+ * Usage:
+ *   const data = await fetchApi<MeResponse>("/auth/me");
+ */
+
+export class ApiError extends Error {
+  public readonly code: string;
+  public readonly status: number;
+
+  constructor(code: string, message: string, status: number) {
+    super(message);
+    this.name = 'ApiError';
+    this.code = code;
+    this.status = status;
+  }
+}
+
+import type {
+  ImportCommitRequest,
+  ImportPreview,
+  ImportPreviewRequest,
+  ImportResult,
+  ImportStatus,
+  PatchChecklistBody,
+  PatchResinBody,
+  PatchSettingsBody,
+  PatchWeeklyClaimsBody,
+  RoutineSnapshotV2,
+} from '@celestia/api-contracts';
+
+export type { ImportResult } from '@celestia/api-contracts';
+
+export async function fetchImportStatus(signal?: AbortSignal): Promise<ImportStatus> {
+  return fetchApi<ImportStatus>('/games/genshin/import/status', { signal });
+}
+
+/**
+ * fetchApi — typed wrapper around the browser Fetch API.
+ *
+ * Reads the JWT from the Zustand auth store via getState() — the
+ * correct pattern for reading Zustand state outside of React components.
+ * Do NOT use localStorage.getItem() directly: the persist middleware
+ * stores data in a nested structure under its own key, not the raw token.
+ *
+ * Throws ApiError for non-2xx responses, parsed from the standard
+ * { success: false, error: { code, message } } response shape.
+ */
+export async function fetchApi<T>(
+  path: string,
+  options: RequestInit = {},
+  session: AccountSession = captureSession(),
+): Promise<T> {
+  assertCurrentSession(session);
+  let token = useAuthStore.getState().token;
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(options.headers as Record<string, string>),
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  let response = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    credentials: 'include',
+    headers,
+  });
+  assertCurrentSession(session);
+  let json = await response.json();
+  assertCurrentSession(session);
+  // This error code is returned before protected handlers run. Retry once after rotation,
+  // preserving the originating account and never replaying a stream body.
+  if (
+    response.status === 401 &&
+    json.error?.code === 'AUTH_SESSION_INVALID' &&
+    accessSessionId(token) &&
+    (options.body === undefined || typeof options.body === 'string')
+  ) {
+    try {
+      token = await refreshAccessToken();
+    } catch {
+      assertCurrentSession(session);
+      useAuthStore.getState().logout();
+      throw new ApiError('UNAUTHORIZED', 'Your session ended. Sign in again.', 401);
+    }
+    assertCurrentSession(session);
+    headers.Authorization = `Bearer ${token}`;
+    response = await fetch(`${API_BASE}${path}`, { ...options, credentials: 'include', headers });
+    json = await response.json();
+  }
+
+  assertCurrentSession(session);
+
+  if (!response.ok || !json.success) {
+    throw new ApiError(
+      json.error?.code ?? 'UNKNOWN_ERROR',
+      json.error?.message ?? 'An unexpected error occurred',
+      response.status,
+    );
+  }
+
+  return json.data as T;
+}
+
+// ============================================================
+// Genshin Impact API Functions
+// ============================================================
+
+/**
+ * importGenshinAccount — POST /games/genshin/import
+ *
+ * Commits exactly the versioned request used for preview, with its token
+ * and explicit empty-section confirmations. Never retries automatically.
+ */
+export async function importGenshinAccount(
+  request: ImportCommitRequest,
+  session?: AccountSession,
+): Promise<ImportResult> {
+  return fetchApi<ImportResult>(
+    '/games/genshin/import',
+    {
+      method: 'POST',
+      body: JSON.stringify(request),
+    },
+    session,
+  );
+}
+
+export async function previewGenshinImport(
+  request: ImportPreviewRequest,
+  session?: AccountSession,
+): Promise<ImportPreview> {
+  return fetchApi<ImportPreview>(
+    '/games/genshin/import/preview',
+    {
+      method: 'POST',
+      body: JSON.stringify(request),
+    },
+    session,
+  );
+}
+
+// ============================================================
+// Genshin Roster Types & Functions (Milestone 2D)
+// ============================================================
+
+export interface RosterWeapon {
+  id: string;
+  weaponKey: string;
+  level: number;
+  refinement: number;
+}
+
+export interface RosterCharacter {
+  id: string;
+  characterKey: string;
+  level: number;
+  ascension: number;
+  constellation: number;
+  talentNormal: number;
+  talentSkill: number;
+  talentBurst: number;
+  equippedWeaponId: string | null;
+  equippedWeapon: RosterWeapon | null;
+}
+
+export interface RosterResponse {
+  characters: RosterCharacter[];
+  total: number;
+}
+
+/**
+ * fetchGenshinRoster — GET /games/genshin/characters
+ *
+ * Returns the authenticated user's full character roster.
+ * Always returns a RosterResponse, even if the user has no data yet
+ * (server returns an empty array, not a 404).
+ */
+export async function fetchGenshinRoster(signal?: AbortSignal): Promise<RosterResponse> {
+  return fetchApi<RosterResponse>('/games/genshin/characters', { signal });
+}
+export function fetchCharacterEquipment(
+  characterKey: string,
+  signal?: AbortSignal,
+): Promise<CharacterEquipmentResponse> {
+  return fetchApi(`/games/genshin/characters/${encodeURIComponent(characterKey)}/equipment`, {
+    signal,
+  });
+}
+
+// ============================================================
+// Genshin Inventory Types & Functions (Milestone 2E)
+// ============================================================
+
+export interface InventoryWeapon {
+  id: string;
+  weaponKey: string;
+  level: number;
+  ascension: number;
+  refinement: number;
+  locked: boolean;
+  equippedCharacterId: string | null;
+}
+
+export interface ArtifactSubStat {
+  key: string;
+  value: number;
+}
+
+export interface InventoryArtifact {
+  id: string;
+  setKey: string;
+  slotKey: string;
+  level: number;
+  rarity: number;
+  mainStatKey: string;
+  subStats: ArtifactSubStat[];
+  locked: boolean;
+}
+
+export interface WeaponsResponse {
+  weapons: InventoryWeapon[];
+  total: number;
+}
+
+export interface ArtifactsResponse {
+  artifacts: InventoryArtifact[];
+  total: number;
+}
+
+/**
+ * fetchGenshinWeapons — GET /games/genshin/weapons
+ *
+ * Returns the authenticated user's full weapon inventory, ordered level desc.
+ * Always returns a WeaponsResponse, even if the user has no data yet.
+ */
+export async function fetchGenshinWeapons(signal?: AbortSignal): Promise<WeaponsResponse> {
+  return fetchApi<WeaponsResponse>('/games/genshin/weapons', { signal });
+}
+
+/**
+ * fetchGenshinArtifacts — GET /games/genshin/artifacts
+ *
+ * Returns the authenticated user's full artifact inventory, ordered by
+ * level desc then rarity desc.
+ * Always returns an ArtifactsResponse, even if the user has no data yet.
+ */
+export async function fetchGenshinArtifacts(signal?: AbortSignal): Promise<ArtifactsResponse> {
+  return fetchApi<ArtifactsResponse>('/games/genshin/artifacts', { signal });
+}
+
+// Companion V2: every mutation returns the complete shared revision.
+export function fetchRoutine(signal?: AbortSignal): Promise<RoutineSnapshotV2> {
+  return fetchApi('/companion/routine?contractVersion=2', { signal });
+}
+export type RoutineCommand =
+  | { kind: 'settings'; body: PatchSettingsBody }
+  | { kind: 'checklist'; body: PatchChecklistBody }
+  | { kind: 'resin'; body: PatchResinBody }
+  | { kind: 'weekly-claims'; body: PatchWeeklyClaimsBody };
+export function patchRoutine(
+  command: RoutineCommand,
+  session?: AccountSession,
+): Promise<RoutineSnapshotV2> {
+  return fetchApi(
+    `/companion/routine/${command.kind}`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify(command.body),
+    },
+    session,
+  );
+}
+
+// ============================================================
+// Upgrade Goals & Farming Planner Types (Milestone 3B)
+// ============================================================
+
+export type GoalType = 'CHARACTER_ASCENSION' | 'CHARACTER_TALENT' | 'WEAPON_ASCENSION';
+export type TalentType = 'normal' | 'skill' | 'burst';
+
+export type UpgradeGoal = GoalRecord;
+
+export type MaterialDelta = MaterialAdviceResponse;
+
+export interface TodayDomain {
+  domainKey: string;
+  name: string;
+  location: string;
+  drops: string[];
+  dropKeys: string[];
+  relevantToGoals: boolean;
+}
+
+export interface TodayResult {
+  goals: AdviceAvailability[];
+  availability: { available: boolean; reason: string | null };
+  serverDay: string;
+  serverId: string | null;
+  domains: TodayDomain[];
+}
+
+export type CreateGoalInput = CreateGoalRequest;
+export async function fetchGoals(signal?: AbortSignal): Promise<UpgradeGoal[]> {
+  return fetchApi('/companion/goals', { signal });
+}
+export async function createGoal(
+  input: CreateGoalInput,
+  session?: AccountSession,
+): Promise<UpgradeGoal> {
+  return fetchApi('/companion/goals', { method: 'POST', body: JSON.stringify(input) }, session);
+}
+export async function updateGoal(
+  id: string,
+  command: GoalCommand,
+  session?: AccountSession,
+): Promise<GoalWriteResponse> {
+  return fetchApi(
+    `/companion/goals/${encodeURIComponent(id)}`,
+    { method: 'PATCH', body: JSON.stringify(command) },
+    session,
+  );
+}
+export async function fetchFocus(signal?: AbortSignal): Promise<FocusRecord[]> {
+  return fetchApi('/games/genshin/focus', { signal });
+}
+export async function setFocus(
+  key: string,
+  command: FocusCommand,
+  session?: AccountSession,
+): Promise<FocusRecord> {
+  return fetchApi(
+    `/games/genshin/characters/${encodeURIComponent(key)}/focus`,
+    { method: 'PATCH', body: JSON.stringify(command) },
+    session,
+  );
+}
+
+export async function fetchMaterialDelta(signal?: AbortSignal): Promise<MaterialDelta> {
+  return fetchApi<MaterialDelta>('/companion/goals/materials', { signal });
+}
+
+export async function fetchTodayDomains(signal?: AbortSignal): Promise<TodayResult> {
+  return fetchApi<TodayResult>('/companion/goals/today', { signal });
+}
+
+// ============================================================
+// Event Planner Types (Milestone 3C)
+// ============================================================
+
+export interface EventRewardTier {
+  tierId: string;
+  label: string;
+  primogems: number;
+  other: string[];
+  claimed: boolean;
+}
+
+export interface GenshinEvent {
+  key: string;
+  name: string;
+  type: string;
+  startUtc: string;
+  endUtc: string;
+  isActive: boolean;
+  isUpcoming: boolean;
+  isExpired: boolean;
+  hoursRemaining: number;
+  description: string;
+  wikiUrl: string | null;
+  rewardTiers: EventRewardTier[];
+  claimedPrimogems: number;
+  totalPrimogems: number;
+}
+
+export interface EventsResponse {
+  availability: { available: boolean; reason: string | null };
+  patch: string;
+  totalUnclaimedPrimogems: number;
+  events: GenshinEvent[];
+}
+
+export interface TierUpdateResult {
+  eventKey: string;
+  tierId: string;
+  claimed: boolean;
+}
+
+export async function fetchEvents(signal?: AbortSignal): Promise<EventsResponse> {
+  return fetchApi<EventsResponse>('/companion/events', { signal });
+}
+
+export async function patchEventTier(
+  eventKey: string,
+  tierId: string,
+  claimed: boolean,
+  session?: AccountSession,
+): Promise<TierUpdateResult> {
+  return fetchApi<TierUpdateResult>(
+    `/companion/events/${eventKey}/tiers/${tierId}`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify({ claimed }),
+    },
+    session,
+  );
+}
+
+// ============================================================
+// Weekly Boss Planner Types (Milestone 3D)
+// ============================================================
+
+export interface HydratedWeeklyBoss {
+  key: string;
+  name: string;
+  location: string;
+  domainName: string;
+  dropKeys: string[];
+  wikiUrl: string | null;
+  defeated: boolean;
+}
+
+// ============================================================
+// Character Intelligence Types & Functions (Milestone 4A)
+// ============================================================
+
+export type RecommendationLabel =
+  'ASCEND_AND_LEVEL' | 'LEVEL_TALENTS' | 'CLOSE_LEVEL_GAP' | 'COMPLETE';
+
+export interface CharacterRecommendation {
+  characterKey: string;
+  rank: number;
+  score: number;
+  recommendation: RecommendationLabel;
+  explanations: string[];
+}
+
+export interface SkippedCharacter {
+  characterKey: string;
+  reason: string;
+}
+
+export interface CharacterIntelligenceResponse {
+  recommendations: CharacterRecommendation[];
+  skipped: SkippedCharacter[];
+  analysedAt: string;
+}
+
+/**
+ * fetchCharacterIntelligence — GET /games/genshin/intelligence/characters
+ *
+ * Returns the top 5 highest-ROI character build recommendations for the
+ * authenticated user, each with a numeric score and plain-language explanations.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if the roster is empty.
+ */
+export async function fetchCharacterIntelligence(): Promise<CharacterIntelligenceResponse> {
+  return fetchApi<CharacterIntelligenceResponse>('/games/genshin/intelligence/characters');
+}
+
+// ============================================================
+// Team Intelligence Types & Functions (Milestone 4B)
+// ============================================================
+
+export interface TeamRosterSlot {
+  roleId: string;
+  label: string;
+  element: string | null;
+  characterKey: string | null;
+  investmentScore: number;
+  isRequired: boolean;
+  flex: boolean;
+}
+
+export interface TeamRecommendation {
+  rank: number;
+  templateId: string;
+  templateName: string;
+  archetype: string;
+  reaction: string;
+  score: number;
+  isBuildable: boolean;
+  roster: TeamRosterSlot[];
+  explanations: string[];
+}
+
+export interface TeamIntelligenceResponse {
+  recommendations: TeamRecommendation[];
+  analysedAt: string;
+}
+
+/**
+ * fetchTeamIntelligence — GET /games/genshin/intelligence/teams
+ *
+ * Returns the top 3 most buildable, meta-relevant team compositions for the
+ * authenticated user, each with a synergy score and plain-language explanations.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if the roster has fewer than 4 characters or no
+ * buildable team can be assembled.
+ */
+export async function fetchTeamIntelligence(): Promise<TeamIntelligenceResponse> {
+  return fetchApi<TeamIntelligenceResponse>('/games/genshin/intelligence/teams');
+}
+
+// ============================================================
+// Artifact Intelligence Types & Functions (Milestone 4C)
+// ============================================================
+
+export interface ArtifactSubStatWithWeight {
+  key: string;
+  value: number;
+  weight: number;
+}
+
+export interface EquippedArtifactOutput {
+  slotKey: string;
+  setKey: string;
+  level: number;
+  rarity: number;
+  mainStatKey: string;
+  slotScore: number;
+  subStats: ArtifactSubStatWithWeight[];
+}
+
+export interface ArtifactRecommendation {
+  characterKey: string;
+  rank: number;
+  artifactEfficiencyScore: number;
+  recommendationScore: number;
+  equippedArtifacts: EquippedArtifactOutput[];
+  explanations: string[];
+}
+
+export interface ArtifactSkippedCharacter {
+  characterKey: string;
+  reason: string;
+}
+
+export interface ArtifactIntelligenceResponse {
+  recommendations: ArtifactRecommendation[];
+  skipped: ArtifactSkippedCharacter[];
+  analysedAt: string;
+}
+
+/**
+ * fetchArtifactIntelligence — GET /games/genshin/intelligence/artifacts
+ *
+ * Returns the top 5 characters whose artifacts need the most improvement,
+ * each with an Artifact Efficiency Score (AES), per-slot breakdowns, and
+ * plain-language explanations.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if the roster is empty.
+ */
+export async function fetchArtifactIntelligence(): Promise<ArtifactIntelligenceResponse> {
+  return fetchApi<ArtifactIntelligenceResponse>('/games/genshin/intelligence/artifacts');
+}
+
+// ============================================================
+// Planner Intelligence Types & Functions (Milestone 4D)
+// ============================================================
+
+export interface PlannerRouteItem {
+  goalId: string;
+  targetKey: string;
+  goalType: string;
+  talentType: string | null;
+  domainName: string;
+  resinCost: number;
+  runs: number;
+  explanations: string[];
+}
+
+export interface PlannerIntelligenceResponse {
+  goals: AdviceAvailability[];
+  allocationBasis: 'resin_budget';
+  currentResin: number;
+  timeUntilCapped: string;
+  route: PlannerRouteItem[];
+  unallocatedResin: number;
+  analysedAt: string;
+}
+
+/**
+ * fetchPlannerIntelligence — GET /games/genshin/intelligence/planner
+ *
+ * Returns an optimised daily farming route for the authenticated user,
+ * allocating their projected resin across their active upgrade goals ranked
+ * by character priority and domain time-gating.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if the user has no active upgrade goals.
+ */
+export async function fetchPlannerIntelligence(): Promise<PlannerIntelligenceResponse> {
+  return fetchApi<PlannerIntelligenceResponse>('/games/genshin/intelligence/planner');
+}
+
+// ============================================================
+// Pull Intelligence Types & Functions (Milestone 4E)
+// ============================================================
+
+export type PullRecommendationLabel = 'MUST_PULL' | 'GOOD_VALUE' | 'SKIP';
+
+export interface PullRecommendation {
+  bannerId: string;
+  bannerName: string;
+  fiveStarKey: string;
+  fourStarKeys: string[];
+  pullValueScore: number;
+  recommendation: PullRecommendationLabel;
+  explanations: string[];
+}
+
+export interface PullIntelligenceResponse {
+  recommendations: PullRecommendation[];
+  analysedAt: string;
+}
+
+/**
+ * fetchPullIntelligence — GET /games/genshin/intelligence/pulls
+ *
+ * Returns Pull Value recommendations for all currently active banners,
+ * scored by how much each banner's 5-star would improve the user's roster,
+ * team compositions, and synergy with their most-invested characters.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ */
+export async function fetchPullIntelligence(): Promise<PullIntelligenceResponse> {
+  return fetchApi<PullIntelligenceResponse>('/games/genshin/intelligence/pulls');
+}
+
+// ============================================================
+// Knowledge Intelligence Types & Functions (Milestone 4F)
+// ============================================================
+
+export type KnowledgeInsightKey =
+  | 'ELEMENTAL_SPECIALIST'
+  | 'TALENT_NEGLECTOR'
+  | 'ARTIFACT_HOARDER'
+  | 'MAX_CONSTELLATION'
+  | 'DIVERSE_ROSTER';
+
+export interface KnowledgeInsight {
+  key: KnowledgeInsightKey;
+  title: string;
+  body: string;
+  iconKey: KnowledgeInsightKey;
+}
+
+export interface KnowledgeIntelligenceResponse {
+  insights: KnowledgeInsight[];
+  totalInsightsFound: number;
+  analysedAt: string;
+}
+
+/**
+ * fetchKnowledgeIntelligence — GET /games/genshin/intelligence/knowledge
+ *
+ * Returns up to 3 personalized daily account insights (elemental specialist,
+ * talent neglect, artifact hoarding, C6 characters, roster diversity),
+ * rotated daily via a seeded selection.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ */
+export async function fetchKnowledgeIntelligence(): Promise<KnowledgeIntelligenceResponse> {
+  return fetchApi<KnowledgeIntelligenceResponse>('/games/genshin/intelligence/knowledge');
+}
+
+// ============================================================
+// Endgame Center Types & Functions (Milestone 5B)
+// ============================================================
+
+export interface AbyssHalfRun {
+  id: string;
+  half: 1 | 2;
+  stars: number;
+  team: string[];
+}
+
+export interface AbyssChamber {
+  chamber: number;
+  totalStars: number;
+  halves: AbyssHalfRun[];
+}
+
+export interface AbyssFloor {
+  floor: number;
+  totalStars: number;
+  chambers: AbyssChamber[];
+}
+
+export interface AbyssCycleResult {
+  cycleId: string;
+  totalStars: number;
+  maxStars: number;
+  completedChambers: number;
+  floors: AbyssFloor[];
+}
+
+export interface AbyssHistoryResponse {
+  cycles: AbyssCycleResult[];
+}
+
+export interface LogAbyssRunPayload {
+  cycleId: string;
+  floor: number;
+  chamber: number;
+  half: 1 | 2;
+  stars: number;
+  team: string[];
+}
+
+/**
+ * fetchAbyssHistory — GET /games/genshin/endgame/abyss
+ *
+ * Returns the authenticated user's full Spiral Abyss run history,
+ * grouped by cycle → floor → chamber. Historical cycles are preserved
+ * for future Intelligence Core analysis.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ */
+export async function fetchAbyssHistory(): Promise<AbyssHistoryResponse> {
+  return fetchApi<AbyssHistoryResponse>('/games/genshin/endgame/abyss');
+}
+
+/**
+ * logAbyssRun — POST /games/genshin/endgame/abyss
+ *
+ * Logs or updates a single chamber-half run.
+ * Upserts on [cycleId, floor, chamber, half] — re-clears are supported.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if input validation fails.
+ */
+export async function logAbyssRun(payload: LogAbyssRunPayload): Promise<AbyssHalfRun> {
+  return fetchApi<AbyssHalfRun>('/games/genshin/endgame/abyss', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+// ============================================================
+// Theater Types & Functions (Milestone 5C/5D)
+// ============================================================
+
+export type TheaterDifficulty = 'EASY' | 'NORMAL' | 'HARD' | 'VISIONARY';
+
+export interface TheaterRun {
+  id: string;
+  seasonId: string;
+  difficulty: TheaterDifficulty;
+  actsCleared: number;
+  stars: number;
+  cast: string[];
+}
+
+export interface TheaterHistoryResponse {
+  runs: TheaterRun[];
+}
+
+export interface LogTheaterRunPayload {
+  seasonId: string;
+  difficulty: TheaterDifficulty;
+  actsCleared: number;
+  stars: number;
+  cast: string[];
+}
+
+/**
+ * fetchTheaterHistory — GET /games/genshin/endgame/theater
+ *
+ * Returns the authenticated user's full Imaginarium Theater run history,
+ * ordered by seasonId descending (most recent season first).
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ */
+export async function fetchTheaterHistory(): Promise<TheaterHistoryResponse> {
+  return fetchApi<TheaterHistoryResponse>('/games/genshin/endgame/theater');
+}
+
+/**
+ * logTheaterRun — POST /games/genshin/endgame/theater
+ *
+ * Logs or updates an Imaginarium Theater run for a given season.
+ * Upserts on [seasonId] — re-clearing a season is fully supported.
+ *
+ * Throws ApiError (404) if the user has no Genshin account.
+ * Throws ApiError (422) if input validation fails.
+ */
+export async function logTheaterRun(payload: LogTheaterRunPayload): Promise<TheaterRun> {
+  return fetchApi<TheaterRun>('/games/genshin/endgame/theater', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+// ============================================================
+// Pull Simulator (Milestone 6A)
+// ============================================================
+
+export type {
+  WishBanner as Banner,
+  WishResultItem as PullResultItem,
+  WishRequest as SimulatePullsPayload,
+  WishResult as SimulatePullsResult,
+} from '@celestia/api-contracts';
+import type {
+  WishBanner as Banner,
+  WishRequest as SimulatePullsPayload,
+  WishResult as SimulatePullsResult,
+} from '@celestia/api-contracts';
+
+/**
+ * fetchBanners — GET /games/genshin/simulators/banners
+ * Returns historical wish scenarios from the pinned simulator library.
+ */
+export async function fetchBanners(): Promise<Banner[]> {
+  return fetchApi<Banner[]>('/games/genshin/simulators/banners');
+}
+
+/**
+ * simulatePulls — POST /games/genshin/simulators/simulate-pulls
+ * Runs a gacha simulation with the given pity state.
+ */
+export async function simulatePulls(payload: SimulatePullsPayload): Promise<SimulatePullsResult> {
+  return fetchApi<SimulatePullsResult>('/games/genshin/simulators/simulate-pulls', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+// ============================================================
+// Progression Intelligence (Milestone 6B)
+// ============================================================
+
+export interface ElementalSpread {
+  element: string;
+  count: number;
+  percentage: number;
+}
+
+export interface ProgressionIntelligenceResponse {
+  rosterCompletion: {
+    owned: number;
+    total: number;
+    percentage: number;
+    rank: string;
+  };
+  ascensionMaturity: {
+    highlyAscended: number; // Ascension 5 or 6 (level 80+)
+    totalOwned: number;
+    percentage: number;
+    rank: string;
+  };
+  elementalSpread: ElementalSpread[];
+  analysedAt: string;
+}
+
+/**
+ * fetchProgressionIntelligence — GET /games/genshin/intelligence/progression
+ * Returns high-level account progression metrics.
+ */
+export async function fetchProgressionIntelligence(): Promise<ProgressionIntelligenceResponse> {
+  return fetchApi<ProgressionIntelligenceResponse>('/games/genshin/intelligence/progression');
+}
+
+
+
+export async function previewTheaterCast(
+  payload: import('@celestia/api-contracts').TheaterCastRequest,
+  signal?: AbortSignal,
+  session?: AccountSession,
+): Promise<import('@celestia/api-contracts').TheaterCastResponse> {
+  return fetchApi(
+    '/games/genshin/endgame/theater/cast-preview',
+    {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      signal,
+    },
+    session,
+  );
+}
+
+export async function fetchKqmGuide(
+  characterKey: string,
+  signal?: AbortSignal,
+): Promise<KqmCharacterGuide> {
+  return fetchApi<KqmCharacterGuide>(
+    `/games/genshin/kqm/guides/${encodeURIComponent(characterKey)}`,
+    { signal },
+  );
+}
+
+export async function fetchKqmGuidesList(
+  query?: string,
+  signal?: AbortSignal,
+): Promise<KqmGuideSummary[]> {
+  const q = query ? `?q=${encodeURIComponent(query)}` : '';
+  return fetchApi<KqmGuideSummary[]>(`/games/genshin/kqm/guides${q}`, { signal });
+}
+

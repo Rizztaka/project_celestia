@@ -1,0 +1,49 @@
+{
+  "contractVersion": 1,
+  "key": "ObsidianCodex",
+  "gameId": 15038,
+  "name": "Obsidian Codex",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/obsidiancodex.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "a4d88bea7fb41313de88ab587d0e70b9ee0a62cf1ecfb8f1ae7c0230113301a5",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Reckoning of the Xenogenic",
+      "description": "A flower meticulously carved from black crystal. It emits a mysterious light at night."
+    },
+    {
+      "slot": "plume",
+      "name": "Root of the Spirit-Marrow",
+      "description": "A feathered accessory made in imitation of an ancient dragon's wing. Perhaps it was once a memento of some forgotten history."
+    },
+    {
+      "slot": "sands",
+      "name": "Myths of the Night Realm",
+      "description": "A mysterious ritual element that is neither a timepiece nor a compass. Nowadays, no one has any idea what it is used for."
+    },
+    {
+      "slot": "goblet",
+      "name": "Pre-Banquet of the Contenders",
+      "description": "A vessel that seems to have been made by twisting and forming stone in a seemingly whimsical fashion. But it is an open question as to who possesses such strength..."
+    },
+    {
+      "slot": "circlet",
+      "name": "Crown of the Saints",
+      "description": "A crown made of obsidian that in ancient times was used in coronation ceremonies by noble tribal kings."
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "description": "While the equipping character is in Nightsoul's Blessing and is on the field, their DMG dealt is increased by 15%."
+    },
+    {
+      "pieces": 4,
+      "description": "After the equipping character consumes 1 Nightsoul point while on the field, CRIT Rate increases by 40% for 6s. This effect can trigger once every second."
+    }
+  ]
+}

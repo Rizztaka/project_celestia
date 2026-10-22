@@ -1,0 +1,222 @@
+{
+  "numTotalTestSuites": 5,
+  "numPassedTestSuites": 3,
+  "numFailedTestSuites": 2,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 19,
+  "numPassedTests": 18,
+  "numFailedTests": 1,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1792677929458,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references reads every canonical character and item through bounded contracts and verified bytes",
+          "status": "passed",
+          "title": "reads every canonical character and item through bounded contracts and verified bytes",
+          "duration": 901.3824999999999,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references preserves full charged/plunge, alternate sprint, passive and constellation conditions",
+          "status": "passed",
+          "title": "preserves full charged/plunge, alternate sprint, passive and constellation conditions",
+          "duration": 3.9629999999999654,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references does not infer Traveler form or transfer another form’s identity",
+          "status": "passed",
+          "title": "does not infer Traveler form or transfer another form’s identity",
+          "duration": 6.882499999999936,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references joins exact weapon ranks and artifact piece/effect counts without flattening conditions",
+          "status": "passed",
+          "title": "joins exact weapon ranks and artifact piece/effect counts without flattening conditions",
+          "duration": 3.2349999999999,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references rejects unknown keys, prototype keys and traversal without falling back to a kit",
+          "status": "passed",
+          "title": "rejects unknown keys, prototype keys and traversal without falling back to a kit",
+          "duration": 7.652700000000095,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references fails closed for corrupted files and valid-hash contract/identity mismatches",
+          "status": "passed",
+          "title": "fails closed for corrupted files and valid-hash contract/identity mismatches",
+          "duration": 25.68419999999992,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792677930522,
+      "endTime": 1792677931471.684,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/src/games/genshin/characters/profile-reference.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules preserves strict HP threshold 90 and separates potential from active bonus",
+          "status": "passed",
+          "title": "preserves strict HP threshold 90 and separates potential from active bonus",
+          "duration": 2.0045000000000073,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules preserves strict HP threshold 90.01 and separates potential from active bonus",
+          "status": "passed",
+          "title": "preserves strict HP threshold 90.01 and separates potential from active bonus",
+          "duration": 0.42170000000010077,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules preserves strict HP threshold null and separates potential from active bonus",
+          "status": "passed",
+          "title": "preserves strict HP threshold null and separates potential from active bonus",
+          "duration": 0.29409999999984393,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules keeps refinement and incompatible weapons authoritative",
+          "status": "passed",
+          "title": "keeps refinement and incompatible weapons authoritative",
+          "duration": 0.4558999999999287,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules does not assume missing assignments empty or count duplicate/invalid slots",
+          "status": "passed",
+          "title": "does not assume missing assignments empty or count duplicate/invalid slots",
+          "duration": 0.8775000000000546,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules binds Deepwood to hits and duration; eligibility alone never activates its four-piece",
+          "status": "passed",
+          "title": "binds Deepwood to hits and duration; eligibility alone never activates its four-piece",
+          "duration": 2.2160999999998694,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules separates Golden Troupe unconditional four-piece from field-dependent extra bonus",
+          "status": "passed",
+          "title": "separates Golden Troupe unconditional four-piece from field-dependent extra bonus",
+          "duration": 0.29970000000002983,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules never interprets unmodeled effects as executable rules",
+          "status": "passed",
+          "title": "never interprets unmodeled effects as executable rules",
+          "duration": 0.1871000000001004,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service produces reproducible useful facts without assuming battle conditions or exposing private IDs",
+          "status": "failed",
+          "title": "produces reproducible useful facts without assuming battle conditions or exposing private IDs",
+          "duration": 50.112100000000055,
+          "failureMessages": [
+            "AssertionError: expected false to be true // Object.is equality\n    at D:\\Genshin Personal\\project-celestia\\apps\\api\\src\\games\\genshin\\intelligence\\build-insights\\build-insights.test.ts:55:67\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at file:///D:/Genshin%20Personal/project-celestia/node_modules/.pnpm/@vitest+runner@3.2.7/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+          ],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service evaluates all catalog characters without an owned record, with explicit limitations",
+          "status": "passed",
+          "title": "evaluates all catalog characters without an owned record, with explicit limitations",
+          "duration": 281.1584999999998,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service isolates a hypothetical incompatible weapon and leaves the recorded build unchanged",
+          "status": "passed",
+          "title": "isolates a hypothetical incompatible weapon and leaves the recorded build unchanged",
+          "duration": 9.711699999999837,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service does not apply unreviewed rules after source drift",
+          "status": "passed",
+          "title": "does not apply unreviewed rules after source drift",
+          "duration": 8.89709999999991,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service rejects ambiguous or impossible comparison requests",
+          "status": "passed",
+          "title": "rejects ambiguous or impossible comparison requests",
+          "duration": 1.8332000000000335,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792677930616,
+      "endTime": 1792677930975.8333,
+      "status": "failed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/src/games/genshin/intelligence/build-insights/build-insights.test.ts"
+    }
+  ]
+}

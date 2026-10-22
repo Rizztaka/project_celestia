@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SacrificialFragments",
+  "gameId": 14403,
+  "name": "Sacrificial Fragments",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/sacrificialfragments.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2fb8520a07d31964d7cd1516516d565843c41bcad8731ed5f50feec4ad329cfb",
+    "license": "MIT"
+  },
+  "description": "A weathered script, the text of which is no longer legible. A cursed item eroded by the winds of time.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Composed",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 40% chance to end its own CD. Can only occur once every 30s."
+    },
+    {
+      "rank": 2,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 50% chance to end its own CD. Can only occur once every 26s."
+    },
+    {
+      "rank": 3,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 60% chance to end its own CD. Can only occur once every 22s."
+    },
+    {
+      "rank": 4,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 70% chance to end its own CD. Can only occur once every 19s."
+    },
+    {
+      "rank": 5,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 80% chance to end its own CD. Can only occur once every 16s."
+    }
+  ]
+}

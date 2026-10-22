@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "ChainBreaker",
+  "gameId": 15431,
+  "name": "Chain Breaker",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/chainbreaker.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "f7f4624ca42b98b2609b6be71f73f1c755949f8338e552b0ead5a0c6973d7602",
+    "license": "MIT"
+  },
+  "description": "A jade-adorned longbow. The gentle winds always seem to swirl gently about its string. Legends claim that this weapon was made in a far more ancient era by a dragon artisan.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Flower-Feather Song",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "For every party member from Natlan or who has a different Elemental Type from the equipping character, the equipping character gains 4.8% increased ATK. When there are no less than 3 of the aforementioned characters, the equipping character gains 24 Elemental Mastery."
+    },
+    {
+      "rank": 2,
+      "description": "For every party member from Natlan or who has a different Elemental Type from the equipping character, the equipping character gains 6% increased ATK. When there are no less than 3 of the aforementioned characters, the equipping character gains 30 Elemental Mastery."
+    },
+    {
+      "rank": 3,
+      "description": "For every party member from Natlan or who has a different Elemental Type from the equipping character, the equipping character gains 7.2% increased ATK. When there are no less than 3 of the aforementioned characters, the equipping character gains 36 Elemental Mastery."
+    },
+    {
+      "rank": 4,
+      "description": "For every party member from Natlan or who has a different Elemental Type from the equipping character, the equipping character gains 8.4% increased ATK. When there are no less than 3 of the aforementioned characters, the equipping character gains 42 Elemental Mastery."
+    },
+    {
+      "rank": 5,
+      "description": "For every party member from Natlan or who has a different Elemental Type from the equipping character, the equipping character gains 9.6% increased ATK. When there are no less than 3 of the aforementioned characters, the equipping character gains 48 Elemental Mastery."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "CrescentPike",
+  "gameId": 13403,
+  "name": "Crescent Pike",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/crescentpike.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "910711586db40d7a8fb4e63709f232f9536cc11c13b6a4b0c30032fd78ce1fbe",
+    "license": "MIT"
+  },
+  "description": "An exotic weapon with an extremely long blade on the top and a crescent blade at the bottom. It found its way into Liyue through foreign traders. With practice, it can deal heavy damage.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Infusion Needle",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "After picking up an Elemental Orb/Particle, Normal and Charged Attacks deal additional DMG equal to 20% of ATK for 5s."
+    },
+    {
+      "rank": 2,
+      "description": "After picking up an Elemental Orb/Particle, Normal and Charged Attacks deal additional DMG equal to 25% of ATK for 5s."
+    },
+    {
+      "rank": 3,
+      "description": "After picking up an Elemental Orb/Particle, Normal and Charged Attacks deal additional DMG equal to 30% of ATK for 5s."
+    },
+    {
+      "rank": 4,
+      "description": "After picking up an Elemental Orb/Particle, Normal and Charged Attacks deal additional DMG equal to 35% of ATK for 5s."
+    },
+    {
+      "rank": 5,
+      "description": "After picking up an Elemental Orb/Particle, Normal and Charged Attacks deal additional DMG equal to 40% of ATK for 5s."
+    }
+  ]
+}

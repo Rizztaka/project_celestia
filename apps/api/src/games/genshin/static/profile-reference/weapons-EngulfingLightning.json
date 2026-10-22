@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "EngulfingLightning",
+  "gameId": 13509,
+  "name": "Engulfing Lightning",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/engulfinglightning.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "f6c2cea718c9ad71fe647dc4f1af6fea84d65305f10f8013771f7c0cf67427c2",
+    "license": "MIT"
+  },
+  "description": "A naginata used to \"cut grass.\" Any army that stands before this weapon will probably be likewise cut down...",
+  "weaponType": "Polearm",
+  "rarity": 5,
+  "effectName": "Timeless Dream: Eternal Stove",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "ATK increased by 28% of Energy Recharge over the base 100%. You can gain a maximum bonus of 80% ATK. Gain 30% Energy Recharge for 12s after using an Elemental Burst."
+    },
+    {
+      "rank": 2,
+      "description": "ATK increased by 35% of Energy Recharge over the base 100%. You can gain a maximum bonus of 90% ATK. Gain 35% Energy Recharge for 12s after using an Elemental Burst."
+    },
+    {
+      "rank": 3,
+      "description": "ATK increased by 42% of Energy Recharge over the base 100%. You can gain a maximum bonus of 100% ATK. Gain 40% Energy Recharge for 12s after using an Elemental Burst."
+    },
+    {
+      "rank": 4,
+      "description": "ATK increased by 49% of Energy Recharge over the base 100%. You can gain a maximum bonus of 110% ATK. Gain 45% Energy Recharge for 12s after using an Elemental Burst."
+    },
+    {
+      "rank": 5,
+      "description": "ATK increased by 56% of Energy Recharge over the base 100%. You can gain a maximum bonus of 120% ATK. Gain 50% Energy Recharge for 12s after using an Elemental Burst."
+    }
+  ]
+}

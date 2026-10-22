@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "MountainBracingBolt",
+  "gameId": 13430,
+  "name": "Mountain-Bracing Bolt",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/mountainbracingbolt.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "02223f0433869fc980b3d29c90de72aa58dbb545b101d62c82df3fc6a383a918",
+    "license": "MIT"
+  },
+  "description": "This polearm was once jointly forged by the craftsmen in the mines as a sacrifice to the spirits of the mountains.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Hope Beyond the Peaks",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Decreases Climbing Stamina Consumption by 15% and increases Elemental Skill DMG by 12%. Also, after other nearby party members use Elemental Skills, the equipping character's Elemental Skill DMG will also increase by 12% for 8s."
+    },
+    {
+      "rank": 2,
+      "description": "Decreases Climbing Stamina Consumption by 15% and increases Elemental Skill DMG by 15%. Also, after other nearby party members use Elemental Skills, the equipping character's Elemental Skill DMG will also increase by 15% for 8s."
+    },
+    {
+      "rank": 3,
+      "description": "Decreases Climbing Stamina Consumption by 15% and increases Elemental Skill DMG by 18%. Also, after other nearby party members use Elemental Skills, the equipping character's Elemental Skill DMG will also increase by 18% for 8s."
+    },
+    {
+      "rank": 4,
+      "description": "Decreases Climbing Stamina Consumption by 15% and increases Elemental Skill DMG by 21%. Also, after other nearby party members use Elemental Skills, the equipping character's Elemental Skill DMG will also increase by 21% for 8s."
+    },
+    {
+      "rank": 5,
+      "description": "Decreases Climbing Stamina Consumption by 15% and increases Elemental Skill DMG by 24%. Also, after other nearby party members use Elemental Skills, the equipping character's Elemental Skill DMG will also increase by 24% for 8s."
+    }
+  ]
+}

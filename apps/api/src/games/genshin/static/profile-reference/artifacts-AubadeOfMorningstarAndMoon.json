@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "AubadeOfMorningstarAndMoon",
+  "gameId": 15043,
+  "name": "Aubade of Morningstar and Moon",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/aubadeofmorningstarandmoon.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "456747e986ddc4291bfb11aba0783e968880d1b2be84dd027043b7bdaf3ba506",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Moonlit Offering's Opulent Dream",
+      "description": "A meticulously carved floral ornament meant to highlight the resplendent beauty of the goddesses of the heavenly moons, crafted in ancient times by artisans who sculpted statues of them."
+    },
+    {
+      "slot": "plume",
+      "name": "Moonlit Offering's Parting Light",
+      "description": "A quill that, in ancient times, granted boundless inspiration to priests who penned prayers to the heavenly moons."
+    },
+    {
+      "slot": "sands",
+      "name": "Moonlit Offering's Final Hour",
+      "description": "An hourglass meant to commemorate the final hour, prepared by sages who, in ancient times, sought truth from the heavenly moons."
+    },
+    {
+      "slot": "goblet",
+      "name": "Moonlit Offering's Libation",
+      "description": "A wine cup lost in the final revelry of an ancient rite, in which believers once offered sacrifices to the heavenly moons."
+    },
+    {
+      "slot": "circlet",
+      "name": "Moonlit Offering's Silver Crown",
+      "description": "A silver circlet set aside at the final syllable of a hymn, worn by poets who, in ancient times, sang in praise of the heavenly moons."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Increases Elemental Mastery by 80." },
+    {
+      "pieces": 4,
+      "description": "When the equipping character is off-field, Lunar Reaction DMG is increased by 20%. When the party's Moonsign Level is at least Ascendant Gleam, Lunar Reaction DMG will be further increased by 40%. This effect will disappear after the equipping character is active for 3s."
+    }
+  ]
+}

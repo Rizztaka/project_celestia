@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "KitainCrossSpear",
+  "gameId": 13414,
+  "name": "Kitain Cross Spear",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/kitaincrossspear.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "e20ce8c913ea082b824d5140be66bd59fc0f4489445a359b43bf6436be0ae0b9",
+    "license": "MIT"
+  },
+  "description": "A special lance that was once used by a famed warrior who guarded the Tatarigami on Yashiori Island.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Samurai Conduct",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Elemental Skill DMG by 6%. After Elemental Skill hits an opponent, the character loses 3 Energy but regenerates 3 Energy every 2s for the next 6s. This effect can occur once every 10s. Can be triggered even when the character is not on the field."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Elemental Skill DMG by 7.5%. After Elemental Skill hits an opponent, the character loses 3 Energy but regenerates 3.5 Energy every 2s for the next 6s. This effect can occur once every 10s. Can be triggered even when the character is not on the field."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Elemental Skill DMG by 9%. After Elemental Skill hits an opponent, the character loses 3 Energy but regenerates 4 Energy every 2s for the next 6s. This effect can occur once every 10s. Can be triggered even when the character is not on the field."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Elemental Skill DMG by 10.5%. After Elemental Skill hits an opponent, the character loses 3 Energy but regenerates 4.5 Energy every 2s for the next 6s. This effect can occur once every 10s. Can be triggered even when the character is not on the field."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Elemental Skill DMG by 12%. After Elemental Skill hits an opponent, the character loses 3 Energy but regenerates 5 Energy every 2s for the next 6s. This effect can occur once every 10s. Can be triggered even when the character is not on the field."
+    }
+  ]
+}

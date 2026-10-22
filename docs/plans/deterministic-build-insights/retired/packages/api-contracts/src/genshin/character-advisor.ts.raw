@@ -1,0 +1,94 @@
+import { z } from 'zod';
+
+const key = z.string().min(1).max(100);
+const digest = z.string().regex(/^[a-f0-9]{64}$/);
+// A party still has four simultaneous members. Discussion may compare the
+// bounded union of two parties; this does not establish an eight-member team.
+export const advisorParticipantLimit = 8;
+export const advisorContextKeysSchema = z.array(key).max(advisorParticipantLimit);
+export const characterAdvisorRequestSchema = z
+  .object({
+    characterKey: key,
+    question: z.string().trim().min(1).max(2000),
+    useRecordedContext: z.boolean().default(true),
+    teamKeys: z.array(key).max(4).default([]),
+    history: z
+      .array(
+        z
+          .object({
+            role: z.enum(['user', 'assistant']),
+            content: z.string().trim().min(1).max(1500),
+          })
+          .strict(),
+      )
+      .max(8)
+      .default([]),
+  })
+  .strict()
+  .refine(
+    (v) => v.history.reduce((n, t) => n + t.content.length, 0) <= 6000,
+    'Conversation is too long. Start a new question.',
+  );
+export type CharacterAdvisorRequest = z.infer<typeof characterAdvisorRequestSchema>;
+export const advisorCitationSchema = z
+  .object({
+    id: key,
+    characterKey: key,
+    topic: z.string().max(100),
+    title: z.string().max(200),
+    url: z.string().url().startsWith('https://'),
+    revision: z.string().max(120),
+    sha256: digest,
+    sectionSha256: digest,
+    review: z.enum(['structured_source', 'candidate_extraction', 'agent_reviewed_note']),
+  })
+  .strict();
+export const advisorSegmentSchema = z
+  .object({
+    text: z.string().trim().min(1).max(1200),
+    basis: z.enum(['source_fact', 'interpretation', 'suggestion']),
+    evidenceIds: z.array(key).min(1).max(4),
+    support: z.string().min(8).max(300),
+  })
+  .strict();
+export const advisorModelAnswerSchema = z
+  .object({
+    segments: z.array(advisorSegmentSchema).min(1).max(6),
+    followUp: z.string().max(300).nullable(),
+  })
+  .strict();
+export const characterAdvisorResponseSchema = z
+  .object({
+    contractVersion: z.literal(1),
+    status: z.enum(['answered', 'partial', 'unavailable', 'unsupported', 'context_changed']),
+    reason: z.enum([
+      'ok',
+      'missing_configuration',
+      'quota',
+      'timeout',
+      'provider_failure',
+      'ungrounded_answer',
+      'incomplete_coverage',
+      'context_budget',
+      'unknown_character',
+      'ambiguous_form',
+      'records_changed',
+    ]),
+    release: z.object({ id: key, digest }).strict(),
+    observation: digest,
+    contextKeys: advisorContextKeysSchema,
+    characterKey: key,
+    answer: advisorModelAnswerSchema.nullable(),
+    coverage: z
+      .array(z.object({ subject: z.string().max(200), covered: z.boolean() }).strict())
+      .max(8)
+      .default([]),
+    citations: z.array(advisorCitationSchema).max(12),
+    limitations: z.array(z.string().max(400)).max(16),
+    recordedContextUsed: z.boolean(),
+    provider: z.string().max(40).nullable(),
+    model: z.string().max(120).nullable(),
+    retryAfterSeconds: z.number().int().min(1).max(86400).nullable(),
+  })
+  .strict();
+export type CharacterAdvisorResponse = z.infer<typeof characterAdvisorResponseSchema>;

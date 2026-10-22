@@ -1,0 +1,516 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+
+import {
+  characterAdvisorRequestSchema,
+  characterAdvisorResponseSchema,
+} from '@celestia/api-contracts';
+import { afterAll, describe, expect, it, vi } from 'vitest';
+vi.mock('@/core/db/prisma.js', () => ({ prisma: {} }));
+vi.mock('@/core/config/env.js', () => ({ env: { CELESTIA_AI_PROVIDER: 'disabled' } }));
+
+import { CharacterAdvisorService } from './advisor.service.js';
+import { retrieveCharacterKnowledge } from './knowledge.retrieval.js';
+import { defaultKnowledgeRoot, knowledgeHash, loadCharacterKnowledge } from './knowledge.store.js';
+
+const artifacts = new URL(
+  '../../../../../../../docs/plans/character-knowledge-assistant/',
+  import.meta.url,
+);
+const json = (name: string) => JSON.parse(readFileSync(new URL(name, artifacts), 'utf8'));
+const candidate = json('quality-repair/candidate.json');
+const knowledge = loadCharacterKnowledge(defaultKnowledgeRoot, candidate.release);
+const oldKnowledge = loadCharacterKnowledge(defaultKnowledgeRoot, candidate.parent);
+type Saved = {
+  attemptId: string;
+  input: Parameters<typeof retrieveCharacterKnowledge>[0];
+  traces: { phase: string; rawOutput: string; request: { content: string }[] }[];
+  response: { status: string };
+};
+const saved: Saved[] = json('api-connection/live-acceptance-results.json').cases;
+const replay: unknown[] = [];
+const contextEvidence: Record<string, Context> = {};
+const request = (characterKey: string, question: string) =>
+  characterAdvisorRequestSchema.parse({ characterKey, question, useRecordedContext: false });
+type Context = {
+  history: { role: string; content: string }[];
+  evidence: {
+    id: string;
+    title: string;
+    text: string;
+    characterKey: string;
+    topic: string;
+    assessment: string;
+    semantics: {
+      abilityKind: string | null;
+      itemType: string | null;
+      effects: {
+        key: string;
+        refinement: number | null;
+        pieceCount: number | null;
+        prerequisites: string[];
+      }[];
+      refinementState: string | null;
+    };
+    provenance: {
+      sha256: string;
+      sectionSha256: string;
+      url: string;
+      revision: string;
+      review: string;
+    };
+  }[];
+  limits: string[];
+};
+function controlled(
+  generate: (context: Context) => unknown,
+  audit = JSON.stringify({ supported: true, issues: [] }),
+) {
+  const contexts: Context[] = [];
+  const complete = vi.fn(async (messages: { content: string }[]) => {
+    if (messages[0]!.content.startsWith('Audit')) return audit;
+    const context = JSON.parse(messages[1]!.content);
+    contexts.push(context);
+    const value = generate(context);
+    return typeof value === 'string' ? value : JSON.stringify(value);
+  });
+  return { provider: 'offline-controlled', model: 'not-real-model-success', complete, contexts };
+}
+function fact(doc: Context['evidence'][number], text = doc.text, support = doc.text.slice(0, 80)) {
+  return { text, basis: 'source_fact', evidenceIds: [doc.id], support };
+}
+const service = (provider: ReturnType<typeof controlled>, data = knowledge) =>
+  new CharacterAdvisorService({ readManyForUser: async () => [] }, provider, data, () => true);
+
+describe('offline grounded quality repair — no real model calls', () => {
+  it.each(
+    saved.flatMap((entry) =>
+      ['saved-context', 'repaired-context'].flatMap((mode) =>
+        ['original-audit', 'forced-positive-audit'].map((auditMode) => ({
+          entry,
+          mode,
+          auditMode,
+        })),
+      ),
+    ),
+  )(
+    'replays exact generation $entry.attemptId against $mode/$auditMode through production service',
+    async ({ entry, mode, auditMode }) => {
+      const raw = entry.traces.find((t) => t.phase === 'generation')!.rawOutput;
+      const oldAudit = entry.traces.find((t) => t.phase === 'audit')?.rawOutput;
+      const provider = controlled(() => raw, auditMode === 'original-audit' ? oldAudit : undefined);
+      const input = characterAdvisorRequestSchema.parse(entry.input);
+      const projection = retrieveCharacterKnowledge(input, oldKnowledge.corpus);
+      const oldContext = JSON.parse(entry.traces[0]!.request[1]!.content);
+      const retrieve =
+        mode === 'saved-context'
+          ? () => ({
+              ...projection,
+              documents: oldContext.evidence.map((d: { id: string }) => ({
+                ...oldKnowledge.corpus.documents.find((v) => v.id === d.id)!,
+                ...d,
+              })),
+            })
+          : retrieveCharacterKnowledge;
+      const response = await new CharacterAdvisorService(
+        { readManyForUser: async () => [] },
+        provider,
+        mode === 'saved-context' ? oldKnowledge : knowledge,
+        () => true,
+        retrieve,
+      ).ask('offline-replay', input);
+      expect(response.status).not.toBe('answered');
+      expect(characterAdvisorResponseSchema.safeParse(response).success).toBe(true);
+      expect(raw).toBe(entry.traces[0]!.rawOutput);
+      if (entry.attemptId === '056ab03e-2129-49bb-adeb-b92f6bbda4fb') {
+        expect(entry.traces[1]!.rawOutput).toContain('"supported":true');
+        expect(response.answer).toBeNull(); // omitted hit prerequisite is independently rejected
+      }
+      replay.push({
+        attemptId: entry.attemptId,
+        mode,
+        auditMode,
+        rawGenerationSha256: knowledgeHash(raw),
+        rawAuditSha256: oldAudit ? knowledgeHash(oldAudit) : null,
+        originalStatus: entry.response.status,
+        response,
+      });
+    },
+  );
+  it('delivers canonical abilities, full refinements and provenance in actual Aino context without assuming R5', async () => {
+    const provider = controlled(() => 'invalid JSON');
+    await service(provider).ask('offline', saved[0]!.input);
+    const context = provider.contexts[0]!;
+    contextEvidence.Aino = context;
+    expect(context).toBeDefined();
+    expect(JSON.stringify(context).length).toBeLessThan(22000);
+    expect(context.evidence.find((d) => d.id === 'Aino:combat2')?.semantics.abilityKind).toBe(
+      'Elemental Skill',
+    );
+    expect(context.evidence.find((d) => d.id === 'Aino:combat3')?.semantics.abilityKind).toBe(
+      'Elemental Burst',
+    );
+    const item = context.evidence.find((d) => d.title === 'Makhaira Aquamarine')!;
+    expect(item.semantics.effects.map((e) => e.refinement)).toEqual([1, 2, 3, 4, 5]);
+    expect(item.text).toMatch(
+      /r5:.*Multiple instances.*This effect will still trigger even if the character is not on the field\.$/,
+    );
+    expect(item.text).toContain(
+      'nearby party members gaining 30% of this buff for the same duration',
+    );
+    expect(item.semantics.refinementState).toContain('otherwise refinement is unknown');
+    for (const doc of context.evidence) {
+      expect(doc.characterKey).toBeTruthy();
+      expect(doc.topic).toBeTruthy();
+      expect(doc.provenance.sha256).toMatch(/^[a-f0-9]{64}$/);
+      expect(doc.provenance.sectionSha256).toMatch(/^[a-f0-9]{64}$/);
+    }
+    const serenade = context.evidence.find((d) => d.title === "Silken Moon's Serenade")!;
+    expect(serenade.semantics.effects.map((e) => e.pieceCount)).toEqual([2, 4]);
+    expect(serenade.text).toContain('When dealing Elemental DMG');
+    expect(serenade.text).toContain('Moonsign is Nascent Gleam/Ascendant Gleam');
+  });
+  it('delivers Xingqiu Burst application/normal attack trigger, Nahida marks and assessed role before inventory mentions', async () => {
+    const provider = controlled(() => 'invalid JSON');
+    await service(provider).ask('offline', saved.at(-1)!.input);
+    const context = provider.contexts[0]!;
+    contextEvidence.Raiden = context;
+    expect(context).toBeDefined();
+    expect(context.evidence.find((d) => d.id === 'Xingqiu:combat3')?.text).toContain(
+      "Your active character's Normal Attacks will trigger consecutive sword rain attacks",
+    );
+    expect(context.evidence.find((d) => d.id === 'Nahida:combat2')?.text).toContain(
+      'Seed of Skandha',
+    );
+    expect(context.evidence.find((d) => d.id === 'RaidenShogun:quality-repair:0')?.text).toContain(
+      'off-field Hyperbloom',
+    );
+    expect(context.evidence.find((d) => d.id === 'RaidenShogun:quality-repair:2')?.text).toContain(
+      'does not assess the exact Nahida and Xingqiu lineup',
+    );
+  });
+  it('accepts source-backed two-set facts with complete hit/reaction/party conditions and safe absent followUp default', async () => {
+    const provider = controlled((context) => ({
+      segments: ['Deepwood Memories', 'Gilded Dreams'].map((title) => {
+        const doc = context.evidence.find((d) => d.title === title)!;
+        // Manually authored fixture of two complete source effects, not a model
+        // result or an optimized build recommendation.
+        return fact(
+          doc,
+          doc.text.replace('effect2Pc:', '2-piece:').replace('effect4Pc:', '4-piece:'),
+          title === 'Deepwood Memories'
+            ? 'After Elemental Skills or Bursts hit opponents'
+            : 'Within 8s of triggering an Elemental Reaction',
+        );
+      }),
+    }));
+    const response = await service(provider).ask('offline', saved[1]!.input);
+    expect(response.status, JSON.stringify(response)).toBe('answered');
+    expect(response.answer?.followUp).toBeNull();
+    expect(response.coverage).toEqual([
+      { subject: 'Deepwood Memories', covered: true },
+      { subject: 'Gilded Dreams', covered: true },
+    ]);
+    expect(provider.complete).toHaveBeenCalledTimes(2);
+  });
+  it('returns an honest partial comparison when Gilded is missing even with a positive audit', async () => {
+    const provider = controlled((context) => {
+      const doc = context.evidence.find((d) => d.title === 'Deepwood Memories')!;
+      return {
+        segments: [
+          fact(
+            doc,
+            'Deepwood Memories 4-piece reduces Dendro RES after Elemental Skills or Bursts hit opponents. The reduction is 30% for 8s and can trigger off-field.',
+            'After Elemental Skills or Bursts hit opponents',
+          ),
+        ],
+        followUp: null,
+      };
+    });
+    const response = await service(provider).ask('offline', saved[1]!.input);
+    expect(response.status).toBe('partial');
+    expect(response.reason).toBe('incomplete_coverage');
+    expect(response.coverage.find((s) => s.subject === 'Gilded Dreams')?.covered).toBe(false);
+    expect(response.limitations.join(' ')).toContain('Missing requested coverage: Gilded Dreams');
+  });
+  it.each([
+    [
+      'If a teammate reliably holds Deepwood Memories, Gilded Dreams is a sensible reaction build for Alhaitham; preserve that teammate requirement when choosing between sets.',
+      'answered',
+    ],
+    [
+      'Gilded Dreams is a sensible reaction build for Alhaitham; choose between it and Deepwood Memories.',
+      'unsupported',
+    ],
+  ])('retains qualified reasoning and its editorial prerequisite: %s', async (text, status) => {
+    const provider = controlled((context) => {
+      const doc = context.evidence.find((d) => d.id === 'Alhaitham:batch01:4')!;
+      return {
+        segments: [
+          {
+            ...fact(
+              doc,
+              text,
+              'Gilded Dreams is a sensible reaction build when a teammate reliably holds Deepwood Memories',
+            ),
+            basis: 'interpretation',
+          },
+        ],
+        followUp: null,
+      };
+    });
+    expect(
+      (
+        await service(provider).ask(
+          'offline',
+          request('Alhaitham', 'Compare Deepwood Memories and Gilded Dreams for a reaction build.'),
+        )
+      ).status,
+    ).toBe(status);
+  });
+  it('allows kit discussion while precisely disclosing absent assessed strategic coverage', async () => {
+    const provider = controlled((context) => ({
+      segments: [fact(context.evidence.find((d) => d.id === 'RaidenShogun:combat2')!)],
+      followUp: null,
+    }));
+    const response = await service(provider, oldKnowledge).ask('offline', saved.at(-1)!.input);
+    expect(response.status, JSON.stringify(response)).toBe('partial');
+    expect(response.answer?.segments).toHaveLength(1);
+    expect(response.limitations.join(' ')).toContain('No assessed Hyperbloom strategy');
+  });
+  it('preserves existing scoped KQM source assessment separately from unassessed inventories', async () => {
+    const provider = controlled((context) => ({
+      segments: [
+        fact(
+          context.evidence.find(
+            (d) =>
+              d.topic === 'roles' &&
+              d.assessment === 'source_compared_relationship_qualitative_conditions_pending',
+          )!,
+        ),
+      ],
+      followUp: null,
+    }));
+    const response = await service(provider).ask(
+      'offline',
+      request('Neuvillette', 'What guide-supported role does Neuvillette have?'),
+    );
+    expect(response.status).toBe('answered');
+    expect(response.limitations.join(' ')).toContain('qualitative conditions pending review');
+  });
+  it('does not call an HP/artifact explanation complete using only a scoped role paragraph', async () => {
+    const provider = controlled((context) => ({
+      segments: [
+        fact(
+          context.evidence.find(
+            (d) =>
+              d.topic === 'roles' &&
+              d.assessment === 'source_compared_relationship_qualitative_conditions_pending',
+          )!,
+        ),
+      ],
+      followUp: null,
+    }));
+    const response = await service(provider).ask(
+      'offline',
+      request('Neuvillette', 'Explain the role, HP and artifact conditions for this build.'),
+    );
+    expect(response.status).toBe('partial');
+    expect(response.coverage).toEqual(
+      expect.arrayContaining([
+        { subject: 'HP conditions', covered: false },
+        { subject: 'Artifact conditions', covered: false },
+      ]),
+    );
+  });
+  it.each(['Aino', 'Alhaitham'])(
+    'transports an actual provider-free accepted preceding exchange into %s follow-up context',
+    async (key) => {
+      let calls = 0;
+      const provider = controlled((context) =>
+        ++calls === 1
+          ? {
+              segments: [
+                ...['skill', 'burst'].map((topic) =>
+                  fact(context.evidence.find((d) => d.characterKey === key && d.topic === topic)!),
+                ),
+                ...(key === 'Aino'
+                  ? [
+                      fact(
+                        context.evidence.find(
+                          (d) => d.characterKey === key && d.topic === 'roles',
+                        )!,
+                      ),
+                    ]
+                  : []),
+              ],
+              followUp: null,
+            }
+          : 'invalid JSON',
+      );
+      const advisor = service(provider);
+      const before = request(
+        key,
+        'Explain the Elemental Skill and Burst mechanics, keeping their stated targets and activation requirements. Treat equipment and current combat conditions as unknown.',
+      );
+      const accepted = await advisor.ask('offline', before);
+      expect(accepted.status).toBe('answered');
+      const pending = json('quality-repair/pending-live-cases.json');
+      const entry = [...pending.cases, ...pending.priorQualityRegressions].find(
+        (c) =>
+          c.id ===
+          (key === 'Aino' ? 'Aino:changed-constraint-followup' : 'alhaitham-changed-context'),
+      );
+      const next = characterAdvisorRequestSchema.parse({
+        // Construct explicit request fields; no case metadata enters the API.
+        characterKey: key,
+        question: entry.input?.question ?? entry.question,
+        useRecordedContext: false,
+        teamKeys: [],
+        history: [],
+      });
+      next.history = [
+        { role: 'user', content: before.question },
+        {
+          role: 'assistant',
+          content: accepted
+            .answer!.segments.map((s) => s.text)
+            .join('\n')
+            .slice(0, 1500),
+        },
+      ];
+      expect(next.history[1]!.content.length).toBeGreaterThan(600);
+      await advisor.ask('offline', next);
+      expect(provider.contexts[1]?.history).toEqual(
+        next.history.map((h) => ({ ...h, content: h.content.slice(0, 600) })),
+      );
+    },
+  );
+  it('does not silently lose a fifth named team member beyond the four-character retrieval boundary', async () => {
+    const input = characterAdvisorRequestSchema.parse({
+      characterKey: 'Neuvillette',
+      useRecordedContext: false,
+      question: 'In a Neuvillette, Furina, Kazuha, Zhongli team, replace Zhongli with Xilonen.',
+      teamKeys: ['Neuvillette', 'Furina', 'KaedeharaKazuha', 'Zhongli'],
+    });
+    const provider = controlled((context) => ({
+      segments: [fact(context.evidence.find((d) => d.id === 'Neuvillette:combat2')!)],
+      followUp: null,
+    }));
+    const response = await service(provider).ask('offline', input);
+    expect(response.contextKeys).toHaveLength(5);
+    expect(response.status).toBe('partial');
+    expect(response.coverage.find((s) => s.subject === 'Kaedehara Kazuha')?.covered).toBe(false);
+  });
+  it('does not confuse Raiden Skill identity with its legitimate Burst damage buff mention', async () => {
+    const provider = controlled((context) => {
+      const doc = context.evidence.find((d) => d.id === 'RaidenShogun:combat2')!;
+      return {
+        segments: [fact(doc, 'Transcendence: Baleful Omen is an Elemental Skill. ' + doc.text)],
+        followUp: null,
+      };
+    });
+    const response = await service(provider).ask(
+      'offline',
+      request('RaidenShogun', 'Explain the Elemental Skill.'),
+    );
+    expect(response.status).toBe('answered');
+    expect(response.answer?.segments[0]?.text).toContain('Burst DMG');
+  });
+  it.each([
+    [
+      'Furina',
+      'How does Salon Solitaire work with Yelan? Discuss their off-field abilities.',
+      'Yelan:combat3',
+      'when your active character uses a Normal Attack',
+    ],
+    [
+      'Bennett',
+      'Explain Fantastic Voyage, then contrast Noblesse Oblige and Instructor triggers.',
+      'Bennett:combat3',
+      'higher than 70%',
+    ],
+    [
+      'Fischl',
+      'Walk me through Golden Troupe, including leaving and taking the field.',
+      'Fischl:item:artifact_set:15032',
+      'cleared 2s after taking the field',
+    ],
+  ])(
+    'held-out %s wording sends manually identified enabling conditions',
+    async (key, question, id, expected) => {
+      // Expectations manually justified by the pinned Yelan Burst, Bennett Burst
+      // and shared Golden Troupe effect, not derived from retrieval helpers.
+      const provider = controlled(() => 'invalid JSON');
+      await service(provider).ask('offline', request(key, question));
+      contextEvidence[key] = provider.contexts[0]!;
+      expect(provider.contexts[0]?.evidence.find((d) => d.id === id)?.text).toContain(expected);
+    },
+  );
+  it.each([
+    [
+      'When current HP increases or decreases, CRIT Rate will be increased by 12% for 5s. Max 3 stacks.',
+      'answered',
+    ],
+    ['CRIT Rate will be increased by 12% for 5s. Max 3 stacks.', 'unsupported'],
+  ])('held-out Lyney/Marechaussee preserves its HP activation: %s', async (effect, status) => {
+    const provider = controlled((context) => {
+      const doc = context.evidence.find((d) => d.title === 'Marechaussee Hunter')!;
+      return {
+        segments: [
+          fact(
+            doc,
+            'Marechaussee Hunter 4-piece: ' + effect,
+            'When current HP increases or decreases',
+          ),
+        ],
+        followUp: null,
+      };
+    });
+    expect(
+      (
+        await service(provider).ask(
+          'offline',
+          request('Lyney', 'Explain Marechaussee Hunter conditions.'),
+        )
+      ).status,
+    ).toBe(status);
+  });
+  it('retains invalid support failures; never stitches missing words or coerces other nullable fields', async () => {
+    for (const generate of [
+      (c: Context) => ({
+        segments: [fact(c.evidence[0]!, undefined, 'made up ... noncontiguous support')],
+      }),
+      (c: Context) => ({ segments: [fact(c.evidence[0]!)], followUp: 0 }),
+      () => '{"segments":[',
+    ]) {
+      const provider = controlled(generate);
+      expect(
+        (await service(provider).ask('offline', request('Aino', 'Explain the Skill.'))).status,
+      ).toBe('unsupported');
+    }
+  });
+});
+afterAll(() => {
+  writeFileSync(
+    new URL('quality-repair/review-fix/replay-results.json', artifacts),
+    JSON.stringify(
+      {
+        kind: 'provider-free-production-service-replay-not-live-success',
+        replay,
+      },
+      null,
+      2,
+    ) + '\n',
+  );
+  writeFileSync(
+    new URL('quality-repair/review-fix/context-evidence.json', artifacts),
+    JSON.stringify(
+      {
+        kind: 'actual-context-construction-with-offline-provider-no-live-quality-claim',
+        contexts: contextEvidence,
+      },
+      null,
+      2,
+    ) + '\n',
+  );
+});

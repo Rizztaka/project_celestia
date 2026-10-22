@@ -1,0 +1,23 @@
+{
+  "contractVersion": 1,
+  "key": "OtherworldlyStory",
+  "gameId": 14303,
+  "name": "Otherworldly Story",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/otherworldlystory.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "c71e463af76ab6f9b6fb10db06e6c9688eae1f798beab841ee8aa8305c59ffd1",
+    "license": "MIT"
+  },
+  "description": "A cheap fantasy novel with no value whatsoever. Any claim that it possesses the power of catalysis is also pure fantasy.",
+  "weaponType": "Catalyst",
+  "rarity": 3,
+  "effectName": "Energy Shower",
+  "refinements": [
+    { "rank": 1, "description": "Picking up an Elemental Energy Orb/Particle recovers 1% HP." },
+    { "rank": 2, "description": "Each Elemental Orb or Particle collected restores 1.25% HP." },
+    { "rank": 3, "description": "Each Elemental Orb or Particle collected restores 1.5% HP." },
+    { "rank": 4, "description": "Each Elemental Orb or Particle collected restores 1.75% HP." },
+    { "rank": 5, "description": "Each Elemental Orb or Particle collected restores 2% HP." }
+  ]
+}

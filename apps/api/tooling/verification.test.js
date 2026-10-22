@@ -231,18 +231,15 @@ describe('Narrow formatting preservation', () => {
       ),
     ).toThrow('Historical raw evidence changed');
   });
-  it('checks the four remaining exception hashes and retires modernized AI source', () => {
+  it('keeps only the historical document exception after AI retirement and UI modernization', () => {
     expect(verifyFormatExceptions()).toEqual([
       '!docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md',
-      '!apps/web/index.html',
-      '!apps/web/src/App.css',
-      '!apps/web/src/index.css',
     ]);
   });
   it('rejects changed exception bytes without changing the real file', () => {
     expect(() =>
       verifyFormatExceptions((path) =>
-        path === 'apps/web/index.html'
+        path === 'docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md'
           ? Buffer.from('changed')
           : readFileSync(join(repoRoot, path)),
       ),

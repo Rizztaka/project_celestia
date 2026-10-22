@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "RoyalGrimoire",
+  "gameId": 14404,
+  "name": "Royal Grimoire",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/royalgrimoire.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "b7dd1f6aa24657130a560fa790cdca11a85ab687dd2da4914f3ca3c09de934e5",
+    "license": "MIT"
+  },
+  "description": "A book that once belonged to a court mage of Mondstadt who served the nobility. It contains faithful and comprehensive historical accounts as well as magic spells.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Focus",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 8%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 2,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 10%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 3,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 12%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 4,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 14%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 5,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 16%. Max 5 stacks. A CRIT Hit removes all stacks."
+    }
+  ]
+}

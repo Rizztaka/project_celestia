@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-22",
+  "verdict": "ready for owner-authorized local commit",
+  "parent": "76aae8aff77b2b90fadb9b94d7c9e3a90d98c719",
+  "exactSnapshot": {
+    "independentCheckout": true,
+    "noWorkspaceSecrets": true,
+    "noLiveDatabase": true,
+    "passedTests": 157,
+    "failedTests": 0,
+    "skippedTests": 0,
+    "testFiles": 16,
+    "report": "exact-commit-tests.json",
+    "checkedSourceBlobs": {
+      "apps/api/tooling/build-ui-character-index.mjs": "0d19379bbad91ba44e7cb332e1dbcd011241d1b9",
+      "apps/api/tooling/c6-c7-browser-check.mjs": "dc9f9183aae6ae02442c4ab2ce72e1accf5cbc80",
+      "apps/api/tooling/journey-client.test.js": "7c2245e601bac4a6ae3df2d5b078ae0fb5609bb1",
+      "apps/api/tooling/premium-ui-client.test.js": "ff93d693fb369c00eeb1f79083bc9b58935adb43",
+      "apps/web/README.md": "c97d99101ddb08c1c35897d83a9d5d7c8f41f7b3",
+      "apps/web/index.html": "db998aea8335805c55f4a3c3edadd467280c9514",
+      "apps/web/public/favicon.svg": "5a7950cdcc772a4f0c0dcad67ade64db9a1486be",
+      "apps/web/src/App.tsx": "00ee1c08b023d5a4e1d59587ea08df4db2775593",
+      "apps/web/src/components/BuildInsights.tsx": "87015c9ea42798b78a87d3b3d0be3806e5ed20dc",
+      "apps/web/src/components/CharacterCatalog.tsx": "bce6a6227f8c68958c3266ed29a4b540d531bba9",
+      "apps/web/src/components/CharacterProfile.tsx": "7227353e18f9af73dd0a363e04de9864d657c455",
+      "apps/web/src/components/CompanionLayout.tsx": "b557cc6e8f10001283e201b9e6de0fe06a512527",
+      "apps/web/src/components/DomainSchedule.tsx": "85005f91c695a5ef6a48ecb2b3beaad3aa6d88e9",
+      "apps/web/src/components/SocialLogin.tsx": "916990260781e5034b7d9a39b63ca6eaa55bb0b0",
+      "apps/web/src/components/TodayPlan.tsx": "c37bbcb4f4fe6f99b4011abcce9fe0dae15a4059",
+      "apps/web/src/components/Ui.tsx": "8dfcaf9dae4902959fd7b174cd6f1c7d9f87d0d5",
+      "apps/web/src/index.css": "0df6202556d019b6b50002612eb7f6be83560bb7",
+      "apps/web/src/lib/artwork.ts": "6715d54443f9ee57a55b0e6acf1070e7c172f7cd",
+      "apps/web/src/lib/character-reference-index.json": "786cc6bb63721759fda711946286840e65dbe6ae",
+      "apps/web/src/pages/CharacterDetailPage.tsx": "dd20cfe6b7be5acbf5e0685a9d19d379213e6e59",
+      "apps/web/src/pages/DashboardPage.tsx": "e489efce02add5477c1b68e54781f80beb9fb07f",
+      "apps/web/src/pages/ImportPage.tsx": "f9d7653397af14cba7aa48442100e71280ed33a6",
+      "apps/web/src/pages/IntelligencePage.tsx": "97ab648fc8d45d063b2bb6c6ae4bae9265e50265",
+      "apps/web/src/pages/InventoryPage.tsx": "d189066b9d839ca6ec1124c91400fd9f1ec46a5f",
+      "apps/web/src/pages/LoginPage.tsx": "833754dab75da63c2b01a441e295851f6e383f7e",
+      "apps/web/src/pages/PasswordRecoveryPage.tsx": "a71f8816c73ff7f6955ada915a7f29c7be6b59c3",
+      "apps/web/src/pages/PlannerPage.tsx": "f12bc1286634699945ec613a8136fdcfabfb34c1",
+      "apps/web/src/pages/ProfilePage.tsx": "dca560b02717129b4819284e091a2f9a80e503de",
+      "apps/web/src/pages/RegisterPage.tsx": "ed14510b6d6849e38badefefcebea780a5a8a5d5",
+      "apps/web/src/pages/RosterPage.tsx": "1cb891620128233cac5ac5b33580d4d1c52bb497",
+      "apps/web/src/styles/companion.css": "62ec6aec773834a8620884be1224cd164e7b8eb6"
+    }
+  },
+  "checks": {
+    "contractsBuild": "passed",
+    "apiProductionBuild": "passed",
+    "webProductionBuildAndTypes": "passed",
+    "fullWebLint": "passed",
+    "changedApiToolingLint": "passed",
+    "authoredFormatting": "passed; indexed LF bytes checked to avoid Windows checkout conversion",
+    "stagedWhitespace": "passed"
+  },
+  "browserAcceptance": "See validation.json: earlier complete-app acceptance with synthetic HTTP data; no live-account acceptance claimed.",
+  "scope": "Premium Genshin interface, canonical character archive, deterministic Build lab presentation, random simulator redirect, tests and review artifacts.",
+  "preservation": {
+    "nineOriginalDraftArchives": "SHA-256 verified",
+    "pinnedProfiles": "unchanged from parent",
+    "legacyNikkeRouteAndTransport": "retained in commit; separate working removal remains unstaged",
+    "databaseSchema": "unchanged from parent",
+    "accountData": "unchanged by UI",
+    "otherSourceDrafts": "unstaged and preserved"
+  },
+  "limits": [
+    "No push or deployment authorized.",
+    "Browser acceptance uses a synthetic fixture, not a live database or real account.",
+    "No expansion of executable combat-mechanic coverage is claimed."
+  ]
+}

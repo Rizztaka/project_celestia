@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "BloodstainedChivalry",
+  "gameId": 15008,
+  "name": "Bloodstained Chivalry",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/bloodstainedchivalry.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2a2c82c5527babcf8a2989d2ecf214fc479771a25a453406143679d25b15be27",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Bloodstained Flower of Iron",
+      "description": "A dried flower stained black with blood and now as hard as steel. Probably some sort of a memento for its former master."
+    },
+    {
+      "slot": "plume",
+      "name": "Bloodstained Black Plume",
+      "description": "A raven feather pinned to a knight's cape. Countless bloodstains have dyed it pitch black."
+    },
+    {
+      "slot": "sands",
+      "name": "Bloodstained Final Hour",
+      "description": "A timepiece once used by a knight. The liquid inside has dried up, rendering it useless."
+    },
+    {
+      "slot": "goblet",
+      "name": "Bloodstained Chevalier's Goblet",
+      "description": "The dark metallic vessel owned by the Bloodstained Knight. Its exterior has been stained as black as the night by smoke and coagulated blood."
+    },
+    {
+      "slot": "circlet",
+      "name": "Bloodstained Iron Mask",
+      "description": "The iron mask the knight used to conceal their identity. Many have speculated about the face behind the mask."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Physical DMG +25%" },
+    {
+      "pieces": 4,
+      "description": "After defeating an opponent, increases Charged Attack DMG by 50%, and reduces its Stamina cost to 0 for 10s."
+    }
+  ]
+}

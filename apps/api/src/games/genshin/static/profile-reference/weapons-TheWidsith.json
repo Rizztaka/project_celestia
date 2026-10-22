@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "TheWidsith",
+  "gameId": 14402,
+  "name": "The Widsith",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/thewidsith.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "d08ee31fca313a31430546f89bbaa106aae34fbb212a6824a30ea4edc86c4dba",
+    "license": "MIT"
+  },
+  "description": "A heavy notebook filled with musical scores. Though suffering from moth damage and heavy wear-and-tear, there is still much power to be found among the hand-written words within.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Debut",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "When the character takes the field, they will gain a random theme song for 10s. This can only occur once every 30s. Recitative: ATK is increased by 60%. Aria: Increases all Elemental DMG by 48%. Interlude: Elemental Mastery is increased by 240."
+    },
+    {
+      "rank": 2,
+      "description": "When the character takes the field, they will gain a random theme song for 10s. This can only occur once every 30s. Recitative: ATK is increased by 75%. Aria: Increases all Elemental DMG by 60%. Interlude: Elemental Mastery is increased by 300."
+    },
+    {
+      "rank": 3,
+      "description": "When the character takes the field, they will gain a random theme song for 10s. This can only occur once every 30s. Recitative: ATK is increased by 90%. Aria: Increases all Elemental DMG by 72%. Interlude: Elemental Mastery is increased by 360."
+    },
+    {
+      "rank": 4,
+      "description": "When the character takes the field, they will gain a random theme song for 10s. This can only occur once every 30s. Recitative: ATK is increased by 105%. Aria: Increases all Elemental DMG by 84%. Interlude: Elemental Mastery is increased by 420."
+    },
+    {
+      "rank": 5,
+      "description": "When the character takes the field, they will gain a random theme song for 10s. This can only occur once every 30s. Recitative: ATK is increased by 120%. Aria: Increases all Elemental DMG by 96%. Interlude: Elemental Mastery is increased by 480."
+    }
+  ]
+}

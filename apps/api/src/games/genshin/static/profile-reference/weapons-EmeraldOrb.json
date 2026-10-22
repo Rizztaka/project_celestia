@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "EmeraldOrb",
+  "gameId": 14304,
+  "name": "Emerald Orb",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/emeraldorb.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "3f525f62827d1d1cd2ab49d48bb27c8d7738ece188b4d50870eb9213859dec70",
+    "license": "MIT"
+  },
+  "description": "A catalyst carved out of the hard jade from Jueyun Karst north of Liyue. Small, light, and durable, it is known more colloquially as the \"jade ball.\"",
+  "weaponType": "Catalyst",
+  "rarity": 3,
+  "effectName": "Rapids",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Upon causing a Vaporize, Electro-Charged, Frozen, Bloom, Lunar-Charged, Lunar-Bloom, or a Hydro-infused Swirl reaction, ATK is increased by 20% for 12s."
+    },
+    {
+      "rank": 2,
+      "description": "Upon causing a Vaporize, Electro-Charged, Frozen, Bloom, Lunar-Charged, Lunar-Bloom, or a Hydro-infused Swirl reaction, ATK is increased by 25% for 12s."
+    },
+    {
+      "rank": 3,
+      "description": "Upon causing a Vaporize, Electro-Charged, Frozen, Bloom, Lunar-Charged, Lunar-Bloom, or a Hydro-infused Swirl reaction, ATK is increased by 30% for 12s."
+    },
+    {
+      "rank": 4,
+      "description": "Upon causing a Vaporize, Electro-Charged, Frozen, Bloom, Lunar-Charged, Lunar-Bloom, or a Hydro-infused Swirl reaction, ATK is increased by 35% for 12s."
+    },
+    {
+      "rank": 5,
+      "description": "Upon causing a Vaporize, Electro-Charged, Frozen, Bloom, Lunar-Charged, Lunar-Bloom, or a Hydro-infused Swirl reaction, ATK is increased by 40% for 12s."
+    }
+  ]
+}

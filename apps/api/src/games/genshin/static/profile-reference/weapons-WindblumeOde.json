@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "WindblumeOde",
+  "gameId": 15413,
+  "name": "Windblume Ode",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/windblumeode.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "8731bc902dbb026579a8c78d801b2b0fc12e22a1dd5e660e5b0c22dc24f7c7ad",
+    "license": "MIT"
+  },
+  "description": "A bow adorned with nameless flowers that bears the earnest hopes of an equally nameless person.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Windblume Wish",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "After using an Elemental Skill, receive a boon from the ancient wish of the Windblume, increasing ATK by 16% for 6s."
+    },
+    {
+      "rank": 2,
+      "description": "After using an Elemental Skill, receive a boon from the ancient wish of the Windblume, increasing ATK by 20% for 6s."
+    },
+    {
+      "rank": 3,
+      "description": "After using an Elemental Skill, receive a boon from the ancient wish of the Windblume, increasing ATK by 24% for 6s."
+    },
+    {
+      "rank": 4,
+      "description": "After using an Elemental Skill, receive a boon from the ancient wish of the Windblume, increasing ATK by 28% for 6s."
+    },
+    {
+      "rank": 5,
+      "description": "After using an Elemental Skill, receive a boon from the ancient wish of the Windblume, increasing ATK by 32% for 6s."
+    }
+  ]
+}

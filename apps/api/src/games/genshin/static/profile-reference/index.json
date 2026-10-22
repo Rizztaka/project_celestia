@@ -1,0 +1,1785 @@
+{
+  "contractVersion": 1,
+  "characters": {
+    "Aether": {
+      "file": "characters-Aether.json",
+      "sha256": "ea7d22a0bd14c75fbdfd92f93f469d446293673d120d1180c317ce30022785b5"
+    },
+    "Aino": {
+      "file": "characters-Aino.json",
+      "sha256": "e4d6a6ff385f06bd17c5628c5ddb03e7a12acf460881bd26be98afa7de845a62"
+    },
+    "Albedo": {
+      "file": "characters-Albedo.json",
+      "sha256": "ad3bfedb20a92baa4aae5c84ade75d764ed866c492ba7860a21bd99288f12473"
+    },
+    "Alhaitham": {
+      "file": "characters-Alhaitham.json",
+      "sha256": "b742b1d6b1ce2f85851b1b4baf686af443101c3893e30c5045e33565fd4d0319"
+    },
+    "Aloy": {
+      "file": "characters-Aloy.json",
+      "sha256": "b875539bbf84e1f90aabb8319fec6be8f4d5c2029f48d3e1c83e05546d4d3220"
+    },
+    "Alyosha": {
+      "file": "characters-Alyosha.json",
+      "sha256": "993a93534af391205d45eadfc4b4a653f6c95c578d4aca3df1c3bdc46fb6a076"
+    },
+    "Amber": {
+      "file": "characters-Amber.json",
+      "sha256": "d6b8e026eaae4e605179437c22ffdd17697817e335864eabafcec2d1ccff2e28"
+    },
+    "AratakiItto": {
+      "file": "characters-AratakiItto.json",
+      "sha256": "fd78d7f7ea2b41599cb32fedc572701c0d4af288df8db001856fe404bf74df68"
+    },
+    "Arlecchino": {
+      "file": "characters-Arlecchino.json",
+      "sha256": "f457991e45370d586c84d6901ab961c803bca23871084ce5645fbb8e2e3c5b32"
+    },
+    "Baizhu": {
+      "file": "characters-Baizhu.json",
+      "sha256": "92da937ad21cc5bce7b92ac2bc2adfe27e956721ab89cf0d1b05bcb2b86f0d1c"
+    },
+    "Barbara": {
+      "file": "characters-Barbara.json",
+      "sha256": "21a8de35de28aefbe90215bfb8730221923cd5e501f61a8a18373ca7181cca60"
+    },
+    "Beidou": {
+      "file": "characters-Beidou.json",
+      "sha256": "1b8f5dce376e4bf288dceb5f2824c59d82f6f9095bbab78fd7c87ca9cf7decd9"
+    },
+    "Bennett": {
+      "file": "characters-Bennett.json",
+      "sha256": "4a8f284bbc5b80eb3beb05e2fad0465e2502a838765c2ad64177ad3742a05e8d"
+    },
+    "Candace": {
+      "file": "characters-Candace.json",
+      "sha256": "47cdb08683f5b1a5513057ac2b6f764abfd4e02e17e08a1f0a36631547af4b38"
+    },
+    "Charlotte": {
+      "file": "characters-Charlotte.json",
+      "sha256": "82a5ddb33fd3e2d1f69db712bb92e76f466e716e7558ce4432500baca1ff770a"
+    },
+    "Chasca": {
+      "file": "characters-Chasca.json",
+      "sha256": "aaeb253e36fe7dd31c59bcf6e7c0a39456c90321d54868da86a23712e99a1acf"
+    },
+    "Chevreuse": {
+      "file": "characters-Chevreuse.json",
+      "sha256": "fd55eac9b560ea26b946032331a86cbb7292705623713527c06a1ad8e974a5d8"
+    },
+    "Chiori": {
+      "file": "characters-Chiori.json",
+      "sha256": "4adaa87a97b4a881e628e17e900db2488fa7a9486ead7c962f00ad49df91dd76"
+    },
+    "Chongyun": {
+      "file": "characters-Chongyun.json",
+      "sha256": "a000ddc141bb51a62dad6c65b9bc349f9436341b738ac4bbb22ea4f384a677e8"
+    },
+    "Citlali": {
+      "file": "characters-Citlali.json",
+      "sha256": "c845d99ee7986516075e6e1c162308724cce73c02ca7cd4245f5055d9f52c521"
+    },
+    "Clorinde": {
+      "file": "characters-Clorinde.json",
+      "sha256": "c50503b7f66ffd04fdfa1f36a162da6f240e3511ace35fb768689c84cbfebc2f"
+    },
+    "Collei": {
+      "file": "characters-Collei.json",
+      "sha256": "b87fbad54972cde4ee73d93d9f0c49a1e858fcc4227ad56e15aea13c4d838a75"
+    },
+    "Columbina": {
+      "file": "characters-Columbina.json",
+      "sha256": "a5efb67bfc06d3ca4d87f455e53427246bedf9bc4d2930571dfbde0b69cc7fd4"
+    },
+    "Cyno": {
+      "file": "characters-Cyno.json",
+      "sha256": "fe2793140059cdeacd219459c5344d7919bf425440f6292da1302a7a8c138b6c"
+    },
+    "Dahlia": {
+      "file": "characters-Dahlia.json",
+      "sha256": "c472e343a367a42008415d48950c7442e7881e335d66a01e1725bc90735eaf63"
+    },
+    "Dehya": {
+      "file": "characters-Dehya.json",
+      "sha256": "35d8bb7979796bb8f469687e405e40c406fc3984be2ffbcf2e1915c723ebe05e"
+    },
+    "Diluc": {
+      "file": "characters-Diluc.json",
+      "sha256": "fea81eda129eead2ada6bf77a05c8aa4693a9098c0e2bf869a56c5fd804e86db"
+    },
+    "Diona": {
+      "file": "characters-Diona.json",
+      "sha256": "9b327982b0250ff85fc06c265006bed112f6d298df65e56286897372117ad886"
+    },
+    "Dori": {
+      "file": "characters-Dori.json",
+      "sha256": "324e1f7ebbcd43e6bb4348cacba7868b7a59b0e496ac15d33686a287c32c32f0"
+    },
+    "Durin": {
+      "file": "characters-Durin.json",
+      "sha256": "272ac255c1041d5bade95246ee35f84509139e61412a0ab57127ffeebf3c300d"
+    },
+    "Emilie": {
+      "file": "characters-Emilie.json",
+      "sha256": "a075697c6a684e92a410286d99b5cf2645535d8f513631595ab5515600578225"
+    },
+    "Escoffier": {
+      "file": "characters-Escoffier.json",
+      "sha256": "3ea4e88e9c58e72ef705e53ec4988c74a40ce6a72e48effff8bd69a041496ba6"
+    },
+    "Eula": {
+      "file": "characters-Eula.json",
+      "sha256": "0ec5f0be0a1445b1e8938e01577661ec4a3f653a170c1e0f4d6234332be48867"
+    },
+    "Faruzan": {
+      "file": "characters-Faruzan.json",
+      "sha256": "1d2551f635f6ea26f8035e75c4cab6d4c5827bce14596cebbcbfbb17547c7a9e"
+    },
+    "Fischl": {
+      "file": "characters-Fischl.json",
+      "sha256": "2f9e8cf3ff01de5c7134c8404d60e8c18597bf12027d3cf29c7f59ad0df60cea"
+    },
+    "Flins": {
+      "file": "characters-Flins.json",
+      "sha256": "793bd453a49f64c34a76c672f0885d12bcf0905ea741c14f2953804066765743"
+    },
+    "Freminet": {
+      "file": "characters-Freminet.json",
+      "sha256": "23bec11871a2d13db6df931f5286b85b34d5a509fcd66b04ff96b4177cb1c220"
+    },
+    "Furina": {
+      "file": "characters-Furina.json",
+      "sha256": "4e81a73f393227cb5fffefe3fd9224e81253bc1daa97d7826004b6df298e3cb2"
+    },
+    "Gaming": {
+      "file": "characters-Gaming.json",
+      "sha256": "a172f17ecedefc852230cfefbcb809191d8a0ae253e5beebf910b9bcad8d9e08"
+    },
+    "Ganyu": {
+      "file": "characters-Ganyu.json",
+      "sha256": "05f95f3ef113372034587dbcdd153ac9ef3325f7410ae33786d5f053435e2fad"
+    },
+    "Gorou": {
+      "file": "characters-Gorou.json",
+      "sha256": "e766734dcda65dda535d24c7b07f726d408eb85e233f53425c4c0092e91a5ba9"
+    },
+    "HuTao": {
+      "file": "characters-HuTao.json",
+      "sha256": "fe8bfe4ba82dd7f32387216b9c806114524fd6eee80f94c216e4e7b9827f5ec1"
+    },
+    "Iansan": {
+      "file": "characters-Iansan.json",
+      "sha256": "4c33913b6771196c1010e243e8390fc5f0cb0187bec8352e338365e619239066"
+    },
+    "Ifa": {
+      "file": "characters-Ifa.json",
+      "sha256": "88f933b058d31eccc90c1c2bb7f4c8e8e0c9e90d4979de4aa99242dde5e5b13d"
+    },
+    "Illuga": {
+      "file": "characters-Illuga.json",
+      "sha256": "59703aaea8ecf5f64ca86d857d561d8ca0a475540586783b28633eb9850596c9"
+    },
+    "Ineffa": {
+      "file": "characters-Ineffa.json",
+      "sha256": "a325b95c85c03080d65f39a8c54f93622bf623b3832f153933105c391351039a"
+    },
+    "Jahoda": {
+      "file": "characters-Jahoda.json",
+      "sha256": "96e41b74416e153d9a1249d67a64039640fd46e33af77786fb6cb03b9146be53"
+    },
+    "Jean": {
+      "file": "characters-Jean.json",
+      "sha256": "d155a7abb455e9a100a24acd620572d50f457e6f66cc757d645fe405e84d2f0a"
+    },
+    "Kachina": {
+      "file": "characters-Kachina.json",
+      "sha256": "93a3aef68d019cb3e98257ff43769dfc133d091bc03f3815765f5d401db76e8d"
+    },
+    "KaedeharaKazuha": {
+      "file": "characters-KaedeharaKazuha.json",
+      "sha256": "f0be8ad3dd4ab8696289f89f05825188b74d45617ea37f445a18de7a0f44e1e5"
+    },
+    "Kaeya": {
+      "file": "characters-Kaeya.json",
+      "sha256": "3a9e1809e4d707b7d447db23bc82575c0e4e4ccd41d4435afb14584296389733"
+    },
+    "KamisatoAyaka": {
+      "file": "characters-KamisatoAyaka.json",
+      "sha256": "22fbf43f918c11b5281a22e1330311d0a3ba9fada2309197d65f8208697d06bb"
+    },
+    "KamisatoAyato": {
+      "file": "characters-KamisatoAyato.json",
+      "sha256": "e36262c6be8ef9acb7fcf9a1da2eafe43a04e9065522408dc0a57ad6c04f4f82"
+    },
+    "Kaveh": {
+      "file": "characters-Kaveh.json",
+      "sha256": "4ae0916437cbff4ef000e3acf4fa0c5e84a9b2ac245d42a1f3c9c0596895a234"
+    },
+    "Keqing": {
+      "file": "characters-Keqing.json",
+      "sha256": "adc66bfcfa3c950e42bd2160e83b91ede14fba191c38423f2caea9523a41bebf"
+    },
+    "Kinich": {
+      "file": "characters-Kinich.json",
+      "sha256": "4a97f13e391fa032269434fdedd703c698f08a6485893f6b79c3a1683deeee5e"
+    },
+    "Kirara": {
+      "file": "characters-Kirara.json",
+      "sha256": "265821525dde9f644c48b13bfc6299b7cf1673d1e906a9765146ba51e5755f1f"
+    },
+    "Klee": {
+      "file": "characters-Klee.json",
+      "sha256": "76607e772ef2f4bb64dadce3c2301bee4ab20a3cd3433549d232e29d1e66ad4e"
+    },
+    "KujouSara": {
+      "file": "characters-KujouSara.json",
+      "sha256": "c0cb1224d5d316d2ebf5d7d835e8ea48cc208a017e2fdc37de6906a8a4a84900"
+    },
+    "KukiShinobu": {
+      "file": "characters-KukiShinobu.json",
+      "sha256": "8f5e81cd367bf8404f17b19e6a972358a446683043b75c62013321047e60426e"
+    },
+    "LanYan": {
+      "file": "characters-LanYan.json",
+      "sha256": "66736f45aee501f9bad47a2b5df988bb1327f0a677c631ecc29d494721adc6b1"
+    },
+    "Lauma": {
+      "file": "characters-Lauma.json",
+      "sha256": "275755a4537b42dbb3f5628b1ec45c424ccea4225c717b171d733f8770f7937b"
+    },
+    "Layla": {
+      "file": "characters-Layla.json",
+      "sha256": "d58590bef0f0a8155fdb20f375ca45ee78d17e3cde3ed6d223a4bf9cbfdbc578"
+    },
+    "Linnea": {
+      "file": "characters-Linnea.json",
+      "sha256": "a2f3c601fe9dab9e2b00ede556427cb82650e78659d1391e14dd87a252c4da31"
+    },
+    "Lisa": {
+      "file": "characters-Lisa.json",
+      "sha256": "83fa15e78bac62b4c42a9228dc2dd1a6b6524cf046230655bfe48f664439769d"
+    },
+    "Lohen": {
+      "file": "characters-Lohen.json",
+      "sha256": "e888d892d7081d755da79870b4325c37fc5195d3f83a5b5b5e8fdb179af1058e"
+    },
+    "Lumine": {
+      "file": "characters-Lumine.json",
+      "sha256": "d56e59640f634e75ab7f5830de445cee021a29764fcfe4bdf3de2fa23ad8d5eb"
+    },
+    "Lynette": {
+      "file": "characters-Lynette.json",
+      "sha256": "a0ac6a444df3ed1b2d62622f3924c534955f03ab2edc6e9feab23136fac573d3"
+    },
+    "Lyney": {
+      "file": "characters-Lyney.json",
+      "sha256": "a83a56918e1ce5f636c6b52d1e2296c2bee9293be58e24b9cadf1151f77c81ac"
+    },
+    "Mavuika": {
+      "file": "characters-Mavuika.json",
+      "sha256": "cbc80a65c539e051d1c0bd294e70acc2169b1ff2534c67cace6ac537daab30dd"
+    },
+    "Mika": {
+      "file": "characters-Mika.json",
+      "sha256": "308d69c53bb1376d01e7dbc900146cd3f45d19e416b65da689f856db3a82dd46"
+    },
+    "Mona": {
+      "file": "characters-Mona.json",
+      "sha256": "2730f41a198ecd575e28f7c27e35524686cc46a9ca22f0367ead9c57c19bb798"
+    },
+    "Mualani": {
+      "file": "characters-Mualani.json",
+      "sha256": "34a11b678c9b60aa9489287351844dc1674e8398b7e991c97000c30da33b4a77"
+    },
+    "Nahida": {
+      "file": "characters-Nahida.json",
+      "sha256": "060bca1bdaa8e29c3ba776d3827a9053c2d305a4d44a65e5c6b50782ecaf60b8"
+    },
+    "Navia": {
+      "file": "characters-Navia.json",
+      "sha256": "f7d6ead4920251e76a0b6ade104621622e7f9f0f66f36a0d324b12dc14d066f6"
+    },
+    "Nefer": {
+      "file": "characters-Nefer.json",
+      "sha256": "f71d71d2d1d6b41aea6dc36928f400c71f098c5cf88af12017aecf3850e10cf5"
+    },
+    "Neuvillette": {
+      "file": "characters-Neuvillette.json",
+      "sha256": "5c1a6f1f97c9117b4e8a64ce4718b0be501a52d15bb7e92aedfb1698a519154a"
+    },
+    "Nicole": {
+      "file": "characters-Nicole.json",
+      "sha256": "f7c4e6fe02240ec098a990a65b83888ba8d38cef9b3e1f0451e5f643938ca3fa"
+    },
+    "Nilou": {
+      "file": "characters-Nilou.json",
+      "sha256": "adca5add1aa34ab39ad9696d23ebb79efaf65b22a43149cbe36c0854fd89c4b6"
+    },
+    "Ningguang": {
+      "file": "characters-Ningguang.json",
+      "sha256": "c5831077ddafab453c64919eb691327dcf5bfc14a702e81753ed5e77db634fd6"
+    },
+    "Noelle": {
+      "file": "characters-Noelle.json",
+      "sha256": "bf1be469766ccfc18b4e3eee0df03ea08383cebf1dc5728f94534f5a87cc793a"
+    },
+    "Odette": {
+      "file": "characters-Odette.json",
+      "sha256": "f6bf69e4019ba368fda5674b131efddef94f05577d1322472988e8b254c0d24a"
+    },
+    "Ororon": {
+      "file": "characters-Ororon.json",
+      "sha256": "11d97f14efd9fc986b20ebfb73bb9b5d9e194700565dc94eeba2c5c088ba990e"
+    },
+    "Prune": {
+      "file": "characters-Prune.json",
+      "sha256": "5f1f70ceac255380474ac2786bbdd98aa39ac769a55a84a9eef4ec4828764d98"
+    },
+    "Qiqi": {
+      "file": "characters-Qiqi.json",
+      "sha256": "9ca991da7afb142e5e21076009e862d414d3383bdf444704c84d8d0bc6ef6095"
+    },
+    "RaidenShogun": {
+      "file": "characters-RaidenShogun.json",
+      "sha256": "28d4cefd0fbb82d5d72b09b2a3005375e6b0a005e4bfa085ff721b6f7355a977"
+    },
+    "Razor": {
+      "file": "characters-Razor.json",
+      "sha256": "0ea827090106b43156a3d7a7cc00e2d6b2710d8396f9bcaee72dc43836c6f799"
+    },
+    "Rosaria": {
+      "file": "characters-Rosaria.json",
+      "sha256": "7bcfd0f9428d4e5debe0a6cb7ec32aa0a10e1d100fd800a61c9d449916e9a252"
+    },
+    "Sandrone": {
+      "file": "characters-Sandrone.json",
+      "sha256": "d6f07fdc49f5f71353210248c3703843f8755f98aa49a1cf4e6a6e96177978d7"
+    },
+    "SangonomiyaKokomi": {
+      "file": "characters-SangonomiyaKokomi.json",
+      "sha256": "3162e5b1486983e5df653a0b17feef4906f3653aed4225954ba7a82bcb79ae0b"
+    },
+    "Sayu": {
+      "file": "characters-Sayu.json",
+      "sha256": "53543e66d7a67eb950443552195001f4ca623828fd515ca9866efc823aeb4ecb"
+    },
+    "Sethos": {
+      "file": "characters-Sethos.json",
+      "sha256": "e4bc319601260bf4d864dd8af7c0051d103d11de1995a03b519f6abf74666057"
+    },
+    "Shenhe": {
+      "file": "characters-Shenhe.json",
+      "sha256": "f20367ed4b33f4dafe261b80854ffc527c63a575a55843bd82221b0a7de4a11a"
+    },
+    "ShikanoinHeizou": {
+      "file": "characters-ShikanoinHeizou.json",
+      "sha256": "b06998bf9389e9e352eb845419bf6221dd88fa21586a0e20f67d57c72c8fb2e8"
+    },
+    "Sigewinne": {
+      "file": "characters-Sigewinne.json",
+      "sha256": "8b71e9cc7d8502a146db54b49cd32946c82ea8c6bbee9e814062f77fd1356ba7"
+    },
+    "Skirk": {
+      "file": "characters-Skirk.json",
+      "sha256": "55e52f9ef8d9d2ad68414fe7a171c3937e0abc026d5d5f30ed6036b10dbf1476"
+    },
+    "Sucrose": {
+      "file": "characters-Sucrose.json",
+      "sha256": "fa5fe1e75f6593203f7e5abbc73d9f135084e35db3682f54f0e3cf6527a80b6a"
+    },
+    "Tartaglia": {
+      "file": "characters-Tartaglia.json",
+      "sha256": "3c0060836cb91a5d66011304363cfd46789fb10b5ad3e9c404226c077263ebd0"
+    },
+    "Thoma": {
+      "file": "characters-Thoma.json",
+      "sha256": "8977f5a17e4d066fa82001c8cb88321e1333e7db7dfc98fe22a9026d41b79b59"
+    },
+    "Tighnari": {
+      "file": "characters-Tighnari.json",
+      "sha256": "b16c1b4e6282c78f456d782fa1b12a47e426e29066a643f94c07be04aaf47b74"
+    },
+    "Varesa": {
+      "file": "characters-Varesa.json",
+      "sha256": "f38115252ec855ee16470b30e1234e041dab4ff1db0bfb87431d43446e465d47"
+    },
+    "Varka": {
+      "file": "characters-Varka.json",
+      "sha256": "e7b1d97c370026778269c16e8f601bca089e2f5775fd3a0d36e8be2b06e8db9a"
+    },
+    "Venti": {
+      "file": "characters-Venti.json",
+      "sha256": "fcfeba46293cf3a435eced3fb5a6c0e473b7391fda172933f35cdeb9b4ac08b1"
+    },
+    "Vesna": {
+      "file": "characters-Vesna.json",
+      "sha256": "3bfec08ea4a44814883d6ca09ba7be853c7a6d5949da0c56b895c03c62e460ec"
+    },
+    "Vodyanitsa": {
+      "file": "characters-Vodyanitsa.json",
+      "sha256": "2e1151f023e3aafdbf2bbc5cc5c0726cb424077488c8d7f30f34bf88b5c4e15e"
+    },
+    "Wanderer": {
+      "file": "characters-Wanderer.json",
+      "sha256": "17a02bc1ff4ce1674e94c7c22dc010d868740ff8d04be7cf71b823bec1b80eb6"
+    },
+    "Wriothesley": {
+      "file": "characters-Wriothesley.json",
+      "sha256": "b6637ad4638d22e6d615bf08b6672af0e750e659b617d8f213f5f99ca8bb82ae"
+    },
+    "Xiangling": {
+      "file": "characters-Xiangling.json",
+      "sha256": "95e3dce4c3bd9b8153becb38ca8095387a2b1cf68a1cf76f3b5c10505f6a6e7b"
+    },
+    "Xianyun": {
+      "file": "characters-Xianyun.json",
+      "sha256": "35952172ff556a7f56418e2bfb463e4d62936d203f7d7f9ee5f67c8201522941"
+    },
+    "Xiao": {
+      "file": "characters-Xiao.json",
+      "sha256": "be7eacd5814d8d082dffc597b475408fc6b83618eabfee9a82aad8926f3973b2"
+    },
+    "Xilonen": {
+      "file": "characters-Xilonen.json",
+      "sha256": "0ee4fdd634909087ce76c6dd41b75ad17ad78110cc4ca25ce38db72ddd5669bd"
+    },
+    "Xingqiu": {
+      "file": "characters-Xingqiu.json",
+      "sha256": "b21ab4f6eeb032321a34f3b41b38f3f2e2368ed07a58405b714cd862c18fbf2e"
+    },
+    "Xinyan": {
+      "file": "characters-Xinyan.json",
+      "sha256": "263cc6d40d81d68a2367d0287488e25f1b26b058e1694d3b8af5bcac522a13fc"
+    },
+    "YaeMiko": {
+      "file": "characters-YaeMiko.json",
+      "sha256": "86b53d89884b20bd3576ba8e2cb6607e65e9182d40eb41b881560bc80f01d883"
+    },
+    "Yanfei": {
+      "file": "characters-Yanfei.json",
+      "sha256": "d62f600ec817d721617e31e7f82d0bb61a24e313ed32372ebe64c8affe943501"
+    },
+    "Yaoyao": {
+      "file": "characters-Yaoyao.json",
+      "sha256": "0612e8fb8fa039a375005b4ee136e7984b9a43471d9439b816878d3bdadcb945"
+    },
+    "Yelan": {
+      "file": "characters-Yelan.json",
+      "sha256": "d5791cccd691a7ae4fb202baf745f91a14067933940bc5244037f52c3d4fef80"
+    },
+    "Yoimiya": {
+      "file": "characters-Yoimiya.json",
+      "sha256": "eab40d26d682c9b4d1a97f6fced8db52bb458c5da0aba166f9fb421d0c923e9e"
+    },
+    "YumemizukiMizuki": {
+      "file": "characters-YumemizukiMizuki.json",
+      "sha256": "a91a1b96fa097ecb532c931a3bf14e916ba64220f8460435b833315066855ea2"
+    },
+    "YunJin": {
+      "file": "characters-YunJin.json",
+      "sha256": "46d69502f35ccd000973a2cc35d1fb2d407cdf97fa59077664abc0441176b68e"
+    },
+    "Zhongli": {
+      "file": "characters-Zhongli.json",
+      "sha256": "aa8e9e4fced3891a408ceb5a0e18eb3fbb40108e18bfbe49304d9346c073a78b"
+    },
+    "Zibai": {
+      "file": "characters-Zibai.json",
+      "sha256": "c6be3e0164714b0306d92de89733a7d91ad5bb4c11b007488d9c5d871a37913c"
+    },
+    "TravelerAnemo": {
+      "file": "characters-TravelerAnemo.json",
+      "sha256": "8c1748c0ac181cf6960461f6c660e39972271d82cb0ce9aa15df4c7ce279a375"
+    },
+    "TravelerCryo": {
+      "file": "characters-TravelerCryo.json",
+      "sha256": "9326465ee5e6166e277ee0a59f9abbfc59519b7568ca12c5aea9765b863a4ee6"
+    },
+    "TravelerDendro": {
+      "file": "characters-TravelerDendro.json",
+      "sha256": "f8277f1592fa64a87f6f28ba4f09f682f0535628e95f888a333ff0f716504db6"
+    },
+    "TravelerElectro": {
+      "file": "characters-TravelerElectro.json",
+      "sha256": "2e6ae76d4fe1e7fdb8e94f6f3fdf84b6a1d5d17c5709d3ac863bcea4f738f568"
+    },
+    "TravelerGeo": {
+      "file": "characters-TravelerGeo.json",
+      "sha256": "c7314e495bbafd1cf7a1011097ccca4ba5313546312bbed6c930da8dac898b4e"
+    },
+    "TravelerHydro": {
+      "file": "characters-TravelerHydro.json",
+      "sha256": "845b185f4645215f19ec3fbfa55d488a0153402e25a047acc8fc73674de093fb"
+    },
+    "TravelerPyro": {
+      "file": "characters-TravelerPyro.json",
+      "sha256": "c5e8fadc23b4ca9df2980a6db7db1f19fea174df4263165939361b3569e86a43"
+    }
+  },
+  "weapons": {
+    "Absolution": {
+      "file": "weapons-Absolution.json",
+      "sha256": "55a2831977b61a22b4c6f4d5029e32bf2f198bc608237534a1e1aa19461e122d"
+    },
+    "Akuoumaru": {
+      "file": "weapons-Akuoumaru.json",
+      "sha256": "15e06ff67e5bd8a9ab71ceb6346d734ab2bce67adfdda85b8184f4f95675038b"
+    },
+    "AlleyHunter": {
+      "file": "weapons-AlleyHunter.json",
+      "sha256": "0231e6d0db7f4a2405878654c5c2751462296167aa4d79283cad8dd8e2be56dc"
+    },
+    "AmenomaKageuchi": {
+      "file": "weapons-AmenomaKageuchi.json",
+      "sha256": "dd0e828c7d58e625f0dea9bc84f7eaee2fcfc5a3a0d890c167301403beee4fc6"
+    },
+    "AmosBow": {
+      "file": "weapons-AmosBow.json",
+      "sha256": "0965fdd1890839678b1733cfacec79926dfd5cfaa9546ffbea45526d925ccefd"
+    },
+    "AngelosHeptades": {
+      "file": "weapons-AngelosHeptades.json",
+      "sha256": "21553816c0a4cb6dfd8863ae2830a18721155379973c8b840baaeade46d5dbf7"
+    },
+    "ApprenticesNotes": {
+      "file": "weapons-ApprenticesNotes.json",
+      "sha256": "c2dc4f167b768e71184298832a8d2c82e7609dc6a40032ba33fda1c3e454b554"
+    },
+    "AquaSimulacra": {
+      "file": "weapons-AquaSimulacra.json",
+      "sha256": "ec52429cf1387975028e44267b7acb0006d17c1273c40175109732ce1f530743"
+    },
+    "AquilaFavonia": {
+      "file": "weapons-AquilaFavonia.json",
+      "sha256": "fb96a0fc712a8a5945782bc25ea07be112b0975e0514332e486947021da24975"
+    },
+    "AshGravenDrinkingHorn": {
+      "file": "weapons-AshGravenDrinkingHorn.json",
+      "sha256": "ed46636879f641e7a262a963f1b49c455b47c08da6903b4f23dcc13fb42afa01"
+    },
+    "AstralVulturesCrimsonPlumage": {
+      "file": "weapons-AstralVulturesCrimsonPlumage.json",
+      "sha256": "29335a85e356533d63dbb111e621698e828349a621cd324bae89d5293a11272b"
+    },
+    "ATeaspoonOfTranscendence": {
+      "file": "weapons-ATeaspoonOfTranscendence.json",
+      "sha256": "10e578f99d39282d4f2b2ce1a48ef694299e7170cfdbe36fc19c6976646d869a"
+    },
+    "AthameArtis": {
+      "file": "weapons-AthameArtis.json",
+      "sha256": "70a58fdb15c6fb10493aa0d39e10d5c9cc8da36a68b1f3b4658beb599fb0728d"
+    },
+    "AThousandBlazingSuns": {
+      "file": "weapons-AThousandBlazingSuns.json",
+      "sha256": "788c0dd2ef5a2d2d625c7e7f8b5d4adae7ef9cb1a049c5a15d76b57e4e80bb9f"
+    },
+    "AThousandFloatingDreams": {
+      "file": "weapons-AThousandFloatingDreams.json",
+      "sha256": "7ca32cdb9a7d3517f786132e55eef83cd07b1d8eb70a1ee5a6f25a6169e3b667"
+    },
+    "Azurelight": {
+      "file": "weapons-Azurelight.json",
+      "sha256": "71499929de590af7af2b51ad33797fd8c137a18e8175b02bc048260c83cb2f57"
+    },
+    "BalladOfTheBoundlessBlue": {
+      "file": "weapons-BalladOfTheBoundlessBlue.json",
+      "sha256": "46c653bc8db8beca94183ff45d3575b42c1c62cd65628ce3f812eed37e3eeaf7"
+    },
+    "BalladOfTheFjords": {
+      "file": "weapons-BalladOfTheFjords.json",
+      "sha256": "2c4a6701ddfe572a9d97faa409a63aee57984d32dbe97eb667df68518c840782"
+    },
+    "BeaconOfTheReedSea": {
+      "file": "weapons-BeaconOfTheReedSea.json",
+      "sha256": "6514238c837d6b8d251a89b6f3f30c904fd9976a070217efc46d6a6910e7ca1d"
+    },
+    "BeginnersProtector": {
+      "file": "weapons-BeginnersProtector.json",
+      "sha256": "36123a6a26406fa97d568d4b7eda0c4fd56e1d2ef1b26bfe132771c5c59a710f"
+    },
+    "BeyondTheChrysalis": {
+      "file": "weapons-BeyondTheChrysalis.json",
+      "sha256": "31eb89aee545190a0e98cecaf216ba89a17855539664c7814f4038b840ad6239"
+    },
+    "BlackcliffAgate": {
+      "file": "weapons-BlackcliffAgate.json",
+      "sha256": "36792acb40cf28fb69207a8f75bfdefcf5509a8dc99b9ba66f3745f3f7c05b93"
+    },
+    "BlackcliffLongsword": {
+      "file": "weapons-BlackcliffLongsword.json",
+      "sha256": "af1c4c8c7b677585c8de910dedb13c129631ecef7d577d7660cf074de22bcb43"
+    },
+    "BlackcliffPole": {
+      "file": "weapons-BlackcliffPole.json",
+      "sha256": "8fc043417e14673b24cae18b19aee61049ee40ca70268f4127d0b7e5e60643e3"
+    },
+    "BlackcliffSlasher": {
+      "file": "weapons-BlackcliffSlasher.json",
+      "sha256": "ccb946765bad8ed73fe6e633d2e4fb97f7e7b44bb094fd5bdebca52cd5478113"
+    },
+    "BlackcliffWarbow": {
+      "file": "weapons-BlackcliffWarbow.json",
+      "sha256": "2408ee61ebbc73f2fa0c24e3d651ec240bba91556054b253fd609c8dd75a0cab"
+    },
+    "BlackmarrowLantern": {
+      "file": "weapons-BlackmarrowLantern.json",
+      "sha256": "c346528703c25afa792e381ab04b299da395a9c8c4aa2c923a5c88e52cacb21d"
+    },
+    "BlackTassel": {
+      "file": "weapons-BlackTassel.json",
+      "sha256": "c46bc34201cc331c392287b77ae9802bbb7e070282145452590994dbe2f82fcc"
+    },
+    "BladeOfAtonement": {
+      "file": "weapons-BladeOfAtonement.json",
+      "sha256": "5f06370c7cbf693dac8753fe85c19b60a967778fd1a7342ad05548c4bd94885a"
+    },
+    "BloodsoakedRuins": {
+      "file": "weapons-BloodsoakedRuins.json",
+      "sha256": "6274f586b8f35f1acf48e579d531a0b1ffb86856490c412eb337c26e3303293c"
+    },
+    "BloodtaintedGreatsword": {
+      "file": "weapons-BloodtaintedGreatsword.json",
+      "sha256": "802123c8f3b44383781d4312b7fff80bbd5a731d2e03d5f5812a444c9ff91ae3"
+    },
+    "BreezeborneRefrain": {
+      "file": "weapons-BreezeborneRefrain.json",
+      "sha256": "cccf156287717abb8ad342f60551d4b060dc8225514fa105b8e34f26139180ff"
+    },
+    "CalamityOfEshu": {
+      "file": "weapons-CalamityOfEshu.json",
+      "sha256": "8f7caec45dfa714ec569e41f3f6356f56f3ce8069f9e67990a6fdf9b6a647840"
+    },
+    "CalamityQueller": {
+      "file": "weapons-CalamityQueller.json",
+      "sha256": "1c34697e74f09eb317313cb04052afe41d944b57ae36a89a567dd85435c3eb99"
+    },
+    "CashflowSupervision": {
+      "file": "weapons-CashflowSupervision.json",
+      "sha256": "7dbc4b678c4c256d3e81f5e1c3106519534f9585df36181935c0247f4bf6f46a"
+    },
+    "ChainBreaker": {
+      "file": "weapons-ChainBreaker.json",
+      "sha256": "884c46b179ace5ea33a0236b040704619f8709587bc350c9bf3c09de7301f78f"
+    },
+    "CinnabarSpindle": {
+      "file": "weapons-CinnabarSpindle.json",
+      "sha256": "22d01af665853a40d95413e8b833cb009dadc18eeab59e1dd325e9538b5c2310"
+    },
+    "ClashOfKings": {
+      "file": "weapons-ClashOfKings.json",
+      "sha256": "2bdd05bc4f9c5f9a86b79c07e01e75a7f19b065be39ef494f967dd86530136f8"
+    },
+    "Cloudforged": {
+      "file": "weapons-Cloudforged.json",
+      "sha256": "431ac996d0d0fae127fc026a89d42126987e85af0bcc2b22ee4b46cab9e88729"
+    },
+    "CompoundBow": {
+      "file": "weapons-CompoundBow.json",
+      "sha256": "866a7994bcafb9e3e963da370cd6ed8b364b2a6ced8ee6d1c83ccce2123ad80e"
+    },
+    "CoolSteel": {
+      "file": "weapons-CoolSteel.json",
+      "sha256": "704c4d2c02f755ab13d66478e2a7b2a279fb9c0afd4af4a6d65073c4fe91a774"
+    },
+    "CovenantOfFrostAndSnow": {
+      "file": "weapons-CovenantOfFrostAndSnow.json",
+      "sha256": "637c1b32c07d849441346f36fdeb58ec5e0b3ba109b1d072a4f40c37dc04e558"
+    },
+    "CranesEchoingCall": {
+      "file": "weapons-CranesEchoingCall.json",
+      "sha256": "70bf9d1c2c9f8497b63530253651048a6ed28415b4315c51fc22889f45e2c08f"
+    },
+    "CrescentPike": {
+      "file": "weapons-CrescentPike.json",
+      "sha256": "c2c1ec2bc42d0f675482f618b9fecca9f15e26f5bf03b08b5142b7f9dc521bb1"
+    },
+    "CrimsonMoonsSemblance": {
+      "file": "weapons-CrimsonMoonsSemblance.json",
+      "sha256": "9486083b7538eded724405e8ed70e3e1696a98643c58e2edf6cdc3b554dfc9ff"
+    },
+    "DarkIronSword": {
+      "file": "weapons-DarkIronSword.json",
+      "sha256": "85f17b0a7897157df7729ae0bdabfcdcbeb6c4de5c49ce7bd6306982e229589a"
+    },
+    "DawningFrost": {
+      "file": "weapons-DawningFrost.json",
+      "sha256": "a462adc7dbb731d7cf5fb2ba5cc1497a4d9d506eaa7c94518c568c3cc67f38fd"
+    },
+    "Deathmatch": {
+      "file": "weapons-Deathmatch.json",
+      "sha256": "4d9be4fa47e4c49ee2a15bf08cfca4eb69965f2d4c1e932a05222334c89cbca2"
+    },
+    "DebateClub": {
+      "file": "weapons-DebateClub.json",
+      "sha256": "ca074cc6014529423bd7c2c1a69dc3e6ec15d35a1cb7590434e160582632c483"
+    },
+    "DialoguesOfTheDesertSages": {
+      "file": "weapons-DialoguesOfTheDesertSages.json",
+      "sha256": "70efed3a0ee999c201925c7dec1fa9ff6203ad1438320a85d422e4b2bb2b4a4e"
+    },
+    "DisasterAndRemorse": {
+      "file": "weapons-DisasterAndRemorse.json",
+      "sha256": "e69c69caae6e2de5afa9569a20d15f9ef35af37d170c304a09ff366005976495"
+    },
+    "DodocoTales": {
+      "file": "weapons-DodocoTales.json",
+      "sha256": "7f33af25bf7d4499981da8ce4c5f314cb00b03b8cb0814bf53211a4ce903b4d3"
+    },
+    "DragonsBane": {
+      "file": "weapons-DragonsBane.json",
+      "sha256": "3e24af911b081de201872bcbc5572018425c515d65d26a55504dacf3f71cec23"
+    },
+    "DragonspineSpear": {
+      "file": "weapons-DragonspineSpear.json",
+      "sha256": "601aa1b52b1d0fe7ec47268d2230deef347c4266cbd2977f8e4a9a385c0f1155"
+    },
+    "DullBlade": {
+      "file": "weapons-DullBlade.json",
+      "sha256": "d94d4faa5a270e49842fb79f935ab22ce6db095e942a258e2f40dee7d1898b1a"
+    },
+    "EarthShaker": {
+      "file": "weapons-EarthShaker.json",
+      "sha256": "2698f772d74aa5bec90e7a4679c4cbe1751c3b901ffebf2e0a80b2da3d7940f9"
+    },
+    "EchoesOfTheHeart": {
+      "file": "weapons-EchoesOfTheHeart.json",
+      "sha256": "ecfab08bfdfe16f17eab926246468d42d6581cb9f43f6b3c6a52d4cdea647d3a"
+    },
+    "ElegyForTheEnd": {
+      "file": "weapons-ElegyForTheEnd.json",
+      "sha256": "aa9af1cc64b8953e72d38ec81ef8fd8816ac003b1c28761765a38799c8ab65ee"
+    },
+    "Emberwell": {
+      "file": "weapons-Emberwell.json",
+      "sha256": "6ed04a2acde5467024d9663381de551c24449328106b00b23adece5ad79d933f"
+    },
+    "EmeraldOrb": {
+      "file": "weapons-EmeraldOrb.json",
+      "sha256": "a76a17e08622b5ea379371ff945e608c8c5a18d1cb08c23e1ab817e9184c9bac"
+    },
+    "EndOfTheLine": {
+      "file": "weapons-EndOfTheLine.json",
+      "sha256": "745d0d50be1cae6f1cd36eaa771cb86b988a4517a6431163037eca7ec1018159"
+    },
+    "EngulfingLightning": {
+      "file": "weapons-EngulfingLightning.json",
+      "sha256": "1ee21d46785e33bf9b342376cbf7f57a3fa197c94d06ce338f7872180ed0daa0"
+    },
+    "EtherlightSpindlelute": {
+      "file": "weapons-EtherlightSpindlelute.json",
+      "sha256": "b561176b6fd5373c1349b9ea8c9c29f594943c1bd62e6219cc1e9ffdd16a558a"
+    },
+    "EverlastingMoonglow": {
+      "file": "weapons-EverlastingMoonglow.json",
+      "sha256": "1fa3f5e5bb873fefa88b55006fa4fac92cfb01f4069a5dbc6816c1a1f5fd9a30"
+    },
+    "ExaiphanesBlade": {
+      "file": "weapons-ExaiphanesBlade.json",
+      "sha256": "ecb3337ac2641a1e2a7a904d37603530f2ae35b4225cb2b9ae4dce07a8e1a5c5"
+    },
+    "EyeOfPerception": {
+      "file": "weapons-EyeOfPerception.json",
+      "sha256": "3f89b1d3959d63857b93fea7b35bb037800673ddb6814ca0dde6ead92b89a88c"
+    },
+    "FadingTwilight": {
+      "file": "weapons-FadingTwilight.json",
+      "sha256": "73144e57c8539d92fd27a685ce50db21bfa9d216c7edef09aff6220b7223c502"
+    },
+    "FangOfTheMountainKing": {
+      "file": "weapons-FangOfTheMountainKing.json",
+      "sha256": "f28d72f9756121701330eeb61fc07cc1ca7798a80b64bd6296938ea48064cb31"
+    },
+    "FavoniusCodex": {
+      "file": "weapons-FavoniusCodex.json",
+      "sha256": "e7104b44e14441dd22d2f1816f5e90f2c0065d479091eedf8bfd415798d988b3"
+    },
+    "FavoniusGreatsword": {
+      "file": "weapons-FavoniusGreatsword.json",
+      "sha256": "9ecc8de337dda3defd99eadd6cf0669a2ea61653ba2b9b98c6402951c50db583"
+    },
+    "FavoniusLance": {
+      "file": "weapons-FavoniusLance.json",
+      "sha256": "da0b4d3cbe04f0acfbab0b880f9c8c2c1fdf70882421d20668d326c823e5159d"
+    },
+    "FavoniusSword": {
+      "file": "weapons-FavoniusSword.json",
+      "sha256": "17f1a620dd288ff520c87e91c7455effd772cf8965c752ec2ca0cdc0705be7b2"
+    },
+    "FavoniusWarbow": {
+      "file": "weapons-FavoniusWarbow.json",
+      "sha256": "ca36633a59bbebdf858e07c9a291036938d46a8e62dd1aff58394455e313f7be"
+    },
+    "FerrousShadow": {
+      "file": "weapons-FerrousShadow.json",
+      "sha256": "03d90b867f71438621440d82bbd5bf6a0eabdcdbc377233e2efe191bdd04168a"
+    },
+    "FesteringDesire": {
+      "file": "weapons-FesteringDesire.json",
+      "sha256": "91695390521801996322ea37bc8d76b96e54bbc2e5500009ac2b054ee07d7848"
+    },
+    "FilletBlade": {
+      "file": "weapons-FilletBlade.json",
+      "sha256": "fca361738c80623d38ad377909c43db64f8ff662858395921927e1199a00f4d0"
+    },
+    "FinaleOfTheDeep": {
+      "file": "weapons-FinaleOfTheDeep.json",
+      "sha256": "7d12ab97c5ebc85cb536f36d5debccfdc4494dd05fcc77d56c5ce4a132b24bdc"
+    },
+    "FlameForgedInsight": {
+      "file": "weapons-FlameForgedInsight.json",
+      "sha256": "aedc0ae1e267c9948a6ced9f67547c5577ce20684d305453b87f8134452a3702"
+    },
+    "FleuveCendreFerryman": {
+      "file": "weapons-FleuveCendreFerryman.json",
+      "sha256": "b101f0433bb0d844c4ed6f563a8c464e2d62ba2be95cc56e328892650ba7e67b"
+    },
+    "FlowerWreathedFeathers": {
+      "file": "weapons-FlowerWreathedFeathers.json",
+      "sha256": "397d5518bf2e1e12e47f421c18226095c92e12144e8b20f66d25a00000f8ccd4"
+    },
+    "FlowingPurity": {
+      "file": "weapons-FlowingPurity.json",
+      "sha256": "c8a3adfc58d4c26518accf25f57f247db2bd9de851145ce66c173a6397bb3e32"
+    },
+    "FluteOfEzpitzal": {
+      "file": "weapons-FluteOfEzpitzal.json",
+      "sha256": "15776d9e4718ec5299ce6e7edffb33d74ca08c6d7ea6d01e2a3e4f0fb7e72c41"
+    },
+    "FootprintOfTheRainbow": {
+      "file": "weapons-FootprintOfTheRainbow.json",
+      "sha256": "5ae399d4fa582cf597e7251519e294930ff01a4d16a5d1880c993ad0e7c316d7"
+    },
+    "ForestRegalia": {
+      "file": "weapons-ForestRegalia.json",
+      "sha256": "3fee51f7f959ef5c212a5638aaaed4440714455b648bf037f48e9a3ad42356fa"
+    },
+    "ForgedByTheGoldenMelody": {
+      "file": "weapons-ForgedByTheGoldenMelody.json",
+      "sha256": "140e55a2657db98d2f71ffba052e5c7d3d8190502ef1f1f7a1647b1d7669554a"
+    },
+    "FracturedHalo": {
+      "file": "weapons-FracturedHalo.json",
+      "sha256": "2e672409653a5cd78e29ef78d3cd9cf9ce45e0524d361e727c7cb5c0f8f8fe3b"
+    },
+    "FreedomSworn": {
+      "file": "weapons-FreedomSworn.json",
+      "sha256": "17014ea792d3fe18d0a5150671f91a1ff19555a17a0f17797a3b6e5bceae83a4"
+    },
+    "Frostbearer": {
+      "file": "weapons-Frostbearer.json",
+      "sha256": "be6802d260cc34059c04a2d6f487d55ccf643a040e4874fa25934933382a51e8"
+    },
+    "Frostbreath": {
+      "file": "weapons-Frostbreath.json",
+      "sha256": "4a2cba77f429c798ab71a8868a9cc09a7feac72563dcffcf4d1dc5f9e2993f05"
+    },
+    "FruitfulHook": {
+      "file": "weapons-FruitfulHook.json",
+      "sha256": "b81e7eeba1e024dba803b849689d3dbbdf1275f9e30148707c7cb2499c0725e4"
+    },
+    "FruitOfFulfillment": {
+      "file": "weapons-FruitOfFulfillment.json",
+      "sha256": "db9e255599ae65b786609eccc1d2e522a6706e0ff2d84ffa81943a130450a887"
+    },
+    "GestOfTheMightyWolf": {
+      "file": "weapons-GestOfTheMightyWolf.json",
+      "sha256": "e961aad6957ccaa184b33b947d832004da203942b3e7a8a5862275e839a9f48a"
+    },
+    "GoldenFrostboundOath": {
+      "file": "weapons-GoldenFrostboundOath.json",
+      "sha256": "71738eb522b082e495acfae705b255c6586d9ff4c8f1b91908060382eeafd86a"
+    },
+    "HakushinRing": {
+      "file": "weapons-HakushinRing.json",
+      "sha256": "46a6cd0c07c2cc1a86079ce65876b8dbba52076c4bfd973219eeb407f3535b7b"
+    },
+    "Halberd": {
+      "file": "weapons-Halberd.json",
+      "sha256": "f7aedfa61a383b90d903350fd720a3205d44518bd0960757cd3683b1734b6979"
+    },
+    "Hamayumi": {
+      "file": "weapons-Hamayumi.json",
+      "sha256": "4d5fb51e1863a0689c443927b55b4a36775aa0d97ff6fe05160a3b6928164305"
+    },
+    "HaranGeppakuFutsu": {
+      "file": "weapons-HaranGeppakuFutsu.json",
+      "sha256": "c467f017256921279cbb1c509abeec0e7ea6a27e78bf3c1f2856b28d7cfd92d9"
+    },
+    "HarbingerOfDawn": {
+      "file": "weapons-HarbingerOfDawn.json",
+      "sha256": "1d9c58f5d6fa3b2b9beb04cd6182096847d6de02968c43fa972723789eb1d469"
+    },
+    "HereticsMoltenBlade": {
+      "file": "weapons-HereticsMoltenBlade.json",
+      "sha256": "56aaff62f946e111b78ea59c0278f871b09edf839a0ec5c8ae3be8e6d9c21b07"
+    },
+    "HuntersBow": {
+      "file": "weapons-HuntersBow.json",
+      "sha256": "0dac9aedd6f94bb3b6d63e0b535bc54dd6a5dc6aa12157add9f7945b54809ed5"
+    },
+    "HuntersPath": {
+      "file": "weapons-HuntersPath.json",
+      "sha256": "003704cb3eabddada98aff43d6957d479d4ad0652d094df3aa4006941decea23"
+    },
+    "HymnOfTheMaelstrom": {
+      "file": "weapons-HymnOfTheMaelstrom.json",
+      "sha256": "6bb3306e7eb4545ddfced65d43f2ef5293130443bac1bd9fc00a3909add9272b"
+    },
+    "IbisPiercer": {
+      "file": "weapons-IbisPiercer.json",
+      "sha256": "c07ea4e103632220e67a108e119f5babe9bcb4bfab2879cf358665a9865aed07"
+    },
+    "IronPoint": {
+      "file": "weapons-IronPoint.json",
+      "sha256": "7c3b3394b0067f25ef325d928e35d5402b7958fbed8195d0a51c49d2ca2c0249"
+    },
+    "IronSting": {
+      "file": "weapons-IronSting.json",
+      "sha256": "5a01976e4bb8e0afb656ebf14556cb528343bdf514db6c8adbfa5b9706034dd3"
+    },
+    "JadefallsSplendor": {
+      "file": "weapons-JadefallsSplendor.json",
+      "sha256": "7abbea1d00ef6a0358d9977ffcbf01bef333616bed8fb9fa9c2889108dabe2e7"
+    },
+    "JadeVista": {
+      "file": "weapons-JadeVista.json",
+      "sha256": "548ec3d157770b6550a45e17034043f02570784bf170d2aed6929d51018e692e"
+    },
+    "KagotsurubeIsshin": {
+      "file": "weapons-KagotsurubeIsshin.json",
+      "sha256": "ef6cdc02594c9ae6d3e3870e39e06f53b735d8909e6cb8ced4ffd3f97ce8150d"
+    },
+    "KagurasVerity": {
+      "file": "weapons-KagurasVerity.json",
+      "sha256": "dcce7f735f128204dae929a3366e21c47f09a98db3fe0de2300c7a87ad74ea4b"
+    },
+    "KatsuragikiriNagamasa": {
+      "file": "weapons-KatsuragikiriNagamasa.json",
+      "sha256": "5b5b53d6b5e0a71ecea1d5437e603bb93e6ec7a4681670d53b658b6244983d03"
+    },
+    "KeyOfKhajNisut": {
+      "file": "weapons-KeyOfKhajNisut.json",
+      "sha256": "1f103ef88a92f6f6242e8963ed43a7b8c866612106c99353901adac8876ebd10"
+    },
+    "KingsSquire": {
+      "file": "weapons-KingsSquire.json",
+      "sha256": "7f4be5b37177af48dc648e95556b27a041ebaa823bde32ad62dc9f4583149d61"
+    },
+    "KitainCrossSpear": {
+      "file": "weapons-KitainCrossSpear.json",
+      "sha256": "69aba1c053ca4bcc60ad18abed0b9381fbd97aa5f31899f66a8331b3da43170c"
+    },
+    "LightbearingMoonshard": {
+      "file": "weapons-LightbearingMoonshard.json",
+      "sha256": "a652ff43683d58fd495fdf4d444bb1353e38d7e2381720279d4eec30fb62b28e"
+    },
+    "LightOfFoliarIncision": {
+      "file": "weapons-LightOfFoliarIncision.json",
+      "sha256": "40e5bf93c30bbc29b7f44cdf6e22c85413637991c549723693f47f286e714dba"
+    },
+    "LionsRoar": {
+      "file": "weapons-LionsRoar.json",
+      "sha256": "c074d45c0faf5fa411ca68e21dbb8d7266e002b6894b13b6318ceb889d2e6c56"
+    },
+    "LithicBlade": {
+      "file": "weapons-LithicBlade.json",
+      "sha256": "0d80e4af58152d9abef7493b143ef28d977d91d1870ee9dac8d61a609c7f4d78"
+    },
+    "LithicSpear": {
+      "file": "weapons-LithicSpear.json",
+      "sha256": "3474cc794f9c7245d63f9b963bf2736c8e88feaac15cb222122b94c3ed1395ec"
+    },
+    "LostPrayerToTheSacredWinds": {
+      "file": "weapons-LostPrayerToTheSacredWinds.json",
+      "sha256": "9477e156bb4058bbd6783ed8bfb59d179a35f371a3573cfb1ae4cab8f89f9049"
+    },
+    "LumidouceElegy": {
+      "file": "weapons-LumidouceElegy.json",
+      "sha256": "af95d66a1bddf5b086f2a6b8d08b5425a328136ec248de80fc3141c86a6f7f05"
+    },
+    "LuxuriousSeaLord": {
+      "file": "weapons-LuxuriousSeaLord.json",
+      "sha256": "89eff789d197da9850469dde5cba9e1051c9d4207fbc4863ce150ddc3c5dd377"
+    },
+    "MagicGuide": {
+      "file": "weapons-MagicGuide.json",
+      "sha256": "2391d98b992933a01fa27b03f8cef8459bfbbf6b85d3524fcacf6663cda86f97"
+    },
+    "MailedFlower": {
+      "file": "weapons-MailedFlower.json",
+      "sha256": "db5538a024a1e369a8435526d6205dad84ef24bad86b6d8edb9981fd46af002d"
+    },
+    "MakhairaAquamarine": {
+      "file": "weapons-MakhairaAquamarine.json",
+      "sha256": "5762ccf3cb373951485339ae1db475deb2f309332dd2dec690fa1d2faf00fc39"
+    },
+    "MappaMare": {
+      "file": "weapons-MappaMare.json",
+      "sha256": "723dae4e0a941e09e4607a4e4cac29344c20130379fe30852ca826534cd39b23"
+    },
+    "MasterKey": {
+      "file": "weapons-MasterKey.json",
+      "sha256": "dd2b453ed689047db28d6af540e07f9e1c4a9b036449f72fd11f41459d98af61"
+    },
+    "MemoryOfDust": {
+      "file": "weapons-MemoryOfDust.json",
+      "sha256": "4aa65bbac94a24bb17eb8f99d0695c4fe53a731f67bc96d217ef22e3a57537af"
+    },
+    "Messenger": {
+      "file": "weapons-Messenger.json",
+      "sha256": "32bfef0666685c1de5d844a3c95c1ece4cc83ac825d40c4f1d237700f6406daa"
+    },
+    "MissiveWindspear": {
+      "file": "weapons-MissiveWindspear.json",
+      "sha256": "3be94fcc9db6502f283a3c48bd9885303aa7f7248a08e7fd8275b1f26ffccbe7"
+    },
+    "MistsplitterReforged": {
+      "file": "weapons-MistsplitterReforged.json",
+      "sha256": "e6a549cb5006a75a79257d91bfc2a51b644a9c470a63605f7daa4cb654e0e42f"
+    },
+    "MitternachtsWaltz": {
+      "file": "weapons-MitternachtsWaltz.json",
+      "sha256": "b07b6f9968fd576b9503260ffc9f69720fba69cd5c528a0e3de1bf90f897b442"
+    },
+    "Moonpiercer": {
+      "file": "weapons-Moonpiercer.json",
+      "sha256": "fb3239a80c1de412860b2a2ce21c67565c71f2b0d8c05a9e2cd02af7d430f70b"
+    },
+    "MoonweaversDawn": {
+      "file": "weapons-MoonweaversDawn.json",
+      "sha256": "58ed739a9ebacd339911fafb7dc6c1d8f1c9c318a0973e07d4eace2dda1b7d71"
+    },
+    "MountainBracingBolt": {
+      "file": "weapons-MountainBracingBolt.json",
+      "sha256": "72eec767ba51068b13e64a66f710d9f96755e2d8bc6cd12d9450f3050a6dab34"
+    },
+    "MouunsMoon": {
+      "file": "weapons-MouunsMoon.json",
+      "sha256": "52a310441ea28475224b0c1d1aa6d73291464b4ac50161c61c2f8416bcdbff77"
+    },
+    "NewBough": {
+      "file": "weapons-NewBough.json",
+      "sha256": "5dadec55fc7aa733e760d8a41e1971130246bcb7087bc30a1c4d15510924d6c4"
+    },
+    "NightweaversLookingGlass": {
+      "file": "weapons-NightweaversLookingGlass.json",
+      "sha256": "f23154126d3a21bc56250f6c75a59708154e0105927bfa38a499ca627123b19a"
+    },
+    "NocturnesCurtainCall": {
+      "file": "weapons-NocturnesCurtainCall.json",
+      "sha256": "c7aa29a09a83f713e28002f27717de4c7d1ddcef39a7477c4947a38634b8aefd"
+    },
+    "OathswornEye": {
+      "file": "weapons-OathswornEye.json",
+      "sha256": "7a562ad6f2fe4c9ad64015c8e02e7f6390e6f7f20e2053da341a4e4526985aaf"
+    },
+    "OldMercsPal": {
+      "file": "weapons-OldMercsPal.json",
+      "sha256": "55c4991c5d0d12d44a47494da2e556f80739dff4135a63936a32487e008ffe40"
+    },
+    "OtherworldlyStory": {
+      "file": "weapons-OtherworldlyStory.json",
+      "sha256": "7a75cfa0f2c4c0cf35e433ef5f35fb8946c0190b5fe0f1ee018f3cdfd8f44361"
+    },
+    "PeakPatrolSong": {
+      "file": "weapons-PeakPatrolSong.json",
+      "sha256": "df43288214fa00eb1a91f2d2ab7167d7dde9594efb23a9a1c11c2ff579eb8ddb"
+    },
+    "PocketGrimoire": {
+      "file": "weapons-PocketGrimoire.json",
+      "sha256": "09bdd23410af1717cdf58bc1226f35d877b9adefb7d737b7fc8d506dcbfbaa62"
+    },
+    "PolarStar": {
+      "file": "weapons-PolarStar.json",
+      "sha256": "112e252405278bee5b27efca850bbec609058e04661a0d5ad335c2b3b375b3a7"
+    },
+    "PortablePowerSaw": {
+      "file": "weapons-PortablePowerSaw.json",
+      "sha256": "8c2d5d538b20f4b7e23511145631dc15d58c808d7c4007ff4eb1b87fd583cf33"
+    },
+    "Predator": {
+      "file": "weapons-Predator.json",
+      "sha256": "f5f82f648139663353dc9543baac2b43cefddde008dfa4fdf397c066e2fe53bf"
+    },
+    "PrimordialJadeCutter": {
+      "file": "weapons-PrimordialJadeCutter.json",
+      "sha256": "5bc073eaf4c5a963d86bd8528b387edfb484ef27f7c5ec53462546356629f809"
+    },
+    "PrimordialJadeWingedSpear": {
+      "file": "weapons-PrimordialJadeWingedSpear.json",
+      "sha256": "7c4a5d8d64e3970f4da219c5778da4b9984d6089775d73a48440d00c2a849062"
+    },
+    "ProspectorsDrill": {
+      "file": "weapons-ProspectorsDrill.json",
+      "sha256": "279d717c6943045d3f7da7054edbfb6ffe1c2978ae5c19de8354c1017f6cdfc6"
+    },
+    "ProspectorsShovel": {
+      "file": "weapons-ProspectorsShovel.json",
+      "sha256": "3c152bfc8f4fe42ac28517cc92bcd3ac3db1a64be744b73551be94b20e51309a"
+    },
+    "PrototypeAmber": {
+      "file": "weapons-PrototypeAmber.json",
+      "sha256": "2c80a1e64c340b0814561ccf0bca96d9c35aa5b65cba90d0472a5e5a05be333b"
+    },
+    "PrototypeArchaic": {
+      "file": "weapons-PrototypeArchaic.json",
+      "sha256": "095e5f2b85f0dca36d31e1d8327fa9e20c2180296fce96b576f849e31779d05a"
+    },
+    "PrototypeCrescent": {
+      "file": "weapons-PrototypeCrescent.json",
+      "sha256": "72786290d2e60354781c81849fa679342acc4f5bbaf6b8afc5f86df6e39eeb2b"
+    },
+    "PrototypeRancour": {
+      "file": "weapons-PrototypeRancour.json",
+      "sha256": "066c8b6af7449b3c159677f60d1dc97325214c0ec7c733a645fada3582faa2a4"
+    },
+    "PrototypeStarglitter": {
+      "file": "weapons-PrototypeStarglitter.json",
+      "sha256": "da19c36415172d2d7ddeda6e4893193e42326a5eacc93bcc3d6f7c5c81394e6b"
+    },
+    "RainbowSerpentsRainBow": {
+      "file": "weapons-RainbowSerpentsRainBow.json",
+      "sha256": "126aaecbcab68f06e69cad5685fdb537a01d31ddf1ce26e2c4c9fd9bc5c02a5e"
+    },
+    "Rainslasher": {
+      "file": "weapons-Rainslasher.json",
+      "sha256": "e1cb5c4e8be317d5f6b866e6cafd1fc359e0c498ca65cf104be7334e4f41a730"
+    },
+    "RangeGauge": {
+      "file": "weapons-RangeGauge.json",
+      "sha256": "0a07a7a00893f27aaee00dd55ac39342f88d2b537bc35bcfc642b1dbfae10d3c"
+    },
+    "RavenBow": {
+      "file": "weapons-RavenBow.json",
+      "sha256": "21156e2d4f42b30f47261d719fbd422d0b27eaf6fdd5093b45cc1c4ec55b1496"
+    },
+    "RecurveBow": {
+      "file": "weapons-RecurveBow.json",
+      "sha256": "896f63a71cff0bb7fb31486bf397989f666003123aa7cce2ad8c2a0448f7e15d"
+    },
+    "RedhornStonethresher": {
+      "file": "weapons-RedhornStonethresher.json",
+      "sha256": "f0936d31ed8a75fbc0e6afa543c8777d83b16f80c7e359fd88c582d7a98eca63"
+    },
+    "ReliquaryOfTruth": {
+      "file": "weapons-ReliquaryOfTruth.json",
+      "sha256": "36562ae2b5db244588ef73fd6a21ccff7d22528aec98cb8c7f89d9cc4bda2ceb"
+    },
+    "RightfulReward": {
+      "file": "weapons-RightfulReward.json",
+      "sha256": "f9f14f03d7f1eddc8751246aa9f4648d79b9709fc0a9538efc80689941200ef6"
+    },
+    "RingOfYaxche": {
+      "file": "weapons-RingOfYaxche.json",
+      "sha256": "c9789fbcb40617101d59c87b0e9db49bf563a3767aca8c75b8f356a1936b882a"
+    },
+    "RoyalBow": {
+      "file": "weapons-RoyalBow.json",
+      "sha256": "0c33ee4eb9db3940a2a7dc673fb8bd3a0106aee47674b35d71a884a547ac695c"
+    },
+    "RoyalGreatsword": {
+      "file": "weapons-RoyalGreatsword.json",
+      "sha256": "9130919d1aa428eae65ffb3e796356c374564ab72cfbbb08fb2df60d98adc038"
+    },
+    "RoyalGrimoire": {
+      "file": "weapons-RoyalGrimoire.json",
+      "sha256": "f43c5a1905fb925ee9b7b3d06aa213f3a044748a34abd6433af6460973c972eb"
+    },
+    "RoyalLongsword": {
+      "file": "weapons-RoyalLongsword.json",
+      "sha256": "c1dedbf3329cd8cb36c291c03d5b721f5843cd859034b30607e516c022b9b333"
+    },
+    "RoyalSpear": {
+      "file": "weapons-RoyalSpear.json",
+      "sha256": "4d5253b5deffd41ecf83d41ead5c4f1e1be554a0bf55d041eb2d5f219cd7b7c2"
+    },
+    "Rust": {
+      "file": "weapons-Rust.json",
+      "sha256": "a4ff7b5632a716f75f595d8da52043b54b17b7903421432a3c219cd1402891fc"
+    },
+    "SacrificersStaff": {
+      "file": "weapons-SacrificersStaff.json",
+      "sha256": "e3257c6eefd90b4b7f6c6697b3522fa614ce6a04f825fa18acbbb1b351890915"
+    },
+    "SacrificialBow": {
+      "file": "weapons-SacrificialBow.json",
+      "sha256": "984a80b0ef8a8dc05ff9e1605832d555ee0b8ac38d54662a13894ff2e7831b7d"
+    },
+    "SacrificialFragments": {
+      "file": "weapons-SacrificialFragments.json",
+      "sha256": "8b84c8e6a2ddc9bfa7de3652a351e759c25c6eea45f9e398c54fe31b4637b974"
+    },
+    "SacrificialGreatsword": {
+      "file": "weapons-SacrificialGreatsword.json",
+      "sha256": "c3715ab3fdeb242ce09bfc4126858f47741e4eb5e405fbddc90335613ee42dc5"
+    },
+    "SacrificialJade": {
+      "file": "weapons-SacrificialJade.json",
+      "sha256": "997fbf8a708fa21a1f5174b1c5342aebe89730c1538087bf420a3bf79a702ce4"
+    },
+    "SacrificialSword": {
+      "file": "weapons-SacrificialSword.json",
+      "sha256": "0b847e77df061850ebd54649b00346898ed8d9118633b914829514c36332bd73"
+    },
+    "SapwoodBlade": {
+      "file": "weapons-SapwoodBlade.json",
+      "sha256": "1a0e4aba72ec85ab98dda66965cd975c22e90f9cd4d46b5775af71e84ac33bcf"
+    },
+    "ScionOfTheBlazingSun": {
+      "file": "weapons-ScionOfTheBlazingSun.json",
+      "sha256": "f2de25bce3cfb745f7aaf4c78c24ca237f35f5ca07d81f570292fb4ce250acfb"
+    },
+    "SeasonedHuntersBow": {
+      "file": "weapons-SeasonedHuntersBow.json",
+      "sha256": "d35cc0075cd1efb6310687dd1fc86d213f42467ae608f7e08438fc8abaa4658a"
+    },
+    "SequenceOfSolitude": {
+      "file": "weapons-SequenceOfSolitude.json",
+      "sha256": "e022c0cde28e8a372d996ed8372bb0ce8cb41e8f28e117c9cb28e1fa66f50503"
+    },
+    "SerenitysCall": {
+      "file": "weapons-SerenitysCall.json",
+      "sha256": "b6cef49f57d5e1c8ca0456da81a842640a0939cb82beae52aa9e9bfc5d50b44e"
+    },
+    "SerpentSpine": {
+      "file": "weapons-SerpentSpine.json",
+      "sha256": "d29d40dedb87cde2c2a5fa90feb8a81309ced2e3c0c363048a3f372810a5e3a3"
+    },
+    "SharpshootersOath": {
+      "file": "weapons-SharpshootersOath.json",
+      "sha256": "83d5e40ef2a18c502c65cb364966fda50fb31c694d47cec0f6ce1b3c8289b42c"
+    },
+    "SilverLight": {
+      "file": "weapons-SilverLight.json",
+      "sha256": "acf984e92a96e84767f15de09f63ed9c32341babfce77da99fce4104c61166e7"
+    },
+    "SilvershowerHeartstrings": {
+      "file": "weapons-SilvershowerHeartstrings.json",
+      "sha256": "c4899bf9d99828d58c25ad2f19615124f8d67780766c6bd54b9e82cf14a9f6eb"
+    },
+    "SilverSword": {
+      "file": "weapons-SilverSword.json",
+      "sha256": "290f9a48766dab19e6359da6843d8cd9bc6d26e0ce6e5b7e0cd3461be0878f81"
+    },
+    "SkyriderGreatsword": {
+      "file": "weapons-SkyriderGreatsword.json",
+      "sha256": "56e8f2dc9d1ec0e523de0c7d564707f49b339174f605ed0018bb9c6521d020b7"
+    },
+    "SkyriderSword": {
+      "file": "weapons-SkyriderSword.json",
+      "sha256": "2fc1f280334b31057e9ec826fea2fcd53b6df1dfd0db4b359a226f504f24d03a"
+    },
+    "SkywardAtlas": {
+      "file": "weapons-SkywardAtlas.json",
+      "sha256": "3649af5f891b00525103cdd3852ddf2e8befb76b49858583051c30ae77444202"
+    },
+    "SkywardBlade": {
+      "file": "weapons-SkywardBlade.json",
+      "sha256": "8dcadef8311d8160ef42e224ef3bd3a378dba8b7dc39cc19558e360c34243825"
+    },
+    "SkywardHarp": {
+      "file": "weapons-SkywardHarp.json",
+      "sha256": "64d59d89dde4212310471180e1886c8b5b200db6e006573b5320923679e5ac59"
+    },
+    "SkywardPride": {
+      "file": "weapons-SkywardPride.json",
+      "sha256": "1e927994deea19e8b4fecbf9a3636211b3c02d3c00c21370692576566349e548"
+    },
+    "SkywardSpine": {
+      "file": "weapons-SkywardSpine.json",
+      "sha256": "b26b87c9abad4fe7fbcbf998a72a1ebcd0c941022d68ff2cbfba7106fc833602"
+    },
+    "Slingshot": {
+      "file": "weapons-Slingshot.json",
+      "sha256": "e8807d74478709417e28a61aac9cec67a8f54490cdafe25861048ea19248a9c7"
+    },
+    "SnareHook": {
+      "file": "weapons-SnareHook.json",
+      "sha256": "4e116814e79ac684cc75aa20ae63220d447e67c14dbee1051681f0d649a04032"
+    },
+    "SnowTombedStarsilver": {
+      "file": "weapons-SnowTombedStarsilver.json",
+      "sha256": "e18cb7b3b1c79f5a83315f13c2b93d4506c0e968543f634215232ed2192c5c35"
+    },
+    "SolarPearl": {
+      "file": "weapons-SolarPearl.json",
+      "sha256": "0eee434b689b1345fec3be7ad0c92c8c93ee38cc95cab2b686c822311e7ce6bd"
+    },
+    "SongOfBrokenPines": {
+      "file": "weapons-SongOfBrokenPines.json",
+      "sha256": "c4111a9f364c1a961fed40ba031ea804761dda181f2f683b5511646e2783fa86"
+    },
+    "SongOfStillness": {
+      "file": "weapons-SongOfStillness.json",
+      "sha256": "6b32b089af645a0a4f9a599d9c4312d60740cadf3d4a53462b8df6acb838cd3d"
+    },
+    "SongOfTheVigil": {
+      "file": "weapons-SongOfTheVigil.json",
+      "sha256": "9d0185cc5e6489e7ac57e52423d331d8727569212b93a3e58e6b84b4338fc033"
+    },
+    "SplendorOfTranquilWaters": {
+      "file": "weapons-SplendorOfTranquilWaters.json",
+      "sha256": "d271f9fcc49bf6c58736b777f5b48160459028cc830956cf8964824d79780d8e"
+    },
+    "StaffOfHoma": {
+      "file": "weapons-StaffOfHoma.json",
+      "sha256": "16ff09ca83c554ce48de1c631e6669f77bbbc43983c5b959f47f9c042b8362c5"
+    },
+    "StaffOfTheScarletSands": {
+      "file": "weapons-StaffOfTheScarletSands.json",
+      "sha256": "6fb2375be6f9c455828b2de2d5a57ab887b7f6d43732dd868b1c4f064f2546c8"
+    },
+    "StarcallersWatch": {
+      "file": "weapons-StarcallersWatch.json",
+      "sha256": "c6bc3b86604c146bf068b2306e81fae6da3f9d6609d895ad0e3aad307113938a"
+    },
+    "SturdyBone": {
+      "file": "weapons-SturdyBone.json",
+      "sha256": "2117ef4be43fcc19936b93589cfff417aafacad9b8a5fb20a3236d74f4e57022"
+    },
+    "SummitShaper": {
+      "file": "weapons-SummitShaper.json",
+      "sha256": "2a7074d5beb3424b7f3a3a5b9f949a9055695bffb16d5c6bb7df99bd2f94a9e5"
+    },
+    "SunnyMorningSleepIn": {
+      "file": "weapons-SunnyMorningSleepIn.json",
+      "sha256": "7ba1ad52d20af904e98bd12b20c769649a8a7ce2680fa9a8f1135ca0f73d5ae4"
+    },
+    "SurfsUp": {
+      "file": "weapons-SurfsUp.json",
+      "sha256": "daf3b51773fa7d022fc3773110878a2e198b28a57148b65ca538bd739e1c165c"
+    },
+    "SwordOfDescension": {
+      "file": "weapons-SwordOfDescension.json",
+      "sha256": "2dae5360e27ac8f968d4f0d77764e83e8fc4d521cf4dc8b19e6cda13b3a185d1"
+    },
+    "SwordOfNarzissenkreuz": {
+      "file": "weapons-SwordOfNarzissenkreuz.json",
+      "sha256": "56ec9b6f4a8c1c2546707f7eacab048367f32b2653aabe61970b854056ab5e7a"
+    },
+    "SymphonistOfScents": {
+      "file": "weapons-SymphonistOfScents.json",
+      "sha256": "ae1fbedb199449bcddec822d25939c697686052261114c15d2c54492d2a47a5f"
+    },
+    "TalkingStick": {
+      "file": "weapons-TalkingStick.json",
+      "sha256": "b4d09b4862452d4a1cb87af4365096bf911a7fdbdacb00c009a9f15c63c6ad2d"
+    },
+    "TamayurateiNoOhanashi": {
+      "file": "weapons-TamayurateiNoOhanashi.json",
+      "sha256": "c7ecd52dba23ffcb6ff5cf986c865239d2817601e7b6795075fea6c0455465f5"
+    },
+    "TheAlleyFlash": {
+      "file": "weapons-TheAlleyFlash.json",
+      "sha256": "cb34cc52a418d18622e27b3b6eb83c0feeea0f74a82c0a88f5f3021e07ca23f9"
+    },
+    "TheBell": {
+      "file": "weapons-TheBell.json",
+      "sha256": "f8507b0f44fb0e6f90919d76b1c2202954a82c13fc819a84fb44065c362c3909"
+    },
+    "TheBlackSword": {
+      "file": "weapons-TheBlackSword.json",
+      "sha256": "d906966675ac90a0357c883c0202716f5b69e2cfb5fd3a4878227bc4059c805c"
+    },
+    "TheCatch": {
+      "file": "weapons-TheCatch.json",
+      "sha256": "9a41934a3f6bfb5fe5f1b7abb8feb4c74bdc1f95e457df4cb6a5cf24d7be758c"
+    },
+    "TheDaybreakChronicles": {
+      "file": "weapons-TheDaybreakChronicles.json",
+      "sha256": "f72609945678da116ad95f7b827a2093fedc2c750d3484f2dd78a77915a345fb"
+    },
+    "TheDockhandsAssistant": {
+      "file": "weapons-TheDockhandsAssistant.json",
+      "sha256": "1fda704269df99e795fee1e3a844c450ab752012b026c7f01f2bf862b5ea23d7"
+    },
+    "TheFirstGreatMagic": {
+      "file": "weapons-TheFirstGreatMagic.json",
+      "sha256": "d2c501a189945f66f89b7a5f040c809160d4c453764a9c26a3eb63a4bf05d8cb"
+    },
+    "TheFlute": {
+      "file": "weapons-TheFlute.json",
+      "sha256": "361304c5be9ae8493f3b4e8bb6fd83a8541a0451dc638cd0ef9d36644ba96b64"
+    },
+    "TheStringless": {
+      "file": "weapons-TheStringless.json",
+      "sha256": "06d6ba20ef6a372d6bc3f69048f6cb4e1e57ef5e88b4f47e1a907b6172d210af"
+    },
+    "TheUnforged": {
+      "file": "weapons-TheUnforged.json",
+      "sha256": "b3760916a1628aa59cc3e036e03e81bf0da66ec49ab4893e7805a0911d8b80dd"
+    },
+    "TheViridescentHunt": {
+      "file": "weapons-TheViridescentHunt.json",
+      "sha256": "cbe8f4462e60c92b38982bd27f7db8d0acd8de55e114b334432e96b758c650a7"
+    },
+    "TheWidsith": {
+      "file": "weapons-TheWidsith.json",
+      "sha256": "d79fc79bc3bc32ae781716f7ec408dd10a20a26282a2cb1143d8b3c023fc08d3"
+    },
+    "ThrillingTalesOfDragonSlayers": {
+      "file": "weapons-ThrillingTalesOfDragonSlayers.json",
+      "sha256": "2a8eb0ff0e2df7642d3d2af5369002955a8365e91a2d9639430a834d40505da5"
+    },
+    "ThunderingPulse": {
+      "file": "weapons-ThunderingPulse.json",
+      "sha256": "382e74dbcd877bbb6ec0d56709ddfb82e19496d3004e4d05e162103e9eafcb4b"
+    },
+    "TidalShadow": {
+      "file": "weapons-TidalShadow.json",
+      "sha256": "0859ed9ee9452c24bfeb96e94925c342afa01cf9f89c41b5bcc02078799a989f"
+    },
+    "TomeOfTheEternalFlow": {
+      "file": "weapons-TomeOfTheEternalFlow.json",
+      "sha256": "de9e4dc1f11ddf7162d2acf8d0f03b3c5b41e978fe8cf232fe81fdd63e273fa4"
+    },
+    "ToukabouShigure": {
+      "file": "weapons-ToukabouShigure.json",
+      "sha256": "c002086b1811207e8489567a904dba471863fd31b43d6c6a24eb9f59ab775441"
+    },
+    "TravelersHandySword": {
+      "file": "weapons-TravelersHandySword.json",
+      "sha256": "8985c6e8018ec62fdde34a68f642dc02a42cd1388f02b8e9f2e2100f84b31d09"
+    },
+    "TulaytullahsRemembrance": {
+      "file": "weapons-TulaytullahsRemembrance.json",
+      "sha256": "138d489c60f651ac717ce6d2c9d9ea41a57404573eeb59e81040e9803ce66f06"
+    },
+    "TwinNephrite": {
+      "file": "weapons-TwinNephrite.json",
+      "sha256": "d8f4a7414e7eb1fad90394d190b5d2133682fa3192d9cb3f35d9328b715c77d1"
+    },
+    "UltimateOverlordsMegaMagicSword": {
+      "file": "weapons-UltimateOverlordsMegaMagicSword.json",
+      "sha256": "a847cb2fb28307ef87cbf7c5a031ec31d0f73d114422ae34dc1abedaede0a1f5"
+    },
+    "UrakuMisugiri": {
+      "file": "weapons-UrakuMisugiri.json",
+      "sha256": "686fc722bb718e4e8c1c96c33412ee545273dfcb749f48054baa499f5acf0af5"
+    },
+    "Verdict": {
+      "file": "weapons-Verdict.json",
+      "sha256": "48b2d8b1d23d56d6ecdb206bcfeb5d711ecd3e3942260242a3261c6f258dda45"
+    },
+    "VividNotions": {
+      "file": "weapons-VividNotions.json",
+      "sha256": "c426e44f50073b5a546dd6fcceee402d5f7b382312e078159a97d127731afe81"
+    },
+    "VortexVanquisher": {
+      "file": "weapons-VortexVanquisher.json",
+      "sha256": "30693b1e49234b4b46aaf199e6ae05552d8049c53c5f5988f8d4fc565ae2caaa"
+    },
+    "WanderingEvenstar": {
+      "file": "weapons-WanderingEvenstar.json",
+      "sha256": "e24a2c5ee44902f7573a10db3d770deff59f309ae3df11f45d2a6c789bda179a"
+    },
+    "WasterGreatsword": {
+      "file": "weapons-WasterGreatsword.json",
+      "sha256": "a0da64dcccb10f85213a7e1aa4915e14fe69994affdfb966aaf370e4ec99fe5a"
+    },
+    "WavebreakersFin": {
+      "file": "weapons-WavebreakersFin.json",
+      "sha256": "46c81452b6509a8108d90ad3d02e3be0e29a11bf017077285a113bbb80501cce"
+    },
+    "WaveridingWhirl": {
+      "file": "weapons-WaveridingWhirl.json",
+      "sha256": "716dbb0f1b5ee67f9dba5ec192dfb131fa8a329ffb3bbd7524a0f4252d5eebd4"
+    },
+    "Whiteblind": {
+      "file": "weapons-Whiteblind.json",
+      "sha256": "7cdc609f8cc30ad65398f07f0ad69b885b716a82f40ece867c3eb3b057f1bd8f"
+    },
+    "WhiteIronGreatsword": {
+      "file": "weapons-WhiteIronGreatsword.json",
+      "sha256": "2f38ba39136d66f8799fae7910720ec470adc4af6a5eb6f2dd2ef3ac90cce730"
+    },
+    "WhitelakeFrostfeather": {
+      "file": "weapons-WhitelakeFrostfeather.json",
+      "sha256": "ba25175d4b350c3c67970efe8fb74206897c611c835375f559bd7064b7938b5e"
+    },
+    "WhiteTassel": {
+      "file": "weapons-WhiteTassel.json",
+      "sha256": "21f5747cf050a6785c64324e75bb9d634b4c6a5db4a88c69cf7aa170e5b30c17"
+    },
+    "WindblumeOde": {
+      "file": "weapons-WindblumeOde.json",
+      "sha256": "32d02b9a404ddeae5fc924c4314af66fc9b69e19bd972cc6f16313b5c16aa100"
+    },
+    "WineAndSong": {
+      "file": "weapons-WineAndSong.json",
+      "sha256": "0e3cdbcd0a663e73f5316e8614980020946158d0794e0da5503a6204879d8d36"
+    },
+    "WintersHeavyHeart": {
+      "file": "weapons-WintersHeavyHeart.json",
+      "sha256": "d3a5c03bdf03d20a9660ebcde11e4e3d251f2403213256ecca547643259d64c3"
+    },
+    "WolfFang": {
+      "file": "weapons-WolfFang.json",
+      "sha256": "710a955206a4f5b05b3da45bdb2dad421df1de8fb795c978712e357e01245b21"
+    },
+    "WolfsGravestone": {
+      "file": "weapons-WolfsGravestone.json",
+      "sha256": "16f7546b0d03006891de901424710531e8c4ab1191dea22701c4a5e1f7d0745e"
+    },
+    "XiphosMoonlight": {
+      "file": "weapons-XiphosMoonlight.json",
+      "sha256": "7336a29e023715ec5955d5c59e2a6a08b17e91bbb91afc54f833aa2100500193"
+    }
+  },
+  "artifacts": {
+    "ADayCarvedFromRisingWinds": {
+      "file": "artifacts-ADayCarvedFromRisingWinds.json",
+      "sha256": "621661d9af3c8c5e69f51429693c39426af370dc0aee4da5e27cdbab01685702"
+    },
+    "Adventurer": {
+      "file": "artifacts-Adventurer.json",
+      "sha256": "8ff6212d750404bf438aa97ca9bed7606bf5c2a8d7c8fb286d78965aac51131d"
+    },
+    "ArchaicPetra": {
+      "file": "artifacts-ArchaicPetra.json",
+      "sha256": "f39d44d493a796e7d0232a97e856bd41b703cfa9f516a0d7abe6f6f3f2f02f33"
+    },
+    "AubadeOfMorningstarAndMoon": {
+      "file": "artifacts-AubadeOfMorningstarAndMoon.json",
+      "sha256": "09ae44487dcbd423a4e2f7359949397dccf72e3c799aaa1be732b65505e49acb"
+    },
+    "Berserker": {
+      "file": "artifacts-Berserker.json",
+      "sha256": "09680c610475a5058ac2d94263be4d483ea180f116db8583d8e2ec452b1b6f81"
+    },
+    "BlizzardStrayer": {
+      "file": "artifacts-BlizzardStrayer.json",
+      "sha256": "74ec23ea0904a696578301b8f4cf31d8c1b0b31ad01899b35759f73d9e431596"
+    },
+    "BloodstainedChivalry": {
+      "file": "artifacts-BloodstainedChivalry.json",
+      "sha256": "3f23fa5cf18040cb6c19f19c8f274fc6483a17783a77e7b8bbf82e40f686c4d5"
+    },
+    "BraveHeart": {
+      "file": "artifacts-BraveHeart.json",
+      "sha256": "4be0d8497b51c3d76bc7c21821fc0ce3a14804be633e8f7c5b69c689f16e29e1"
+    },
+    "CelestialGift": {
+      "file": "artifacts-CelestialGift.json",
+      "sha256": "1b6db40b6429b34e3b53a7fc3d9dfc9bb2885deb18c97860cb683d9dc65a2c65"
+    },
+    "CrimsonWitchOfFlames": {
+      "file": "artifacts-CrimsonWitchOfFlames.json",
+      "sha256": "d75e6434861f7968fa375d26ba35b6d81c6b1f22066e58eacc98af05f36c74fd"
+    },
+    "DeepwoodMemories": {
+      "file": "artifacts-DeepwoodMemories.json",
+      "sha256": "e992c81e8920076084a933153685fccb984eed7dd1737f0e1dfa780b21fedbc0"
+    },
+    "DefendersWill": {
+      "file": "artifacts-DefendersWill.json",
+      "sha256": "eb2624e18d2cb8009e61043c11ca38a79f71094f38d481ad850c2eefc3041981"
+    },
+    "DesertPavilionChronicle": {
+      "file": "artifacts-DesertPavilionChronicle.json",
+      "sha256": "3e621ac78a2f629c59b17cf13900e9abe1d76297b435615b627e1873215ccfda"
+    },
+    "DisenchantmentInDeepShadow": {
+      "file": "artifacts-DisenchantmentInDeepShadow.json",
+      "sha256": "c9ddbf987192198ccc5587507b823813c94ff0c94a13de61411c46b920e111e8"
+    },
+    "EchoesOfAnOffering": {
+      "file": "artifacts-EchoesOfAnOffering.json",
+      "sha256": "a69e5fa332daae41b44c76a9c8f6a33bcf2f47bec3d3373478503a687a473675"
+    },
+    "EmblemOfSeveredFate": {
+      "file": "artifacts-EmblemOfSeveredFate.json",
+      "sha256": "02bcf45c960f7e530427353baa1578efa5fd51c4443e4828178ba0b37f9c66c0"
+    },
+    "FinaleOfTheDeepGalleries": {
+      "file": "artifacts-FinaleOfTheDeepGalleries.json",
+      "sha256": "bb2cba015c8df9b4d241acaa75d21385b8c57db0f3363511edf2ee13a6cbbb1c"
+    },
+    "FlowerOfParadiseLost": {
+      "file": "artifacts-FlowerOfParadiseLost.json",
+      "sha256": "90e44447076a8f1bec6dcb72405f30054962282426ba3bcdeb31b2925a387e9b"
+    },
+    "FragmentOfHarmonicWhimsy": {
+      "file": "artifacts-FragmentOfHarmonicWhimsy.json",
+      "sha256": "9fc5fe5ae83bb57ac16a7f0c510c45842a479f2a55c766a4ed5e9f5c4ee0ecf7"
+    },
+    "Gambler": {
+      "file": "artifacts-Gambler.json",
+      "sha256": "73ba4218aedd0540612218395cb46dcef7078d6140572f211b82a8bd5fb84152"
+    },
+    "GildedDreams": {
+      "file": "artifacts-GildedDreams.json",
+      "sha256": "8fd2a78a5dd17bc1ecfc9237325783de78da8767102e27b9b22488a1cf127ffb"
+    },
+    "GladiatorsFinale": {
+      "file": "artifacts-GladiatorsFinale.json",
+      "sha256": "167f01ed5552499b474dc0a454f44dc5810a22acd777d97d00093651961b0eef"
+    },
+    "GoldenTroupe": {
+      "file": "artifacts-GoldenTroupe.json",
+      "sha256": "ba1a50a32074b6122d388967f12bcfcc6f7b1b74bb38fe91de3d0d73d8afd349"
+    },
+    "HeartOfDepth": {
+      "file": "artifacts-HeartOfDepth.json",
+      "sha256": "5018b89b6e054f5ad98e68c17cfa46626d0ddfc4dc1a5d7f590ce41b3fb9be55"
+    },
+    "HeartOfTheFurnace": {
+      "file": "artifacts-HeartOfTheFurnace.json",
+      "sha256": "ac97b94dd070e6e8d7292eb3c3406c0e802daf71b29f78ed771d279aa00a6909"
+    },
+    "HuskOfOpulentDreams": {
+      "file": "artifacts-HuskOfOpulentDreams.json",
+      "sha256": "c1f7c6dbfdd3c3df5d6731067a5db47b23dbe3505a413f717b0f757166934637"
+    },
+    "Instructor": {
+      "file": "artifacts-Instructor.json",
+      "sha256": "68e8083691678c57ee488154bf8adc3cb02afa6454fe88c6d015e3df5aba750c"
+    },
+    "Lavawalker": {
+      "file": "artifacts-Lavawalker.json",
+      "sha256": "29afd8e6d20d172912cfd366dd3e889b5ce4a70d542356c989839c975d95e412"
+    },
+    "LongNightsOath": {
+      "file": "artifacts-LongNightsOath.json",
+      "sha256": "2857ba1727eb11ca4d3a9e2cee89b96e70b27ad4458d910ed0514dee124a3fdb"
+    },
+    "LuckyDog": {
+      "file": "artifacts-LuckyDog.json",
+      "sha256": "e6a7e3806c5973fae7b23981f50e9efa0f6ef1d7e4dc0cdb3f5969f3be771270"
+    },
+    "MaidenBeloved": {
+      "file": "artifacts-MaidenBeloved.json",
+      "sha256": "2b9cab9629430a3c8f9113fae8e856001e6cc60f6b5e8288e995f3072d755603"
+    },
+    "MarechausseeHunter": {
+      "file": "artifacts-MarechausseeHunter.json",
+      "sha256": "c7a1b869aada47ac8a245365f8f1d965927c085423cc9099db002ae30b30da75"
+    },
+    "MartialArtist": {
+      "file": "artifacts-MartialArtist.json",
+      "sha256": "d82f8d8438a66fc4e4107b68749668593040c911885f1f58eeb76068a7681487"
+    },
+    "NightOfTheSkysUnveiling": {
+      "file": "artifacts-NightOfTheSkysUnveiling.json",
+      "sha256": "5a6cd82f8d17fb4d2c3562c26fc4bd982c1eda4a355ce747074cf767346aa55f"
+    },
+    "NighttimeWhispersInTheEchoingWoods": {
+      "file": "artifacts-NighttimeWhispersInTheEchoingWoods.json",
+      "sha256": "893aeb3f3f0960e4c079a6ed88da8758a952d90c6b0e71a49b55fe07e95b28ae"
+    },
+    "NoblesseOblige": {
+      "file": "artifacts-NoblesseOblige.json",
+      "sha256": "20a7e029fe37bc31c7776d92e90f582aeea724dab3e1b3974af9b79addb3ace5"
+    },
+    "NymphsDream": {
+      "file": "artifacts-NymphsDream.json",
+      "sha256": "34d2b445ac178b14fe83526aedf275c362fe3ab3cac2959be4878a03c004bb6b"
+    },
+    "ObsidianCodex": {
+      "file": "artifacts-ObsidianCodex.json",
+      "sha256": "bb7da286bc0b90b978314c0a5f9d693d687cc5ba970a8cc482286998915fe7ae"
+    },
+    "OceanHuedClam": {
+      "file": "artifacts-OceanHuedClam.json",
+      "sha256": "91c76578c3df6c51d4f3f4ce537731c97eb1af2b8cce32320326ba1d6e19f61c"
+    },
+    "PaleFlame": {
+      "file": "artifacts-PaleFlame.json",
+      "sha256": "564fe11d0b2bcb77b01ff35f0b5f8078bc85c1e10abf419e23778158c6bd7537"
+    },
+    "PrayersForDestiny": {
+      "file": "artifacts-PrayersForDestiny.json",
+      "sha256": "a7d10219f4416b8ea0c66ec4725360d8b8978db56ecb405b1c536465466cf7df"
+    },
+    "PrayersForIllumination": {
+      "file": "artifacts-PrayersForIllumination.json",
+      "sha256": "64f4ba6c684014d7f2e2dd070f8eed08367550cdd6df34c48e89839c40b6249e"
+    },
+    "PrayersForWisdom": {
+      "file": "artifacts-PrayersForWisdom.json",
+      "sha256": "246e5e10102e56e7ba9a26d96d70d5de20cf287632e7dc79316e99245bd0d390"
+    },
+    "PrayersToSpringtime": {
+      "file": "artifacts-PrayersToSpringtime.json",
+      "sha256": "d87d841dec5959ed7e6d02688468d262b578264ca2e36a8cb9bc098f502df06f"
+    },
+    "ResolutionOfSojourner": {
+      "file": "artifacts-ResolutionOfSojourner.json",
+      "sha256": "a236336a1a31569362fcecb1b56a52f9e48cd6220971a5eb6c9832afb80a1e93"
+    },
+    "RetracingBolide": {
+      "file": "artifacts-RetracingBolide.json",
+      "sha256": "22d1cbb003d40d89cba8ab157456687f298cd981abd569d24eb44e1283bb862a"
+    },
+    "ScarletProof": {
+      "file": "artifacts-ScarletProof.json",
+      "sha256": "e1797e157d305a398d07a45b83c973e5d7ea1b19c7fadc8f56e47d63e2d930b8"
+    },
+    "Scholar": {
+      "file": "artifacts-Scholar.json",
+      "sha256": "e40a81649945064de72569c8eb31268aa3c85dcc6532873a8e77911b300b4263"
+    },
+    "ScrollOfTheHeroOfCinderCity": {
+      "file": "artifacts-ScrollOfTheHeroOfCinderCity.json",
+      "sha256": "803d949d320199128d1bf2a34f4a5b86f6e1f642ea222be358a3bc0a0927a02c"
+    },
+    "ShimenawasReminiscence": {
+      "file": "artifacts-ShimenawasReminiscence.json",
+      "sha256": "7f18f8f2f88128109bdc75fb9cf956a16d3e0d6c1b6b0af6919a67fb291853a6"
+    },
+    "SilkenMoonsSerenade": {
+      "file": "artifacts-SilkenMoonsSerenade.json",
+      "sha256": "053956df0e62d089eb0ef1a0eee150203626b74db9901d4ef0eb4857d9baa3c5"
+    },
+    "SongOfDaysPast": {
+      "file": "artifacts-SongOfDaysPast.json",
+      "sha256": "5be88b7da95c46d35be0b7321927b0b9da2a4ee8afa30a5d0599e30ad488bdd1"
+    },
+    "TenacityOfTheMillelith": {
+      "file": "artifacts-TenacityOfTheMillelith.json",
+      "sha256": "7c25e3de4d4ee8a725b9a3720af28e455b7209411336489bf443bf587110dd51"
+    },
+    "TheExile": {
+      "file": "artifacts-TheExile.json",
+      "sha256": "a2c9d4715dd15cfbafbc8b7e80247d98c472220fba464f2712e12975dfa77070"
+    },
+    "ThunderingFury": {
+      "file": "artifacts-ThunderingFury.json",
+      "sha256": "c5f138342bc14f899a29e6d5ceb6eda721a2c9a456ba9a9932750142d25c60d0"
+    },
+    "Thundersoother": {
+      "file": "artifacts-Thundersoother.json",
+      "sha256": "e9e60750b78bb7296cf4157d5f05734a46d71cc5dfbc25dbf514c7c01fc3d24c"
+    },
+    "TinyMiracle": {
+      "file": "artifacts-TinyMiracle.json",
+      "sha256": "7b5ed98d4de7af7472c779c97691785f836abfc8fb67bd0dd020e5857cc73349"
+    },
+    "TravelingDoctor": {
+      "file": "artifacts-TravelingDoctor.json",
+      "sha256": "3b431f2434e93c033a60e97e906befaba102194c6f0508215a823700b1e27bc2"
+    },
+    "UnfinishedReverie": {
+      "file": "artifacts-UnfinishedReverie.json",
+      "sha256": "8b2e24be1c0c7d7e7f0e3d12132d59dbaef1872d60447b6b54904840e0c9c267"
+    },
+    "VermillionHereafter": {
+      "file": "artifacts-VermillionHereafter.json",
+      "sha256": "2bff645a3465ff83d58e6fd670312eea9c1f14b0b622f0054a03830ff16a4dc6"
+    },
+    "ViridescentVenerer": {
+      "file": "artifacts-ViridescentVenerer.json",
+      "sha256": "58fc237612bdc1abfca9d07a82cb3be03d69e408e5fd7effc48ac098974ee189"
+    },
+    "VourukashasGlow": {
+      "file": "artifacts-VourukashasGlow.json",
+      "sha256": "1070adf97126ef75c3b059e2616c9a75d0f58538418d389727d67c228a761d06"
+    },
+    "WanderersTroupe": {
+      "file": "artifacts-WanderersTroupe.json",
+      "sha256": "bca6cdf3345e3886dd3123995477868271e92cce87c86651265850f9f3b3fc4e"
+    }
+  }
+}

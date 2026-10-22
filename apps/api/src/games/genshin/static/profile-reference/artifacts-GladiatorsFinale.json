@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "GladiatorsFinale",
+  "gameId": 15001,
+  "name": "Gladiator's Finale",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/gladiatorsfinale.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "9c5407af6fe62280a3ae902c811eb1f3bbbcd094876d9e59f142b0013b48221b",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Gladiator's Nostalgia",
+      "description": "No one knows why the legendary gladiator wore this flower on his chest. It was the brutal warrior's only weakness."
+    },
+    {
+      "slot": "plume",
+      "name": "Gladiator's Destiny",
+      "description": "A feather of dreams that soars free like an eagle. At the end of the gladiator's legendary life, this parting gift was left upon his chest by a bird that knew true freedom."
+    },
+    {
+      "slot": "sands",
+      "name": "Gladiator's Longing",
+      "description": "A timepiece that recorded the gladiator's days in the bloodstained Colosseum. To him, it counted down the days on his long road to freedom."
+    },
+    {
+      "slot": "goblet",
+      "name": "Gladiator's Intoxication",
+      "description": "The golden cup a champion gladiator drank from in ancient times. It brimmed with his glory for years until the fateful day of his fall."
+    },
+    {
+      "slot": "circlet",
+      "name": "Gladiator's Triumphus",
+      "description": "The helmet of a legendary gladiator from ancient times, who would proudly stretch out his bloodied arms to welcome the thunderous applause of his audience."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "ATK +18%." },
+    {
+      "pieces": 4,
+      "description": "If the wielder of this artifact set uses a Sword, Claymore or Polearm, increases their Normal Attack DMG by 35%."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "AThousandFloatingDreams",
+  "gameId": 14511,
+  "name": "A Thousand Floating Dreams",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/athousandfloatingdreams.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "ecabf8e3e96851bbf88a55ede16326656b4f38c5230d4f943ce3be090e7c72a4",
+    "license": "MIT"
+  },
+  "description": "This lamp illuminates the dreams that float up over a thousand nights, and in its emerald-green light flows a song of ancient days.",
+  "weaponType": "Catalyst",
+  "rarity": 5,
+  "effectName": "A Thousand Nights' Dawnsong",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Party members other than the equipping character will provide the equipping character with buffs based on whether their Elemental Type is the same as the latter or not. If their Elemental Types are the same, increase Elemental Mastery by 32. If not, increase the equipping character's DMG Bonus from their Elemental Type by 10%. Each of the aforementioned effects can have up to 3 stacks. Additionally, all nearby party members other than the equipping character will have their Elemental Mastery increased by 40. Multiple such effects from multiple such weapons can stack."
+    },
+    {
+      "rank": 2,
+      "description": "Party members other than the equipping character will provide the equipping character with buffs based on whether their Elemental Type is the same as the latter or not. If their Elemental Types are the same, increase Elemental Mastery by 40. If not, increase the equipping character's DMG Bonus from their Elemental Type by 14%. The aforementioned effects can have 3 stacks. Additionally, all nearby party members other than the equipping character will have their Elemental Mastery increased by 42. Multiple such effects from multiple such weapons can stack."
+    },
+    {
+      "rank": 3,
+      "description": "Party members other than the equipping character will provide the equipping character with buffs based on whether their Elemental Type is the same as the latter or not. If their Elemental Types are the same, increase Elemental Mastery by 48. If not, increase the equipping character's DMG Bonus from their Elemental Type by 18%. The aforementioned effects can have 3 stacks. Additionally, all nearby party members other than the equipping character will have their Elemental Mastery increased by 44. Multiple such effects from multiple such weapons can stack."
+    },
+    {
+      "rank": 4,
+      "description": "Party members other than the equipping character will provide the equipping character with buffs based on whether their Elemental Type is the same as the latter or not. If their Elemental Types are the same, increase Elemental Mastery by 56. If not, increase the equipping character's DMG Bonus from their Elemental Type by 22%. The aforementioned effects can have 3 stacks. Additionally, all nearby party members other than the equipping character will have their Elemental Mastery increased by 46. Multiple such effects from multiple such weapons can stack."
+    },
+    {
+      "rank": 5,
+      "description": "Party members other than the equipping character will provide the equipping character with buffs based on whether their Elemental Type is the same as the latter or not. If their Elemental Types are the same, increase Elemental Mastery by 64. If not, increase the equipping character's DMG Bonus from their Elemental Type by 26%. The aforementioned effects can have 3 stacks. Additionally, all nearby party members other than the equipping character will have their Elemental Mastery increased by 48. Multiple such effects from multiple such weapons can stack."
+    }
+  ]
+}

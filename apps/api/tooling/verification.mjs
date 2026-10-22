@@ -103,9 +103,15 @@ export function verifyFormatExceptions(read = (path) => readFileSync(join(repoRo
   const record = JSON.parse(read('docs/plans/c5-companion-beta/preservation-check.json'));
   const inherited = Object.entries(record.formatterExceptions);
   if (inherited.length !== 5) throw new Error('Expected five inherited formatting exceptions.');
-  // Section 5 modernizes and formats this source. Retain historical evidence,
-  // but include the changed file in normal formatting checks instead of excluding it.
-  const exceptions = inherited.filter(([path]) => path !== 'apps/api/src/core/ai/openrouter.ts');
+  // Retired AI/starter files and modernized UI source no longer inherit an
+  // unchanged-file exception. Keep checking the original historical document.
+  const modernized = new Set([
+    'apps/api/src/core/ai/openrouter.ts',
+    'apps/web/index.html',
+    'apps/web/src/App.css',
+    'apps/web/src/index.css',
+  ]);
+  const exceptions = inherited.filter(([path]) => !modernized.has(path));
   for (const [path, { sha256 }] of exceptions) {
     const actual = createHash('sha256').update(read(path)).digest('hex').toUpperCase();
     if (actual !== sha256) throw new Error(`Formatting exception changed: ${path}`);

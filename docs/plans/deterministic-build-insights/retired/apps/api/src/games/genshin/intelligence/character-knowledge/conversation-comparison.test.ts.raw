@@ -1,0 +1,387 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+
+import {
+  advisorContextKeysSchema,
+  characterAdvisorRequestSchema,
+  characterAdvisorResponseSchema,
+} from '@celestia/api-contracts';
+import type { Request, Response } from 'express';
+import { afterAll, describe, expect, it, vi } from 'vitest';
+vi.mock('@/core/db/prisma.js', () => ({ prisma: {} }));
+vi.mock('@/core/config/env.js', () => ({ env: { CELESTIA_AI_PROVIDER: 'disabled' } }));
+
+import type { AdvisorProvider } from '@/core/ai/advisor-provider.js';
+
+import type { CharacterEquipmentRow } from '../../characters/character-equipment.repository.js';
+import { characterKnowledgeObservationHandler } from './advisor.controller.js';
+import { CharacterAdvisorService } from './advisor.service.js';
+import { defaultKnowledgeRoot, loadCharacterKnowledge } from './knowledge.store.js';
+
+const artifacts = new URL(
+  '../../../../../../../docs/plans/character-knowledge-assistant/',
+  import.meta.url,
+);
+const json = (name: string) => JSON.parse(readFileSync(new URL(name, artifacts), 'utf8'));
+const candidate = json('quality-repair/candidate.json');
+const knowledge = loadCharacterKnowledge(defaultKnowledgeRoot, candidate.release);
+const saved = json('api-connection/live-acceptance-results.json');
+const pending = json('quality-repair/pending-live-cases.json');
+const aino = characterAdvisorRequestSchema.parse(saved.cases[0].input);
+const replacementEntry = pending.cases.find(
+  (c: { id: string }) => c.id === 'neuvillette-replacement',
+);
+const replacement = characterAdvisorRequestSchema.parse({
+  characterKey: replacementEntry.characterKey,
+  question: replacementEntry.question,
+  teamKeys: replacementEntry.teamKeys,
+  useRecordedContext: false,
+});
+type Context = Awaited<ReturnType<CharacterAdvisorService['prepare']>>['fit']['context'];
+type Doc = Context['evidence'][number];
+const evidence: unknown[] = [];
+const fact = (d: Doc, text = d.text, support = d.text.slice(0, 80)) => ({
+  text,
+  support,
+  basis: 'source_fact',
+  evidenceIds: [d.id],
+});
+function provider(generate: (context: Context) => unknown) {
+  const contexts: Context[] = [];
+  const complete = vi.fn(async (messages: { content: string }[]) => {
+    const parsed = JSON.parse(messages[1]!.content);
+    expect(messages[1]!.content.length).toBeLessThanOrEqual(22000);
+    if (messages[0]!.content.startsWith('Audit'))
+      return JSON.stringify({ supported: true, issues: [] });
+    contexts.push(parsed);
+    const result = generate(parsed);
+    return typeof result === 'string' ? result : JSON.stringify(result);
+  });
+  return {
+    provider: 'offline',
+    model: 'controlled-not-real-model',
+    complete,
+    contexts,
+  } satisfies AdvisorProvider & { contexts: Context[] };
+}
+function row(key: string): CharacterEquipmentRow {
+  return {
+    character: {
+      characterKey: key,
+      level: 80,
+      ascension: 6,
+      constellation: 0,
+      talentNormal: 8,
+      talentSkill: 8,
+      talentBurst: 8,
+      accountId: 'PRIVATE-ACCOUNT',
+      id: 'PRIVATE-CHARACTER',
+    } as CharacterEquipmentRow['character'],
+    weapon: null,
+    artifacts: [],
+    receipts: [],
+    weaponRelationConsistent: true,
+    artifactRelationsConsistent: true,
+  };
+}
+function ainoAnswer(context: Context) {
+  const doc = (title: string) => context.evidence.find((d) => d.title === title)!;
+  const burst = context.evidence.find((d) => d.id === 'Aino:combat3')!;
+  const weapons = context.evidence.find((d) => d.id === 'Aino:batch01:5')!;
+  const stats = context.evidence.find((d) => d.id === 'Aino:batch01:3')!;
+  const favonius = doc('Favonius Greatsword'),
+    makhaira = doc('Makhaira Aquamarine'),
+    serenade = doc("Silken Moon's Serenade");
+  // Manually justified controlled facts: the selected r1 effect is an explicitly
+  // hypothetical example; the delivered evidence must still contain all r1-r5.
+  const weaponFact = (d: Doc) => {
+    const unit = d.text.match(/r1: ([\s\S]*?) r2:/)![1]!;
+    return fact(
+      d,
+      `${d.title}, illustrative r1 (not recorded equipment): ${unit}`,
+      unit.slice(0, 80),
+    );
+  };
+  return {
+    segments: [
+      fact(burst, 'Aino’s Elemental Burst, Precision Hydronic Cooler: ' + burst.text),
+      fact(stats),
+      {
+        ...weaponFact(favonius),
+        text: weaponFact(favonius).text + ' CRIT hits during her field time enable particles.',
+        evidenceIds: [favonius.id, weapons.id],
+      },
+      {
+        ...weaponFact(makhaira),
+        text:
+          weaponFact(makhaira).text +
+          ' This alternative suits a team benefiting from ATK when energy is already covered.',
+        evidenceIds: [makhaira.id, weapons.id],
+        basis: 'interpretation',
+      },
+      fact(
+        serenade,
+        serenade.text.replace('effect2Pc:', '2-piece:').replace('effect4Pc:', '4-piece:'),
+      ),
+    ],
+    followUp: null,
+  };
+}
+function comparisonAnswer(context: Context) {
+  const get = (id: string) => {
+    const d = context.evidence.find((v) => v.id === id);
+    expect(d, 'Required pinned comparison evidence: ' + id).toBeDefined();
+    return d!;
+  };
+  const z = get('Zhongli:combat2'),
+    x = get('Xilonen:combat2'),
+    xb = get('Xilonen:combat3'),
+    xp = get('Xilonen:passive1');
+  const f = get('Furina:combat2'),
+    k = get('KaedeharaKazuha:combat2');
+  const hold = z.text.split('\n\n').find((s) => s.startsWith('Hold\n'))!;
+  const shield = z.text.split('\n\n').find((s) => s.startsWith('Jade Shield\n'))!;
+  return {
+    segments: [
+      {
+        ...fact(
+          z,
+          'Zhongli: ' +
+            hold +
+            '\n' +
+            shield +
+            '\nCompared with this held-Skill shield, Xilonen offers conditional RES reduction and active-character healing. These are alternative four-member teams; no ownership or equal defensive coverage is established.',
+          'Creates a shield of jade.',
+        ),
+        basis: 'interpretation',
+        evidenceIds: [z.id, x.id, xb.id],
+      },
+      fact(
+        x,
+        'Xilonen has 3 Samplers. The initial recorded Source Sample within each Sampler will be Geo. Each Pyro/Hydro/Cryo/Electro party member converts a Geo Sample. While in Nightsoul’s Blessing, the Geo Sample is active. After unlocking her Ascension Talent, Netotiliztli’s Echoes, she can regenerate Nightsoul points. When her Nightsoul points hit the maximum, the 3 Source Samples activate for 15s. When the Source Samples are active, nearby opponents’ corresponding Elemental RES decreases. Same-Elemental-Type effects cannot stack; the effects can trigger off-field.',
+        'Xilonen has 3 Samplers with her',
+      ),
+      fact(xp, 'Xilonen: ' + xp.text),
+      fact(xb, 'Xilonen’s Elemental Burst: ' + xb.text),
+      fact(
+        f,
+        'Furina’s Pneuma option: ' + f.text.split('\n\n').find((s) => s.startsWith('Pneuma\n'))!,
+        'Summons the Singer of Many Waters',
+      ),
+      fact(k, 'Kaedehara Kazuha: ' + k.text.split('\n\n')[0]!),
+    ],
+    followUp: null,
+  };
+}
+describe('actual conversation budgeting and compared-participant correction (offline)', () => {
+  it.each([2, 4].flatMap((turns) => [false, true].map((recorded) => ({ turns, recorded }))))(
+    'original Aino build with $turns full turns / recorded=$recorded produces a useful supported completion',
+    async ({ turns, recorded }) => {
+      const history = Array.from({ length: turns }, (_, i) => ({
+        role: i % 2 ? ('assistant' as const) : ('user' as const),
+        content: (i === turns - 2
+          ? 'My changed constraint: explain conditional support; do not assume my alternatives are owned. '
+          : 'We discussed activation conditions and conditional equipment choices. '
+        )
+          .repeat(12)
+          .slice(0, 600),
+      }));
+      const input = characterAdvisorRequestSchema.parse({
+        ...aino,
+        history,
+        useRecordedContext: recorded,
+      });
+      const rows = [row('Aino'), row('Fischl')];
+      rows[0]!.weapon = {
+        weaponKey: 'FerrousShadow',
+        refinement: 2,
+        level: 80,
+      } as CharacterEquipmentRow['weapon'];
+      rows[0]!.artifacts = ['flower', 'plume', 'sands', 'goblet', 'circlet'].map((slotKey) => ({
+        slotKey,
+        setKey: 'Instructor',
+        mainStatKey: slotKey === 'flower' ? 'hp' : slotKey === 'plume' ? 'atk' : 'eleMas',
+        level: 16,
+      })) as CharacterEquipmentRow['artifacts'];
+      rows[0]!.receipts = ['characters', 'weapons', 'artifacts'].map((section) => ({
+        section,
+        importedAt: '2026-10-21T00:00:00Z',
+        source: 'PRIVATE-RECEIPT',
+        entryCount: section === 'artifacts' ? 5 : 1,
+      }));
+      const repo = { readManyForUser: vi.fn(async () => rows) };
+      const reservation = vi.fn(() => true),
+        model = provider(ainoAnswer);
+      const result = await new CharacterAdvisorService(repo, model, knowledge, reservation).ask(
+        'offline-owner',
+        input,
+      );
+      expect(result.status, JSON.stringify(result)).toBe('answered');
+      expect(characterAdvisorResponseSchema.safeParse(result).success).toBe(true);
+      expect(reservation).toHaveBeenCalledOnce();
+      expect(model.complete).toHaveBeenCalledTimes(2);
+      expect(model.contexts[0]!.history).toEqual(history);
+      const makhaira = model.contexts[0]!.evidence.find((d) => d.title === 'Makhaira Aquamarine')!;
+      expect(makhaira.text).toMatch(
+        /r5:.*This effect will still trigger even if the character is not on the field\.$/,
+      );
+      if (recorded) {
+        expect(JSON.stringify(model.contexts[0]!.SERVER_RECORDS)).toContain('FerrousShadow');
+        expect(JSON.stringify(model.contexts[0]!.SERVER_RECORDS)).toContain('Instructor');
+        expect(JSON.stringify(model.contexts[0]!.SERVER_RECORDS)).not.toContain('PRIVATE-RECEIPT');
+        expect(JSON.stringify(model.contexts[0]!.SERVER_RECORDS)).not.toContain('Fischl');
+        expect(repo.readManyForUser.mock.calls[0]).toEqual(['offline-owner', ['Aino']]);
+      } else expect(repo.readManyForUser).not.toHaveBeenCalled();
+      evidence.push({
+        kind: 'controlled-positive-not-live',
+        case: 'Aino',
+        turns,
+        recorded,
+        context: model.contexts[0],
+        response: result,
+      });
+    },
+  );
+  it('fails an impossible local envelope without spending usage or calling any adapter', async () => {
+    const huge = row('Aino');
+    huge.receipts = [
+      { section: 'x'.repeat(23000), importedAt: new Date('2026-10-22'), entryCount: 1 },
+    ] as unknown as CharacterEquipmentRow['receipts'];
+    const reserve = vi.fn(() => true),
+      model = provider(() => 'invalid JSON');
+    const result = await new CharacterAdvisorService(
+      { readManyForUser: async () => [huge] },
+      model,
+      knowledge,
+      reserve,
+    ).ask('offline-owner', { ...aino, useRecordedContext: true });
+    expect(result.reason).toBe('context_budget');
+    expect(result.answer).toBeNull();
+    expect(result.limitations.join(' ')).toContain('no provider attempt was reserved');
+    expect(reserve).not.toHaveBeenCalled();
+    expect(model.complete).not.toHaveBeenCalled();
+  });
+  it('the exact replacement request supports five compared participants and a qualified completion', async () => {
+    const model = provider(comparisonAnswer);
+    const result = await new CharacterAdvisorService(
+      { readManyForUser: async () => [] },
+      model,
+      knowledge,
+      () => true,
+    ).ask('offline-owner', replacement);
+    expect(result.status, JSON.stringify(result)).toBe('answered');
+    expect(result.contextKeys).toEqual([
+      'Neuvillette',
+      'Xilonen',
+      'Zhongli',
+      'Furina',
+      'KaedeharaKazuha',
+    ]);
+    expect(result.coverage.every((s) => s.covered)).toBe(true);
+    expect(model.contexts[0]!.selectedTeam).toHaveLength(4);
+    expect(model.contexts[0]!.comparedParticipants).toHaveLength(5);
+    expect(model.contexts[0]!.participantScope).toContain('not simultaneous');
+    evidence.push({
+      kind: 'manually-justified-qualified-comparison-not-live',
+      context: model.contexts[0],
+      response: result,
+    });
+  });
+  it('a genuine missing participant source remains partial rather than dropping the participant', async () => {
+    const altered = structuredClone(knowledge);
+    altered.corpus.documents = altered.corpus.documents.filter(
+      (d) => d.characterKey !== 'KaedeharaKazuha',
+    );
+    const model = provider((context) => {
+      const z = context.evidence.find((d) => d.id === 'Zhongli:combat2')!;
+      return {
+        segments: [
+          fact(
+            z,
+            'Zhongli: ' + z.text.split('\n\n').find((s) => s.startsWith('Hold\n')),
+            'Creates a shield of jade.',
+          ),
+        ],
+        followUp: null,
+      };
+    });
+    const response = await new CharacterAdvisorService(
+      { readManyForUser: async () => [] },
+      model,
+      altered,
+      () => true,
+    ).ask('offline', replacement);
+    expect(response.status).toBe('partial');
+    expect(response.coverage).toContainEqual({ subject: 'Kaedehara Kazuha', covered: false });
+    expect(response.limitations.join(' ')).toContain('Kaedehara Kazuha');
+  });
+  it('reads/observes all five relevant characters only, and rejects a changed fifth record', async () => {
+    const keys = ['Neuvillette', 'Xilonen', 'Zhongli', 'Furina', 'KaedeharaKazuha'];
+    const rows = [...keys.map(row), row('Fischl')];
+    const repo = { readManyForUser: vi.fn(async () => rows) };
+    const svc = new CharacterAdvisorService(repo, null, knowledge);
+    const before = await svc.snapshot('owner-a', keys);
+    expect(before.records.relevant.map((r) => r.characterKey)).toEqual(keys);
+    expect(before.records.ownedCharacterKeys).not.toContain('Fischl');
+    rows.at(-1)!.character.level++;
+    expect((await svc.snapshot('owner-a', keys)).digest).toBe(before.digest);
+    rows[4]!.character.level++;
+    expect((await svc.snapshot('owner-a', keys)).digest).not.toBe(before.digest);
+    expect(repo.readManyForUser.mock.calls[0]).toEqual(['owner-a', keys]);
+    const model = provider((context) => {
+      rows[4]!.character.level++;
+      return comparisonAnswer(context);
+    });
+    const response = await new CharacterAdvisorService(repo, model, knowledge, () => true).ask(
+      'owner-a',
+      { ...replacement, useRecordedContext: true },
+    );
+    expect(response.status).toBe('context_changed');
+    expect(JSON.stringify(model.contexts)).not.toMatch(/PRIVATE-ACCOUNT|PRIVATE-CHARACTER|Fischl/);
+  });
+  it('the production observation handler accepts the comparison union, canonicalizes aliases and rejects overflow before reading', async () => {
+    const snapshot = vi.fn(async () => ({ digest: 'a'.repeat(64) }));
+    const handler = characterKnowledgeObservationHandler(
+      () => ({ snapshot }) as unknown as CharacterAdvisorService,
+    );
+    const jsonReply = vi.fn();
+    const res = { json: jsonReply } as unknown as Response;
+    await handler(
+      {
+        query: { keys: JSON.stringify(['Neuvillette', 'Furina', 'Kazuha', 'Zhongli', 'Xilonen']) },
+        user: { id: 'owner-only' },
+      } as unknown as Request,
+      res,
+    );
+    expect(snapshot).toHaveBeenCalledWith('owner-only', [
+      'Neuvillette',
+      'Furina',
+      'KaedeharaKazuha',
+      'Zhongli',
+      'Xilonen',
+    ]);
+    expect(jsonReply).toHaveBeenCalledOnce();
+    expect(advisorContextKeysSchema.safeParse(Array(9).fill('Furina')).success).toBe(false);
+    await expect(
+      handler(
+        {
+          query: { keys: JSON.stringify(Array(9).fill('Furina')) },
+          user: { id: 'other' },
+        } as unknown as Request,
+        res,
+      ),
+    ).rejects.toThrow();
+    expect(snapshot).toHaveBeenCalledOnce();
+    expect(
+      characterAdvisorRequestSchema.safeParse({
+        ...replacement,
+        teamKeys: replacement.teamKeys.concat('Xilonen'),
+      }).success,
+    ).toBe(false);
+  });
+});
+afterAll(() =>
+  writeFileSync(
+    new URL('quality-repair/review-fix/production-context-evidence.json', artifacts),
+    JSON.stringify({ kind: 'offline-fixtures-not-provider-success', evidence }, null, 2) + '\n',
+  ),
+);

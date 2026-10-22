@@ -1,0 +1,85 @@
+// Offline review artifacts only. Never reads credentials or writes usage/queues.
+import { createHash } from 'node:crypto';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { advisorImplementationIdentity } from './advisor-implementation-identity.mjs';
+
+const project = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const artifacts = join(project, 'docs/plans/character-knowledge-assistant');
+const output = join(artifacts, 'quality-repair');
+const json = (p) => JSON.parse(readFileSync(p));
+const put = (name, value) =>
+  writeFileSync(join(output, name), JSON.stringify(value, null, 2) + '\n');
+const candidate = json(join(output, 'candidate.json'));
+const implementation = advisorImplementationIdentity(project);
+const identity = {
+  release: candidate.release,
+  identityVersion: implementation.identityVersion,
+  ...implementation.signatures,
+};
+const previous = json(join(artifacts, 'api-connection/pending-live-cases.json'));
+const failed = json(join(artifacts, 'api-connection/live-acceptance-results.json'));
+const queuePath = join(artifacts, 'all-kqm-verification/model-queue.json');
+const queue = json(queuePath);
+const cases = structuredClone(previous.cases);
+const regressions = structuredClone(previous.priorQualityRegressions);
+const historical = regressions.find((c) => c.id === 'Aino:changed-constraint-followup').input;
+cases.push({
+  id: 'Aino:historical-correction',
+  historicalCorrection: true,
+  input: {
+    ...historical,
+    question:
+      'Correct the earlier assistant claims about off-team versus off-field, calling the Claymore a sword, and pure Hydro teams strengthening Moonsign. Use current sources and clarify any still-unspecified new field-time role. Do not assume I own a hypothetical alternative.',
+  },
+  state: 'pending-fresh-independent-live',
+  previousCase: null,
+  requirement:
+    'Deliberately failed historical history is a correction probe, never accepted preceding history for a normal follow-up.',
+});
+for (const entry of [...cases, ...regressions]) {
+  entry.historicalState = entry.state;
+  entry.state = 'pending-fresh-independent-live';
+  delete entry.latestAttemptId;
+}
+put('pending-live-cases.json', {
+  release: candidate.release,
+  parent: candidate.parent,
+  identity,
+  state: 'hold-offline-repair-independent-review-required',
+  cases,
+  priorQualityRegressions: regressions,
+  requirements: [
+    'No live calls authorized by offline success. Independent review first.',
+    'Same shared all-kqm-synthetic identity, limits, ledger and pacing; at most two advice attempts per invocation.',
+    'Normal follow-ups require the actual independently passed current preceding answer at matching identity; partial answers do not qualify.',
+    'Use --repair for separate fresh traces/checkpoints. Preserve the five old failures and all historical acceptance identities.',
+    'No candidate selection, restart or promotion in this milestone. Stop on new quality failure for offline diagnosis.',
+  ],
+  allowance: previous.allowance,
+});
+put('signatures.json', {
+  identity,
+  implementation,
+  previousIdentities: failed.cases.map((c) => ({ attemptId: c.attemptId, identity: c.identity })),
+  acceptance:
+    'No fresh real-model passes. New policy/retrieval/contract/corpus identities invalidate old acceptance; provider implementation is unchanged.',
+  fullRoster: {
+    cases: queue.cases.length,
+    states: [...new Set(queue.cases.map((c) => c.state))],
+    queueSha256: createHash('sha256').update(readFileSync(queuePath)).digest('hex'),
+    disposition:
+      '508-case roster queue retained byte-for-byte; historical identity retained, pending under the new implementation. No queue/counter edit.',
+  },
+});
+console.log(
+  JSON.stringify({
+    release: candidate.release,
+    identityVersion: identity.identityVersion,
+    freshLiveCases: cases.length + regressions.length,
+    rosterCases: queue.cases.length,
+    providerRequests: 0,
+  }),
+);

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "TheAlleyFlash",
+  "gameId": 11410,
+  "name": "The Alley Flash",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/thealleyflash.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "3501762c989c4fc0c218e242ab46a9396b92e34fb9ed915e156ef0f3cd5ec6ee",
+    "license": "MIT"
+  },
+  "description": "A straight sword as black as the night. It once belonged to a thief who roamed the benighted streets.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Itinerant Hero",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases DMG dealt by the character equipping this weapon by 12%. Taking DMG disables this effect for 5s."
+    },
+    {
+      "rank": 2,
+      "description": "Increases DMG dealt by the character equipping this weapon by 15%. Taking DMG disables this effect for 5s."
+    },
+    {
+      "rank": 3,
+      "description": "Increases DMG dealt by the character equipping this weapon by 18%. Taking DMG disables this effect for 5s."
+    },
+    {
+      "rank": 4,
+      "description": "Increases DMG dealt by the character equipping this weapon by 21%. Taking DMG disables this effect for 5s."
+    },
+    {
+      "rank": 5,
+      "description": "Increases DMG dealt by the character equipping this weapon by 24%. Taking DMG disables this effect for 5s."
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "EchoesOfAnOffering",
+  "gameId": 15024,
+  "name": "Echoes of an Offering",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/echoesofanoffering.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "a7aafbc550cd8951c86d0aa9ab4135afd39fcbbaacb9c9778c44340afbaeac72",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Soulscent Bloom",
+      "description": "A jade carved into the shape of a flower. A phantom scent, here one instant and gone the next, swirls around it."
+    },
+    {
+      "slot": "plume",
+      "name": "Jade Leaf",
+      "description": "A jade ornament shaped like a leaf. It seems to have once had deep meaning between specific friends."
+    },
+    {
+      "slot": "sands",
+      "name": "Symbol of Felicitation",
+      "description": "A circular jade ornament. Legend has it that it was once used somewhere as a symbol for rituals to begin."
+    },
+    {
+      "slot": "goblet",
+      "name": "Chalice of the Font",
+      "description": "This teacup forever overflows with fresh water. Perhaps it was a gift from an adeptus, one of their relics, or just something they left behind."
+    },
+    {
+      "slot": "circlet",
+      "name": "Flowing Rings",
+      "description": "A pair of earrings made from a single piece of jade. It has a most gentle texture."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "ATK +18%." },
+    {
+      "pieces": 4,
+      "description": "When Normal Attacks hit opponents, there is a 36% chance that it will trigger Valley Rite, which will increase Normal Attack DMG by 70% of ATK. This effect will be dispelled 0.05s after a Normal Attack deals DMG. If a Normal Attack fails to trigger Valley Rite, the odds of it triggering the next time will increase by 20%. This trigger can occur once every 0.2s."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "contractVersion": 1,
+  "key": "FootprintOfTheRainbow",
+  "gameId": 13431,
+  "name": "Footprint of the Rainbow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/footprintoftherainbow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "03ad759d85107287f95807b7126c1d3a7b957e348f9cdba911e5263fa1bf0f52",
+    "license": "MIT"
+  },
+  "description": "A keen polearm forged from jade. It gives off rainbow-hued light when exposed to sunlight.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Pact of Flowing Springs",
+  "refinements": [
+    { "rank": 1, "description": "Using an Elemental Skill increases DEF by 16% for 15s." },
+    { "rank": 2, "description": "Using an Elemental Skill increases DEF by 20% for 15s." },
+    { "rank": 3, "description": "Using an Elemental Skill increases DEF by 24% for 15s." },
+    { "rank": 4, "description": "Using an Elemental Skill increases DEF by 28% for 15s." },
+    { "rank": 5, "description": "Using an Elemental Skill increases DEF by 32% for 15s." }
+  ]
+}

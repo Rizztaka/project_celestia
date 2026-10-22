@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "ADayCarvedFromRisingWinds",
+  "gameId": 15044,
+  "name": "A Day Carved From Rising Winds",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/adaycarvedfromrisingwinds.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "85f4503be0bc9d1abd43136eff9c84dfc5e25a661ec85fc36dbaf9b7e48419df",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Windborne Flower's Spruchdichtung",
+      "description": "An azure crystal bloom that never withers, said to have once belonged, in ages past, to a wandering girl who invoked the thousand winds and countless flowers."
+    },
+    {
+      "slot": "plume",
+      "name": "Dawn's Brilliant Oath",
+      "description": "A feather accessory of azure, clear as the dawn, said to have once belonged to a guard who cast aside his name in ages past."
+    },
+    {
+      "slot": "sands",
+      "name": "A Note in Spring's Leich",
+      "description": "An hourglass filled with azure sand. For reasons unknown, no matter how it is turned, the grains within it refuse to stir."
+    },
+    {
+      "slot": "goblet",
+      "name": "Heldenepos's Unspoken Tale",
+      "description": "An ancient goblet, its azure surface weathered by time. It is rumored to have belonged to an unnamed bard in ages past."
+    },
+    {
+      "slot": "circlet",
+      "name": "Minnesang of Love and Lament",
+      "description": "A luxurious hair accessory adorned with jade and azure crystals, said to have once been a token bestowed by the Lord of Storm upon a favored recipient in ages past."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "ATK +18%." },
+    {
+      "pieces": 4,
+      "description": "After a Normal Attack, Charged Attack, Elemental Skill, or Elemental Burst hits an opponent, gain the Blessing of Pastoral Winds effect for 6s: ATK is increased by 25%. If the equipping character has completed Witch's Homework, Blessing of Pastoral Winds will be upgraded to Resolve of Pastoral Winds, which additionally increases the CRIT Rate of the equipping character by 20%. This effect can be triggered even when the character is off-field."
+    }
+  ]
+}

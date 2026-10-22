@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "TalkingStick",
+  "gameId": 12424,
+  "name": "Talking Stick",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/talkingstick.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2b844afed21e919f97d0fd8b2036dbb57035a44bd7a5014a1ac5518c7b8f1e19",
+    "license": "MIT"
+  },
+  "description": "Most people will find this obsidian-inlaid club quite convincing indeed.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "\"The Silver Tongue\"",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "ATK will be increased by 16% for 15s after being affected by Pyro. This effect can be triggered once every 12s. All Elemental DMG Bonus will be increased by 12% for 15s after being affected by Hydro, Cryo, Electro, or Dendro. This effect can be triggered once every 12s."
+    },
+    {
+      "rank": 2,
+      "description": "ATK will be increased by 20% for 15s after being affected by Pyro. This effect can be triggered once every 12s. All Elemental DMG Bonus will be increased by 15% for 15s after being affected by Hydro, Cryo, Electro, or Dendro. This effect can be triggered once every 12s."
+    },
+    {
+      "rank": 3,
+      "description": "ATK will be increased by 24% for 15s after being affected by Pyro. This effect can be triggered once every 12s. All Elemental DMG Bonus will be increased by 18% for 15s after being affected by Hydro, Cryo, Electro, or Dendro. This effect can be triggered once every 12s."
+    },
+    {
+      "rank": 4,
+      "description": "ATK will be increased by 28% for 15s after being affected by Pyro. This effect can be triggered once every 12s. All Elemental DMG Bonus will be increased by 21% for 15s after being affected by Hydro, Cryo, Electro, or Dendro. This effect can be triggered once every 12s."
+    },
+    {
+      "rank": 5,
+      "description": "ATK will be increased by 32% for 15s after being affected by Pyro. This effect can be triggered once every 12s. All Elemental DMG Bonus will be increased by 24% for 15s after being affected by Hydro, Cryo, Electro, or Dendro. This effect can be triggered once every 12s."
+    }
+  ]
+}

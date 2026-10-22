@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SilverLight",
+  "gameId": 11438,
+  "name": "Silver Light",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/silverlight.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "a480f32e66cca346f5a870038bb63f253e536d8f19573666043ec110f751ae6c",
+    "license": "MIT"
+  },
+  "description": "A longsword left behind by Wind Reader, one of the Three Hermits of Guizang in Liyue. Legend has it that it was forged out of sacred silver descended from the heavens, and that it once cleaved flowing sea water into two.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Radiance on the Water",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Elemental Mastery by 52 for 12s after Elemental Skill use. Max 2 stacks, and each stack's duration is independent of the others."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Elemental Mastery by 65 for 12s after Elemental Skill use. Max 2 stacks, and each stack's duration is independent of the others."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Elemental Mastery by 78 for 12s after Elemental Skill use. Max 2 stacks, and each stack's duration is independent of the others."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Elemental Mastery by 91 for 12s after Elemental Skill use. Max 2 stacks, and each stack's duration is independent of the others."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Elemental Mastery by 104 for 12s after Elemental Skill use. Max 2 stacks, and each stack's duration is independent of the others."
+    }
+  ]
+}

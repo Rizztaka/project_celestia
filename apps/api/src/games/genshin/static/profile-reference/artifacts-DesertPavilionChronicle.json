@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "DesertPavilionChronicle",
+  "gameId": 15027,
+  "name": "Desert Pavilion Chronicle",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/desertpavilionchronicle.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "8519e4dda370773aa1c4354d4dd4feb248a5e42505417bf2427bf6f54dfd5d82",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "The First Days of the City of Kings",
+      "description": "An artificial flower that shimmers with a strange light. If you incline your ear to it, you can vaguely hear charming laughter issuing from within."
+    },
+    {
+      "slot": "plume",
+      "name": "End of the Golden Realm",
+      "description": "A crystal-clear artificial feather that is one of the legacies of an ancient human realm. The cries of soaring eagles are also sealed within."
+    },
+    {
+      "slot": "sands",
+      "name": "Timepiece of the Lost Path",
+      "description": "An ancient mechanical clock. The Jinni fragments continue to emit light at its center and vibrate ever so slightly, as if to say something..."
+    },
+    {
+      "slot": "goblet",
+      "name": "Defender of the Enchanting Dream",
+      "description": "An ancient golden cup that is both marvelously and luxuriously wrought. Murmurings can be heard within its empty innards."
+    },
+    {
+      "slot": "circlet",
+      "name": "Legacy of the Desert High-Born",
+      "description": "Earrings made from amber gold that shines with a strange light."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Anemo DMG Bonus +15%" },
+    {
+      "pieces": 4,
+      "description": "When Charged Attacks hit opponents, the equipping character's Normal Attack SPD will increase by 10% while Normal, Charged, and Plunging Attack DMG will increase by 40% for 15s."
+    }
+  ]
+}

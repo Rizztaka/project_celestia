@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SkywardPride",
+  "gameId": 12501,
+  "name": "Skyward Pride",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/skywardpride.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2537ff11d79dcdffaa90e8dc354367035c9869f215d2665248006df141ec3972",
+    "license": "MIT"
+  },
+  "description": "A claymore that symbolizes the pride of Dvalin soaring through the skies. When swung, it emits a deep hum as the full force of Dvalin's command of the sky and the wind is unleashed.",
+  "weaponType": "Claymore",
+  "rarity": 5,
+  "effectName": "Sky-ripping Dragon Spine",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases all DMG by 8%. After using an Elemental Burst, a vacuum blade that does 80% of ATK as DMG to opponents along its path will be created when Normal or Charged Attacks hit. Lasts for 20s or 8 vacuum blades."
+    },
+    {
+      "rank": 2,
+      "description": "Increases all DMG by 10%. After using an Elemental Burst, a vacuum blade that does 100% of ATK as DMG to opponents along its path will be created when Normal or Charged Attacks hit. Lasts for 20s or 8 vacuum blades."
+    },
+    {
+      "rank": 3,
+      "description": "Increases all DMG by 12%. After using an Elemental Burst, a vacuum blade that does 120% of ATK as DMG to opponents along its path will be created when Normal or Charged Attacks hit. Lasts for 20s or 8 vacuum blades."
+    },
+    {
+      "rank": 4,
+      "description": "Increases all DMG by 14%. After using an Elemental Burst, a vacuum blade that does 140% of ATK as DMG to opponents along its path will be created when Normal or Charged Attacks hit. Lasts for 20s or 8 vacuum blades."
+    },
+    {
+      "rank": 5,
+      "description": "Increases all DMG by 16%. After using an Elemental Burst, a vacuum blade that does 160% of ATK as DMG to opponents along its path will be created when Normal or Charged Attacks hit. Lasts for 20s or 8 vacuum blades."
+    }
+  ]
+}

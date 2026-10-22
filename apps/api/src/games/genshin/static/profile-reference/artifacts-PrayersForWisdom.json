@@ -1,0 +1,20 @@
+{
+  "contractVersion": 1,
+  "key": "PrayersForWisdom",
+  "gameId": 15011,
+  "name": "Prayers for Wisdom",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/prayersforwisdom.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "cd52ebde2f96e43a508439e2b1b350f611b0b9721592ce9fc5e7db853de11a72",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "circlet",
+      "name": "Tiara of Thunder",
+      "description": "A tiara worn by those tasked with offering sacrifices in ancient times. Because it harkened to the call of thunder year in and year out, it possesses remarkable resistance."
+    }
+  ],
+  "effects": [{ "pieces": 1, "description": "Affected by Electro for 40% less time." }]
+}

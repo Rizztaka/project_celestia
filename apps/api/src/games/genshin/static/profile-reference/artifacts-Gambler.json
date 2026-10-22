@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "Gambler",
+  "gameId": 10008,
+  "name": "Gambler",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/gambler.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "c3f8c49969e9ee29b354037f0b05a31198a93da3fafc24c45aed4d45c64c1014",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Gambler's Brooch",
+      "description": "A big, luxurious flower that can hide loaded dice."
+    },
+    {
+      "slot": "plume",
+      "name": "Gambler's Feather Accessory",
+      "description": "The tail feather of a large bird. Perfect for discretely concealing a trump card."
+    },
+    {
+      "slot": "sands",
+      "name": "Gambler's Pocket Watch",
+      "description": "A shattered pocket watch that once took a lethal hit for its owner."
+    },
+    {
+      "slot": "goblet",
+      "name": "Gambler's Dice Cup",
+      "description": "This vessel was specially made for a single purpose. It has absolutely no secret compartments built into it."
+    },
+    {
+      "slot": "circlet",
+      "name": "Gambler's Earrings",
+      "description": "A pair of blue earrings that, when worn, calm the mind and encourage a rational assessment of risks."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Increases Elemental Skill DMG by 20%." },
+    {
+      "pieces": 4,
+      "description": "Defeating an opponent has a 100% chance to remove Elemental Skill CD. Can only occur once every 15s."
+    }
+  ]
+}

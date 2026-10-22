@@ -1,0 +1,374 @@
+// Guarded synthetic K2 acceptance only. No production module imports this harness.
+import { spawn } from 'node:child_process';
+import { randomBytes } from 'node:crypto';
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import { dirname, join, resolve } from 'node:path';
+
+import { fileCommands, releaseBrowserSupport } from './contextual-release-browser-support.mjs';
+import {
+  acquireLease,
+  assertClosedPort,
+  assertExclusiveFixture,
+  assertProcess,
+  assertQuiescent,
+  binary,
+  cleanResources,
+  connectTarget,
+  createResources,
+  inspectFixture,
+  planTargets,
+  privateDirectory,
+  privateWrite,
+} from './recovery/fixture.mjs';
+import { isolatedEnvironment, requireSafe, safeFailure } from './recovery/policy.mjs';
+import { packageRun, repoRoot, run } from './recovery/process.mjs';
+
+const base = isolatedEnvironment(process.env);
+const k3 = false;
+const candidateMode = process.argv.length === 3 && process.argv[2] === '--candidate';
+requireSafe(process.argv.length === 2 || candidateMode || k3, 'UNSUPPORTED_BROWSER_ARGUMENT');
+const runLabel = process.env.CELESTIA_CONTEXTUAL_BROWSER_RUN ?? '';
+requireSafe(!runLabel || /^[a-z][a-z0-9-]{0,30}$/.test(runLabel), 'INVALID_BROWSER_RUN_LABEL');
+const runSuffix = runLabel ? `-${runLabel}` : '';
+const fixture = JSON.parse(
+  readFileSync(join(repoRoot, 'docs/plans/contextual-guide-knowledge/k1-fixture.json'), 'utf8'),
+);
+inspectFixture(fixture, base);
+for (const port of [fixture.port, 45448, 45449]) await assertClosedPort(port);
+const targets = planTargets(fixture, base, randomBytes(8).toString('hex'));
+const target = targets.source;
+const { root } = privateDirectory(base);
+const owned = new Set();
+const record = {
+  kind: 'Character advisor guarded browser harness',
+  root,
+  startedAt: new Date().toISOString(),
+  commands: [],
+};
+if (candidateMode) {
+  // Exercise the existing application with an isolated pointer. Never select a
+  // candidate in the owner's store merely to make browser acceptance possible.
+  const store = join(repoRoot, 'apps/api/src/games/genshin/static/character-knowledge');
+  const candidate = JSON.parse(
+    readFileSync(
+      join(
+        repoRoot,
+        'docs/plans/character-knowledge-assistant/all-kqm-verification/candidate.json',
+      ),
+    ),
+  );
+  requireSafe(/^[a-z0-9-]{1,90}$/.test(candidate.release.id), 'INVALID_CANDIDATE_ID');
+  const isolated = join(root, 'character-knowledge');
+  mkdirSync(join(isolated, 'releases'), { recursive: true });
+  cpSync(
+    join(store, 'releases', candidate.release.id),
+    join(isolated, 'releases', candidate.release.id),
+    { recursive: true },
+  );
+  writeFileSync(join(isolated, 'active.json'), JSON.stringify(candidate.release) + '\n');
+  target.env.CELESTIA_CHARACTER_KNOWLEDGE_ROOT = isolated;
+  process.env.CELESTIA_CHARACTER_KNOWLEDGE_ROOT = isolated;
+  const { loadCharacterKnowledge } =
+    await import('../src/games/genshin/intelligence/character-knowledge/knowledge.store.ts');
+  const checked = loadCharacterKnowledge(isolated);
+  record.candidateRelease = checked.release;
+  record.selectionScope = 'isolated test store only; owner active.json unchanged';
+}
+const webRoot = join(repoRoot, 'apps/web');
+const webRequire = createRequire(join(webRoot, 'package.json'));
+const vite = resolve(dirname(webRequire.resolve('vite/package.json')), 'bin/vite.js');
+let release,
+  admin,
+  db,
+  server,
+  web,
+  pid,
+  started = false;
+let lifecycle;
+const statePath = join(
+  repoRoot,
+  candidateMode
+    ? 'docs/plans/character-knowledge-assistant/api-connection/browser-state.json'
+    : `docs/plans/contextual-guide-knowledge/advisor-browser-state${runSuffix}.json`,
+);
+const controlPath = join(
+  repoRoot,
+  candidateMode
+    ? 'docs/plans/character-knowledge-assistant/api-connection/browser-control.json'
+    : `docs/plans/contextual-guide-knowledge/advisor-browser-control${runSuffix}.json`,
+);
+if (candidateMode) {
+  // A previous run's quit command must not stop a newly started fixture.
+  writeFileSync(controlPath, JSON.stringify({ id: 0, name: 'idle' }) + '\n');
+}
+const saveState = () => {
+  writeFileSync(statePath, JSON.stringify({ ...record, harnessPid: process.pid }, null, 2) + '\n');
+};
+let fail = false,
+  delay = 0;
+console.log(`K2 browser evidence: ${root}`);
+try {
+  release = acquireLease(fixture, 'k2-browser');
+  started = true;
+  run(
+    binary(fixture, 'pg_ctl'),
+    [
+      'start',
+      '-D',
+      fixture.dataDir,
+      '-l',
+      join(root, 'postgres.log'),
+      '-o',
+      `-h 127.0.0.1 -p ${fixture.port}`,
+      '-w',
+    ],
+    base,
+    { backgroundLauncher: true, timeout: 30000 },
+  );
+  pid = assertProcess(fixture, base);
+  admin = await connectTarget(targets.admin, fixture, base);
+  const identity = (
+    await admin.query(
+      "SELECT current_setting('data_directory') AS path, system_identifier::text AS system FROM pg_control_system()",
+    )
+  ).rows[0];
+  requireSafe(
+    resolve(identity.path).toLowerCase() === resolve(fixture.dataDir).toLowerCase() &&
+      identity.system === fixture.systemIdentifier,
+    'SERVER_IDENTITY_MISMATCH',
+  );
+  requireSafe(
+    (await admin.query('SELECT pg_try_advisory_lock(5305001) AS locked')).rows[0].locked,
+    'FIXTURE_LEASE_UNAVAILABLE',
+  );
+  await assertExclusiveFixture(admin);
+  await createResources(admin, target, fixture, root, owned);
+  record.stage = 'migrations';
+  packageRun('prisma', 'prisma', ['migrate', 'deploy'], target.env);
+  record.stage = 'application-imports';
+  Object.assign(process.env, target.env, { CORS_ALLOWED_ORIGINS: 'http://127.0.0.1:45449' });
+  const [{ PrismaClient }, { PrismaPg }, { default: express }] = await Promise.all([
+    import('@prisma/client'),
+    import('@prisma/adapter-pg'),
+    import('express'),
+  ]);
+  db = new PrismaClient({ adapter: new PrismaPg({ connectionString: target.env.DATABASE_URL }) });
+  globalThis.prisma = db;
+  const [{ AuthService }, { GenshinImportService }, { createApp }, { logger }] = await Promise.all([
+    import('../src/platform/auth/auth.service.ts'),
+    import('../src/games/genshin/importer/importer.service.ts'),
+    import('../src/app.ts'),
+    import('../src/core/logger/logger.ts'),
+  ]);
+  logger.level = 'silent';
+  const auth = new AuthService(),
+    importer = new GenshinImportService();
+  const users = {};
+  const commit = async (userId, refinement, pieces = 4) => {
+    const input = {
+      requestVersion: 1,
+      sections: ['characters', 'weapons', 'artifacts'],
+      payload: {
+        format: 'GOOD',
+        version: 2,
+        source: 'K2 synthetic browser import',
+        characters: [
+          'Keqing',
+          'Fischl',
+          'KaedeharaKazuha',
+          'HuTao',
+          'Neuvillette',
+          'Furina',
+          'Nahida',
+          'RaidenShogun',
+        ].map((key) => ({
+          key,
+          level: 80,
+          ascension: 6,
+          constellation: 0,
+          talent: { auto: 6, skill: 6, burst: 6 },
+        })),
+        artifacts: ['Keqing', 'Fischl', 'KaedeharaKazuha'].flatMap((location, index) =>
+          ['flower', 'plume', 'sands', 'goblet', 'circlet'].slice(0, pieces).map((slotKey) => ({
+            setKey: ['MarechausseeHunter', 'GoldenTroupe', 'ViridescentVenerer'][index],
+            slotKey,
+            rarity: 5,
+            level: 20,
+            mainStatKey: 'opaque',
+            location,
+            substats: [],
+            lock: false,
+          })),
+        ),
+        ...(refinement
+          ? {
+              weapons: [
+                {
+                  key: 'HarbingerOfDawn',
+                  level: 80,
+                  ascension: 6,
+                  refinement,
+                  location: 'Keqing',
+                  lock: false,
+                },
+              ],
+            }
+          : { weapons: [] }),
+      },
+    };
+    const preview = await importer.preview(userId, input);
+    await importer.importAccount(userId, {
+      ...input,
+      previewToken: preview.previewToken,
+      confirmClear: preview.clearSections,
+    });
+  };
+  for (const name of ['a', 'b']) {
+    record.stage = `seed-${name}`;
+    const result = await auth.register({
+      email: `k2-${name}@test.invalid`,
+      username: `k2-${name}`,
+      password: 'K2-synthetic-only!',
+    });
+    users[name] = result.user.id;
+    await commit(result.user.id, name === 'a' ? 1 : null, name === 'a' ? 4 : 2);
+  }
+  const { mountAdvisorBrowserControl } = await import('./character-advisor-browser-control.mjs');
+  const wrapper = express();
+  const advisorControl = await mountAdvisorBrowserControl(wrapper, db, record);
+  record.stage = 'server';
+  wrapper.use(async (req, res, next) => {
+    if (k3) return lifecycle.proxy(req, res, delay, fail);
+    if (req.path.endsWith('/guide-advice/v2')) {
+      if (delay) await new Promise((done) => setTimeout(done, delay));
+      if (fail)
+        return res.status(503).json({
+          success: false,
+          error: { code: 'SYNTHETIC_FAILURE', message: 'Synthetic K2 guide refresh failure.' },
+        });
+    }
+    next();
+  });
+  wrapper.use(createApp());
+  if (k3) {
+    record.kind = 'K3 isolated release/API/browser harness';
+    record.stage = 'compiled-api-build';
+    packageRun('typescript', 'tsc', [], target.env);
+    packageRun('tsc-alias', 'tsc-alias', [], target.env);
+    run(
+      process.execPath,
+      [
+        '-e',
+        "require('fs').cpSync('src/games/genshin/static','dist/games/genshin/static',{recursive:true,force:true})",
+      ],
+      target.env,
+    );
+    lifecycle = releaseBrowserSupport(
+      root,
+      { ...target.env, CORS_ALLOWED_ORIGINS: 'http://127.0.0.1:45449' },
+      record,
+    );
+    await lifecycle.start();
+  }
+  server = await new Promise((done) => {
+    const instance = wrapper.listen(45448, '127.0.0.1', () => done(instance));
+  });
+  record.stage = 'web-build';
+  run(
+    process.execPath,
+    [vite, 'build'],
+    { ...base, NODE_ENV: 'production', VITE_API_URL: 'http://127.0.0.1:45448/api/v1' },
+    { cwd: webRoot },
+  );
+  web = spawn(
+    process.execPath,
+    [vite, 'preview', '--host', '127.0.0.1', '--port', '45449', '--strictPort'],
+    { cwd: webRoot, env: { ...base, NODE_ENV: 'production' }, windowsHide: true, stdio: 'ignore' },
+  );
+  console.log(
+    'K2_BROWSER_READY synthetic login k2-a@test.invalid / k2-b@test.invalid; password K2-synthetic-only!',
+  );
+  record.stage = 'browser-ready';
+  saveState();
+  const lines = fileCommands(controlPath);
+  for await (const command of lines) {
+    const name = command.trim();
+    if (await advisorControl.command(name)) {
+      record.commands.push({ name, at: new Date().toISOString() });
+      saveState();
+      continue;
+    }
+    if (name === 'quit') {
+      break;
+    }
+    if (k3 && (await lifecycle.command(name))) {
+      /* real guarded pointer/restart lifecycle */
+    } else if (name === 'fail') fail = true;
+    else if (name === 'normal') {
+      fail = false;
+      delay = 0;
+    } else if (name === 'delay') delay = 3000;
+    else if (name === 'slow-fail') {
+      fail = true;
+      delay = 8000;
+    } else if (name === 'import-r5') await commit(users.a, 5);
+    else if (name === 'import-partial') await commit(users.a, 5, 2);
+    else {
+      console.log('UNSUPPORTED_COMMAND');
+      continue;
+    }
+    record.commands.push({ name, at: new Date().toISOString() });
+    saveState();
+    console.log(`K2_COMMAND_COMPLETE ${name}`);
+  }
+} catch (error) {
+  record.failure = safeFailure(error);
+  record.failure.name = error instanceof Error ? error.name : 'unknown';
+  process.exitCode = 1;
+} finally {
+  try {
+    if (server) {
+      server.closeAllConnections();
+      await new Promise((done) => server.close(done));
+    }
+    await lifecycle?.close();
+    if (web && web.exitCode === null) {
+      const exited = new Promise((done) => web.once('exit', done));
+      web.kill();
+      await exited;
+    }
+    await db?.$disconnect();
+    if (admin) {
+      await assertExclusiveFixture(admin);
+      await assertQuiescent(admin, [target]);
+      await cleanResources(admin, [target], root, owned, fixture);
+      await admin.end();
+      record.resourcesRemoved = true;
+    }
+    if (!pid && started && existsSync(join(fixture.dataDir, 'postmaster.pid')))
+      pid = assertProcess(fixture, base);
+    if (pid) {
+      requireSafe(assertProcess(fixture, base) === pid, 'CLEANUP_PROCESS_CHANGED');
+      run(binary(fixture, 'pg_ctl'), ['stop', '-D', fixture.dataDir, '-m', 'fast', '-w'], base);
+    }
+    await assertClosedPort(fixture.port);
+    release?.();
+    record.stoppedOwnedProcess = true;
+    run(process.execPath, [vite, 'build'], { ...base, NODE_ENV: 'production' }, { cwd: webRoot });
+    record.ordinaryWebBuildRestored = true;
+    for (const port of [45448, 45449]) await assertClosedPort(port);
+    record.browserPortsClosed = true;
+  } catch (error) {
+    record.cleanupFailure = safeFailure(error);
+    process.exitCode = 1;
+  }
+  record.finishedAt = new Date().toISOString();
+  privateWrite(
+    root,
+    k3 ? 'k3-browser-result.json' : 'advisor-browser-result.json',
+    JSON.stringify(record, null, 2) + '\n',
+  );
+  saveState();
+  console.log(JSON.stringify(record));
+}

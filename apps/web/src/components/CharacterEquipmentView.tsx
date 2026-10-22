@@ -7,8 +7,9 @@ import {
 } from '@celestia/api-contracts';
 
 import { artworkDisplayName } from '../lib/artwork';
+import { statLabel, statValue } from '../lib/profile-presentation';
+import { ArtifactReference, WeaponReference } from './EquipmentReference';
 import { GenshinArtifactIcon } from './GenshinArtifactIcon';
-import { GenshinAvatar } from './GenshinAvatar';
 import { GenshinWeaponIcon } from './GenshinWeaponIcon';
 
 const recordedName = artworkDisplayName;
@@ -20,29 +21,22 @@ function Receipt({
   merged?: boolean;
 }) {
   return (
-    <div className="mt-3 space-y-1 text-xs leading-relaxed text-zinc-400">
-      {receipt.status === 'unknown' ? (
-        <p>Import provenance unknown. Stored records may predate section receipts.</p>
-      ) : (
-        <>
-          <p>
-            Section received:{' '}
-            <time dateTime={receipt.importedAt!}>
-              {new Date(receipt.importedAt!).toLocaleString()}
-            </time>
-          </p>
-          <p className="break-words">
-            Source label: {receipt.source || 'Not supplied'} · Supplied entries:{' '}
-            {receipt.entryCount}
-          </p>
-          <p>
-            {merged
-              ? 'Characters were merged. This receipt does not date each retained character.'
-              : 'Recorded section replacement. This receipt does not prove a complete game scan.'}
-          </p>
-        </>
-      )}
-    </div>
+    <details className="mt-4 text-xs text-zinc-300">
+      <summary className="cursor-pointer">Import provenance</summary>
+      <div className="mt-2 space-y-2">
+        <p>
+          {receipt.status === 'unknown'
+            ? 'Import history unknown'
+            : `Received ${receipt.importedAt ? new Date(receipt.importedAt).toLocaleString() : 'date unknown'} · ${receipt.source ?? 'Source not recorded'} · ${receipt.entryCount} supplied entries`}
+        </p>
+        <p>
+          {merged
+            ? 'Character entries were merged; this receipt does not date each retained value.'
+            : 'A replacement section does not prove a complete in-game scan.'}
+        </p>
+        <p>Receipt dates describe import time, not acquisition or live observation.</p>
+      </div>
+    </details>
   );
 }
 function MissingAssignment({
@@ -73,6 +67,7 @@ function MissingAssignment({
 function ArtifactPiece({ item }: { item: RecordedArtifact }) {
   return (
     <div className="space-y-3">
+      <ArtifactReference itemKey={item.setKey} slot={item.slotKey} />
       <GenshinArtifactIcon
         setKey={item.setKey}
         slotKey={item.slotKey}
@@ -80,16 +75,17 @@ function ArtifactPiece({ item }: { item: RecordedArtifact }) {
         size="lg"
       />
       <div>
-        <p className="break-words font-semibold text-white">{recordedName(item.setKey)}</p>
-        <p className="break-all text-xs text-zinc-500">{item.setKey}</p>
+        <p className="break-words font-semibold text-white">
+          {recordedName(item.setKey)} · Equipped
+        </p>
       </div>
       <p className="text-sm text-zinc-300">
         {item.rarity}★ · Level +{item.level}
-        {item.locked ? ' · Locked' : ''}
+        {item.locked ? ' · Inventory lock recorded' : ''}
       </p>
       <div className="rounded-lg bg-white/5 p-3">
-        <p className="text-xs text-zinc-400">Main stat key</p>
-        <p className="break-all font-medium text-white">{item.mainStatKey}</p>
+        <p className="text-xs text-zinc-400">Main stat</p>
+        <p className="break-all font-medium text-white">{statLabel(item.mainStatKey)}</p>
         <p className="mt-1 text-xs text-zinc-400">Amount unavailable — not stored.</p>
       </div>
       <div>
@@ -104,8 +100,10 @@ function ArtifactPiece({ item }: { item: RecordedArtifact }) {
           <dl className="space-y-1 text-sm">
             {item.subStats.map((stat, index) => (
               <div key={index} className="flex justify-between gap-3">
-                <dt className="min-w-0 break-all text-zinc-300">{stat.key || 'Unnamed stat'}</dt>
-                <dd className="shrink-0 tabular-nums text-white">{stat.value}</dd>
+                <dt className="min-w-0 break-all text-zinc-300">{statLabel(stat.key)}</dt>
+                <dd className="shrink-0 tabular-nums text-white">
+                  {statValue(stat.key, stat.value)}
+                </dd>
               </div>
             ))}
           </dl>
@@ -115,8 +113,6 @@ function ArtifactPiece({ item }: { item: RecordedArtifact }) {
   );
 }
 export function CharacterEquipmentView({ data }: { data: CharacterEquipmentResponse }) {
-  const c = data.character;
-  const name = recordedName(c.characterKey);
   const setCounts = new Map<string, number>();
   for (const slot of artifactSlots) {
     const assigned = data.artifacts[slot];
@@ -125,62 +121,17 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
   }
   return (
     <div className="space-y-6">
+      <Receipt receipt={data.provenance.characters} merged />
       <section
-        className="glass-panel rounded-2xl border border-white/10 p-5 sm:p-6"
-        aria-labelledby="character-title"
-      >
-        <div className="flex items-center gap-4">
-          <GenshinAvatar characterKey={c.characterKey} size="lg" constellation={c.constellation} />
-          <div className="min-w-0">
-            <p className="mb-1 text-xs uppercase tracking-widest text-indigo-300">
-              Recorded character
-            </p>
-            <h1
-              id="character-title"
-              className="font-display break-words text-3xl font-bold text-white"
-            >
-              {name}
-            </h1>
-            <p className="mt-1 break-all text-xs text-zinc-500">{c.characterKey}</p>
-          </div>
-        </div>
-        <dl className="mt-6 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-3">
-          {[
-            ['Level', c.level],
-            ['Ascension', c.ascension],
-            ['Constellation', c.constellation],
-          ].map(([label, value]) => (
-            <div key={label} className="rounded-xl bg-white/5 p-3">
-              <dt className="text-xs text-zinc-400">{label}</dt>
-              <dd className="mt-1 text-2xl font-semibold text-white">{value}</dd>
-            </div>
-          ))}
-        </dl>
-        <h2 className="mt-6 text-sm font-semibold text-zinc-200">Stored talents</h2>
-        <dl className="mt-3 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-3">
-          {[
-            ['Normal attack', c.talents.normal],
-            ['Skill', c.talents.skill],
-            ['Burst', c.talents.burst],
-          ].map(([label, value]) => (
-            <div key={label}>
-              <dt className="text-xs text-zinc-400">{label}</dt>
-              <dd className="mt-1 text-lg text-white">{value}</dd>
-            </div>
-          ))}
-        </dl>
-        <p className="mt-3 text-xs leading-relaxed text-zinc-400">
-          Values are stored as supplied. Base versus constellation-adjusted talent levels cannot be
-          established from these records. Legacy/default origin is not recorded per value.
-        </p>
-        <Receipt receipt={data.provenance.characters} merged />
-      </section>
-      <section
-        className="glass-panel rounded-2xl border border-white/10 p-5 sm:p-6"
+        className={`rounded-2xl border p-5 sm:p-6 ${data.weapon.item ? 'border-indigo-300/40 bg-indigo-500/15' : 'border-dashed border-zinc-600 bg-zinc-900/70'}`}
         aria-labelledby="weapon-title"
       >
         <h2 id="weapon-title" className="mb-4 text-lg font-semibold text-white">
-          Recorded weapon assignment
+          {data.weapon.item
+            ? 'Equipped weapon · Recorded'
+            : data.weapon.state === 'unknown'
+              ? 'Weapon assignment · Unknown'
+              : 'Weapon assignment · Not recorded'}
         </h2>
         {data.weapon.state === 'recorded_assigned' ? (
           <div className="flex items-start gap-4">
@@ -193,22 +144,30 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
               <p className="break-words font-semibold text-white">
                 {recordedName(data.weapon.item.weaponKey)}
               </p>
-              <p className="mt-1 break-all text-xs text-zinc-500">{data.weapon.item.weaponKey}</p>
+
               <p className="mt-3 text-sm text-zinc-300">
                 Level {data.weapon.item.level} · Ascension {data.weapon.item.ascension} · Refinement{' '}
                 {data.weapon.item.refinement}
-                {data.weapon.item.locked ? ' · Locked' : ''}
+                {data.weapon.item.locked ? ' · Inventory lock recorded' : ''}
               </p>
             </div>
           </div>
         ) : (
           <MissingAssignment assignment={data.weapon} />
         )}
+        {data.weapon.item && (
+          <div className="mt-4">
+            <WeaponReference
+              itemKey={data.weapon.item.weaponKey}
+              refinement={data.weapon.item.refinement}
+            />
+          </div>
+        )}
         <Receipt receipt={data.provenance.weapons} />
       </section>
       <section aria-labelledby="artifacts-title">
         <h2 id="artifacts-title" className="text-lg font-semibold text-white">
-          Recorded artifact assignments
+          Artifacts · Recorded assignments
         </h2>
         <Receipt receipt={data.provenance.artifacts} />
         {!data.artifactRelationsConsistent && (
@@ -222,7 +181,7 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
             return (
               <article
                 key={slot}
-                className="glass-panel min-w-0 rounded-2xl border border-white/10 p-5"
+                className={`min-w-0 rounded-2xl border p-5 ${assignment.state === 'recorded_assigned' ? 'border-indigo-300/40 bg-indigo-500/15' : 'border-dashed border-zinc-600 bg-zinc-900/70'}`}
               >
                 <h3 className="mb-4 flex items-center gap-3 text-base font-semibold capitalize text-indigo-200">
                   <span
@@ -256,10 +215,13 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
         <div className="mt-4 rounded-xl border border-white/10 p-4 text-sm text-zinc-400">
           <p className="font-medium text-zinc-200">Recorded set counts</p>
           {setCounts.size ? (
-            <ul className="mt-2 space-y-1">
+            <ul className="mt-3 space-y-4">
               {[...setCounts].map(([set, count]) => (
                 <li key={set} className="break-words">
-                  {recordedName(set)}: {count} recorded {count === 1 ? 'piece' : 'pieces'}
+                  <p className="mb-3 text-zinc-200">
+                    {recordedName(set)}: {count} recorded {count === 1 ? 'piece' : 'pieces'}
+                  </p>
+                  <ArtifactReference itemKey={set} count={count} data={data} />
                 </li>
               ))}
             </ul>
@@ -267,7 +229,8 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
             <p className="mt-2">No pieces assigned in the five recorded slots.</p>
           )}
           <p className="mt-2 text-xs">
-            Counts describe these records; set effects and build quality are not evaluated.
+            Counts describe recorded assignments. Conditional activation remains unknown; incomplete
+            slots do not establish missing inventory.
           </p>
         </div>
       </section>

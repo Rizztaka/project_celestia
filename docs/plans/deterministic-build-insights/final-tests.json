@@ -1,0 +1,1012 @@
+{
+  "numTotalTestSuites": 19,
+  "numPassedTestSuites": 19,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 100,
+  "numPassedTests": 100,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1792678815737,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["deterministic build presentation"],
+          "fullName": "deterministic build presentation removes every retired runtime file while retaining its exact historical bytes",
+          "status": "passed",
+          "title": "removes every retired runtime file while retaining its exact historical bytes",
+          "duration": 16.915899999999965,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build presentation"],
+          "fullName": "deterministic build presentation shows explicit conditional state and complete source conditions with an accessible disclosure",
+          "status": "passed",
+          "title": "shows explicit conditional state and complete source conditions with an accessible disclosure",
+          "duration": 15.07910000000004,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build presentation"],
+          "fullName": "deterministic build presentation both character and team flows have no chat entry; character detail mounts automatic insights",
+          "status": "passed",
+          "title": "both character and team flows have no chat entry; character detail mounts automatic insights",
+          "duration": 3.9560000000000173,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792678893908,
+      "endTime": 1792678893943.956,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/tooling/build-insights-client.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["character knowledge immutable store"],
+          "fullName": "character knowledge immutable store preserves actual release and all pinned kit inputs through Git autocrlf=true",
+          "status": "passed",
+          "title": "preserves actual release and all pinned kit inputs through Git autocrlf=true",
+          "duration": 16821.8089,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["character knowledge immutable store"],
+          "fullName": "character knowledge immutable store preserves actual release and all pinned kit inputs through Git autocrlf=false",
+          "status": "passed",
+          "title": "preserves actual release and all pinned kit inputs through Git autocrlf=false",
+          "duration": 13413.877099999998,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["character knowledge immutable store"],
+          "fullName": "character knowledge immutable store rejects modified bytes instead of silently loading a different release",
+          "status": "passed",
+          "title": "rejects modified bytes instead of silently loading a different release",
+          "duration": 235.48939999999857,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792678850894,
+      "endTime": 1792678881366.4895,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/tooling/character-knowledge-store.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary renders C0 honestly with all six readable descriptions",
+          "status": "passed",
+          "title": "renders C0 honestly with all six readable descriptions",
+          "duration": 16.724699999999984,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary renders C1 honestly with all six readable descriptions",
+          "status": "passed",
+          "title": "renders C1 honestly with all six readable descriptions",
+          "duration": 8.9144,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary renders C6 honestly with all six readable descriptions",
+          "status": "passed",
+          "title": "renders C6 honestly with all six readable descriptions",
+          "duration": 6.145600000000059,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary renders Cundefined honestly with all six readable descriptions",
+          "status": "passed",
+          "title": "renders Cundefined honestly with all six readable descriptions",
+          "duration": 6.933899999999994,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary rejects invalid progression instead of rendering a fictitious C0",
+          "status": "passed",
+          "title": "rejects invalid progression instead of rendering a fictitious C0",
+          "duration": 0.44659999999998945,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary keeps talent conventions and every passive/special ability explicit",
+          "status": "passed",
+          "title": "keeps talent conventions and every passive/special ability explicit",
+          "duration": 9.025099999999952,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary shows reference identity with no invented level, talent or C-count for unowned/failure states",
+          "status": "passed",
+          "title": "shows reference identity with no invented level, talent or C-count for unowned/failure states",
+          "duration": 10.932099999999991,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary keeps failed and loading owned reads unknown instead of asserting absent records",
+          "status": "passed",
+          "title": "keeps failed and loading owned reads unknown instead of asserting absent records",
+          "duration": 7.748800000000074,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary preserves partial/inconsistent equipment uncertainty and conditional eligibility",
+          "status": "passed",
+          "title": "preserves partial/inconsistent equipment uncertainty and conditional eligibility",
+          "duration": 1.171799999999962,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary renders exact refinement and conditional set text without any mutation request",
+          "status": "passed",
+          "title": "renders exact refinement and conditional set text without any mutation request",
+          "duration": 8.459099999999921,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary renders hostile source strings as inert text",
+          "status": "passed",
+          "title": "renders hostile source strings as inert text",
+          "duration": 4.4085999999999785,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary rejects delayed reference responses after an account change",
+          "status": "passed",
+          "title": "rejects delayed reference responses after an account change",
+          "duration": 1.4716999999999416,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile presentation and account boundary"],
+          "fullName": "profile presentation and account boundary rejects delayed equipment responses after an account change",
+          "status": "passed",
+          "title": "rejects delayed equipment responses after an account change",
+          "duration": 0.35360000000002856,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792678894935,
+      "endTime": 1792678895018.3535,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/tooling/profile-reference-client.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["profile reference real Git checkout byte preservation"],
+          "fullName": "profile reference real Git checkout byte preservation retains the reviewed catalog and production reads with core.autocrlf=false",
+          "status": "passed",
+          "title": "retains the reviewed catalog and production reads with core.autocrlf=false",
+          "duration": 16035.3347,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["profile reference real Git checkout byte preservation"],
+          "fullName": "profile reference real Git checkout byte preservation retains the reviewed catalog and production reads with core.autocrlf=true",
+          "status": "passed",
+          "title": "retains the reviewed catalog and production reads with core.autocrlf=true",
+          "duration": 16552.6579,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792678817131,
+      "endTime": 1792678849719.658,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/tooling/profile-reference-git-roundtrip.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission allows the burst, refills exactly on the boundary and never exceeds the burst",
+          "status": "passed",
+          "title": "allows the burst, refills exactly on the boundary and never exceeds the burst",
+          "duration": 3.978900000000067,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission cannot churn active penalties out of capacity; expires only fully replenished entries",
+          "status": "passed",
+          "title": "cannot churn active penalties out of capacity; expires only fully replenished entries",
+          "duration": 292.67430000000013,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission does not extend penalties for denied attempts or refill on a backward clock",
+          "status": "passed",
+          "title": "does not extend penalties for denied attempts or refill on a backward clock",
+          "duration": 1.070299999999861,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission normalizes direct peer ::ffff:127.0.0.1",
+          "status": "passed",
+          "title": "normalizes direct peer ::ffff:127.0.0.1",
+          "duration": 7.766099999999824,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission normalizes direct peer 0:0:0:0:0:ffff:7f00:0001",
+          "status": "passed",
+          "title": "normalizes direct peer 0:0:0:0:0:ffff:7f00:0001",
+          "duration": 0.22890000000006694,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission normalizes direct peer 127.0.0.1",
+          "status": "passed",
+          "title": "normalizes direct peer 127.0.0.1",
+          "duration": 0.1595999999999549,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission normalizes direct peer 2001:0DB8:0:0:0:0:0:1",
+          "status": "passed",
+          "title": "normalizes direct peer 2001:0DB8:0:0:0:0:0:1",
+          "duration": 0.07960000000002765,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission normalizes direct peer fe80::1%3",
+          "status": "passed",
+          "title": "normalizes direct peer fe80::1%3",
+          "duration": 0.049900000000434375,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission normalizes direct peer undefined",
+          "status": "passed",
+          "title": "normalizes direct peer undefined",
+          "duration": 0.17350000000033106,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission normalizes direct peer ",
+          "status": "passed",
+          "title": "normalizes direct peer ",
+          "duration": 0.06439999999975043,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission normalizes direct peer malformed",
+          "status": "passed",
+          "title": "normalizes direct peer malformed",
+          "duration": 0.037299999999959255,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission normalizes direct peer aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "status": "passed",
+          "title": "normalizes direct peer aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "duration": 0.0603000000000975,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission caps total and per-identity work and releases idempotently with no queue",
+          "status": "passed",
+          "title": "caps total and per-identity work and releases idempotently with no queue",
+          "duration": 0.45870000000013533,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission rejects invalid policy values 0",
+          "status": "passed",
+          "title": "rejects invalid policy values 0",
+          "duration": 3.7011999999999716,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission rejects invalid policy values -1",
+          "status": "passed",
+          "title": "rejects invalid policy values -1",
+          "duration": 0.47460000000000946,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission rejects invalid policy values Infinity",
+          "status": "passed",
+          "title": "rejects invalid policy values Infinity",
+          "duration": 0.19860000000016953,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission rejects invalid policy values NaN",
+          "status": "passed",
+          "title": "rejects invalid policy values NaN",
+          "duration": 0.16509999999971114,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission rejects invalid policy values 1.5",
+          "status": "passed",
+          "title": "rejects invalid policy values 1.5",
+          "duration": 0.1570000000001528,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded request admission"],
+          "fullName": "Bounded request admission rejects invalid policy values 1000000000000",
+          "status": "passed",
+          "title": "rejects invalid policy values 1000000000000",
+          "duration": 0.288300000000163,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792678885882,
+      "endTime": 1792678886195.2883,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/src/core/middleware/request-admission.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety bounds auth at 8192 bytes (-1)",
+          "status": "passed",
+          "title": "bounds auth at 8192 bytes (-1)",
+          "duration": 66.27700000000004,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety bounds auth at 8192 bytes (0)",
+          "status": "passed",
+          "title": "bounds auth at 8192 bytes (0)",
+          "duration": 14.658900000000358,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety bounds auth at 8192 bytes (1)",
+          "status": "passed",
+          "title": "bounds auth at 8192 bytes (1)",
+          "duration": 10.983999999999469,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety bounds ordinary requests at 65536 bytes (-1)",
+          "status": "passed",
+          "title": "bounds ordinary requests at 65536 bytes (-1)",
+          "duration": 10.542699999999968,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety bounds ordinary requests at 65536 bytes (0)",
+          "status": "passed",
+          "title": "bounds ordinary requests at 65536 bytes (0)",
+          "duration": 9.736900000000787,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety bounds ordinary requests at 65536 bytes (1)",
+          "status": "passed",
+          "title": "bounds ordinary requests at 65536 bytes (1)",
+          "duration": 7.544600000000173,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety bounds authenticated import at 4194304 bytes (-1)",
+          "status": "passed",
+          "title": "bounds authenticated import at 4194304 bytes (-1)",
+          "duration": 47.770799999999326,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety bounds authenticated import at 4194304 bytes (0)",
+          "status": "passed",
+          "title": "bounds authenticated import at 4194304 bytes (0)",
+          "duration": 44.90809999999965,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety bounds authenticated import at 4194304 bytes (1)",
+          "status": "passed",
+          "title": "bounds authenticated import at 4194304 bytes (1)",
+          "duration": 38.01789999999983,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety authenticates before malformed/large body at /api/v1/games/genshin/import",
+          "status": "passed",
+          "title": "authenticates before malformed/large body at /api/v1/games/genshin/import",
+          "duration": 13.1212000000005,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety authenticates before malformed/large body at /api/v1/games/genshin/import/preview",
+          "status": "passed",
+          "title": "authenticates before malformed/large body at /api/v1/games/genshin/import/preview",
+          "duration": 19.446200000000317,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety authenticates before malformed/large body at /api/v1/games/genshin/import/preview/?caller=ignored",
+          "status": "passed",
+          "title": "authenticates before malformed/large body at /api/v1/games/genshin/import/preview/?caller=ignored",
+          "duration": 17.332800000000134,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety safely maps malformed/strict JSON",
+          "status": "passed",
+          "title": "safely maps malformed/strict JSON",
+          "duration": 38.30839999999989,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety safely maps malformed/strict JSON",
+          "status": "passed",
+          "title": "safely maps malformed/strict JSON",
+          "duration": 11.536999999999352,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety safely maps malformed/strict JSON",
+          "status": "passed",
+          "title": "safely maps malformed/strict JSON",
+          "duration": 7.562800000000607,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety rejects media text/plain",
+          "status": "passed",
+          "title": "rejects media text/plain",
+          "duration": 5.51929999999993,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety rejects media application/x-www-form-urlencoded",
+          "status": "passed",
+          "title": "rejects media application/x-www-form-urlencoded",
+          "duration": 5.3906000000006316,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety rejects media application/json; charset=iso-8859-1",
+          "status": "passed",
+          "title": "rejects media application/json; charset=iso-8859-1",
+          "duration": 7.5963999999994485,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety rejects media application/json; charset=utf-16",
+          "status": "passed",
+          "title": "rejects media application/json; charset=utf-16",
+          "duration": 5.470299999999952,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety rejects content encoding gzip without inflation",
+          "status": "passed",
+          "title": "rejects content encoding gzip without inflation",
+          "duration": 6.756900000000314,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety rejects content encoding br without inflation",
+          "status": "passed",
+          "title": "rejects content encoding br without inflation",
+          "duration": 5.67830000000049,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety rejects content encoding deflate without inflation",
+          "status": "passed",
+          "title": "rejects content encoding deflate without inflation",
+          "duration": 5.651600000000144,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety rejects content encoding unknown without inflation",
+          "status": "passed",
+          "title": "rejects content encoding unknown without inflation",
+          "duration": 8.004500000000007,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety bounds actual chunked transfer at 8192 bytes",
+          "status": "passed",
+          "title": "bounds actual chunked transfer at 8192 bytes",
+          "duration": 26.920600000000377,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety bounds actual chunked transfer at 8193 bytes",
+          "status": "passed",
+          "title": "bounds actual chunked transfer at 8193 bytes",
+          "duration": 6.954200000000128,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety counts invalid attempts before parsing; forwarded headers cannot change the peer budget",
+          "status": "passed",
+          "title": "counts invalid attempts before parsing; forwarded headers cannot change the peer budget",
+          "duration": 24.806799999999384,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety keeps login/register budgets separate, accounts failed credentials, and isolates fresh apps",
+          "status": "passed",
+          "title": "keeps login/register budgets separate, accounts failed credentials, and isolates fresh apps",
+          "duration": 22.881500000000415,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety shares preview/commit budget using verified owners only; status, health and preflight stay usable",
+          "status": "passed",
+          "title": "shares preview/commit budget using verified owners only; status, health and preflight stay usable",
+          "duration": 49.67200000000048,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety rejects new authenticated identities at capacity without growing or evicting active penalties",
+          "status": "passed",
+          "title": "rejects new authenticated identities at capacity without growing or evicting active penalties",
+          "duration": 42.31660000000011,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety does not grant the large parser to unmatched path /api/v1/games/genshin/import/preview/extra",
+          "status": "passed",
+          "title": "does not grant the large parser to unmatched path /api/v1/games/genshin/import/preview/extra",
+          "duration": 7.058799999999792,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety does not grant the large parser to unmatched path /api/v1/games/genshin/importx",
+          "status": "passed",
+          "title": "does not grant the large parser to unmatched path /api/v1/games/genshin/importx",
+          "duration": 6.561200000000099,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety does not grant the large parser to unmatched path /api/v1/games/genshin/import/%70review",
+          "status": "passed",
+          "title": "does not grant the large parser to unmatched path /api/v1/games/genshin/import/%70review",
+          "duration": 7.066799999999603,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety does not grant the large parser to unmatched path /api/v1/auth/login/extra",
+          "status": "passed",
+          "title": "does not grant the large parser to unmatched path /api/v1/auth/login/extra",
+          "duration": 7.346400000000358,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety does not run a POST handler via GET/PUT and retains endgame authentication",
+          "status": "passed",
+          "title": "does not run a POST handler via GET/PUT and retains endgame authentication",
+          "duration": 23.433500000000095,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety retains auth permit after disconnect until the password/service promise settles",
+          "status": "passed",
+          "title": "retains auth permit after disconnect until the password/service promise settles",
+          "duration": 13.663099999999758,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety holds shared import permits across preview/commit and releases after thrown service errors",
+          "status": "passed",
+          "title": "holds shared import permits across preview/commit and releases after thrown service errors",
+          "duration": 27.139799999999923,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety releases permits for aborted partial bodies, parser and validation failures",
+          "status": "passed",
+          "title": "releases permits for aborted partial bodies, parser and validation failures",
+          "duration": 21.15859999999975,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Composed application request safety"],
+          "fullName": "Composed application request safety does not classify arbitrary downstream parser-looking errors as client errors",
+          "status": "passed",
+          "title": "does not classify arbitrary downstream parser-looking errors as client errors",
+          "duration": 9.59940000000006,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792678892279,
+      "endTime": 1792678892983.5994,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/src/core/middleware/request-safety.http.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references reads every canonical character and item through bounded contracts and verified bytes",
+          "status": "passed",
+          "title": "reads every canonical character and item through bounded contracts and verified bytes",
+          "duration": 1105.8814,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references preserves full charged/plunge, alternate sprint, passive and constellation conditions",
+          "status": "passed",
+          "title": "preserves full charged/plunge, alternate sprint, passive and constellation conditions",
+          "duration": 4.3383000000001175,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references does not infer Traveler form or transfer another form’s identity",
+          "status": "passed",
+          "title": "does not infer Traveler form or transfer another form’s identity",
+          "duration": 12.522699999999986,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references joins exact weapon ranks and artifact piece/effect counts without flattening conditions",
+          "status": "passed",
+          "title": "joins exact weapon ranks and artifact piece/effect counts without flattening conditions",
+          "duration": 7.059700000000021,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references rejects unknown keys, prototype keys and traversal without falling back to a kit",
+          "status": "passed",
+          "title": "rejects unknown keys, prototype keys and traversal without falling back to a kit",
+          "duration": 17.774000000000115,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["production profile references"],
+          "fullName": "production profile references fails closed for corrupted files and valid-hash contract/identity mismatches",
+          "status": "passed",
+          "title": "fails closed for corrupted files and valid-hash contract/identity mismatches",
+          "duration": 46.33140000000003,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792678882182,
+      "endTime": 1792678883376.3313,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/src/games/genshin/characters/profile-reference.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["build insights HTTP boundary"],
+          "fullName": "build insights HTTP boundary requires authentication before any equipment read",
+          "status": "passed",
+          "title": "requires authentication before any equipment read",
+          "duration": 20.788699999999835,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["build insights HTTP boundary"],
+          "fullName": "build insights HTTP boundary serves an unowned profile and a hypothetical comparison without writes",
+          "status": "passed",
+          "title": "serves an unowned profile and a hypothetical comparison without writes",
+          "duration": 21.129400000000032,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["build insights HTTP boundary"],
+          "fullName": "build insights HTTP boundary rejects invalid comparison parameters before reading equipment",
+          "status": "passed",
+          "title": "rejects invalid comparison parameters before reading equipment",
+          "duration": 7.0797999999999774,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792678897532,
+      "endTime": 1792678897581.0798,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/src/games/genshin/intelligence/build-insights/build-insights.http.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules preserves strict HP threshold 90 and separates potential from active bonus",
+          "status": "passed",
+          "title": "preserves strict HP threshold 90 and separates potential from active bonus",
+          "duration": 1.324899999999957,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules preserves strict HP threshold 90.01 and separates potential from active bonus",
+          "status": "passed",
+          "title": "preserves strict HP threshold 90.01 and separates potential from active bonus",
+          "duration": 0.32399999999995543,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules preserves strict HP threshold null and separates potential from active bonus",
+          "status": "passed",
+          "title": "preserves strict HP threshold null and separates potential from active bonus",
+          "duration": 0.168200000000013,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules keeps refinement and incompatible weapons authoritative",
+          "status": "passed",
+          "title": "keeps refinement and incompatible weapons authoritative",
+          "duration": 0.30949999999995725,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules does not assume missing assignments empty or count duplicate/invalid slots",
+          "status": "passed",
+          "title": "does not assume missing assignments empty or count duplicate/invalid slots",
+          "duration": 1.5801000000000158,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules binds Deepwood to hits and duration; eligibility alone never activates its four-piece",
+          "status": "passed",
+          "title": "binds Deepwood to hits and duration; eligibility alone never activates its four-piece",
+          "duration": 1.796600000000069,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules separates Golden Troupe unconditional four-piece from field-dependent extra bonus",
+          "status": "passed",
+          "title": "separates Golden Troupe unconditional four-piece from field-dependent extra bonus",
+          "duration": 0.33120000000008076,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules never interprets unmodeled effects as executable rules",
+          "status": "passed",
+          "title": "never interprets unmodeled effects as executable rules",
+          "duration": 0.14179999999998927,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service produces reproducible useful facts without assuming battle conditions or exposing private IDs",
+          "status": "passed",
+          "title": "produces reproducible useful facts without assuming battle conditions or exposing private IDs",
+          "duration": 38.145399999999995,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service evaluates all catalog characters without an owned record, with explicit limitations",
+          "status": "passed",
+          "title": "evaluates all catalog characters without an owned record, with explicit limitations",
+          "duration": 297.25069999999994,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service isolates a hypothetical incompatible weapon and leaves the recorded build unchanged",
+          "status": "passed",
+          "title": "isolates a hypothetical incompatible weapon and leaves the recorded build unchanged",
+          "duration": 10.106100000000083,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service does not apply unreviewed rules after source drift",
+          "status": "passed",
+          "title": "does not apply unreviewed rules after source drift",
+          "duration": 7.026899999999955,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service rejects ambiguous or impossible comparison requests",
+          "status": "passed",
+          "title": "rejects ambiguous or impossible comparison requests",
+          "duration": 0.8949000000000069,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792678895581,
+      "endTime": 1792678895941.895,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/src/games/genshin/intelligence/build-insights/build-insights.test.ts"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "BalladOfTheBoundlessBlue",
+  "gameId": 14426,
+  "name": "Ballad of the Boundless Blue",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/balladoftheboundlessblue.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "a5caa079d09f1e33302637d25ac1c3311d62941a886cb6632bd4f8dfd9d56c3a",
+    "license": "MIT"
+  },
+  "description": "An anthology of exquisite poetry. It contains quite a few poems beloved by Mondstadters, concerning the skies, dandelions, and other such topics.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Azure Skies",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Within 6s after Normal or Charged Attacks hit an opponent, Normal Attack DMG will be increased by 8% and Charged Attack DMG will be increased by 6%. Max 3 stacks. This effect can be triggered once every 0.3s."
+    },
+    {
+      "rank": 2,
+      "description": "Within 6s after Normal or Charged Attacks hit an opponent, Normal Attack DMG will be increased by 10% and Charged Attack DMG will be increased by 7.5%. Max 3 stacks. This effect can be triggered once every 0.3s."
+    },
+    {
+      "rank": 3,
+      "description": "Within 6s after Normal or Charged Attacks hit an opponent, Normal Attack DMG will be increased by 12% and Charged Attack DMG will be increased by 9%. Max 3 stacks. This effect can be triggered once every 0.3s."
+    },
+    {
+      "rank": 4,
+      "description": "Within 6s after Normal or Charged Attacks hit an opponent, Normal Attack DMG will be increased by 14% and Charged Attack DMG will be increased by 10.5%. Max 3 stacks. This effect can be triggered once every 0.3s."
+    },
+    {
+      "rank": 5,
+      "description": "Within 6s after Normal or Charged Attacks hit an opponent, Normal Attack DMG will be increased by 16% and Charged Attack DMG will be increased by 12%. Max 3 stacks. This effect can be triggered once every 0.3s."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "contractVersion": 1,
+  "key": "SharpshootersOath",
+  "gameId": 15302,
+  "name": "Sharpshooter's Oath",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/sharpshootersoath.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "1fa140087c668c108ef580d712a7372367d100f4974898f3c896856534e4fb39",
+    "license": "MIT"
+  },
+  "description": "This superior bow once belonged to a master archer. However, it gives off a strong scent, thus making it unsuitable for hunting.",
+  "weaponType": "Bow",
+  "rarity": 3,
+  "effectName": "Precise",
+  "refinements": [
+    { "rank": 1, "description": "Increases DMG against weak spots by 24%." },
+    { "rank": 2, "description": "Increases DMG against weak spots by 30%." },
+    { "rank": 3, "description": "Increases DMG against weak spots by 36%." },
+    { "rank": 4, "description": "Increases DMG against weak spots by 42%." },
+    { "rank": 5, "description": "Increases DMG against weak spots by 48%." }
+  ]
+}

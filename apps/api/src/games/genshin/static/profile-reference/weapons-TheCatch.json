@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "TheCatch",
+  "gameId": 13415,
+  "name": "\"The Catch\"",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/thecatch.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "6c98045cad5ef9efa7ae75a04486d46fc44299488117a97fc1368de775c5afc8",
+    "license": "MIT"
+  },
+  "description": "In the distant past, this was the beloved spear of a famed Inazuman bandit.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Shanty",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Elemental Burst DMG by 16% and Elemental Burst CRIT Rate by 6%."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Elemental Burst DMG by 20% and Elemental Burst CRIT Rate by 7.5%."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Elemental Burst DMG by 24% and Elemental Burst CRIT Rate by 9%."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Elemental Burst DMG by 28% and Elemental Burst CRIT Rate by 10.5%."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Elemental Burst DMG by 32% and Elemental Burst CRIT Rate by 12%."
+    }
+  ]
+}

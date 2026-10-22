@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "TheViridescentHunt",
+  "gameId": 15409,
+  "name": "The Viridescent Hunt",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/theviridescenthunt.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "ecc06db6f2c29b01ac9a98624c50f7e744b6c1ff56f9d7dfef35bbe7180ca1f8",
+    "license": "MIT"
+  },
+  "description": "A pure green hunting bow. This once belonged to a certain hunter whose home was the forest.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Verdant Wind",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Upon hit, Normal and Charged Attacks have a 50% chance to generate a Cyclone, which will continuously attract surrounding opponents, dealing 40% of ATK as DMG to these opponents every 0.5s for 4s. This effect can only occur once every 14s."
+    },
+    {
+      "rank": 2,
+      "description": "Upon hit, Normal and Charged Attacks have a 50% chance to generate a Cyclone, which will continuously attract surrounding opponents, dealing 50% of ATK as DMG to these opponents every 0.5s for 4s. This effect can only occur once every 13s."
+    },
+    {
+      "rank": 3,
+      "description": "Upon hit, Normal and Charged Attacks have a 50% chance to generate a Cyclone, which will continuously attract surrounding opponents, dealing 60% of ATK as DMG to these opponents every 0.5s for 4s. This effect can only occur once every 12s."
+    },
+    {
+      "rank": 4,
+      "description": "Upon hit, Normal and Charged Attacks have a 50% chance to generate a Cyclone, which will continuously attract surrounding opponents, dealing 70% of ATK as DMG to these opponents every 0.5s for 4s. This effect can only occur once every 11s."
+    },
+    {
+      "rank": 5,
+      "description": "Upon hit, Normal and Charged Attacks have a 50% chance to generate a Cyclone, which will continuously attract surrounding opponents, dealing 80% of ATK as DMG to these opponents every 0.5s for 4s. This effect can only occur once every 10s."
+    }
+  ]
+}

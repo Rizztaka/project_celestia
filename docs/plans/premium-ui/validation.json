@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-22",
+  "status": "implemented and verified locally",
+  "tests": {
+    "passed": 155,
+    "failed": 0,
+    "skipped": 0,
+    "files": 16,
+    "report": "tests.json"
+  },
+  "checks": {
+    "webProductionBuild": "passed",
+    "apiProductionBuild": "passed",
+    "webTypes": "passed",
+    "webLint": "passed (entire app)",
+    "changedApiToolingLint": "passed",
+    "scopedWhitespace": "passed"
+  },
+  "browser": {
+    "syntheticFixture": true,
+    "liveDatabaseOrAccount": false,
+    "productionReferenceEquipmentAndInsightsServices": true,
+    "passed": [
+      "Sign-in and disabled-provider removal",
+      "Desktop collection, search and character navigation",
+      "Recorded C0 with locked C1 full description still readable",
+      "Three character tabs and URL selection",
+      "Gilded Dreams hypothetical comparison retains recorded Deepwood/Harbinger",
+      "390px mobile collection and native menu",
+      "Escape closes the drawer and restores Menu focus",
+      "Loaded 320px collection: horizontal overflow 0; clipped controls 0; header overflow 0",
+      "Invalid GOOD JSON is rejected and typed draft is retained",
+      "Build lab, inventory and endgame records render",
+      "Legacy simulator URL reaches functional Wish Savings"
+    ],
+    "fixtureCorrection": "Initial material fixture omitted required stockBasis; corrected fixture and reran savings. This was not a production service change.",
+    "transientDevelopmentLogs": "Vite briefly reported CSS reload errors during formatting; final production builds succeeded.",
+    "freshCollectionConsoleErrors": 0,
+    "screenshots": [
+      "characters-desktop.png",
+      "characters-mobile.png",
+      "characters-320.png",
+      "mobile-navigation.png"
+    ]
+  },
+  "preservation": {
+    "originalDraftSnapshots": 9,
+    "rawManifest": "before.json",
+    "sourceProfileCatalog": "unchanged",
+    "accountDataRemoved": false,
+    "unrelatedWorkingChangesPreserved": true
+  },
+  "cleanup": [
+    "Replaced legacy heuristic ranking dashboard UI with Build lab",
+    "Retired random pull simulator UI; kept old URL as savings redirect",
+    "Removed duplicate public KQM reader and unused client helpers",
+    "Hide unavailable OAuth providers rather than showing disabled actions",
+    "Removed unused starter App.css and icons.svg",
+    "Replaced stale multi-game metadata and starter favicon",
+    "Folded repeated provenance/onboarding/detail content behind disclosures"
+  ],
+  "limitations": [
+    "Synthetic UI acceptance does not constitute live database or real-account acceptance.",
+    "No backend heuristic API or historical source data purged; retained interfaces stay compatible.",
+    "No complete combat optimizer or expansion of executable mechanic coverage claimed.",
+    "The initial 155-test run used the working tree. Final independent commit validation is recorded in commit-review.json (157 tests). No push or deployment performed."
+  ]
+}

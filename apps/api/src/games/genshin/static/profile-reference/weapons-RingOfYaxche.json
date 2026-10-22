@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "RingOfYaxche",
+  "gameId": 14431,
+  "name": "Ring of Yaxche",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/ringofyaxche.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2ed586c47228bdb82d91070f84d4cdd363bd94be25e1310fcb74a558d4d69106",
+    "license": "MIT"
+  },
+  "description": "This jade vessel was created by a hero of yesteryear. Legend has it that it once shot the giant dragon that dwelt in the volcano down from the skies.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Echoes of the Plentiful Land",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Using an Elemental Skill grants the Jade-Forged Crown effect: Every 1,000 Max HP will increase the Normal Attack DMG dealt by the equipping character by 0.6% for 10s. Normal Attack DMG can be increased this way by a maximum of 16%."
+    },
+    {
+      "rank": 2,
+      "description": "Using an Elemental Skill grants the Jade-Forged Crown effect: Every 1,000 Max HP will increase the Normal Attack DMG dealt by the equipping character by 0.7% for 10s. Normal Attack DMG can be increased this way by a maximum of 20%."
+    },
+    {
+      "rank": 3,
+      "description": "Using an Elemental Skill grants the Jade-Forged Crown effect: Every 1,000 Max HP will increase the Normal Attack DMG dealt by the equipping character by 0.8% for 10s. Normal Attack DMG can be increased this way by a maximum of 24%."
+    },
+    {
+      "rank": 4,
+      "description": "Using an Elemental Skill grants the Jade-Forged Crown effect: Every 1,000 Max HP will increase the Normal Attack DMG dealt by the equipping character by 0.9% for 10s. Normal Attack DMG can be increased this way by a maximum of 28%."
+    },
+    {
+      "rank": 5,
+      "description": "Using an Elemental Skill grants the Jade-Forged Crown effect: Every 1,000 Max HP will increase the Normal Attack DMG dealt by the equipping character by 1% for 10s. Normal Attack DMG can be increased this way by a maximum of 32%."
+    }
+  ]
+}

@@ -34,3 +34,10 @@
 /docs/plans/contextual-guide-knowledge/k3-evidence/** -text
 /docs/plans/contextual-guide-knowledge/k3-live-check/** -text
 /docs/plans/contextual-guide-knowledge/k3-fixture-workflow/** -text
+
+# Pin profile and retired-source hashes to the reviewed bytes.
+/apps/api/src/games/genshin/static/profile-reference/** -text
+/docs/plans/deterministic-build-insights/retired/** -text
+
+# Preserve draft UI retirement snapshots exactly.
+/docs/plans/premium-ui/before/** -text -whitespace

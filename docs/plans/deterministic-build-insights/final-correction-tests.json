@@ -1,0 +1,229 @@
+{
+  "numTotalTestSuites": 7,
+  "numPassedTestSuites": 7,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 19,
+  "numPassedTests": 19,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1792679027708,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["deterministic build presentation"],
+          "fullName": "deterministic build presentation removes every retired runtime file while retaining its exact historical bytes",
+          "status": "passed",
+          "title": "removes every retired runtime file while retaining its exact historical bytes",
+          "duration": 21.464500000000044,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build presentation"],
+          "fullName": "deterministic build presentation shows explicit conditional state and complete source conditions with an accessible disclosure",
+          "status": "passed",
+          "title": "shows explicit conditional state and complete source conditions with an accessible disclosure",
+          "duration": 11.0471,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build presentation"],
+          "fullName": "deterministic build presentation both character and team flows have no chat entry; character detail mounts automatic insights",
+          "status": "passed",
+          "title": "both character and team flows have no chat entry; character detail mounts automatic insights",
+          "duration": 1.8164000000000442,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792679028594,
+      "endTime": 1792679028627.8164,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/tooling/build-insights-client.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["build insights HTTP boundary"],
+          "fullName": "build insights HTTP boundary requires authentication before any equipment read",
+          "status": "passed",
+          "title": "requires authentication before any equipment read",
+          "duration": 16.705700000000093,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["build insights HTTP boundary"],
+          "fullName": "build insights HTTP boundary serves an unowned profile and a hypothetical comparison without writes",
+          "status": "passed",
+          "title": "serves an unowned profile and a hypothetical comparison without writes",
+          "duration": 17.585199999999986,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["build insights HTTP boundary"],
+          "fullName": "build insights HTTP boundary rejects invalid comparison parameters before reading equipment",
+          "status": "passed",
+          "title": "rejects invalid comparison parameters before reading equipment",
+          "duration": 4.683099999999968,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792679030412,
+      "endTime": 1792679030450.683,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/src/games/genshin/intelligence/build-insights/build-insights.http.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules preserves strict HP threshold 90 and separates potential from active bonus",
+          "status": "passed",
+          "title": "preserves strict HP threshold 90 and separates potential from active bonus",
+          "duration": 0.9457000000000448,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules preserves strict HP threshold 90.01 and separates potential from active bonus",
+          "status": "passed",
+          "title": "preserves strict HP threshold 90.01 and separates potential from active bonus",
+          "duration": 0.248299999999972,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules preserves strict HP threshold null and separates potential from active bonus",
+          "status": "passed",
+          "title": "preserves strict HP threshold null and separates potential from active bonus",
+          "duration": 0.1671999999999798,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules keeps refinement and incompatible weapons authoritative",
+          "status": "passed",
+          "title": "keeps refinement and incompatible weapons authoritative",
+          "duration": 0.36700000000001864,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules does not assume missing assignments empty or count duplicate/invalid slots",
+          "status": "passed",
+          "title": "does not assume missing assignments empty or count duplicate/invalid slots",
+          "duration": 0.6723999999999819,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules binds Deepwood to hits and duration; eligibility alone never activates its four-piece",
+          "status": "passed",
+          "title": "binds Deepwood to hits and duration; eligibility alone never activates its four-piece",
+          "duration": 0.9616000000000327,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules separates Golden Troupe unconditional four-piece from field-dependent extra bonus",
+          "status": "passed",
+          "title": "separates Golden Troupe unconditional four-piece from field-dependent extra bonus",
+          "duration": 0.1230000000000473,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["deterministic build rules"],
+          "fullName": "deterministic build rules never interprets unmodeled effects as executable rules",
+          "status": "passed",
+          "title": "never interprets unmodeled effects as executable rules",
+          "duration": 0.07830000000001291,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service produces reproducible useful facts without assuming battle conditions or exposing private IDs",
+          "status": "passed",
+          "title": "produces reproducible useful facts without assuming battle conditions or exposing private IDs",
+          "duration": 23.42330000000004,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service evaluates all catalog characters without an owned record, with explicit limitations",
+          "status": "passed",
+          "title": "evaluates all catalog characters without an owned record, with explicit limitations",
+          "duration": 217.44850000000002,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service isolates a hypothetical incompatible weapon and leaves the recorded build unchanged",
+          "status": "passed",
+          "title": "isolates a hypothetical incompatible weapon and leaves the recorded build unchanged",
+          "duration": 5.187599999999975,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service does not apply unreviewed rules after source drift",
+          "status": "passed",
+          "title": "does not apply unreviewed rules after source drift",
+          "duration": 4.756399999999985,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["read-only source-backed service"],
+          "fullName": "read-only source-backed service rejects ambiguous or impossible comparison requests",
+          "status": "passed",
+          "title": "rejects ambiguous or impossible comparison requests",
+          "duration": 0.7784000000000333,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792679029128,
+      "endTime": 1792679029383.7783,
+      "status": "passed",
+      "message": "",
+      "name": "D:/Genshin Personal/project-celestia/apps/api/src/games/genshin/intelligence/build-insights/build-insights.test.ts"
+    }
+  ]
+}

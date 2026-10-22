@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SkyriderSword",
+  "gameId": 11306,
+  "name": "Skyrider Sword",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/skyridersword.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "b9f010402f832ae4ce901ea9ba000c0c4da211da64588364f96eff0190df59b6",
+    "license": "MIT"
+  },
+  "description": "A reliable steel sword. The legendary Skyrider once tried to ride it as a flying sword...",
+  "weaponType": "Sword",
+  "rarity": 3,
+  "effectName": "Determination",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Using an Elemental Burst grants a 12% increase in ATK and Movement SPD for 15s."
+    },
+    {
+      "rank": 2,
+      "description": "Using an Elemental Burst grants a 15% increase in ATK and Movement SPD for 15s."
+    },
+    {
+      "rank": 3,
+      "description": "Using an Elemental Burst grants a 18% increase in ATK and Movement SPD for 15s."
+    },
+    {
+      "rank": 4,
+      "description": "Using an Elemental Burst grants a 21% increase in ATK and Movement SPD for 15s."
+    },
+    {
+      "rank": 5,
+      "description": "Using an Elemental Burst grants a 24% increase in ATK and Movement SPD for 15s."
+    }
+  ]
+}

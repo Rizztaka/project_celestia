@@ -5,24 +5,25 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 
 import { fetchApi } from '../lib/api';
 import { useAuthStore } from '../stores/auth.store';
+import { CelestiaMark, UiIcon } from './Ui';
 
 const primary = [
   ['/', 'Today'],
   ['/roster', 'Characters'],
   ['/planner', 'Planner'],
+  ['/inventory', 'Inventory'],
 ] as const;
 const supporting = [
   ['/import', 'Import'],
-  ['/inventory', 'Inventory'],
   ['/profile', 'Settings & profile'],
 ] as const;
 const secondary = [
-  ['/intelligence', 'Intelligence'],
-  ['/simulators', 'Pull simulator'],
+  ['/intelligence', 'Build lab'],
   ['/endgame', 'Endgame records'],
 ] as const;
 
 function MobileNavigation({ signOut, signingOut }: { signOut: () => void; signingOut: boolean }) {
+  const { pathname } = useLocation();
   const drawer = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -118,17 +119,33 @@ function MobileNavigation({ signOut, signingOut }: { signOut: () => void; signin
         </div>
         {(
           [
-            ['Primary', primary],
-            ['Supporting', supporting],
-            ['Other tools', secondary],
+            ['Your workspace', primary],
+            ['Explore', secondary],
+            ['Your account', supporting],
           ] as const
         ).map(([label, links]) => (
           <nav key={label} aria-label={`${label} mobile navigation`} className="mt-5 flex flex-col">
             <h3 className="mb-1 px-3 text-xs uppercase tracking-wider text-indigo-200">{label}</h3>
             {links.map(([to, name]) => (
-              <NavLink key={to} to={to} end={to === '/'} onClick={() => drawer.current?.close()}>
+              <Link
+                key={to}
+                to={to}
+                aria-current={
+                  (
+                    to === '/'
+                      ? pathname === '/'
+                      : pathname === to ||
+                        pathname.startsWith(to + '/') ||
+                        (to === '/roster' && pathname.startsWith('/characters/'))
+                  )
+                    ? 'page'
+                    : undefined
+                }
+                onClick={() => drawer.current?.close()}
+              >
+                <UiIcon name={navIcons[to]} />
                 {name}
-              </NavLink>
+              </Link>
             ))}
           </nav>
         ))}
@@ -145,12 +162,23 @@ function MobileNavigation({ signOut, signingOut }: { signOut: () => void; signin
   );
 }
 
+const navIcons: Record<string, Parameters<typeof UiIcon>[0]['name']> = {
+  '/': 'today',
+  '/roster': 'characters',
+  '/planner': 'planner',
+  '/inventory': 'inventory',
+  '/intelligence': 'insights',
+  '/endgame': 'endgame',
+  '/import': 'import',
+  '/profile': 'settings',
+};
+
 export function CompanionNavigation() {
   const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
   const [signingOut, setSigningOut] = useState(false);
   const [logoutError, setLogoutError] = useState('');
   const location = useLocation();
-  const disclosure = useRef<HTMLDetailsElement>(null);
   const signOut = () => {
     if (signingOut) return;
     setSigningOut(true);
@@ -160,84 +188,94 @@ export function CompanionNavigation() {
       .catch(() => setLogoutError('Could not sign out. Reconnect and try again.'))
       .finally(() => setSigningOut(false));
   };
-  useEffect(() => {
-    if (disclosure.current) disclosure.current.open = false;
-  }, [location.pathname, location.search, location.hash]);
-  useEffect(() => {
-    const dismiss = (event: PointerEvent | KeyboardEvent) => {
-      const element = disclosure.current;
-      if (!element?.open) return;
-      if (event instanceof KeyboardEvent) {
-        if (event.key !== 'Escape') return;
-        element.open = false;
-        element.querySelector('summary')?.focus();
-        event.preventDefault();
-      } else if (event.target instanceof Node && !element.contains(event.target)) {
-        const containedFocus = element.contains(document.activeElement);
-        element.open = false;
-        if (containedFocus) element.querySelector('summary')?.focus();
-      }
-    };
-    document.addEventListener('keydown', dismiss);
-    document.addEventListener('pointerdown', dismiss);
-    return () => {
-      document.removeEventListener('keydown', dismiss);
-      document.removeEventListener('pointerdown', dismiss);
-    };
-  }, []);
   return (
     <header className="companion-header">
       <a className="companion-skip" href="#companion-content">
         Skip to content
       </a>
       <div className="companion-brand-row">
-        <Link to="/" className="font-display text-lg font-bold text-white">
-          Project Celestia
+        <Link to="/" className="celestia-brand">
+          <CelestiaMark />
+          <span>
+            CELESTIA<small>GENSHIN COMPANION</small>
+          </span>
         </Link>
-        <button className="companion-desktop-signout" disabled={signingOut} onClick={signOut}>
-          {signingOut ? 'Signing out…' : 'Sign out'}
-        </button>
         <MobileNavigation
           key={`${location.pathname}${location.search}${location.hash}`}
           signOut={signOut}
           signingOut={signingOut}
         />
       </div>
+      <div className="desktop-navigation">
+        <p className="nav-caption">YOUR WORKSPACE</p>
+        <nav aria-label="Primary navigation" className="companion-primary">
+          {primary.map(([to, label]) => (
+            <Link
+              key={to}
+              to={to}
+              aria-current={
+                (
+                  to === '/'
+                    ? location.pathname === '/'
+                    : location.pathname === to ||
+                      location.pathname.startsWith(to + '/') ||
+                      (to === '/roster' && location.pathname.startsWith('/characters/'))
+                )
+                  ? 'page'
+                  : undefined
+              }
+            >
+              <UiIcon name={navIcons[to]} />
+              <span>{label}</span>
+            </Link>
+          ))}
+        </nav>
+        <p className="nav-caption">EXPLORE</p>
+        <nav aria-label="Supporting navigation" className="companion-supporting">
+          {secondary.map(([to, label]) => (
+            <NavLink key={to} to={to}>
+              <UiIcon name={navIcons[to]} />
+              <span>{label}</span>
+            </NavLink>
+          ))}
+        </nav>
+        <div className="sidebar-bottom">
+          <Link
+            className="sidebar-import"
+            to="/import"
+            aria-current={location.pathname === '/import' ? 'page' : undefined}
+          >
+            <UiIcon name="import" />
+            <span>
+              Import account data<small>Bring your builds along</small>
+            </span>
+            <UiIcon name="arrow" />
+          </Link>
+          <Link
+            to="/profile"
+            className="sidebar-account"
+            aria-current={location.pathname === '/profile' ? 'page' : undefined}
+          >
+            <span className="account-initial">
+              {(user?.username ?? 'T').slice(0, 1).toUpperCase()}
+            </span>
+            <span>
+              {user?.username ?? 'Traveler'}
+              <small>Settings & profile</small>
+            </span>
+            <UiIcon name="settings" />
+          </Link>
+          <button className="companion-desktop-signout" disabled={signingOut} onClick={signOut}>
+            <UiIcon name="logout" />
+            {signingOut ? 'Signing out…' : 'Sign out'}
+          </button>
+        </div>
+      </div>
       {logoutError && (
-        <p role="alert" className="p-2 text-sm text-amber-200">
+        <p role="alert" className="logout-error">
           {logoutError}
         </p>
       )}
-      <nav aria-label="Primary navigation" className="companion-primary">
-        {primary.map(([to, label]) => (
-          <NavLink key={to} to={to} end={to === '/'}>
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-      <nav aria-label="Supporting navigation" className="companion-supporting">
-        {supporting.map(([to, label]) => (
-          <NavLink key={to} to={to}>
-            {label}
-          </NavLink>
-        ))}
-        <details ref={disclosure} className="companion-tools">
-          <summary>
-            Other tools{secondary.some(([to]) => to === location.pathname) ? ' · viewing' : ''}
-          </summary>
-          <div className="companion-tool-links">
-            {secondary.map(([to, label]) => (
-              <NavLink key={to} to={to}>
-                {label}
-              </NavLink>
-            ))}
-            <details>
-              <summary>Archived Stubs</summary>
-              <NavLink to="/nikke/roster">NIKKE (legacy)</NavLink>
-            </details>
-          </div>
-        </details>
-      </nav>
     </header>
   );
 }
@@ -299,15 +337,29 @@ export default function CompanionLayout() {
   return (
     <div className="companion-shell">
       <CompanionNavigation />
-      <Suspense
-        fallback={
-          <main id="companion-content" tabIndex={-1}>
-            <p role="status">Loading page…</p>
-          </main>
-        }
-      >
-        <PageContent />
-      </Suspense>
+      <div className="companion-workspace">
+        <div className="workspace-bar">
+          <span>
+            Genshin Impact <span aria-hidden="true">/</span> <strong>Personal workspace</strong>
+          </span>
+          <Link to="/profile" className="workspace-account">
+            Your account <UiIcon name="settings" />
+          </Link>
+        </div>
+        <Suspense
+          fallback={
+            <main id="companion-content" tabIndex={-1}>
+              <p role="status">Loading page…</p>
+            </main>
+          }
+        >
+          <PageContent />
+        </Suspense>
+        <footer className="workspace-footer">
+          <span>CELESTIA</span>
+          <span>Your journey. At your pace.</span>
+        </footer>
+      </div>
     </div>
   );
 }

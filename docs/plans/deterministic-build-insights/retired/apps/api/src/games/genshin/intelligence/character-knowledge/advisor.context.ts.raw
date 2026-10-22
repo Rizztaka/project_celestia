@@ -1,0 +1,146 @@
+import type { CharacterAdvisorRequest } from '@celestia/api-contracts';
+
+import {
+  evidenceSemantics,
+  guidanceAssessment,
+  hasAssessedGuidance,
+  sourcePrerequisites,
+} from './knowledge.evidence.js';
+import type { retrieveCharacterKnowledge } from './knowledge.retrieval.js';
+import { type KnowledgeCorpus, type KnowledgeDocument, knowledgeHash } from './knowledge.store.js';
+
+export const advisorContextLimit = 22000;
+type Retrieval = ReturnType<typeof retrieveCharacterKnowledge>;
+
+export function prepareAdvisorContext(
+  input: CharacterAdvisorRequest,
+  retrieved: Retrieval,
+  corpus: KnowledgeCorpus,
+  records: unknown,
+  limits: string[],
+) {
+  const evidence = new Map(
+    retrieved.documents.map((d) => {
+      const { effects, ...semantics } = evidenceSemantics(d, corpus);
+      const source = corpus.sources.find((s) => s.id === d.sourceId)!;
+      return [
+        d.id,
+        {
+          id: d.id,
+          characterKey: d.characterKey,
+          topic: d.topic,
+          title: d.title,
+          text: d.text,
+          scope: d.scope,
+          review: d.review,
+          assessment: guidanceAssessment(d, corpus),
+          semantics: {
+            ...semantics,
+            effects: effects.map(({ text, ...unit }) => ({
+              ...unit,
+              prerequisites: sourcePrerequisites(text),
+            })),
+            refinementState: effects.some((e) => e.refinement)
+              ? 'Refinement alternatives are source mechanics, not ownership. Use a matching SERVER_RECORDS refinement only when recorded; otherwise refinement is unknown.'
+              : null,
+          },
+          provenance: {
+            sourceId: d.sourceId,
+            url: source.url,
+            revision: source.revision,
+            sha256: source.sha256,
+            sectionSha256: d.sectionSha256,
+            assessment: source.review,
+          },
+        },
+      ] as const;
+    }),
+  );
+  const budgetLimit =
+    'Some complete optional evidence was omitted to fit the actual conversation and recorded context; do not infer omitted conditions.';
+  const subjectsFor = (docs: KnowledgeDocument[]) => {
+    const ids = new Set(docs.map((d) => d.id));
+    return retrieved.subjects.map((s) => ({
+      ...s,
+      evidenceIds: s.evidenceIds.filter((id) => ids.has(id)),
+    }));
+  };
+  const limitsFor = (docs: KnowledgeDocument[]) =>
+    [
+      ...(docs.length < retrieved.documents.length ? [budgetLimit] : []),
+      ...subjectsFor(docs)
+        .filter((s) => !s.evidenceIds.length)
+        .map((s) => `No applicable evidence for requested subject ${s.label} fits this request.`),
+      ...limits,
+    ].slice(0, 16);
+  const build = (docs: KnowledgeDocument[]) => ({
+    character: retrieved.primary?.key ?? input.characterKey,
+    question: input.question,
+    history: input.history.slice(-4).map((h) => ({ ...h, content: h.content.slice(0, 600) })),
+    selectedTeam: input.teamKeys,
+    comparedParticipants: retrieved.entities,
+    participantScope:
+      'Compared alternatives, not simultaneous team membership. selectedTeam has at most four members.',
+    SERVER_RECORDS: records,
+    evidence: docs.map((d) => evidence.get(d.id)!),
+    // Internal alias/category bookkeeping is redundant in the model context.
+    requestedSubjects: subjectsFor(docs).map((s) => ({
+      label: s.label,
+      evidenceIds: s.evidenceIds,
+    })),
+    limits: limitsFor(docs),
+  });
+  let documents = retrieved.documents;
+  let context = build(documents);
+  // Most requests need no pruning. If necessary, retain complete priority units
+  // instead of cutting history, recorded facts, effects or their prerequisites.
+  if (JSON.stringify(context).length > advisorContextLimit) {
+    const essential = new Set<string>();
+    for (const d of documents)
+      if (
+        d.id.includes(':item:') ||
+        (d.characterKey === retrieved.primary?.key && ['skill', 'burst'].includes(d.topic))
+      )
+        essential.add(d.id);
+    for (const key of retrieved.entities) {
+      const doc = documents.find(
+        (d) =>
+          d.characterKey === key && d.review === 'structured_source' && !d.id.includes(':item:'),
+      );
+      if (doc) essential.add(doc.id);
+    }
+    const ordered = [
+      ...documents.filter((d) => essential.has(d.id)),
+      ...documents.filter((d) => !essential.has(d.id)),
+    ];
+    documents = [];
+    for (const doc of ordered) {
+      const next = [...documents, doc];
+      if (JSON.stringify(build(next)).length <= advisorContextLimit) documents = next;
+    }
+    context = build(documents);
+  }
+  const serialized = JSON.stringify(context);
+  const strategyMissing =
+    retrieved.strategyMissing ||
+    (retrieved.documents.some(
+      (d) => d.characterKey === retrieved.primary?.key && hasAssessedGuidance(d, corpus),
+    ) &&
+      !documents.some(
+        (d) => d.characterKey === retrieved.primary?.key && hasAssessedGuidance(d, corpus),
+      ));
+  return {
+    context,
+    serialized,
+    digest: knowledgeHash(serialized),
+    dispatchable: documents.length > 0 && serialized.length <= advisorContextLimit,
+    retrieved: {
+      ...retrieved,
+      documents,
+      subjects: subjectsFor(documents),
+      strategyMissing,
+      limitations: limitsFor(documents),
+      characters: documents.reduce((n, d) => n + d.text.length + d.scope.length, 0),
+    },
+  };
+}

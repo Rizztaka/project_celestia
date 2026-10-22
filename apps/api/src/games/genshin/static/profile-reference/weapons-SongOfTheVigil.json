@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SongOfTheVigil",
+  "gameId": 13436,
+  "name": "Song of the Vigil",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/songofthevigil.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "d1d6393d230c9d7d89626e01bba34a5e3e73d98742663cd3c1cf8af452e7e455",
+    "license": "MIT"
+  },
+  "description": "A long spear that once stood guard over all. Today, it has found a new purpose with children and their games of make-believe.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Cadence of Days Gone By",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Triggering an Elemental Reaction regenerates 4 Elemental Energy for the equipping character. This effect can trigger once every 9s. On the other hand, triggering a Stellar Glimmer reaction increases their ATK by 20% for 12s. The aforementioned effects can trigger even when the character is not on the field."
+    },
+    {
+      "rank": 2,
+      "description": "Triggering an Elemental Reaction regenerates 5 Elemental Energy for the equipping character. This effect can trigger once every 9s. On the other hand, triggering a Stellar Glimmer reaction increases their ATK by 25% for 12s. The aforementioned effects can trigger even when the character is not on the field."
+    },
+    {
+      "rank": 3,
+      "description": "Triggering an Elemental Reaction regenerates 6 Elemental Energy for the equipping character. This effect can trigger once every 9s. On the other hand, triggering a Stellar Glimmer reaction increases their ATK by 30% for 12s. The aforementioned effects can trigger even when the character is not on the field."
+    },
+    {
+      "rank": 4,
+      "description": "Triggering an Elemental Reaction regenerates 7 Elemental Energy for the equipping character. This effect can trigger once every 9s. On the other hand, triggering a Stellar Glimmer reaction increases their ATK by 35% for 12s. The aforementioned effects can trigger even when the character is not on the field."
+    },
+    {
+      "rank": 5,
+      "description": "Triggering an Elemental Reaction regenerates 8 Elemental Energy for the equipping character. This effect can trigger once every 9s. On the other hand, triggering a Stellar Glimmer reaction increases their ATK by 40% for 12s. The aforementioned effects can trigger even when the character is not on the field."
+    }
+  ]
+}

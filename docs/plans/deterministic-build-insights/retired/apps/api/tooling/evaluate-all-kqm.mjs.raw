@@ -1,0 +1,450 @@
+// Complete deterministic evaluation matrix and resumable real-model queue.
+// Controlled adapters certify boundaries, never usefulness or model quality.
+import { existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { config } from 'dotenv';
+
+import { hash } from './kqm-workflow.mjs';
+
+const project = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const artifacts = join(project, 'docs/plans/character-knowledge-assistant/all-kqm-verification');
+const json = (path) => JSON.parse(readFileSync(path));
+const save = (path, value) => {
+  const tmp = path + '.tmp';
+  writeFileSync(tmp, JSON.stringify(value, null, 2) + '\n');
+  renameSync(tmp, path);
+};
+const live = process.argv.includes('--live');
+if (process.argv.slice(2).some((arg) => arg !== '--live')) throw Error('Unsupported argument');
+if (live) {
+  const settings = {};
+  config({ path: join(project, 'apps/api/.env'), processEnv: settings, quiet: true });
+  for (const key of [
+    'GROQ_API_KEY',
+    'OPENROUTER_API_KEY',
+    'CELESTIA_AI_PROVIDER',
+    'CELESTIA_AI_MODEL',
+    'CELESTIA_AI_FREE_ONLY',
+    'CELESTIA_AI_DAILY_REQUESTS',
+    'CELESTIA_AI_USER_DAILY_REQUESTS',
+  ])
+    if (settings[key] && !process.env[key]) process.env[key] = settings[key];
+}
+Object.assign(process.env, {
+  NODE_ENV: 'test',
+  DOTENV_CONFIG_PATH: process.platform === 'win32' ? 'NUL' : '/dev/null',
+  DATABASE_URL: 'postgresql://synthetic:synthetic@127.0.0.1:1/never_connected',
+  JWT_SECRET: 'all-kqm-isolated-synthetic-never-authenticated',
+});
+const [
+  { characterAdvisorRequestSchema },
+  { loadCharacterKnowledge, defaultKnowledgeRoot },
+  { retrieveCharacterKnowledge },
+  { CharacterAdvisorService },
+  { configuredAdvisorProvider },
+] = await Promise.all([
+  import('@celestia/api-contracts'),
+  import('../src/games/genshin/intelligence/character-knowledge/knowledge.store.ts'),
+  import('../src/games/genshin/intelligence/character-knowledge/knowledge.retrieval.ts'),
+  import('../src/games/genshin/intelligence/character-knowledge/advisor.service.ts'),
+  import('../src/core/ai/advisor-provider.ts'),
+]);
+const candidate = json(join(artifacts, 'candidate.json'));
+const knowledge = loadCharacterKnowledge(defaultKnowledgeRoot, candidate.release);
+const discovery = json(join(artifacts, 'discovery.json'));
+const sourceProgress = json(join(artifacts, 'progress.json'));
+const policyDigest = hash(
+  readFileSync(
+    join(project, 'apps/api/src/games/genshin/intelligence/character-knowledge/advisor.service.ts'),
+  ),
+);
+const claims = json(join(artifacts, 'claims.json')).claims;
+const matrix = [];
+for (const row of discovery.characters) {
+  const profile = knowledge.corpus.profiles.find((p) => p.key === row.canonicalKey);
+  const retained = claims.filter(
+    (c) =>
+      c.characterKey === row.canonicalKey && knowledge.corpus.documents.some((d) => d.id === c.id),
+  );
+  const weapons = [
+    ...new Set(retained.filter((c) => c.topic === 'weapons' && c.item).map((c) => c.item.name)),
+  ];
+  const sets = [
+    ...new Set(retained.filter((c) => c.topic === 'build' && c.item).map((c) => c.item.name)),
+  ];
+  const role = retained.find((c) => c.type === 'supported-role')?.role;
+  const teammateClaims = claims.filter((c) => c.characterKey === row.canonicalKey && c.teammateKey);
+  const teammates = [...new Set(teammateClaims.map((c) => c.teammateKey))];
+  // Hypothetical team compositions are test inputs, never recommended/owned
+  // teams. Prefer actual guide-related identities; baseline-only rows retain a
+  // visible limitation rather than disappearing from the matrix.
+  const fallbacks = knowledge.corpus.profiles
+    .filter((p) => !p.forms.length && p.key !== profile?.key)
+    .map((p) => p.key);
+  const available = [...new Set([...teammates, ...fallbacks])].filter(
+    (key) => key !== row.canonicalKey,
+  );
+  const teamKeys = [row.canonicalKey, ...available.slice(0, 3)];
+  const replacement = available[3];
+  const display = (key) => knowledge.corpus.profiles.find((p) => p.key === key)?.name ?? key;
+  const base = {
+    characterKey: row.canonicalKey,
+    useRecordedContext: false,
+    teamKeys: [],
+    history: [],
+  };
+  const build = `How should I build ${profile?.name ?? row.displayName}${role ? ' for ' + role : ''}? Explain useful mechanics, stats${weapons.length ? ', ' + weapons.slice(0, 2).join(' versus ') : ', weapon tradeoffs'}${sets.length ? ' and ' + sets.slice(0, 2).join(' versus ') : ' and artifacts'}, with the conditions and source limits.`;
+  let followup = weapons.length
+    ? `I do not own ${weapons[0]}. ${weapons[1] ? 'Could ' + weapons[1] + ' be a hypothetical alternative? ' : ''}I also want to change the field-time role. Which earlier advice still applies and what becomes uncertain?`
+    : 'I want to change the field-time role and have no guide-recommended equipment. Which kit facts still help, and which strategic details are unavailable?';
+  const item = knowledge.mechanics?.items.find((i) => i.name === weapons[0]);
+  if (item && /above 90%/.test(JSON.stringify(item.effects)))
+    followup += ' I cannot keep HP above 90%.';
+  else if (item && /CRIT Hits/.test(JSON.stringify(item.effects)))
+    followup += ' I cannot reliably trigger CRIT hits during my field time.';
+  const cases = [
+    { kind: 'build', question: build },
+    {
+      kind: 'changed-constraint-followup',
+      question: followup,
+      history: [{ role: 'user', content: build }],
+      previousCase: row.id + ':build',
+    },
+    {
+      kind: 'full-team-substitution',
+      teamKeys,
+      question: `In a hypothetical ${teamKeys.map(display).join(', ')} team, should I replace ${display(teamKeys[3])} with ${display(replacement)}? Explain which utility, reaction and defensive conditions change; do not assume this team or replacement is recommended or owned.`,
+      replacement,
+      sourceTeamLimited: teammates.length < 4,
+    },
+    {
+      kind: 'insufficient-evidence',
+      question: `What are my exact required ER and personal DPS for ${profile?.name ?? row.displayName} with unknown artifacts, weapon refinement, teammates, enemy state and rotation? If not supported, explain the useful limitation and next detail needed.`,
+    },
+  ];
+  for (const entry of cases) {
+    const input = characterAdvisorRequestSchema.parse({
+      ...base,
+      ...Object.fromEntries(
+        Object.entries(entry).filter(([key]) => ['question', 'history', 'teamKeys'].includes(key)),
+      ),
+    });
+    matrix.push({
+      id: row.id + ':' + entry.kind,
+      characterId: row.id,
+      kind: entry.kind,
+      input,
+      replacement: entry.replacement ?? null,
+      sourceTeamLimited: entry.sourceTeamLimited ?? false,
+      previousCase: entry.previousCase ?? null,
+      sourceIdentities: row.sources.map((source) => ({
+        url: source.url,
+        sha256: sourceProgress.sources[source.url]?.sha256,
+      })),
+      release: knowledge.release,
+      rubric: [
+        'usefulness',
+        'mechanics',
+        'retained conditions',
+        'source support',
+        'constraint adaptation',
+        'honest uncertainty and ownership',
+      ],
+    });
+  }
+}
+if (matrix.length !== discovery.characters.length * 4) throw Error('Evaluation coverage mismatch');
+save(join(artifacts, 'evaluation-cases.json'), {
+  release: knowledge.release,
+  denominator: discovery.characters.length,
+  cases: matrix,
+});
+const controlledProvider = {
+  provider: 'controlled-all-kqm-adapter',
+  model: 'not-live-ai',
+  complete: async (messages) => {
+    if (messages[0].content.startsWith('Audit'))
+      return JSON.stringify({ supported: true, issues: [] });
+    const context = JSON.parse(messages[1].content),
+      doc = context.evidence.find(
+        (d) => !d.id.includes(':guide:') && !d.id.includes(':relations:'),
+      );
+    if (/exact.*DPS/i.test(context.question))
+      return JSON.stringify({
+        segments: [
+          {
+            text: 'Use exactly 200% ER and 100000 DPS.',
+            basis: 'suggestion',
+            evidenceIds: [doc.id],
+            support: doc.text.slice(0, 100),
+          },
+        ],
+        followUp: null,
+      });
+    return JSON.stringify({
+      segments: [
+        {
+          text: 'Controlled evidence transport: ' + doc.text.slice(0, 450),
+          basis: 'source_fact',
+          evidenceIds: [doc.id],
+          support: doc.text.slice(0, 100),
+        },
+      ],
+      followUp: 'Which role and equipment constraints should be considered?',
+    });
+  },
+};
+const controlledService = new CharacterAdvisorService(
+  { readManyForUser: async () => [] },
+  controlledProvider,
+  knowledge,
+  () => true,
+);
+const controlled = [];
+for (const entry of matrix) {
+  const retrieved = retrieveCharacterKnowledge(entry.input, knowledge.corpus);
+  const response = await controlledService.ask('all-kqm-synthetic', entry.input);
+  const hasStrategy = retrieved.documents.some(
+    (d) =>
+      d.characterKey === entry.input.characterKey &&
+      (d.id.includes(':kqm:') || d.review === 'agent_reviewed_note'),
+  );
+  const hasMechanics = retrieved.documents.some(
+    (d) => d.id === entry.input.characterKey + ':combat2',
+  );
+  const hasReplacement =
+    !entry.replacement || retrieved.documents.some((d) => d.characterKey === entry.replacement);
+  const gaps = [];
+  const honestOutcome =
+    entry.kind === 'insufficient-evidence'
+      ? response.status === 'unsupported' && response.reason === 'ungrounded_answer'
+      : response.status === 'answered';
+  if (!hasStrategy)
+    gaps.push(
+      'No assessed/normalized strategic relationship reaches this case; kit-only limitation applies.',
+    );
+  if (!hasMechanics) gaps.push('Primary Skill not retrieved.');
+  if (!hasReplacement) gaps.push('Proposed replacement evidence missing.');
+  if (!honestOutcome) gaps.push('Controlled outcome did not match answer/unsupported boundary.');
+  controlled.push({
+    id: entry.id,
+    characterId: entry.characterId,
+    status: response.status,
+    reason: response.reason,
+    answer: response.answer,
+    citations: response.citations,
+    contextKeys: response.contextKeys,
+    evidence: retrieved.documents.map((d) => ({
+      id: d.id,
+      topic: d.topic,
+      sourceId: d.sourceId,
+      textHash: hash(d.text),
+      review: d.review,
+    })),
+    contextDigest: retrieved.contextDigest,
+    characters: retrieved.characters,
+    checks: {
+      hasStrategy,
+      hasMechanics,
+      hasReplacement,
+      honestOutcome,
+      bounded: retrieved.characters <= 9000 && retrieved.documents.length <= 12,
+    },
+    gaps,
+    state:
+      !hasMechanics || !hasReplacement || !honestOutcome
+        ? 'failed'
+        : hasStrategy
+          ? 'controlled-boundary-passed'
+          : 'source-limited',
+    modelQuality: 'not-evaluated-by-controlled-adapter',
+  });
+}
+save(join(artifacts, 'controlled-results.json'), {
+  release: knowledge.release,
+  kind: 'controlled-not-live-ai',
+  cases: controlled,
+  counts: {
+    cases: controlled.length,
+    boundaryPassed: controlled.filter((c) => c.state === 'controlled-boundary-passed').length,
+    sourceLimited: controlled.filter((c) => c.state === 'source-limited').length,
+    failed: controlled.filter((c) => c.state === 'failed').length,
+  },
+});
+const queuePath = join(artifacts, 'model-queue.json');
+const day = new Date().toISOString().slice(0, 10);
+const priorRequestEvidence = [
+  '../batches/01-aino-albedo-alhaitham/actual-model-results.json',
+  '../batches/01-aino-albedo-alhaitham/actual-model-results-format-correction.json',
+  '../batches/01-aino-albedo-alhaitham/actual-model-results-paced.json',
+];
+const priorRequests = priorRequestEvidence.reduce((count, file) => {
+  const path = join(artifacts, file);
+  if (!existsSync(path)) return count;
+  const record = json(path);
+  return (
+    count + (record.startedAt?.startsWith(day) ? record.cases.filter((c) => c.response).length : 0)
+  );
+}, 0);
+const previous = existsSync(queuePath)
+  ? json(queuePath)
+  : {
+      cases: [],
+      requestsReservedToday: priorRequests,
+      day,
+      priorRequestEvidence,
+    };
+if (previous.day !== day) {
+  previous.previousDays = [
+    ...(previous.previousDays ?? []),
+    { day: previous.day, requestsReserved: previous.requestsReservedToday },
+  ];
+  previous.day = day;
+  previous.requestsReservedToday = 0;
+  previous.userRequestsReservedToday = 0;
+}
+const queue = {
+  ...previous,
+  release: knowledge.release,
+  cases: matrix.map((entry) => {
+    const contextDigest = controlled.find((c) => c.id === entry.id).contextDigest;
+    const inputHash = hash(JSON.stringify(entry.input));
+    const old = previous.cases.find(
+      (c) =>
+        c.id === entry.id &&
+        c.inputHash === inputHash &&
+        c.contextDigest === contextDigest &&
+        c.policyDigest === policyDigest,
+    );
+    return (
+      old ?? {
+        id: entry.id,
+        characterId: entry.characterId,
+        inputHash,
+        contextDigest,
+        policyDigest,
+        state: 'model-evaluation-pending',
+      }
+    );
+  }),
+};
+save(queuePath, queue);
+if (live) {
+  const { env } = await import('../src/core/config/env.ts');
+  const configured = configuredAdvisorProvider();
+  const livePath = join(artifacts, 'actual-model-results.json');
+  const real = existsSync(livePath)
+    ? json(livePath)
+    : {
+        kind: 'actual-configured-model',
+        release: knowledge.release,
+        provider: configured?.provider ?? null,
+        model: configured?.model ?? null,
+        cases: [],
+        noDatabaseConnected: true,
+      };
+  let traces = [];
+  const provider = configured
+    ? {
+        provider: configured.provider,
+        model: configured.model,
+        complete: async (...args) => {
+          const output = await configured.complete(...args);
+          traces.push({
+            phase: args[0][0].content.startsWith('Audit') ? 'audit' : 'generation',
+            rawOutput: output,
+          });
+          return output;
+        },
+      }
+    : null;
+  const service = new CharacterAdvisorService(
+    { readManyForUser: async () => [] },
+    provider,
+    knowledge,
+  );
+  let attempted = 0;
+  const pending = queue.cases.filter((c) =>
+    [
+      'model-evaluation-pending',
+      'pending-provider-quota',
+      'pending-provider-configuration',
+    ].includes(c.state),
+  );
+  pending.sort(
+    (a, b) =>
+      Number(real.cases.some((c) => c.id.startsWith(a.characterId + ':'))) -
+      Number(real.cases.some((c) => c.id.startsWith(b.characterId + ':'))),
+  );
+  for (const queued of pending) {
+    // This day's earlier authorized runs already reserved ten advice requests.
+    // Do not reset a process counter to circumvent the configured free ceiling.
+    if (
+      queue.requestsReservedToday >= env.CELESTIA_AI_DAILY_REQUESTS ||
+      (queue.userRequestsReservedToday ?? 0) >= env.CELESTIA_AI_USER_DAILY_REQUESTS ||
+      attempted >= 2
+    )
+      break;
+    const entry = matrix.find((c) => c.id === queued.id);
+    const preceding = entry.previousCase
+      ? real.cases.find((c) => c.id === entry.previousCase && c.response?.status === 'answered')
+      : null;
+    const input = structuredClone(entry.input);
+    if (preceding)
+      input.history.push({
+        role: 'assistant',
+        content: preceding.response.answer.segments
+          .map((s) => s.text)
+          .join('\n')
+          .slice(0, 1500),
+      });
+    queue.requestsReservedToday++;
+    queue.userRequestsReservedToday = (queue.userRequestsReservedToday ?? 0) + 1;
+    queued.state = 'reserved-in-progress';
+    save(queuePath, queue);
+    await new Promise((done) => setTimeout(done, 60000));
+    traces = [];
+    const response = await service.ask('all-kqm-synthetic', input);
+    real.cases.push({
+      id: entry.id,
+      input,
+      response,
+      traces,
+      context: retrieveCharacterKnowledge(input, knowledge.corpus).documents,
+      assessment: 'pending-output-assessment',
+    });
+    queued.state =
+      response.reason === 'quota'
+        ? 'pending-provider-quota'
+        : response.reason === 'missing_configuration'
+          ? 'pending-provider-configuration'
+          : 'evaluated-needs-output-assessment';
+    queued.actualResult = real.cases.length - 1;
+    save(livePath, real);
+    save(queuePath, queue);
+    attempted++;
+    console.log(
+      JSON.stringify({
+        id: entry.id,
+        status: response.status,
+        reason: response.reason,
+        provider: real.provider,
+        model: real.model,
+      }),
+    );
+    if (response.reason === 'quota' || response.reason === 'missing_configuration') break;
+  }
+}
+console.log(
+  JSON.stringify({
+    characters: discovery.characters.length,
+    cases: matrix.length,
+    controlledFailures: controlled.filter((c) => c.state === 'failed').map((c) => c.id),
+    livePending: queue.cases.filter(
+      (c) => c.state.startsWith('model-') || c.state.startsWith('pending-'),
+    ).length,
+    requestsReservedToday: queue.requestsReservedToday,
+  }),
+);

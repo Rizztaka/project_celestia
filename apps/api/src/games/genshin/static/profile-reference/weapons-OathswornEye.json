@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "OathswornEye",
+  "gameId": 14415,
+  "name": "Oathsworn Eye",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/oathsworneye.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "28abe6dd17bfa28cca25753a2fcb82c7db320d78fa313cb9a4be5a57d954ad6b",
+    "license": "MIT"
+  },
+  "description": "A national treasure of Byakuyakoku stored in the Dainichi Mikoshi. With the coming of the Serpent God, this item was used to notarize great oaths and wishes.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "People of the Faltering Light",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Energy Recharge by 24% for 10s after using an Elemental Skill."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Energy Recharge by 30% for 10s after using an Elemental Skill."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Energy Recharge by 36% for 10s after using an Elemental Skill."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Energy Recharge by 42% for 10s after using an Elemental Skill."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Energy Recharge by 48% for 10s after using an Elemental Skill."
+    }
+  ]
+}

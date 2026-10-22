@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "RoyalSpear",
+  "gameId": 13408,
+  "name": "Royal Spear",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/royalspear.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "12dfe3096d8323c5c8cfc73189392102b8637ea327235ca56589ac0fbd73a495",
+    "license": "MIT"
+  },
+  "description": "This polearm was once cherished by a member of the old nobility that governed Mondstadt long ago. Although it has never seen the light of day, it is still incomparably sharp.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Focus",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 8%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 2,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 10%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 3,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 12%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 4,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 14%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 5,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 16%. Max 5 stacks. A CRIT Hit removes all stacks."
+    }
+  ]
+}

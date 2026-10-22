@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "WineAndSong",
+  "gameId": 14410,
+  "name": "Wine and Song",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/wineandsong.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "32220961e34487de090179f9cc3a15a09d2e3c8d519bf46ca79d1b9584ab46c5",
+    "license": "MIT"
+  },
+  "description": "A songbook from the bygone aristocratic era, whose composer has become forgotten. It chronicles the tale of a certain heroic outlaw.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Ever-Changing",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Hitting an opponent with a Normal Attack decreases the Stamina consumption of Sprint or Alternate Sprint by 14% for 5s. Additionally, using a Sprint or Alternate Sprint ability increases ATK by 20% for 5s."
+    },
+    {
+      "rank": 2,
+      "description": "Hitting an opponent with a Normal Attack decreases the Stamina consumption of Sprint or Alternate Sprint by 16% for 5s. Additionally, using a Sprint or Alternate Sprint ability increases ATK by 25% for 5s."
+    },
+    {
+      "rank": 3,
+      "description": "Hitting an opponent with a Normal Attack decreases the Stamina consumption of Sprint or Alternate Sprint by 18% for 5s. Additionally, using a Sprint or Alternate Sprint ability increases ATK by 30% for 5s."
+    },
+    {
+      "rank": 4,
+      "description": "Hitting an opponent with a Normal Attack decreases the Stamina consumption of Sprint or Alternate Sprint by 20% for 5s. Additionally, using a Sprint or Alternate Sprint ability increases ATK by 35% for 5s."
+    },
+    {
+      "rank": 5,
+      "description": "Hitting an opponent with a Normal Attack decreases the Stamina consumption of Sprint or Alternate Sprint by 22% for 5s. Additionally, using a Sprint or Alternate Sprint ability increases ATK by 40% for 5s."
+    }
+  ]
+}

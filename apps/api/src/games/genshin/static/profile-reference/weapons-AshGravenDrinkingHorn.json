@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "AshGravenDrinkingHorn",
+  "gameId": 14427,
+  "name": "Ash-Graven Drinking Horn",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/ashgravendrinkinghorn.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "21c74e002980d5d9b456fc4b3f67da0031b1b6ee053f887cde438bb0bf2deaab",
+    "license": "MIT"
+  },
+  "description": "A ritual vessel passed down amongst the Meztli. They say that this was once a treasure much-valued, yet never used, by the hero \"Giant\" Tupac.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Tupac's Grip",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "When an attack hits an opponent, deal AoE DMG equal to 40% of Max HP at the target location. This effect can be triggered once every 15s."
+    },
+    {
+      "rank": 2,
+      "description": "When an attack hits an opponent, deal AoE DMG equal to 50% of Max HP at the target's location. This effect can be triggered once every 15s."
+    },
+    {
+      "rank": 3,
+      "description": "When an attack hits an opponent, deal AoE DMG equal to 60% of Max HP at the target's location. This effect can be triggered once every 15s."
+    },
+    {
+      "rank": 4,
+      "description": "When an attack hits an opponent, deal AoE DMG equal to 70% of Max HP at the target's location. This effect can be triggered once every 15s."
+    },
+    {
+      "rank": 5,
+      "description": "When an attack hits an opponent, deal AoE DMG equal to 80% of Max HP at the target's location. This effect can be triggered once every 15s."
+    }
+  ]
+}

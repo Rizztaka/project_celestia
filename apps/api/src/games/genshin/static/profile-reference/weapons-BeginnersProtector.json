@@ -1,0 +1,17 @@
+{
+  "contractVersion": 1,
+  "key": "BeginnersProtector",
+  "gameId": 13101,
+  "name": "Beginner's Protector",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/beginnersprotector.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "b138e23cce5ae360bfc14ee824970f06cbc44e40235d4914bd178c5ba3c86bd8",
+    "license": "MIT"
+  },
+  "description": "A polearm as straight as a flag pole. Well suited to most combat situations, it has an imposing presence when swung.",
+  "weaponType": "Polearm",
+  "rarity": 1,
+  "effectName": "",
+  "refinements": []
+}

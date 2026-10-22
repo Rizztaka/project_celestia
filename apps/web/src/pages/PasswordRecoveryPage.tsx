@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { AuthFrame } from '../components/Ui';
 import { fetchApi } from '../lib/api';
 import { useAuthStore } from '../stores/auth.store';
 
@@ -66,17 +67,18 @@ export default function PasswordRecoveryPage({ mode }: { mode: 'forgot' | 'reset
         ? 'Choose a new password'
         : 'Verify your email';
   return (
-    <main className="companion-shell flex min-h-screen items-center justify-center p-4">
+    <AuthFrame
+      title={heading}
+      description={
+        mode === 'forgot'
+          ? 'Enter your account email. We’ll send a link that works for 15 minutes.'
+          : mode === 'reset'
+            ? 'Resetting your password signs out all existing sessions.'
+            : 'Confirm that this email belongs to your Celestia account.'
+      }
+    >
       <meta name="referrer" content="no-referrer" />
-      <div className="glass-panel w-full max-w-md space-y-5 rounded-2xl p-6 sm:p-8">
-        <h1 className="text-2xl font-semibold text-white">{heading}</h1>
-        <p className="text-sm text-zinc-400">
-          {mode === 'forgot'
-            ? 'Enter your account email. We’ll send a link that works for 15 minutes.'
-            : mode === 'reset'
-              ? 'Resetting your password signs out all existing sessions.'
-              : 'Confirm that this email belongs to your Celestia account.'}
-        </p>
+      <div className="space-y-5">
         {mode !== 'forgot' && !/^[a-f0-9]{64}$/.test(token) ? (
           <p role="alert" className="text-amber-200">
             This link is incomplete. Request a new email.
@@ -169,6 +171,6 @@ export default function PasswordRecoveryPage({ mode }: { mode: 'forgot' | 'reset
           </Link>
         )}
       </div>
-    </main>
+    </AuthFrame>
   );
 }

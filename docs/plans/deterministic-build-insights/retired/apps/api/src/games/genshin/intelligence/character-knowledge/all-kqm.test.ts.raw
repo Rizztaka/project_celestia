@@ -1,0 +1,100 @@
+import { readFileSync } from 'node:fs';
+
+import { describe, expect, it } from 'vitest';
+
+import { talentParameter } from './knowledge.mechanics.js';
+import { retrieveCharacterKnowledge } from './knowledge.retrieval.js';
+import { defaultKnowledgeRoot, loadCharacterKnowledge } from './knowledge.store.js';
+
+const root = new URL(
+  '../../../../../../../docs/plans/character-knowledge-assistant/all-kqm-verification/',
+  import.meta.url,
+);
+const json = (name: string) => JSON.parse(readFileSync(new URL(name, root), 'utf8'));
+const candidate = json('candidate.json');
+const knowledge = loadCharacterKnowledge(defaultKnowledgeRoot, candidate.release);
+const discovery = json('discovery.json');
+const cases = json('evaluation-cases.json').cases as {
+  id: string;
+  characterId: string;
+  kind: string;
+  input: Parameters<typeof retrieveCharacterKnowledge>[0];
+  replacement: string | null;
+}[];
+describe('all discovered KQM character/form coverage and candidate retrieval', () => {
+  it('sends both named artifact effects alongside kit and strategy, including shared item evidence', () => {
+    const result = retrieveCharacterKnowledge(
+      {
+        characterKey: 'Alhaitham',
+        question:
+          'Build Alhaitham for Spread: compare Deepwood Memories and Gilded Dreams, including piece counts and conditions.',
+        useRecordedContext: false,
+        teamKeys: [],
+        history: [],
+      },
+      knowledge.corpus,
+    );
+    for (const name of ['Deepwood Memories', 'Gilded Dreams']) {
+      const doc = result.documents.find((d) => d.id.includes(':item:') && d.title === name);
+      expect(doc?.text).toContain('effect2Pc:');
+      expect(doc?.text).toContain('effect4Pc:');
+      expect(knowledge.corpus.documents.find((d) => d.id === doc?.id)?.sourceId).toBe(
+        doc?.sourceId,
+      );
+    }
+    expect(result.documents.some((d) => d.id === 'Alhaitham:combat2')).toBe(true);
+    expect(
+      result.documents.some((d) => d.id.includes(':kqm:') || d.review === 'agent_reviewed_note'),
+    ).toBe(true);
+    expect(result.entities).toEqual(['Alhaitham']);
+    expect(result.documents.length).toBeLessThanOrEqual(12);
+    expect(result.characters).toBeLessThanOrEqual(9000);
+  });
+  it('validates the candidate independently while retaining the selected runtime and full baseline', () => {
+    const before = loadCharacterKnowledge().release;
+    loadCharacterKnowledge(defaultKnowledgeRoot, candidate.release);
+    expect(loadCharacterKnowledge().release).toEqual(before);
+    expect(knowledge.corpus.profiles).toHaveLength(129);
+    expect(knowledge.mechanics?.items.filter((i) => i.type === 'artifact_set')).toHaveLength(63);
+    expect(knowledge.mechanics?.items.filter((i) => i.type === 'weapon')).toHaveLength(255);
+    expect(knowledge.mechanics?.revision).toBe('49a6544a6c6ae36089cb42fa591fc46f01de8bcf');
+  });
+  it('has four evaluation cases and a result for every discovered row, including source-limited infographics', () => {
+    const coverage = json('coverage.json');
+    expect(coverage.results.map((r: { id: string }) => r.id).sort()).toEqual(
+      discovery.characters.map((r: { id: string }) => r.id).sort(),
+    );
+    for (const row of discovery.characters) {
+      expect(cases.filter((c) => c.characterId === row.id)).toHaveLength(4);
+    }
+    expect(
+      coverage.results
+        .filter((r: { extraction: string }) => r.extraction === 'source-limited')
+        .map((r: { id: string }) => r.id)
+        .sort(),
+    ).toEqual(['TravelerCryo', 'Vesna']);
+    expect(coverage.counts.verified).toBe(0);
+  });
+  it.each(cases.filter((c) => c.kind === 'full-team-substitution'))(
+    '$id retains the explicit comparison even when the whole team is named',
+    (entry) => {
+      const result = retrieveCharacterKnowledge(entry.input, knowledge.corpus);
+      expect(entry.input.teamKeys).toHaveLength(4);
+      expect(result.entities).toContain(entry.replacement);
+      expect(result.documents.some((d) => d.characterKey === entry.replacement)).toBe(true);
+      expect(result.entities.length).toBeLessThanOrEqual(8);
+      expect(result.characters).toBeLessThanOrEqual(9000);
+    },
+  );
+  it('keeps parameter labels and same-revision arrays; does not guess stored talent level or unit semantics', () => {
+    const data = knowledge.mechanics!;
+    const first = talentParameter(data, 'Aino', 'combat1', 'param1', 1)!;
+    const second = talentParameter(data, 'Aino', 'combat1', 'param1', 2)!;
+    expect(first.value).toBe(0.664986);
+    expect(second.value).toBe(0.719113);
+    expect(first.labels.some((label) => label.includes('{param1:F1P}'))).toBe(true);
+    expect(talentParameter(data, 'Aether', 'combat1', 'param1', 1)).toBeNull();
+    expect(talentParameter(data, 'Aino', 'combat1', 'param1', 0)).toBeNull();
+    expect(talentParameter(data, 'Aino', 'combat1', 'param1', 16)).toBeNull();
+  });
+});

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "FavoniusWarbow",
+  "gameId": 15401,
+  "name": "Favonius Warbow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/favoniuswarbow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "1677ebabe70bbeddb866ac7ff688024fc896e7d1d184d4325f109b7b760db3bc",
+    "license": "MIT"
+  },
+  "description": "A standard-issue recurve bow of the Knights of Favonius. Only the best archers can unleash its full potential.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Windfall",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "CRIT Hits have a 60% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 12s."
+    },
+    {
+      "rank": 2,
+      "description": "CRIT Hits have a 70% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 10.5s."
+    },
+    {
+      "rank": 3,
+      "description": "CRIT Hits have a 80% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 9s."
+    },
+    {
+      "rank": 4,
+      "description": "CRIT Hits have a 90% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 7.5s."
+    },
+    {
+      "rank": 5,
+      "description": "CRIT Hits have a 100% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 6s."
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+import {
+  advisorContextKeysSchema,
+  type CharacterAdvisorRequest,
+  characterAdvisorResponseSchema,
+} from '@celestia/api-contracts';
+
+import type { AccountSession } from './account-session';
+import { fetchApi } from './api';
+
+export interface KnowledgeMetadata {
+  release: { id: string; digest: string };
+  profile: { key: string; name: string; forms: string[]; gaps: string[] } | null;
+}
+export function fetchKnowledgeMetadata(
+  key: string,
+  signal?: AbortSignal,
+  session?: AccountSession,
+) {
+  return fetchApi<KnowledgeMetadata>(
+    `/games/genshin/character-knowledge/${encodeURIComponent(key)}`,
+    { signal },
+    session,
+  );
+}
+export async function askCharacterAdvisor(
+  input: CharacterAdvisorRequest,
+  signal: AbortSignal,
+  session: AccountSession,
+) {
+  return characterAdvisorResponseSchema.parse(
+    await fetchApi(
+      '/games/genshin/intelligence/character-advisor',
+      { method: 'POST', body: JSON.stringify(input), signal },
+      session,
+    ),
+  );
+}
+export function fetchAdvisorObservation(
+  keys: string[],
+  signal?: AbortSignal,
+  session?: AccountSession,
+) {
+  advisorContextKeysSchema.parse(keys);
+  return fetchApi<{ digest: string; release: { id: string; digest: string } }>(
+    `/games/genshin/character-knowledge/observation?keys=${encodeURIComponent(JSON.stringify(keys))}`,
+    { signal },
+    session,
+  );
+}

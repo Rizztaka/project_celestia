@@ -1,0 +1,69 @@
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { describe, expect, it } from 'vitest';
+
+import { precedingAccepted } from './advisor-acceptance-ledger.mjs';
+import { advisorImplementationIdentity } from './advisor-implementation-identity.mjs';
+
+const project = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+describe('repair acceptance identity and history boundaries', () => {
+  it('invalidates acceptance when an imported validation policy or evidence adapter changes', () => {
+    const baseline = advisorImplementationIdentity(project);
+    const scratch = mkdtempSync(join(tmpdir(), 'celestia-repair-signature-'));
+    try {
+      for (const path of Object.keys(baseline.files)) {
+        mkdirSync(dirname(join(scratch, path)), { recursive: true });
+        writeFileSync(join(scratch, path), readFileSync(join(project, path)));
+      }
+      expect(advisorImplementationIdentity(scratch)).toEqual(baseline);
+      const validator =
+        'apps/api/src/games/genshin/intelligence/character-knowledge/advisor.validation.ts';
+      writeFileSync(join(scratch, validator), '// changed policy dependency\n');
+      const changed = advisorImplementationIdentity(scratch);
+      expect(changed.signatures.policyDigest).not.toBe(baseline.signatures.policyDigest);
+      expect(changed.signatures.providerDigest).toBe(baseline.signatures.providerDigest);
+      const evidence =
+        'apps/api/src/games/genshin/intelligence/character-knowledge/knowledge.evidence.ts';
+      writeFileSync(join(scratch, evidence), '// changed semantic delivery\n');
+      expect(advisorImplementationIdentity(scratch).signatures.retrievalDigest).not.toBe(
+        baseline.signatures.retrievalDigest,
+      );
+      for (const [path, signature] of [
+        [
+          'apps/api/src/games/genshin/intelligence/character-knowledge/advisor.context.ts',
+          'policyDigest',
+        ],
+        ['apps/web/src/lib/character-advisor.ts', 'observationDigest'],
+        ['apps/api/tooling/advisor-acceptance-dispatch.mjs', 'runnerDigest'],
+      ]) {
+        const original = readFileSync(join(scratch, path));
+        writeFileSync(join(scratch, path), '// changed correction dependency\n');
+        expect(advisorImplementationIdentity(scratch).signatures[signature]).not.toBe(
+          baseline.signatures[signature],
+        );
+        writeFileSync(join(scratch, path), original);
+      }
+    } finally {
+      rmSync(scratch, { recursive: true });
+    }
+  });
+  it('rejects partial answers as accepted follow-up history despite a passed audit/assessment flag', () => {
+    expect(() =>
+      precedingAccepted(
+        [
+          {
+            id: 'build',
+            identity: {},
+            response: { status: 'partial' },
+            assessment: { state: 'passed' },
+          },
+        ],
+        'build',
+        {},
+      ),
+    ).toThrow('independently accepted');
+  });
+});

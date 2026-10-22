@@ -1,0 +1,158 @@
+import { randomUUID } from 'node:crypto';
+
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '@prisma/client';
+import jwt from 'jsonwebtoken';
+import supertest from 'supertest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+
+import { disposableTestDatabase } from '@/core/db/disposable-test-database.js';
+const shared = vi.hoisted(() => ({ db: null as PrismaClient | null }));
+vi.mock('@/core/db/prisma.js', () => ({
+  prisma: new Proxy(
+    {},
+    {
+      get(_t, key) {
+        const value = Reflect.get(shared.db!, key);
+        return typeof value === 'function' ? value.bind(shared.db) : value;
+      },
+    },
+  ),
+}));
+import { app } from '@/app.js';
+import { env } from '@/core/config/env.js';
+
+import { GenshinCharacterEquipmentRepository } from '../../characters/character-equipment.repository.js';
+import { GenshinImportRepository } from '../../importer/importer.repository.js';
+import { GenshinImportService } from '../../importer/importer.service.js';
+import { CharacterAdvisorService } from './advisor.service.js';
+const url = disposableTestDatabase();
+describe.skipIf(!url)('guarded PostgreSQL character advisor', () => {
+  let db: PrismaClient, owner: string, other: string;
+  const owners: string[] = [],
+    queries: string[] = [];
+  const api = supertest(app);
+  const auth = (id = owner) => jwt.sign({ sid: id }, env.JWT_SECRET, { subject: id });
+  beforeAll(async () => {
+    const client = new PrismaClient({
+      adapter: new PrismaPg({ connectionString: url! }),
+      log: [{ emit: 'event', level: 'query' }],
+    });
+    client.$on('query', (e) => queries.push(e.query));
+    db = client;
+    shared.db = db;
+    for (const name of ['first', 'second']) {
+      const id = randomUUID();
+      owners.push(id);
+      await db.user.create({
+        data: {
+          id,
+          username: `advisor-${name}-${id}`,
+          email: `${id}@test.invalid`,
+          password: 'synthetic',
+        },
+      });
+      await db.session.create({
+        data: {
+          id,
+          userId: id,
+          tokenHash: id.replaceAll('-', '').repeat(2),
+          expiresAt: new Date('2099-01-01'),
+        },
+      });
+    }
+    [owner, other] = owners as [string, string];
+    const importer = new GenshinImportService(new GenshinImportRepository(db));
+    const input = {
+      requestVersion: 1,
+      sections: ['characters'],
+      payload: {
+        format: 'GOOD',
+        version: 2,
+        source: 'advisor synthetic',
+        characters: [
+          {
+            key: 'Furina',
+            level: 80,
+            ascension: 6,
+            constellation: 0,
+            talent: { auto: 1, skill: 8, burst: 8 },
+          },
+        ],
+      },
+    };
+    const preview = await importer.preview(other, input);
+    await importer.importAccount(other, {
+      ...input,
+      previewToken: preview.previewToken,
+      confirmClear: preview.clearSections,
+    });
+  });
+  afterAll(async () => {
+    if (db) {
+      await db.user.deleteMany({ where: { id: { in: owners } } });
+      await db.$disconnect();
+    }
+  });
+  it('requires authentication on metadata, observation and generation', async () => {
+    expect((await api.get('/api/v1/games/genshin/character-knowledge/Furina')).status).toBe(401);
+    expect(
+      (await api.get('/api/v1/games/genshin/character-knowledge/observation?keys=[]')).status,
+    ).toBe(401);
+    expect(
+      (
+        await api
+          .post('/api/v1/games/genshin/intelligence/character-advisor')
+          .send({ characterKey: 'Furina', question: 'Build?' })
+      ).status,
+    ).toBe(401);
+  });
+  it('allows unowned catalog metadata and reports missing configuration without creating accounts', async () => {
+    const metadata = await api
+      .get('/api/v1/games/genshin/character-knowledge/Neuvillette')
+      .auth(auth(), { type: 'bearer' });
+    expect(metadata.status).toBe(200);
+    expect(metadata.body.data.profile.key).toBe('Neuvillette');
+    const result = await api
+      .post('/api/v1/games/genshin/intelligence/character-advisor')
+      .auth(auth(), { type: 'bearer' })
+      .send({ characterKey: 'Neuvillette', question: 'How do charged attacks work?' });
+    expect(result.status).toBe(200);
+    expect(result.body.data.reason).toBe('missing_configuration');
+    expect(result.body.data.release).toEqual(metadata.body.data.release);
+    expect(await db.genshinAccount.findUnique({ where: { userId: owner } })).toBeNull();
+  });
+  it('keeps real owned observations user scoped and read only', async () => {
+    const service = new CharacterAdvisorService(new GenshinCharacterEquipmentRepository(db), null);
+    queries.length = 0;
+    const a = await service.snapshot(owner, ['Furina']),
+      b = await service.snapshot(other, ['Furina']);
+    expect(a.records.ownedCharacterKeys).toEqual([]);
+    expect(b.records.ownedCharacterKeys).toEqual(['Furina']);
+    expect(a.digest).not.toBe(b.digest);
+    expect(queries).toHaveLength(2);
+    expect(queries.every((q) => /^SELECT/.test(q.trimStart()))).toBe(true);
+    expect(b.records.relevant[0]!.weapon).toBeNull();
+  });
+  it.each(['not-json', '["Missing"]'])(
+    'rejects invalid observation keys %s as a client error',
+    async (keys) =>
+      expect(
+        (
+          await api
+            .get('/api/v1/games/genshin/character-knowledge/observation')
+            .query({ keys })
+            .auth(auth(), { type: 'bearer' })
+        ).status,
+      ).toBe(400),
+  );
+  it('rejects caller supplied ownership records and arbitrary properties', async () =>
+    expect(
+      (
+        await api
+          .post('/api/v1/games/genshin/intelligence/character-advisor')
+          .auth(auth(), { type: 'bearer' })
+          .send({ characterKey: 'Furina', question: 'Build?', userId: other })
+      ).status,
+    ).toBe(400));
+});

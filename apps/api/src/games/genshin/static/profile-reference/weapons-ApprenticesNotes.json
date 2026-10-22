@@ -1,0 +1,17 @@
+{
+  "contractVersion": 1,
+  "key": "ApprenticesNotes",
+  "gameId": 14101,
+  "name": "Apprentice's Notes",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/apprenticesnotes.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "3551af94de10b173691571edaf174bb64df1ac85d61bb95aca0aa17a66f3b6be",
+    "license": "MIT"
+  },
+  "description": "Notes left behind by a top student. Many useful spells are listed, and the handwriting is beautiful.",
+  "weaponType": "Catalyst",
+  "rarity": 1,
+  "effectName": "",
+  "refinements": []
+}

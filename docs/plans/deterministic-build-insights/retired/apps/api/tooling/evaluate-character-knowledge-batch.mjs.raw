@@ -1,0 +1,199 @@
+// Explicit local evaluation. Controlled outputs never certify model quality.
+// Live mode uses only the existing server AI settings, an empty synthetic
+// ownership repository, and production provider/quota/groundedness boundaries.
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+import { config } from 'dotenv';
+
+const live = process.argv.includes('--live');
+const runName = process.argv.find((arg) => arg.startsWith('--run='))?.slice(6) ?? '';
+const caseIds = process.argv
+  .find((arg) => arg.startsWith('--cases='))
+  ?.slice(8)
+  .split(',');
+const priorName = process.argv.find((arg) => arg.startsWith('--prior='))?.slice(8);
+const paced = process.argv.includes('--paced');
+if (priorName && !/^actual-model-results[a-z0-9-]*\.json$/.test(priorName))
+  throw Error('Invalid prior evidence');
+if (runName && !/^[a-z0-9-]{1,30}$/.test(runName)) throw Error('Invalid run label');
+if (
+  process.argv
+    .slice(2)
+    .some(
+      (arg) =>
+        !['--live', '--paced'].includes(arg) &&
+        !['--run=', '--cases=', '--prior='].some((prefix) => arg.startsWith(prefix)),
+    )
+)
+  throw Error('Unsupported arguments');
+const batch = resolve(
+  '../../docs/plans/character-knowledge-assistant/batches/01-aino-albedo-alhaitham',
+);
+const output = resolve(
+  batch,
+  (live ? 'actual-model-results' : 'controlled-results-v2') +
+    (runName ? '-' + runName : '') +
+    '.json',
+);
+if (existsSync(output)) throw Error('Evidence is immutable; use a new explicitly labeled run');
+// Never print, serialize or expose the secret configuration. dotenv reads it in
+// the server process, just as the normal API does. Unrelated DB settings are not
+// imported into this isolated evaluation process.
+if (live) {
+  const settings = {};
+  config({ path: resolve('.env'), processEnv: settings, quiet: true });
+  for (const name of [
+    'GROQ_API_KEY',
+    'OPENROUTER_API_KEY',
+    'CELESTIA_AI_PROVIDER',
+    'CELESTIA_AI_MODEL',
+    'CELESTIA_AI_FREE_ONLY',
+    'CELESTIA_AI_DAILY_REQUESTS',
+    'CELESTIA_AI_USER_DAILY_REQUESTS',
+  ])
+    if (settings[name] && !process.env[name]) process.env[name] = settings[name];
+}
+Object.assign(process.env, {
+  DOTENV_CONFIG_PATH: process.platform === 'win32' ? 'NUL' : '/dev/null',
+  NODE_ENV: 'test',
+  DATABASE_URL: 'postgresql://synthetic:synthetic@127.0.0.1:1/synthetic_never_connected',
+  JWT_SECRET: 'batch01-synthetic-never-used-for-real-authentication',
+});
+const [
+  { characterAdvisorRequestSchema },
+  { CharacterAdvisorService },
+  { configuredAdvisorProvider },
+  { retrieveCharacterKnowledge },
+  { loadedCharacterKnowledge },
+] = await Promise.all([
+  import('@celestia/api-contracts'),
+  import('../src/games/genshin/intelligence/character-knowledge/advisor.service.ts'),
+  import('../src/core/ai/advisor-provider.ts'),
+  import('../src/games/genshin/intelligence/character-knowledge/knowledge.retrieval.ts'),
+  import('../src/games/genshin/intelligence/character-knowledge/knowledge.store.ts'),
+]);
+const matrix = JSON.parse(readFileSync(resolve(batch, 'evaluation-cases.json')));
+if (caseIds?.some((id) => !matrix.cases.some((c) => c.id === id && c.live)))
+  throw Error('Unknown live case');
+const prior = priorName ? JSON.parse(readFileSync(resolve(batch, priorName))) : null;
+const record = {
+  kind: live ? 'actual-configured-model' : 'controlled-adapter-not-live-ai',
+  release: loadedCharacterKnowledge.release,
+  startedAt: new Date().toISOString(),
+  noDatabaseConnected: true,
+  syntheticOwnedKeys: [],
+  cases: [],
+  providerCalls: 0,
+};
+let traces = [];
+const configured = live ? configuredAdvisorProvider() : null;
+const provider = live
+  ? configured
+    ? {
+        provider: configured.provider,
+        model: configured.model,
+        complete: async (...args) => {
+          record.providerCalls++;
+          if (record.providerCalls > 12) throw Error('Evaluation request ceiling');
+          const raw = await configured.complete(...args);
+          traces.push({
+            phase: args[0][0].content.startsWith('Audit') ? 'groundedness-audit' : 'generation',
+            messages: args[0],
+            rawOutput: raw,
+          });
+          return raw;
+        },
+      }
+    : null
+  : {
+      provider: 'controlled-batch-adapter',
+      model: 'not-live-ai',
+      complete: async (messages) => {
+        if (messages[0].content.startsWith('Audit'))
+          return JSON.stringify({ supported: true, issues: [] });
+        const context = JSON.parse(messages[1].content);
+        const doc = context.evidence.find((d) => d.review === 'agent_reviewed_note');
+        return JSON.stringify({
+          segments: [
+            {
+              text: doc.text,
+              basis: 'interpretation',
+              evidenceIds: [doc.id],
+              support: doc.text.slice(0, 100),
+            },
+          ],
+          followUp: 'Which team and role do you want to use?',
+        });
+      },
+    };
+record.provider = provider?.provider ?? null;
+record.model = provider?.model ?? null;
+const service = new CharacterAdvisorService(
+  { readManyForUser: async () => [] },
+  provider,
+  undefined,
+  live ? undefined : () => true,
+);
+let quota = false;
+for (const entry of matrix.cases.filter(
+  (c) => (!live || c.live) && (!caseIds || caseIds.includes(c.id)),
+)) {
+  if (quota) {
+    record.cases.push({ id: entry.id, state: 'pending-provider-quota', question: entry.question });
+    continue;
+  }
+  // Fixed pacing respects free-provider token windows; never auto-retry a quota
+  // failure or change providers. Each wait is bounded to one minute.
+  if (live && paced) await new Promise((done) => setTimeout(done, 60000));
+  let history = entry.history ?? [];
+  if (live && entry.previousLiveCase) {
+    const preceding =
+      record.cases.find((c) => c.id === entry.previousLiveCase) ??
+      prior?.cases.find((c) => c.id === entry.previousLiveCase);
+    if (preceding?.response?.answer)
+      history = [
+        { role: 'user', content: preceding.input.question },
+        {
+          role: 'assistant',
+          content: preceding.response.answer.segments
+            .map((s) => s.text)
+            .join('\n')
+            .slice(0, 1500),
+        },
+      ];
+  }
+  const input = characterAdvisorRequestSchema.parse({
+    characterKey: entry.characterKey,
+    question: entry.question,
+    useRecordedContext: entry.useRecordedContext ?? false,
+    teamKeys: entry.teamKeys ?? [],
+    history,
+  });
+  const retrieved = retrieveCharacterKnowledge(input);
+  traces = [];
+  const response = await service.ask('batch01-synthetic-' + entry.characterKey, input);
+  record.cases.push({
+    id: entry.id,
+    input,
+    response,
+    evidence: retrieved.documents,
+    traces,
+    assessment: live
+      ? 'pending-implementor-output-assessment'
+      : 'controlled context/boundary only; no usefulness or model-quality certification',
+  });
+  quota = response.reason === 'quota';
+  writeFileSync(output, JSON.stringify(record, null, 2) + '\n');
+  console.log(
+    JSON.stringify({
+      id: entry.id,
+      status: response.status,
+      reason: response.reason,
+      provider: response.provider,
+      model: response.model,
+    }),
+  );
+}
+record.finishedAt = new Date().toISOString();
+writeFileSync(output, JSON.stringify(record, null, 2) + '\n');

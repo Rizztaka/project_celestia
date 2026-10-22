@@ -1,0 +1,17 @@
+{
+  "contractVersion": 1,
+  "key": "HuntersBow",
+  "gameId": 15101,
+  "name": "Hunter's Bow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/huntersbow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "4bb508273d3af6b7aba5b14373dbf2b70faf1ee76dd6146b30a2b6ec694329a7",
+    "license": "MIT"
+  },
+  "description": "A hunter's music consists of but two sounds: the twang of the bowstring and the whoosh of soaring arrows.",
+  "weaponType": "Bow",
+  "rarity": 1,
+  "effectName": "",
+  "refinements": []
+}

@@ -12,15 +12,12 @@ import { resolve } from 'node:path';
 import { disposableTestDatabase } from '../src/core/db/disposable-test-database.ts';
 
 assert.ok(disposableTestDatabase(), 'Explicit disposable database required');
-assert.equal(process.env.OPENROUTER_API_KEY || '', '', 'No remote AI calls in this check');
 const output = resolve(process.argv[3]);
 mkdirSync(output, { recursive: true });
 const { chromium } = createRequire(import.meta.url)(process.argv[2]);
 const { app } = await import('../src/app.ts');
 const { prisma, disconnectDatabase } = await import('../src/core/db/prisma.ts');
 const { AuthService } = await import('../src/platform/auth/auth.service.ts');
-const { getOpenRouterClient } = await import('../src/core/ai/openrouter.ts');
-assert.equal(getOpenRouterClient(), null);
 const server = await new Promise((done) => {
   const instance = app.listen(45472, '127.0.0.1', () => done(instance));
 });
@@ -42,7 +39,7 @@ const base = 'http://127.0.0.1:45471';
 const api = 'http://127.0.0.1:45472/api/v1';
 const results = {
   status: 'running',
-  backend: 'real API, isolated PostgreSQL, no OpenRouter key',
+  backend: 'real API, isolated PostgreSQL, deterministic composition',
   events: 'synthetic active event and expired event',
   checks: [],
   viewports: [],
@@ -207,7 +204,6 @@ try {
   );
   await page.keyboard.press('Escape');
   assert.equal(await slotOne.evaluate((element) => element === document.activeElement), true);
-  await page.getByRole('button', { name: 'Summarize advice' }).click();
   await page.getByRole('status').filter({ hasText: 'Four slots filled' }).waitFor();
   const downloadEvent = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export teams' }).click();
@@ -226,7 +222,7 @@ try {
   await page.getByRole('status').filter({ hasText: 'Use a version 1' }).waitFor();
   assert.equal(await page.getByRole('button', { name: 'Load Raiden National' }).count(), 1);
   results.checks.push(
-    'Four roster picker slots, search/element filters, resonance explanation, save/reload/load, real AI fallback, JSON export/import and invalid import preservation',
+    'Four roster picker slots, search/element filters, resonance explanation, save/reload/load, deterministic composition notes, JSON export/import and invalid import preservation',
   );
   for (const width of [1280, 640, 320]) {
     await page.setViewportSize({ width, height: 900 });
@@ -289,33 +285,13 @@ try {
     'Savings reacts to inventory, Welkin and unclaimed event toggles; expired rewards excluded; weapon target artwork; 1280/640/320px reflow',
   );
   await page.goto(base + '/simulators');
-  await page.getByRole('heading', { name: /Pity Tracker — Ancient Flame/ }).waitFor();
-  await page
-    .getByRole('img', { name: /Mavuika avatar/ })
-    .first()
-    .waitFor();
-  await page.setViewportSize({ width: 1280, height: 900 });
-  await page
-    .getByRole('button', { name: /Wish ×10|Wish x10|10 Pull|10-pull/i })
-    .first()
-    .click();
-  const totalPulls = page
-    .getByText('Total Pulls', { exact: true })
-    .locator('..')
-    .locator('p')
-    .last();
-  await totalPulls.filter({ hasText: /^10$/ }).waitFor();
-  await page.getByRole('button', { name: 'Reset', exact: true }).click();
-  await page.getByText('Total Pulls', { exact: true }).waitFor({ state: 'hidden' });
+  await page.waitForURL(/\/planner\?tab=savings$/);
+  await page.getByRole('heading', { name: 'Wish Savings', exact: true }).waitFor();
   results.checks.push(
-    'Simulator defaults past preserved expired Odette to Mavuika; real ten-pull endpoint succeeds',
+    'Retired random simulator URL redirects to the functional wish savings planner',
   );
-  // The summary button has spent one request; exhaust the shared per-owner burst.
-  const statuses = [];
-  for (let attempt = 0; attempt < 4; attempt++)
-    statuses.push((await call('/games/genshin/intelligence/ai-summary', {})).status);
-  assert.ok(statuses.includes(429));
-  results.checks.push('Actual AI endpoint enforces per-owner request limit');
+  assert.equal((await call('/games/genshin/intelligence/ai-summary', {})).status, 404);
+  results.checks.push('Retired model endpoint is absent');
   assert.deepEqual(results.pageErrors, []);
   results.status = 'passed';
 } catch (error) {

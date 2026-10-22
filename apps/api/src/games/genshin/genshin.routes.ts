@@ -6,8 +6,8 @@ import { artifactRoutes } from './artifacts/artifact.routes.js';
 import { characterRoutes } from './characters/character.routes.js';
 import { endgameRoutes } from './endgame/endgame.routes.js';
 import { createImporterRoutes } from './importer/importer.routes.js';
-import { createAiAdviceRoutes } from './intelligence/ai-advice.routes.js';
 import { artifactIntelligenceRoutes } from './intelligence/artifact-intelligence/artifact-intelligence.routes.js';
+import { buildInsightsRoutes } from './intelligence/build-insights/build-insights.routes.js';
 import { characterIntelligenceRoutes } from './intelligence/character-intelligence/character-intelligence.routes.js';
 import { farmingIntelligenceRoutes } from './intelligence/farming-intelligence/farming-intelligence.routes.js';
 import { guideKnowledgeRoutes } from './intelligence/guide-knowledge/guide-knowledge.routes.js';
@@ -22,29 +22,29 @@ export function createGenshinRoutes(safety: RequestSafety) {
   const router = Router();
 
   /**
-   * Genshin Impact domain router — parent aggregator.
+   * Genshin Impact domain router â€” parent aggregator.
    * Mounted at /api/v1/games/genshin in app.ts.
    *
    * Sub-domain routers by milestone:
-   *   importerRoutes    → /import        ✅ Milestone 2C
-   *   characterRoutes   → /characters    ✅ Milestone 2D
-   *   weaponRoutes      → /weapons       ✅ Milestone 2E
-   *   artifactRoutes    → /artifacts     ✅ Milestone 2E
-   *   characterIntelligenceRoutes → /intelligence ✅ Milestone 4A
-   *   teamIntelligenceRoutes      → /intelligence ✅ Milestone 4B
-   *   artifactIntelligenceRoutes  → /intelligence ✅ Milestone 4C
-   *   plannerIntelligenceRoutes   → /intelligence ✅ Milestone 4D
-   *   pullIntelligenceRoutes      → /intelligence ✅ Milestone 4E
-   *   knowledgeIntelligenceRoutes → /intelligence ✅ Milestone 4F
-   *   endgameRoutes               → /endgame      ✅ Milestone 5A
+   *   importerRoutes    â†’ /import        âœ… Milestone 2C
+   *   characterRoutes   â†’ /characters    âœ… Milestone 2D
+   *   weaponRoutes      â†’ /weapons       âœ… Milestone 2E
+   *   artifactRoutes    â†’ /artifacts     âœ… Milestone 2E
+   *   characterIntelligenceRoutes â†’ /intelligence âœ… Milestone 4A
+   *   teamIntelligenceRoutes      â†’ /intelligence âœ… Milestone 4B
+   *   artifactIntelligenceRoutes  â†’ /intelligence âœ… Milestone 4C
+   *   plannerIntelligenceRoutes   â†’ /intelligence âœ… Milestone 4D
+   *   pullIntelligenceRoutes      â†’ /intelligence âœ… Milestone 4E
+   *   knowledgeIntelligenceRoutes â†’ /intelligence âœ… Milestone 4F
+   *   endgameRoutes               â†’ /endgame      âœ… Milestone 5A
    *
    * Per ADR 0001 (Modular Monolith): each sub-domain owns its own routes file.
-   * This file only aggregates — no route definitions belong here directly.
+   * This file only aggregates â€” no route definitions belong here directly.
    */
   // Only the import router can choose large-body parsing, after auth and admission.
   router.use(createImporterRoutes(safety));
-  router.use(createAiAdviceRoutes(safety));
   router.use(safety.ordinaryJson);
+  router.use(buildInsightsRoutes);
   router.use(characterRoutes);
   router.use(guideKnowledgeRoutes);
   router.use(weaponRoutes);

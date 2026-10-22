@@ -1,0 +1,17 @@
+{
+  "contractVersion": 1,
+  "key": "PocketGrimoire",
+  "gameId": 14201,
+  "name": "Pocket Grimoire",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/pocketgrimoire.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "baa9f586b0e39da0c7c2aecb6d2e623bba0a5f39f497e63aa9d9e4fdc5d9fe13",
+    "license": "MIT"
+  },
+  "description": "A carefully compiled notebook featuring the essentials needed to pass a magic exam.",
+  "weaponType": "Catalyst",
+  "rarity": 2,
+  "effectName": "",
+  "refinements": []
+}

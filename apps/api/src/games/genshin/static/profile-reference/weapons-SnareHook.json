@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SnareHook",
+  "gameId": 15433,
+  "name": "Snare Hook",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/snarehook.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "157b0cdfd2801c04d1cf5f53533dbb02e9b3ec0d149ca35fe208f22354f887e4",
+    "license": "MIT"
+  },
+  "description": "The stave of this bow is comprised of metal alloy and yet remains surprisingly light. Even when faced with thick, heavy snares, the arrows it fires can pass through unhindered.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Phantom Flash",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Upon causing an Elemental Reaction, increases Elemental Mastery by 60 for 12s. Moonsign: Ascendant Gleam: Elemental Mastery from this effect is further increased by 60. This effect can be triggered even if the equipping character is off-field."
+    },
+    {
+      "rank": 2,
+      "description": "Upon causing an Elemental Reaction, increases Elemental Mastery by 75 for 12s. Moonsign: Ascendant Gleam: Elemental Mastery from this effect is further increased by 75. This effect can be triggered even if the equipping character is off-field."
+    },
+    {
+      "rank": 3,
+      "description": "Upon causing an Elemental Reaction, increases Elemental Mastery by 90 for 12s. Moonsign: Ascendant Gleam: Elemental Mastery from this effect is further increased by 90. This effect can be triggered even if the equipping character is off-field."
+    },
+    {
+      "rank": 4,
+      "description": "Upon causing an Elemental Reaction, increases Elemental Mastery by 105 for 12s. Moonsign: Ascendant Gleam: Elemental Mastery from this effect is further increased by 105. This effect can be triggered even if the equipping character is off-field."
+    },
+    {
+      "rank": 5,
+      "description": "Upon causing an Elemental Reaction, increases Elemental Mastery by 120 for 12s. Moonsign: Ascendant Gleam: Elemental Mastery from this effect is further increased by 120. This effect can be triggered even if the equipping character is off-field."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "JadeVista",
+  "gameId": 15435,
+  "name": "Jade Vista",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/jadevista.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2fa4666e341200dd1f7e3ec80fa72a68c5e0fd4919b199faf738cfc6e964df72",
+    "license": "MIT"
+  },
+  "description": "A longbow of immense strength. It shines with the radiance of dreams even in the darkest of nights.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "A Candle Woven From the Night",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "For every party member other than the equipping character: · Who is of the same Elemental Type as the equipper: The equipping character's Elemental Mastery is increased by 64; · Who is not of the same Elemental Type as the equipper: The equipping character's ATK increases by 12%. The two effects described above can stack up to 3 times in total, with Elemental Mastery buffs applied first."
+    },
+    {
+      "rank": 2,
+      "description": "For every party member other than the equipping character: · Who is of the same Elemental Type as the equipper: The equipping character's Elemental Mastery is increased by 80; · Who is not of the same Elemental Type as the equipper: The equipping character's ATK increases by 15%. The two effects described above can stack up to 3 times in total, with Elemental Mastery buffs applied first."
+    },
+    {
+      "rank": 3,
+      "description": "For every party member other than the equipping character: · Who is of the same Elemental Type as the equipper: The equipping character's Elemental Mastery is increased by 96; · Who is not of the same Elemental Type as the equipper: The equipping character's ATK increases by 18%. The two effects described above can stack up to 3 times in total, with Elemental Mastery buffs applied first."
+    },
+    {
+      "rank": 4,
+      "description": "For every party member other than the equipping character: · Who is of the same Elemental Type as the equipper: The equipping character's Elemental Mastery is increased by 112; · Who is not of the same Elemental Type as the equipper: The equipping character's ATK increases by 21%. The two effects described above can stack up to 3 times in total, with Elemental Mastery buffs applied first."
+    },
+    {
+      "rank": 5,
+      "description": "For every party member other than the equipping character: · Who is of the same Elemental Type as the equipper: The equipping character's Elemental Mastery is increased by 128; · Who is not of the same Elemental Type as the equipper: The equipping character's ATK increases by 24%. The two effects described above can stack up to 3 times in total, with Elemental Mastery buffs applied first."
+    }
+  ]
+}

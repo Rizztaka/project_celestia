@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "WolfsGravestone",
+  "gameId": 12502,
+  "name": "Wolf's Gravestone",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/wolfsgravestone.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "d2ce0b49eccd9a8929d9b3702fa5351ea8857668155c27986a22f942adce685e",
+    "license": "MIT"
+  },
+  "description": "A longsword used by the Wolf Knight. Originally just a heavy sheet of iron given to the knight by a blacksmith from the city, it became endowed with legendary power owing to his friendship with the wolves.",
+  "weaponType": "Claymore",
+  "rarity": 5,
+  "effectName": "Wolfish Tracker",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases ATK by 20%. On hit, attacks against opponents with less than 30% HP increase all party members' ATK by 40% for 12s. Can only occur once every 30s."
+    },
+    {
+      "rank": 2,
+      "description": "Increases ATK by 25%. On hit, attacks against opponents with less than 30% HP increase all party members' ATK by 50% for 12s. Can only occur once every 30s."
+    },
+    {
+      "rank": 3,
+      "description": "Increases ATK by 30%. On hit, attacks against opponents with less than 30% HP increase all party members' ATK by 60% for 12s. Can only occur once every 30s."
+    },
+    {
+      "rank": 4,
+      "description": "Increases ATK by 35%. On hit, attacks against opponents with less than 30% HP increase all party members' ATK by 70% for 12s. Can only occur once every 30s."
+    },
+    {
+      "rank": 5,
+      "description": "Increases ATK by 40%. On hit, attacks against opponents with less than 30% HP increase all party members' ATK by 80% for 12s. Can only occur once every 30s."
+    }
+  ]
+}

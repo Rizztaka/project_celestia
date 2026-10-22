@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "PrimordialJadeCutter",
+  "gameId": 11505,
+  "name": "Primordial Jade Cutter",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/primordialjadecutter.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "d5128b31404bc1766bab8c487eae41d38a5849c19087b55c7901d1b5c351d1de",
+    "license": "MIT"
+  },
+  "description": "A ceremonial sword masterfully carved from pure jade. There almost seems to be an audible sigh in the wind as it is swung.",
+  "weaponType": "Sword",
+  "rarity": 5,
+  "effectName": "Protector's Virtue",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "HP increased by 20%. Additionally, provides an ATK Bonus based on 1.2% of the wielder's Max HP."
+    },
+    {
+      "rank": 2,
+      "description": "HP increased by 25%. Additionally, provides an ATK Bonus based on 1.5% of the wielder's Max HP."
+    },
+    {
+      "rank": 3,
+      "description": "HP increased by 30%. Additionally, provides an ATK Bonus based on 1.8% of the wielder's Max HP."
+    },
+    {
+      "rank": 4,
+      "description": "HP increased by 35%. Additionally, provides an ATK Bonus based on 2.1% of the wielder's Max HP."
+    },
+    {
+      "rank": 5,
+      "description": "HP increased by 40%. Additionally, provides an ATK Bonus based on 2.4% of the wielder's Max HP."
+    }
+  ]
+}

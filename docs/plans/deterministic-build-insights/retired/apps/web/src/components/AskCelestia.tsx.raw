@@ -1,0 +1,354 @@
+import type { CharacterAdvisorRequest, CharacterAdvisorResponse } from '@celestia/api-contracts';
+import { useQuery } from '@tanstack/react-query';
+import { type FormEvent, useEffect, useRef, useState } from 'react';
+
+import { captureSession, isCurrentSession } from '../lib/account-session';
+import {
+  askCharacterAdvisor,
+  fetchAdvisorObservation,
+  fetchKnowledgeMetadata,
+} from '../lib/character-advisor';
+import { useAuthStore } from '../stores/auth.store';
+
+interface Props {
+  characterKey: string;
+  teamKeys?: string[];
+  recordsBoundary?: string;
+  initialQuestion?: string;
+}
+export function AskCelestia(props: Props) {
+  const epoch = useAuthStore((s) => s.sessionEpoch);
+  return (
+    <SessionAdvisor
+      key={JSON.stringify([epoch, props.characterKey, props.teamKeys, props.recordsBoundary])}
+      {...props}
+    />
+  );
+}
+function SessionAdvisor({
+  characterKey,
+  teamKeys = [],
+  recordsBoundary = '',
+  initialQuestion = '',
+}: Props) {
+  const [session] = useState(captureSession);
+  const [question, setQuestion] = useState(initialQuestion),
+    [useRecords, setUseRecords] = useState(true),
+    [history, setHistory] = useState<CharacterAdvisorRequest['history']>([]);
+  const [pending, setPending] = useState(false),
+    [error, setError] = useState(''),
+    [reply, setReply] = useState<{
+      id: number;
+      data: CharacterAdvisorResponse;
+      boundary: string;
+      question: string;
+    } | null>(null),
+    [rejected, setRejected] = useState<number | null>(null);
+  const sequence = useRef(0),
+    abort = useRef<AbortController | null>(null);
+  const boundary = JSON.stringify({ characterKey, teamKeys, recordsBoundary, useRecords });
+  const metadata = useQuery({
+    queryKey: ['genshin', 'character-knowledge', characterKey],
+    queryFn: ({ signal }) => fetchKnowledgeMetadata(characterKey, signal, session),
+    retry: false,
+  });
+  const profile = metadata.data?.profile;
+  const unknownCharacter = metadata.data !== undefined && !profile;
+  const observation = useQuery({
+    queryKey: [
+      'genshin',
+      'character-advisor-observation',
+      reply?.data.observation,
+      reply?.data.contextKeys,
+    ],
+    queryFn: ({ signal }) => fetchAdvisorObservation(reply!.data.contextKeys, signal, session),
+    enabled: !!reply?.data.answer && reply.data.recordedContextUsed,
+    retry: false,
+    staleTime: 0,
+  });
+  const mismatch =
+    !!reply &&
+    ((observation.data &&
+      reply.data.recordedContextUsed &&
+      (observation.data.digest !== reply.data.observation ||
+        observation.data.release.digest !== reply.data.release.digest)) ||
+      (metadata.data && metadata.data.release.digest !== reply.data.release.digest));
+  // Latch rejection for this reply, independently of retained query data/errors.
+  if (mismatch && reply && rejected !== reply.id) setRejected(reply.id);
+  useEffect(
+    () => () => {
+      sequence.current++;
+      abort.current?.abort();
+    },
+    [],
+  );
+  const reset = () => {
+    sequence.current++;
+    abort.current?.abort();
+    setReply(null);
+    setHistory([]);
+    setRejected(null);
+    setQuestion('');
+    setError('');
+    setPending(false);
+  };
+  async function submit(event: FormEvent) {
+    event.preventDefault();
+    if (!question.trim() || pending) return;
+    const id = ++sequence.current,
+      origin = boundary,
+      asked = question.trim(),
+      controller = new AbortController();
+    abort.current?.abort();
+    abort.current = controller;
+    setPending(true);
+    setError('');
+    setReply(null);
+    try {
+      const data = await askCharacterAdvisor(
+        { characterKey, question: asked, teamKeys, useRecordedContext: useRecords, history },
+        controller.signal,
+        session,
+      );
+      const current = await fetchKnowledgeMetadata(characterKey, controller.signal, session);
+      if (id !== sequence.current || !isCurrentSession(session)) return;
+      if (current.release.digest !== data.release.digest) {
+        setError('Knowledge changed while answering. Ask again using the current sources.');
+        return;
+      }
+      setRejected(null);
+      setReply({ id, data, boundary: origin, question: asked });
+      if (data.status === 'answered' && data.answer) {
+        setHistory((previous) =>
+          [
+            ...previous,
+            { role: 'user' as const, content: asked.slice(0, 1000) },
+            {
+              role: 'assistant' as const,
+              content: data
+                .answer!.segments.map((s) => s.text)
+                .join('\n')
+                .slice(0, 1000),
+            },
+          ].slice(-6),
+        );
+        setQuestion('');
+      }
+    } catch {
+      if (id === sequence.current && isCurrentSession(session) && !controller.signal.aborted)
+        setError('Celestia could not answer. Retry when ready; no account changes were made.');
+    } finally {
+      if (id === sequence.current) setPending(false);
+    }
+  }
+  const invalid = !!reply && (reply.boundary !== boundary || rejected === reply.id || mismatch);
+  const visible = reply && !invalid ? reply.data : null;
+  const messages: Record<string, string> = {
+    missing_configuration:
+      'AI is not configured yet. Factual references are available below; no model answer was generated.',
+    quota: 'The configured AI allowance is temporarily exhausted. Try again later.',
+    timeout: 'The AI request timed out. Try a shorter question.',
+    provider_failure: 'The configured model is unavailable. No paid fallback was used.',
+    ungrounded_answer:
+      'Celestia could not support this answer from the retrieved evidence. Try narrowing the question.',
+    context_budget:
+      'This conversation and its supporting evidence could not fit the local request limit. Try a shorter question or start a new conversation.',
+    records_changed:
+      'Relevant records changed while answering. Ask again with the current records.',
+    unknown_character: 'This key is not in the current character catalog.',
+    ambiguous_form:
+      'Which Traveler element do you mean? Ask about a specific form; the current element is unknown.',
+  };
+  return (
+    <section
+      aria-label="Ask Celestia"
+      className="glass-panel mb-6 space-y-3 rounded-xl border border-indigo-400/20 p-4 sm:p-5"
+    >
+      <h2 className="text-xl font-semibold text-white">Ask Celestia</h2>
+      <p className="text-sm text-zinc-400">
+        Ask about this character, builds or teammates. Follow up naturally; answers use local kit
+        knowledge and available attributed guide notes.
+      </p>
+      {metadata.isPending && (
+        <p role="status" className="text-xs text-zinc-500">
+          Checking local character knowledge…
+        </p>
+      )}
+      {metadata.isError && (
+        <div role="alert" className="space-y-2 text-xs text-amber-200">
+          <p>
+            Character knowledge status is unavailable right now. Celestia will still report the
+            source state returned for any deliberate question.
+          </p>
+          <button
+            type="button"
+            className="underline"
+            onClick={() => void metadata.refetch()}
+            disabled={metadata.isFetching}
+          >
+            {metadata.isFetching ? 'Retrying knowledge status…' : 'Retry knowledge status'}
+          </button>
+        </div>
+      )}
+      {unknownCharacter && (
+        <p role="alert" className="text-xs text-amber-200">
+          This key is not in the current character catalog, so Celestia cannot answer it from the
+          local knowledge release.
+        </p>
+      )}
+      {profile && (
+        <details className="text-xs text-zinc-400">
+          <summary className="cursor-pointer text-indigo-200">Knowledge coverage</summary>
+          <p className="mt-2">
+            {profile.forms.length
+              ? 'This character has multiple forms. Specify the element you mean; no current form is inferred.'
+              : 'Structured kit knowledge is available for this catalog character.'}
+          </p>
+          {profile.gaps.map((gap) => (
+            <p key={gap} className="mt-2">
+              {gap}
+            </p>
+          ))}
+        </details>
+      )}
+      <form onSubmit={(event) => void submit(event)} className="space-y-3">
+        <label className="block text-sm">
+          {history.length ? 'Your follow-up' : 'Your question'}
+          <textarea
+            aria-label="Ask Celestia question"
+            value={question}
+            maxLength={2000}
+            onChange={(e) => setQuestion(e.target.value)}
+            placeholder="How could I build and use this character?"
+            disabled={unknownCharacter}
+            className="mt-2 min-h-20 w-full rounded-lg border border-white/20 bg-zinc-950 p-3 text-white"
+          />
+        </label>
+        <label className="flex items-center gap-2 text-xs text-zinc-400">
+          <input
+            type="checkbox"
+            checked={useRecords}
+            disabled={unknownCharacter}
+            onChange={(e) => {
+              reset();
+              setUseRecords(e.target.checked);
+            }}
+          />
+          Use relevant recorded game data when available
+        </label>
+        <p className="text-xs text-zinc-500">
+          Questions also work for unowned characters. General discussion does not imply ownership.
+          Relevant game context goes to the configured AI provider when you ask.
+        </p>
+        <div className="flex gap-3">
+          <button
+            className="min-h-11 rounded-lg bg-indigo-600 px-4 py-2 text-white disabled:opacity-50"
+            disabled={pending || unknownCharacter || !question.trim()}
+            type="submit"
+          >
+            {pending ? 'Thinking…' : 'Ask Celestia'}
+          </button>
+          <button
+            className="min-h-11 rounded-lg border border-white/20 px-3 text-sm"
+            type="button"
+            onClick={reset}
+          >
+            New conversation
+          </button>
+        </div>
+      </form>
+      {pending && <p role="status">Retrieving relevant knowledge and checking the answer…</p>}
+      {error && <p role="alert">{error}</p>}
+      {invalid && (
+        <p role="alert">
+          Relevant records or knowledge changed. This answer is no longer shown. Ask again with the
+          current context.
+        </p>
+      )}
+      {observation.isError && visible?.answer && (
+        <p className="text-xs text-amber-200">
+          Current records could not be rechecked. This is the last validated answer for its recorded
+          snapshot.
+        </p>
+      )}
+      {visible && (
+        <div aria-live="polite" className="space-y-3">
+          <p className="text-xs text-zinc-400">Question: {reply?.question}</p>
+          {visible.answer ? (
+            <>
+              <AdvisorCoverageNotice response={visible} />
+              {visible.answer.segments.map((segment, i) => (
+                <p key={i} className="whitespace-pre-wrap text-sm leading-relaxed">
+                  {segment.text}
+                  <span className="ml-2 text-xs text-zinc-500">
+                    {segment.basis === 'source_fact'
+                      ? 'Source-backed'
+                      : segment.basis === 'interpretation'
+                        ? 'Interpretation'
+                        : 'Suggestion'}
+                  </span>
+                </p>
+              ))}
+              {visible.answer.followUp && (
+                <p className="text-sm text-indigo-200">{visible.answer.followUp}</p>
+              )}
+            </>
+          ) : (
+            <p role="status">
+              {messages[visible.reason] ?? 'No supported answer is available.'}
+              {visible.retryAfterSeconds
+                ? ` Retry after about ${visible.retryAfterSeconds} seconds.`
+                : ''}
+            </p>
+          )}
+          <details>
+            <summary className="cursor-pointer py-2 text-sm text-indigo-200">
+              Sources and limits
+            </summary>
+            <ul className="space-y-2 text-xs">
+              {visible.citations.length ? (
+                visible.citations.map((source) => (
+                  <li key={source.id}>
+                    <a
+                      href={source.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline"
+                    >
+                      {source.characterKey} · {source.title}
+                    </a>{' '}
+                    ·{' '}
+                    {source.review === 'candidate_extraction'
+                      ? 'Candidate section inventory'
+                      : source.review === 'structured_source'
+                        ? 'Pinned kit source'
+                        : 'Agent factual note'}{' '}
+                    · {source.revision}
+                  </li>
+                ))
+              ) : (
+                <li>No source-backed references were returned for this response.</li>
+              )}
+            </ul>
+            {visible.limitations.map((line) => (
+              <p key={line} className="mt-2 text-xs text-zinc-400">
+                {line}
+              </p>
+            ))}
+          </details>
+        </div>
+      )}
+    </section>
+  );
+}
+
+export function AdvisorCoverageNotice({ response }: { response: CharacterAdvisorResponse }) {
+  if (response.status !== 'partial') return null;
+  const missing = response.coverage.filter((s) => !s.covered).map((s) => s.subject);
+  return (
+    <p role="status" className="text-sm text-amber-200">
+      Partial answer. Some requested details could not be supported.
+      {missing.length > 0 && ` Missing coverage: ${missing.join(', ')}.`}
+    </p>
+  );
+}

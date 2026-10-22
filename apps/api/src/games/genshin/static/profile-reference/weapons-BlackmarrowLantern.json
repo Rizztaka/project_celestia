@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "BlackmarrowLantern",
+  "gameId": 14433,
+  "name": "Blackmarrow Lantern",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/blackmarrowlantern.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "ad0db0aa1381046e5befc260e08690a7d5447658d5c211325a99d246f362d694",
+    "license": "MIT"
+  },
+  "description": "A lantern that emits a faint, ghostly glow, contained by a midnight-black alloy that resembles interlocking bones. It is said to have once been revered as a precious treasure by a certain secret organization.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Token of Covenant",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Bloom DMG is increased by 48%, and Lunar-Bloom DMG is increased by 12%. Moonsign: Ascendant Gleam: Lunar-Bloom DMG is increased by an additional 12%."
+    },
+    {
+      "rank": 2,
+      "description": "Bloom DMG is increased by 60%, and Lunar-Bloom DMG is increased by 15%. Moonsign: Ascendant Gleam: Lunar-Bloom DMG is increased by an additional 15%."
+    },
+    {
+      "rank": 3,
+      "description": "Bloom DMG is increased by 72%, and Lunar-Bloom DMG is increased by 18%. Moonsign: Ascendant Gleam: Lunar-Bloom DMG is increased by an additional 18%."
+    },
+    {
+      "rank": 4,
+      "description": "Bloom DMG is increased by 84%, and Lunar-Bloom DMG is increased by 21%. Moonsign: Ascendant Gleam: Lunar-Bloom DMG is increased by an additional 21%."
+    },
+    {
+      "rank": 5,
+      "description": "Bloom DMG is increased by 96%, and Lunar-Bloom DMG is increased by 24%. Moonsign: Ascendant Gleam: Lunar-Bloom DMG is increased by an additional 24%."
+    }
+  ]
+}

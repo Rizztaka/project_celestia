@@ -1,0 +1,252 @@
+{
+  "contractVersion": 1,
+  "key": "Diluc",
+  "gameId": 10000016,
+  "name": "Diluc",
+  "description": "The tycoon of a winery empire in Mondstadt, unmatched in every possible way.",
+  "element": "Pyro",
+  "weaponType": "Claymore",
+  "rarity": 5,
+  "forms": [],
+  "talents": [
+    {
+      "key": "combat1",
+      "name": "Tempered Sword",
+      "description": "Normal Attack\nPerforms up to 4 consecutive strikes.\n\nCharged Attack\nDrains Stamina over time to perform continuous slashes.\nAt the end of the sequence, performs a more powerful slash.\n\nPlunging Attack\nPlunges from mid-air to strike the ground, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "kind": "normal",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat2",
+      "name": "Searing Onslaught",
+      "description": "Performs a forward slash that deals Pyro DMG.\n\nThis skill can be consecutively used 3 times.\nEnters CD if not cast again within a short period.",
+      "kind": "skill",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat3",
+      "name": "Dawn",
+      "description": "Releases intense flames to knock back nearby opponents, dealing Pyro DMG. The flames then converge into the weapon, summoning a Phoenix that flies forward and deals massive Pyro DMG to all opponents in its path. The Phoenix explodes upon reaching its destination, causing a large amount of AoE Pyro DMG.\nThe searing flames that run down his blade cause it to be infused with Pyro.",
+      "kind": "burst",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive1",
+      "name": "Relentless",
+      "description": "Diluc's Charged Attack Stamina Cost is decreased by 50%, and its duration is increased by 3s.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive2",
+      "name": "Blessing of Phoenix",
+      "description": "The Pyro Infusion provided by Dawn lasts for 4s longer. Additionally, Diluc gains 20% Pyro DMG Bonus during the duration of this effect.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive3",
+      "name": "Tradition of the Dawn Knight",
+      "description": "Refunds 15% of the ore used when crafting Claymore-type weapons.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    }
+  ],
+  "constellations": [
+    {
+      "key": "c1",
+      "name": "Conviction",
+      "description": "Diluc deals 15% more DMG to opponents whose HP is above 50%.",
+      "kind": "constellation",
+      "constellation": 1,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c2",
+      "name": "Searing Ember",
+      "description": "When Diluc takes DMG, his ATK increases by 10% and his ATK SPD increases by 5%. Lasts for 10s.\nThis effect can stack up to 3 times and can only occur once every 1.5s.",
+      "kind": "constellation",
+      "constellation": 2,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c3",
+      "name": "Fire and Steel",
+      "description": "Increases the Level of Searing Onslaught by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 3,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c4",
+      "name": "Flowing Flame",
+      "description": "Casting Searing Onslaught in rhythm greatly increases damage dealt.\n2s after casting Searing Onslaught, casting the next Searing Onslaught in the combo deals 40% additional DMG. This effect lasts for 2s.",
+      "kind": "constellation",
+      "constellation": 4,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c5",
+      "name": "Phoenix, Harbinger of Dawn",
+      "description": "Increases the Level of Dawn by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 5,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c6",
+      "name": "Flaming Sword, Nemesis of the Dark",
+      "description": "After casting Searing Onslaught, the next 2 Normal Attacks within the next 6s will have their DMG and ATK SPD increased by 30%.\nAdditionally, Searing Onslaught will not interrupt the Normal Attack combo.",
+      "kind": "constellation",
+      "constellation": 6,
+      "unlock": "constellation"
+    }
+  ],
+  "weapons": [
+    { "key": "Akuoumaru", "name": "Akuoumaru" },
+    { "key": "ATeaspoonOfTranscendence", "name": "A Teaspoon of Transcendence" },
+    { "key": "AThousandBlazingSuns", "name": "A Thousand Blazing Suns" },
+    { "key": "BeaconOfTheReedSea", "name": "Beacon of the Reed Sea" },
+    { "key": "BlackcliffSlasher", "name": "Blackcliff Slasher" },
+    { "key": "BladeOfAtonement", "name": "Blade of Atonement" },
+    { "key": "BloodtaintedGreatsword", "name": "Bloodtainted Greatsword" },
+    { "key": "DebateClub", "name": "Debate Club" },
+    { "key": "EarthShaker", "name": "Earth Shaker" },
+    { "key": "FangOfTheMountainKing", "name": "Fang of the Mountain King" },
+    { "key": "FavoniusGreatsword", "name": "Favonius Greatsword" },
+    { "key": "FerrousShadow", "name": "Ferrous Shadow" },
+    { "key": "FlameForgedInsight", "name": "Flame-Forged Insight" },
+    { "key": "ForestRegalia", "name": "Forest Regalia" },
+    { "key": "ForgedByTheGoldenMelody", "name": "Forged by the Golden Melody" },
+    { "key": "FruitfulHook", "name": "Fruitful Hook" },
+    { "key": "GestOfTheMightyWolf", "name": "Gest of the Mighty Wolf" },
+    { "key": "KatsuragikiriNagamasa", "name": "Katsuragikiri Nagamasa" },
+    { "key": "LithicBlade", "name": "Lithic Blade" },
+    { "key": "LuxuriousSeaLord", "name": "Luxurious Sea-Lord" },
+    { "key": "MailedFlower", "name": "Mailed Flower" },
+    { "key": "MakhairaAquamarine", "name": "Makhaira Aquamarine" },
+    { "key": "MasterKey", "name": "Master Key" },
+    { "key": "OldMercsPal", "name": "Old Merc's Pal" },
+    { "key": "PortablePowerSaw", "name": "Portable Power Saw" },
+    { "key": "PrototypeArchaic", "name": "Prototype Archaic" },
+    { "key": "Rainslasher", "name": "Rainslasher" },
+    { "key": "RedhornStonethresher", "name": "Redhorn Stonethresher" },
+    { "key": "RoyalGreatsword", "name": "Royal Greatsword" },
+    { "key": "SacrificialGreatsword", "name": "Sacrificial Greatsword" },
+    { "key": "SerpentSpine", "name": "Serpent Spine" },
+    { "key": "SkyriderGreatsword", "name": "Skyrider Greatsword" },
+    { "key": "SkywardPride", "name": "Skyward Pride" },
+    { "key": "SnowTombedStarsilver", "name": "Snow-Tombed Starsilver" },
+    { "key": "SongOfBrokenPines", "name": "Song of Broken Pines" },
+    { "key": "TalkingStick", "name": "Talking Stick" },
+    { "key": "TheBell", "name": "The Bell" },
+    { "key": "TheUnforged", "name": "The Unforged" },
+    { "key": "TidalShadow", "name": "Tidal Shadow" },
+    {
+      "key": "UltimateOverlordsMegaMagicSword",
+      "name": "\"Ultimate Overlord's Mega Magic Sword\""
+    },
+    { "key": "Verdict", "name": "Verdict" },
+    { "key": "WasterGreatsword", "name": "Waster Greatsword" },
+    { "key": "Whiteblind", "name": "Whiteblind" },
+    { "key": "WhiteIronGreatsword", "name": "White Iron Greatsword" },
+    { "key": "WolfsGravestone", "name": "Wolf's Gravestone" }
+  ],
+  "artifactSets": [
+    { "key": "ADayCarvedFromRisingWinds", "name": "A Day Carved From Rising Winds" },
+    { "key": "Adventurer", "name": "Adventurer" },
+    { "key": "ArchaicPetra", "name": "Archaic Petra" },
+    { "key": "AubadeOfMorningstarAndMoon", "name": "Aubade of Morningstar and Moon" },
+    { "key": "Berserker", "name": "Berserker" },
+    { "key": "BlizzardStrayer", "name": "Blizzard Strayer" },
+    { "key": "BloodstainedChivalry", "name": "Bloodstained Chivalry" },
+    { "key": "BraveHeart", "name": "Brave Heart" },
+    { "key": "CelestialGift", "name": "Celestial Gift" },
+    { "key": "CrimsonWitchOfFlames", "name": "Crimson Witch of Flames" },
+    { "key": "DeepwoodMemories", "name": "Deepwood Memories" },
+    { "key": "DefendersWill", "name": "Defender's Will" },
+    { "key": "DesertPavilionChronicle", "name": "Desert Pavilion Chronicle" },
+    { "key": "DisenchantmentInDeepShadow", "name": "Disenchantment in Deep Shadow" },
+    { "key": "EchoesOfAnOffering", "name": "Echoes of an Offering" },
+    { "key": "EmblemOfSeveredFate", "name": "Emblem of Severed Fate" },
+    { "key": "FinaleOfTheDeepGalleries", "name": "Finale of the Deep Galleries" },
+    { "key": "FlowerOfParadiseLost", "name": "Flower of Paradise Lost" },
+    { "key": "FragmentOfHarmonicWhimsy", "name": "Fragment of Harmonic Whimsy" },
+    { "key": "Gambler", "name": "Gambler" },
+    { "key": "GildedDreams", "name": "Gilded Dreams" },
+    { "key": "GladiatorsFinale", "name": "Gladiator's Finale" },
+    { "key": "GoldenTroupe", "name": "Golden Troupe" },
+    { "key": "HeartOfDepth", "name": "Heart of Depth" },
+    { "key": "HeartOfTheFurnace", "name": "Heart of the Furnace" },
+    { "key": "HuskOfOpulentDreams", "name": "Husk of Opulent Dreams" },
+    { "key": "Instructor", "name": "Instructor" },
+    { "key": "Lavawalker", "name": "Lavawalker" },
+    { "key": "LongNightsOath", "name": "Long Night's Oath" },
+    { "key": "LuckyDog", "name": "Lucky Dog" },
+    { "key": "MaidenBeloved", "name": "Maiden Beloved" },
+    { "key": "MarechausseeHunter", "name": "Marechaussee Hunter" },
+    { "key": "MartialArtist", "name": "Martial Artist" },
+    { "key": "NightOfTheSkysUnveiling", "name": "Night of the Sky's Unveiling" },
+    {
+      "key": "NighttimeWhispersInTheEchoingWoods",
+      "name": "Nighttime Whispers in the Echoing Woods"
+    },
+    { "key": "NoblesseOblige", "name": "Noblesse Oblige" },
+    { "key": "NymphsDream", "name": "Nymph's Dream" },
+    { "key": "ObsidianCodex", "name": "Obsidian Codex" },
+    { "key": "OceanHuedClam", "name": "Ocean-Hued Clam" },
+    { "key": "PaleFlame", "name": "Pale Flame" },
+    { "key": "PrayersForDestiny", "name": "Prayers for Destiny" },
+    { "key": "PrayersForIllumination", "name": "Prayers for Illumination" },
+    { "key": "PrayersForWisdom", "name": "Prayers for Wisdom" },
+    { "key": "PrayersToSpringtime", "name": "Prayers to Springtime" },
+    { "key": "ResolutionOfSojourner", "name": "Resolution of Sojourner" },
+    { "key": "RetracingBolide", "name": "Retracing Bolide" },
+    { "key": "ScarletProof", "name": "Scarlet Proof" },
+    { "key": "Scholar", "name": "Scholar" },
+    { "key": "ScrollOfTheHeroOfCinderCity", "name": "Scroll of the Hero of Cinder City" },
+    { "key": "ShimenawasReminiscence", "name": "Shimenawa's Reminiscence" },
+    { "key": "SilkenMoonsSerenade", "name": "Silken Moon's Serenade" },
+    { "key": "SongOfDaysPast", "name": "Song of Days Past" },
+    { "key": "TenacityOfTheMillelith", "name": "Tenacity of the Millelith" },
+    { "key": "TheExile", "name": "The Exile" },
+    { "key": "ThunderingFury", "name": "Thundering Fury" },
+    { "key": "Thundersoother", "name": "Thundersoother" },
+    { "key": "TinyMiracle", "name": "Tiny Miracle" },
+    { "key": "TravelingDoctor", "name": "Traveling Doctor" },
+    { "key": "UnfinishedReverie", "name": "Unfinished Reverie" },
+    { "key": "VermillionHereafter", "name": "Vermillion Hereafter" },
+    { "key": "ViridescentVenerer", "name": "Viridescent Venerer" },
+    { "key": "VourukashasGlow", "name": "Vourukasha's Glow" },
+    { "key": "WanderersTroupe", "name": "Wanderer's Troupe" }
+  ],
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/characters/diluc.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "9eac24e6d29bb6fc1f24cafc9753ddb65ba0c5551fdbe14ae6f32ce80248b1c7",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/diluc.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "b3ffce9be2d2c16e334ac391760b0e88d778bb5321ac5abe1d25067d7184d7be",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/constellations/diluc.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "39634899259b336c06d251c739b0d446bf572d8c426235688748ff7446a6c7b7",
+      "license": "MIT"
+    }
+  ],
+  "gaps": [
+    "Passive and special ability unlock requirements are not supplied by this pinned source; their unlock states remain unknown."
+  ]
+}

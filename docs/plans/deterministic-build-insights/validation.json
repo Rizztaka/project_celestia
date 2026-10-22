@@ -1,0 +1,56 @@
+{
+  "kind": "implemented-deterministic-runtime-migration",
+  "tests": {
+    "passed": 100,
+    "failed": 0,
+    "files": 9,
+    "report": "final-tests.json",
+    "finalCorrectionSubset": {
+      "passed": 19,
+      "report": "final-correction-tests.json",
+      "additive": false
+    }
+  },
+  "checks": {
+    "contractsBuildAndTypes": "passed",
+    "apiProductionBuild": "passed",
+    "webProductionBuildAndTypes": "passed",
+    "changedCodeLint": "passed",
+    "scopedWhitespace": "passed"
+  },
+  "browser": {
+    "productionComponentAndService": true,
+    "syntheticEquipment": true,
+    "realAccountOrDatabase": false,
+    "hypotheticalGildedSelection": "passed",
+    "comparisonLoadingRemountFixed": true,
+    "screenshot": "browser-preview.png",
+    "ownedServersStopped": true,
+    "temporaryFrontendEntriesRemoved": true
+  },
+  "runtime": {
+    "providerSdkRemoved": true,
+    "modelClientsRoutesChatRemoved": true,
+    "providerCalls": 0,
+    "equipmentWrites": 0,
+    "catalogEntries": 129,
+    "scope": "weapon compatibility; piece bounds; Harbinger; four reviewed artifact families; explicit unsupported-effect references"
+  },
+  "preservation": {
+    "protectedDataFilesChecked": 1194,
+    "changedProtectedData": [],
+    "retiredSources": 39,
+    "archiveMismatch": [],
+    "scope": "Pinned profile/knowledge/source bytes compared with the earlier preflight baseline; unrelated work not reset."
+  },
+  "git": {
+    "staged": false,
+    "committed": false,
+    "deployed": false
+  },
+  "limits": [
+    "No full build/team strategy solver or damage/ER optimizer is claimed.",
+    "Historical model ledgers/traces are retained; all pending model workflows are superseded.",
+    "No full-repository lint or live-account/database browser verification is claimed."
+  ]
+}

@@ -1,0 +1,17 @@
+[
+  "apps\\api\\dist\\core\\ai\\openrouter.js",
+  "apps\\api\\dist\\core\\ai\\advisor-provider.js",
+  "apps\\api\\dist\\core\\ai\\advisor-provider.test.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\character-knowledge\\advisor.service.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\character-knowledge\\advisor.controller.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\character-knowledge\\knowledge.retrieval.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\character-knowledge\\character-advisor.test.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\character-knowledge\\character-advisor.integration.test.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\character-knowledge\\batch01.test.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\character-knowledge\\all-kqm.test.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\character-knowledge\\knowledge.regressions.test.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\ai-advice.controller.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\ai-advice.routes.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\ai-advice.service.js",
+  "apps\\api\\dist\\games\\genshin\\intelligence\\ai-advice.service.test.js"
+]

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "CovenantOfFrostAndSnow",
+  "gameId": 15436,
+  "name": "Covenant of Frost and Snow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/covenantoffrostandsnow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "6f1dceb3d886abd92563a831da9fbd593de2fd82e80a9095e1c1f29bc9de041e",
+    "license": "MIT"
+  },
+  "description": "A longbow crafted to preserve order. Its cold radiance perfectly emanates the ideals of absolute fairness and justice.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "The Law's Equilibrium",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "For 12s after the equipping character uses an Elemental Skill, their Elemental Mastery is increased by 120."
+    },
+    {
+      "rank": 2,
+      "description": "For 12s after the equipping character uses an Elemental Skill, their Elemental Mastery is increased by 150."
+    },
+    {
+      "rank": 3,
+      "description": "For 12s after the equipping character uses an Elemental Skill, their Elemental Mastery is increased by 180."
+    },
+    {
+      "rank": 4,
+      "description": "For 12s after the equipping character uses an Elemental Skill, their Elemental Mastery is increased by 210."
+    },
+    {
+      "rank": 5,
+      "description": "For 12s after the equipping character uses an Elemental Skill, their Elemental Mastery is increased by 240."
+    }
+  ]
+}

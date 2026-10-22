@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "DragonsBane",
+  "gameId": 13401,
+  "name": "Dragon's Bane",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/dragonsbane.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "8db08fcdad36684e0955144c92f6a7999d44e08fe189c0d301bfcd974f0942de",
+    "license": "MIT"
+  },
+  "description": "A polearm decorated with an entwining golden dragon. Light and sharp, this weapon may very well kill dragons with ease.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Bane of Flame and Water",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases DMG against opponents affected by Hydro or Pyro by 20%."
+    },
+    {
+      "rank": 2,
+      "description": "Increases DMG against opponents affected by Hydro or Pyro by 24%."
+    },
+    {
+      "rank": 3,
+      "description": "Increases DMG against opponents affected by Hydro or Pyro by 28%."
+    },
+    {
+      "rank": 4,
+      "description": "Increases DMG against opponents affected by Hydro or Pyro by 32%."
+    },
+    {
+      "rank": 5,
+      "description": "Increases DMG against opponents affected by Hydro or Pyro by 36%."
+    }
+  ]
+}

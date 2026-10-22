@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "LithicSpear",
+  "gameId": 13406,
+  "name": "Lithic Spear",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/lithicspear.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "97e93e6f6ca18552e15bdb1a2ae9f15ad9aea42d89ea8f59aabbe22f42f8b69c",
+    "license": "MIT"
+  },
+  "description": "A spear forged from the rocks of the Guyun Stone Forest. Its hardness knows no equal.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Lithic Axiom: Unity",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "For every character in the party who hails from Liyue, the character who equips this weapon gains a 7% ATK increase and a 3% CRIT Rate increase. This effect stacks up to 4 times."
+    },
+    {
+      "rank": 2,
+      "description": "For every character in the party who hails from Liyue, the character who equips this weapon gains a 8% ATK increase and a 4% CRIT Rate increase. This effect stacks up to 4 times."
+    },
+    {
+      "rank": 3,
+      "description": "For every character in the party who hails from Liyue, the character who equips this weapon gains a 9% ATK increase and a 5% CRIT Rate increase. This effect stacks up to 4 times."
+    },
+    {
+      "rank": 4,
+      "description": "For every character in the party who hails from Liyue, the character who equips this weapon gains a 10% ATK increase and a 6% CRIT Rate increase. This effect stacks up to 4 times."
+    },
+    {
+      "rank": 5,
+      "description": "For every character in the party who hails from Liyue, the character who equips this weapon gains a 11% ATK increase and a 7% CRIT Rate increase. This effect stacks up to 4 times."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+// Shared evaluation accounting. Pure helpers permit quota regression checks.
+export function rollUtcDay(queue, now) {
+  const day = now.toISOString().slice(0, 10);
+  if (queue.day > day) throw Error('Ledger is ahead of the clock');
+  if (queue.day !== day) {
+    queue.previousDays = [
+      ...(queue.previousDays ?? []),
+      {
+        day: queue.day,
+        requestsReserved: queue.requestsReservedToday,
+        userRequestsReserved: queue.userRequestsReservedToday ?? null,
+      },
+    ];
+    queue.day = day;
+    queue.requestsReservedToday = 0;
+    queue.userRequestsReservedToday = 0;
+  }
+  return queue;
+}
+
+export function reserveShared(queue, limits, attempted, now) {
+  rollUtcDay(queue, now);
+  if (queue.providerBlockedUntil && Date.parse(queue.providerBlockedUntil) > now.getTime())
+    return 'provider-cooldown';
+  if (queue.requestsReservedToday >= limits.daily) return 'daily-ceiling';
+  if ((queue.userRequestsReservedToday ?? 0) >= limits.user) return 'user-ceiling';
+  if (attempted >= 2) return 'invocation-ceiling';
+  queue.requestsReservedToday++;
+  queue.userRequestsReservedToday = (queue.userRequestsReservedToday ?? 0) + 1;
+  return null;
+}
+
+export function precedingAccepted(results, id, identity) {
+  const result = [...results].reverse().find((r) => r.id === id);
+  if (
+    !result ||
+    result.assessment?.state !== 'passed' ||
+    result.response?.status !== 'answered' ||
+    JSON.stringify(result.identity) !== JSON.stringify(identity)
+  )
+    throw Error('Follow-up needs an independently accepted preceding answer at current identity');
+  return result;
+}

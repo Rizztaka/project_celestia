@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SkywardAtlas",
+  "gameId": 14501,
+  "name": "Skyward Atlas",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/skywardatlas.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "290719027716329e14904b65f5b571e7bdcf379162f05e94888c6540d1ecdb1b",
+    "license": "MIT"
+  },
+  "description": "A cloud atlas symbolizing Dvalin and his former master, the Anemo Archon. It details the winds and clouds of the northern regions and contains the powers of the sky and wind.",
+  "weaponType": "Catalyst",
+  "rarity": 5,
+  "effectName": "Wandering Clouds",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Elemental DMG Bonus by 12%. Normal Attack hits have a 50% chance to earn the favor of the clouds, which actively seek out nearby opponents to attack for 15s, dealing 160% ATK DMG. Can only occur once every 30s."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Elemental DMG Bonus by 15%. Normal Attack hits have a 50% chance to earn the favor of the clouds, which actively seek out nearby opponents to attack for 15s, dealing 200% ATK DMG. Can only occur once every 30s."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Elemental DMG Bonus by 18%. Normal Attack hits have a 50% chance to earn the favor of the clouds, which actively seek out nearby opponents to attack for 15s, dealing 240% ATK DMG. Can only occur once every 30s."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Elemental DMG Bonus by 21%. Normal Attack hits have a 50% chance to earn the favor of the clouds, which actively seek out nearby opponents to attack for 15s, dealing 280% ATK DMG. Can only occur once every 30s."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Elemental DMG Bonus by 24%. Normal Attack hits have a 50% chance to earn the favor of the clouds, which actively seek out nearby opponents to attack for 15s, dealing 320% ATK DMG. Can only occur once every 30s."
+    }
+  ]
+}

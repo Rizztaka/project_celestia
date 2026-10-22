@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "NoblesseOblige",
+  "gameId": 15007,
+  "name": "Noblesse Oblige",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/noblesseoblige.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "6dda4c7d393b910f041c7d189a962a990669c8d9e667ed1326432eea6244a54f",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Royal Flora",
+      "description": "A satin flower with a glossy finish, fit for an elegant gathering. It still looks as distinguished as it did on the day it was cast aside."
+    },
+    {
+      "slot": "plume",
+      "name": "Royal Plume",
+      "description": "A feathered hat accessory worn by the old aristocrats of Mondstadt on hunts. It still stands proudly as if no time has passed."
+    },
+    {
+      "slot": "sands",
+      "name": "Royal Pocket Watch",
+      "description": "A pocket watch that once belonged to the old aristocrats of Mondstadt. Passed down from generation to generation, it has witnessed many years of history."
+    },
+    {
+      "slot": "goblet",
+      "name": "Royal Silver Urn",
+      "description": "An ornamental urn that once belonged to the old aristocrats of Mondstadt. Mournful winds seem to echo within its empty interior."
+    },
+    {
+      "slot": "circlet",
+      "name": "Royal Masque",
+      "description": "A masquerade mask worn by the old aristocrats of Mondstadt. Its hollow eyes are fixated on the golden days of the past."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Elemental Burst DMG +20%" },
+    {
+      "pieces": 4,
+      "description": "Using an Elemental Burst increases all party members' ATK by 20% for 12s. This effect cannot stack."
+    }
+  ]
+}

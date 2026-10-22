@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "EyeOfPerception",
+  "gameId": 14409,
+  "name": "Eye of Perception",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/eyeofperception.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "24ee41e358c8eb915f8def3c8af68c07ebc757c380bce47dc50b1416020a62fa",
+    "license": "MIT"
+  },
+  "description": "A dim black glaze pearl that is said to have the power to read the purity of one's heart.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Echo",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Normal and Charged Attacks have a 50% chance to fire a Bolt of Perception, dealing 240% ATK as DMG. This bolt can bounce between opponents a maximum of 4 times. This effect can occur once every 12s."
+    },
+    {
+      "rank": 2,
+      "description": "Normal and Charged Attacks have a 50% chance to fire a Bolt of Perception, dealing 270% ATK as DMG. This bolt can bounce between opponents a maximum of 4 times. This effect can occur once every 11s."
+    },
+    {
+      "rank": 3,
+      "description": "Normal and Charged Attacks have a 50% chance to fire a Bolt of Perception, dealing 300% ATK as DMG. This bolt can bounce between opponents a maximum of 4 times. This effect can occur once every 10s."
+    },
+    {
+      "rank": 4,
+      "description": "Normal and Charged Attacks have a 50% chance to fire a Bolt of Perception, dealing 330% ATK as DMG. This bolt can bounce between opponents a maximum of 4 times. This effect can occur once every 9s."
+    },
+    {
+      "rank": 5,
+      "description": "Normal and Charged Attacks have a 50% chance to fire a Bolt of Perception, dealing 360% ATK as DMG. This bolt can bounce between opponents a maximum of 4 times. This effect can occur once every 8s."
+    }
+  ]
+}

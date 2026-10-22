@@ -21,3 +21,9 @@ From the repository root, after the documented workspace setup:
 See [Development Guide](../../docs/DEVELOPMENT_GUIDE.md) for project standards. API lint coverage is a separate [open milestone](../../docs/plans/3a-backend-lint/implementation_plan.md); do not assume a successful root lint currently covers the backend.
 
 Implementation sessions are Wednesday and Sunday. Deployment is a separate reviewed action.
+
+## Deterministic build insights (2026-10-22)
+
+Character pages use the read-only Build insights API and optional hypothetical
+equipment comparisons. No model key or provider is required. Full descriptions
+remain available; executable rule coverage is disclosed separately.

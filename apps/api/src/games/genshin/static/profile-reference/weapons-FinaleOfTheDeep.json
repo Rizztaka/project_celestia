@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "FinaleOfTheDeep",
+  "gameId": 11425,
+  "name": "Finale of the Deep",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/finaleofthedeep.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "9759a7d64693a0f63dd393a274a80971d17a24664f5f0669ca89dee98548c632",
+    "license": "MIT"
+  },
+  "description": "This longsword is as silent as the mysterious ocean depths. It is even more ancient than its stylings might imply.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "An End Sublime",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "When using an Elemental Skill, ATK will be increased by 12% for 15s, and a Bond of Life worth 25% of Max HP will be granted. This effect can be triggered once every 10s. When the Bond of Life is cleared, a maximum of 150 ATK will be gained based on 2.4% of the total amount of the Life Bond cleared, lasting for 15s."
+    },
+    {
+      "rank": 2,
+      "description": "When using an Elemental Skill, ATK will be increased by 15% for 15s, and a Bond of Life worth 25% of Max HP will be granted. This effect can be triggered once every 10s. When the Bond of Life is cleared, a maximum of 187.5 ATK will be gained based on 3% of the total amount of the Life Bond cleared, lasting for 15s."
+    },
+    {
+      "rank": 3,
+      "description": "When using an Elemental Skill, ATK will be increased by 18% for 15s, and a Bond of Life worth 25% of Max HP will be granted. This effect can be triggered once every 10s. When the Bond of Life is cleared, a maximum of 225 ATK will be gained based on 3.6% of the total amount of the Life Bond cleared, lasting for 15s."
+    },
+    {
+      "rank": 4,
+      "description": "When using an Elemental Skill, ATK will be increased by 21% for 15s, and a Bond of Life worth 25% of Max HP will be granted. This effect can be triggered once every 10s. When the Bond of Life is cleared, a maximum of 262.5 ATK will be gained based on 4.2% of the total amount of the Life Bond cleared, lasting for 15s."
+    },
+    {
+      "rank": 5,
+      "description": "When using an Elemental Skill, ATK will be increased by 24% for 15s, and a Bond of Life worth 25% of Max HP will be granted. This effect can be triggered once every 10s. When the Bond of Life is cleared, a maximum of 300 ATK will be gained based on 4.8% of the total amount of the Life Bond cleared, lasting for 15s."
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "FinaleOfTheDeepGalleries",
+  "gameId": 15040,
+  "name": "Finale of the Deep Galleries",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/finaleofthedeepgalleries.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "a7b9a511454d973d308f5dbfb34481cf786fd55e23b6ac7f52617d63f2f003fb",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Deep Gallery's Echoing Song",
+      "description": "An icy flower fashioned from northland jade. Over the course of its long life, its petals have crumbled to dust."
+    },
+    {
+      "slot": "plume",
+      "name": "Deep Gallery's Distant Pact",
+      "description": "A feathered accessory fashioned from northland jade that shimmers with an otherworldly glow."
+    },
+    {
+      "slot": "sands",
+      "name": "Deep Gallery's Moment of Oblivion",
+      "description": "A pocket watch fashioned from northland jade. Its hands are forever frozen in the moment of its destruction."
+    },
+    {
+      "slot": "goblet",
+      "name": "Deep Gallery's Bestowed Banquet",
+      "description": "A cup fashioned from northland jade. They say that the people of an ancient civilization once used it as a ceremonial vessel to make offerings to the heavens."
+    },
+    {
+      "slot": "circlet",
+      "name": "Deep Gallery's Lost Crown",
+      "description": "A helmet steeped in obsession, just like the mind of its previous owner. Its jade ornamentation seems to come from an age more ancient still."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Cryo DMG Bonus +15%" },
+    {
+      "pieces": 4,
+      "description": "When the equipping character has 0 Elemental Energy, Normal Attack DMG is increased by 60% and Elemental Burst DMG is increased by 60%. After the equipping character deals Normal Attack DMG, the aforementioned Elemental Burst effect will stop applying for 6s. After the equipping character deals Elemental Burst DMG, the aforementioned Normal Attack effect will stop applying for 6s. This effect can trigger even if the equipping character is off the field."
+    }
+  ]
+}

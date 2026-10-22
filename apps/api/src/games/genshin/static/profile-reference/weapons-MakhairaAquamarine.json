@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "MakhairaAquamarine",
+  "gameId": 12415,
+  "name": "Makhaira Aquamarine",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/makhairaaquamarine.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2bbd5d28dde82133d1330fa8bd6d1efcecb08d0e82c216debbd2fc19c4c5a3e3",
+    "license": "MIT"
+  },
+  "description": "An ancient greatsword that gleams like the waters themselves. A thousand years of sand erosion has not dulled its unnaturally sharp edge one bit.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Desert Pavilion",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "The following effect will trigger every 10s: The equipping character will gain 24% of their Elemental Mastery as bonus ATK for 12s, with nearby party members gaining 30% of this buff for the same duration. Multiple instances of this weapon can allow this buff to stack. This effect will still trigger even if the character is not on the field."
+    },
+    {
+      "rank": 2,
+      "description": "The following effect will trigger every 10s: The equipping character will gain 30% of their Elemental Mastery as bonus ATK for 12s, with nearby party members gaining 30% of this buff for the same duration. Multiple instances of this weapon can allow this buff to stack. This effect will still trigger even if the character is not on the field."
+    },
+    {
+      "rank": 3,
+      "description": "The following effect will trigger every 10s: The equipping character will gain 36% of their Elemental Mastery as bonus ATK for 12s, with nearby party members gaining 30% of this buff for the same duration. Multiple instances of this weapon can allow this buff to stack. This effect will still trigger even if the character is not on the field."
+    },
+    {
+      "rank": 4,
+      "description": "The following effect will trigger every 10s: The equipping character will gain 42% of their Elemental Mastery as bonus ATK for 12s, with nearby party members gaining 30% of this buff for the same duration. Multiple instances of this weapon can allow this buff to stack. This effect will still trigger even if the character is not on the field."
+    },
+    {
+      "rank": 5,
+      "description": "The following effect will trigger every 10s: The equipping character will gain 48% of their Elemental Mastery as bonus ATK for 12s, with nearby party members gaining 30% of this buff for the same duration. Multiple instances of this weapon can allow this buff to stack. This effect will still trigger even if the character is not on the field."
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+// External offline review metadata only. No provider/configuration/usage writes.
+import { createHash } from 'node:crypto';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { advisorImplementationIdentity } from './advisor-implementation-identity.mjs';
+
+const project = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const root = join(project, 'docs/plans/character-knowledge-assistant/quality-repair');
+const read = (name) => JSON.parse(readFileSync(join(root, name)));
+const put = (name, value) => writeFileSync(join(root, name), JSON.stringify(value, null, 2) + '\n');
+const hash = (path) => createHash('sha256').update(readFileSync(path)).digest('hex');
+const before = read('review-fix/signatures-before.json');
+const pending = read('review-fix/pending-live-cases-before.json');
+const implementation = advisorImplementationIdentity(project);
+const identity = {
+  release: pending.release,
+  identityVersion: implementation.identityVersion,
+  ...implementation.signatures,
+};
+put('signatures.json', {
+  ...before,
+  identity,
+  implementation,
+  previousIdentities: [
+    ...before.previousIdentities,
+    {
+      identity: before.identity,
+      source: 'review-fix/signatures-before.json',
+      disposition: 'historical-offline-repair-not-live-acceptance',
+    },
+  ],
+  acceptance:
+    'No fresh real-model passes. Version 3 includes actual context preparation, observation and runner dispatch dependencies; prior identities/traces remain historical. Provider implementation unchanged.',
+});
+put('pending-live-cases.json', {
+  ...pending,
+  identity,
+  state: 'hold-review-fix-independent-review-required',
+  livePlan: 'review-fix/live-acceptance-plan.md',
+  requirements: [
+    ...pending.requirements,
+    'Production preparation must fit the actual serialized conversation/records and every required evidence subject before shared reservation. Preserve all historical usage.',
+    'Stop the invocation after any unsupported, partial or unavailable result; raw traces remain pending independent assessment.',
+    'Compared participants are bounded at eight, selected teams at four. The original five-participant replacement now has a qualified controlled completion; this is not live acceptance.',
+  ],
+});
+const candidate = read('candidate.json');
+put('review-fix/semantic-review.json', {
+  state: 'independently-approved-scoped-not-live-quality',
+  authority: {
+    artifact: 'quality-repair/independent-review.md',
+    sha256: hash(join(root, 'independent-review.md')),
+  },
+  immutableCandidate: {
+    release: candidate.release,
+    descriptorSha256: hash(join(root, 'candidate.json')),
+    edited: false,
+  },
+  notes: candidate.assessments.map((a) => ({
+    documentId: a.documentId,
+    source: a.source,
+    sectionSha256: a.section.sha256,
+    disposition:
+      'Independent review checked pinned bytes and parsed section; supported scoped role split, transformative-scaling distinction and illustrative composition only.',
+  })),
+  limitations: [
+    'Does not certify the exact Nahida/Xingqiu team or universal rankings.',
+    'Fresh independent real-model acceptance remains pending.',
+  ],
+});
+console.log(
+  JSON.stringify({
+    identityVersion: identity.identityVersion,
+    previousIdentities: before.previousIdentities.length + 1,
+    providerRequests: 0,
+  }),
+);

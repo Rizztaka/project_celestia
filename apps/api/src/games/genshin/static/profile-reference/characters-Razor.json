@@ -1,0 +1,252 @@
+{
+  "contractVersion": 1,
+  "key": "Razor",
+  "gameId": 10000020,
+  "name": "Razor",
+  "description": "A boy who lives among the wolves in Wolvendom of Mondstadt, away from human civilization. As agile as lightning.",
+  "element": "Electro",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "forms": [],
+  "talents": [
+    {
+      "key": "combat1",
+      "name": "Steel Fang",
+      "description": "Normal Attack\nPerforms up to 4 consecutive strikes.\n\nCharged Attack\nDrains Stamina over time to perform continuous spinning attacks against all nearby opponents.\nAt the end of the sequence, performs a more powerful slash. \n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "kind": "normal",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat2",
+      "name": "Claw and Thunder",
+      "description": "Hunts his prey using the techniques taught to him by his master and his lupical.\n\nPress\nSwings the Thunder Wolf Claw, dealing Electro DMG to opponents in front of Razor.\nUpon striking an opponent, Razor will gain an Electro Sigil, which increases his Energy Recharge rate.\nRazor can have up to 3 Electro Sigils simultaneously, and gaining a new Electro Sigil refreshes their duration.\n\nHold\nGathers Electro energy to unleash a lightning storm over a small AoE, causing massive Electro DMG, and clears all of Razor's Electro Sigils.\nEach Electro Sigil cleared in this manner will be converted into Energy for Razor.",
+      "kind": "skill",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat3",
+      "name": "Lightning Fang",
+      "description": "Summons the Wolf Within, which deals Electro DMG to all nearby opponents. This clears all of Razor's Electro Sigils, which will be converted into Elemental Energy for him.\nThe Wolf Within will fight alongside Razor for the skill's duration.\n\nThe Wolf Within\n·Strikes alongside Razor's normal attacks, dealing Electro DMG.\n·Raises Razor's ATK SPD and Electro RES.\n·Causes Razor to be immune to DMG inflicted by the Electro-Charged status.\n·Disables Razor's Charged Attacks.\n·Increases Razor's resistance to interruption.\n\nThese effects end when Razor leaves the battlefield.\nWhen Razor leaves the field, a maximum of 10 Energy will be returned to him based off the duration remaining on this skill.",
+      "kind": "burst",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive1",
+      "name": "Awakening",
+      "description": "Decreases Claw and Thunder's CD by 18%.\nUsing Lightning Fang resets the CD of Claw and Thunder.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive2",
+      "name": "Hunger",
+      "description": "When Razor's Energy is below 50%, increases Energy Recharge by 30%.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive3",
+      "name": "Wolvensprint",
+      "description": "Decreases sprinting Stamina consumption for your own party members by 20%.\nNot stackable with Passive Talents that provide the exact same effects.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    }
+  ],
+  "constellations": [
+    {
+      "key": "c1",
+      "name": "Wolf's Instinct",
+      "description": "Picking up an Elemental Orb or Particle increases Razor's DMG by 10% for 8s.",
+      "kind": "constellation",
+      "constellation": 1,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c2",
+      "name": "Suppression",
+      "description": "Increases CRIT Rate against opponents with less than 30% HP by 10%.",
+      "kind": "constellation",
+      "constellation": 2,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c3",
+      "name": "Soul Companion",
+      "description": "Increases the Level of Lightning Fang by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 3,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c4",
+      "name": "Bite",
+      "description": "When casting Claw and Thunder (Press), opponents hit will have their DEF decreased by 15% for 7s.",
+      "kind": "constellation",
+      "constellation": 4,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c5",
+      "name": "Sharpened Claws",
+      "description": "Increases the Level of Claw and Thunder by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 5,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c6",
+      "name": "Lupus Fulguris",
+      "description": "Every 10s, Razor's sword charges up, causing the next Normal Attack to release lightning that deals 100% of Razor's ATK as Electro DMG.\nWhen Razor is not using Lightning Fang, a lightning strike on an opponent will grant Razor an Electro Sigil for Claw and Thunder.",
+      "kind": "constellation",
+      "constellation": 6,
+      "unlock": "constellation"
+    }
+  ],
+  "weapons": [
+    { "key": "Akuoumaru", "name": "Akuoumaru" },
+    { "key": "ATeaspoonOfTranscendence", "name": "A Teaspoon of Transcendence" },
+    { "key": "AThousandBlazingSuns", "name": "A Thousand Blazing Suns" },
+    { "key": "BeaconOfTheReedSea", "name": "Beacon of the Reed Sea" },
+    { "key": "BlackcliffSlasher", "name": "Blackcliff Slasher" },
+    { "key": "BladeOfAtonement", "name": "Blade of Atonement" },
+    { "key": "BloodtaintedGreatsword", "name": "Bloodtainted Greatsword" },
+    { "key": "DebateClub", "name": "Debate Club" },
+    { "key": "EarthShaker", "name": "Earth Shaker" },
+    { "key": "FangOfTheMountainKing", "name": "Fang of the Mountain King" },
+    { "key": "FavoniusGreatsword", "name": "Favonius Greatsword" },
+    { "key": "FerrousShadow", "name": "Ferrous Shadow" },
+    { "key": "FlameForgedInsight", "name": "Flame-Forged Insight" },
+    { "key": "ForestRegalia", "name": "Forest Regalia" },
+    { "key": "ForgedByTheGoldenMelody", "name": "Forged by the Golden Melody" },
+    { "key": "FruitfulHook", "name": "Fruitful Hook" },
+    { "key": "GestOfTheMightyWolf", "name": "Gest of the Mighty Wolf" },
+    { "key": "KatsuragikiriNagamasa", "name": "Katsuragikiri Nagamasa" },
+    { "key": "LithicBlade", "name": "Lithic Blade" },
+    { "key": "LuxuriousSeaLord", "name": "Luxurious Sea-Lord" },
+    { "key": "MailedFlower", "name": "Mailed Flower" },
+    { "key": "MakhairaAquamarine", "name": "Makhaira Aquamarine" },
+    { "key": "MasterKey", "name": "Master Key" },
+    { "key": "OldMercsPal", "name": "Old Merc's Pal" },
+    { "key": "PortablePowerSaw", "name": "Portable Power Saw" },
+    { "key": "PrototypeArchaic", "name": "Prototype Archaic" },
+    { "key": "Rainslasher", "name": "Rainslasher" },
+    { "key": "RedhornStonethresher", "name": "Redhorn Stonethresher" },
+    { "key": "RoyalGreatsword", "name": "Royal Greatsword" },
+    { "key": "SacrificialGreatsword", "name": "Sacrificial Greatsword" },
+    { "key": "SerpentSpine", "name": "Serpent Spine" },
+    { "key": "SkyriderGreatsword", "name": "Skyrider Greatsword" },
+    { "key": "SkywardPride", "name": "Skyward Pride" },
+    { "key": "SnowTombedStarsilver", "name": "Snow-Tombed Starsilver" },
+    { "key": "SongOfBrokenPines", "name": "Song of Broken Pines" },
+    { "key": "TalkingStick", "name": "Talking Stick" },
+    { "key": "TheBell", "name": "The Bell" },
+    { "key": "TheUnforged", "name": "The Unforged" },
+    { "key": "TidalShadow", "name": "Tidal Shadow" },
+    {
+      "key": "UltimateOverlordsMegaMagicSword",
+      "name": "\"Ultimate Overlord's Mega Magic Sword\""
+    },
+    { "key": "Verdict", "name": "Verdict" },
+    { "key": "WasterGreatsword", "name": "Waster Greatsword" },
+    { "key": "Whiteblind", "name": "Whiteblind" },
+    { "key": "WhiteIronGreatsword", "name": "White Iron Greatsword" },
+    { "key": "WolfsGravestone", "name": "Wolf's Gravestone" }
+  ],
+  "artifactSets": [
+    { "key": "ADayCarvedFromRisingWinds", "name": "A Day Carved From Rising Winds" },
+    { "key": "Adventurer", "name": "Adventurer" },
+    { "key": "ArchaicPetra", "name": "Archaic Petra" },
+    { "key": "AubadeOfMorningstarAndMoon", "name": "Aubade of Morningstar and Moon" },
+    { "key": "Berserker", "name": "Berserker" },
+    { "key": "BlizzardStrayer", "name": "Blizzard Strayer" },
+    { "key": "BloodstainedChivalry", "name": "Bloodstained Chivalry" },
+    { "key": "BraveHeart", "name": "Brave Heart" },
+    { "key": "CelestialGift", "name": "Celestial Gift" },
+    { "key": "CrimsonWitchOfFlames", "name": "Crimson Witch of Flames" },
+    { "key": "DeepwoodMemories", "name": "Deepwood Memories" },
+    { "key": "DefendersWill", "name": "Defender's Will" },
+    { "key": "DesertPavilionChronicle", "name": "Desert Pavilion Chronicle" },
+    { "key": "DisenchantmentInDeepShadow", "name": "Disenchantment in Deep Shadow" },
+    { "key": "EchoesOfAnOffering", "name": "Echoes of an Offering" },
+    { "key": "EmblemOfSeveredFate", "name": "Emblem of Severed Fate" },
+    { "key": "FinaleOfTheDeepGalleries", "name": "Finale of the Deep Galleries" },
+    { "key": "FlowerOfParadiseLost", "name": "Flower of Paradise Lost" },
+    { "key": "FragmentOfHarmonicWhimsy", "name": "Fragment of Harmonic Whimsy" },
+    { "key": "Gambler", "name": "Gambler" },
+    { "key": "GildedDreams", "name": "Gilded Dreams" },
+    { "key": "GladiatorsFinale", "name": "Gladiator's Finale" },
+    { "key": "GoldenTroupe", "name": "Golden Troupe" },
+    { "key": "HeartOfDepth", "name": "Heart of Depth" },
+    { "key": "HeartOfTheFurnace", "name": "Heart of the Furnace" },
+    { "key": "HuskOfOpulentDreams", "name": "Husk of Opulent Dreams" },
+    { "key": "Instructor", "name": "Instructor" },
+    { "key": "Lavawalker", "name": "Lavawalker" },
+    { "key": "LongNightsOath", "name": "Long Night's Oath" },
+    { "key": "LuckyDog", "name": "Lucky Dog" },
+    { "key": "MaidenBeloved", "name": "Maiden Beloved" },
+    { "key": "MarechausseeHunter", "name": "Marechaussee Hunter" },
+    { "key": "MartialArtist", "name": "Martial Artist" },
+    { "key": "NightOfTheSkysUnveiling", "name": "Night of the Sky's Unveiling" },
+    {
+      "key": "NighttimeWhispersInTheEchoingWoods",
+      "name": "Nighttime Whispers in the Echoing Woods"
+    },
+    { "key": "NoblesseOblige", "name": "Noblesse Oblige" },
+    { "key": "NymphsDream", "name": "Nymph's Dream" },
+    { "key": "ObsidianCodex", "name": "Obsidian Codex" },
+    { "key": "OceanHuedClam", "name": "Ocean-Hued Clam" },
+    { "key": "PaleFlame", "name": "Pale Flame" },
+    { "key": "PrayersForDestiny", "name": "Prayers for Destiny" },
+    { "key": "PrayersForIllumination", "name": "Prayers for Illumination" },
+    { "key": "PrayersForWisdom", "name": "Prayers for Wisdom" },
+    { "key": "PrayersToSpringtime", "name": "Prayers to Springtime" },
+    { "key": "ResolutionOfSojourner", "name": "Resolution of Sojourner" },
+    { "key": "RetracingBolide", "name": "Retracing Bolide" },
+    { "key": "ScarletProof", "name": "Scarlet Proof" },
+    { "key": "Scholar", "name": "Scholar" },
+    { "key": "ScrollOfTheHeroOfCinderCity", "name": "Scroll of the Hero of Cinder City" },
+    { "key": "ShimenawasReminiscence", "name": "Shimenawa's Reminiscence" },
+    { "key": "SilkenMoonsSerenade", "name": "Silken Moon's Serenade" },
+    { "key": "SongOfDaysPast", "name": "Song of Days Past" },
+    { "key": "TenacityOfTheMillelith", "name": "Tenacity of the Millelith" },
+    { "key": "TheExile", "name": "The Exile" },
+    { "key": "ThunderingFury", "name": "Thundering Fury" },
+    { "key": "Thundersoother", "name": "Thundersoother" },
+    { "key": "TinyMiracle", "name": "Tiny Miracle" },
+    { "key": "TravelingDoctor", "name": "Traveling Doctor" },
+    { "key": "UnfinishedReverie", "name": "Unfinished Reverie" },
+    { "key": "VermillionHereafter", "name": "Vermillion Hereafter" },
+    { "key": "ViridescentVenerer", "name": "Viridescent Venerer" },
+    { "key": "VourukashasGlow", "name": "Vourukasha's Glow" },
+    { "key": "WanderersTroupe", "name": "Wanderer's Troupe" }
+  ],
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/characters/razor.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "77172b4363a3b4cdeded9c5ca16cfb18f2a5b2c3749b8082e07d4729d1dc937a",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/razor.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "be68f74acab9a9d7b2dd67261007d173a9937670b86f540422fc01610a26d990",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/constellations/razor.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "913421aa0eb1dddf21fe1ec6d28b8f994fd0157d696fd5472bb5e4d5babe4f2e",
+      "license": "MIT"
+    }
+  ],
+  "gaps": [
+    "Passive and special ability unlock requirements are not supplied by this pinned source; their unlock states remain unknown."
+  ]
+}

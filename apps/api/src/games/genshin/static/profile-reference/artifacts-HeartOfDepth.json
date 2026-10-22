@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "HeartOfDepth",
+  "gameId": 15016,
+  "name": "Heart of Depth",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/heartofdepth.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "c593de46477942b5404f8ffc960f102bb0a9f6859460db854757490e920ba56c",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Gilded Corsage",
+      "description": "A mantle brooch that has lost its luster. The gold plating that once adorned it was ground away by the wind and the waves long ago."
+    },
+    {
+      "slot": "plume",
+      "name": "Gust of Nostalgia",
+      "description": "A feather carried over by whimpering sea winds and crimson waves. The passage of time has changed its shape and color."
+    },
+    {
+      "slot": "sands",
+      "name": "Copper Compass",
+      "description": "An ancient bronze compass. Its needle points towards some ever-distant shore, to a non-existent harbor."
+    },
+    {
+      "slot": "goblet",
+      "name": "Goblet of Thundering Deep",
+      "description": "A faded wine cup that was unintentionally dredged up from the sea. Its dull exterior tells of the days it has spent beneath the waves."
+    },
+    {
+      "slot": "circlet",
+      "name": "Wine-Stained Tricorne",
+      "description": "An ancient, wine-stained sea hat that still reeks of alcohol even now."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Hydro DMG Bonus +15%" },
+    {
+      "pieces": 4,
+      "description": "After using Elemental Skill, increases Normal Attack and Charged Attack DMG by 30% for 15s."
+    }
+  ]
+}

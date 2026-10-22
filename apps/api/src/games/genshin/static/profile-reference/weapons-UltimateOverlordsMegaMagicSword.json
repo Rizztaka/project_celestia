@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "UltimateOverlordsMegaMagicSword",
+  "gameId": 12426,
+  "name": "\"Ultimate Overlord's Mega Magic Sword\"",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/ultimateoverlordsmegamagicsword.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "bd134e127ff4272077911d759027401beb00dc4d2578f770e071f57e596997ef",
+    "license": "MIT"
+  },
+  "description": "A magical sword that can only be wielded by the ultimate overlord who rules the seas. As it has been made with special water-resistant materials, it will not get ruined by water damage even after being immersed. Why, one might even call it invincible!",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Melussistance!",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "ATK increased by 12%. That's not all! The support from all Melusines you've helped in Merusea Village fills you with strength! Based on the number of them you've helped, your ATK is increased by up to an additional 12%."
+    },
+    {
+      "rank": 2,
+      "description": "ATK increased by 15%. That's not all! The support from all Melusines you've helped in Merusea Village fills you with strength! Based on the number of them you've helped, your ATK is increased by up to an additional 15%."
+    },
+    {
+      "rank": 3,
+      "description": "ATK increased by 18%. That's not all! The support from all Melusines you've helped in Merusea Village fills you with strength! Based on the number of them you've helped, your ATK is increased by up to an additional 18%."
+    },
+    {
+      "rank": 4,
+      "description": "ATK increased by 21%. That's not all! The support from all Melusines you've helped in Merusea Village fills you with strength! Based on the number of them you've helped, your ATK is increased by up to an additional 21%."
+    },
+    {
+      "rank": 5,
+      "description": "ATK increased by 24%. That's not all! The support from all Melusines you've helped in Merusea Village fills you with strength! Based on the number of them you've helped, your ATK is increased by up to an additional 24%."
+    }
+  ]
+}

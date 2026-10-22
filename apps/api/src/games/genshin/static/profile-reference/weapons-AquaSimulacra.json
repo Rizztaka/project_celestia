@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "AquaSimulacra",
+  "gameId": 15508,
+  "name": "Aqua Simulacra",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/aquasimulacra.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "30547af7445c6e1b4f9af2a2a12e137665ac9e87887ae6c921d8401fc126a4d6",
+    "license": "MIT"
+  },
+  "description": "This longbow's color is unpredictable. Under the light, it takes on a lustrous, watery blue.",
+  "weaponType": "Bow",
+  "rarity": 5,
+  "effectName": "The Cleansing Form",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "HP is increased by 16%. When there are opponents nearby, the DMG dealt by the wielder of this weapon is increased by 20%. This will take effect whether the character is on-field or not."
+    },
+    {
+      "rank": 2,
+      "description": "HP is increased by 20%. When there are opponents nearby, the DMG dealt by the wielder of this weapon is increased by 25%. This will take effect whether the character is on-field or not."
+    },
+    {
+      "rank": 3,
+      "description": "HP is increased by 24%. When there are opponents nearby, the DMG dealt by the wielder of this weapon is increased by 30%. This will take effect whether the character is on-field or not."
+    },
+    {
+      "rank": 4,
+      "description": "HP is increased by 28%. When there are opponents nearby, the DMG dealt by the wielder of this weapon is increased by 35%. This will take effect whether the character is on-field or not."
+    },
+    {
+      "rank": 5,
+      "description": "HP is increased by 32%. When there are opponents nearby, the DMG dealt by the wielder of this weapon is increased by 40%. This will take effect whether the character is on-field or not."
+    }
+  ]
+}

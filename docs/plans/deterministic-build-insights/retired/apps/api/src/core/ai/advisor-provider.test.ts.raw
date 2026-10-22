@@ -1,0 +1,117 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+const state = vi.hoisted(() => ({
+  env: {
+    API_ORIGIN: 'http://localhost:4000',
+    CELESTIA_AI_PROVIDER: 'groq',
+    CELESTIA_AI_MODEL: 'openai/gpt-oss-120b',
+    GROQ_API_KEY: 'synthetic-groq-key' as string | undefined,
+    OPENROUTER_API_KEY: undefined as string | undefined,
+  },
+  construct: vi.fn(),
+  create: vi.fn(),
+}));
+
+vi.mock('../config/env.js', () => ({ env: state.env }));
+vi.mock('openai', () => ({
+  default: vi.fn().mockImplementation((options: unknown) => {
+    state.construct(options);
+    return { chat: { completions: { create: state.create } } };
+  }),
+}));
+
+import { configuredAdvisorProvider } from './advisor-provider.js';
+
+const messages = [{ role: 'user' as const, content: 'Use only the supplied evidence.' }];
+
+describe('configured advisor provider boundary', () => {
+  beforeEach(() => {
+    state.env.CELESTIA_AI_PROVIDER = 'groq';
+    state.env.CELESTIA_AI_MODEL = 'openai/gpt-oss-120b';
+    state.env.GROQ_API_KEY = 'synthetic-groq-key';
+    state.env.OPENROUTER_API_KEY = undefined;
+    state.construct.mockReset();
+    state.create.mockReset();
+  });
+
+  it('uses the configured Groq model and sends bounded JSON completion settings', async () => {
+    state.create.mockResolvedValue({ choices: [{ message: { content: '{"ok":true}' } }] });
+
+    const provider = configuredAdvisorProvider();
+    expect(provider).toMatchObject({ provider: 'groq', model: 'openai/gpt-oss-120b' });
+
+    const signal = new AbortController().signal;
+    await expect(provider!.complete(messages, 1000, signal)).resolves.toBe('{"ok":true}');
+
+    expect(state.construct).toHaveBeenCalledWith({
+      apiKey: expect.any(String),
+      baseURL: 'https://api.groq.com/openai/v1',
+      timeout: 12000,
+      maxRetries: 0,
+    });
+    expect(state.create).toHaveBeenCalledWith(
+      {
+        model: 'openai/gpt-oss-120b',
+        messages,
+        max_tokens: 1000,
+        response_format: { type: 'json_object' },
+        reasoning_effort: 'low',
+        include_reasoning: false,
+      },
+      { signal },
+    );
+  });
+
+  it('keeps OpenRouter explicit and disables provider-side fallback', async () => {
+    state.env.CELESTIA_AI_PROVIDER = 'openrouter';
+    state.env.CELESTIA_AI_MODEL = 'example/free-model:free';
+    state.env.GROQ_API_KEY = undefined;
+    state.env.OPENROUTER_API_KEY = 'synthetic-openrouter-key';
+    state.create.mockResolvedValue({ choices: [{ message: { content: '{"ok":true}' } }] });
+
+    const provider = configuredAdvisorProvider();
+    await provider!.complete(messages, 300);
+
+    expect(state.construct).toHaveBeenCalledWith({
+      apiKey: expect.any(String),
+      baseURL: 'https://openrouter.ai/api/v1',
+      timeout: 12000,
+      maxRetries: 0,
+      defaultHeaders: {
+        'HTTP-Referer': 'http://localhost:4000',
+        'X-Title': 'Project Celestia',
+      },
+    });
+    expect(state.create.mock.calls[0]![0]).toMatchObject({
+      provider: { allow_fallbacks: false },
+    });
+  });
+
+  it('does not use the other provider key as a fallback', () => {
+    state.env.GROQ_API_KEY = undefined;
+    state.env.OPENROUTER_API_KEY = 'synthetic-openrouter-key';
+
+    expect(configuredAdvisorProvider()).toBeNull();
+    expect(state.construct).not.toHaveBeenCalled();
+  });
+
+  it('maps rate limits and aborted requests to honest provider states', async () => {
+    const provider = configuredAdvisorProvider()!;
+    const rateLimit = Object.assign(new Error('rate limited'), {
+      status: 429,
+      headers: { get: () => '17' },
+    });
+    state.create.mockRejectedValueOnce(rateLimit);
+    await expect(provider.complete(messages, 300)).rejects.toMatchObject({
+      reason: 'quota',
+      retryAfterSeconds: 17,
+    });
+
+    state.create.mockRejectedValueOnce(new Error('request aborted'));
+    const controller = new AbortController();
+    controller.abort();
+    await expect(provider.complete(messages, 300, controller.signal)).rejects.toMatchObject({
+      reason: 'timeout',
+    });
+  });
+});

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "TheBell",
+  "gameId": 12402,
+  "name": "The Bell",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/thebell.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "d65988672b3b29682c8e115fdc3495165d8d5ec4b49a4bdaa6eac49eab169c55",
+    "license": "MIT"
+  },
+  "description": "A heavy greatsword. A clock is embedded within it, though its internal mechanisms have long been damaged.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Rebellious Guardian",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Taking DMG generates a shield which absorbs DMG up to 20% of Max HP. This shield lasts for 10s or until broken, and can only be triggered once every 45s. While protected by a shield, the character gains 12% increased DMG."
+    },
+    {
+      "rank": 2,
+      "description": "Taking DMG generates a shield which absorbs DMG up to 23% of Max HP. This shield lasts for 10s or until broken, and can only be triggered once every 45s. While protected by a shield, the character gains 15% increased DMG."
+    },
+    {
+      "rank": 3,
+      "description": "Taking DMG generates a shield which absorbs DMG up to 26% of Max HP. This shield lasts for 10s or until broken, and can only be triggered once every 45s. While protected by a shield, the character gains 18% increased DMG."
+    },
+    {
+      "rank": 4,
+      "description": "Taking DMG generates a shield which absorbs DMG up to 29% of Max HP. This shield lasts for 10s or until broken, and can only be triggered once every 45s. While protected by a shield, the character gains 21% increased DMG."
+    },
+    {
+      "rank": 5,
+      "description": "Taking DMG generates a shield which absorbs DMG up to 32% of Max HP. This shield lasts for 10s or until broken, and can only be triggered once every 45s. While protected by a shield, the character gains 24% increased DMG."
+    }
+  ]
+}

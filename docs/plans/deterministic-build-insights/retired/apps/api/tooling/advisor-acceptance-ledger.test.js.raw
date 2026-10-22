@@ -1,0 +1,58 @@
+import assert from 'node:assert/strict';
+
+import { test } from 'vitest';
+
+import { precedingAccepted, reserveShared, rollUtcDay } from './advisor-acceptance-ledger.mjs';
+
+test('UTC rollover retains exhausted historical allowance and leaves full-roster cases intact', () => {
+  const queue = {
+    day: '2026-10-21',
+    requestsReservedToday: 12,
+    userRequestsReservedToday: 5,
+    cases: [{ id: 'retained' }],
+  };
+  rollUtcDay(queue, new Date('2026-10-21T23:59:59Z'));
+  assert.equal(queue.requestsReservedToday, 12);
+  rollUtcDay(queue, new Date('2026-10-22T00:00:00Z'));
+  assert.deepEqual(queue.previousDays, [
+    { day: '2026-10-21', requestsReserved: 12, userRequestsReserved: 5 },
+  ]);
+  assert.equal(queue.requestsReservedToday, 0);
+  assert.deepEqual(queue.cases, [{ id: 'retained' }]);
+  assert.throws(() => rollUtcDay(queue, new Date('2026-10-21T23:59:59Z')));
+});
+
+test('shared daily, user, provider and invocation limits cannot be bypassed by another invocation', () => {
+  const now = new Date('2026-10-22T06:00:00Z');
+  const limits = { daily: 12, user: 5 };
+  const queue = { day: '2026-10-22', requestsReservedToday: 0, userRequestsReservedToday: 0 };
+  assert.equal(reserveShared(queue, limits, 2, now), 'invocation-ceiling');
+  for (let i = 0; i < 5; i++) assert.equal(reserveShared(queue, limits, 0, now), null);
+  assert.equal(reserveShared(queue, limits, 0, now), 'user-ceiling');
+  queue.requestsReservedToday = 12;
+  assert.equal(reserveShared(queue, limits, 0, now), 'daily-ceiling');
+  queue.providerBlockedUntil = '2026-10-22T07:00:00Z';
+  assert.equal(reserveShared(queue, limits, 0, now), 'provider-cooldown');
+  assert.equal(queue.requestsReservedToday, 12);
+});
+
+test('normal follow-ups require independently passed current answers, never answered status alone', () => {
+  const identity = { policyDigest: 'current', release: { id: 'candidate' } };
+  const result = {
+    id: 'build',
+    response: { status: 'answered' },
+    identity,
+    assessment: { state: 'quality-failed' },
+  };
+  assert.throws(() => precedingAccepted([result], 'build', identity));
+  result.assessment.state = 'passed';
+  assert.equal(precedingAccepted([result], 'build', identity), result);
+  assert.throws(() => precedingAccepted([result], 'build', { ...identity, policyDigest: 'new' }));
+  assert.throws(() =>
+    precedingAccepted(
+      [result, { ...result, assessment: { state: 'quality-failed' } }],
+      'build',
+      identity,
+    ),
+  );
+});

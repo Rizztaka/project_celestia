@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "WaveridingWhirl",
+  "gameId": 14430,
+  "name": "Waveriding Whirl",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/waveridingwhirl.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "40e6e42a2e72528f63632d2eb1ee5f330088d801fd91fed518b3dace7ccd1161",
+    "license": "MIT"
+  },
+  "description": "A boomerang made from the fangs of a giant sea serpent. It was a rare weapon indeed that the giant Tupac would call \"trusty.\"",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Fangs Flying To and Fro",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Decreases Swimming Stamina consumption by 15%. In addition, for 10s after using an Elemental Skill, Max HP is increased by 20%. For every Hydro Elemental Type character in the party, Max HP is increased by another 12%, and the maximum increase that can be achieved in this way is 24%. Can be triggered once every 15s."
+    },
+    {
+      "rank": 2,
+      "description": "Decreases Swimming Stamina consumption by 15%. In addition, for 10s after using an Elemental Skill, Max HP is increased by 25%. For every Hydro Elemental Type character in the party, Max HP is increased by another 15%, and the maximum increase that can be achieved in this way is 30%. Can be triggered once every 15s."
+    },
+    {
+      "rank": 3,
+      "description": "Decreases Swimming Stamina consumption by 15%. In addition, for 10s after using an Elemental Skill, Max HP is increased by 30%. For every Hydro Elemental Type character in the party, Max HP is increased by another 18%, and the maximum increase that can be achieved in this way is 36%. Can be triggered once every 15s."
+    },
+    {
+      "rank": 4,
+      "description": "Decreases Swimming Stamina consumption by 15%. In addition, for 10s after using an Elemental Skill, Max HP is increased by 35%. For every Hydro Elemental Type character in the party, Max HP is increased by another 21%, and the maximum increase that can be achieved in this way is 42%. Can be triggered once every 15s."
+    },
+    {
+      "rank": 5,
+      "description": "Decreases Swimming Stamina consumption by 15%. In addition, for 10s after using an Elemental Skill, Max HP is increased by 40%. For every Hydro Elemental Type character in the party, Max HP is increased by another 24%, and the maximum increase that can be achieved in this way is 48%. Can be triggered once every 15s."
+    }
+  ]
+}

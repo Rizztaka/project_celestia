@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "EarthShaker",
+  "gameId": 12431,
+  "name": "Earth Shaker",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/earthshaker.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "8008ed90e1a456088d7d5092745b5e7296918644ebcbfeace3d242c3f5abf568",
+    "license": "MIT"
+  },
+  "description": "A heavy blade that people claim was beloved by the hero known as the Firethief. They say that even the Lord of Cinder Keep's flames could not burn it away.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Oath of Qhapaq Nan",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "After a party member triggers a Pyro-related reaction, the equipping character's Elemental Skill DMG is increased by 16% for 8s. This effect can be triggered even when the triggering party member is not on the field."
+    },
+    {
+      "rank": 2,
+      "description": "After a party member triggers a Pyro-related reaction, the equipping character's Elemental Skill DMG is increased by 20% for 8s. This effect can be triggered even when the triggering party member is not on the field."
+    },
+    {
+      "rank": 3,
+      "description": "After a party member triggers a Pyro-related reaction, the equipping character's Elemental Skill DMG is increased by 24% for 8s. This effect can be triggered even when the triggering party member is not on the field."
+    },
+    {
+      "rank": 4,
+      "description": "After a party member triggers a Pyro-related reaction, the equipping character's Elemental Skill DMG is increased by 28% for 8s. This effect can be triggered even when the triggering party member is not on the field."
+    },
+    {
+      "rank": 5,
+      "description": "After a party member triggers a Pyro-related reaction, the equipping character's Elemental Skill DMG is increased by 32% for 8s. This effect can be triggered even when the triggering party member is not on the field."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "FerrousShadow",
+  "gameId": 12301,
+  "name": "Ferrous Shadow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/ferrousshadow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "3d1da5032b5a02edd5c0d48843cd171ce855bdf5fb1b4724e7f8754568b77231",
+    "license": "MIT"
+  },
+  "description": "A replica of the famed sword of Arundolyn, the Lion of Light. Feel the power of a legendary hero as you hold this sword in your hand! Imagine yourself as the great warrior himself! Note: Daydreaming not recommended in live combat.",
+  "weaponType": "Claymore",
+  "rarity": 3,
+  "effectName": "Unbending",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "When HP falls below 70%, increases Charged Attack DMG by 30% and Charged Attacks become harder to interrupt."
+    },
+    {
+      "rank": 2,
+      "description": "When HP falls below 75%, increases Charged Attack DMG by 35% and Charged Attacks become harder to interrupt."
+    },
+    {
+      "rank": 3,
+      "description": "When HP falls below 80%, increases Charged Attack DMG by 40% and Charged Attacks become harder to interrupt."
+    },
+    {
+      "rank": 4,
+      "description": "When HP falls below 85%, increases Charged Attack DMG by 45% and Charged Attacks become harder to interrupt."
+    },
+    {
+      "rank": 5,
+      "description": "When HP falls below 90%, increases Charged Attack DMG by 50% and Charged Attacks become harder to interrupt."
+    }
+  ]
+}

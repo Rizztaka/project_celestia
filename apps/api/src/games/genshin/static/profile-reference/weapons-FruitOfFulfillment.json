@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "FruitOfFulfillment",
+  "gameId": 14417,
+  "name": "Fruit of Fulfillment",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/fruitoffulfillment.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "a99d7bcfa95e3724d7e01827932233391f4889d2485012345d41e80581656d38",
+    "license": "MIT"
+  },
+  "description": "A fruit you obtained from an Aranara tale. It holds the potential to conquer any crisis.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Full Circle",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Obtain the \"Wax and Wane\" effect after an Elemental Reaction is triggered, gaining 24 Elemental Mastery while losing 5% ATK. For every 0.3s, 1 stack of Wax and Wane can be gained. Max 5 stacks. For every 6s that go by without an Elemental Reaction being triggered, 1 stack will be lost. This effect can be triggered even when the character is off-field."
+    },
+    {
+      "rank": 2,
+      "description": "Obtain the \"Wax and Wane\" effect after an Elemental Reaction is triggered, gaining 27 Elemental Mastery while losing 5% ATK. For every 0.3s, 1 stack of Wax and Wane can be gained. Max 5 stacks. For every 6s that go by without an Elemental Reaction being triggered, 1 stack will be lost. This effect can be triggered even when the character is off-field."
+    },
+    {
+      "rank": 3,
+      "description": "Obtain the \"Wax and Wane\" effect after an Elemental Reaction is triggered, gaining 30 Elemental Mastery while losing 5% ATK. For every 0.3s, 1 stack of Wax and Wane can be gained. Max 5 stacks. For every 6s that go by without an Elemental Reaction being triggered, 1 stack will be lost. This effect can be triggered even when the character is off-field."
+    },
+    {
+      "rank": 4,
+      "description": "Obtain the \"Wax and Wane\" effect after an Elemental Reaction is triggered, gaining 33 Elemental Mastery while losing 5% ATK. For every 0.3s, 1 stack of Wax and Wane can be gained. Max 5 stacks. For every 6s that go by without an Elemental Reaction being triggered, 1 stack will be lost. This effect can be triggered even when the character is off-field."
+    },
+    {
+      "rank": 5,
+      "description": "Obtain the \"Wax and Wane\" effect after an Elemental Reaction is triggered, gaining 36 Elemental Mastery while losing 5% ATK. For every 0.3s, 1 stack of Wax and Wane can be gained. Max 5 stacks. For every 6s that go by without an Elemental Reaction being triggered, 1 stack will be lost. This effect can be triggered even when the character is off-field."
+    }
+  ]
+}

@@ -1,0 +1,260 @@
+{
+  "contractVersion": 1,
+  "key": "Kinich",
+  "gameId": 10000101,
+  "name": "Kinich",
+  "description": "A Huitztlan Saurian Hunter skilled at counting costs.",
+  "element": "Dendro",
+  "weaponType": "Claymore",
+  "rarity": 5,
+  "forms": [],
+  "talents": [
+    {
+      "key": "combat1",
+      "name": "Nightsun Style",
+      "description": "Normal Attack\nPerforms up to 3 rapid strikes.\nAfter using his Elemental Skill \"Canopy Hunter: Riding High\"'s mid-air swing, he can perform a Normal Attack in mid-air before landing.\n\nCharged Attack\nConsumes a certain amount of Stamina to spin and throw his Claymore forward to attack opponents.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "kind": "normal",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat2",
+      "name": "Canopy Hunter: Riding High",
+      "description": "Kinich uses his big-game hunting skills to either move swiftly or attack his opponent.\nWhen there is an opponent or object that can be attacked nearby, he will attach a grappling hook to the target and enter Nightsoul's Blessing with 0 Nightsoul points. If neither is nearby, he fires a grappling hook forward and swings in mid-air, and this Skill's CD is decreased by 60%.\nThis skill can be Held to release. When it is Held, Kinich can aim the grappling hook.\n\nNightsoul's Blessing: Kinich\nKinich's Nightsoul's Blessing lasts 10s and generates 2 Nightsoul points every second.\nIn this state, Kinich will hook onto a nearby opponent and perform a variable attack:\n·When using a Normal Attack, Kinich will fire Loop Shots as he loops around the grappled target based on his current movement direction, dealing Nightsoul-aligned Dendro DMG and generating 3 Nightsoul points. Loop Shot DMG is considered Elemental Skill DMG.\n·When Nightsoul points are at max, he can use the Elemental Skill \"Scalespiker Cannon\": Consume all Nightsoul points to deal Nightsoul-aligned Dendro DMG. When \"Scalespiker Cannon\" is Held, Kinich can aim this shot. After firing the Cannon, Kinich will try to grapple to its target.\nWhile in Nightsoul's Blessing, after grappling an opponent or firing \"Scalespiker Cannon,\" a Blind Spot will be generated next to the opponent. When Kinich enters this Blind Spot, it will disappear and he will generate 4 Nightsoul points.\nIf the grapple connection should snap due to exceeding the maximum distance or some other reason, using a Normal Attack will establish a new connection with a nearby opponent before performing Loop Shots.",
+      "kind": "skill",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat3",
+      "name": "Hail to the Almighty Dragonlord",
+      "description": "Unleashes the power of the Almighty Dragonlord, K'uhul Ajaw (on a limited, conditional, restricted, contractual, partial, temporary basis), dealing Nightsoul-aligned AoE Dendro DMG. Ajaw will unleash his Dragon Breath at intervals, dealing Nightsoul-aligned AoE Dendro DMG.\nIf Kinich is in Nightsoul's Blessing when this is used, this Blessing's duration is extended by 1.7s.",
+      "kind": "burst",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive1",
+      "name": "The Price of Desolation",
+      "description": "When Kinich is in Nightsoul's Blessing state, opponents hit by his Elemental Skill will enter the Desolation state, and when affected by Burning or Burgeon reaction DMG, they will restore 7 Nightsoul points to him. Nightsoul points can be gained this way once every 0.8s. The Desolation state will persist until this instance of Kinich's Nightsoul's Blessing state ends.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive2",
+      "name": "Flame Spirit Pact",
+      "description": "After a nearby party member triggers a Nightsoul Burst, Kinich will gain 1 stack of Hunter's Experience that lasts 15s. Max 2 stacks. When Kinich uses Canopy Hunter: Riding High's Scalespiker Cannon, all stacks of Hunter's Experience will be consumed, with each stack consumed increasing the DMG dealt by this Cannon shot by 320% of Kinich's ATK.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive3",
+      "name": "Night Realm's Gift: Repaid in Full",
+      "description": "When Kinich is in the air following Canopy Hunter: Riding High's mid-air swing, he can consume 10 Phlogiston points to perform another mid-air swing.\nWhile in an area with Phlogiston Mechanics within Natlan, he can use Nightsoul Transmission: Kinich. When the current active character is sprinting, in movement states that result from specific Talents, or in the air, when you switch to Kinich: Kinich will perform one of the following actions depending on the conditions met:\n·When facing a Coilgrass Sigil that can be interacted with: He will fire a grappling hook towards it to move;\n·When there are nearby opponents and you are in combat: Kinich will use Canopy Hunter: Riding High in the direction of the opponents;\nOtherwise, Kinich will fire a grappling hook and swing, prioritizing valid Coilgrass Sigils as grapple targets.\nNightsoul Transmission can be triggered once every 10s by your own party.\n\nWhen interacting with Coilgrass Sigils and other items that Yumkasaurs can interact with, \"Canopy Hunter: Riding High\" will be converted to \"Yumkasaur Mimesis,\" which causes interactions with such items to follow rules applicable to Yumkasaurs, and which will not put Canopy Hunter: Riding High on CD.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive4",
+      "name": "Swift Envoy",
+      "description": "While in an area with Phlogiston Mechanics within Natlan, interacting with some harvestable items will increase your own party members' Movement SPD by 15% for 10s. Additionally, the location of nearby resources unique to Natlan will appear on your mini-map.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    }
+  ],
+  "constellations": [
+    {
+      "key": "c1",
+      "name": "Parrot's Beak",
+      "description": "After Kinich lands from Canopy Hunter: Riding High's mid-air swing, his Movement SPD will increase by 30% for 6s.\nAdditionally, Scalespiker Cannon's CRIT DMG is increased by 100%.",
+      "kind": "constellation",
+      "constellation": 1,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c2",
+      "name": "Tiger Beetle's Palm",
+      "description": "When Kinich's Elemental Skill hits an opponent, it will decrease their Dendro RES by 30% for 6s.\nAdditionally, the first Scalespiker Cannon Kinich fires after entering Nightsoul's Blessing has increased AoE, and its DMG increases by 100%.",
+      "kind": "constellation",
+      "constellation": 2,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c3",
+      "name": "Protosuchian's Claw",
+      "description": "Increases the Level of Canopy Hunter: Riding High by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 3,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c4",
+      "name": "Hummingbird's Feather",
+      "description": "When in Nightsoul's Blessing, Kinich will restore 5 Energy after using his Loop Shots or after unleashing the Scalespiker Cannon. Energy can be regenerated this way once every 2.8s.\nAdditionally, Hail to the Almighty Dragonlord deals 70% more DMG.",
+      "kind": "constellation",
+      "constellation": 4,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c5",
+      "name": "Howler Monkey's Tail",
+      "description": "Increases the Level of Hail to the Almighty Dragonlord by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 5,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c6",
+      "name": "Auspicious Beast's Shape",
+      "description": "After Scalespiker Cannon hits an opponent, it will bounce between opponents once, dealing 700% of Kinich's ATK as Dendro DMG.\nIf this Scalespiker Cannon triggers the buffs that Ascension Talent \"Flame Spirit Pact\" or the Constellation \"Tiger Beetle's Palm\" grant to the Cannon, the bouncing attack will also obtain the relevant buffs.",
+      "kind": "constellation",
+      "constellation": 6,
+      "unlock": "constellation"
+    }
+  ],
+  "weapons": [
+    { "key": "Akuoumaru", "name": "Akuoumaru" },
+    { "key": "ATeaspoonOfTranscendence", "name": "A Teaspoon of Transcendence" },
+    { "key": "AThousandBlazingSuns", "name": "A Thousand Blazing Suns" },
+    { "key": "BeaconOfTheReedSea", "name": "Beacon of the Reed Sea" },
+    { "key": "BlackcliffSlasher", "name": "Blackcliff Slasher" },
+    { "key": "BladeOfAtonement", "name": "Blade of Atonement" },
+    { "key": "BloodtaintedGreatsword", "name": "Bloodtainted Greatsword" },
+    { "key": "DebateClub", "name": "Debate Club" },
+    { "key": "EarthShaker", "name": "Earth Shaker" },
+    { "key": "FangOfTheMountainKing", "name": "Fang of the Mountain King" },
+    { "key": "FavoniusGreatsword", "name": "Favonius Greatsword" },
+    { "key": "FerrousShadow", "name": "Ferrous Shadow" },
+    { "key": "FlameForgedInsight", "name": "Flame-Forged Insight" },
+    { "key": "ForestRegalia", "name": "Forest Regalia" },
+    { "key": "ForgedByTheGoldenMelody", "name": "Forged by the Golden Melody" },
+    { "key": "FruitfulHook", "name": "Fruitful Hook" },
+    { "key": "GestOfTheMightyWolf", "name": "Gest of the Mighty Wolf" },
+    { "key": "KatsuragikiriNagamasa", "name": "Katsuragikiri Nagamasa" },
+    { "key": "LithicBlade", "name": "Lithic Blade" },
+    { "key": "LuxuriousSeaLord", "name": "Luxurious Sea-Lord" },
+    { "key": "MailedFlower", "name": "Mailed Flower" },
+    { "key": "MakhairaAquamarine", "name": "Makhaira Aquamarine" },
+    { "key": "MasterKey", "name": "Master Key" },
+    { "key": "OldMercsPal", "name": "Old Merc's Pal" },
+    { "key": "PortablePowerSaw", "name": "Portable Power Saw" },
+    { "key": "PrototypeArchaic", "name": "Prototype Archaic" },
+    { "key": "Rainslasher", "name": "Rainslasher" },
+    { "key": "RedhornStonethresher", "name": "Redhorn Stonethresher" },
+    { "key": "RoyalGreatsword", "name": "Royal Greatsword" },
+    { "key": "SacrificialGreatsword", "name": "Sacrificial Greatsword" },
+    { "key": "SerpentSpine", "name": "Serpent Spine" },
+    { "key": "SkyriderGreatsword", "name": "Skyrider Greatsword" },
+    { "key": "SkywardPride", "name": "Skyward Pride" },
+    { "key": "SnowTombedStarsilver", "name": "Snow-Tombed Starsilver" },
+    { "key": "SongOfBrokenPines", "name": "Song of Broken Pines" },
+    { "key": "TalkingStick", "name": "Talking Stick" },
+    { "key": "TheBell", "name": "The Bell" },
+    { "key": "TheUnforged", "name": "The Unforged" },
+    { "key": "TidalShadow", "name": "Tidal Shadow" },
+    {
+      "key": "UltimateOverlordsMegaMagicSword",
+      "name": "\"Ultimate Overlord's Mega Magic Sword\""
+    },
+    { "key": "Verdict", "name": "Verdict" },
+    { "key": "WasterGreatsword", "name": "Waster Greatsword" },
+    { "key": "Whiteblind", "name": "Whiteblind" },
+    { "key": "WhiteIronGreatsword", "name": "White Iron Greatsword" },
+    { "key": "WolfsGravestone", "name": "Wolf's Gravestone" }
+  ],
+  "artifactSets": [
+    { "key": "ADayCarvedFromRisingWinds", "name": "A Day Carved From Rising Winds" },
+    { "key": "Adventurer", "name": "Adventurer" },
+    { "key": "ArchaicPetra", "name": "Archaic Petra" },
+    { "key": "AubadeOfMorningstarAndMoon", "name": "Aubade of Morningstar and Moon" },
+    { "key": "Berserker", "name": "Berserker" },
+    { "key": "BlizzardStrayer", "name": "Blizzard Strayer" },
+    { "key": "BloodstainedChivalry", "name": "Bloodstained Chivalry" },
+    { "key": "BraveHeart", "name": "Brave Heart" },
+    { "key": "CelestialGift", "name": "Celestial Gift" },
+    { "key": "CrimsonWitchOfFlames", "name": "Crimson Witch of Flames" },
+    { "key": "DeepwoodMemories", "name": "Deepwood Memories" },
+    { "key": "DefendersWill", "name": "Defender's Will" },
+    { "key": "DesertPavilionChronicle", "name": "Desert Pavilion Chronicle" },
+    { "key": "DisenchantmentInDeepShadow", "name": "Disenchantment in Deep Shadow" },
+    { "key": "EchoesOfAnOffering", "name": "Echoes of an Offering" },
+    { "key": "EmblemOfSeveredFate", "name": "Emblem of Severed Fate" },
+    { "key": "FinaleOfTheDeepGalleries", "name": "Finale of the Deep Galleries" },
+    { "key": "FlowerOfParadiseLost", "name": "Flower of Paradise Lost" },
+    { "key": "FragmentOfHarmonicWhimsy", "name": "Fragment of Harmonic Whimsy" },
+    { "key": "Gambler", "name": "Gambler" },
+    { "key": "GildedDreams", "name": "Gilded Dreams" },
+    { "key": "GladiatorsFinale", "name": "Gladiator's Finale" },
+    { "key": "GoldenTroupe", "name": "Golden Troupe" },
+    { "key": "HeartOfDepth", "name": "Heart of Depth" },
+    { "key": "HeartOfTheFurnace", "name": "Heart of the Furnace" },
+    { "key": "HuskOfOpulentDreams", "name": "Husk of Opulent Dreams" },
+    { "key": "Instructor", "name": "Instructor" },
+    { "key": "Lavawalker", "name": "Lavawalker" },
+    { "key": "LongNightsOath", "name": "Long Night's Oath" },
+    { "key": "LuckyDog", "name": "Lucky Dog" },
+    { "key": "MaidenBeloved", "name": "Maiden Beloved" },
+    { "key": "MarechausseeHunter", "name": "Marechaussee Hunter" },
+    { "key": "MartialArtist", "name": "Martial Artist" },
+    { "key": "NightOfTheSkysUnveiling", "name": "Night of the Sky's Unveiling" },
+    {
+      "key": "NighttimeWhispersInTheEchoingWoods",
+      "name": "Nighttime Whispers in the Echoing Woods"
+    },
+    { "key": "NoblesseOblige", "name": "Noblesse Oblige" },
+    { "key": "NymphsDream", "name": "Nymph's Dream" },
+    { "key": "ObsidianCodex", "name": "Obsidian Codex" },
+    { "key": "OceanHuedClam", "name": "Ocean-Hued Clam" },
+    { "key": "PaleFlame", "name": "Pale Flame" },
+    { "key": "PrayersForDestiny", "name": "Prayers for Destiny" },
+    { "key": "PrayersForIllumination", "name": "Prayers for Illumination" },
+    { "key": "PrayersForWisdom", "name": "Prayers for Wisdom" },
+    { "key": "PrayersToSpringtime", "name": "Prayers to Springtime" },
+    { "key": "ResolutionOfSojourner", "name": "Resolution of Sojourner" },
+    { "key": "RetracingBolide", "name": "Retracing Bolide" },
+    { "key": "ScarletProof", "name": "Scarlet Proof" },
+    { "key": "Scholar", "name": "Scholar" },
+    { "key": "ScrollOfTheHeroOfCinderCity", "name": "Scroll of the Hero of Cinder City" },
+    { "key": "ShimenawasReminiscence", "name": "Shimenawa's Reminiscence" },
+    { "key": "SilkenMoonsSerenade", "name": "Silken Moon's Serenade" },
+    { "key": "SongOfDaysPast", "name": "Song of Days Past" },
+    { "key": "TenacityOfTheMillelith", "name": "Tenacity of the Millelith" },
+    { "key": "TheExile", "name": "The Exile" },
+    { "key": "ThunderingFury", "name": "Thundering Fury" },
+    { "key": "Thundersoother", "name": "Thundersoother" },
+    { "key": "TinyMiracle", "name": "Tiny Miracle" },
+    { "key": "TravelingDoctor", "name": "Traveling Doctor" },
+    { "key": "UnfinishedReverie", "name": "Unfinished Reverie" },
+    { "key": "VermillionHereafter", "name": "Vermillion Hereafter" },
+    { "key": "ViridescentVenerer", "name": "Viridescent Venerer" },
+    { "key": "VourukashasGlow", "name": "Vourukasha's Glow" },
+    { "key": "WanderersTroupe", "name": "Wanderer's Troupe" }
+  ],
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/characters/kinich.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "8a1bdfa4e1aff4deb4ac7f1736947e1e9066c4563e48a5f46907472c7177fab3",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/kinich.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "22ad72a0d9fdf1bdc2ea07fa5b620c52733d6984036c37c150f706b99a8b39fb",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/constellations/kinich.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "13dd800a679fa0ad0c7cc3115ed69995d6f6ba1dd1fbf85c3ffcbdfcc75c22f4",
+      "license": "MIT"
+    }
+  ],
+  "gaps": [
+    "Passive and special ability unlock requirements are not supplied by this pinned source; their unlock states remain unknown."
+  ]
+}

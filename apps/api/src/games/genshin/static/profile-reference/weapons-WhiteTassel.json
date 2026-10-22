@@ -1,0 +1,23 @@
+{
+  "contractVersion": 1,
+  "key": "WhiteTassel",
+  "gameId": 13301,
+  "name": "White Tassel",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/whitetassel.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "b41e3176c3a142b70065d1f3b22057f9ca69a46e0e915df91d20ec1dbd83709e",
+    "license": "MIT"
+  },
+  "description": "A standard-issue weapon of the Millelith soldiers. It has a sturdy shaft and sharp spearhead. It's a reliable weapon.",
+  "weaponType": "Polearm",
+  "rarity": 3,
+  "effectName": "Sharp",
+  "refinements": [
+    { "rank": 1, "description": "Increases Normal Attack DMG by 24%." },
+    { "rank": 2, "description": "Increases Normal Attack DMG by 30%." },
+    { "rank": 3, "description": "Increases Normal Attack DMG by 36%." },
+    { "rank": 4, "description": "Increases Normal Attack DMG by 42%." },
+    { "rank": 5, "description": "Increases Normal Attack DMG by 48%." }
+  ]
+}

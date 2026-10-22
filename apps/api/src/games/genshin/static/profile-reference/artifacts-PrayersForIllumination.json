@@ -1,0 +1,20 @@
+{
+  "contractVersion": 1,
+  "key": "PrayersForIllumination",
+  "gameId": 15009,
+  "name": "Prayers for Illumination",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/prayersforillumination.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "6e868a1a6d36c1fde141fa9795f589148e240f6c720aeca479b1194a8486508e",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "circlet",
+      "name": "Tiara of Flame",
+      "description": "A tiara worn by those tasked with offering sacrifices in ancient times. After being subjected to the dancing sacrificial flames year in and year out, it possesses remarkable resistance."
+    }
+  ],
+  "effects": [{ "pieces": 1, "description": "Affected by Pyro for 40% less time." }]
+}

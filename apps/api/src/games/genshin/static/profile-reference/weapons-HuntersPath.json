@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "HuntersPath",
+  "gameId": 15511,
+  "name": "Hunter's Path",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/hunterspath.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "a053a338973212828a0feb0438b919432eb4f958a886e809f3f91dd949f2f6f0",
+    "license": "MIT"
+  },
+  "description": "This gilded bow was made using precious white branches. It has felled countless wicked beasts attempting to infiltrate the woods.",
+  "weaponType": "Bow",
+  "rarity": 5,
+  "effectName": "At the End of the Beast-Paths",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Gain 12% All Elemental DMG Bonus. Obtain the Tireless Hunt effect after hitting an opponent with a Charged Attack. This effect increases Charged Attack DMG by 160% of Elemental Mastery. This effect will be removed after 12 Charged Attacks or 10s. Only 1 instance of Tireless Hunt can be gained every 12s."
+    },
+    {
+      "rank": 2,
+      "description": "Gain 15% All Elemental DMG Bonus. Obtain the Tireless Hunt effect after hitting an opponent with a Charged Attack. This effect increases Charged Attack DMG by 200% of Elemental Mastery. This effect will be removed after 12 Charged Attacks or 10s. Only 1 instance of Tireless Hunt can be gained every 12s."
+    },
+    {
+      "rank": 3,
+      "description": "Gain 18% All Elemental DMG Bonus. Obtain the Tireless Hunt effect after hitting an opponent with a Charged Attack. This effect increases Charged Attack DMG by 240% of Elemental Mastery. This effect will be removed after 12 Charged Attacks or 10s. Only 1 instance of Tireless Hunt can be gained every 12s."
+    },
+    {
+      "rank": 4,
+      "description": "Gain 21% All Elemental DMG Bonus. Obtain the Tireless Hunt effect after hitting an opponent with a Charged Attack. This effect increases Charged Attack DMG by 280% of Elemental Mastery. This effect will be removed after 12 Charged Attacks or 10s. Only 1 instance of Tireless Hunt can be gained every 12s."
+    },
+    {
+      "rank": 5,
+      "description": "Gain 24% All Elemental DMG Bonus. Obtain the Tireless Hunt effect after hitting an opponent with a Charged Attack. This effect increases Charged Attack DMG by 320% of Elemental Mastery. This effect will be removed after 12 Charged Attacks or 10s. Only 1 instance of Tireless Hunt can be gained every 12s."
+    }
+  ]
+}

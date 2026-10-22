@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "TinyMiracle",
+  "gameId": 10004,
+  "name": "Tiny Miracle",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/tinymiracle.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "652aad095ef57660d75ed7868cb00d894f31616f1a6ab383643b2e5a55a5ebb9",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Tiny Miracle's Flower",
+      "description": "A flower that grew from a rock, breaking through the stone as it strove to reach the light."
+    },
+    {
+      "slot": "plume",
+      "name": "Tiny Miracle's Feather",
+      "description": "A feather from a bird of prey that flies almost too fast for the human eye to detect."
+    },
+    {
+      "slot": "sands",
+      "name": "Tiny Miracle's Hourglass",
+      "description": "Just an ordinary, everyday hourglass. Turn it upside down and sure enough, the dry sand starts trickling down like water."
+    },
+    {
+      "slot": "goblet",
+      "name": "Tiny Miracle's Goblet",
+      "description": "A cup commonly used for fortune-telling. It can also hold water, of course."
+    },
+    {
+      "slot": "circlet",
+      "name": "Tiny Miracle's Earrings",
+      "description": "A cheap accessory that is actually made from ancient meteoric ore."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "All Elemental RES increased by 20%." },
+    {
+      "pieces": 4,
+      "description": "Incoming elemental DMG increases corresponding Elemental RES by 30% for 10s. Can only occur once every 10s."
+    }
+  ]
+}

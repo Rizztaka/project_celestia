@@ -1,0 +1,23 @@
+{
+  "contractVersion": 1,
+  "key": "HarbingerOfDawn",
+  "gameId": 11302,
+  "name": "Harbinger of Dawn",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/harbingerofdawn.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "90ed459a7126b086708e83dfc3d0ceee63637f41fcb8ec06edf0932201b662e3",
+    "license": "MIT"
+  },
+  "description": "A sword that once shone like the sun. The wielder of this sword will be blessed with a \"feel-good\" buff. The reflective material on the blade has long worn off.",
+  "weaponType": "Sword",
+  "rarity": 3,
+  "effectName": "Vigorous",
+  "refinements": [
+    { "rank": 1, "description": "When HP is above 90%, increases CRIT Rate by 14%." },
+    { "rank": 2, "description": "When HP is above 90%, increases CRIT Rate by 17.5%." },
+    { "rank": 3, "description": "When HP is above 90%, increases CRIT Rate by 21%." },
+    { "rank": 4, "description": "When HP is above 90%, increases CRIT Rate by 24.5%." },
+    { "rank": 5, "description": "When HP is above 90%, increases CRIT Rate by 28%." }
+  ]
+}

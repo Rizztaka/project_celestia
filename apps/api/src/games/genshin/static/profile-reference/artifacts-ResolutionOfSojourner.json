@@ -1,0 +1,43 @@
+{
+  "contractVersion": 1,
+  "key": "ResolutionOfSojourner",
+  "gameId": 10001,
+  "name": "Resolution of Sojourner",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/resolutionofsojourner.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "4191f3149591687ce0c1faffbb4c3fd34e48b058ee78a9249a45496aa1c56ea7",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Heart of Comradeship",
+      "description": "A small cerulean flower with somebody's ribbon pinned to the stem."
+    },
+    {
+      "slot": "plume",
+      "name": "Feather of Homecoming",
+      "description": "A blue arrow fletching imbued with the sentiment of travelers that had once faded into the horizon."
+    },
+    {
+      "slot": "sands",
+      "name": "Sundial of the Sojourner",
+      "description": "A sundial that has survived the ages, always silently recording the cycles of the sun and moon as they pass through the sky."
+    },
+    {
+      "slot": "goblet",
+      "name": "Goblet of the Sojourner",
+      "description": "A plain porcelain goblet that was once brimming with joyous brews."
+    },
+    {
+      "slot": "circlet",
+      "name": "Crown of Parting",
+      "description": "A reed coronet that emanates the spring breeze."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "ATK +18%." },
+    { "pieces": 4, "description": "Increases Charged Attack CRIT Rate by 30%." }
+  ]
+}

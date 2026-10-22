@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "LuxuriousSeaLord",
+  "gameId": 12412,
+  "name": "Luxurious Sea-Lord",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/luxurioussealord.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "7b82ffc00b3056b0af748d3ade564bad8871a295d4f0d989f5888304491cec7d",
+    "license": "MIT"
+  },
+  "description": "The great king of the ocean. Having been air-dried, it makes for a fine weapon as well as emergency sustenance.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Oceanic Victory",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Elemental Burst DMG by 12%. When Elemental Burst hits opponents, there is a 100% chance of summoning a huge onrush of tuna that deals 100% ATK as AoE DMG. This effect can occur once every 15s."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Elemental Burst DMG by 15%. When Elemental Burst hits opponents, there is a 100% chance of summoning a huge onrush of tuna that deals 125% ATK as AoE DMG. This effect can occur once every 15s."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Elemental Burst DMG by 18%. When Elemental Burst hits opponents, there is a 100% chance of summoning a huge onrush of tuna that deals 150% ATK as AoE DMG. This effect can occur once every 15s."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Elemental Burst DMG by 21%. When Elemental Burst hits opponents, there is a 100% chance of summoning a huge onrush of tuna that deals 175% ATK as AoE DMG. This effect can occur once every 15s."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Elemental Burst DMG by 24%. When Elemental Burst hits opponents, there is a 100% chance of summoning a huge onrush of tuna that deals 200% ATK as AoE DMG. This effect can occur once every 15s."
+    }
+  ]
+}

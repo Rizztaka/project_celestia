@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SerpentSpine",
+  "gameId": 12409,
+  "name": "Serpent Spine",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/serpentspine.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "ab081720223283a21b797a841e2fd741bb7d6829ec76d43644ab46f47421fced",
+    "license": "MIT"
+  },
+  "description": "A rare weapon whose origin is the ancient ocean. One can hear the sound of the ageless waves as one swings it.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Wavesplitter",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Every 4s a character is on the field, they will deal 6% more DMG and take 3% more DMG. This effect has a maximum of 5 stacks and will not be reset if the character leaves the field, but will be reduced by 1 stack when the character takes DMG."
+    },
+    {
+      "rank": 2,
+      "description": "Every 4s a character is on the field, they will deal 7% more DMG and take 2.7% more DMG. This effect has a maximum of 5 stacks and will not be reset if the character leaves the field, but will be reduced by 1 stack when the character takes DMG."
+    },
+    {
+      "rank": 3,
+      "description": "Every 4s a character is on the field, they will deal 8% more DMG and take 2.4% more DMG. This effect has a maximum of 5 stacks and will not be reset if the character leaves the field, but will be reduced by 1 stack when the character takes DMG."
+    },
+    {
+      "rank": 4,
+      "description": "Every 4s a character is on the field, they will deal 9% more DMG and take 2.2% more DMG. This effect has a maximum of 5 stacks and will not be reset if the character leaves the field, but will be reduced by 1 stack when the character takes DMG."
+    },
+    {
+      "rank": 5,
+      "description": "Every 4s a character is on the field, they will deal 10% more DMG and take 2% more DMG. This effect has a maximum of 5 stacks and will not be reset if the character leaves the field, but will be reduced by 1 stack when the character takes DMG."
+    }
+  ]
+}

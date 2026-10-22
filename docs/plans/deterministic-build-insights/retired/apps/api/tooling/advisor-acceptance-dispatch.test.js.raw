@@ -1,0 +1,212 @@
+import { readFileSync } from 'node:fs';
+
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/core/db/prisma.js', () => ({ prisma: {} }));
+vi.mock('@/core/config/env.js', () => ({ env: { CELESTIA_AI_PROVIDER: 'disabled' } }));
+
+import { AdvisorProviderFailure } from '../src/core/ai/advisor-provider.js';
+import { CharacterAdvisorService } from '../src/games/genshin/intelligence/character-knowledge/advisor.service.js';
+import {
+  defaultKnowledgeRoot,
+  knowledgeHash,
+  loadCharacterKnowledge,
+} from '../src/games/genshin/intelligence/character-knowledge/knowledge.store.js';
+import { dispatchAdvisorAcceptance } from './advisor-acceptance-dispatch.mjs';
+
+const candidate = JSON.parse(
+  readFileSync(
+    new URL(
+      '../../../docs/plans/character-knowledge-assistant/quality-repair/candidate.json',
+      import.meta.url,
+    ),
+  ),
+);
+const knowledge = loadCharacterKnowledge(defaultKnowledgeRoot, candidate.release);
+const entry = (id, extra = {}) => ({
+  id,
+  characterKey: 'Neuvillette',
+  question: 'Explain the Elemental Skill.',
+  ...extra,
+});
+function answer(context) {
+  const d = context.evidence.find((v) => v.id === 'Neuvillette:combat2');
+  return {
+    segments: [
+      { text: d.text, support: d.text.slice(0, 80), basis: 'source_fact', evidenceIds: [d.id] },
+    ],
+    followUp: null,
+  };
+}
+function setup(
+  cases,
+  generate = answer,
+  corpus = knowledge,
+  repository = { readManyForUser: async () => [] },
+) {
+  const options = {
+    ids: cases.map((v) => v.id),
+    cases,
+    records: { cases: [] },
+    progress: { cases: {}, attempts: [] },
+    queue: { day: '2026-10-22', requestsReservedToday: 0, userRequestsReservedToday: 0, cases: [] },
+    identity: { release: candidate.release, policyDigest: 'controlled-current' },
+    knowledge: corpus,
+    limits: { daily: 12, user: 5 },
+    hash: knowledgeHash,
+    configured: {
+      provider: 'offline',
+      model: 'controlled-not-real-model',
+      complete: vi.fn(async (messages) => {
+        expect(messages[1].content.length).toBeLessThanOrEqual(22000);
+        if (messages[0].content.startsWith('Audit'))
+          return JSON.stringify({ supported: true, issues: [] });
+        const output = generate(JSON.parse(messages[1].content));
+        return typeof output === 'string' ? output : JSON.stringify(output);
+      }),
+    },
+    save: vi.fn(),
+    resultsPath: 'in-memory-results',
+    checkpoint: 'in-memory-checkpoint',
+    updateShared: vi.fn(),
+    createService: (provider) =>
+      new CharacterAdvisorService(repository, provider, corpus, () => true),
+    now: () => new Date('2026-10-22T12:00:00Z'),
+    pace: vi.fn(async () => {}),
+    log: vi.fn(),
+  };
+  return options;
+}
+describe('actual acceptance dispatch with production preparation (no credentials or live ledger)', () => {
+  it.each(['unsupported', 'partial', 'unavailable'])(
+    'stops after %s and retains the first raw trace',
+    async (status) => {
+      const first = entry(
+        'first',
+        status === 'partial'
+          ? { question: 'Explain Neuvillette and Furina Elemental Skills.' }
+          : {},
+      );
+      const options = setup([first, entry('second')], (context) => {
+        if (status === 'unsupported') return 'RAW invalid JSON';
+        if (status === 'unavailable') throw new AdvisorProviderFailure('quota', 90);
+        return answer(context);
+      });
+      const result = await dispatchAdvisorAcceptance(options);
+      expect(result.attempted).toBe(1);
+      expect(result.records.cases).toHaveLength(1);
+      expect(result.records.cases[0].response.status).toBe(status);
+      expect(options.queue.requestsReservedToday).toBe(1);
+      expect(options.pace).toHaveBeenCalledOnce();
+      expect(options.progress.cases.second).toBeUndefined();
+      const trace = result.records.cases[0].traces[0];
+      expect(trace.request[1].content).toContain('SERVER_RECORDS');
+      if (status === 'unsupported') expect(trace.rawOutput).toBe('RAW invalid JSON');
+      if (status === 'unavailable') {
+        expect(trace.failure).toEqual({ reason: 'quota', retryAfterSeconds: 90 });
+        expect(options.queue.providerBlockedUntil).toBe('2026-10-22T12:01:30.000Z');
+      }
+    },
+  );
+  it('rejects an impossible recorded envelope before shared reservation, pacing or adapter dispatch', async () => {
+    const record = {
+      character: { characterKey: 'Neuvillette' },
+      weapon: null,
+      artifacts: [],
+      receipts: [{ section: 'x'.repeat(23000), importedAt: new Date(), entryCount: 1 }],
+    };
+    const options = setup(
+      [
+        entry('first', {
+          input: {
+            characterKey: 'Neuvillette',
+            question: 'Explain the Elemental Skill.',
+            useRecordedContext: true,
+          },
+        }),
+        entry('second'),
+      ],
+      answer,
+      knowledge,
+      { readManyForUser: async () => [record] },
+    );
+    const result = await dispatchAdvisorAcceptance(options);
+    expect(result.records.cases[0].response.reason).toBe('context_budget');
+    expect(result.records.cases[0].state).toBe('blocked-local-preflight-no-reservation');
+    expect(result.attempted).toBe(0);
+    expect(options.queue.requestsReservedToday).toBe(0);
+    expect(options.updateShared).not.toHaveBeenCalled();
+    expect(options.pace).not.toHaveBeenCalled();
+    expect(options.configured.complete).not.toHaveBeenCalled();
+    expect(options.save).toHaveBeenCalledTimes(2);
+  });
+  it('blocks a predictable required source gap without reserving, retaining the missing subject', async () => {
+    const altered = structuredClone(knowledge);
+    altered.corpus.documents = altered.corpus.documents.filter((d) => d.characterKey !== 'Furina');
+    const options = setup(
+      [
+        entry('first', { question: 'Explain Neuvillette and Furina Elemental Skills.' }),
+        entry('second'),
+      ],
+      answer,
+      altered,
+    );
+    const result = await dispatchAdvisorAcceptance(options);
+    expect(result.records.cases[0].missingSubjects).toContain('Furina');
+    expect(result.records.cases[0].response.reason).toBe('incomplete_coverage');
+    expect(options.updateShared).not.toHaveBeenCalled();
+    expect(options.configured.complete).not.toHaveBeenCalled();
+  });
+  it('blocks a known strategy gap before shared reservation', async () => {
+    const altered = structuredClone(knowledge);
+    altered.corpus.documents = altered.corpus.documents.filter(
+      (d) => d.characterKey !== 'Neuvillette' || d.review === 'structured_source',
+    );
+    const options = setup(
+      [entry('first', { question: 'Explain a support role for Neuvillette.' })],
+      answer,
+      altered,
+    );
+    const result = await dispatchAdvisorAcceptance(options);
+    expect(result.records.cases[0].strategyMissing).toBe(true);
+    expect(result.records.cases[0].response.reason).toBe('incomplete_coverage');
+    expect(options.updateShared).not.toHaveBeenCalled();
+    expect(options.configured.complete).not.toHaveBeenCalled();
+  });
+  it('can dispatch two answered independent cases while keeping assessment pending', async () => {
+    const options = setup([entry('first'), entry('second')]);
+    const result = await dispatchAdvisorAcceptance(options);
+    expect(result.records.cases.map((c) => c.response.status)).toEqual(['answered', 'answered']);
+    expect(result.attempted).toBe(2);
+    expect(options.queue.requestsReservedToday).toBe(2);
+    expect(
+      result.records.cases.every((c) => c.assessment.state === 'pending-independent-assessment'),
+    ).toBe(true);
+  });
+  it('does not automatically use a just-answered result as follow-up history', async () => {
+    const options = setup([entry('first'), entry('followup', { previousCase: 'first' })]);
+    await expect(dispatchAdvisorAcceptance(options)).rejects.toThrow('independently accepted');
+    expect(options.queue.requestsReservedToday).toBe(1);
+    expect(options.records.cases).toHaveLength(1);
+    expect(options.configured.complete).toHaveBeenCalledTimes(2);
+  });
+  it('uses the actual independently assessed current exchange as follow-up history', async () => {
+    const options = setup([entry('first')]);
+    await dispatchAdvisorAcceptance(options);
+    options.records.cases[0].assessment.state = 'passed';
+    options.ids = ['followup'];
+    options.cases.push(entry('followup', { previousCase: 'first' }));
+    await dispatchAdvisorAcceptance(options);
+    const result = options.records.cases[1];
+    expect(result.precedingResult).toBe(options.records.cases[0].attemptId);
+    const actualContext = JSON.parse(result.traces[0].request[1].content);
+    expect(actualContext.history[0].content).toBe(options.records.cases[0].input.question);
+    expect(actualContext.history[1].content).toBe(
+      options.records.cases[0].response.answer.segments
+        .map((s) => s.text)
+        .join('\n')
+        .slice(0, 600),
+    );
+    expect(result.response.status).toBe('answered');
+  });
+});

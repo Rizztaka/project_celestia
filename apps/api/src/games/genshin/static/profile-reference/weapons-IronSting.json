@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "IronSting",
+  "gameId": 11407,
+  "name": "Iron Sting",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/ironsting.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "39a0591e00417e202c419a6097129fb042d8c2a6e08b53917d20e0685472a40e",
+    "license": "MIT"
+  },
+  "description": "An exotic long-bladed rapier that somehow found its way into Liyue via foreign traders. It is light, agile, and sharp.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Infusion Stinger",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Dealing Elemental DMG increases all DMG by 6% for 6s. Max 2 stacks. Can occur once every 1s."
+    },
+    {
+      "rank": 2,
+      "description": "Dealing Elemental DMG increases all DMG by 7.5% for 6s. Max 2 stacks. Can occur once every 1s."
+    },
+    {
+      "rank": 3,
+      "description": "Dealing Elemental DMG increases all DMG by 9% for 6s. Max 2 stacks. Can occur once every 1s."
+    },
+    {
+      "rank": 4,
+      "description": "Dealing Elemental DMG increases all DMG by 10.5% for 6s. Max 2 stacks. Can occur once every 1s."
+    },
+    {
+      "rank": 5,
+      "description": "Dealing Elemental DMG increases all DMG by 12% for 6s. Max 2 stacks. Can occur once every 1s."
+    }
+  ]
+}

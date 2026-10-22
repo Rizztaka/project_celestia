@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "CinnabarSpindle",
+  "gameId": 11415,
+  "name": "Cinnabar Spindle",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/cinnabarspindle.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "982a7d614052a7f9ca0049f524fafaa399f993f524d375a892183a7c64fb359e",
+    "license": "MIT"
+  },
+  "description": "A sword made from materials that do not belong in this world. The power within might even be able to withstand the corruption of a venom that could corrode a mighty dragon.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Spotless Heart",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Elemental Skill DMG is increased by 40% of DEF. The effect will be triggered no more than once every 1.5s and will be cleared 0.1s after the Elemental Skill deals DMG."
+    },
+    {
+      "rank": 2,
+      "description": "Elemental Skill DMG is increased by 50% of DEF. The effect will be triggered no more than once every 1.5s and will be cleared 0.1s after the Elemental Skill deals DMG."
+    },
+    {
+      "rank": 3,
+      "description": "Elemental Skill DMG is increased by 60% of DEF. The effect will be triggered no more than once every 1.5s and will be cleared 0.1s after the Elemental Skill deals DMG."
+    },
+    {
+      "rank": 4,
+      "description": "Elemental Skill DMG is increased by 70% of DEF. The effect will be triggered no more than once every 1.5s and will be cleared 0.1s after the Elemental Skill deals DMG."
+    },
+    {
+      "rank": 5,
+      "description": "Elemental Skill DMG is increased by 80% of DEF. The effect will be triggered no more than once every 1.5s and will be cleared 0.1s after the Elemental Skill deals DMG."
+    }
+  ]
+}

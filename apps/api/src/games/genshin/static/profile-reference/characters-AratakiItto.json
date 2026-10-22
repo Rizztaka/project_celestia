@@ -1,0 +1,252 @@
+{
+  "contractVersion": 1,
+  "key": "AratakiItto",
+  "gameId": 10000057,
+  "name": "Arataki Itto",
+  "description": "The first and greatest head of the Arataki Gang, famed throughout Inazuma City's Hanamizaka... Wait, what? You've never heard of them? Are you trying to be funny here?",
+  "element": "Geo",
+  "weaponType": "Claymore",
+  "rarity": 5,
+  "forms": [],
+  "talents": [
+    {
+      "key": "combat1",
+      "name": "Fight Club Legend",
+      "description": "Normal Attack\nPerforms up to 4 consecutive strikes.\nWhen the 2nd and 4th strikes hit opponents, Itto will gain 1 and 2 stacks of Superlative Superstrength, respectively.\nMax 5 stacks. Triggering this effect will refresh the current duration of any existing stacks.\n\nAdditionally, Itto's Normal Attack combo does not immediately reset after sprinting or using his Elemental Skill, \"Masatsu Zetsugi: Akaushi Burst!\"\n\nCharged Attack\nWhen holding to perform a Charged Attack, Itto unleashes a series of Arataki Kesagiri slashes without consuming Stamina. Instead, each Arataki Kesagiri slash consumes 1 stack of Superlative Superstrength. When the final stack is consumed, Itto delivers a powerful final slash.\nIf no stacks of Superlative Superstrength are available, Itto will perform a single Saichimonji Slash.\n\nPlunging Attack\nPlunges from mid-air to strike the ground, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "kind": "normal",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat2",
+      "name": "Masatsu Zetsugi: Akaushi Burst!",
+      "description": "Hurls Ushi, the young akaushi bull and auxiliary member of the Arataki Gang, dealing Geo DMG to opponents on hit. When Ushi hits opponents, Arataki Itto gains 1 stack of Superlative Superstrength.\n\nUshi will remain on the field and provide support in the following ways:\n· Taunts surrounding opponents and draws their attacks.\n· Inherits HP based on a percentage of Arataki Itto's Max HP.\n· When Ushi takes DMG, Arataki Itto gains 1 stack of Superlative Superstrength. Only 1 stack can be gained in this way every 2s.\n· Ushi will flee when its HP reaches 0 or its duration ends. It will grant Arataki Itto 1 stack of Superlative Superstrength when it leaves.\n\nHold\nAdjust throwing angle.\n\nUshi is considered a Geo construct. Arataki Itto can only deploy 1 Ushi on the field at any one time.",
+      "kind": "skill",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat3",
+      "name": "Royal Descent: Behold, Itto the Evil!",
+      "description": "Time to show 'em the might of the Arataki Gang! For a time, Itto lets out his inner Raging Oni King, wielding his Oni King's Kanabou in battle.\nThis state has the following special properties:\n· Converts Itto's Normal, Charged, and Plunging Attacks to Geo DMG. This cannot be overridden.\n· Increases Itto's Normal Attack SPD. Also increases his ATK based on his DEF.\n· On hit, the 1st and 3rd strikes of his attack combo will each grant Arataki Itto 1 stack of Superlative Superstrength.\n· Decreases Itto's Elemental and Physical RES by 20%.\n\nThe Raging Oni King state will be cleared when Itto leaves the field.",
+      "kind": "burst",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive1",
+      "name": "Arataki Ichiban",
+      "description": "When Arataki Itto uses consecutive Arataki Kesagiri, he obtains the following effects:\n· Each slash increases the ATK SPD of the next slash by 10%. Max ATK SPD increase is 30%.\n· Increases his resistance to interruption.\n\nThese effects will be cleared once he stops performing consecutive slashes.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive2",
+      "name": "Bloodline of the Crimson Oni",
+      "description": "Arataki Kesagiri DMG is increased by 35% of Arataki Itto's DEF.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive3",
+      "name": "Woodchuck Chucked",
+      "description": "When a party member uses attacks to obtain wood from a tree, they have a 25% chance to get an additional log of wood.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    }
+  ],
+  "constellations": [
+    {
+      "key": "c1",
+      "name": "Stay a While and Listen Up",
+      "description": "After using Royal Descent: Behold, Itto the Evil!, Arataki Itto gains 2 stacks of Superlative Superstrength. After 1s, Itto will gain 1 stack of Superlative Superstrength every 0.5s for 1.5s.",
+      "kind": "constellation",
+      "constellation": 1,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c2",
+      "name": "Gather 'Round, It's a Brawl!",
+      "description": "After using Royal Descent: Behold, Itto the Evil!, each party member whose Element is Geo will decrease that skill's CD by 1.5s and restore 6 Energy to Arataki Itto.\nCD can be decreased by up to 4.5s in this manner. Max 18 Energy can be restored in this manner.",
+      "kind": "constellation",
+      "constellation": 2,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c3",
+      "name": "Horns Lowered, Coming Through",
+      "description": "Increases the Level of Masatsu Zetsugi: Akaushi Burst! by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 3,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c4",
+      "name": "Jailhouse Bread and Butter",
+      "description": "When the Raging Oni King state caused by Royal Descent: Behold, Itto the Evil! ends, all nearby party members gain 20% DEF and 20% ATK for 10s.",
+      "kind": "constellation",
+      "constellation": 4,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c5",
+      "name": "10 Years of Hanamizaka Fame",
+      "description": "Increases the Level of Royal Descent: Behold, Itto the Evil! by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 5,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c6",
+      "name": "Arataki Itto, Present!",
+      "description": "Arataki Itto's Charged Attacks deal +70% CRIT DMG. Additionally, when he uses Arataki Kesagiri, he has a 50% chance to not consume stacks of Superlative Superstrength.",
+      "kind": "constellation",
+      "constellation": 6,
+      "unlock": "constellation"
+    }
+  ],
+  "weapons": [
+    { "key": "Akuoumaru", "name": "Akuoumaru" },
+    { "key": "ATeaspoonOfTranscendence", "name": "A Teaspoon of Transcendence" },
+    { "key": "AThousandBlazingSuns", "name": "A Thousand Blazing Suns" },
+    { "key": "BeaconOfTheReedSea", "name": "Beacon of the Reed Sea" },
+    { "key": "BlackcliffSlasher", "name": "Blackcliff Slasher" },
+    { "key": "BladeOfAtonement", "name": "Blade of Atonement" },
+    { "key": "BloodtaintedGreatsword", "name": "Bloodtainted Greatsword" },
+    { "key": "DebateClub", "name": "Debate Club" },
+    { "key": "EarthShaker", "name": "Earth Shaker" },
+    { "key": "FangOfTheMountainKing", "name": "Fang of the Mountain King" },
+    { "key": "FavoniusGreatsword", "name": "Favonius Greatsword" },
+    { "key": "FerrousShadow", "name": "Ferrous Shadow" },
+    { "key": "FlameForgedInsight", "name": "Flame-Forged Insight" },
+    { "key": "ForestRegalia", "name": "Forest Regalia" },
+    { "key": "ForgedByTheGoldenMelody", "name": "Forged by the Golden Melody" },
+    { "key": "FruitfulHook", "name": "Fruitful Hook" },
+    { "key": "GestOfTheMightyWolf", "name": "Gest of the Mighty Wolf" },
+    { "key": "KatsuragikiriNagamasa", "name": "Katsuragikiri Nagamasa" },
+    { "key": "LithicBlade", "name": "Lithic Blade" },
+    { "key": "LuxuriousSeaLord", "name": "Luxurious Sea-Lord" },
+    { "key": "MailedFlower", "name": "Mailed Flower" },
+    { "key": "MakhairaAquamarine", "name": "Makhaira Aquamarine" },
+    { "key": "MasterKey", "name": "Master Key" },
+    { "key": "OldMercsPal", "name": "Old Merc's Pal" },
+    { "key": "PortablePowerSaw", "name": "Portable Power Saw" },
+    { "key": "PrototypeArchaic", "name": "Prototype Archaic" },
+    { "key": "Rainslasher", "name": "Rainslasher" },
+    { "key": "RedhornStonethresher", "name": "Redhorn Stonethresher" },
+    { "key": "RoyalGreatsword", "name": "Royal Greatsword" },
+    { "key": "SacrificialGreatsword", "name": "Sacrificial Greatsword" },
+    { "key": "SerpentSpine", "name": "Serpent Spine" },
+    { "key": "SkyriderGreatsword", "name": "Skyrider Greatsword" },
+    { "key": "SkywardPride", "name": "Skyward Pride" },
+    { "key": "SnowTombedStarsilver", "name": "Snow-Tombed Starsilver" },
+    { "key": "SongOfBrokenPines", "name": "Song of Broken Pines" },
+    { "key": "TalkingStick", "name": "Talking Stick" },
+    { "key": "TheBell", "name": "The Bell" },
+    { "key": "TheUnforged", "name": "The Unforged" },
+    { "key": "TidalShadow", "name": "Tidal Shadow" },
+    {
+      "key": "UltimateOverlordsMegaMagicSword",
+      "name": "\"Ultimate Overlord's Mega Magic Sword\""
+    },
+    { "key": "Verdict", "name": "Verdict" },
+    { "key": "WasterGreatsword", "name": "Waster Greatsword" },
+    { "key": "Whiteblind", "name": "Whiteblind" },
+    { "key": "WhiteIronGreatsword", "name": "White Iron Greatsword" },
+    { "key": "WolfsGravestone", "name": "Wolf's Gravestone" }
+  ],
+  "artifactSets": [
+    { "key": "ADayCarvedFromRisingWinds", "name": "A Day Carved From Rising Winds" },
+    { "key": "Adventurer", "name": "Adventurer" },
+    { "key": "ArchaicPetra", "name": "Archaic Petra" },
+    { "key": "AubadeOfMorningstarAndMoon", "name": "Aubade of Morningstar and Moon" },
+    { "key": "Berserker", "name": "Berserker" },
+    { "key": "BlizzardStrayer", "name": "Blizzard Strayer" },
+    { "key": "BloodstainedChivalry", "name": "Bloodstained Chivalry" },
+    { "key": "BraveHeart", "name": "Brave Heart" },
+    { "key": "CelestialGift", "name": "Celestial Gift" },
+    { "key": "CrimsonWitchOfFlames", "name": "Crimson Witch of Flames" },
+    { "key": "DeepwoodMemories", "name": "Deepwood Memories" },
+    { "key": "DefendersWill", "name": "Defender's Will" },
+    { "key": "DesertPavilionChronicle", "name": "Desert Pavilion Chronicle" },
+    { "key": "DisenchantmentInDeepShadow", "name": "Disenchantment in Deep Shadow" },
+    { "key": "EchoesOfAnOffering", "name": "Echoes of an Offering" },
+    { "key": "EmblemOfSeveredFate", "name": "Emblem of Severed Fate" },
+    { "key": "FinaleOfTheDeepGalleries", "name": "Finale of the Deep Galleries" },
+    { "key": "FlowerOfParadiseLost", "name": "Flower of Paradise Lost" },
+    { "key": "FragmentOfHarmonicWhimsy", "name": "Fragment of Harmonic Whimsy" },
+    { "key": "Gambler", "name": "Gambler" },
+    { "key": "GildedDreams", "name": "Gilded Dreams" },
+    { "key": "GladiatorsFinale", "name": "Gladiator's Finale" },
+    { "key": "GoldenTroupe", "name": "Golden Troupe" },
+    { "key": "HeartOfDepth", "name": "Heart of Depth" },
+    { "key": "HeartOfTheFurnace", "name": "Heart of the Furnace" },
+    { "key": "HuskOfOpulentDreams", "name": "Husk of Opulent Dreams" },
+    { "key": "Instructor", "name": "Instructor" },
+    { "key": "Lavawalker", "name": "Lavawalker" },
+    { "key": "LongNightsOath", "name": "Long Night's Oath" },
+    { "key": "LuckyDog", "name": "Lucky Dog" },
+    { "key": "MaidenBeloved", "name": "Maiden Beloved" },
+    { "key": "MarechausseeHunter", "name": "Marechaussee Hunter" },
+    { "key": "MartialArtist", "name": "Martial Artist" },
+    { "key": "NightOfTheSkysUnveiling", "name": "Night of the Sky's Unveiling" },
+    {
+      "key": "NighttimeWhispersInTheEchoingWoods",
+      "name": "Nighttime Whispers in the Echoing Woods"
+    },
+    { "key": "NoblesseOblige", "name": "Noblesse Oblige" },
+    { "key": "NymphsDream", "name": "Nymph's Dream" },
+    { "key": "ObsidianCodex", "name": "Obsidian Codex" },
+    { "key": "OceanHuedClam", "name": "Ocean-Hued Clam" },
+    { "key": "PaleFlame", "name": "Pale Flame" },
+    { "key": "PrayersForDestiny", "name": "Prayers for Destiny" },
+    { "key": "PrayersForIllumination", "name": "Prayers for Illumination" },
+    { "key": "PrayersForWisdom", "name": "Prayers for Wisdom" },
+    { "key": "PrayersToSpringtime", "name": "Prayers to Springtime" },
+    { "key": "ResolutionOfSojourner", "name": "Resolution of Sojourner" },
+    { "key": "RetracingBolide", "name": "Retracing Bolide" },
+    { "key": "ScarletProof", "name": "Scarlet Proof" },
+    { "key": "Scholar", "name": "Scholar" },
+    { "key": "ScrollOfTheHeroOfCinderCity", "name": "Scroll of the Hero of Cinder City" },
+    { "key": "ShimenawasReminiscence", "name": "Shimenawa's Reminiscence" },
+    { "key": "SilkenMoonsSerenade", "name": "Silken Moon's Serenade" },
+    { "key": "SongOfDaysPast", "name": "Song of Days Past" },
+    { "key": "TenacityOfTheMillelith", "name": "Tenacity of the Millelith" },
+    { "key": "TheExile", "name": "The Exile" },
+    { "key": "ThunderingFury", "name": "Thundering Fury" },
+    { "key": "Thundersoother", "name": "Thundersoother" },
+    { "key": "TinyMiracle", "name": "Tiny Miracle" },
+    { "key": "TravelingDoctor", "name": "Traveling Doctor" },
+    { "key": "UnfinishedReverie", "name": "Unfinished Reverie" },
+    { "key": "VermillionHereafter", "name": "Vermillion Hereafter" },
+    { "key": "ViridescentVenerer", "name": "Viridescent Venerer" },
+    { "key": "VourukashasGlow", "name": "Vourukasha's Glow" },
+    { "key": "WanderersTroupe", "name": "Wanderer's Troupe" }
+  ],
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/characters/aratakiitto.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "6a92383697834b921547ba061c39fa00f5e05fef98325894b24e442b971ee6f6",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/aratakiitto.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "9bb84641e6eea5ebe16a8215c35d80f83f4f7071eaefd0fc1d3fbf49a20dfe1a",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/constellations/aratakiitto.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "6d3b9a2121fd98b8668cd072f78456e364afce1def2e837270401d867d84ca77",
+      "license": "MIT"
+    }
+  ],
+  "gaps": [
+    "Passive and special ability unlock requirements are not supplied by this pinned source; their unlock states remain unknown."
+  ]
+}

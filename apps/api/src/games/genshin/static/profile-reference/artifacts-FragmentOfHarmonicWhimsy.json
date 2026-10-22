@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "FragmentOfHarmonicWhimsy",
+  "gameId": 15035,
+  "name": "Fragment of Harmonic Whimsy",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/fragmentofharmonicwhimsy.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "ae452222885115735ac45d9e8454787e46a5042d85b5c6b0bf34c8e4f2ae8479",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Harmonious Symphony Prelude",
+      "description": "An honorary medal in the shape of a blooming flower. Adorned with blue stone and gold, it was once bestowed upon immortals."
+    },
+    {
+      "slot": "plume",
+      "name": "Ancient Sea's Nocturnal Musing",
+      "description": "A feather accessory carved in the shape of the wings of the golden bees of legend. They seem to flutter with the slightest breeze."
+    },
+    {
+      "slot": "sands",
+      "name": "The Grand Jape of the Turning of Fate",
+      "description": "A timepiece made in imitation of the wheel of fate. It ceased turning long ago."
+    },
+    {
+      "slot": "goblet",
+      "name": "Ichor Shower Rhapsody",
+      "description": "A rhyton fired with copper as the base, that was once filled with fine wine from paradise."
+    },
+    {
+      "slot": "circlet",
+      "name": "Whimsical Dance of the Withered",
+      "description": "A mask once covered in gold leaf. Perhaps it is a relic from some ancient officer of the legions."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "ATK +18%." },
+    {
+      "pieces": 4,
+      "description": "When the value of a Bond of Life increases or decreases, this character deals 18% increased DMG for 6s. Max 3 stacks."
+    }
+  ]
+}

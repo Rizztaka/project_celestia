@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "MitternachtsWaltz",
+  "gameId": 15412,
+  "name": "Mitternachts Waltz",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/mitternachtswaltz.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "d789695e364dcecd72a586e6762f01562f49721d65445d8e5c2d42eb674eb981",
+    "license": "MIT"
+  },
+  "description": "A bow painted the color of transgression and nights of illusion.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Evernight Duet",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Normal Attack hits on opponents increase Elemental Skill DMG by 20% for 5s. Elemental Skill hits on opponents increase Normal Attack DMG by 20% for 5s."
+    },
+    {
+      "rank": 2,
+      "description": "Normal Attack hits on opponents increase Elemental Skill DMG by 25% for 5s. Elemental Skill hits on opponents increase Normal Attack DMG by 25% for 5s."
+    },
+    {
+      "rank": 3,
+      "description": "Normal Attack hits on opponents increase Elemental Skill DMG by 30% for 5s. Elemental Skill hits on opponents increase Normal Attack DMG by 30% for 5s."
+    },
+    {
+      "rank": 4,
+      "description": "Normal Attack hits on opponents increase Elemental Skill DMG by 35% for 5s. Elemental Skill hits on opponents increase Normal Attack DMG by 35% for 5s."
+    },
+    {
+      "rank": 5,
+      "description": "Normal Attack hits on opponents increase Elemental Skill DMG by 40% for 5s. Elemental Skill hits on opponents increase Normal Attack DMG by 40% for 5s."
+    }
+  ]
+}

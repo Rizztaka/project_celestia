@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "MemoryOfDust",
+  "gameId": 14504,
+  "name": "Memory of Dust",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/memoryofdust.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "73101d4676795525396188706bb5241ff0b890d41ea45ae1c2211acb9b6a5849",
+    "license": "MIT"
+  },
+  "description": "A stone dumbbell containing distant memories. Its endless transformations reveal the power within.",
+  "weaponType": "Catalyst",
+  "rarity": 5,
+  "effectName": "Golden Majesty",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Shield Strength by 20%. Scoring hits on opponents increases ATK by 4% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Shield Strength by 25%. Scoring hits on opponents increases ATK by 5% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Shield Strength by 30%. Scoring hits on opponents increases ATK by 6% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Shield Strength by 35%. Scoring hits on opponents increases ATK by 7% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Shield Strength by 40%. Scoring hits on opponents increases ATK by 8% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SolarPearl",
+  "gameId": 14405,
+  "name": "Solar Pearl",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/solarpearl.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "fec3e06d608d118a1fefb2d4256904936667d1ed478d9313bc5bfc253abc46ea",
+    "license": "MIT"
+  },
+  "description": "A dull, golden pearl made of an unknown substance that harbors the light of the sun and the moon and pulses with a warm strength.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Solar Shine",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Normal Attack hits increase Elemental Skill and Elemental Burst DMG by 20% for 6s. Likewise, Elemental Skill or Elemental Burst hits increase Normal Attack DMG by 20% for 6s."
+    },
+    {
+      "rank": 2,
+      "description": "Normal Attack hits increase Elemental Skill and Elemental Burst DMG by 25% for 6s. Likewise, Elemental Skill or Elemental Burst hits increase Normal Attack DMG by 25% for 6s."
+    },
+    {
+      "rank": 3,
+      "description": "Normal Attack hits increase Elemental Skill and Elemental Burst DMG by 30% for 6s. Likewise, Elemental Skill or Elemental Burst hits increase Normal Attack DMG by 30% for 6s."
+    },
+    {
+      "rank": 4,
+      "description": "Normal Attack hits increase Elemental Skill and Elemental Burst DMG by 35% for 6s. Likewise, Elemental Skill or Elemental Burst hits increase Normal Attack DMG by 35% for 6s."
+    },
+    {
+      "rank": 5,
+      "description": "Normal Attack hits increase Elemental Skill and Elemental Burst DMG by 40% for 6s. Likewise, Elemental Skill or Elemental Burst hits increase Normal Attack DMG by 40% for 6s."
+    }
+  ]
+}

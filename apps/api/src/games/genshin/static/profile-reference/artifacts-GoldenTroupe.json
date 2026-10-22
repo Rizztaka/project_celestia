@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "GoldenTroupe",
+  "gameId": 15032,
+  "name": "Golden Troupe",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/goldentroupe.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "d656f4a8ec933a1bd2e6d12b614fe47b67e8a76d61840e2eb2fd1a34271bda39",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Golden Song's Variation",
+      "description": "A flower constructed out of clam, mother-of-pearl, and gold leaf. It blooms proudly."
+    },
+    {
+      "slot": "plume",
+      "name": "Golden Bird's Shedding",
+      "description": "A gold feather made using silver and gold filigree. A crystal-clear sapphire is mounted atop it."
+    },
+    {
+      "slot": "sands",
+      "name": "Golden Era's Prelude",
+      "description": "This lovely sundial is inlaid with silver and gold. It seems that time has stopped flowing atop its dial plate."
+    },
+    {
+      "slot": "goblet",
+      "name": "Golden Night's Bustle",
+      "description": "An ancient silver urn that was once filled with fine wine as red as rubies. Now, it contains nothing but bitter seawater."
+    },
+    {
+      "slot": "circlet",
+      "name": "Golden Troupe's Reward",
+      "description": "An ancient crown that resembles a stage prop more than it does some suzerain's headgear."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Increases Elemental Skill DMG by 20%." },
+    {
+      "pieces": 4,
+      "description": "Increases Elemental Skill DMG by 25%. Additionally, when not on the field, Elemental Skill DMG will be further increased by 25%. This effect will be cleared 2s after taking the field."
+    }
+  ]
+}

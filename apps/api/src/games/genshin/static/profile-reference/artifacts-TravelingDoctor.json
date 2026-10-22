@@ -1,0 +1,43 @@
+{
+  "contractVersion": 1,
+  "key": "TravelingDoctor",
+  "gameId": 10013,
+  "name": "Traveling Doctor",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/travelingdoctor.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "ebdd7a5605253f9a2566de2f674a53aaa86f09e4eb0995c2024200876a805bd1",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Traveling Doctor's Silver Lotus",
+      "description": "A precious medicinal ingredient that has lost all medicinal value after years in storage."
+    },
+    {
+      "slot": "plume",
+      "name": "Traveling Doctor's Owl Feather",
+      "description": "The durable feather of an owl. Emblematic of nocturnal supremacy, it gave some encouragement to the Traveling Doctor when venturing out to visit patients late at night."
+    },
+    {
+      "slot": "sands",
+      "name": "Traveling Doctor's Pocket Watch",
+      "description": "A precise instrument used for keeping time. For a doctor, every second counts."
+    },
+    {
+      "slot": "goblet",
+      "name": "Traveling Doctor's Medicine Pot",
+      "description": "This pot used to carry concentrated and extremely potent concoctions. It is now empty, but still gives off a strong smell of medicine."
+    },
+    {
+      "slot": "circlet",
+      "name": "Traveling Doctor's Handkerchief",
+      "description": "Used to tie back the doctor's hair when treating patients. Can also be used as a sling for sprains and broken arms in emergencies."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Increases incoming healing by 20%." },
+    { "pieces": 4, "description": "Using Elemental Burst restores 20% HP." }
+  ]
+}

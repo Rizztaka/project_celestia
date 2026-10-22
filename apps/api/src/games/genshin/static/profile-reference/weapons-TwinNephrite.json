@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "TwinNephrite",
+  "gameId": 14305,
+  "name": "Twin Nephrite",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/twinnephrite.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2a918a48d843ba6c24563c1586890387e3d32f02b51db895ec6155c1b8045b82",
+    "license": "MIT"
+  },
+  "description": "A jade pendant formed by piecing together two jade stones.",
+  "weaponType": "Catalyst",
+  "rarity": 3,
+  "effectName": "Guerilla Tactics",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Defeating an opponent increases Movement SPD and ATK by 12% for 15s."
+    },
+    {
+      "rank": 2,
+      "description": "Defeating an opponent increases Movement SPD and ATK by 14% for 15s."
+    },
+    {
+      "rank": 3,
+      "description": "Defeating an opponent increases Movement SPD and ATK by 16% for 15s."
+    },
+    {
+      "rank": 4,
+      "description": "Defeating an opponent increases Movement SPD and ATK by 18% for 15s."
+    },
+    {
+      "rank": 5,
+      "description": "Defeating an opponent increases Movement SPD and ATK by 20% for 15s."
+    }
+  ]
+}

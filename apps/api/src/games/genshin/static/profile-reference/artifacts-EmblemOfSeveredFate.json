@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "EmblemOfSeveredFate",
+  "gameId": 15020,
+  "name": "Emblem of Severed Fate",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/emblemofseveredfate.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "8c6e88473103113a2315e014a03a5a2c6e5b521225f2f340796127fbda1d9649",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Magnificent Tsuba",
+      "description": "Legends hold that this ornate hand guard was once fitted upon a sword gifted to the oni who betrayed the Shogun."
+    },
+    {
+      "slot": "plume",
+      "name": "Sundered Feather",
+      "description": "This was once the black feather of a certain tengu warrior, and was the treasured souvenir of an ancient swordsman."
+    },
+    {
+      "slot": "sands",
+      "name": "Storm Cage",
+      "description": "An exquisite seal cage patterned with pansies painted upon a black backdrop, decorated with shining inlaid seashells and intricate gold-work."
+    },
+    {
+      "slot": "goblet",
+      "name": "Scarlet Vessel",
+      "description": "An intricately-designed wine vessel that a world-famous martial artist once drank from."
+    },
+    {
+      "slot": "circlet",
+      "name": "Ornate Kabuto",
+      "description": "A sturdy and hard helmet worn as armor by a noble samurai."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Energy Recharge +20%" },
+    {
+      "pieces": 4,
+      "description": "Increases Elemental Burst DMG by 25% of Energy Recharge. A maximum of 75% bonus DMG can be obtained in this way."
+    }
+  ]
+}

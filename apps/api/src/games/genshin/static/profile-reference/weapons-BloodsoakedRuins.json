@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "BloodsoakedRuins",
+  "gameId": 13516,
+  "name": "Bloodsoaked Ruins",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/bloodsoakedruins.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "e30ea7db212bb9eb0c011e18853f0ae800ba5fa43c19d32ec887a40842be8b49",
+    "license": "MIT"
+  },
+  "description": "A long spear tainted black by unrelenting battle, it shines with an ethereal glow beneath the ghostly blue light of lantern-fire.",
+  "weaponType": "Polearm",
+  "rarity": 5,
+  "effectName": "Mournful Tribute",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "For 3.5s after using an Elemental Burst, the equipping character's Lunar-Charged DMG dealt to opponents is increased by 36%. Additionally, after triggering a Lunar-Charged reaction, the equipping character will gain Requiem of Ruin: CRIT DMG is increased by 28% for 6s. They will also regain 12 Elemental Energy. Elemental Energy can be restored this way once every 14s."
+    },
+    {
+      "rank": 2,
+      "description": "For 3.5s after using an Elemental Burst, the equipping character's Lunar-Charged DMG dealt to opponents is increased by 48%. Additionally, after triggering a Lunar-Charged reaction, the equipping character will gain Requiem of Ruin: CRIT DMG is increased by 35% for 6s. They will also regain 13 Elemental Energy. Elemental Energy can be restored this way once every 14s."
+    },
+    {
+      "rank": 3,
+      "description": "For 3.5s after using an Elemental Burst, the equipping character's Lunar-Charged DMG dealt to opponents is increased by 60%. Additionally, after triggering a Lunar-Charged reaction, the equipping character will gain Requiem of Ruin: CRIT DMG is increased by 42% for 6s. They will also regain 14 Elemental Energy. Elemental Energy can be restored this way once every 14s."
+    },
+    {
+      "rank": 4,
+      "description": "For 3.5s after using an Elemental Burst, the equipping character's Lunar-Charged DMG dealt to opponents is increased by 72%. Additionally, after triggering a Lunar-Charged reaction, the equipping character will gain Requiem of Ruin: CRIT DMG is increased by 49% for 6s. They will also regain 15 Elemental Energy. Elemental Energy can be restored this way once every 14s."
+    },
+    {
+      "rank": 5,
+      "description": "For 3.5s after using an Elemental Burst, the equipping character's Lunar-Charged DMG dealt to opponents is increased by 84%. Additionally, after triggering a Lunar-Charged reaction, the equipping character will gain Requiem of Ruin: CRIT DMG is increased by 56% for 6s. They will also regain 16 Elemental Energy. Elemental Energy can be restored this way once every 14s."
+    }
+  ]
+}

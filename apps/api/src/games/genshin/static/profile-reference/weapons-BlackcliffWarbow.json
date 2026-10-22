@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "BlackcliffWarbow",
+  "gameId": 15408,
+  "name": "Blackcliff Warbow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/blackcliffwarbow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "fb1e2b93b290c236d74e9bf0ae3fcd0116b4e1fa326cc5ccd960042c557f91b1",
+    "license": "MIT"
+  },
+  "description": "A bow made of blackcliff that features extremely sturdy bow limbs. It requires an archer with a strong bow arm to use.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Press the Advantage",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "After defeating an enemy, ATK is increased by 12% for 30s. This effect has a maximum of 3 stacks, and the duration of each stack is independent of the others."
+    },
+    {
+      "rank": 2,
+      "description": "After defeating an enemy, ATK is increased by 15% for 30s. This effect has a maximum of 3 stacks, and the duration of each stack is independent of the others."
+    },
+    {
+      "rank": 3,
+      "description": "After defeating an enemy, ATK is increased by 18% for 30s. This effect has a maximum of 3 stacks, and the duration of each stack is independent of the others."
+    },
+    {
+      "rank": 4,
+      "description": "After defeating an enemy, ATK is increased by 21% for 30s. This effect has a maximum of 3 stacks, and the duration of each stack is independent of the others."
+    },
+    {
+      "rank": 5,
+      "description": "After defeating an enemy, ATK is increased by 24% for 30s. This effect has a maximum of 3 stacks, and the duration of each stack is independent of the others."
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "reason": "Owner removed generative AI entirely; historical evidence preserved, not runtime code.",
+  "files": [
+    {
+      "path": "apps/api/src/core/ai/openrouter.ts",
+      "sha256": "fa25b63d61152bb0644618d07e22ad47a0f9c6394a4fad11e2170fd8bf4ca91b"
+    },
+    {
+      "path": "apps/api/src/core/ai/advisor-provider.ts",
+      "sha256": "55090a39f8411743cd4260ca0cde43842cecbbea8045c630588c7c9bacaa7e8c"
+    },
+    {
+      "path": "apps/api/src/core/ai/advisor-provider.test.ts",
+      "sha256": "56a7a603f5fb806ec1cdcf1221856f797e45846a4590aec886a68b33f36bb4ad"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/advisor.service.ts",
+      "sha256": "f316603dc68d6751274e14e27e0a00aa95b6afb6370b04d73605a58a2d23cba2"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/advisor.controller.ts",
+      "sha256": "b2ec7d4deb7b40c8b91e2bb6cfb465874e8375d2c7d1f80945ee407dcaa2c421"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/advisor.context.ts",
+      "sha256": "d9343608b2a5650dfb8419942723bd6123114c33665da1855d52d3bf4e872849"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/advisor.validation.ts",
+      "sha256": "158f54c677c3f4b3c0865088061c556545b90fde50ca4cbb3ac024b5b1fe74b2"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/knowledge.retrieval.ts",
+      "sha256": "8b9dc8f1f454741ed3bfba9c9c885c2b94a9e9b020218c49fa5779ac2b7d819c"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/character-advisor.test.ts",
+      "sha256": "36c455d0d45d7e95f87b7d0d14c2139c13e7aad48c4587948f2c85c646c03081"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/character-advisor.integration.test.ts",
+      "sha256": "2305719e4a4f872ad98e64f3a2623c17b725ceb0259945c5c3ecead61b3baeea"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/batch01.test.ts",
+      "sha256": "54085fada9a7cd643c97608a70146353b7ca658e5162417fa54e4058a31dd059"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/all-kqm.test.ts",
+      "sha256": "68967d56405ba705c5b337d4bce850113b3d16d72bff854761402ae99b11d1d8"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/knowledge.regressions.test.ts",
+      "sha256": "c639accb34b3e411f254a07c8758315483d609ac524f9057002e2e5cf22a443a"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/quality-repair.test.ts",
+      "sha256": "fc0e546b2d525191549319058028784df855dd8e843f7306d69b8feb8b1b8d25"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/character-knowledge/conversation-comparison.test.ts",
+      "sha256": "a49e1fee2127b9dd278376919b33faa442072511550f4bc498493d743b8ccf92"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/ai-advice.controller.ts",
+      "sha256": "42b74404059bd2fa2f47ee65c9256d6b72dff58a3470dbd11143b68cb366af3e"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/ai-advice.routes.ts",
+      "sha256": "e1306b8d812535a30e0c1d873b954e03965b7e9364344f9d6dea2d4419db5180"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/ai-advice.service.ts",
+      "sha256": "f2ad0558e21e003455caa2425b5f6e558a7091104cf24320659be5a593567e0e"
+    },
+    {
+      "path": "apps/api/src/games/genshin/intelligence/ai-advice.service.test.ts",
+      "sha256": "1d7ba1b2f946ffa639f92221a91c8095ab4823a0e644acbb948c09b549e17937"
+    },
+    {
+      "path": "apps/web/src/components/AskCelestia.tsx",
+      "sha256": "06ecc7183ac0bbec590e8f39fd39def483b7fe1971ec04354cee1897e7554990"
+    },
+    {
+      "path": "apps/web/src/lib/character-advisor.ts",
+      "sha256": "ef91e1ca6646ebf971ef841092c124e994e28e81e6a40a317dc86a6438dab53b"
+    },
+    {
+      "path": "packages/api-contracts/src/genshin/character-advisor.ts",
+      "sha256": "065752954b1a59e65055950cda7be11dbf6cf4f9b05af8c5e23b9e78ace5783e"
+    },
+    {
+      "path": "apps/api/tooling/advisor-acceptance-dispatch.mjs",
+      "sha256": "8cf0e28b8e5f1b813498a263901f3fb8329cd20b4957836307a9b6d16ef7429c"
+    },
+    {
+      "path": "apps/api/tooling/advisor-acceptance-dispatch.test.js",
+      "sha256": "ca0199de250d3f9c2ca2754c736aa70ce71d1206813449fa004ef2851a86d109"
+    },
+    {
+      "path": "apps/api/tooling/advisor-acceptance-ledger.mjs",
+      "sha256": "2a305e1ed248bad246e0cef276033c4cd7b77aa9a42582ba93a2680701eb578b"
+    },
+    {
+      "path": "apps/api/tooling/advisor-acceptance-ledger.test.js",
+      "sha256": "36ebe95f50dbff1e6fbd7134028380dba66f4dcda04838c5e9d4d810f52367df"
+    },
+    {
+      "path": "apps/api/tooling/advisor-implementation-identity.mjs",
+      "sha256": "ecc9ea116008e2816af2916b84379034d6912adfa7fb4cdee9abdb48c025291f"
+    },
+    {
+      "path": "apps/api/tooling/character-advisor-client.test.js",
+      "sha256": "abe1f3fc3b6b2b2e18802855823c2a5b4ce2fc0cf340df64af261acf4c596317"
+    },
+    {
+      "path": "apps/api/tooling/character-advisor-browser.mjs",
+      "sha256": "40709cc78c93dde8edcc9063c0b5ba31349541e95417eba1100986b12c1cce9e"
+    },
+    {
+      "path": "apps/api/tooling/character-advisor-browser-control.mjs",
+      "sha256": "e51ad0bd797ee7644a4189805b6e829695cf7798fc6b0f0f40a732671c6e21fc"
+    },
+    {
+      "path": "apps/api/tooling/grounded-repair.test.js",
+      "sha256": "986e536adf21f352eaca51dc0b6e384811393d7e89786486735fb8c5e079a796"
+    },
+    {
+      "path": "apps/api/tooling/run-advisor-acceptance.mjs",
+      "sha256": "ff0bac991578768eb7c92e875828e6708fdc112f6c01b72de2c2622eb4ad3eb6"
+    },
+    {
+      "path": "apps/api/tooling/evaluate-all-kqm.mjs",
+      "sha256": "dac7974d947094f312ad594d639521287feec820752149b61ecde0f12078a24e"
+    },
+    {
+      "path": "apps/api/tooling/evaluate-character-knowledge-batch.mjs",
+      "sha256": "f2dd132453398772ad2ae5889a58b508909bbe008439b50b7625ea090fe64e09"
+    },
+    {
+      "path": "apps/api/tooling/verify-advisor-connection.mjs",
+      "sha256": "c78c06904886348c8906ba633633378d6d377ca9438d308719ae04ad1976e325"
+    },
+    {
+      "path": "apps/api/tooling/check-advisor-review-fix.mjs",
+      "sha256": "02361ab789111bed67352561f393664dae4d89df6fc3ff2d5fbf197e06a10e31"
+    },
+    {
+      "path": "apps/api/tooling/record-advisor-review-fix.mjs",
+      "sha256": "de49b1b0cc8a2422ce4cee3bbebd0a202408cbcb9616739040aacc72c5031a3f"
+    },
+    {
+      "path": "apps/api/tooling/record-grounded-repair.mjs",
+      "sha256": "a834a74b82d21b7d46f4c6de22e1d824daba267000e412062e3fe916f9689f74"
+    },
+    {
+      "path": "apps/api/tooling/report-all-kqm.mjs",
+      "sha256": "b2f27c2c9dcea67872d2118d217834889d37bcddb7a0a27f08ace7b23f02d636"
+    }
+  ]
+}

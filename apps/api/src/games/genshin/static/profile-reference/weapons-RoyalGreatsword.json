@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "RoyalGreatsword",
+  "gameId": 12404,
+  "name": "Royal Greatsword",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/royalgreatsword.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "08e6d63b44adaed592c0507c9e1ec2e2276965831862a1cf4ed981ee08d11ff3",
+    "license": "MIT"
+  },
+  "description": "An old greatsword that belonged to the erstwhile rulers of Mondstadt. It is made from the finest-quality materials and has stood the test of time. A weapon for use by the nobility only.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Focus",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 8%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 2,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 10%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 3,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 12%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 4,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 14%. Max 5 stacks. A CRIT Hit removes all stacks."
+    },
+    {
+      "rank": 5,
+      "description": "Upon damaging an opponent, increases CRIT Rate by 16%. Max 5 stacks. A CRIT Hit removes all stacks."
+    }
+  ]
+}

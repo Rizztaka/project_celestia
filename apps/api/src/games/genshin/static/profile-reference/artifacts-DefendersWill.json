@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "DefendersWill",
+  "gameId": 10003,
+  "name": "Defender's Will",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/defenderswill.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "d6bbd6f869108da7f9fc3cd9f0b3edb2ff7bf864db2037f1901bb30b3a7c510b",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Guardian's Flower",
+      "description": "An iris that was cherished by the guardian. Unfortunately, the chance never came for it to be given to whom the guardian loved."
+    },
+    {
+      "slot": "plume",
+      "name": "Guardian's Sigil",
+      "description": "A feather-shaped brooch that symbolizes someone's yearning to defend others like a shield."
+    },
+    {
+      "slot": "sands",
+      "name": "Guardian's Clock",
+      "description": "A small timekeeping gadget. On moonless nights, it was the only way its former owner could know the time."
+    },
+    {
+      "slot": "goblet",
+      "name": "Guardian's Vessel",
+      "description": "A metal vessel that can be filled with a drink to dispel the loneliness of the long watch."
+    },
+    {
+      "slot": "circlet",
+      "name": "Guardian's Band",
+      "description": "A fabric band dyed indigo by the darkness of night. Can also double as a bandage in the event of an emergency."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "DEF +30%" },
+    {
+      "pieces": 4,
+      "description": "For each different element present in your own party, the wearer's Elemental RES to that corresponding element is increased by 30%."
+    }
+  ]
+}

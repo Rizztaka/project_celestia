@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "VourukashasGlow",
+  "gameId": 15030,
+  "name": "Vourukasha's Glow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/vourukashasglow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "d026a078b85c7e239d011168b78791971bc0f85d61d998d1fcb7993423bfc7c8",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Stamen of Khvarena's Origin",
+      "description": "An insignia in the shape of a lovely little flower that was once worn by pilgrims in times long bygone."
+    },
+    {
+      "slot": "plume",
+      "name": "Vibrant Pinion",
+      "description": "An exquisite feather-shaped decoration on which the vivid hues of verdant leaves and fragrant flowers shimmer."
+    },
+    {
+      "slot": "sands",
+      "name": "Ancient Abscission",
+      "description": "An ancient timepiece upon which the light of Khvarena gleams. It is filled with a pure liquid that appears alive."
+    },
+    {
+      "slot": "goblet",
+      "name": "Feast of Boundless Joy",
+      "description": "An opulent wine goblet that was once filled with nectar and honeydew, but is empty today."
+    },
+    {
+      "slot": "circlet",
+      "name": "Heart of Khvarena's Brilliance",
+      "description": "Intricate and vibrant earrings upon which the luster of a hundred flowers seems to flow."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "HP +20%" },
+    {
+      "pieces": 4,
+      "description": "Elemental Skill and Elemental Burst DMG will be increased by 10%. After the equipping character takes DMG, the aforementioned DMG Bonus is increased by 80% for 5s. This effect increase can have 5 stacks. The duration of each stack is counted independently. These effects can be triggered even when the equipping character is not on the field."
+    }
+  ]
+}

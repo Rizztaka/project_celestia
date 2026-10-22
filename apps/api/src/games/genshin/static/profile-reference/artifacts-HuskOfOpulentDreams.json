@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "HuskOfOpulentDreams",
+  "gameId": 15021,
+  "name": "Husk of Opulent Dreams",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/huskofopulentdreams.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "7335c8ac921cde976d9990782fe8a5541752698b3ef3a4f1076de6ed0f1431fd",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Bloom Times",
+      "description": "A small golden ornament with six petals that shall never wilt. It symbolizes the transience of mortal glories."
+    },
+    {
+      "slot": "plume",
+      "name": "Plume of Luxury",
+      "description": "A feather-shaped token that was brought forth from a secluded hall. The compassion of its creator led to it being left within that mansion along with a certain slumbering form."
+    },
+    {
+      "slot": "sands",
+      "name": "Song of Life",
+      "description": "As far as Inazuma is concerned, this is some small object from overseas. The heart of this mechanism has been removed, and its hands no longer turn."
+    },
+    {
+      "slot": "goblet",
+      "name": "Calabash of Awakening",
+      "description": "A gourd that has been adorned with powdered gold and black paint. Its original color can no longer be discerned, but its main use seems to be as a performance prop."
+    },
+    {
+      "slot": "circlet",
+      "name": "Skeletal Hat",
+      "description": "A hat that once shielded a wanderer from sun and rain. It eventually became a convenient tool with which faces might be hidden and expressions obscured."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "DEF +30%" },
+    {
+      "pieces": 4,
+      "description": "A character equipped with this Artifact set will obtain the Curiosity effect in the following conditions: When on the field, the character gains 1 stack after hitting an opponent with a Geo attack, triggering a maximum of once every 0.3s. When off the field, the character gains 1 stack every 3s. Curiosity can stack up to 4 times, each providing 6% DEF and a 6% Geo DMG Bonus. When 6 seconds pass without gaining a Curiosity stack, 1 stack is lost."
+    }
+  ]
+}

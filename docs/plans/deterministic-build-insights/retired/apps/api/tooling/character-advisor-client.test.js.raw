@@ -1,0 +1,117 @@
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+const webRequire = createRequire(new URL('../../web/package.json', import.meta.url));
+const { createElement: h } = webRequire('react'),
+  { renderToStaticMarkup } = webRequire('react-dom/server');
+const { QueryClient, QueryClientProvider } =
+  await import('../../web/node_modules/@tanstack/react-query/build/modern/index.js');
+let Ask, CoverageNotice, clientApi, store, sessions;
+beforeAll(async () => {
+  vi.stubGlobal('localStorage', { getItem: () => null, setItem() {}, removeItem() {} });
+  Ask = (await import('../../web/src/components/AskCelestia.tsx')).AskCelestia;
+  CoverageNotice = (await import('../../web/src/components/AskCelestia.tsx')).AdvisorCoverageNotice;
+  clientApi = await import('../../web/src/lib/character-advisor.ts');
+  store = (await import('../../web/src/stores/auth.store.ts')).useAuthStore;
+  sessions = await import('../../web/src/lib/account-session.ts');
+});
+afterEach(() => vi.unstubAllGlobals());
+describe('all character Ask Celestia client', () => {
+  it('observes all five compared participants and rejects overflow before fetching', async () => {
+    store.setState({ token: 'synthetic-comparison', sessionEpoch: 30 });
+    const session = sessions.captureSession();
+    const fetch = vi.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ success: true, data: { digest: 'observed-five' } }),
+    }));
+    vi.stubGlobal('fetch', fetch);
+    const keys = ['Neuvillette', 'Furina', 'KaedeharaKazuha', 'Zhongli', 'Xilonen'];
+    expect(await clientApi.fetchAdvisorObservation(keys, undefined, session)).toEqual({
+      digest: 'observed-five',
+    });
+    expect(
+      JSON.parse(
+        new URL(fetch.mock.calls[0][0], 'https://offline.invalid').searchParams.get('keys'),
+      ),
+    ).toEqual(keys);
+    expect(() =>
+      clientApi.fetchAdvisorObservation(Array(9).fill('Furina'), undefined, session),
+    ).toThrow();
+    expect(fetch).toHaveBeenCalledOnce();
+  });
+  it('shows partial status and the missing comparison subject next to the answer', () => {
+    const html = renderToStaticMarkup(
+      h(CoverageNotice, {
+        response: {
+          status: 'partial',
+          coverage: [
+            { subject: 'Deepwood Memories', covered: true },
+            { subject: 'Gilded Dreams', covered: false },
+          ],
+        },
+      }),
+    );
+    expect(html).toContain('Partial answer.');
+    expect(html).toContain('Missing coverage: Gilded Dreams.');
+    expect(html).not.toContain('Deepwood Memories');
+    expect(html).toContain('role="status"');
+  });
+  it('renders the same deliberate question entry for every catalog key without issuing model requests', () => {
+    const catalog = JSON.parse(
+      readFileSync(
+        new URL('../src/games/genshin/static/progression-catalog.json', import.meta.url),
+      ),
+    ).characters;
+    const fetch = vi.fn();
+    vi.stubGlobal('fetch', fetch);
+    for (const characterKey of Object.keys(catalog)) {
+      const c = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+      const html = renderToStaticMarkup(
+        h(QueryClientProvider, { client: c }, h(Ask, { characterKey })),
+      );
+      expect(html).toContain('Ask Celestia question');
+      expect(html).not.toContain('Guidance for your scenario');
+      expect(html).not.toContain('Harbinger');
+      c.clear();
+    }
+    expect(fetch).not.toHaveBeenCalled();
+  });
+  it('normal detail unmounts both rejected public panels and mounts the shared entry outside owned gates', () => {
+    const detail = readFileSync(
+      new URL('../../web/src/pages/CharacterDetailPage.tsx', import.meta.url),
+      'utf8',
+    );
+    expect(detail).not.toContain('ContextualAdvicePanel');
+    expect(detail).not.toContain('GuideAdviceCard');
+    expect(detail).toContain('<AskCelestia');
+    const team = readFileSync(
+      new URL('../../web/src/components/TeamBuilder.tsx', import.meta.url),
+      'utf8',
+    );
+    expect(team).toContain('<AskCelestia');
+  });
+  it('rejects a late response from a previous account instead of displaying it', async () => {
+    store.setState({ token: 'synthetic-a', sessionEpoch: 10 });
+    const session = sessions.captureSession();
+    let deliver;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        () =>
+          new Promise((resolve) => {
+            deliver = resolve;
+          }),
+      ),
+    );
+    const pending = clientApi.fetchKnowledgeMetadata('Furina', undefined, session);
+    store.setState({ token: 'synthetic-b', sessionEpoch: 11 });
+    deliver({
+      ok: true,
+      status: 200,
+      json: async () => ({ success: true, data: { profile: { key: 'Furina' } } }),
+    });
+    await expect(pending).rejects.toThrow();
+  });
+});

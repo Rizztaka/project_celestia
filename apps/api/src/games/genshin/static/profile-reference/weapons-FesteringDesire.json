@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "FesteringDesire",
+  "gameId": 11413,
+  "name": "Festering Desire",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/festeringdesire.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "956adba628b295aac91c7e6d340307468cc4e410ec90df3b06caf92db6b803f1",
+    "license": "MIT"
+  },
+  "description": "A creepy straight sword that almost seems to yearn for life. It drips with a shriveling venom that could even corrupt a mighty dragon.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Undying Admiration",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Elemental Skill DMG by 16% and Elemental Skill CRIT Rate by 6%."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Elemental Skill DMG by 20% and Elemental Skill CRIT Rate by 7.5%."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Elemental Skill DMG by 24% and Elemental Skill CRIT Rate by 9%."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Elemental Skill DMG by 28% and Elemental Skill CRIT Rate by 10.5%."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Elemental Skill DMG by 32% and Elemental Skill CRIT Rate by 12%."
+    }
+  ]
+}

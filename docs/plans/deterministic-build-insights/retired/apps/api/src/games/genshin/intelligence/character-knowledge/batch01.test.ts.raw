@@ -1,0 +1,143 @@
+import { readFileSync } from 'node:fs';
+
+import { characterAdvisorRequestSchema } from '@celestia/api-contracts';
+import { describe, expect, it, vi } from 'vitest';
+vi.mock('@/core/db/prisma.js', () => ({ prisma: {} }));
+vi.mock('@/core/config/env.js', () => ({ env: { CELESTIA_AI_PROVIDER: 'disabled' } }));
+
+import { CharacterAdvisorService } from './advisor.service.js';
+import { retrieveCharacterKnowledge } from './knowledge.retrieval.js';
+import { loadedCharacterKnowledge } from './knowledge.store.js';
+
+const cases = JSON.parse(
+  readFileSync(
+    new URL(
+      '../../../../../../../docs/plans/character-knowledge-assistant/batches/01-aino-albedo-alhaitham/evaluation-cases.json',
+      import.meta.url,
+    ),
+    'utf8',
+  ),
+).cases as {
+  id: string;
+  characterKey: string;
+  question: string;
+  requiredTopics: string[];
+  replacement?: string;
+  teamKeys?: string[];
+  history?: { role: string; content: string }[];
+  useRecordedContext?: boolean;
+}[];
+describe('batch01 evidence and controlled advisor flow (not live AI)', () => {
+  it.each(cases)('$id receives relevant assessed notes and mechanics within bounds', (entry) => {
+    const result = retrieveCharacterKnowledge(
+      characterAdvisorRequestSchema.parse({
+        characterKey: entry.characterKey,
+        question: entry.question,
+        teamKeys: entry.teamKeys,
+        history: entry.history,
+        useRecordedContext: entry.useRecordedContext,
+      }),
+    );
+    for (const topic of entry.requiredTopics)
+      expect(
+        result.documents.some((d) => d.characterKey === entry.characterKey && d.topic === topic),
+        entry.id + ':' + topic,
+      ).toBe(true);
+    expect(
+      result.documents.some(
+        (d) => d.characterKey === entry.characterKey && d.review === 'agent_reviewed_note',
+      ),
+    ).toBe(true);
+    if (entry.replacement)
+      expect(result.documents.some((d) => d.characterKey === entry.replacement)).toBe(true);
+    expect(result.characters).toBeLessThanOrEqual(9000);
+    expect(result.documents.length).toBeLessThanOrEqual(12);
+  });
+  it.each([
+    ['Aino', 'weapons', /CRIT hits.*field time/, /energy is already covered/],
+    ['Albedo', 'weapons', /above 90%/, /Furina/],
+    ['Alhaitham', 'build', /Without another viable Deepwood holder/, /HP fluctuations/],
+  ])(
+    '%s notes preserve conditional suitability instead of inventory-only facts',
+    (key, topic, condition, tradeoff) => {
+      const text = loadedCharacterKnowledge.corpus.documents
+        .filter(
+          (d) => d.characterKey === key && d.topic === topic && d.review === 'agent_reviewed_note',
+        )
+        .map((d) => d.text)
+        .join(' ');
+      expect(text).toMatch(condition as RegExp);
+      expect(text).toMatch(tradeoff as RegExp);
+      expect(text).not.toContain('Artifact options mentioned:');
+    },
+  );
+  it('changes the actual advisor evidence when a relevant source condition changes despite unrelated inventories', async () => {
+    const original = loadedCharacterKnowledge;
+    const altered = structuredClone(original);
+    const note = altered.corpus.documents.find(
+      (d) =>
+        d.characterKey === 'Albedo' && d.topic === 'weapons' && d.review === 'agent_reviewed_note',
+    )!;
+    note.text =
+      'Controlled source revision: Harbinger requires a different tested condition. ' + note.text;
+    for (let n = 0; n < 80; n++)
+      altered.corpus.documents.push({
+        ...note,
+        id: 'unrelated:' + n,
+        characterKey: 'Furina',
+        review: 'candidate_extraction',
+        text: 'Artifact section inventory weapon stat build '.repeat(20),
+      });
+    const contexts: { evidence: { id: string; text: string }[] }[] = [];
+    const provider = {
+      provider: 'controlled',
+      model: 'not-live-ai',
+      complete: async (messages: { role: string; content: string }[]) => {
+        if (messages[0]!.content.startsWith('Audit'))
+          return JSON.stringify({ supported: true, issues: [] });
+        const context = JSON.parse(messages[1]!.content);
+        contexts.push(context);
+        const doc = context.evidence.find((d: { id: string }) => d.id === note.id);
+        return JSON.stringify({
+          segments: [
+            {
+              text: doc.text,
+              basis: 'source_fact',
+              evidenceIds: [doc.id],
+              support: doc.text.slice(0, 90),
+            },
+          ],
+          followUp: null,
+        });
+      },
+    };
+    const request = characterAdvisorRequestSchema.parse({
+      characterKey: 'Albedo',
+      question: 'Compare Harbinger of Dawn and Flute of Ezpitzal with Furina',
+      useRecordedContext: false,
+    });
+    const before = await new CharacterAdvisorService(
+      { readManyForUser: async () => [] },
+      provider,
+      original,
+      () => true,
+    ).ask('synthetic', request);
+    const after = await new CharacterAdvisorService(
+      { readManyForUser: async () => [] },
+      provider,
+      altered,
+      () => true,
+    ).ask('synthetic', request);
+    // This controlled note explains weapons but omits requested Furina kit
+    // coverage. The source-revision assertion must not certify completeness.
+    expect(before.status).toBe('partial');
+    expect(after.status).toBe('partial');
+    expect(contexts[1]!.evidence.find((d) => d.id === note.id)?.text).toContain(
+      'Controlled source revision',
+    );
+    expect(contexts[0]!.evidence.find((d) => d.id === note.id)?.text).not.toContain(
+      'Controlled source revision',
+    );
+    expect(after.answer?.segments[0]?.text).not.toBe(before.answer?.segments[0]?.text);
+  });
+});

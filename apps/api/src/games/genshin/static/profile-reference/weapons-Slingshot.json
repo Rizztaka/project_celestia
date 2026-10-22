@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "Slingshot",
+  "gameId": 15304,
+  "name": "Slingshot",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/slingshot.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "8fb54e018f87d0c447e6e67da9142a7b87701b821946fb63c7b04fbc9a40d85e",
+    "license": "MIT"
+  },
+  "description": "A bow, despite the name. After countless experiments and improvements to the design, the creator of the ultimate slingshot found himself to have made what was actually a bow.",
+  "weaponType": "Bow",
+  "rarity": 3,
+  "effectName": "Slingshot",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "If a Normal or Charged Attack hits a target within 0.3s of being fired, increases DMG by 36%. Otherwise, decreases DMG by 10%."
+    },
+    {
+      "rank": 2,
+      "description": "If a Normal or Charged Attack hits a target within 0.3s of being fired, increases DMG by 42%. Otherwise, decreases DMG by 10%."
+    },
+    {
+      "rank": 3,
+      "description": "If a Normal or Charged Attack hits a target within 0.3s of being fired, increases DMG by 48%. Otherwise, decreases DMG by 10%."
+    },
+    {
+      "rank": 4,
+      "description": "If a Normal or Charged Attack hits a target within 0.3s of being fired, increases DMG by 54%. Otherwise, decreases DMG by 10%."
+    },
+    {
+      "rank": 5,
+      "description": "If a Normal or Charged Attack hits a target within 0.3s of being fired, increases DMG by 60%. Otherwise, decreases DMG by 10%."
+    }
+  ]
+}

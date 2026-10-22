@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "LostPrayerToTheSacredWinds",
+  "gameId": 14502,
+  "name": "Lost Prayer to the Sacred Winds",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/lostprayertothesacredwinds.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "17ffd350464ed38b2e721211b85bb91fa763131d4efe3f63c14aed34d2e66011",
+    "license": "MIT"
+  },
+  "description": "An educational tome written by anonymous early inhabitants who worshiped the wind. It has been blessed by the wind for its faithfulness and influence over the millennia.",
+  "weaponType": "Catalyst",
+  "rarity": 5,
+  "effectName": "Boundless Blessing",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Movement SPD by 10%. When in battle, gain an 8% Elemental DMG Bonus every 4s. Max 4 stacks. Lasts until the character falls or leaves combat."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Movement SPD by 10%. When in battle, earn a 10% Elemental DMG Bonus every 4s. Max 4 stacks. Lasts until the character falls or leaves combat."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Movement SPD by 10%. When in battle, gain a 12% Elemental DMG Bonus every 4s. Max 4 stacks. Lasts until the character falls or leaves combat."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Movement SPD by 10%. When in battle, gain a 14% Elemental DMG Bonus every 4s. Max 4 stacks. Lasts until the character falls or leaves combat."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Movement SPD by 10%. When in battle, gain a 16% Elemental DMG Bonus every 4s. Max 4 stacks. Lasts until the character falls or leaves combat."
+    }
+  ]
+}

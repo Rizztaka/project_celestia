@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "PrototypeAmber",
+  "gameId": 14406,
+  "name": "Prototype Amber",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/prototypeamber.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "e9c758c855b3ac1aba486795330bc0f374cec1d8d5ae572e6c0fa1736b402c78",
+    "license": "MIT"
+  },
+  "description": "A dully gilded catalyst secretly guarded in the Blackcliff Forge. It seems to glow with the very light from the sky.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Gilding",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Using an Elemental Burst regenerates 4 Energy every 2s for 6s. All party members will regenerate 4% HP every 2s for this duration."
+    },
+    {
+      "rank": 2,
+      "description": "Using an Elemental Burst regenerates 4.5 Energy every 2s for 6s. All party members will regenerate 4.5% HP every 2s for this duration."
+    },
+    {
+      "rank": 3,
+      "description": "Using an Elemental Burst regenerates 5 Energy every 2s for 6s. All party members will regenerate 5% HP every 2s for this duration."
+    },
+    {
+      "rank": 4,
+      "description": "Using an Elemental Burst regenerates 5.5 Energy every 2s for 6s. All party members will regenerate 5.5% HP every 2s for this duration."
+    },
+    {
+      "rank": 5,
+      "description": "Using an Elemental Burst regenerates 6 Energy every 2s for 6s. All party members will regenerate 6% HP every 2s for this duration."
+    }
+  ]
+}

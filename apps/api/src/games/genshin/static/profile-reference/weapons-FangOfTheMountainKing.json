@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "FangOfTheMountainKing",
+  "gameId": 12513,
+  "name": "Fang of the Mountain King",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/fangofthemountainking.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "3420bf82e66f15dbb12684f3afeb835ba5292edbb29856f11ea4d19579c47dab",
+    "license": "MIT"
+  },
+  "description": "A giant sword forged from pure turquoise. Due to its greater weight than most ordinary weapons, it was named for Kongomato the Mountain King.",
+  "weaponType": "Claymore",
+  "rarity": 5,
+  "effectName": "Turquoise Hunt",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Gain 1 stack of Canopy's Favor after hitting an opponent with an Elemental Skill. This can be triggered once every 0.5s. After a nearby party member triggers a Burning or Burgeon reaction, the equipping character will gain 3 stacks. This effect can be triggered once every 2s and can be triggered even when the triggering party member is off-field. Canopy's Favor: Elemental Skill and Burst DMG is increased by 10% for 6s. Max 6 stacks. Each stack is counted independently."
+    },
+    {
+      "rank": 2,
+      "description": "Gain 1 stack of Canopy's Favor after hitting an opponent with an Elemental Skill. This can be triggered once every 0.5s. After a nearby party member triggers a Burning or Burgeon reaction, the equipping character will gain 3 stacks. This effect can be triggered once every 2s and can be triggered even when the triggering party member is off-field. Canopy's Favor: Elemental Skill and Burst DMG is increased by 12.5% for 6s. Max 6 stacks. Each stack is counted independently."
+    },
+    {
+      "rank": 3,
+      "description": "Gain 1 stack of Canopy's Favor after hitting an opponent with an Elemental Skill. This can be triggered once every 0.5s. After a nearby party member triggers a Burning or Burgeon reaction, the equipping character will gain 3 stacks. This effect can be triggered once every 2s and can be triggered even when the triggering party member is off-field. Canopy's Favor: Elemental Skill and Burst DMG is increased by 15% for 6s. Max 6 stacks. Each stack is counted independently."
+    },
+    {
+      "rank": 4,
+      "description": "Gain 1 stack of Canopy's Favor after hitting an opponent with an Elemental Skill. This can be triggered once every 0.5s. After a nearby party member triggers a Burning or Burgeon reaction, the equipping character will gain 3 stacks. This effect can be triggered once every 2s and can be triggered even when the triggering party member is off-field. Canopy's Favor: Elemental Skill and Burst DMG is increased by 17.5% for 6s. Max 6 stacks. Each stack is counted independently."
+    },
+    {
+      "rank": 5,
+      "description": "Gain 1 stack of Canopy's Favor after hitting an opponent with an Elemental Skill. This can be triggered once every 0.5s. After a nearby party member triggers a Burning or Burgeon reaction, the equipping character will gain 3 stacks. This effect can be triggered once every 2s and can be triggered even when the triggering party member is off-field. Canopy's Favor: Elemental Skill and Burst DMG is increased by 20% for 6s. Max 6 stacks. Each stack is counted independently."
+    }
+  ]
+}

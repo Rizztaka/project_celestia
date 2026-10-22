@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "FlowerOfParadiseLost",
+  "gameId": 15028,
+  "name": "Flower of Paradise Lost",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/flowerofparadiselost.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "1d21ae5966c93d202d664c09ee6491bbb544958b241b8bc80b48c9ccec58e0ac",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Ay-Khanoum's Myriad",
+      "description": "An amethyst bloom that has been beautifully sculpted in the image of an ancient, extinct flower."
+    },
+    {
+      "slot": "plume",
+      "name": "Wilting Feast",
+      "description": "A feather left behind by a long-extinct bird species. It was inlaid with gold and gems by the ancient adherents of the Goddess of Flowers."
+    },
+    {
+      "slot": "sands",
+      "name": "A Moment Congealed",
+      "description": "These sands no longer move no matter how you tilt the hourglass, now and forever defying the drift of time itself."
+    },
+    {
+      "slot": "goblet",
+      "name": "Secret-Keeper's Magic Bottle",
+      "description": "A small bottle made of purple crystal. An emerald cap keeps it tightly sealed."
+    },
+    {
+      "slot": "circlet",
+      "name": "Amethyst Crown",
+      "description": "A crown inlaid with amethyst and emerald. It seems to have been the headgear worn by ancient priests of the Goddess of Flowers."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Increases Elemental Mastery by 80." },
+    {
+      "pieces": 4,
+      "description": "The equipping character's Bloom, Hyperbloom, and Burgeon reaction DMG are increased by 40%, and their Lunar-Bloom reaction DMG is increased by 10%. Additionally, after the equipping character triggers Bloom, Hyperbloom, Lunar-Bloom, or Burgeon, they will gain another 25% bonus to the effects mentioned prior. Each stack of this lasts 10s. Max 4 stacks simultaneously. This effect can only be triggered once per second. The character who equips this can still trigger its effects when not on the field."
+    }
+  ]
+}

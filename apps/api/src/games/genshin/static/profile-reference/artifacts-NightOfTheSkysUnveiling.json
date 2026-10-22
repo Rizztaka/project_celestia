@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "NightOfTheSkysUnveiling",
+  "gameId": 15041,
+  "name": "Night of the Sky's Unveiling",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/nightoftheskysunveiling.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "556a7564da8721ac4d51d89cfb5b7e9c20058459c80531c6b52283b328daedf1",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Bloom of the Mind's Desire",
+      "description": "A sacred relic carved in the shape of a flower. It seems to represent a terrifying presence that unfurls like a bloom."
+    },
+    {
+      "slot": "plume",
+      "name": "Feather of Indelible Sin",
+      "description": "A feathered accessory once worn on a felt hat. It feels out of place among the nobles of Snezhnaya and their taste for splendor."
+    },
+    {
+      "slot": "sands",
+      "name": "Revelation's Toll",
+      "description": "An exquisite chiming clock driven by a mysterious power. It does not seem that timekeeping is its purpose."
+    },
+    {
+      "slot": "goblet",
+      "name": "Vessel of Plenty",
+      "description": "A specially crafted goblet used for palace banquets. It was once employed to perform some kind of magic."
+    },
+    {
+      "slot": "circlet",
+      "name": "Crown of the Befallen",
+      "description": "A crown modeled on the circlet worn by a sinner. Perhaps in someone's heart, love and sin flow from the same source."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Increases Elemental Mastery by 80." },
+    {
+      "pieces": 4,
+      "description": "When nearby party members trigger Lunar Reactions, if the equipping character is on the field, gain the Gleaming Moon: Intent effect for 4s: Increases CRIT Rate by 15%/30% when the party's Moonsign is Nascent Gleam/Ascendant Gleam. All party members' Lunar Reaction DMG is increased by 10% for each different Gleaming Moon effect that party members have. Effects from Gleaming Moon cannot stack."
+    }
+  ]
+}

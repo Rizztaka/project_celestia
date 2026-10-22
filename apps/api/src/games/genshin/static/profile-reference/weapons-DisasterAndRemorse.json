@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "DisasterAndRemorse",
+  "gameId": 13517,
+  "name": "Disaster and Remorse",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/disasterandremorse.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2e21aeabaa0725f24c179ef734c1ef7d0246227e4ae937107e082e6883442a53",
+    "license": "MIT"
+  },
+  "description": "A polearm forged from Whitestone and Starsilver. Its keen point is constantly enveloped in a bone-piercing chill.",
+  "weaponType": "Polearm",
+  "rarity": 5,
+  "effectName": "Dolorous Stroke",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "After the equipping character uses an Elemental Skill, they gain \"Path of Conflict\" for 17s, as well as \"Unforgivable\" and \"Irreparable\" for 3s each. This effect can trigger once every 18s.\nUnforgivable: Increases the equipping character's Normal Attack and Charged Attack DMG by 40%.\nIrreparable: Increases the equipping character's Elemental Skill and Elemental Burst DMG by 40%.\nWhile Path of Conflict is in effect, when the equipping character hits an opponent with a Normal Attack or Charged Attack, Irreparable's duration will be increased by 1s. When the equipping character hits an opponent with their Elemental Skill or Elemental Burst, Unforgivable's duration will be increased by 1s. Each of the above effects can be triggered once every 0.1s. When Path of Conflict ends or the equipping character leaves the field, both Unforgivable and Irreparable will be removed.\nHexerei: Secret Rite: The above DMG boosts are increased by 75%."
+    },
+    {
+      "rank": 2,
+      "description": "After the equipping character uses an Elemental Skill, they gain \"Path of Conflict\" for 17s, as well as \"Unforgivable\" and \"Irreparable\" for 3s each. This effect can trigger once every 18s.\nUnforgivable: Increases the equipping character's Normal Attack and Charged Attack DMG by 50%.\nIrreparable: Increases the equipping character's Elemental Skill and Elemental Burst DMG by 50%.\nWhile Path of Conflict is in effect, when the equipping character hits an opponent with a Normal Attack or Charged Attack, Irreparable's duration will be increased by 1s. When the equipping character hits an opponent with their Elemental Skill or Elemental Burst, Unforgivable's duration will be increased by 1s. Each of the above effects can be triggered once every 0.1s. When Path of Conflict ends or the equipping character leaves the field, both Unforgivable and Irreparable will be removed.\nHexerei: Secret Rite: The above DMG boosts are increased by 75%."
+    },
+    {
+      "rank": 3,
+      "description": "After the equipping character uses an Elemental Skill, they gain \"Path of Conflict\" for 17s, as well as \"Unforgivable\" and \"Irreparable\" for 3s each. This effect can trigger once every 18s.\nUnforgivable: Increases the equipping character's Normal Attack and Charged Attack DMG by 60%.\nIrreparable: Increases the equipping character's Elemental Skill and Elemental Burst DMG by 60%.\nWhile Path of Conflict is in effect, when the equipping character hits an opponent with a Normal Attack or Charged Attack, Irreparable's duration will be increased by 1s. When the equipping character hits an opponent with their Elemental Skill or Elemental Burst, Unforgivable's duration will be increased by 1s. Each of the above effects can be triggered once every 0.1s. When Path of Conflict ends or the equipping character leaves the field, both Unforgivable and Irreparable will be removed.\nHexerei: Secret Rite: The above DMG boosts are increased by 75%."
+    },
+    {
+      "rank": 4,
+      "description": "After the equipping character uses an Elemental Skill, they gain \"Path of Conflict\" for 17s, as well as \"Unforgivable\" and \"Irreparable\" for 3s each. This effect can trigger once every 18s.\nUnforgivable: Increases the equipping character's Normal Attack and Charged Attack DMG by 70%.\nIrreparable: Increases the equipping character's Elemental Skill and Elemental Burst DMG by 70%.\nWhile Path of Conflict is in effect, when the equipping character hits an opponent with a Normal Attack or Charged Attack, Irreparable's duration will be increased by 1s. When the equipping character hits an opponent with their Elemental Skill or Elemental Burst, Unforgivable's duration will be increased by 1s. Each of the above effects can be triggered once every 0.1s. When Path of Conflict ends or the equipping character leaves the field, both Unforgivable and Irreparable will be removed.\nHexerei: Secret Rite: The above DMG boosts are increased by 75%."
+    },
+    {
+      "rank": 5,
+      "description": "After the equipping character uses an Elemental Skill, they gain \"Path of Conflict\" for 17s, as well as \"Unforgivable\" and \"Irreparable\" for 3s each. This effect can trigger once every 18s.\nUnforgivable: Increases the equipping character's Normal Attack and Charged Attack DMG by 80%.\nIrreparable: Increases the equipping character's Elemental Skill and Elemental Burst DMG by 80%.\nWhile Path of Conflict is in effect, when the equipping character hits an opponent with a Normal Attack or Charged Attack, Irreparable's duration will be increased by 1s. When the equipping character hits an opponent with their Elemental Skill or Elemental Burst, Unforgivable's duration will be increased by 1s. Each of the above effects can be triggered once every 0.1s. When Path of Conflict ends or the equipping character leaves the field, both Unforgivable and Irreparable will be removed.\nHexerei: Secret Rite: The above DMG boosts are increased by 75%."
+    }
+  ]
+}

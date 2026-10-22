@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "HeartOfTheFurnace",
+  "gameId": 15048,
+  "name": "Heart of the Furnace",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/heartofthefurnace.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "5ed61826d4f178c63f6a0ff92cba803e1490910ba0bd6c2bc189482360bfa29f",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Foundryman's Conjecture",
+      "description": "He knew that, unlike the temperature at the heart of the furnace, just how warm or cold a human heart is towards another cannot be clearly measured in degrees."
+    },
+    {
+      "slot": "plume",
+      "name": "Foundryman's Observation",
+      "description": "He knew that, unlike the colors at the heart of the furnace, the outcome of various worldly affairs could not be predicted simply through close observation."
+    },
+    {
+      "slot": "sands",
+      "name": "Foundryman's Calculus",
+      "description": "He knew that, unlike the heat at the heart of the furnace, the workings of power could not be controlled by the simple pull of a lever or the press of a button."
+    },
+    {
+      "slot": "goblet",
+      "name": "Foundryman's Magnanimity",
+      "description": "He knew that, unlike the flame at the heart of the furnace, which would continue burning indefinitely so long as it is supplied with fuel, friendship was far more fleeting."
+    },
+    {
+      "slot": "circlet",
+      "name": "Foundryman's Legacy",
+      "description": "He knew that, unlike the flame at the heart of the furnace, the resolve to pursue a dream could never be simply passed on to those to come after."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "ATK +18%." },
+    {
+      "pieces": 4,
+      "description": "Increases the equipping character's ATK by 12% for 12s when they trigger a Stellar Glimmer reaction or deal Stellar Glimmer reaction DMG. Also increases Stellar Glimmer reaction DMG dealt by all nearby party members by 50%. The above effects can trigger even when the equipping character is not on the field, and the DMG bonus from multiple Artifact Sets with the same name do not stack."
+    }
+  ]
+}

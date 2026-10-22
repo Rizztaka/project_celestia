@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SkyriderGreatsword",
+  "gameId": 12306,
+  "name": "Skyrider Greatsword",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/skyridergreatsword.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "c5c3bd3fed30f95e25089855eea3cb557d960c30e3f18de03c93820dc8518d42",
+    "license": "MIT"
+  },
+  "description": "A reliable steel sword. The legendary Skyrider once tried to ride it as a flying sword... for the second time.",
+  "weaponType": "Claymore",
+  "rarity": 3,
+  "effectName": "Courage",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "On hit, Normal or Charged Attacks increase ATK by 6% for 6s. Max 4 stacks. Can occur once every 0.5s."
+    },
+    {
+      "rank": 2,
+      "description": "On hit, Normal or Charged Attacks increase ATK by 7% for 6s. Max 4 stacks. Can occur once every 0.5s."
+    },
+    {
+      "rank": 3,
+      "description": "On hit, Normal or Charged Attacks increase ATK by 8% for 6s. Max 4 stacks. Can occur once every 0.5s."
+    },
+    {
+      "rank": 4,
+      "description": "On hit, Normal or Charged Attacks increase ATK by 9% for 6s. Max 4 stacks. Can occur once every 0.5s."
+    },
+    {
+      "rank": 5,
+      "description": "On hit, Normal or Charged Attacks increase ATK by 10% for 6s. Max 4 stacks. Can occur once every 0.5s."
+    }
+  ]
+}

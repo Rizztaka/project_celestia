@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "WolfFang",
+  "gameId": 11424,
+  "name": "Wolf-Fang",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/wolffang.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "6e76a79eb0ad7f9801a70622a6fb833e4c61c3c439c03e9a96893a55b55e1690",
+    "license": "MIT"
+  },
+  "description": "Legend has it that this longsword was once used by a wandering knight in the distant past.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Northwind Wolf",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "DMG dealt by Elemental Skill and Elemental Burst is increased by 16%. When an Elemental Skill hits an opponent, its CRIT Rate will be increased by 2%. When an Elemental Burst hits an opponent, its CRIT Rate will be increased by 2%. Both of these effects last 10s separately, have 4 max stacks, and can be triggered once every 0.1s."
+    },
+    {
+      "rank": 2,
+      "description": "DMG dealt by Elemental Skill and Elemental Burst is increased by 20%. When an Elemental Skill hits an opponent, its CRIT Rate will be increased by 2.5%. When an Elemental Burst hits an opponent, its CRIT Rate will be increased by 2.5%. Both of these effects last 10s separately, have 4 max stacks, and can be triggered once every 0.1s."
+    },
+    {
+      "rank": 3,
+      "description": "DMG dealt by Elemental Skill and Elemental Burst is increased by 24%. When an Elemental Skill hits an opponent, its CRIT Rate will be increased by 3%. When an Elemental Burst hits an opponent, its CRIT Rate will be increased by 3%. Both of these effects last 10s separately, have 4 max stacks, and can be triggered once every 0.1s."
+    },
+    {
+      "rank": 4,
+      "description": "DMG dealt by Elemental Skill and Elemental Burst is increased by 28%. When an Elemental Skill hits an opponent, its CRIT Rate will be increased by 3.5%. When an Elemental Burst hits an opponent, its CRIT Rate will be increased by 3.5%. Both of these effects last 10s separately, have 4 max stacks, and can be triggered once every 0.1s."
+    },
+    {
+      "rank": 5,
+      "description": "DMG dealt by Elemental Skill and Elemental Burst is increased by 32%. When an Elemental Skill hits an opponent, its CRIT Rate will be increased by 4%. When an Elemental Burst hits an opponent, its CRIT Rate will be increased by 4%. Both of these effects last 10s separately, have 4 max stacks, and can be triggered once every 0.1s."
+    }
+  ]
+}

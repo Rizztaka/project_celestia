@@ -1,0 +1,252 @@
+{
+  "contractVersion": 1,
+  "key": "Eula",
+  "gameId": 10000051,
+  "name": "Eula",
+  "description": "The Spindrift Knight, a scion of the old aristocracy, and the Captain of the Knights of Favonius Reconnaissance Company. The reason for which a descendant of the ancient nobles might join the Knights remains a great mystery in Mondstadt to this very day.",
+  "element": "Cryo",
+  "weaponType": "Claymore",
+  "rarity": 5,
+  "forms": [],
+  "talents": [
+    {
+      "key": "combat1",
+      "name": "Favonius Bladework - Edel",
+      "description": "Normal Attack\nPerforms up to 5 consecutive strikes.\n\nCharged Attack\nDrains Stamina over time to perform continuous slashes.\nAt the end of the sequence, performs a more powerful slash.\n\nPlunging Attack\nPlunges from mid-air to strike the ground, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "kind": "normal",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat2",
+      "name": "Icetide Vortex",
+      "description": "Sharp frost, swift blade.\n\nPress\nSlashes swiftly, dealing Cryo DMG.\nWhen it hits an opponent, Eula gains a stack of Grimheart that stacks up to 2 times. These stacks can only be gained once every 0.3s.\n\nGrimheart\nIncreases Eula's resistance to interruption and DEF.\n\nHold\nWielding her sword, Eula consumes all the stacks of Grimheart and lashes forward, dealing AoE Cryo DMG to opponents in front of her.\nIf Grimheart stacks are consumed, surrounding opponents will have their Physical RES and Cryo RES decreased.\nEach consumed stack of Grimheart will be converted into an Icewhirl Brand that deals Cryo DMG to nearby opponents.",
+      "kind": "skill",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat3",
+      "name": "Glacial Illumination",
+      "description": "Brandishes her greatsword, dealing Cryo DMG to nearby opponents and creating a Lightfall Sword that follows her around for a duration of up to 7s.\nWhile present, the Lightfall Sword increases Eula's resistance to interruption. When Eula's own Normal Attack, Elemental Skill, and Elemental Burst deal DMG to opponents, they will charge the Lightfall Sword, which can gain an energy stack once every 0.1s.\nOnce its duration ends, the Lightfall Sword will descend and explode violently, dealing Physical DMG to nearby opponents.\nThis DMG scales on the number of energy stacks the Lightfall Sword has accumulated.\nIf Eula leaves the field, the Lightfall Sword will explode immediately.",
+      "kind": "burst",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive1",
+      "name": "Roiling Rime",
+      "description": "If 2 stacks of Grimheart are consumed upon unleashing the Holding Mode of Icetide Vortex, a Shattered Lightfall Sword will be created that will explode immediately, dealing 50% of the basic Physical DMG dealt by a Lightfall Sword created by Glacial Illumination.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive2",
+      "name": "Wellspring of War-Lust",
+      "description": "When Glacial Illumination is cast, the CD of Icetide Vortex is reset and Eula gains 1 stack of Grimheart.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive3",
+      "name": "Aristocratic Introspection",
+      "description": "When Eula crafts Character Talent Materials, she has a 10% chance to receive double the product.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    }
+  ],
+  "constellations": [
+    {
+      "key": "c1",
+      "name": "Tidal Illusion",
+      "description": "Every time Icetide Vortex's Grimheart stacks are consumed, Eula's Physical DMG is increased by 30% for 6s.\nEach stack consumed will increase the duration of this effect by 6s up to a maximum of 18s.",
+      "kind": "constellation",
+      "constellation": 1,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c2",
+      "name": "Lady of Seafoam",
+      "description": "Decreases the CD of Icetide Vortex's Holding Mode, rendering it identical to Press CD.",
+      "kind": "constellation",
+      "constellation": 2,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c3",
+      "name": "Lawrence Pedigree",
+      "description": "Increases the Level of Glacial Illumination by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 3,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c4",
+      "name": "The Obstinacy of One's Inferiors",
+      "description": "Lightfall Swords deal 25% increased DMG against opponents with less than 50% HP.",
+      "kind": "constellation",
+      "constellation": 4,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c5",
+      "name": "Chivalric Quality",
+      "description": "Increases the Level of Icetide Vortex by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 5,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c6",
+      "name": "Noble Obligation",
+      "description": "Lightfall Swords created by Glacial Illumination start with 5 stacks of energy. Normal Attacks, Elemental Skills, and Elemental Bursts have a 50% chance to grant the Lightfall Sword an additional stack of energy.",
+      "kind": "constellation",
+      "constellation": 6,
+      "unlock": "constellation"
+    }
+  ],
+  "weapons": [
+    { "key": "Akuoumaru", "name": "Akuoumaru" },
+    { "key": "ATeaspoonOfTranscendence", "name": "A Teaspoon of Transcendence" },
+    { "key": "AThousandBlazingSuns", "name": "A Thousand Blazing Suns" },
+    { "key": "BeaconOfTheReedSea", "name": "Beacon of the Reed Sea" },
+    { "key": "BlackcliffSlasher", "name": "Blackcliff Slasher" },
+    { "key": "BladeOfAtonement", "name": "Blade of Atonement" },
+    { "key": "BloodtaintedGreatsword", "name": "Bloodtainted Greatsword" },
+    { "key": "DebateClub", "name": "Debate Club" },
+    { "key": "EarthShaker", "name": "Earth Shaker" },
+    { "key": "FangOfTheMountainKing", "name": "Fang of the Mountain King" },
+    { "key": "FavoniusGreatsword", "name": "Favonius Greatsword" },
+    { "key": "FerrousShadow", "name": "Ferrous Shadow" },
+    { "key": "FlameForgedInsight", "name": "Flame-Forged Insight" },
+    { "key": "ForestRegalia", "name": "Forest Regalia" },
+    { "key": "ForgedByTheGoldenMelody", "name": "Forged by the Golden Melody" },
+    { "key": "FruitfulHook", "name": "Fruitful Hook" },
+    { "key": "GestOfTheMightyWolf", "name": "Gest of the Mighty Wolf" },
+    { "key": "KatsuragikiriNagamasa", "name": "Katsuragikiri Nagamasa" },
+    { "key": "LithicBlade", "name": "Lithic Blade" },
+    { "key": "LuxuriousSeaLord", "name": "Luxurious Sea-Lord" },
+    { "key": "MailedFlower", "name": "Mailed Flower" },
+    { "key": "MakhairaAquamarine", "name": "Makhaira Aquamarine" },
+    { "key": "MasterKey", "name": "Master Key" },
+    { "key": "OldMercsPal", "name": "Old Merc's Pal" },
+    { "key": "PortablePowerSaw", "name": "Portable Power Saw" },
+    { "key": "PrototypeArchaic", "name": "Prototype Archaic" },
+    { "key": "Rainslasher", "name": "Rainslasher" },
+    { "key": "RedhornStonethresher", "name": "Redhorn Stonethresher" },
+    { "key": "RoyalGreatsword", "name": "Royal Greatsword" },
+    { "key": "SacrificialGreatsword", "name": "Sacrificial Greatsword" },
+    { "key": "SerpentSpine", "name": "Serpent Spine" },
+    { "key": "SkyriderGreatsword", "name": "Skyrider Greatsword" },
+    { "key": "SkywardPride", "name": "Skyward Pride" },
+    { "key": "SnowTombedStarsilver", "name": "Snow-Tombed Starsilver" },
+    { "key": "SongOfBrokenPines", "name": "Song of Broken Pines" },
+    { "key": "TalkingStick", "name": "Talking Stick" },
+    { "key": "TheBell", "name": "The Bell" },
+    { "key": "TheUnforged", "name": "The Unforged" },
+    { "key": "TidalShadow", "name": "Tidal Shadow" },
+    {
+      "key": "UltimateOverlordsMegaMagicSword",
+      "name": "\"Ultimate Overlord's Mega Magic Sword\""
+    },
+    { "key": "Verdict", "name": "Verdict" },
+    { "key": "WasterGreatsword", "name": "Waster Greatsword" },
+    { "key": "Whiteblind", "name": "Whiteblind" },
+    { "key": "WhiteIronGreatsword", "name": "White Iron Greatsword" },
+    { "key": "WolfsGravestone", "name": "Wolf's Gravestone" }
+  ],
+  "artifactSets": [
+    { "key": "ADayCarvedFromRisingWinds", "name": "A Day Carved From Rising Winds" },
+    { "key": "Adventurer", "name": "Adventurer" },
+    { "key": "ArchaicPetra", "name": "Archaic Petra" },
+    { "key": "AubadeOfMorningstarAndMoon", "name": "Aubade of Morningstar and Moon" },
+    { "key": "Berserker", "name": "Berserker" },
+    { "key": "BlizzardStrayer", "name": "Blizzard Strayer" },
+    { "key": "BloodstainedChivalry", "name": "Bloodstained Chivalry" },
+    { "key": "BraveHeart", "name": "Brave Heart" },
+    { "key": "CelestialGift", "name": "Celestial Gift" },
+    { "key": "CrimsonWitchOfFlames", "name": "Crimson Witch of Flames" },
+    { "key": "DeepwoodMemories", "name": "Deepwood Memories" },
+    { "key": "DefendersWill", "name": "Defender's Will" },
+    { "key": "DesertPavilionChronicle", "name": "Desert Pavilion Chronicle" },
+    { "key": "DisenchantmentInDeepShadow", "name": "Disenchantment in Deep Shadow" },
+    { "key": "EchoesOfAnOffering", "name": "Echoes of an Offering" },
+    { "key": "EmblemOfSeveredFate", "name": "Emblem of Severed Fate" },
+    { "key": "FinaleOfTheDeepGalleries", "name": "Finale of the Deep Galleries" },
+    { "key": "FlowerOfParadiseLost", "name": "Flower of Paradise Lost" },
+    { "key": "FragmentOfHarmonicWhimsy", "name": "Fragment of Harmonic Whimsy" },
+    { "key": "Gambler", "name": "Gambler" },
+    { "key": "GildedDreams", "name": "Gilded Dreams" },
+    { "key": "GladiatorsFinale", "name": "Gladiator's Finale" },
+    { "key": "GoldenTroupe", "name": "Golden Troupe" },
+    { "key": "HeartOfDepth", "name": "Heart of Depth" },
+    { "key": "HeartOfTheFurnace", "name": "Heart of the Furnace" },
+    { "key": "HuskOfOpulentDreams", "name": "Husk of Opulent Dreams" },
+    { "key": "Instructor", "name": "Instructor" },
+    { "key": "Lavawalker", "name": "Lavawalker" },
+    { "key": "LongNightsOath", "name": "Long Night's Oath" },
+    { "key": "LuckyDog", "name": "Lucky Dog" },
+    { "key": "MaidenBeloved", "name": "Maiden Beloved" },
+    { "key": "MarechausseeHunter", "name": "Marechaussee Hunter" },
+    { "key": "MartialArtist", "name": "Martial Artist" },
+    { "key": "NightOfTheSkysUnveiling", "name": "Night of the Sky's Unveiling" },
+    {
+      "key": "NighttimeWhispersInTheEchoingWoods",
+      "name": "Nighttime Whispers in the Echoing Woods"
+    },
+    { "key": "NoblesseOblige", "name": "Noblesse Oblige" },
+    { "key": "NymphsDream", "name": "Nymph's Dream" },
+    { "key": "ObsidianCodex", "name": "Obsidian Codex" },
+    { "key": "OceanHuedClam", "name": "Ocean-Hued Clam" },
+    { "key": "PaleFlame", "name": "Pale Flame" },
+    { "key": "PrayersForDestiny", "name": "Prayers for Destiny" },
+    { "key": "PrayersForIllumination", "name": "Prayers for Illumination" },
+    { "key": "PrayersForWisdom", "name": "Prayers for Wisdom" },
+    { "key": "PrayersToSpringtime", "name": "Prayers to Springtime" },
+    { "key": "ResolutionOfSojourner", "name": "Resolution of Sojourner" },
+    { "key": "RetracingBolide", "name": "Retracing Bolide" },
+    { "key": "ScarletProof", "name": "Scarlet Proof" },
+    { "key": "Scholar", "name": "Scholar" },
+    { "key": "ScrollOfTheHeroOfCinderCity", "name": "Scroll of the Hero of Cinder City" },
+    { "key": "ShimenawasReminiscence", "name": "Shimenawa's Reminiscence" },
+    { "key": "SilkenMoonsSerenade", "name": "Silken Moon's Serenade" },
+    { "key": "SongOfDaysPast", "name": "Song of Days Past" },
+    { "key": "TenacityOfTheMillelith", "name": "Tenacity of the Millelith" },
+    { "key": "TheExile", "name": "The Exile" },
+    { "key": "ThunderingFury", "name": "Thundering Fury" },
+    { "key": "Thundersoother", "name": "Thundersoother" },
+    { "key": "TinyMiracle", "name": "Tiny Miracle" },
+    { "key": "TravelingDoctor", "name": "Traveling Doctor" },
+    { "key": "UnfinishedReverie", "name": "Unfinished Reverie" },
+    { "key": "VermillionHereafter", "name": "Vermillion Hereafter" },
+    { "key": "ViridescentVenerer", "name": "Viridescent Venerer" },
+    { "key": "VourukashasGlow", "name": "Vourukasha's Glow" },
+    { "key": "WanderersTroupe", "name": "Wanderer's Troupe" }
+  ],
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/characters/eula.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "ccfc75b700e65c3d4ed23eabfe00b5b16051e97376f53e36fb2bbac9c308cfd1",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/eula.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "848b3c2d6ef0712ded4822ba06747c8cbce5532826c153f48174e140d7280283",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/constellations/eula.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "c0178a8776403b80edfc4780cc266fffccd0ec64fe94b9f15d08201b017bf09d",
+      "license": "MIT"
+    }
+  ],
+  "gaps": [
+    "Passive and special ability unlock requirements are not supplied by this pinned source; their unlock states remain unknown."
+  ]
+}

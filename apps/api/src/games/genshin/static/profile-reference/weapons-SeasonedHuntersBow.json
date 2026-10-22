@@ -1,0 +1,17 @@
+{
+  "contractVersion": 1,
+  "key": "SeasonedHuntersBow",
+  "gameId": 15201,
+  "name": "Seasoned Hunter's Bow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/seasonedhuntersbow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "723c5b0a2e9d020a719b005d90cb64b165f44df0824883596e64fc4ee1dc6980",
+    "license": "MIT"
+  },
+  "description": "A bow that has been well-polished by time and meticulously cared for by its owner. It feels almost like an extension of the archer's arm.",
+  "weaponType": "Bow",
+  "rarity": 2,
+  "effectName": "",
+  "refinements": []
+}

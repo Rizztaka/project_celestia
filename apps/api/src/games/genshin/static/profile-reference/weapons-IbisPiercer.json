@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "IbisPiercer",
+  "gameId": 15419,
+  "name": "Ibis Piercer",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/ibispiercer.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "adf442c66cb3b9eea61a0e79b6ac01e02d28a023e20476dee9c346c10392a8fc",
+    "license": "MIT"
+  },
+  "description": "A golden bow forged from the description in the story. If you use it as a normal weapon, you can also view it as a part of a fictional world that has made it off the pages.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Secret Wisdom's Favor",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "The character's Elemental Mastery will increase by 40 within 6s after Charged Attacks hit opponents. Max 2 stacks. This effect can be triggered once every 0.5s."
+    },
+    {
+      "rank": 2,
+      "description": "The character's Elemental Mastery will increase by 50 within 6s after Charged Attacks hit opponents. Max 2 stacks. This effect can be triggered once every 0.5s."
+    },
+    {
+      "rank": 3,
+      "description": "The character's Elemental Mastery will increase by 60 within 6s after Charged Attacks hit opponents. Max 2 stacks. This effect can be triggered once every 0.5s."
+    },
+    {
+      "rank": 4,
+      "description": "The character's Elemental Mastery will increase by 70 within 6s after Charged Attacks hit opponents. Max 2 stacks. This effect can be triggered once every 0.5s."
+    },
+    {
+      "rank": 5,
+      "description": "The character's Elemental Mastery will increase by 80 within 6s after Charged Attacks hit opponents. Max 2 stacks. This effect can be triggered once every 0.5s."
+    }
+  ]
+}

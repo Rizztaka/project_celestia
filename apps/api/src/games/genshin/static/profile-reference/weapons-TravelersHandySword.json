@@ -1,0 +1,23 @@
+{
+  "contractVersion": 1,
+  "key": "TravelersHandySword",
+  "gameId": 11303,
+  "name": "Traveler's Handy Sword",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/travelershandysword.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "5fbc9b431d48282a2ec473c975f382b713acd889ba71e1f1efc02694b605d542",
+    "license": "MIT"
+  },
+  "description": "A handy steel sword which contains scissors, a magnifying glass, tinder, and other useful items in its sheath.",
+  "weaponType": "Sword",
+  "rarity": 3,
+  "effectName": "Journey",
+  "refinements": [
+    { "rank": 1, "description": "Each Elemental Orb or Particle collected restores 1% HP." },
+    { "rank": 2, "description": "Each Elemental Orb or Particle collected restores 1.25% HP." },
+    { "rank": 3, "description": "Each Elemental Orb or Particle collected restores 1.5% HP." },
+    { "rank": 4, "description": "Each Elemental Orb or Particle collected restores 1.75% HP." },
+    { "rank": 5, "description": "Each Elemental Orb or Particle collected restores 2% HP." }
+  ]
+}

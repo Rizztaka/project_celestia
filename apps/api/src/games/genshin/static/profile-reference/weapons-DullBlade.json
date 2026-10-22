@@ -1,0 +1,17 @@
+{
+  "contractVersion": 1,
+  "key": "DullBlade",
+  "gameId": 11101,
+  "name": "Dull Blade",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/dullblade.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "0da6a6df7153398bf04d609f9bafd620ba0bc481900a2cffd09a326b0bf6c0de",
+    "license": "MIT"
+  },
+  "description": "Youthful dreams and the thrill of adventure. If this isn't enough, then make it up with valiance.",
+  "weaponType": "Sword",
+  "rarity": 1,
+  "effectName": "",
+  "refinements": []
+}

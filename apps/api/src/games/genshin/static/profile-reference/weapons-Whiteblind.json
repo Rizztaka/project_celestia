@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "Whiteblind",
+  "gameId": 12407,
+  "name": "Whiteblind",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/whiteblind.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2416d544b5808b1f24bdb9f0dd0a61cfe59156d8c42b771088c5abf019b75154",
+    "license": "MIT"
+  },
+  "description": "An exotic sword with one section of the blade left blunt. It made its way into Liyue via the hands of foreign traders. Incredibly powerful in the hands of someone who knows how to use it.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Infusion Blade",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "On hit, Normal or Charged Attacks increase ATK and DEF by 6% for 6s. Max 4 stacks. This effect can only occur once every 0.5s."
+    },
+    {
+      "rank": 2,
+      "description": "On hit, Normal or Charged Attacks increase ATK and DEF by 7.5% for 6s. Max 4 stacks. This effect can only occur once every 0.5s."
+    },
+    {
+      "rank": 3,
+      "description": "On hit, Normal or Charged Attacks increase ATK and DEF by 9% for 6s. Max 4 stacks. This effect can only occur once every 0.5s."
+    },
+    {
+      "rank": 4,
+      "description": "On hit, Normal or Charged Attacks increase ATK and DEF by 10.5% for 6s. Max 4 stacks. This effect can only occur once every 0.5s."
+    },
+    {
+      "rank": 5,
+      "description": "On hit, Normal or Charged Attacks increase ATK and DEF by 12% for 6s. Max 4 stacks. This effect can only occur once every 0.5s."
+    }
+  ]
+}

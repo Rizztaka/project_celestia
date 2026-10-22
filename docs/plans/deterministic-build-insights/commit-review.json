@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-22",
+  "result": "ready for the owner-authorized local commit",
+  "scope": "Remove model runtime; add deterministic build insights and required profile descriptions/catalog.",
+  "excluded": [
+    "Unrelated NIKKE/schema/account-data removal",
+    "Optional hand-authored KQM guide-reader draft",
+    "Earlier source-acquisition and model-evaluation work not required by this runtime"
+  ],
+  "exactCheckout": {
+    "freshDependencyInstall": "frozen lockfile; scripts disabled",
+    "prismaTypes": "generated with a synthetic port-1 URL, without a database connection",
+    "passedTests": 97,
+    "failedTests": 0,
+    "skippedTests": 0,
+    "files": 8,
+    "report": "exact-commit-tests.json",
+    "workers": 1,
+    "environment": "Explicit synthetic DATABASE_URL and JWT_SECRET; no local secret files loaded",
+    "initialAttempt": "Catalog scans timed out during concurrent builds/lint; admission suite lacked test environment. Full focused rerun passed with explicit environment and one worker."
+  },
+  "checks": {
+    "contractsBuild": "passed",
+    "apiProductionBuild": "passed",
+    "webProductionBuild": "passed",
+    "webTypecheck": "passed",
+    "apiLint": "passed (entire API)",
+    "webLint": "passed (entire web app)",
+    "contractsLint": "passed (entire contracts package)",
+    "format": "changed authored text; immutable catalogs/raw archives preserved",
+    "whitespace": "git diff --cached --check"
+  },
+  "integrity": {
+    "runtimeAndCatalogFiles": 484,
+    "runtimeAndCatalogSha256": "7f45bf78b92ae5f3a3e82a231c5b4a05336cb0f08f889fc014f3c41fa331bd6a",
+    "profileCatalogFiles": 446,
+    "retiredExactByteArchives": 39
+  },
+  "limits": [
+    "Read-only HTTP/service boundaries tested with mocked data access; no live account or database acceptance claimed.",
+    "Pure rules currently cover compatibility, piece bounds, Harbinger and four artifact families; no complete build optimizer or all-character strategy engine claimed.",
+    "Browser evidence in walkthrough is from the preceding synthetic component/service acceptance.",
+    "No push or deployment is authorized by this request."
+  ]
+}

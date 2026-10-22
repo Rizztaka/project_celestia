@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "MarechausseeHunter",
+  "gameId": 15031,
+  "name": "Marechaussee Hunter",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/marechausseehunter.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "ea038fbec55df2b68a39f0c722606a0b4de05da77ac5df6e2c603554d6a3f3ce",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Hunter's Brooch",
+      "description": "An ancient emblem that was once awarded to those who had made exceptional contributions in battle."
+    },
+    {
+      "slot": "plume",
+      "name": "Masterpiece's Overture",
+      "description": "A portable tool used to adjust the torque on some old-school clockwork machine. It has since lost its practical value."
+    },
+    {
+      "slot": "sands",
+      "name": "Moment of Judgment",
+      "description": "A standard pocket watch. Its accuracy is not particularly high."
+    },
+    {
+      "slot": "goblet",
+      "name": "Forgotten Vessel",
+      "description": "A portable metal vessel containing strong wine. Can be stuffed into the pocket of an outer coat for ease of access and use."
+    },
+    {
+      "slot": "circlet",
+      "name": "Veteran's Visage",
+      "description": "An old mask that can, to some extent, stand in for a face marred by wounds. Its design can vary based on the wounded areas and the user's gender."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Normal and Charged Attack DMG +15%" },
+    {
+      "pieces": 4,
+      "description": "When current HP increases or decreases, CRIT Rate will be increased by 12% for 5s. Max 3 stacks."
+    }
+  ]
+}

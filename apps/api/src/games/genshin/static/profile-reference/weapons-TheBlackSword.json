@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "TheBlackSword",
+  "gameId": 11409,
+  "name": "The Black Sword",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/theblacksword.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "e9d42e29d60fccb34f7770112fd4f25b59622710e7695594c3550310cfaee953",
+    "license": "MIT"
+  },
+  "description": "A pitch-black longsword that thirsts for violence and conflict. It is said that this weapon can cause its user to become drunk on the red wine of slaughter.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Justice",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases DMG dealt by Normal and Charged Attacks by 20%. Additionally, regenerates 60% of ATK as HP when Normal and Charged Attacks score a CRIT Hit. This effect can occur once every 5s."
+    },
+    {
+      "rank": 2,
+      "description": "Increases DMG dealt by Normal and Charged Attacks by 25%. Additionally, regenerates 70% of ATK as HP when Normal and Charged Attacks score a CRIT Hit. This effect can occur once every 5s."
+    },
+    {
+      "rank": 3,
+      "description": "Increases DMG dealt by Normal and Charged Attacks by 30%. Additionally, regenerates 80% of ATK as HP when Normal and Charged Attacks score a CRIT Hit. This effect can occur once every 5s."
+    },
+    {
+      "rank": 4,
+      "description": "Increases DMG dealt by Normal and Charged Attacks by 35%. Additionally, regenerates 90% of ATK as HP when Normal and Charged Attacks score a CRIT Hit. This effect can occur once every 5s."
+    },
+    {
+      "rank": 5,
+      "description": "Increases DMG dealt by Normal and Charged Attacks by 40%. Additionally, regenerates 100% of ATK as HP when Normal and Charged Attacks score a CRIT Hit. This effect can occur once every 5s."
+    }
+  ]
+}

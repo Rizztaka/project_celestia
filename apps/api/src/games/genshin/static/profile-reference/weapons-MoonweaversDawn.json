@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "MoonweaversDawn",
+  "gameId": 11434,
+  "name": "Moonweaver's Dawn",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/moonweaversdawn.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "4b631ca38d71042b12eaa613041b7def9e662a2fd7c453d8cecdaf4f97c6e66b",
+    "license": "MIT"
+  },
+  "description": "An immaculate, sharp silver sword that can slice through armor like moonlight flowing through the empty night. According to legend, it is a divine blade, blessed by the first Moonchanter herself.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Secret Silver's Testament",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Elemental Burst DMG by 20%. When the equipping character's Energy Capacity does not exceed 60/40, their Elemental Burst DMG is increased by an additional 16%/28%."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Elemental Burst DMG by 25%. When the equipping character's Energy Capacity does not exceed 60/40, their Elemental Burst DMG is increased by an additional 20%/35%."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Elemental Burst DMG by 30%. When the equipping character's Energy Capacity does not exceed 60/40, their Elemental Burst DMG is increased by an additional 24%/42%."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Elemental Burst DMG by 35%. When the equipping character's Energy Capacity does not exceed 60/40, their Elemental Burst DMG is increased by an additional 28%/49%."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Elemental Burst DMG by 40%. When the equipping character's Energy Capacity does not exceed 60/40, their Elemental Burst DMG is increased by an additional 32%/56%."
+    }
+  ]
+}

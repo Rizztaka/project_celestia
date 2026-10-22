@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "Deathmatch",
+  "gameId": 13405,
+  "name": "Deathmatch",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/deathmatch.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "62b96bcec5d313edf5dff4ffc09c3562fc0f52267fb65b714a898936275fe481",
+    "license": "MIT"
+  },
+  "description": "A sharp crimson polearm that was once a gladiator's priceless treasure. Its awl has been stained by the blood of countless beasts and men.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Gladiator",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "If there are at least 2 opponents nearby, ATK is increased by 16% and DEF is increased by 16%. If there are fewer than 2 opponents nearby, ATK is increased by 24%."
+    },
+    {
+      "rank": 2,
+      "description": "If there are at least 2 opponents nearby, ATK is increased by 20% and DEF is increased by 20%. If there are fewer than 2 opponents nearby, ATK is increased by 30%."
+    },
+    {
+      "rank": 3,
+      "description": "If there are at least 2 opponents nearby, ATK is increased by 24% and DEF is increased by 24%. If there are fewer than 2 opponents nearby, ATK is increased by 36%."
+    },
+    {
+      "rank": 4,
+      "description": "If there are at least 2 opponents nearby, ATK is increased by 28% and DEF is increased by 28%. If there are fewer than 2 opponents nearby, ATK is increased by 42%."
+    },
+    {
+      "rank": 5,
+      "description": "If there are at least 2 opponents nearby, ATK is increased by 32% and DEF is increased by 32%. If there are fewer than 2 opponents nearby, ATK is increased by 48%."
+    }
+  ]
+}

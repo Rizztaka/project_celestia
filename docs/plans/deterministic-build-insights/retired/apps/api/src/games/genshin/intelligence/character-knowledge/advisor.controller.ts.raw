@@ -1,0 +1,89 @@
+import {
+  advisorContextKeysSchema,
+  characterAdvisorRequestSchema,
+  characterAdvisorResponseSchema,
+} from '@celestia/api-contracts';
+import type { Request, Response } from 'express';
+import { z } from 'zod';
+
+import { BadRequestError } from '@/core/errors/app-error.js';
+import { successResponse } from '@/core/utils/response.js';
+
+import { CharacterAdvisorService } from './advisor.service.js';
+import { resolveKnowledgeCharacter } from './knowledge.retrieval.js';
+import { loadedCharacterKnowledge } from './knowledge.store.js';
+
+export const askCharacter = characterAdvisorHandler();
+export function characterAdvisorHandler(factory = () => new CharacterAdvisorService()) {
+  return async function askCharacter(req: Request, res: Response) {
+    const input = characterAdvisorRequestSchema.parse(req.body),
+      abort = new AbortController();
+    const closed = () => abort.abort();
+    res.once('close', closed);
+    const timer = setTimeout(closed, 25000);
+    try {
+      const answer = await factory().ask(req.user!.id, input, abort.signal);
+      if (!res.destroyed)
+        res.json(
+          successResponse(
+            characterAdvisorResponseSchema.parse(answer),
+            'Character advice evaluated.',
+          ),
+        );
+    } finally {
+      clearTimeout(timer);
+      res.off('close', closed);
+    }
+  };
+}
+export function characterKnowledgeMetadata(req: Request, res: Response) {
+  const key = z.string().min(1).max(100).parse(req.params.key),
+    profile = resolveKnowledgeCharacter(key);
+  res.json(
+    successResponse(
+      {
+        release: loadedCharacterKnowledge.release,
+        profile: profile
+          ? { key: profile.key, name: profile.name, forms: profile.forms, gaps: profile.gaps }
+          : null,
+      },
+      'Knowledge metadata.',
+    ),
+  );
+}
+export const characterKnowledgeObservation = characterKnowledgeObservationHandler();
+export function characterKnowledgeObservationHandler(
+  factory = () => new CharacterAdvisorService(),
+) {
+  return async function observation(req: Request, res: Response) {
+    const { keys } = z
+      .object({
+        keys: z
+          .string()
+          .max(1000)
+          .transform((s, ctx) => {
+            try {
+              return JSON.parse(s) as unknown;
+            } catch {
+              ctx.addIssue({ code: 'custom', message: 'Invalid keys JSON' });
+              return z.NEVER;
+            }
+          })
+          .pipe(advisorContextKeysSchema),
+      })
+      .strict()
+      .parse(req.query);
+    if (keys.some((k) => !resolveKnowledgeCharacter(k)))
+      throw new BadRequestError('Unknown observation character');
+    const snapshot = await factory().snapshot(
+      req.user!.id,
+      keys.map((key) => resolveKnowledgeCharacter(key)!.key),
+    );
+    res.json(
+      successResponse(
+        { release: loadedCharacterKnowledge.release, digest: snapshot.digest },
+        'Current observation.',
+      ),
+    );
+  };
+}

@@ -1,0 +1,41 @@
+import { CharacterAdvisorService } from './character-knowledge/advisor.service.js';
+import { describeComposition } from './team-intelligence/team-composition.service.js';
+
+export async function planningKnowledgeAdvice(
+  context: {
+    todayPlan?: string;
+    teamComp?: string[];
+  },
+  userId?: string,
+) {
+  const result = describeComposition(context.teamComp ?? []);
+  const fallback = [
+    ...result.explanations,
+    ...result.resonances.map((r) => `${r.name}${r.active ? '' : ' (preview)'}: ${r.description}`),
+  ].join('\n');
+  if (!userId || !context.teamComp?.length)
+    return { summary: fallback, status: 'deterministic_notes', citations: [] };
+  const response = await new CharacterAdvisorService().ask(userId, {
+    characterKey: context.teamComp[0]!,
+    question:
+      context.todayPlan?.trim() ||
+      'Explain how these selected teammates can work together, the conditions and useful alternatives.',
+    teamKeys: context.teamComp,
+    useRecordedContext: true,
+    history: [],
+  });
+  return {
+    summary:
+      response.answer?.segments.map((s) => s.text).join('\n\n') ??
+      `AI unavailable (${response.reason}). Deterministic composition notes:\n${fallback}`,
+    status: response.status,
+    reason: response.reason,
+    citations: response.citations,
+  };
+}
+export async function synthesizeAdvice(
+  context: { todayPlan?: string; teamComp?: string[] },
+  userId?: string,
+): Promise<string> {
+  return (await planningKnowledgeAdvice(context, userId)).summary;
+}

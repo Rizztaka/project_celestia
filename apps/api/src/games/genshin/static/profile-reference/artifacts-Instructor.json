@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "Instructor",
+  "gameId": 10007,
+  "name": "Instructor",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/instructor.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "9320714633cd77dc1f49f72a8c5a9fbeced17091486c9673fd84bb354419afa4",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Instructor's Brooch",
+      "description": "Whenever the instructor wore this brooch, it meant there would be no training sessions that day."
+    },
+    {
+      "slot": "plume",
+      "name": "Instructor's Feather Accessory",
+      "description": "Any instructor who has mastered the art of de-escalation knows to keep this accessory firmly in their grasp at all times."
+    },
+    {
+      "slot": "sands",
+      "name": "Instructor's Pocket Watch",
+      "description": "A stopwatch used not for general timekeeping but to measure the duration of a training session."
+    },
+    {
+      "slot": "goblet",
+      "name": "Instructor's Tea Cup",
+      "description": "It may seem like an ordinary tea cup to most. But to students, it is the symbol of the instructor's authority."
+    },
+    {
+      "slot": "circlet",
+      "name": "Instructor's Cap",
+      "description": "A standard-issue honorary instructor's cap, only granted to those who turn down a promotion."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Increases Elemental Mastery by 80." },
+    {
+      "pieces": 4,
+      "description": "Upon triggering an Elemental Reaction, increases all party members' Elemental Mastery by 120 for 8s."
+    }
+  ]
+}

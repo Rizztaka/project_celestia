@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "TheDockhandsAssistant",
+  "gameId": 11427,
+  "name": "The Dockhand's Assistant",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/thedockhandsassistant.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "c67fc3577cde636f553b95da138f3e7908a54ce2b99b31f9cc2aa71dbfea878d",
+    "license": "MIT"
+  },
+  "description": "A convenient cutting tool that you can rarely find nowadays. You can replace the blades as they are dulled by usage.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Sea Shanty",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "When the wielder is healed or heals others, they will gain a Stoic's Symbol that lasts 30s, up to a maximum of 3 Symbols. When using their Elemental Skill or Burst, all Symbols will be consumed and the Roused effect will be granted for 10s. For each Symbol consumed, gain 40 Elemental Mastery, and 2s after the effect occurs, 2 Energy per Symbol consumed will be restored for said character. The Roused effect can be triggered once every 15s, and Symbols can be gained even when the character is not on the field."
+    },
+    {
+      "rank": 2,
+      "description": "When the wielder is healed or heals others, they will gain a Stoic's Symbol that lasts 30s, up to a maximum of 3 Symbols. When using their Elemental Skill or Burst, all Symbols will be consumed and the Roused effect will be granted for 10s. For each Symbol consumed, gain 50 Elemental Mastery, and 2s after the effect occurs, 2.5 Energy per Symbol consumed will be restored for said character. The Roused effect can be triggered once every 15s, and Symbols can be gained even when the character is not on the field."
+    },
+    {
+      "rank": 3,
+      "description": "When the wielder is healed or heals others, they will gain a Stoic's Symbol that lasts 30s, up to a maximum of 3 Symbols. When using their Elemental Skill or Burst, all Symbols will be consumed and the Roused effect will be granted for 10s. For each Symbol consumed, gain 60 Elemental Mastery, and 2s after the effect occurs, 3 Energy per Symbol consumed will be restored for said character. The Roused effect can be triggered once every 15s, and Symbols can be gained even when the character is not on the field."
+    },
+    {
+      "rank": 4,
+      "description": "When the wielder is healed or heals others, they will gain a Stoic's Symbol that lasts 30s, up to a maximum of 3 Symbols. When using their Elemental Skill or Burst, all Symbols will be consumed and the Roused effect will be granted for 10s. For each Symbol consumed, gain 70 Elemental Mastery, and 2s after the effect occurs, 3.5 Energy per Symbol consumed will be restored for said character. The Roused effect can be triggered once every 15s, and Symbols can be gained even when the character is not on the field."
+    },
+    {
+      "rank": 5,
+      "description": "When the wielder is healed or heals others, they will gain a Stoic's Symbol that lasts 30s, up to a maximum of 3 Symbols. When using their Elemental Skill or Burst, all Symbols will be consumed and the Roused effect will be granted for 10s. For each Symbol consumed, gain 80 Elemental Mastery, and 2s after the effect occurs, 4 Energy per Symbol consumed will be restored for said character. The Roused effect can be triggered once every 15s, and Symbols can be gained even when the character is not on the field."
+    }
+  ]
+}

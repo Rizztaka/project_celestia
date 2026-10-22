@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SacrificialGreatsword",
+  "gameId": 12403,
+  "name": "Sacrificial Greatsword",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/sacrificialgreatsword.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "4adc9055822f2e19618aac902fc616f2b7f4022823a715515de8c290186a812b",
+    "license": "MIT"
+  },
+  "description": "A ceremonial greatsword that has become petrified over time. The trinkets on it are still visible. It grants the wielder the power to withstand the winds of time.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Composed",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 40% chance to end its own CD. Can only occur once every 30s."
+    },
+    {
+      "rank": 2,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 50% chance to end its own CD. Can only occur once every 26s."
+    },
+    {
+      "rank": 3,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 60% chance to end its own CD. Can only occur once every 22s."
+    },
+    {
+      "rank": 4,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 70% chance to end its own CD. Can only occur once every 19s."
+    },
+    {
+      "rank": 5,
+      "description": "After damaging an opponent with an Elemental Skill, the skill has a 80% chance to end its own CD. Can only occur once every 16s."
+    }
+  ]
+}

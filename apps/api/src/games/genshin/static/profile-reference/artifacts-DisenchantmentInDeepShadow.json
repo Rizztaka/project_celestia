@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "DisenchantmentInDeepShadow",
+  "gameId": 15046,
+  "name": "Disenchantment in Deep Shadow",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/disenchantmentindeepshadow.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "80bfeee8ee2cd780c644d7ed01ad5f0bf52d58270da9546652d739de3b0124c2",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Iridescence That Ceased Amidst Glory",
+      "description": "It was a flower made of silk, gifted to her by a friend whose hands were as cold as ice."
+    },
+    {
+      "slot": "plume",
+      "name": "Sharpness That Ceased Upon Wondrous Creation",
+      "description": "It was a feathered quill given to her followers, once used to pen the most absurd of dreams."
+    },
+    {
+      "slot": "sands",
+      "name": "Moment That Ceased Upon Waking From Grand Dreams",
+      "description": "It was a fleeting moment she gave a certain silent alchemist to remind him of every item on his schedule."
+    },
+    {
+      "slot": "goblet",
+      "name": "Ovations That Ceased Upon Festivity",
+      "description": "It was a goblet of wine she had accepted in celebration from the hands of a colleague."
+    },
+    {
+      "slot": "circlet",
+      "name": "Pendulum That Ceased Amidst a Great Fall",
+      "description": "It was a delicate trinket awarded to her in praise by the hand of her only master."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "ATK +18%." },
+    {
+      "pieces": 4,
+      "description": "Increases Superconduct Reaction DMG by 80% and Stellar-Conduct Reaction DMG by 40%. When the wielder attacks opponents affected by Superconduct or Stellar-Conduct, this attack's CRIT Rate is increased by 16%."
+    }
+  ]
+}

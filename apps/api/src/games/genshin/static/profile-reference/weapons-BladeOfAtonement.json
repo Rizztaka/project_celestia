@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "BladeOfAtonement",
+  "gameId": 12436,
+  "name": "Blade of Atonement",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/bladeofatonement.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "0049d610a7c92f0694a6592f6af027b7df192b14392b969467ccd063864bbd83",
+    "license": "MIT"
+  },
+  "description": "A greatsword passed down by the Luchkin. It is said that only the bravest warrior is qualified to wield it.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Repentance and Redemption",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Triggering an Elemental Reaction increases the equipping character's Elemental Mastery by 64 for 12s, while triggering a Stellar Glimmer reaction increases their ATK by 16% for 12s. The aforementioned effects can trigger even when the character is not on the field."
+    },
+    {
+      "rank": 2,
+      "description": "Triggering an Elemental Reaction increases the equipping character's Elemental Mastery by 80 for 12s, while triggering a Stellar Glimmer reaction increases their ATK by 20% for 12s. The aforementioned effects can trigger even when the character is not on the field."
+    },
+    {
+      "rank": 3,
+      "description": "Triggering an Elemental Reaction increases the equipping character's Elemental Mastery by 96 for 12s, while triggering a Stellar Glimmer reaction increases their ATK by 24% for 12s. The aforementioned effects can trigger even when the character is not on the field."
+    },
+    {
+      "rank": 4,
+      "description": "Triggering an Elemental Reaction increases the equipping character's Elemental Mastery by 112 for 12s, while triggering a Stellar Glimmer reaction increases their ATK by 28% for 12s. The aforementioned effects can trigger even when the character is not on the field."
+    },
+    {
+      "rank": 5,
+      "description": "Triggering an Elemental Reaction increases the equipping character's Elemental Mastery by 128 for 12s, while triggering a Stellar Glimmer reaction increases their ATK by 32% for 12s. The aforementioned effects can trigger even when the character is not on the field."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "LightbearingMoonshard",
+  "gameId": 11519,
+  "name": "Lightbearing Moonshard",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/lightbearingmoonshard.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "f1cc4422b06aa46e5bc39e494429edf8154028b0fa51265f8279a0838e272fb7",
+    "license": "MIT"
+  },
+  "description": "A legendary sword, said to be forged from the glimmering moonlight gathered in a well by an adeptus hidden among clear springs. Its true form is revealed only at the meeting of dusk and dawn.",
+  "weaponType": "Sword",
+  "rarity": 5,
+  "effectName": "Legacy of Lang-Gan",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases DEF by 20%. DMG inflicted by Lunar-Crystallize reactions increases by 64% for 5s after the equipping character uses an Elemental Skill."
+    },
+    {
+      "rank": 2,
+      "description": "Increases DEF by 25%. DMG inflicted by Lunar-Crystallize reactions increases by 80% for 5s after the equipping character uses an Elemental Skill."
+    },
+    {
+      "rank": 3,
+      "description": "Increases DEF by 30%. DMG inflicted by Lunar-Crystallize reactions increases by 96% for 5s after the equipping character uses an Elemental Skill."
+    },
+    {
+      "rank": 4,
+      "description": "Increases DEF by 35%. DMG inflicted by Lunar-Crystallize reactions increases by 112% for 5s after the equipping character uses an Elemental Skill."
+    },
+    {
+      "rank": 5,
+      "description": "Increases DEF by 40%. DMG inflicted by Lunar-Crystallize reactions increases by 128% for 5s after the equipping character uses an Elemental Skill."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "FlameForgedInsight",
+  "gameId": 12432,
+  "name": "Flame-Forged Insight",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/flameforgedinsight.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "3b71571d8c196d6cc353b731ec280b47b0b5073c05bcd421f8c92204ef9c662d",
+    "license": "MIT"
+  },
+  "description": "Tribal tales tell of a great blade forged by the People of the Springs to protect a child who would embark on a distant journey. This particular weapon appears to be a replica of that legendary sword.",
+  "weaponType": "Claymore",
+  "rarity": 4,
+  "effectName": "Mind in Bloom",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "When Electro-Charged, Lunar-Charged, Bloom, Lunar-Bloom, Crystallize or Lunar-Crystallize is triggered, restore 12 Elemental Energy and increase Elemental Mastery by 60 for 15 seconds. This effect can be triggered at most once every 15s and can be triggered even when the equipping character is off-field."
+    },
+    {
+      "rank": 2,
+      "description": "When Electro-Charged, Lunar-Charged, Bloom, Lunar-Bloom, Crystallize or Lunar-Crystallize is triggered, restore 15 Elemental Energy and increase Elemental Mastery by 75 for 15 seconds. This effect can be triggered at most once every 15s and can be triggered even when the equipping character is off-field."
+    },
+    {
+      "rank": 3,
+      "description": "When Electro-Charged, Lunar-Charged, Bloom, Lunar-Bloom, Crystallize or Lunar-Crystallize is triggered, restore 18 Elemental Energy and increase Elemental Mastery by 90 for 15 seconds. This effect can be triggered at most once every 15s and can be triggered even when the equipping character is off-field."
+    },
+    {
+      "rank": 4,
+      "description": "When Electro-Charged, Lunar-Charged, Bloom, Lunar-Bloom, Crystallize or Lunar-Crystallize is triggered, restore 21 Elemental Energy and increase Elemental Mastery by 105 for 15 seconds. This effect can be triggered at most once every 15s and can be triggered even when the equipping character is off-field."
+    },
+    {
+      "rank": 5,
+      "description": "When Electro-Charged, Lunar-Charged, Bloom, Lunar-Bloom, Crystallize or Lunar-Crystallize is triggered, restore 24 Elemental Energy and increase Elemental Mastery by 120 for 15 seconds. This effect can be triggered at most once every 15s and can be triggered even when the equipping character is off-field."
+    }
+  ]
+}

@@ -1,0 +1,260 @@
+{
+  "contractVersion": 1,
+  "key": "Mavuika",
+  "gameId": 10000106,
+  "name": "Mavuika",
+  "description": "The leader of Natlan who inherited the Ancient Name of \"Kiongozi.\" She made a vow to illuminate the future of the nation of war with the Sacred Flame.",
+  "element": "Pyro",
+  "weaponType": "Claymore",
+  "rarity": 5,
+  "forms": [],
+  "talents": [
+    {
+      "key": "combat1",
+      "name": "Flames Weave Life",
+      "description": "Normal Attack\nPerforms up to 4 consecutive claymore strikes.\n\nCharged Attack\nConsumes a certain amount of Stamina to perform an especially powerful Severing Splendor strike toward the front.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "kind": "normal",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat2",
+      "name": "The Named Moment",
+      "description": "Calling upon her authority over \"conflict,\" Mavuika summons the All-Fire Armaments passed down through the line of human Archons, dealing Nightsoul-aligned Pyro DMG.\nAfter using this, Mavuika's Nightsoul points are restored to max value, and she enters the Nightsoul's Blessing state.\n\nAll-Fire Armaments\nHas different forms when Tapped or Held.\n\nTap\n\"Divine Name Unleashed\": The All-Fire Armaments manifest as a Ring of Searing Radiance. The Ring follows the current active character and attacks nearby opponents at intervals, dealing Nightsoul-aligned Pyro DMG.\n\nHold\n\"Ancient Name Unbound\": The All-Fire Armaments manifest as a Flamestrider. In this state, Mavuika can ride the Flamestrider at high speed, or activate its hidden backup propulsion module to temporarily cross various terrain types and glide in mid-air. Mavuika's Normal, Charged, and Plunging Attacks will also be converted to deal Nightsoul-aligned Pyro DMG which cannot be overridden. When sprinting, she also deals Nightsoul-aligned Pyro DMG to opponents along her path.\n\nWhile in the Nightsoul's Blessing state, Tapping the Elemental Skill can switch the All-Fire Armaments' form. The Armaments will disappear once Mavuika's Nightsoul's Blessing state ends.\n\nNightsoul's Blessing: Mavuika\nContinuously consumes Nightsoul points according to the All-Fire Armaments' form. Mavuika's Nightsoul's Blessing state ends once her Nightsoul points are exhausted.",
+      "kind": "skill",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "combat3",
+      "name": "Hour of Burning Skies",
+      "description": "Let the people's inner voices reach the divine throne in the heavens.\nMavuika's Elemental Burst is not reliant on Energy, but instead, on \"Fighting Spirit.\"\n\nFighting Spirit\nWhen Mavuika has at least 50% Fighting Spirit, she can consume it all to unleash her Elemental Burst.\nMavuika can obtain Fighting Spirit via the following methods:\n· When in combat, Nightsoul points consumed by nearby party members are converted to Fighting Spirit.\n· When nearby party members' Normal Attacks hit opponents, Mavuika gains 1.5 Fighting Spirit. This can trigger once every 0.1s.\n\nAfter using this, Mavuika gains 10 Nightsoul points and enters the Nightsoul's Blessing state. Riding her Flamestrider high in the air, she uses a powerful Sunfell Slice against opponents on the ground, dealing Nightsoul-aligned AoE Pyro DMG and entering the \"Crucible of Death and Life\" state.\n\nCrucible of Death and Life\nDuring this time, Mavuika's various actions will no longer consume Nightsoul points, and her interruption resistance is increased. Also, the DMG dealt by Sunfell Slice and \"Ancient Name Unbound\"'s Normal and Charged Attacks is increased based on the amount of Fighting Spirit she has when using the Elemental Burst.\nCrucible of Death and Life will be canceled when Mavuika leaves the field.",
+      "kind": "burst",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive1",
+      "name": "Gift of Flaming Flowers",
+      "description": "When a nearby party member triggers a Nightsoul Burst, Mavuika's ATK increases by 30% for 10s.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive2",
+      "name": "\"Kiongozi\"",
+      "description": "After using her Elemental Burst, Hour of Burning Skies, every point of Fighting Spirit present when it is used increases the DMG that the current active party member deals by 0.2%. The maximum increase obtainable this way is 40%, and this effect lasts 20s, decaying over this duration until it reaches 0.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive3",
+      "name": "Night Realm's Gift: Exhaust Mode",
+      "description": "After Nightsoul points have been fully depleted, Mavuika will switch to using Phlogiston to maintain the All-Fire Armaments' Flamestrider form.\nWhile in an area with Phlogiston Mechanics within Natlan, Nightsoul Transmission: Mavuika can be used. When the current active character is sprinting, climbing, swimming, in movement modes caused by certain Talents, or at a certain height in the air, switching to Mavuika will trigger the following: Mavuika enters the Nightsoul's Blessing state and obtains 50% of her maximum Nightsoul points. Nightsoul Transmission can be triggered once every 10s by your own party.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    },
+    {
+      "key": "passive4",
+      "name": "Night-Shattering Radiance",
+      "description": "The party's Nightsoul Transmission CD is decreased by 20%.",
+      "kind": "passive",
+      "constellation": null,
+      "unlock": "unknown"
+    }
+  ],
+  "constellations": [
+    {
+      "key": "c1",
+      "name": "The Night-Lord's Explication",
+      "description": "Mavuika's maximum Nightsoul points are increased to 120, and she gains Fighting Spirit 25% more efficiently.\nAdditionally, she gains 40% ATK for 8s after gaining Fighting Spirit.",
+      "kind": "constellation",
+      "constellation": 1,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c2",
+      "name": "The Ashen Price",
+      "description": "When in the Nightsoul's Blessing State, Mavuika's Base ATK is increased by 200, and she obtains the following effects based on All-Fire Armaments' form:\n· Ring of Searing Radiance: Nearby opponents' DEF is decreased by 20%.\n· Flamestrider: Mavuika's Normal Attacks, Charged Attacks, and her Sunfell Slice from the Elemental Burst Hour of Burning Skies deal 60%, 90%, and 120% of her ATK as increased DMG respectively.",
+      "kind": "constellation",
+      "constellation": 2,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c3",
+      "name": "The Burning Sun",
+      "description": "Increases the Level of Hour of Burning Skies by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 3,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c4",
+      "name": "The Leader's Resolve",
+      "description": "Enhances the effects of the Ascension Talent \"Kiongozi\":\nThe DMG increase gained after using the Elemental Burst Hour of Burning Skies will not decay over time, and an additional 10% DMG Bonus will be gained.\nYou must first unlock the Ascension Talent \"Kiongozi.\"",
+      "kind": "constellation",
+      "constellation": 4,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c5",
+      "name": "The Meaning of Truth",
+      "description": "Increases the Level of The Named Moment by 3.\nMaximum upgrade level is 15.",
+      "kind": "constellation",
+      "constellation": 5,
+      "unlock": "constellation"
+    },
+    {
+      "key": "c6",
+      "name": "\"Humanity's Name\" Unfettered",
+      "description": "The All-Fire Armaments from the Elemental Skill The Named Moment receive all-round improvements:\n· Ring of Searing Radiance: When the Ring's attacks hit opponents, a Flamestrider will crash into the struck opponent, dealing 200% of ATK as Nightsoul-aligned AoE Pyro DMG.\n· Flamestrider: When Mavuika is riding the Flamestrider, she will also summon a Scorching Ring of Searing Radiance to follow her, which will decrease nearby opponents' DEF by 20% and deal 500% of ATK as Nightsoul-aligned AoE Pyro DMG to nearby opponents once every 3s. Mavuika's terrain-crossing abilities will also be further improved.\n\nAdditionally, when Mavuika is riding her Flamestrider and is not in combat, when her Nightsoul points drop to 5, she will gain 80 Nightsoul points. This effect can trigger once every 15s.",
+      "kind": "constellation",
+      "constellation": 6,
+      "unlock": "constellation"
+    }
+  ],
+  "weapons": [
+    { "key": "Akuoumaru", "name": "Akuoumaru" },
+    { "key": "ATeaspoonOfTranscendence", "name": "A Teaspoon of Transcendence" },
+    { "key": "AThousandBlazingSuns", "name": "A Thousand Blazing Suns" },
+    { "key": "BeaconOfTheReedSea", "name": "Beacon of the Reed Sea" },
+    { "key": "BlackcliffSlasher", "name": "Blackcliff Slasher" },
+    { "key": "BladeOfAtonement", "name": "Blade of Atonement" },
+    { "key": "BloodtaintedGreatsword", "name": "Bloodtainted Greatsword" },
+    { "key": "DebateClub", "name": "Debate Club" },
+    { "key": "EarthShaker", "name": "Earth Shaker" },
+    { "key": "FangOfTheMountainKing", "name": "Fang of the Mountain King" },
+    { "key": "FavoniusGreatsword", "name": "Favonius Greatsword" },
+    { "key": "FerrousShadow", "name": "Ferrous Shadow" },
+    { "key": "FlameForgedInsight", "name": "Flame-Forged Insight" },
+    { "key": "ForestRegalia", "name": "Forest Regalia" },
+    { "key": "ForgedByTheGoldenMelody", "name": "Forged by the Golden Melody" },
+    { "key": "FruitfulHook", "name": "Fruitful Hook" },
+    { "key": "GestOfTheMightyWolf", "name": "Gest of the Mighty Wolf" },
+    { "key": "KatsuragikiriNagamasa", "name": "Katsuragikiri Nagamasa" },
+    { "key": "LithicBlade", "name": "Lithic Blade" },
+    { "key": "LuxuriousSeaLord", "name": "Luxurious Sea-Lord" },
+    { "key": "MailedFlower", "name": "Mailed Flower" },
+    { "key": "MakhairaAquamarine", "name": "Makhaira Aquamarine" },
+    { "key": "MasterKey", "name": "Master Key" },
+    { "key": "OldMercsPal", "name": "Old Merc's Pal" },
+    { "key": "PortablePowerSaw", "name": "Portable Power Saw" },
+    { "key": "PrototypeArchaic", "name": "Prototype Archaic" },
+    { "key": "Rainslasher", "name": "Rainslasher" },
+    { "key": "RedhornStonethresher", "name": "Redhorn Stonethresher" },
+    { "key": "RoyalGreatsword", "name": "Royal Greatsword" },
+    { "key": "SacrificialGreatsword", "name": "Sacrificial Greatsword" },
+    { "key": "SerpentSpine", "name": "Serpent Spine" },
+    { "key": "SkyriderGreatsword", "name": "Skyrider Greatsword" },
+    { "key": "SkywardPride", "name": "Skyward Pride" },
+    { "key": "SnowTombedStarsilver", "name": "Snow-Tombed Starsilver" },
+    { "key": "SongOfBrokenPines", "name": "Song of Broken Pines" },
+    { "key": "TalkingStick", "name": "Talking Stick" },
+    { "key": "TheBell", "name": "The Bell" },
+    { "key": "TheUnforged", "name": "The Unforged" },
+    { "key": "TidalShadow", "name": "Tidal Shadow" },
+    {
+      "key": "UltimateOverlordsMegaMagicSword",
+      "name": "\"Ultimate Overlord's Mega Magic Sword\""
+    },
+    { "key": "Verdict", "name": "Verdict" },
+    { "key": "WasterGreatsword", "name": "Waster Greatsword" },
+    { "key": "Whiteblind", "name": "Whiteblind" },
+    { "key": "WhiteIronGreatsword", "name": "White Iron Greatsword" },
+    { "key": "WolfsGravestone", "name": "Wolf's Gravestone" }
+  ],
+  "artifactSets": [
+    { "key": "ADayCarvedFromRisingWinds", "name": "A Day Carved From Rising Winds" },
+    { "key": "Adventurer", "name": "Adventurer" },
+    { "key": "ArchaicPetra", "name": "Archaic Petra" },
+    { "key": "AubadeOfMorningstarAndMoon", "name": "Aubade of Morningstar and Moon" },
+    { "key": "Berserker", "name": "Berserker" },
+    { "key": "BlizzardStrayer", "name": "Blizzard Strayer" },
+    { "key": "BloodstainedChivalry", "name": "Bloodstained Chivalry" },
+    { "key": "BraveHeart", "name": "Brave Heart" },
+    { "key": "CelestialGift", "name": "Celestial Gift" },
+    { "key": "CrimsonWitchOfFlames", "name": "Crimson Witch of Flames" },
+    { "key": "DeepwoodMemories", "name": "Deepwood Memories" },
+    { "key": "DefendersWill", "name": "Defender's Will" },
+    { "key": "DesertPavilionChronicle", "name": "Desert Pavilion Chronicle" },
+    { "key": "DisenchantmentInDeepShadow", "name": "Disenchantment in Deep Shadow" },
+    { "key": "EchoesOfAnOffering", "name": "Echoes of an Offering" },
+    { "key": "EmblemOfSeveredFate", "name": "Emblem of Severed Fate" },
+    { "key": "FinaleOfTheDeepGalleries", "name": "Finale of the Deep Galleries" },
+    { "key": "FlowerOfParadiseLost", "name": "Flower of Paradise Lost" },
+    { "key": "FragmentOfHarmonicWhimsy", "name": "Fragment of Harmonic Whimsy" },
+    { "key": "Gambler", "name": "Gambler" },
+    { "key": "GildedDreams", "name": "Gilded Dreams" },
+    { "key": "GladiatorsFinale", "name": "Gladiator's Finale" },
+    { "key": "GoldenTroupe", "name": "Golden Troupe" },
+    { "key": "HeartOfDepth", "name": "Heart of Depth" },
+    { "key": "HeartOfTheFurnace", "name": "Heart of the Furnace" },
+    { "key": "HuskOfOpulentDreams", "name": "Husk of Opulent Dreams" },
+    { "key": "Instructor", "name": "Instructor" },
+    { "key": "Lavawalker", "name": "Lavawalker" },
+    { "key": "LongNightsOath", "name": "Long Night's Oath" },
+    { "key": "LuckyDog", "name": "Lucky Dog" },
+    { "key": "MaidenBeloved", "name": "Maiden Beloved" },
+    { "key": "MarechausseeHunter", "name": "Marechaussee Hunter" },
+    { "key": "MartialArtist", "name": "Martial Artist" },
+    { "key": "NightOfTheSkysUnveiling", "name": "Night of the Sky's Unveiling" },
+    {
+      "key": "NighttimeWhispersInTheEchoingWoods",
+      "name": "Nighttime Whispers in the Echoing Woods"
+    },
+    { "key": "NoblesseOblige", "name": "Noblesse Oblige" },
+    { "key": "NymphsDream", "name": "Nymph's Dream" },
+    { "key": "ObsidianCodex", "name": "Obsidian Codex" },
+    { "key": "OceanHuedClam", "name": "Ocean-Hued Clam" },
+    { "key": "PaleFlame", "name": "Pale Flame" },
+    { "key": "PrayersForDestiny", "name": "Prayers for Destiny" },
+    { "key": "PrayersForIllumination", "name": "Prayers for Illumination" },
+    { "key": "PrayersForWisdom", "name": "Prayers for Wisdom" },
+    { "key": "PrayersToSpringtime", "name": "Prayers to Springtime" },
+    { "key": "ResolutionOfSojourner", "name": "Resolution of Sojourner" },
+    { "key": "RetracingBolide", "name": "Retracing Bolide" },
+    { "key": "ScarletProof", "name": "Scarlet Proof" },
+    { "key": "Scholar", "name": "Scholar" },
+    { "key": "ScrollOfTheHeroOfCinderCity", "name": "Scroll of the Hero of Cinder City" },
+    { "key": "ShimenawasReminiscence", "name": "Shimenawa's Reminiscence" },
+    { "key": "SilkenMoonsSerenade", "name": "Silken Moon's Serenade" },
+    { "key": "SongOfDaysPast", "name": "Song of Days Past" },
+    { "key": "TenacityOfTheMillelith", "name": "Tenacity of the Millelith" },
+    { "key": "TheExile", "name": "The Exile" },
+    { "key": "ThunderingFury", "name": "Thundering Fury" },
+    { "key": "Thundersoother", "name": "Thundersoother" },
+    { "key": "TinyMiracle", "name": "Tiny Miracle" },
+    { "key": "TravelingDoctor", "name": "Traveling Doctor" },
+    { "key": "UnfinishedReverie", "name": "Unfinished Reverie" },
+    { "key": "VermillionHereafter", "name": "Vermillion Hereafter" },
+    { "key": "ViridescentVenerer", "name": "Viridescent Venerer" },
+    { "key": "VourukashasGlow", "name": "Vourukasha's Glow" },
+    { "key": "WanderersTroupe", "name": "Wanderer's Troupe" }
+  ],
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/characters/mavuika.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "4dd9983816cfc9ffac3da8867f6868823700ae1d75a588ef64b88c8deeef048d",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/talents/mavuika.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "8f8c93b0c80653e2c46241caf2e8d2ff14c84c90744bfbaa1a3626dd090ab8b1",
+      "license": "MIT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/constellations/mavuika.json",
+      "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+      "sha256": "23bd851fab3cbd7369dca14cee2e47561123fdd6224d2bc4b5317de5994de20b",
+      "license": "MIT"
+    }
+  ],
+  "gaps": [
+    "Passive and special ability unlock requirements are not supplied by this pinned source; their unlock states remain unknown."
+  ]
+}

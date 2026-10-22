@@ -1,0 +1,193 @@
+// Byte preservation / report checks only; never loads provider configuration.
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { advisorImplementationIdentity } from './advisor-implementation-identity.mjs';
+
+const project = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const root = 'docs/plans/character-knowledge-assistant/quality-repair/';
+const output = root + 'review-fix/';
+const bytes = (p) => readFileSync(join(project, p));
+const json = (p) => JSON.parse(bytes(p));
+const hash = (b) => createHash('sha256').update(b).digest('hex');
+const put = (name, value) =>
+  writeFileSync(join(project, output, name), JSON.stringify(value, null, 2) + '\n');
+const before = json(output + 'preservation-before.json');
+const allowed = new Set([
+  'apps/api/src/games/genshin/intelligence/character-knowledge/advisor.controller.ts',
+  'apps/api/src/games/genshin/intelligence/character-knowledge/advisor.service.ts',
+  'apps/api/src/games/genshin/intelligence/character-knowledge/all-kqm.test.ts',
+  'apps/api/src/games/genshin/intelligence/character-knowledge/knowledge.regressions.test.ts',
+  'apps/api/src/games/genshin/intelligence/character-knowledge/knowledge.retrieval.ts',
+  'apps/api/src/games/genshin/intelligence/character-knowledge/quality-repair.test.ts',
+  'apps/api/tooling/advisor-implementation-identity.mjs',
+  'apps/api/tooling/character-advisor-client.test.js',
+  'apps/api/tooling/grounded-repair.test.js',
+  'apps/api/tooling/run-advisor-acceptance.mjs',
+  'apps/web/src/components/AskCelestia.tsx',
+  'apps/web/src/lib/character-advisor.ts',
+  'packages/api-contracts/src/genshin/character-advisor.ts',
+  'docs/plans/CURRENT_HANDOFF.md',
+  root + 'signatures.json',
+  root + 'pending-live-cases.json',
+  output + 'task.md',
+]);
+const changed = [],
+  missing = [];
+for (const [path, sha256] of Object.entries(before.hashes)) {
+  if (!existsSync(join(project, path))) missing.push(path);
+  else if (hash(bytes(path)) !== sha256) changed.push(path);
+}
+const unexpected = changed.filter((p) => !allowed.has(p));
+const head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: project, encoding: 'utf8' }).trim();
+const indexPath = execFileSync('git', ['rev-parse', '--git-path', 'index'], {
+  cwd: project,
+  encoding: 'utf8',
+}).trim();
+const index = hash(readFileSync(resolve(project, indexPath)));
+const handoff = bytes('docs/plans/CURRENT_HANDOFF.md');
+const oldMarker = Buffer.from(
+  '> **2026-10-22 independent grounded-repair review: two bounded fixes before live.**',
+);
+const offset = handoff.indexOf(oldMarker);
+const queuePath = 'docs/plans/character-knowledge-assistant/all-kqm-verification/model-queue.json';
+const queue = json(queuePath);
+const protectedPaths = Object.keys(before.hashes).filter((p) => !allowed.has(p));
+const preservation = {
+  kind: 'starting-dirty-tree-byte-preservation',
+  startingFiles: Object.keys(before.hashes).length,
+  changedExistingFiles: changed,
+  protectedExistingFiles: protectedPaths.length,
+  missing,
+  unexpected,
+  headUnchanged: head === before.head,
+  indexUnchanged: index === before.index,
+  priorHandoffVerbatim:
+    offset >= 0 &&
+    hash(handoff.subarray(offset)) === before.hashes['docs/plans/CURRENT_HANDOFF.md'],
+  sharedLedger: {
+    unchanged: hash(bytes(queuePath)) === before.hashes[queuePath],
+    sha256: hash(bytes(queuePath)),
+    day: queue.day,
+    daily: queue.requestsReservedToday,
+    user: queue.userRequestsReservedToday,
+    cases: queue.cases.length,
+    states: [...new Set(queue.cases.map((c) => c.state))],
+  },
+  active: json('apps/api/src/games/genshin/static/character-knowledge/active.json'),
+  candidate: json(root + 'candidate.json').release,
+  unchangedProtectedDisposition:
+    'All starting files outside the explicit correction allowlist retain their exact bytes, including release/rollback/pinned source/profile approval/old reports and traces/unrelated dirty work.',
+};
+put('preservation.json', preservation);
+assert.deepEqual(missing, []);
+assert.deepEqual(unexpected, []);
+assert.ok(
+  preservation.headUnchanged && preservation.indexUnchanged && preservation.priorHandoffVerbatim,
+);
+assert.ok(preservation.sharedLedger.unchanged);
+assert.equal(queue.cases.length, 508);
+assert.equal(queue.requestsReservedToday, 5);
+assert.equal(queue.userRequestsReservedToday, 5);
+const metadata = json(root + 'pending-live-cases.json');
+const oldMetadata = json(output + 'pending-live-cases-before.json');
+assert.deepEqual(metadata.cases, oldMetadata.cases);
+assert.deepEqual(metadata.priorQualityRegressions, oldMetadata.priorQualityRegressions);
+const signatures = json(root + 'signatures.json');
+assert.deepEqual(signatures.implementation, advisorImplementationIdentity(project));
+assert.equal(signatures.previousIdentities.length, 6);
+assert.equal(
+  signatures.identity.providerDigest,
+  json(output + 'signatures-before.json').identity.providerDigest,
+);
+const tests = json(output + 'focused-tests.json');
+assert.equal(tests.numFailedTests, 0);
+assert.equal(tests.numPendingTests, 0);
+assert.equal(tests.numPassedTests, 278);
+const recorded = json(output + 'recorded-context-tests.json');
+assert.equal(recorded.numPassedTests, 9);
+assert.equal(recorded.numFailedTests, 0);
+const probe = json(output + 'post-fix-probe.json');
+assert.equal(probe.requests.length, 10);
+assert.ok(probe.notes.every((n) => n.pinnedBytesAndSectionMatch));
+assert.ok(
+  probe.requests.every(
+    (r) =>
+      r.mockGenerationCalls === 1 &&
+      r.modelContextCharacters <= 22000 &&
+      !r.missingEvidenceSubjects.length,
+  ),
+);
+const controlled = json(output + 'production-context-evidence.json');
+assert.equal(controlled.evidence.length, 5);
+assert.ok(
+  controlled.evidence.every(
+    (e) => e.response.status === 'answered' && JSON.stringify(e.context).length <= 22000,
+  ),
+);
+for (const name of ['api-lint', 'web-lint', 'contracts-scoped-lint'])
+  assert.equal(
+    bytes(output + name + '.log')
+      .toString()
+      .trim(),
+    '',
+  );
+for (const name of ['api-types', 'web-types', 'contracts-types'])
+  assert.doesNotMatch(bytes(output + name + '.log').toString(), /error TS|ERR_|error:/);
+assert.doesNotMatch(bytes(output + 'format-check.log').toString(), /Code style issues|\[warn\]/);
+put('validation.json', {
+  kind: 'offline-correction-validation-not-live-acceptance',
+  providerRequests: 0,
+  tests: {
+    passed: tests.numPassedTests,
+    files: tests.testResults.length,
+    failed: 0,
+    skippedOrPending: tests.numPendingTests,
+    report: 'focused-tests.json',
+    enrichedRecordedContextRerun: { passed: 9, report: 'recorded-context-tests.json' },
+  },
+  types: { api: 'passed', web: 'passed', contracts: 'passed' },
+  lint: {
+    changedApiFiles: 'passed',
+    changedWebFiles: 'passed',
+    changedContract: 'passed',
+    fullContracts:
+      'blocked by unchanged contextual-advice.ts:1 import order; original bytes preserved (see contracts-lint.log)',
+  },
+  format:
+    'passed for all changed/new code and correction markdown; historical handoff retained verbatim',
+  independentProbeReplay: {
+    requests: 10,
+    dispatchedToOfflineAdapter: 10,
+    missingEvidenceSubjects: 0,
+    notesSourceHashChecks: 3,
+    intentionalInvalidJson: 'unsupported results are construction probes, never quality successes',
+    report: 'post-fix-probe.json',
+  },
+  usefulControlledCompletions: controlled.evidence.map((e) => ({
+    kind: e.kind,
+    turns: e.turns,
+    recorded: e.recorded,
+    length: JSON.stringify(e.context).length,
+    status: e.response.status,
+  })),
+  identity: signatures.identity,
+  historicalIdentityEntriesRetained: signatures.previousIdentities.length,
+  preservation: 'passed; preservation.json',
+  currentSharedUsage: preservation.sharedLedger,
+  liveAcceptance:
+    'pending independent review and later authorization/allowance; no fresh real-model quality pass',
+});
+console.log(
+  JSON.stringify({
+    preservation: 'passed',
+    startingFiles: preservation.startingFiles,
+    changedExisting: changed.length,
+    tests: 278,
+    providerRequests: 0,
+  }),
+);

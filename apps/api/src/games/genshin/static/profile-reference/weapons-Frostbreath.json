@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "Frostbreath",
+  "gameId": 13435,
+  "name": "Frostbreath",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/frostbreath.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "8ca6478b7b3c9ff87275b7c25f61cf9a2c6577a447144e21415de989d62c54b1",
+    "license": "MIT"
+  },
+  "description": "A spear of solid ice imbued with an icy chill. It is said that it once belonged to the Belyi Tsar who ruled Snezhnaya in the distant past.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "A Cast Real Far",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Triggering a Cryo or Hydro-related elemental reaction increases the equipping character's ATK by 20% for the next 15s, as well as regenerates 6 Elemental Energy for other members of their party. This effect can trigger once every 16s."
+    },
+    {
+      "rank": 2,
+      "description": "Triggering a Cryo or Hydro-related elemental reaction increases the equipping character's ATK by 25% for the next 15s, as well as regenerates 7.5 Elemental Energy for other members of their party. This effect can trigger once every 16s."
+    },
+    {
+      "rank": 3,
+      "description": "Triggering a Cryo or Hydro-related elemental reaction increases the equipping character's ATK by 30% for the next 15s, as well as regenerates 9 Elemental Energy for other members of their party. This effect can trigger once every 16s."
+    },
+    {
+      "rank": 4,
+      "description": "Triggering a Cryo or Hydro-related elemental reaction increases the equipping character's ATK by 35% for the next 15s, as well as regenerates 10.5 Elemental Energy for other members of their party. This effect can trigger once every 16s."
+    },
+    {
+      "rank": 5,
+      "description": "Triggering a Cryo or Hydro-related elemental reaction increases the equipping character's ATK by 40% for the next 15s, as well as regenerates 12 Elemental Energy for other members of their party. This effect can trigger once every 16s."
+    }
+  ]
+}

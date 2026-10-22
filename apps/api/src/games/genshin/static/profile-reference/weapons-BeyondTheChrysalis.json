@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "BeyondTheChrysalis",
+  "gameId": 11522,
+  "name": "Beyond the Chrysalis",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/beyondthechrysalis.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "3939aeec6ebe04d30b963e92c5acbe9289bcddc5f91acf8fa810bf48cf68f97d",
+    "license": "MIT"
+  },
+  "description": "A longsword brimming with light and color, and as weightless as a butterfly when brandished. It was once used by a certain individual to break bonds.",
+  "weaponType": "Sword",
+  "rarity": 5,
+  "effectName": "Dance of Wings Unbound",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Each time the equipping character uses their Elemental Skill or Elemental Burst, they gain one of the following three effects in sequence:\nWinds of Devotion: Increases the equipping character's CRIT DMG by 56% for 10s;\nWinds of Defiance: Increases Stellar Swirl reaction DMG dealt by the equipping character by 36% for 10s; and\nWinds of Plenty: Regenerates 5 Elemental Energy for the equipping character. Up to 5 Elemental Energy can be regenerated in this way every 4s.\nThe aforementioned effects are removed and the sequence is reset when the equipping character leaves the field."
+    },
+    {
+      "rank": 2,
+      "description": "Each time the equipping character uses their Elemental Skill or Elemental Burst, they gain one of the following three effects in sequence:\nWinds of Devotion: Increases the equipping character's CRIT DMG by 72% for 10s;\nWinds of Defiance: Increases Stellar Swirl reaction DMG dealt by the equipping character by 45% for 10s; and\nWinds of Plenty: Regenerates 5.5 Elemental Energy for the equipping character. Up to 5.5 Elemental Energy can be regenerated in this way every 4s.\nThe aforementioned effects are removed and the sequence is reset when the equipping character leaves the field."
+    },
+    {
+      "rank": 3,
+      "description": "Each time the equipping character uses their Elemental Skill or Elemental Burst, they gain one of the following three effects in sequence:\nWinds of Devotion: Increases the equipping character's CRIT DMG by 88% for 10s;\nWinds of Defiance: Increases Stellar Swirl reaction DMG dealt by the equipping character by 54% for 10s; and\nWinds of Plenty: Regenerates 6 Elemental Energy for the equipping character. Up to 6 Elemental Energy can be regenerated in this way every 4s.\nThe aforementioned effects are removed and the sequence is reset when the equipping character leaves the field."
+    },
+    {
+      "rank": 4,
+      "description": "Each time the equipping character uses their Elemental Skill or Elemental Burst, they gain one of the following three effects in sequence:\nWinds of Devotion: Increases the equipping character's CRIT DMG by 104% for 10s;\nWinds of Defiance: Increases Stellar Swirl reaction DMG dealt by the equipping character by 63% for 10s; and\nWinds of Plenty: Regenerates 6.5 Elemental Energy for the equipping character. Up to 6.5 Elemental Energy can be regenerated in this way every 4s.\nThe aforementioned effects are removed and the sequence is reset when the equipping character leaves the field."
+    },
+    {
+      "rank": 5,
+      "description": "Each time the equipping character uses their Elemental Skill or Elemental Burst, they gain one of the following three effects in sequence:\nWinds of Devotion: Increases the equipping character's CRIT DMG by 120% for 10s;\nWinds of Defiance: Increases Stellar Swirl reaction DMG dealt by the equipping character by 72% for 10s; and\nWinds of Plenty: Regenerates 7 Elemental Energy for the equipping character. Up to 7 Elemental Energy can be regenerated in this way every 4s.\nThe aforementioned effects are removed and the sequence is reset when the equipping character leaves the field."
+    }
+  ]
+}

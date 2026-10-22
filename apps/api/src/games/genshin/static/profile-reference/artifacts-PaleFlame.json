@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "PaleFlame",
+  "gameId": 15018,
+  "name": "Pale Flame",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/paleflame.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "ae3c38cb11f72f1a3f9a3f51ba164c8d833ca8bb93703e282f054de50a48965d",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Stainless Bloom",
+      "description": "A hard, blue artificial flower. Its petals shall never wither, nor shall its colors fade."
+    },
+    {
+      "slot": "plume",
+      "name": "Wise Doctor's Pinion",
+      "description": "An ominous pinion with edges of unsurpassed keenness. Perhaps it represents an unnaturally uninhibited nature."
+    },
+    {
+      "slot": "sands",
+      "name": "Moment of Cessation",
+      "description": "A pocket watch with a cover that cannot be opened. Yet it ticks and tocks away, following the inexorable flow of time."
+    },
+    {
+      "slot": "goblet",
+      "name": "Surpassing Cup",
+      "description": "An intricately-made cup. Its appearance betrays nothing of its age to an observer."
+    },
+    {
+      "slot": "circlet",
+      "name": "Mocking Mask",
+      "description": "A mask that covers the face, hiding one's expression from others."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Physical DMG is increased by 25%." },
+    {
+      "pieces": 4,
+      "description": "When an Elemental Skill hits an opponent, ATK is increased by 9% for 7s. This effect stacks up to 2 times and can be triggered once every 0.3s. Once 2 stacks are reached, the 2-set effect is increased by 100%."
+    }
+  ]
+}

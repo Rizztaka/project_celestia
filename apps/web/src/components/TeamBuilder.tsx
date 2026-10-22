@@ -1,5 +1,5 @@
 import type { MeResponse } from '@celestia/api-contracts';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 
 import { captureSession, isCurrentSession } from '../lib/account-session';
@@ -33,8 +33,6 @@ function OwnedTeamBuilder({ ownerId }: { ownerId: string }) {
   const [search, setSearch] = useState('');
   const [element, setElement] = useState('All');
   const [slot, setSlot] = useState(0);
-  const [notes, setNotes] = useState('');
-  const [summary, setSummary] = useState<{ signature: string; text: string } | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const roster = useQuery({
     queryKey: ['genshin', 'characters'],
@@ -42,7 +40,6 @@ function OwnedTeamBuilder({ ownerId }: { ownerId: string }) {
   });
   const owned = new Set(roster.data?.characters.map((character) => character.characterKey));
   const keys = slots.filter((key): key is string => key !== null);
-  const signature = JSON.stringify({ keys, notes });
   const canEvaluate = !roster.error && !!roster.data && keys.every((key) => owned.has(key));
   const evaluation = useQuery({
     queryKey: ['genshin', 'team-evaluation', keys],
@@ -53,20 +50,6 @@ function OwnedTeamBuilder({ ownerId }: { ownerId: string }) {
         session,
       ),
     enabled: canEvaluate,
-    retry: false,
-  });
-  const advice = useMutation({
-    mutationFn: async () => ({
-      signature,
-      ...(await fetchApi<{ summary: string }>(
-        '/games/genshin/intelligence/ai-summary',
-        { method: 'POST', body: JSON.stringify({ teamComp: keys, todayPlan: notes }) },
-        session,
-      )),
-    }),
-    onSuccess: (data) => {
-      if (isCurrentSession(session)) setSummary({ signature: data.signature, text: data.summary });
-    },
     retry: false,
   });
   function persist(next: SavedTeam[]) {
@@ -225,37 +208,6 @@ function OwnedTeamBuilder({ ownerId }: { ownerId: string }) {
           Saved teams are private to your signed-in account on this browser. Export a copy to move
           them to another device. Up to 100 teams.
         </p>
-      </div>
-      <div className="space-y-3">
-        <h3 className="font-semibold text-white">Daily & team advice</h3>
-        <label className="block">
-          Today’s planning notes (optional)
-          <textarea
-            className={field}
-            maxLength={2000}
-            value={notes}
-            onChange={(event) => setNotes(event.target.value)}
-            placeholder="Spend resin on talent books, then test this team."
-          />
-        </label>
-        <p className="text-sm text-zinc-400">
-          Summarizes your selected team and notes. When AI is configured, these notes are sent to
-          OpenRouter; otherwise local rules provide the advice.
-        </p>
-        <button
-          type="button"
-          className={button}
-          disabled={advice.isPending || keys.some((key) => !owned.has(key))}
-          onClick={() => advice.mutate()}
-        >
-          {advice.isPending ? 'Summarizing…' : 'Summarize advice'}
-        </button>
-        {advice.error && <p role="alert">{advice.error.message}</p>}
-        {summary?.signature === signature && (
-          <p className="whitespace-pre-line text-sm" role="status">
-            {summary.text}
-          </p>
-        )}
       </div>
       <section aria-label="Saved teams" className="space-y-3">
         <h3 className="font-semibold text-white">Saved teams ({saved.length})</h3>

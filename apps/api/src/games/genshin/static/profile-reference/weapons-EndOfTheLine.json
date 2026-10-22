@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "EndOfTheLine",
+  "gameId": 15418,
+  "name": "End of the Line",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/endoftheline.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2b26b629a27d9e7248f81bbde53159ded1ddc94f0ce3917a03c1720b6f25c271",
+    "license": "MIT"
+  },
+  "description": "This seems to be a now-extinct fish. Its body is sufficiently elastic that a string may be attached to it to let it serve as a bow.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Net Snapper",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Triggers the Flowrider effect after using an Elemental Skill, dealing 80% ATK as AoE DMG upon hitting an opponent with an attack. Flowrider will be removed after 15s or after causing 3 instances of AoE DMG. Only 1 instance of AoE DMG can be caused every 2s in this way. Flowrider can be triggered once every 12s."
+    },
+    {
+      "rank": 2,
+      "description": "Triggers the Flowrider effect after using an Elemental Skill, dealing 100% ATK as AoE DMG upon hitting an opponent with an attack. Flowrider will be removed after 15s or after causing 3 instances of AoE DMG. Only 1 instance of AoE DMG can be caused every 2s in this way. Flowrider can be triggered once every 12s."
+    },
+    {
+      "rank": 3,
+      "description": "Triggers the Flowrider effect after using an Elemental Skill, dealing 120% ATK as AoE DMG upon hitting an opponent with an attack. Flowrider will be removed after 15s or after causing 3 instances of AoE DMG. Only 1 instance of AoE DMG can be caused every 2s in this way. Flowrider can be triggered once every 12s."
+    },
+    {
+      "rank": 4,
+      "description": "Triggers the Flowrider effect after using an Elemental Skill, dealing 140% ATK as AoE DMG upon hitting an opponent with an attack. Flowrider will be removed after 15s or after causing 3 instances of AoE DMG. Only 1 instance of AoE DMG can be caused every 2s in this way. Flowrider can be triggered once every 12s."
+    },
+    {
+      "rank": 5,
+      "description": "Triggers the Flowrider effect after using an Elemental Skill, dealing 160% ATK as AoE DMG upon hitting an opponent with an attack. Flowrider will be removed after 15s or after causing 3 instances of AoE DMG. Only 1 instance of AoE DMG can be caused every 2s in this way. Flowrider can be triggered once every 12s."
+    }
+  ]
+}

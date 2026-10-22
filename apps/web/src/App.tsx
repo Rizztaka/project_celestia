@@ -148,6 +148,7 @@ function App() {
                   <Route path="/import" element={<ImportPage />} />
                   <Route path="/roster" element={<RosterPage />} />
                   <Route path="/roster/:characterKey" element={<CharacterDetailPage />} />
+                  <Route path="/characters/:characterKey" element={<CharacterDetailPage />} />
                   <Route path="/inventory" element={<InventoryPage />} />
                   <Route path="/planner" element={<PlannerPage />} />
                   <Route path="/intelligence" element={<IntelligencePage />} />

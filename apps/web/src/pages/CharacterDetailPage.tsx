@@ -1,24 +1,35 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 
+import { BuildInsights } from '../components/BuildInsights';
 import { CharacterEquipmentView } from '../components/CharacterEquipmentView';
-import { ContextualAdvicePanel } from '../components/ContextualAdvicePanel';
+import { CharacterProfileHeader, CharacterProfileKit } from '../components/CharacterProfile';
+import { EquipmentReferenceBrowser } from '../components/EquipmentReference';
 import { FocusButton } from '../components/FocusButton';
-import { GuideAdviceCard } from '../components/GuideAdviceCard';
 import { ApiError, fetchCharacterEquipment, fetchGoals, fetchImportStatus } from '../lib/api';
+import { fetchProfileReference } from '../lib/profile-reference';
 
 export default function CharacterDetailPage() {
+  const queryClient = useQueryClient();
   const { characterKey = '' } = useParams();
   const detail = useQuery({
     queryKey: ['genshin', 'character-equipment', characterKey],
     queryFn: ({ signal }) => fetchCharacterEquipment(characterKey, signal),
     retry: false,
   });
+
+  const reference = useQuery({
+    queryKey: ['genshin', 'profile-reference', characterKey],
+    queryFn: ({ signal }) => fetchProfileReference(characterKey, signal),
+    retry: false,
+  });
+
   const goals = useQuery({
     queryKey: ['companion', 'goals'],
     queryFn: ({ signal }) => fetchGoals(signal),
     retry: false,
   });
+
   const notFound = detail.error instanceof ApiError && detail.error.status === 404;
   const status = useQuery({
     queryKey: ['genshin', 'import-status'],
@@ -39,15 +50,40 @@ export default function CharacterDetailPage() {
             ← All characters
           </Link>
           <button
-            disabled={detail.isFetching}
-            onClick={() => void detail.refetch()}
+            disabled={detail.isFetching || reference.isFetching}
+            onClick={() => {
+              void detail.refetch();
+              void reference.refetch();
+              void queryClient.invalidateQueries({ queryKey: ['genshin', 'weapon-reference'] });
+              void queryClient.invalidateQueries({ queryKey: ['genshin', 'artifact-reference'] });
+              void queryClient.invalidateQueries({
+                queryKey: ['genshin', 'build-insights'],
+              });
+            }}
             className="rounded-lg border border-white/10 px-4 py-2 text-sm hover:bg-white/5 disabled:opacity-50"
           >
-            {detail.isFetching ? 'Refreshing…' : 'Refresh'}
+            {detail.isFetching || reference.isFetching ? 'Refreshing…' : 'Refresh'}
           </button>
         </div>
-        {!detail.data && !notFound && (
-          <h1 className="mb-6 text-2xl font-bold text-white">Character equipment</h1>
+
+        <CharacterProfileHeader
+          characterKey={characterKey}
+          reference={reference.data}
+          data={detail.data}
+          recordsStatus={detail.isPending ? 'loading' : notFound ? 'not_recorded' : 'unavailable'}
+        />
+        {reference.isPending && (
+          <p role="status" className="mb-4">
+            Loading reference descriptions…
+          </p>
+        )}
+        {reference.isError && (
+          <p role="alert" className="mb-4 rounded-xl border border-amber-500/40 p-4">
+            Reference descriptions could not load. Recorded data remains available.{' '}
+            <button className="underline" onClick={() => void reference.refetch()}>
+              Retry reference
+            </button>
+          </p>
         )}
         {detail.isLoading && (
           <p role="status" className="glass-panel rounded-xl p-6">
@@ -56,15 +92,19 @@ export default function CharacterDetailPage() {
         )}
         {notFound ? (
           <div className="glass-panel space-y-4 rounded-2xl p-6">
-            <h1 className="text-2xl font-semibold text-white">Character not found</h1>
+            <h2 className="text-xl font-semibold text-white">
+              Progression & equipment not recorded
+            </h2>
             <p>
               {noImport
                 ? 'No import is recorded for this account. This character is not in your recorded roster.'
                 : 'This character is not in your recorded roster.'}
             </p>
-            <Link to="/import" className="inline-block text-indigo-300">
-              Import character data
-            </Link>
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <Link to="/import" className="inline-block text-indigo-300 hover:text-indigo-200">
+                Import character data →
+              </Link>
+            </div>
           </div>
         ) : (
           <>
@@ -94,6 +134,7 @@ export default function CharacterDetailPage() {
             )}
             {detail.data && (
               <>
+                <CharacterEquipmentView data={detail.data} />
                 <section
                   className="glass-panel mb-6 space-y-4 rounded-xl p-4"
                   aria-label="Focus and goals"
@@ -159,16 +200,26 @@ export default function CharacterDetailPage() {
                     describe imports.
                   </p>
                 </section>
-                <ContextualAdvicePanel
-                  equipment={detail.data}
-                  onRefresh={() => void detail.refetch()}
-                />
-                <CharacterEquipmentView data={detail.data} />
-                <GuideAdviceCard equipment={detail.data} onRefresh={() => void detail.refetch()} />
               </>
             )}
           </>
         )}
+        {reference.data && (
+          <>
+            <CharacterProfileKit reference={reference.data} data={detail.data} />
+            <EquipmentReferenceBrowser
+              key={characterKey}
+              reference={reference.data}
+              data={detail.data}
+            />
+          </>
+        )}
+        <div className="mt-8">
+          <BuildInsights
+            characterKey={characterKey}
+            recordsBoundary={JSON.stringify(detail.data ?? null)}
+          />
+        </div>
       </main>
     </div>
   );

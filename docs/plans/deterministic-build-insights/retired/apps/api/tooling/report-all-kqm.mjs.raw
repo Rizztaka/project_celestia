@@ -1,0 +1,154 @@
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const project = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const root = join(project, 'docs/plans/character-knowledge-assistant/all-kqm-verification');
+const json = (name) => JSON.parse(readFileSync(join(root, name)));
+const discovery = json('discovery.json'),
+  coverage = json('coverage.json'),
+  semantics = json('semantic-assessment.json'),
+  candidate = json('candidate.json'),
+  controlled = json('controlled-results.json'),
+  queue = json('model-queue.json');
+const actual = existsSync(join(root, 'actual-model-results.json'))
+  ? json('actual-model-results.json')
+  : { cases: [] };
+const active = JSON.parse(
+  readFileSync(join(project, 'apps/api/src/games/genshin/static/character-knowledge/active.json')),
+);
+const states = (values) =>
+  values.reduce((result, state) => ((result[state] = (result[state] ?? 0) + 1), result), {});
+const summary = {
+  scope:
+    'Every actual KQM-index character/form; not restricted to batches. No whole-character verification is inferred from acquisition or parsing.',
+  index: discovery.index,
+  counts: {
+    cards: discovery.cards.length,
+    characters: discovery.characters.length,
+    sourceUrls: new Set(discovery.characters.flatMap((c) => c.sources.map((s) => s.url))).size,
+    acquiredCharacters: coverage.counts.acquired,
+    failedAcquisitions: coverage.counts.failed,
+    scopedAssessedCharacters: semantics.counts.assessedWithLimits,
+    infographicOnly: discovery.characters
+      .filter((c) => c.sources.every((s) => s.kind === 'infographic'))
+      .map((c) => c.id),
+    relationships: semantics.counts.relationships,
+    failedSourceComparisons: semantics.counts.failedRelationships,
+    controlled: controlled.counts,
+    controlledOutcomes: states(controlled.cases.map((c) => c.status)),
+    modelQueue: states(queue.cases.map((c) => c.state)),
+    wholeCharactersVerified: 0,
+  },
+  catalogReconciliation: {
+    localKeys: 129,
+    explicitKits: 127,
+    ambiguousTravelerSelectors: 2,
+    unmatchedDiscovered: discovery.characters.filter((c) => !c.canonicalKey),
+    catalogWithoutDirectKqmCard: discovery.catalogWithoutKqm,
+  },
+  active,
+  candidate: { ...candidate.release, state: candidate.state },
+  topicLimits: Object.fromEntries(
+    ['roles', 'build', 'weapons', 'teams', 'rotation'].map((topic) => [
+      topic,
+      semantics.characters
+        .filter((c) => c.topicCoverage[topic].state === 'source-limited')
+        .map((c) => ({
+          key: c.characterKey,
+          reason:
+            'No relationship accepted by the bounded parser for this topic; narrative/image evidence may exist. This is an extraction/assessment limit, not a claim that KQM has no such guidance.',
+        })),
+    ]),
+  ),
+  numericalJoinLimits: candidate.mechanicalJoins.filter((c) => c.state === 'source-limited'),
+  broaderLimits: [
+    'Comparative equipment/team rankings and material guide conditions outside scoped relationship checks remain unapproved; conditions are retained as dimensions/fingerprints against private source inputs, not discarded or represented as complete applicability.',
+    'Twenty-six characters have differing quick/extended main-stat scopes; differences are retained for review, not assumed to be contradictions or proof of outdatedness.',
+    'Albedo historical pinned kit omits modern guide Hexerei/C1/C2/C6 extensions. Prior assessed conditional notes are retained, with modern primary-mechanics and precise C6 cross-check still open.',
+    'Mona and Kamisato Ayaka special sprint parameter labels lack matching numerical combatsp arrays in the selected data; no coefficients are invented.',
+    'Exact personalized DPS/ER requires a supported deterministic calculation and known inputs; no such solver was added.',
+  ],
+  actualModel: {
+    provider: actual.provider ?? null,
+    model: actual.model ?? null,
+    attempted: actual.cases.length,
+    release: actual.release ?? null,
+    outcomes: actual.cases.map((c) => ({
+      id: c.id,
+      responseStatus: c.response.status,
+      assessment: c.assessment,
+    })),
+    relationToCurrentCandidate:
+      actual.release?.digest === candidate.release.digest
+        ? 'same candidate'
+        : 'Earlier immutable candidate; retained failure evidence, not acceptance of the current candidate.',
+    requestsReservedToday: queue.requestsReservedToday,
+    userRequestsReservedToday: queue.userRequestsReservedToday ?? null,
+    pendingCases: queue.cases.filter((c) => c.state.includes('pending')).map((c) => c.id),
+  },
+  statesDefinition: {
+    acquired: 'Transport, bytes and identity captured only.',
+    extracted: 'A structured relationship was produced; no automatic qualitative approval.',
+    assessed:
+      'Only the explicitly stated source/type/relationship scope passed comparison, with recorded reasoning.',
+    sourceLimited:
+      'Specific image/parser/parameter/qualitative coverage is unavailable to this path.',
+    failed: 'The recorded acquisition, comparison, retrieval or real quality check failed.',
+    modelEvaluationPending:
+      'The exact input, context and release still need real configured-model output and usefulness/condition assessment.',
+    verified:
+      'Would require sufficient semantic topic coverage and useful grounded actual answers plus constraint-changing follow-ups; no row is currently granted this status.',
+  },
+  noScheduler: true,
+  noCommit: true,
+  noPush: true,
+  noDeployment: true,
+};
+writeFileSync(join(root, 'coverage-summary.json'), JSON.stringify(summary, null, 2) + '\n');
+const list = (topic) => summary.topicLimits[topic].map((r) => r.key).join(', ');
+writeFileSync(
+  join(root, 'walkthrough.md'),
+  `# All-KQM workflow — review handoff
+
+The full discovered set was processed: **${summary.counts.characters} character/form rows**, ${summary.counts.cards} cards and ${summary.counts.sourceUrls} source URLs. All acquisition results are retained; none failed. This completes the discovered-set processing pass, **not full-roster semantic or model-quality verification**. Every row remains visible, including infographic-only Cryo Traveler and Vesna. Aether/Lumine remain ambiguous local selectors grouped with the explicit Traveler forms in the alphabetical checklist.
+
+The single manual command is:
+
+\`\`\`powershell
+pnpm --filter @celestia/api exec tsx tooling/all-kqm-verification.mjs
+\`\`\`
+
+It discovers/acquires, normalizes, compares source support, builds or reuses an immutable candidate, runs the complete controlled evaluation matrix, and checkpoints a separate actual-model queue. Add \`--live\` only for a deliberate provider run. It uses the existing server configuration, at most two queued advice requests per invocation, a persisted daily/user allowance and bounded pacing. The current day's advice ledger is ${queue.requestsReservedToday}; no further requests were made after the configured ceiling. No future run or scheduler was created. Completed matching inputs are not automatically re-sent. Changed input/context produces a pending case rather than inheriting approval.
+
+The four shared defects are corrected: typed canonical artifacts, protected enabling kit mechanics with bounded/deduplicated inventories, priority for an explicit replacement pair even when the full selected team is repeated, and the latest explicit user-selected Traveler form across follow-ups. A pure source-native coefficient lookup keeps talent labels and numerical arrays joined without guessing percent units or stored talent-level conventions. The candidate also retains matching character/weapon stats and curves, 63 canonical artifact sets and 255 weapons from pinned genshin-db revision 49a6544a6c6ae36089cb42fa591fc46f01de8bcf, including its MIT license.
+
+Source checking assessed **${summary.counts.relationships} scoped relationships** across 125 text-backed entries, with no failing source comparisons. This is a comparison of explicit role labels, slot alternatives, priority sequences, item-benefit joins, teammate utilities and energy scenario labels. The per-claim reasoning and conditions are in [semantic-assessment.json](semantic-assessment.json) and [claims.json](claims.json). It is not approval of all recommendation caveats or universal rankings. Versions and quick/extended scope differences are retained; old version labels alone are not treated as false facts. Original concise normalized notes and pinned item facts are used internally; private source HTML is not a proposed public prose/artwork mirror. The 31 earlier assessed batch notes/version reconciliations remain available under their original identities.
+
+The evaluation matrix has **508 cases**, four for each discovered character/form: build, changed constraint, full-team substitution, and insufficient evidence. Every case reaches the existing advisor service. Final retrieval/boundary failures: ${controlled.counts.failed}; ${controlled.counts.sourceLimited} cases honestly have limited strategy evidence. The controlled adapter does not establish useful AI answers. Insufficient-evidence controls deliberately attempt unsupported exact ER/DPS and exercise rejection. All real inputs, context hashes and pending cases are retained separately.
+
+The real Groq openai/gpt-oss-120b run contains ${actual.cases.length} outputs for the earlier immutable candidate, assessed as quality failures despite an answered status and positive same-model audit. Examples include conflating Nod-Krai/Moonsign with a pure-Hydro team, calling a Claymore a sword and poor role-change adaptation. Those failures are retained, not counted as successes. The advisor now has stricter piece-count/energy/constraint instructions and a canonical element/weapon-term support filter; these changes have controlled regression coverage but no new live acceptance within today's ceiling. The current candidate has ${summary.actualModel.pendingCases.length} pending real evaluations, named individually in [model-queue.json](model-queue.json). No fully verified character is claimed.
+
+Current selected runtime: **${active.id}**. New candidate: **${candidate.release.id}**, digest **${candidate.release.digest}**, built and validated but **not selected**. Earlier releases remain intact. Full catalog Ask Celestia access, read-only owned records and account/session/release safeguards remain. No frontend flow was changed in this all-KQM pass. Earlier mounted browser evidence is reused only for unchanged UI/isolation boundaries, not current answer quality.
+
+Precise remaining topic limits from the bounded parser:
+
+- Role/progression: ${list('roles')}.
+- Build/stat relationships: ${list('build')}.
+- Weapon/artifact relationships: ${list('weapons')}.
+- Teammate utilities: ${list('teams')}.
+- Energy scenario tables: ${list('rotation')}.
+
+Narrative or image content may exist for those topics; this report does not claim publisher absence. Albedo's modern primary-mechanics cross-check and C6 wording remain open. Mona/Ayaka special-sprint numerical joins are explicitly limited. Broad qualitative applicability is still a topic-level limit beyond the scoped assertions. Independent review must assess those boundaries and the failed actual answers before promotion. See [validation.json](validation.json), [preservation-cleanup.json](preservation-cleanup.json) and [proposed-commits.md](proposed-commits.md).
+
+Stop here for independent review. No commit, staging, push, deployment, billing change, branch switch, stash, reset or worktree/chat creation occurred. Subsequent work is the existing full queue and named exceptions, not commissioning another three-character batch.
+`,
+);
+console.log(
+  JSON.stringify({
+    characters: summary.counts.characters,
+    candidate: candidate.release.id,
+    modelPending: summary.actualModel.pendingCases.length,
+    verified: 0,
+  }),
+);

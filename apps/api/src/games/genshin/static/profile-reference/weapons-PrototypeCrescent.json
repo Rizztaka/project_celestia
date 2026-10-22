@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "PrototypeCrescent",
+  "gameId": 15406,
+  "name": "Prototype Crescent",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/prototypecrescent.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "ee11c713f95b19759eebe92bf238089954f7407abfd25d87e68a8e7545e83f81",
+    "license": "MIT"
+  },
+  "description": "A prototype longbow discovered in the Blackcliff Forge. The arrow fired from this bow glimmers like a ray of moonlight.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Unreturning",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Charged Attack hits on weak points increase Movement SPD by 10% and ATK by 36% for 10s."
+    },
+    {
+      "rank": 2,
+      "description": "Charged Attack hits on weak points increase Movement SPD by 10% and ATK by 45% for 10s."
+    },
+    {
+      "rank": 3,
+      "description": "Charged Attack hits on weak points increase Movement SPD by 10% and ATK by 54% for 10s."
+    },
+    {
+      "rank": 4,
+      "description": "Charged Attack hits on weak points increase Movement SPD by 10% and ATK by 63% for 10s."
+    },
+    {
+      "rank": 5,
+      "description": "Charged Attack hits on weak points increase Movement SPD by 10% and ATK by 72% for 10s."
+    }
+  ]
+}

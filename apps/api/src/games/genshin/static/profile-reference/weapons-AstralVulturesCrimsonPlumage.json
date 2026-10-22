@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "AstralVulturesCrimsonPlumage",
+  "gameId": 15514,
+  "name": "Astral Vulture's Crimson Plumage",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/astralvulturescrimsonplumage.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "26d966c5ab78a7e63a2d605c53b4cccb523949513863ce2301e3e24cf8247cde",
+    "license": "MIT"
+  },
+  "description": "An ancient longbow crested with red feathers, a sacred relic of the Flower-Feather Clan that has been passed down from generation to generation.",
+  "weaponType": "Bow",
+  "rarity": 5,
+  "effectName": "The Moonring Sighted",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "For 12s after triggering a Swirl or Stellar Swirl reaction, ATK increases by 24%. In addition, when 1/2 or more characters in the party are of a different Elemental Type from the equipping character, the DMG dealt by the equipping character's Charged Attacks is increased by 20%/48%, and Elemental Burst DMG dealt is increased by 10%/24%."
+    },
+    {
+      "rank": 2,
+      "description": "For 12s after triggering a Swirl or Stellar Swirl reaction, ATK increases by 30%. In addition, when 1/2 or more characters in the party are of a different Elemental Type from the equipping character, the DMG dealt by the equipping character's Charged Attacks is increased by 25%/60%, and Elemental Burst DMG dealt is increased by 12.5%/30%."
+    },
+    {
+      "rank": 3,
+      "description": "For 12s after triggering a Swirl or Stellar Swirl reaction, ATK increases by 36%. In addition, when 1/2 or more characters in the party are of a different Elemental Type from the equipping character, the DMG dealt by the equipping character's Charged Attacks is increased by 30%/72%, and Elemental Burst DMG dealt is increased by 15%/36%."
+    },
+    {
+      "rank": 4,
+      "description": "For 12s after triggering a Swirl or Stellar Swirl reaction, ATK increases by 42%. In addition, when 1/2 or more characters in the party are of a different Elemental Type from the equipping character, the DMG dealt by the equipping character's Charged Attacks is increased by 35%/84%, and Elemental Burst DMG dealt is increased by 17.5%/42%."
+    },
+    {
+      "rank": 5,
+      "description": "For 12s after triggering a Swirl or Stellar Swirl reaction, ATK increases by 48%. In addition, when 1/2 or more characters in the party are of a different Elemental Type from the equipping character, the DMG dealt by the equipping character's Charged Attacks is increased by 40%/96%, and Elemental Burst DMG dealt is increased by 20%/48%."
+    }
+  ]
+}

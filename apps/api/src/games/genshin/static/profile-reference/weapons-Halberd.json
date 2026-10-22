@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "Halberd",
+  "gameId": 13302,
+  "name": "Halberd",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/halberd.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "32ba451e43de779f725f74038c21fac23372eac7ffa5f99a7c0b1c8c07b5e2a3",
+    "license": "MIT"
+  },
+  "description": "A polearm with an axe blade mounted on top that can deal quite a lot of damage. It's favored by the Millelith officers.",
+  "weaponType": "Polearm",
+  "rarity": 3,
+  "effectName": "Heavy",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Normal Attacks deal an additional 160% ATK as DMG. Can only occur once every 10s."
+    },
+    {
+      "rank": 2,
+      "description": "Normal Attacks deal an additional 200% ATK as DMG. This effect can only occur once every 10s."
+    },
+    {
+      "rank": 3,
+      "description": "Normal Attacks deal an additional 240% ATK as DMG. This effect can only occur once every 10s."
+    },
+    {
+      "rank": 4,
+      "description": "Normal Attacks deal an additional 280% ATK as DMG. This effect can only occur once every 10s."
+    },
+    {
+      "rank": 5,
+      "description": "Normal Attacks deal an additional 320% ATK as DMG. This effect can only occur once every 10s."
+    }
+  ]
+}

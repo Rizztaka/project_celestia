@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "VermillionHereafter",
+  "gameId": 15023,
+  "name": "Vermillion Hereafter",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/vermillionhereafter.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "75b5462299cfbcce3f912e84bd3dcbfccae914ce937ad42220474ddc66670602",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Flowering Life",
+      "description": "An ancient memento. It still looks as alive as the being that preserved it several centuries ago."
+    },
+    {
+      "slot": "plume",
+      "name": "Feather of Nascent Light",
+      "description": "A dimly lustrous pinion steeped in strong memories."
+    },
+    {
+      "slot": "sands",
+      "name": "Solar Relic",
+      "description": "An ancient timepiece with a mighty solid look. Its luster is produced by sand crystal."
+    },
+    {
+      "slot": "goblet",
+      "name": "Moment of the Pact",
+      "description": "An old cup made of sand crystal. Its luster is somehow undimmed by age."
+    },
+    {
+      "slot": "circlet",
+      "name": "Thundering Poise",
+      "description": "This mask is said to have been made by the mountain people for a Yaksha. It is of simple make, but its surface still shines brightly nonetheless."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "ATK +18%." },
+    {
+      "pieces": 4,
+      "description": "After using an Elemental Burst, this character will gain the Nascent Light effect, increasing their ATK by 8% for 16s. When the character's HP decreases, their ATK will further increase by 10%. This further increase can occur this way a maximum of 4 times. This effect can be triggered once every 0.8s. Nascent Light will be dispelled when the character leaves the field. If an Elemental Burst is used again during the duration of Nascent Light, the original Nascent Light will be dispelled."
+    }
+  ]
+}

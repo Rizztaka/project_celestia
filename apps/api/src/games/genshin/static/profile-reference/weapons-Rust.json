@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "Rust",
+  "gameId": 15405,
+  "name": "Rust",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/rust.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "71cf06fb713898b809d2f863d2a2ac1fb60d7c3f3b08defe32384dcc4146aefc",
+    "license": "MIT"
+  },
+  "description": "A completely rusted iron greatbow. The average person would lack the strength to even lift it, let alone fire it.",
+  "weaponType": "Bow",
+  "rarity": 4,
+  "effectName": "Rapid Firing",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Increases Normal Attack DMG by 40% but decreases Charged Attack DMG by 10%."
+    },
+    {
+      "rank": 2,
+      "description": "Increases Normal Attack DMG by 50% but decreases Charged Attack DMG by 10%."
+    },
+    {
+      "rank": 3,
+      "description": "Increases Normal Attack DMG by 60% but decreases Charged Attack DMG by 10%."
+    },
+    {
+      "rank": 4,
+      "description": "Increases Normal Attack DMG by 70% but decreases Charged Attack DMG by 10%."
+    },
+    {
+      "rank": 5,
+      "description": "Increases Normal Attack DMG by 80% but decreases Charged Attack DMG by 10%."
+    }
+  ]
+}

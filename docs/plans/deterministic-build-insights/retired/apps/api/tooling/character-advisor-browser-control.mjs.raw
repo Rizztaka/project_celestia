@@ -1,0 +1,94 @@
+// Controlled adapter for real browser/service isolation tests. Never imported by production.
+import { corsAllowedOrigins } from '../src/core/config/cors.ts';
+import { requireAuth } from '../src/core/middleware/auth.middleware.ts';
+import { originPolicy } from '../src/core/middleware/origin.middleware.ts';
+import { createRequestSafety } from '../src/core/middleware/request-admission.ts';
+import { GenshinCharacterEquipmentRepository } from '../src/games/genshin/characters/character-equipment.repository.ts';
+import { characterAdvisorHandler } from '../src/games/genshin/intelligence/character-knowledge/advisor.controller.ts';
+import { CharacterAdvisorService } from '../src/games/genshin/intelligence/character-knowledge/advisor.service.ts';
+import { requireSafe } from './recovery/policy.mjs';
+
+export async function mountAdvisorBrowserControl(wrapper, db, record) {
+  requireSafe(
+    process.env.NODE_ENV === 'test' &&
+      process.env.DOTENV_CONFIG_PATH === (process.platform === 'win32' ? 'NUL' : '/dev/null') &&
+      !!process.env.CELESTIA_TEST_DATABASE_URL,
+    'TEST_FIXTURE_REQUIRED',
+  );
+  let enabled = false,
+    fail = false,
+    recordsFail = false,
+    delay = 0;
+  wrapper.use(originPolicy(corsAllowedOrigins('test', 'http://127.0.0.1:45449')));
+  const provider = {
+    provider: 'controlled-browser-adapter',
+    model: 'not-live-ai',
+    async complete(messages) {
+      if (delay) await new Promise((r) => setTimeout(r, delay));
+      if (messages[0].content.startsWith('Audit'))
+        return JSON.stringify({ supported: true, issues: [] });
+      const context = JSON.parse(messages[1].content),
+        doc = context.evidence[0];
+      record.advisorInputs ??= [];
+      record.advisorInputs.push({
+        character: context.character,
+        question: context.question,
+        history: context.history,
+        owned: context.SERVER_RECORDS?.ownedCharacterKeys,
+        documentIds: context.evidence.map((d) => d.id),
+      });
+      return JSON.stringify({
+        segments: [
+          {
+            text: `Controlled browser response for ${context.character}: consider the documented conditions before choosing a rotation.`,
+            basis: 'suggestion',
+            evidenceIds: [doc.id],
+            support: doc.text.slice(0, 80),
+          },
+        ],
+        followUp: 'Which teammates do you want to use?',
+      });
+    },
+  };
+  const handler = characterAdvisorHandler(
+    () =>
+      new CharacterAdvisorService(
+        new GenshinCharacterEquipmentRepository(db),
+        provider,
+        undefined,
+        () => true,
+      ),
+  );
+  wrapper.use((req, res, next) => {
+    if (
+      (fail && /character-knowledge\/observation|intelligence\/character-advisor/.test(req.path)) ||
+      (recordsFail && /\/characters\/[^/]+\/equipment$/.test(req.path))
+    )
+      return res.status(503).json({
+        success: false,
+        error: { code: 'SYNTHETIC_FAILURE', message: 'Controlled transport failure' },
+      });
+    next();
+  });
+  wrapper.post(
+    '/api/v1/games/genshin/intelligence/character-advisor',
+    (req, res, next) => (enabled ? next() : next('route')),
+    requireAuth,
+    createRequestSafety().aiSummary(handler),
+  );
+  return {
+    async command(name) {
+      if (name === 'controlled') enabled = true;
+      else if (name === 'missing-key') enabled = false;
+      else if (name === 'advisor-fail') fail = true;
+      else if (name === 'records-fail') recordsFail = true;
+      else if (name === 'advisor-normal') {
+        fail = false;
+        recordsFail = false;
+        delay = 0;
+      } else if (name === 'advisor-delay') delay = 3000;
+      else return false;
+      return true;
+    },
+  };
+}

@@ -4,6 +4,33 @@
 
 ## Context
 
+### Owner-directed removal of generative AI (2026-10-22)
+
+The owner explicitly removed AI from Celestia and authorized direct implementation.
+This supersedes the October 21 generative-advisor amendment below and all pending
+model acceptance/promotion work. Runtime advice uses pure typed calculations and
+condition evaluation followed by deterministic explanations. The existing
+score-free applicability extension applies: no arbitrary score or ranking is
+required. Imported facts, hypothetical alternatives and unknown combat state
+remain distinct. Guide prose is reference evidence; only explicit reviewed rules
+are executable. Retained model-era artifacts are historical evidence, not work
+to resume. See the deterministic-build-insights implementation and walkthrough.
+
+### Grounded qualitative advising amendment (2026-10-21)
+
+The owner's character-knowledge product correction supersedes the interpretation
+that AI may only rewrite deterministic sentences. A separate Genshin advisor may
+retrieve bounded versioned kit/guide evidence and authenticated read-only game
+context, reason qualitatively, explain tradeoffs and adapt to conversation. It is
+explicitly generative: source facts, interpretations and suggestions remain
+distinct. Evidence/citation validation and a separate groundedness check reject
+unsupported answers; known math and owned records remain authoritative.
+Calculators and pure explainers remain unchanged. The advisor cannot calculate
+invented exact DPS/ER, claim ownership from user prose, execute source instructions,
+or perform account/equipment/team/goal writes. The default character product is
+Ask Celestia for the complete local catalog; K1/K2 routes remain compatible
+internal foundations, not the mandatory public mechanics questionnaire.
+
 ### K1 applicability extension (2026-10-19)
 
 Contextual guide knowledge returns a versioned applicability response rather than

@@ -1,0 +1,43 @@
+{
+  "contractVersion": 1,
+  "key": "LuckyDog",
+  "gameId": 10011,
+  "name": "Lucky Dog",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/luckydog.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2feb880fca1c95f2afa07b0a1c0ec86b7532facfed0baef8555f6d223a455c01",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Lucky Dog's Clover",
+      "description": "A four-leaf clover that grows in the wild. It was picked because it is said to bring good luck."
+    },
+    {
+      "slot": "plume",
+      "name": "Lucky Dog's Eagle Feather",
+      "description": "A monster once cornered an adventurer, but was then picked off by a hunting eagle... That eagle dropped this feather, which now carries some of the adventurer's good luck."
+    },
+    {
+      "slot": "sands",
+      "name": "Lucky Dog's Hourglass",
+      "description": "A broken hourglass from which all the sand has escaped. But it's fine, because the passage of time means nothing to someone without a single worry in the whole world."
+    },
+    {
+      "slot": "goblet",
+      "name": "Lucky Dog's Goblet",
+      "description": "An exquisite metallic vessel that was once used to knock out a thief."
+    },
+    {
+      "slot": "circlet",
+      "name": "Lucky Dog's Silver Circlet",
+      "description": "Its former owner once fell into a cave and found the treasure trove of an exiled royal. This is a souvenir from that incident."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "DEF increased by 100." },
+    { "pieces": 4, "description": "Picking up Mora restores 300 HP." }
+  ]
+}

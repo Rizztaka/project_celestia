@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SymphonistOfScents",
+  "gameId": 13514,
+  "name": "Symphonist of Scents",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/symphonistofscents.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "27fdcdbed0e0cacd309d34244e73a4e2af7947d518d8faacfc1a7a4fcc26becf",
+    "license": "MIT"
+  },
+  "description": "An elegantly built polearm, said to have been a conductor's baton wielded by a great musician to bridge tune and taste.",
+  "weaponType": "Polearm",
+  "rarity": 5,
+  "effectName": "Seasoned Symphony",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "ATK is increased by 12%. When the equipping character is off-field, ATK is increased by an additional 12%. After initiating healing, the equipping character and the character(s) they have healed will obtain the \"Sweet Echoes\" effect, increasing their ATK by 32% for 3s. This effect can be triggered even if the equipping character is off-field."
+    },
+    {
+      "rank": 2,
+      "description": "ATK is increased by 15%. When the equipping character is off-field, ATK is increased by an additional 15%. After initiating healing, the equipping character and the character(s) they have healed will obtain the \"Sweet Echoes\" effect, increasing their ATK by 40% for 3s. This effect can be triggered even if the equipping character is off-field."
+    },
+    {
+      "rank": 3,
+      "description": "ATK is increased by 18%. When the equipping character is off-field, ATK is increased by an additional 18%. After initiating healing, the equipping character and the character(s) they have healed will obtain the \"Sweet Echoes\" effect, increasing their ATK by 48% for 3s. This effect can be triggered even if the equipping character is off-field."
+    },
+    {
+      "rank": 4,
+      "description": "ATK is increased by 21%. When the equipping character is off-field, ATK is increased by an additional 21%. After initiating healing, the equipping character and the character(s) they have healed will obtain the \"Sweet Echoes\" effect, increasing their ATK by 56% for 3s. This effect can be triggered even if the equipping character is off-field."
+    },
+    {
+      "rank": 5,
+      "description": "ATK is increased by 24%. When the equipping character is off-field, ATK is increased by an additional 24%. After initiating healing, the equipping character and the character(s) they have healed will obtain the \"Sweet Echoes\" effect, increasing their ATK by 64% for 3s. This effect can be triggered even if the equipping character is off-field."
+    }
+  ]
+}

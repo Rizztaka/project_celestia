@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "FavoniusSword",
+  "gameId": 11401,
+  "name": "Favonius Sword",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/favoniussword.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "8d8b83bbb2cfdbd01ec7661f6a80a973e6574741cf10eab62ab21706d4f77927",
+    "license": "MIT"
+  },
+  "description": "A standard-issue longsword of the Knights of Favonius. When you're armed with this agile and sharp weapon, channeling the power of the elements has never been so easy!",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Windfall",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "CRIT Hits have a 60% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 12s."
+    },
+    {
+      "rank": 2,
+      "description": "CRIT Hits have a 70% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 10.5s."
+    },
+    {
+      "rank": 3,
+      "description": "CRIT Hits have a 80% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 9s."
+    },
+    {
+      "rank": 4,
+      "description": "CRIT Hits have a 90% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 7.5s."
+    },
+    {
+      "rank": 5,
+      "description": "CRIT Hits have a 100% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 6s."
+    }
+  ]
+}

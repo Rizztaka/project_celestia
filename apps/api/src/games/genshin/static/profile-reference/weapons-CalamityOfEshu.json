@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "CalamityOfEshu",
+  "gameId": 11432,
+  "name": "Calamity of Eshu",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/calamityofeshu.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "c39dc508fbb445e198e9bfe6b01da880d24cd1767cf86ee488a9ab986198e015",
+    "license": "MIT"
+  },
+  "description": "A ceremonial blade forged by Sanhaj, the great high priest of the Masters of the Night-Wind. In tales of bygone days, Sanhaj could use this curved blade to perform rituals, blurring the boundary between the Night Kingdom and the present world.",
+  "weaponType": "Sword",
+  "rarity": 4,
+  "effectName": "Diffusing Boundary",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "While characters are protected by a Shield, DMG dealt by Normal and Charged Attacks is increased by 20%, and Normal and Charged Attack CRIT Rate is increased by 8%."
+    },
+    {
+      "rank": 2,
+      "description": "While characters are protected by a Shield, DMG dealt by Normal and Charged Attacks is increased by 25%, and Normal and Charged Attack CRIT Rate is increased by 10%."
+    },
+    {
+      "rank": 3,
+      "description": "While characters are protected by a Shield, DMG dealt by Normal and Charged Attacks is increased by 30%, and Normal and Charged Attack CRIT Rate is increased by 12%."
+    },
+    {
+      "rank": 4,
+      "description": "While characters are protected by a Shield, DMG dealt by Normal and Charged Attacks is increased by 35%, and Normal and Charged Attack CRIT Rate is increased by 14%."
+    },
+    {
+      "rank": 5,
+      "description": "While characters are protected by a Shield, DMG dealt by Normal and Charged Attacks is increased by 40%, and Normal and Charged Attack CRIT Rate is increased by 16%."
+    }
+  ]
+}

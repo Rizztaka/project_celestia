@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "ATeaspoonOfTranscendence",
+  "gameId": 12516,
+  "name": "A Teaspoon of Transcendence",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/ateaspoonoftranscendence.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2d21a853656412365d097577df24dbc13641003cd0f1da8d77f04229d6795ae3",
+    "license": "MIT"
+  },
+  "description": "An object of fantasy with countless definitions amidst an endless sea of stories. On the grand scale of the universe or the realm of dreams, there is no real difference between the holy sword of the brave warrior and the princess's teaspoon, or between the ice-cold clockspring and the key that will unlock the gates of transcendence...",
+  "weaponType": "Claymore",
+  "rarity": 5,
+  "effectName": "White Fairy's Queening",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "ATK is increased by 28%.\nAdditionally, each time the equipping character hits an opponent with their Charged Attack, they attain \"Transcendence\" for a short time: their Stellar-Conduct and Stellar Swirl reaction DMG is increased by 16% for 5s. This effect can stack once every 0.2s, max 3 stacks."
+    },
+    {
+      "rank": 2,
+      "description": "ATK is increased by 35%.\nAdditionally, each time the equipping character hits an opponent with their Charged Attack, they attain \"Transcendence\" for a short time: their Stellar-Conduct and Stellar Swirl reaction DMG is increased by 20% for 5s. This effect can stack once every 0.2s, max 3 stacks."
+    },
+    {
+      "rank": 3,
+      "description": "ATK is increased by 42%.\nAdditionally, each time the equipping character hits an opponent with their Charged Attack, they attain \"Transcendence\" for a short time: their Stellar-Conduct and Stellar Swirl reaction DMG is increased by 24% for 5s. This effect can stack once every 0.2s, max 3 stacks."
+    },
+    {
+      "rank": 4,
+      "description": "ATK is increased by 49%.\nAdditionally, each time the equipping character hits an opponent with their Charged Attack, they attain \"Transcendence\" for a short time: their Stellar-Conduct and Stellar Swirl reaction DMG is increased by 28% for 5s. This effect can stack once every 0.2s, max 3 stacks."
+    },
+    {
+      "rank": 5,
+      "description": "ATK is increased by 56%.\nAdditionally, each time the equipping character hits an opponent with their Charged Attack, they attain \"Transcendence\" for a short time: their Stellar-Conduct and Stellar Swirl reaction DMG is increased by 32% for 5s. This effect can stack once every 0.2s, max 3 stacks."
+    }
+  ]
+}

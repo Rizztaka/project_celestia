@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "PrimordialJadeWingedSpear",
+  "gameId": 13505,
+  "name": "Primordial Jade Winged-Spear",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/primordialjadewingedspear.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "b4eb50c0460fd5b84233e4e0e1440ca695b6f923f90090f899231c1b78a848b7",
+    "license": "MIT"
+  },
+  "description": "A jade polearm made by the archons, capable of slaying ancient beasts.",
+  "weaponType": "Polearm",
+  "rarity": 5,
+  "effectName": "Eagle Spear of Justice",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "On hit, increases ATK by 3.2% for 6s. Max 7 stacks. This effect can only occur once every 0.3s. While in possession of the maximum possible stacks, DMG dealt is increased by 12%."
+    },
+    {
+      "rank": 2,
+      "description": "On hit, increases ATK by 3.9% for 6s. Max 7 stacks. This effect can only occur once every 0.3s. While in possession of the maximum possible stacks, DMG dealt is increased by 15%."
+    },
+    {
+      "rank": 3,
+      "description": "On hit, increases ATK by 4.6% for 6s. Max 7 stacks. This effect can only occur once every 0.3s. While in possession of the maximum possible stacks, DMG dealt is increased by 18%."
+    },
+    {
+      "rank": 4,
+      "description": "On hit, increases ATK by 5.3% for 6s. Max 7 stacks. This effect can only occur once every 0.3s. While in possession of the maximum possible stacks, DMG dealt is increased by 21%."
+    },
+    {
+      "rank": 5,
+      "description": "On hit, increases ATK by 6% for 6s. Max 7 stacks. This effect can only occur once every 0.3s. While in possession of the maximum possible stacks, DMG dealt is increased by 24%."
+    }
+  ]
+}

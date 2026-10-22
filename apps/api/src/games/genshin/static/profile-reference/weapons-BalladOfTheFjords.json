@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "BalladOfTheFjords",
+  "gameId": 13424,
+  "name": "Ballad of the Fjords",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/balladofthefjords.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "6f60a3a5b86d3eef86603931d33e2f2b1783fbf1184a041297108d8abe5294d5",
+    "license": "MIT"
+  },
+  "description": "A polearm used by those seeking to catch fish in the tundra. It lets none escape.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Tales of the Tundra",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "When there are at least 3 different Elemental Types in your party, Elemental Mastery will be increased by 120."
+    },
+    {
+      "rank": 2,
+      "description": "When there are at least 3 different Elemental Types in your party, Elemental Mastery will be increased by 150."
+    },
+    {
+      "rank": 3,
+      "description": "When there are at least 3 different Elemental Types in your party, Elemental Mastery will be increased by 180."
+    },
+    {
+      "rank": 4,
+      "description": "When there are at least 3 different Elemental Types in your party, Elemental Mastery will be increased by 210."
+    },
+    {
+      "rank": 5,
+      "description": "When there are at least 3 different Elemental Types in your party, Elemental Mastery will be increased by 240."
+    }
+  ]
+}

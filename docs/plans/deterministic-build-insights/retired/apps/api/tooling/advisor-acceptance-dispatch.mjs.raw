@@ -1,0 +1,204 @@
+// Actual targeted dispatch loop; dependencies are injected for provider-free tests.
+import assert from 'node:assert/strict';
+import { randomUUID } from 'node:crypto';
+
+import { characterAdvisorRequestSchema } from '@celestia/api-contracts';
+
+import { precedingAccepted, reserveShared } from './advisor-acceptance-ledger.mjs';
+
+export async function dispatchAdvisorAcceptance({
+  ids,
+  cases,
+  records,
+  progress,
+  queue,
+  identity,
+  configured,
+  knowledge,
+  limits,
+  hash,
+  save,
+  resultsPath,
+  checkpoint,
+  updateShared,
+  createService,
+  now = () => new Date(),
+  pace = () => new Promise((done) => setTimeout(done, 60000)),
+  log = (value) => globalThis.console.log(JSON.stringify(value)),
+}) {
+  const invocation = randomUUID();
+  let attempted = 0;
+  for (const id of ids) {
+    const entry = cases.find((c) => c.id === id);
+    const current = [...records.cases].reverse().find((r) => r.id === id);
+    let input = entry.input
+      ? structuredClone(entry.input)
+      : {
+          characterKey: entry.characterKey,
+          question: entry.question,
+          useRecordedContext: false,
+          teamKeys: entry.teamKeys ?? [],
+          history: entry.history ?? [],
+        };
+    let precedingResult = null;
+    if (entry.previousCase) {
+      const preceding = precedingAccepted(records.cases, entry.previousCase, identity);
+      assert.equal(preceding.response.provider, configured.provider);
+      assert.equal(preceding.response.model, configured.model);
+      precedingResult = preceding.attemptId;
+      // Replace retained failed history with the actual current accepted exchange.
+      input.history = [
+        { role: 'user', content: preceding.input.question },
+        {
+          role: 'assistant',
+          content: preceding.response.answer.segments
+            .map((s) => s.text)
+            .join('\n')
+            .slice(0, 1500),
+        },
+      ];
+    }
+    input = characterAdvisorRequestSchema.parse(input);
+    const traces = [];
+    const provider = {
+      provider: configured.provider,
+      model: configured.model,
+      async complete(...parameters) {
+        const messages = parameters[0];
+        const trace = {
+          phase: messages[0].content.startsWith('Audit') ? 'audit' : 'generation',
+          startedAt: now().toISOString(),
+          request: messages,
+          maxTokens: parameters[1],
+        };
+        traces.push(trace);
+        try {
+          trace.rawOutput = await configured.complete(...parameters);
+          return trace.rawOutput;
+        } catch (error) {
+          trace.failure = {
+            reason: error.reason ?? 'provider_failure',
+            retryAfterSeconds: error.retryAfterSeconds ?? null,
+          };
+          throw error;
+        } finally {
+          trace.finishedAt = now().toISOString();
+        }
+      },
+    };
+    const service = createService(provider);
+    const prepared = await service.prepare('all-kqm-synthetic', input);
+    const retrieved = prepared.retrieved;
+    const contextDigest = prepared.fit.digest;
+    const missingSubjects = retrieved.subjects
+      .filter((s) => !s.evidenceIds.length)
+      .map((s) => s.label);
+    if (
+      prepared.localReason ||
+      missingSubjects.length ||
+      retrieved.coverageLimited ||
+      retrieved.strategyMissing
+    ) {
+      const response = prepared.localReason
+        ? await service.askPrepared('all-kqm-synthetic', prepared)
+        : { ...prepared.base, status: 'unsupported', reason: 'incomplete_coverage' };
+      const result = {
+        id,
+        input,
+        identity,
+        contextDigest,
+        response,
+        traces,
+        state: 'blocked-local-preflight-no-reservation',
+        missingSubjects,
+        strategyMissing: retrieved.strategyMissing,
+        coverageLimited: retrieved.coverageLimited,
+        assessment: { state: 'not-dispatched-local-limitation' },
+      };
+      records.cases.push(result);
+      save(resultsPath, records);
+      progress.cases[id] = result;
+      save(checkpoint, progress);
+      log({ id, state: result.state, reason: response.reason, missingSubjects });
+      break;
+    }
+    if (
+      current?.assessment?.state === 'passed' &&
+      JSON.stringify(current.identity) === JSON.stringify(identity) &&
+      current.inputHash === hash(JSON.stringify(input)) &&
+      current.contextDigest === contextDigest &&
+      current.response.provider === configured.provider &&
+      current.response.model === configured.model
+    ) {
+      log({ id, state: 'preserved-accepted-result' });
+      continue;
+    }
+    const blocked = reserveShared(queue, limits, attempted, now());
+    if (blocked) {
+      updateShared(queue);
+      log({
+        id,
+        blocked,
+        day: queue.day,
+        daily: queue.requestsReservedToday,
+        user: queue.userRequestsReservedToday,
+      });
+      break;
+    }
+    const attemptId = randomUUID();
+    const reservedAt = now().toISOString();
+    const reservation = {
+      attemptId,
+      invocation,
+      id,
+      reservedAt,
+      identity,
+      inputHash: hash(JSON.stringify(input)),
+      contextDigest,
+      userIdentity: 'all-kqm-synthetic',
+      state: 'reserved-in-progress',
+    };
+    queue.acceptanceAttempts = [...(queue.acceptanceAttempts ?? []), reservation];
+    updateShared(queue);
+    progress.attempts.push(reservation);
+    progress.cases[id] = reservation;
+    save(checkpoint, progress);
+    log({
+      id,
+      state: 'reserved-paced',
+      daily: queue.requestsReservedToday,
+      user: queue.userRequestsReservedToday,
+    });
+    await pace();
+    const response = await service.askPrepared('all-kqm-synthetic', prepared);
+    const result = {
+      ...reservation,
+      input,
+      precedingResult,
+      response,
+      traces,
+      sources: knowledge.corpus.sources.filter((s) =>
+        retrieved.documents.some((d) => d.sourceId === s.id),
+      ),
+      context: retrieved.documents,
+      finishedAt: now().toISOString(),
+      assessment: { state: 'pending-independent-assessment' },
+    };
+    records.cases.push(result);
+    save(resultsPath, records);
+    reservation.state =
+      response.reason === 'quota' ? 'pending-provider-quota' : 'evaluated-needs-output-assessment';
+    reservation.resultIndex = records.cases.length - 1;
+    if (response.reason === 'quota')
+      queue.providerBlockedUntil = new Date(
+        now().getTime() + (response.retryAfterSeconds ?? 60) * 1000,
+      ).toISOString();
+    progress.cases[id] = reservation;
+    save(checkpoint, progress);
+    updateShared(queue);
+    attempted++;
+    log({ id, status: response.status, reason: response.reason, attemptId });
+    if (response.status !== 'answered') break;
+  }
+  return { records, progress, queue, attempted };
+}

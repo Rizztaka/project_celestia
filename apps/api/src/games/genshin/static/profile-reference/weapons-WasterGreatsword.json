@@ -1,0 +1,17 @@
+{
+  "contractVersion": 1,
+  "key": "WasterGreatsword",
+  "gameId": 12101,
+  "name": "Waster Greatsword",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/wastergreatsword.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "aa46a6e854aaa86df2920eb64586c4c29e4dd9321187815bba43f2d20787954e",
+    "license": "MIT"
+  },
+  "description": "A sturdy sheet of iron that may be powerful enough to break apart mountains if wielded with enough willpower.",
+  "weaponType": "Claymore",
+  "rarity": 1,
+  "effectName": "",
+  "refinements": []
+}

@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "HakushinRing",
+  "gameId": 14414,
+  "name": "Hakushin Ring",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/hakushinring.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "c3208e9d635531a1b73f0482ff7ec3ac0b981d1b97c2d05f1382fe98cb7370cb",
+    "license": "MIT"
+  },
+  "description": "A catalyst that carries the memory of the Kitsune Saiguu of ancient times. However, this device is but an impoverished vessel for the full breadth of her thought.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Sakura Saiguu",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "After the character equipped with this weapon triggers an Electro elemental reaction, nearby party members of an Elemental Type involved in the elemental reaction receive a 10% Elemental DMG Bonus for their element, lasting 6s. Elemental Bonuses gained in this way cannot be stacked."
+    },
+    {
+      "rank": 2,
+      "description": "After the character equipped with this weapon triggers an Electro elemental reaction, nearby party members of an Elemental Type involved in the elemental reaction receive a 12.5% Elemental DMG Bonus for their element, lasting 6s. Elemental Bonuses gained in this way cannot be stacked."
+    },
+    {
+      "rank": 3,
+      "description": "After the character equipped with this weapon triggers an Electro elemental reaction, nearby party members of an Elemental Type involved in the elemental reaction receive a 15% Elemental DMG Bonus for their element, lasting 6s. Elemental Bonuses gained in this way cannot be stacked."
+    },
+    {
+      "rank": 4,
+      "description": "After the character equipped with this weapon triggers an Electro elemental reaction, nearby party members of an Elemental Type involved in the elemental reaction receive a 17.5% Elemental DMG Bonus for their element, lasting 6s. Elemental Bonuses gained in this way cannot be stacked."
+    },
+    {
+      "rank": 5,
+      "description": "After the character equipped with this weapon triggers an Electro elemental reaction, nearby party members of an Elemental Type involved in the elemental reaction receive a 20% Elemental DMG Bonus for their element, lasting 6s. Elemental Bonuses gained in this way cannot be stacked."
+    }
+  ]
+}

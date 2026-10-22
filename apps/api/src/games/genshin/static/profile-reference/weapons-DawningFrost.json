@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "DawningFrost",
+  "gameId": 14434,
+  "name": "Dawning Frost",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/dawningfrost.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "9e9e7d73b48f3ee1787aa204aa47fb60c2727ec94f3f2ff53197f458c03725f6",
+    "license": "MIT"
+  },
+  "description": "A silver-forged ritual vessel, pure and completely without blemish. It is said to be a sacred relic passed down for generations among the priestesses of the far north.",
+  "weaponType": "Catalyst",
+  "rarity": 4,
+  "effectName": "Nocturnal Dreams",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "For 10s after a Charged Attack hits an opponent, Elemental Mastery is increased by 72. For 10s after an Elemental Skill hits an opponent, Elemental Mastery is increased by 48."
+    },
+    {
+      "rank": 2,
+      "description": "For 10s after a Charged Attack hits an opponent, Elemental Mastery is increased by 90. For 10s after an Elemental Skill hits an opponent, Elemental Mastery is increased by 60."
+    },
+    {
+      "rank": 3,
+      "description": "For 10s after a Charged Attack hits an opponent, Elemental Mastery is increased by 108. For 10s after an Elemental Skill hits an opponent, Elemental Mastery is increased by 72."
+    },
+    {
+      "rank": 4,
+      "description": "For 10s after a Charged Attack hits an opponent, Elemental Mastery is increased by 126. For 10s after an Elemental Skill hits an opponent, Elemental Mastery is increased by 84."
+    },
+    {
+      "rank": 5,
+      "description": "For 10s after a Charged Attack hits an opponent, Elemental Mastery is increased by 144. For 10s after an Elemental Skill hits an opponent, Elemental Mastery is increased by 96."
+    }
+  ]
+}

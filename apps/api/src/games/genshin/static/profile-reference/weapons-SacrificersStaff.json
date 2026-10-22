@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "SacrificersStaff",
+  "gameId": 13434,
+  "name": "Sacrificer's Staff",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/sacrificersstaff.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "63bb7901bc932d0e31a9193754d7433177c1d6c46f4957abcab262b6ebe98bb9",
+    "license": "MIT"
+  },
+  "description": "A silver-white polearm, pure and completely without blemish. Legend has it that it was used by the Archpriestesses of Hyperborea in ages past to guide their flock of Frostmoon Scions.",
+  "weaponType": "Polearm",
+  "rarity": 4,
+  "effectName": "Untainted Desire",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "For 6s after an Elemental Skill hits an opponent, ATK is increased by 8% and Energy Recharge is increased by 6%. Max 3 stacks. This effect can be triggered even when the equipping character is off-field."
+    },
+    {
+      "rank": 2,
+      "description": "For 6s after an Elemental Skill hits an opponent, ATK is increased by 10% and Energy Recharge is increased by 7.5%. Max 3 stacks. This effect can be triggered even when the equipping character is off-field."
+    },
+    {
+      "rank": 3,
+      "description": "For 6s after an Elemental Skill hits an opponent, ATK is increased by 12% and Energy Recharge is increased by 9%. Max 3 stacks. This effect can be triggered even when the equipping character is off-field."
+    },
+    {
+      "rank": 4,
+      "description": "For 6s after an Elemental Skill hits an opponent, ATK is increased by 14% and Energy Recharge is increased by 10.5%. Max 3 stacks. This effect can be triggered even when the equipping character is off-field."
+    },
+    {
+      "rank": 5,
+      "description": "For 6s after an Elemental Skill hits an opponent, ATK is increased by 16% and Energy Recharge is increased by 12%. Max 3 stacks. This effect can be triggered even when the equipping character is off-field."
+    }
+  ]
+}

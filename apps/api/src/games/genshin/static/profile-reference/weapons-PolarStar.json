@@ -1,0 +1,38 @@
+{
+  "contractVersion": 1,
+  "key": "PolarStar",
+  "gameId": 15507,
+  "name": "Polar Star",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/weapons/polarstar.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "24f1db7ecb41ca303393d8a58e320469e53ce5f3555f74c378ed9ab6f7509608",
+    "license": "MIT"
+  },
+  "description": "A pristine bow that is as sharp as the glaciers of the far north.",
+  "weaponType": "Bow",
+  "rarity": 5,
+  "effectName": "Daylight's Augury",
+  "refinements": [
+    {
+      "rank": 1,
+      "description": "Elemental Skill and Elemental Burst DMG increased by 12%. After a Normal Attack, Charged Attack, Elemental Skill or Elemental Burst hits an opponent, 1 stack of Ashen Nightstar will be gained for 12s. When 1/2/3/4 stacks of Ashen Nightstar are present, ATK is increased by 10/20/30/48%. The stack of Ashen Nightstar created by the Normal Attack, Charged Attack, Elemental Skill or Elemental Burst will be counted independently of the others."
+    },
+    {
+      "rank": 2,
+      "description": "Elemental Skill and Elemental Burst DMG increased by 15%. After a Normal Attack, Charged Attack, Elemental Skill or Elemental Burst hits an opponent, 1 stack of Ashen Nightstar will be gained for 12s. When 1/2/3/4 stacks of Ashen Nightstar are present, ATK is increased by 12.5/25/37.5/60%. The stack of Ashen Nightstar created by the Normal Attack, Charged Attack, Elemental Skill or Elemental Burst will be counted independently of the others."
+    },
+    {
+      "rank": 3,
+      "description": "Elemental Skill and Elemental Burst DMG increased by 18%. After a Normal Attack, Charged Attack, Elemental Skill or Elemental Burst hits an opponent, 1 stack of Ashen Nightstar will be gained for 12s. When 1/2/3/4 stacks of Ashen Nightstar are present, ATK is increased by 15/30/45/72%. The stack of Ashen Nightstar created by the Normal Attack, Charged Attack, Elemental Skill or Elemental Burst will be counted independently of the others."
+    },
+    {
+      "rank": 4,
+      "description": "Elemental Skill and Elemental Burst DMG increased by 21%. After a Normal Attack, Charged Attack, Elemental Skill or Elemental Burst hits an opponent, 1 stack of Ashen Nightstar will be gained for 12s. When 1/2/3/4 stacks of Ashen Nightstar are present, ATK is increased by 17.5/35/52.5/84%. The stack of Ashen Nightstar created by the Normal Attack, Charged Attack, Elemental Skill or Elemental Burst will be counted independently of the others."
+    },
+    {
+      "rank": 5,
+      "description": "Elemental Skill and Elemental Burst DMG increased by 24%. After a Normal Attack, Charged Attack, Elemental Skill or Elemental Burst hits an opponent, 1 stack of Ashen Nightstar will be gained for 12s. When 1/2/3/4 stacks of Ashen Nightstar are present, ATK is increased by 20/40/60/96%. The stack of Ashen Nightstar created by the Normal Attack, Charged Attack, Elemental Skill or Elemental Burst will be counted independently of the others."
+    }
+  ]
+}

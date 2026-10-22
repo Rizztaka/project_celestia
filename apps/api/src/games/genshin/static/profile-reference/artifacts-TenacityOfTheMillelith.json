@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "key": "TenacityOfTheMillelith",
+  "gameId": 15017,
+  "name": "Tenacity of the Millelith",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/tenacityofthemillelith.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "261e6873a667f719140af232422dbcad4d1b86f63925e99cd4e99f6221c04129",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Flower of Accolades",
+      "description": "A flower made from gold leaf. It represents the glories and honors attained by its wearer."
+    },
+    {
+      "slot": "plume",
+      "name": "Ceremonial War-Plume",
+      "description": "A falcon feather worn on ceremonial occasions. It displays the dignity and resolve of Liyue Harbor to the outside world."
+    },
+    {
+      "slot": "sands",
+      "name": "Orichalceous Time-Dial",
+      "description": "A simple device for telling time. This was once standard-issue for the Millelith during times of war."
+    },
+    {
+      "slot": "goblet",
+      "name": "Noble's Pledging Vessel",
+      "description": "A golden cup used by the Millelith to take their oaths. Still bears the lovely scent of wine."
+    },
+    {
+      "slot": "circlet",
+      "name": "General's Ancient Helm",
+      "description": "A splendorous helmet from ages past. Clean the dust away and it will look brand-new once more."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "HP +20%" },
+    {
+      "pieces": 4,
+      "description": "When an Elemental Skill hits an opponent, the ATK of all nearby party members is increased by 20% and their Shield Strength is increased by 30% for 3s. This effect can be triggered once every 0.5s. This effect can still be triggered even when the character who is using this artifact set is not on the field."
+    }
+  ]
+}

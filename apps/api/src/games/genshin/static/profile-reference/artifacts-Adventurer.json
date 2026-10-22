@@ -1,0 +1,43 @@
+{
+  "contractVersion": 1,
+  "key": "Adventurer",
+  "gameId": 10010,
+  "name": "Adventurer",
+  "source": {
+    "url": "https://raw.githubusercontent.com/theBowja/genshin-db/49a6544a6c6ae36089cb42fa591fc46f01de8bcf/src/data/English/artifacts/adventurer.json",
+    "revision": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "sha256": "2a48c4595242032cfa3baf2ab998ad0d0431d352c116b6029e2ae504725bccfc",
+    "license": "MIT"
+  },
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Adventurer's Flower",
+      "description": "A resilient flower that survived the harsh environment of an ancient city. It is now proudly worn like a medal."
+    },
+    {
+      "slot": "plume",
+      "name": "Adventurer's Tail Feather",
+      "description": "The feather of an exotic bird rarely seen on this continent."
+    },
+    {
+      "slot": "sands",
+      "name": "Adventurer's Pocket Watch",
+      "description": "It's easy to lose track of time when you're adventuring where the sun doesn't shine, whether that's the depths of the abyss or the ruins of a lost city."
+    },
+    {
+      "slot": "goblet",
+      "name": "Adventurer's Golden Goblet",
+      "description": "The spoils of one of an adventurer's many expeditions. Though a little damaged, it is still an excellent find."
+    },
+    {
+      "slot": "circlet",
+      "name": "Adventurer's Bandana",
+      "description": "A cloth garment worn at the forehead. Though soaked in sweat and covered in dust, it still beams with an adventurer's pride."
+    }
+  ],
+  "effects": [
+    { "pieces": 2, "description": "Max HP increased by 1,000." },
+    { "pieces": 4, "description": "Opening a chest regenerates 30% Max HP over 5s." }
+  ]
+}

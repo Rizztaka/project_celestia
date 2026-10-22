@@ -3,10 +3,13 @@ import { createRequire } from 'node:module';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { CharacterEquipmentView } from '../../web/src/components/CharacterEquipmentView.tsx';
+import { CharacterProfileHeader } from '../../web/src/components/CharacterProfile.tsx';
 
 const webRequire = createRequire(new URL('../../web/package.json', import.meta.url));
 const { createElement } = webRequire('react');
 const { renderToStaticMarkup } = webRequire('react-dom/server');
+const { QueryClientProvider } =
+  await import('../../web/node_modules/@tanstack/react-query/build/modern/index.js');
 
 let createAccountQueryClient;
 let bindAccountCache;
@@ -61,12 +64,27 @@ function fixture() {
     artifactRelationsConsistent: true,
   };
 }
-const render = (data) => renderToStaticMarkup(createElement(CharacterEquipmentView, { data }));
+const render = (data) => {
+  const client = createAccountQueryClient();
+  cleanups.push(() => client.clear());
+  return renderToStaticMarkup(
+    createElement(
+      QueryClientProvider,
+      { client },
+      createElement(
+        'div',
+        null,
+        createElement(CharacterProfileHeader, { characterKey: data.character.characterKey, data }),
+        createElement(CharacterEquipmentView, { data }),
+      ),
+    ),
+  );
+};
 describe('C3a actual web presentation and session cache', () => {
   it('renders five explicit unknown slots and preserves stored talent semantics', () => {
     const html = render(fixture());
     for (const slot of slots) expect(html).toContain(`</span>${slot}</h3>`);
-    expect(html).toContain('Base versus constellation-adjusted');
+    expect(html).toContain('Base levels and constellation adjustments are unknown');
     expect(html).toContain('Assignment unknown');
     expect(html).not.toContain('No weapon equipped');
     expect(html).toContain('cannot tell whether this slot is empty or equipped in-game');
@@ -85,7 +103,7 @@ describe('C3a actual web presentation and session cache', () => {
     const html = render(data);
     expect(html).toContain('No assignment in recorded data');
     expect(html).toContain('Synthetic empty section');
-    expect(html).toContain('does not prove a complete game scan');
+    expect(html).toContain('does not prove a complete in-game scan');
     expect(html).not.toMatch(/confirmed unequipped|Known empty/);
   });
   it('shows opaque stored values without main-stat estimates, set bonuses or quality scores', () => {

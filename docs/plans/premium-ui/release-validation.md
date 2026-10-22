@@ -12,3 +12,9 @@ exception and still rejects changed historical bytes. All 33 verification-harnes
 tests pass locally in the isolated release checkout. The two UI test reports were
 formatted as JSON without changing their data. No product logic, schema or
 account data is changed by this follow-up. Full remote CI must pass before merge.
+
+The next full run passed 1,596 tests and exposed three legacy equipment-rendering
+test failures. The harness now supplies the query provider required by source
+descriptions and renders the progression header where talent semantics now live.
+Assertions retain unknown/empty/opaque-data and session isolation coverage while
+using the current copy. All six equipment client tests pass in isolation.

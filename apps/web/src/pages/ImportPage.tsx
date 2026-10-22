@@ -110,6 +110,7 @@ export default function ImportPage() {
   return (
     <div className="min-h-screen text-zinc-300">
       <main id="companion-content" tabIndex={-1} className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+        <p className="eyebrow">BRING YOUR BUILDS ALONG</p>
         <h1 className="font-display mb-3 text-3xl font-bold text-white">Import account data</h1>
         <p className="mb-8 leading-relaxed text-zinc-400">
           Bring a GOOD export from Genshin Optimizer or Inventory Kamera into your companion. Choose

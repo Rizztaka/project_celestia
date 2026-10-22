@@ -1,9 +1,14 @@
 import metadata from './artwork-metadata.json';
+import referenceIndex from './character-reference-index.json';
 import targets from './progression-targets.json';
 
 type CharacterMetadata = { name: string; rarity: number; element: string; weapon: string };
 type WeaponMetadata = { name: string; rarity: number };
-export const characterMetadata: Record<string, CharacterMetadata> = metadata.characters;
+export const referenceCharacters: Record<string, CharacterMetadata> = referenceIndex;
+export const characterMetadata: Record<string, CharacterMetadata> = {
+  ...metadata.characters,
+  ...referenceCharacters,
+};
 export const weaponMetadata: Record<string, WeaponMetadata> = metadata.weapons;
 export function artworkDisplayName(key: string): string {
   return (

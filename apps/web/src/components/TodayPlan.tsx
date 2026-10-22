@@ -153,12 +153,12 @@ export default function TodayPlan() {
     plan && advice.data && adviceMatches(plan, advice.data) && !expired ? advice.data : null;
   const enabled = plan?.routines.filter((item) => !item.dismissed).map((item) => item.kind) ?? [];
   return (
-    <div className="min-w-0 space-y-6">
+    <div className="today-plan min-w-0 space-y-6">
       <section id="session-recording" className="space-y-4" aria-label="Manual session recording">
         <h2 className="text-xl font-semibold text-white">Your routine</h2>
         <p className="text-sm text-zinc-400">
-          Record what you did, or update a resin checkpoint. These actions do not grant drops,
-          change inventory or complete goals.
+          Record your session or update a resin checkpoint. Inventory and goals are managed
+          separately.
         </p>
         {plan && !plan.routines.length && (
           <p className="text-sm">
@@ -564,7 +564,7 @@ export default function TodayPlan() {
         <Link className={planButton} to="/import">
           Update inventory by import
         </Link>
-        <details open>
+        <details>
           <summary className="cursor-pointer font-semibold text-white">
             Talent books and weapon materials open today
           </summary>

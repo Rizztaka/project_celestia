@@ -285,26 +285,10 @@ try {
     'Savings reacts to inventory, Welkin and unclaimed event toggles; expired rewards excluded; weapon target artwork; 1280/640/320px reflow',
   );
   await page.goto(base + '/simulators');
-  await page.getByRole('heading', { name: /Pity Tracker — Ancient Flame/ }).waitFor();
-  await page
-    .getByRole('img', { name: /Mavuika avatar/ })
-    .first()
-    .waitFor();
-  await page.setViewportSize({ width: 1280, height: 900 });
-  await page
-    .getByRole('button', { name: /Wish ×10|Wish x10|10 Pull|10-pull/i })
-    .first()
-    .click();
-  const totalPulls = page
-    .getByText('Total Pulls', { exact: true })
-    .locator('..')
-    .locator('p')
-    .last();
-  await totalPulls.filter({ hasText: /^10$/ }).waitFor();
-  await page.getByRole('button', { name: 'Reset', exact: true }).click();
-  await page.getByText('Total Pulls', { exact: true }).waitFor({ state: 'hidden' });
+  await page.waitForURL(/\/planner\?tab=savings$/);
+  await page.getByRole('heading', { name: 'Wish Savings', exact: true }).waitFor();
   results.checks.push(
-    'Simulator defaults past preserved expired Odette to Mavuika; real ten-pull endpoint succeeds',
+    'Retired random simulator URL redirects to the functional wish savings planner',
   );
   assert.equal((await call('/games/genshin/intelligence/ai-summary', {})).status, 404);
   results.checks.push('Retired model endpoint is absent');

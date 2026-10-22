@@ -1,3 +1,15 @@
+> **2026-10-22 premium UI commit review: passed; owner authorized local commit.**
+> Shared charcoal/ivory/gold design, sidebar/mobile navigation, portrait collection,
+> 129-entry canonical archive, character tabs, authentication and Build lab.
+> Retired legacy ranking dashboard, random simulator UI, duplicate KQM reader,
+> unavailable OAuth actions and unused starter assets; existing user data retained.
+> **157/157 tests** in an independent commit checkout; contracts/API/web builds,
+> web types, full web lint and changed API tooling lint pass.
+> Desktop and 390/320px synthetic browser acceptance includes focus restoration,
+> locked descriptions, read-only comparison, import validation and savings redirect.
+> [Read commit scope, verification and limits](premium-ui/commit-review.md).
+> Unrelated NIKKE/schema/source drafts stay separate. No push or deployment included.
+
 > **2026-10-22 commit-readiness review: passed for the scoped deterministic migration.**
 > A separate checkout of the proposed index passed **97/97 focused tests** (8 files),
 > API/web production builds, contracts build, web types and full API/web/contracts lint.

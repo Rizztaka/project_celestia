@@ -207,6 +207,7 @@ export default function PlannerPage() {
       >
         {/* Page heading */}
         <div className="animate-fade-in mb-8">
+          <p className="eyebrow">MAKE ROOM FOR PROGRESS</p>
           <h1 className="font-display text-4xl font-bold tracking-tight text-white">Planner</h1>
           <p className="mt-2 text-base text-zinc-400">
             Plan your routine, build teams, and budget your next wishes.

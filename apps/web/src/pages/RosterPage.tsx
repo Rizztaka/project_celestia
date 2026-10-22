@@ -1,9 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
+import type { CSSProperties } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
+import { CharacterCatalog } from '../components/CharacterCatalog';
 import { FocusButton } from '../components/FocusButton';
 import { GenshinAvatar } from '../components/GenshinAvatar';
 import { GenshinWeaponIcon } from '../components/GenshinWeaponIcon';
+import { PageHeader, UiIcon } from '../components/Ui';
 import type { RosterCharacter, RosterWeapon } from '../lib/api';
 import { fetchFocus, fetchGenshinRoster } from '../lib/api';
 import { artworkDisplayName, characterMetadata } from '../lib/artwork';
@@ -12,103 +15,61 @@ import { getElementTheme } from '../lib/element-colors';
 // Catalog names, with a readable fallback for unrecognized imported keys.
 const formatName = artworkDisplayName;
 
-// -------------------------------------------------------
-// Constellation-tier color mapping
-// -------------------------------------------------------
-function constellationColor(c: number): string {
-  if (c === 0) return 'text-zinc-400 border-zinc-700';
-  if (c <= 2) return 'text-accent-400 border-accent-500/50';
-  if (c <= 4) return 'text-violet-400 border-violet-500/50';
-  return 'text-amber-400 border-amber-500/50';
-}
-
-// -------------------------------------------------------
-// CharacterCard
-// -------------------------------------------------------
 function CharacterCard({ character }: { character: RosterCharacter }) {
   const displayName = formatName(character.characterKey);
   const metadata = characterMetadata[character.characterKey];
   const theme = getElementTheme(character.characterKey);
-  const c = character.constellation;
-  const colorClass = constellationColor(c);
-
   return (
     <article
-      aria-label={`${displayName}, ${metadata ? `${metadata.rarity} star ${theme.element} ${metadata.weapon} character, ` : ''}Level ${character.level}, Constellation ${c}`}
-      className={`group flex min-w-0 flex-col gap-4 rounded-2xl border border-t-2 bg-zinc-900/40 p-4 transition-colors hover:bg-zinc-900/70 sm:p-5 ${metadata?.rarity === 5 ? 'border-amber-500/30' : metadata?.rarity === 4 ? 'border-purple-500/30' : 'border-zinc-700'}`}
+      className="collection-card"
+      aria-label={`${displayName}, Level ${character.level}, Constellation ${character.constellation}`}
+      style={{ '--element-glow': theme.glow } as CSSProperties}
     >
-      {/* Header: avatar + name + constellation */}
-      <div className="flex items-center gap-4">
-        <GenshinAvatar characterKey={character.characterKey} constellation={c} />
-
-        {/* Name + level */}
-        <div className="min-w-0 flex-1">
-          <Link
-            to={`/roster/${encodeURIComponent(character.characterKey)}`}
-            className="font-display group-hover:text-accent-400 block break-words text-base font-bold text-white transition-colors"
-          >
-            {displayName}
-          </Link>
-          <p className="mt-0.5 text-xs text-zinc-500">
-            Lv.{character.level} · A{character.ascension}
-          </p>
-        </div>
-
-        {metadata && (
-          <span
-            className={`text-xs font-semibold ${metadata.rarity === 5 ? 'text-amber-300' : 'text-purple-300'}`}
-          >
-            {metadata.rarity}★
-          </span>
-        )}
-        {/* Constellation badge */}
-        <span
-          className={`shrink-0 rounded-full border bg-black/30 px-2 py-0.5 text-xs font-bold ${colorClass}`}
+      <div className="collection-art">
+        <GenshinAvatar
+          characterKey={character.characterKey}
+          size="xl"
+          className="collection-avatar"
+          showElementBadge={false}
+        />
+        <span className="collection-constellation">C{character.constellation}</span>
+      </div>
+      <div className="collection-body">
+        <p className="collection-element">
+          {theme.element} <span aria-hidden="true"> / </span>{' '}
+          {metadata?.weapon ?? 'Unknown weapon type'}
+        </p>
+        <Link
+          className="collection-name"
+          to={`/roster/${encodeURIComponent(character.characterKey)}`}
         >
-          C{character.constellation}
-        </span>
+          {displayName}
+        </Link>
+        <div className="collection-level">
+          <span>
+            Level {character.level}{' '}
+            <span className="text-zinc-500">/ Asc. {character.ascension}</span>
+          </span>
+          <span>{metadata ? `${metadata.rarity}★` : ''}</span>
+        </div>
+        <div className="collection-talents">
+          <span>Talents</span>
+          <strong>N {character.talentNormal}</strong>
+          <strong>S {character.talentSkill}</strong>
+          <strong>B {character.talentBurst}</strong>
+        </div>
+        <div className="collection-weapon">
+          <WeaponChip weapon={character.equippedWeapon} />
+        </div>
+        <FocusButton characterKey={character.characterKey} />
+        <Link
+          className="collection-open"
+          to={`/roster/${encodeURIComponent(character.characterKey)}`}
+        >
+          <span>Open character</span>
+          <UiIcon name="arrow" />
+        </Link>
       </div>
-
-      {/* Divider */}
-      <div className="border-t border-white/5" />
-
-      {/* Talents */}
-      <div className="flex items-center gap-1">
-        <span className="mr-auto text-xs uppercase tracking-wider text-zinc-500">Talents</span>
-        {(
-          [
-            { label: 'N', value: character.talentNormal },
-            { label: 'S', value: character.talentSkill },
-            { label: 'B', value: character.talentBurst },
-          ] as const
-        ).map(({ label, value }) => (
-          <div key={label} className="flex w-10 flex-col items-center">
-            <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
-              {label}
-            </span>
-            <span
-              className={`font-display text-base font-bold ${
-                value >= 10 ? 'text-accent-400' : 'text-white'
-              }`}
-            >
-              {value}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      {/* Divider */}
-      <div className="border-t border-white/5" />
-
-      {/* Equipped weapon */}
-      <WeaponChip weapon={character.equippedWeapon} />
-      <FocusButton characterKey={character.characterKey} />
-      <Link
-        to={`/roster/${encodeURIComponent(character.characterKey)}`}
-        className="rounded-lg border border-indigo-500/20 px-3 py-2 text-center text-sm text-indigo-300 hover:bg-indigo-500/10"
-      >
-        View recorded equipment
-      </Link>
     </article>
   );
 }
@@ -274,70 +235,46 @@ export default function RosterPage() {
         tabIndex={-1}
         className="relative z-10 mx-auto max-w-7xl px-6 py-12"
       >
-        <ImportStatus />
-        {/* Page heading */}
-        <div className="animate-fade-in mb-6 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="font-display text-4xl font-bold tracking-tight text-white">
-              Characters
-            </h1>
-            <p className="mt-2 text-base text-zinc-400">
-              {isLoading
-                ? 'Loading your characters…'
-                : data
-                  ? `${data.total} recorded character${data.total === 1 ? '' : 's'}`
-                  : 'Character count unavailable'}
-            </p>
-          </div>
-          {!isLoading && characters.length > 0 && (
-            <Link
-              to="/import"
-              className="text-accent-400 hover:text-accent-300 flex items-center gap-1.5 text-sm font-medium transition-colors"
-            >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                />
-              </svg>
-              Re-import
+        <PageHeader
+          eyebrow="YOUR COLLECTION"
+          title="Every character. A possibility."
+          description={
+            isLoading
+              ? 'Loading your characters…'
+              : data
+                ? `${data.total} recorded character${data.total === 1 ? '' : 's'}. Your builds, talents and next steps, together.`
+                : 'Character records are currently unavailable.'
+          }
+          actions={
+            <Link className="button-primary" to="/import">
+              <UiIcon name="import" />
+              Import characters
             </Link>
-          )}
-        </div>
-
-        <p className="mb-4 text-sm text-zinc-400">
-          Focus is an optional shortlist, independent of goal status. Open a character for recorded
-          equipment and goals. Stored talent values may include adjustments; they do not establish
-          base-level progress.
-        </p>
-        <div className="mb-4 flex flex-wrap items-end gap-3">
-          <label className="flex flex-col gap-2 text-sm">
-            Search characters
+          }
+        />
+        <div className="collection-toolbar">
+          <label className="collection-search">
+            <span className="sr-only">Search characters</span>
             <input
               type="search"
+              aria-label="Search characters"
+              placeholder="Find a character…"
               value={search}
               onChange={(event) => setFilter('q', event.target.value, true)}
-              className="rounded-lg border border-white/20 bg-zinc-900 px-3 py-2"
             />
           </label>
-          <button
-            className="rounded-lg border border-white/20 px-3 py-2 text-sm"
-            disabled={isFetching}
-            onClick={() => void refetch()}
-          >
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={focusOnly}
+              onChange={(event) => setFilter('focus', event.target.checked ? 'true' : '')}
+            />
+            Focus characters only
+          </label>
+          <button className="button-secondary" disabled={isFetching} onClick={() => void refetch()}>
             {isFetching ? 'Refreshing characters…' : 'Refresh characters'}
           </button>
         </div>
-        <label className="mb-6 flex items-center gap-3">
-          <input
-            type="checkbox"
-            checked={focusOnly}
-            onChange={(event) => setFilter('focus', event.target.checked ? 'true' : '')}
-          />
-          Focus characters only
-        </label>
         {focusOnly && focus.isPending && <p role="status">Loading focus…</p>}
         {focusOnly && focus.error && (
           <p role="alert">
@@ -391,7 +328,7 @@ export default function RosterPage() {
 
         {/* Loading state: 6 skeleton cards */}
         {isLoading && (
-          <div className="grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="collection-grid">
             {Array.from({ length: 6 }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
@@ -403,12 +340,16 @@ export default function RosterPage() {
 
         {/* Populated state: character grid */}
         {!isLoading && characters.length > 0 && (
-          <div className="animate-fade-in grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="collection-grid">
             {visibleCharacters.map((character) => (
               <CharacterCard key={character.id} character={character} />
             ))}
           </div>
         )}
+        <CharacterCatalog search={search} />
+        <div className="mt-6">
+          <ImportStatus />
+        </div>
       </main>
     </div>
   );

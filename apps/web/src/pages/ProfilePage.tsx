@@ -33,6 +33,7 @@ export default function ProfilePage() {
       className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6"
     >
       <header>
+        <p className="eyebrow">YOUR SPACE</p>
         <h1 className="text-3xl font-bold text-white">Settings & profile</h1>
         <p className="mt-3 text-zinc-400">
           Adjust your companion using the same controls you use day to day.

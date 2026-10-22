@@ -1,0 +1,391 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
+
+import { BuildInsights } from '../components/BuildInsights';
+import { CharacterEquipmentView } from '../components/CharacterEquipmentView';
+import { CharacterProfileHeader, CharacterProfileKit } from '../components/CharacterProfile';
+import { EquipmentReferenceBrowser } from '../components/EquipmentReference';
+import { FocusButton } from '../components/FocusButton';
+import { KqmGuideView } from '../components/KqmGuideView';
+import {
+  ApiError,
+  fetchCharacterEquipment,
+  fetchGoals,
+  fetchImportStatus,
+  fetchKqmGuide,
+} from '../lib/api';
+import { fetchProfileReference } from '../lib/profile-reference';
+
+export default function CharacterDetailPage() {
+  const queryClient = useQueryClient();
+  const { characterKey = '' } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const paramTab = searchParams.get('tab');
+  const [tabState, setTabState] = useState<'equipment' | 'kqm' | null>(null);
+
+  const detail = useQuery({
+    queryKey: ['genshin', 'character-equipment', characterKey],
+    queryFn: ({ signal }) => fetchCharacterEquipment(characterKey, signal),
+    retry: false,
+  });
+
+  const reference = useQuery({
+    queryKey: ['genshin', 'profile-reference', characterKey],
+    queryFn: ({ signal }) => fetchProfileReference(characterKey, signal),
+    retry: false,
+  });
+
+  const kqmGuide = useQuery({
+    queryKey: ['genshin', 'kqm-guide', characterKey],
+    queryFn: ({ signal }) => fetchKqmGuide(characterKey, signal),
+    retry: false,
+  });
+
+  const goals = useQuery({
+    queryKey: ['companion', 'goals'],
+    queryFn: ({ signal }) => fetchGoals(signal),
+    retry: false,
+  });
+
+  const notFound = detail.error instanceof ApiError && detail.error.status === 404;
+  const status = useQuery({
+    queryKey: ['genshin', 'import-status'],
+    queryFn: ({ signal }) => fetchImportStatus(signal),
+    enabled: notFound,
+    retry: false,
+  });
+  const noImport = status.data?.sections.every((section) => section.status === 'unknown');
+  const kqmGuideMissing = kqmGuide.error instanceof ApiError && kqmGuide.error.status === 404;
+
+  const activeTab =
+    paramTab === 'kqm' || paramTab === 'equipment' ? paramTab : (tabState ?? 'equipment');
+
+  const setTab = (newTab: 'equipment' | 'kqm') => {
+    setTabState(newTab);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set('tab', newTab);
+      return next;
+    });
+  };
+
+  return (
+    <div className="min-h-screen text-zinc-300">
+      <main
+        id="companion-content"
+        tabIndex={-1}
+        className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10"
+      >
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <Link to="/roster" className="text-sm text-indigo-300 hover:text-indigo-200">
+            ← All characters
+          </Link>
+          <button
+            disabled={detail.isFetching || kqmGuide.isFetching || reference.isFetching}
+            onClick={() => {
+              void detail.refetch();
+              void kqmGuide.refetch();
+              void reference.refetch();
+              void queryClient.invalidateQueries({ queryKey: ['genshin', 'weapon-reference'] });
+              void queryClient.invalidateQueries({ queryKey: ['genshin', 'artifact-reference'] });
+              void queryClient.invalidateQueries({
+                queryKey: ['genshin', 'build-insights'],
+              });
+            }}
+            className="rounded-lg border border-white/10 px-4 py-2 text-sm hover:bg-white/5 disabled:opacity-50"
+          >
+            {detail.isFetching || kqmGuide.isFetching || reference.isFetching
+              ? 'Refreshing…'
+              : 'Refresh'}
+          </button>
+        </div>
+
+        <CharacterProfileHeader
+          characterKey={characterKey}
+          reference={reference.data}
+          data={detail.data}
+          recordsStatus={detail.isPending ? 'loading' : notFound ? 'not_recorded' : 'unavailable'}
+        />
+        {reference.isPending && (
+          <p role="status" className="mb-4">
+            Loading reference descriptions…
+          </p>
+        )}
+        {reference.isError && (
+          <p role="alert" className="mb-4 rounded-xl border border-amber-500/40 p-4">
+            Reference descriptions could not load. Recorded data remains available.{' '}
+            <button className="underline" onClick={() => void reference.refetch()}>
+              Retry reference
+            </button>
+          </p>
+        )}
+        {/* Tab Switcher */}
+        <div className="mb-6 flex gap-4 border-b border-white/10">
+          <button
+            type="button"
+            onClick={() => setTab('equipment')}
+            className={`flex items-center gap-2 border-b-2 px-1 pb-3 text-sm font-semibold transition-colors ${
+              activeTab === 'equipment'
+                ? 'border-indigo-400 text-white'
+                : 'border-transparent text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            <svg
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+            <span>Equipment & Goals</span>
+            {detail.data && (
+              <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-zinc-300">
+                Lv. {detail.data.character.level}
+              </span>
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab('kqm')}
+            className={`flex items-center gap-2 border-b-2 px-1 pb-3 text-sm font-semibold transition-colors ${
+              activeTab === 'kqm'
+                ? 'border-amber-400 text-amber-300'
+                : 'border-transparent text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            <svg className="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z" />
+            </svg>
+            <span>KQM Theorycrafting Guide</span>
+            {kqmGuide.data && (
+              <span className="rounded-full border border-amber-500/40 bg-amber-500/20 px-2 py-0.5 text-xs text-amber-300">
+                Verified
+              </span>
+            )}
+          </button>
+        </div>
+
+        {activeTab === 'equipment' ? (
+          <>
+            {detail.isLoading && (
+              <p role="status" className="glass-panel rounded-xl p-6">
+                Loading recorded equipment…
+              </p>
+            )}
+            {notFound ? (
+              <div className="glass-panel space-y-4 rounded-2xl p-6">
+                <h2 className="text-xl font-semibold text-white">
+                  Progression & equipment not recorded
+                </h2>
+                <p>
+                  {noImport
+                    ? 'No import is recorded for this account. This character is not in your recorded roster.'
+                    : 'This character is not in your recorded roster.'}
+                </p>
+                <div className="flex flex-wrap items-center gap-4 pt-2">
+                  <Link to="/import" className="inline-block text-indigo-300 hover:text-indigo-200">
+                    Import character data →
+                  </Link>
+                  {kqmGuide.data && (
+                    <button
+                      type="button"
+                      onClick={() => setTab('kqm')}
+                      className="text-sm text-amber-400 underline hover:text-amber-300"
+                    >
+                      View KQM Theorycrafting Guide →
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <>
+                {detail.isError && (
+                  <div
+                    role="alert"
+                    className="mb-5 rounded-xl border border-amber-500/30 bg-amber-500/5 p-4"
+                  >
+                    <p>
+                      {detail.error instanceof Error
+                        ? detail.error.message
+                        : 'Could not load recorded equipment.'}
+                    </p>
+                    {detail.data && (
+                      <p className="mt-2 text-sm">
+                        Showing the previously loaded records. Refresh failed.
+                      </p>
+                    )}
+                    <button
+                      onClick={() => void detail.refetch()}
+                      disabled={detail.isFetching}
+                      className="mt-3 rounded-lg border border-white/20 px-3 py-2 text-sm disabled:opacity-50"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                )}
+                {detail.data && (
+                  <>
+                    <CharacterEquipmentView data={detail.data} />
+                    <section
+                      className="glass-panel mb-6 space-y-4 rounded-xl p-4"
+                      aria-label="Focus and goals"
+                    >
+                      <FocusButton characterKey={characterKey} />
+                      <div className="flex flex-wrap gap-3 text-sm text-indigo-200">
+                        <Link
+                          to={`/planner?tab=farming&target=${encodeURIComponent(characterKey)}`}
+                        >
+                          Manage character goals
+                        </Link>
+                        <Link
+                          to={`/planner?tab=farming&newType=CHARACTER_ASCENSION&key=${encodeURIComponent(characterKey)}`}
+                        >
+                          Add ascension goal
+                        </Link>
+                        <Link
+                          to={`/planner?tab=farming&newType=CHARACTER_TALENT&key=${encodeURIComponent(characterKey)}`}
+                        >
+                          Add base talent goal
+                        </Link>
+                        {detail.data.weapon.item && (
+                          <Link
+                            to={`/planner?tab=farming&newType=WEAPON_ASCENSION&key=${encodeURIComponent(detail.data.weapon.item.weaponKey)}`}
+                          >
+                            Add weapon type goal ({detail.data.weapon.item.weaponKey})
+                          </Link>
+                        )}
+                      </div>
+                      <p className="text-xs text-zinc-400">
+                        Weapon goals retain the selected type key after equipment changes; they do
+                        not track a physical copy. Raw talent values cannot be compared to base
+                        talent targets.
+                      </p>
+                      {goals.isPending && <p role="status">Loading goals…</p>}
+                      {goals.error && (
+                        <p role="alert">
+                          Goals could not refresh. Last confirmed goals, if any, remain below.{' '}
+                          <button className="underline" onClick={() => void goals.refetch()}>
+                            Retry goals
+                          </button>
+                        </p>
+                      )}
+                      {goals.data
+                        ?.filter(
+                          (goal) =>
+                            goal.targetKey === characterKey && goal.goalType !== 'WEAPON_ASCENSION',
+                        )
+                        .map((goal) => (
+                          <p key={goal.id} className="text-sm">
+                            <Link
+                              className="text-indigo-200"
+                              to={`/planner?tab=farming&goal=${encodeURIComponent(goal.id)}`}
+                            >
+                              {goal.status} · Priority {goal.priority} · Declared {goal.fromPhase} →{' '}
+                              {goal.toPhase}
+                            </Link>
+                            {goal.goalType === 'CHARACTER_ASCENSION'
+                              ? ` · Stored ascension ${detail.data.character.ascension}; lifecycle remains your decision.`
+                              : ' · Base-level comparison unknown.'}
+                          </p>
+                        ))}
+                      <p className="text-xs text-zinc-400">
+                        Stored progression has no per-character observation timestamp. Section
+                        receipts describe imports.
+                      </p>
+                    </section>
+                  </>
+                )}
+              </>
+            )}
+            {reference.data && (
+              <>
+                <CharacterProfileKit reference={reference.data} data={detail.data} />
+                <EquipmentReferenceBrowser
+                  key={characterKey}
+                  reference={reference.data}
+                  data={detail.data}
+                />
+              </>
+            )}
+          </>
+        ) : (
+          <div className="space-y-6">
+            {kqmGuide.isLoading && (
+              <p role="status" className="glass-panel rounded-xl p-6">
+                Loading KQM theorycrafting guide…
+              </p>
+            )}
+            {kqmGuide.isError && (
+              <div
+                role="alert"
+                className="glass-panel space-y-4 rounded-2xl border border-zinc-800 p-6"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="rounded-full border border-amber-500/40 bg-amber-500/20 p-2 text-amber-300">
+                    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z" />
+                    </svg>
+                  </span>
+                  <div>
+                    <h2 className="text-xl font-bold text-white">
+                      {kqmGuideMissing ? 'No KQM Guide Indexed Yet' : 'KQM Guide Unavailable'}
+                    </h2>
+                    <p className="text-xs text-zinc-400">
+                      KeqingMains community theorycrafting source
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm text-zinc-300">
+                  {kqmGuideMissing
+                    ? `We haven't indexed a verified KQM theorycrafting guide for ${characterKey} yet.`
+                    : 'The KQM source could not be checked right now. Celestia knowledge and recorded equipment remain separate from this optional guide.'}
+                </p>
+                {!kqmGuideMissing && (
+                  <button
+                    type="button"
+                    onClick={() => void kqmGuide.refetch()}
+                    disabled={kqmGuide.isFetching}
+                    className="rounded-xl border border-white/20 px-4 py-2 text-xs text-zinc-200 disabled:opacity-50"
+                  >
+                    {kqmGuide.isFetching ? 'Retrying KQM source…' : 'Retry KQM source'}
+                  </button>
+                )}
+                {kqmGuideMissing && (
+                  <div>
+                    <a
+                      href={`https://keqingmains.com/?s=${encodeURIComponent(characterKey)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-xl border border-amber-500/50 bg-amber-500/20 px-4 py-2 text-xs font-medium text-amber-200 transition-all hover:bg-amber-500/30"
+                    >
+                      <span>Search KeqingMains.com</span>
+                      <svg
+                        className="h-3.5 w-3.5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+                      </svg>
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
+            {kqmGuide.data && <KqmGuideView guide={kqmGuide.data} />}
+          </div>
+        )}
+        <div className="mt-8">
+          <BuildInsights
+            characterKey={characterKey}
+            recordsBoundary={JSON.stringify(detail.data ?? null)}
+          />
+        </div>
+      </main>
+    </div>
+  );
+}

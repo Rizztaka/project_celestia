@@ -1,77 +1,119 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap');
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Manrope:wght@400;500;600;650;700;800&display=swap');
+@import 'tailwindcss';
 
 @theme {
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Outfit', sans-serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Manrope', system-ui, sans-serif;
+  --color-celestia-950: #101113;
+  --color-celestia-900: #181a1d;
+  --color-celestia-800: #222428;
+  --color-celestia-700: #303238;
+  --color-accent-300: #ead7ad;
+  --color-accent-400: #dcc18b;
+  --color-accent-500: #c9a96e;
+  --color-accent-glow: rgb(201 169 110 / 15%);
+  --color-indigo-50: #faf6ee;
+  --color-indigo-100: #f1e7d1;
+  --color-indigo-200: #e9d7b3;
+  --color-indigo-300: #dfc68f;
+  --color-indigo-400: #cfb072;
+  --color-indigo-500: #b99a60;
+  --color-indigo-600: #927742;
+  --color-indigo-700: #715d37;
+  --color-indigo-800: #53482f;
+  --color-indigo-900: #393326;
+  --color-indigo-950: #26231c;
+  --color-success-400: #84bea1;
+  --color-warning-400: #dfbc7c;
+  --color-danger-400: #ef9b94;
+}
 
-  /* Premium dark mode palette */
-  --color-celestia-950: #0a0a0c;
-  --color-celestia-900: #121216;
-  --color-celestia-800: #1c1c22;
-  --color-celestia-700: #272730;
-
-  /* Accent colors - vibrant, mystical feel */
-  --color-accent-400: #818cf8;
-  --color-accent-500: #6366f1;
-  --color-accent-glow: rgba(99, 102, 241, 0.5);
-
-  --color-success-400: #34d399;
-  --color-success-glow: rgba(52, 211, 153, 0.4);
-
-  --color-warning-400: #fbbf24;
-  --color-warning-glow: rgba(251, 191, 36, 0.4);
-
-  --color-danger-400: #f87171;
-  --color-danger-glow: rgba(248, 113, 113, 0.4);
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    margin: 0;
+    min-width: 0;
+    background: #101113;
+    color: #b0b1b5;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    color: #f1eee7;
+    letter-spacing: -0.035em;
+  }
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  summary {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  ::selection {
+    background: #cfb07244;
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid #dfc68f;
+    outline-offset: 4px;
+  }
 }
 
 @layer utilities {
   .glass-panel {
-    @apply bg-celestia-900/60 backdrop-blur-md border border-white/5 shadow-xl;
+    border: 1px solid #ffffff0e;
+    background: #191b1f;
+    box-shadow: 0 5px 24px #0000000d;
   }
-
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-400 to-indigo-300;
+    color: #ede1c6;
   }
-
   .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent-glow/20 hover:border-accent-500/50;
+    transition:
+      border-color 180ms,
+      background 180ms;
   }
-
+  .hover-lift:hover {
+    border-color: #cfb07255;
+    background: #202125;
+  }
   .animate-fade-in {
-    animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: enter-page 250ms ease-out;
   }
 }
-
-@keyframes fadeIn {
+@keyframes enter-page {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-    opacity: 1;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
-  100% {
-    transform: translateX(200%);
-    opacity: 0;
-  }
-}
-
-body {
-  @apply bg-celestia-950 text-zinc-300 font-sans antialiased selection:bg-accent-500/30;
-  /* Subtle radial gradient background for depth */
-  background-image: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
-}
-
-h1, h2, h3, h4, h5, h6 {
-  @apply font-display tracking-tight text-white;
 }

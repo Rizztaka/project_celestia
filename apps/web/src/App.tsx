@@ -45,7 +45,6 @@ const PasswordRecoveryPage = lazy(() => import('./pages/PasswordRecoveryPage'));
 const OAuthCallbackPage = lazy(() => import('./pages/OAuthCallbackPage'));
 const RosterPage = lazy(() => import('./pages/RosterPage'));
 const CharacterDetailPage = lazy(() => import('./pages/CharacterDetailPage'));
-const SimulatorsPage = lazy(() => import('./pages/SimulatorsPage'));
 const NikkeRosterPage = lazy(() =>
   import('./pages/nikke/NikkeRosterPage').then((m) => ({ default: m.NikkeRosterPage })),
 );
@@ -83,13 +82,11 @@ class ErrorBoundary extends React.Component<
     if (this.state.hasError) {
       return (
         <div className="flex h-screen w-screen flex-col items-center justify-center bg-zinc-950 p-6 text-center">
-          <h1 className="mb-4 text-3xl font-bold text-red-500">Fatal App Crash</h1>
-          <p className="mb-6 text-zinc-400">Something caused the app to crash entirely.</p>
-          <pre className="max-w-3xl overflow-auto rounded-lg bg-zinc-900 p-4 text-left text-sm text-red-300">
-            {this.state.error?.message}
-            {'\n\n'}
-            {this.state.error?.stack}
-          </pre>
+          <h1 className="mb-4 text-3xl font-medium text-white">Let's find our way back.</h1>
+          <p className="mb-6 max-w-md text-zinc-400">
+            This page couldn't finish loading. Reload to try again. Your saved account data stays on
+            the server.
+          </p>
           <button
             onClick={() => window.location.reload()}
             className="mt-8 rounded-lg bg-indigo-600 px-6 py-2 font-semibold text-white hover:bg-indigo-500"
@@ -153,8 +150,11 @@ function App() {
                   <Route path="/planner" element={<PlannerPage />} />
                   <Route path="/intelligence" element={<IntelligencePage />} />
                   <Route path="/endgame" element={<EndgamePage />} />
-                  <Route path="/simulators" element={<SimulatorsPage />} />
                   <Route path="/nikke/roster" element={<NikkeRosterPage />} />
+                  <Route
+                    path="/simulators"
+                    element={<Navigate to="/planner?tab=savings" replace />}
+                  />
                 </Route>
               </Route>
 

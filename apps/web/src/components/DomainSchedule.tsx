@@ -25,7 +25,9 @@ export default function DomainSchedule({
   initialOnlyGoals?: boolean;
 }) {
   const id = useId();
-  const [day, setDay] = useState(initialDay as string);
+  const [day, setDay] = useState<string>(
+    initialDay === 'today' && weekday === null ? 'week' : initialDay,
+  );
   const [search, setSearch] = useState('');
   const [onlyGoals, setOnlyGoals] = useState(initialOnlyGoals);
   const hasGoals = !!goalDomainKeys?.length;

@@ -1,0 +1,38 @@
+[
+  {
+    "path": "apps/web/src/App.tsx",
+    "sha256": "9d243a11d20ed76fe4d17568cc68090bbf29cfa2f386c13bf50f1b547921476d"
+  },
+  {
+    "path": "apps/web/src/pages/CharacterDetailPage.tsx",
+    "sha256": "1b967d88d55b35a363410d45189de493cfe7a36bba236bad992764eee28ef12a"
+  },
+  {
+    "path": "apps/web/src/pages/IntelligencePage.tsx",
+    "sha256": "d1e9ade4314093df47ddc41cdeab840b02f81ab32b5269c70bdad212de9125ed"
+  },
+  {
+    "path": "apps/web/src/pages/SimulatorsPage.tsx",
+    "sha256": "417457fd8f7494ecddf7ee6ce52822d2a8206ab9d36dff79718af8c567fd47b1"
+  },
+  {
+    "path": "apps/web/src/components/CompanionLayout.tsx",
+    "sha256": "a6815166ac58ebf3563f72b11d8bea315daf2477a1d046614771daa24a75a578"
+  },
+  {
+    "path": "apps/web/src/components/KqmGuideView.tsx",
+    "sha256": "1d14aeec0b3f1dde3b88a1618b5914aeeb33193a39b957275d6cfc47a534fcb6"
+  },
+  {
+    "path": "apps/web/src/lib/api.ts",
+    "sha256": "12b5089920792286a260270c6a99b0b978dfdcb26f2e25a258b542c6f951a7d4"
+  },
+  {
+    "path": "apps/web/src/App.css",
+    "sha256": "6e25a776d3e8102da5bacb3cb99f4a5fc662a2e01e6143140671a556d28c3d5c"
+  },
+  {
+    "path": "apps/web/public/icons.svg",
+    "sha256": "b45fa506195cfcdef406ba9f0c77b36ddc1a7c224040926ec70abc2fdea7b93a"
+  }
+]

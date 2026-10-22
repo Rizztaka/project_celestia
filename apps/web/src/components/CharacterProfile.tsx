@@ -28,7 +28,7 @@ export function CharacterProfileHeader({
         ? 'Unknown · Unavailable'
         : 'Not recorded';
   return (
-    <header className="glass-panel mb-6 space-y-5 rounded-2xl border border-white/15 p-5 sm:p-6">
+    <header className="character-hero glass-panel mb-6 space-y-5 rounded-2xl border border-white/15 p-5 sm:p-6">
       <div className="flex items-center gap-5">
         <GenshinAvatar characterKey={characterKey} size="xl" constellation={c?.constellation} />
         <div className="min-w-0">
@@ -45,7 +45,12 @@ export function CharacterProfileHeader({
           )}
         </div>
       </div>
-      {reference && <SourceText text={reference.description} />}
+      {reference && (
+        <details className="character-bio">
+          <summary className="text-xs text-zinc-400">About {reference.name}</summary>
+          <SourceText text={reference.description} />
+        </details>
+      )}
       <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
           ['Level', c?.level],
@@ -64,7 +69,7 @@ export function CharacterProfileHeader({
       </dl>
       <p className="text-xs leading-relaxed text-zinc-300">
         {c
-          ? 'Talent values are stored as supplied. Base versus constellation-adjusted levels and legacy/default origins are unknown; no bonuses have been added.'
+          ? 'Talent levels are shown as imported; no bonuses have been added. Base levels and constellation adjustments are unknown.'
           : recordsStatus === 'loading'
             ? 'Loading recorded progression and equipment.'
             : recordsStatus === 'unavailable'

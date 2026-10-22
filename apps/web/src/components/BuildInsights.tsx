@@ -16,9 +16,13 @@ const states = {
 };
 export function InsightCards({ cards }: { cards: BuildInsightCard[] }) {
   return (
-    <div className="space-y-3">
+    <div className="insight-grid">
       {cards.map((card) => (
-        <article key={card.id} className="rounded-lg border border-white/10 p-4">
+        <article
+          data-insight-state={card.state}
+          key={card.id}
+          className="rounded-lg border border-white/10 p-4"
+        >
           <div className="flex flex-wrap justify-between gap-2">
             <h3 className="font-semibold">{card.title}</h3>
             <span className="text-xs text-indigo-200">{states[card.state]}</span>

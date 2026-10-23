@@ -78,6 +78,7 @@ describe('Guarded verification orchestration', () => {
       'prisma-validate',
       'schema-diff',
       'full-suite',
+      'shared-contracts-lint',
       'api-lint',
       'api-types-and-build',
       'api-aliases',

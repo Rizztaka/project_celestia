@@ -27,3 +27,9 @@ Local evidence remains 1,634 passing tests / 100 files, including 138 required
 PostgreSQL cases, with the complete guarded verification command successful.
 Staged whitespace validation additionally covers newly added files; the SQL
 migration's final CRLF was normalized to LF without changing its statements.
+
+The first PR CI run passed guarded complete verification, then caught an unsorted
+shared-contract barrel export in the separate monorepo lint step. The export was
+sorted and the guarded verifier now includes shared-contract lint as well. Its
+orchestration regression checks that step, so a local green gate covers this
+package too. The production rollout prerequisites above remain unchanged.

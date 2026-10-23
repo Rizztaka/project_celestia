@@ -68,6 +68,7 @@ export * from './genshin/contextual-release.js';
 export * from './genshin/farming.js';
 export * from './genshin/goals.js';
 export * from './genshin/guide-knowledge.js';
+export * from './genshin/hoyolab.js';
 export {
   type ImportCommitRequest,
   importCommitRequestSchema,
@@ -87,5 +88,3 @@ export * from './genshin/profile-reference.js';
 export * from './genshin/theater.js';
 export * from './genshin/wishes.js';
 export { type CreateUserInput, createUserSchema } from './users/user.schema.js';
-
-export * from './genshin/hoyolab.js';

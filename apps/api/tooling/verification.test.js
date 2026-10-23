@@ -24,7 +24,9 @@ const safe = {
 };
 function evidence() {
   const counts = { ...integrationMinimums };
-  for (let i = 0; i < 38; i++) counts[`src/unit-${i}.test.ts`] = i === 0 ? 565 : 1;
+  for (let i = 0; i < 38; i++)
+    counts[`src/unit-${i}.test.ts`] =
+      i === 0 ? 671 - Object.values(integrationMinimums).reduce((a, b) => a + b, 0) : 1;
   const report = {
     success: true,
     numFailedTests: 0,
@@ -62,7 +64,12 @@ describe('Guarded verification orchestration', () => {
   it('safe input reaches ordered readiness, migration, full-suite and package checks', async () => {
     const { deps, events } = harness();
     const result = await runVerification(safe, deps);
-    expect(result.tests).toMatchObject({ passed: 708, files: 44, postgresCases: 106, skipped: 0 });
+    expect(result.tests).toMatchObject({
+      passed: 708,
+      files: 38 + Object.keys(integrationMinimums).length,
+      postgresCases: Object.values(integrationMinimums).reduce((a, b) => a + b, 0),
+      skipped: 0,
+    });
     expect(events).toEqual([
       'shared-types-and-build',
       'ready',
@@ -208,7 +215,10 @@ describe('Complete result evidence, not reported exit status alone', () => {
     });
     report.numPassedTests++;
     report.numTotalTests++;
-    expect(validateTestReport(report, expected)).toMatchObject({ passed: 709, files: 45 });
+    expect(validateTestReport(report, expected)).toMatchObject({
+      passed: 709,
+      files: 39 + Object.keys(integrationMinimums).length,
+    });
   });
 });
 

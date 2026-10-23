@@ -1,5 +1,5 @@
 import { prisma } from '@/core/db/prisma.js';
-import { NotFoundError } from '@/core/errors/app-error.js';
+import { NotFoundError, UnprocessableError } from '@/core/errors/app-error.js';
 
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
 import { GenshinCharacterService } from '../../characters/character.service.js';
@@ -78,22 +78,31 @@ function buildDailySeed(userId: string): number {
 // -------------------------------------------------------
 
 function toCharacterInput(chars: CharacterWithWeapon[]): CharacterInput[] {
-  return chars.map((c) => ({
-    characterKey: c.characterKey,
-    level: c.level,
-    ascension: c.ascension,
-    constellation: c.constellation,
-    talentNormal: c.talentNormal,
-    talentSkill: c.talentSkill,
-    talentBurst: c.talentBurst,
-    equippedWeapon: c.equippedWeapon
-      ? {
-          weaponKey: c.equippedWeapon.weaponKey,
-          level: c.equippedWeapon.level,
-          refinement: c.equippedWeapon.refinement,
-        }
-      : null,
-  }));
+  if (chars.some((c) => c.dataSource === 'hoyolab' || c.ascension === null))
+    throw new UnprocessableError(
+      'This legacy score requires confirmed ascension and base talent levels. View your equipped builds instead.',
+    );
+  return chars
+    .filter(
+      (c): c is CharacterWithWeapon & { ascension: number } =>
+        c.ascension !== null && c.dataSource !== 'hoyolab',
+    )
+    .map((c) => ({
+      characterKey: c.characterKey,
+      level: c.level,
+      ascension: c.ascension,
+      constellation: c.constellation,
+      talentNormal: c.talentNormal,
+      talentSkill: c.talentSkill,
+      talentBurst: c.talentBurst,
+      equippedWeapon: c.equippedWeapon
+        ? {
+            weaponKey: c.equippedWeapon.weaponKey,
+            level: c.equippedWeapon.level,
+            refinement: c.equippedWeapon.refinement,
+          }
+        : null,
+    }));
 }
 
 // -------------------------------------------------------

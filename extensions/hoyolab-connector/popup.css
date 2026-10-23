@@ -1,0 +1,41 @@
+body {
+  width: 320px;
+  padding: 22px;
+  background: #11141c;
+  color: #b5bdce;
+  font: 14px/1.6 system-ui;
+}
+h1 {
+  color: #f4f5f8;
+  font-size: 24px;
+  line-height: 1.2;
+}
+.eyebrow {
+  color: #99b5e6;
+  letter-spacing: 0.15em;
+  font-size: 10px;
+}
+a {
+  color: #b7d0fa;
+}
+button {
+  background: #b7c9ec;
+  color: #151c2b;
+  border: 0;
+  border-radius: 9px;
+  padding: 12px 20px;
+  font: 600 14px system-ui;
+  cursor: pointer;
+  width: 100%;
+}
+button:disabled {
+  opacity: 0.5;
+}
+#status {
+  color: #e1d1af;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 4px;
+}

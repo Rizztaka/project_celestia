@@ -11,16 +11,13 @@ const primary = [
   ['/', 'Today'],
   ['/roster', 'Characters'],
   ['/planner', 'Planner'],
-  ['/inventory', 'Inventory'],
+  ['/inventory', 'Equipment'],
 ] as const;
 const supporting = [
-  ['/import', 'Import'],
+  ['/connect', 'Account'],
   ['/profile', 'Settings & profile'],
 ] as const;
-const secondary = [
-  ['/intelligence', 'Build lab'],
-  ['/endgame', 'Endgame records'],
-] as const;
+const secondary = [['/endgame', 'Endgame records']] as const;
 
 function MobileNavigation({ signOut, signingOut }: { signOut: () => void; signingOut: boolean }) {
   const { pathname } = useLocation();
@@ -169,7 +166,7 @@ const navIcons: Record<string, Parameters<typeof UiIcon>[0]['name']> = {
   '/inventory': 'inventory',
   '/intelligence': 'insights',
   '/endgame': 'endgame',
-  '/import': 'import',
+  '/connect': 'import',
   '/profile': 'settings',
 };
 
@@ -242,12 +239,12 @@ export function CompanionNavigation() {
         <div className="sidebar-bottom">
           <Link
             className="sidebar-import"
-            to="/import"
-            aria-current={location.pathname === '/import' ? 'page' : undefined}
+            to="/connect"
+            aria-current={location.pathname === '/connect' ? 'page' : undefined}
           >
             <UiIcon name="import" />
             <span>
-              Import account data<small>Bring your builds along</small>
+              Connect HoYoLAB<small>Your equipped builds, synced</small>
             </span>
             <UiIcon name="arrow" />
           </Link>

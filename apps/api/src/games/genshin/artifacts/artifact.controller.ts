@@ -25,7 +25,10 @@ export class GenshinArtifactController {
    * global error handler in app.ts automatically.
    */
   listArtifacts = async (req: Request, res: Response) => {
-    const artifacts = await this.artifactService.getArtifactsForUser(req.user!.id);
+    const artifacts = await this.artifactService.getArtifactsForUser(
+      req.user!.id,
+      req.query.equipped === 'true',
+    );
     res
       .status(200)
       .json(

@@ -379,6 +379,13 @@ export function createRequestSafety(
       boundedJson(checked.importBytes),
       { existingSubject: true },
     ),
+    hoyolab: protect(
+      rateStore('hoyolab', { ...checked.import, burst: 3, refillMs: 60000 }),
+      concurrency('hoyolab', checked.importConcurrency),
+      ownerIdentity,
+      boundedJson(checked.authBytes),
+      { existingSubject: true, responseMs: 240000 },
+    ),
     accountData: protect(
       rateStore('account-data', accountDataPolicy.rate),
       concurrency('account-data', accountDataPolicy.concurrency),

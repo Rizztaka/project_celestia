@@ -122,6 +122,8 @@ export class GenshinImportRepository {
     if (selected.has('characters')) {
       for (const character of payload.characters ?? []) {
         const data = {
+          active: true,
+          dataSource: 'manual',
           level: character.level,
           ascension: character.ascension,
           constellation: character.constellation,

@@ -20,7 +20,7 @@ export class GenshinCharacterRepository {
   }
 
   async findByAccountId(accountId: string): Promise<GenshinCharacter[]> {
-    return prisma.genshinCharacter.findMany({ where: { accountId } });
+    return prisma.genshinCharacter.findMany({ where: { accountId, active: true } });
   }
 
   /**
@@ -29,7 +29,7 @@ export class GenshinCharacterRepository {
    */
   async findByAccountIdWithWeapon(accountId: string): Promise<CharacterWithWeapon[]> {
     return prisma.genshinCharacter.findMany({
-      where: { accountId },
+      where: { accountId, active: true },
       include: { equippedWeapon: true },
       orderBy: { level: 'desc' },
     });
@@ -41,7 +41,7 @@ export class GenshinCharacterRepository {
    */
   async findByAccountIdWithArtifacts(accountId: string) {
     return prisma.genshinCharacter.findMany({
-      where: { accountId },
+      where: { accountId, active: true },
       include: { equippedArtifacts: true },
       orderBy: { level: 'desc' },
     });

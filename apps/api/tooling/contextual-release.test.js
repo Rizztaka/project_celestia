@@ -506,18 +506,23 @@ describe('K3 immutable local release lifecycle', () => {
       expect(existsSync(join(root, 'writer.lock'))).toBe(false);
     },
   );
-  it('rejects release-ID reuse with different content and preserves finalized evidence', () => {
-    const { root, base } = store(),
-      input = candidate(base);
-    const first = publishCandidate(root, 'fixture-immutable', input, 'fixture');
-    expect(publishCandidate(root, first.id, input, 'fixture')).toEqual(first);
-    input.pack.limitations.push('Fixture-only changed bundle.');
-    const { contentHash: _, ...content } = input.pack;
-    input.pack.contentHash = digest(content);
-    void _;
-    expect(() => publishCandidate(root, first.id, input, 'fixture')).toThrow('immutable');
-    expect(loadRelease(root, first.id).descriptor).toEqual(first);
-  });
+  // Full immutable bundles are read and verified repeatedly; allow bounded Windows filesystem latency.
+  it(
+    'rejects release-ID reuse with different content and preserves finalized evidence',
+    { timeout: 15000 },
+    () => {
+      const { root, base } = store(),
+        input = candidate(base);
+      const first = publishCandidate(root, 'fixture-immutable', input, 'fixture');
+      expect(publishCandidate(root, first.id, input, 'fixture')).toEqual(first);
+      input.pack.limitations.push('Fixture-only changed bundle.');
+      const { contentHash: _, ...content } = input.pack;
+      input.pack.contentHash = digest(content);
+      void _;
+      expect(() => publishCandidate(root, first.id, input, 'fixture')).toThrow('immutable');
+      expect(loadRelease(root, first.id).descriptor).toEqual(first);
+    },
+  );
   it('fails selected-bundle startup visibly on corruption but does not mutate a loaded snapshot', () => {
     const { root, base } = store();
     writeFileSync(join(root, 'releases', baselineId, 'registry.json'), '[]');

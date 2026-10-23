@@ -5,6 +5,7 @@ import type { RequestSafety } from '@/core/middleware/request-admission.js';
 import { artifactRoutes } from './artifacts/artifact.routes.js';
 import { characterRoutes } from './characters/character.routes.js';
 import { endgameRoutes } from './endgame/endgame.routes.js';
+import { createHoyolabRoutes } from './hoyolab/hoyolab.routes.js';
 import { createImporterRoutes } from './importer/importer.routes.js';
 import { artifactIntelligenceRoutes } from './intelligence/artifact-intelligence/artifact-intelligence.routes.js';
 import { buildInsightsRoutes } from './intelligence/build-insights/build-insights.routes.js';
@@ -42,6 +43,7 @@ export function createGenshinRoutes(safety: RequestSafety) {
    * This file only aggregates â€” no route definitions belong here directly.
    */
   // Only the import router can choose large-body parsing, after auth and admission.
+  router.use(createHoyolabRoutes(safety));
   router.use(createImporterRoutes(safety));
   router.use(safety.ordinaryJson);
   router.use(buildInsightsRoutes);

@@ -4,6 +4,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { AccessibleTabs, TabPanel } from '../components/AccessibleTabs';
 import { BuildInsights } from '../components/BuildInsights';
 import { CharacterEquipmentView } from '../components/CharacterEquipmentView';
+import { CharacterNextSteps } from '../components/CharacterNextSteps';
 import { CharacterProfileHeader, CharacterProfileKit } from '../components/CharacterProfile';
 import { EquipmentReferenceBrowser } from '../components/EquipmentReference';
 import { FocusButton } from '../components/FocusButton';
@@ -89,6 +90,7 @@ export default function CharacterDetailPage() {
             </button>
           </p>
         )}
+        {detail.data && <CharacterNextSteps data={detail.data} goals={goals.data} />}
         <AccessibleTabs
           label="Character sections"
           prefix="character"
@@ -105,12 +107,15 @@ export default function CharacterDetailPage() {
           ]}
         />
         <TabPanel prefix="character" id="build" active={active}>
-          <div className="mb-7">
+          <details className="glass-panel mb-7 rounded-xl p-4">
+            <summary className="cursor-pointer text-sm text-zinc-300">
+              Detailed build analysis
+            </summary>
             <BuildInsights
               characterKey={characterKey}
               recordsBoundary={JSON.stringify(detail.data ?? null)}
             />
-          </div>
+          </details>
           {detail.isLoading && (
             <p role="status" className="glass-panel rounded-xl p-6">
               Loading recorded equipment…
@@ -123,12 +128,12 @@ export default function CharacterDetailPage() {
               </h2>
               <p>
                 {noImport
-                  ? 'No import is recorded for this account. This character is not in your recorded roster.'
+                  ? 'Connect HoYoLAB to load your roster.'
                   : 'This character is not in your recorded roster.'}
               </p>
               <div className="flex flex-wrap items-center gap-4 pt-2">
-                <Link to="/import" className="inline-block text-indigo-300 hover:text-indigo-200">
-                  Import character data →
+                <Link to="/connect" className="inline-block text-indigo-300 hover:text-indigo-200">
+                  Connect HoYoLAB →
                 </Link>
               </div>
             </div>

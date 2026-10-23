@@ -46,6 +46,7 @@ export const statNames: Record<string, string> = {
   geo_dmg_: 'Geo DMG',
   dendro_dmg_: 'Dendro DMG',
   phys_dmg_: 'Physical DMG',
+  physical_dmg_: 'Physical DMG',
   heal_: 'Healing Bonus',
 };
 export const statLabel = (key: string) => statNames[key] ?? (key || 'Unnamed stat');

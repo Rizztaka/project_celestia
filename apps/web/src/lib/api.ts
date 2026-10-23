@@ -217,7 +217,7 @@ export interface RosterCharacter {
   id: string;
   characterKey: string;
   level: number;
-  ascension: number;
+  ascension: number | null;
   constellation: number;
   talentNormal: number;
   talentSkill: number;
@@ -255,12 +255,13 @@ export function fetchCharacterEquipment(
 // ============================================================
 
 export interface InventoryWeapon {
+  equippedBy?: { id: string; characterKey: string } | null;
   id: string;
   weaponKey: string;
   level: number;
-  ascension: number;
+  ascension: number | null;
   refinement: number;
-  locked: boolean;
+  locked: boolean | null;
   equippedCharacterId: string | null;
 }
 
@@ -270,6 +271,9 @@ export interface ArtifactSubStat {
 }
 
 export interface InventoryArtifact {
+  equippedBy?: { id: string; characterKey: string } | null;
+  equippedCharacterId: string | null;
+  mainStatValue?: number | null;
   id: string;
   setKey: string;
   slotKey: string;
@@ -277,7 +281,7 @@ export interface InventoryArtifact {
   rarity: number;
   mainStatKey: string;
   subStats: ArtifactSubStat[];
-  locked: boolean;
+  locked: boolean | null;
 }
 
 export interface WeaponsResponse {
@@ -297,7 +301,7 @@ export interface ArtifactsResponse {
  * Always returns a WeaponsResponse, even if the user has no data yet.
  */
 export async function fetchGenshinWeapons(signal?: AbortSignal): Promise<WeaponsResponse> {
-  return fetchApi<WeaponsResponse>('/games/genshin/weapons', { signal });
+  return fetchApi<WeaponsResponse>('/games/genshin/weapons?equipped=true', { signal });
 }
 
 /**
@@ -308,7 +312,7 @@ export async function fetchGenshinWeapons(signal?: AbortSignal): Promise<Weapons
  * Always returns an ArtifactsResponse, even if the user has no data yet.
  */
 export async function fetchGenshinArtifacts(signal?: AbortSignal): Promise<ArtifactsResponse> {
-  return fetchApi<ArtifactsResponse>('/games/genshin/artifacts', { signal });
+  return fetchApi<ArtifactsResponse>('/games/genshin/artifacts?equipped=true', { signal });
 }
 
 // Companion V2: every mutation returns the complete shared revision.

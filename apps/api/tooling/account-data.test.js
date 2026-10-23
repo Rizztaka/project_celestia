@@ -3,7 +3,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('../src/core/db/prisma.js', () => ({ prisma: {} }));
 import { BoundedRateStore } from '../src/core/middleware/request-admission.ts';
-import { genshinAccountData } from '../src/games/genshin/account-data/genshin-account-data.ts';
+import {
+  genshinAccountData,
+  genshinSecurityModelDisposition,
+} from '../src/games/genshin/account-data/genshin-account-data.ts';
 import { nikkeAccountData } from '../src/games/nikke/account-data/nikke-account-data.ts';
 import { accountDataPolicy } from '../src/platform/account-data/account-data.policy.ts';
 import {
@@ -14,15 +17,14 @@ import { authSecurityModelDisposition } from '../src/platform/auth/security-disp
 
 describe('C5d schema coverage and resource policy', () => {
   it('requires explicit table and scalar-field disposition for every Prisma model', () => {
+    const securityModels = { ...authSecurityModelDisposition, ...genshinSecurityModelDisposition };
     const tables = [profileTable, ...genshinAccountData.tables, ...nikkeAccountData.tables];
     const models = Prisma.dmmf.datamodel.models;
     expect(tables.length).toBe(20);
-    expect(models.length).toBe(tables.length + Object.keys(authSecurityModelDisposition).length);
+    expect(models.length).toBe(tables.length + Object.keys(securityModels).length);
     for (const model of models) {
-      if (Object.hasOwn(authSecurityModelDisposition, model.name)) {
-        expect(authSecurityModelDisposition[model.name]).toBe(
-          'exclude_from_export_cascade_on_delete',
-        );
+      if (Object.hasOwn(securityModels, model.name)) {
+        expect(securityModels[model.name]).toBe('exclude_from_export_cascade_on_delete');
         continue;
       }
       const table = tables.find((item) => item.table === (model.dbName ?? model.name));

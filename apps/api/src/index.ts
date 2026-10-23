@@ -6,6 +6,9 @@ import { disconnectRedis } from '@/core/infra/redis.js';
 import { createShutdownHandler } from '@/core/infra/shutdown.js';
 import { logger } from '@/core/logger/logger.js';
 
+import { startHoyolabRefresh } from './games/genshin/hoyolab/hoyolab.scheduler.js';
+
+const stopHoyolabRefresh = startHoyolabRefresh();
 const PORT = parseInt(env.PORT, 10);
 
 const server = app.listen(PORT, () => {
@@ -15,7 +18,7 @@ const server = app.listen(PORT, () => {
 const gracefulShutdown = createShutdownHandler({
   server,
   drain: markDraining,
-  disconnect: [disconnectDatabase, disconnectRedis],
+  disconnect: [stopHoyolabRefresh, disconnectDatabase, disconnectRedis],
   logger,
 });
 

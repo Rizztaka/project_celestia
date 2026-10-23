@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Connect HoYoLAB</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <p class="eyebrow">CELESTIA · ACCOUNT CONNECTION</p>
+    <h1>Your builds, connected.</h1>
+    <p>Sign in on HoYoLAB, then return to Celestia’s Connect page and choose “Ready to connect”.</p>
+    <a href="https://www.hoyolab.com/" target="_blank" rel="noreferrer">Open HoYoLAB ↗</a>
+    <p>
+      Connect shares only your HoYoLAB session with Celestia. Celestia encrypts it on its server to
+      refresh your builds about every 15 minutes. Disconnect in Celestia to stop. Your password
+      stays with HoYoLAB.
+    </p>
+    <button id="connect">Connect HoYoLAB</button>
+    <p id="status" role="status" aria-live="polite"></p>
+    <script src="policy.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

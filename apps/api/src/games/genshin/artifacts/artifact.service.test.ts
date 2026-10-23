@@ -31,6 +31,7 @@ const mockArtifact: GenshinArtifact = {
   slotKey: 'goblet',
   level: 20,
   rarity: 5,
+  mainStatValue: null,
   mainStatKey: 'pyro_dmg_',
   subStats: [
     { key: 'critRate_', value: 6.6 },

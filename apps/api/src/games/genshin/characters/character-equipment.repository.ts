@@ -40,7 +40,7 @@ export class GenshinCharacterEquipmentRepository {
         NOT EXISTS (SELECT 1 FROM genshin_artifacts ar
           WHERE ar."equippedCharacterId" = c.id AND ar."accountId" <> a.id) AS "artifactRelationsConsistent"
       FROM genshin_accounts a JOIN genshin_characters c ON c."accountId" = a.id
-      WHERE a."userId" = ${userId} AND c."characterKey" = ANY(${characterKeys}::text[])
+      WHERE a."userId" = ${userId} AND c.active = true AND c."characterKey" = ANY(${characterKeys}::text[])
       ORDER BY c."characterKey"
     `;
     return rows;

@@ -296,7 +296,7 @@ describe('C3b actual client, mutation cache and originating session', () => {
     expect(talent).toContain('max="9"');
     expect(talent).toContain('max="10"');
     expect(talent).toContain('excluding constellation bonuses');
-    expect(talent).toContain('Imported talents do not change your starting value');
+    expect(talent).toContain('Sync does not change your chosen starting value');
     expect(talent).toContain('for=');
   });
 });

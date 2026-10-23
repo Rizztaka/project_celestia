@@ -23,6 +23,8 @@ export const genshinAccountTables: readonly AccountTable[] = [
     'id',
     'accountId',
     'characterKey',
+    'active',
+    'dataSource',
     'level',
     'ascension',
     'constellation',
@@ -52,6 +54,7 @@ export const genshinAccountTables: readonly AccountTable[] = [
     'level',
     'rarity',
     'mainStatKey',
+    'mainStatValue',
     'subStats',
     'locked',
     'equippedCharacterId',
@@ -223,3 +226,8 @@ export const genshinAccountData: AccountDataDomain = {
     await tx.upgradeGoal.deleteMany({ where: { userId: owner } });
   },
 };
+
+// Session credentials are deliberately excluded from account downloads and cascade on deletion.
+export const genshinSecurityModelDisposition = {
+  GenshinHoyolabConnection: 'exclude_from_export_cascade_on_delete',
+} as const;

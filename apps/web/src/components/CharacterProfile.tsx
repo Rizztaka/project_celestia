@@ -54,7 +54,7 @@ export function CharacterProfileHeader({
       <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
           ['Level', c?.level],
-          ['Ascension', c?.ascension],
+          ['Ascension', c ? (c.ascension ?? 'Not supplied') : undefined],
           ['Constellations', c ? `C${c.constellation}` : undefined],
           [
             'Talents · Normal / Skill / Burst',
@@ -69,7 +69,9 @@ export function CharacterProfileHeader({
       </dl>
       <p className="text-xs leading-relaxed text-zinc-300">
         {c
-          ? 'Talent levels are shown as imported; no bonuses have been added. Base levels and constellation adjustments are unknown.'
+          ? c.talentBasis === 'hoyolab_displayed'
+            ? 'Talent levels match HoYoLAB and may include constellation bonuses.'
+            : 'Talent levels are shown as recorded; no bonuses have been added. Base levels and constellation adjustments are unknown.'
           : recordsStatus === 'loading'
             ? 'Loading recorded progression and equipment.'
             : recordsStatus === 'unavailable'

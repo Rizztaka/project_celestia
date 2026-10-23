@@ -14,6 +14,14 @@ export class GenshinWeaponRepository {
     });
   }
 
+  async findEquippedByAccountId(accountId: string) {
+    return prisma.genshinWeapon.findMany({
+      where: { accountId, equippedBy: { is: { accountId, active: true } } },
+      include: { equippedBy: { select: { id: true, characterKey: true } } },
+      orderBy: { level: 'desc' },
+    });
+  }
+
   async findById(id: string): Promise<GenshinWeapon | null> {
     return prisma.genshinWeapon.findUnique({ where: { id } });
   }

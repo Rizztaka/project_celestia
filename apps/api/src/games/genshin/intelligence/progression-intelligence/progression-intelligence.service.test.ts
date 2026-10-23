@@ -38,6 +38,8 @@ function character(
   input: Pick<CharacterWithWeapon, 'characterKey'> & Partial<CharacterWithWeapon>,
 ): CharacterWithWeapon {
   return {
+    active: true,
+    dataSource: 'manual',
     id: input.characterKey,
     accountId: mockAccount.id,
     level: 1,
@@ -91,6 +93,8 @@ describe('Progression Intelligence Service', () => {
 
     // Mock a roster that is exactly 50% of the total characters
     const mockRoster = Array.from({ length: Math.floor(totalChars / 2) }).map((_, i) => ({
+      active: true,
+      dataSource: 'manual',
       characterKey: `Char${i}`,
       level: 1,
       ascension: 1,

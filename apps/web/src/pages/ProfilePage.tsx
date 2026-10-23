@@ -48,13 +48,12 @@ export default function ProfilePage() {
           <Link className={planButton} to="/#plan-choices">
             Routine choices & resin ceiling
           </Link>
-          <Link className={planButton} to="/import">
-            Import observations
+          <Link className={planButton} to="/connect">
+            HoYoLAB connection
           </Link>
         </div>
         <p className="text-sm text-zinc-400">
-          Asia, America, Europe and TW/HK/MO reset tracking are supported. Imports are optional and
-          preserve focus, declared goals and plan choices.
+          Manage your HoYoLAB connection, server reminders and upgrade goals independently.
         </p>
       </section>
       <section aria-label="Account profile" className="glass-panel space-y-4 rounded-xl p-5">

@@ -59,12 +59,14 @@ export class GenshinWeaponService {
    * Returns an empty array — never throws — when the user has no Genshin
    * account yet. An empty inventory is a valid state.
    */
-  async getWeaponsForUser(userId: string): Promise<GenshinWeapon[]> {
+  async getWeaponsForUser(userId: string, equippedOnly = false): Promise<GenshinWeapon[]> {
     const account = await prisma.genshinAccount.findUnique({
       where: { userId },
     });
     if (!account) return [];
-    return this.weaponRepository.findByAccountId(account.id);
+    return equippedOnly
+      ? this.weaponRepository.findEquippedByAccountId(account.id)
+      : this.weaponRepository.findByAccountId(account.id);
   }
 
   /**

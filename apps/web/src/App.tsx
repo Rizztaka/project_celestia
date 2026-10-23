@@ -11,7 +11,7 @@
  *   /register    — public, RegisterPage
  *   /            — protected, DashboardPage
  *   /profile     — protected, ProfilePage
- *   /import      — protected, ImportPage
+ *   /connect     — protected, AccountConnectionPage
  *   /roster      — protected, RosterPage   ← Milestone 2D
  *   /inventory   — protected, InventoryPage ← Milestone 2E
  *
@@ -32,8 +32,7 @@ import { useAuthStore } from './stores/auth.store';
 // Lazy loaded page components
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const EndgamePage = lazy(() => import('./pages/EndgamePage'));
-const ImportPage = lazy(() => import('./pages/ImportPage'));
-const IntelligencePage = lazy(() => import('./pages/IntelligencePage'));
+const AccountConnectionPage = lazy(() => import('./pages/AccountConnectionPage'));
 const InventoryPage = lazy(() => import('./pages/InventoryPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const PlannerPage = lazy(() => import('./pages/PlannerPage'));
@@ -142,13 +141,14 @@ function App() {
                 <Route element={<CompanionLayout />}>
                   <Route path="/" element={<DashboardPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/import" element={<ImportPage />} />
+                  <Route path="/connect" element={<AccountConnectionPage />} />
+                  <Route path="/import" element={<Navigate to="/connect" replace />} />
                   <Route path="/roster" element={<RosterPage />} />
                   <Route path="/roster/:characterKey" element={<CharacterDetailPage />} />
                   <Route path="/characters/:characterKey" element={<CharacterDetailPage />} />
                   <Route path="/inventory" element={<InventoryPage />} />
                   <Route path="/planner" element={<PlannerPage />} />
-                  <Route path="/intelligence" element={<IntelligencePage />} />
+                  <Route path="/intelligence" element={<Navigate to="/roster" replace />} />
                   <Route path="/endgame" element={<EndgamePage />} />
                   <Route path="/nikke/roster" element={<NikkeRosterPage />} />
                   <Route

@@ -211,9 +211,7 @@ export default function TheaterCastBuilder({ roster }: { roster: RosterCharacter
               Clear selection
             </button>
             {!result.candidates.length && (
-              <p className="mt-4 text-sm text-zinc-300">
-                Import your roster to evaluate owned characters.
-              </p>
+              <p className="mt-4 text-sm text-zinc-300">Connect HoYoLAB to evaluate your roster.</p>
             )}
             <div className="mt-4 grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
               {result.candidates.map((c) => (

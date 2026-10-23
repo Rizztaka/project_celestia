@@ -22,7 +22,7 @@ function artifact(row: GenshinArtifact): RecordedArtifact {
     level: row.level,
     rarity: row.rarity,
     mainStatKey: row.mainStatKey,
-    mainStatValue: null,
+    mainStatValue: row.mainStatValue ?? null,
     subStats: subStats.success ? subStats.data : null,
     locked: row.locked,
   };
@@ -86,7 +86,8 @@ export class GenshinCharacterEquipmentService {
           skill: character.talentSkill,
           burst: character.talentBurst,
         },
-        talentBasis: 'stored_convention_unknown',
+        talentBasis:
+          character.dataSource === 'hoyolab' ? 'hoyolab_displayed' : 'stored_convention_unknown',
       },
       provenance,
       weapon: weapon

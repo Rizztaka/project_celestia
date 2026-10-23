@@ -53,6 +53,8 @@ const account: NonNullable<ImportSnapshot> = {
     {
       id: 'character-a',
       accountId: 'account-a',
+      active: true,
+      dataSource: 'manual',
       characterKey: 'HuTao',
       level: 80,
       constellation: 0,

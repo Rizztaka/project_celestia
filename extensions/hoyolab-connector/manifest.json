@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Celestia HoYoLAB Connector",
+  "version": "0.1.0",
+  "description": "Connect your HoYoLAB session to Celestia when you explicitly choose Connect.",
+  "permissions": ["cookies", "activeTab"],
+  "host_permissions": ["https://*.hoyolab.com/*"],
+  "action": { "default_popup": "popup.html" },
+  "content_scripts": [
+    {
+      "matches": ["https://projectcelestia.vercel.app/connect"],
+      "js": ["bridge.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

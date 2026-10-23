@@ -18,6 +18,8 @@ const OTHER_ACCOUNT_ID = 'account-xyz-999';
 const mockCharacter: GenshinCharacter = {
   id: 'char-abc-123',
   accountId: ACCOUNT_ID,
+  active: true,
+  dataSource: 'manual',
   characterKey: 'hutao',
   level: 90,
   ascension: 6,

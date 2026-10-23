@@ -290,14 +290,11 @@ export default function PlannerPage() {
                     : 'Partial costs — unavailable goals are excluded from totals.'}
                 </p>
                 <p className="mt-2">
-                  Costs use your declared from → target range; re-import does not measure a new
-                  remaining-upgrade cost. Stock is recorded from imports; it is not live inventory.
-                  No inventory entry is required: planning counts the full requirement for
-                  unrecorded items, then credits recorded stock and 3:1 crafting from surplus lower
-                  tiers. Missing stock observations remain unknown.
+                  Costs follow your chosen start and target. HoYoLAB does not supply material stock;
+                  quantities needed may be unknown. Previously recorded stock can be out of date.
                 </p>
                 <p className="mt-1">
-                  Import basis: {materialsData.stockBasis.source ?? 'source unknown'} ·{' '}
+                  Saved stock source: {materialsData.stockBasis.source ?? 'source unknown'} ·{' '}
                   {materialsData.stockBasis.importedAt
                     ? new Date(materialsData.stockBasis.importedAt).toLocaleString()
                     : 'receipt time unknown'}

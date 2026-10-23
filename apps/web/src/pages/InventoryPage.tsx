@@ -13,6 +13,7 @@ import {
   type InventoryWeapon,
 } from '../lib/api';
 import { artworkDisplayName, weaponMetadata } from '../lib/artwork';
+import { statValue } from '../lib/profile-presentation';
 
 // -------------------------------------------------------
 // Formatting utilities
@@ -90,7 +91,7 @@ function WeaponCard({ weapon }: { weapon: InventoryWeapon }) {
   const displayName = formatName(weapon.weaponKey);
   const metadata = weaponMetadata[weapon.weaponKey];
   const ref = refinementClasses(weapon.refinement);
-  const isEquipped = weapon.equippedCharacterId !== null;
+  const isEquipped = !!weapon.equippedBy || !!weapon.equippedCharacterId;
 
   return (
     <div
@@ -124,7 +125,18 @@ function WeaponCard({ weapon }: { weapon: InventoryWeapon }) {
           className={`h-1.5 w-1.5 shrink-0 rounded-full ${isEquipped ? 'bg-emerald-400' : 'bg-zinc-600'}`}
         />
         <span className={isEquipped ? 'text-emerald-400' : 'text-zinc-600'}>
-          {isEquipped ? 'Assignment recorded' : 'No assignment recorded'}
+          {weapon.equippedBy ? (
+            <Link
+              className="hover:underline"
+              to={`/roster/${encodeURIComponent(weapon.equippedBy.characterKey)}`}
+            >
+              Equipped on {formatName(weapon.equippedBy.characterKey)}
+            </Link>
+          ) : isEquipped ? (
+            'Assignment recorded'
+          ) : (
+            'Assignment unknown'
+          )}
         </span>
         {weapon.locked && (
           <svg
@@ -170,7 +182,21 @@ function ArtifactRow({ artifact }: { artifact: InventoryArtifact }) {
         <p className="group-hover:text-accent-400 truncate text-sm font-medium text-white transition-colors">
           {setName}
         </p>
-        <p className="text-xs text-zinc-500">{slot.label}</p>
+        <p className="text-xs text-zinc-500">
+          {slot.label}
+          {artifact.equippedBy && (
+            <>
+              {' '}
+              ·{' '}
+              <Link
+                className="text-indigo-200 hover:underline"
+                to={`/roster/${encodeURIComponent(artifact.equippedBy.characterKey)}`}
+              >
+                {formatName(artifact.equippedBy.characterKey)}
+              </Link>
+            </>
+          )}
+        </p>
       </div>
 
       {/* Rarity + level */}
@@ -183,7 +209,14 @@ function ArtifactRow({ artifact }: { artifact: InventoryArtifact }) {
 
       {/* Main stat */}
       <div className="w-20 shrink-0">
-        <span className="text-sm font-semibold text-white">{mainStat}</span>
+        <span className="text-sm font-semibold text-white">
+          {mainStat}
+          {artifact.mainStatValue != null && (
+            <span className="block text-xs text-zinc-300">
+              {statValue(artifact.mainStatKey, artifact.mainStatValue)}
+            </span>
+          )}
+        </span>
       </div>
 
       {/* Sub-stats */}
@@ -195,7 +228,10 @@ function ArtifactRow({ artifact }: { artifact: InventoryArtifact }) {
           >
             {formatStat(sub.key)}{' '}
             <span className="text-zinc-400">
-              {Number.isInteger(sub.value) ? sub.value : sub.value.toFixed(1)}
+              {statValue(
+                sub.key,
+                Number.isInteger(sub.value) ? sub.value : Number(sub.value.toFixed(1)),
+              )}
             </span>
           </span>
         ))}
@@ -285,13 +321,13 @@ function EmptyState({ type }: { type: 'weapons' | 'artifacts' }) {
       </div>
       <h2 className="font-display mb-3 text-2xl font-bold text-white">No {label} found</h2>
       <p className="mb-8 max-w-sm text-base leading-relaxed text-zinc-400">
-        Import your Genshin account data to see your {label} here.
+        Connect HoYoLAB to see your equipped {label} here.
       </p>
       <Link
-        to="/import"
+        to="/connect"
         className="from-accent-500 hover:from-accent-400 shadow-accent-glow/30 rounded-xl bg-gradient-to-r to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition-all hover:to-indigo-500"
       >
-        Import Account
+        Connect HoYoLAB
       </Link>
     </div>
   );
@@ -320,7 +356,7 @@ function TabBar({
 
   return (
     <AccessibleTabs
-      label="Inventory sections"
+      label="Equipment sections"
       prefix="inventory"
       tabs={tabs.map((tab) => ({ id: tab.id, label: `${tab.label} (${tab.count ?? 'Unknown'})` }))}
       active={active}
@@ -336,7 +372,7 @@ function TabBar({
 // -------------------------------------------------------
 // InventoryPage — main export
 // -------------------------------------------------------
-import { ImportStatus } from '../components/ImportStatus';
+import { HoyolabSummary } from '../components/HoyolabSummary';
 
 export default function InventoryPage() {
   const [activeTab, setActiveTab] = useState<Tab>('weapons');
@@ -371,28 +407,28 @@ export default function InventoryPage() {
         tabIndex={-1}
         className="relative z-10 mx-auto max-w-7xl px-6 py-12"
       >
-        <ImportStatus />
+        <HoyolabSummary compact />
         {/* Page heading */}
         <div className="animate-fade-in mb-8">
           <p className="eyebrow">YOUR EQUIPMENT</p>
-          <h1 className="font-display text-4xl font-bold tracking-tight text-white">Inventory</h1>
+          <h1 className="font-display text-4xl font-bold tracking-tight text-white">Equipment</h1>
           <p className="mt-2 text-base text-zinc-400">
             {isWeaponsLoading || isArtifactsLoading
-              ? 'Loading your inventory…'
-              : `Recorded weapons: ${weaponsQuery.data?.total ?? 'unknown'} · artifacts: ${artifactsQuery.data?.total ?? 'unknown'}`}
+              ? 'Loading equipped gear…'
+              : `Equipped weapons: ${weaponsQuery.data?.total ?? 'unknown'} · artifacts: ${artifactsQuery.data?.total ?? 'unknown'}`}
           </p>
         </div>
 
         <p className="mb-4 text-sm text-zinc-400">
-          These are imported records, not live equipment. An absent assignment does not confirm an
-          empty in-game slot.
+          Equipped gear from your latest saved snapshot. Refresh your HoYoLAB connection to fetch
+          changes.
         </p>
         <button
           className="mb-4 rounded-lg border border-white/20 px-3 py-2 text-sm"
           disabled={activeQuery.isFetching}
           onClick={() => void activeQuery.refetch()}
         >
-          {activeQuery.isFetching ? 'Refreshing inventory…' : 'Refresh inventory'}
+          {activeQuery.isFetching ? 'Reloading…' : 'Reload saved gear'}
         </button>
         {/* Tab bar — rendered with live counts once data arrives */}
         <TabBar
@@ -462,8 +498,8 @@ export default function InventoryPage() {
             {!isArtifactsLoading && artifacts.length > 0 && (
               <div className="animate-fade-in flex flex-col gap-2">
                 {/* Artifact list header */}
-                <div className="hidden items-center gap-3 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-600 md:flex">
-                  <div className="w-8 shrink-0" />
+                <div className="hidden items-center gap-3 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-600 min-[1000px]:flex">
+                  <div className="w-12 shrink-0" />
                   <div className="w-44 shrink-0">Set · Slot</div>
                   <div className="w-20 shrink-0">Rarity · Lv</div>
                   <div className="w-20 shrink-0">Main Stat</div>

@@ -70,7 +70,7 @@ describe('C5 real navigation, rendering and transport regressions', () => {
     ['/roster/Opaque%20%2F%20%E5%AD%97', 'Characters'],
     ['/planner?tab=farming&goal=opaque%2Fid&status=paused', 'Planner'],
     ['/profile', 'Settings &amp; profile'],
-    ['/intelligence', 'Build lab'],
+    ['/connect', 'Account'],
     ['/characters/Albedo', 'Characters'],
   ])(
     'marks the correct destination for %s and preserves supported destinations',
@@ -79,7 +79,7 @@ describe('C5 real navigation, rendering and transport regressions', () => {
       expect(html).toMatch(
         new RegExp(String.raw`aria-current="page"[^>]*>(?:(?!</a>)[\s\S])*?${label}<`),
       );
-      for (const path of ['/import', '/inventory', '/profile', '/intelligence', '/endgame'])
+      for (const path of ['/connect', '/inventory', '/profile', '/endgame'])
         expect(html).toContain(`href="${path}"`);
       expect(html).toContain('href="#companion-content"');
       expect(html).not.toContain('href="/simulators"');
@@ -102,7 +102,7 @@ describe('C5 real navigation, rendering and transport regressions', () => {
       'No character observations yet',
     );
     qc.setQueryData(['genshin', 'characters'], { characters: [], total: 0 });
-    expect(render(Roster, '/roster', qc)).toContain('Create a goal without importing');
+    expect(render(Roster, '/roster', qc)).toContain('Create a goal');
   });
   it('renders labeled retained roster records after the actual query cache receives a failure', async () => {
     const qc = rosterClient();
@@ -131,7 +131,7 @@ describe('C5 real navigation, rendering and transport regressions', () => {
         .catch(() => {});
     }
     const html = render(Inventory, '/inventory', qc);
-    expect(html).toContain('Recorded weapons: unknown');
+    expect(html).toContain('Equipped weapons: unknown');
     expect(html).not.toContain('No weapons found');
   });
   it('profile recovery keeps confirmed owner details and existing settings routes', async () => {

@@ -77,7 +77,7 @@ function OwnedTeamBuilder({ ownerId }: { ownerId: string }) {
       <header>
         <h2 className="text-xl font-semibold text-white">Team Builder</h2>
         <p className="mt-2 text-sm text-zinc-400">
-          Build from your imported roster, inspect resonances and save teams for your next run.
+          Build from your saved roster, inspect resonances and save teams for your next run.
         </p>
       </header>
       {roster.isPending && <p role="status">Loading your roster…</p>}
@@ -89,9 +89,7 @@ function OwnedTeamBuilder({ ownerId }: { ownerId: string }) {
           </button>
         </p>
       )}
-      {roster.data?.characters.length === 0 && (
-        <p>Import your characters to unlock the team picker.</p>
-      )}
+      {roster.data?.characters.length === 0 && <p>Connect HoYoLAB to load your characters.</p>}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {slots.map((key, index) => (
           <div key={index} className="space-y-2 rounded-xl border border-zinc-700 p-3">

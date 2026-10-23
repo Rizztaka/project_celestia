@@ -127,8 +127,8 @@ export default function GoalForm({
         {goalType === 'WEAPON_ASCENSION'
           ? 'This intent tracks a weapon type, not one physical copy or its assignment. Progress comparison is unknown.'
           : isTalent
-            ? 'Set base talent levels 1–10, excluding constellation bonuses. Imported talents do not change your starting value.'
-            : 'Declare ascension phases 0–6. Imports never advance this starting value.'}
+            ? 'Set base talent levels 1–10, excluding constellation bonuses. Sync does not change your chosen starting value.'
+            : 'Declare ascension phases 0–6. Sync never advances this starting value.'}
       </p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <label className="text-sm" htmlFor={`${id}-from`}>

@@ -75,12 +75,14 @@ export class GenshinArtifactService {
    * Returns an empty array — never throws — when the user has no Genshin
    * account yet. An empty inventory is a valid state.
    */
-  async getArtifactsForUser(userId: string): Promise<GenshinArtifact[]> {
+  async getArtifactsForUser(userId: string, equippedOnly = false): Promise<GenshinArtifact[]> {
     const account = await prisma.genshinAccount.findUnique({
       where: { userId },
     });
     if (!account) return [];
-    return this.artifactRepository.findByAccountId(account.id);
+    return equippedOnly
+      ? this.artifactRepository.findEquippedByAccountId(account.id)
+      : this.artifactRepository.findByAccountId(account.id);
   }
 
   /**

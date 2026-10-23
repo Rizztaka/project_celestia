@@ -68,6 +68,7 @@ export * from './genshin/contextual-release.js';
 export * from './genshin/farming.js';
 export * from './genshin/goals.js';
 export * from './genshin/guide-knowledge.js';
+export * from './genshin/hoyolab.js';
 export {
   type ImportCommitRequest,
   importCommitRequestSchema,

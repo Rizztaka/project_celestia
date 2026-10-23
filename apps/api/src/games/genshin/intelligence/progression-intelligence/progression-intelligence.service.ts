@@ -1,5 +1,5 @@
 import { prisma } from '@/core/db/prisma.js';
-import { NotFoundError } from '@/core/errors/app-error.js';
+import { NotFoundError, UnprocessableError } from '@/core/errors/app-error.js';
 
 import { GenshinCharacterService } from '../../characters/character.service.js';
 import {
@@ -41,6 +41,10 @@ export class ProgressionIntelligenceService {
 
     const charService = new GenshinCharacterService();
     const roster = await charService.getCharactersForUser(userId);
+    if (roster.some((c) => c.ascension === null))
+      throw new UnprocessableError(
+        'Ascension progress cannot be scored while some source level caps are unknown. View the individual builds instead.',
+      );
     const totalAvailableCharacters = collectibleCharacterCount;
     const owned = roster.length;
 
@@ -54,7 +58,9 @@ export class ProgressionIntelligenceService {
 
     // 2. Ascension Maturity
     // Count characters with ascension >= 5 (meaning level 80+)
-    const highlyAscended = roster.filter((char) => char.ascension >= 5).length;
+    const highlyAscended = roster.filter(
+      (char) => char.ascension !== null && char.ascension >= 5,
+    ).length;
     const maturityPercentage = owned > 0 ? (highlyAscended / owned) * 100 : 0;
     let maturityRank = 'Trainee';
     if (maturityPercentage >= 80) maturityRank = 'Abyss Ready';

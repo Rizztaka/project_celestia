@@ -29,6 +29,7 @@ export const applicationTables = [
   'password_reset_tokens',
   'email_verification_tokens',
   'genshin_accounts',
+  'genshin_hoyolab_connections',
   'genshin_characters',
   'genshin_weapons',
   'genshin_artifacts',
@@ -72,6 +73,12 @@ export async function seed(client, syntheticLoginPassword) {
         'users',
         row({ id, email: `c5b-${key}@test.invalid`, username: `c5b-${key}`, password }),
       );
+      await insert('genshin_hoyolab_connections', {
+        userId: id,
+        encryptedSession: 'synthetic-ciphertext-not-a-real-session',
+        roles: '[]',
+        ...timestamps,
+      });
       const digest = (kind) => createHash('sha256').update(`synthetic-${kind}-${id}`).digest('hex');
       await insert(
         'sessions',

@@ -1,0 +1,95 @@
+[
+  {
+    "repo": "seriaati/genshin.py",
+    "commit": "2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213",
+    "path": "genshin/models/genshin/chronicle/characters.py",
+    "url": "https://raw.githubusercontent.com/seriaati/genshin.py/2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213/genshin/models/genshin/chronicle/characters.py",
+    "sha256": "2666998c4588bdc55b8ad93ec932223b3fe9b258549b807397ec0d5e585d2e2c"
+  },
+  {
+    "repo": "seriaati/genshin.py",
+    "commit": "2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213",
+    "path": "genshin/models/genshin/chronicle/notes.py",
+    "url": "https://raw.githubusercontent.com/seriaati/genshin.py/2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213/genshin/models/genshin/chronicle/notes.py",
+    "sha256": "891b2aabe8c7c3479ad8022ca55046716765bb9e65d6b311661943920d324d56"
+  },
+  {
+    "repo": "seriaati/genshin.py",
+    "commit": "2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213",
+    "path": "genshin/models/genshin/character.py",
+    "url": "https://raw.githubusercontent.com/seriaati/genshin.py/2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213/genshin/models/genshin/character.py",
+    "sha256": "03de797ad54ee626c8fdf4823fa9a9ef741a502f199524f324cc1fe7412de638"
+  },
+  {
+    "repo": "LeiShi1313/genshin-good-exporter",
+    "commit": "6ef0b920772308e5eaa12becea43bfa919a5f9a4",
+    "path": "src/lib/convert.js",
+    "url": "https://raw.githubusercontent.com/LeiShi1313/genshin-good-exporter/6ef0b920772308e5eaa12becea43bfa919a5f9a4/src/lib/convert.js",
+    "sha256": "6b73e43c93e07a2717c7eab5488ee3ad6dc9ae54c67837e86a0648ec8d517c50"
+  },
+  {
+    "repo": "LeiShi1313/genshin-good-exporter",
+    "commit": "6ef0b920772308e5eaa12becea43bfa919a5f9a4",
+    "path": "src/background.js",
+    "url": "https://raw.githubusercontent.com/LeiShi1313/genshin-good-exporter/6ef0b920772308e5eaa12becea43bfa919a5f9a4/src/background.js",
+    "sha256": "a492b2deed99185af0b23667164460ae1e91227f8ec1a84a341380c04ce5efe1"
+  },
+  {
+    "repo": "LeiShi1313/genshin-good-exporter",
+    "commit": "6ef0b920772308e5eaa12becea43bfa919a5f9a4",
+    "path": "src/page-bridge.js",
+    "url": "https://raw.githubusercontent.com/LeiShi1313/genshin-good-exporter/6ef0b920772308e5eaa12becea43bfa919a5f9a4/src/page-bridge.js",
+    "sha256": "d7044de095a323527ac4b7533b9873f2f434b72ba1292c0441868961d452af00"
+  },
+  {
+    "repo": "seriaati/genshin.py",
+    "commit": "2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213",
+    "path": "genshin/client/components/chronicle/genshin.py",
+    "url": "https://raw.githubusercontent.com/seriaati/genshin.py/2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213/genshin/client/components/chronicle/genshin.py",
+    "sha256": "227e40ad0fa20590a43ab223aa2263e467117f0dcca2d6d257fcc3f6203d299e"
+  },
+  {
+    "repo": "seriaati/genshin.py",
+    "commit": "2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213",
+    "path": "genshin/client/components/chronicle/base.py",
+    "url": "https://raw.githubusercontent.com/seriaati/genshin.py/2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213/genshin/client/components/chronicle/base.py",
+    "sha256": "44f44f9ef30d86b351c6081d4448786b306b956cee1fdce54a654ca163c5a91b"
+  },
+  {
+    "repo": "seriaati/genshin.py",
+    "commit": "2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213",
+    "path": "genshin/client/components/hoyolab.py",
+    "url": "https://raw.githubusercontent.com/seriaati/genshin.py/2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213/genshin/client/components/hoyolab.py",
+    "sha256": "56b53f3abaa2b2fee17a264423a6d01aecc42c76932b69a781f86f7e6ab8628b"
+  },
+  {
+    "repo": "seriaati/genshin.py",
+    "commit": "2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213",
+    "path": "genshin/client/routes.py",
+    "url": "https://raw.githubusercontent.com/seriaati/genshin.py/2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213/genshin/client/routes.py",
+    "sha256": "7bdc51e6fef99090835e64c2f7a697aeccfe120b4e86c14610bad933d232a602"
+  },
+  {
+    "repo": "seriaati/genshin.py",
+    "commit": "2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213",
+    "path": "genshin/client/components/base.py",
+    "url": "https://raw.githubusercontent.com/seriaati/genshin.py/2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213/genshin/client/components/base.py",
+    "sha256": "c53ffb76449766714ccc24afc0abe7dd56f71bfd4ca8963a74c7fa7738555946"
+  },
+  {
+    "repo": "seriaati/genshin.py",
+    "commit": "2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213",
+    "path": "genshin/constants.py",
+    "url": "https://raw.githubusercontent.com/seriaati/genshin.py/2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213/genshin/constants.py",
+    "sha256": "eb294f74dfb307b371e750e90a919648207afd206ceb00133d875fae62edb626",
+    "note": "Protocol reference; verify pinned retrieval hash when reproducing."
+  },
+  {
+    "repo": "seriaati/genshin.py",
+    "commit": "2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213",
+    "path": "genshin/utility/ds.py",
+    "url": "https://raw.githubusercontent.com/seriaati/genshin.py/2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213/genshin/utility/ds.py",
+    "sha256": "0e037f8860a5391b77fcc33210618cc4414853cb3db918be568e40dde2525f64",
+    "note": "Protocol reference; verify pinned retrieval hash when reproducing."
+  }
+]

@@ -75,6 +75,7 @@ async function capture() {
 }
 function owned(state, owner, includePassword = true) {
   const securityTables = new Set([
+    'genshin_hoyolab_connections',
     'sessions',
     'rotated_refresh_tokens',
     'oauth_accounts',
@@ -189,7 +190,7 @@ describe.skipIf(!databaseUrl)('C5d actual disposable PostgreSQL', () => {
     await seed(client, password);
     seeded = true;
     api = supertest(createApp());
-  });
+  }, 30_000); // Large fixture setup can exceed the default hook budget on Windows.
   afterAll(async () => {
     await cleanup();
     await db?.$disconnect();

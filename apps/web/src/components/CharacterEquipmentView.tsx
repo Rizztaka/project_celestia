@@ -22,11 +22,11 @@ function Receipt({
 }) {
   return (
     <details className="mt-4 text-xs text-zinc-300">
-      <summary className="cursor-pointer">Import provenance</summary>
+      <summary className="cursor-pointer">Source & freshness</summary>
       <div className="mt-2 space-y-2">
         <p>
           {receipt.status === 'unknown'
-            ? 'Import history unknown'
+            ? 'Source history unknown'
             : `Received ${receipt.importedAt ? new Date(receipt.importedAt).toLocaleString() : 'date unknown'} · ${receipt.source ?? 'Source not recorded'} · ${receipt.entryCount} supplied entries`}
         </p>
         <p>
@@ -34,7 +34,10 @@ function Receipt({
             ? 'Character entries were merged; this receipt does not date each retained value.'
             : 'A replacement section does not prove a complete in-game scan.'}
         </p>
-        <p>Receipt dates describe import time, not acquisition or live observation.</p>
+        <p>
+          Dates describe when Celestia received these records. HoYoLAB snapshots may lag behind the
+          game.
+        </p>
       </div>
     </details>
   );
@@ -53,14 +56,12 @@ function MissingAssignment({
       </p>
       <p className="mt-1">
         {assignment.reason === 'inconsistent_relation'
-          ? 'The stored equipment relation is inconsistent. Import a fresh section to update this view.'
+          ? 'Refresh HoYoLAB to replace inconsistent equipment records.'
           : assignment.reason === 'provenance_unknown'
-            ? 'No equipment assignment is recorded here, and the equipment import history is unknown.'
-            : 'No piece is assigned here in the stored section.'}
+            ? 'The equipment source is unavailable.'
+            : 'This slot has no saved assignment.'}
       </p>
-      <p className="mt-2 text-zinc-200">
-        Celestia cannot tell whether this slot is empty or equipped in-game.
-      </p>
+      <p className="mt-2 text-zinc-200">Check this slot in game, then refresh HoYoLAB.</p>
     </div>
   );
 }
@@ -86,7 +87,11 @@ function ArtifactPiece({ item }: { item: RecordedArtifact }) {
       <div className="rounded-lg bg-white/5 p-3">
         <p className="text-xs text-zinc-400">Main stat</p>
         <p className="break-all font-medium text-white">{statLabel(item.mainStatKey)}</p>
-        <p className="mt-1 text-xs text-zinc-400">Amount unavailable — not stored.</p>
+        <p className="mt-1 text-sm text-zinc-300">
+          {item.mainStatValue === null
+            ? 'Amount not supplied'
+            : statValue(item.mainStatKey, item.mainStatValue)}
+        </p>
       </div>
       <div>
         <p className="mb-2 text-xs text-zinc-400">Stored substats</p>
@@ -146,8 +151,8 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
               </p>
 
               <p className="mt-3 text-sm text-zinc-300">
-                Level {data.weapon.item.level} · Ascension {data.weapon.item.ascension} · Refinement{' '}
-                {data.weapon.item.refinement}
+                Level {data.weapon.item.level} · Ascension {data.weapon.item.ascension ?? '—'} ·
+                Refinement {data.weapon.item.refinement}
                 {data.weapon.item.locked ? ' · Inventory lock recorded' : ''}
               </p>
             </div>
@@ -235,9 +240,8 @@ export function CharacterEquipmentView({ data }: { data: CharacterEquipmentRespo
         </div>
       </section>
       <p className="text-xs leading-relaxed text-zinc-500">
-        Import receipts describe when Celestia received a section, not when items were observed in
-        the game. Equipment is recorded data, with no live game connection or acquisition dates.
-        Explicit empty-slot observations are not stored.
+        Equipment reflects the latest saved snapshot and may lag behind the game. Refresh from
+        Account to fetch changes.
       </p>
     </div>
   );

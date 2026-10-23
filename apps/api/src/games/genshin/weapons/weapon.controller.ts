@@ -25,7 +25,10 @@ export class GenshinWeaponController {
    * global error handler in app.ts automatically.
    */
   listWeapons = async (req: Request, res: Response) => {
-    const weapons = await this.weaponService.getWeaponsForUser(req.user!.id);
+    const weapons = await this.weaponService.getWeaponsForUser(
+      req.user!.id,
+      req.query.equipped === 'true',
+    );
     res
       .status(200)
       .json(successResponse({ weapons, total: weapons.length }, 'Weapons retrieved successfully.'));

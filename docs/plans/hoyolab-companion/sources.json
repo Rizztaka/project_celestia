@@ -1,0 +1,18 @@
+[
+  {
+    "url": "https://ailuminary.app/faq/",
+    "evidence": "Official page read with web tool; native apps, official-page sign-in, encrypted cookies, web planned. Private code unknown."
+  },
+  {
+    "url": "https://ailuminary.app/privacy/",
+    "evidence": "Official connection and credential-storage disclosure read with web tool. Direct HTTP capture returned 403; not bypassed."
+  },
+  {
+    "repository": "seriaati/genshin.py",
+    "commitTree": "2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213"
+  },
+  {
+    "repository": "LeiShi1313/genshin-good-exporter",
+    "commitTree": "6ef0b920772308e5eaa12becea43bfa919a5f9a4"
+  }
+]

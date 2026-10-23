@@ -1,3 +1,16 @@
+> **2026-10-23 HoYoLAB companion: implemented and locally verified; live acceptance pending.**
+> Work continues in the attached managed `hoyolab-companion` worktree, based on
+> released master `00cf042`. Website + explicit-action Chromium connector,
+> encrypted session storage, atomic equipped-build refresh, concise snapshot and
+> goal-first pages. Normal file-import UI and Build lab navigation retired.
+> Guarded verification passed: 1,634 tests / 100 files, 138 required PostgreSQL cases,
+> schema, lint, types, builds, formatting and diff checks. Synthetic desktop/mobile
+> acceptance passed; actual owner HoYoLAB sign-in is pending.
+> Feature branch: `codex/hoyolab-companion`. No AI added; production feature
+> deployment/migration and owner live sign-in remain pending.
+> [Implementation and acceptance boundary](hoyolab-companion/walkthrough.md).
+> [Release operations](hoyolab-companion/operations.md).
+
 > **2026-10-22 premium UI commit review: passed; owner authorized local commit.**
 > Shared charcoal/ivory/gold design, sidebar/mobile navigation, portrait collection,
 > 129-entry canonical archive, character tabs, authentication and Build lab.

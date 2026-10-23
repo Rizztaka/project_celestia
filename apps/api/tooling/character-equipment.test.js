@@ -87,7 +87,7 @@ describe('C3a actual web presentation and session cache', () => {
     expect(html).toContain('Base levels and constellation adjustments are unknown');
     expect(html).toContain('Assignment unknown');
     expect(html).not.toContain('No weapon equipped');
-    expect(html).toContain('cannot tell whether this slot is empty or equipped in-game');
+    expect(html).toContain('Check this slot in game, then refresh HoYoLAB');
   });
   it('shows recorded-empty input as unrecorded assignments and section receipt, never known-empty', () => {
     const data = fixture();
@@ -124,7 +124,7 @@ describe('C3a actual web presentation and session cache', () => {
     const html = render(data);
     expect(html).toContain('unknown_main_');
     expect(html).toContain('opaque_substat');
-    expect(html).toContain('Amount unavailable');
+    expect(html).toContain('Amount not supplied');
     expect(html).toContain('1 recorded piece');
     expect(html).not.toMatch(/AES|efficiency score|damage score|bonus activated/);
   });

@@ -27,6 +27,7 @@ model User {
   // Back-relation to Genshin domain — no column is added to the users table.
   // One user has at most one Genshin account in Phase 2.
   genshinAccount GenshinAccount?
+  genshinHoyolabConnection GenshinHoyolabConnection?
 
   // Back-relation to NIKKE domain (Phase 7).
   nikkeAccount NikkeAccount?
@@ -254,15 +255,17 @@ model GenshinImportSectionState {
 /// Talent values are stored as supplied. Persistence does not establish their
 /// base/effective convention or whether an individual value came from a default.
 model GenshinCharacter {
+  dataSource String @default("manual")
   id               String  @id @default(uuid())
   accountId        String
   characterKey     String  // references static game data, NOT a FK
   level            Int     // 1–90
-  ascension        Int     // 0–6
+  ascension        Int?    // Unknown when HoYoLAB omits the level cap
   constellation    Int     // 0–6
   talentNormal     Int     // 1–10 (base level)
   talentSkill      Int     // 1–10 (base level)
   talentBurst      Int     // 1–10 (base level)
+  active           Boolean @default(true)
   equippedWeaponId String? @unique // 1:1 with GenshinWeapon; null = no weapon equipped
 
   createdAt DateTime @default(now())
@@ -284,9 +287,9 @@ model GenshinWeapon {
   accountId  String
   weaponKey  String  // references static game data, NOT a FK
   level      Int     // 1–90
-  ascension  Int     // 0–6
+  ascension  Int?    // Unknown when HoYoLAB omits the level cap
   refinement Int     // 1–5
-  locked     Boolean @default(false)
+  locked     Boolean? @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -310,7 +313,8 @@ model GenshinArtifact {
   rarity              Int     // 1–5 (star count)
   mainStatKey         String  // e.g. "hp", "atk", "critRate_", "eleMas"
   subStats            Json    @default("[]") // ArtifactSubStat[]
-  locked              Boolean @default(false)
+  locked              Boolean? @default(false)
+  mainStatValue       Float?
   equippedCharacterId String? // FK to GenshinCharacter.id; null = in inventory
 
   createdAt DateTime @default(now())
@@ -651,4 +655,27 @@ model NikkeEquipment {
   updatedAt     DateTime @updatedAt
 
   character     NikkeCharacter @relation(fields: [characterId], references: [id], onDelete: Cascade)
+}
+
+// Private application data. Data API roles have no grants/policies.
+model GenshinHoyolabConnection {
+  userId String @id
+  encryptedSession String?
+  generation Int @default(1)
+  roles Json @default("[]")
+  selectedUid String?
+  selectedServer String?
+  state String @default("disconnected")
+  syncedAt DateTime?
+  nextSyncAt DateTime?
+  notes Json?
+  leaseId String?
+  leaseUntil DateTime?
+  lastError String?
+  lastAttemptAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([nextSyncAt])
+  @@map("genshin_hoyolab_connections")
 }

@@ -48,7 +48,7 @@ function CharacterCard({ character }: { character: RosterCharacter }) {
         <div className="collection-level">
           <span>
             Level {character.level}{' '}
-            <span className="text-zinc-500">/ Asc. {character.ascension}</span>
+            <span className="text-zinc-500">/ Asc. {character.ascension ?? '—'}</span>
           </span>
           <span>{metadata ? `${metadata.rarity}★` : ''}</span>
         </div>
@@ -163,33 +163,33 @@ function EmptyState() {
         No character observations yet
       </h2>
       <p className="mb-8 max-w-sm text-base leading-relaxed text-zinc-400">
-        An optional import adds recorded characters and equipment here. You can use Today routines
-        and create catalog goals before importing.
+        Connect HoYoLAB to load your characters and equipped builds. You can also browse the
+        character catalog below.
       </p>
       <Link
-        to="/import"
+        to="/connect"
         className="from-accent-500 hover:from-accent-400 shadow-accent-glow/30 rounded-xl bg-gradient-to-r to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition-all hover:to-indigo-500"
       >
-        Import observations
+        Connect HoYoLAB
       </Link>
       <Link
         to="/planner?tab=farming&newType=CHARACTER_TALENT"
         className="mt-4 text-indigo-200 underline"
       >
-        Create a goal without importing
+        Create a goal
       </Link>
     </div>
   );
 }
 
 // -------------------------------------------------------
-// Nav bar (same pattern as ImportPage)
+// Page navigation
 // -------------------------------------------------------
 
 // -------------------------------------------------------
 // RosterPage — main export
 // -------------------------------------------------------
-import { ImportStatus } from '../components/ImportStatus';
+import { HoyolabSummary } from '../components/HoyolabSummary';
 
 export default function RosterPage() {
   const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
@@ -246,9 +246,9 @@ export default function RosterPage() {
                 : 'Character records are currently unavailable.'
           }
           actions={
-            <Link className="button-primary" to="/import">
+            <Link className="button-primary" to="/connect">
               <UiIcon name="import" />
-              Import characters
+              Manage connection
             </Link>
           }
         />
@@ -348,7 +348,7 @@ export default function RosterPage() {
         )}
         <CharacterCatalog search={search} />
         <div className="mt-6">
-          <ImportStatus />
+          <HoyolabSummary compact />
         </div>
       </main>
     </div>

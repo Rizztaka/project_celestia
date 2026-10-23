@@ -20,9 +20,9 @@ export interface EquipmentSectionReceipt {
 export interface RecordedWeapon {
   weaponKey: string;
   level: number;
-  ascension: number;
+  ascension: number | null;
   refinement: number;
-  locked: boolean;
+  locked: boolean | null;
 }
 export interface RecordedArtifact {
   setKey: string;
@@ -30,9 +30,9 @@ export interface RecordedArtifact {
   level: number;
   rarity: number;
   mainStatKey: string;
-  mainStatValue: null;
+  mainStatValue: number | null;
   subStats: { key: string; value: number }[] | null;
-  locked: boolean;
+  locked: boolean | null;
 }
 export type EquipmentAssignment<T> =
   | { state: 'recorded_assigned'; item: T }
@@ -43,10 +43,10 @@ export interface CharacterEquipmentResponse {
   character: {
     characterKey: string;
     level: number;
-    ascension: number;
+    ascension: number | null;
     constellation: number;
     talents: { normal: number; skill: number; burst: number };
-    talentBasis: 'stored_convention_unknown';
+    talentBasis: 'stored_convention_unknown' | 'hoyolab_displayed';
   };
   provenance: Record<'characters' | 'weapons' | 'artifacts', EquipmentSectionReceipt>;
   weapon: EquipmentAssignment<RecordedWeapon>;

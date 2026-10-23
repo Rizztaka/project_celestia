@@ -64,13 +64,17 @@ describe('Actual application origin policy', () => {
     'https://trusted.example',
     'HTTPS://TRUSTED.EXAMPLE:443',
     'https://preview-42.vercel.app',
-  ])('allows configured origin %s', async (origin) => {
-    const res = await (await application()).get('/api/v1/health').set('Origin', origin);
-    expect(res.status).toBe(200);
-    expect(res.headers['access-control-allow-origin']).toBe(origin);
-    expect(res.headers['access-control-allow-credentials']).toBe('true');
-    expect(res.headers.vary).toContain('Origin');
-  });
+  ])(
+    'allows configured origin %s',
+    async (origin) => {
+      const res = await (await application()).get('/api/v1/health').set('Origin', origin);
+      expect(res.status).toBe(200);
+      expect(res.headers['access-control-allow-origin']).toBe(origin);
+      expect(res.headers['access-control-allow-credentials']).toBe('true');
+      expect(res.headers.vary).toContain('Origin');
+    },
+    15_000,
+  ); // Includes a cold import and validation of pinned knowledge files.
 
   it.each([
     'https://safe.example',

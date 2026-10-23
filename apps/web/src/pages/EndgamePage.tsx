@@ -1158,13 +1158,13 @@ export default function EndgamePage() {
         </div>
         <h1 className="font-display text-xl font-bold text-white">Endgame records</h1>
         <p className="max-w-sm text-sm text-zinc-400">
-          Import your game data first before using the Endgame Center.
+          Connect HoYoLAB to use your roster in endgame planning.
         </p>
         <Link
-          to="/import"
+          to="/connect"
           className="mt-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-500"
         >
-          Go to Import
+          Connect HoYoLAB
         </Link>
       </main>
     );

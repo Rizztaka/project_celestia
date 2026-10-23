@@ -373,7 +373,14 @@
 }
 .companion-artifact-row {
   display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  grid-template-columns: 3rem minmax(0, 1fr) auto;
+}
+.companion-artifact-row > :nth-child(4) {
+  grid-column: 2 / -1;
+  width: auto;
+}
+.companion-artifact-row > :last-child {
+  display: none;
 }
 .companion-artifact-row .artifact-name {
   width: auto;
@@ -803,10 +810,17 @@
 }
 @media (min-width: 1000px) {
   .companion-artifact-row {
-    grid-template-columns: 2rem minmax(8rem, 11rem) 5rem 5rem minmax(0, 1fr) 1rem;
+    grid-template-columns: 3rem minmax(8rem, 11rem) 5rem 5rem minmax(0, 1fr) 1rem;
   }
   .companion-artifact-row .artifact-stats {
     grid-column: auto;
+  }
+  .companion-artifact-row > :nth-child(4) {
+    grid-column: auto;
+    width: 5rem;
+  }
+  .companion-artifact-row > :last-child {
+    display: block;
   }
 }
 @media (min-width: 1550px) {

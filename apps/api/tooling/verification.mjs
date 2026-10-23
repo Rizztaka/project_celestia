@@ -12,6 +12,8 @@ export const apiRoot = fileURLToPath(new URL('../', import.meta.url));
 export const repoRoot = resolve(apiRoot, '../..');
 const webRoot = resolve(repoRoot, 'apps/web');
 export const integrationMinimums = {
+  'src/games/genshin/hoyolab/hoyolab.integration.test.ts': 17,
+  'src/games/genshin/hoyolab/hoyolab.http.test.ts': 3,
   'src/platform/companion/plan.integration.test.ts': 28,
   'src/platform/companion/goal-lifecycle.integration.test.ts': 28,
   'src/platform/companion/routine.integration.test.ts': 12,
@@ -238,6 +240,13 @@ export async function runVerification(input, dependencies = {}) {
   ]);
   const tests = validateTestReport(readReport(reportPath), expectedFiles);
   console.log(`VERIFIED ${JSON.stringify(tests)}`);
+  check(
+    'shared-contracts-lint',
+    'eslint',
+    'eslint',
+    ['src', '--max-warnings', '0'],
+    resolve(repoRoot, 'packages/api-contracts'),
+  );
   check('api-lint', 'eslint', 'eslint', ['.', '--max-warnings', '0']);
   check('api-types-and-build', 'typescript', 'tsc', []);
   check('api-aliases', 'tsc-alias', 'tsc-alias', []);

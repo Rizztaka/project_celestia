@@ -1,0 +1,29 @@
+{
+  "operation": "analyze_javascript_application",
+  "tool": "rea-agents@6.5.0",
+  "node": "24.11.0",
+  "integrityPolicy": "fail",
+  "artifactSha256": "b7662575553bde022a5c87ce1155b9e66ec56735fa1c371412fe481e5296143b",
+  "integrityContradictions": [],
+  "statistics": {
+    "relevant_files": 1,
+    "nested_asar_containers": 0,
+    "text_bytes_read": 16233,
+    "invalid_utf8_files": 0,
+    "parsed_javascript_files": 1,
+    "visited_ast_nodes": 2382,
+    "findings": 9,
+    "modules": 0,
+    "parse_failures": 0
+  },
+  "limitations": [
+    "Caller-selected source analysis leaves 0 inventoried files outside analysis scope. Inventory identity covers the complete artifact; relationships through unselected sources remain unknown.",
+    "CommonJS and ESM binding relationships were recovered from inert syntax and resolved only within the inventoried artifact container.",
+    "Graph coverage is incomplete; unavailable facts remain explicit and must not be read as absence.",
+    "JavaScript and HTML were parsed as inert text; bundle bootstrap code was never executed.",
+    "Static imports, entrypoints, workers, endpoints, and storage relationships do not prove runtime execution.",
+    "Static paths and relationships may remain unresolved when expressions are dynamic or obfuscated.",
+    "Webpack/Rspack factories were recovered from AST literals; REA did not invoke push handlers or bundle bootstrap code."
+  ],
+  "scope": "Public exporter convert.js static syntax; no source code executed. Does not establish Luminary internals or live HoYoLAB acceptance."
+}

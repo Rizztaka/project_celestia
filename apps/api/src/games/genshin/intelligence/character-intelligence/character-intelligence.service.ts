@@ -95,6 +95,13 @@ export class CharacterIntelligenceService {
     const skipped: SkippedCharacter[] = [];
 
     for (const char of roster) {
+      if (char.ascension === null || char.dataSource === 'hoyolab') {
+        skipped.push({
+          characterKey: char.characterKey,
+          reason: 'This legacy score requires confirmed ascension and base talent levels.',
+        });
+        continue;
+      }
       const metadata = characterProfiles[char.characterKey];
       const profile = metadata?.metaTier ? metadata : null;
       const hasFallbackProfile = profile === null;

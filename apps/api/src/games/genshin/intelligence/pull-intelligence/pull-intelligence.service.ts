@@ -1,7 +1,7 @@
 import { createRequire } from 'module';
 
 import { prisma } from '@/core/db/prisma.js';
-import { NotFoundError } from '@/core/errors/app-error.js';
+import { NotFoundError, UnprocessableError } from '@/core/errors/app-error.js';
 
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
 import { GenshinCharacterService } from '../../characters/character.service.js';
@@ -82,22 +82,31 @@ export class PullIntelligenceService {
       await this.genshinCharacterService.getCharactersForUser(userId);
 
     // ── 3. Shape roster into calculator inputs ────────────────────────────
-    const roster: CharacterInput[] = rawRoster.map((char) => ({
-      characterKey: char.characterKey,
-      level: char.level,
-      ascension: char.ascension,
-      constellation: char.constellation,
-      talentNormal: char.talentNormal,
-      talentSkill: char.talentSkill,
-      talentBurst: char.talentBurst,
-      equippedWeapon: char.equippedWeapon
-        ? {
-            weaponKey: char.equippedWeapon.weaponKey,
-            level: char.equippedWeapon.level,
-            refinement: char.equippedWeapon.refinement,
-          }
-        : null,
-    }));
+    if (rawRoster.some((c) => c.dataSource === 'hoyolab' || c.ascension === null))
+      throw new UnprocessableError(
+        'This legacy score requires confirmed ascension and base talent levels. View your equipped builds instead.',
+      );
+    const roster: CharacterInput[] = rawRoster
+      .filter(
+        (char): char is typeof char & { ascension: number } =>
+          char.ascension !== null && char.dataSource !== 'hoyolab',
+      )
+      .map((char) => ({
+        characterKey: char.characterKey,
+        level: char.level,
+        ascension: char.ascension,
+        constellation: char.constellation,
+        talentNormal: char.talentNormal,
+        talentSkill: char.talentSkill,
+        talentBurst: char.talentBurst,
+        equippedWeapon: char.equippedWeapon
+          ? {
+              weaponKey: char.equippedWeapon.weaponKey,
+              level: char.equippedWeapon.level,
+              refinement: char.equippedWeapon.refinement,
+            }
+          : null,
+      }));
 
     // ── 4. Compute current team score breakdowns (before simulating pulls) ─
     const currentBreakdowns = scoreAllTemplates(META_TEMPLATES, roster);

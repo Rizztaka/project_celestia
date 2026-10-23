@@ -154,46 +154,6 @@ export default function TodayPlan() {
   const enabled = plan?.routines.filter((item) => !item.dismissed).map((item) => item.kind) ?? [];
   return (
     <div className="today-plan min-w-0 space-y-6">
-      <section id="session-recording" className="space-y-4" aria-label="Manual session recording">
-        <h2 className="text-xl font-semibold text-white">Your routine</h2>
-        <p className="text-sm text-zinc-400">
-          Record your session or update a resin checkpoint. Inventory and goals are managed
-          separately.
-        </p>
-        {plan && !plan.routines.length && (
-          <p className="text-sm">
-            No optional routines enabled. Open Plan choices below to choose some, or keep a quiet
-            plan.
-          </p>
-        )}
-        {plan &&
-          plan.routines.length > 0 &&
-          plan.routines.every((item) => item.dismissed || item.task?.done === true) && (
-            <p className="text-sm">
-              Your enabled routine reminders are recorded or set aside. Nothing else is due from
-              these reminders; manual recording remains available.
-            </p>
-          )}
-        <div className="flex flex-wrap gap-3">
-          {plan?.routines
-            .filter((item) => !item.dismissed)
-            .map((item) => (
-              <button
-                key={item.kind}
-                className={planButton}
-                disabled={disabled || !plan.period}
-                onClick={() =>
-                  dismiss({ kind: 'routine', routineKind: item.kind }, item.scope, true)
-                }
-              >
-                Dismiss {routineLabels[item.kind]} for{' '}
-                {item.scope === 'day' ? 'today' : 'this week'}
-              </button>
-            ))}
-        </div>
-        <RoutinePanel view="daily" enabledKinds={enabled} />
-      </section>
-
       <section
         aria-label="Today's goals and choices"
         className="companion-priority-card min-w-0 space-y-5 rounded-2xl p-4 sm:p-6"
@@ -251,7 +211,7 @@ export default function TodayPlan() {
                 <Link className="underline" to="/planner?tab=farming&newType=CHARACTER_TALENT">
                   create a goal
                 </Link>
-                . You can start before importing.
+                .
               </p>
             )}
             {!!plan.goals.length && !selected.length && (
@@ -343,8 +303,7 @@ export default function TodayPlan() {
             </div>
             {!plan.period && (
               <p className="text-sm text-amber-200">
-                Period dismissal is unavailable until a supported server is selected above. Manual
-                goals and plan choices still work.
+                Select your game server in Optional manual reminders to enable reset tracking.
               </p>
             )}
             <details id="plan-choices" className="rounded-xl border border-white/10 p-4">
@@ -428,11 +387,13 @@ export default function TodayPlan() {
         )}
       </section>
 
-      <section
+      <details
         aria-label="This week"
         className="companion-info-card space-y-3 rounded-2xl p-4 sm:p-6"
       >
-        <h2 className="text-xl font-semibold text-white">This week</h2>
+        <summary className="cursor-pointer font-semibold text-white">
+          Optional weekly tracking
+        </summary>
         {!plan ? (
           <p>Load your plan to see the supported weekly period.</p>
         ) : !plan.weekly.available ? (
@@ -463,15 +424,15 @@ export default function TodayPlan() {
         <Link className={planButton} to="/planner?tab=weekly">
           Record weekly claims
         </Link>
-        <p className="text-sm text-zinc-400">
-          No forecast of future resin, discounts, deadlines or guaranteed upgrades.
-        </p>
-      </section>
+      </details>
 
-      <section
+      <details
         aria-label="Supporting material advice"
         className="companion-info-card space-y-3 rounded-2xl p-4 sm:p-6"
       >
+        <summary className="cursor-pointer font-semibold text-white">
+          Farming details & schedules
+        </summary>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-xl font-semibold text-white">Farm today</h2>
           <button
@@ -561,8 +522,8 @@ export default function TodayPlan() {
             </details>
           </>
         )}
-        <Link className={planButton} to="/import">
-          Update inventory by import
+        <Link className={planButton} to="/connect">
+          Manage HoYoLAB connection
         </Link>
         <details>
           <summary className="cursor-pointer font-semibold text-white">
@@ -586,7 +547,53 @@ export default function TodayPlan() {
             initialOnlyGoals={false}
           />
         </details>
-      </section>
+      </details>
+      <details
+        id="session-recording"
+        className="glass-panel space-y-4 rounded-xl p-5"
+        aria-label="Manual session recording"
+      >
+        <summary className="cursor-pointer text-sm text-zinc-300">
+          Optional manual reminders
+        </summary>
+        <h2 className="text-xl font-semibold text-white">Your routine</h2>
+        <p className="text-sm text-zinc-400">
+          Record your session or update a resin checkpoint. Inventory and goals are managed
+          separately.
+        </p>
+        {plan && !plan.routines.length && (
+          <p className="text-sm">
+            No optional routines enabled. Open Plan choices below to choose some, or keep a quiet
+            plan.
+          </p>
+        )}
+        {plan &&
+          plan.routines.length > 0 &&
+          plan.routines.every((item) => item.dismissed || item.task?.done === true) && (
+            <p className="text-sm">
+              Your enabled routine reminders are recorded or set aside. Nothing else is due from
+              these reminders; manual recording remains available.
+            </p>
+          )}
+        <div className="flex flex-wrap gap-3">
+          {plan?.routines
+            .filter((item) => !item.dismissed)
+            .map((item) => (
+              <button
+                key={item.kind}
+                className={planButton}
+                disabled={disabled || !plan.period}
+                onClick={() =>
+                  dismiss({ kind: 'routine', routineKind: item.kind }, item.scope, true)
+                }
+              >
+                Dismiss {routineLabels[item.kind]} for{' '}
+                {item.scope === 'day' ? 'today' : 'this week'}
+              </button>
+            ))}
+        </div>
+        <RoutinePanel view="daily" enabledKinds={enabled} />
+      </details>
     </div>
   );
 }

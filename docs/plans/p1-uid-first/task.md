@@ -30,3 +30,5 @@
 
 - [x] Route old public login/registration bookmarks to UID entry without session restoration; preserve legacy account access under `/workspace/login` and `/workspace/register`.
 - [x] Test Add UID versus Switch UID on both old public URLs and retain private workspace authentication (77 focused client tests pass).
+
+- [x] Remove Equipment from UID desktop/mobile navigation and Today shortcuts, retaining equipment in character details and compatibility URLs.

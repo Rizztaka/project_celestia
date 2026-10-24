@@ -1,0 +1,70 @@
+[
+  {
+    "path": ".scratch/dump.mjs",
+    "sha256": "c6bbaa34ea44f00751bfabcdf22cad6937f8e8d5fd8f6ada75922a548683b09c"
+  },
+  {
+    "path": ".scratch/enka.json",
+    "sha256": "ae839edc06b2379099b38933e0212731bfa3bd7ad420edf56326a162c9a939a0"
+  },
+  {
+    "path": ".scratch/locs.json",
+    "sha256": "4553446022c6b45293190577cd8590a9d553cb895e1e92e8bfad46b670fd9727"
+  },
+  {
+    "path": ".scratch/relics.json",
+    "sha256": "e991c4b316634fba45fde0622d7d979c861c0ec4c2b0229c908b08fb01b89c4f"
+  },
+  {
+    "path": ".scratch/snapshot.json",
+    "sha256": "7f4290a5eac0167e412a32401e2b8593e1d0e0d25499ce6746e946c353bab2af"
+  },
+  {
+    "path": ".scratch/weapons.json",
+    "sha256": "606e61d91ca0f6e4db4bdff2b0c831f07ee4f27edf47e87acc872ef4e1cb4639"
+  },
+  {
+    "path": "apps/api/src/games/genshin/static/enka/relic-items.json",
+    "sha256": "1dd6b2566a40ad574496cb0a0805293c22c7ae048cadc7fcad0df0f4c3128a22"
+  },
+  {
+    "path": "apps/api/tooling/build-equipment-identity.mjs",
+    "sha256": "9bbb0d0ed8e14763b1ec3f58a02539daedb3b7b5fe6b3c2d0677a518725d7248"
+  },
+  {
+    "path": "apps/web/src/lib/build-analysis/equipment.ts",
+    "sha256": "531869f05a5631ad37edb9d82ea904ae9f6a5feb5d7609dab538ee4c670543a6"
+  },
+  {
+    "path": "apps/web/src/lib/build-analysis/identity.ts",
+    "sha256": "e1cacf4dac3e60c18428d3006400eaeab42b34f11c2409ce2d815abfb3eb6a1b"
+  },
+  {
+    "path": "apps/web/src/lib/build-analysis/snapshot.ts",
+    "sha256": "3383dac2f4a17c066dc1ef754541b362904c21011d42a02d54a961b5ae411942"
+  },
+  {
+    "path": "apps/web/src/lib/build-analysis/types.ts",
+    "sha256": "907828ca23ac70e6a2897172b13295bc604a311a602cc160c1bbfd3a38bfa063"
+  },
+  {
+    "path": "apps/web/src/lib/build-analysis/units.ts",
+    "sha256": "33c3d3e7c3d64f0558387252c8635c4392a3f81f927e36cfb7b08c61c4f14660"
+  },
+  {
+    "path": "docs/plans/character-team-build-analyzers/implementation-prompt.md",
+    "sha256": "30fe07d4d051acd3379e0cf634bdf5dad394e4e94a94bc70fd85d17475b023ed"
+  },
+  {
+    "path": "docs/plans/character-team-build-analyzers/implementation_plan.md",
+    "sha256": "954cf3c987283eae1cc14fe60c61700bc5400f85f2edf4f21ea8932dbbc302f8"
+  },
+  {
+    "path": "docs/plans/character-team-build-analyzers/live-baseline.md",
+    "sha256": "8434a7e1049285d712c8382a51750793cde240ed363de581031fc4b08bde4876"
+  },
+  {
+    "path": "docs/plans/character-team-build-analyzers/task.md",
+    "sha256": "6d99170f2978a722b0d47785feaa4e2559fcd8cafede93b9ec4313d6f4f7e48a"
+  }
+]

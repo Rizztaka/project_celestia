@@ -195,6 +195,7 @@ it('opens the reported build inside the main shell and links back to the UID cha
   expect(keys).toEqual([
     ['enka-showcase', uid],
     ['observed-roster', uid],
+    ['public-teams', uid],
   ]);
   expect(transport).not.toHaveBeenCalled();
   expect(html).not.toContain('Refresh Showcase');

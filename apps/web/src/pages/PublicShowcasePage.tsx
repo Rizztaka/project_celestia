@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import CharacterBuildDetail from '../components/CharacterBuildDetail';
+import PublicCharacterAnalysis from '../components/PublicCharacterAnalysis';
 import ShowcaseSnapshot, { ShowcaseStatus } from '../components/ShowcaseSnapshot';
 import { PageHeader } from '../components/Ui';
 import { useUidDialog } from '../lib/uid-dialog';
@@ -25,7 +26,7 @@ export default function PublicShowcasePage() {
   const retained = history.records.find(
     (item) => item.character.key === id || String(item.character.id) === id,
   );
-  const character = currentCharacter ?? retained?.character;
+  const character = retained?.character ?? currentCharacter;
   return (
     <main id="companion-content" tabIndex={-1} className="today-page space-y-6">
       {!id ? (
@@ -108,7 +109,19 @@ export default function PublicShowcasePage() {
                 </p>
               ) : null}
               {character ? (
-                <CharacterBuildDetail key={character.key} character={character} uid={uid} />
+                <CharacterBuildDetail
+                  key={`${uid}:${character.key}`}
+                  character={character}
+                  uid={uid}
+                  analysis={
+                    <PublicCharacterAnalysis
+                      key={`${uid}:${character.key}`}
+                      uid={uid}
+                      character={character}
+                      records={history.records}
+                    />
+                  }
+                />
               ) : snapshot ? (
                 <div className="rounded-xl border border-white/10 p-5">
                   <h1 className="mb-3 text-xl">Character build unavailable</h1>

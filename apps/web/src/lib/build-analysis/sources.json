@@ -1,0 +1,41 @@
+{
+  "version": "public-build-analysis-1",
+  "sources": [
+    {
+      "id": "kqm-furina",
+      "url": "https://keqingmains.com/q/furina-quickguide/",
+      "title": "Furina quick guide",
+      "sha256": "2fd167195f221340a7999d315d4bdd99b10ea08ccdd92f90f5ac36a82bd15f60",
+      "reviewedAt": "2026-10-24",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model."
+    },
+    {
+      "id": "kqm-sucrose",
+      "url": "https://keqingmains.com/q/sucrose-quickguide/",
+      "title": "Sucrose quick guide",
+      "sha256": "17ab8845b05168863a6f0ef85face3ffe64fb9c7c29f669827522406847e3135",
+      "reviewedAt": "2026-10-24",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model."
+    },
+    {
+      "id": "kqm-skirk",
+      "url": "https://keqingmains.com/q/skirk-quickguide/",
+      "title": "Skirk quick guide",
+      "sha256": "bccc9174978a0ad453691aa6ab8538a88632105827c68a92e8a1eab09879e8e9",
+      "reviewedAt": "2026-10-24",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model."
+    },
+    {
+      "id": "kqm-xilonen",
+      "url": "https://keqingmains.com/q/xilonen-quickguide/",
+      "title": "Xilonen quick guide",
+      "sha256": "8ec9f099f6f4014f9b3f313a164da3c715732533917cb88857b64194548c9482",
+      "reviewedAt": "2026-10-24",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model."
+    }
+  ]
+}

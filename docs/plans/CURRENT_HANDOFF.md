@@ -1,3 +1,17 @@
+> **2026-10-24 public UID analyzers and Teams redesign completed locally.**
+> Continued the interrupted Claude work in `D:/Genshin Personal/celestia-build-analyzers`,
+> branch `claude/public-build-analyzers`, production base `e8f6a95`.
+> Canonical preview: http://127.0.0.1:45761/u/860507835/teams (real Arima showcase).
+> Teams now has portrait slots, searchable picker, member tabs, overview and comparisons
+> in Celestia styling. Shared public character/team guidance covers Furina, Sucrose,
+> Skirk and Xilonen; other kits have general checks and explicit coverage limits.
+> **126/126 focused tests**, API/web builds, full web lint and scoped tooling lint pass.
+> Actual browser/IndexedDB verification includes desktop/390/320px and keyboard focus.
+> [Read implementation, evidence and limits](character-team-build-analyzers/walkthrough.md).
+> Original messy checkout and inherited scratch/generator sources preserved.
+> No commit, push, migration, production write or deployment. Earlier model-era roles
+> do not supersede the owner's direct request to continue implementation.
+
 > **2026-10-22 premium UI commit review: passed; owner authorized local commit.**
 > Shared charcoal/ivory/gold design, sidebar/mobile navigation, portrait collection,
 > 129-entry canonical archive, character tabs, authentication and Build lab.

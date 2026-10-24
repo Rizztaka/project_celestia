@@ -14,11 +14,13 @@ function UidNavigation({ uid, nickname }: { uid?: string; nickname?: string }) {
   const primary = [
     [base, 'Today'],
     [uid ? `${base}/roster` : '/?add=characters', 'Characters'],
+    [uid ? `${base}/teams` : '/?add=teams', 'Teams'],
   ] as const;
   const supporting = [[uid ? `${base}/showcase` : '/?add=profile', 'Public profile']] as const;
   const icons: Record<string, Parameters<typeof UiIcon>[0]['name']> = {
     [base]: 'today',
     [primary[1][0]]: 'characters',
+    [primary[2][0]]: 'characters',
     [supporting[0][0]]: 'settings',
   };
   const isCurrent = (to: string, pathname: string) =>

@@ -1,5 +1,5 @@
 import type { ShowcaseCharacter, ShowcaseEquipment, ShowcaseStat } from '@celestia/api-contracts';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 const kinds = { normal: 'Normal Attack', skill: 'Elemental Skill', burst: 'Elemental Burst' };
 const accents = {
@@ -96,9 +96,11 @@ function ArtifactCard({ slot, item }: { slot: string; item?: ShowcaseEquipment }
 export default function CharacterBuildDetail({
   character,
   uid,
+  analysis,
 }: {
   character: ShowcaseCharacter;
   uid: string;
+  analysis?: ReactNode;
 }) {
   const element = character.element;
   const ids = [
@@ -176,6 +178,7 @@ export default function CharacterBuildDetail({
           )}
         </section>
       </div>
+      {analysis}
       <div className="build-loadout-grid">
         <section className="build-panel build-weapon" aria-label={`${character.name} weapon`}>
           <h2>Weapon</h2>

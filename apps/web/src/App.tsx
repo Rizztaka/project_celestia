@@ -1,3 +1,5 @@
+import './styles/build-analysis.css';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
@@ -19,6 +21,7 @@ const UidWorkspace = lazy(() => import('./components/UidWorkspace'));
 const UidDashboardPage = lazy(() => import('./pages/UidDashboardPage'));
 const UidRosterPage = lazy(() => import('./pages/UidRosterPage'));
 const UidEquipmentPage = lazy(() => import('./pages/UidEquipmentPage'));
+const UidTeamsPage = lazy(() => import('./pages/UidTeamsPage'));
 const EndgamePage = lazy(() => import('./pages/EndgamePage'));
 const ImportPage = lazy(() => import('./pages/ImportPage'));
 const IntelligencePage = lazy(() => import('./pages/IntelligencePage'));
@@ -139,6 +142,7 @@ export default function App() {
                 <Route path="/u/:uid" element={<UidWorkspace />}>
                   <Route index element={<UidDashboardPage />} />
                   <Route path="roster" element={<UidRosterPage />} />
+                  <Route path="teams" element={<UidTeamsPage />} />
                   <Route path="inventory" element={<UidEquipmentPage />} />
                   <Route path="showcase" element={<PublicShowcasePage />} />
                   <Route path="character/:id" element={<PublicShowcasePage />} />

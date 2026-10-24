@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-24",
+  "workspace": "D:/Genshin Personal/celestia-build-analyzers",
+  "branch": "claude/public-build-analyzers",
+  "base": "e8f6a95c319a8621c0524ff2947550c644a2d1b3",
+  "preview": "http://127.0.0.1:45761/u/860507835/teams",
+  "checks": [
+    { "command": "pnpm --filter @celestia/api-contracts build", "result": "passed" },
+    { "command": "pnpm --filter @celestia/api build", "result": "passed" },
+    { "command": "pnpm --filter @celestia/web build", "result": "passed; includes tsc -b" },
+    { "command": "pnpm --filter @celestia/web lint", "result": "passed" },
+    {
+      "command": "pnpm --filter @celestia/api exec eslint tooling/build-analysis.test.js tooling/uid-teams-client.test.js tooling/uid-teams-storage.test.js tooling/build-analysis-fixtures.mjs tooling/build-analysis-browser-fixture.mjs tooling/build-analysis-sources.mjs --max-warnings 0",
+      "result": "passed"
+    },
+    {
+      "command": "pnpm --filter @celestia/api exec vitest run tooling/build-analysis.test.js tooling/uid-teams-client.test.js tooling/uid-teams-storage.test.js tooling/observed-roster-client.test.js tooling/uid-workspace-client.test.js tooling/showcase-client.test.js src/games/genshin/showcase/showcase.test.ts src/games/genshin/showcase/showcase.http.test.ts",
+      "result": "passed",
+      "files": 8,
+      "tests": 126
+    },
+    {
+      "command": "pnpm --filter @celestia/api exec vitest run tooling/uid-teams-client.test.js tooling/uid-workspace-client.test.js",
+      "result": "passed after final UI copy changes",
+      "files": 2,
+      "tests": 15
+    }
+  ],
+  "browser": {
+    "syntheticUid": "800000001",
+    "isolatedFixtureOrigin": "http://127.0.0.1:45771",
+    "widths": [1366, 390, 320],
+    "pageOverflow": false,
+    "exercised": [
+      "saved team load/reload",
+      "actual JSON export/import",
+      "portrait slots and member tabs",
+      "search and element filters",
+      "duplicate playable-form blocking",
+      "Escape focus restoration",
+      "keyboard tabs",
+      "unsaved role/replacement isolation",
+      "standalone equipment assumption",
+      "frozen teammate comparison",
+      "member and return links",
+      "missing references",
+      "real Arima public preview"
+    ]
+  },
+  "preservation": {
+    "inheritedScratchAndGeneratorHashesUnchanged": true,
+    "originalMessySourcePreserved": true,
+    "staged": false,
+    "committed": false,
+    "pushed": false,
+    "deployed": false,
+    "productionWrites": false
+  },
+  "coverage": ["Furina", "Sucrose", "Skirk", "Xilonen"],
+  "limitations": [
+    "general checks for other kits",
+    "Furina/Xilonen C6 outside tailored scope",
+    "browser-local persistence",
+    "no damage/rotation/ER simulation",
+    "pinned source review, no runtime upstream drift polling",
+    "no experienced screen-reader acceptance claimed"
+  ]
+}

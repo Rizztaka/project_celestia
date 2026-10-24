@@ -228,7 +228,7 @@ it('refresh adds and updates the saved roster, keeps removed builds accessible, 
     [...document.querySelectorAll('a')].find((link) => link.textContent.trim() === 'Characters'),
   );
   await until(() => document.querySelector('a[aria-label="Open Skirk"]'));
-  await click(document.querySelector('a[aria-label="Open Skirk"]'));
+  await click(document.querySelector('a[aria-label="Open Skirk"] .collection-level'));
   await until(() => document.querySelector('.character-build-detail'));
   expect(window.location.pathname).toBe(savedPath);
   expect(text()).toContain('Previously observed build');

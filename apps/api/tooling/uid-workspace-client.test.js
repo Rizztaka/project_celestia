@@ -96,9 +96,11 @@ it('opens a clean Celestia Today with connected UID navigation, without duplicat
     'View my characters',
   ])
     expect(html).toContain(text);
-  for (const path of [`/u/${uid}/roster`, `/u/${uid}/inventory`, `/u/${uid}/showcase`])
+  for (const path of [`/u/${uid}/roster`, `/u/${uid}/showcase`])
     expect(html).toContain(`href="${path.replace('&', '&amp;')}"`);
   expect(html).toMatch(/<button[^>]*>Switch UID<\/button>/);
+  expect(html).not.toContain(`href="/u/${uid}/inventory"`);
+  expect(html).not.toContain('Your equipped gear');
   expect(html).not.toContain('Sign out');
   expect(html).not.toContain('href="/login"');
   expect(html).not.toContain('href="/import"');

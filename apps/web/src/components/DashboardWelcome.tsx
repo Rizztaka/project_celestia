@@ -70,11 +70,10 @@ export default function DashboardWelcome({
         </div>
       </section>
       {onAddUid ? (
-        <div className="today-shortcuts">
+        <div className="today-shortcuts uid-shortcuts">
           {(
             [
               ['characters', 'Your characters', 'Builds, talents & progression'],
-              ['inventory', 'Your equipped gear', 'Weapons, artifacts & statistics'],
               ['settings', 'Your public profile', 'Account details & showcase refresh'],
             ] as const
           ).map(([icon, title, description]) => (
@@ -89,7 +88,7 @@ export default function DashboardWelcome({
           ))}
         </div>
       ) : (
-        <div className="today-shortcuts">
+        <div className={uid ? 'today-shortcuts uid-shortcuts' : 'today-shortcuts'}>
           <Link className="shortcut-card" to={uid ? `${base}/roster` : '/roster'}>
             <UiIcon name="characters" />
             <span>
@@ -98,14 +97,16 @@ export default function DashboardWelcome({
             </span>
             <UiIcon name="arrow" />
           </Link>
-          <Link className="shortcut-card" to={uid ? `${base}/inventory` : '/planner?tab=farming'}>
-            <UiIcon name={uid ? 'inventory' : 'planner'} />
-            <span>
-              <strong>{uid ? 'Your equipped gear' : 'Make a little progress'}</strong>
-              <small>{uid ? 'Weapons, artifacts & statistics' : 'Your goals, in your order'}</small>
-            </span>
-            <UiIcon name="arrow" />
-          </Link>
+          {!uid ? (
+            <Link className="shortcut-card" to="/planner?tab=farming">
+              <UiIcon name="planner" />
+              <span>
+                <strong>Make a little progress</strong>
+                <small>Your goals, in your order</small>
+              </span>
+              <UiIcon name="arrow" />
+            </Link>
+          ) : null}
           <Link className="shortcut-card" to={uid ? `${base}/showcase` : '/import'}>
             <UiIcon name={uid ? 'settings' : 'import'} />
             <span>

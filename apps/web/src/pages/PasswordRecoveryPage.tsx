@@ -52,7 +52,7 @@ export default function PasswordRecoveryPage({ mode }: { mode: 'forgot' | 'reset
     if (!mutation.isSuccess || mode !== 'reset') return;
     const timer = setTimeout(
       () =>
-        navigate('/login', {
+        navigate('/workspace/login', {
           replace: true,
           state: { message: 'Password reset. Sign in with your new password.' },
         }),
@@ -161,7 +161,7 @@ export default function PasswordRecoveryPage({ mode }: { mode: 'forgot' | 'reset
         )}
         <Link
           className="inline-block text-sm text-indigo-200 underline"
-          to={mode === 'verify' ? '/profile' : '/login'}
+          to={mode === 'verify' ? '/profile' : '/workspace/login'}
         >
           {mode === 'verify' ? 'Back to profile' : 'Back to sign in'}
         </Link>

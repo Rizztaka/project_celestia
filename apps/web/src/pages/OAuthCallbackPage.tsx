@@ -24,7 +24,7 @@ export default function OAuthCallbackPage() {
       {error ? (
         <>
           <p role="alert">{error}</p>
-          <Link to="/login" className="underline">
+          <Link to="/workspace/login" className="underline">
             Back to sign in
           </Link>
         </>

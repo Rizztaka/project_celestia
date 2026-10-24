@@ -355,7 +355,9 @@ describe.skipIf(!database)('Section 2 actual PostgreSQL sessions, recovery and O
         '/api/v1/auth/oauth/google/callback?code=synthetic&state=incorrect-state-value',
       );
       if (value) request = request.set('Cookie', value);
-      expect((await request).headers.location).toBe('http://localhost:5173/login?oauth=failed');
+      expect((await request).headers.location).toBe(
+        'http://localhost:5173/workspace/login?oauth=failed',
+      );
     }
     const state = new URL(started.headers.location).searchParams.get('state')!;
     expect(
@@ -366,7 +368,7 @@ describe.skipIf(!database)('Section 2 actual PostgreSQL sessions, recovery and O
           )
           .set('Cookie', cookie)
       ).headers.location,
-    ).toBe('http://localhost:5173/login?oauth=failed');
+    ).toBe('http://localhost:5173/workspace/login?oauth=failed');
     expect(network).not.toHaveBeenCalled();
   });
   it.each(['discord', 'google'] as const)(

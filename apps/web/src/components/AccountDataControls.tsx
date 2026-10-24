@@ -95,7 +95,7 @@ export default function AccountDataControls() {
             controller.signal,
           );
           if (current()) {
-            navigate('/login', { replace: true, state: { accountDeleted: true } });
+            navigate('/workspace/login', { replace: true, state: { accountDeleted: true } });
             useAuthStore.getState().logout();
           }
         }

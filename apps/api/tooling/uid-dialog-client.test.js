@@ -131,6 +131,47 @@ afterEach(async () => {
 });
 afterAll(() => dom.window.close());
 
+it.each(['/login', '/register'])(
+  'opens the UID-first home from the old %s bookmark without restoring a credential session',
+  async (path) => {
+    const transport = vi.fn();
+    vi.stubGlobal('fetch', transport);
+    await mount(path);
+    await until(() => window.location.pathname === '/');
+    expect(text()).toContain('Today, at your pace.');
+    expect(buttons('Add UID').length).toBeGreaterThan(0);
+    expect(buttons('Switch UID')).toHaveLength(0);
+    expect(document.querySelector('input[type="password"]')).toBeNull();
+    expect(transport).not.toHaveBeenCalled();
+  },
+);
+
+it.each(['/login', '/register'])(
+  'resumes the saved UID from the old %s bookmark and offers Switch UID without sign-in',
+  async (path) => {
+    localStorage.setItem(storageKey, JSON.stringify({ version: 2, uid }));
+    const transport = vi.fn(async () => response(data()));
+    vi.stubGlobal('fetch', transport);
+    await mount(path);
+    await until(() => window.location.pathname === `/u/${uid}` && buttons('Switch UID').length);
+    expect(document.querySelector('input[type="password"]')).toBeNull();
+    expect(transport).toHaveBeenCalledTimes(1);
+    expect(transport.mock.calls[0][0]).toContain(`/games/genshin/showcase/${uid}`);
+    expect(transport.mock.calls[0][1].credentials).toBe('omit');
+  },
+);
+
+it('keeps the existing private workspace guarded with its own credential route', async () => {
+  const transport = vi.fn(async () => response({ success: false }));
+  vi.stubGlobal('fetch', transport);
+  window.history.replaceState({}, '', '/workspace');
+  await act(async () => root.render(h(App)));
+  await until(() => document.querySelector('input[type="password"]'));
+  expect(window.location.pathname).toBe('/workspace/login');
+  expect(document.querySelector('a[href="/workspace/register"]')).toBeTruthy();
+  expect(transport.mock.calls[0][0]).toContain('/auth/refresh');
+});
+
 it('refresh adds and updates the saved roster, keeps removed builds accessible, and preserves it after empty responses, failures and reloads', async () => {
   const raw = syntheticShowcase(uid);
   raw.avatarInfoList.push({

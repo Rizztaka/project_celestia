@@ -27,3 +27,6 @@
 - [x] Inspect GitHub, Vercel, confirmed Render workspace and Supabase read-only.
 - [x] Complete full repository verification and final commit (1,705 tests across 102 files; all quality gates pass).
 - [ ] Publish changes (requires explicit authorization under the earlier no-push/no-deploy instruction).
+
+- [x] Route old public login/registration bookmarks to UID entry without session restoration; preserve legacy account access under `/workspace/login` and `/workspace/register`.
+- [x] Test Add UID versus Switch UID on both old public URLs and retain private workspace authentication (77 focused client tests pass).

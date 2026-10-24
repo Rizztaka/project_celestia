@@ -12,8 +12,11 @@ pnpm showcase:dev
 
 Open http://127.0.0.1:45751/. If the launcher is already running, use that address without starting a second copy. The launcher uses the existing frontend and Express backend, isolated loopback ports, a sanitized environment and no real database credentials. The original checkout and its port 5173 remain separate and preserved.
 
+See `public-entry-walkthrough.md` for the latest public login URL refinement and production release boundary.
+
 ## Current experience
 
+- Public `/login` and `/register` links redirect to the UID-first home. Original account forms remain at `/workspace/login` and `/workspace/register`.
 - New visitors see Celestia's Today screen and **Add UID**. The shared dialog validates and searches a public UID, previews its showcased characters, and connects the whole showcase only after **Add UID** is selected. Search and Cancel never change the active UID.
 - Returning visitors resume the last successfully connected UID. Sidebar **Switch UID** uses the same dialog. A UID lookup does not prove ownership or create an authenticated account.
 - `/u/:uid` is Today. `/u/:uid/roster` is the retained character collection; element, weapon type, rarity and search filters combine locally and persist in the URL. `/u/:uid/inventory` shows latest observed equipment. `/u/:uid/showcase` shows only the latest successful public showcase.
@@ -34,7 +37,7 @@ The API reuses the bounded Enka adapter, same-UID request deduplication, TTL, pa
 
 See `roster-retention-test-results.json` for the 153 targeted passing tests and `roster-retention-quality-results.json` for final quality gates. The new tests cover transactional persistence, concurrent/older responses, per-UID isolation, empty showcases, storage denial and rollback. An actual App DOM interaction test verifies refresh/update, retained character details, current-only Public Profile, failure preservation and persistence after a new App mount.
 
-The complete repository verifier passed: **1,705 tests across 102 files, including 118 required PostgreSQL cases**, with zero failures or skips. Its migration/schema checks, lint, types, production build, repository formatting and Git whitespace gates pass. See `full-verification.json`. It ran against a newly initialized disposable PostgreSQL cluster on loopback port 45759, never the running original database or Supabase. Its compact evidence is saved alongside this document. All newly authored source is linted, typechecked and formatted. Original preservation is checked independently across 3,481 paths plus HEAD, branch and index.
+The complete repository verifier passed: **1,710 tests across 102 files, including 118 required PostgreSQL cases**, with zero failures or skips. Its migration/schema checks, lint, types, production build, repository formatting and Git whitespace gates pass. See `public-entry-verification.json`. It ran against a newly initialized disposable PostgreSQL cluster on loopback port 45759, never the running original database or Supabase. Its compact evidence is saved alongside this document. All newly authored source is linted, typechecked and formatted. Original preservation is checked independently across 3,481 paths plus HEAD, branch and index.
 
 DOM tests are not a visual browser check. Visual review of the latest build sheet, native UID dialog and roster remains pending under the previously recorded browser automation block. Earlier screenshots do not certify the final layout.
 

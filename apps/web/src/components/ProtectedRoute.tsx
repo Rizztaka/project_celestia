@@ -2,7 +2,7 @@
  * ProtectedRoute — wraps any route that requires authentication.
  *
  * Reads the token from the Zustand auth store. If no token exists,
- * redirects to /login. If a token exists, renders the child route.
+ * redirects to /workspace/login. If a token exists, renders the child route.
  *
  * Note: token presence does not guarantee validity — the server will
  * reject expired tokens with a 401, which the API client converts to
@@ -23,7 +23,7 @@ export function ProtectedRoute() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/workspace/login" replace />;
   }
 
   return <Outlet />;

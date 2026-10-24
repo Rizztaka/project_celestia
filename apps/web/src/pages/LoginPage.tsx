@@ -157,7 +157,7 @@ function LoginPage() {
       <p className="mt-6 text-center text-sm text-zinc-500">
         Don&apos;t have an account?{' '}
         <Link
-          to="/register"
+          to="/workspace/register"
           className="text-accent-400 hover:text-accent-300 font-medium transition-colors"
         >
           Create one

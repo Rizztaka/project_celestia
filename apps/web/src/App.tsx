@@ -143,9 +143,11 @@ export default function App() {
                   <Route path="showcase" element={<PublicShowcasePage />} />
                   <Route path="character/:id" element={<PublicShowcasePage />} />
                 </Route>
+                <Route path="/login" element={<Navigate to="/" replace />} />
+                <Route path="/register" element={<Navigate to="/" replace />} />
                 <Route element={<WorkspaceApp />}>
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/workspace/login" element={<LoginPage />} />
+                  <Route path="/workspace/register" element={<RegisterPage />} />
                   <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                   <Route path="/reset-password" element={<ResetPasswordPage />} />
                   <Route path="/verify-email" element={<PasswordRecoveryPage mode="verify" />} />

@@ -160,7 +160,7 @@ function RegisterPage() {
       <p className="mt-6 text-center text-sm text-zinc-500">
         Already have an account?{' '}
         <Link
-          to="/login"
+          to="/workspace/login"
           className="text-accent-400 hover:text-accent-300 font-medium transition-colors"
         >
           Sign in

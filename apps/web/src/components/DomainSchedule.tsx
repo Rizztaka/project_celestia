@@ -57,7 +57,7 @@ export default function DomainSchedule({
           : 'Choose your server on Today to see what is open now. You can still browse every weekday.'}
       </p>
       {serverId === null && (
-        <Link to="/" className="mt-2 inline-block text-sm text-indigo-200 underline">
+        <Link to="/workspace" className="mt-2 inline-block text-sm text-indigo-200 underline">
           Choose server on Today
         </Link>
       )}

@@ -45,7 +45,7 @@ export default function ProfilePage() {
           <Link className={planButton} to="/planner?tab=daily#routine-settings">
             Server & manual records
           </Link>
-          <Link className={planButton} to="/#plan-choices">
+          <Link className={planButton} to="/workspace#plan-choices">
             Routine choices & resin ceiling
           </Link>
           <Link className={planButton} to="/import">

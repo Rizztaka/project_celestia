@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-24",
+  "timezone": "Asia/Calcutta",
+  "synthetic": {
+    "url": "http://127.0.0.1:45761/showcase",
+    "transport": "Only external Enka responses replaced in the full Express app; no browser API interception.",
+    "passed": [
+      "Public page without sign-in",
+      "Invalid UID error before lookup",
+      "Load Showcase shows profile and returned character",
+      "Build expansion shows base/bonus talents, weapon, artifact stats and combat percentages",
+      "Refresh during TTL says locally cached with unchanged successful receipt time",
+      "Fixture upstream count stays one for a cache hit",
+      "503 after TTL retains prior character and successful receipt time with stale guidance",
+      "Reload retains UID and returns the prior stale snapshot without upstream access",
+      "429 shows wait guidance and keeps prior build",
+      "Validated empty response shows private/empty guidance without ownership inference"
+    ],
+    "upstreamFixtureCalls": 4,
+    "finalPublicEntryRecheck": {
+      "upstreamFixtureCalls": 1,
+      "authenticationRequests": 0,
+      "result": "After separating the direct public entry from session restoration, reload rendered the saved UID and cached build without an auth request."
+    },
+    "screenshots": ["showcase-synthetic-desktop.png", "showcase-synthetic-stale.png"]
+  },
+  "live": {
+    "url": "http://127.0.0.1:45751/showcase",
+    "uid": "618285856",
+    "uidProvenance": "Example in Enka's official API documentation; not the owner's account.",
+    "renderedDetailedCharacters": 4,
+    "expandedCharacter": "Amber",
+    "observedWeapon": "Skyward Harp",
+    "observedWeaponLevel": 90,
+    "observedRefinement": 2,
+    "equippedArtifactsRendered": 5,
+    "ownerGameComparison": "Not performed"
+  },
+  "limits": [
+    "No physical mobile device acceptance",
+    "No owner acceptance",
+    "No database or production system accessed"
+  ]
+}

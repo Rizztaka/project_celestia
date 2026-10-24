@@ -1,0 +1,41 @@
+{
+  "verifiedOn": "2026-10-24",
+  "frontend": "Actual unified Vite frontend",
+  "api": "Existing Express createApp with injected synthetic Enka transport",
+  "fixtureOrigins": ["http://127.0.0.1:45761", "http://127.0.0.1:45760"],
+  "authRequests": 0,
+  "checks": [
+    "invalid UID validation",
+    "successful lookup navigates to UID route",
+    "10-digit UID switching",
+    "persisted last successful UID resumes on full root load",
+    "failed switch does not replace remembered UID",
+    "dashboard and character pages share cached query",
+    "Refresh disabled until TTL deadline",
+    "cached versus fetched labels",
+    "429 Retry-After retains snapshot",
+    "503 retains snapshot",
+    "stopped API connection failure retains snapshot",
+    "successful empty response replaces current builds",
+    "old character link explains missing current build",
+    "talents weapon artifact stats details",
+    "Columbina 10000125 mapping and direct page reload"
+  ],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "documentScrollWidth": 375,
+      "horizontalOverflow": false
+    },
+    {
+      "width": 320,
+      "height": 740,
+      "documentScrollWidth": 305,
+      "horizontalOverflow": false
+    }
+  ],
+  "viewportRestored": true,
+  "personalAcceptance": "Not performed; reserved for owner",
+  "providerCaveat": "Synthetic browser data is not a real player observation; previous real-provider evidence remains in the P1 evidence directory."
+}

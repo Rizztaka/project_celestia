@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-24",
+  "timezone": "Asia/Calcutta",
+  "tests": { "passed": 100, "failed": 0, "pending": 0, "files": 5, "report": "test-results.json" },
+  "passed": [
+    "Shared contracts build",
+    "API TypeScript check",
+    "Web TypeScript check",
+    "API production build",
+    "Web production build",
+    "Full API lint",
+    "Full web lint",
+    "Full shared-contracts lint",
+    "Compiled API metadata resolution",
+    "Local launcher startup and browser to API to provider flow",
+    "React structure, hooks, accessibility and server-state review",
+    "Scoped Prettier check",
+    "Git whitespace check",
+    "Public startup browser recheck: zero authentication requests",
+    "Follow-up: Columbina 10000125 current metadata, modern image paths and costumes",
+    "Follow-up: isolated home/registration routes redirect to showcase in Chrome",
+    "Follow-up: compiled API resolves Columbina identity and portrait"
+  ],
+  "notRun": [
+    "Full database integration suite",
+    "Owner real-account comparison",
+    "Production deployment"
+  ],
+  "dependenciesAdded": 0,
+  "migrationsApplied": 0,
+  "sourceSeparation": "New showcase path has no account/import repository dependency; real-app HTTP test uses a throwing database sentinel.",
+  "syntheticVersusLive": "Automated and fixture browser tests are synthetic. Public example verification is separately recorded in live-api-check.json and browser-results.json."
+}

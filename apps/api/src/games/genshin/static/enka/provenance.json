@@ -1,0 +1,28 @@
+{
+  "revision": "a9b583eb4a708dd3db56f6bdef35c3e84e4d213c",
+  "acquiredAt": "2026-10-24T10:17:41.739Z",
+  "documentation": "https://github.com/EnkaNetwork/API-docs/blob/master/docs/gi/api.md",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/EnkaNetwork/API-docs/a9b583eb4a708dd3db56f6bdef35c3e84e4d213c/store/gi/avatars.json",
+      "output": "characters.json",
+      "upstreamSha256": "d399a75241d1206553f3e2cb860d513faa01ccfb3a98d944d35f9e5ffc27c56b"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/EnkaNetwork/API-docs/a9b583eb4a708dd3db56f6bdef35c3e84e4d213c/store/loc.json",
+      "output": "english.json",
+      "upstreamSha256": "ee8a58105be0595b386d035377711d7aa0859d09550241b291459372bbd38976"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/EnkaNetwork/API-docs/a9b583eb4a708dd3db56f6bdef35c3e84e4d213c/store/gi/locs.json",
+      "output": "english.json",
+      "upstreamSha256": "4553446022c6b45293190577cd8590a9d553cb895e1e92e8bfad46b670fd9727"
+    }
+  ],
+  "talentReference": {
+    "index": "../profile-reference/index.json",
+    "sha256": "1c1780307536d4f67eb97ec1d5e74c042e03a1008f02c9ff6dc73e47075c6752",
+    "output": "talent-names.json"
+  },
+  "transformation": "Current store/gi/avatars.json reduced to name, element, portrait, skill order, proud-skill and costume fields; costume fields normalized to internal names. English maps merged from legacy store/loc.json and current store/gi/locs.json, current map takes precedence. Talent names, character weapon type and character rarity projected from integrity-checked local character references by game ID; talents follow combat kind in Enka SkillOrder and Traveler forms use Enka Element. No account data or calculated progression."
+}

@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-23T19:28:06.168Z",
+  "original": "D:/Genshin Personal/project-celestia",
+  "reference": "Prior investigation baseline; all 1722 pre-existing uncommitted paths checked again.",
+  "checkedPaths": 1722,
+  "changed": [
+    "apps/api/src/games/genshin/hoyolab/hoyolab.controller.ts",
+    "apps/api/src/games/genshin/hoyolab/hoyolab.routes.ts",
+    "apps/web/src/App.tsx",
+    "apps/web/src/components/RoutinePanel.tsx",
+    "apps/web/src/components/TodayPlan.tsx",
+    "apps/web/src/lib/hoyolab.ts",
+    "apps/web/src/pages/DashboardPage.tsx",
+    "apps/web/src/pages/HoyolabPage.tsx"
+  ],
+  "originalHead": "be25f56c1051f460883a318d8c6428382188003f",
+  "originalBranch": "codex/contextual-guide-knowledge",
+  "stagedDiffEmpty": true,
+  "passed": false
+}

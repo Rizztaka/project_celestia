@@ -15,6 +15,7 @@ import { errorResponse } from '@/core/utils/response.js';
 import { genshinAccountData } from './games/genshin/account-data/genshin-account-data.js';
 import { GenshinCompanionProvider } from './games/genshin/companion/genshin-companion.provider.js';
 import { createGenshinRoutes } from './games/genshin/genshin.routes.js';
+import type { ShowcaseService } from './games/genshin/showcase/showcase.service.js';
 import { nikkeAccountData } from './games/nikke/account-data/nikke-account-data.js';
 import { nikkeRoutes } from './games/nikke/nikke.routes.js';
 import { createAccountDataRoutes } from './platform/account-data/account-data.routes.js';
@@ -26,7 +27,13 @@ import { userRoutes } from './platform/users/user.routes.js';
 // Register companion providers
 companionRegistry.register(new GenshinCompanionProvider());
 
-export function createApp(options: { policy?: RequestSafetyPolicy; clock?: () => number } = {}) {
+export function createApp(
+  options: {
+    policy?: RequestSafetyPolicy;
+    clock?: () => number;
+    showcaseService?: ShowcaseService;
+  } = {},
+) {
   const app = express();
   app.set('trust proxy', env.TRUST_PROXY ?? false);
   const safety = createRequestSafety(options.policy, options.clock);
@@ -59,7 +66,7 @@ export function createApp(options: { policy?: RequestSafetyPolicy; clock?: () =>
   // Platform routes
   v1Router.use('/auth', createAuthRoutes(safety));
   v1Router.use('/users', createAccountDataRoutes(safety, [genshinAccountData, nikkeAccountData]));
-  v1Router.use('/games/genshin', createGenshinRoutes(safety));
+  v1Router.use('/games/genshin', createGenshinRoutes(safety, options.showcaseService));
   // Expensive routes above own their parser. No earlier middleware consumes their bodies.
   v1Router.use(safety.ordinaryJson);
   v1Router.use('/users', userRoutes);

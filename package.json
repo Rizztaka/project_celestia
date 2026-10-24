@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "showcase:dev": "node tooling/showcase-dev.mjs",
     "recovery:rehearse": "pnpm --filter @celestia/api exec tsx tooling/recovery/cli.mjs",
     "verify": "pnpm --filter @celestia/api exec tsx tooling/verify.mjs",
     "dev": "turbo run dev",

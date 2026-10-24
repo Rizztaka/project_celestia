@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-24T10:21:41.039Z",
+  "tests": 146,
+  "passed": 146,
+  "contractsBuild": "passed",
+  "apiBuild": "passed",
+  "webBuild": "passed",
+  "webLint": "passed",
+  "scopedApiToolingLint": "passed",
+  "contractsLint": "passed",
+  "format": "passed",
+  "diffCheck": "passed",
+  "packagedParser": "Amber Pyro/Bow/4-star without equipped gear confirmed",
+  "originalCheckout": "3481 paths, HEAD, branch and index unchanged",
+  "launcher": "running on API 45750 / frontend 45751",
+  "browserVisualVerification": "pending under existing extension automation block"
+}

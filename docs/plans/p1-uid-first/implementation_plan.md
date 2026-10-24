@@ -1,0 +1,27 @@
+# P1 UID-first refinement
+
+Use the existing `codex/p1-enka-showcase` safe worktree. The original dirty checkout and running original app are preserved. This is an incremental refinement of the existing P1 implementation, not a replacement checkout.
+
+One BrowserRouter provides `/` UID entry, `/u/:uid` public dashboard and `/u/:uid/character/:id` reported build details. `/showcase` remains a compatibility entry. The previous authenticated workspace remains available at `/workspace` and its existing feature URLs; session restoration runs only on those routes. Public routes never restore a login session.
+
+Reuse the shared showcase contract, public backend route, bounded Enka service cache, parser, pinned current metadata (including Columbina), existing brand and build components. No new database or authentication system. Only remember a UID after a successful, issue-free snapshot. Store no snapshot in browser storage. Keep UID queries separate from account caches and never show another UID's snapshot while switching.
+
+Manual refresh uses the existing provider TTL/retry deadline, disables requests until eligible, and preserves the last successful result on service or network failure. Direct character links use the same query and current snapshot. No inferred equipment or private roster; no separate history introduced.
+
+Validate provider documentation, targeted parser/service/client regressions, legacy client regressions, builds, type checks, lint and formatting. Verify entry, return, switch, deep links, refresh, errors, empty data and narrow layouts against the full app with a synthetic provider transport. Preserve evidence in this directory and stop for owner acceptance. No deployment, push, merge or removal of prior implementation.
+
+Talent-name follow-up: project actual combat talent names from the existing integrity-checked character references onto the pinned Enka skill IDs. Select Traveler references by Enka element and retain conservative skill-ID fallbacks. Keep observed levels and bonuses unchanged, display names in both build views, and cover the mapping plus rendered output in regressions.
+
+Inline overview follow-up: keep the View build disclosure compact with named talent levels, a small grid of key statistics and artifact set piece counts. Keep the weapon summary in the character header. Show the complete equipment statistics and artifact breakdown only on the character detail page; preserve the existing header navigation and independent inline disclosure.
+
+Final character-bar refinement supersedes the inline overview: remove the View build disclosure and its inline content entirely. Keep each whole character bar as a native link to that character's existing detailed build route. Render the full build directly on the detail page without a second disclosure.
+
+Build-page cleanup: render the refresh button and countdown only on Public Profile, not character detail routes. Keep shared showcase data and error/loading feedback, and disable the unused countdown interval on detail pages.
+
+Talent types: add a nullable talent kind to the showcase contract, derived from the matching Enka metadata's SkillOrder. Display Normal Attack, Elemental Skill or Elemental Burst above the talent name. Keep unknown types explicit and preserve actual levels and bonuses. Provide design recommendations separately; a larger visual redesign is not part of this edit.
+
+Approved design and UID-dialog refinement: implement the proposed hero, key-stat hierarchy, dedicated weapon/talent panels and consistent artifact cards. Remove the build-page top-right Switch UID control. Sidebar UID actions open one accessible search/preview/add dialog. The user clarified that Add connects the entire public showcase, without selecting individual characters. Searches and cancellation must not change the active UID or saved preference. First-time visitors see the normal Celestia shell and Today screen with Add UID actions; returning users resume the last successfully added UID. Keep the original authenticated workspace and preserved checkout intact. Validate modal state transitions, cached/error/empty lookups, first use, switching, build mapping and responsive structure. Keep existing TTL behavior and no deployment/push/merge.
+
+Character filters: add combined element, character weapon type and 4-star/5-star filters alongside the existing name/ID search, with URL persistence, result counts and Clear filters. Reuse integrity-checked character references for weapon type and character rarity; never infer character rarity from equipped weapon rarity. Unknown metadata remains nullable. Filtering is local to the current public showcase and must not trigger upstream requests or reveal a private roster.
+
+Roster retention and release audit: persist previously observed public character builds per UID in browser IndexedDB with transactional upserts. Successful refreshes add/update records and never delete absent characters, including empty responses. Keep Public Profile strictly current; clearly label retained roster/equipment/detail observations with their last retrieval time. Preserve records on errors, out-of-order data, storage failures and UID switching. Run regression and production-quality checks, inspect the exact changes for secrets, and commit the complete isolated P1 implementation as requested. Inspect GitHub, Vercel, Render and Supabase read-only. Existing prohibition on pushing/deploying/merging remains unless explicitly superseded.

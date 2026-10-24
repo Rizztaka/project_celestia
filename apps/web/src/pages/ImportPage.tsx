@@ -119,7 +119,7 @@ export default function ImportPage() {
         </p>
         <p className="mb-6 text-sm">
           Importing is optional.{' '}
-          <Link className="text-indigo-200 underline" to="/">
+          <Link className="text-indigo-200 underline" to="/workspace">
             Use Today without an import
           </Link>
           . Receipts date this import, not a live game observation.
@@ -140,7 +140,7 @@ export default function ImportPage() {
               ))}
             </dl>
             <div className="flex flex-wrap gap-4">
-              <Link className={buttonClass} to="/">
+              <Link className={buttonClass} to="/workspace">
                 Return to Today
               </Link>
               <Link className={buttonClass} to="/roster">

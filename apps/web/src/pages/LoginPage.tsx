@@ -44,7 +44,7 @@ function LoginPage() {
       }),
     onSuccess: (data) => {
       login(data.token, data.user);
-      navigate('/', { replace: true });
+      navigate('/workspace', { replace: true });
     },
   });
 

@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-10-24T11:06:00.079Z",
+  "fullVerification": "passed",
+  "command": "pnpm verify",
+  "tests": {
+    "passed": 1705,
+    "files": 102,
+    "failed": 0,
+    "skipped": 0,
+    "postgresCases": 118,
+    "integration": {
+      "src/platform/companion/plan.integration.test.ts": 36,
+      "src/platform/companion/goal-lifecycle.integration.test.ts": 28,
+      "src/platform/companion/routine.integration.test.ts": 16,
+      "src/games/genshin/characters/character-equipment.integration.test.ts": 13,
+      "src/games/genshin/importer/importer.integration.test.ts": 16,
+      "src/platform/companion/catalog-advice.integration.test.ts": 9
+    }
+  },
+  "contractsLint": "passed",
+  "apiLintTypesBuild": "passed",
+  "webLintTypesProductionBuild": "passed",
+  "repositoryFormat": "passed",
+  "gitWhitespace": "passed",
+  "originalCheckout": { "paths": 3481, "filesHeadBranchIndexUnchanged": true },
+  "credentialPatternReview": "no findings in staged implementation and evidence",
+  "dataBoundary": "Production Supabase was read-only. Integration migrations and test mutations used a newly initialized disposable local PostgreSQL cluster on port 45759.",
+  "persistence": "Per-UID browser IndexedDB upserts; no deletion on refresh; not cross-device or cross-origin synchronization.",
+  "deployment": "Read-only audit complete. Production still on master 00cf042. No push, merge or deployment.",
+  "visualVerification": "Latest native UID dialog and build/roster layouts remain pending owner visual review under the existing browser automation block."
+}

@@ -12,11 +12,11 @@ export default function OAuthCallbackPage() {
     if (started.current) return;
     started.current = true;
     if (useAuthStore.getState().isAuthenticated) {
-      navigate('/', { replace: true });
+      navigate('/workspace', { replace: true });
       return;
     }
     void restoreCookieSession()
-      .then(() => navigate('/', { replace: true }))
+      .then(() => navigate('/workspace', { replace: true }))
       .catch(() => setError('Sign-in could not finish. Please try again.'));
   }, [navigate]);
   return (

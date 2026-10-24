@@ -22,16 +22,13 @@ export default function UidCharacterGrid({
         const observation = observations.find((record) => record.character.key === character.key);
         const retained = currentKeys && !currentKeys.has(character.key);
         return (
-          <article
-            className="collection-card"
+          <Link
+            to={uidCharacterPath(uid, character.key)}
+            className="collection-card uid-character-card"
             key={character.key}
-            aria-label={`${character.name}, ${character.level === null ? 'level not reported' : `Level ${character.level}`}, Constellation ${character.constellation}`}
+            aria-label={`Open ${character.name}`}
           >
-            <Link
-              to={uidCharacterPath(uid, character.key)}
-              className="collection-art block"
-              aria-label={`Open ${character.name}`}
-            >
+            <div className="collection-art">
               {character.portrait ? (
                 <img
                   src={character.portrait}
@@ -44,7 +41,7 @@ export default function UidCharacterGrid({
                 />
               ) : null}
               <span className="collection-constellation">C{character.constellation}</span>
-            </Link>
+            </div>
             <div className="collection-body">
               <p className="collection-element">
                 {retained ? 'Previously observed' : 'Public showcase'}
@@ -64,9 +61,7 @@ export default function UidCharacterGrid({
                   ) : null}
                 </p>
               ) : null}
-              <Link className="collection-name" to={uidCharacterPath(uid, character.key)}>
-                {character.name}
-              </Link>
+              <h2 className="collection-name">{character.name}</h2>
               {!character.metadataAvailable ? (
                 <p className="text-xs text-amber-100">Metadata unavailable · ID {character.id}</p>
               ) : null}
@@ -96,12 +91,12 @@ export default function UidCharacterGrid({
                   {character.weapon?.name ?? 'Weapon not reported'}
                 </span>
               </div>
-              <Link className="collection-open" to={uidCharacterPath(uid, character.key)}>
+              <div className="collection-open">
                 <span>Open character</span>
                 <UiIcon name="arrow" />
-              </Link>
+              </div>
             </div>
-          </article>
+          </Link>
         );
       })}
     </div>

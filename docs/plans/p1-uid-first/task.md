@@ -32,3 +32,5 @@
 - [x] Test Add UID versus Switch UID on both old public URLs and retain private workspace authentication (77 focused client tests pass).
 
 - [x] Remove Equipment from UID desktop/mobile navigation and Today shortcuts, retaining equipment in character details and compatibility URLs.
+
+- [x] Make the complete UID roster card a native build-page link with visible keyboard focus; exercise a metadata-area click in the existing interaction regression.

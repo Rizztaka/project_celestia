@@ -616,3 +616,14 @@ body:has(.uid-dialog[open]) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+.uid-character-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.uid-character-card:focus-visible {
+  outline: 2px solid #d8be89;
+  outline-offset: 4px;
+}

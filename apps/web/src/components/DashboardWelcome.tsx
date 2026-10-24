@@ -6,9 +6,11 @@ import { CelestiaMark, PageHeader, UiIcon } from './Ui';
 export default function DashboardWelcome({
   uid,
   onAddUid,
+  compact = false,
 }: {
   uid?: string;
   onAddUid?: () => void;
+  compact?: boolean;
 }) {
   const base = `/u/${uid}`;
   return (
@@ -36,39 +38,41 @@ export default function DashboardWelcome({
           )
         }
       />
-      <section className="today-hero" aria-label="Your journey">
-        <div className="today-hero-content">
-          <p className="eyebrow">LESS BUSYWORK. MORE TEYVAT.</p>
-          <h2>
-            Every great build
-            <br />
-            begins with a next step.
-          </h2>
-          <p>
-            {onAddUid
-              ? 'Connect your public Genshin showcase to see your characters, talents and equipped builds in one considered space.'
-              : uid
-                ? 'Your showcase is connected. Explore your characters, talents and equipped builds in one considered space.'
-                : 'Make progress on your terms. Keep your characters, daily routine and longer plans in one considered space.'}
-          </p>
-          {onAddUid ? (
-            <button type="button" className="button-primary" onClick={onAddUid}>
-              Add UID <UiIcon name="arrow" />
-            </button>
-          ) : uid ? (
-            <Link className="button-primary" to={`${base}/roster`}>
-              View my characters <UiIcon name="arrow" />
-            </Link>
-          ) : (
-            <a className="button-primary" href="#session-recording">
-              Record my session <UiIcon name="arrow" />
-            </a>
-          )}
-        </div>
-        <div className="hero-orbits" aria-hidden="true">
-          <CelestiaMark />
-        </div>
-      </section>
+      {!compact ? (
+        <section className="today-hero" aria-label="Your journey">
+          <div className="today-hero-content">
+            <p className="eyebrow">LESS BUSYWORK. MORE TEYVAT.</p>
+            <h2>
+              Every great build
+              <br />
+              begins with a next step.
+            </h2>
+            <p>
+              {onAddUid
+                ? 'Connect your public Genshin showcase to see your characters, talents and equipped builds in one considered space.'
+                : uid
+                  ? 'Your showcase is connected. Explore your characters, talents and equipped builds in one considered space.'
+                  : 'Make progress on your terms. Keep your characters, daily routine and longer plans in one considered space.'}
+            </p>
+            {onAddUid ? (
+              <button type="button" className="button-primary" onClick={onAddUid}>
+                Add UID <UiIcon name="arrow" />
+              </button>
+            ) : uid ? (
+              <Link className="button-primary" to={`${base}/roster`}>
+                View my characters <UiIcon name="arrow" />
+              </Link>
+            ) : (
+              <a className="button-primary" href="#session-recording">
+                Record my session <UiIcon name="arrow" />
+              </a>
+            )}
+          </div>
+          <div className="hero-orbits" aria-hidden="true">
+            <CelestiaMark />
+          </div>
+        </section>
+      ) : null}
       {onAddUid ? (
         <div className="today-shortcuts uid-shortcuts">
           {(

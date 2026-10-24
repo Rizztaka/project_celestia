@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
 
 import DashboardWelcome from '../components/DashboardWelcome';
+import TodayDomains from '../components/TodayDomains';
 import { readShowcaseUid } from '../lib/showcase';
 import { useUidDialog } from '../lib/uid-dialog';
 
@@ -16,6 +17,7 @@ export default function ShowcasePage() {
   return (
     <main id="companion-content" tabIndex={-1} className="today-page space-y-7">
       <DashboardWelcome onAddUid={openUidDialog} />
+      <TodayDomains />
       <p className="text-sm leading-relaxed text-zinc-500">
         No sign-in or registration needed. Add your Genshin UID to explore publicly showcased
         characters and equipped builds.

@@ -34,3 +34,7 @@
 - [x] Remove Equipment from UID desktop/mobile navigation and Today shortcuts, retaining equipment in character details and compatibility URLs.
 
 - [x] Make the complete UID roster card a native build-page link with visible keyboard focus; exercise a metadata-area click in the existing interaction regression.
+
+- [x] Implement compact Today talent/weapon domain panels, server timing, weekday browsing and saved-roster material matches using the existing catalog.
+- [x] Verify offline projection, Columbina, unknown/Traveler exclusions, Sunday, all supported reset boundaries, interactive day/server/scope controls and existing UID flows (96 relevant tests, web lint/types/build).
+- [ ] Owner visual review of the first Today farming layout and selection of further refinements.

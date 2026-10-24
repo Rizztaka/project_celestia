@@ -1,0 +1,14 @@
+{
+  "recordedAt": "2026-10-24T07:28:51.534Z",
+  "tests": {
+    "passed": 126,
+    "failed": 0,
+    "success": true
+  },
+  "gates": {
+    "webBuildAndTypes": 0,
+    "webLint": 0
+  },
+  "browserVerification": "Blocked by an open Chrome extension UI; no new interactive result claimed.",
+  "ownerAcceptance": "pending"
+}

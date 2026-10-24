@@ -1,0 +1,1210 @@
+{
+  "numTotalTestSuites": 13,
+  "numPassedTestSuites": 13,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 125,
+  "numPassedTests": 125,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1792825705229,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions marks the correct destination for /workspace and preserves supported destinations",
+          "status": "passed",
+          "title": "marks the correct destination for /workspace and preserves supported destinations",
+          "duration": 34.537900000000036,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions marks the correct destination for /roster/Opaque%20%2F%20%E5%AD%97 and preserves supported destinations",
+          "status": "passed",
+          "title": "marks the correct destination for /roster/Opaque%20%2F%20%E5%AD%97 and preserves supported destinations",
+          "duration": 8.87909999999988,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions marks the correct destination for /planner?tab=farming&goal=opaque%2Fid&status=paused and preserves supported destinations",
+          "status": "passed",
+          "title": "marks the correct destination for /planner?tab=farming&goal=opaque%2Fid&status=paused and preserves supported destinations",
+          "duration": 9.820600000000013,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions marks the correct destination for /profile and preserves supported destinations",
+          "status": "passed",
+          "title": "marks the correct destination for /profile and preserves supported destinations",
+          "duration": 10.52839999999992,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions marks the correct destination for /intelligence and preserves supported destinations",
+          "status": "passed",
+          "title": "marks the correct destination for /intelligence and preserves supported destinations",
+          "duration": 12.942600000000084,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions marks the correct destination for /characters/Albedo and preserves supported destinations",
+          "status": "passed",
+          "title": "marks the correct destination for /characters/Albedo and preserves supported destinations",
+          "duration": 9.412599999999884,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions combines persisted URL search and focus without changing opaque character links",
+          "status": "passed",
+          "title": "combines persisted URL search and focus without changing opaque character links",
+          "duration": 30.43060000000014,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions distinguishes a no-match filter from an account with no recorded characters",
+          "status": "passed",
+          "title": "distinguishes a no-match filter from an account with no recorded characters",
+          "duration": 114.86529999999993,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions renders labeled retained roster records after the actual query cache receives a failure",
+          "status": "passed",
+          "title": "renders labeled retained roster records after the actual query cache receives a failure",
+          "duration": 92.30830000000014,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions keeps an unavailable inventory count unknown, instead of rendering numeric zero",
+          "status": "passed",
+          "title": "keeps an unavailable inventory count unknown, instead of rendering numeric zero",
+          "duration": 4.200800000000072,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions profile recovery keeps confirmed owner details and existing settings routes",
+          "status": "passed",
+          "title": "profile recovery keeps confirmed owner details and existing settings routes",
+          "duration": 17.059999999999945,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions fetchImportStatus carries cancellation and rejects a delayed originating-owner response",
+          "status": "passed",
+          "title": "fetchImportStatus carries cancellation and rejects a delayed originating-owner response",
+          "duration": 3.4307000000001153,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions fetchGenshinRoster carries cancellation and rejects a delayed originating-owner response",
+          "status": "passed",
+          "title": "fetchGenshinRoster carries cancellation and rejects a delayed originating-owner response",
+          "duration": 0.677599999999984,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions fetchGenshinWeapons carries cancellation and rejects a delayed originating-owner response",
+          "status": "passed",
+          "title": "fetchGenshinWeapons carries cancellation and rejects a delayed originating-owner response",
+          "duration": 0.6718000000000757,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions fetchGenshinArtifacts carries cancellation and rejects a delayed originating-owner response",
+          "status": "passed",
+          "title": "fetchGenshinArtifacts carries cancellation and rejects a delayed originating-owner response",
+          "duration": 0.5054000000000087,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions fetchMaterialDelta carries cancellation and rejects a delayed originating-owner response",
+          "status": "passed",
+          "title": "fetchMaterialDelta carries cancellation and rejects a delayed originating-owner response",
+          "duration": 0.36750000000006366,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions fetchTodayDomains carries cancellation and rejects a delayed originating-owner response",
+          "status": "passed",
+          "title": "fetchTodayDomains carries cancellation and rejects a delayed originating-owner response",
+          "duration": 0.42250000000012733,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions fetchEvents carries cancellation and rejects a delayed originating-owner response",
+          "status": "passed",
+          "title": "fetchEvents carries cancellation and rejects a delayed originating-owner response",
+          "duration": 0.39049999999997453,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["C5 real navigation, rendering and transport regressions"],
+          "fullName": "C5 real navigation, rendering and transport regressions fetchNikkeRoster carries cancellation and rejects a delayed originating-owner response",
+          "status": "passed",
+          "title": "fetchNikkeRoster carries cancellation and rejects a delayed originating-owner response",
+          "duration": 0.42669999999998254,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792825708651,
+      "endTime": 1792825709003.4268,
+      "status": "passed",
+      "message": "",
+      "name": "C:/Users/inuzu/.codex/worktrees/p1-enka-showcase/project-celestia/apps/api/tooling/journey-client.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "renders account overview, all returned builds, weapon/artifact details and correctly formatted statistics",
+          "status": "passed",
+          "title": "renders account overview, all returned builds, weapon/artifact details and correctly formatted statistics",
+          "duration": 14.38559999999984,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "distinguishes empty/private showcase from owned-roster data and unavailable observations",
+          "status": "passed",
+          "title": "distinguishes empty/private showcase from owned-roster data and unavailable observations",
+          "duration": 3.7065999999999804,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "labels fetched freshness accurately",
+          "status": "passed",
+          "title": "labels fetched freshness accurately",
+          "duration": 6.010099999999966,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "labels cached freshness accurately",
+          "status": "passed",
+          "title": "labels cached freshness accurately",
+          "duration": 0.7764999999999418,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "labels stale freshness accurately",
+          "status": "passed",
+          "title": "labels stale freshness accurately",
+          "duration": 0.6803999999999633,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "labels unavailable freshness accurately",
+          "status": "passed",
+          "title": "labels unavailable freshness accurately",
+          "duration": 0.5254999999999654,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "renders initial/loading/network/rate-limit states accessibly and never prints upstream diagnostics",
+          "status": "passed",
+          "title": "renders initial/loading/network/rate-limit states accessibly and never prints upstream diagnostics",
+          "duration": 1.4827000000000226,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "saves only a versioned UID preference; corrupt or denied storage does not crash",
+          "status": "passed",
+          "title": "saves only a versioned UID preference; corrupt or denied storage does not crash",
+          "duration": 1.3823999999999614,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "uses legacy UID preferences only as prefill until a lookup succeeds",
+          "status": "passed",
+          "title": "uses legacy UID preferences only as prefill until a lookup succeeds",
+          "duration": 0.6521999999999935,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "handles typed provider failures and rejects malformed/foreign snapshots without authenticating",
+          "status": "passed",
+          "title": "handles typed provider failures and rejects malformed/foreign snapshots without authenticating",
+          "duration": 23.93170000000009,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps showcase queries and UI separate from roster/import/account actions",
+          "status": "passed",
+          "title": "keeps showcase queries and UI separate from roster/import/account actions",
+          "duration": 5.004599999999982,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps UID entry free of workspace registration and sign-in links",
+          "status": "passed",
+          "title": "keeps UID entry free of workspace registration and sign-in links",
+          "duration": 3.6410000000000764,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "remembers only successful public lookups, preserving the previous UID on errors or stale results",
+          "status": "passed",
+          "title": "remembers only successful public lookups, preserving the previous UID on errors or stale results",
+          "duration": 0.5366999999998825,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 600000001 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 600000001 without inventing unknown ranges",
+          "duration": 0.14670000000000982,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 700000001 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 700000001 without inventing unknown ranges",
+          "duration": 0.05400000000008731,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 800000001 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 800000001 without inventing unknown ranges",
+          "duration": 0.04860000000007858,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 1800000001 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 1800000001 without inventing unknown ranges",
+          "duration": 0.053699999999935244,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 900000001 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 900000001 without inventing unknown ranges",
+          "duration": 0.04310000000009495,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 1234567890 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 1234567890 without inventing unknown ranges",
+          "duration": 0.043199999999842476,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix invalid without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix invalid without inventing unknown ranges",
+          "duration": 0.07389999999986685,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "enforces TTL and retry deadlines through the exact refresh boundary",
+          "status": "passed",
+          "title": "enforces TTL and retry deadlines through the exact refresh boundary",
+          "duration": 0.18049999999993815,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "retains an earlier successful snapshot even when a restarted API has lost its cache",
+          "status": "passed",
+          "title": "retains an earlier successful snapshot even when a restarted API has lost its cache",
+          "duration": 0.23630000000002838,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "deduplicates client lookup and dashboard requests for one UID and separates UID caches",
+          "status": "passed",
+          "title": "deduplicates client lookup and dashboard requests for one UID and separates UID caches",
+          "duration": 3.383299999999963,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "renders UID dashboard links and a character deep link from the same current snapshot",
+          "status": "passed",
+          "title": "renders UID dashboard links and a character deep link from the same current snapshot",
+          "duration": 14.91859999999997,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "shows missing character and invalid UID links clearly, without substituting private or historical data",
+          "status": "passed",
+          "title": "shows missing character and invalid UID links clearly, without substituting private or historical data",
+          "duration": 6.766599999999926,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "disables refresh during provider TTL and Retry-After, and retains old data on a rate limit",
+          "status": "passed",
+          "title": "disables refresh during provider TTL and Retry-After, and retains old data on a rate limit",
+          "duration": 4.718699999999899,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792825707094,
+      "endTime": 1792825707187.7188,
+      "status": "passed",
+      "message": "",
+      "name": "C:/Users/inuzu/.codex/worktrees/p1-enka-showcase/project-celestia/apps/api/tooling/showcase-client.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "opens Celestia Today with the real workspace shell and UID data, without mounting account queries",
+          "status": "passed",
+          "title": "opens Celestia Today with the real workspace shell and UID data, without mounting account queries",
+          "duration": 34.75400000000013,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "uses the connected characters in the main collection cards and keeps search scoped to that UID",
+          "status": "passed",
+          "title": "uses the connected characters in the main collection cards and keeps search scoped to that UID",
+          "duration": 17.07420000000002,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "connects the same equipped weapon and artifact data to the main equipment tabs",
+          "status": "passed",
+          "title": "connects the same equipped weapon and artifact data to the main equipment tabs",
+          "duration": 12.520199999999932,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "opens the reported build inside the main shell and links back to the UID character collection",
+          "status": "passed",
+          "title": "opens the reported build inside the main shell and links back to the UID character collection",
+          "duration": 9.293800000000147,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "never substitutes another UID data while a different workspace is loading",
+          "status": "passed",
+          "title": "never substitutes another UID data while a different workspace is loading",
+          "duration": 5.308399999999892,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps empty or hidden data explicit across Today, characters and equipment",
+          "status": "passed",
+          "title": "keeps empty or hidden data explicit across Today, characters and equipment",
+          "duration": 19.607099999999946,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "retains connected workspace data and disables refresh during provider backoff",
+          "status": "passed",
+          "title": "retains connected workspace data and disables refresh during provider backoff",
+          "duration": 9.319700000000012,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "retains the original account Today actions in the shared welcome component",
+          "status": "passed",
+          "title": "retains the original account Today actions in the shared welcome component",
+          "duration": 3.106599999999844,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps new character metadata and absent observations accurate in the main collection",
+          "status": "passed",
+          "title": "keeps new character metadata and absent observations accurate in the main collection",
+          "duration": 6.2047999999999774,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "resolves UID navigation accurately and preserves opaque character keys",
+          "status": "passed",
+          "title": "resolves UID navigation accurately and preserves opaque character keys",
+          "duration": 0.38560000000006767,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792825710333,
+      "endTime": 1792825710451.3855,
+      "status": "passed",
+      "message": "",
+      "name": "C:/Users/inuzu/.codex/worktrees/p1-enka-showcase/project-celestia/apps/api/tooling/uid-workspace-client.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview reports missing metadata as unknown without writing",
+          "status": "passed",
+          "title": "reports missing metadata as unknown without writing",
+          "duration": 2.161899999999946,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview preserves absent sections and previews character merges without writing",
+          "status": "passed",
+          "title": "preserves absent sections and previews character merges without writing",
+          "duration": 5.7346,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview keeps an unselected present section out of the write selection",
+          "status": "passed",
+          "title": "keeps an unselected present section out of the write selection",
+          "duration": 3.2509000000000015,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview rejects selecting absent weapons",
+          "status": "passed",
+          "title": "rejects selecting absent weapons",
+          "duration": 1.134999999999991,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview rejects selecting absent artifacts",
+          "status": "passed",
+          "title": "rejects selecting absent artifacts",
+          "duration": 0.3390999999999167,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview rejects selecting absent materials",
+          "status": "passed",
+          "title": "rejects selecting absent materials",
+          "duration": 0.3045999999999367,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview rejects invalid selection []",
+          "status": "passed",
+          "title": "rejects invalid selection []",
+          "duration": 0.48719999999991614,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview rejects invalid selection [ 'weapons', 'weapons' ]",
+          "status": "passed",
+          "title": "rejects invalid selection [ 'weapons', 'weapons' ]",
+          "duration": 0.2498000000000502,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview rejects invalid selection [ 'unknown' ]",
+          "status": "passed",
+          "title": "rejects invalid selection [ 'unknown' ]",
+          "duration": 0.5099999999999909,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview requires confirmation for empty replacement and zero-only materials",
+          "status": "passed",
+          "title": "requires confirmation for empty replacement and zero-only materials",
+          "duration": 3.644999999999982,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview does not treat an empty character list as roster deletion",
+          "status": "passed",
+          "title": "does not treat an empty character list as roster deletion",
+          "duration": 1.1914000000000442,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview accepts equipment belonging to an existing character absent from the export",
+          "status": "passed",
+          "title": "accepts equipment belonging to an existing character absent from the export",
+          "duration": 1.6358999999999924,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview rejects unresolved locations instead of silently unequipping items",
+          "status": "passed",
+          "title": "rejects unresolved locations instead of silently unequipping items",
+          "duration": 0.29589999999996053,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview does not resolve a character from an unselected section",
+          "status": "passed",
+          "title": "does not resolve a character from an unselected section",
+          "duration": 0.42999999999995,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview rejects conflicting assignments 0",
+          "status": "passed",
+          "title": "rejects conflicting assignments 0",
+          "duration": 0.30709999999999127,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview rejects conflicting assignments 1",
+          "status": "passed",
+          "title": "rejects conflicting assignments 1",
+          "duration": 0.17270000000007713,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview rejects conflicting assignments 2",
+          "status": "passed",
+          "title": "rejects conflicting assignments 2",
+          "duration": 0.1636999999999489,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview accepts repeated unequipped items and distinct artifact slots",
+          "status": "passed",
+          "title": "accepts repeated unequipped items and distinct artifact slots",
+          "duration": 2.024400000000014,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview validates game field ranges before reading inventory",
+          "status": "passed",
+          "title": "validates game field ranges before reading inventory",
+          "duration": 0.3769000000000915,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview rejects material quantities outside the database integer range",
+          "status": "passed",
+          "title": "rejects material quantities outside the database integer range",
+          "duration": 0.25290000000006785,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Safe import contract and preview"],
+          "fullName": "Safe import contract and preview requires a versioned preview for legacy raw GOOD imports",
+          "status": "passed",
+          "title": "requires a versioned preview for legacy raw GOOD imports",
+          "duration": 0.39800000000002456,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Preview integrity"],
+          "fullName": "Preview integrity rejects changed user before writes",
+          "status": "passed",
+          "title": "rejects changed user before writes",
+          "duration": 2.581299999999942,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Preview integrity"],
+          "fullName": "Preview integrity rejects changed payload before writes",
+          "status": "passed",
+          "title": "rejects changed payload before writes",
+          "duration": 1.5053000000000338,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Preview integrity"],
+          "fullName": "Preview integrity rejects changed scope before writes",
+          "status": "passed",
+          "title": "rejects changed scope before writes",
+          "duration": 1.4423999999999069,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Preview integrity"],
+          "fullName": "Preview integrity rejects changed token before writes",
+          "status": "passed",
+          "title": "rejects changed token before writes",
+          "duration": 0.9160000000000537,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Preview integrity"],
+          "fullName": "Preview integrity rejects expired previews",
+          "status": "passed",
+          "title": "rejects expired previews",
+          "duration": 3.0269000000000688,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Preview integrity"],
+          "fullName": "Preview integrity rejects inventory edits between preview and commit",
+          "status": "passed",
+          "title": "rejects inventory edits between preview and commit",
+          "duration": 1.7783000000000584,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Preview integrity"],
+          "fullName": "Preview integrity fingerprints reordered object keys identically while detecting changed arrays",
+          "status": "passed",
+          "title": "fingerprints reordered object keys identically while detecting changed arrays",
+          "duration": 0.3543000000000802,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792825712079,
+      "endTime": 1792825712115.7783,
+      "status": "passed",
+      "message": "",
+      "name": "C:/Users/inuzu/.codex/worktrees/p1-enka-showcase/project-celestia/apps/api/src/games/genshin/importer/importer.service.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Showcase through the existing Express application"],
+          "fullName": "Showcase through the existing Express application serves public data, rejects UID injection, and never accesses or replaces stored account data",
+          "status": "passed",
+          "title": "serves public data, rejects UID injection, and never accesses or replaces stored account data",
+          "duration": 37.43529999999964,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792825714994,
+      "endTime": 1792825715031.4353,
+      "status": "passed",
+      "message": "",
+      "name": "C:/Users/inuzu/.codex/worktrees/p1-enka-showcase/project-celestia/apps/api/src/games/genshin/showcase/showcase.http.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract accepts numeric UID 800000001",
+          "status": "passed",
+          "title": "accepts numeric UID 800000001",
+          "duration": 1.2660000000000764,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract accepts numeric UID 1800000001",
+          "status": "passed",
+          "title": "accepts numeric UID 1800000001",
+          "duration": 0.20959999999990941,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract rejects unsafe UID ",
+          "status": "passed",
+          "title": "rejects unsafe UID ",
+          "duration": 0.24579999999991742,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract rejects unsafe UID  800000001",
+          "status": "passed",
+          "title": "rejects unsafe UID  800000001",
+          "duration": 0.09320000000002437,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract rejects unsafe UID 000000000",
+          "status": "passed",
+          "title": "rejects unsafe UID 000000000",
+          "duration": 0.22550000000001091,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract rejects unsafe UID 123",
+          "status": "passed",
+          "title": "rejects unsafe UID 123",
+          "duration": 0.11310000000003129,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract rejects unsafe UID 80000000a",
+          "status": "passed",
+          "title": "rejects unsafe UID 80000000a",
+          "duration": 0.06709999999998217,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract rejects unsafe UID ../800000001",
+          "status": "passed",
+          "title": "rejects unsafe UID ../800000001",
+          "duration": 0.04800000000000182,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract rejects unsafe UID 800000001?info",
+          "status": "passed",
+          "title": "rejects unsafe UID 800000001?info",
+          "duration": 0.3007999999999811,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract rejects unsafe UID 12345678901",
+          "status": "passed",
+          "title": "rejects unsafe UID 12345678901",
+          "duration": 0.30750000000000455,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract maps identity, explicit progression, weapon refinement and artifact level/slot without importing a roster",
+          "status": "passed",
+          "title": "maps identity, explicit progression, weapon refinement and artifact level/slot without importing a roster",
+          "duration": 4.995400000000018,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract uses the skill-depot metadata for Traveler and retains unknown characters",
+          "status": "passed",
+          "title": "uses the skill-depot metadata for Traveler and retains unknown characters",
+          "duration": 0.9462999999999511,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract recognizes Columbina 10000125 from current Enka metadata without inventing progression",
+          "status": "passed",
+          "title": "recognizes Columbina 10000125 from current Enka metadata without inventing progression",
+          "duration": 0.3250000000000455,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract accepts modern icon paths and costumes without widening the image origin",
+          "status": "passed",
+          "title": "accepts modern icon paths and costumes without widening the image origin",
+          "duration": 0.39659999999992124,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract keeps missing observations unknown and handles absent/empty private showcases",
+          "status": "passed",
+          "title": "keeps missing observations unknown and handles absent/empty private showcases",
+          "duration": 0.27300000000002456,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract formats 20 using its documented units",
+          "status": "passed",
+          "title": "formats 20 using its documented units",
+          "duration": 0.08530000000007476,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract formats 23 using its documented units",
+          "status": "passed",
+          "title": "formats 23 using its documented units",
+          "duration": 0.0362999999999829,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract formats FIGHT_PROP_CRITICAL using its documented units",
+          "status": "passed",
+          "title": "formats FIGHT_PROP_CRITICAL using its documented units",
+          "duration": 0.02909999999997126,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract formats 2000 using its documented units",
+          "status": "passed",
+          "title": "formats 2000 using its documented units",
+          "duration": 0.02800000000002001,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract formats 28 using its documented units",
+          "status": "passed",
+          "title": "formats 28 using its documented units",
+          "duration": 0.02689999999995507,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract does not invent names or units for unknown statistics, or accept hostile icon paths",
+          "status": "passed",
+          "title": "does not invent names or units for unknown statistics, or accept hostile icon paths",
+          "duration": 0.11120000000005348,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract accepts documented propValue and observed statValue without silently choosing conflicting values",
+          "status": "passed",
+          "title": "accepts documented propValue and observed statValue without silently choosing conflicting values",
+          "duration": 1.231300000000033,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public showcase data contract"],
+          "fullName": "Public showcase data contract rejects mismatched UIDs, malformed responses and duplicate characters or slots atomically",
+          "status": "passed",
+          "title": "rejects mismatched UIDs, malformed responses and duplicate characters or slots atomically",
+          "duration": 2.6976999999999407,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache identifies the application, fixes the destination and reuses the TTL without a new upstream request",
+          "status": "passed",
+          "title": "identifies the application, fixes the destination and reuses the TTL without a new upstream request",
+          "duration": 13.644999999999982,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache coalesces simultaneous requests for the same UID and bounds different-UID concurrency",
+          "status": "passed",
+          "title": "coalesces simultaneous requests for the same UID and bounds different-UID concurrency",
+          "duration": 0.7003999999999451,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache handles provider 400 and retains the prior snapshot",
+          "status": "passed",
+          "title": "handles provider 400 and retains the prior snapshot",
+          "duration": 0.8745999999999867,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache handles provider 404 and retains the prior snapshot",
+          "status": "passed",
+          "title": "handles provider 404 and retains the prior snapshot",
+          "duration": 0.7016999999999598,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache handles provider 424 and retains the prior snapshot",
+          "status": "passed",
+          "title": "handles provider 424 and retains the prior snapshot",
+          "duration": 0.858600000000024,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache handles provider 429 and retains the prior snapshot",
+          "status": "passed",
+          "title": "handles provider 429 and retains the prior snapshot",
+          "duration": 1.023900000000026,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache handles provider 500 and retains the prior snapshot",
+          "status": "passed",
+          "title": "handles provider 500 and retains the prior snapshot",
+          "duration": 0.65949999999998,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache handles provider 503 and retains the prior snapshot",
+          "status": "passed",
+          "title": "handles provider 503 and retains the prior snapshot",
+          "duration": 0.8440999999999121,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache honors dynamic Retry-After 120 across UIDs",
+          "status": "passed",
+          "title": "honors dynamic Retry-After 120 across UIDs",
+          "duration": 0.5529000000000224,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache honors dynamic Retry-After Wed, 15 Jan 2031 08:00:00 GMT across UIDs",
+          "status": "passed",
+          "title": "honors dynamic Retry-After Wed, 15 Jan 2031 08:00:00 GMT across UIDs",
+          "duration": 0.28949999999997544,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache preserves a successful snapshot on network failure",
+          "status": "passed",
+          "title": "preserves a successful snapshot on network failure",
+          "duration": 0.7355000000000018,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache preserves a successful snapshot on json failure",
+          "status": "passed",
+          "title": "preserves a successful snapshot on json failure",
+          "duration": 0.5577999999999292,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache preserves a successful snapshot on shape failure",
+          "status": "passed",
+          "title": "preserves a successful snapshot on shape failure",
+          "duration": 0.4855999999999767,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache preserves a successful snapshot on oversized failure",
+          "status": "passed",
+          "title": "preserves a successful snapshot on oversized failure",
+          "duration": 1.7146999999999935,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache reports timeout safely and bounds cache capacity without evicting live TTLs",
+          "status": "passed",
+          "title": "reports timeout safely and bounds cache capacity without evicting live TTLs",
+          "duration": 1.2819000000000642,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Bounded Enka reads and TTL cache"],
+          "fullName": "Bounded Enka reads and TTL cache allows a validated successful empty showcase to replace only the cached showcase",
+          "status": "passed",
+          "title": "allows a validated successful empty showcase to replace only the cached showcase",
+          "duration": 0.5563000000000784,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public HTTP boundary"],
+          "fullName": "Public HTTP boundary serves without credentials and never accepts writes",
+          "status": "passed",
+          "title": "serves without credentials and never accepts writes",
+          "duration": 32.24240000000009,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Public HTTP boundary"],
+          "fullName": "Public HTTP boundary returns a typed no-snapshot rate-limit response with Retry-After",
+          "status": "passed",
+          "title": "returns a typed no-snapshot rate-limit response with Retry-After",
+          "duration": 5.365699999999947,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792825711340,
+      "endTime": 1792825711418.3657,
+      "status": "passed",
+      "message": "",
+      "name": "C:/Users/inuzu/.codex/worktrees/p1-enka-showcase/project-celestia/apps/api/src/games/genshin/showcase/showcase.test.ts"
+    }
+  ]
+}

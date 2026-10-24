@@ -16,9 +16,11 @@ import { plannerIntelligenceRoutes } from './intelligence/planner-intelligence/p
 import { progressionIntelligenceRoutes } from './intelligence/progression-intelligence/progression-intelligence.routes.js';
 import { pullIntelligenceRoutes } from './intelligence/pull-intelligence/pull-intelligence.routes.js';
 import { teamIntelligenceRoutes } from './intelligence/team-intelligence/team-intelligence.routes.js';
+import { createShowcaseRoutes } from './showcase/showcase.routes.js';
+import type { ShowcaseService } from './showcase/showcase.service.js';
 import pullSimulatorRoutes from './simulators/pull-simulator.routes.js';
 import { weaponRoutes } from './weapons/weapon.routes.js';
-export function createGenshinRoutes(safety: RequestSafety) {
+export function createGenshinRoutes(safety: RequestSafety, showcaseService?: ShowcaseService) {
   const router = Router();
 
   /**
@@ -43,6 +45,7 @@ export function createGenshinRoutes(safety: RequestSafety) {
    */
   // Only the import router can choose large-body parsing, after auth and admission.
   router.use(createImporterRoutes(safety));
+  router.use(createShowcaseRoutes(showcaseService));
   router.use(safety.ordinaryJson);
   router.use(buildInsightsRoutes);
   router.use(characterRoutes);

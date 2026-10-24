@@ -129,7 +129,7 @@ export class SecurityController {
       setRefreshCookie(res, tokens.refreshToken);
       res.redirect(`${web}/auth/callback`);
     } catch {
-      res.redirect(`${web}/login?oauth=failed`);
+      res.redirect(`${web}/workspace/login?oauth=failed`);
     }
   };
 }

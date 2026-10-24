@@ -66,7 +66,7 @@ function rosterClient() {
 }
 describe('C5 real navigation, rendering and transport regressions', () => {
   it.each([
-    ['/', 'Today'],
+    ['/workspace', 'Today'],
     ['/roster/Opaque%20%2F%20%E5%AD%97', 'Characters'],
     ['/planner?tab=farming&goal=opaque%2Fid&status=paused', 'Planner'],
     ['/profile', 'Settings &amp; profile'],
@@ -153,7 +153,7 @@ describe('C5 real navigation, rendering and transport regressions', () => {
     expect(html).toContain('Last confirmed account details');
     expect(html).toContain('a@test.invalid');
     expect(html).toContain('/planner?tab=daily#routine-settings');
-    expect(html).toContain('/#plan-choices');
+    expect(html).toContain('/workspace#plan-choices');
   });
   it.each([
     'fetchImportStatus',

@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import DashboardWelcome from '../components/DashboardWelcome';
 import TodayPlan from '../components/TodayPlan';
-import { CelestiaMark, PageHeader, UiIcon } from '../components/Ui';
 import { captureSession, isCurrentSession } from '../lib/account-session';
 import { ApiError, fetchApi } from '../lib/api';
 import { useAuthStore } from '../stores/auth.store';
@@ -24,62 +24,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen text-zinc-300">
       <main id="companion-content" tabIndex={-1} className="today-page">
-        <PageHeader
-          eyebrow="YOUR PERSONAL COMPANION"
-          title="Today, at your pace."
-          description="A clear view of what matters. A little room for what comes next."
-          actions={
-            <Link className="button-secondary" to="/planner">
-              <UiIcon name="planner" /> Open planner
-            </Link>
-          }
-        />
-        <section className="today-hero" aria-label="Your journey">
-          <div className="today-hero-content">
-            <p className="eyebrow">LESS BUSYWORK. MORE TEYVAT.</p>
-            <h2>
-              Every great build
-              <br />
-              begins with a next step.
-            </h2>
-            <p>
-              Make progress on your terms. Keep your characters, daily routine and longer plans in
-              one considered space.
-            </p>
-            <a className="button-primary" href="#session-recording">
-              Record my session <UiIcon name="arrow" />
-            </a>
-          </div>
-          <div className="hero-orbits" aria-hidden="true">
-            <CelestiaMark />
-          </div>
-        </section>
-        <div className="today-shortcuts">
-          <Link className="shortcut-card" to="/roster">
-            <UiIcon name="characters" />
-            <span>
-              <strong>Your characters</strong>
-              <small>Builds, talents & progression</small>
-            </span>
-            <UiIcon name="arrow" />
-          </Link>
-          <Link className="shortcut-card" to="/planner?tab=farming">
-            <UiIcon name="planner" />
-            <span>
-              <strong>Make a little progress</strong>
-              <small>Your goals, in your order</small>
-            </span>
-            <UiIcon name="arrow" />
-          </Link>
-          <Link className="shortcut-card" to="/import">
-            <UiIcon name="import" />
-            <span>
-              <strong>Bring your builds along</strong>
-              <small>Review & import a GOOD export</small>
-            </span>
-            <UiIcon name="arrow" />
-          </Link>
-        </div>
+        <DashboardWelcome />
         {me.error && (
           <p role="alert">
             Account details could not refresh. Your last confirmed panels remain available.
@@ -95,10 +40,10 @@ export default function DashboardPage() {
             routines, and record what you did. Goals and imports are optional.
           </p>
           <div className="flex flex-wrap gap-3">
-            <Link className="button-secondary" to="/#routine-settings">
+            <Link className="button-secondary" to="/workspace#routine-settings">
               Choose server
             </Link>
-            <Link className="button-secondary" to="/#plan-choices">
+            <Link className="button-secondary" to="/workspace#plan-choices">
               Choose routines
             </Link>
             <Link className="button-secondary" to="/planner?tab=farming&newType=CHARACTER_TALENT">

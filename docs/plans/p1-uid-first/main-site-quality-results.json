@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-10-24T07:12:10.468Z",
+  "tests": {
+    "passed": 125,
+    "failed": 0,
+    "success": true
+  },
+  "gates": {
+    "webBuildAndTypes": 0,
+    "webLint": 0,
+    "apiLint": 0,
+    "changedSourceFormat": 0,
+    "gitWhitespace": 0
+  },
+  "browser": {
+    "provider": "synthetic transport in existing Express app",
+    "initialNavigationProviderCalls": 1,
+    "finalProviderCalls": 5,
+    "authenticationRequests": 0,
+    "mobileWidths": [390, 320],
+    "mobileHorizontalOverflow": false,
+    "drawerClosedAfterNavigation": true,
+    "bodyScrollRestored": true,
+    "viewportOverrideReset": true,
+    "rootResumeFinalCheck": "Blocked by an open Chrome extension UI; not claimed as passing"
+  },
+  "personalAcceptance": "pending"
+}

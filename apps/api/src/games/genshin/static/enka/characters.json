@@ -1,0 +1,2335 @@
+{
+  "10000002": {
+    "NameTextMapHash": 1006042610,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Ayaka.png",
+    "SkillOrder": [10024, 10018, 10019],
+    "ProudMap": {
+      "10018": 232,
+      "10019": 239,
+      "10024": 231
+    },
+    "Costumes": {
+      "200201": {
+        "icon": "/ui/UI_AvatarIcon_AyakaCostumeFruhling.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_AyakaCostumeFruhling.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000003": {
+    "NameTextMapHash": 3221565738,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Qin.png",
+    "SkillOrder": [10031, 10033, 10034],
+    "ProudMap": {
+      "10031": 331,
+      "10033": 332,
+      "10034": 339
+    },
+    "Costumes": {
+      "200301": {
+        "icon": "/ui/UI_AvatarIcon_QinCostumeSea.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_QinCostumeSea.png"
+      },
+      "200302": {
+        "icon": "/ui/UI_AvatarIcon_QinCostumeWic.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_QinCostumeWic.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000005": {
+    "NameTextMapHash": 3816664530,
+    "Element": "None",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoy.png",
+    "SkillOrder": [100540, 10067, 10068],
+    "ProudMap": {
+      "10067": 732,
+      "10068": 739,
+      "100540": 731
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000006": {
+    "NameTextMapHash": 3344622722,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Lisa.png",
+    "SkillOrder": [10060, 10061, 10062],
+    "ProudMap": {
+      "10060": 431,
+      "10061": 432,
+      "10062": 439
+    },
+    "Costumes": {
+      "200601": {
+        "icon": "/ui/UI_AvatarIcon_LisaCostumeStudentin.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_LisaCostumeStudentin.png"
+      }
+    },
+    "WeaponType": "Catalyst",
+    "Rarity": 4
+  },
+  "10000007": {
+    "NameTextMapHash": 3816664530,
+    "Element": "None",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirl.png",
+    "SkillOrder": [100550, 10067, 10068],
+    "ProudMap": {
+      "10067": 732,
+      "10068": 739,
+      "100550": 731
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000014": {
+    "NameTextMapHash": 3775298658,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Barbara.png",
+    "SkillOrder": [10070, 10071, 10072],
+    "ProudMap": {
+      "10070": 1431,
+      "10071": 1432,
+      "10072": 1439
+    },
+    "Costumes": {
+      "201401": {
+        "icon": "/ui/UI_AvatarIcon_BarbaraCostumeSummertime.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_BarbaraCostumeSummertime.png"
+      }
+    },
+    "WeaponType": "Catalyst",
+    "Rarity": 4
+  },
+  "10000015": {
+    "NameTextMapHash": 4119662698,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Kaeya.png",
+    "SkillOrder": [10073, 10074, 10075],
+    "ProudMap": {
+      "10073": 1531,
+      "10074": 1532,
+      "10075": 1539
+    },
+    "Costumes": {
+      "201501": {
+        "icon": "/ui/UI_AvatarIcon_KaeyaCostumeDancer.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_KaeyaCostumeDancer.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 4
+  },
+  "10000016": {
+    "NameTextMapHash": 3608179810,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Diluc.png",
+    "SkillOrder": [10160, 10161, 10165],
+    "ProudMap": {
+      "10160": 1631,
+      "10161": 1632,
+      "10165": 1639
+    },
+    "Costumes": {
+      "201601": {
+        "icon": "/ui/UI_AvatarIcon_DilucCostumeFlamme.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_DilucCostumeFlamme.png"
+      }
+    },
+    "WeaponType": "Claymore",
+    "Rarity": 5
+  },
+  "10000020": {
+    "NameTextMapHash": 4160146730,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Razor.png",
+    "SkillOrder": [10201, 10202, 10203],
+    "ProudMap": {
+      "10201": 2031,
+      "10202": 2032,
+      "10203": 2039
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 4
+  },
+  "10000021": {
+    "NameTextMapHash": 1966438658,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Ambor.png",
+    "SkillOrder": [10041, 10032, 10017],
+    "ProudMap": {
+      "10017": 2139,
+      "10032": 2132,
+      "10041": 2131
+    },
+    "Costumes": {
+      "202101": {
+        "icon": "/ui/UI_AvatarIcon_AmborCostumeWic.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_AmborCostumeWic.png"
+      }
+    },
+    "WeaponType": "Bow",
+    "Rarity": 4
+  },
+  "10000022": {
+    "NameTextMapHash": 2466140362,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Venti.png",
+    "SkillOrder": [10221, 10224, 10225],
+    "ProudMap": {
+      "10221": 2231,
+      "10224": 2232,
+      "10225": 2239
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 5
+  },
+  "10000023": {
+    "NameTextMapHash": 1130995834,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Xiangling.png",
+    "SkillOrder": [10231, 10232, 10235],
+    "ProudMap": {
+      "10231": 2331,
+      "10232": 2332,
+      "10235": 2339
+    },
+    "Costumes": {
+      "202301": {
+        "icon": "/ui/UI_AvatarIcon_XianglingCostumeWinter.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_XianglingCostumeWinter.png"
+      }
+    },
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000024": {
+    "NameTextMapHash": 2646367730,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Beidou.png",
+    "SkillOrder": [10241, 10242, 10245],
+    "ProudMap": {
+      "10241": 2431,
+      "10242": 2432,
+      "10245": 2439
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 4
+  },
+  "10000025": {
+    "NameTextMapHash": 4197635170,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Xingqiu.png",
+    "SkillOrder": [10381, 10382, 10385],
+    "ProudMap": {
+      "10381": 2531,
+      "10382": 2532,
+      "10385": 2539
+    },
+    "Costumes": {
+      "202501": {
+        "icon": "/ui/UI_AvatarIcon_XingqiuCostumeBamboo.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_XingqiuCostumeBamboo.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 4
+  },
+  "10000026": {
+    "NameTextMapHash": 1021947178,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Xiao.png",
+    "SkillOrder": [10261, 10262, 10265],
+    "ProudMap": {
+      "10261": 2631,
+      "10262": 2632,
+      "10265": 2639
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000027": {
+    "NameTextMapHash": 4127888458,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Ningguang.png",
+    "SkillOrder": [10271, 10272, 10274],
+    "ProudMap": {
+      "10271": 2731,
+      "10272": 2732,
+      "10274": 2739
+    },
+    "Costumes": {
+      "202701": {
+        "icon": "/ui/UI_AvatarIcon_NingguangCostumeFloral.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_NingguangCostumeFloral.png"
+      }
+    },
+    "WeaponType": "Catalyst",
+    "Rarity": 4
+  },
+  "10000029": {
+    "NameTextMapHash": 3339083250,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Klee.png",
+    "SkillOrder": [10291, 10292, 10295],
+    "ProudMap": {
+      "10291": 2931,
+      "10292": 2932,
+      "10295": 2939
+    },
+    "Costumes": {
+      "202901": {
+        "icon": "/ui/UI_AvatarIcon_KleeCostumeWitch.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_KleeCostumeWitch.png"
+      }
+    },
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000030": {
+    "NameTextMapHash": 3862787418,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Zhongli.png",
+    "SkillOrder": [10301, 10302, 10303],
+    "ProudMap": {
+      "10301": 3031,
+      "10302": 3032,
+      "10303": 3039
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000031": {
+    "NameTextMapHash": 3277782506,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Fischl.png",
+    "SkillOrder": [10311, 10312, 10313],
+    "ProudMap": {
+      "10311": 3131,
+      "10312": 3132,
+      "10313": 3139
+    },
+    "Costumes": {
+      "203101": {
+        "icon": "/ui/UI_AvatarIcon_FischlCostumeHighness.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_FischlCostumeHighness.png"
+      }
+    },
+    "WeaponType": "Bow",
+    "Rarity": 4
+  },
+  "10000032": {
+    "NameTextMapHash": 968892866,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Bennett.png",
+    "SkillOrder": [10321, 10322, 10323],
+    "ProudMap": {
+      "10321": 3231,
+      "10322": 3232,
+      "10323": 3239
+    },
+    "Costumes": {
+      "203201": {
+        "icon": "/ui/UI_AvatarIcon_BennettCostumeSummer.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_BennettCostumeSummer.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 4
+  },
+  "10000033": {
+    "NameTextMapHash": 3847142754,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Tartaglia.png",
+    "SkillOrder": [10331, 10332, 10333],
+    "ProudMap": {
+      "10331": 3331,
+      "10332": 3332,
+      "10333": 3339
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 5
+  },
+  "10000034": {
+    "NameTextMapHash": 1921418330,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Noel.png",
+    "SkillOrder": [10341, 10342, 10343],
+    "ProudMap": {
+      "10341": 3431,
+      "10342": 3432,
+      "10343": 3439
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 4
+  },
+  "10000035": {
+    "NameTextMapHash": 168956210,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Qiqi.png",
+    "SkillOrder": [10351, 10352, 10353],
+    "ProudMap": {
+      "10351": 3531,
+      "10352": 3532,
+      "10353": 3539
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000036": {
+    "NameTextMapHash": 2876340530,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Chongyun.png",
+    "SkillOrder": [10401, 10402, 10403],
+    "ProudMap": {
+      "10401": 3631,
+      "10402": 3632,
+      "10403": 3639
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 4
+  },
+  "10000037": {
+    "NameTextMapHash": 2679780610,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Ganyu.png",
+    "SkillOrder": [10371, 10372, 10373],
+    "ProudMap": {
+      "10371": 3731,
+      "10372": 3732,
+      "10373": 3739
+    },
+    "Costumes": {
+      "203701": {
+        "icon": "/ui/UI_AvatarIcon_GanyuCostumeYu.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_GanyuCostumeYu.png"
+      }
+    },
+    "WeaponType": "Bow",
+    "Rarity": 5
+  },
+  "10000038": {
+    "NameTextMapHash": 4108620210,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Albedo.png",
+    "SkillOrder": [10386, 10387, 10388],
+    "ProudMap": {
+      "10386": 3831,
+      "10387": 3832,
+      "10388": 3839
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000039": {
+    "NameTextMapHash": 1468367026,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Diona.png",
+    "SkillOrder": [10391, 10392, 10395],
+    "ProudMap": {
+      "10391": 3931,
+      "10392": 3932,
+      "10395": 3939
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 4
+  },
+  "10000041": {
+    "NameTextMapHash": 1113306282,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Mona.png",
+    "SkillOrder": [10411, 10412, 10415],
+    "ProudMap": {
+      "10411": 4131,
+      "10412": 4132,
+      "10415": 4139
+    },
+    "Costumes": {
+      "204101": {
+        "icon": "/ui/UI_AvatarIcon_MonaCostumeWic.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_MonaCostumeWic.png"
+      }
+    },
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000042": {
+    "NameTextMapHash": 1864015138,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Keqing.png",
+    "SkillOrder": [10421, 10422, 10425],
+    "ProudMap": {
+      "10421": 4231,
+      "10422": 4232,
+      "10425": 4239
+    },
+    "Costumes": {
+      "204201": {
+        "icon": "/ui/UI_AvatarIcon_KeqingCostumeFeather.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_KeqingCostumeFeather.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000043": {
+    "NameTextMapHash": 1053433018,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Sucrose.png",
+    "SkillOrder": [10431, 10432, 10435],
+    "ProudMap": {
+      "10431": 4331,
+      "10432": 4332,
+      "10435": 4339
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 4
+  },
+  "10000044": {
+    "NameTextMapHash": 4273845410,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Xinyan.png",
+    "SkillOrder": [10441, 10442, 10443],
+    "ProudMap": {
+      "10441": 4431,
+      "10442": 4432,
+      "10443": 4439
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 4
+  },
+  "10000045": {
+    "NameTextMapHash": 4260733330,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Rosaria.png",
+    "SkillOrder": [10451, 10452, 10453],
+    "ProudMap": {
+      "10451": 4531,
+      "10452": 4532,
+      "10453": 4539
+    },
+    "Costumes": {
+      "204501": {
+        "icon": "/ui/UI_AvatarIcon_RosariaCostumeWic.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_RosariaCostumeWic.png"
+      }
+    },
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000046": {
+    "NameTextMapHash": 1940919482,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Hutao.png",
+    "SkillOrder": [10461, 10462, 10463],
+    "ProudMap": {
+      "10461": 4631,
+      "10462": 4632,
+      "10463": 4639
+    },
+    "Costumes": {
+      "204601": {
+        "icon": "/ui/UI_AvatarIcon_HutaoCostumeWinter.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_HutaoCostumeWinter.png"
+      }
+    },
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000047": {
+    "NameTextMapHash": 88505754,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Kazuha.png",
+    "SkillOrder": [10471, 10472, 10475],
+    "ProudMap": {
+      "10471": 4731,
+      "10472": 4732,
+      "10475": 4739
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000048": {
+    "NameTextMapHash": 697277554,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Feiyan.png",
+    "SkillOrder": [10481, 10482, 10485],
+    "ProudMap": {
+      "10481": 4831,
+      "10482": 4832,
+      "10485": 4839
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 4
+  },
+  "10000049": {
+    "NameTextMapHash": 2504399314,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Yoimiya.png",
+    "SkillOrder": [10491, 10492, 10495],
+    "ProudMap": {
+      "10491": 4931,
+      "10492": 4932,
+      "10495": 4939
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 5
+  },
+  "10000050": {
+    "NameTextMapHash": 3555115090,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Tohma.png",
+    "SkillOrder": [10501, 10502, 10505],
+    "ProudMap": {
+      "10501": 5031,
+      "10502": 5032,
+      "10505": 5039
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000051": {
+    "NameTextMapHash": 3717666906,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Eula.png",
+    "SkillOrder": [10511, 10512, 10515],
+    "ProudMap": {
+      "10511": 5131,
+      "10512": 5132,
+      "10515": 5139
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 5
+  },
+  "10000052": {
+    "NameTextMapHash": 3024506994,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Shougun.png",
+    "SkillOrder": [10521, 10522, 10525],
+    "ProudMap": {
+      "10521": 5231,
+      "10522": 5232,
+      "10525": 5239
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000053": {
+    "NameTextMapHash": 2388785242,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Sayu.png",
+    "SkillOrder": [10531, 10532, 10535],
+    "ProudMap": {
+      "10531": 5331,
+      "10532": 5332,
+      "10535": 5339
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 4
+  },
+  "10000054": {
+    "NameTextMapHash": 3914045794,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Kokomi.png",
+    "SkillOrder": [10541, 10542, 10545],
+    "ProudMap": {
+      "10541": 5431,
+      "10542": 5432,
+      "10545": 5439
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000055": {
+    "NameTextMapHash": 3400133034,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Gorou.png",
+    "SkillOrder": [10551, 10552, 10555],
+    "ProudMap": {
+      "10551": 5531,
+      "10552": 5532,
+      "10555": 5539
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 4
+  },
+  "10000056": {
+    "NameTextMapHash": 1483922610,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Sara.png",
+    "SkillOrder": [10561, 10562, 10565],
+    "ProudMap": {
+      "10561": 5631,
+      "10562": 5632,
+      "10565": 5639
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 4
+  },
+  "10000057": {
+    "NameTextMapHash": 3068316954,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Itto.png",
+    "SkillOrder": [10571, 10572, 10575],
+    "ProudMap": {
+      "10571": 5731,
+      "10572": 5732,
+      "10575": 5739
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 5
+  },
+  "10000058": {
+    "NameTextMapHash": 2713452722,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Yae.png",
+    "SkillOrder": [10581, 10582, 10585],
+    "ProudMap": {
+      "10581": 5831,
+      "10582": 5832,
+      "10585": 5839
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000059": {
+    "NameTextMapHash": 646031578,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Heizo.png",
+    "SkillOrder": [10591, 10592, 10595],
+    "ProudMap": {
+      "10591": 5931,
+      "10592": 5932,
+      "10595": 5939
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 4
+  },
+  "10000060": {
+    "NameTextMapHash": 2848373866,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Yelan.png",
+    "SkillOrder": [10606, 10607, 10610],
+    "ProudMap": {
+      "10606": 6031,
+      "10607": 6032,
+      "10610": 6039
+    },
+    "Costumes": {
+      "206001": {
+        "icon": "/ui/UI_AvatarIcon_YelanCostumeSummer.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_YelanCostumeSummer.png"
+      }
+    },
+    "WeaponType": "Bow",
+    "Rarity": 5
+  },
+  "10000061": {
+    "NameTextMapHash": 1456642530,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Momoka.png",
+    "SkillOrder": [10611, 10612, 10615],
+    "ProudMap": {
+      "10611": 6131,
+      "10612": 6132,
+      "10615": 6139
+    },
+    "Costumes": {
+      "206101": {
+        "icon": "/ui/UI_AvatarIcon_MomokaCostumeErrantry.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_MomokaCostumeErrantry.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 4
+  },
+  "10000062": {
+    "NameTextMapHash": 3689107586,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Aloy.png",
+    "SkillOrder": [10621, 10622, 10625],
+    "ProudMap": {
+      "10621": 6231,
+      "10622": 6232,
+      "10625": 6239
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 5
+  },
+  "10000063": {
+    "NameTextMapHash": 334242122,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Shenhe.png",
+    "SkillOrder": [10631, 10632, 10635],
+    "ProudMap": {
+      "10631": 6331,
+      "10632": 6332,
+      "10635": 6339
+    },
+    "Costumes": {
+      "206301": {
+        "icon": "/ui/UI_AvatarIcon_ShenheCostumeDai.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_ShenheCostumeDai.png"
+      }
+    },
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000064": {
+    "NameTextMapHash": 655825362,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Yunjin.png",
+    "SkillOrder": [10641, 10642, 10643],
+    "ProudMap": {
+      "10641": 6431,
+      "10642": 6432,
+      "10643": 6439
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000065": {
+    "NameTextMapHash": 1940821474,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Shinobu.png",
+    "SkillOrder": [10651, 10652, 10655],
+    "ProudMap": {
+      "10651": 6531,
+      "10652": 6532,
+      "10655": 6539
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 4
+  },
+  "10000066": {
+    "NameTextMapHash": 1588620330,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Ayato.png",
+    "SkillOrder": [10661, 10662, 10665],
+    "ProudMap": {
+      "10661": 6631,
+      "10662": 6632,
+      "10665": 6639
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000067": {
+    "NameTextMapHash": 2948361666,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Collei.png",
+    "SkillOrder": [10671, 10672, 10675],
+    "ProudMap": {
+      "10671": 6731,
+      "10672": 6732,
+      "10675": 6739
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 4
+  },
+  "10000068": {
+    "NameTextMapHash": 388272194,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Dori.png",
+    "SkillOrder": [10681, 10682, 10685],
+    "ProudMap": {
+      "10681": 6831,
+      "10682": 6832,
+      "10685": 6839
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 4
+  },
+  "10000069": {
+    "NameTextMapHash": 2506955778,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Tighnari.png",
+    "SkillOrder": [10691, 10692, 10695],
+    "ProudMap": {
+      "10691": 6931,
+      "10692": 6932,
+      "10695": 6939
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 5
+  },
+  "10000070": {
+    "NameTextMapHash": 3850149970,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Nilou.png",
+    "SkillOrder": [10701, 10702, 10705],
+    "ProudMap": {
+      "10701": 7031,
+      "10702": 7032,
+      "10705": 7039
+    },
+    "Costumes": {
+      "207001": {
+        "icon": "/ui/UI_AvatarIcon_NilouCostumeFairy.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_NilouCostumeFairy.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000071": {
+    "NameTextMapHash": 1049891906,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Cyno.png",
+    "SkillOrder": [10711, 10712, 10715],
+    "ProudMap": {
+      "10711": 7131,
+      "10712": 7132,
+      "10715": 7139
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000072": {
+    "NameTextMapHash": 3092975658,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Candace.png",
+    "SkillOrder": [10721, 10722, 10725],
+    "ProudMap": {
+      "10721": 7231,
+      "10722": 7232,
+      "10725": 7239
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000073": {
+    "NameTextMapHash": 712500570,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Nahida.png",
+    "SkillOrder": [10731, 10732, 10735],
+    "ProudMap": {
+      "10731": 7331,
+      "10732": 7332,
+      "10735": 7339
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000074": {
+    "NameTextMapHash": 2889777514,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Layla.png",
+    "SkillOrder": [10741, 10742, 10745],
+    "ProudMap": {
+      "10741": 7431,
+      "10742": 7432,
+      "10745": 7439
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 4
+  },
+  "10000075": {
+    "NameTextMapHash": 3230559562,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Wanderer.png",
+    "SkillOrder": [10751, 10752, 10755],
+    "ProudMap": {
+      "10751": 7531,
+      "10752": 7532,
+      "10755": 7539
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000076": {
+    "NameTextMapHash": 2387711482,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Faruzan.png",
+    "SkillOrder": [10761, 10762, 10765],
+    "ProudMap": {
+      "10761": 7631,
+      "10762": 7632,
+      "10765": 7639
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 4
+  },
+  "10000077": {
+    "NameTextMapHash": 1732417970,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Yaoyao.png",
+    "SkillOrder": [10771, 10772, 10775],
+    "ProudMap": {
+      "10771": 7731,
+      "10772": 7732,
+      "10775": 7739
+    },
+    "Costumes": {
+      "207701": {
+        "icon": "/ui/UI_AvatarIcon_YaoyaoCostumeWinter.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_YaoyaoCostumeWinter.png"
+      }
+    },
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000078": {
+    "NameTextMapHash": 4002156906,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Alhatham.png",
+    "SkillOrder": [10781, 10782, 10785],
+    "ProudMap": {
+      "10781": 7831,
+      "10782": 7832,
+      "10785": 7839
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000079": {
+    "NameTextMapHash": 2360533154,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Dehya.png",
+    "SkillOrder": [10791, 10792, 10795],
+    "ProudMap": {
+      "10791": 7931,
+      "10792": 7932,
+      "10795": 7939
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 5
+  },
+  "10000080": {
+    "NameTextMapHash": 231911858,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Mika.png",
+    "SkillOrder": [10801, 10802, 10805],
+    "ProudMap": {
+      "10801": 8031,
+      "10802": 8032,
+      "10805": 8039
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000081": {
+    "NameTextMapHash": 466355514,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Kaveh.png",
+    "SkillOrder": [10811, 10812, 10815],
+    "ProudMap": {
+      "10811": 8131,
+      "10812": 8132,
+      "10815": 8139
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 4
+  },
+  "10000082": {
+    "NameTextMapHash": 2984815066,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Baizhuer.png",
+    "SkillOrder": [10821, 10822, 10825],
+    "ProudMap": {
+      "10821": 8231,
+      "10822": 8232,
+      "10825": 8239
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000083": {
+    "NameTextMapHash": 1225226258,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Linette.png",
+    "SkillOrder": [10831, 10832, 10835],
+    "ProudMap": {
+      "10831": 8331,
+      "10832": 8332,
+      "10835": 8339
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 4
+  },
+  "10000084": {
+    "NameTextMapHash": 2472444970,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Liney.png",
+    "SkillOrder": [10841, 10842, 10845],
+    "ProudMap": {
+      "10841": 8431,
+      "10842": 8432,
+      "10845": 8439
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 5
+  },
+  "10000085": {
+    "NameTextMapHash": 4201963842,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Freminet.png",
+    "SkillOrder": [10851, 10852, 10855],
+    "ProudMap": {
+      "10851": 8531,
+      "10852": 8532,
+      "10855": 8539
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 4
+  },
+  "10000086": {
+    "NameTextMapHash": 370150538,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Wriothesley.png",
+    "SkillOrder": [10861, 10862, 10865],
+    "ProudMap": {
+      "10861": 8631,
+      "10862": 8632,
+      "10865": 8639
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000087": {
+    "NameTextMapHash": 1504902330,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Neuvillette.png",
+    "SkillOrder": [10871, 10872, 10875],
+    "ProudMap": {
+      "10871": 8731,
+      "10872": 8732,
+      "10875": 8739
+    },
+    "Costumes": {
+      "208701": {
+        "icon": "/ui/UI_AvatarIcon_NeuvilletteCostumeWinter.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_NeuvilletteCostumeWinter.png"
+      }
+    },
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000088": {
+    "NameTextMapHash": 3831162130,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Charlotte.png",
+    "SkillOrder": [10881, 10882, 10885],
+    "ProudMap": {
+      "10881": 8831,
+      "10882": 8832,
+      "10885": 8839
+    },
+    "Costumes": {
+      "208801": {
+        "icon": "/ui/UI_AvatarIcon_CharlotteCostumeDong.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_CharlotteCostumeDong.png"
+      }
+    },
+    "WeaponType": "Catalyst",
+    "Rarity": 4
+  },
+  "10000089": {
+    "NameTextMapHash": 2180900234,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Furina.png",
+    "SkillOrder": [10891, 10892, 10895],
+    "ProudMap": {
+      "10891": 8931,
+      "10892": 8932,
+      "10895": 8939
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000090": {
+    "NameTextMapHash": 540313842,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Chevreuse.png",
+    "SkillOrder": [10901, 10902, 10905],
+    "ProudMap": {
+      "10901": 9031,
+      "10902": 9032,
+      "10905": 9039
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000091": {
+    "NameTextMapHash": 2877588578,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Navia.png",
+    "SkillOrder": [10911, 10912, 10915],
+    "ProudMap": {
+      "10911": 9131,
+      "10912": 9132,
+      "10915": 9139
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 5
+  },
+  "10000092": {
+    "NameTextMapHash": 2822240322,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Gaming.png",
+    "SkillOrder": [10921, 10922, 10925],
+    "ProudMap": {
+      "10921": 9231,
+      "10922": 9232,
+      "10925": 9239
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 4
+  },
+  "10000093": {
+    "NameTextMapHash": 3648220258,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Liuyun.png",
+    "SkillOrder": [10931, 10932, 10935],
+    "ProudMap": {
+      "10931": 9331,
+      "10932": 9332,
+      "10935": 9339
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000094": {
+    "NameTextMapHash": 1944606922,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Chiori.png",
+    "SkillOrder": [10941, 10942, 10945],
+    "ProudMap": {
+      "10941": 9431,
+      "10942": 9432,
+      "10945": 9439
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000095": {
+    "NameTextMapHash": 781488450,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Sigewinne.png",
+    "SkillOrder": [10951, 10952, 10955],
+    "ProudMap": {
+      "10951": 9531,
+      "10952": 9532,
+      "10955": 9539
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 5
+  },
+  "10000096": {
+    "NameTextMapHash": 167198962,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Arlecchino.png",
+    "SkillOrder": [10961, 10962, 10965],
+    "ProudMap": {
+      "10961": 9631,
+      "10962": 9632,
+      "10965": 9639
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000097": {
+    "NameTextMapHash": 1431321834,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Sethos.png",
+    "SkillOrder": [10971, 10972, 10975],
+    "ProudMap": {
+      "10971": 9731,
+      "10972": 9732,
+      "10975": 9739
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 4
+  },
+  "10000098": {
+    "NameTextMapHash": 2745368786,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Clorinde.png",
+    "SkillOrder": [10981, 10982, 10985],
+    "ProudMap": {
+      "10981": 9831,
+      "10982": 9832,
+      "10985": 9839
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000099": {
+    "NameTextMapHash": 1705785610,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Emilie.png",
+    "SkillOrder": [10991, 10992, 10995],
+    "ProudMap": {
+      "10991": 9931,
+      "10992": 9932,
+      "10995": 9939
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000100": {
+    "NameTextMapHash": 2531816890,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Kachina.png",
+    "SkillOrder": [11001, 11002, 11005],
+    "ProudMap": {
+      "11001": 10031,
+      "11002": 10032,
+      "11005": 10039
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000101": {
+    "NameTextMapHash": 4172712122,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Kinich.png",
+    "SkillOrder": [11011, 11012, 11015],
+    "ProudMap": {
+      "11011": 10131,
+      "11012": 10132,
+      "11015": 10139
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 5
+  },
+  "10000102": {
+    "NameTextMapHash": 3949670506,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Mualani.png",
+    "SkillOrder": [30000, 30002, 30007],
+    "ProudMap": {
+      "30000": 10231,
+      "30002": 10232,
+      "30007": 10239
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000103": {
+    "NameTextMapHash": 2515292370,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Xilonen.png",
+    "SkillOrder": [11031, 11032, 11035],
+    "ProudMap": {
+      "11031": 10331,
+      "11032": 10332,
+      "11035": 10339
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000104": {
+    "NameTextMapHash": 3746229466,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Chasca.png",
+    "SkillOrder": [11041, 11042, 11045],
+    "ProudMap": {
+      "11041": 10431,
+      "11042": 10432,
+      "11045": 10439
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 5
+  },
+  "10000105": {
+    "NameTextMapHash": 1198350762,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Olorun.png",
+    "SkillOrder": [30501, 30502, 30505],
+    "ProudMap": {
+      "30501": 10531,
+      "30502": 10532,
+      "30505": 10539
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 4
+  },
+  "10000106": {
+    "NameTextMapHash": 113398050,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Mavuika.png",
+    "SkillOrder": [11061, 11062, 11065],
+    "ProudMap": {
+      "11061": 10631,
+      "11062": 10632,
+      "11065": 10639
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 5
+  },
+  "10000107": {
+    "NameTextMapHash": 1197974530,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Citlali.png",
+    "SkillOrder": [11071, 11072, 11075],
+    "ProudMap": {
+      "11071": 10731,
+      "11072": 10732,
+      "11075": 10739
+    },
+    "Costumes": {
+      "210701": {
+        "icon": "/ui/UI_AvatarIcon_CitlaliCostumeXia.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_CitlaliCostumeXia.png"
+      }
+    },
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000108": {
+    "NameTextMapHash": 1888132250,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Lanyan.png",
+    "SkillOrder": [11081, 11082, 11085],
+    "ProudMap": {
+      "11081": 10831,
+      "11082": 10832,
+      "11085": 10839
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 4
+  },
+  "10000109": {
+    "NameTextMapHash": 3784387026,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Mizuki.png",
+    "SkillOrder": [11091, 11092, 11095],
+    "ProudMap": {
+      "11091": 10931,
+      "11092": 10932,
+      "11095": 10939
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000110": {
+    "NameTextMapHash": 3120492002,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Iansan.png",
+    "SkillOrder": [11101, 11102, 11105],
+    "ProudMap": {
+      "11101": 11031,
+      "11102": 11032,
+      "11105": 11039
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000111": {
+    "NameTextMapHash": 283438362,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Varesa.png",
+    "SkillOrder": [11111, 11112, 11115],
+    "ProudMap": {
+      "11111": 11131,
+      "11112": 11132,
+      "11115": 11139
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000112": {
+    "NameTextMapHash": 4035850498,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Escoffier.png",
+    "SkillOrder": [11121, 11122, 11125],
+    "ProudMap": {
+      "11121": 11231,
+      "11122": 11232,
+      "11125": 11239
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000113": {
+    "NameTextMapHash": 3398664506,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Ifa.png",
+    "SkillOrder": [11131, 11132, 11135],
+    "ProudMap": {
+      "11131": 11331,
+      "11132": 11332,
+      "11135": 11339
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 4
+  },
+  "10000114": {
+    "NameTextMapHash": 123650378,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_SkirkNew.png",
+    "SkillOrder": [11141, 11142, 11145],
+    "ProudMap": {
+      "11141": 11431,
+      "11142": 11432,
+      "11145": 11439
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000115": {
+    "NameTextMapHash": 2332663914,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Dahlia.png",
+    "SkillOrder": [11151, 11152, 11155],
+    "ProudMap": {
+      "11151": 11531,
+      "11152": 11532,
+      "11155": 11539
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 4
+  },
+  "10000116": {
+    "NameTextMapHash": 2759230658,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Ineffa.png",
+    "SkillOrder": [11161, 11162, 11165],
+    "ProudMap": {
+      "11161": 11631,
+      "11162": 11632,
+      "11165": 11639
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000119": {
+    "NameTextMapHash": 1776873506,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Lauma.png",
+    "SkillOrder": [11191, 11192, 11195],
+    "ProudMap": {
+      "11191": 11931,
+      "11192": 11932,
+      "11195": 11939
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000120": {
+    "NameTextMapHash": 1804674298,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Flins.png",
+    "SkillOrder": [11201, 11202, 11205],
+    "ProudMap": {
+      "11201": 12031,
+      "11202": 12032,
+      "11205": 12039
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000121": {
+    "NameTextMapHash": 3887687898,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Aino.png",
+    "SkillOrder": [11211, 11212, 11215],
+    "ProudMap": {
+      "11211": 12131,
+      "11212": 12132,
+      "11215": 12139
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 4
+  },
+  "10000122": {
+    "NameTextMapHash": 2745785690,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Nefer.png",
+    "SkillOrder": [11221, 11222, 11225],
+    "ProudMap": {
+      "11221": 12231,
+      "11222": 12232,
+      "11225": 12239
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000123": {
+    "NameTextMapHash": 2801077538,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Durin.png",
+    "SkillOrder": [11231, 11232, 11235],
+    "ProudMap": {
+      "11231": 12331,
+      "11232": 12332,
+      "11235": 12339
+    },
+    "Costumes": {
+      "212301": {
+        "icon": "/ui/UI_AvatarIcon_DurinCostumeWic.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_DurinCostumeWic.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000124": {
+    "NameTextMapHash": 1438964010,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Jahoda.png",
+    "SkillOrder": [11241, 11242, 11245],
+    "ProudMap": {
+      "11241": 12431,
+      "11242": 12432,
+      "11245": 12439
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 4
+  },
+  "10000125": {
+    "NameTextMapHash": 1888371106,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Columbina.png",
+    "SkillOrder": [11251, 11252, 11255],
+    "ProudMap": {
+      "11251": 12531,
+      "11252": 12532,
+      "11255": 12539
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000126": {
+    "NameTextMapHash": 937532578,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Zibai.png",
+    "SkillOrder": [11261, 11262, 11265],
+    "ProudMap": {
+      "11261": 12631,
+      "11262": 12632,
+      "11265": 12639
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000127": {
+    "NameTextMapHash": 102656474,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Illuga.png",
+    "SkillOrder": [11271, 11272, 11275],
+    "ProudMap": {
+      "11271": 12731,
+      "11272": 12732,
+      "11275": 12739
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000128": {
+    "NameTextMapHash": 963351866,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Varka.png",
+    "SkillOrder": [11281, 11282, 11285],
+    "ProudMap": {
+      "11281": 12831,
+      "11282": 12832,
+      "11285": 12839
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 5
+  },
+  "10000129": {
+    "NameTextMapHash": 2872823194,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Lohen.png",
+    "SkillOrder": [11291, 11292, 11295],
+    "ProudMap": {
+      "11291": 12931,
+      "11292": 12932,
+      "11295": 12939
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 5
+  },
+  "10000130": {
+    "NameTextMapHash": 1961019898,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Linnea.png",
+    "SkillOrder": [11301, 11302, 11305],
+    "ProudMap": {
+      "11301": 13031,
+      "11302": 13032,
+      "11305": 13039
+    },
+    "Costumes": {},
+    "WeaponType": "Bow",
+    "Rarity": 5
+  },
+  "10000131": {
+    "NameTextMapHash": 1711582634,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Nicole.png",
+    "SkillOrder": [11311, 11312, 11315],
+    "ProudMap": {
+      "11311": 13131,
+      "11312": 13132,
+      "11315": 13139
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000132": {
+    "NameTextMapHash": 2787504450,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Prune.png",
+    "SkillOrder": [11321, 11322, 11325],
+    "ProudMap": {
+      "11321": 13231,
+      "11322": 13232,
+      "11325": 13239
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 4
+  },
+  "10000133": {
+    "NameTextMapHash": 108893506,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MarionetteNew.png",
+    "SkillOrder": [11331, 11332, 11335],
+    "ProudMap": {
+      "11331": 13331,
+      "11332": 13332,
+      "11335": 13339
+    },
+    "Costumes": {},
+    "WeaponType": "Claymore",
+    "Rarity": 5
+  },
+  "10000140": {
+    "NameTextMapHash": 1692132714,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Vodyanitsa.png",
+    "SkillOrder": [11401, 11402, 11405],
+    "ProudMap": {
+      "11401": 14031,
+      "11402": 14032,
+      "11405": 14039
+    },
+    "Costumes": {},
+    "WeaponType": "Catalyst",
+    "Rarity": 5
+  },
+  "10000143": {
+    "NameTextMapHash": 3992521194,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Vesna.png",
+    "SkillOrder": [11431, 11432, 11435],
+    "ProudMap": {
+      "11431": 14331,
+      "11432": 14332,
+      "11435": 14339
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000148": {
+    "NameTextMapHash": 2727450010,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Alyosha.png",
+    "SkillOrder": [11481, 11482, 11485],
+    "ProudMap": {
+      "11481": 14831,
+      "11482": 14832,
+      "11485": 14839
+    },
+    "Costumes": {},
+    "WeaponType": "Polearm",
+    "Rarity": 4
+  },
+  "10000150": {
+    "NameTextMapHash": 2417850,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_Odette.png",
+    "SkillOrder": [11501, 11502, 11505],
+    "ProudMap": {
+      "11501": 15031,
+      "11502": 15032,
+      "11505": 15039
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000005-501": {
+    "NameTextMapHash": 3816664530,
+    "Element": "None",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoy.png",
+    "SkillOrder": [100540, 10067, 10068],
+    "ProudMap": {
+      "10067": 732,
+      "10068": 739,
+      "100540": 731
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000005-502": {
+    "NameTextMapHash": 1533656306,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoy.png",
+    "SkillOrder": [100541, 10097, 10098],
+    "ProudMap": {
+      "10097": 532,
+      "10098": 539,
+      "100541": 530
+    },
+    "Costumes": {
+      "200501": {
+        "icon": "/ui/UI_AvatarIcon_PlayerBoyCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoyCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000005-503": {
+    "NameTextMapHash": 1533656306,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoy.png",
+    "SkillOrder": [100542, 10087, 10088],
+    "ProudMap": {
+      "10087": 632,
+      "10088": 639,
+      "100542": 630
+    },
+    "Costumes": {
+      "200501": {
+        "icon": "/ui/UI_AvatarIcon_PlayerBoyCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoyCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000005-504": {
+    "NameTextMapHash": 1533656306,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoy.png",
+    "SkillOrder": [100543, 10067, 10068],
+    "ProudMap": {
+      "10067": 732,
+      "10068": 739,
+      "100543": 730
+    },
+    "Costumes": {
+      "200501": {
+        "icon": "/ui/UI_AvatarIcon_PlayerBoyCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoyCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000005-505": {
+    "NameTextMapHash": 1533656306,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoy.png",
+    "SkillOrder": [100544, 10127, 10128],
+    "ProudMap": {
+      "10127": 832,
+      "10128": 839,
+      "100544": 830
+    },
+    "Costumes": {
+      "200501": {
+        "icon": "/ui/UI_AvatarIcon_PlayerBoyCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoyCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000005-506": {
+    "NameTextMapHash": 1533656306,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoy.png",
+    "SkillOrder": [100545, 10077, 10078],
+    "ProudMap": {
+      "10077": 932,
+      "10078": 939,
+      "100545": 730
+    },
+    "Costumes": {
+      "200501": {
+        "icon": "/ui/UI_AvatarIcon_PlayerBoyCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoyCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000005-507": {
+    "NameTextMapHash": 1533656306,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoy.png",
+    "SkillOrder": [100546, 10602, 10605],
+    "ProudMap": {
+      "10602": 1032,
+      "10605": 1039,
+      "100546": 1030
+    },
+    "Costumes": {
+      "200501": {
+        "icon": "/ui/UI_AvatarIcon_PlayerBoyCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoyCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000005-508": {
+    "NameTextMapHash": 1533656306,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoy.png",
+    "SkillOrder": [100547, 10117, 10118],
+    "ProudMap": {
+      "10117": 1132,
+      "10118": 1139,
+      "100547": 1130
+    },
+    "Costumes": {
+      "200501": {
+        "icon": "/ui/UI_AvatarIcon_PlayerBoyCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerBoyCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000007-701": {
+    "NameTextMapHash": 3816664530,
+    "Element": "None",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirl.png",
+    "SkillOrder": [100550, 10067, 10068],
+    "ProudMap": {
+      "10067": 732,
+      "10068": 739,
+      "100550": 731
+    },
+    "Costumes": {},
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000007-702": {
+    "NameTextMapHash": 3816664530,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirl.png",
+    "SkillOrder": [100551, 10097, 10098],
+    "ProudMap": {
+      "10097": 532,
+      "10098": 539,
+      "100551": 531
+    },
+    "Costumes": {
+      "200701": {
+        "icon": "/ui/UI_AvatarIcon_PlayerGirlCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirlCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000007-703": {
+    "NameTextMapHash": 3816664530,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirl.png",
+    "SkillOrder": [100552, 10087, 10088],
+    "ProudMap": {
+      "10087": 632,
+      "10088": 639,
+      "100552": 631
+    },
+    "Costumes": {
+      "200701": {
+        "icon": "/ui/UI_AvatarIcon_PlayerGirlCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirlCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000007-704": {
+    "NameTextMapHash": 3816664530,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirl.png",
+    "SkillOrder": [100553, 10067, 10068],
+    "ProudMap": {
+      "10067": 732,
+      "10068": 739,
+      "100553": 731
+    },
+    "Costumes": {
+      "200701": {
+        "icon": "/ui/UI_AvatarIcon_PlayerGirlCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirlCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000007-705": {
+    "NameTextMapHash": 3816664530,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirl.png",
+    "SkillOrder": [100554, 10127, 10128],
+    "ProudMap": {
+      "10127": 832,
+      "10128": 839,
+      "100554": 831
+    },
+    "Costumes": {
+      "200701": {
+        "icon": "/ui/UI_AvatarIcon_PlayerGirlCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirlCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000007-706": {
+    "NameTextMapHash": 3816664530,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirl.png",
+    "SkillOrder": [100555, 10077, 10078],
+    "ProudMap": {
+      "10077": 932,
+      "10078": 939,
+      "100555": 731
+    },
+    "Costumes": {
+      "200701": {
+        "icon": "/ui/UI_AvatarIcon_PlayerGirlCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirlCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000007-707": {
+    "NameTextMapHash": 3816664530,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirl.png",
+    "SkillOrder": [100556, 10602, 10605],
+    "ProudMap": {
+      "10602": 1032,
+      "10605": 1039,
+      "100556": 1031
+    },
+    "Costumes": {
+      "200701": {
+        "icon": "/ui/UI_AvatarIcon_PlayerGirlCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirlCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000007-708": {
+    "NameTextMapHash": 3816664530,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirl.png",
+    "SkillOrder": [100557, 10117, 10118],
+    "ProudMap": {
+      "10117": 1132,
+      "10118": 1139,
+      "100557": 1131
+    },
+    "Costumes": {
+      "200701": {
+        "icon": "/ui/UI_AvatarIcon_PlayerGirlCostumeCWXR.png",
+        "sideIconName": "/ui/UI_AvatarIcon_Side_PlayerGirlCostumeCWXR.png"
+      }
+    },
+    "WeaponType": "Sword",
+    "Rarity": 5
+  },
+  "10000117-11701": {
+    "NameTextMapHash": 1496871274,
+    "Element": "None",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinBoy.png",
+    "SkillOrder": [11171, 11172, 111751],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111751": 11739
+    },
+    "Costumes": {}
+  },
+  "10000117-11702": {
+    "NameTextMapHash": 1496871274,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinBoy.png",
+    "SkillOrder": [11171, 11172, 111751],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111751": 11739
+    },
+    "Costumes": {}
+  },
+  "10000117-11703": {
+    "NameTextMapHash": 1496871274,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinBoy.png",
+    "SkillOrder": [11171, 11172, 111752],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111752": 11739
+    },
+    "Costumes": {}
+  },
+  "10000117-11704": {
+    "NameTextMapHash": 1496871274,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinBoy.png",
+    "SkillOrder": [11171, 11172, 111753],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111753": 11739
+    },
+    "Costumes": {}
+  },
+  "10000117-11705": {
+    "NameTextMapHash": 1496871274,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinBoy.png",
+    "SkillOrder": [11171, 11172, 111754],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111754": 11739
+    },
+    "Costumes": {}
+  },
+  "10000117-11706": {
+    "NameTextMapHash": 1496871274,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinBoy.png",
+    "SkillOrder": [11171, 11172, 111755],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111755": 11739
+    },
+    "Costumes": {}
+  },
+  "10000117-11707": {
+    "NameTextMapHash": 1496871274,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinBoy.png",
+    "SkillOrder": [11171, 11172, 111756],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111756": 11739
+    },
+    "Costumes": {}
+  },
+  "10000117-11708": {
+    "NameTextMapHash": 1496871274,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinBoy.png",
+    "SkillOrder": [11171, 11172, 111757],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111757": 11739
+    },
+    "Costumes": {}
+  },
+  "10000118-11801": {
+    "NameTextMapHash": 4125864442,
+    "Element": "None",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinGirl.png",
+    "SkillOrder": [11171, 11172, 111751],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111751": 11739
+    },
+    "Costumes": {}
+  },
+  "10000118-11802": {
+    "NameTextMapHash": 4125864442,
+    "Element": "Fire",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinGirl.png",
+    "SkillOrder": [11171, 11172, 111751],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111751": 11739
+    },
+    "Costumes": {}
+  },
+  "10000118-11803": {
+    "NameTextMapHash": 4125864442,
+    "Element": "Water",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinGirl.png",
+    "SkillOrder": [11171, 11172, 111752],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111752": 11739
+    },
+    "Costumes": {}
+  },
+  "10000118-11804": {
+    "NameTextMapHash": 4125864442,
+    "Element": "Electric",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinGirl.png",
+    "SkillOrder": [11171, 11172, 111753],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111753": 11739
+    },
+    "Costumes": {}
+  },
+  "10000118-11805": {
+    "NameTextMapHash": 4125864442,
+    "Element": "Ice",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinGirl.png",
+    "SkillOrder": [11171, 11172, 111754],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111754": 11739
+    },
+    "Costumes": {}
+  },
+  "10000118-11806": {
+    "NameTextMapHash": 4125864442,
+    "Element": "Wind",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinGirl.png",
+    "SkillOrder": [11171, 11172, 111755],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111755": 11739
+    },
+    "Costumes": {}
+  },
+  "10000118-11807": {
+    "NameTextMapHash": 4125864442,
+    "Element": "Rock",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinGirl.png",
+    "SkillOrder": [11171, 11172, 111756],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111756": 11739
+    },
+    "Costumes": {}
+  },
+  "10000118-11808": {
+    "NameTextMapHash": 4125864442,
+    "Element": "Grass",
+    "SideIconName": "/ui/UI_AvatarIcon_Side_MannequinGirl.png",
+    "SkillOrder": [11171, 11172, 111757],
+    "ProudMap": {
+      "11171": 11731,
+      "11172": 11732,
+      "111757": 11739
+    },
+    "Costumes": {}
+  }
+}

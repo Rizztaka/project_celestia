@@ -1,0 +1,382 @@
+{
+  "numTotalTestSuites": 2,
+  "numPassedTestSuites": 2,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 37,
+  "numPassedTests": 37,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1792833054199,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "renders character bars as full-area links without inline build controls or content",
+          "status": "passed",
+          "title": "renders character bars as full-area links without inline build controls or content",
+          "duration": 12.737600000000043,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "distinguishes empty/private showcase from owned-roster data and unavailable observations",
+          "status": "passed",
+          "title": "distinguishes empty/private showcase from owned-roster data and unavailable observations",
+          "duration": 10.080600000000004,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "labels fetched freshness accurately",
+          "status": "passed",
+          "title": "labels fetched freshness accurately",
+          "duration": 3.920199999999909,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "labels cached freshness accurately",
+          "status": "passed",
+          "title": "labels cached freshness accurately",
+          "duration": 0.5468999999999369,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "labels stale freshness accurately",
+          "status": "passed",
+          "title": "labels stale freshness accurately",
+          "duration": 0.384900000000016,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "labels unavailable freshness accurately",
+          "status": "passed",
+          "title": "labels unavailable freshness accurately",
+          "duration": 0.3021000000001095,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "renders initial/loading/network/rate-limit states accessibly and never prints upstream diagnostics",
+          "status": "passed",
+          "title": "renders initial/loading/network/rate-limit states accessibly and never prints upstream diagnostics",
+          "duration": 1.1812999999999647,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "saves only a versioned UID preference; corrupt or denied storage does not crash",
+          "status": "passed",
+          "title": "saves only a versioned UID preference; corrupt or denied storage does not crash",
+          "duration": 1.0363999999999578,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "uses legacy UID preferences only as prefill until a lookup succeeds",
+          "status": "passed",
+          "title": "uses legacy UID preferences only as prefill until a lookup succeeds",
+          "duration": 0.53449999999998,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "handles typed provider failures and rejects malformed/foreign snapshots without authenticating",
+          "status": "passed",
+          "title": "handles typed provider failures and rejects malformed/foreign snapshots without authenticating",
+          "duration": 25.23230000000001,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps showcase queries and UI separate from roster/import/account actions",
+          "status": "passed",
+          "title": "keeps showcase queries and UI separate from roster/import/account actions",
+          "duration": 1.5720000000000027,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps UID entry free of workspace registration and sign-in links",
+          "status": "passed",
+          "title": "keeps UID entry free of workspace registration and sign-in links",
+          "duration": 1.0481999999999516,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "remembers only successful public lookups, preserving the previous UID on errors or stale results",
+          "status": "passed",
+          "title": "remembers only successful public lookups, preserving the previous UID on errors or stale results",
+          "duration": 0.35820000000001073,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 600000001 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 600000001 without inventing unknown ranges",
+          "duration": 0.08210000000008222,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 700000001 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 700000001 without inventing unknown ranges",
+          "duration": 0.045999999999935426,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 800000001 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 800000001 without inventing unknown ranges",
+          "duration": 0.09140000000002146,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 1800000001 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 1800000001 without inventing unknown ranges",
+          "duration": 0.04540000000008604,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 900000001 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 900000001 without inventing unknown ranges",
+          "duration": 0.03290000000004056,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix 1234567890 without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix 1234567890 without inventing unknown ranges",
+          "duration": 0.031799999999975626,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "identifies the server from the complete UID prefix invalid without inventing unknown ranges",
+          "status": "passed",
+          "title": "identifies the server from the complete UID prefix invalid without inventing unknown ranges",
+          "duration": 0.0624000000000251,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "enforces TTL and retry deadlines through the exact refresh boundary",
+          "status": "passed",
+          "title": "enforces TTL and retry deadlines through the exact refresh boundary",
+          "duration": 0.13599999999996726,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "retains an earlier successful snapshot even when a restarted API has lost its cache",
+          "status": "passed",
+          "title": "retains an earlier successful snapshot even when a restarted API has lost its cache",
+          "duration": 0.19729999999992742,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "deduplicates client lookup and dashboard requests for one UID and separates UID caches",
+          "status": "passed",
+          "title": "deduplicates client lookup and dashboard requests for one UID and separates UID caches",
+          "duration": 1.8496999999999844,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "renders UID dashboard links and a character deep link from the same current snapshot",
+          "status": "passed",
+          "title": "renders UID dashboard links and a character deep link from the same current snapshot",
+          "duration": 5.905000000000086,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "shows missing character and invalid UID links clearly, without substituting private or historical data",
+          "status": "passed",
+          "title": "shows missing character and invalid UID links clearly, without substituting private or historical data",
+          "duration": 5.233899999999949,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "disables refresh during provider TTL and Retry-After, and retains old data on a rate limit",
+          "status": "passed",
+          "title": "disables refresh during provider TTL and Retry-After, and retains old data on a rate limit",
+          "duration": 4.284800000000018,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792833056461,
+      "endTime": 1792833056538.285,
+      "status": "passed",
+      "message": "",
+      "name": "C:/Users/inuzu/.codex/worktrees/p1-enka-showcase/project-celestia/apps/api/tooling/showcase-client.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "opens a clean Celestia Today with connected UID navigation, without duplicated profile/build panels or account queries",
+          "status": "passed",
+          "title": "opens a clean Celestia Today with connected UID navigation, without duplicated profile/build panels or account queries",
+          "duration": 31.267200000000003,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "uses the connected characters in the main collection cards and keeps search scoped to that UID",
+          "status": "passed",
+          "title": "uses the connected characters in the main collection cards and keeps search scoped to that UID",
+          "duration": 23.654200000000174,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "connects the same equipped weapon and artifact data to the main equipment tabs",
+          "status": "passed",
+          "title": "connects the same equipped weapon and artifact data to the main equipment tabs",
+          "duration": 16.383600000000115,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "opens the reported build inside the main shell and links back to the UID character collection",
+          "status": "passed",
+          "title": "opens the reported build inside the main shell and links back to the UID character collection",
+          "duration": 10.104900000000043,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "never substitutes another UID data while a different workspace is loading",
+          "status": "passed",
+          "title": "never substitutes another UID data while a different workspace is loading",
+          "duration": 6.957400000000007,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps Today clean and empty or hidden data explicit in the data views",
+          "status": "passed",
+          "title": "keeps Today clean and empty or hidden data explicit in the data views",
+          "duration": 21.907200000000103,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "retains connected workspace data and disables refresh during provider backoff",
+          "status": "passed",
+          "title": "retains connected workspace data and disables refresh during provider backoff",
+          "duration": 9.23759999999993,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "uses a timer instead of cache diagnostics in the public profile and links character identities to details",
+          "status": "passed",
+          "title": "uses a timer instead of cache diagnostics in the public profile and links character identities to details",
+          "duration": 4.9565000000000055,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "retains the original account Today actions in the shared welcome component",
+          "status": "passed",
+          "title": "retains the original account Today actions in the shared welcome component",
+          "duration": 2.2672999999999774,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps new character metadata and absent observations accurate in the main collection",
+          "status": "passed",
+          "title": "keeps new character metadata and absent observations accurate in the main collection",
+          "duration": 4.510299999999916,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "resolves UID navigation accurately and preserves opaque character keys",
+          "status": "passed",
+          "title": "resolves UID navigation accurately and preserves opaque character keys",
+          "duration": 0.18970000000012988,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792833055572,
+      "endTime": 1792833055704.1897,
+      "status": "passed",
+      "message": "",
+      "name": "C:/Users/inuzu/.codex/worktrees/p1-enka-showcase/project-celestia/apps/api/tooling/uid-workspace-client.test.js"
+    }
+  ]
+}

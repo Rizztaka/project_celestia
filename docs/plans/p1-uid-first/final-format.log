@@ -1,0 +1,5 @@
+CHECK repository-format
+Checking formatting...
+All matched files use Prettier code style!
+CHECK diff-check
+Verification evidence: C:\Users\inuzu\AppData\Local\Temp\celestia-verification-kZWY8a

@@ -202,7 +202,10 @@ export default function FarmingPanel() {
                         : 'Select a server, a daily budget of at least 20 resin, and difficulty with known required stock to calculate pacing.'}
                     </p>
                   )}
-                  <Link to="/#plan-choices" className="mt-2 inline-block text-indigo-200 underline">
+                  <Link
+                    to="/workspace#plan-choices"
+                    className="mt-2 inline-block text-indigo-200 underline"
+                  >
                     Set daily budget on Today
                   </Link>
                   {result.schedule.days.some((day) => day.resin > 0) && (

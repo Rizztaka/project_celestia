@@ -1,6 +1,6 @@
 import '../styles/companion.css';
 
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { type ReactNode, Suspense, useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 
 import { fetchApi } from '../lib/api';
@@ -8,12 +8,13 @@ import { useAuthStore } from '../stores/auth.store';
 import { CelestiaMark, UiIcon } from './Ui';
 
 const primary = [
-  ['/', 'Today'],
+  ['/workspace', 'Today'],
   ['/roster', 'Characters'],
   ['/planner', 'Planner'],
   ['/inventory', 'Inventory'],
 ] as const;
 const supporting = [
+  ['/showcase', 'My Showcase'],
   ['/import', 'Import'],
   ['/profile', 'Settings & profile'],
 ] as const;
@@ -22,7 +23,21 @@ const secondary = [
   ['/endgame', 'Endgame records'],
 ] as const;
 
-function MobileNavigation({ signOut, signingOut }: { signOut: () => void; signingOut: boolean }) {
+export function MobileNavigation({
+  signOut,
+  signingOut = false,
+  groups,
+  icons = navIcons,
+  footer,
+  isCurrent,
+}: {
+  signOut?: () => void;
+  signingOut?: boolean;
+  groups?: readonly (readonly [string, readonly (readonly [string, string])[]])[];
+  icons?: Record<string, Parameters<typeof UiIcon>[0]['name']>;
+  footer?: ReactNode;
+  isCurrent?: (to: string, pathname: string) => boolean;
+}) {
   const { pathname } = useLocation();
   const drawer = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
@@ -118,11 +133,12 @@ function MobileNavigation({ signOut, signingOut }: { signOut: () => void; signin
           </button>
         </div>
         {(
-          [
+          groups ??
+          ([
             ['Your workspace', primary],
             ['Explore', secondary],
             ['Your account', supporting],
-          ] as const
+          ] as const)
         ).map(([label, links]) => (
           <nav key={label} aria-label={`${label} mobile navigation`} className="mt-5 flex flex-col">
             <h3 className="mb-1 px-3 text-xs uppercase tracking-wider text-indigo-200">{label}</h3>
@@ -132,38 +148,44 @@ function MobileNavigation({ signOut, signingOut }: { signOut: () => void; signin
                 to={to}
                 aria-current={
                   (
-                    to === '/'
-                      ? pathname === '/'
-                      : pathname === to ||
-                        pathname.startsWith(to + '/') ||
-                        (to === '/roster' && pathname.startsWith('/characters/'))
+                    isCurrent
+                      ? isCurrent(to, pathname)
+                      : to === '/workspace'
+                        ? pathname === '/workspace'
+                        : pathname === to ||
+                          pathname.startsWith(to + '/') ||
+                          (to === '/roster' && pathname.startsWith('/characters/'))
                   )
                     ? 'page'
                     : undefined
                 }
                 onClick={() => drawer.current?.close()}
               >
-                <UiIcon name={navIcons[to]} />
+                <UiIcon name={icons[to]} />
                 {name}
               </Link>
             ))}
           </nav>
         ))}
-        <button
-          type="button"
-          className="mt-5 w-full border border-zinc-600"
-          disabled={signingOut}
-          onClick={signOut}
-        >
-          {signingOut ? 'Signing out…' : 'Sign out'}
-        </button>
+        {footer}
+        {signOut ? (
+          <button
+            type="button"
+            className="mt-5 w-full border border-zinc-600"
+            disabled={signingOut}
+            onClick={signOut}
+          >
+            {signingOut ? 'Signing out…' : 'Sign out'}
+          </button>
+        ) : null}
       </dialog>
     </>
   );
 }
 
 const navIcons: Record<string, Parameters<typeof UiIcon>[0]['name']> = {
-  '/': 'today',
+  '/showcase': 'characters',
+  '/workspace': 'today',
   '/roster': 'characters',
   '/planner': 'planner',
   '/inventory': 'inventory',
@@ -215,8 +237,8 @@ export function CompanionNavigation() {
               to={to}
               aria-current={
                 (
-                  to === '/'
-                    ? location.pathname === '/'
+                  to === '/workspace'
+                    ? location.pathname === '/workspace'
                     : location.pathname === to ||
                       location.pathname.startsWith(to + '/') ||
                       (to === '/roster' && location.pathname.startsWith('/characters/'))
@@ -333,18 +355,30 @@ function PageContent() {
   return <Outlet />;
 }
 
-export default function CompanionLayout() {
+export default function CompanionLayout({
+  navigation,
+  workspaceBar,
+  footer,
+}: {
+  navigation?: ReactNode;
+  workspaceBar?: ReactNode;
+  footer?: ReactNode;
+}) {
   return (
     <div className="companion-shell">
-      <CompanionNavigation />
+      {navigation ?? <CompanionNavigation />}
       <div className="companion-workspace">
         <div className="workspace-bar">
-          <span>
-            Genshin Impact <span aria-hidden="true">/</span> <strong>Personal workspace</strong>
-          </span>
-          <Link to="/profile" className="workspace-account">
-            Your account <UiIcon name="settings" />
-          </Link>
+          {workspaceBar ?? (
+            <>
+              <span>
+                Genshin Impact <span aria-hidden="true">/</span> <strong>Personal workspace</strong>
+              </span>
+              <Link to="/profile" className="workspace-account">
+                Your account <UiIcon name="settings" />
+              </Link>
+            </>
+          )}
         </div>
         <Suspense
           fallback={
@@ -356,8 +390,12 @@ export default function CompanionLayout() {
           <PageContent />
         </Suspense>
         <footer className="workspace-footer">
-          <span>CELESTIA</span>
-          <span>Your journey. At your pace.</span>
+          {footer ?? (
+            <>
+              <span>CELESTIA</span>
+              <span>Your journey. At your pace.</span>
+            </>
+          )}
         </footer>
       </div>
     </div>

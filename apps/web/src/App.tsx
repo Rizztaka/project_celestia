@@ -1,36 +1,24 @@
-/**
- * App.tsx — Application root
- *
- * Responsibilities:
- *   1. Provide TanStack QueryClient to the component tree
- *   2. Define the React Router route hierarchy
- *   3. Enforce authentication via ProtectedRoute
- *
- * Route structure:
- *   /login       — public, LoginPage
- *   /register    — public, RegisterPage
- *   /            — protected, DashboardPage
- *   /profile     — protected, ProfilePage
- *   /import      — protected, ImportPage
- *   /roster      — protected, RosterPage   ← Milestone 2D
- *   /inventory   — protected, InventoryPage ← Milestone 2E
- *
- * State management split (per ARCHITECTURE.md):
- *   - Zustand (auth.store.ts)  → token, isAuthenticated (client state)
- *   - TanStack Query           → server data (profile, future game data)
- */
-
-import { QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 
 import CompanionLayout from './components/CompanionLayout';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import UidDialogProvider from './components/UidDialogProvider';
 import { bindAccountCache, createAccountQueryClient } from './lib/account-cache';
 import { useAuthStore } from './stores/auth.store';
 
 // Lazy loaded page components
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const ShowcasePage = lazy(() => import('./pages/ShowcasePage'));
+const GuestWorkspace = lazy(() =>
+  import('./components/UidWorkspace').then((module) => ({ default: module.GuestWorkspace })),
+);
+const PublicShowcasePage = lazy(() => import('./pages/PublicShowcasePage'));
+const UidWorkspace = lazy(() => import('./components/UidWorkspace'));
+const UidDashboardPage = lazy(() => import('./pages/UidDashboardPage'));
+const UidRosterPage = lazy(() => import('./pages/UidRosterPage'));
+const UidEquipmentPage = lazy(() => import('./pages/UidEquipmentPage'));
 const EndgamePage = lazy(() => import('./pages/EndgamePage'));
 const ImportPage = lazy(() => import('./pages/ImportPage'));
 const IntelligencePage = lazy(() => import('./pages/IntelligencePage'));
@@ -48,6 +36,11 @@ const CharacterDetailPage = lazy(() => import('./pages/CharacterDetailPage'));
 const NikkeRosterPage = lazy(() =>
   import('./pages/nikke/NikkeRosterPage').then((m) => ({ default: m.NikkeRosterPage })),
 );
+
+function ShowcaseAlias() {
+  const { search } = useLocation();
+  return <Navigate to={`/${search}`} replace />;
+}
 
 function AccountQueryProvider({ children }: { children: React.ReactNode }) {
   const [client] = useState(createAccountQueryClient);
@@ -100,7 +93,7 @@ class ErrorBoundary extends React.Component<
   }
 }
 
-function App() {
+function WorkspaceApp() {
   const epoch = useAuthStore((state) => state.sessionEpoch);
   const [ready, setReady] = useState(() => !!useAuthStore.getState().token);
   const restoring = useRef(false);
@@ -118,53 +111,73 @@ function App() {
       </p>
     );
   return (
-    <ErrorBoundary>
-      <AccountQueryProvider key={epoch}>
-        <BrowserRouter>
-          <Suspense
-            fallback={
-              <div className="flex h-screen w-screen items-center justify-center bg-zinc-950">
-                <p role="status" className="text-zinc-300">
-                  Loading page…
-                </p>
-              </div>
-            }
-          >
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/reset-password" element={<ResetPasswordPage />} />
-              <Route path="/verify-email" element={<PasswordRecoveryPage mode="verify" />} />
-              <Route path="/auth/callback" element={<OAuthCallbackPage />} />
-
-              <Route element={<ProtectedRoute />}>
-                <Route element={<CompanionLayout />}>
-                  <Route path="/" element={<DashboardPage />} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/import" element={<ImportPage />} />
-                  <Route path="/roster" element={<RosterPage />} />
-                  <Route path="/roster/:characterKey" element={<CharacterDetailPage />} />
-                  <Route path="/characters/:characterKey" element={<CharacterDetailPage />} />
-                  <Route path="/inventory" element={<InventoryPage />} />
-                  <Route path="/planner" element={<PlannerPage />} />
-                  <Route path="/intelligence" element={<IntelligencePage />} />
-                  <Route path="/endgame" element={<EndgamePage />} />
-                  <Route path="/nikke/roster" element={<NikkeRosterPage />} />
-                  <Route
-                    path="/simulators"
-                    element={<Navigate to="/planner?tab=savings" replace />}
-                  />
-                </Route>
-              </Route>
-
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </AccountQueryProvider>
-    </ErrorBoundary>
+    <AccountQueryProvider key={epoch}>
+      <Outlet />
+    </AccountQueryProvider>
   );
 }
 
-export default App;
+export default function App() {
+  const [client] = useState(() => new QueryClient());
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={client}>
+        <BrowserRouter>
+          <UidDialogProvider>
+            <Suspense
+              fallback={
+                <p role="status" className="p-6 text-zinc-300">
+                  Loading showcase…
+                </p>
+              }
+            >
+              <Routes>
+                <Route path="/" element={<GuestWorkspace />}>
+                  <Route index element={<ShowcasePage />} />
+                </Route>
+                <Route path="/showcase" element={<ShowcaseAlias />} />
+                <Route path="/u/:uid" element={<UidWorkspace />}>
+                  <Route index element={<UidDashboardPage />} />
+                  <Route path="roster" element={<UidRosterPage />} />
+                  <Route path="inventory" element={<UidEquipmentPage />} />
+                  <Route path="showcase" element={<PublicShowcasePage />} />
+                  <Route path="character/:id" element={<PublicShowcasePage />} />
+                </Route>
+                <Route path="/login" element={<Navigate to="/" replace />} />
+                <Route path="/register" element={<Navigate to="/" replace />} />
+                <Route element={<WorkspaceApp />}>
+                  <Route path="/workspace/login" element={<LoginPage />} />
+                  <Route path="/workspace/register" element={<RegisterPage />} />
+                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                  <Route path="/reset-password" element={<ResetPasswordPage />} />
+                  <Route path="/verify-email" element={<PasswordRecoveryPage mode="verify" />} />
+                  <Route path="/auth/callback" element={<OAuthCallbackPage />} />
+                  <Route element={<ProtectedRoute />}>
+                    <Route element={<CompanionLayout />}>
+                      <Route path="/workspace" element={<DashboardPage />} />
+                      <Route path="/profile" element={<ProfilePage />} />
+                      <Route path="/import" element={<ImportPage />} />
+                      <Route path="/roster" element={<RosterPage />} />
+                      <Route path="/roster/:characterKey" element={<CharacterDetailPage />} />
+                      <Route path="/characters/:characterKey" element={<CharacterDetailPage />} />
+                      <Route path="/inventory" element={<InventoryPage />} />
+                      <Route path="/planner" element={<PlannerPage />} />
+                      <Route path="/intelligence" element={<IntelligencePage />} />
+                      <Route path="/endgame" element={<EndgamePage />} />
+                      <Route path="/nikke/roster" element={<NikkeRosterPage />} />
+                      <Route
+                        path="/simulators"
+                        element={<Navigate to="/planner?tab=savings" replace />}
+                      />
+                    </Route>
+                  </Route>
+                </Route>
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </Suspense>
+          </UidDialogProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+}

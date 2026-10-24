@@ -1,0 +1,24 @@
+{
+  "recordedAt": "2026-10-24T06:48:16.844Z",
+  "branch": "codex/p1-enka-showcase",
+  "tests": {
+    "passed": 115,
+    "failed": 0,
+    "total": 115,
+    "success": true
+  },
+  "checks": {
+    "webBuild": 0,
+    "webLint": 0,
+    "webTypes": 0,
+    "apiBuild": 0,
+    "apiLint": 0,
+    "apiTypes": 0,
+    "contractsBuild": 0,
+    "contractsLint": 0,
+    "changedSourceFormatting": 0,
+    "gitDiffWhitespace": 0
+  },
+  "scope": "Targeted showcase and existing journey/importer regressions. No production database or full database integration suite.",
+  "ownerAcceptance": "pending"
+}

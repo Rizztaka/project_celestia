@@ -1,0 +1,672 @@
+{
+  "10000002": {
+    "10018": "Kamisato Art: Hyouka",
+    "10019": "Kamisato Art: Soumetsu",
+    "10024": "Kamisato Art: Kabuki"
+  },
+  "10000003": {
+    "10031": "Favonius Bladework",
+    "10033": "Gale Blade",
+    "10034": "Dandelion Breeze"
+  },
+  "10000006": {
+    "10060": "Lightning Touch",
+    "10061": "Violet Arc",
+    "10062": "Lightning Rose"
+  },
+  "10000014": {
+    "10070": "Whisper of Water",
+    "10071": "Let the Show Begin♪",
+    "10072": "Shining Miracle♪"
+  },
+  "10000015": {
+    "10073": "Ceremonial Bladework",
+    "10074": "Frostgnaw",
+    "10075": "Glacial Waltz"
+  },
+  "10000016": {
+    "10160": "Tempered Sword",
+    "10161": "Searing Onslaught",
+    "10165": "Dawn"
+  },
+  "10000020": {
+    "10201": "Steel Fang",
+    "10202": "Claw and Thunder",
+    "10203": "Lightning Fang"
+  },
+  "10000021": {
+    "10017": "Fiery Rain",
+    "10032": "Explosive Puppet",
+    "10041": "Sharpshooter"
+  },
+  "10000022": {
+    "10221": "Divine Marksmanship",
+    "10224": "Skyward Sonnet",
+    "10225": "Wind's Grand Ode"
+  },
+  "10000023": {
+    "10231": "Dough-Fu",
+    "10232": "Guoba Attack",
+    "10235": "Pyronado"
+  },
+  "10000024": {
+    "10241": "Oceanborne",
+    "10242": "Tidecaller",
+    "10245": "Stormbreaker"
+  },
+  "10000025": {
+    "10381": "Guhua Style",
+    "10382": "Guhua Sword: Fatal Rainscreen",
+    "10385": "Guhua Sword: Raincutter"
+  },
+  "10000026": {
+    "10261": "Whirlwind Thrust",
+    "10262": "Lemniscatic Wind Cycling",
+    "10265": "Bane of All Evil"
+  },
+  "10000027": {
+    "10271": "Sparkling Scatter",
+    "10272": "Jade Screen",
+    "10274": "Starshatter"
+  },
+  "10000029": {
+    "10291": "Kaboom!",
+    "10292": "Jumpy Dumpty",
+    "10295": "Sparks 'n' Splash"
+  },
+  "10000030": {
+    "10301": "Rain of Stone",
+    "10302": "Dominus Lapidis",
+    "10303": "Planet Befall"
+  },
+  "10000031": {
+    "10311": "Bolts of Downfall",
+    "10312": "Nightrider",
+    "10313": "Midnight Phantasmagoria"
+  },
+  "10000032": {
+    "10321": "Strike of Fortune",
+    "10322": "Passion Overload",
+    "10323": "Fantastic Voyage"
+  },
+  "10000033": {
+    "10331": "Cutting Torrent",
+    "10332": "Foul Legacy: Raging Tide",
+    "10333": "Havoc: Obliteration"
+  },
+  "10000034": {
+    "10341": "Favonius Bladework - Maid",
+    "10342": "Breastplate",
+    "10343": "Sweeping Time"
+  },
+  "10000035": {
+    "10351": "Ancient Sword Art",
+    "10352": "Adeptus Art: Herald of Frost",
+    "10353": "Adeptus Art: Preserver of Fortune"
+  },
+  "10000036": {
+    "10401": "Demonbane",
+    "10402": "Spirit Blade: Chonghua's Layered Frost",
+    "10403": "Spirit Blade: Cloud-Parting Star"
+  },
+  "10000037": {
+    "10371": "Liutian Archery",
+    "10372": "Trail of the Qilin",
+    "10373": "Celestial Shower"
+  },
+  "10000038": {
+    "10386": "Favonius Bladework - Weiss",
+    "10387": "Abiogenesis: Solar Isotoma",
+    "10388": "Rite of Progeniture: Tectonic Tide"
+  },
+  "10000039": {
+    "10391": "Kätzlein Style",
+    "10392": "Icy Paws",
+    "10395": "Signature Mix"
+  },
+  "10000041": {
+    "10411": "Ripple of Fate",
+    "10412": "Mirror Reflection of Doom",
+    "10415": "Stellaris Phantasm"
+  },
+  "10000042": {
+    "10421": "Yunlai Swordsmanship",
+    "10422": "Stellar Restoration",
+    "10425": "Starward Sword"
+  },
+  "10000043": {
+    "10431": "Wind Spirit Creation",
+    "10432": "Astable Anemohypostasis Creation - 6308",
+    "10435": "Forbidden Creation - Isomer 75 / Type II"
+  },
+  "10000044": {
+    "10441": "Dance on Fire",
+    "10442": "Sweeping Fervor",
+    "10443": "Riff Revolution"
+  },
+  "10000045": {
+    "10451": "Spear of the Church",
+    "10452": "Ravaging Confession",
+    "10453": "Rites of Termination"
+  },
+  "10000046": {
+    "10461": "Secret Spear of Wangsheng",
+    "10462": "Guide to Afterlife",
+    "10463": "Spirit Soother"
+  },
+  "10000047": {
+    "10471": "Garyuu Bladework",
+    "10472": "Chihayaburu",
+    "10475": "Kazuha Slash"
+  },
+  "10000048": {
+    "10481": "Seal of Approval",
+    "10482": "Signed Edict",
+    "10485": "Done Deal"
+  },
+  "10000049": {
+    "10491": "Firework Flare-Up",
+    "10492": "Niwabi Fire-Dance",
+    "10495": "Ryuukin Saxifrage"
+  },
+  "10000050": {
+    "10501": "Swiftshatter Spear",
+    "10502": "Blazing Blessing",
+    "10505": "Crimson Ooyoroi"
+  },
+  "10000051": {
+    "10511": "Favonius Bladework - Edel",
+    "10512": "Icetide Vortex",
+    "10515": "Glacial Illumination"
+  },
+  "10000052": {
+    "10521": "Origin",
+    "10522": "Transcendence: Baleful Omen",
+    "10525": "Secret Art: Musou Shinsetsu"
+  },
+  "10000053": {
+    "10531": "Shuumatsuban Ninja Blade",
+    "10532": "Yoohoo Art: Fuuin Dash",
+    "10535": "Yoohoo Art: Mujina Flurry"
+  },
+  "10000054": {
+    "10541": "The Shape of Water",
+    "10542": "Kurage's Oath",
+    "10545": "Nereid's Ascension"
+  },
+  "10000055": {
+    "10551": "Ripping Fang Fletching",
+    "10552": "Inuzaka All-Round Defense",
+    "10555": "Juuga: Forward Unto Victory"
+  },
+  "10000056": {
+    "10561": "Tengu Bowmanship",
+    "10562": "Tengu Stormcall",
+    "10565": "Subjugation: Koukou Sendou"
+  },
+  "10000057": {
+    "10571": "Fight Club Legend",
+    "10572": "Masatsu Zetsugi: Akaushi Burst!",
+    "10575": "Royal Descent: Behold, Itto the Evil!"
+  },
+  "10000058": {
+    "10581": "Spiritfox Sin-Eater",
+    "10582": "Yakan Evocation: Sesshou Sakura",
+    "10585": "Great Secret Art: Tenko Kenshin"
+  },
+  "10000059": {
+    "10591": "Fudou Style Martial Arts",
+    "10592": "Heartstopper Strike",
+    "10595": "Windmuster Kick"
+  },
+  "10000060": {
+    "10606": "Stealthy Bowshot",
+    "10607": "Lingering Lifeline",
+    "10610": "Depth-Clarion Dice"
+  },
+  "10000061": {
+    "10611": "Boxcutter",
+    "10612": "Meow-teor Kick",
+    "10615": "Secret Art: Surprise Dispatch"
+  },
+  "10000062": {
+    "10621": "Rapid Fire",
+    "10622": "Frozen Wilds",
+    "10625": "Prophecies of Dawn"
+  },
+  "10000063": {
+    "10631": "Dawnstar Piercer",
+    "10632": "Spring Spirit Summoning",
+    "10635": "Divine Maiden's Deliverance"
+  },
+  "10000064": {
+    "10641": "Cloud-Grazing Strike",
+    "10642": "Opening Flourish",
+    "10643": "Cliffbreaker's Banner"
+  },
+  "10000065": {
+    "10651": "Shinobu's Shadowsword",
+    "10652": "Sanctifying Ring",
+    "10655": "Gyoei Narukami Kariyama Rite"
+  },
+  "10000066": {
+    "10661": "Kamisato Art: Marobashi",
+    "10662": "Kamisato Art: Kyouka",
+    "10665": "Kamisato Art: Suiyuu"
+  },
+  "10000067": {
+    "10671": "Supplicant's Bowmanship",
+    "10672": "Floral Brush",
+    "10675": "Trump-Card Kitty"
+  },
+  "10000068": {
+    "10681": "Marvelous Sword-Dance (Modified)",
+    "10682": "Spirit-Warding Lamp: Troubleshooter Cannon",
+    "10685": "Alcazarzaray's Exactitude"
+  },
+  "10000069": {
+    "10691": "Khanda Barrier-Buster",
+    "10692": "Vijnana-Phala Mine",
+    "10695": "Fashioner's Tanglevine Shaft"
+  },
+  "10000070": {
+    "10701": "Dance of Samser",
+    "10702": "Dance of Haftkarsvar",
+    "10705": "Dance of Abzendegi: Distant Dreams, Listening Spring"
+  },
+  "10000071": {
+    "10711": "Invoker's Spear",
+    "10712": "Secret Rite: Chasmic Soulfarer",
+    "10715": "Sacred Rite: Wolf's Swiftness"
+  },
+  "10000072": {
+    "10721": "Gleaming Spear - Guardian Stance",
+    "10722": "Sacred Rite: Heron's Sanctum",
+    "10725": "Sacred Rite: Wagtail's Tide"
+  },
+  "10000073": {
+    "10731": "Akara",
+    "10732": "All Schemes to Know",
+    "10735": "Illusory Heart"
+  },
+  "10000074": {
+    "10741": "Sword of the Radiant Path",
+    "10742": "Nights of Formal Focus",
+    "10745": "Dream of the Star-Stream Shaker"
+  },
+  "10000075": {
+    "10751": "Yuuban Meigen",
+    "10752": "Hanega: Song of the Wind",
+    "10755": "Kyougen: Five Ceremonial Plays"
+  },
+  "10000076": {
+    "10761": "Parthian Shot",
+    "10762": "Wind Realm of Nasamjnin",
+    "10765": "The Wind's Secret Ways"
+  },
+  "10000077": {
+    "10771": "Toss 'N' Turn Spear",
+    "10772": "Raphanus Sky Cluster",
+    "10775": "Moonjade Descent"
+  },
+  "10000078": {
+    "10781": "Abductive Reasoning",
+    "10782": "Universality: An Elaboration on Form",
+    "10785": "Particular Field: Fetters of Phenomena"
+  },
+  "10000079": {
+    "10791": "Sandstorm Assault",
+    "10792": "Molten Inferno",
+    "10795": "Leonine Bite"
+  },
+  "10000080": {
+    "10801": "Spear of Favonius - Arrow's Passage",
+    "10802": "Starfrost Swirl",
+    "10805": "Skyfeather Song"
+  },
+  "10000081": {
+    "10811": "Schematic Setup",
+    "10812": "Artistic Ingenuity",
+    "10815": "Painted Dome"
+  },
+  "10000082": {
+    "10821": "The Classics of Acupuncture",
+    "10822": "Universal Diagnosis",
+    "10825": "Holistic Revivification"
+  },
+  "10000083": {
+    "10831": "Rapid Ritesword",
+    "10832": "Enigmatic Feint",
+    "10835": "Magic Trick: Astonishing Shift"
+  },
+  "10000084": {
+    "10841": "Card Force Translocation",
+    "10842": "Bewildering Lights",
+    "10845": "Wondrous Trick: Miracle Parade"
+  },
+  "10000085": {
+    "10851": "Flowing Eddies",
+    "10852": "Pressurized Floe",
+    "10855": "Shadowhunter's Ambush"
+  },
+  "10000086": {
+    "10861": "Forceful Fists of Frost",
+    "10862": "Icefang Rush",
+    "10865": "Darkgold Wolfbite"
+  },
+  "10000087": {
+    "10871": "As Water Seeks Equilibrium",
+    "10872": "O Tears, I Shall Repay",
+    "10875": "O Tides, I Have Returned"
+  },
+  "10000088": {
+    "10881": "Cool-Color Capture",
+    "10882": "Framing: Freezing Point Composition",
+    "10885": "Still Photo: Comprehensive Confirmation"
+  },
+  "10000089": {
+    "10891": "Soloist's Solicitation",
+    "10892": "Salon Solitaire",
+    "10895": "Let the People Rejoice"
+  },
+  "10000090": {
+    "10901": "Line Bayonet Thrust EX",
+    "10902": "Short-Range Rapid Interdiction Fire",
+    "10905": "Ring of Bursting Grenades"
+  },
+  "10000091": {
+    "10911": "Blunt Refusal",
+    "10912": "Ceremonial Crystalshot",
+    "10915": "As the Sunlit Sky's Singing Salute"
+  },
+  "10000092": {
+    "10921": "Stellar Rend",
+    "10922": "Bestial Ascent",
+    "10925": "Suanni's Gilded Dance"
+  },
+  "10000093": {
+    "10931": "Word of Wind and Flower",
+    "10932": "White Clouds at Dawn",
+    "10935": "Stars Gather at Dusk"
+  },
+  "10000094": {
+    "10941": "Weaving Blade",
+    "10942": "Fluttering Hasode",
+    "10945": "Hiyoku: Twin Blades"
+  },
+  "10000095": {
+    "10951": "Targeted Treatment",
+    "10952": "Rebound Hydrotherapy",
+    "10955": "Super Saturated Syringing"
+  },
+  "10000096": {
+    "10961": "Invitation to a Beheading",
+    "10962": "All Is Ash",
+    "10965": "Balemoon Rising"
+  },
+  "10000097": {
+    "10971": "Royal Reed Archery",
+    "10972": "Ancient Rite: The Thundering Sands",
+    "10975": "Secret Rite: Twilight Shadowpiercer"
+  },
+  "10000098": {
+    "10981": "Oath of Hunting Shadows",
+    "10982": "Hunter's Vigil",
+    "10985": "Last Lightfall"
+  },
+  "10000099": {
+    "10991": "Shadow-Hunting Spear (Custom)",
+    "10992": "Fragrance Extraction",
+    "10995": "Aromatic Explication"
+  },
+  "10000100": {
+    "11001": "Cragbiter",
+    "11002": "Go, Go Turbo Twirly!",
+    "11005": "Time to Get Serious!"
+  },
+  "10000101": {
+    "11011": "Nightsun Style",
+    "11012": "Canopy Hunter: Riding High",
+    "11015": "Hail to the Almighty Dragonlord"
+  },
+  "10000102": {
+    "30000": "Cooling Treatment",
+    "30002": "Surfshark Wavebreaker",
+    "30007": "Boomsharka-laka"
+  },
+  "10000103": {
+    "11031": "Ehecatl's Roar",
+    "11032": "Yohual's Scratch",
+    "11035": "Ocelotlicue Point!"
+  },
+  "10000104": {
+    "11041": "Phantom Feather Flurry",
+    "11042": "Spirit Reins, Shadow Hunt",
+    "11045": "Soul Reaper's Fatal Round"
+  },
+  "10000105": {
+    "30501": "Spiritvessel Snapshot",
+    "30502": "Night's Sling",
+    "30505": "Dark Voices Echo"
+  },
+  "10000106": {
+    "11061": "Flames Weave Life",
+    "11062": "The Named Moment",
+    "11065": "Hour of Burning Skies"
+  },
+  "10000107": {
+    "11071": "Shadow-Stealing Spirit Vessel",
+    "11072": "Dawnfrost Darkstar",
+    "11075": "Edict of Entwined Splendor"
+  },
+  "10000108": {
+    "11081": "Black Pheasant Strides on Water",
+    "11082": "Swallow-Wisp Pinion Dance",
+    "11085": "Lustrous Moonrise"
+  },
+  "10000109": {
+    "11091": "Pure Heart, Pure Dreams",
+    "11092": "Aisa Utamakura Pilgrimage",
+    "11095": "Anraku Secret Spring Therapy"
+  },
+  "10000110": {
+    "11101": "Weighted Spike",
+    "11102": "Thunderbolt Rush",
+    "11105": "The Three Principles of Power"
+  },
+  "10000111": {
+    "11111": "By the Horns",
+    "11112": "Riding the Night-Rainbow",
+    "11115": "Guardian Vent!"
+  },
+  "10000112": {
+    "11121": "Kitchen Skills",
+    "11122": "Low-Temperature Cooking",
+    "11125": "Scoring Cuts"
+  },
+  "10000113": {
+    "11131": "Rite of Dispelling Winds",
+    "11132": "Airborne Disease Prevention",
+    "11135": "Compound Sedation Field"
+  },
+  "10000114": {
+    "11141": "Havoc: Sunder",
+    "11142": "Havoc: Warp",
+    "11145": "Havoc: Ruin"
+  },
+  "10000115": {
+    "11151": "Favonius Bladework - Ritual",
+    "11152": "Immersive Ordinance",
+    "11155": "Radiant Psalter"
+  },
+  "10000116": {
+    "11161": "Cyclonic Duster",
+    "11162": "Cleaning Mode: Carrier Frequency",
+    "11165": "Supreme Instruction: Cyclonic Exterminator"
+  },
+  "10000119": {
+    "11191": "Peregrination of Linnunrata",
+    "11192": "Runo: Dawnless Rest of Karsikko",
+    "11195": "Runo: All Hearts Become the Beating Moon"
+  },
+  "10000120": {
+    "11201": "Pocztowy Demonspear",
+    "11202": "Ancient Rite: Arcane Light",
+    "11205": "Ancient Ritual: Cometh the Night"
+  },
+  "10000121": {
+    "11211": "Bish-Bash-Bosh Repair",
+    "11212": "Musecatcher",
+    "11215": "Precision Hydronic Cooler"
+  },
+  "10000122": {
+    "11221": "Striking Serpent",
+    "11222": "Senet Strategy: Dance of a Thousand Nights",
+    "11225": "Sacred Vow: True Eye's Phantasm"
+  },
+  "10000123": {
+    "11231": "Radiant Wingslash",
+    "11232": "Binary Form: Convergence and Division",
+    "11235": "Principle of Purity: As the Light Shifts"
+  },
+  "10000124": {
+    "11241": "Strike While the Arrow's Hot",
+    "11242": "Savvy Strategy: Splitting the Spoils",
+    "11245": "Hidden Aces: Seven Tools of the Hunter"
+  },
+  "10000125": {
+    "11251": "Moondew Cascade",
+    "11252": "Eternal Tides",
+    "11255": "Moonlit Melancholy"
+  },
+  "10000126": {
+    "11261": "Golden Blade's Petaled Touch",
+    "11262": "Heaven and Earth Made Manifest",
+    "11265": "Tri-Sphere Eminence"
+  },
+  "10000127": {
+    "11271": "Oathkeeper's Spear",
+    "11272": "Dawnbearing Songbird",
+    "11275": "Shadowless Reflection"
+  },
+  "10000128": {
+    "11281": "Favonius Bladework: Dancing Radiance",
+    "11282": "Windbound Execution",
+    "11285": "Northwind Avatar"
+  },
+  "10000129": {
+    "11291": "Spear of Favonius — Broken Oath",
+    "11292": "Unforeseen Strike",
+    "11295": "Manifest Judgment"
+  },
+  "10000130": {
+    "11301": "Capture Protocol",
+    "11302": "Countermeasure: Lumi's Battle Cry!",
+    "11305": "Memo: Survival Guide in Extreme Conditions"
+  },
+  "10000131": {
+    "11311": "Allegoria",
+    "11312": "Revelation: Uncreated Light",
+    "11315": "Revelation: Ladder of Divine Ascent"
+  },
+  "10000132": {
+    "11321": "Badaboom! Hexbuster Hammer",
+    "11322": "Ring-A-Ding-Ding! Hexhunter Chime",
+    "11325": "The Bell Tolls! The Hunt Is On!"
+  },
+  "10000133": {
+    "11331": "Formule Phenomenale: Self-Evident Proposition",
+    "11332": "Formule Phenomenale: Differential Analysis",
+    "11335": "Formule Phenomenale: Q.E.D."
+  },
+  "10000140": {
+    "11401": "Psyshkhwe Arietta",
+    "11402": "Rechitativ: Sonorous Dawn",
+    "11405": "Koda: Sink With Thee"
+  },
+  "10000143": {
+    "11431": "Vila Blade Dance",
+    "11432": "The Art of Victory",
+    "11435": "For the Tsaritsa!"
+  },
+  "10000148": {
+    "11481": "Skirmishing Spear",
+    "11482": "Thunderbolt Strike",
+    "11485": "Hunter's Advance"
+  },
+  "10000150": {
+    "11501": "Snow Swan Variation",
+    "11502": "Adagio: Phantom Night Dancers",
+    "11505": "Presto: Bluebird Finale"
+  },
+  "10000005-502": {
+    "10097": "Flowfire Blade",
+    "10098": "Plains Scorcher",
+    "100541": "Foreign Blaze"
+  },
+  "10000005-503": {
+    "10087": "Aquacrest Saber",
+    "10088": "Rising Waters",
+    "100542": "Foreign Stream"
+  },
+  "10000005-504": {
+    "10067": "Palm Vortex",
+    "10068": "Gust Surge",
+    "100543": "Foreign Ironwind"
+  },
+  "10000005-505": {
+    "10127": "Ice Fog Piercer",
+    "10128": "Frostbound Javelin",
+    "100544": "Foreign Frostglint"
+  },
+  "10000005-506": {
+    "10077": "Starfell Sword",
+    "10078": "Wake of Earth",
+    "100545": "Foreign Rockblade"
+  },
+  "10000005-507": {
+    "10602": "Lightning Blade",
+    "10605": "Bellowing Thunder",
+    "100546": "Foreign Thundershock"
+  },
+  "10000005-508": {
+    "10117": "Razorgrass Blade",
+    "10118": "Surgent Manifestation",
+    "100547": "Foreign Fieldcleaver"
+  },
+  "10000007-702": {
+    "10097": "Flowfire Blade",
+    "10098": "Plains Scorcher",
+    "100551": "Foreign Blaze"
+  },
+  "10000007-703": {
+    "10087": "Aquacrest Saber",
+    "10088": "Rising Waters",
+    "100552": "Foreign Stream"
+  },
+  "10000007-704": {
+    "10067": "Palm Vortex",
+    "10068": "Gust Surge",
+    "100553": "Foreign Ironwind"
+  },
+  "10000007-705": {
+    "10127": "Ice Fog Piercer",
+    "10128": "Frostbound Javelin",
+    "100554": "Foreign Frostglint"
+  },
+  "10000007-706": {
+    "10077": "Starfell Sword",
+    "10078": "Wake of Earth",
+    "100555": "Foreign Rockblade"
+  },
+  "10000007-707": {
+    "10602": "Lightning Blade",
+    "10605": "Bellowing Thunder",
+    "100556": "Foreign Thundershock"
+  },
+  "10000007-708": {
+    "10117": "Razorgrass Blade",
+    "10118": "Surgent Manifestation",
+    "100557": "Foreign Fieldcleaver"
+  }
+}

@@ -12,11 +12,11 @@ export default function OAuthCallbackPage() {
     if (started.current) return;
     started.current = true;
     if (useAuthStore.getState().isAuthenticated) {
-      navigate('/', { replace: true });
+      navigate('/workspace', { replace: true });
       return;
     }
     void restoreCookieSession()
-      .then(() => navigate('/', { replace: true }))
+      .then(() => navigate('/workspace', { replace: true }))
       .catch(() => setError('Sign-in could not finish. Please try again.'));
   }, [navigate]);
   return (
@@ -24,7 +24,7 @@ export default function OAuthCallbackPage() {
       {error ? (
         <>
           <p role="alert">{error}</p>
-          <Link to="/login" className="underline">
+          <Link to="/workspace/login" className="underline">
             Back to sign in
           </Link>
         </>

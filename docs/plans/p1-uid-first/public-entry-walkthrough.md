@@ -1,0 +1,13 @@
+# Public entry without sign-in
+
+The reported URL was `https://projectcelestia.vercel.app/login`. This is the previous production application's credential page. The UID-first implementation was pushed only to `codex/p1-enka-showcase`; production still used master commit `00cf042` during diagnosis. Vercel also protects preview URLs, but that is separate from the reported application login and no hosting protection setting was changed.
+
+Public `/login` and `/register` bookmarks now redirect to the same `/` UID-first home, outside the legacy account/session provider. New visitors see Today and Add UID without an authentication request. Returning visitors resume their successfully saved UID and see Switch UID. A saved UID stays specific to the browser and origin.
+
+The preserved authenticated workspace remains available through its existing protected feature routes. Its credential forms are now explicitly at `/workspace/login` and `/workspace/register`; internal registration, password recovery, OAuth failure and account-deletion navigation use those destinations. The protected-route guard and server-side account authentication remain in place. Existing accounts, imports, stored records and public Enka behavior are unchanged.
+
+Five new App DOM regressions cover fresh and returning visitors on both old public credential URLs, absence of password inputs/authentication requests, and the retained private workspace guard. The focused client run passed 77 tests. The full verifier passed **1,710 tests across 102 files** with zero failures/skips, including the PostgreSQL integration cases. Lint, types, production build, repository formatting and whitespace checks pass. Evidence: `public-entry-verification.json`. Tests use synthetic public profiles and a disposable local database; production data is untouched. These DOM checks are not fresh visual browser verification.
+
+For local review, use the running http://127.0.0.1:45751/login or launch from this worktree with `pnpm showcase:dev`. A new browser should arrive at Today with Add UID; a browser with a saved successful UID should arrive at that UID's Today screen with Switch UID. Public Profile, Characters and builds remain accessible through the same shell.
+
+Commit and push this change to the already authorized development branch. Updating `projectcelestia.vercel.app` requires release authorization under the user's earlier instruction to commit only for now: publish the updated Render backend first, then the Vercel frontend, and verify anonymous entry plus the public showcase endpoint. No database migration is required for the public UID flow. Do not mistake a development-branch push or protected preview for production deployment.

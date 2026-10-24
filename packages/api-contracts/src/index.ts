@@ -84,6 +84,7 @@ export {
 } from './genshin/import.schema.js';
 export * from './genshin/plan.js';
 export * from './genshin/profile-reference.js';
+export * from './genshin/showcase.js';
 export * from './genshin/theater.js';
 export * from './genshin/wishes.js';
 export { type CreateUserInput, createUserSchema } from './users/user.schema.js';

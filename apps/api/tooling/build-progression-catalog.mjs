@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { writeDomainSchedule } from './build-domain-schedule.mjs';
 import { buildGameReferences } from './build-game-references.mjs';
+import { writeTodayDomainCatalog } from './build-today-domains.mjs';
 import { writeCatalogJson } from './catalog-json.mjs';
 import { refreshFarmingFamilies } from './refresh-farming-families.mjs';
 
@@ -287,6 +288,7 @@ const targets = {
   artifactSets: Object.values(references.artifactSets),
 };
 await writeCatalogJson(resolve(root, 'apps/web/src/lib/progression-targets.json'), targets);
+await writeTodayDomainCatalog(catalog);
 const notice = resolve(root, 'docs/third-party/genshin-db-LICENSE.txt');
 mkdirSync(dirname(notice), { recursive: true });
 writeFileSync(notice, readFileSync(resolve(cache, 'LICENSE'), 'utf8'));

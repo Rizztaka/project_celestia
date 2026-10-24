@@ -83,17 +83,19 @@ function page(path = `/u/${uid}`, data = result) {
   return { html, transport, keys };
 }
 
-it('opens a clean Celestia Today with connected UID navigation, without duplicated profile/build panels or account queries', () => {
+it('opens a farming-focused Today with connected UID navigation and no private account queries', () => {
   const { html, transport, keys } = page();
   for (const text of [
     'Today, at your pace.',
-    'Every great build',
-    'begins with a next step.',
+    'Available today',
+    'Farming day',
+    'Talents',
+    'Weapons',
     'companion-header',
     'companion-workspace',
     'Synthetic Traveler',
     'UID 800000001',
-    'View my characters',
+    'Open characters',
   ])
     expect(html).toContain(text);
   for (const path of [`/u/${uid}/roster`, `/u/${uid}/showcase`])
@@ -105,8 +107,6 @@ it('opens a clean Celestia Today with connected UID navigation, without duplicat
   expect(html).not.toContain('href="/login"');
   expect(html).not.toContain('href="/import"');
   for (const text of [
-    'Hu Tao',
-    'Staff of Homa',
     'Adventure Rank',
     'Public account overview',
     'Your showcased characters',
@@ -114,7 +114,8 @@ it('opens a clean Celestia Today with connected UID navigation, without duplicat
     'locally cached',
   ])
     expect(html).not.toContain(text);
-  expect(keys.every((key) => key[0] === 'enka-showcase')).toBe(true);
+  expect(html).not.toContain('Every great build');
+  expect(keys.every((key) => ['enka-showcase', 'observed-roster'].includes(key[0]))).toBe(true);
   expect(transport).not.toHaveBeenCalled();
 });
 

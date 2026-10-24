@@ -1,3 +1,13 @@
+> **2026-10-24 saved-team gallery follow-up:** Removed both New team controls.
+> A permanent maker saves compact cards below it, two per desktop row. Click a card
+> to expand all four member builds, with overview/comparison/editing retained.
+> Existing browser-local teams and UID boundaries remain compatible.
+> **128/128 tests**, web build/types, full web lint and scoped tooling lint pass;
+> browser checks cover actual four-character save, two-column cards, keyboard
+> expansion, reload, unique tab IDs and 390/320px widths without overflow.
+> [Details and screenshots](character-team-build-analyzers/gallery-update.md).
+> Continues the owner's authorized commit/deploy workflow for this feature.
+
 > **2026-10-24 public UID analyzers and Teams redesign completed locally.**
 > Continued the interrupted Claude work in `D:/Genshin Personal/celestia-build-analyzers`,
 > branch `claude/public-build-analyzers`, production base `e8f6a95`.

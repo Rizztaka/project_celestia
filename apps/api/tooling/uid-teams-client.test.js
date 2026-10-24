@@ -98,7 +98,14 @@ it('loads the real IndexedDB team into portrait slots and a keyboard-accessible 
   expect(document.querySelector('[role="tabpanel"]:not([hidden])').textContent).toContain(
     'Observed equipment',
   );
-  expect(document.querySelector('select').value).toBe('team-one');
+  expect(document.querySelectorAll('.saved-member-build')).toHaveLength(0);
+  expect(document.querySelector('[aria-label="Collapse Synthetic team"]')).toBeTruthy();
+  expect(document.querySelector('.team-library-bar')).toBeNull();
+  expect(
+    [...document.querySelectorAll('button')].some(
+      (button) => button.textContent.trim() === 'New team',
+    ),
+  ).toBe(false);
   const active = document.querySelector('[role="tab"][aria-selected="true"]');
   await act(async () =>
     active.dispatchEvent(
@@ -137,4 +144,49 @@ it('switches UID without showing or attaching the other UID team, and reports mi
   expect(document.body.textContent).not.toContain('Synthetic team');
   expect(document.querySelectorAll('.team-slot-filled')).toHaveLength(0);
   expect(await readUidTeams('800000002')).toEqual([]);
+});
+it('shows compact teams below an independent maker and expands all four builds', async () => {
+  await writeUidTeams(uid, [saved, { ...saved, id: 'team-two', name: 'Second team' }]);
+  await mount(uid, `/u/${uid}/teams`);
+  expect(document.querySelectorAll('.saved-team-card')).toHaveLength(2);
+  expect(document.querySelectorAll('.saved-member-build')).toHaveLength(0);
+  expect(
+    document
+      .querySelector('[aria-label="Team maker"]')
+      .compareDocumentPosition(document.querySelector('.saved-team-collection')) &
+      dom.window.Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  await click('Open Synthetic team');
+  expect(document.querySelectorAll('.saved-member-build')).toHaveLength(4);
+  expect(
+    document.querySelector('[aria-label="Team maker"]').querySelectorAll('.team-slot-filled'),
+  ).toHaveLength(0);
+  for (const region of document.querySelectorAll('.saved-member-build'))
+    expect(region.textContent).toContain('Observed equipment');
+  await click('Collapse Synthetic team');
+  expect(document.querySelectorAll('.saved-member-build')).toHaveLength(0);
+  await click('Open Second team');
+  expect(document.querySelectorAll('.saved-team-card.is-expanded')).toHaveLength(1);
+  expect(document.querySelectorAll('.saved-member-build')).toHaveLength(4);
+  expect(await readUidTeams(uid)).toHaveLength(2);
+});
+it('saves a second lineup as a compact card and resets the maker without changing existing teams', async () => {
+  await writeUidTeams(uid, [saved]);
+  await mount();
+  await click('Duplicate to maker');
+  expect(
+    document.querySelector('[aria-label="Team maker"]').querySelectorAll('.team-slot-filled'),
+  ).toHaveLength(4);
+  await click('Save team');
+  await act(async () => new Promise((resolve) => setTimeout(resolve, 40)));
+  expect(document.querySelectorAll('.saved-team-card')).toHaveLength(2);
+  expect(document.querySelectorAll('.saved-team-card.is-expanded')).toHaveLength(0);
+  expect(
+    document.querySelector('[aria-label="Team maker"]').querySelectorAll('.team-slot-filled'),
+  ).toHaveLength(0);
+  const stored = await readUidTeams(uid);
+  expect(stored.find((team) => team.id === saved.id)).toEqual(saved);
+  expect(stored.some((team) => team.name === 'Synthetic team (copy)')).toBe(true);
+  expect(document.activeElement.getAttribute('aria-label')).toBe('Open Synthetic team (copy)');
+  expect(transport).not.toHaveBeenCalled();
 });

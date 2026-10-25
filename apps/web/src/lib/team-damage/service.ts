@@ -97,6 +97,12 @@ export interface SearchResult {
   samples: number;
   ranked: { id: string; result: DamageResult }[];
 }
+export interface TeamSearchResult {
+  tested: number;
+  failed: number;
+  samples: number;
+  ranked: { id: string; result: DamageResult }[];
+}
 /** Screen with seed 1; re-evaluate the top three and baseline using identical seeds 1..N. */
 export function searchTeamRotations(
   candidates: { id: string; config: string }[],
@@ -141,6 +147,50 @@ export function searchTeamRotations(
         finalists.filter((row) => !row.result).length,
       samples,
       ranked,
+    };
+  })().finally(() => session.close());
+  return { promise, cancel: () => session.close() };
+}
+
+/** Screen every generated team once, then verify the best five with identical seeds. */
+export function searchTeamCandidates(
+  candidates: { id: string; config: string }[],
+  samples: number,
+  progress: (message: string) => void,
+) {
+  if (!candidates.length) throw new Error('No complete supported team candidates were found.');
+  if (!Number.isInteger(samples) || samples < 1 || samples > 50)
+    throw new Error('Use between 1 and 50 verification samples.');
+  const session = simulationSession(progress);
+  const promise: Promise<TeamSearchResult> = (async () => {
+    const screened: JobResult[] = [];
+    for (let offset = 0; offset < candidates.length; offset += 48) {
+      const batch = candidates.slice(offset, offset + 48);
+      screened.push(
+        ...(await session.run(
+          batch.map((candidate) => ({ ...candidate, samples: 1 })),
+          `Finding the strongest teams (${Math.min(offset + batch.length, candidates.length)} of ${candidates.length})`,
+        )),
+      );
+    }
+    const valid = screened.flatMap((row) =>
+      row.result ? [{ id: row.id, dps: row.result.dps }] : [],
+    );
+    if (!valid.length) throw new Error('No generated team could be simulated.');
+    const finalists = rankDamage(valid)
+      .slice(0, 5)
+      .map((row) => ({ ...candidates.find((candidate) => candidate.id === row.id)!, samples }));
+    const verified = await session.run(finalists, 'Verifying the strongest teams');
+    return {
+      tested: candidates.length,
+      failed:
+        screened.filter((row) => !row.result).length + verified.filter((row) => !row.result).length,
+      samples,
+      ranked: rankDamage(
+        verified.flatMap((row) =>
+          row.result ? [{ id: row.id, dps: row.result.dps, result: row.result }] : [],
+        ),
+      ),
     };
   })().finally(() => session.close());
   return { promise, cancel: () => session.close() };

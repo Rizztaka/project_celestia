@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
+import TeamAutoGenerator from '../components/TeamAutoGenerator';
 import TeamBuildEditor from '../components/TeamBuildEditor';
 import { ElementCrest, TeamPortrait } from '../components/TeamCharacterPicker';
 import { PageHeader, UiIcon } from '../components/Ui';
@@ -65,28 +66,39 @@ function TeamsWorkspace({ uid }: { uid: string }) {
       <PageHeader
         eyebrow="BETTER BUILDS, TOGETHER"
         title="Your teams"
-        description="Build a lineup. Keep your favorites close."
+        description="Choose a damage dealer. Let the benchmark find the strongest lineup from the builds you have observed."
       />
-      <TeamBuildEditor
-        key={`maker-${makerVersion}-${copy?.id ?? 'blank'}`}
+      <TeamAutoGenerator
         uid={uid}
-        initialDraft={
-          copy ? { name: `${copy.name.slice(0, 70)} (copy)`, slots: copy.members } : undefined
-        }
-        onSaved={(saved) => {
-          setMakerVersion((version) => version + 1);
-          navigate(`/u/${uid}/teams`, { replace: true });
-          setMessage('Team saved below. Your team maker is ready for another lineup.');
+        records={history.records}
+        onSave={async (team) => {
+          await mutation.mutateAsync({ teams: [...(teams.data ?? []), team] });
           collection.current?.scrollIntoView?.({ block: 'start' });
-          window.setTimeout(
-            () =>
-              document
-                .getElementById(`saved-team-open-${uid}-${saved.id}`)
-                ?.focus({ preventScroll: true }),
-            0,
-          );
         }}
       />
+      <details className="team-manual-builder" open={!!copy}>
+        <summary>Build a team manually</summary>
+        <TeamBuildEditor
+          key={`maker-${makerVersion}-${copy?.id ?? 'blank'}`}
+          uid={uid}
+          initialDraft={
+            copy ? { name: `${copy.name.slice(0, 70)} (copy)`, slots: copy.members } : undefined
+          }
+          onSaved={(saved) => {
+            setMakerVersion((version) => version + 1);
+            navigate(`/u/${uid}/teams`, { replace: true });
+            setMessage('Team saved below. Your team maker is ready for another lineup.');
+            collection.current?.scrollIntoView?.({ block: 'start' });
+            window.setTimeout(
+              () =>
+                document
+                  .getElementById(`saved-team-open-${uid}-${saved.id}`)
+                  ?.focus({ preventScroll: true }),
+              0,
+            );
+          }}
+        />
+      </details>
       <section
         ref={collection}
         className="saved-team-collection"

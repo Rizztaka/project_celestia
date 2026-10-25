@@ -1,3 +1,14 @@
+> **2026-10-25 fixed enemy and player-chosen DPS:** Supersedes configurable
+> target and automatic-search controls below. A read-only Lv.100 infinite-HP,
+> 0% starting-RES dummy is shared by every run (60 seconds, 20 fixed-seed samples).
+> Players explicitly choose Default or Custom rotation, then Show DPS. The main
+> result shows average damage per second; total/sample details are secondary.
+> Custom drafts survive mode switches and saves, legacy target overrides are
+> ignored, and existing rotation/team data stays compatible. Engine coverage
+> gates remain, including Nefer. **150/150 tests**, build/types/lint pass; actual
+> WASM runs, save/reload and 390/320px acceptance verified with synthetic fixtures.
+> [Behavior, compatibility, evidence and limits](character-team-build-analyzers/player-dps-flow.md).
+
 > **2026-10-25 individual team UI redesign:** A compact hero and persistent
 > Lineup & builds / Damage lab sections replace the long competing stack. Short
 > roster cards, expandable member equipment/advice and a focused character/action

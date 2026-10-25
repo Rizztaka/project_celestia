@@ -1043,3 +1043,203 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Player-chosen rotation against one read-only benchmark. */
+.benchmark-facts {
+  margin-top: 20px;
+  display: grid;
+  gap: 0;
+}
+.benchmark-facts > div {
+  padding: 12px 0;
+  border-bottom: 1px solid #ffffff0d;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+}
+.benchmark-facts dt {
+  font-size: 11px;
+  color: #8d99a6;
+}
+.benchmark-facts dd {
+  font-size: 11px;
+  color: #dedace;
+  text-align: right;
+  max-width: 145px;
+  line-height: 1.7;
+}
+.benchmark-note {
+  margin-top: 17px;
+  font-size: 10px;
+  color: #8b97a4;
+  line-height: 1.9;
+}
+.rotation-mode-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.team-dps-workspace .rotation-mode-options > label {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 15px 12px;
+  border: 1px solid #ffffff13;
+  background: #11161b;
+  border-radius: 9px;
+  cursor: pointer;
+}
+.team-dps-workspace .rotation-mode-options > label:has(input:checked) {
+  border-color: #d8be8950;
+  background: #d8be8908;
+}
+.team-dps-workspace .rotation-mode-options input {
+  width: 15px;
+  min-height: 0;
+  height: 15px;
+  margin-top: 1px;
+  padding: 0;
+}
+.rotation-mode-options strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #dbd6ca;
+}
+.rotation-mode-options small {
+  display: block;
+  margin-top: 6px;
+  font-size: 10px;
+  color: #8c98a6;
+  line-height: 1.7;
+}
+.default-rotation-preview > label {
+  max-width: 280px;
+}
+.default-rotation-preview ol {
+  margin: 18px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.default-rotation-preview li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  border: 1px solid #ffffff0e;
+  border-radius: 8px;
+  background: #1a2026;
+  font-size: 12px;
+  color: #c9cdd1;
+}
+.default-rotation-preview li > span {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: #d8be890a;
+  color: #c7b38d;
+  font-size: 10px;
+}
+.default-rotation-preview > p {
+  font-size: 11px;
+  line-height: 1.9;
+}
+.rotation-choice-note {
+  font-size: 10px;
+  color: #818e9d;
+}
+.dps-run-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.dps-run-panel .lab-section-header {
+  margin: 0;
+}
+.dps-run-panel > button {
+  min-width: 160px;
+  padding: 13px 24px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+.dps-result-region {
+  scroll-margin-top: 105px;
+}
+.team-dps-primary {
+  padding: 28px;
+  border: 1px solid #d8be8938;
+  background: linear-gradient(120deg, #d8be8910, #171d24);
+  border-radius: 14px;
+}
+.team-dps-primary > small {
+  color: #c3b18d;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+.team-dps-primary > div {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 14px 0;
+}
+.team-dps-primary strong {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4vw, 60px);
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+  color: #ead7b1;
+  font-weight: 450;
+  font-variant-numeric: tabular-nums;
+}
+.team-dps-primary > div > span {
+  font-size: 13px;
+  color: #a7a796;
+}
+.team-dps-primary > p {
+  font-size: 12px;
+  color: #9fa7ae;
+  line-height: 1.9;
+}
+.team-dps-primary b {
+  font-weight: 500;
+  color: #d2c4aa;
+}
+.team-dps-workspace .damage-results > .analysis-disclosure {
+  border: 1px solid #ffffff12;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #9ba6b2;
+}
+.team-dps-workspace .damage-results > .analysis-disclosure p {
+  margin-top: 12px;
+  line-height: 1.9;
+}
+@media (max-width: 650px) {
+  .rotation-mode-options {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .dps-run-panel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .dps-run-panel > button {
+    width: 100%;
+  }
+  .team-dps-primary {
+    padding: 22px;
+  }
+  .dps-result-region {
+    scroll-margin-top: 135px;
+  }
+}

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
-import type { DamageSettings } from './calculator';
+import { benchmarkSettings } from './benchmark.calculator';
+import type { DamageSettings, RotationStep } from './calculator';
 
 const settingsSchema = z
   .object({
@@ -39,5 +40,44 @@ export function saveDamageSettings(uid: string, id: string, settings: DamageSett
   localStorage.setItem(
     key(uid, id),
     JSON.stringify({ version: 1, uid, teamId: id, settings: settingsSchema.parse(settings) }),
+  );
+}
+
+const rotationChoiceSchema = z.object({
+  mode: z.enum(['default', 'custom']),
+  driver: z.string().max(30),
+});
+export function readRotationChoice(uid: string, id: string) {
+  const settings = readDamageSettings(uid, id);
+  if (!settings) return null;
+  try {
+    const value = JSON.parse(localStorage.getItem(key(uid, id))!);
+    const choice = rotationChoiceSchema.parse({
+      mode: value.rotationMode ?? (settings.steps.length ? 'custom' : 'default'),
+      driver: value.defaultDriver ?? '',
+    });
+    return { ...choice, customSteps: settings.steps };
+  } catch {
+    return null;
+  }
+}
+export function saveRotationChoice(
+  uid: string,
+  id: string,
+  mode: 'default' | 'custom',
+  driver: string,
+  customSteps: RotationStep[],
+) {
+  rotationChoiceSchema.parse({ mode, driver });
+  localStorage.setItem(
+    key(uid, id),
+    JSON.stringify({
+      version: 1,
+      uid,
+      teamId: id,
+      rotationMode: mode,
+      defaultDriver: driver,
+      settings: settingsSchema.parse(benchmarkSettings(customSteps)),
+    }),
   );
 }

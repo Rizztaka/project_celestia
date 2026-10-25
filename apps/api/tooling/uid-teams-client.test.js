@@ -108,70 +108,66 @@ async function click(text) {
   await act(async () => b.click());
 }
 
-it('offers a neutral immortal dummy and readable action cards with reorder controls', async () => {
+async function chooseRotation(mode) {
+  const radio = [...document.querySelectorAll('input[type="radio"]')].find((input) =>
+    input.closest('label')?.textContent.includes(mode),
+  );
+  expect(radio).toBeTruthy();
+  await act(async () => radio.click());
+}
+
+it('shows a fixed read-only enemy and lets the player choose default or custom without losing edits', async () => {
   await writeUidTeams(uid, [saved]);
   await mount();
   await click('Damage lab');
-  expect(document.body.textContent).toContain('Training dummy');
-  expect(document.body.textContent).toContain('cannot die during the timed test');
-  const preset = [...document.querySelectorAll('select')].find((select) =>
-    select.closest('label')?.textContent.includes('Training dummy preset'),
+  const enemy = document.querySelector('[aria-label="Benchmark enemy details"]');
+  expect(enemy.textContent).toContain('100');
+  expect(enemy.textContent).toContain('0%');
+  expect(enemy.querySelectorAll('input,select,textarea,button')).toHaveLength(0);
+  expect(document.querySelector('.rotation-search-controls')).toBeNull();
+  expect(document.querySelector('[aria-label="Default rotation steps"]').children).toHaveLength(5);
+  expect(document.querySelector('[aria-label="Default rotation steps"]').textContent).toContain(
+    'Skirk: Normal attack ×6',
   );
-  expect(preset.value).toBe('neutral');
+  await chooseRotation('Custom rotation');
   await click('Add Furina Skill');
   await click('Choose Skirk for rotation');
   await click('Add Skirk Burst');
-  expect(document.querySelectorAll('.rotation-builder-steps > li')).toHaveLength(2);
-  expect(document.querySelector('[aria-label="Rotation preview"]').textContent).toContain(
-    'Furina: Skill → Skirk: Burst',
-  );
-  expect(document.querySelector('[aria-label="Move step 1 earlier"]').disabled).toBe(true);
-  await click('Move step 2 earlier');
-  expect(document.querySelector('[aria-label="Rotation preview"]').textContent).toContain(
-    'Skirk: Burst → Furina: Skill',
-  );
+  expect(document.querySelectorAll('.rotation-builder-steps > li')).toHaveLength(7);
+  await click('Move step 7 earlier');
+  const before = document.querySelector('[aria-label="Rotation preview"]').textContent;
+  await chooseRotation('Default rotation');
+  expect(document.querySelector('.rotation-composer')).toBeNull();
+  await chooseRotation('Custom rotation');
+  expect(document.querySelector('[aria-label="Rotation preview"]').textContent).toBe(before);
   expect(document.querySelector('[aria-label="Step 1 wait seconds"]')).toBeTruthy();
-  await act(async () => {
-    preset.value = 'standard';
-    preset.dispatchEvent(new Event('change', { bubbles: true }));
-  });
-  expect(document.querySelector('.damage-training-dummy').textContent).toContain('10%');
-  await act(async () => {
-    preset.value = 'custom';
-    preset.dispatchEvent(new Event('change', { bubbles: true }));
-  });
-  expect(
-    [...document.querySelectorAll('label')].some((label) =>
-      label.textContent.includes('Starting resistance to all damage'),
-    ),
-  ).toBe(true);
+  expect(dom.window.localStorage.length).toBe(0);
 });
 
-it('shows verified search alternatives, applies a winner only on click, saves it explicitly and invalidates changed-target results', async () => {
-  class SearchWorker {
+it('ignores legacy target overrides, runs the chosen rotation on the fixed benchmark and shows average DPS', async () => {
+  const requests = [];
+  class DpsWorker {
     postMessage(message) {
+      requests.push(message);
       queueMicrotask(() =>
         this.onmessage({
           data: {
             type: 'result',
             results: message.jobs.map((job) => ({
               id: job.id,
-              runs: Array.from({ length: job.samples }, (_, i) => {
-                const dps = 100 + Number(job.id) * 10;
-                return {
-                  seed: String(i + 1),
-                  durationFrames: 3600,
-                  totalDamage: dps * 60,
-                  dps,
-                  members: ['furina', 'sucrose', 'skirk', 'xilonen'].map((key, index) => ({
-                    key,
-                    damage: index === 0 ? dps * 60 : 0,
-                    actions: 1,
-                    activeFrames: 0,
-                    failedIntervals: 0,
-                  })),
-                };
-              }),
+              runs: Array.from({ length: job.samples }, (_, i) => ({
+                seed: String(i + 1),
+                durationFrames: 3600,
+                totalDamage: 6000,
+                dps: 100,
+                members: ['furina', 'sucrose', 'skirk', 'xilonen'].map((key, index) => ({
+                  key,
+                  damage: index === 0 ? 6000 : 0,
+                  actions: 1,
+                  activeFrames: 0,
+                  failedIntervals: 0,
+                })),
+              })),
             })),
           },
         }),
@@ -179,37 +175,54 @@ it('shows verified search alternatives, applies a winner only on click, saves it
     }
     terminate() {}
   }
-  vi.stubGlobal('Worker', SearchWorker);
+  vi.stubGlobal('Worker', DpsWorker);
+  const legacySteps = [
+    {
+      characterKey: saved.members[0].characterKey,
+      action: 'skill',
+      repeat: 1,
+      waitFrames: 90,
+      params: '',
+    },
+  ];
+  dom.window.localStorage.setItem(
+    `celestia.team-rotation.v1:${uid}:team-one`,
+    JSON.stringify({
+      version: 1,
+      uid,
+      teamId: 'team-one',
+      settings: { duration: 180, enemyLevel: 50, resistance: 80, samples: 1, steps: legacySteps },
+    }),
+  );
   await writeUidTeams(uid, [saved]);
   await mount();
   await click('Damage lab');
-  for (const name of ['Furina', 'Sucrose', 'Skirk', 'Xilonen']) {
-    await click(`Choose ${name} for rotation`);
-    await click(`Add ${name} Skill`);
-  }
-  await click('Choose Skirk for rotation');
-  await click('Add Skirk Normal attack');
-  const before = document.querySelector('[aria-label="Rotation preview"]').textContent;
-  await click('Find best tested rotation');
+  expect(document.querySelector('[aria-label="Step 1 wait seconds"]').value).toBe('1.5');
+  await click('Show DPS');
   await act(async () => new Promise((resolve) => setTimeout(resolve, 25)));
-  expect(document.querySelector('[aria-label="Rotation search results"]').textContent).toContain(
-    'finalists compared',
+  expect(requests).toHaveLength(1);
+  expect(requests[0].jobs[0].samples).toBe(20);
+  expect(requests[0].jobs[0].config).toContain('options iteration=1 duration=60');
+  expect(requests[0].jobs[0].config).toContain('target lvl=100 resist=0 pos=0,0 radius=1;');
+  expect(requests[0].jobs[0].config).toContain('wait(90)');
+  const result = document.querySelector('[aria-label="Team damage results"]');
+  expect(result.textContent).toContain('AVERAGE TEAM DPS100damage / second');
+  expect(result.textContent).toContain('not only the opening second');
+  expect(result.textContent).toContain(
+    new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(6000) +
+      ' over 60 seconds',
   );
-  expect(document.querySelector('[aria-label="Rotation preview"]').textContent).toBe(before);
-  expect(dom.window.localStorage.length).toBe(0);
-  await click('Use this rotation');
-  expect(document.querySelector('[aria-label="Rotation preview"]').textContent).not.toBe(before);
-  expect(document.querySelector('[aria-label="Team damage results"]')).toBeTruthy();
   await click('Save rotation');
-  expect(dom.window.localStorage.getItem(`celestia.team-rotation.v1:${uid}:team-one`)).toBeTruthy();
-  const preset = [...document.querySelectorAll('select')].find((select) =>
-    select.closest('label')?.textContent.includes('Training dummy preset'),
+  const stored = JSON.parse(
+    dom.window.localStorage.getItem(`celestia.team-rotation.v1:${uid}:team-one`),
   );
-  await act(async () => {
-    preset.value = 'standard';
-    preset.dispatchEvent(new Event('change', { bubbles: true }));
-  });
+  expect(stored.rotationMode).toBe('custom');
+  expect(stored.settings.steps).toEqual(legacySteps);
+  expect(stored.settings.enemyLevel).toBe(100);
+  expect(stored.settings.resistance).toBe(0);
+  await click('Add Furina Burst');
   expect(document.querySelector('[aria-label="Team damage results"]')).toBeNull();
+  expect(requests).toHaveLength(1);
   expect((await readUidTeams(uid))[0]).toEqual(saved);
 });
 
@@ -282,16 +295,17 @@ it('keeps lineup drafts, rotation edits and an in-flight simulation when switchi
   await click('Damage lab');
   expect(buildPanel.hidden).toBe(true);
   expect(labPanel.hidden).toBe(false);
+  await chooseRotation('Custom rotation');
   await click('Add Furina Skill');
-  await click('Calculate team damage');
+  await click('Show DPS');
   expect(workers).toHaveLength(1);
   await click('Lineup & builds');
   expect(role.value).toBe('off_field_damage');
   expect(workers[0].terminated).toBe(false);
   expect((await readUidTeams(uid))[0].members[0].roleId).toBe('party_buff');
   await click('Damage lab');
-  expect(document.querySelectorAll('.rotation-builder-steps > li')).toHaveLength(1);
-  await click('Cancel simulation');
+  expect(document.querySelectorAll('.rotation-builder-steps > li')).toHaveLength(6);
+  await click('Cancel calculation');
   expect(workers[0].terminated).toBe(true);
   expect(document.body.textContent).toContain('Simulation cancelled.');
   const primary = document.querySelector('[aria-label="Team page"] [aria-selected="true"]');

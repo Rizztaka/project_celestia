@@ -3,5 +3,23 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
+  },
+  "files.exclude": {
+    "**/.local-archive": true,
+    "**/.local-maintenance": true,
+    "**/.scratch": true,
+    "**/.worktrees": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.turbo": true
+  },
+  "search.exclude": {
+    "**/.local-archive": true,
+    "**/.local-maintenance": true,
+    "**/.scratch": true,
+    "**/.worktrees": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.turbo": true
   }
 }

@@ -5,3 +5,9 @@ dist
 .env.*
 !.env.example
 !.env.deploy.example
+
+# Local recovery material, temporary research, and optional nested checkouts.
+.local-archive/
+.local-maintenance/
+.scratch/
+.worktrees/

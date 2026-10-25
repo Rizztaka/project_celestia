@@ -1,3 +1,10 @@
+> **2026-10-25 workspace consolidation:** `project-celestia` is now the canonical
+> checkout on production's `master` commit. The 3,166,214 untracked lines in the
+> older checkout were archived and removed from active source, along with its
+> divergent tracked edits. The outside analyzer worktree and old review copy were
+> retired after verified recovery archives were placed inside the project.
+> [Evidence and recovery](workspace-cleanup-2026-10-25.md).
+
 > **2026-10-25 fixed enemy and player-chosen DPS:** Supersedes configurable
 > target and automatic-search controls below. A read-only Lv.100 infinite-HP,
 > 0% starting-RES dummy is shared by every run (60 seconds, 20 fixed-seed samples).

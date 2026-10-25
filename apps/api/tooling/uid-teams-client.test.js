@@ -47,6 +47,8 @@ beforeEach(() => {
   installDom();
   vi.stubGlobal('indexedDB', new IDBFactory());
   vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true);
+  vi.stubGlobal('localStorage', dom.window.localStorage);
+  dom.window.localStorage.clear();
   transport = vi.fn();
   vi.stubGlobal('fetch', transport);
   document.body.innerHTML = '<div id="root"></div>';
@@ -105,6 +107,104 @@ async function click(text) {
   expect(b).toBeTruthy();
   await act(async () => b.click());
 }
+
+it('offers a neutral immortal dummy and readable action cards with reorder controls', async () => {
+  await writeUidTeams(uid, [saved]);
+  await mount();
+  expect(document.body.textContent).toContain('Training dummy');
+  expect(document.body.textContent).toContain('cannot die during the timed test');
+  const preset = [...document.querySelectorAll('select')].find((select) =>
+    select.closest('label')?.textContent.includes('Training dummy preset'),
+  );
+  expect(preset.value).toBe('neutral');
+  await click('Add Furina Skill');
+  await click('Add Skirk Burst');
+  expect(document.querySelectorAll('.rotation-builder-steps > li')).toHaveLength(2);
+  expect(document.querySelector('[aria-label="Rotation preview"]').textContent).toContain(
+    'Furina: Skill → Skirk: Burst',
+  );
+  expect(document.querySelector('[aria-label="Move step 1 earlier"]').disabled).toBe(true);
+  await click('Move step 2 earlier');
+  expect(document.querySelector('[aria-label="Rotation preview"]').textContent).toContain(
+    'Skirk: Burst → Furina: Skill',
+  );
+  expect(document.querySelector('[aria-label="Step 1 wait seconds"]')).toBeTruthy();
+  await act(async () => {
+    preset.value = 'standard';
+    preset.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  expect(document.querySelector('.damage-training-dummy').textContent).toContain('10%');
+  await act(async () => {
+    preset.value = 'custom';
+    preset.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  expect(
+    [...document.querySelectorAll('label')].some((label) =>
+      label.textContent.includes('Starting resistance to all damage'),
+    ),
+  ).toBe(true);
+});
+
+it('shows verified search alternatives, applies a winner only on click, saves it explicitly and invalidates changed-target results', async () => {
+  class SearchWorker {
+    postMessage(message) {
+      queueMicrotask(() =>
+        this.onmessage({
+          data: {
+            type: 'result',
+            results: message.jobs.map((job) => ({
+              id: job.id,
+              runs: Array.from({ length: job.samples }, (_, i) => {
+                const dps = 100 + Number(job.id) * 10;
+                return {
+                  seed: String(i + 1),
+                  durationFrames: 3600,
+                  totalDamage: dps * 60,
+                  dps,
+                  members: ['furina', 'sucrose', 'skirk', 'xilonen'].map((key, index) => ({
+                    key,
+                    damage: index === 0 ? dps * 60 : 0,
+                    actions: 1,
+                    activeFrames: 0,
+                    failedIntervals: 0,
+                  })),
+                };
+              }),
+            })),
+          },
+        }),
+      );
+    }
+    terminate() {}
+  }
+  vi.stubGlobal('Worker', SearchWorker);
+  await writeUidTeams(uid, [saved]);
+  await mount();
+  for (const name of ['Furina', 'Sucrose', 'Skirk', 'Xilonen']) await click(`Add ${name} Skill`);
+  await click('Add Skirk Normal attack');
+  const before = document.querySelector('[aria-label="Rotation preview"]').textContent;
+  await click('Find best tested rotation');
+  await act(async () => new Promise((resolve) => setTimeout(resolve, 25)));
+  expect(document.querySelector('[aria-label="Rotation search results"]').textContent).toContain(
+    'finalists compared',
+  );
+  expect(document.querySelector('[aria-label="Rotation preview"]').textContent).toBe(before);
+  expect(dom.window.localStorage.length).toBe(0);
+  await click('Use this rotation');
+  expect(document.querySelector('[aria-label="Rotation preview"]').textContent).not.toBe(before);
+  expect(document.querySelector('[aria-label="Team damage results"]')).toBeTruthy();
+  await click('Save rotation');
+  expect(dom.window.localStorage.getItem(`celestia.team-rotation.v1:${uid}:team-one`)).toBeTruthy();
+  const preset = [...document.querySelectorAll('select')].find((select) =>
+    select.closest('label')?.textContent.includes('Training dummy preset'),
+  );
+  await act(async () => {
+    preset.value = 'standard';
+    preset.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  expect(document.querySelector('[aria-label="Team damage results"]')).toBeNull();
+  expect((await readUidTeams(uid))[0]).toEqual(saved);
+});
 
 it('loads the real IndexedDB team into portrait slots and a keyboard-accessible workspace without private requests', async () => {
   await writeUidTeams(uid, [saved]);

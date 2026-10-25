@@ -1,3 +1,15 @@
+> **2026-10-25 training dummy and player rotation tools:** New runs default to a
+> non-dying Lv.100 target with 0% uniform elemental/Physical starting RES; 10% and
+> custom presets preserve fair target conditions. Portrait action buttons, step
+> cards, move controls, seconds-based waits and a readable loop simplify editing.
+> A deterministic bounded 12/48-candidate search compares turn orders and attack
+> counts, then verifies finalists and baseline with common seeds. It reports best
+> tested, never a global-optimum guarantee; apply/save are explicit. Engine and
+> Nefer coverage limits remain unchanged. **145/145 tests** plus build/types/lint
+> pass; actual browser search, application/save/reload, cancellation, invalidation
+> and 390/320px acceptance verified using isolated synthetic fixtures.
+> [Behavior, search limits, verification and evidence](character-team-build-analyzers/training-dummy-rotations.md).
+
 > **2026-10-25 dedicated team pages and real damage simulation:** Each saved card
 > now links to `/u/:uid/teams/:teamId`, with all four builds and a browser gcsim
 > rotation calculator. Roles stay optional for build advice and confer no damage.

@@ -35,26 +35,54 @@ self.onmessage = async ({ data }) => {
   if (busy) return;
   busy = true;
   try {
+    // Keep already-open clients from the previous deployment working until refresh.
+    const legacy = !data.jobs && typeof data.config === 'string';
+    const jobs = legacy ? [{ id: '0', config: data.config, samples: data.samples }] : data.jobs;
     if (
-      typeof data.config !== 'string' ||
-      data.config.length > 40000 ||
-      !Number.isInteger(data.samples) ||
-      data.samples < 1 ||
-      data.samples > 50 ||
+      !Array.isArray(jobs) ||
+      jobs.length < 1 ||
+      jobs.length > 48 ||
+      jobs.some(
+        (job) =>
+          typeof job.id !== 'string' ||
+          job.id.length > 20 ||
+          typeof job.config !== 'string' ||
+          job.config.length > 40000 ||
+          !Number.isInteger(job.samples) ||
+          job.samples < 1 ||
+          job.samples > 50,
+      ) ||
       !/^[a-f0-9]{64}$/.test(data.hash)
     )
       throw new Error('Invalid simulation request.');
     self.postMessage({ type: 'loading' });
     await initialize(data.hash);
-    const runs = [];
-    for (let i = 0; i < data.samples; i++) {
-      const result = JSON.parse(runCelestia(data.config, String(i + 1)));
-      if (result.error) throw new Error(result.error);
-      runs.push(result);
-      self.postMessage({ type: 'progress', completed: i + 1, total: data.samples });
-      await new Promise((resolve) => setTimeout(resolve, 0));
+    const results = [];
+    const total = jobs.reduce((sum, job) => sum + job.samples, 0);
+    let completed = 0;
+    for (const job of jobs) {
+      const runs = [];
+      try {
+        for (let i = 0; i < job.samples; i++) {
+          const result = JSON.parse(runCelestia(job.config, String(i + 1)));
+          if (result.error) throw new Error(result.error);
+          runs.push(result);
+          completed++;
+          self.postMessage({ type: 'progress', completed, total });
+          await new Promise((resolve) => setTimeout(resolve, 0));
+        }
+        results.push({ id: job.id, runs });
+      } catch (error) {
+        completed += job.samples - runs.length;
+        results.push({
+          id: job.id,
+          error: error instanceof Error ? error.message : 'Invalid candidate.',
+        });
+      }
     }
-    self.postMessage({ type: 'result', runs });
+    if (legacy && results[0].error) self.postMessage({ type: 'error', message: results[0].error });
+    else if (legacy) self.postMessage({ type: 'result', runs: results[0].runs });
+    else self.postMessage({ type: 'result', results });
   } catch (error) {
     self.postMessage({
       type: 'error',

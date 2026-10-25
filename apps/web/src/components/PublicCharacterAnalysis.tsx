@@ -78,23 +78,25 @@ export default function PublicCharacterAnalysis({
         .
       </p>
       <div className="analysis-controls">
-        <label>
-          Build role
-          <select
-            value={roleId}
-            disabled={!roles.length}
-            onChange={(e) => setLocalRole(e.target.value as BuildRoleId)}
-          >
-            <option value="unspecified">
-              {roles.length ? 'Choose a role' : 'General build checks'}
-            </option>
-            {roles.map((r) => (
-              <option key={r.id} value={r.id}>
-                {roleLabels[r.id]}
+        {roles.length ? (
+          <label>
+            Build role (optional)
+            <select
+              value={roleId}
+              disabled={!roles.length}
+              onChange={(e) => setLocalRole(e.target.value as BuildRoleId)}
+            >
+              <option value="unspecified">
+                {roles.length ? 'Choose a role' : 'General build checks'}
               </option>
-            ))}
-          </select>
-        </label>
+              {roles.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {roleLabels[r.id]}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
         <label>
           Team context
           <select
@@ -128,7 +130,7 @@ export default function PublicCharacterAnalysis({
         <p role="status">Saved team context could not load. Existing records were preserved.</p>
       ) : null}
       {saved ? (
-        <Link className="analysis-link" to={`/u/${uid}/teams?team=${encodeURIComponent(saved.id)}`}>
+        <Link className="analysis-link" to={`/u/${uid}/teams/${encodeURIComponent(saved.id)}`}>
           ← Return to {saved.name}
         </Link>
       ) : (
@@ -152,8 +154,9 @@ export default function PublicCharacterAnalysis({
       </details>
       {analysis.coverage.roleSupported ? <BuildAnalysisComparison input={input} /> : null}
       <p className="analysis-muted">
-        Reviewed role guidance currently covers Furina, Sucrose, Skirk and Xilonen. Kit
-        interactions, rotations and exact damage are only assessed where a reviewed rule is shown.
+        Roles describe build purpose and guide these recommendations. They do not add damage or
+        buffs. Reviewed guidance covers Furina, Sucrose, Skirk and Xilonen. Team damage is
+        calculated separately from a chosen rotation on the team details page.
       </p>
     </section>
   );

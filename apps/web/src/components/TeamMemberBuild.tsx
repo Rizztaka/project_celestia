@@ -59,26 +59,30 @@ export default function TeamMemberBuild({
         </button>
       </header>
       <div className="team-role-row">
-        <label>
-          Build role
-          <select
-            value={roleId}
-            disabled={!roles.length && roleId === 'unspecified'}
-            onChange={(e) => onRole(e.target.value as BuildRoleId)}
-          >
-            <option value="unspecified">
-              {roles.length ? 'Choose a role' : 'General build checks'}
-            </option>
-            {roleId !== 'unspecified' && !roles.some((r) => r.id === roleId) ? (
-              <option value={roleId}>Saved role outside current coverage</option>
-            ) : null}
-            {roles.map((r) => (
-              <option key={r.id} value={r.id}>
-                {roleLabels[r.id]}
+        {roles.length || roleId !== 'unspecified' ? (
+          <label>
+            Build role (optional)
+            <select
+              value={roleId}
+              disabled={!roles.length && roleId === 'unspecified'}
+              onChange={(e) => onRole(e.target.value as BuildRoleId)}
+            >
+              <option value="unspecified">
+                {roles.length ? 'Choose a role' : 'General build checks'}
               </option>
-            ))}
-          </select>
-        </label>
+              {roleId !== 'unspecified' && !roles.some((r) => r.id === roleId) ? (
+                <option value={roleId}>Saved role outside current coverage</option>
+              ) : null}
+              {roles.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {roleLabels[r.id]}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : (
+          <p className="analysis-muted">General build checks</p>
+        )}
         <Link
           to={`${uidCharacterPath(uid, character.key)}${teamId ? `?team=${encodeURIComponent(teamId)}` : ''}`}
           className="team-text-link"
@@ -86,6 +90,12 @@ export default function TeamMemberBuild({
           Full character build ↗
         </Link>
       </div>
+      {roles.length ? (
+        <p className="analysis-muted team-role-help">
+          Optional build purpose: this changes main-stat, talent and team advice. It does not add
+          damage or buffs. Choose how you actually use {character.name}.
+        </p>
+      ) : null}
       <dl className="team-stat-strip">
         {stats.map((s) => (
           <div key={s.id}>

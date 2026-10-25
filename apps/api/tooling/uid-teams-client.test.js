@@ -17,10 +17,14 @@ function installDom() {
 installDom();
 const { createElement: h, act } = require('react');
 const { createRoot } = require('react-dom/client');
-const { MemoryRouter } = require('react-router-dom');
+const { MemoryRouter, Routes, Route, useLocation } = require('react-router-dom');
 const { QueryClient, QueryClientProvider } =
   await import('../../web/node_modules/@tanstack/react-query/build/modern/index.js');
-let Page, Context, root, client, transport;
+let Page, DetailsPage, Context, root, client, transport;
+function LocationProbe() {
+  const location = useLocation();
+  return h('span', { 'data-current-path': '' }, location.pathname + location.search);
+}
 const uid = '800000001';
 const saved = {
   version: 1,
@@ -36,6 +40,7 @@ const saved = {
 };
 beforeAll(async () => {
   ({ default: Page } = await import('../../web/src/pages/UidTeamsPage.tsx'));
+  ({ default: DetailsPage } = await import('../../web/src/pages/UidTeamDetailsPage.tsx'));
   ({ UidWorkspaceContext: Context } = await import('../../web/src/lib/uid-workspace.ts'));
 });
 beforeEach(() => {
@@ -54,7 +59,7 @@ afterEach(async () => {
   vi.unstubAllGlobals();
 });
 afterAll(() => dom.window.close());
-async function mount(target = uid, path = `/u/${target}/teams?team=team-one`) {
+async function mount(target = uid, path = `/u/${target}/teams/team-one`) {
   const result = analysisFixture(target);
   client.setQueryData(['observed-roster', target], {
     records: result.snapshot.characters.map((character) => ({
@@ -72,7 +77,21 @@ async function mount(target = uid, path = `/u/${target}/teams?team=team-one`) {
         h(
           MemoryRouter,
           { initialEntries: [path] },
-          h(Context, { value: { uid: target, query: { data: result } } }, h(Page)),
+          h(
+            Context,
+            { value: { uid: target, query: { data: result } } },
+            h(
+              'div',
+              {},
+              h(LocationProbe),
+              h(
+                Routes,
+                {},
+                h(Route, { path: '/u/:uid/teams', element: h(Page) }),
+                h(Route, { path: '/u/:uid/teams/:teamId', element: h(DetailsPage) }),
+              ),
+            ),
+          ),
         ),
       ),
     ),
@@ -80,7 +99,7 @@ async function mount(target = uid, path = `/u/${target}/teams?team=team-one`) {
   await act(async () => new Promise((resolve) => setTimeout(resolve, 25)));
 }
 async function click(text) {
-  const b = [...document.querySelectorAll('button')].find(
+  const b = [...document.querySelectorAll('button,a')].find(
     (b) => (b.getAttribute('aria-label') ?? b.textContent.trim()) === text,
   );
   expect(b).toBeTruthy();
@@ -99,7 +118,10 @@ it('loads the real IndexedDB team into portrait slots and a keyboard-accessible 
     'Observed equipment',
   );
   expect(document.querySelectorAll('.saved-member-build')).toHaveLength(0);
-  expect(document.querySelector('[aria-label="Collapse Synthetic team"]')).toBeTruthy();
+  expect(document.querySelector('[data-current-path]').textContent).toBe(
+    `/u/${uid}/teams/team-one`,
+  );
+  expect(document.querySelector('[aria-label="Team maker"]')).toBeNull();
   expect(document.querySelector('.team-library-bar')).toBeNull();
   expect(
     [...document.querySelectorAll('button')].some(
@@ -129,7 +151,11 @@ it('updates roles in the draft, explicitly saves them and preserves equipment ob
   });
   expect((await readUidTeams(uid))[0].members[0].roleId).toBe('party_buff');
   await click('Save changes');
-  await act(async () => new Promise((resolve) => setTimeout(resolve, 30)));
+  await act(async () => {
+    for (let attempt = 0; attempt < 100 && client.isMutating(); attempt++)
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 25));
+  });
   expect((await readUidTeams(uid))[0].members[0].roleId).toBe('off_field_damage');
   expect(
     client
@@ -145,7 +171,7 @@ it('switches UID without showing or attaching the other UID team, and reports mi
   expect(document.querySelectorAll('.team-slot-filled')).toHaveLength(0);
   expect(await readUidTeams('800000002')).toEqual([]);
 });
-it('shows compact teams below an independent maker and expands all four builds', async () => {
+it('opens a separate team page with all four builds and returns to the compact collection', async () => {
   await writeUidTeams(uid, [saved, { ...saved, id: 'team-two', name: 'Second team' }]);
   await mount(uid, `/u/${uid}/teams`);
   expect(document.querySelectorAll('.saved-team-card')).toHaveLength(2);
@@ -158,17 +184,29 @@ it('shows compact teams below an independent maker and expands all four builds',
   ).toBeTruthy();
   await click('Open Synthetic team');
   expect(document.querySelectorAll('.saved-member-build')).toHaveLength(4);
-  expect(
-    document.querySelector('[aria-label="Team maker"]').querySelectorAll('.team-slot-filled'),
-  ).toHaveLength(0);
+  expect(document.querySelector('[aria-label="Team maker"]')).toBeNull();
+  expect(document.querySelector('[data-current-path]').textContent).toBe(
+    `/u/${uid}/teams/team-one`,
+  );
   for (const region of document.querySelectorAll('.saved-member-build'))
     expect(region.textContent).toContain('Observed equipment');
-  await click('Collapse Synthetic team');
+  await click('← Back to teams');
   expect(document.querySelectorAll('.saved-member-build')).toHaveLength(0);
+  expect(document.querySelector('[aria-label="Team maker"]')).toBeTruthy();
   await click('Open Second team');
-  expect(document.querySelectorAll('.saved-team-card.is-expanded')).toHaveLength(1);
+  expect(document.querySelector('[data-current-path]').textContent).toBe(
+    `/u/${uid}/teams/team-two`,
+  );
   expect(document.querySelectorAll('.saved-member-build')).toHaveLength(4);
   expect(await readUidTeams(uid)).toHaveLength(2);
+});
+it('keeps legacy team-context links working by redirecting to the dedicated page', async () => {
+  await writeUidTeams(uid, [saved]);
+  await mount(uid, `/u/${uid}/teams?team=team-one`);
+  expect(document.querySelector('[data-current-path]').textContent).toBe(
+    `/u/${uid}/teams/team-one`,
+  );
+  expect(document.querySelectorAll('.saved-member-build')).toHaveLength(4);
 });
 it('saves a second lineup as a compact card and resets the maker without changing existing teams', async () => {
   await writeUidTeams(uid, [saved]);

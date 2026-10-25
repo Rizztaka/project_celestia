@@ -16,6 +16,9 @@ export function useUidWorkspace() {
 export const uidCharacterPath = (uid: string, key: string) =>
   `/u/${uid}/character/${encodeURIComponent(key)}`;
 
+export const uidTeamPath = (uid: string, teamId: string) =>
+  `/u/${uid}/teams/${encodeURIComponent(teamId)}`;
+
 export function uidNavigationActive(to: string, pathname: string, uid: string) {
   const base = `/u/${uid}`;
   if (to === base) return pathname === base || pathname === `${base}/`;

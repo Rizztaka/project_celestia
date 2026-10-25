@@ -2,12 +2,11 @@ import '../styles/teams.css';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import TeamBuildEditor from '../components/TeamBuildEditor';
 import { ElementCrest, TeamPortrait } from '../components/TeamCharacterPicker';
 import { PageHeader, UiIcon } from '../components/Ui';
-import { roleLabels } from '../lib/build-analysis/explainer';
 import {
   parseUidTeamFile,
   type SavedUidTeam,
@@ -15,7 +14,7 @@ import {
   writeUidTeams,
 } from '../lib/build-analysis/teams-storage';
 import { uidTeamsKey, useUidTeams } from '../lib/build-analysis/use-teams';
-import { useUidWorkspace } from '../lib/uid-workspace';
+import { uidTeamPath, useUidWorkspace } from '../lib/uid-workspace';
 import { useObservedRoster } from '../lib/use-observed-roster';
 
 function TeamsWorkspace({ uid }: { uid: string }) {
@@ -23,13 +22,14 @@ function TeamsWorkspace({ uid }: { uid: string }) {
   const history = useObservedRoster(uid, query.data);
   const teams = useUidTeams(uid);
   const client = useQueryClient();
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
   const [makerVersion, setMakerVersion] = useState(0);
-  const [copy, setCopy] = useState<SavedUidTeam | null>(null);
+  const copy = teams.data?.find((team) => team.id === params.get('copy'));
   const [message, setMessage] = useState('');
   const input = useRef<HTMLInputElement>(null);
   const collection = useRef<HTMLElement>(null);
-  const expandedId = params.get('team');
+  const legacyId = params.get('team');
   const writable = !teams.isPending && !teams.isError;
   const mutation = useMutation({
     mutationFn: (action: { teams: SavedUidTeam[]; deleteId?: string; importFile?: boolean }) =>
@@ -45,12 +45,6 @@ function TeamsWorkspace({ uid }: { uid: string }) {
           : 'Could not save team changes. Existing records were preserved.',
       ),
   });
-  function expand(id?: string) {
-    const next = new URLSearchParams(params);
-    if (id) next.set('team', id);
-    else next.delete('team');
-    setParams(next, { replace: true });
-  }
   function exportTeams() {
     try {
       const url = URL.createObjectURL(
@@ -65,6 +59,7 @@ function TeamsWorkspace({ uid }: { uid: string }) {
       setMessage('Could not create an export.');
     }
   }
+  if (legacyId) return <Navigate replace to={uidTeamPath(uid, legacyId)} />;
   return (
     <main id="companion-content" tabIndex={-1} className="today-page teams-page">
       <PageHeader
@@ -73,15 +68,14 @@ function TeamsWorkspace({ uid }: { uid: string }) {
         description="Build a lineup. Keep your favorites close."
       />
       <TeamBuildEditor
-        key={`maker-${makerVersion}`}
+        key={`maker-${makerVersion}-${copy?.id ?? 'blank'}`}
         uid={uid}
         initialDraft={
           copy ? { name: `${copy.name.slice(0, 70)} (copy)`, slots: copy.members } : undefined
         }
         onSaved={(saved) => {
-          setCopy(null);
           setMakerVersion((version) => version + 1);
-          expand();
+          navigate(`/u/${uid}/teams`, { replace: true });
           setMessage('Team saved below. Your team maker is ready for another lineup.');
           collection.current?.scrollIntoView?.({ block: 'start' });
           window.setTimeout(
@@ -159,11 +153,6 @@ function TeamsWorkspace({ uid }: { uid: string }) {
             Saved teams could not load. Existing records are preserved.
           </p>
         ) : null}
-        {expandedId && !teams.isPending && !teams.data?.some((team) => team.id === expandedId) ? (
-          <p role="status" className="analysis-notice">
-            This team is not saved in this browser. Import its file or make a lineup above.
-          </p>
-        ) : null}
         {!teams.isPending && !teams.isError && !teams.data?.length ? (
           <div className="saved-teams-empty">
             <UiIcon name="characters" />
@@ -173,21 +162,17 @@ function TeamsWorkspace({ uid }: { uid: string }) {
         ) : null}
         <div className="saved-team-grid">
           {teams.data?.map((team) => {
-            const expanded = expandedId === team.id;
             return (
-              <article key={team.id} className={`saved-team-card ${expanded ? 'is-expanded' : ''}`}>
-                <button
+              <article key={team.id} className="saved-team-card">
+                <Link
                   id={`saved-team-open-${uid}-${team.id}`}
-                  type="button"
+                  to={uidTeamPath(uid, team.id)}
                   className="saved-team-summary"
-                  aria-expanded={expanded}
-                  aria-controls={`team-details-${team.id}`}
-                  aria-label={`${expanded ? 'Collapse' : 'Open'} ${team.name}`}
-                  onClick={() => expand(expanded ? undefined : team.id)}
+                  aria-label={`Open ${team.name}`}
                 >
                   <span className="saved-team-title">
                     <strong>{team.name}</strong>
-                    <span aria-hidden="true">{expanded ? '−' : '↗'}</span>
+                    <span aria-hidden="true">↗</span>
                   </span>
                   <span className="saved-team-portraits">
                     {team.members.map((member, slot) => {
@@ -218,64 +203,10 @@ function TeamsWorkspace({ uid }: { uid: string }) {
                     })}
                   </span>
                   <span className="saved-team-summary-footer">
-                    <span>
-                      {team.members.filter((member) => member.roleId !== 'unspecified').length}{' '}
-                      roles selected
-                    </span>
-                    <span>{expanded ? 'Close details' : 'View all builds'}</span>
+                    <span>4 characters</span>
+                    <span>View team details</span>
                   </span>
-                </button>
-                <div
-                  id={`team-details-${team.id}`}
-                  hidden={!expanded}
-                  className="saved-team-details"
-                >
-                  {expanded ? (
-                    <>
-                      <div className="saved-team-actions">
-                        <span>
-                          {team.members
-                            .map((member) => roleLabels[member.roleId])
-                            .filter((role) => role !== roleLabels.unspecified)
-                            .join(' · ') || 'Choose roles below to explore build guidance.'}
-                        </span>
-                        <button
-                          type="button"
-                          className="button-secondary"
-                          disabled={!writable || mutation.isPending}
-                          onClick={() => {
-                            setCopy(team);
-                            setMakerVersion((version) => version + 1);
-                            document
-                              .getElementById('companion-content')
-                              ?.scrollIntoView?.({ block: 'start' });
-                          }}
-                        >
-                          Duplicate to maker
-                        </button>
-                        <button
-                          type="button"
-                          className="team-delete-action"
-                          disabled={!writable || mutation.isPending}
-                          onClick={() =>
-                            mutation.mutate(
-                              { teams: [], deleteId: team.id },
-                              { onSuccess: () => expand() },
-                            )
-                          }
-                        >
-                          Delete team
-                        </button>
-                      </div>
-                      <TeamBuildEditor
-                        key={team.id}
-                        uid={uid}
-                        savedTeam={team}
-                        onSaved={() => setMessage(`${team.name} updated.`)}
-                      />
-                    </>
-                  ) : null}
-                </div>
+                </Link>
               </article>
             );
           })}

@@ -1,0 +1,11 @@
+{
+  "upstream": "https://github.com/genshinsim/gcsim",
+  "revision": "caf738dc807a646e2eee7e7b572f225dd6deb510",
+  "release": "v2.47.2",
+  "license": "MIT",
+  "bridge": "apps/api/tooling/gcsim/celestia.go",
+  "bridgeSha256": "25b924c086a61f0f8eea7c0b83e644b137f46c0e4a43995ba8bcbb2fa6cd6a2f",
+  "wasmSha256": "25764a4ee3b53f800ec4ca2109f427e8ca5ff2eaa8418b12cbe003fc1c0995ff",
+  "runtimeSha256": "0c949f4996f9a89698e4b5c586de32249c3b69b7baadb64d220073cc04acba14",
+  "goVersion": "go version go1.27.3 windows/amd64"
+}

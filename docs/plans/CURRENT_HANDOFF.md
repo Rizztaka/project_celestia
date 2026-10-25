@@ -1,3 +1,15 @@
+> **2026-10-25 dedicated team pages and real damage simulation:** Each saved card
+> now links to `/u/:uid/teams/:teamId`, with all four builds and a browser gcsim
+> rotation calculator. Roles stay optional for build advice and confer no damage.
+> Pinned MIT engine, fixed seeds, artifact-only inputs, coverage gates, explicit
+> rotation saves, cancellation and stale-result invalidation. Nefer is not in the
+> pinned engine; affected teams are blocked rather than partially totalled.
+> **137/137 tests**, web build/types/lint and scoped tooling lint pass. Actual
+> browser WASM results, resistance changes, cancellation, saved-rotation reload,
+> keyboard routes and 390/320px layouts verified with isolated synthetic fixtures.
+> [Implementation, engine provenance, evidence and limits](character-team-build-analyzers/team-details-damage.md).
+> Continues the owner's authorized scoped commit/push/Vercel release workflow.
+
 > **2026-10-24 saved-team gallery follow-up:** Removed both New team controls.
 > A permanent maker saves compact cards below it, two per desktop row. Click a card
 > to expand all four member builds, with overview/comparison/editing retained.

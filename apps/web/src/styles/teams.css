@@ -1214,6 +1214,284 @@
   width: 100%;
   text-align: left;
   padding: 20px;
+  text-decoration: none;
+}
+
+.team-role-help {
+  line-height: 1.8;
+  max-width: 650px;
+}
+.team-damage-disclosure {
+  border: 1px solid #d8be892b;
+  background: linear-gradient(120deg, #d8be8909, #17191d);
+  border-radius: 12px;
+}
+.team-damage-disclosure > summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 22px;
+  cursor: pointer;
+  list-style: none;
+}
+.team-damage-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+.team-damage-disclosure > summary > span:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.team-damage-disclosure > summary small {
+  color: #c6af7d;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+}
+.team-damage-disclosure > summary strong {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: #ede5d4;
+  font-weight: 400;
+}
+.team-damage-disclosure > summary span span {
+  color: #969ba7;
+  font-size: 12px;
+}
+.team-damage-disclosure > summary > span:last-child {
+  color: #d8be89;
+  font-size: 22px;
+}
+.team-damage-disclosure > summary:focus-visible {
+  outline: 2px solid #d8be89;
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+.team-damage-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+  padding: 22px;
+  border-top: 1px solid #ffffff10;
+}
+.team-damage-panel .analysis-notice ul {
+  margin-top: 10px;
+  padding-left: 18px;
+  list-style: disc;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.damage-settings {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.damage-settings label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #9fa3af;
+  font-size: 11px;
+  min-width: 0;
+}
+.damage-settings input,
+.damage-settings select {
+  background: #17191e;
+  color: #e0ded8;
+  border: 1px solid #ffffff19;
+  border-radius: 6px;
+  padding: 9px 10px;
+  min-width: 0;
+  width: 100%;
+  font-size: 12px;
+}
+.damage-enemy-settings {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.damage-rotation-heading,
+.damage-rotation-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.damage-rotation-heading h3 {
+  color: #e1dbcf;
+  font-size: 17px;
+}
+.damage-rotation-heading button,
+.damage-rotation-actions button {
+  font-size: 11px;
+  padding: 9px 12px;
+}
+.damage-rotation-actions {
+  justify-content: flex-start;
+}
+.damage-rotation-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.damage-rotation-steps > li {
+  display: grid;
+  grid-template-columns: 28px minmax(100px, 1.3fr) minmax(100px, 1.3fr) 60px minmax(90px, 1fr) 32px;
+  align-items: end;
+  gap: 10px;
+  padding: 14px;
+  background: #ffffff03;
+  border: 1px solid #ffffff0d;
+  border-radius: 8px;
+  min-width: 0;
+}
+.damage-step-index {
+  align-self: center;
+  color: #877e68;
+  font-size: 12px;
+}
+.damage-step-options {
+  grid-column: 2 / -1;
+  font-size: 11px;
+  color: #a89b80;
+}
+.damage-step-options summary {
+  cursor: pointer;
+}
+.damage-step-options label {
+  max-width: 360px;
+  margin-block: 10px;
+}
+.damage-step-options a {
+  text-decoration: underline;
+}
+.team-damage-panel pre {
+  overflow: auto;
+  max-height: 350px;
+  background: #101215;
+  padding: 16px;
+  color: #a9b4c4;
+  font-size: 11px;
+  line-height: 1.8;
+  border-radius: 8px;
+}
+.damage-total {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background: #d8be8909;
+  padding: 22px;
+  border: 1px solid #d8be8922;
+  border-radius: 10px;
+}
+.damage-total small {
+  display: block;
+  color: #ae9d7a;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+.damage-total strong {
+  display: block;
+  color: #e7d4ac;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3vw, 40px);
+  margin-top: 10px;
+  font-weight: 400;
+}
+.damage-results {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.damage-member-results {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.damage-member-results > div > div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+}
+.damage-member-results strong {
+  color: #ddd7ca;
+  font-weight: 500;
+}
+.damage-member-results span,
+.damage-member-results small {
+  color: #9299a6;
+  font-size: 11px;
+}
+.damage-member-results progress {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 5px;
+  margin: 10px 0;
+  accent-color: #d8be89;
+  border: 0;
+  border-radius: 10px;
+  background: #ffffff12;
+  overflow: hidden;
+}
+.damage-member-results progress::-webkit-progress-bar {
+  background: #ffffff12;
+}
+.damage-member-results progress::-webkit-progress-value {
+  background: #d8be89;
+  border-radius: 10px;
+}
+.damage-member-results progress::-moz-progress-bar {
+  background: #d8be89;
+  border-radius: 10px;
+}
+@media (max-width: 750px) {
+  .damage-enemy-settings {
+    grid-template-columns: 1fr 1fr;
+  }
+  .damage-rotation-steps > li {
+    grid-template-columns: 24px minmax(0, 1fr) minmax(0, 1fr) 28px;
+    gap: 10px;
+  }
+  .damage-rotation-steps > li > label:nth-of-type(3) {
+    grid-column: 2;
+  }
+  .damage-rotation-steps > li > button {
+    grid-column: 4;
+    grid-row: 1;
+  }
+  .damage-step-options {
+    grid-column: 2 / 4;
+  }
+  .damage-member-results {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 400px) {
+  .team-damage-panel {
+    padding: 14px;
+  }
+  .team-damage-disclosure > summary {
+    padding: 17px;
+  }
+  .team-damage-disclosure > summary strong {
+    font-size: 21px;
+  }
+  .damage-rotation-steps > li {
+    padding: 10px;
+  }
+  .damage-total {
+    grid-template-columns: 1fr;
+    padding: 17px;
+  }
 }
 .saved-team-summary:hover {
   background: #ffffff03;

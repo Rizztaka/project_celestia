@@ -1,0 +1,6165 @@
+{
+  "version": "gcsim-2.47.2-celestia-1",
+  "revision": "caf738dc807a646e2eee7e7b572f225dd6deb510",
+  "characters": {
+    "10000005:504": {
+      "key": "aetheranemo",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000005:505": {
+      "key": "aethercryo",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000005:508": {
+      "key": "aetherdendro",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000005:507": {
+      "key": "aetherelectro",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000005:506": {
+      "key": "aethergeo",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000005:503": {
+      "key": "aetherhydro",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only skill and burst followed by walk have proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000005:502": {
+      "key": "aetherpyro",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Only available for Lumine. Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Only available for Lumine. Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only skill and burst followed by walk have proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000121:12101": {
+      "key": "aino",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000038:3801": {
+      "key": "albedo",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000078:7801": {
+      "key": "alhaitham",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be skill[hold=1] or a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000062:6201": {
+      "key": "aloy",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000021:2101": {
+      "key": "amber",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only burst and aim followed by walk have proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000057:5701": {
+      "key": "aratakiitto",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000096:9601": {
+      "key": "arlecchino",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": null
+        },
+        {
+          "action": "high_plunge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000082:8201": {
+      "key": "baizhu",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000014:1401": {
+      "key": "barbara",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Everything except charge and burst followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000024:2401": {
+      "key": "beidou",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000032:3201": {
+      "key": "bennett",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000072:7201": {
+      "key": "candace",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000088:8801": {
+      "key": "charlotte",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000104:10401": {
+      "key": "chasca",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Must have just exited Nightsoul Blessing"
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000090:9001": {
+      "key": "chevreuse",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000094:9401": {
+      "key": "chiori",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be skill[hold=1]."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Everything except normal followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000036:3601": {
+      "key": "chongyun",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000107:10701": {
+      "key": "citlali",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000098:9801": {
+      "key": "clorinde",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000067:6701": {
+      "key": "collei",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000125:12501": {
+      "key": "columbina",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000071:7101": {
+      "key": "cyno",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000115:11501": {
+      "key": "dahlia",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000079:7901": {
+      "key": "dehya",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000016:1601": {
+      "key": "diluc",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000039:3901": {
+      "key": "diona",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000068:6801": {
+      "key": "dori",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000123:12301": {
+      "key": "durin",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000099:9901": {
+      "key": "emilie",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000112:11201": {
+      "key": "escoffier",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000051:5101": {
+      "key": "eula",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Everything except normal followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000076:7601": {
+      "key": "faruzan",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000031:3101": {
+      "key": "fischl",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000120:12001": {
+      "key": "flins",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000085:8501": {
+      "key": "freminet",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000089:8901": {
+      "key": "furina",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000092:9201": {
+      "key": "gaming",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be skill or a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be skill or a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000037:3701": {
+      "key": "ganyu",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000055:5501": {
+      "key": "gorou",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000046:4601": {
+      "key": "hutao",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000110:11001": {
+      "key": "iansan",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": "Must use the 'movement' argument on action params or `movement` system function to generate Nightsoul points."
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000113:11301": {
+      "key": "ifa",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Must have just exited Nightsoul Blessing"
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000116:11601": {
+      "key": "ineffa",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000124:12401": {
+      "key": "jahoda",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000003:301": {
+      "key": "jean",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000047:4701": {
+      "key": "kaedeharakazuha",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be skill or a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000015:1501": {
+      "key": "kaeya",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000002:201": {
+      "key": "kamisatoayaka",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000066:6601": {
+      "key": "kamisatoayato",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Not available in skill state. Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example. Cannot be used while in skill state."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example. Cannot be used while in skill state."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000081:8101": {
+      "key": "kaveh",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000042:4201": {
+      "key": "keqing",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000101:10101": {
+      "key": "kinich",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge. Cannot charge in nightsoul blessing"
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example. Cannot low plunge in nightsoul blessing."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000061:6101": {
+      "key": "kirara",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000029:2901": {
+      "key": "klee",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000056:5601": {
+      "key": "kujousara",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000065:6501": {
+      "key": "kukishinobu",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000108:10801": {
+      "key": "lanyan",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000119:11901": {
+      "key": "lauma",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": "Cannot dash while in spirit envoy state."
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000074:7401": {
+      "key": "layla",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000006:601": {
+      "key": "lisa",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000007:704": {
+      "key": "lumineanemo",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000007:705": {
+      "key": "luminecryo",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Only available for Lumine. Previous action must be a jump buffed via Xianyun's burst."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Only available for Lumine. Previous action must be a jump buffed via Xianyun's burst."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000007:708": {
+      "key": "luminedendro",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000007:707": {
+      "key": "lumineelectro",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000007:706": {
+      "key": "luminegeo",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000007:703": {
+      "key": "luminehydro",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only skill and burst followed by walk have proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000007:702": {
+      "key": "luminepyro",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Only available for Lumine. Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Only available for Lumine. Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only skill and burst followed by walk have proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000083:8301": {
+      "key": "lynette",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000084:8401": {
+      "key": "lyney",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000106:10601": {
+      "key": "mavuika",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a walking Flamestrider jump or jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000080:8001": {
+      "key": "mika",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000041:4101": {
+      "key": "mona",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000102:10201": {
+      "key": "mualani",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000073:7301": {
+      "key": "nahida",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000091:9101": {
+      "key": "navia",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Normal Attacks do not have legal walk cancels recorded, but Skill, Burst and Low/High Plunge do."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000087:8701": {
+      "key": "neuvillette",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000131:13101": {
+      "key": "nicole",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000070:7001": {
+      "key": "nilou",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000027:2701": {
+      "key": "ningguang",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000034:3401": {
+      "key": "noelle",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000150:15001": {
+      "key": "odette",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000105:10501": {
+      "key": "ororon",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000132:13201": {
+      "key": "prune",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000035:3501": {
+      "key": "qiqi",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000052:5201": {
+      "key": "raidenshogun",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000020:2001": {
+      "key": "razor",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000045:4501": {
+      "key": "rosaria",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000054:5401": {
+      "key": "sangonomiyakokomi",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000053:5301": {
+      "key": "sayu",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000097:9701": {
+      "key": "sethos",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000063:6301": {
+      "key": "shenhe",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Everything except normal followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000059:5901": {
+      "key": "shikanoinheizou",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000095:9501": {
+      "key": "sigewinne",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000114:11401": {
+      "key": "skirk",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": "Cannot be used in Seven-Phase Flash."
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000043:4301": {
+      "key": "sucrose",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000033:3301": {
+      "key": "tartaglia",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": "Only available if not in skill state."
+        },
+        {
+          "action": "charge",
+          "note": "Only available if in skill state. Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk and walk followed by skill have proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000050:5001": {
+      "key": "thoma",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000069:6901": {
+      "key": "tighnari",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000111:11101": {
+      "key": "varesa",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be charge or jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": "Hold skill is not implemented."
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000128:12801": {
+      "key": "varka",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000022:2201": {
+      "key": "venti",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be skill[hold=1]."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000075:7501": {
+      "key": "wanderer",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Only available for a short time after Windfavored state ends."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": "Swapping while Windfavored state is active is not legal."
+        }
+      ]
+    },
+    "10000086:8601": {
+      "key": "wriothesley",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000023:2301": {
+      "key": "xiangling",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000093:9301": {
+      "key": "xianyun",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be jump buffed via Xianyun's burst for example or must be still in Cloud Transmogrification state (Xianyun E)."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be jump buffed via Xianyun's burst for example or must be still in Cloud Transmogrification state (Xianyun E)."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000026:2601": {
+      "key": "xiao",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000103:10301": {
+      "key": "xilonen",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge. Cannot charge in nightsoul blessing"
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example. Cannot low plunge in nightsoul blessing."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000025:2501": {
+      "key": "xingqiu",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000044:4401": {
+      "key": "xinyan",
+      "weaponClass": "WEAPON_CLAYMORE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000058:5801": {
+      "key": "yaemiko",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000048:4801": {
+      "key": "yanfei",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "low_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "high_plunge",
+          "note": "Previous action must be a jump buffed via Xianyun's burst for example."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk (except low_plunge and high_plunge) has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000077:7701": {
+      "key": "yaoyao",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000060:6001": {
+      "key": "yelan",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000049:4901": {
+      "key": "yoimiya",
+      "weaponClass": "WEAPON_BOW",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "aim",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "Only aim followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000109:10901": {
+      "key": "yumemizukimizuki",
+      "weaponClass": "WEAPON_CATALYST",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": null
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": null
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000064:6401": {
+      "key": "yunjin",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    },
+    "10000030:3001": {
+      "key": "zhongli",
+      "weaponClass": "WEAPON_POLE",
+      "actions": [
+        {
+          "action": "attack",
+          "note": null
+        },
+        {
+          "action": "charge",
+          "note": "Need to use attack right before charge."
+        },
+        {
+          "action": "skill",
+          "note": null
+        },
+        {
+          "action": "burst",
+          "note": null
+        },
+        {
+          "action": "dash",
+          "note": null
+        },
+        {
+          "action": "jump",
+          "note": null
+        },
+        {
+          "action": "walk",
+          "note": "No action followed by walk has proper frames."
+        },
+        {
+          "action": "swap",
+          "note": null
+        }
+      ]
+    }
+  },
+  "weapons": {
+    "11101": {
+      "key": "dullblade",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11201": {
+      "key": "silversword",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11301": {
+      "key": "coolsteel",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11302": {
+      "key": "harbingerofdawn",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11303": {
+      "key": "travelershandysword",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11304": {
+      "key": "darkironsword",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11305": {
+      "key": "filletblade",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11306": {
+      "key": "skyridersword",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11401": {
+      "key": "favoniussword",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11402": {
+      "key": "theflute",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11403": {
+      "key": "sacrificialsword",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11404": {
+      "key": "royallongsword",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11405": {
+      "key": "lionsroar",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11406": {
+      "key": "prototyperancour",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11407": {
+      "key": "ironsting",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11408": {
+      "key": "blackclifflongsword",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11409": {
+      "key": "theblacksword",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11410": {
+      "key": "thealleyflash",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11412": {
+      "key": "swordofdescension",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11413": {
+      "key": "festeringdesire",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11414": {
+      "key": "amenomakageuchi",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11415": {
+      "key": "cinnabarspindle",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11416": {
+      "key": "kagotsurubeisshin",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11417": {
+      "key": "sapwoodblade",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11418": {
+      "key": "xiphosmoonlight",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11422": {
+      "key": "toukaboushigure",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11424": {
+      "key": "wolffang",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11425": {
+      "key": "finaleofthedeep",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11426": {
+      "key": "fleuvecendreferryman",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11427": {
+      "key": "thedockhandsassistant",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11428": {
+      "key": "swordofnarzissenkreuz",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11430": {
+      "key": "sturdybone",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11431": {
+      "key": "fluteofezpitzal",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11432": {
+      "key": "calamityofeshu",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11433": {
+      "key": "serenityscall",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11434": {
+      "key": "moonweaversdawn",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11501": {
+      "key": "aquilafavonia",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11502": {
+      "key": "skywardblade",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11503": {
+      "key": "freedomsworn",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11504": {
+      "key": "summitshaper",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11505": {
+      "key": "primordialjadecutter",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11509": {
+      "key": "mistsplitterreforged",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11510": {
+      "key": "harangeppakufutsu",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11511": {
+      "key": "keyofkhajnisut",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11512": {
+      "key": "lightoffoliarincision",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11513": {
+      "key": "splendoroftranquilwaters",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11514": {
+      "key": "urakumisugiri",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11515": {
+      "key": "absolution",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11516": {
+      "key": "peakpatrolsong",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11517": {
+      "key": "azurelight",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11518": {
+      "key": "athameartis",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11519": {
+      "key": "lightbearingmoonshard",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "11521": {
+      "key": "exaiphanesblade",
+      "weaponClass": "WEAPON_SWORD_ONE_HAND"
+    },
+    "12101": {
+      "key": "wastergreatsword",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12201": {
+      "key": "oldmercspal",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12301": {
+      "key": "ferrousshadow",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12302": {
+      "key": "bloodtaintedgreatsword",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12303": {
+      "key": "whiteirongreatsword",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12305": {
+      "key": "debateclub",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12306": {
+      "key": "skyridergreatsword",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12401": {
+      "key": "favoniusgreatsword",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12402": {
+      "key": "thebell",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12403": {
+      "key": "sacrificialgreatsword",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12404": {
+      "key": "royalgreatsword",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12405": {
+      "key": "rainslasher",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12406": {
+      "key": "prototypearchaic",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12407": {
+      "key": "whiteblind",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12408": {
+      "key": "blackcliffslasher",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12409": {
+      "key": "serpentspine",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12410": {
+      "key": "lithicblade",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12411": {
+      "key": "snowtombedstarsilver",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12412": {
+      "key": "luxurioussealord",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12414": {
+      "key": "katsuragikirinagamasa",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12415": {
+      "key": "makhairaaquamarine",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12416": {
+      "key": "akuoumaru",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12417": {
+      "key": "forestregalia",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12418": {
+      "key": "mailedflower",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12424": {
+      "key": "talkingstick",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12425": {
+      "key": "tidalshadow",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12426": {
+      "key": "ultimateoverlordsmegamagicsword",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12427": {
+      "key": "portablepowersaw",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12430": {
+      "key": "fruitfulhook",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12431": {
+      "key": "earthshaker",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12432": {
+      "key": "flameforgedinsight",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12433": {
+      "key": "masterkey",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12436": {
+      "key": "bladeofatonement",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12501": {
+      "key": "skywardpride",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12502": {
+      "key": "wolfsgravestone",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12503": {
+      "key": "songofbrokenpines",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12504": {
+      "key": "theunforged",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12510": {
+      "key": "redhornstonethresher",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12511": {
+      "key": "beaconofthereedsea",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12512": {
+      "key": "verdict",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12513": {
+      "key": "fangofthemountainking",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12514": {
+      "key": "athousandblazingsuns",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "12515": {
+      "key": "gestofthemightywolf",
+      "weaponClass": "WEAPON_CLAYMORE"
+    },
+    "13101": {
+      "key": "beginnersprotector",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13201": {
+      "key": "ironpoint",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13301": {
+      "key": "whitetassel",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13302": {
+      "key": "halberd",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13303": {
+      "key": "blacktassel",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13401": {
+      "key": "dragonsbane",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13402": {
+      "key": "prototypestarglitter",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13403": {
+      "key": "crescentpike",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13404": {
+      "key": "blackcliffpole",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13405": {
+      "key": "deathmatch",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13406": {
+      "key": "lithicspear",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13407": {
+      "key": "favoniuslance",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13408": {
+      "key": "royalspear",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13409": {
+      "key": "dragonspinespear",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13414": {
+      "key": "kitaincrossspear",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13415": {
+      "key": "thecatch",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13416": {
+      "key": "wavebreakersfin",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13417": {
+      "key": "moonpiercer",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13419": {
+      "key": "missivewindspear",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13424": {
+      "key": "balladofthefjords",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13425": {
+      "key": "rightfulreward",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13426": {
+      "key": "dialoguesofthedesertsages",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13427": {
+      "key": "prospectorsdrill",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13430": {
+      "key": "mountainbracingbolt",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13431": {
+      "key": "footprintoftherainbow",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13432": {
+      "key": "tamayurateinoohanashi",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13433": {
+      "key": "prospectorsshovel",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13434": {
+      "key": "sacrificersstaff",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13501": {
+      "key": "staffofhoma",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13502": {
+      "key": "skywardspine",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13504": {
+      "key": "vortexvanquisher",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13505": {
+      "key": "primordialjadewingedspear",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13507": {
+      "key": "calamityqueller",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13509": {
+      "key": "engulfinglightning",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13511": {
+      "key": "staffofthescarletsands",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13512": {
+      "key": "crimsonmoonssemblance",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13513": {
+      "key": "lumidouceelegy",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13514": {
+      "key": "symphonistofscents",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13515": {
+      "key": "fracturedhalo",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13516": {
+      "key": "bloodsoakedruins",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "13517": {
+      "key": "disasterandremorse",
+      "weaponClass": "WEAPON_POLE"
+    },
+    "14101": {
+      "key": "apprenticesnotes",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14201": {
+      "key": "pocketgrimoire",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14301": {
+      "key": "magicguide",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14302": {
+      "key": "thrillingtalesofdragonslayers",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14303": {
+      "key": "otherworldlystory",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14304": {
+      "key": "emeraldorb",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14305": {
+      "key": "twinnephrite",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14401": {
+      "key": "favoniuscodex",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14402": {
+      "key": "thewidsith",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14403": {
+      "key": "sacrificialfragments",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14404": {
+      "key": "royalgrimoire",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14405": {
+      "key": "solarpearl",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14406": {
+      "key": "prototypeamber",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14407": {
+      "key": "mappamare",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14408": {
+      "key": "blackcliffagate",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14409": {
+      "key": "eyeofperception",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14410": {
+      "key": "wineandsong",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14412": {
+      "key": "frostbearer",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14413": {
+      "key": "dodocotales",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14414": {
+      "key": "hakushinring",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14415": {
+      "key": "oathsworneye",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14416": {
+      "key": "wanderingevenstar",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14417": {
+      "key": "fruitoffulfillment",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14424": {
+      "key": "sacrificialjade",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14425": {
+      "key": "flowingpurity",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14426": {
+      "key": "balladoftheboundlessblue",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14427": {
+      "key": "ashgravendrinkinghorn",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14430": {
+      "key": "waveridingwhirl",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14431": {
+      "key": "ringofyaxche",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14432": {
+      "key": "etherlightspindlelute",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14433": {
+      "key": "blackmarrowlantern",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14434": {
+      "key": "dawningfrost",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14436": {
+      "key": "echoesoftheheart",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14501": {
+      "key": "skywardatlas",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14502": {
+      "key": "lostprayertothesacredwinds",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14504": {
+      "key": "memoryofdust",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14505": {
+      "key": "jadefallssplendor",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14506": {
+      "key": "everlastingmoonglow",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14509": {
+      "key": "kagurasverity",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14511": {
+      "key": "athousandfloatingdreams",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14512": {
+      "key": "tulaytullahsremembrance",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14513": {
+      "key": "cashflowsupervision",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14514": {
+      "key": "tomeoftheeternalflow",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14515": {
+      "key": "cranesechoingcall",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14516": {
+      "key": "surfsup",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14517": {
+      "key": "starcallerswatch",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14518": {
+      "key": "sunnymorningsleepin",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14519": {
+      "key": "vividnotions",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14520": {
+      "key": "nightweaverslookingglass",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14521": {
+      "key": "reliquaryoftruth",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14522": {
+      "key": "nocturnescurtaincall",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "14523": {
+      "key": "angelosheptades",
+      "weaponClass": "WEAPON_CATALYST"
+    },
+    "15101": {
+      "key": "huntersbow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15201": {
+      "key": "seasonedhuntersbow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15301": {
+      "key": "ravenbow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15302": {
+      "key": "sharpshootersoath",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15303": {
+      "key": "recurvebow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15304": {
+      "key": "slingshot",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15305": {
+      "key": "messenger",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15401": {
+      "key": "favoniuswarbow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15402": {
+      "key": "thestringless",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15403": {
+      "key": "sacrificialbow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15404": {
+      "key": "royalbow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15405": {
+      "key": "rust",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15406": {
+      "key": "prototypecrescent",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15407": {
+      "key": "compoundbow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15408": {
+      "key": "blackcliffwarbow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15409": {
+      "key": "theviridescenthunt",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15410": {
+      "key": "alleyhunter",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15411": {
+      "key": "fadingtwilight",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15412": {
+      "key": "mitternachtswaltz",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15413": {
+      "key": "windblumeode",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15414": {
+      "key": "hamayumi",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15415": {
+      "key": "predator",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15416": {
+      "key": "mouunsmoon",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15417": {
+      "key": "kingssquire",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15418": {
+      "key": "endoftheline",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15419": {
+      "key": "ibispiercer",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15424": {
+      "key": "scionoftheblazingsun",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15425": {
+      "key": "songofstillness",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15426": {
+      "key": "cloudforged",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15427": {
+      "key": "rangegauge",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15430": {
+      "key": "flowerwreathedfeathers",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15431": {
+      "key": "chainbreaker",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15432": {
+      "key": "sequenceofsolitude",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15433": {
+      "key": "snarehook",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15434": {
+      "key": "rainbowserpentsrainbow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15436": {
+      "key": "covenantoffrostandsnow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15501": {
+      "key": "skywardharp",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15502": {
+      "key": "amosbow",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15503": {
+      "key": "elegyfortheend",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15507": {
+      "key": "polarstar",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15508": {
+      "key": "aquasimulacra",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15509": {
+      "key": "thunderingpulse",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15511": {
+      "key": "hunterspath",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15512": {
+      "key": "thefirstgreatmagic",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15513": {
+      "key": "silvershowerheartstrings",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15514": {
+      "key": "astralvulturescrimsonplumage",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15515": {
+      "key": "thedaybreakchronicles",
+      "weaponClass": "WEAPON_BOW"
+    },
+    "15516": {
+      "key": "goldenfrostboundoath",
+      "weaponClass": "WEAPON_BOW"
+    }
+  },
+  "sets": {
+    "10001": "resolutionofsojourner",
+    "10002": "braveheart",
+    "10003": "defenderswill",
+    "10005": "berserker",
+    "10006": "martialartist",
+    "10007": "instructor",
+    "10008": "gambler",
+    "10009": "theexile",
+    "10012": "scholar",
+    "14001": "blizzardstrayer",
+    "14002": "thundersoother",
+    "14003": "lavawalker",
+    "14004": "maidenbeloved",
+    "15001": "gladiatorsfinale",
+    "15002": "viridescentvenerer",
+    "15003": "wandererstroupe",
+    "15005": "thunderingfury",
+    "15006": "crimsonwitchofflames",
+    "15007": "noblesseoblige",
+    "15008": "bloodstainedchivalry",
+    "15014": "archaicpetra",
+    "15015": "retracingbolide",
+    "15016": "heartofdepth",
+    "15017": "tenacityofthemillelith",
+    "15018": "paleflame",
+    "15019": "shimenawasreminiscence",
+    "15020": "emblemofseveredfate",
+    "15021": "huskofopulentdreams",
+    "15022": "oceanhuedclam",
+    "15023": "vermillionhereafter",
+    "15024": "echoesofanoffering",
+    "15025": "deepwoodmemories",
+    "15026": "gildeddreams",
+    "15027": "desertpavilionchronicle",
+    "15028": "flowerofparadiselost",
+    "15029": "nymphsdream",
+    "15030": "vourukashasglow",
+    "15031": "marechausseehunter",
+    "15032": "goldentroupe",
+    "15033": "songofdayspast",
+    "15034": "nighttimewhispersintheechoingwoods",
+    "15035": "fragmentofharmonicwhimsy",
+    "15036": "unfinishedreverie",
+    "15037": "scrolloftheheroofcindercity",
+    "15038": "obsidiancodex",
+    "15039": "longnightsoath",
+    "15040": "finaleofthedeepgalleries",
+    "15041": "nightoftheskysunveiling",
+    "15042": "silkenmoonsserenade",
+    "15043": "aubadeofmorningstarandmoon",
+    "15044": "adaycarvedfromrisingwinds",
+    "15045": "celestialgift",
+    "15046": "disenchantmentindeepshadow",
+    "15047": "scarletproof",
+    "15048": "heartofthefurnace"
+  }
+}

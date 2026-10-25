@@ -111,6 +111,7 @@ async function click(text) {
 it('offers a neutral immortal dummy and readable action cards with reorder controls', async () => {
   await writeUidTeams(uid, [saved]);
   await mount();
+  await click('Damage lab');
   expect(document.body.textContent).toContain('Training dummy');
   expect(document.body.textContent).toContain('cannot die during the timed test');
   const preset = [...document.querySelectorAll('select')].find((select) =>
@@ -118,6 +119,7 @@ it('offers a neutral immortal dummy and readable action cards with reorder contr
   );
   expect(preset.value).toBe('neutral');
   await click('Add Furina Skill');
+  await click('Choose Skirk for rotation');
   await click('Add Skirk Burst');
   expect(document.querySelectorAll('.rotation-builder-steps > li')).toHaveLength(2);
   expect(document.querySelector('[aria-label="Rotation preview"]').textContent).toContain(
@@ -180,7 +182,12 @@ it('shows verified search alternatives, applies a winner only on click, saves it
   vi.stubGlobal('Worker', SearchWorker);
   await writeUidTeams(uid, [saved]);
   await mount();
-  for (const name of ['Furina', 'Sucrose', 'Skirk', 'Xilonen']) await click(`Add ${name} Skill`);
+  await click('Damage lab');
+  for (const name of ['Furina', 'Sucrose', 'Skirk', 'Xilonen']) {
+    await click(`Choose ${name} for rotation`);
+    await click(`Add ${name} Skill`);
+  }
+  await click('Choose Skirk for rotation');
   await click('Add Skirk Normal attack');
   const before = document.querySelector('[aria-label="Rotation preview"]').textContent;
   await click('Find best tested rotation');
@@ -228,7 +235,9 @@ it('loads the real IndexedDB team into portrait slots and a keyboard-accessible 
       (button) => button.textContent.trim() === 'New team',
     ),
   ).toBe(false);
-  const active = document.querySelector('[role="tab"][aria-selected="true"]');
+  const active = document.querySelector(
+    '[aria-label="Team workspace"] [role="tab"][aria-selected="true"]',
+  );
   await act(async () =>
     active.dispatchEvent(
       new dom.window.KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
@@ -238,6 +247,62 @@ it('loads the real IndexedDB team into portrait slots and a keyboard-accessible 
   expect(document.querySelector('[aria-label="Build role"]')).toBeNull();
   expect(transport).not.toHaveBeenCalled();
 });
+it('keeps lineup drafts, rotation edits and an in-flight simulation when switching page sections', async () => {
+  const workers = [];
+  class PendingWorker {
+    terminated = false;
+    constructor() {
+      workers.push(this);
+    }
+    postMessage() {}
+    terminate() {
+      this.terminated = true;
+    }
+  }
+  vi.stubGlobal('Worker', PendingWorker);
+  await writeUidTeams(uid, [saved]);
+  await mount();
+  const buildPanel = document.querySelector('[role="tabpanel"][id$="-panel-builds"]');
+  const labPanel = document.querySelector('[role="tabpanel"][id$="-panel-damage"]');
+  expect(buildPanel.hidden).toBe(false);
+  expect(labPanel.hidden).toBe(true);
+  expect(
+    [...document.querySelectorAll('button')].find((button) =>
+      button.textContent.includes('Save changes'),
+    ).disabled,
+  ).toBe(true);
+  await click('Furina');
+  const role = [...document.querySelectorAll('select')].find((select) =>
+    select.closest('label')?.textContent.includes('Build role'),
+  );
+  await act(async () => {
+    role.value = 'off_field_damage';
+    role.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await click('Damage lab');
+  expect(buildPanel.hidden).toBe(true);
+  expect(labPanel.hidden).toBe(false);
+  await click('Add Furina Skill');
+  await click('Calculate team damage');
+  expect(workers).toHaveLength(1);
+  await click('Lineup & builds');
+  expect(role.value).toBe('off_field_damage');
+  expect(workers[0].terminated).toBe(false);
+  expect((await readUidTeams(uid))[0].members[0].roleId).toBe('party_buff');
+  await click('Damage lab');
+  expect(document.querySelectorAll('.rotation-builder-steps > li')).toHaveLength(1);
+  await click('Cancel simulation');
+  expect(workers[0].terminated).toBe(true);
+  expect(document.body.textContent).toContain('Simulation cancelled.');
+  const primary = document.querySelector('[aria-label="Team page"] [aria-selected="true"]');
+  await act(async () =>
+    primary.dispatchEvent(new dom.window.KeyboardEvent('keydown', { key: 'Home', bubbles: true })),
+  );
+  expect(document.activeElement.textContent).toBe('Lineup & builds');
+  expect(buildPanel.hidden).toBe(false);
+  expect(dom.window.localStorage.length).toBe(0);
+});
+
 it('updates roles in the draft, explicitly saves them and preserves equipment observations', async () => {
   await writeUidTeams(uid, [saved]);
   await mount();

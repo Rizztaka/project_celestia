@@ -20,6 +20,7 @@ export default function TeamMemberBuild({
   teamId,
   onRole,
   onReplace,
+  compact = false,
 }: {
   uid: string;
   character: ShowcaseCharacter;
@@ -30,6 +31,7 @@ export default function TeamMemberBuild({
   teamId?: string;
   onRole: (role: BuildRoleId) => void;
   onReplace: () => void;
+  compact?: boolean;
 }) {
   const roles = roleOptions(character);
   const stats = ['2000', '2001', '2002', '28', '20', '22', '23'].flatMap((id) => {
@@ -37,6 +39,7 @@ export default function TeamMemberBuild({
     return stat ? [stat] : [];
   });
   const knownWeapon = character.weapon ? weaponIdentity(character.weapon.id) : null;
+  const Equipment = compact ? 'details' : 'div';
   return (
     <div className="team-member-workspace">
       <header className="team-member-heading">
@@ -90,7 +93,7 @@ export default function TeamMemberBuild({
           Full character build ↗
         </Link>
       </div>
-      {roles.length ? (
+      {roles.length && !compact ? (
         <p className="analysis-muted team-role-help">
           Optional build purpose: this changes main-stat, talent and team advice. It does not add
           damage or buffs. Choose how you actually use {character.name}.
@@ -104,72 +107,79 @@ export default function TeamMemberBuild({
           </div>
         ))}
       </dl>
-      <div className="team-loadout-heading">
-        <h3>Observed equipment</h3>
-        <span>Recorded build</span>
-      </div>
-      <div className="team-equipment-grid">
-        <div className="team-weapon-tile">
-          {character.weapon?.icon ? (
-            <img
-              src={character.weapon.icon}
-              width={64}
-              height={64}
-              alt=""
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            <span aria-hidden="true" className="team-gear-placeholder">
-              ◇
-            </span>
-          )}
-          <div>
-            <small>WEAPON</small>
-            <h4>{knownWeapon?.name ?? character.weapon?.name ?? 'Weapon not reported'}</h4>
-            <p>
-              {character.weapon
-                ? `Lv. ${character.weapon.level ?? '?'} · R${character.weapon.refinement ?? '?'}`
-                : 'Details unavailable'}
-            </p>
-          </div>
+      <Equipment className="team-member-full-build">
+        {compact ? (
+          <summary>
+            Equipment & build advice <span aria-hidden="true">＋</span>
+          </summary>
+        ) : null}
+        <div className="team-loadout-heading">
+          <h3>Observed equipment</h3>
+          <span>Recorded build</span>
         </div>
-        {['Flower', 'Plume', 'Sands', 'Goblet', 'Circlet'].map((slot) => {
-          const item = character.artifacts.find((a) => a.slot === slot);
-          const set = item ? setIdentityForItem(item.id) : null;
-          return (
-            <div key={slot} className="team-artifact-tile">
-              <small>{slot}</small>
-              {item?.icon ? (
-                <img src={item.icon} width={52} height={52} alt="" referrerPolicy="no-referrer" />
-              ) : (
-                <span aria-hidden="true" className="team-gear-placeholder">
-                  ✧
-                </span>
-              )}
-              <strong>{item?.mainStat?.name ?? 'Not reported'}</strong>
-              <span>{item?.mainStat?.formatted ?? '—'}</span>
-              <p>{set?.name ?? item?.setName ?? 'Unknown set'}</p>
-              {item ? <small>+{item.level ?? '?'}</small> : null}
+        <div className="team-equipment-grid">
+          <div className="team-weapon-tile">
+            {character.weapon?.icon ? (
+              <img
+                src={character.weapon.icon}
+                width={64}
+                height={64}
+                alt=""
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <span aria-hidden="true" className="team-gear-placeholder">
+                ◇
+              </span>
+            )}
+            <div>
+              <small>WEAPON</small>
+              <h4>{knownWeapon?.name ?? character.weapon?.name ?? 'Weapon not reported'}</h4>
+              <p>
+                {character.weapon
+                  ? `Lv. ${character.weapon.level ?? '?'} · R${character.weapon.refinement ?? '?'}`
+                  : 'Details unavailable'}
+              </p>
             </div>
-          );
-        })}
-      </div>
-      <div className="team-loadout-heading">
-        <h3>Build insights</h3>
-        <span>
-          {roleId === 'unspecified'
-            ? roles.length
-              ? 'Select a role to begin'
-              : 'General build checks'
-            : roleLabels[roleId]}
-        </span>
-      </div>
-      <BuildAnalysisFindings findings={analysis.actions} />
-      <details className="analysis-disclosure" open={!analysis.coverage.roleSupported}>
-        <summary>All checks ({analysis.findings.length})</summary>
-        <BuildAnalysisFindings findings={analysis.findings} />
-      </details>
-      {analysis.coverage.roleSupported ? <BuildAnalysisComparison input={input} /> : null}
+          </div>
+          {['Flower', 'Plume', 'Sands', 'Goblet', 'Circlet'].map((slot) => {
+            const item = character.artifacts.find((a) => a.slot === slot);
+            const set = item ? setIdentityForItem(item.id) : null;
+            return (
+              <div key={slot} className="team-artifact-tile">
+                <small>{slot}</small>
+                {item?.icon ? (
+                  <img src={item.icon} width={52} height={52} alt="" referrerPolicy="no-referrer" />
+                ) : (
+                  <span aria-hidden="true" className="team-gear-placeholder">
+                    ✧
+                  </span>
+                )}
+                <strong>{item?.mainStat?.name ?? 'Not reported'}</strong>
+                <span>{item?.mainStat?.formatted ?? '—'}</span>
+                <p>{set?.name ?? item?.setName ?? 'Unknown set'}</p>
+                {item ? <small>+{item.level ?? '?'}</small> : null}
+              </div>
+            );
+          })}
+        </div>
+        <div className="team-loadout-heading">
+          <h3>Build insights</h3>
+          <span>
+            {roleId === 'unspecified'
+              ? roles.length
+                ? 'Select a role to begin'
+                : 'General build checks'
+              : roleLabels[roleId]}
+          </span>
+        </div>
+        <BuildAnalysisFindings findings={analysis.actions} />
+        <details className="analysis-disclosure" open={!analysis.coverage.roleSupported}>
+          <summary>All checks ({analysis.findings.length})</summary>
+          <BuildAnalysisFindings findings={analysis.findings} />
+        </details>
+        {analysis.coverage.roleSupported ? <BuildAnalysisComparison input={input} /> : null}
+      </Equipment>
     </div>
   );
 }

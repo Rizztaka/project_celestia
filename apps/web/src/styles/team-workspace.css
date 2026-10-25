@@ -1,0 +1,1045 @@
+/* The saved-team workspace. Gallery and maker retain their existing presentation. */
+.companion-shell main.team-details-page {
+  padding-top: 26px;
+  gap: 22px;
+  --workspace-line: #ffffff10;
+  --workspace-surface: #161a1e;
+  --workspace-muted: #9ba2ad;
+}
+.team-workspace-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.team-workspace-topline > a {
+  font-size: 12px;
+  color: #acb0b7;
+}
+.team-options-menu {
+  position: relative;
+  z-index: 20;
+  font-size: 12px;
+}
+.team-options-menu summary {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  color: #bfc0bb;
+  list-style: none;
+  padding: 9px 12px;
+  border: 1px solid var(--workspace-line);
+  border-radius: 8px;
+}
+.team-options-menu summary::-webkit-details-marker {
+  display: none;
+}
+.team-options-menu summary span {
+  font-size: 18px;
+  line-height: 10px;
+  color: #c9b68e;
+}
+.team-options-menu > div {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 7px);
+  padding: 6px;
+  width: 190px;
+  border: 1px solid #ffffff1c;
+  border-radius: 10px;
+  background: #202429;
+  box-shadow: 0 14px 45px #0008;
+  display: grid;
+}
+.team-options-menu a,
+.team-options-menu button {
+  padding: 11px;
+  text-align: left;
+  border-radius: 6px;
+}
+.team-options-menu a:hover,
+.team-options-menu button:hover {
+  background: #ffffff08;
+}
+.team-options-menu button {
+  color: #d8a59b;
+}
+.team-options-menu summary:focus-visible,
+.team-member-full-build > summary:focus-visible,
+.rotation-step-edit > summary:focus-visible {
+  outline: 2px solid #d8be89;
+  outline-offset: 4px;
+}
+.team-workspace-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 26px 28px;
+  border: 1px solid #d8be891b;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at top right, #d8be890b, transparent 65%),
+    linear-gradient(110deg, #1b1d20, #14181c);
+}
+.team-workspace-hero .page-heading {
+  margin: 0;
+}
+.team-workspace-hero .page-heading h1 {
+  font-size: clamp(30px, 3.1vw, 42px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  overflow-wrap: anywhere;
+}
+.team-workspace-hero .eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.17em;
+  margin-bottom: 9px;
+}
+.team-workspace-hero .page-description {
+  font-size: 12px;
+  margin-top: 9px;
+  color: #a7adb6;
+}
+.team-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 15px;
+  margin-top: 18px;
+  font-size: 10px;
+  color: #8f98a5;
+}
+.team-hero-meta > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #b5b6ab;
+}
+.team-hero-meta i {
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background: #b7bb94;
+}
+.team-hero-roster {
+  max-width: 290px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.team-hero-roster > div {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 11px;
+}
+.team-hero-roster img,
+.team-hero-roster .team-portrait-fallback,
+.team-hero-roster > div > span {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border: 1px solid #ffffff16;
+  border-radius: 50%;
+  margin-left: -7px;
+  background: #20262a;
+  padding: 2px;
+}
+.team-hero-roster p {
+  font-size: 10px;
+  line-height: 1.8;
+  color: #a4aab1;
+}
+.team-primary-tabs {
+  position: sticky;
+  top: 12px;
+  z-index: 12;
+  background: #101316f5;
+  backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--workspace-line);
+  padding-bottom: 12px;
+}
+.team-primary-tabs [role='tablist'] {
+  width: fit-content;
+  flex: 0 1 auto;
+  margin: 0;
+  padding: 4px;
+  gap: 4px;
+  background: #161a1e;
+  border: 1px solid var(--workspace-line);
+  border-radius: 10px;
+}
+.team-primary-tabs [role='tab'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 11px 18px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #929ba7;
+  background: transparent;
+  box-shadow: none;
+}
+.team-primary-tabs [role='tab'][aria-selected='true'] {
+  background: #d8be8914;
+  color: #e5d2ac;
+  box-shadow: 0 1px 3px #0002;
+}
+.team-primary-tabs .ui-icon {
+  width: 16px;
+  height: 16px;
+}
+.team-primary-tabs [role='tab'][aria-selected='true']::after {
+  content: none;
+}
+.team-tab-hint {
+  white-space: nowrap;
+  font-size: 11px;
+  color: #737e8a;
+}
+.team-details-page > [role='tabpanel'] {
+  min-width: 0;
+  outline: none;
+}
+.team-details-page > [role='tabpanel'][hidden] {
+  display: none;
+}
+.team-build-editor-workspace .team-editor {
+  border-radius: 13px;
+  background: #15191d;
+}
+.team-build-editor-workspace .team-editor-header {
+  padding: 19px 20px;
+}
+.team-editor-label {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: #a2a38e;
+  margin-bottom: 8px;
+}
+.team-build-editor-workspace .team-title-field input {
+  font-size: 18px;
+  max-width: 400px;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+.team-build-editor-workspace .team-editor-header p {
+  font-size: 10px;
+  margin-top: 4px;
+}
+.team-build-editor-workspace .team-save-button {
+  min-height: 38px;
+  padding: 10px 13px;
+  font-size: 11px;
+  gap: 12px;
+  border-radius: 8px;
+}
+.team-build-editor-workspace .team-slot-grid {
+  padding: 0 20px 18px;
+  gap: 12px;
+}
+.team-build-editor-workspace .team-slot {
+  height: 156px;
+  border-radius: 10px;
+  background-color: #1b2025;
+}
+.team-build-editor-workspace .team-slot-portrait {
+  height: 93px;
+}
+.team-build-editor-workspace .team-slot-portrait > img {
+  width: 94px;
+  height: 94px;
+}
+.team-build-editor-workspace .team-slot-number {
+  top: 10px;
+  left: 11px;
+  font-size: 9px;
+}
+.team-build-editor-workspace .team-slot-focus > .team-element-crest {
+  top: 10px;
+  right: 11px;
+  width: 15px;
+  height: 15px;
+}
+.team-build-editor-workspace .team-slot-constellation {
+  top: 72px;
+  right: 9px;
+}
+.team-build-editor-workspace .team-slot-copy {
+  padding: 7px 12px 10px;
+}
+.team-build-editor-workspace .team-slot-copy h2 {
+  font-size: 17px;
+  margin-top: 3px;
+}
+.team-build-editor-workspace .team-slot-copy > p {
+  font-size: 9px;
+}
+.team-build-editor-workspace .team-slot-copy small {
+  display: none;
+}
+.team-build-editor-workspace .team-slot-remove {
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  pointer-events: none;
+}
+.team-build-editor-workspace .team-slot:hover .team-slot-remove,
+.team-build-editor-workspace .team-slot:focus-within .team-slot-remove {
+  opacity: 1;
+  pointer-events: auto;
+}
+.team-build-editor-workspace .team-lineup-footer {
+  padding: 11px 20px;
+  font-size: 10px;
+}
+.team-build-editor-workspace .team-lineup-footer .team-element-crest {
+  width: 12px;
+  height: 12px;
+}
+.team-build-editor-workspace .team-save-message:empty {
+  display: none;
+}
+.team-build-editor-workspace .team-workspace-tabs {
+  margin-top: 22px;
+}
+.team-build-editor-workspace .team-workspace-tabs [role='tablist'] {
+  gap: 2px;
+}
+.team-build-editor-workspace .team-workspace-tabs [role='tab'] {
+  padding: 12px 13px;
+  font-size: 11px;
+}
+.team-build-editor-workspace .saved-team-build-grid {
+  gap: 16px;
+}
+.team-build-editor-workspace .saved-member-build {
+  padding: 21px;
+  border-radius: 12px;
+  background: #15191d;
+  border-color: #ffffff10;
+}
+.team-build-editor-workspace .team-member-heading h2 {
+  font-size: 24px;
+}
+.team-build-editor-workspace .team-member-heading time {
+  font-size: 9px;
+}
+.team-build-editor-workspace .team-role-row {
+  margin-block: 18px;
+}
+.team-build-editor-workspace .team-role-row label {
+  font-size: 10px;
+}
+.team-build-editor-workspace .team-role-row select {
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-size: 11px;
+  background: #1c2127;
+}
+.team-build-editor-workspace .team-role-row .team-text-link {
+  font-size: 10px;
+}
+.team-build-editor-workspace .team-stat-strip {
+  border: 0;
+  background: #101419;
+  padding: 15px 6px;
+  border-radius: 9px;
+  gap: 16px 0;
+}
+.team-build-editor-workspace .team-stat-strip dt {
+  font-size: 9px;
+  color: #969faa;
+}
+.team-build-editor-workspace .team-stat-strip dd {
+  font-size: 21px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  margin-top: 6px;
+}
+.team-build-editor-workspace .team-member-full-build {
+  margin-top: 17px;
+}
+.team-member-full-build > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 0 2px;
+  border-top: 1px solid #ffffff12;
+  color: #c4b391;
+  font-size: 11px;
+}
+.team-member-full-build > summary::-webkit-details-marker {
+  display: none;
+}
+.team-member-full-build[open] > summary {
+  margin-bottom: 20px;
+}
+.team-member-full-build[open] > summary > span {
+  transform: rotate(45deg);
+}
+.team-build-editor-workspace .team-member-full-build .team-loadout-heading {
+  margin-top: 18px;
+}
+.team-damage-workspace .team-damage-panel {
+  padding: 0;
+  border: 0;
+  gap: 22px;
+}
+.team-damage-workspace .team-section-intro {
+  margin-bottom: 0;
+}
+.team-damage-workspace .team-section-intro h2 {
+  font-size: 28px;
+  letter-spacing: -0.035em;
+}
+.team-damage-workspace .team-section-intro p {
+  font-size: 12px;
+  max-width: 590px;
+}
+.team-damage-workspace .team-section-intro .eyebrow {
+  font-size: 9px;
+  margin-bottom: 7px;
+}
+.team-damage-workspace .analysis-state {
+  font-size: 10px;
+  padding: 7px 10px;
+  background: #1a1f23;
+  color: #a9b59f;
+  border: 1px solid #a9b59f24;
+  white-space: nowrap;
+}
+.team-damage-workspace .analysis-notice {
+  padding: 15px 18px;
+  background: #bda16b09;
+  border: 1px solid #bda16b30;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #cdbb9b;
+}
+.team-damage-workspace .analysis-notice ul {
+  margin-top: 6px;
+  font-size: 11px;
+}
+.lab-editor-grid {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.lab-target-panel,
+.lab-rotation-panel,
+.lab-test-panel {
+  min-width: 0;
+  border: 1px solid var(--workspace-line);
+  border-radius: 13px;
+  background: #15191d;
+  padding: 20px;
+}
+.lab-target-panel {
+  position: sticky;
+  top: 90px;
+}
+.lab-section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.lab-section-header > span {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid #d8be8930;
+  border-radius: 8px;
+  color: #c6ae7f;
+  font-size: 10px;
+  flex-shrink: 0;
+  background: #d8be8907;
+}
+.lab-section-header h3 {
+  margin: 1px 0 6px;
+  color: #e4e1d7;
+  font-size: 17px;
+  font-weight: 450;
+  letter-spacing: -0.02em;
+}
+.lab-section-header p {
+  font-size: 11px;
+  color: #8b95a1;
+  line-height: 1.7;
+}
+.lab-target-panel .damage-training-dummy {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  gap: 16px;
+  background: none;
+}
+.lab-target-panel .damage-training-dummy h3 {
+  font-size: 18px;
+  margin: 0 0 10px;
+}
+.lab-target-panel .damage-training-dummy p {
+  font-size: 11px;
+  line-height: 1.8;
+}
+.lab-target-panel .damage-training-dummy label {
+  align-self: stretch;
+}
+.lab-target-panel .damage-training-dummy > p {
+  padding: 12px;
+  border: 1px solid #ffffff0a;
+  border-radius: 8px;
+  background: #101419;
+}
+.lab-target-panel .damage-enemy-settings {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--workspace-line);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.team-damage-workspace .damage-settings label {
+  font-size: 10px;
+  color: #9ca5b1;
+  gap: 8px;
+}
+.team-damage-workspace .damage-settings input,
+.team-damage-workspace .damage-settings select {
+  border-radius: 7px;
+  background: #1a2026;
+  border-color: #ffffff13;
+  min-height: 38px;
+  font-size: 11px;
+  color: #dce0e2;
+}
+.lab-template,
+.rotation-readable-plan {
+  border: 1px solid #ffffff10;
+  border-radius: 8px;
+  background: #ffffff02;
+  padding: 12px 14px;
+}
+.lab-template {
+  margin-bottom: 18px;
+}
+.lab-template > summary,
+.rotation-readable-plan > summary,
+.lab-search-method > summary {
+  cursor: pointer;
+  font-size: 11px;
+  color: #b4bbc4;
+}
+.lab-template > summary > span,
+.rotation-readable-plan > summary > span {
+  margin-left: 12px;
+  font-size: 10px;
+  color: #7b8796;
+}
+.lab-template[open] > summary {
+  margin-bottom: 16px;
+}
+.lab-template .damage-rotation-heading {
+  justify-content: flex-start;
+  align-items: end;
+}
+.lab-template p {
+  margin-top: 12px;
+  font-size: 11px;
+}
+.rotation-composer {
+  border: 1px solid #ffffff14;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #11161b;
+}
+.rotation-character-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  padding: 8px;
+  border-bottom: 1px solid #ffffff10;
+}
+.rotation-character-strip button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 5px;
+  color: #939eab;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  font-size: 11px;
+  min-width: 0;
+}
+.rotation-character-strip button > img,
+.rotation-character-strip button > .team-portrait-fallback {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+.rotation-character-strip button > span:last-child {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rotation-character-strip button[aria-pressed='true'] {
+  background: #d8be8911;
+  color: #e3d0a9;
+  border-color: #d8be8933;
+}
+.team-damage-workspace .rotation-action-palette {
+  display: block;
+  padding: 15px;
+}
+.rotation-action-palette > p {
+  font-size: 10px;
+  color: #8b98a6;
+  margin-bottom: 12px;
+}
+.rotation-action-palette > p > strong {
+  font-weight: 500;
+  color: #ccd0d2;
+}
+.team-damage-workspace .rotation-palette-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.team-damage-workspace .rotation-action-palette > .rotation-palette-buttons {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.team-damage-workspace .rotation-palette-buttons button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px;
+  border: 1px solid #ffffff14;
+  border-radius: 7px;
+  background: #20262d;
+  font-size: 11px;
+}
+.rotation-palette-buttons button > span {
+  font-size: 9px;
+  color: #d5c095;
+  padding: 4px 5px;
+  background: #d8be8910;
+  border-radius: 4px;
+  min-width: 23px;
+}
+.rotation-palette-buttons button > i {
+  margin-left: auto;
+  color: #73808f;
+  font-style: normal;
+}
+.team-damage-workspace .rotation-readable-plan {
+  margin-block: 14px;
+  border-left: 1px solid #ffffff10;
+}
+.rotation-readable-plan p {
+  margin-top: 12px;
+  font-size: 11px;
+}
+.team-damage-workspace .rotation-builder-steps {
+  gap: 9px;
+}
+.team-damage-workspace .rotation-builder-steps > li {
+  padding: 13px 15px;
+  border-radius: 9px;
+  background: #1a2026;
+  border-color: #ffffff0c;
+}
+.team-damage-workspace .rotation-builder-steps header {
+  margin-bottom: 6px;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+.team-damage-workspace .rotation-builder-steps header > strong {
+  min-width: 0;
+  font-size: 12px;
+}
+.rotation-step-summary {
+  display: block;
+  padding-left: 26px;
+  margin-top: 7px;
+  font-size: 11px;
+  color: #97a2ae;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.team-damage-workspace .rotation-step-tools {
+  flex-shrink: 0;
+  gap: 4px;
+}
+.team-damage-workspace .rotation-step-tools button {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border-color: #ffffff0d;
+}
+.rotation-step-edit > summary {
+  cursor: pointer;
+  display: inline-block;
+  font-size: 10px;
+  color: #c6b38c;
+  margin: 5px 0 0 26px;
+}
+.rotation-step-edit[open] > summary {
+  margin-bottom: 14px;
+}
+.rotation-step-edit .rotation-step-fields {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.team-damage-workspace .lab-rotation-panel > .analysis-muted {
+  font-size: 10px;
+  line-height: 1.8;
+  color: #7f8b98;
+  margin-block: 14px;
+}
+.lab-rotation-panel > .damage-rotation-actions {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--workspace-line);
+  justify-content: space-between;
+}
+.lab-rotation-panel .damage-rotation-actions button {
+  font-size: 11px;
+  border-radius: 7px;
+}
+.lab-run-options {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 20px;
+}
+.lab-calculate-card {
+  min-width: 0;
+  padding: 20px;
+  background: #d8be8908;
+  border: 1px solid #d8be8921;
+  border-radius: 10px;
+}
+.lab-calculate-card h4 {
+  font-size: 17px;
+  color: #e0d7c6;
+  font-weight: 450;
+  margin-bottom: 10px;
+}
+.lab-calculate-card p {
+  font-size: 11px;
+  color: #a89b83;
+  margin-bottom: 24px;
+}
+.lab-calculate-card button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+.team-damage-workspace .rotation-search-controls {
+  border: 0;
+  padding: 5px 0 0;
+  background: transparent;
+  border-radius: 0;
+}
+.team-damage-workspace .rotation-search-controls h3 {
+  font-family: var(--font-body);
+  font-size: 17px;
+  margin: 0 0 8px;
+  color: #dddcd5;
+  font-weight: 450;
+}
+.team-damage-workspace .rotation-search-controls > p {
+  font-size: 11px;
+  line-height: 1.8;
+}
+.team-damage-workspace .rotation-search-controls .damage-rotation-actions {
+  margin: 15px 0 11px;
+  gap: 10px;
+}
+.lab-search-method {
+  margin-top: 10px;
+}
+.lab-search-method > summary {
+  font-size: 10px;
+  color: #c3b28e;
+}
+.lab-search-method p {
+  margin-top: 10px;
+  font-size: 11px;
+  color: #929daa;
+  line-height: 1.8;
+}
+.lab-results-empty {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 23px;
+  border: 1px dashed #ffffff1a;
+  border-radius: 12px;
+  color: #808d9b;
+  background: #ffffff01;
+}
+.lab-results-empty > span {
+  font-size: 26px;
+  color: #a79571;
+}
+.lab-results-empty h3 {
+  font-size: 14px;
+  color: #c6c9c9;
+  font-weight: 450;
+  margin-bottom: 7px;
+}
+.lab-results-empty p {
+  font-size: 11px;
+  line-height: 1.8;
+}
+.team-damage-workspace .analysis-message:empty {
+  display: none;
+}
+.team-damage-workspace .analysis-message:not(:empty) {
+  padding: 13px 16px;
+  border-radius: 8px;
+  border: 1px solid #d8be8922;
+  background: #d8be8905;
+  font-size: 11px;
+}
+.team-damage-workspace .damage-total {
+  background: linear-gradient(115deg, #d8be8910, #171d24);
+  padding: 25px;
+  border-radius: 13px;
+  gap: 24px;
+}
+.team-damage-workspace .damage-total strong {
+  font-size: clamp(30px, 3vw, 44px);
+  font-variant-numeric: tabular-nums;
+}
+.team-damage-workspace .damage-member-results {
+  gap: 14px;
+}
+.team-damage-workspace .damage-member-results > div {
+  border: 1px solid var(--workspace-line);
+  border-radius: 10px;
+  padding: 17px;
+  background: #151a20;
+}
+.team-damage-workspace .rotation-search-results > article {
+  background: #151a20;
+  border-radius: 12px;
+}
+.team-damage-workspace .rotation-search-results > article:first-of-type {
+  background: linear-gradient(115deg, #d8be890d, #151a20);
+}
+.team-damage-workspace .rotation-search-results article ol {
+  gap: 8px 23px;
+}
+.team-damage-workspace > .team-damage-panel > .analysis-disclosure {
+  border: 1px solid var(--workspace-line);
+  border-radius: 10px;
+  padding: 15px;
+  color: #9ca7b4;
+}
+.team-damage-workspace > .team-damage-panel > .analysis-disclosure > summary {
+  font-size: 11px;
+  cursor: pointer;
+}
+.team-damage-workspace > .team-damage-panel > .analysis-disclosure > p {
+  margin-top: 16px;
+}
+@media (max-width: 1100px) {
+  .lab-editor-grid {
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .lab-target-panel,
+  .lab-rotation-panel,
+  .lab-test-panel {
+    padding: 16px;
+  }
+  .team-hero-roster {
+    max-width: 210px;
+  }
+}
+@media (max-width: 950px) {
+  .lab-editor-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lab-target-panel {
+    position: static;
+  }
+  .lab-target-panel .damage-training-dummy {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .lab-target-panel .damage-training-dummy > p {
+    grid-column: 1 / -1;
+  }
+  .team-tab-hint {
+    display: none;
+  }
+  .team-workspace-hero {
+    padding: 23px;
+    gap: 20px;
+  }
+  .team-hero-roster {
+    display: none;
+  }
+  .team-build-editor-workspace .team-slot-remove {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+@media (max-width: 650px) {
+  .team-primary-tabs {
+    top: 64px;
+  }
+  .companion-shell main.team-details-page {
+    padding-top: 20px;
+    gap: 18px;
+  }
+  .team-workspace-hero {
+    padding: 21px 18px;
+    border-radius: 12px;
+  }
+  .team-workspace-hero .page-heading h1 {
+    font-size: 32px;
+  }
+  .team-workspace-hero .page-description {
+    font-size: 11px;
+    line-height: 1.8;
+  }
+  .team-hero-meta {
+    font-size: 9px;
+    gap: 8px 12px;
+    margin-top: 14px;
+  }
+  .team-primary-tabs [role='tablist'] {
+    width: 100%;
+  }
+  .team-primary-tabs [role='tab'] {
+    flex: 1;
+    padding: 11px 9px;
+    font-size: 11px;
+    gap: 7px;
+  }
+  .team-build-editor-workspace .team-editor-header {
+    padding: 16px;
+    gap: 10px;
+  }
+  .team-build-editor-workspace .team-slot-grid {
+    padding: 0 14px 14px;
+    gap: 9px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .team-build-editor-workspace .team-slot {
+    height: 142px;
+  }
+  .team-build-editor-workspace .team-slot-portrait {
+    height: 80px;
+  }
+  .team-build-editor-workspace .team-slot-portrait > img {
+    width: 83px;
+    height: 83px;
+  }
+  .team-build-editor-workspace .team-slot-copy h2 {
+    font-size: 16px;
+  }
+  .team-build-editor-workspace .team-slot-constellation {
+    top: 60px;
+  }
+  .team-build-editor-workspace .team-lineup-footer {
+    padding: 11px 15px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .team-build-editor-workspace .team-save-button {
+    font-size: 10px;
+    gap: 5px;
+    padding: 9px 11px;
+    min-height: 36px;
+  }
+  .team-build-editor-workspace .team-save-button .ui-icon {
+    width: 13px;
+  }
+  .team-build-editor-workspace .team-title-field input {
+    font-size: 16px;
+  }
+  .team-build-editor-workspace .saved-member-build {
+    padding: 17px;
+  }
+  .team-build-editor-workspace .team-stat-strip dd {
+    font-size: 20px;
+  }
+  .team-build-editor-workspace .team-workspace-tabs [role='tab'] {
+    font-size: 10px;
+    padding: 10px;
+  }
+  .team-damage-workspace .team-section-intro h2 {
+    font-size: 25px;
+  }
+  .lab-target-panel .damage-training-dummy {
+    display: flex;
+  }
+  .lab-run-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lab-calculate-card {
+    padding: 17px;
+  }
+  .team-damage-workspace .rotation-character-strip button {
+    font-size: 10px;
+    padding: 9px 2px;
+  }
+  .rotation-character-strip button > img {
+    width: 34px;
+    height: 34px;
+  }
+  .team-damage-workspace .rotation-palette-buttons button {
+    font-size: 10px;
+    padding: 8px;
+    gap: 5px;
+  }
+  .team-damage-workspace .rotation-action-palette {
+    padding: 12px;
+  }
+  .team-damage-workspace .rotation-builder-steps > li {
+    padding: 12px;
+  }
+  .team-damage-workspace .rotation-builder-steps header > strong {
+    font-size: 11px;
+  }
+  .team-damage-workspace .rotation-step-tools button {
+    width: 32px;
+    height: 32px;
+  }
+  .rotation-step-summary {
+    font-size: 10px;
+  }
+  .team-damage-workspace .damage-total {
+    padding: 20px;
+  }
+  .team-damage-workspace .damage-member-results {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .team-details-page *,
+  .team-details-page *::before,
+  .team-details-page *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

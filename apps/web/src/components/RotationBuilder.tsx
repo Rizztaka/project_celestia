@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import type { SavedUidTeam } from '../lib/build-analysis/teams-storage';
 import type { CharacterObservation } from '../lib/observed-roster';
 import { engineCharacter, type RotationStep } from '../lib/team-damage/calculator';
@@ -18,6 +20,11 @@ export default function RotationBuilder({
   steps: RotationStep[];
   onChange: (steps: RotationStep[]) => void;
 }) {
+  const [selected, setSelected] = useState(team.members[0]?.characterKey ?? '');
+  const selectedKey = team.members.some((member) => member.characterKey === selected)
+    ? selected
+    : (team.members[0]?.characterKey ?? '');
+  const actions = engineCharacter(selectedKey)?.actions ?? [];
   const characters = team.members.map(
     (member) =>
       records.find(
@@ -38,61 +45,78 @@ export default function RotationBuilder({
   }
   return (
     <>
-      <div className="rotation-action-palette" aria-label="Add character actions">
-        {team.members.map((member, index) => {
-          const character = characters[index];
-          const actions = engineCharacter(member.characterKey)?.actions ?? [];
-          return (
-            <div key={member.characterKey}>
-              <div className="rotation-palette-character">
-                {character ? <TeamPortrait character={character} /> : null}
-                <strong>{names[member.characterKey] ?? member.characterKey}</strong>
-              </div>
-              <div className="rotation-palette-buttons">
-                {[
-                  ['skill', 'Skill · E'],
-                  ['burst', 'Burst · Q'],
-                  ['attack', 'Normal attack'],
-                  ['charge', 'Charged attack'],
-                ]
-                  .filter(([action]) => actions.some((a) => a.action === action))
-                  .map(([action, label]) => (
-                    <button
-                      key={action}
-                      type="button"
-                      className="button-secondary"
-                      disabled={steps.length >= 64}
-                      aria-label={`Add ${names[member.characterKey] ?? member.characterKey} ${actionLabels[action]}`}
-                      onClick={() =>
-                        onChange([
-                          ...steps,
-                          {
-                            characterKey: member.characterKey,
-                            action,
-                            repeat: 1,
-                            waitFrames: 0,
-                            params: '',
-                          },
-                        ])
-                      }
-                    >
-                      {label} ＋
-                    </button>
-                  ))}
-                {!actions.length ? <small>Actions unavailable for this kit.</small> : null}
-              </div>
-            </div>
-          );
-        })}
+      <div className="rotation-composer">
+        <div
+          className="rotation-character-strip"
+          role="group"
+          aria-label="Choose a character for the rotation"
+        >
+          {team.members.map((member, index) => (
+            <button
+              type="button"
+              key={member.characterKey}
+              aria-label={`Choose ${names[member.characterKey] ?? member.characterKey} for rotation`}
+              aria-pressed={selectedKey === member.characterKey}
+              onClick={() => setSelected(member.characterKey)}
+            >
+              {characters[index] ? (
+                <TeamPortrait character={characters[index]!} />
+              ) : (
+                <span aria-hidden="true">?</span>
+              )}
+              <span>{names[member.characterKey] ?? 'Unavailable'}</span>
+            </button>
+          ))}
+        </div>
+        <div className="rotation-action-palette" aria-label="Add character actions">
+          <p>
+            Add an action for <strong>{names[selectedKey] ?? 'this character'}</strong>
+          </p>
+          <div className="rotation-palette-buttons">
+            {[
+              ['skill', 'Skill', 'E'],
+              ['burst', 'Burst', 'Q'],
+              ['attack', 'Normal attack', 'NA'],
+              ['charge', 'Charged attack', 'CA'],
+            ]
+              .filter(([action]) => actions.some((a) => a.action === action))
+              .map(([action, label, shortcut]) => (
+                <button
+                  key={action}
+                  type="button"
+                  className="button-secondary"
+                  disabled={steps.length >= 64}
+                  aria-label={`Add ${names[selectedKey] ?? selectedKey} ${actionLabels[action]}`}
+                  onClick={() =>
+                    onChange([
+                      ...steps,
+                      { characterKey: selectedKey, action, repeat: 1, waitFrames: 0, params: '' },
+                    ])
+                  }
+                >
+                  <span>{shortcut}</span>
+                  {label}
+                  <i aria-hidden="true">＋</i>
+                </button>
+              ))}
+            {!actions.length ? (
+              <small>
+                Actions are unavailable for this kit. Other members can still be edited.
+              </small>
+            ) : null}
+          </div>
+        </div>
       </div>
-      <div className="rotation-readable-plan" aria-label="Rotation preview">
-        <span>YOUR REPEATING LOOP</span>
+      <details className="rotation-readable-plan" aria-label="Rotation preview">
+        <summary>
+          Read the full loop <span>{steps.length} steps</span>
+        </summary>
         <p>
           {preview.length
             ? preview.join(' → ')
             : 'Tap a character’s Skill, Burst or attack above to start.'}
         </p>
-      </div>
+      </details>
       <ol className="rotation-builder-steps" aria-label="Rotation steps">
         {steps.map((step, index) => {
           const profile = engineCharacter(step.characterKey);
@@ -103,6 +127,12 @@ export default function RotationBuilder({
                 <strong>
                   <span>{String(index + 1).padStart(2, '0')}</span>{' '}
                   {names[step.characterKey] ?? 'Unavailable member'}
+                  <small className="rotation-step-summary">
+                    {actionLabels[step.action] ?? step.action}
+                    {step.params ? ' · custom action' : ''}
+                    {step.repeat > 1 ? ` ×${step.repeat}` : ''}
+                    {step.waitFrames ? ` · wait ${Number((step.waitFrames / 60).toFixed(3))}s` : ''}
+                  </small>
                 </strong>
                 <div className="rotation-step-tools">
                   <button
@@ -130,90 +160,97 @@ export default function RotationBuilder({
                   </button>
                 </div>
               </header>
-              <div className="rotation-step-fields">
-                <label>
-                  Character
-                  <select
-                    aria-label={`Step ${index + 1} character`}
-                    value={step.characterKey}
-                    onChange={(event) =>
-                      change(index, {
-                        characterKey: event.target.value,
-                        action: 'skill',
-                        params: '',
-                      })
-                    }
+              <details className="rotation-step-edit">
+                <summary>Edit step</summary>
+                <div className="rotation-step-fields">
+                  <label>
+                    Character
+                    <select
+                      aria-label={`Step ${index + 1} character`}
+                      value={step.characterKey}
+                      onChange={(event) =>
+                        change(index, {
+                          characterKey: event.target.value,
+                          action: 'skill',
+                          params: '',
+                        })
+                      }
+                    >
+                      {!team.members.some((m) => m.characterKey === step.characterKey) ? (
+                        <option value={step.characterKey}>Unavailable member</option>
+                      ) : null}
+                      {team.members.map((member) => (
+                        <option key={member.characterKey} value={member.characterKey}>
+                          {names[member.characterKey] ?? member.characterKey}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Do this
+                    <select
+                      aria-label={`Step ${index + 1} action`}
+                      value={step.action}
+                      onChange={(event) =>
+                        change(index, { action: event.target.value, params: '' })
+                      }
+                    >
+                      {profile?.actions.map((a) => (
+                        <option key={a.action} value={a.action}>
+                          {actionLabels[a.action] ?? a.action}
+                        </option>
+                      )) ?? <option value={step.action}>Unsupported action</option>}
+                    </select>
+                  </label>
+                  <label>
+                    Repeat
+                    <input
+                      aria-label={`Step ${index + 1} repeats`}
+                      type="number"
+                      min={1}
+                      max={20}
+                      value={numericValue(step.repeat)}
+                      onChange={(event) => change(index, { repeat: event.target.valueAsNumber })}
+                    />
+                  </label>
+                  <label>
+                    Wait after (seconds)
+                    <input
+                      aria-label={`Step ${index + 1} wait seconds`}
+                      type="number"
+                      min={0}
+                      max={30}
+                      step="any"
+                      value={numericValue(Number((step.waitFrames / 60).toFixed(3)))}
+                      onChange={(event) =>
+                        change(index, { waitFrames: Math.round(event.target.valueAsNumber * 60) })
+                      }
+                    />
+                  </label>
+                </div>
+                <details className="damage-step-options">
+                  <summary>
+                    Advanced action options{action?.note ? ' / character notes' : ''}
+                  </summary>
+                  {action?.note ? <p className="analysis-muted">{action.note}</p> : null}
+                  <label>
+                    Numeric parameters
+                    <input
+                      aria-label={`Step ${index + 1} parameters`}
+                      maxLength={160}
+                      placeholder="e.g. hold=1"
+                      value={step.params}
+                      onChange={(event) => change(index, { params: event.target.value })}
+                    />
+                  </label>
+                  <a
+                    href={`https://docs.gcsim.app/reference/characters/${profile?.key ?? ''}/`}
+                    target="_blank"
+                    rel="noreferrer"
                   >
-                    {!team.members.some((m) => m.characterKey === step.characterKey) ? (
-                      <option value={step.characterKey}>Unavailable member</option>
-                    ) : null}
-                    {team.members.map((member) => (
-                      <option key={member.characterKey} value={member.characterKey}>
-                        {names[member.characterKey] ?? member.characterKey}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label>
-                  Do this
-                  <select
-                    aria-label={`Step ${index + 1} action`}
-                    value={step.action}
-                    onChange={(event) => change(index, { action: event.target.value, params: '' })}
-                  >
-                    {profile?.actions.map((a) => (
-                      <option key={a.action} value={a.action}>
-                        {actionLabels[a.action] ?? a.action}
-                      </option>
-                    )) ?? <option value={step.action}>Unsupported action</option>}
-                  </select>
-                </label>
-                <label>
-                  Repeat
-                  <input
-                    aria-label={`Step ${index + 1} repeats`}
-                    type="number"
-                    min={1}
-                    max={20}
-                    value={numericValue(step.repeat)}
-                    onChange={(event) => change(index, { repeat: event.target.valueAsNumber })}
-                  />
-                </label>
-                <label>
-                  Wait after (seconds)
-                  <input
-                    aria-label={`Step ${index + 1} wait seconds`}
-                    type="number"
-                    min={0}
-                    max={30}
-                    step="any"
-                    value={numericValue(Number((step.waitFrames / 60).toFixed(3)))}
-                    onChange={(event) =>
-                      change(index, { waitFrames: Math.round(event.target.valueAsNumber * 60) })
-                    }
-                  />
-                </label>
-              </div>
-              <details className="damage-step-options">
-                <summary>Advanced action options{action?.note ? ' / character notes' : ''}</summary>
-                {action?.note ? <p className="analysis-muted">{action.note}</p> : null}
-                <label>
-                  Numeric parameters
-                  <input
-                    aria-label={`Step ${index + 1} parameters`}
-                    maxLength={160}
-                    placeholder="e.g. hold=1"
-                    value={step.params}
-                    onChange={(event) => change(index, { params: event.target.value })}
-                  />
-                </label>
-                <a
-                  href={`https://docs.gcsim.app/reference/characters/${profile?.key ?? ''}/`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Character action reference ↗
-                </a>
+                    Character action reference ↗
+                  </a>
+                </details>
               </details>
             </li>
           );

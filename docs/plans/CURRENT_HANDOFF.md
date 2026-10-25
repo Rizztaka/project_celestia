@@ -1,3 +1,14 @@
+> **2026-10-25 individual team UI redesign:** A compact hero and persistent
+> Lineup & builds / Damage lab sections replace the long competing stack. Short
+> roster cards, expandable member equipment/advice and a focused character/action
+> composer simplify the page. The lab groups target, rotation and test/search
+> controls; numerical behavior and all existing tools remain. Hidden panels keep
+> drafts, results and running jobs. Save changes requires an actual edit.
+> **146/146 tests**, web build/types/lint and scoped tooling lint pass. Actual
+> browser state preservation, equipment expansion, matching real-engine damage,
+> search results and 390/320px layouts verified with isolated synthetic fixtures.
+> [Design, behavior, checks and screenshots](character-team-build-analyzers/team-workspace-redesign.md).
+
 > **2026-10-25 training dummy and player rotation tools:** New runs default to a
 > non-dying Lv.100 target with 0% uniform elemental/Physical starting RES; 10% and
 > custom presets preserve fair target conditions. Portrait action buttons, step

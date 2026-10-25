@@ -181,32 +181,20 @@ export default function TeamDamagePanel({
     }
   }
   return (
-    <details className="team-damage-disclosure">
-      <summary>
-        <span>
-          <small>TEAM DAMAGE</small>
-          <strong>Calculate this lineup’s damage</strong>
-          <span>Choose a rotation and enemy to estimate team DPS.</span>
-        </span>
-        <span aria-hidden="true">↗</span>
-      </summary>
+    <div className="team-damage-workspace">
       <section className="team-damage-panel" aria-labelledby="team-damage-title">
         <header className="team-section-intro">
           <div>
-            <p className="eyebrow">PLAY IT THROUGH</p>
-            <h2 id="team-damage-title">Team damage</h2>
+            <p className="eyebrow">TEST. COMPARE. REFINE.</p>
+            <h2 id="team-damage-title">Damage lab</h2>
             <p>
-              Simulate your saved lineup using your rotation. Save any build edits below before
-              calculating.
+              A focused space for your target, rotation and next improvement. Save lineup edits
+              before testing.
             </p>
           </div>
-          <span className="analysis-state">Rotation simulation</span>
+          <span className="analysis-state">Calculated on your device</span>
         </header>
-        <p className="analysis-muted">
-          The simulator rebuilds stats from levels, base talents, weapons and artifacts, then
-          evaluates attacks, reactions and team effects. Roles guide build advice; they do not
-          multiply damage.
-        </p>
+
         {messages.length ? (
           <div className="analysis-notice" role="status">
             <strong>Complete team damage is unavailable for this build.</strong>
@@ -219,222 +207,271 @@ export default function TeamDamagePanel({
         ) : null}
         <fieldset disabled={running} className="damage-settings">
           <legend className="sr-only">Simulation settings and rotation</legend>
-          <div className="damage-training-dummy">
-            <div>
-              <p className="eyebrow">ONE TARGET. FAIR COMPARISONS.</p>
-              <h3>
-                Training dummy <span>∞ HP</span>
-              </h3>
-              <p>
-                One stationary enemy that cannot die during the timed test. No shields, phases,
-                attacks or HP-drop particles.
-              </p>
-            </div>
-            <label>
-              Training dummy preset
-              <select
-                value={customTarget ? 'custom' : settings.resistance === 0 ? 'neutral' : 'standard'}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  setCustomTarget(value === 'custom');
-                  if (value !== 'custom')
-                    setSettings((current) => ({
-                      ...current,
-                      enemyLevel: 100,
-                      resistance: value === 'neutral' ? 0 : 10,
-                    }));
-                }}
-              >
-                <option value="neutral">Neutral · Lv. 100 · 0% RES</option>
-                <option value="standard">Standard · Lv. 100 · 10% RES</option>
-                <option value="custom">Custom level / uniform RES</option>
-              </select>
-            </label>
-            <p className="analysis-muted">
-              Starting resistance: <strong>{settings.resistance}%</strong> to Pyro, Hydro, Cryo,
-              Electro, Anemo, Geo, Dendro and Physical. Normal level-based DEF and your team’s
-              resistance reductions still apply. Every search candidate uses this exact dummy and
-              test duration.
-            </p>
-          </div>
-          <div className="damage-enemy-settings">
-            <label>
-              Duration (seconds)
-              <input
-                type="number"
-                min={10}
-                max={180}
-                value={numericValue(settings.duration)}
-                onChange={(e) => setSettings((s) => ({ ...s, duration: e.target.valueAsNumber }))}
+          <div className="lab-editor-grid">
+            <aside className="lab-target-panel">
+              <header className="lab-section-header">
+                <span>01</span>
+                <div>
+                  <h3>Set the target</h3>
+                  <p>Same conditions. Fair comparisons.</p>
+                </div>
+              </header>
+              <div className="damage-training-dummy">
+                <div>
+                  <h3>
+                    Training dummy <span>∞ HP</span>
+                  </h3>
+                  <p>
+                    One target that cannot die during the timed test. No shields or enemy attacks.
+                  </p>
+                </div>
+                <label>
+                  Training dummy preset
+                  <select
+                    value={
+                      customTarget ? 'custom' : settings.resistance === 0 ? 'neutral' : 'standard'
+                    }
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      setCustomTarget(value === 'custom');
+                      if (value !== 'custom')
+                        setSettings((current) => ({
+                          ...current,
+                          enemyLevel: 100,
+                          resistance: value === 'neutral' ? 0 : 10,
+                        }));
+                    }}
+                  >
+                    <option value="neutral">Neutral · Lv. 100 · 0% RES</option>
+                    <option value="standard">Standard · Lv. 100 · 10% RES</option>
+                    <option value="custom">Custom level / uniform RES</option>
+                  </select>
+                </label>
+                <p className="analysis-muted">
+                  All elements &amp; Physical start at <strong>{settings.resistance}% RES</strong>.
+                  Level-based DEF and your team’s resistance reductions still apply.
+                </p>
+              </div>
+              <div className="damage-enemy-settings">
+                <label>
+                  Duration (seconds)
+                  <input
+                    type="number"
+                    min={10}
+                    max={180}
+                    value={numericValue(settings.duration)}
+                    onChange={(e) =>
+                      setSettings((s) => ({ ...s, duration: e.target.valueAsNumber }))
+                    }
+                  />
+                </label>
+                {customTarget ? (
+                  <label>
+                    Enemy level
+                    <input
+                      type="number"
+                      min={1}
+                      max={200}
+                      value={numericValue(settings.enemyLevel)}
+                      onChange={(e) =>
+                        setSettings((s) => ({ ...s, enemyLevel: e.target.valueAsNumber }))
+                      }
+                    />
+                  </label>
+                ) : null}
+                {customTarget ? (
+                  <label>
+                    Starting resistance to all damage (%)
+                    <input
+                      type="number"
+                      min={-100}
+                      max={300}
+                      value={numericValue(settings.resistance)}
+                      onChange={(e) =>
+                        setSettings((s) => ({ ...s, resistance: e.target.valueAsNumber }))
+                      }
+                    />
+                  </label>
+                ) : null}
+                <label>
+                  Simulation samples
+                  <select
+                    value={settings.samples}
+                    onChange={(e) =>
+                      setSettings((s) => ({ ...s, samples: Number(e.target.value) }))
+                    }
+                  >
+                    {[1, 10, 20, 50].map((n) => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            </aside>
+            <section className="lab-rotation-panel">
+              <header className="lab-section-header">
+                <span>02</span>
+                <div>
+                  <h3>Your rotation</h3>
+                  <p>Choose a character. Add an action. Make it yours.</p>
+                </div>
+              </header>
+              <details className="lab-template">
+                <summary>
+                  Start from a basic template <span>Optional</span>
+                </summary>
+                <div className="damage-rotation-heading">
+                  <label>
+                    On-field attacker for template
+                    <select
+                      value={starterDriver}
+                      onChange={(event) => setStarterDriver(event.target.value)}
+                    >
+                      <option value="">Choose a character</option>
+                      {team.members.map((member) => (
+                        <option key={member.characterKey} value={member.characterKey}>
+                          {names[member.characterKey] ?? member.characterKey}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <button
+                    type="button"
+                    className="button-secondary"
+                    disabled={!team.members.some((member) => member.characterKey === starterDriver)}
+                    onClick={loadStarter}
+                  >
+                    Load basic rotation
+                  </button>
+                </div>
+                <p className="analysis-muted">
+                  Start with a template, or tap actions below. Each card is one step in your
+                  repeating rotation. Add Bursts, set attack counts and move cards into the order
+                  you play. Templates are editable starting points.
+                </p>
+              </details>
+              <RotationBuilder
+                team={team}
+                records={records}
+                steps={settings.steps}
+                onChange={(steps) => setSettings((current) => ({ ...current, steps }))}
               />
-            </label>
-            {customTarget ? (
-              <label>
-                Enemy level
-                <input
-                  type="number"
-                  min={1}
-                  max={200}
-                  value={numericValue(settings.enemyLevel)}
-                  onChange={(e) =>
-                    setSettings((s) => ({ ...s, enemyLevel: e.target.valueAsNumber }))
+              <div className="damage-rotation-actions">
+                <button
+                  type="button"
+                  className="button-secondary"
+                  disabled={settings.steps.length >= 64}
+                  onClick={() =>
+                    setSettings((s) => ({
+                      ...s,
+                      steps: [...s.steps, stepFor(team.members[0].characterKey)],
+                    }))
                   }
-                />
-              </label>
-            ) : null}
-            {customTarget ? (
-              <label>
-                Starting resistance to all damage (%)
-                <input
-                  type="number"
-                  min={-100}
-                  max={300}
-                  value={numericValue(settings.resistance)}
-                  onChange={(e) =>
-                    setSettings((s) => ({ ...s, resistance: e.target.valueAsNumber }))
-                  }
-                />
-              </label>
-            ) : null}
-            <label>
-              Simulation samples
-              <select
-                value={settings.samples}
-                onChange={(e) => setSettings((s) => ({ ...s, samples: Number(e.target.value) }))}
-              >
-                {[1, 10, 20, 50].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <div className="damage-rotation-heading">
-            <h3>Your rotation</h3>
-            <label>
-              On-field attacker for template
-              <select
-                value={starterDriver}
-                onChange={(event) => setStarterDriver(event.target.value)}
-              >
-                <option value="">Choose a character</option>
-                {team.members.map((member) => (
-                  <option key={member.characterKey} value={member.characterKey}>
-                    {names[member.characterKey] ?? member.characterKey}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button
-              type="button"
-              className="button-secondary"
-              disabled={!team.members.some((member) => member.characterKey === starterDriver)}
-              onClick={loadStarter}
-            >
-              Load basic rotation
-            </button>
-          </div>
-          <p className="analysis-muted">
-            Start with a template, or tap actions below. Each card is one step in your repeating
-            rotation. Add Bursts, set attack counts and move cards into the order you play.
-            Templates are editable starting points.
-          </p>
-          <RotationBuilder
-            team={team}
-            records={records}
-            steps={settings.steps}
-            onChange={(steps) => setSettings((current) => ({ ...current, steps }))}
-          />
-          <div className="damage-rotation-actions">
-            <button
-              type="button"
-              className="button-secondary"
-              disabled={settings.steps.length >= 64}
-              onClick={() =>
-                setSettings((s) => ({
-                  ...s,
-                  steps: [...s.steps, stepFor(team.members[0].characterKey)],
-                }))
-              }
-            >
-              ＋ Add step
-            </button>
-            <button
-              type="button"
-              className="button-secondary"
-              onClick={() => {
-                try {
-                  saveDamageSettings(uid, team.id, settings);
-                  setStatus('Rotation saved in this browser.');
-                } catch {
-                  setError('Could not save this rotation. Check the settings and browser storage.');
-                }
-              }}
-            >
-              Save rotation
-            </button>
-          </div>
-          {settings.steps.length && input.issues.some((i) => i.code === 'invalid_rotation') ? (
-            <p role="status" className="analysis-notice">
-              {explainDamageIssue({ code: 'invalid_rotation' }, names)}
-            </p>
-          ) : null}
-          <p className="analysis-muted">
-            Timed training dummy, full starting character HP/energy, no external particles, 12-frame
-            swap delay. Cooldown and energy limits stay enabled. Conditional passives use the
-            engine’s defaults. The first run downloads about 9 MB of simulator data; calculation
-            stays on your device.
-          </p>
-          <button
-            type="button"
-            className="button-primary"
-            disabled={!input.config}
-            onClick={() => void run()}
-          >
-            Calculate team damage
-          </button>
-          <section className="rotation-search-controls" aria-labelledby="rotation-search-title">
-            <p className="eyebrow">TRY A STRONGER SEQUENCE</p>
-            <h3 id="rotation-search-title">Find a better rotation</h3>
-            <p>
-              Consecutive steps for one character form a turn. Try different orders for these turns,
-              plus 3, 6 or 9 repeats of the last Normal attack step. Each turn keeps its own Skill,
-              Burst and combo order. Add the actions you want tested in the builder first.
-            </p>
-            <div className="damage-rotation-actions">
-              <label>
-                Search size
-                <select
-                  value={searchLimit}
-                  onChange={(event) => setSearchLimit(Number(event.target.value) as 12 | 48)}
                 >
-                  <option value={12}>Quick · up to 12 rotations</option>
-                  <option value={48}>Wider · up to 48 rotations</option>
-                </select>
-              </label>
-              <button
-                type="button"
-                className="button-secondary"
-                disabled={!input.config || plannedSearch.candidates.length < 2}
-                onClick={() => void search()}
-              >
-                Find best tested rotation
-              </button>
+                  ＋ Add step
+                </button>
+                <button
+                  type="button"
+                  className="button-secondary"
+                  onClick={() => {
+                    try {
+                      saveDamageSettings(uid, team.id, settings);
+                      setStatus('Rotation saved in this browser.');
+                    } catch {
+                      setError(
+                        'Could not save this rotation. Check the settings and browser storage.',
+                      );
+                    }
+                  }}
+                >
+                  Save rotation
+                </button>
+              </div>
+              {settings.steps.length && input.issues.some((i) => i.code === 'invalid_rotation') ? (
+                <p role="status" className="analysis-notice">
+                  {explainDamageIssue({ code: 'invalid_rotation' }, names)}
+                </p>
+              ) : null}
+            </section>
+          </div>
+          <section className="lab-test-panel">
+            <header className="lab-section-header">
+              <span>03</span>
+              <div>
+                <h3>Test &amp; improve</h3>
+                <p>Measure your loop, then explore a stronger sequence.</p>
+              </div>
+            </header>
+            <div className="lab-run-options">
+              <div className="lab-calculate-card">
+                <h4>Test your current rotation</h4>
+                <p>
+                  {settings.steps.length} steps · {settings.duration}s · {settings.samples} samples
+                </p>
+                <button
+                  type="button"
+                  className="button-primary"
+                  disabled={!input.config}
+                  onClick={() => void run()}
+                >
+                  Calculate team damage
+                </button>
+              </div>
+              <section className="rotation-search-controls" aria-labelledby="rotation-search-title">
+                <h3 id="rotation-search-title">Find a better rotation</h3>
+                <p>
+                  Compare alternatives against your current loop, using the same target and builds.
+                </p>
+                <div className="damage-rotation-actions">
+                  <label>
+                    Search size
+                    <select
+                      value={searchLimit}
+                      onChange={(event) => setSearchLimit(Number(event.target.value) as 12 | 48)}
+                    >
+                      <option value={12}>Quick · up to 12 rotations</option>
+                      <option value={48}>Wider · up to 48 rotations</option>
+                    </select>
+                  </label>
+                  <button
+                    type="button"
+                    className="button-secondary"
+                    disabled={!input.config || plannedSearch.candidates.length < 2}
+                    onClick={() => void search()}
+                  >
+                    Find best tested rotation
+                  </button>
+                </div>
+                <p className="analysis-muted">
+                  {plannedSearch.candidates.length} candidates · {settings.samples} verification
+                  samples · best tested, with no global-maximum guarantee.
+                </p>
+                <details className="lab-search-method">
+                  <summary>How the search works</summary>{' '}
+                  <p>
+                    Consecutive steps for one character form a turn. Try different orders for these
+                    turns, plus 3, 6 or 9 repeats of the last Normal attack step. Each turn keeps
+                    its own Skill, Burst and combo order. Add the actions you want tested in the
+                    builder first.
+                  </p>{' '}
+                  <p className="analysis-muted">
+                    Screens {plannedSearch.candidates.length} candidates with seed 1, then verifies
+                    the top three and your current rotation with the same {settings.samples} samples
+                    each. Ranks verified finalists by average DPS over {settings.duration}s. This is
+                    a bounded search, not a proof of the highest possible damage. Longer searches
+                    may take a few minutes.
+                  </p>
+                </details>
+                {plannedSearch.issue === 'turn_limit' ? (
+                  <p role="status">
+                    Search supports up to 8 character turns. Combine adjacent actions for the same
+                    character or simplify your loop. Manual calculation still supports 64 steps.
+                  </p>
+                ) : null}
+              </section>
             </div>
-            <p className="analysis-muted">
-              Screens {plannedSearch.candidates.length} candidates with seed 1, then verifies the
-              top three and your current rotation with the same {settings.samples} samples each.
-              Ranks verified finalists by average DPS over {settings.duration}s. This is a bounded
-              search, not a proof of the highest possible damage. Longer searches may take a few
-              minutes.
-            </p>
-            {plannedSearch.issue === 'turn_limit' ? (
-              <p role="status">
-                Search supports up to 8 character turns. Combine adjacent actions for the same
-                character or simplify your loop. Manual calculation still supports 64 steps.
-              </p>
-            ) : null}
           </section>
         </fieldset>
         {running ? (
@@ -449,6 +486,15 @@ export default function TeamDamagePanel({
           <p role="alert" className="analysis-notice">
             {error}
           </p>
+        ) : null}
+        {!result && !searchReport && !running ? (
+          <section className="lab-results-empty" aria-label="No damage results yet">
+            <span aria-hidden="true">◇</span>
+            <div>
+              <h3>Ready for your first test</h3>
+              <p>Your DPS, damage breakdown and tested alternatives will appear here.</p>
+            </div>
+          </section>
         ) : null}
         {freshSearch ? (
           <section className="rotation-search-results" aria-label="Rotation search results">
@@ -582,7 +628,18 @@ export default function TeamDamagePanel({
           </p>
         ) : null}
         <details className="analysis-disclosure">
-          <summary>Calculation source and generated configuration</summary>
+          <summary>Test conditions, engine &amp; generated configuration</summary>
+          <p className="analysis-muted">
+            The simulator rebuilds stats from levels, base talents, weapons and artifacts, then
+            evaluates attacks, reactions and team effects. Roles guide build advice; they do not
+            multiply damage.
+          </p>
+          <p className="analysis-muted">
+            Timed training dummy, full starting character HP/energy, no external particles, 12-frame
+            swap delay. Cooldown and energy limits stay enabled. Conditional passives use the
+            engine’s defaults. The first run downloads about 9 MB of simulator data; calculation
+            stays on your device.
+          </p>
           <p className="analysis-muted">
             Pinned{' '}
             <a
@@ -604,6 +661,6 @@ export default function TeamDamagePanel({
           </a>
         </details>
       </section>
-    </details>
+    </div>
   );
 }

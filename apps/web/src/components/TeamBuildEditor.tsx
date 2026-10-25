@@ -30,11 +30,13 @@ export default function TeamBuildEditor({
   uid,
   savedTeam,
   initialDraft,
+  presentation = 'default',
   onSaved,
 }: {
   uid: string;
   savedTeam?: SavedUidTeam;
   initialDraft?: Draft;
+  presentation?: 'default' | 'workspace';
   onSaved: (team: SavedUidTeam) => void;
 }) {
   const { query } = useUidWorkspace();
@@ -132,6 +134,7 @@ export default function TeamBuildEditor({
           hypothesis: null,
         }}
         teamId={savedContextMatches ? current.id : undefined}
+        compact={presentation === 'workspace' && activeView === 'members'}
         onRole={(roleId) => {
           const slots = [...current.slots];
           slots[slot] = { ...member, roleId };
@@ -151,7 +154,7 @@ export default function TeamBuildEditor({
   }
   return (
     <section
-      className="team-build-editor"
+      className={`team-build-editor ${presentation === 'workspace' ? 'team-build-editor-workspace' : ''}`}
       aria-label={savedTeam ? `Edit ${savedTeam.name}` : 'Team maker'}
     >
       {teams.isPending ? (
@@ -172,6 +175,9 @@ export default function TeamBuildEditor({
       <section className="team-editor" aria-label="Team draft">
         <header className="team-editor-header">
           <div>
+            {presentation === 'workspace' ? (
+              <span className="team-editor-label">YOUR LINEUP</span>
+            ) : null}
             <label className="team-title-field">
               <span className="sr-only">Team name</span>
               <input
@@ -189,7 +195,9 @@ export default function TeamBuildEditor({
           <button
             type="button"
             className="button-primary team-save-button"
-            disabled={!writable || members.length !== 4 || !current.name.trim()}
+            disabled={
+              !writable || members.length !== 4 || !current.name.trim() || (!!savedTeam && !dirty)
+            }
             onClick={save}
           >
             {mutation.isPending ? 'Saving…' : current.id ? 'Save changes' : 'Save team'}

@@ -199,7 +199,7 @@ Implemented the Marginal Investment Advice Engine adhering strictly to **ADR-001
    - Deprioritizes low-impact farming traps (e.g., crowning Normal Attack on off-field supports) by incorporating heavy cost weighting for rare items (Crown of Insight: 1,000 weight, weekly boss materials: 300 weight) and 0 score delta.
 
 3. **Pure Explainer (`apps/api/src/games/genshin/intelligence/marginal-investment/marginal-investment.explainer.ts`)**:
-   - Pure function taking calculator results and explaining *why* the recommended next action is prioritized.
+   - Pure function taking calculator results and explaining _why_ the recommended next action is prioritized.
    - Details exact materials required (`Materials Required: ...`).
    - Details the threshold or gap closed by the top recommendation.
    - Provides explicit diminishing returns explanations for builds already achieving `ready_for_target`.
@@ -372,7 +372,3 @@ Implemented the Marginal Investment Advice Engine adhering strictly to **ADR-001
   - `pnpm --filter @celestia/web run build`: **Passed (`vite build`, exit code 0)**.
 - **Git Diff Hygiene**:
   - `git diff --check`: **Passed (exit code 0, no whitespace or merge marker issues)**.
-
-
-
-

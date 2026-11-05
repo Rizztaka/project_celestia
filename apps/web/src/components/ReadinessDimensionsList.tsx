@@ -43,6 +43,10 @@ export function ReadinessDimensionsList({
 }: ReadinessDimensionsListProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
+  if (!dimensions) {
+    return null;
+  }
+
   const energyDim = dimensions.rotation_energy;
   const energyDetails = energyDim?.details as
     | {

@@ -303,6 +303,33 @@ const defaultBenchmarks: Record<string, RoleBenchmarkProfile> = {
     minSupportStatThreshold: 600,
   },
 
+  // Sucrose
+  'sucrose:resistance_shred': {
+    roleId: 'resistance_shred',
+    roleName: 'Anemo Swirl & VV Shred Support',
+    targetLevel: 80,
+    targetAscension: 5,
+    priorityTalents: ['skill', 'burst'],
+    minTalentLevels: { skill: 6, burst: 6 },
+    recommendedWeapons: [
+      'SacrificialFragments',
+      'AThousandFloatingDreams',
+      'MappaMare',
+      'FavoniusCodex',
+      'MagicGuide',
+    ],
+    minWeaponLevel: 80,
+    recommendedMainStats: {
+      sands: ['elementalMastery', 'energyRecharge'],
+      goblet: ['elementalMastery'],
+      circlet: ['elementalMastery'],
+    },
+    recommendedSets: [{ setKey: 'ViridescentVenerer', pieces: 4 }],
+    energyRechargeThreshold: 140,
+    scalingStat: 'em',
+    minSupportStatThreshold: 500,
+  },
+
   // generic archetypes
   generic_dps: {
     roleId: 'on_field_damage',
@@ -412,7 +439,10 @@ export function resolveRoleBenchmark(
     normalizedRole.includes('support') ||
     normalizedRole.includes('buff') ||
     normalizedRole.includes('healer') ||
-    normalizedRole.includes('shield')
+    normalizedRole.includes('shield') ||
+    normalizedRole.includes('shred') ||
+    normalizedRole.includes('trigger') ||
+    normalizedRole.includes('reaction')
   ) {
     return defaultBenchmarks.generic_support;
   }

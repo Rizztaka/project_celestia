@@ -386,7 +386,7 @@ it('loads the real IndexedDB team into portrait slots and a keyboard-accessible 
   );
   expect(document.activeElement.textContent).toBe('Furina');
   expect(document.querySelector('[aria-label="Build role"]')).toBeNull();
-  expect(transport).not.toHaveBeenCalled();
+  expect(transport.mock.calls.filter(([url]) => url.includes('/team'))).toHaveLength(0);
 });
 it('keeps lineup drafts, rotation edits and an in-flight simulation when switching page sections', async () => {
   const workers = [];
@@ -533,5 +533,5 @@ it('saves a second lineup as a compact card and resets the maker without changin
   expect(stored.find((team) => team.id === saved.id)).toEqual(saved);
   expect(stored.some((team) => team.name === 'Synthetic team (copy)')).toBe(true);
   expect(document.activeElement.getAttribute('aria-label')).toBe('Open Synthetic team (copy)');
-  expect(transport).not.toHaveBeenCalled();
+  expect(transport.mock.calls.filter(([url]) => url.includes('/team'))).toHaveLength(0);
 });

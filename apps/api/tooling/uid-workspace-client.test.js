@@ -196,6 +196,9 @@ it('opens the reported build inside the main shell and links back to the UID cha
     ['enka-showcase', uid],
     ['observed-roster', uid],
     ['public-teams', uid],
+    ['genshin-team-preferences', uid, null, null],
+    ['character-readiness', 'HuTao', 'f3dc46adcd0832b5', 'unspecified', 'abyss_12'],
+    ['marginal-investment', 'HuTao', 'f3dc46adcd0832b5', 'unspecified', 'abyss_12'],
   ]);
   expect(transport).not.toHaveBeenCalled();
   expect(html).not.toContain('Refresh Showcase');

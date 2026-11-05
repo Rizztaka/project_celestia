@@ -197,13 +197,19 @@ it('refresh adds and updates the saved roster, keeps removed builds accessible, 
     fetchedAt: '2026-10-24T10:04:00.000Z',
     snapshot: { ...updated.snapshot, characters: [] },
   };
-  const transport = vi
+  const showcaseTransport = vi
     .fn()
     .mockResolvedValueOnce(response(initial))
     .mockResolvedValueOnce(response(updated))
     .mockResolvedValueOnce(response(empty))
     .mockRejectedValueOnce(new Error('Synthetic network failure'))
     .mockImplementation(async () => response(empty));
+  const transport = vi.fn(async (url, ...rest) => {
+    if (typeof url === 'string' && url.includes('/games/genshin/showcase/')) {
+      return showcaseTransport(url, ...rest);
+    }
+    return response({ success: true, data: {} });
+  });
   vi.stubGlobal('fetch', transport);
   const history = await import('../../web/src/lib/observed-roster.ts');
   await mount(`/u/${uid}/roster`);
@@ -237,7 +243,7 @@ it('refresh adds and updates the saved roster, keeps removed builds accessible, 
   );
   await until(() => buttons('Refresh Showcase')[0]);
   await click(buttons('Refresh Showcase')[0]);
-  await until(() => transport.mock.calls.length === 3 && !buttons('Refreshing…').length);
+  await until(() => showcaseTransport.mock.calls.length === 3 && !buttons('Refreshing…').length);
   expect(document.querySelectorAll('.collection-card')).toHaveLength(2);
   await click(buttons('Refresh Showcase')[0]);
   await until(() => text().includes('Could not reach'));
@@ -364,7 +370,15 @@ it('opens the normal Celestia home for a new visitor, previews a UID and only co
 
 it('resumes the last added UID; switching previews and cancellation preserve the current build and UID', async () => {
   localStorage.setItem(storageKey, JSON.stringify({ version: 2, uid }));
-  const transport = vi.fn(async (url) => response(data(url.endsWith(otherUid) ? otherUid : uid)));
+  const showcaseTransport = vi.fn(async (url) =>
+    response(data(url.endsWith(otherUid) ? otherUid : uid)),
+  );
+  const transport = vi.fn(async (url, ...rest) => {
+    if (typeof url === 'string' && url.includes('/games/genshin/showcase/')) {
+      return showcaseTransport(url, ...rest);
+    }
+    return response({ success: true, data: {} });
+  });
   vi.stubGlobal('fetch', transport);
   await mount();
   await until(
@@ -410,7 +424,7 @@ it('resumes the last added UID; switching previews and cancellation preserve the
   await until(() => document.querySelector('.collection-card'));
   expect(document.querySelector('#companion-content').textContent).toContain('Skirk');
   expect(document.querySelector('#companion-content').textContent).not.toContain('Hu Tao');
-  expect(transport).toHaveBeenCalledTimes(2);
+  expect(showcaseTransport).toHaveBeenCalledTimes(2);
 });
 
 it('validates input, handles network and rate-limit errors, and never enables Add on a failed lookup', async () => {

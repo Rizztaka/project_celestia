@@ -25,15 +25,20 @@ export function MarginalUpgradeCard({
     );
   }
 
-  if (!marginalData) return null;
+  if (!marginalData || !marginalData.currentReadiness) return null;
 
-  const { currentReadiness, recommendedNextAction, rankedUpgrades, explanations } = marginalData;
-  const isReady = currentReadiness.status === 'ready_for_target';
+  const {
+    currentReadiness,
+    recommendedNextAction,
+    rankedUpgrades = [],
+    explanations = [],
+  } = marginalData;
+  const isReady = currentReadiness?.status === 'ready_for_target';
   const nextAction: UpgradeCandidate | null =
     recommendedNextAction ?? (rankedUpgrades.length > 0 ? rankedUpgrades[0] : null);
 
   // Farming trap explanation if present
-  const trapWarning = explanations.find(
+  const trapWarning = explanations?.find(
     (exp) =>
       exp.toLowerCase().includes('farming trap') ||
       exp.toLowerCase().includes('crowning') ||

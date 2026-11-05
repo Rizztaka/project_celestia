@@ -254,7 +254,7 @@ export default function PublicCharacterAnalysis({
           snapshot.
         </p>
       ) : null}
-      {readiness.data && (
+      {readiness.data?.dimensions && (
         <div style={{ marginBlock: '1rem' }}>
           <ReadinessDimensionsList
             dimensions={readiness.data.dimensions}

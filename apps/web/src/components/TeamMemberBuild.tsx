@@ -288,7 +288,7 @@ export default function TeamMemberBuild({
               : roleLabels[roleId]}
           </span>
         </div>
-        {readiness.data && (
+        {readiness.data?.dimensions && (
           <div style={{ marginBlock: '0.75rem' }}>
             <ReadinessDimensionsList
               dimensions={readiness.data.dimensions}

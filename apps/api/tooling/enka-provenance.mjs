@@ -48,6 +48,19 @@ export function projectEnkaMetadata(upstream) {
   };
 }
 
+const validCharactersHashes = new Set([
+  '811db7a9172735c2b7e41de6dcbe719a64c9f1416c354c66668a1b3b8a2f49b5', // CRLF
+  'c6e4b965851b94a8424bee0fee8177c93362eafd38b9faa1b2f830a7e8f5f365', // LF
+]);
+const validEnglishHashes = new Set([
+  '87928a26369871c70e7a125d8ceac7d9fa993036b2e40c17092e367cf5266613', // CRLF
+  '3759f27773df3ec3ae8b0aeaf43189380ef587877f7a2edd44daacea185c0bb2', // LF
+]);
+const validProvenanceHashes = new Set([
+  '2c4cf63444f5099f9c336f20d72345a8f787c5d1f1bbb7dcce8c7867be94e1c2', // CRLF
+  '924be4c89a5d82e250a5f9cfce9924146cf450ee1164cd98b6bc3e3896e92692', // LF
+]);
+
 export function verifyEnkaProvenance({
   provenance,
   provenanceBytes,
@@ -56,12 +69,11 @@ export function verifyEnkaProvenance({
   upstream,
 }) {
   const localByteIntegrity =
-    hash(charactersBytes) === '811db7a9172735c2b7e41de6dcbe719a64c9f1416c354c66668a1b3b8a2f49b5' &&
-    hash(englishBytes) === '87928a26369871c70e7a125d8ceac7d9fa993036b2e40c17092e367cf5266613'
+    validCharactersHashes.has(hash(charactersBytes)) && validEnglishHashes.has(hash(englishBytes))
       ? 'verified'
       : 'invalid';
   const metadataIntegrity =
-    hash(provenanceBytes) === '2c4cf63444f5099f9c336f20d72345a8f787c5d1f1bbb7dcce8c7867be94e1c2' &&
+    validProvenanceHashes.has(hash(provenanceBytes)) &&
     canonical(provenance) === canonical(JSON.parse(provenanceBytes)) &&
     provenance.revision === revision &&
     provenance.sources.length === 3 &&

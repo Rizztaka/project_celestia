@@ -14,10 +14,10 @@ const rosterBytes = readFileSync(
 const sourceHash = createHash('sha256').update(sourceBytes).digest('hex');
 const rosterHash = createHash('sha256').update(rosterBytes).digest('hex');
 const input = {
-  installedVersion: '5.2.14',
+  installedVersion: '5.2.15',
   installedSourcePath: 'src/min/data.min.json',
   sourceBytes,
-  expectedVersion: '5.2.14',
+  expectedVersion: '5.2.15',
   expectedSourcePath: 'src/min/data.min.json',
   expectedSourceSha256: sourceHash,
   manifest: JSON.parse(rosterBytes).source,
@@ -41,7 +41,7 @@ describe('genshin-db release source provenance', () => {
   });
 
   it('rejects installed package-version drift', () => {
-    expect(verifyGenshinDbProvenance({ ...input, installedVersion: '5.2.15' })).toMatchObject({
+    expect(verifyGenshinDbProvenance({ ...input, installedVersion: '5.2.14' })).toMatchObject({
       status: 'invalid',
       packageVersion: 'invalid',
     });

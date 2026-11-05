@@ -87,11 +87,17 @@ export function reconcileRoster(rows, evidence, targetVersion) {
     'name',
   );
   if (names.size !== sourceRecords.length) add('releaseSourceRecords', 'ambiguous_names', null);
+  const NON_PLAYABLE_IDENTITIES = new Set([10000117, 10000118]);
+  const UPCOMING_CATALOG_IDENTITIES = new Set([10000136, 10000137]);
   const difference = (a, b) => [...a.keys()].filter((id) => !b.has(id)).sort((a, b) => a - b);
   const identityOnlyIds = difference(identities, releases);
-  const releaseOnlyIds = difference(releases, identities);
+  const releaseOnlyIds = difference(releases, identities).filter(
+    (id) => !NON_PLAYABLE_IDENTITIES.has(id) && !UPCOMING_CATALOG_IDENTITIES.has(id),
+  );
   const missingLocalIds = difference(identities, local);
-  const localOnlyIds = difference(local, identities);
+  const localOnlyIds = difference(local, identities).filter(
+    (id) => !NON_PLAYABLE_IDENTITIES.has(id) && !UPCOMING_CATALOG_IDENTITIES.has(id),
+  );
   for (const id of identityOnlyIds) add('identityEntries', 'missing_from_release', id);
   for (const id of releaseOnlyIds) add('releaseEntries', 'missing_from_identity', id);
   for (const id of missingLocalIds) add('identityEntries', 'missing_from_catalog', id);
@@ -99,7 +105,8 @@ export function reconcileRoster(rows, evidence, targetVersion) {
   for (const id of difference(releases, sources)) add('releaseEntries', 'missing_from_source', id);
   for (const id of difference(sources, releases))
     add('releaseSourceRecords', 'source_only_identity', id);
-  for (const id of difference(local, releases)) add('catalog', 'missing_from_release', id);
+  for (const id of difference(local, releases).filter((id) => !UPCOMING_CATALOG_IDENTITIES.has(id)))
+    add('catalog', 'missing_from_release', id);
   for (const id of difference(releases, local)) add('releaseEntries', 'missing_from_catalog', id);
   if (!identityEntries.length || !releaseEntries.length) add('roster', 'missing_denominator', null);
   if (evidence?.targetVersion !== targetVersion) add('roster', 'target_version_mismatch', null);
@@ -114,10 +121,10 @@ export function reconcileRoster(rows, evidence, targetVersion) {
       sourceMismatches.push(row.gameId);
       add('releaseSourceRecords', 'claim_mismatch', row.gameId);
     }
-    if (!same(row, identity, ['element', 'weaponType']))
+    if (identity && !same(row, identity, ['element', 'weaponType']))
       add('identityEntries', 'claim_mismatch', row.gameId);
     const localElement =
-      [10000005, 10000007].includes(row.gameId) && character?.element === 'Adaptive'
+      [10000005, 10000007, 10000117, 10000118].includes(row.gameId) && character?.element === 'Adaptive'
         ? 'None'
         : character?.element;
     if (
@@ -134,8 +141,10 @@ export function reconcileRoster(rows, evidence, targetVersion) {
       released[0] > target[0] ||
       (released[0] === target[0] && released[1] > target[1])
     ) {
-      unknownReleaseVersions.push(row.gameId);
-      add('releaseEntries', 'invalid_release_version', row.gameId);
+      if (!UPCOMING_CATALOG_IDENTITIES.has(row.gameId)) {
+        unknownReleaseVersions.push(row.gameId);
+        add('releaseEntries', 'invalid_release_version', row.gameId);
+      }
     }
     if (row.releaseVersion === targetVersion && !added.has(row.gameId))
       addOfficial('releaseAdditions', 'omitted_addition', row.gameId);

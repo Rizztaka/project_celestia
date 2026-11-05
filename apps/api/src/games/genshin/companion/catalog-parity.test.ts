@@ -28,8 +28,8 @@ describe('Sourced catalog parity and macro planning anchors', () => {
       expect(characterElements[character.key]).toBeDefined();
       expect(weaponTypes[character.key]).toMatch(/^(Sword|Claymore|Polearm|Bow|Catalyst)$/);
     }
-    expect(collectibleCharacterCount).toBe(122);
-    expect(Object.keys(catalog.characters)).toHaveLength(129);
+    expect(collectibleCharacterCount).toBe(124);
+    expect(Object.keys(catalog.characters)).toHaveLength(131);
     expect(catalog.excludedTargets.filter((entry) => /manekin/.test(entry.file))).toHaveLength(2);
     expect(profiles.Manekin.recommendationBasis).toBe('unavailable');
     expect(profiles.Mavuika.metaTier).toBeUndefined();

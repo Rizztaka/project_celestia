@@ -10,6 +10,7 @@ dist
 .local-archive/
 .local-maintenance/
 .scratch/
+.cache/
 .worktrees/
 # Windows reserved-device artifact created by NUL-based test redirection.
 NUL

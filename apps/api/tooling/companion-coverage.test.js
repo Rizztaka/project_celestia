@@ -608,46 +608,44 @@ describe('companion capability inventory', () => {
     expect(report.gaps.blockedRoleSources).toEqual([]);
     expect(report.rows.find((row) => row.key === 'Furina').reviewedRolePatterns).not.toEqual([]);
     expect(report.rows.find((row) => row.key === 'Nefer').simulationForms).toEqual([]);
-    expect(report.releaseCompleteness).toBe('unverified');
+    expect(report.releaseCompleteness).toBe('verified');
     expect(report.roster).toMatchObject({
       targetVersion: '7.1',
       denominator: 122,
-      verifiedLocalIdentities: 0,
       matchedLocalIdentities: 122,
       missingLocalIdentities: [],
-      localOnlyIdentities: [10000117, 10000118],
-      status: 'incomplete',
-      identityReconciliation: { status: 'incomplete', releaseOnlyIds: [10000117, 10000118] },
+      localOnlyIdentities: [10000117, 10000118, 10000136, 10000137],
+      status: 'reconciled',
+      identityReconciliation: { status: 'reconciled', releaseOnlyIds: [] },
       releaseVerification: {
         sourceIntegrity: true,
-        denominator: 124,
-        verifiedLocalIdentities: 0,
-        matchedLocalIdentities: 124,
+        denominator: 126,
+        matchedLocalIdentities: 126,
         missingLocalIdentities: [],
         sourceMismatches: [],
         unknownReleaseVersions: [],
         duplicateReleaseIdentities: [],
         sourceProvenance: {
-          status: 'unverified',
-          provenance: 'unverified',
+          status: 'verified',
+          provenance: 'verified',
           packageVersion: 'verified',
           sourcePath: 'verified',
           sourceBytes: 'verified',
           manifest: 'verified',
           roster: 'verified',
         },
-        status: 'invalid',
+        status: 'verified',
       },
       officialReleaseVerification: {
         sourceIntegrity: true,
         mismatches: [],
-        status: 'unverified',
-        provenance: 'unverified',
+        status: 'verified',
+        provenance: 'verified',
       },
     });
-    expect(report.roster.releaseVerification.source.packageVersion).toBe('5.2.14');
+    expect(report.roster.releaseVerification.source.packageVersion).toBe('5.2.15');
     expect(report.roster.releaseVerification.source.dataSha256).toBe(
-      '948b4e005f9f23871a8045fc58a40fed63a2b473b402e42d33459a2ded9a4bbf',
+      '6a71ab45b080bcc3296629610fb320f3aed2a20e6e6fcda4af8a1d20638d6c28',
     );
     expect(report.roster.releaseAdditions).toEqual([
       { key: 'Vesna', gameId: 10000143, status: 'matched' },

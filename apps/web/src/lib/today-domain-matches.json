@@ -1,7 +1,7 @@
 {
   "source": {
     "repository": "https://github.com/theBowja/genshin-db",
-    "commit": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf"
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592"
   },
   "characters": {
     "10000002": ["VioletCourtDomainOfMasteryThunderingValley"],
@@ -120,6 +120,8 @@
     "10000131": ["LightlessCapitalDomainOfMasteryShadowedLegacy"],
     "10000132": ["ForsakenRiftDomainOfMasteryFrozenAbyss"],
     "10000133": ["LightlessCapitalDomainOfMasteryOverturnedRoost"],
+    "10000136": ["RelicsOfTheFallenGraceDomainOfMasteryContemplation"],
+    "10000137": ["RelicsOfTheFallenGraceDomainOfMasterySharedVision"],
     "10000140": ["RelicsOfTheFallenGraceDomainOfMasteryHermitage"],
     "10000143": ["RelicsOfTheFallenGraceDomainOfMasterySharedVision"],
     "10000148": ["RelicsOfTheFallenGraceDomainOfMasteryHermitage"],
@@ -328,6 +330,7 @@
     "14522": ["LostMooncourtDomainOfForgeryLunarOblation"],
     "14523": ["LostMooncourtDomainOfForgeryRadiantSplendor"],
     "14524": ["ScarsOfCursedObsessionDomainOfForgeryChainTrack"],
+    "14525": ["ScarsOfCursedObsessionDomainOfForgerySeveredSteel"],
     "15101": ["CeciliaGardenDomainOfForgerySubmergedValley"],
     "15201": ["CeciliaGardenDomainOfForgerySubmergedValley"],
     "15301": ["CeciliaGardenDomainOfForgeryCityOfReflections"],

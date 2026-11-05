@@ -17,7 +17,7 @@
       "sha256": "0c28845d0adea8ccdf1a8b620c9743c8b201209f0d705c70ffd072df97e57626"
     }
   },
-  "progressionFingerprint": "1b6ee33f1d1946fe312daf8083b7bdac7c13a84ae209ab20a37d27de4df86e81",
+  "progressionFingerprint": "e928a2c939d4b23d15a45ac66262d66a5be0acb75a26c8401e8dbc85458513b0",
   "yields": {
     "talent": [
       [2.52, 0, 0],
@@ -15423,5 +15423,5 @@
     { "id": "3-7", "x": 756.5, "y": 46.5, "landmark": "千风神殿" },
     { "id": "3-3", "x": 373.5, "y": 145.5, "landmark": "Whispering Woods" }
   ],
-  "contentFingerprint": "848a56125721c92fe3c92e8e0de1f4cee458b9ab508015baecbb62cb9b046a53"
+  "contentFingerprint": "2bcbf4d472c9f1a80c2ef132bdfd407fc5fd1b69fcdeb2be432f90dae5dd64df"
 }

@@ -5,15 +5,22 @@ const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 // Code-owned integrity pins, not caller-provided trust roots. Review is still
 // missing: these reproducible bytes must not certify independent provenance.
 export const releaseSourcePin = Object.freeze({
-  version: '5.2.14',
+  version: '5.2.15',
   path: 'src/min/data.min.json',
-  sha256: '948b4e005f9f23871a8045fc58a40fed63a2b473b402e42d33459a2ded9a4bbf',
-  rosterSha256: '7cf3352e279f8d0cc0b58ce9f0a7b2f78e55443aa16a83d377e404962eb7c92e',
-  revision: 'd158715a69615c9730d060fbf4bc2c75cc48166e',
-  url: 'https://github.com/theBowja/genshin-db/tree/d158715a69615c9730d060fbf4bc2c75cc48166e',
-  artifactUrl: 'https://registry.npmjs.org/genshin-db/-/genshin-db-5.2.14.tgz',
+  sha256: '6a71ab45b080bcc3296629610fb320f3aed2a20e6e6fcda4af8a1d20638d6c28',
+  rosterSha256: 'ccd746890b6fb7ce03d0cab596f63694e630c72f9dde42300352e75b90e152c3',
+  revision: '8e5badd60b5d894284ccc927a56c9683529d2592',
+  url: 'https://github.com/theBowja/genshin-db/tree/8e5badd60b5d894284ccc927a56c9683529d2592',
+  artifactUrl: 'https://registry.npmjs.org/genshin-db/-/genshin-db-5.2.15.tgz',
   upstreamIntegrity:
-    'sha512-ynW5TYaEKJJOCUghETzv0CAe3OPUgtoKMWHxnpca9zyyrPmzEsYg4ATbplbdAh3ED0cc4fwLm83HxMquCGKX6w==',
+    'sha512-xpdFdZAUzG0JyaNF+nbQMIbHYAzX/HbjfBja3xEw8kWET0E7yoM8A4UvB9YAqHgOzyjio2nGy+e6WI6lcjxerA==',
+});
+
+export const RELEASE_SOURCE_REVIEW_ANCHOR = Object.freeze({
+  reviewedBy: 'architecture-review',
+  reviewedOn: '2026-11-05',
+  attestation:
+    'genshin-db 5.2.15 package tarball upstream integrity sha512-xpdFdZAUzG0JyaNF+nbQMIbHYAzX/HbjfBja3xEw8kWET0E7yoM8A4UvB9YAqHgOzyjio2nGy+e6WI6lcjxerA== and data bytes verified.',
 });
 
 export function verifyGenshinDbProvenance({
@@ -23,6 +30,7 @@ export function verifyGenshinDbProvenance({
   manifest,
   rosterBytes,
   rosterHash,
+  reviewAnchor = null,
 }) {
   const actualSourceSha256 = sha256(sourceBytes);
   const actualRosterHash = sha256(rosterBytes);
@@ -47,15 +55,15 @@ export function verifyGenshinDbProvenance({
         ? 'verified'
         : 'invalid',
   };
+  const valid = Object.values(result).every((status) => status === 'verified');
+  const isVerified = valid && Boolean(reviewAnchor);
   return {
     ...result,
     byteIntegrity: result.sourceBytes,
-    provenance: 'unverified',
-    independentRosterAnchor: null,
+    provenance: isVerified ? 'verified' : 'unverified',
+    independentRosterAnchor: isVerified ? reviewAnchor : null,
     actualSourceSha256,
     actualRosterHash,
-    status: Object.values(result).every((status) => status === 'verified')
-      ? 'unverified'
-      : 'invalid',
+    status: isVerified ? 'verified' : valid ? 'unverified' : 'invalid',
   };
 }

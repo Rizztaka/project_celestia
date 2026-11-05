@@ -110,7 +110,7 @@
     "description": "A \"professional hunter\" and master of the Snezhnayan snowfields. A fierce, distinct \"idealism\" burns beneath his calm demeanor.",
     "birthday": "February 9",
     "affiliation": "Snezhnaya",
-    "region": null,
+    "region": "Snezhnaya",
     "constellation": "Canis Borzoides",
     "voiceActors": {
       "english": "Kevin Andrew Rivera",
@@ -1458,6 +1458,26 @@
     },
     "recommendationBasis": "unavailable"
   },
+  "Mitya": {
+    "name": "Mitya",
+    "gameId": 10000136,
+    "element": "Electro",
+    "weaponType": "Catalyst",
+    "rarity": 5,
+    "title": "Rules Set at Naught",
+    "description": "An exceptionally ingenious energy specialist and a master of the fine art of \"schedule-dodging.\"",
+    "birthday": "February 8",
+    "affiliation": "Royal Energy Commission of Snezhnaya",
+    "region": "Snezhnaya",
+    "constellation": "Nodus Gordianus",
+    "voiceActors": {
+      "english": "Brian Ballance",
+      "chinese": "苏尚卿",
+      "japanese": "小林裕介",
+      "korean": "Choi U-seong"
+    },
+    "recommendationBasis": "unavailable"
+  },
   "Mona": {
     "name": "Mona",
     "gameId": 10000041,
@@ -1668,7 +1688,7 @@
     "description": "A famed Snezhnayan ballerina who blossoms against the frozen landscape with a beauty as sharp as frost.",
     "birthday": "February 20",
     "affiliation": "Korolevskiy Troupe",
-    "region": null,
+    "region": "Snezhnaya",
     "constellation": "Cygnus Olor",
     "voiceActors": {
       "english": "Alexis Tipton",
@@ -1812,7 +1832,7 @@
     "description": "The Seventh of the Fatui Harbingers, \"Marionette.\" Interprets all phenomena through the prism of mathematics, and is an elegant lady who is never absent from a tea party.",
     "birthday": "January 13",
     "affiliation": "Fatui",
-    "region": null,
+    "region": "Snezhnaya",
     "constellation": "Narcissorolegium",
     "voiceActors": {
       "english": "Deneen Melody",
@@ -2042,6 +2062,26 @@
     },
     "recommendationBasis": "unavailable"
   },
+  "Valeriy": {
+    "name": "Valeriy",
+    "gameId": 10000137,
+    "element": "Electro",
+    "weaponType": "Sword",
+    "rarity": 4,
+    "title": "Fort Fulguration",
+    "description": "Commander of the Special Assignments Battalion. A soldier skilled at protecting key personnel and keeping operations on track.",
+    "birthday": "March 24",
+    "affiliation": "Fatui Grenadier Guards First Regiment",
+    "region": "Snezhnaya",
+    "constellation": "Ursus Magnus",
+    "voiceActors": {
+      "english": "Jordan Reynolds",
+      "chinese": "淦子齐",
+      "japanese": "古川慎",
+      "korean": "Park Noh-sik"
+    },
+    "recommendationBasis": "unavailable"
+  },
   "Varesa": {
     "name": "Varesa",
     "gameId": 10000111,
@@ -2116,7 +2156,7 @@
     "description": "Commander of the Druzhna and the Tsaritsa's keen blade.",
     "birthday": "February 4",
     "affiliation": "Druzhna",
-    "region": null,
+    "region": "Snezhnaya",
     "constellation": "Amentum Vernum",
     "voiceActors": {
       "english": "Ari Thrash",
@@ -2136,7 +2176,7 @@
     "description": "Prima Donna of the Korolevskiy Troupe and a Water Imp who has parted from her kin.",
     "birthday": "March 29",
     "affiliation": "Korolevskiy Troupe",
-    "region": null,
+    "region": "Snezhnaya",
     "constellation": "Piscicula Aurea",
     "voiceActors": {
       "english": "Suzie Yeung",

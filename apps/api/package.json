@@ -20,7 +20,7 @@
     "dotenv": "^17.4.2",
     "enka-network-api": "^5.1.2",
     "express": "^5.0.0",
-    "genshin-db": "5.2.14",
+    "genshin-db": "5.2.15",
     "helmet": "^8.0.0",
     "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.3",

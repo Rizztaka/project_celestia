@@ -276,6 +276,12 @@
       "dropKeys": ["PlumeOfTheFallenWatcher"]
     },
     {
+      "key": "Wavebinder",
+      "gameId": 25134601,
+      "name": "Wavebinder",
+      "dropKeys": ["ShatteredStabilityAnchor"]
+    },
+    {
       "key": "WaywardHermeticSpiritspeaker",
       "gameId": 25520101,
       "name": "Wayward Hermetic Spiritspeaker",

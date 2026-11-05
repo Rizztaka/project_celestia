@@ -28,3 +28,10 @@ To ensure zero context is lost when the human orchestrator switches models in th
 - **prisma-mcp-server**: Keep for local schema management and migrations.
 - **supabase-mcp-server**: Keep, but restrict production access. 
 - *Note: Production secrets must never be unnecessarily exposed to AI agents.*
+
+## Pragmatic Evolution & User Consent Protocol
+Rules, architecture guidelines, and pinning restrictions exist to guarantee reliability—never to block improvement. If any rule or historical constraint prevents the project from becoming better, adopting modern tooling, or reaching user objectives faster:
+1. Explain the rule and proposed improvement with trade-offs.
+2. Ask the user for explicit permission to override the rule.
+3. Once the user grants permission, proceed decisively without hesitation.
+(See `.agents/rules/pragmatic-evolution.md` for full guidance).

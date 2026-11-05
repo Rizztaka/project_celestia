@@ -2,7 +2,7 @@
   "version": 1,
   "source": {
     "repository": "https://github.com/theBowja/genshin-db",
-    "commit": "49a6544a6c6ae36089cb42fa591fc46f01de8bcf",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
     "reviewedOn": "2026-10-18",
     "authority": "community",
     "resinSource": "https://genshin.hoyoverse.com/en/news/detail/159349",
@@ -79,7 +79,7 @@
       "src/data/English/materials/crystallinebloom.json": "8827f1900babf71958379e85109f8ebdd9a31b56baeba33691f99554c37a68ee",
       "src/data/English/materials/shivadajadechunk.json": "ca8b9325571fa0055e870fb85428e12794cff36510ede0c6bd6e175661aeb3a6",
       "src/data/English/materials/shivadajadegemstone.json": "725e76bcb6375e27888d8a5d5122caa47faa4e1f510c45bc7837fe3f4b341740",
-      "src/data/English/characters/alyosha.json": "b7e1edc5aa047a0a7b2057e4ecc77f0ba2a6b4754be7e76fa78c6479491c71c2",
+      "src/data/English/characters/alyosha.json": "c45ea8077ebeabfc1961ba20525ff2ab5be6f57aa5178a6e3424b44e369c311b",
       "src/data/English/talents/alyosha.json": "181a516ee1e929f157a8eb810f8ea61bce324d545c44ce2280362d7da0b91176",
       "src/data/English/materials/teachingsoffortitude.json": "49cd4cea21762bfdbf465d31acece9229d2c25fa2b8e26f682dfcf9503066e43",
       "src/data/English/materials/chimericcore.json": "2337ff300cbc18ac04d0c7455ece01f17ea46da7db86ad622c4752745e4d9cab",
@@ -89,7 +89,7 @@
       "src/data/English/materials/primechimericnexus.json": "a0ec5483e45e2847834502e3c7ee463d23fc54f45d41ad6edae63cbf8cf73ae4",
       "src/data/English/materials/elixiroftheheretic.json": "837e547537ecb2d115b6238ca2dc1e21701420d48c5e88e2dacf1d7c71e0f9fd",
       "src/data/English/materials/vajradaamethystsliver.json": "eae3f69cbf0b3fd6485a0c106db063452d689f594b30ce3afaf1b283bac9dec2",
-      "src/data/English/materials/flockingweed.json": "232d9efe0ca849539ce76764998a3e174d436cd84c5a72a1974009b02f43f77c",
+      "src/data/English/materials/flockingweed.json": "68b4c65585f44dc8a5aff436464cabd02dc5afbbf58a9451cdfd0279a6a2bd43",
       "src/data/English/materials/vajradaamethystfragment.json": "3c4823cee4e955924f2ab07cd1c5f80716c793664592f07d5ddeaabac8e4534c",
       "src/data/English/materials/severedtailoftheskyroamer.json": "f7a2cc0007498c387a64774179b8043afa976ef32e3b9cc3c100edb1098aef8a",
       "src/data/English/materials/vajradaamethystchunk.json": "45d2fc13e367f64ab675ce9ca5b4d7a10bd3cc086855e8273d896b5393be08da",
@@ -425,6 +425,13 @@
       "src/data/English/characters/mika.json": "b847344a8ec39fd77e813bac361521ff63884f845c3f0c2259598e7e423c74ab",
       "src/data/English/talents/mika.json": "38744cddb1f989f0e0b6660c84088ffa5b563b910412106c5d584a0706b21fc0",
       "src/data/English/materials/wolfhook.json": "ecf26c15cdcc0750337cf56577123a4017df900cd95fd5f0e41aa18b44ed830c",
+      "src/data/English/characters/mitya.json": "b197a26688044af47c8cb81558ada63ffecb891eda6dfd9813a10af0a9b7dbb0",
+      "src/data/English/talents/mitya.json": "ab356578e1912d2f6f8e66d1925a4a2e176db80cc327d922c091785c68f3adbc",
+      "src/data/English/materials/teachingsofcharity.json": "8d022a221569bdbeca64f621751f1fbc205cb6a3f68a1b69b2546e60b652e5b7",
+      "src/data/English/materials/guidetocharity.json": "98b298b9adbe3f0f8c9fb5e94f9793a896370b50d1247513ad5f973641440559",
+      "src/data/English/materials/philosophiesofcharity.json": "5ddefe4f4de9c438da73662143411bd4ff55a58b5c7c8c54e6285b3ac55af3cb",
+      "src/data/English/materials/kristallfold.json": "6db74fffceb8ed45496c8bbab4b8870fba16348ef3d2c9aac4d4618a7d89ebd2",
+      "src/data/English/materials/shatteredstabilityanchor.json": "3af550d534083d0847171355545a850a1a8ba0756b15b9e2c7f287fb252b1392",
       "src/data/English/characters/mona.json": "d53395f7312ff481406b57a6dca4088ff2280f2c44da1a25906a1feb729116fa",
       "src/data/English/talents/mona.json": "61f1699fe1eb1f6cb52599f77220ae21fb687f0cae795d51fef7b4c9d9a1a60f",
       "src/data/English/characters/mualani.json": "30703474c21988505bfd3f2615ba04ac198a5dca0ec8098f5b7e4756c97786ff",
@@ -452,16 +459,13 @@
       "src/data/English/materials/glazelily.json": "d7fa3d6cb901032bc06fe302260f2e865fe79e3ae05dbd706dbe36f0276e2387",
       "src/data/English/characters/noelle.json": "aa7486772e749127a2429ba00203c074bf0504737e73bc724b1a1fef377b8259",
       "src/data/English/talents/noelle.json": "764df969c727b1a97d19650471e8de2609f6364bfa59fbdb2485f47b63fdf045",
-      "src/data/English/characters/odette.json": "9dba9233c9999cc2f4b555a619fbbe49ffbe3db884becd23c5a303f8986a8103",
+      "src/data/English/characters/odette.json": "8c64b2a308ebf2172f243d6ee8ddda46bb2d3b24c8af646bc169241a03e7c7d0",
       "src/data/English/talents/odette.json": "3ced816c106240596b62487e1c1c64a98c59df7896fe2c42d76aecbbaa7f0c23",
-      "src/data/English/materials/teachingsofcharity.json": "8d022a221569bdbeca64f621751f1fbc205cb6a3f68a1b69b2546e60b652e5b7",
       "src/data/English/materials/etherealglimmershard.json": "76895d06f393db678f314d9f7a18fcfbbd8c2aa4ca3bac6db86d15cc04438b3a",
-      "src/data/English/materials/guidetocharity.json": "98b298b9adbe3f0f8c9fb5e94f9793a896370b50d1247513ad5f973641440559",
       "src/data/English/materials/etherealcrystal.json": "8199c70c132d8c6c7ffab113e9e64654857469fb0778bdd590a49f59e8c02e21",
-      "src/data/English/materials/philosophiesofcharity.json": "5ddefe4f4de9c438da73662143411bd4ff55a58b5c7c8c54e6285b3ac55af3cb",
       "src/data/English/materials/etherealcrystalscalestone.json": "c2851c9760d4f6dc80092bf04c46bbffa0d5fe60d928fa02f7817cc182ae20f5",
       "src/data/English/materials/twistedwitheredbranch.json": "7299e39b4bf06e38c9ee7b75b161a9432c00c83504c06fb5a8654999611ffe5e",
-      "src/data/English/materials/frostfairyflower.json": "82ccd5c5195d2c7f14fec8948a9d8856337323cd4a2e4f7e44c5b984cce4bf50",
+      "src/data/English/materials/frostfairyflower.json": "a3cbb391e9f20dc57e8749a38c212a29552454f9fe1703445377a29d33c3bfb4",
       "src/data/English/materials/unscorchedblossombranch.json": "c1e1d9e7443589bc9c45eb5e0148fdff6cc057ec09e59a866ed6c4eb67a4407b",
       "src/data/English/characters/ororon.json": "d49ead5970b70e65b862da9187ffb9c5367777ae1833a96e7df8f4aabd4907ad",
       "src/data/English/talents/ororon.json": "7c4e22cf8be903f1529e88aa9286bcb5bab96101a47247025d1a1cd3c1e8077b",
@@ -476,7 +480,7 @@
       "src/data/English/talents/razor.json": "be68f74acab9a9d7b2dd67261007d173a9937670b86f540422fc01610a26d990",
       "src/data/English/characters/rosaria.json": "df3d055e7c76717da76911c02d95d67443bdb731b8a6376b89ef82e57a212756",
       "src/data/English/talents/rosaria.json": "ae8241925341ed8b01f2b8e55811f0931e350afef9173f0a7eb9ce85385196f9",
-      "src/data/English/characters/sandrone.json": "5b9b65b487534b6ce8208c6ee423d18ecf80e3d0a1295d7a36851fd208768632",
+      "src/data/English/characters/sandrone.json": "8dda5e05792a7f980b391d3abe9e06df3e5fb52e2531951beed1265d2de949da",
       "src/data/English/talents/sandrone.json": "6563fd1d9e3bd9ef2392db70fa33f9c1583daa693099c588063d827dd8b869a9",
       "src/data/English/materials/madmansrestraint.json": "de84f7a13d6a4d85dab51f39fec5a477710ceeb7960383fd6991f0de7600f89b",
       "src/data/English/materials/subdetectionunit.json": "8a9c47ad04d984afd190c9335b108ea0458f8abd0efd84330492e49ba752f506",
@@ -511,22 +515,25 @@
       "src/data/English/materials/smolderingpearl.json": "c11bfdeb46c52c03427e8ce334a4a965afab2afcbdb48dfb90a4993c60e51b47",
       "src/data/English/characters/tighnari.json": "a49e2cf5b5f7c9ad112a3bc810b0416872f620b9fd3bb874e18356f317b4e041",
       "src/data/English/talents/tighnari.json": "507230e414249bd86e1ac6ad3178965c43f525de6526d300b540db7862ebbe5e",
+      "src/data/English/characters/valeriy.json": "2d3914374f5e8339761a9a6a196e418d257e21b673c739564e2d756975df16c9",
+      "src/data/English/talents/valeriy.json": "b3f65c870af474422b0ea581bfe7d1df120b20ca352f7ca3bea97cf5313e3a96",
+      "src/data/English/materials/teachingsofglory.json": "d473efda74c882021c0d952b3f3a99315375c8754b9ffa493c9aa6db1f83ddb6",
+      "src/data/English/materials/guidetoglory.json": "98902d7e3d72deaf71a5ac94daaecf45c10a28191307c06b891d3cf2a936f995",
+      "src/data/English/materials/philosophiesofglory.json": "69c8c23fdde98c9fa334d1aea5fa9839ff4208298cef0841d24a1beb462d4e26",
+      "src/data/English/materials/fairywormwood.json": "c4ef371d880ec5f2b76f0b1078d0b66434f75c71c3bc189601434ca37aa646f8",
       "src/data/English/characters/varesa.json": "bc187f5dc57dc5d3607f8e79e792e3f533b8ac964b3f5537fe5ace68ce1584d7",
       "src/data/English/talents/varesa.json": "b4a066920f82dc12f974ff3d41aac0820301b71f2620a0ef7c44bf8329b82c89",
       "src/data/English/characters/varka.json": "1d1d52d5acadcb9cb7e281c6314b72c7872a608a9e3d0ece14c18772d5045940",
       "src/data/English/talents/varka.json": "8f7fb9d3b8eb0fe179098264f8116ce24275b59cb47b3121255dbd9e2fbe2eab",
       "src/data/English/characters/venti.json": "840d0fb2332c53ea6dde0299623a09f41b330eb9cbfbb03e7773ad4170a57eb7",
       "src/data/English/talents/venti.json": "f747783fed334ca07e77b575df9677c9cb1a24b5cc78ea180c59ca64bed44076",
-      "src/data/English/characters/vesna.json": "2b7079ae233122e127f52cbb1419d1519a59b79bad5da92d894321956de2281c",
+      "src/data/English/characters/vesna.json": "4d0b722ff0bf80895f38a2858f0144ab86520a53b1efb02b07c6afcf4ebaca7e",
       "src/data/English/talents/vesna.json": "36cd8992ced564a50341c5180cab627ff43803f291234ca5fae92d60edb4e3c4",
-      "src/data/English/materials/teachingsofglory.json": "d473efda74c882021c0d952b3f3a99315375c8754b9ffa493c9aa6db1f83ddb6",
-      "src/data/English/materials/guidetoglory.json": "98902d7e3d72deaf71a5ac94daaecf45c10a28191307c06b891d3cf2a936f995",
-      "src/data/English/materials/philosophiesofglory.json": "69c8c23fdde98c9fa334d1aea5fa9839ff4208298cef0841d24a1beb462d4e26",
       "src/data/English/materials/profanedsprout.json": "3093d695569dee02d89673a99766bbcc0b33c50a8aa3567ab1b77348dc557095",
-      "src/data/English/materials/goldenfern.json": "85c528961ffc4784945f2bd603f2b4d64798fbe37369621c68d0a9c830d98f8d",
+      "src/data/English/materials/goldenfern.json": "b9895f429dd896bd368e5e11ff343b8077db65a72adb041aa5ad683b84a6c60d",
       "src/data/English/materials/vagabondscrackedarmor.json": "31d037ac7bf6e059fd3776b08add73d46b58f6ea1553a34dfc0ef4c16afe70c8",
-      "src/data/English/characters/vodyanitsa.json": "0a8f85d98c1e4603c74b57aea7a8eca3334e766b90d2f31e5883af7c79a61aad",
-      "src/data/English/talents/vodyanitsa.json": "447539b2c4c0781b384d2315bb3a210c3037ff825921c177c70a831737962b4c",
+      "src/data/English/characters/vodyanitsa.json": "e554637a9f72ee7275e01c285ba886a39492c0a7518aed150255cac64958c44f",
+      "src/data/English/talents/vodyanitsa.json": "49ecbcc1eb5375884b5faa4d33436b5c8800d3df0d8b13cbd87f3bd051133a90",
       "src/data/English/characters/wanderer.json": "0904d0312f62b442d018ee43a9d8c93ed57af56365152d655c43a9cd8a88f7ce",
       "src/data/English/talents/wanderer.json": "c4c0b6278182f939a8a075eec22c2605984ac18ee77fe42dc61896baec86ed02",
       "src/data/English/characters/wriothesley.json": "8d4a93425fc823425b79ffb0489191e7d7ea9c96bebefa1e01989bdcef0d87df",
@@ -687,7 +694,7 @@
       "src/data/English/materials/markedshell.json": "af1e5470eb7aa490a64c45591f8258ab95805872805385641f3c9d7f6863bbdf",
       "src/data/English/materials/oldendaysofscorchingmight.json": "a186371505d04cb2c11df569555f02cac176a37beee8a47503f9c024b984e39e",
       "src/data/English/weapons/beginnersprotector.json": "b138e23cce5ae360bfc14ee824970f06cbc44e40235d4914bd178c5ba3c86bd8",
-      "src/data/English/weapons/beyondthechrysalis.json": "3939aeec6ebe04d30b963e92c5acbe9289bcddc5f91acf8fa810bf48cf68f97d",
+      "src/data/English/weapons/beyondthechrysalis.json": "412fa4b02ac1c75e09c020db58dbd251c476aee4ab65a3722d972e0bd09f93d8",
       "src/data/English/materials/riseofthepalestararmy.json": "a0b073ca6a8f2f3f9af98d337b8d9561dd760888198407c339d651717a9f927d",
       "src/data/English/materials/hollowrootoflife.json": "5c8482debdb027baa8f7c59cafb454e6b1f6dbb35bf658d45cb398ab9aafcb8d",
       "src/data/English/materials/musterofthepalestararmy.json": "4d495211d0369f314719c74078479e37d7853f1e6bfde38ede52ebaae8bcf883",
@@ -729,7 +736,7 @@
       "src/data/English/materials/deadleylinebranch.json": "12053dc411d41e4415cf9081dc9ecb0faabacb748c32c91a0503a2bb83ddb059",
       "src/data/English/materials/deadleylineleaves.json": "193fb5df87c94f351c6539f8f54a52328e447bc4a59d3f95332889b5d47316fd",
       "src/data/English/materials/leylinesprout.json": "34d456a32ae6c5d2f1633df7d4c7bcd94f6265384408fc7fa455dd4086d1ae24",
-      "src/data/English/weapons/breezebornerefrain.json": "088036a7d04e256844e86d1fa8a69c013199888f0d4e2cc90364f8fbd4ff32c6",
+      "src/data/English/weapons/breezebornerefrain.json": "f3a4d91159fe22d3a40bf7c768cd763aa9a1c73f8240669da1973c1b6e5de6e7",
       "src/data/English/materials/thefrostemperorsrevival.json": "1b812863a5482b4a69e4ace011afa5d5848337349491055016ce90593d85746b",
       "src/data/English/materials/accretedfragment.json": "a09327da27a28b0b9db67907fd95e80a260df4c2e0ab2ad751bc388c9d809c12",
       "src/data/English/materials/thefrostemperorsceremony.json": "eabb43068750a65bb2824a0d8d390dd7d5ef0b54583f4e2975647d973a4f149c",
@@ -907,7 +914,7 @@
       "src/data/English/weapons/pocketgrimoire.json": "baa9f586b0e39da0c7c2aecb6d2e623bba0a5f39f497e63aa9d9e4fdc5d9fe13",
       "src/data/English/weapons/polarstar.json": "24f1db7ecb41ca303393d8a58e320469e53ce5f3555f74c378ed9ab6f7509608",
       "src/data/English/weapons/portablepowersaw.json": "056e2c133209244fe3183621d62ff89dc3d64ff5696ee1c16c7650e27c1e1d21",
-      "src/data/English/weapons/predator.json": "fd43c1645d7c5c08e5543b42f41e4872775fe8706be64473c7b661c0a934da5a",
+      "src/data/English/weapons/predator.json": "611ff8d4e94a8b2ca67e0888c0ceffa2ec620269ad9c4d7d80cbf032c6088adf",
       "src/data/English/weapons/primordialjadecutter.json": "d5128b31404bc1766bab8c487eae41d38a5849c19087b55c7901d1b5c351d1de",
       "src/data/English/weapons/primordialjadewingedspear.json": "b4eb50c0460fd5b84233e4e0e1440ca695b6f923f90090f899231c1b78a848b7",
       "src/data/English/weapons/prospectorsdrill.json": "48a839e5c38a154cd0193e14c280ed6a641e016565e56bd284465aa1405b08c4",
@@ -948,7 +955,7 @@
       "src/data/English/weapons/serenityscall.json": "33d2b26ede415a13a3bf3bd1e0abc9f21f46d79b9d21e768a367aaaed6e0bb66",
       "src/data/English/weapons/serpentspine.json": "ab081720223283a21b797a841e2fd741bb7d6829ec76d43644ab46f47421fced",
       "src/data/English/weapons/sharpshootersoath.json": "1fa140087c668c108ef580d712a7372367d100f4974898f3c896856534e4fb39",
-      "src/data/English/weapons/silverlight.json": "a480f32e66cca346f5a870038bb63f253e536d8f19573666043ec110f751ae6c",
+      "src/data/English/weapons/silverlight.json": "17d3b171be29079be9577e200b706cbf44b09651b7ad17c9527bb1f95309fdf2",
       "src/data/English/weapons/silvershowerheartstrings.json": "e47033548e696c5d66b3ec28020af6f3d53a55e341e1f9cf8b1e43ec4280ecbb",
       "src/data/English/weapons/silversword.json": "1e7fdf2fdfc8758c4a6406f17965a7a8c01f7084e3b44622f3a4dae971bf7a79",
       "src/data/English/weapons/skyridergreatsword.json": "c5c3bd3fed30f95e25089855eea3cb557d960c30e3f18de03c93820dc8518d42",
@@ -969,11 +976,15 @@
       "src/data/English/weapons/staffofhoma.json": "b603a0d359a45a7b6c2e4d923a3a308ce7602c5e173abccac5d54ebb0075ab49",
       "src/data/English/weapons/staffofthescarletsands.json": "e4bbfe8f554e5c687fc47d443e25b3615b5c20ed7d30b71262d587d6c0a89a61",
       "src/data/English/weapons/starcallerswatch.json": "1b812d3054f7607c1ad0cafacd71c6ab5138d0942b94dd78596d783e4fba68c7",
+      "src/data/English/weapons/starsealededict.json": "fabb39e74aca7ed97d11052203e808e00b7d16cb110286e8063c37b70cc5c9f3",
+      "src/data/English/materials/snowbornheartshard.json": "219eed3113ab1267b97a93d2049157d75854a55a2c1c3597deade54f38de3cab",
+      "src/data/English/materials/snowbornmirrorheart.json": "da0fe72621e1aa487d19ee13b6ba094b89816eea86e533e9bd40dfbd76669d86",
+      "src/data/English/materials/snowbornheartofignorance.json": "bc9c641567773d9611f75347303d4dbfacff01234c5cff110a5d5629c282c4ec",
       "src/data/English/weapons/sturdybone.json": "047278b6872a7e3b9ac977094e1046c398bf70e7c7bfc5710c5190781a3c6a76",
       "src/data/English/weapons/summitshaper.json": "a2c7ed16bf9abcaaaa9092c7c6349643936f0ca7fb129a4c0e7deddbe23b67ff",
       "src/data/English/weapons/sunnymorningsleepin.json": "334ece008db518fec980bf6382dacdfcd02e602206f880ed9c5481ee8996bca5",
       "src/data/English/weapons/surfsup.json": "a38140db54d79ade09a3c69ed69269207938228f4bfd65cff1bfa5554cf07dec",
-      "src/data/English/weapons/swordofdescension.json": "974c1b4474b4eb4b7353b3a2191eb3b0f181583f1bab6d38a9f3c80675239495",
+      "src/data/English/weapons/swordofdescension.json": "9ae1a24b653cba53b61aa66de4b4bb82ff624e5d35b69fb6d5b22cedb0f120e5",
       "src/data/English/weapons/swordofnarzissenkreuz.json": "2a1d5ac28e945cd26da68289e606f352846d28ea80955c3e7e97947de52e6400",
       "src/data/English/weapons/symphonistofscents.json": "27fdcdbed0e0cacd309d34244e73a4e2af7947d518d8faacfc1a7a4fcc26becf",
       "src/data/English/weapons/talkingstick.json": "2b844afed21e919f97d0fd8b2036dbb57035a44bd7a5014a1ac5518c7b8f1e19",
@@ -1143,6 +1154,7 @@
       "src/data/English/enemies/theknave.json": "73797e0924ffde8299303cf6f0f982a50b178ee36d29633eebc914ff3ffe72aa",
       "src/data/English/enemies/thundermanifestation.json": "8e2fa75037138cb8a66ec2abfb553992bc3a050aa0fdcf8ae18412d67c99cbf6",
       "src/data/English/enemies/watcherfallenvigil.json": "6faefa5d64b813c7e190f63c1b08dd23f27b511ea234e470be8940bd7e1ee48c",
+      "src/data/English/enemies/wavebinder.json": "c592847894ba955a689e0dc5c09800452e643c3037d2a95e37f0f62152b0f4f5",
       "src/data/English/enemies/waywardhermeticspiritspeaker.json": "3af3b2b3b642901dbed6334d87375740d6c92a2866be6f58cb32d0724b35b203",
       "src/data/English/crafts/aberrantcoreofthedeepshadow.json": "f54332a15d19ff8c10f902d0041ffdf9177f573b57ab86cc4d85387d6e06a95d",
       "src/data/English/crafts/accretedgrowth.json": "8a4415f555ed0545d67367ffd349ed6c15026af62e1b5a9ad27fbbfee67ac9d3",
@@ -1352,6 +1364,8 @@
       "src/data/English/crafts/silvertalismanoftheforestdew.json": "8f010fb22b750926e9f9c222c519b40595573c40bd5885ef25c38dff186f44af",
       "src/data/English/crafts/slimeconcentrate.json": "69c88391b3424ef094a4e8f9ea79c0ea6ff2124065e3f1dc74c46c1cc01c038f",
       "src/data/English/crafts/slimesecretions.json": "75a12c20f3a3c4ae4c06f19730927e79918c7700174e8f446fe4957b8d342092",
+      "src/data/English/crafts/snowbornheartofignorance.json": "6928380ae236d436697fd94b4e515593c1721aaff9d820ef72fc73af7d93c21d",
+      "src/data/English/crafts/snowbornmirrorheart.json": "295648ada3ee4b000cd1a0cd9c26a9e0f60e682cfc621a9409fd5d89ed4b26cf",
       "src/data/English/crafts/spectralheart.json": "bd19a87d44eecc91bdb11ba276530cd1766bd29bf56d0b836364d2ea568b6466",
       "src/data/English/crafts/spectralnucleus.json": "00d3566df3bc04433ae168d9f8d674bc6f5308024c928f84f2e09a77f5b481f9",
       "src/data/English/crafts/splinteredhilt.json": "aadc05db8defdee24bef6352335f05e7cb3b0b2f28378f2fd4864b923b79b7d9",
@@ -2261,7 +2275,11 @@
       "key": "Flockingweed",
       "gameItemId": 101276,
       "name": "Flockingweed",
-      "sources": ["Recommendation: Found in Fellfrost Peak", "Go to collect"],
+      "sources": [
+        "Recommendation: Found in Fellfrost Peak",
+        "Grown in the Serenitea Pot",
+        "Go to collect"
+      ],
       "category": "local_specialty",
       "domainKey": null
     },
@@ -4176,6 +4194,50 @@
       "category": "local_specialty",
       "domainKey": null
     },
+    "TeachingsOfCharity": {
+      "key": "TeachingsOfCharity",
+      "gameItemId": 104365,
+      "name": "Teachings of Charity",
+      "sources": ["Exchanged in the Gift Shop"],
+      "category": "talent_book",
+      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation"
+    },
+    "GuideToCharity": {
+      "key": "GuideToCharity",
+      "gameItemId": 104366,
+      "name": "Guide to Charity",
+      "sources": [],
+      "category": "talent_book",
+      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation"
+    },
+    "PhilosophiesOfCharity": {
+      "key": "PhilosophiesOfCharity",
+      "gameItemId": 104367,
+      "name": "Philosophies of Charity",
+      "sources": [],
+      "category": "talent_book",
+      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation"
+    },
+    "Kristallfold": {
+      "key": "Kristallfold",
+      "gameItemId": 101274,
+      "name": "Kristallfold",
+      "sources": [
+        "Recommendation: Found in Downtown Novokitezhgrad",
+        "Grown in the Serenitea Pot",
+        "Go to collect"
+      ],
+      "category": "local_specialty",
+      "domainKey": null
+    },
+    "ShatteredStabilityAnchor": {
+      "key": "ShatteredStabilityAnchor",
+      "gameItemId": 113093,
+      "name": "Shattered Stability Anchor",
+      "sources": ["Dropped by Lv. 30+ Wavebinders"],
+      "category": "world_boss",
+      "domainKey": null
+    },
     "SprayfeatherGill": {
       "key": "SprayfeatherGill",
       "gameItemId": 101247,
@@ -4245,14 +4307,6 @@
       "category": "local_specialty",
       "domainKey": null
     },
-    "TeachingsOfCharity": {
-      "key": "TeachingsOfCharity",
-      "gameItemId": 104365,
-      "name": "Teachings of Charity",
-      "sources": ["Exchanged in the Gift Shop"],
-      "category": "talent_book",
-      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation"
-    },
     "EtherealGlimmershard": {
       "key": "EtherealGlimmershard",
       "gameItemId": 112146,
@@ -4261,14 +4315,6 @@
       "category": "progression_support",
       "domainKey": null
     },
-    "GuideToCharity": {
-      "key": "GuideToCharity",
-      "gameItemId": 104366,
-      "name": "Guide to Charity",
-      "sources": [],
-      "category": "talent_book",
-      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation"
-    },
     "EtherealCrystal": {
       "key": "EtherealCrystal",
       "gameItemId": 112147,
@@ -4276,14 +4322,6 @@
       "sources": ["Dropped by Lv. 40+ Fae of Crystalline Flesh", "Stardust Exchange"],
       "category": "progression_support",
       "domainKey": null
-    },
-    "PhilosophiesOfCharity": {
-      "key": "PhilosophiesOfCharity",
-      "gameItemId": 104367,
-      "name": "Philosophies of Charity",
-      "sources": [],
-      "category": "talent_book",
-      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation"
     },
     "EtherealCrystalscaleStone": {
       "key": "EtherealCrystalscaleStone",
@@ -4314,6 +4352,7 @@
       "sources": [
         "Recommendation: Found near Snezhnograd",
         "Recommendation: Found in White Birch Snowgrave",
+        "Grown in the Serenitea Pot",
         "Go to collect"
       ],
       "category": "local_specialty",
@@ -4473,6 +4512,18 @@
       "category": "talent_book",
       "domainKey": "RelicsOfTheFallenGraceDomainOfMasterySharedVision"
     },
+    "FairyWormwood": {
+      "key": "FairyWormwood",
+      "gameItemId": 101273,
+      "name": "Fairy Wormwood",
+      "sources": [
+        "Recommendation: Found in Teplo Oasis",
+        "Grown in the Serenitea Pot",
+        "Go to collect"
+      ],
+      "category": "local_specialty",
+      "domainKey": null
+    },
     "ProfanedSprout": {
       "key": "ProfanedSprout",
       "gameItemId": 113089,
@@ -4491,6 +4542,7 @@
       "sources": [
         "Recommendation: Found in Flamefeather Valley",
         "Recommendation: Found in Rankova Zorya",
+        "Grown in the Serenitea Pot",
         "Go to collect"
       ],
       "category": "local_specialty",
@@ -6190,6 +6242,33 @@
       "name": "Sigil of a Striding Will",
       "sources": [
         "Dropped by Lv. 60+ Wayob Manifestations",
+        "Stardust Exchange: Craft after exchanging"
+      ],
+      "category": "progression_support",
+      "domainKey": null
+    },
+    "SnowbornHeartshard": {
+      "key": "SnowbornHeartshard",
+      "gameItemId": 112158,
+      "name": "Snowborn Heartshard",
+      "sources": ["Dropped by Mindless Iceborns", "Stardust Exchange"],
+      "category": "progression_support",
+      "domainKey": null
+    },
+    "SnowbornMirrorheart": {
+      "key": "SnowbornMirrorheart",
+      "gameItemId": 112159,
+      "name": "Snowborn Mirrorheart",
+      "sources": ["Dropped by Lv. 40+ Mindless Iceborns", "Stardust Exchange"],
+      "category": "progression_support",
+      "domainKey": null
+    },
+    "SnowbornHeartOfIgnorance": {
+      "key": "SnowbornHeartOfIgnorance",
+      "gameItemId": 112160,
+      "name": "Snowborn Heart of Ignorance",
+      "sources": [
+        "Dropped by Lv. 60+ Mindless Iceborns",
         "Stardust Exchange: Craft after exchanging"
       ],
       "category": "progression_support",
@@ -13970,6 +14049,129 @@
       ],
       "talentUnavailableReason": null
     },
+    "Mitya": {
+      "key": "Mitya",
+      "name": "Mitya",
+      "gameId": 10000136,
+      "ascension": [
+        {
+          "phase": 1,
+          "costs": {
+            "Mora": 20000,
+            "VajradaAmethystSliver": 1,
+            "Kristallfold": 3,
+            "ChimericCore": 3
+          }
+        },
+        {
+          "phase": 2,
+          "costs": {
+            "Mora": 40000,
+            "VajradaAmethystFragment": 3,
+            "ShatteredStabilityAnchor": 2,
+            "Kristallfold": 10,
+            "ChimericCore": 15
+          }
+        },
+        {
+          "phase": 3,
+          "costs": {
+            "Mora": 60000,
+            "VajradaAmethystFragment": 6,
+            "ShatteredStabilityAnchor": 4,
+            "Kristallfold": 20,
+            "SymbioticChimericNucleus": 12
+          }
+        },
+        {
+          "phase": 4,
+          "costs": {
+            "Mora": 80000,
+            "VajradaAmethystChunk": 3,
+            "ShatteredStabilityAnchor": 8,
+            "Kristallfold": 30,
+            "SymbioticChimericNucleus": 18
+          }
+        },
+        {
+          "phase": 5,
+          "costs": {
+            "Mora": 100000,
+            "VajradaAmethystChunk": 6,
+            "ShatteredStabilityAnchor": 12,
+            "Kristallfold": 45,
+            "PrimeChimericNexus": 12
+          }
+        },
+        {
+          "phase": 6,
+          "costs": {
+            "Mora": 120000,
+            "VajradaAmethystGemstone": 6,
+            "ShatteredStabilityAnchor": 20,
+            "Kristallfold": 60,
+            "PrimeChimericNexus": 24
+          }
+        }
+      ],
+      "talent": [
+        { "phase": 2, "costs": { "Mora": 12500, "TeachingsOfCharity": 3, "ChimericCore": 6 } },
+        {
+          "phase": 3,
+          "costs": { "Mora": 17500, "GuideToCharity": 2, "SymbioticChimericNucleus": 3 }
+        },
+        {
+          "phase": 4,
+          "costs": { "Mora": 25000, "GuideToCharity": 4, "SymbioticChimericNucleus": 4 }
+        },
+        {
+          "phase": 5,
+          "costs": { "Mora": 30000, "GuideToCharity": 6, "SymbioticChimericNucleus": 6 }
+        },
+        {
+          "phase": 6,
+          "costs": { "Mora": 37500, "GuideToCharity": 9, "SymbioticChimericNucleus": 9 }
+        },
+        {
+          "phase": 7,
+          "costs": {
+            "Mora": 120000,
+            "PhilosophiesOfCharity": 4,
+            "PrimeChimericNexus": 4,
+            "MaskOfTheVirtuousDoctor": 1
+          }
+        },
+        {
+          "phase": 8,
+          "costs": {
+            "Mora": 260000,
+            "PhilosophiesOfCharity": 6,
+            "PrimeChimericNexus": 6,
+            "MaskOfTheVirtuousDoctor": 1
+          }
+        },
+        {
+          "phase": 9,
+          "costs": {
+            "Mora": 450000,
+            "PhilosophiesOfCharity": 12,
+            "PrimeChimericNexus": 9,
+            "MaskOfTheVirtuousDoctor": 2
+          }
+        },
+        {
+          "phase": 10,
+          "costs": {
+            "Mora": 700000,
+            "PhilosophiesOfCharity": 16,
+            "PrimeChimericNexus": 12,
+            "MaskOfTheVirtuousDoctor": 2,
+            "CrownOfInsight": 1
+          }
+        }
+      ],
+      "talentUnavailableReason": null
+    },
     "Mona": {
       "key": "Mona",
       "name": "Mona",
@@ -17213,6 +17415,120 @@
             "PhilosophiesOfAdmonition": 16,
             "CrystallineCystDust": 12,
             "TheMeaningOfAeons": 2,
+            "CrownOfInsight": 1
+          }
+        }
+      ],
+      "talentUnavailableReason": null
+    },
+    "Valeriy": {
+      "key": "Valeriy",
+      "name": "Valeriy",
+      "gameId": 10000137,
+      "ascension": [
+        {
+          "phase": 1,
+          "costs": {
+            "Mora": 20000,
+            "VajradaAmethystSliver": 1,
+            "FairyWormwood": 3,
+            "EtherealGlimmershard": 3
+          }
+        },
+        {
+          "phase": 2,
+          "costs": {
+            "Mora": 40000,
+            "VajradaAmethystFragment": 3,
+            "SeveredTailOfTheSkyRoamer": 2,
+            "FairyWormwood": 10,
+            "EtherealGlimmershard": 15
+          }
+        },
+        {
+          "phase": 3,
+          "costs": {
+            "Mora": 60000,
+            "VajradaAmethystFragment": 6,
+            "SeveredTailOfTheSkyRoamer": 4,
+            "FairyWormwood": 20,
+            "EtherealCrystal": 12
+          }
+        },
+        {
+          "phase": 4,
+          "costs": {
+            "Mora": 80000,
+            "VajradaAmethystChunk": 3,
+            "SeveredTailOfTheSkyRoamer": 8,
+            "FairyWormwood": 30,
+            "EtherealCrystal": 18
+          }
+        },
+        {
+          "phase": 5,
+          "costs": {
+            "Mora": 100000,
+            "VajradaAmethystChunk": 6,
+            "SeveredTailOfTheSkyRoamer": 12,
+            "FairyWormwood": 45,
+            "EtherealCrystalscaleStone": 12
+          }
+        },
+        {
+          "phase": 6,
+          "costs": {
+            "Mora": 120000,
+            "VajradaAmethystGemstone": 6,
+            "SeveredTailOfTheSkyRoamer": 20,
+            "FairyWormwood": 60,
+            "EtherealCrystalscaleStone": 24
+          }
+        }
+      ],
+      "talent": [
+        {
+          "phase": 2,
+          "costs": { "Mora": 12500, "TeachingsOfGlory": 3, "EtherealGlimmershard": 6 }
+        },
+        { "phase": 3, "costs": { "Mora": 17500, "GuideToGlory": 2, "EtherealCrystal": 3 } },
+        { "phase": 4, "costs": { "Mora": 25000, "GuideToGlory": 4, "EtherealCrystal": 4 } },
+        { "phase": 5, "costs": { "Mora": 30000, "GuideToGlory": 6, "EtherealCrystal": 6 } },
+        { "phase": 6, "costs": { "Mora": 37500, "GuideToGlory": 9, "EtherealCrystal": 9 } },
+        {
+          "phase": 7,
+          "costs": {
+            "Mora": 120000,
+            "PhilosophiesOfGlory": 4,
+            "EtherealCrystalscaleStone": 4,
+            "CounterfeitResin": 1
+          }
+        },
+        {
+          "phase": 8,
+          "costs": {
+            "Mora": 260000,
+            "PhilosophiesOfGlory": 6,
+            "EtherealCrystalscaleStone": 6,
+            "CounterfeitResin": 1
+          }
+        },
+        {
+          "phase": 9,
+          "costs": {
+            "Mora": 450000,
+            "PhilosophiesOfGlory": 12,
+            "EtherealCrystalscaleStone": 9,
+            "CounterfeitResin": 2
+          }
+        },
+        {
+          "phase": 10,
+          "costs": {
+            "Mora": 700000,
+            "PhilosophiesOfGlory": 16,
+            "EtherealCrystalscaleStone": 12,
+            "CounterfeitResin": 2,
             "CrownOfInsight": 1
           }
         }
@@ -32084,6 +32400,67 @@
         }
       ]
     },
+    "StarsealedEdict": {
+      "key": "StarsealedEdict",
+      "name": "Starsealed Edict",
+      "gameId": 14525,
+      "ascension": [
+        {
+          "phase": 1,
+          "costs": {
+            "Mora": 10000,
+            "TheFrostEmperorsRevival": 5,
+            "SnowbornHeartshard": 5,
+            "EtherealGlimmershard": 3
+          }
+        },
+        {
+          "phase": 2,
+          "costs": {
+            "Mora": 20000,
+            "TheFrostEmperorsCeremony": 5,
+            "SnowbornHeartshard": 18,
+            "EtherealGlimmershard": 12
+          }
+        },
+        {
+          "phase": 3,
+          "costs": {
+            "Mora": 30000,
+            "TheFrostEmperorsCeremony": 9,
+            "SnowbornMirrorheart": 9,
+            "EtherealCrystal": 9
+          }
+        },
+        {
+          "phase": 4,
+          "costs": {
+            "Mora": 45000,
+            "TheFrostEmperorsLament": 5,
+            "SnowbornMirrorheart": 18,
+            "EtherealCrystal": 14
+          }
+        },
+        {
+          "phase": 5,
+          "costs": {
+            "Mora": 55000,
+            "TheFrostEmperorsLament": 9,
+            "SnowbornHeartOfIgnorance": 14,
+            "EtherealCrystalscaleStone": 9
+          }
+        },
+        {
+          "phase": 6,
+          "costs": {
+            "Mora": 65000,
+            "TheFrostEmperorsFarewell": 6,
+            "SnowbornHeartOfIgnorance": 27,
+            "EtherealCrystalscaleStone": 18
+          }
+        }
+      ]
+    },
     "SturdyBone": {
       "key": "SturdyBone",
       "name": "Sturdy Bone",
@@ -35612,6 +35989,7 @@
     ["ShivadaJadeSliver", "ShivadaJadeFragment", "ShivadaJadeChunk", "ShivadaJadeGemstone"],
     ["TreasureHoarderInsignia", "SilverRavenInsignia", "GoldenRavenInsignia"],
     ["SlimeCondensate", "SlimeSecretions", "SlimeConcentrate"],
+    ["SnowbornHeartshard", "SnowbornMirrorheart", "SnowbornHeartOfIgnorance"],
     ["SpectralHusk", "SpectralHeart", "SpectralNucleus"],
     ["RuinedHilt", "SplinteredHilt", "StillSmolderingHilt"],
     ["HollowRootOfLife", "SproutNodeOfLife", "CoiledCoreOfLife"],
@@ -35668,5 +36046,5 @@
       "GoldenGobletOfThePristineSea"
     ]
   ],
-  "contentFingerprint": "1b6ee33f1d1946fe312daf8083b7bdac7c13a84ae209ab20a37d27de4df86e81"
+  "contentFingerprint": "e928a2c939d4b23d15a45ac66262d66a5be0acb75a26c8401e8dbc85458513b0"
 }

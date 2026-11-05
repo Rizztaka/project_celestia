@@ -3,17 +3,17 @@
   "targetVersion": "7.1",
   "source": {
     "id": "genshin-db",
-    "url": "https://github.com/theBowja/genshin-db/tree/d158715a69615c9730d060fbf4bc2c75cc48166e",
-    "revision": "d158715a69615c9730d060fbf4bc2c75cc48166e",
-    "registryMetadataRetrievedOn": "2026-10-26",
+    "url": "https://github.com/theBowja/genshin-db/tree/8e5badd60b5d894284ccc927a56c9683529d2592",
+    "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "registryMetadataRetrievedOn": "2026-11-05",
     "archiveRetrievalStatus": "timed_out",
-    "artifactUrl": "https://registry.npmjs.org/genshin-db/-/genshin-db-5.2.14.tgz",
-    "upstreamIntegrity": "sha512-ynW5TYaEKJJOCUghETzv0CAe3OPUgtoKMWHxnpca9zyyrPmzEsYg4ATbplbdAh3ED0cc4fwLm83HxMquCGKX6w==",
+    "artifactUrl": "https://registry.npmjs.org/genshin-db/-/genshin-db-5.2.15.tgz",
+    "upstreamIntegrity": "sha512-xpdFdZAUzG0JyaNF+nbQMIbHYAzX/HbjfBja3xEw8kWET0E7yoM8A4UvB9YAqHgOzyjio2nGy+e6WI6lcjxerA==",
     "independentReview": null,
-    "packageVersion": "5.2.14",
+    "packageVersion": "5.2.15",
     "dataFile": "src/min/data.min.json",
-    "dataSha256": "948b4e005f9f23871a8045fc58a40fed63a2b473b402e42d33459a2ded9a4bbf",
-    "patchScope": "Playable character identity and release-version metadata through Version 7.1.",
+    "dataSha256": "6a71ab45b080bcc3296629610fb320f3aed2a20e6e6fcda4af8a1d20638d6c28",
+    "patchScope": "Playable character identity and release-version metadata through Version 7.2.",
     "reviewStatus": "unverified"
   },
   "releaseNotice": {
@@ -1014,6 +1014,22 @@
       "element": "Cryo",
       "weaponType": "Sword",
       "releaseVersion": "7.0"
+    },
+    {
+      "key": "Mitya",
+      "gameId": 10000136,
+      "sourceName": "Mitya",
+      "element": "Electro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "7.2"
+    },
+    {
+      "key": "Valeriy",
+      "gameId": 10000137,
+      "sourceName": "Valeriy",
+      "element": "Electro",
+      "weaponType": "Sword",
+      "releaseVersion": "7.2"
     }
   ],
   "releaseAdditions": [

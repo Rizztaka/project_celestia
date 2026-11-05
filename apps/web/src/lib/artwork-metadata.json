@@ -438,6 +438,12 @@
       "element": "Cryo",
       "weapon": "Polearm"
     },
+    "Mitya": {
+      "name": "Mitya",
+      "rarity": 5,
+      "element": "Electro",
+      "weapon": "Catalyst"
+    },
     "Mona": {
       "name": "Mona",
       "rarity": 5,
@@ -617,6 +623,12 @@
       "rarity": 5,
       "element": "Electro",
       "weapon": "Catalyst"
+    },
+    "Valeriy": {
+      "name": "Valeriy",
+      "rarity": 4,
+      "element": "Electro",
+      "weapon": "Sword"
     },
     "Varka": {
       "name": "Varka",
@@ -1899,6 +1911,10 @@
     "Widsith": {
       "name": "The Widsith",
       "rarity": 4
+    },
+    "StarsealedEdict": {
+      "name": "Starsealed Edict",
+      "rarity": 5
     }
   }
 }

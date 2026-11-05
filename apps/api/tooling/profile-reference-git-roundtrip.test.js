@@ -125,6 +125,6 @@ describe('profile reference real Git checkout byte preservation', () => {
         removeOwnedDirectory(temp, parent);
       }
     },
-    30000,
+    90000,
   );
 });

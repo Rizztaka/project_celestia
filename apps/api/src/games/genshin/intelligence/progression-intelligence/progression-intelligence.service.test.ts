@@ -87,7 +87,7 @@ describe('Progression Intelligence Service', () => {
 
   it('counts distinct source identities without aliases, comments or Traveler forms', async () => {
     const totalChars = collectibleCharacterCount;
-    expect(totalChars).toBe(122);
+    expect(totalChars).toBe(124);
 
     // Mock a roster that is exactly 50% of the total characters
     const mockRoster = Array.from({ length: Math.floor(totalChars / 2) }).map((_, i) => ({

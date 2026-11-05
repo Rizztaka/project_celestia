@@ -608,7 +608,11 @@
     {
       "key": "Flockingweed",
       "name": "Flockingweed",
-      "sources": ["Recommendation: Found in Fellfrost Peak", "Go to collect"],
+      "sources": [
+        "Recommendation: Found in Fellfrost Peak",
+        "Grown in the Serenitea Pot",
+        "Go to collect"
+      ],
       "domainKey": null,
       "category": "local_specialty"
     },
@@ -2318,6 +2322,45 @@
       "category": "local_specialty"
     },
     {
+      "key": "TeachingsOfCharity",
+      "name": "Teachings of Charity",
+      "sources": ["Exchanged in the Gift Shop"],
+      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation",
+      "category": "talent_book"
+    },
+    {
+      "key": "GuideToCharity",
+      "name": "Guide to Charity",
+      "sources": [],
+      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation",
+      "category": "talent_book"
+    },
+    {
+      "key": "PhilosophiesOfCharity",
+      "name": "Philosophies of Charity",
+      "sources": [],
+      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation",
+      "category": "talent_book"
+    },
+    {
+      "key": "Kristallfold",
+      "name": "Kristallfold",
+      "sources": [
+        "Recommendation: Found in Downtown Novokitezhgrad",
+        "Grown in the Serenitea Pot",
+        "Go to collect"
+      ],
+      "domainKey": null,
+      "category": "local_specialty"
+    },
+    {
+      "key": "ShatteredStabilityAnchor",
+      "name": "Shattered Stability Anchor",
+      "sources": ["Dropped by Lv. 30+ Wavebinders"],
+      "domainKey": null,
+      "category": "world_boss"
+    },
+    {
       "key": "SprayfeatherGill",
       "name": "Sprayfeather Gill",
       "sources": [
@@ -2380,13 +2423,6 @@
       "category": "local_specialty"
     },
     {
-      "key": "TeachingsOfCharity",
-      "name": "Teachings of Charity",
-      "sources": ["Exchanged in the Gift Shop"],
-      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation",
-      "category": "talent_book"
-    },
-    {
       "key": "EtherealGlimmershard",
       "name": "Ethereal Glimmershard",
       "sources": ["Dropped by Fae of Crystalline Flesh", "Stardust Exchange"],
@@ -2394,25 +2430,11 @@
       "category": "progression_support"
     },
     {
-      "key": "GuideToCharity",
-      "name": "Guide to Charity",
-      "sources": [],
-      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation",
-      "category": "talent_book"
-    },
-    {
       "key": "EtherealCrystal",
       "name": "Ethereal Crystal",
       "sources": ["Dropped by Lv. 40+ Fae of Crystalline Flesh", "Stardust Exchange"],
       "domainKey": null,
       "category": "progression_support"
-    },
-    {
-      "key": "PhilosophiesOfCharity",
-      "name": "Philosophies of Charity",
-      "sources": [],
-      "domainKey": "RelicsOfTheFallenGraceDomainOfMasteryContemplation",
-      "category": "talent_book"
     },
     {
       "key": "EtherealCrystalscaleStone",
@@ -2440,6 +2462,7 @@
       "sources": [
         "Recommendation: Found near Snezhnograd",
         "Recommendation: Found in White Birch Snowgrave",
+        "Grown in the Serenitea Pot",
         "Go to collect"
       ],
       "domainKey": null,
@@ -2584,6 +2607,17 @@
       "category": "talent_book"
     },
     {
+      "key": "FairyWormwood",
+      "name": "Fairy Wormwood",
+      "sources": [
+        "Recommendation: Found in Teplo Oasis",
+        "Grown in the Serenitea Pot",
+        "Go to collect"
+      ],
+      "domainKey": null,
+      "category": "local_specialty"
+    },
+    {
       "key": "ProfanedSprout",
       "name": "Profaned Sprout",
       "sources": [
@@ -2599,6 +2633,7 @@
       "sources": [
         "Recommendation: Found in Flamefeather Valley",
         "Recommendation: Found in Rankova Zorya",
+        "Grown in the Serenitea Pot",
         "Go to collect"
       ],
       "domainKey": null,
@@ -4104,6 +4139,30 @@
       ],
       "domainKey": null,
       "category": "progression_support"
+    },
+    {
+      "key": "SnowbornHeartshard",
+      "name": "Snowborn Heartshard",
+      "sources": ["Dropped by Mindless Iceborns", "Stardust Exchange"],
+      "domainKey": null,
+      "category": "progression_support"
+    },
+    {
+      "key": "SnowbornMirrorheart",
+      "name": "Snowborn Mirrorheart",
+      "sources": ["Dropped by Lv. 40+ Mindless Iceborns", "Stardust Exchange"],
+      "domainKey": null,
+      "category": "progression_support"
+    },
+    {
+      "key": "SnowbornHeartOfIgnorance",
+      "name": "Snowborn Heart of Ignorance",
+      "sources": [
+        "Dropped by Lv. 60+ Mindless Iceborns",
+        "Stardust Exchange: Craft after exchanging"
+      ],
+      "domainKey": null,
+      "category": "progression_support"
     }
   ],
   "domains": [
@@ -4727,6 +4786,7 @@
     { "key": "Lyney", "name": "Lyney", "talentMax": 10 },
     { "key": "Mavuika", "name": "Mavuika", "talentMax": 10 },
     { "key": "Mika", "name": "Mika", "talentMax": 10 },
+    { "key": "Mitya", "name": "Mitya", "talentMax": 10 },
     { "key": "Mona", "name": "Mona", "talentMax": 10 },
     { "key": "Mualani", "name": "Mualani", "talentMax": 10 },
     { "key": "Nahida", "name": "Nahida", "talentMax": 10 },
@@ -4756,6 +4816,7 @@
     { "key": "Tartaglia", "name": "Tartaglia", "talentMax": 10 },
     { "key": "Thoma", "name": "Thoma", "talentMax": 10 },
     { "key": "Tighnari", "name": "Tighnari", "talentMax": 10 },
+    { "key": "Valeriy", "name": "Valeriy", "talentMax": 10 },
     { "key": "Varesa", "name": "Varesa", "talentMax": 10 },
     { "key": "Varka", "name": "Varka", "talentMax": 10 },
     { "key": "Venti", "name": "Venti", "talentMax": 10 },
@@ -5011,6 +5072,7 @@
     { "key": "StaffOfHoma", "name": "Staff of Homa", "ascensionMax": 6 },
     { "key": "StaffOfTheScarletSands", "name": "Staff of the Scarlet Sands", "ascensionMax": 6 },
     { "key": "StarcallersWatch", "name": "Starcaller's Watch", "ascensionMax": 6 },
+    { "key": "StarsealedEdict", "name": "Starsealed Edict", "ascensionMax": 6 },
     { "key": "SturdyBone", "name": "Sturdy Bone", "ascensionMax": 6 },
     { "key": "SummitShaper", "name": "Summit Shaper", "ascensionMax": 6 },
     { "key": "SunnyMorningSleepIn", "name": "Sunny Morning Sleep-In", "ascensionMax": 6 },

@@ -13,6 +13,7 @@ import { readRotationChoice, saveRotationChoice } from '../lib/team-damage/prefe
 import { describeRotation } from '../lib/team-damage/rotation-explainer';
 import { type DamageResult, runTeamSimulation } from '../lib/team-damage/service';
 import RotationBuilder from './RotationBuilder';
+import RotationExecutionEvidence from './RotationExecutionEvidence';
 
 const format = (value: number) => value.toLocaleString(undefined, { maximumFractionDigits: 0 });
 export default function TeamDamagePanel({
@@ -197,7 +198,7 @@ export default function TeamDamagePanel({
                 </div>
               </header>
               <div className="rotation-mode-options" role="radiogroup" aria-label="Rotation choice">
-                <label>
+                <label aria-label="Default rotation">
                   <input
                     type="radio"
                     name={`rotation-${uid}-${team.id}`}
@@ -209,7 +210,7 @@ export default function TeamDamagePanel({
                     <small>A simple, ready-to-use starting loop</small>
                   </span>
                 </label>
-                <label>
+                <label aria-label="Custom rotation">
                   <input
                     type="radio"
                     name={`rotation-${uid}-${team.id}`}
@@ -394,6 +395,11 @@ export default function TeamDamagePanel({
                   rotation, not guaranteed in-game damage.
                 </p>
               </details>
+              <RotationExecutionEvidence
+                result={fresh}
+                steps={settings.steps}
+                names={engineNames}
+              />
             </section>
           ) : result ? (
             <p className="analysis-muted">

@@ -14,6 +14,7 @@ export {
   verifyEmailSchema,
 } from './auth/auth.schema.js';
 export { type MeResponse, meResponseSchema } from './auth/me.schema.js';
+export * from './genshin/account-context.js';
 export type {
   AdviceAvailability,
   AdviceDomain,
@@ -82,9 +83,12 @@ export {
   type ImportSectionStatus,
   type ImportStatus,
 } from './genshin/import.schema.js';
+export * from './genshin/marginal-investment.js';
 export * from './genshin/plan.js';
 export * from './genshin/profile-reference.js';
+export * from './genshin/readiness.js';
 export * from './genshin/showcase.js';
+export * from './genshin/team-preferences.js';
 export * from './genshin/theater.js';
 export * from './genshin/wishes.js';
 export { type CreateUserInput, createUserSchema } from './users/user.schema.js';

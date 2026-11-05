@@ -158,7 +158,7 @@ export default function RoutinePanel({
         ) : (
           <>
             <p role="alert">{query.error?.message ?? 'Routine unavailable.'}</p>
-            <button className={button} onClick={() => void query.refetch()}>
+            <button type="button" className={button} onClick={() => void query.refetch()}>
               Retry
             </button>
           </>
@@ -222,6 +222,7 @@ export default function RoutinePanel({
           ))}
         </select>
         <button
+          type="button"
           ref={refreshButton}
           className={button}
           disabled={saving || query.isFetching || !online}
@@ -375,7 +376,7 @@ export default function RoutinePanel({
                   disabled={disabled}
                 />
               </label>
-              <button className={`${button} self-end`} disabled={disabled}>
+              <button type="submit" className={`${button} self-end`} disabled={disabled}>
                 Record resin
               </button>
             </form>
@@ -457,6 +458,7 @@ export default function RoutinePanel({
               </p>
               <div className="flex flex-wrap gap-3">
                 <button
+                  type="button"
                   className={button}
                   disabled={disabled}
                   onClick={() =>
@@ -466,6 +468,7 @@ export default function RoutinePanel({
                   Record use now
                 </button>
                 <button
+                  type="button"
                   className={button}
                   disabled={disabled || !transformer?.lastRecordedAt}
                   onClick={() =>
@@ -525,7 +528,7 @@ export default function RoutinePanel({
                 disabled={clockDisabled}
               />
             </label>
-            <button className={button} disabled={clockDisabled}>
+            <button type="submit" className={button} disabled={clockDisabled}>
               Save total
             </button>
             <button

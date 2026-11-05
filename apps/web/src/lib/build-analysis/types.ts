@@ -5,7 +5,7 @@
  * state, rotations, ownership or a complete roster, and no type carries a build score.
  */
 
-export const RULE_PACK_VERSION = 'public-build-analysis-1';
+export const RULE_PACK_VERSION = 'public-build-analysis-2';
 
 export type TriState = 'true' | 'false' | 'unknown';
 
@@ -33,6 +33,7 @@ export type BuildRoleId =
   | 'resistance_shred'
   | 'healing_support'
   | 'shield_support'
+  | 'general_checks'
   | 'unspecified';
 
 export type FindingCategory =
@@ -132,6 +133,7 @@ export interface NormalizedCharacter {
   metadataAvailable: boolean;
   /** False means the contract omitted equipment entirely; not proof of empty slots. */
   equipmentAvailable: boolean;
+  observationConflict: boolean;
   observedAt: string;
   talents: NormalizedTalent[];
   weapon: NormalizedWeapon | null;
@@ -201,6 +203,7 @@ export interface CharacterAnalysis {
   characterKey: string;
   roleId: BuildRoleId;
   teamId: string | null;
+  roleAssumed: boolean;
   hypothesis: Hypothesis | null;
   /** Deterministic identity of everything that influenced the result. */
   digest: string;

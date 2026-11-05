@@ -3,22 +3,21 @@ import { readFileSync } from 'node:fs';
 
 import { writeCatalogJson } from './catalog-json.mjs';
 const root = new URL('../../web/src/lib/build-analysis/', import.meta.url);
+const previousManifest = JSON.parse(readFileSync(new URL('sources.json', root)));
 const sources = [];
-for (const name of ['furina', 'sucrose', 'skirk', 'xilonen']) {
-  const url = `https://keqingmains.com/q/${name}-quickguide/`;
+for (const previous of previousManifest.sources) {
+  const { url, id } = previous;
   const response = await fetch(url, { signal: AbortSignal.timeout(20000), redirect: 'error' });
-  if (!response.ok) throw new Error(`Could not acquire ${name}: ${response.status}`);
+  if (!response.ok) throw new Error(`Could not acquire ${id}: ${response.status}`);
   const bytes = new Uint8Array(await response.arrayBuffer());
   if (bytes.length > 4_000_000) throw new Error('Guide exceeds bound.');
   const html = new TextDecoder().decode(bytes);
   if (!html.includes('Talent') || !html.includes('Artifact'))
     throw new Error('Guide content missing.');
   sources.push({
-    id: `kqm-${name}`,
-    url,
-    title: `${name[0].toUpperCase()}${name.slice(1)} quick guide`,
+    ...previous,
     sha256: createHash('sha256').update(bytes).digest('hex'),
-    reviewedAt: '2026-10-24',
+    acquiredAt: new Date().toISOString(),
     attribution:
       'KQM; linked reference, independently written summaries. No guide prose reproduced.',
     scope:
@@ -49,8 +48,10 @@ await writeCatalogJson(new URL('equipment-identity.json', root), {
   source: relics.source,
 });
 await writeCatalogJson(new URL('sources.json', root), {
-  version: 'public-build-analysis-1',
+  version: previousManifest.version,
   sources,
 });
 // Acquisition does not update reviewed-hashes.json. Review source changes first.
-console.log('Generated four guide fingerprints and stable equipment identities.');
+console.log(
+  `Acquired ${sources.length} guide fingerprints and stable equipment identities; accepted hashes unchanged.`,
+);

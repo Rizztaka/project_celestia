@@ -1,10 +1,20 @@
 # Project Celestia documentation
 
-Start with [CURRENT_HANDOFF](plans/CURRENT_HANDOFF.md) for implemented status, then [Project Vision](PROJECT_VISION.md), [Roadmap](ROADMAP.md), and [Genshin Companion](features/FEATURE_GENSHIN_COMPANION.md) for product direction. C3a [equipment API](api/character-equipment.md) and [acceptance](plans/c3a-character-equipment/walkthrough.md) record the latest local slice; C3b remains separate.
+Start with [CURRENT_HANDOFF](plans/CURRENT_HANDOFF.md) for implemented status and the
+[autonomous companion plan](plans/autonomous-companion/implementation_plan.md) for
+the owner's 2026-10-25 goal, code audit, delivery order and acceptance criteria.
+[Project Vision](PROJECT_VISION.md) and [Roadmap](ROADMAP.md) record its precedence
+over historical scope. Run `pnpm companion:status` for local data/engine/advice
+coverage; the report does not certify live-patch completeness.
 
 ## Current direction and precedence
 
-The owner selected a Genshin companion focus and delegated feature selection in September 2026. Equipped artifacts and inventory remain; artifact optimization is excluded.
+The owner now wants an autonomous endgame companion with build assessment,
+damage-based team generation, content-specific teams, account-value pull advice
+and a fun simulator. Verified knowledge through version 7.1 and player convenience
+are explicit requirements. Earlier exclusions of these features are superseded.
+Existing equipment, inventory, goals and deterministic calculations remain useful
+foundations. A global artifact optimizer is not required by this goal.
 
 For product scope, the current vision, roadmap, and companion specification supersede older feature ambitions. For engineering, retain the architecture and applicable ADRs, including the explicit September amendments. Current code describes implemented behavior; a target specification does not make that behavior shipped.
 

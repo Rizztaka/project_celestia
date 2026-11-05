@@ -67,6 +67,21 @@ export const genshinAccountTables: readonly AccountTable[] = [
   ),
   table('genshin_character_focus', ['accountId', 'characterKey', 'focused', 'revision']),
   table(
+    'genshin_team_preferences',
+    [
+      'id',
+      'userId',
+      'scopeKey',
+      'uid',
+      'accountId',
+      'revision',
+      'payload',
+      'createdAt',
+      'updatedAt',
+    ],
+    user,
+  ),
+  table(
     'upgrade_goals',
     [
       'id',

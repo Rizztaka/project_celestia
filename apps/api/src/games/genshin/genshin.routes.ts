@@ -12,13 +12,16 @@ import { characterIntelligenceRoutes } from './intelligence/character-intelligen
 import { farmingIntelligenceRoutes } from './intelligence/farming-intelligence/farming-intelligence.routes.js';
 import { guideKnowledgeRoutes } from './intelligence/guide-knowledge/guide-knowledge.routes.js';
 import { knowledgeIntelligenceRoutes } from './intelligence/knowledge-intelligence/knowledge-intelligence.routes.js';
+import { marginalInvestmentRoutes } from './intelligence/marginal-investment/marginal-investment.routes.js';
 import { plannerIntelligenceRoutes } from './intelligence/planner-intelligence/planner-intelligence.routes.js';
 import { progressionIntelligenceRoutes } from './intelligence/progression-intelligence/progression-intelligence.routes.js';
 import { pullIntelligenceRoutes } from './intelligence/pull-intelligence/pull-intelligence.routes.js';
+import { readinessIntelligenceRoutes } from './intelligence/readiness-intelligence/readiness-intelligence.routes.js';
 import { teamIntelligenceRoutes } from './intelligence/team-intelligence/team-intelligence.routes.js';
 import { createShowcaseRoutes } from './showcase/showcase.routes.js';
 import type { ShowcaseService } from './showcase/showcase.service.js';
 import pullSimulatorRoutes from './simulators/pull-simulator.routes.js';
+import { teamPreferencesRoutes } from './team-preferences.routes.js';
 import { weaponRoutes } from './weapons/weapon.routes.js';
 export function createGenshinRoutes(safety: RequestSafety, showcaseService?: ShowcaseService) {
   const router = Router();
@@ -47,6 +50,7 @@ export function createGenshinRoutes(safety: RequestSafety, showcaseService?: Sho
   router.use(createImporterRoutes(safety));
   router.use(createShowcaseRoutes(showcaseService));
   router.use(safety.ordinaryJson);
+  router.use(teamPreferencesRoutes);
   router.use(buildInsightsRoutes);
   router.use(characterRoutes);
   router.use(guideKnowledgeRoutes);
@@ -59,6 +63,8 @@ export function createGenshinRoutes(safety: RequestSafety, showcaseService?: Sho
   router.use(farmingIntelligenceRoutes);
   router.use(pullIntelligenceRoutes);
   router.use(progressionIntelligenceRoutes);
+  router.use(readinessIntelligenceRoutes);
+  router.use(marginalInvestmentRoutes);
   router.use(knowledgeIntelligenceRoutes);
   router.use(endgameRoutes);
   router.use(pullSimulatorRoutes);

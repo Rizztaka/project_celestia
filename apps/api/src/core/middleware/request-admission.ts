@@ -26,8 +26,8 @@ export function normalizeClientAddress(address: string | undefined): string {
   const canonical = new URL(`http://[${value}]`).hostname.slice(1, -1);
   const mapped = /^::ffff:([0-9a-f]+):([0-9a-f]+)$/.exec(canonical);
   if (!mapped) return canonical;
-  const high = parseInt(mapped[1]!, 16),
-    low = parseInt(mapped[2]!, 16);
+  const high = Number.parseInt(mapped[1]!, 16),
+    low = Number.parseInt(mapped[2]!, 16);
   return `${high >> 8}.${high & 255}.${low >> 8}.${low & 255}`;
 }
 
@@ -261,7 +261,7 @@ function readBody(parse: RequestHandler, req: Request, res: Response): Promise<v
       done = true;
       req.off('aborted', closed);
       res.off('close', closed);
-      if (error) reject(error);
+      if (error) reject(error instanceof Error ? error : new Error(String(error)));
       else resolve();
     };
     req.once('aborted', closed);

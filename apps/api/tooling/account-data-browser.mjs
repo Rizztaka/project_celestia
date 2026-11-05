@@ -198,7 +198,7 @@ try {
         await import('../src/games/nikke/account-data/nikke-account-data.ts');
       const repository = new AccountDataRepository([genshinAccountData, nikkeAccountData]);
       requireSafe(
-        exported.exportVersion === 1 && Object.keys(exported.tables).length === 20,
+        exported.exportVersion === 1 && Object.keys(exported.tables).length === 21,
         'DOWNLOAD_SCHEMA_MISMATCH',
       );
       entry.tables = [];

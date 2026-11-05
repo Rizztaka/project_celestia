@@ -52,15 +52,14 @@ export default function SessionManagement({ verified }: { verified: boolean }) {
         });
         useAuthStore.getState().logout();
         window.location.assign(result.url);
-        return action;
+        return;
       }
       await fetchApi(action === 'others' ? '/auth/logout-others' : '/auth/verification-email', {
         method: 'POST',
         body: '{}',
       });
-      return action;
     },
-    onSuccess: (action) => {
+    onSuccess: (_, action) => {
       setMessage(
         action === 'others'
           ? 'Other devices signed out.'

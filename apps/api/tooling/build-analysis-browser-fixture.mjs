@@ -1,6 +1,6 @@
 if (
   process.env.NODE_ENV !== 'test' ||
-  process.env.DATABASE_URL !== 'postgresql://synthetic:synthetic@127.0.0.1:1/never_connect'
+  process.env.DATABASE_URL !== 'postgresql://127.0.0.1:1/never_connect'
 )
   throw new Error('Synthetic fixture environment required.');
 import { readFileSync } from 'node:fs';

@@ -14,7 +14,7 @@ import { tmpdir } from 'node:os';
 import { join, relative } from 'node:path';
 
 import ts from 'typescript';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   boundedSourceFetch,
@@ -45,24 +45,39 @@ import {
 } from './contextual-baseline.mjs';
 
 const roots = [];
-afterEach(() =>
-  roots.splice(0).forEach((root) => {
-    const target = realpathSync(root);
-    const ownedName = relative(realpathSync(tmpdir()), target);
-    if (
-      !/^celestia-k3-(release-test|portable|link-outside|production-copy)-[^\\/]+$/.test(ownedName)
-    )
-      throw Error('Refusing cleanup outside the owned K3 temporary directory.');
-    rmSync(target, { recursive: true, force: true });
-  }),
-);
+let templateRoot;
+beforeEach(() => {
+  // Fixture releases are intentionally accepted only in the same isolated
+  // environment used by the recovery/test harness. Keep child publisher
+  // processes on that exact environment too.
+  vi.stubEnv('NODE_ENV', 'test');
+  vi.stubEnv('DOTENV_CONFIG_PATH', process.platform === 'win32' ? 'NUL' : '/dev/null');
+});
+function cleanup(root) {
+  const target = realpathSync(root);
+  const ownedName = relative(realpathSync(tmpdir()), target);
+  if (!/^celestia-k3-(release-test|portable|link-outside|production-copy)-[^\\/]+$/.test(ownedName))
+    throw Error('Refusing cleanup outside the owned K3 temporary directory.');
+  rmSync(target, { recursive: true, force: true });
+}
+afterEach(() => {
+  roots.splice(0).forEach(cleanup);
+  vi.unstubAllEnvs();
+});
+afterAll(() => {
+  if (templateRoot) cleanup(templateRoot);
+});
 const save = (file, data) => writeFileSync(file, JSON.stringify(data, null, 2) + '\n');
 function store() {
   const root = mkdtempSync(join(tmpdir(), 'celestia-k3-release-test-'));
   roots.push(root);
-  save(join(root, 'fixture.json'), 'isolated-synthetic-knowledge');
-  migrateApprovedBaseline(root);
-  activateRelease(root, baselineId, null, 'OmniRush.ai test agent');
+  if (!templateRoot) {
+    templateRoot = mkdtempSync(join(tmpdir(), 'celestia-k3-release-test-template-'));
+    save(join(templateRoot, 'fixture.json'), 'isolated-synthetic-knowledge');
+    migrateApprovedBaseline(templateRoot);
+    activateRelease(templateRoot, baselineId, null, 'OmniRush.ai test agent');
+  }
+  cpSync(templateRoot, root, { recursive: true });
   return { root, base: loadSelectedRelease(root) };
 }
 const candidate = (base) => ({
@@ -381,7 +396,11 @@ describe('K3 bounded source and review workflow', () => {
     }
   });
 });
-describe('K3 immutable local release lifecycle', () => {
+// Release publication validates and hashes a complete 17-source pack several
+// times by design. On Windows this bounded filesystem work can exceed Vitest's
+// default five-second per-test budget; the explicit suite budget guards against
+// false timeout failures without changing any assertion or failure behavior.
+describe('K3 immutable local release lifecycle', { timeout: 30000 }, () => {
   it('imports the exact approved baseline without changing historical review provenance', () => {
     const { base } = store();
     expect(base.pack).toEqual(approvedBaselineInput().pack);
@@ -465,7 +484,16 @@ describe('K3 immutable local release lifecycle', () => {
     const result = spawnSync(
       process.execPath,
       ['--import', 'tsx', '--input-type=module', '-e', code],
-      { cwd: process.cwd(), env: process.env, encoding: 'utf8', timeout: 15000 },
+      {
+        cwd: process.cwd(),
+        env: {
+          ...process.env,
+          NODE_ENV: 'test',
+          DOTENV_CONFIG_PATH: process.platform === 'win32' ? 'NUL' : '/dev/null',
+        },
+        encoding: 'utf8',
+        timeout: 15000,
+      },
     );
     expect(result.status).toBe(23);
     expect(loadSelectedRelease(root)).toEqual(base);

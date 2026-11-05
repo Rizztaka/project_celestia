@@ -43,15 +43,15 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1d0ff469b62b6d0ad9b0af0fb3b1e40be53ce9b9 # v4.2.0
         with:
           node-version: 22
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@08c4be7e2e672a47d11bd04269e27e5f3e8529cb # v4.3.0
         with:
           version: 11.18.0
 
@@ -60,7 +60,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@1bd1e32a3bdc45762d14e2693a61fed9204366e7 # v4.2.0
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -98,10 +98,10 @@ jobs:
           REDIS_URL: redis://127.0.0.1:6379/15
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
 
       - name: Validate API container
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6.15.0
         with:
           context: .
           file: apps/api/Dockerfile
@@ -110,7 +110,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=api
 
       - name: Validate web container
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6.15.0
         with:
           context: .
           file: apps/web/Dockerfile
@@ -120,7 +120,7 @@ jobs:
 
       - name: Preserve verification results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: verification-results
           path: ${{ runner.temp }}/celestia-verification-*/*.json

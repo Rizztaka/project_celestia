@@ -32,12 +32,45 @@ vi.mock('@/core/db/prisma.js', () => ({
 vi.mock('@/core/logger/logger.js', () => ({ logger: { info: vi.fn(), error: mocks.error } }));
 
 const secret = 'c5a-synthetic-http-secret-at-least-32-characters';
+const originalEnvironment = {
+  NODE_ENV: process.env.NODE_ENV,
+  DOTENV_CONFIG_PATH: process.env.DOTENV_CONFIG_PATH,
+  DATABASE_URL: process.env.DATABASE_URL,
+  JWT_SECRET: process.env.JWT_SECRET,
+  OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
+  WEB_ORIGIN: process.env.WEB_ORIGIN,
+  API_ORIGIN: process.env.API_ORIGIN,
+  CORS_ALLOWED_ORIGINS: process.env.CORS_ALLOWED_ORIGINS,
+};
+Object.assign(process.env, {
+  NODE_ENV: 'production',
+  DOTENV_CONFIG_PATH: process.platform === 'win32' ? 'NUL' : '/dev/null',
+  DATABASE_URL: 'postgresql://synthetic:synthetic@127.0.0.1:55448/celestia_test_cors',
+  JWT_SECRET: secret,
+  OPENROUTER_API_KEY: 'synthetic-unused',
+  WEB_ORIGIN: 'https://trusted.example',
+  API_ORIGIN: 'https://api.trusted.example',
+  CORS_ALLOWED_ORIGINS: 'https://trusted.example, https://preview-42.vercel.app',
+});
+const defaultApplication = supertest((await import('@/app.js')).app);
+for (const [key, value] of Object.entries(originalEnvironment)) {
+  if (value === undefined) delete process.env[key];
+  else process.env[key] = value;
+}
 async function application(
   mode = 'production',
   origins: string | undefined = mode === 'production'
     ? 'https://trusted.example, https://preview-42.vercel.app'
     : undefined,
 ) {
+  if (
+    mode === 'production' &&
+    origins === 'https://trusted.example, https://preview-42.vercel.app' &&
+    process.env.WEB_ORIGIN === 'https://trusted.example' &&
+    process.env.API_ORIGIN === 'https://api.trusted.example' &&
+    process.env.JWT_SECRET === secret
+  )
+    return defaultApplication;
   vi.resetModules();
   vi.stubEnv('NODE_ENV', mode);
   vi.stubEnv('CORS_ALLOWED_ORIGINS', origins);

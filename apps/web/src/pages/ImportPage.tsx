@@ -240,7 +240,6 @@ export default function ImportPage() {
                   className="overflow-x-auto"
                   role="region"
                   aria-label="Section counts; scroll horizontally on narrow screens"
-                  tabIndex={0}
                 >
                   <table className="w-full min-w-[28rem] text-left text-sm">
                     <caption className="mb-3 text-left text-zinc-400">

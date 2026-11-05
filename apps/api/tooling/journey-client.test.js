@@ -82,7 +82,7 @@ describe('C5 real navigation, rendering and transport regressions', () => {
       for (const path of ['/import', '/inventory', '/profile', '/intelligence', '/endgame'])
         expect(html).toContain(`href="${path}"`);
       expect(html).toContain('href="#companion-content"');
-      expect(html).not.toContain('href="/simulators"');
+      expect(html).toContain('href="/simulators"');
       expect(html).not.toContain('<main');
     },
   );

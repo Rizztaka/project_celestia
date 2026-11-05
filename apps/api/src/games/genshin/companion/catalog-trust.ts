@@ -405,7 +405,9 @@ export class GenshinCatalogTrust {
         steps.push({ phase: row.phase, costs });
       }
     }
-    const consumed = [...new Set(steps.flatMap((step) => Object.keys(step.costs)))].sort();
+    const consumed = [...new Set(steps.flatMap((step) => Object.keys(step.costs)))].sort((a, b) =>
+      a.localeCompare(b),
+    );
     const joined = consumed.map((material) => {
       if (materialReferences === 'local_keys') return { key: key.parse(material) };
       const reference = materialSchema.parse(references[material]);

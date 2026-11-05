@@ -90,7 +90,7 @@ export function PlanPreferencesForm({
         </p>
       )}
       <div className="flex flex-wrap gap-3">
-        <button className={planButton} disabled={disabled}>
+        <button type="submit" className={planButton} disabled={disabled}>
           Save plan choices
         </button>
         <button type="button" className={planButton} disabled={saving} onClick={onRestore}>

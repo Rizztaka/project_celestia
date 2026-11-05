@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo, useState } from 'react';
 
+import { publicAccountContext } from '../lib/account-context.calculator';
 import { roleOptions } from '../lib/build-analysis/character.calculator';
 import { roleLabels } from '../lib/build-analysis/explainer';
 import { formIdentity } from '../lib/build-analysis/identity';
@@ -41,6 +42,12 @@ export default function TeamBuildEditor({
 }) {
   const { query } = useUidWorkspace();
   const history = useObservedRoster(uid, query.data);
+  const [now] = useState(Date.now);
+  const account = useMemo(
+    () => publicAccountContext(uid, history.records, now),
+    [uid, history.records, now],
+  );
+  const records = account.records;
   const teams = useUidTeams(uid);
   const client = useQueryClient();
   const [draft, setDraft] = useState<Draft | null>(initialDraft ?? null);
@@ -56,7 +63,7 @@ export default function TeamBuildEditor({
       ? { id: selected.id, name: selected.name, slots: [...selected.members] }
       : blankDraft());
   const members = current.slots.filter((m): m is MemberSelection => !!m);
-  const normalized = useMemo(() => history.records.map(normalizeObservation), [history.records]);
+  const normalized = useMemo(() => records.map(normalizeObservation), [records]);
   const analysis = analyzeTeam(uid, members, normalized);
   const context = teamContext(uid, members, normalized);
   const subjects = Object.fromEntries(normalized.map((r) => [r.key, r.name]));
@@ -113,7 +120,7 @@ export default function TeamBuildEditor({
   function renderMember(slot: number) {
     const member = current.slots[slot];
     if (!member) return null;
-    const observation = history.records.find((r) => r.character.key === member.characterKey);
+    const observation = records.find((r) => r.character.key === member.characterKey);
     const memberAnalysis = analysis.members.find(
       (m) => m.characterKey === member.characterKey,
     )?.analysis;
@@ -206,9 +213,7 @@ export default function TeamBuildEditor({
         </header>
         <div className="team-slot-grid">
           {current.slots.map((member, slot) => {
-            const c = history.records.find(
-              (r) => r.character.key === member?.characterKey,
-            )?.character;
+            const c = records.find((r) => r.character.key === member?.characterKey)?.character;
             return (
               <article
                 key={slot}
@@ -237,7 +242,7 @@ export default function TeamBuildEditor({
                         <small>
                           {member?.roleId === 'unspecified'
                             ? roleOptions(c).length
-                              ? 'Set a build role'
+                              ? 'Automatic reviewed role'
                               : 'General build checks'
                             : roleLabels[member!.roleId]}
                         </small>
@@ -456,7 +461,7 @@ export default function TeamBuildEditor({
       {pickerSlot !== null ? (
         <TeamCharacterPicker
           slot={pickerSlot}
-          characters={history.records.map((r) => r.character)}
+          characters={records.map((r) => r.character)}
           excludedForms={current.slots.flatMap((m, i) =>
             m && i !== pickerSlot
               ? [formIdentity({ avatarId: Number(m.characterKey.split(':')[0]) })]

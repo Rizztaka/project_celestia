@@ -2,7 +2,8 @@ import { sources } from './coverage';
 import type { BuildRoleId, Finding } from './types';
 
 export const roleLabels: Record<BuildRoleId, string> = {
-  unspecified: 'Choose a role',
+  unspecified: 'Automatic reviewed role',
+  general_checks: 'General checks only',
   on_field_damage: 'On-field damage',
   off_field_damage: 'Off-field damage',
   reaction_trigger: 'Reaction trigger',
@@ -55,17 +56,30 @@ export function explainFinding(f: Finding) {
     explanation = '';
   if (f.ruleId.startsWith('main-stat-')) {
     title = `${value(f, 'slot')} main stat`;
-    explanation = `${f.hypothesisDependent ? 'Assumed choice' : 'Recorded choice'}: ${statLabel(value(f, 'actual'))}. This role's reviewed choices: ${list(value(f, 'accepted'))}. ${truth === 'false' ? 'Consider one of these alternatives for the selected role; this is not a damage comparison.' : truth === 'unknown' ? 'Refresh or check this slot before drawing a conclusion.' : 'This is an accepted choice; the alternatives can also be valid.'}`;
+    const context = value(f, 'context');
+    const conditional = {
+      reaction_context:
+        'EM is a conditional alternative when this character owns the relevant reactions. Team presence alone does not prove reaction ownership.',
+      favonius_proc:
+        'This CRIT choice is reviewed for Favonius triggering. Check the weapon, field time and actual CRIT opportunities.',
+      team_buffs:
+        'This alternative depends on the balance of team buffs, personal damage and healing. It is not an unconditional upgrade.',
+    }[context];
+    explanation = `${f.hypothesisDependent ? 'Assumed choice' : 'Recorded choice'}: ${statLabel(value(f, 'actual'))}. This role's reviewed choices: ${list(value(f, 'accepted'))}. ${truth === 'false' ? 'Consider one of these alternatives for the selected role; this is not a damage comparison.' : truth === 'unknown' ? 'Refresh or check this slot before drawing a conclusion.' : (conditional ?? 'This is an accepted choice; the alternatives can also be valid.')}`;
   } else
     switch (f.ruleId) {
       case 'coverage':
         title = 'Analysis coverage';
         explanation =
           {
+            general_checks_selected:
+              'General equipment checks were selected. No reviewed role or build-purpose assumption is applied.',
             choose_role:
               'Choose a role to apply the reviewed build guidance. Generic equipment checks remain available.',
             source_changed:
               'The source fingerprint changed. Tailored rules are disabled until reviewed.',
+            observation_conflict:
+              'Different builds were observed at the same time. Refresh this character to resolve the conflict before using tailored advice. Existing observations are preserved.',
             constellation_scope:
               'This constellation changes the modeled support pattern. Only generic checks are available.',
             unsupported:
@@ -119,6 +133,27 @@ export function explainFinding(f: Finding) {
         explanation =
           'Do not chase a fixed ER target at the expense of EM. Burst usage and rotation determine its value.';
         break;
+      case 'kazuha-energy':
+        title = 'Kazuha’s Burst depends on the rotation';
+        explanation =
+          'Burst use changes with the team: some Vape/Melt or short rotations skip it. Set ER for the intended rotation rather than imposing a fixed target on every build.';
+        break;
+      case 'bennett-buff-scaling':
+        title = 'Bennett’s buff uses base ATK';
+        explanation =
+          'His Burst buff scales with character base ATK, weapon base ATK and Burst talent level. Artifact ATK and the weapon’s ATK% secondary stat do not increase that buff. This reviewed role prioritizes healing and energy; personal-damage builds use a different pattern.';
+        break;
+      case 'nahida-em-context':
+        title = 'Nahida does not require a universal 1,000 EM build';
+        explanation =
+          'Her EM sharing can use another teammate’s higher EM. Team buffs, reaction ownership, weapon and substats affect the balance between EM, Dendro damage and CRIT. Reaching 1,000 EM is not required for a good build, and recorded stats do not prove in-combat buff uptime.';
+        break;
+      case 'escoffier-party': {
+        title = 'Escoffier’s Hydro/Cryo party scaling';
+        const matching = f.values.matching;
+        explanation = `${matching?.kind === 'count' ? matching.value : 'Unknown'} known Hydro/Cryo members are represented, including Escoffier. Her strongest reviewed resistance reduction uses four Hydro/Cryo party members. Smaller qualifying counts can still provide support; Skill/Burst execution and actual debuff uptime remain unverified.`;
+        break;
+      }
       case 'no-energy-burst':
         title = 'A different Burst resource';
         explanation =
@@ -150,7 +185,7 @@ export function explainFinding(f: Finding) {
         title = 'Viridescent Venerer in this lineup';
         explanation =
           truth === 'true'
-            ? 'A swirlable teammate element is present. Sucrose must actually trigger the relevant Swirl while on-field; application and resistance reduction uptime are unverified.'
+            ? 'A swirlable teammate element is present. The set wearer must actually trigger the relevant Swirl while on-field; application and resistance reduction uptime are unverified.'
             : truth === 'false'
               ? 'No Pyro/Hydro/Electro/Cryo teammate is represented. Teammate-element resistance reduction is not established; an enemy aura is outside this input.'
               : 'The potential teammate element is unresolved. The set effect still requires a relevant Swirl.';

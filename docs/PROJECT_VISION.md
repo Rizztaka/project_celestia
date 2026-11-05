@@ -1,5 +1,16 @@
 # Project Celestia — Genshin Companion
 
+> **Current owner direction — 2026-10-25:** Build an autonomous Genshin companion
+> for endgame players: contextual build readiness and next upgrades, teams ranked
+> by supported damage simulations, Abyss/Onslaught/Theater planning, account-value
+> pull comparisons, and a separate fun wish simulator. Maintain verified knowledge
+> through version 7.1, with convenience, favorites and comfort built into decisions.
+> [Current implementation plan and acceptance](plans/autonomous-companion/implementation_plan.md).
+> The September scope below is historical where it conflicts with this direction;
+> its exclusions of damage analysis, advanced endgame and simulator expansion no
+> longer define the work queue. Preserve source honesty, player control and the
+> existing deterministic architecture. The complete goal is not yet implemented.
+
 **Version:** 2.0
 
 **Updated:** 2026-09-25

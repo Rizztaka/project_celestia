@@ -16,15 +16,19 @@ function UidNavigation({ uid, nickname }: { uid?: string; nickname?: string }) {
     [uid ? `${base}/roster` : '/?add=characters', 'Characters'],
     [uid ? `${base}/teams` : '/?add=teams', 'Teams'],
   ] as const;
-  const supporting = [[uid ? `${base}/showcase` : '/?add=profile', 'Public profile']] as const;
+  const supporting = [
+    [uid ? `${base}/showcase` : '/?add=profile', 'Public profile'],
+    [uid ? `${base}/simulators` : '/simulators', 'Wish sandbox'],
+  ] as const;
   const icons: Record<string, Parameters<typeof UiIcon>[0]['name']> = {
     [base]: 'today',
     [primary[1][0]]: 'characters',
     [primary[2][0]]: 'characters',
     [supporting[0][0]]: 'settings',
+    [supporting[1][0]]: 'insights',
   };
   const isCurrent = (to: string, pathname: string) =>
-    uid ? uidNavigationActive(to, pathname, uid) : to === '/' && pathname === '/';
+    uid ? uidNavigationActive(to, pathname, uid) : to === pathname;
   const label = uid ? 'Switch UID' : 'Add UID';
   return (
     <header className="companion-header">

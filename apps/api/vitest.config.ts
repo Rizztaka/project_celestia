@@ -12,6 +12,10 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['src/**/*.test.ts', 'tooling/**/*.test.js'],
+    // The serialized full suite includes real PostgreSQL, WASM and child-process
+    // cases. Keep bounded timeouts without treating load-induced slowness as a hang.
+    testTimeout: 15_000,
+    hookTimeout: 30_000,
     coverage: {
       reporter: ['text', 'json', 'html'],
     },

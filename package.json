@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "companion:status": "pnpm --filter @celestia/api exec tsx tooling/companion-status.mjs",
     "showcase:dev": "node tooling/showcase-dev.mjs",
     "recovery:rehearse": "pnpm --filter @celestia/api exec tsx tooling/recovery/cli.mjs",
     "verify": "pnpm --filter @celestia/api exec tsx tooling/verify.mjs",
@@ -24,6 +25,16 @@
       "name": "pnpm",
       "version": "^11.18.0",
       "onFail": "download"
+    }
+  },
+  "pnpm": {
+    "overrides": {
+      "proxy-addr": "^2.0.8",
+      "body-parser": "^2.4.0",
+      "qs": "^6.16.1",
+      "fast-uri": "^3.1.6",
+      "deepmerge-ts": "^8.0.0",
+      "mysql2": "^3.23.1"
     }
   },
   "type": "module",

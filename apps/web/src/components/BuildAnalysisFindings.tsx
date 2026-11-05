@@ -40,6 +40,7 @@ export function BuildAnalysisFindings({
                 {copy.sources.map((s) => (
                   <a key={s.id} href={s.url} target="_blank" rel="noreferrer">
                     {s.title}
+                    {s.sourceVersion ? ` · guide v${s.sourceVersion}` : ''}
                   </a>
                 ))}
               </p>

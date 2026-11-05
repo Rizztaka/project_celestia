@@ -2,10 +2,14 @@ import { randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
 
 import {
+  WISH_SANDBOX_RULES_VERSION,
   type WishBanner,
   type WishRequest,
   wishRequestSchema,
   type WishResult,
+  type WishSandboxCatalog,
+  wishSandboxCatalogSchema,
+  wishSandboxRequestSchema,
 } from '@celestia/api-contracts';
 
 import { UnprocessableError } from '@/core/errors/app-error.js';
@@ -24,11 +28,34 @@ export class PullSimulatorService {
   getBanners(): WishBanner[] {
     return banners;
   }
+  getSandboxCatalog(): WishSandboxCatalog {
+    return wishSandboxCatalogSchema.parse({
+      contractVersion: 1,
+      rulesVersion: WISH_SANDBOX_RULES_VERSION,
+      banners,
+      notices: [
+        'Historical fictional scenarios, not the live wish schedule or an account-value recommendation.',
+        'Soft pity is approximate. Character scenarios use a simplified 50/50 and omit Capturing Radiance.',
+        'The Chronicled scenario offers character path targets only. This is not a complete current-version wish model.',
+        'Fictional results do not change your account, real wish history or savings.',
+      ],
+    });
+  }
+  simulateSandbox(request: unknown): WishResult {
+    const parsed = wishSandboxRequestSchema.safeParse(request);
+    if (!parsed.success) throw new UnprocessableError('Invalid sandbox request.');
+    const { rulesVersion, ...input } = parsed.data;
+    if (rulesVersion !== WISH_SANDBOX_RULES_VERSION)
+      throw new UnprocessableError('Sandbox rules changed. Reload the catalog before continuing.');
+    return this.simulateParsedPulls(input);
+  }
   simulatePulls(request: WishRequest): WishResult {
     const parsed = wishRequestSchema.safeParse(request);
     if (!parsed.success)
       throw new UnprocessableError(parsed.error.errors.map((e) => e.message).join('; '));
-    const input = parsed.data;
+    return this.simulateParsedPulls(parsed.data);
+  }
+  private simulateParsedPulls(input: WishRequest): WishResult {
     const banner = banners.find((b) => b.bannerId === input.bannerId);
     if (!banner) throw new UnprocessableError('Unknown simulator scenario.');
     if (input.currentPity5 >= banner.hardPity)

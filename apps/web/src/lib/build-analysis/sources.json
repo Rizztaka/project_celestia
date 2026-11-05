@@ -1,5 +1,5 @@
 {
-  "version": "public-build-analysis-1",
+  "version": "public-build-analysis-2",
   "sources": [
     {
       "id": "kqm-furina",
@@ -8,7 +8,8 @@
       "sha256": "2fd167195f221340a7999d315d4bdd99b10ea08ccdd92f90f5ac36a82bd15f60",
       "reviewedAt": "2026-10-24",
       "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
-      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model."
+      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model.",
+      "sourceVersion": null
     },
     {
       "id": "kqm-sucrose",
@@ -17,7 +18,8 @@
       "sha256": "17ab8845b05168863a6f0ef85face3ffe64fb9c7c29f669827522406847e3135",
       "reviewedAt": "2026-10-24",
       "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
-      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model."
+      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model.",
+      "sourceVersion": null
     },
     {
       "id": "kqm-skirk",
@@ -26,7 +28,8 @@
       "sha256": "bccc9174978a0ad453691aa6ab8538a88632105827c68a92e8a1eab09879e8e9",
       "reviewedAt": "2026-10-24",
       "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
-      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model."
+      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model.",
+      "sourceVersion": null
     },
     {
       "id": "kqm-xilonen",
@@ -35,7 +38,96 @@
       "sha256": "8ec9f099f6f4014f9b3f313a164da3c715732533917cb88857b64194548c9482",
       "reviewedAt": "2026-10-24",
       "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
-      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model."
+      "scope": "Selected role main stats, talent priorities and modeled team prerequisites, not a complete kit/rotation model.",
+      "sourceVersion": null
+    },
+    {
+      "id": "kqm-bennett",
+      "url": "https://keqingmains.com/q/bennett-quickguide/",
+      "title": "Bennett quick guide",
+      "sha256": "6ab9916c3aa9a63f3074ca3d3991d8b5d0e18180b4d6b536a46586dac0442f07",
+      "reviewedAt": "2026-10-25",
+      "sourceVersion": "5.7",
+      "reviewer": "Codex agent; selected build-pattern review, not human/gameplay or complete-patch certification.",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected off-field/support main stats, conditional alternatives and talent/set directions. Source guide version is retained; no exhaustive kit, rotation or endgame readiness claim."
+    },
+    {
+      "id": "kqm-xiangling",
+      "url": "https://keqingmains.com/q/xiangling-quickguide/",
+      "title": "Xiangling quick guide",
+      "sha256": "8e5793a1a4ada371cfa9f309bf2834079bcd5949819d4dc5295c596b503e3f53",
+      "reviewedAt": "2026-10-25",
+      "sourceVersion": "4.5",
+      "reviewer": "Codex agent; selected build-pattern review, not human/gameplay or complete-patch certification.",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected off-field/support main stats, conditional alternatives and talent/set directions. Source guide version is retained; no exhaustive kit, rotation or endgame readiness claim."
+    },
+    {
+      "id": "kqm-xingqiu",
+      "url": "https://keqingmains.com/q/xingqiu-quickguide/",
+      "title": "Xingqiu quick guide",
+      "sha256": "165c06c4d921ab02275497ba32f86ba1d078b144a193c5bb780e566fc30a47da",
+      "reviewedAt": "2026-10-25",
+      "sourceVersion": "5.7",
+      "reviewer": "Codex agent; selected build-pattern review, not human/gameplay or complete-patch certification.",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected off-field/support main stats, conditional alternatives and talent/set directions. Source guide version is retained; no exhaustive kit, rotation or endgame readiness claim."
+    },
+    {
+      "id": "kqm-fischl",
+      "url": "https://keqingmains.com/q/fischl-quickguide/",
+      "title": "Fischl quick guide",
+      "sha256": "39d3ddb82e4eb25316eec18d51eb816e2abb1c913e749fde1997f35c8970e2f6",
+      "reviewedAt": "2026-10-25",
+      "sourceVersion": "4.0",
+      "reviewer": "Codex agent; selected build-pattern review, not human/gameplay or complete-patch certification.",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected off-field/support main stats, conditional alternatives and talent/set directions. Source guide version is retained; no exhaustive kit, rotation or endgame readiness claim."
+    },
+    {
+      "id": "kqm-kazuha",
+      "url": "https://keqingmains.com/q/kazuha-quickguide/",
+      "title": "Kazuha quick guide",
+      "sha256": "bbe329075cb13c23de91e4e19216a6deec1613a7fe21a04e9bd5360993a2bc21",
+      "reviewedAt": "2026-10-25",
+      "sourceVersion": "7.1",
+      "reviewer": "Codex agent; selected build-pattern review, not human/gameplay or complete-patch certification.",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected off-field/support main stats, conditional alternatives and talent/set directions. Source guide version is retained; no exhaustive kit, rotation or endgame readiness claim."
+    },
+    {
+      "id": "kqm-nahida",
+      "url": "https://keqingmains.com/q/nahida-quickguide/",
+      "title": "Nahida quick guide",
+      "sha256": "563e7f37f15a2af4773a47d4f27a92bdf311145036636dc4261db0d1329b8094",
+      "reviewedAt": "2026-10-25",
+      "sourceVersion": "5.6",
+      "reviewer": "Codex agent; selected build-pattern review, not human/gameplay or complete-patch certification.",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected off-field/support main stats, conditional alternatives and talent/set directions. Source guide version is retained; no exhaustive kit, rotation or endgame readiness claim."
+    },
+    {
+      "id": "kqm-escoffier",
+      "url": "https://keqingmains.com/q/escoffier-quickguide/",
+      "title": "Escoffier quick guide",
+      "sha256": "9bfe855382596339657cd2e0b3a668ad6faef612ae59d320f21c8e5a85831181",
+      "reviewedAt": "2026-10-25",
+      "sourceVersion": "7.1",
+      "reviewer": "Codex agent; selected build-pattern review, not human/gameplay or complete-patch certification.",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected off-field/support main stats, conditional alternatives and talent/set directions. Source guide version is retained; no exhaustive kit, rotation or endgame readiness claim."
+    },
+    {
+      "id": "kqm-dahlia",
+      "url": "https://keqingmains.com/q/dahlia-quickguide/",
+      "title": "Dahlia quick guide",
+      "sha256": "bda7938850d0e0c257a5331c08ee0d5c0dc0a9590a541f60ccafa7400479b2ab",
+      "reviewedAt": "2026-10-25",
+      "sourceVersion": "5.7",
+      "reviewer": "Codex agent; selected build-pattern review, not human/gameplay or complete-patch certification.",
+      "attribution": "KQM; linked reference, independently written summaries. No guide prose reproduced.",
+      "scope": "Selected off-field/support main stats, conditional alternatives and talent/set directions. Source guide version is retained; no exhaustive kit, rotation or endgame readiness claim."
     }
   ]
 }

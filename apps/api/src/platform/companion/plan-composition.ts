@@ -102,9 +102,9 @@ export function composePlanAdvice(
         domain.name,
         domain.location,
         domain.resinPerClaim,
-        [...domain.days].sort(),
-        [...domain.dropKeys].sort(),
-        [...domain.drops].sort(),
+        [...domain.days].sort((a, b) => a - b),
+        [...domain.dropKeys].sort((a, b) => a.localeCompare(b)),
+        [...domain.drops].sort((a, b) => a.localeCompare(b)),
       ]);
       if (signatures.has(domain.domainKey) && signatures.get(domain.domainKey) !== signature)
         conflicting.add(domain.domainKey);

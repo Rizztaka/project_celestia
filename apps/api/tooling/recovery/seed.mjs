@@ -39,6 +39,7 @@ export const applicationTables = [
   'genshin_routine_state',
   'genshin_plan_preferences',
   'genshin_plan_dismissals',
+  'genshin_team_preferences',
   'daily_companion',
   'weekly_boss_state',
   'event_progress',
@@ -362,6 +363,44 @@ export async function seed(client, syntheticLoginPassword) {
       teapot: false,
       transformer: true,
       weeklyClaims: false,
+    });
+    const preferencesPayload = (userId, accountId) =>
+      JSON.stringify({
+        version: 1,
+        uid: null,
+        ownerId: userId,
+        accountId,
+        favoriteCharacters: [],
+        excludedCharacters: [],
+        requiredForms: [],
+        priority: 'damage',
+        preferredDriverKey: null,
+        verificationSamples: 5,
+        equipmentPolicy: 'recorded_builds_only',
+        protectedGear: [],
+        comfort: 'unknown',
+        timeBudgetMinutes: null,
+        content: { mode: 'unknown', difficulty: 'unknown', target: 'unknown' },
+      });
+    await insert('genshin_team_preferences', {
+      ...row({
+        userId: ids.a,
+        scopeKey: `account:${ids.accountA}`,
+        uid: null,
+        accountId: ids.accountA,
+        revision: 3,
+      }),
+      payload: preferencesPayload(ids.a, ids.accountA),
+    });
+    await insert('genshin_team_preferences', {
+      ...row({
+        userId: ids.b,
+        scopeKey: `account:${ids.accountB}`,
+        uid: null,
+        accountId: ids.accountB,
+        revision: 1,
+      }),
+      payload: preferencesPayload(ids.b, ids.accountB),
     });
     await insert('genshin_plan_dismissals', {
       userId: ids.a,

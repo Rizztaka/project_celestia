@@ -81,10 +81,10 @@ export async function migrationCompatibility(client) {
     'SELECT migration_name, checksum, finished_at IS NOT NULL AS finished, rolled_back_at IS NULL AS not_rolled_back, applied_steps_count FROM _prisma_migrations ORDER BY migration_name',
   );
   requireSafe(
-    // Historical migrations plus the named server and account-security expansions.
+    // Historical migrations plus the named server, account-security and preference expansions.
     // Keep an exact inventory, never a permissive minimum or receipt bypass.
-    names.length === 15 &&
-      names.at(-1) === '20261018100000_account_security_sessions' &&
+    names.length === 16 &&
+      names.at(-1) === '20261027120000_add_genshin_team_preferences' &&
       rows.length === names.length &&
       rows.every(
         (r, i) =>

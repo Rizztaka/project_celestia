@@ -1,5 +1,13 @@
 # Genshin Companion — target product specification
 
+> **Current specification — 2026-10-25:** The owner's [autonomous endgame companion
+> plan](../plans/autonomous-companion/implementation_plan.md) now defines the
+> product, implementation order and acceptance. It includes contextual readiness,
+> damage-based teams, Abyss/Onslaught/Theater planning, account-value pulls and a
+> separate simulator, with verified knowledge through 7.1 and player convenience.
+> Conflicting scope limits and expansion gates below are historical. Existing
+> tracking, ownership, provenance and import-preservation contracts remain.
+
 > **2026-10-17 functional coverage expansion:** The owner replaced bounded C5h with useful core functionality and selected Seelie's Today/planner/calculator/pacing patterns. All four server clocks, broad ascension/base-talent/weapon costs, weekday domain guidance and calmer Today/Planner organization are implemented locally. Full guarded recovery/verification passes **1,038 tests / 58 files / 140 actual PostgreSQL cases**, no failures/skips. [Walkthrough](../plans/production-readiness/walkthrough.md), [sources and exceptions](../plans/production-readiness/sources.md) and [actual browser observations](../plans/production-readiness/browser-observations.md) supersede the old scope statements below. Deployment and human accessibility acceptance are not implied. Earlier dated banners are historical.
 
 > **Local C5 checkpoint — 2026-10-09:** Shared Today/Characters/Planner navigation, supporting import/settings/inventory, retained secondary routes and no-import guidance are implemented. Actual synthetic import, lifecycle, failed-save, reset and owner-switch journeys passed; 708 tests / 44 files include 106 PostgreSQL cases. [Acceptance](../plans/c5-companion-beta/acceptance.md) records the unverified real zoom/reduced-motion/assistive checks. [Readiness](../plans/c5-companion-beta/beta-readiness.md) keeps recovery, operations, deployment and human beta evidence open. C6/C7 remain gated; older banners and broader targets below are historical/planned scope.

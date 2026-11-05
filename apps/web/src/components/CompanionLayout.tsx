@@ -21,6 +21,7 @@ const supporting = [
 const secondary = [
   ['/intelligence', 'Build lab'],
   ['/endgame', 'Endgame records'],
+  ['/simulators', 'Wish sandbox'],
 ] as const;
 
 export function MobileNavigation({
@@ -191,6 +192,7 @@ const navIcons: Record<string, Parameters<typeof UiIcon>[0]['name']> = {
   '/inventory': 'inventory',
   '/intelligence': 'insights',
   '/endgame': 'endgame',
+  '/simulators': 'insights',
   '/import': 'import',
   '/profile': 'settings',
 };

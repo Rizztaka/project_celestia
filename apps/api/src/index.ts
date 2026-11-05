@@ -6,7 +6,7 @@ import { disconnectRedis } from '@/core/infra/redis.js';
 import { createShutdownHandler } from '@/core/infra/shutdown.js';
 import { logger } from '@/core/logger/logger.js';
 
-const PORT = parseInt(env.PORT, 10);
+const PORT = Number.parseInt(env.PORT, 10);
 
 const server = app.listen(PORT, () => {
   logger.info(`Project Celestia API is running on port ${PORT} in ${env.NODE_ENV} mode`);

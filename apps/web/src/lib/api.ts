@@ -1,4 +1,6 @@
 import type {
+  CharacterReadinessRequestInput,
+  CharacterReadinessResponse,
   CreateGoalRequest,
   FarmingIntelligenceResponse,
   FocusCommand,
@@ -6,6 +8,8 @@ import type {
   GoalCommand,
   GoalRecord,
   GoalWriteResponse,
+  MarginalInvestmentRequestInput,
+  MarginalInvestmentResponse,
   PlanAdvice,
   PlanCommand,
   PlanSnapshot,
@@ -86,12 +90,68 @@ import type {
   PatchSettingsBody,
   PatchWeeklyClaimsBody,
   RoutineSnapshotV2,
+  TeamPreferencesResponse,
+  TeamPreferencesWrite,
 } from '@celestia/api-contracts';
 
 export type { ImportResult } from '@celestia/api-contracts';
 
 export async function fetchImportStatus(signal?: AbortSignal): Promise<ImportStatus> {
   return fetchApi<ImportStatus>('/games/genshin/import/status', { signal });
+}
+
+export function fetchTeamPreferences(
+  uid: string | null,
+  accountId: string | null = null,
+  signal?: AbortSignal,
+): Promise<TeamPreferencesResponse> {
+  const params = new URLSearchParams();
+  if (uid) params.set('uid', uid);
+  if (accountId) params.set('accountId', accountId);
+  return fetchApi(`/games/genshin/team-preferences?${params}`, { signal });
+}
+
+export function patchTeamPreferences(
+  command: TeamPreferencesWrite,
+  signal?: AbortSignal,
+): Promise<TeamPreferencesResponse> {
+  return fetchApi('/games/genshin/team-preferences', {
+    method: 'PATCH',
+    body: JSON.stringify(command),
+    signal,
+  });
+}
+
+export function fetchCharacterReadiness(
+  payload: CharacterReadinessRequestInput,
+  signal?: AbortSignal,
+  session?: AccountSession,
+): Promise<CharacterReadinessResponse> {
+  return fetchApi<CharacterReadinessResponse>(
+    '/games/genshin/intelligence/readiness',
+    {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      signal,
+    },
+    session,
+  );
+}
+
+export function fetchMarginalInvestment(
+  payload: MarginalInvestmentRequestInput,
+  signal?: AbortSignal,
+  session?: AccountSession,
+): Promise<MarginalInvestmentResponse> {
+  return fetchApi<MarginalInvestmentResponse>(
+    '/games/genshin/intelligence/marginal-investment',
+    {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      signal,
+    },
+    session,
+  );
 }
 
 /**

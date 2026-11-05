@@ -1,5 +1,14 @@
 # **Project Celestia Architecture**
 
+> **2026-10-25 product-scope amendment:** The owner's [autonomous endgame companion
+> goal](plans/autonomous-companion/implementation_plan.md) replaces prior product
+> exclusions of damage analysis, automatic team recommendations, advanced endgame
+> planning and new simulator features. The modular monolith, ownership boundaries,
+> shared contracts and deterministic calculator/explainer separation still apply.
+> Existing public browser analysis/gcsim remain established execution paths; new
+> server intelligence belongs in the Genshin domain. This does not require an LLM
+> or a new microservice architecture.
+
 ## Current scope — September 2026
 
 The active product is the [Genshin companion](features/FEATURE_GENSHIN_COMPANION.md). Existing modular boundaries remain; multi-game expansion and artifact optimization are not current delivery commitments. [ADR 0012](adr/0012-genshin-companion-direction.md) records the transition.

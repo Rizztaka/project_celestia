@@ -1,7 +1,7 @@
 // Test-only full-app fixture. No browser/API response interception, login or database.
 if (
   process.env.NODE_ENV !== 'test' ||
-  process.env.DATABASE_URL !== 'postgresql://synthetic:synthetic@127.0.0.1:1/never_connect'
+  process.env.DATABASE_URL !== 'postgresql://127.0.0.1:1/never_connect'
 ) {
   throw new Error('Requires the explicit synthetic, unreachable database declaration.');
 }

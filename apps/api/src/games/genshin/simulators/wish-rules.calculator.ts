@@ -1,4 +1,10 @@
-import type { WishBanner, WishItem, WishRequest } from '@celestia/api-contracts';
+import {
+  type WishBanner,
+  wishFourStarWeaponKeys,
+  type WishItem,
+  type WishRequest,
+  wishThreeStarWeaponKeys,
+} from '@celestia/api-contracts';
 export interface WishState {
   endPity5: number;
   endPity4: number;
@@ -9,42 +15,8 @@ export interface WishState {
 export interface WishCalculation extends WishState {
   pulls: WishItem[];
 }
-const threeStars = [
-  'HarbingerOfDawn',
-  'Slingshot',
-  'ThrillingTalesOfDragonSlayers',
-  'BlackTassel',
-  'DebateClub',
-  'BloodtaintedGreatsword',
-  'CoolSteel',
-  'SharpshootersOath',
-  'MagicGuide',
-  'FerrousShadow',
-  'EmeraldOrb',
-  'RavenBow',
-  'SkyriderSword',
-];
-const fourStarWeapons = new Set([
-  'FavoniusSword',
-  'TheFlute',
-  'SacrificialSword',
-  'LionsRoar',
-  'FavoniusGreatsword',
-  'TheBell',
-  'SacrificialGreatsword',
-  'Rainslasher',
-  'DragonsBane',
-  'FavoniusLance',
-  'FavoniusCodex',
-  'TheWidsith',
-  'SacrificialFragments',
-  'EyeOfPerception',
-  'FavoniusWarbow',
-  'TheStringless',
-  'SacrificialBow',
-  'Rust',
-  'LithicBlade',
-]);
+const threeStars = wishThreeStarWeaponKeys;
+const fourStarWeapons = new Set<string>(wishFourStarWeaponKeys);
 /** Explicit random stream makes every state transition reproducible. Soft pity is a modeling approximation. */
 export function calculateWishes(
   banner: WishBanner,

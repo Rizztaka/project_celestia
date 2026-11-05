@@ -112,7 +112,9 @@ export class BuildInsightsService {
       weapon?.refinement ?? null,
       'recorded',
     );
-    for (const set of [...new Set(assignments.map((a) => a.set))].sort())
+    for (const set of [...new Set(assignments.map((a) => a.set))].sort((a, b) =>
+      a.localeCompare(b),
+    ))
       cards.push(
         ...this.artifact(
           set,

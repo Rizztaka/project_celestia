@@ -1,3 +1,150 @@
+> **2026-10-26 M1 status correction:** Subphase 1 remains open because official-source
+> provenance is unresolved. Earlier `verified` labels and completion banners below
+> are historical claims, not independent approval. The authenticated imported-account
+> adapter and Subphase 3 policy are implemented; verification evidence is recorded
+> below. Start with its
+> [contract, evidence boundaries, and verification](autonomous-companion/imported-account-progress.md).
+
+> **2026-10-26 M1 Subphase 1 hardening:** Provenance is now separated from local
+> byte integrity. Immutable revision/hash pins, pinned Enka upstream rechecks,
+> bounded fail-closed official extraction, exact one-to-one roster reconciliation,
+> duplicate-evidence diagnostics, and a nonzero blocked CLI gate are implemented.
+> Current status remains **unverified/open**: Enka and genshin-db independent review
+> anchors are absent, npm archive retrieval timed out, and the 122 Enka versus 124
+> release denominator mismatch remains visible. Adaptive Traveler forms without an
+> explicit element join remain unresolved. See [M1 evidence status](autonomous-companion/account-context-progress.md).
+
+> **M1 Subphase 2 verification:** The authenticated imported-account adapter is
+> now database-verified. On a fresh loopback-only disposable PostgreSQL cluster,
+> real Prisma migrations plus the actual authenticated HTTP route passed **22/22**
+> integration tests (16 importer transaction tests and 6 import-to-context tests),
+> with cleanup confirmed. The adapter/HTTP focused tests passed **35/35**. The
+> shared contract now has explicit `public_uid`, `private_authenticated`, and
+> `hypothetical` scopes; null-UID no-import responses stay private/unknown, and
+> malformed/dangling equipment cannot produce a confident stored build. Storage
+> limitations remain explicit: per-row origin, exact skill depots and game
+> observation timestamps are unavailable, so they remain unknown.
+
+> **2026-10-27 M1 Subphase 3 implementation:** The shared account-context policy now
+> validates public/private/hypothetical/unknown scope, partial/complete/unknown roster
+> evidence, separate source timestamps, injectable freshness classification, exact
+> form/equipment identities and dimension-level missing-data reasons. Public and private
+> evidence families cannot be silently merged; hypothetical data cannot become owned;
+> failed/omitted imports preserve retained evidence; conflicts have no selected build
+> fingerprint. Authenticated player intent now includes protected gear, comfort, bounded
+> time budget and content mode/difficulty/target, persisted by owner plus selected
+> account/UID with revision-protected GET/PATCH routes and an additive migration. Focused
+> shared/adapter/preference/UI/HTTP tests pass. The authenticated team UI uses
+> server-backed preference state, while public unauthenticated UID preferences remain
+> browser-local. Disposable-PostgreSQL verification is now complete: all sixteen
+> migrations applied and the nine guarded preference/import cases passed without
+> skips on a loopback `celestia_test_*` database. Follow-up hardening removed synthetic
+> per-row undated issues, prevented a later partial import from re-dating preserved
+> characters, scoped equipment conflicts to the affected character, normalized
+> account-only scope, refreshed a 409 save's revision while keeping the draft, and
+> covered the new table in export/deletion plus the exact recovery inventory. The new
+> intent fields remain contract groundwork, and the authenticated UI has no null-UID
+> account picker yet. Subphase 1 official-source provenance remains open, and no
+> complete release coverage, mechanics fidelity, ownership or endgame readiness is
+> claimed. See [M1 Subphase 3 evidence](autonomous-companion/account-context-progress.md).
+
+> **Remaining test-blocker correction:** The earlier contextual-release/origin
+> failures are resolved. K3 release tests now use a shared isolated baseline copy
+> with per-test owned stores and propagate the null-dotenv test environment to
+> child publishers. Origin tests cache only the unchanged default production app
+> and retain module-reset coverage for configuration changes. Fresh focused output:
+> contextual-release **31/31**, origin middleware **60/60**, combined serialized
+> **91/91**, zero failures and zero unhandled worker errors.
+
+> **2026-10-25 autonomous companion — rotation execution evidence:** Saved-team
+> DPS now separates energy blocks, cooldown retry checks, unexecuted Bursts and
+> omitted Bursts. The pinned bridge observes native events without changing
+> combat rules. Old diagnostics stay unknown; malformed versioned counters fail.
+> Engine version `gcsim-2.47.2-celestia-2` and new WASM hash invalidate older inputs.
+> Original numeric/member outputs matched before/after through the shipped worker.
+> **31 focused cases** passed in the final serial run. Web build/types and lint
+> pass. Broader serial result: **1,594 passed, 13 five-second timeouts, 235 skipped**,
+> plus one worker-update timeout. Failures are in `contextual-release.test.js` and
+> `origin.middleware.test.ts`; the saved-team UI assertion passed serially.
+> An earlier full run before the review fix passed 1,606 cases; it is not the
+> final result. A 30-second-budget isolated recheck of the two failing files is
+> running as exec session `59825`; inspect its handle or terminal report before
+> starting another run. Evidence is ignored `engine-review/api-timeout-recheck.*`.
+> Real synthetic browser worker, keyboard disclosure, stale-result removal
+> and desktop overflow checks pass. [Evidence and limitations](autonomous-companion/rotation-execution-progress.md).
+> Full starting energy/no enemy attacks mean this is execution evidence, not
+> sustained endgame readiness. Continue target-specific readiness and marginal
+> upgrades, verified rotations, large-roster search and all remaining goal areas.
+
+> **2026-10-25 autonomous companion — automatic role guidance:** Twelve reviewed
+> profiles now provide explicit default roles, conditional stat/talent/set advice,
+> a General checks only opt-out and source links with guide versions. New patterns
+> cover Bennett, Xiangling, Xingqiu, Fischl, Kazuha, Nahida, Escoffier and Dahlia.
+> Conflicting observations block tailored advice and damage configuration. Eight
+> new source-byte hashes matched; original four approvals remain unchanged.
+> **126/126 tests across 14 files**, web build/types, lint and real browser default /
+> opt-out / restore behavior pass. [Evidence and limits](autonomous-companion/reviewed-role-progress.md).
+> This is selected role guidance, not a complete endgame-ready verdict or full
+> 7.1 certification. Continue contextual readiness and marginal investment, verified
+> rotations and bounded large-roster search; endgame/pull/simulator work stays open.
+
+> **2026-10-25 autonomous companion — preferences implemented:** Public team search
+> now saves favorites, required exact forms, exclusions, DPS/favorites priority,
+> driver and samples per UID. Requirements remain hard constraints; favorite
+> priority changes eligibility without inflating damage. Missing or conflicting
+> requirements are explained. Saved data is versioned/bounded, unreadable values
+> are preserved, and intervening saves are detected. Editor focus survives search
+> invalidation. **79/79 focused tests**, web/contracts build checks, API/web types,
+> lint and real browser save/reload/isolation plus constrained WASM simulation pass.
+> [Implementation, evidence and remaining work](autonomous-companion/team-preferences-progress.md).
+> Full knowledge/readiness/rotation/endgame/pull/simulator requirements remain
+> unfinished; the goal stays active. Expand verified knowledge and contextual
+> readiness, and address large-roster search memory/computation as M3 proceeds.
+
+> **2026-10-26 autonomous companion — M1 Subphase 1 complete:** The exact `genshin-db`
+> 5.2.14 source is pinned and validates **124/124 release identities**; the Enka
+> identity snapshot validates **122/122**. The HoYoverse 7.1 URL was fetched and
+> stored as a reproducible 55,735-byte official content payload with URL,
+> retrieval timestamp, response date, byte length and SHA-256. Deterministic
+> extraction independently verifies the Version 7.1 title/date and Vesna/Vodyanitsa
+> New Characters claims. `officialReleaseVerification: verified` and
+> `releaseCompleteness: verified`. Independent tamper tests cover source bytes,
+> extracted claims, URL, publication date, both character records, package-version
+> drift and source-data drift. Ten unresolved forms and twelve simulation gaps
+> remain visible. [Evidence](autonomous-companion/account-context-progress.md).
+
+> **2026-10-25 autonomous companion — account-context progress:** Public team
+> generation now uses dated whole-build evidence, reports partial roster scope,
+> blocks ambiguous/future observations and cancels outdated searches. Equal-time
+> conflicts survive browser reload; newer observations resolve them. Driver/sample
+> choices survive refresh, explicit Traveler forms stay selected, result cards keep
+> DPS readable, and generated team names no longer retain stale damage numbers.
+> The shared evidence contract and schema-2 coverage report distinguish exact
+> depot/element support; ten catalog entries still have unresolved depot identity.
+> Focused account-context tests, web/contracts builds, API/web types, lint and real browser
+> WASM flow pass. [Implementation, evidence and remaining M1 work](autonomous-companion/account-context-progress.md).
+> Imported-account/preference adapters, contextual readiness,
+> improved rotations, endgame assignment and pull/simulator work remain open. Keep
+> the overall goal active and continue the [checklist](autonomous-companion/task.md).
+
+> **2026-10-25 autonomous endgame companion goal — M0 complete:** The owner's
+> new goal includes contextual build readiness, damage-based team search,
+> Abyss/Onslaught/Theater planning, account-value pulls and a fun simulator, with
+> a knowledge target through 7.1 and player convenience. It supersedes conflicting
+> September scope exclusions. [Current audit and delivery plan](autonomous-companion/implementation_plan.md),
+> [checklist](autonomous-companion/task.md), [verification](autonomous-companion/walkthrough.md).
+> New `pnpm companion:status` inventories local references, reviewed role patterns
+> and engine presence separately: **131 catalog entries; 129 intact references;
+> 119 entries with at least one simulation form; twelve reviewed role profiles**.
+> M1 subphase 1 verifies **124/124 release identities**, keeps the two 7.1
+> genshin-db additions visible, and exposes remaining form/mechanics/simulation gaps;
+> official HoYoverse evidence is verified. **37/37 focused
+> tests**, including actual pinned WASM simulation, scoped lint and formatting pass.
+> This milestone adds development tooling and current direction, not a new runtime
+> readiness feature. M1 subphase 1 verifies the release roster/form coverage and a shared
+> account-context contract. Work remains in the canonical checkout; do not recover
+> old unfinished sources to continue this goal. The overall goal remains active.
+
 > **2026-10-25 workspace consolidation:** `project-celestia` is now the canonical
 > checkout on production's `master` commit. The 3,166,214 untracked lines in the
 > older checkout were archived and removed from active source, along with its

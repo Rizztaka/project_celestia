@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM node:22-alpine AS builder
+FROM node:22.23.4-alpine AS builder
 RUN corepack enable pnpm && corepack prepare pnpm@11.18.0 --activate
 WORKDIR /app
 ENV CI=true
@@ -14,6 +14,7 @@ ENV VITE_API_URL=$VITE_API_URL
 RUN pnpm --filter @celestia/api-contracts build && pnpm --filter @celestia/web build
 
 FROM nginx:alpine AS runner
+RUN apk upgrade --no-cache
 COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
 EXPOSE 80

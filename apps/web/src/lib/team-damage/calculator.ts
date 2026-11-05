@@ -22,6 +22,7 @@ export interface DamageSettings {
 export interface DamageIssue {
   code:
     | 'missing_build'
+    | 'conflicting_build'
     | 'unsupported_character'
     | 'missing_progression'
     | 'missing_talents'
@@ -98,6 +99,10 @@ export function damageInput(
       issues.push({ code, characterKey: member.characterKey, detail });
     if (!observation) {
       issue('missing_build');
+      continue;
+    }
+    if (observation.conflicted) {
+      issue('conflicting_build');
       continue;
     }
     if (!profile) {
@@ -183,11 +188,11 @@ export function damageInput(
         else totals[key] = (totals[key] ?? 0) + value;
       }
     }
-    for (const [set, count] of Object.entries(setCounts).sort())
+    for (const [set, count] of Object.entries(setCounts).sort(([a], [b]) => a.localeCompare(b)))
       lines.push(`${profile.key} add set="${set}" count=${count};`);
     lines.push(
       `${profile.key} add stats ${Object.entries(totals)
-        .sort()
+        .sort(([a], [b]) => a.localeCompare(b))
         .map(([key, value]) => `${key}=${Number(value.toFixed(8))}`)
         .join(' ')};`,
     );
@@ -249,6 +254,7 @@ export function damageInput(
   };
 }
 export interface EngineRun {
+  diagnosticsVersion?: number;
   seed: string;
   durationFrames: number;
   totalDamage: number;
@@ -259,8 +265,37 @@ export interface EngineRun {
     activeFrames: number;
     actions: number;
     failedIntervals: number;
+    actionCounts?: Record<string, number>;
+    blockedAttempts?: Record<string, number>;
   }[];
 }
+function validCounters(value: unknown): value is Record<string, number> {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    Object.keys(value).length <= 32 &&
+    Object.entries(value).every(
+      ([key, count]) =>
+        /^[a-z][a-z_0-9]*$/.test(key) &&
+        key.length <= 64 &&
+        Number.isSafeInteger(count) &&
+        count >= 0 &&
+        count <= 100000000,
+    )
+  );
+}
+
+function averageCounters(rows: Record<string, number>[]) {
+  const keys = [...new Set(rows.flatMap((row) => Object.keys(row)))].sort();
+  return Object.fromEntries(
+    keys.map((key) => [
+      key,
+      rows.reduce((sum, row) => sum + (Object.hasOwn(row, key) ? row[key] : 0), 0) / rows.length,
+    ]),
+  );
+}
+
 export function summarizeRuns(runs: EngineRun[]) {
   if (
     !runs.length ||
@@ -281,7 +316,12 @@ export function summarizeRuns(runs: EngineRun[]) {
             !Number.isFinite(member.actions) ||
             member.actions < 0 ||
             !Number.isFinite(member.failedIntervals) ||
-            member.failedIntervals < 0,
+            member.failedIntervals < 0 ||
+            (run.diagnosticsVersion === 1 &&
+              (!validCounters(member.actionCounts) ||
+                !validCounters(member.blockedAttempts) ||
+                Object.values(member.actionCounts).reduce((sum, count) => sum + count, 0) !==
+                  member.actions)),
         ) ||
         Math.abs(run.members.reduce((sum, member) => sum + member.damage, 0) - run.totalDamage) >
           Math.max(1, run.totalDamage) * 0.000001,
@@ -289,9 +329,11 @@ export function summarizeRuns(runs: EngineRun[]) {
   )
     throw new Error('INVALID_SIMULATION_RESULT');
   const count = runs.length;
+  const diagnosticsAvailable = runs.every((run) => run.diagnosticsVersion === 1);
   const keys = runs[0].members.map((m) => m.key);
   return {
     samples: count,
+    diagnosticsAvailable,
     damage: runs.reduce((s, r) => s + r.totalDamage, 0) / count,
     dps: runs.reduce((s, r) => s + r.dps, 0) / count,
     minDps: Math.min(...runs.map((r) => r.dps)),
@@ -305,6 +347,12 @@ export function summarizeRuns(runs: EngineRun[]) {
         dps: rows.reduce((s, r, i) => s + r!.damage / (runs[i].durationFrames / 60), 0) / count,
         actions: rows.reduce((s, r) => s + r!.actions, 0) / count,
         waits: rows.reduce((s, r) => s + r!.failedIntervals, 0) / count,
+        actionCounts: diagnosticsAvailable
+          ? averageCounters(rows.map((row) => row!.actionCounts!))
+          : null,
+        blockedAttempts: diagnosticsAvailable
+          ? averageCounters(rows.map((row) => row!.blockedAttempts!))
+          : null,
       };
     }),
   };

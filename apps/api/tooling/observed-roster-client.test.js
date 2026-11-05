@@ -117,3 +117,45 @@ it('reports denied storage without deleting previously saved records', async () 
   denied.mockRestore();
   expect(await history.readObservedRoster(uid)).toEqual(original);
 });
+
+it('preserves equal-time build conflicts across reloads and resolves them only with a newer observation', async () => {
+  const initial = result(uid, first, [10000046]);
+  const conflicting = structuredClone(initial);
+  conflicting.snapshot.characters[0].level = 1;
+  await history.recordObservedRoster(uid, initial);
+  await history.recordObservedRoster(uid, conflicting);
+  const reloaded = await history.readObservedRoster(uid);
+  expect(reloaded.records).toHaveLength(1);
+  expect(reloaded.records[0]).toMatchObject({ conflicted: true, character: { level: 80 } });
+  await history.recordObservedRoster(uid, initial);
+  expect((await history.readObservedRoster(uid)).records[0].conflicted).toBe(true);
+  const { publicAccountContext } = await import('../../web/src/lib/account-context.calculator.ts');
+  expect(publicAccountContext(uid, reloaded.records, Date.parse(second)).records).toEqual([]);
+  const refreshed = await history.recordObservedRoster(uid, result(uid, second, [10000046]));
+  expect(refreshed.records[0].conflicted).toBeUndefined();
+  expect(refreshed.records[0].character.level).toBe(90);
+});
+
+it('keeps a cache/showcase tie ambiguous while separating different UIDs', () => {
+  const firstRecord = history.observationsFromResult(uid, result(uid, first, [10000046]))[0];
+  const conflicting = structuredClone(firstRecord);
+  conflicting.character.level = 1;
+  const merged = history.mergeObservations([firstRecord], [conflicting]);
+  expect(merged).toHaveLength(1);
+  expect(merged[0].conflicted).toBe(true);
+  expect(history.mergeObservations(merged, [firstRecord])[0].conflicted).toBe(true);
+  const foreign = { ...firstRecord, uid: otherUid };
+  expect(history.mergeObservations([firstRecord], [foreign])).toHaveLength(2);
+});
+
+it('does not let a future-dated refresh replace a valid retained build', async () => {
+  const now = Date.parse(second);
+  const original = await history.recordObservedRoster(uid, result(uid, first, [10000046]), now);
+  const future = result(uid, '2027-01-01T00:00:00.000Z', [10000046]);
+  expect(history.observationsFromResult(uid, future, now)).toEqual([]);
+  expect(await history.recordObservedRoster(uid, future, now)).toEqual(original);
+  const futureRecord = { ...original.records[0], observedAt: future.fetchedAt };
+  expect(history.mergeObservations([futureRecord], original.records, now)).toEqual(
+    original.records,
+  );
+});

@@ -16,7 +16,7 @@ describe('C5d schema coverage and resource policy', () => {
   it('requires explicit table and scalar-field disposition for every Prisma model', () => {
     const tables = [profileTable, ...genshinAccountData.tables, ...nikkeAccountData.tables];
     const models = Prisma.dmmf.datamodel.models;
-    expect(tables.length).toBe(20);
+    expect(tables.length).toBe(21);
     expect(models.length).toBe(tables.length + Object.keys(authSecurityModelDisposition).length);
     for (const model of models) {
       if (Object.hasOwn(authSecurityModelDisposition, model.name)) {

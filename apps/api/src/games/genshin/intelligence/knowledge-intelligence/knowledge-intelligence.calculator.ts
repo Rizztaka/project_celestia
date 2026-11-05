@@ -76,7 +76,7 @@ export function detectTalentNeglector(roster: CharacterInput[]): KnowledgeInsigh
   if (neglected.length === 0) return null;
 
   // Pick the one with highest level (most "obvious" neglect)
-  const worst = neglected.reduce((a, b) => (a.level > b.level ? a : b));
+  const worst = neglected.reduce((a, b) => (a.level > b.level ? a : b), neglected[0]!);
   const avgTalent = Math.round((worst.talentNormal + worst.talentSkill + worst.talentBurst) / 3);
 
   return {
@@ -119,7 +119,7 @@ export function detectMaxConstellation(roster: CharacterInput[]): KnowledgeInsig
   const top = c6.reduce((a, b) => {
     if (a.ascension !== b.ascension) return a.ascension > b.ascension ? a : b;
     return a.level > b.level ? a : b;
-  });
+  }, c6[0]!);
 
   return {
     key: 'MAX_CONSTELLATION',
@@ -148,7 +148,7 @@ export function detectDiverseRoster(
 
   return {
     key: 'DIVERSE_ROSTER',
-    subject: [...elements].sort().join(', '),
+    subject: [...elements].sort((a, b) => a.localeCompare(b)).join(', '),
     value: elements.size,
   };
 }

@@ -5,6 +5,7 @@ import { IDBFactory } from 'fake-indexeddb';
 import { JSDOM } from 'jsdom';
 import { afterAll, afterEach, beforeAll, beforeEach, expect, it, vi } from 'vitest';
 
+import { defaultTeamSearchPreferences } from '../../../packages/api-contracts/src/genshin/team-preferences.ts';
 import { readUidTeams, writeUidTeams } from '../../web/src/lib/build-analysis/teams-storage.ts';
 import { analysisFixture } from './build-analysis-fixtures.mjs';
 
@@ -20,7 +21,7 @@ const { createRoot } = require('react-dom/client');
 const { MemoryRouter, Routes, Route, useLocation } = require('react-router-dom');
 const { QueryClient, QueryClientProvider } =
   await import('../../web/node_modules/@tanstack/react-query/build/modern/index.js');
-let Page, DetailsPage, Context, root, client, transport;
+let Page, DetailsPage, Context, authStore, root, client, transport;
 function LocationProbe() {
   const location = useLocation();
   return h('span', { 'data-current-path': '' }, location.pathname + location.search);
@@ -42,6 +43,7 @@ beforeAll(async () => {
   ({ default: Page } = await import('../../web/src/pages/UidTeamsPage.tsx'));
   ({ default: DetailsPage } = await import('../../web/src/pages/UidTeamDetailsPage.tsx'));
   ({ UidWorkspaceContext: Context } = await import('../../web/src/lib/uid-workspace.ts'));
+  ({ useAuthStore: authStore } = await import('../../web/src/stores/auth.store.ts'));
 });
 beforeEach(() => {
   installDom();
@@ -51,6 +53,8 @@ beforeEach(() => {
   dom.window.localStorage.clear();
   transport = vi.fn();
   vi.stubGlobal('fetch', transport);
+  authStore.setState({ token: null, user: null, isAuthenticated: false });
+  dom.window.localStorage.clear();
   document.body.innerHTML = '<div id="root"></div>';
   root = createRoot(document.getElementById('root'));
   client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
@@ -108,6 +112,14 @@ async function click(text) {
   await act(async () => b.click());
 }
 
+async function waitFor(predicate, timeout = 2000) {
+  const started = Date.now();
+  while (!predicate()) {
+    if (Date.now() - started >= timeout) throw new Error('Timed out waiting for UI update.');
+    await act(async () => new Promise((resolve) => setTimeout(resolve, 10)));
+  }
+}
+
 async function chooseRotation(mode) {
   const radio = [...document.querySelectorAll('input[type="radio"]')].find((input) =>
     input.closest('label')?.textContent.includes(mode),
@@ -142,6 +154,120 @@ it('shows a fixed read-only enemy and lets the player choose default or custom w
   expect(document.querySelector('[aria-label="Rotation preview"]').textContent).toBe(before);
   expect(document.querySelector('[aria-label="Step 1 wait seconds"]')).toBeTruthy();
   expect(dom.window.localStorage.length).toBe(0);
+});
+
+it('loads and saves authenticated team preferences through the server instead of local storage', async () => {
+  const owner = {
+    id: 'owner-a',
+    email: 'owner-a@example.test',
+    username: 'owner-a',
+    createdAt: '2026-10-01T00:00:00.000Z',
+    updatedAt: '2026-10-01T00:00:00.000Z',
+  };
+  authStore.getState().login('synthetic-token', owner);
+  expect(authStore.getState().user.id).toBe(owner.id);
+  const base = defaultTeamSearchPreferences(uid, { ownerId: owner.id, accountId: null });
+  transport.mockImplementation(async (_url, options = {}) => ({
+    ok: true,
+    status: 200,
+    json: async () => ({
+      success: true,
+      data: {
+        preferences: options.method === 'PATCH' ? { ...base, priority: 'favorites' } : base,
+        revision: options.method === 'PATCH' ? 1 : 0,
+      },
+    }),
+  }));
+  await mount(uid, `/u/${uid}/teams`);
+  await waitFor(() => transport.mock.calls.length > 0);
+  expect(transport).toHaveBeenCalledWith(
+    expect.stringContaining('/games/genshin/team-preferences?uid=800000001'),
+    expect.objectContaining({
+      headers: expect.objectContaining({ Authorization: 'Bearer synthetic-token' }),
+    }),
+  );
+  const select = document.querySelector('select[name="verificationSamples"]');
+  select.value = '10';
+  await act(async () => select.dispatchEvent(new dom.window.Event('change', { bubbles: true })));
+  await click('Save preferences');
+  await waitFor(() => transport.mock.calls.some(([, options]) => options.method === 'PATCH'));
+  const [, options] = transport.mock.calls.find(([, request]) => request.method === 'PATCH');
+  expect(JSON.parse(options.body)).toMatchObject({
+    expectedRevision: 0,
+    scope: { uid, accountId: null },
+    preferences: { ownerId: owner.id, verificationSamples: 10 },
+  });
+  expect(
+    dom.window.localStorage.getItem(`celestia.team-search.v1:${owner.id}:uid-${uid}`),
+  ).toBeNull();
+});
+
+it('refreshes the stored revision after a 409 without discarding the draft', async () => {
+  const owner = {
+    id: 'owner-a',
+    email: 'owner-a@example.test',
+    username: 'owner-a',
+    createdAt: '2026-10-01T00:00:00.000Z',
+    updatedAt: '2026-10-01T00:00:00.000Z',
+  };
+  authStore.getState().login('synthetic-token', owner);
+  const base = defaultTeamSearchPreferences(uid, { ownerId: owner.id, accountId: null });
+  let patchAttempts = 0;
+  transport.mockImplementation(async (_url, options = {}) => {
+    if (options.method === 'PATCH') {
+      patchAttempts += 1;
+      return {
+        ok: false,
+        status: 409,
+        json: async () => ({
+          success: false,
+          error: { code: 'CONFLICT', message: 'Preferences changed. Refresh before saving.' },
+        }),
+      };
+    }
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        success: true,
+        data: {
+          preferences: patchAttempts ? { ...base, priority: 'favorites' } : base,
+          revision: patchAttempts ? 1 : 0,
+        },
+      }),
+    };
+  });
+  await mount(uid, `/u/${uid}/teams`);
+  await waitFor(() => transport.mock.calls.length > 0);
+  const select = document.querySelector('select[name="verificationSamples"]');
+  select.value = '10';
+  await act(async () => select.dispatchEvent(new dom.window.Event('change', { bubbles: true })));
+  await click('Save preferences');
+  await waitFor(() => document.querySelector('[role="alert"]'));
+  expect(document.querySelector('[role="alert"]').textContent).toContain('Preferences changed');
+  expect(document.querySelector('select[name="verificationSamples"]').value).toBe('10');
+  await waitFor(() => document.body.textContent.includes('Preferences changed in another tab'));
+  const save = [...document.querySelectorAll('button')].find(
+    (button) => button.textContent === 'Save preferences',
+  );
+  expect(save.disabled).toBe(true);
+  expect(
+    dom.window.localStorage.getItem(`celestia.team-search.v1:${owner.id}:uid-${uid}`),
+  ).toBeNull();
+
+  // The draft is not a dead end: an explicit overwrite targets the refreshed revision.
+  await click('Save my preferences over it');
+  await waitFor(
+    () => transport.mock.calls.filter(([, options]) => options.method === 'PATCH').length === 2,
+  );
+  const patches = transport.mock.calls.filter(([, options]) => options.method === 'PATCH');
+  expect(JSON.parse(patches[1][1].body)).toMatchObject({
+    expectedRevision: 1,
+    preferences: { verificationSamples: 10 },
+  });
+  expect(
+    dom.window.localStorage.getItem(`celestia.team-search.v1:${owner.id}:uid-${uid}`),
+  ).toBeNull();
 });
 
 it('ignores legacy target overrides, runs the chosen rotation on the fixed benchmark and shows average DPS', async () => {
@@ -208,6 +334,7 @@ it('ignores legacy target overrides, runs the chosen rotation on the fixed bench
   const result = document.querySelector('[aria-label="Team damage results"]');
   expect(result.textContent).toContain('AVERAGE TEAM DPS100damage / second');
   expect(result.textContent).toContain('not only the opening second');
+  expect(result.textContent).toContain('Action-specific evidence is unavailable');
   expect(result.textContent).toContain(
     new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(6000) +
       ' over 60 seconds',
@@ -222,6 +349,7 @@ it('ignores legacy target overrides, runs the chosen rotation on the fixed bench
   expect(stored.settings.resistance).toBe(0);
   await click('Add Furina Burst');
   expect(document.querySelector('[aria-label="Team damage results"]')).toBeNull();
+  expect(document.querySelector('[aria-label="furina rotation evidence"]')).toBeNull();
   expect(requests).toHaveLength(1);
   expect((await readUidTeams(uid))[0]).toEqual(saved);
 });
@@ -395,7 +523,7 @@ it('saves a second lineup as a compact card and resets the maker without changin
     document.querySelector('[aria-label="Team maker"]').querySelectorAll('.team-slot-filled'),
   ).toHaveLength(4);
   await click('Save team');
-  await act(async () => new Promise((resolve) => setTimeout(resolve, 40)));
+  await waitFor(() => document.querySelectorAll('.saved-team-card').length === 2);
   expect(document.querySelectorAll('.saved-team-card')).toHaveLength(2);
   expect(document.querySelectorAll('.saved-team-card.is-expanded')).toHaveLength(0);
   expect(

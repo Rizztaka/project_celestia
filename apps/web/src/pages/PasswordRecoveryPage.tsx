@@ -146,6 +146,7 @@ export default function PasswordRecoveryPage({ mode }: { mode: 'forgot' | 'reset
               </p>
             )}
             <button
+              type="submit"
               className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold text-white disabled:opacity-50"
               disabled={mutation.isPending}
             >

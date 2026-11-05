@@ -1,5 +1,23 @@
 # **Project Celestia Decisions Log**
 
+## DEC-010 — Autonomous endgame companion
+
+**Date:** 2026-10-25. **Status:** Accepted product direction, directly requested by
+the owner as an active goal.
+
+Build contextual character readiness, supported DPS team search, content-specific
+Abyss/Onslaught/Theater teams, account-value pull comparisons and a fun simulator,
+with verified knowledge through 7.1 and convenient use. This supersedes DEC-009's
+conflicting product exclusions; keep its source honesty and player control.
+
+Use existing deterministic engines and separate calculations from explanations.
+Autonomy means refreshing recommendations from known account observations; it
+does not require an AI provider or imply live access to an entire account.
+Descriptive records, reviewed advice and simulation support have separate coverage.
+The goal is not complete merely because legacy modules already exist.
+
+Delivery and acceptance: [current plan](plans/autonomous-companion/implementation_plan.md).
+
 > **2026-10-02:** [ADR 0013](adr/0013-versioned-routine-snapshots.md) records the locally implemented routine snapshot, compatibility, concurrency, and conservative migration decisions. The Asia clock evidence is accepted and the default provider is enabled locally; no release is implied.
 
 ## DEC-009 — Genshin companion product focus

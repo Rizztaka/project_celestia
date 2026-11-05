@@ -8,6 +8,7 @@ import TeamAutoGenerator from '../components/TeamAutoGenerator';
 import TeamBuildEditor from '../components/TeamBuildEditor';
 import { ElementCrest, TeamPortrait } from '../components/TeamCharacterPicker';
 import { PageHeader, UiIcon } from '../components/Ui';
+import { reviewedProfiles } from '../lib/build-analysis/identity';
 import {
   parseUidTeamFile,
   type SavedUidTeam,
@@ -85,6 +86,11 @@ function TeamsWorkspace({ uid }: { uid: string }) {
             copy ? { name: `${copy.name.slice(0, 70)} (copy)`, slots: copy.members } : undefined
           }
           onSaved={(saved) => {
+            client.setQueryData<SavedUidTeam[]>(uidTeamsKey(uid), (current = []) =>
+              [...current.filter((team) => team.id !== saved.id), saved].sort(
+                (a, b) => a.name.localeCompare(b.name, 'en') || a.id.localeCompare(b.id, 'en'),
+              ),
+            );
             setMakerVersion((version) => version + 1);
             navigate(`/u/${uid}/teams`, { replace: true });
             setMessage('Team saved below. Your team maker is ready for another lineup.');
@@ -227,8 +233,8 @@ function TeamsWorkspace({ uid }: { uid: string }) {
       <footer className="team-coverage-note">
         <UiIcon name="insights" />
         <p>
-          Tailored role guidance: Furina, Sucrose, Skirk and Xilonen. Other characters keep their
-          observed builds and general checks.
+          Tailored role guidance covers selected patterns for {reviewedProfiles.length} reviewed
+          characters. Other characters keep their observed builds and general checks.
         </p>
       </footer>
     </main>

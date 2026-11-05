@@ -94,7 +94,7 @@ describe.skipIf(!databaseUrl)('C5c admission with actual disposable PostgreSQL',
     await client?.end();
     vi.restoreAllMocks();
   });
-  it('preserves all twenty tables, receipts and intent after malformed/oversized/resource/foreign rejections', async () => {
+  it('preserves all twenty-one tables, receipts and intent after malformed/oversized/resource/foreign rejections', async () => {
     const before = await snapshot(client);
     expect(
       (await api.post(root).set('Content-Type', 'application/json').send('x'.repeat(100_000)))
@@ -157,6 +157,7 @@ describe.skipIf(!databaseUrl)('C5c admission with actual disposable PostgreSQL',
       'genshin_routine_state',
       'genshin_plan_preferences',
       'genshin_plan_dismissals',
+      'genshin_team_preferences',
       'genshin_weapons',
       'genshin_artifacts',
       'genshin_characters',

@@ -13,6 +13,7 @@ const member = z
       .refine((v) =>
         [
           'unspecified',
+          'general_checks',
           'on_field_damage',
           'off_field_damage',
           'reaction_trigger',

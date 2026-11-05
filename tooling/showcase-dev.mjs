@@ -18,7 +18,7 @@ const environment = Object.fromEntries(
 Object.assign(environment, {
   NODE_ENV: 'development',
   DOTENV_CONFIG_PATH: process.platform === 'win32' ? 'NUL' : '/dev/null',
-  DATABASE_URL: 'postgresql://synthetic:synthetic@127.0.0.1:1/never_connect',
+  DATABASE_URL: 'postgresql://127.0.0.1:1/never_connect',
   JWT_SECRET: randomBytes(32).toString('hex'),
   TRUST_PROXY: 'false',
   PORT: '45750',

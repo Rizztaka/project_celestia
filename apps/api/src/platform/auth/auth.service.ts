@@ -85,6 +85,7 @@ export class AuthService {
 
     const isPasswordValid = await bcrypt.compare(
       data.password,
+      // nosemgrep: detected-bcrypt-hash - Synthetic dummy hash used strictly for constant-time comparison against timing attacks
       user?.password ?? '$2b$12$C6UzMDM.H6dfI/f/IKcEe.5W6zOXwvbeStW5SAoFhuLhUmWzjDxVS',
     );
 

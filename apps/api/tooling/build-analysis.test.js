@@ -11,6 +11,7 @@ import {
   talentTotal,
 } from '../../web/src/lib/build-analysis/snapshot.ts';
 import { analyzeTeam, teamContext } from '../../web/src/lib/build-analysis/team.calculator.ts';
+import { RULE_PACK_VERSION } from '../../web/src/lib/build-analysis/types.ts';
 import {
   normalizeCombatStat,
   normalizeEquipmentStat,
@@ -28,7 +29,7 @@ function input(index = 0, roleId = 'party_buff') {
   return {
     uid,
     character: records()[index],
-    rulePackVersion: 'public-build-analysis-1',
+    rulePackVersion: RULE_PACK_VERSION,
     roleId,
     team: null,
     hypothesis: null,
@@ -250,7 +251,7 @@ describe('team context', () => {
     t.members.forEach((m) =>
       expect(m.analysis).toEqual(
         analyzeCharacter({
-          rulePackVersion: 'public-build-analysis-1',
+          rulePackVersion: RULE_PACK_VERSION,
           uid,
           character: r.find((c) => c.key === m.characterKey),
           roleId: m.roleId,

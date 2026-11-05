@@ -110,7 +110,7 @@ export class ContextualAdviceService {
       ...selections
         .filter((entry) => entry.selection === 'owned')
         .map((entry) => entry.characterKey),
-    ].sort();
+    ].sort((a, b) => a.localeCompare(b));
     const snapshots = await this.repository.read(userId, keys);
     const equipment = snapshots.find((entry) => entry.character.characterKey === key.data);
     if (!equipment) throw new NotFoundError('Character not found.');

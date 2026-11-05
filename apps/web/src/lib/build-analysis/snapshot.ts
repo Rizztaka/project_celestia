@@ -86,6 +86,7 @@ export function normalizeObservation(observation: CharacterObservation): Normali
     constellation: character.constellation,
     metadataAvailable: character.metadataAvailable,
     equipmentAvailable: character.equipmentAvailable,
+    observationConflict: observation.conflicted === true,
     observedAt: observation.observedAt,
     talents: normalizeTalents(character),
     weapon: normalizeWeapon(character),

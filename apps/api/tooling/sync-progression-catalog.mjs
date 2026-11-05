@@ -10,6 +10,7 @@ if (!/^[a-f0-9]{40}$/.test(commit)) throw new Error('Supply a full pinned commit
 const revisionCache = resolve(cache, commit);
 mkdirSync(revisionCache, { recursive: true });
 const sha = (text) => createHash('sha256').update(text).digest('hex');
+// nosemgrep: javascript.crypto.weak-cryptographic-algorithm - Git tree and blob protocol strictly requires SHA-1
 const gitBlob = (bytes) =>
   createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
 async function request(url) {
@@ -34,6 +35,7 @@ async function tree(ref) {
       ]),
     ),
   );
+  // nosemgrep: javascript.crypto.weak-cryptographic-algorithm - Git tree protocol strictly requires SHA-1
   const actual = createHash('sha1').update(`tree ${bytes.length}\0`).update(bytes).digest('hex');
   if (actual !== listing.sha || actual !== ref)
     throw new Error(`Source tree integrity mismatch: ${ref}`);

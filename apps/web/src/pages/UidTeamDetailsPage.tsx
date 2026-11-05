@@ -10,6 +10,7 @@ import TeamBuildEditor from '../components/TeamBuildEditor';
 import { TeamPortrait } from '../components/TeamCharacterPicker';
 import TeamDamagePanel from '../components/TeamDamagePanel';
 import { PageHeader, UiIcon } from '../components/Ui';
+import { publicAccountContext } from '../lib/account-context.calculator';
 import { type SavedUidTeam, writeUidTeams } from '../lib/build-analysis/teams-storage';
 import { uidTeamsKey, useUidTeams } from '../lib/build-analysis/use-teams';
 import type { CharacterObservation } from '../lib/observed-roster';
@@ -153,11 +154,13 @@ export default function UidTeamDetailsPage() {
   const { teamId } = useParams();
   const teams = useUidTeams(uid);
   const history = useObservedRoster(uid, query.data);
+  const [now] = useState(Date.now);
+  const account = publicAccountContext(uid, history.records, now);
   const team = teams.data?.find((entry) => entry.id === teamId);
   return (
     <main id="companion-content" tabIndex={-1} className="today-page teams-page team-details-page">
       {team ? (
-        <TeamWorkspace key={`${uid}:${team.id}`} team={team} records={history.records} />
+        <TeamWorkspace key={`${uid}:${team.id}`} team={team} records={account.records} />
       ) : (
         <>
           <Link className="team-text-link" to={`/u/${uid}/teams`}>

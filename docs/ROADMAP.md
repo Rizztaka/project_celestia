@@ -1,5 +1,18 @@
 # Project Celestia Roadmap
 
+> **Current roadmap — owner direction, 2026-10-25:** The autonomous endgame
+> companion goal supersedes earlier product exclusions and historical milestone
+> gates below. Start with the [code audit, delivery plan and acceptance
+> criteria](plans/autonomous-companion/implementation_plan.md) and
+> [checklist](plans/autonomous-companion/task.md).
+>
+> Delivery order: **M0 coverage baseline → M1 trusted knowledge/account context →
+> M2 contextual build readiness → M3 verified rotations/team search → M4 endgame
+> assignment → M5 account-value pulls → M6 fun simulator and companion summary.**
+> Existing features are foundations; neither descriptive catalog size nor
+> training-dummy DPS certifies complete version-7.1 support. Runtime behavior and
+> current verification take precedence over older completion banners.
+
 > **2026-10-18 owner-authorized Section 5 — C6/C7 implemented locally:** Planner now includes a roster-backed Team Builder with deterministic resonance/reaction explanations, account-scoped local saved teams and JSON import/export, plus Wish Savings with inventory/pity controls, modeled income and active event deadlines. OpenRouter is optional with bounded synthesis and deterministic fallback. Simulator scenarios default to an unexpired Mavuika/Raiden banner; Odette and NIKKE API/database contracts remain preserved. [Walkthrough and assumptions](plans/section5-modernization/walkthrough.md). Local verification passes **1,247 tests / 75 files**, zero failures/skips; browser checks exercise the real API and disposable PostgreSQL. Banner dates, income calendars and probability ramps are explicitly planning scenarios. Earlier C6/C7 authorization gates below are historical; this directive authorizes their implementation. No deployment or remote CI is claimed.
 
 > **2026-10-18 owner clarification — domain farming focus complete locally:** Planner now prioritizes all 48 talent/weapon material families with weekday/Today filters, search, goal relevance, full drop schedules and selected-server current/next availability. Browsing works without stock, difficulty or server selection; current-day claims require the selected server. Coordinate controls and duplicate Today sidebar are removed; the compatible route API/data remain preserved, and the main view skips coordinate calculations. Optional resin estimates are collapsed. REA's prior failure was resolved by using supported Node 24.11.0 instead of unsupported 22.14.0; static analysis passes with integrity checks enabled. The local REA skill's runtime/CLI/evidence guidance is corrected; no upstream patch or system/runtime configuration change. Final guarded recovery/full verification passes **1082 / 61 / 145 actual PostgreSQL cases**, zero failures/skips. [Walkthrough](plans/domain-farming/walkthrough.md), [validation](plans/domain-farming/validation-results.json), [browser evidence](plans/domain-farming/browser-observations.md), [REA review](plans/domain-farming/rea-review.json), [cleanup](plans/domain-farming/cleanup.json), [preservation](plans/domain-farming/preservation-check.json). Inherited dirty work, master/HEAD, empty index and all fourteen migrations preserved. No repeated owner walkthrough, human acceptance, staging, commit, push, deployment or next phase. Earlier dated notes are historical.

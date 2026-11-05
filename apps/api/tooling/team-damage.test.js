@@ -55,6 +55,16 @@ function fixture() {
   return { team, records, settings };
 }
 describe('observed build to damage simulation', () => {
+  it('blocks a complete team total when an observed member has unresolved build conflicts', () => {
+    const { team, records, settings } = fixture();
+    records[0].conflicted = true;
+    const result = damageInput(uid, team, records, settings);
+    expect(result.config).toBeNull();
+    expect(result.issues).toContainEqual({
+      code: 'conflicting_build',
+      characterKey: records[0].character.key,
+    });
+  });
   it('ships the pinned engine and matching source bridge with verified checksums', () => {
     const asset = (name) =>
       new URL(`../../web/public/vendor/gcsim-v2.47.2/${name}`, import.meta.url);

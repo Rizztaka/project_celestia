@@ -23,7 +23,8 @@ const readJson = (url) => JSON.parse(readFileSync(url, 'utf8'));
 export function buildEquipmentIdentity({ relics, english, references }) {
   const referencesByGameId = new Map();
   for (const reference of references)
-    if (!referencesByGameId.has(reference.gameId)) referencesByGameId.set(reference.gameId, reference);
+    if (!referencesByGameId.has(reference.gameId))
+      referencesByGameId.set(reference.gameId, reference);
   const sets = {};
   for (const [setId, set] of Object.entries(relics.Sets)) {
     const name = english[String(set.Name)] ?? null;
@@ -41,7 +42,9 @@ export function buildEquipmentIdentity({ relics, english, references }) {
 }
 
 const response = await fetch(relicUrl, {
-  headers: { 'User-Agent': 'ProjectCelestia-P1/1.0 (+https://github.com/Rizztaka/project_celestia)' },
+  headers: {
+    'User-Agent': 'ProjectCelestia-P1/1.0 (+https://github.com/Rizztaka/project_celestia)',
+  },
   signal: AbortSignal.timeout(20000),
   redirect: 'error',
 });
@@ -59,7 +62,8 @@ const references = Object.entries(referenceIndex.artifacts).map(([key, entry]) =
 });
 
 const identity = buildEquipmentIdentity({ relics, english, references });
-if (Object.keys(identity.items).length < 1000) throw new Error('Equipment identity table too small.');
+if (Object.keys(identity.items).length < 1000)
+  throw new Error('Equipment identity table too small.');
 await writeCatalogJson(destination, {
   ...identity,
   source: {

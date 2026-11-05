@@ -22,7 +22,7 @@ function copyFileSync(source, destination) {
   writeFileSync(destination, readFileSync(source));
 }
 if (
-  hash(join(source, 'LICENSE')) !==
+  hashText(join(source, 'LICENSE')) !==
   'a100d2f2a4f04058c3986861bcb1b27d1a920e9e7b810714fffc3f66c188f6d4'
 )
   throw new Error('Pinned MIT license mismatch; do not build from floating main.');
@@ -88,7 +88,7 @@ const sets = Object.fromEntries(Object.values(readData('artifact')).map((a) => [
 writeFileSync(
   join(metadataRoot, 'engine-metadata.json'),
   JSON.stringify(
-    { version: 'gcsim-2.47.2-celestia-1', revision, characters, weapons, sets },
+    { version: 'gcsim-2.47.2-celestia-2', revision, characters, weapons, sets },
     null,
     2,
   ) + '\n',

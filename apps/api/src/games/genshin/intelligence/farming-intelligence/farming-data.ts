@@ -92,8 +92,8 @@ export function validateFarmingData(input: unknown) {
     if (
       family.materialKeys.length !== (family.kind === 'talent' ? 3 : 4) ||
       new Set(family.materialKeys).size !== family.materialKeys.length ||
-      JSON.stringify([...family.materialKeys].sort()) !==
-        JSON.stringify([...family.domain.dropKeys].sort())
+      JSON.stringify([...family.materialKeys].sort((a, b) => a.localeCompare(b))) !==
+        JSON.stringify([...family.domain.dropKeys].sort((a, b) => a.localeCompare(b)))
     )
       throw new Error('Invalid farming family.');
     for (const key of family.materialKeys) {

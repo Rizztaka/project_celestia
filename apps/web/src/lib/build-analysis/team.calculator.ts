@@ -10,7 +10,7 @@ export interface MemberSelection {
 }
 export function validRole(key: string, role: string) {
   if (!/^[1-9]\d{7}:(?:[1-9]\d{0,7}|unknown)$/.test(key)) return false;
-  if (role === 'unspecified') return true;
+  if (role === 'unspecified' || role === 'general_checks') return true;
   const [avatar, depot] = key.split(':');
   const p = profileForCharacter(Number(avatar), Number(depot));
   return !!p && !!reviewedRole(p, role);
@@ -62,7 +62,7 @@ export function analyzeTeam(
       : [],
   );
   const teamFindings = members.flatMap((m) => m.analysis.findings.filter((f) => f.teamDependent));
-  const times = [...new Set(members.map((m) => m.observedAt))].sort();
+  const times = [...new Set(members.map((m) => m.observedAt))].sort((a, b) => a.localeCompare(b));
   const missing = context.members.filter((m) => !m.character).map((m) => m.characterKey);
   return {
     rulePackVersion: RULE_PACK_VERSION,

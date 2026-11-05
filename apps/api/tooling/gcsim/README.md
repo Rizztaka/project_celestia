@@ -28,9 +28,10 @@ pnpm --filter @celestia/api exec vitest run tooling/team-damage.test.js
 The builder verifies the pinned LICENSE, compiles `js/wasm` with local Go,
 compresses the engine, copies its matching runtime and dependency license
 notices, extracts exact numeric character/form, weapon and set identities, and
-writes SHA-256 receipts. Verify the source revision independently before building;
-the license hash alone is not a source revision attestation. Review generated
-coverage and bump `gcsim-2.47.2-celestia-1` if engine behavior or inputs change.
+writes SHA-256 receipts. The LICENSE check normalizes CRLF to LF for Windows
+checkouts. Verify the source revision independently before building; the license
+hash alone is not a source revision attestation. Review generated coverage and
+bump the current `gcsim-2.47.2-celestia-2` if engine behavior or inputs change.
 
 The raw WASM is about 57 MB and stays in the extracted source directory. Only the
 approximately 9 MB gzip file is distributed. The browser decompresses it and
@@ -49,6 +50,26 @@ This pin includes 124 character/forms, 237 weapons and 55 sets. Nefer is absent.
 Numerical results describe the chosen rotation and enemy under engine rules;
 they are not an optimal-team recommendation or a guarantee of in-game damage.
 The basic rotation is deliberately labeled as an editable starting point.
+
+## Rotation diagnostics
+
+Bridge revision 2 adds `diagnosticsVersion: 1`, per-member `actionCounts` from
+native action events, and `blockedAttempts` from native `OnActionFailed` events.
+It observes existing events without changing combat rules or random seeds.
+The raw WASM hash and engine version invalidate older derived results.
+
+Blocked attempts are **retry checks**, not seconds or distinct missed actions.
+Cooldown and energy causes can change while a single requested action waits.
+Upstream's failure-interval collector retains only its initial reason; this
+bridge therefore counts each emitted reason instead of assigning the whole
+interval duration to one cause. Existing `failedIntervals` remains available for
+older clients but must not be interpreted as an energy-failure count.
+
+The TypeScript summary validates complete version-1 diagnostic maps and averages
+them across all samples, including zeros. Legacy or mixed-version results have
+unknown diagnostics. A loop without a requested Burst cannot prove that Burst
+energy needs are met. Full starting energy, short duration and the absence of
+enemy attacks also prevent a universal sustained-energy or survival verdict.
 
 Sources: [configuration reference](https://docs.gcsim.app/reference/config/),
 [configuration guide](https://docs.gcsim.app/guides/understanding_config_files/),

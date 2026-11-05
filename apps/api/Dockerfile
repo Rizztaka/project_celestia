@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM node:22-alpine AS base
+FROM node:22.23.4-alpine AS base
 RUN apk add --no-cache openssl
 RUN corepack enable pnpm && corepack prepare pnpm@11.18.0 --activate
 WORKDIR /app
@@ -13,14 +13,14 @@ COPY packages/api-contracts/package.json packages/api-contracts/package.json
 RUN pnpm install --frozen-lockfile
 COPY . .
 # Configuration requires a URL for generation; this does not connect to a database.
-RUN DATABASE_URL=postgresql://unused:unused@localhost:5432/unused pnpm --filter @celestia/api exec prisma generate
+RUN DATABASE_URL=postgresql://localhost:5432/unused pnpm --filter @celestia/api exec prisma generate
 RUN pnpm --filter @celestia/api-contracts build && pnpm --filter @celestia/api build
 RUN find apps/api/dist -name '*.test.js' -delete
 RUN pnpm --filter @celestia/api exec node -e "const fs = require('node:fs'), path = require('node:path'); const generated = require.resolve('.prisma/client/default', {paths: [path.dirname(require.resolve('@prisma/client'))]}); fs.cpSync(path.dirname(generated), '/production/generated', {recursive: true});"
 RUN pnpm --filter @celestia/api deploy --legacy --prod /production/api
 RUN node -e "require('node:fs').cpSync('/production/generated', '/production/api/node_modules/.prisma/client', {recursive: true})"
 
-FROM node:22-alpine AS runner
+FROM node:22.23.4-alpine AS runner
 RUN apk add --no-cache openssl
 WORKDIR /app
 ENV NODE_ENV=production

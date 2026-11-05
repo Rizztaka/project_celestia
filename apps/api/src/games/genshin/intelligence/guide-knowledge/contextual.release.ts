@@ -545,9 +545,9 @@ export function loadRelease(
     ...tracking.map((source) => `evidence/${source.id}.raw`),
     ...new Set(tracking.flatMap((source) => source.notices)),
     ...(descriptor.base ? ['candidate.json'] : []),
-  ].sort();
+  ].sort((a, b) => a.localeCompare(b));
   requireValid(
-    digest(requiredPaths) === digest(Object.keys(files).sort()),
+    digest(requiredPaths) === digest(Object.keys(files).sort((a, b) => a.localeCompare(b))),
     'Unexpected or missing release file/reference.',
   );
   if (descriptor.base) {

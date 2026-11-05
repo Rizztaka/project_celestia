@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"syscall/js"
 
+	"github.com/genshinsim/gcsim/pkg/core/action"
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/gcs/ast"
 	"github.com/genshinsim/gcsim/pkg/gcs/eval"
 	"github.com/genshinsim/gcsim/pkg/simulation"
@@ -20,18 +22,21 @@ import (
 func init() { js.Global().Set("runCelestia", js.FuncOf(celestiaRun)) }
 
 type celestiaMember struct {
-	Key             string  `json:"key"`
-	Damage          float64 `json:"damage"`
-	ActiveFrames    int     `json:"activeFrames"`
-	Actions         int     `json:"actions"`
-	FailedIntervals int     `json:"failedIntervals"`
+	Key             string         `json:"key"`
+	Damage          float64        `json:"damage"`
+	ActiveFrames    int            `json:"activeFrames"`
+	Actions         int            `json:"actions"`
+	FailedIntervals int            `json:"failedIntervals"`
+	ActionCounts    map[string]int `json:"actionCounts"`
+	BlockedAttempts map[string]int `json:"blockedAttempts"`
 }
 type celestiaResult struct {
-	Seed           string           `json:"seed"`
-	DurationFrames int              `json:"durationFrames"`
-	TotalDamage    float64          `json:"totalDamage"`
-	DPS            float64          `json:"dps"`
-	Members        []celestiaMember `json:"members"`
+	DiagnosticsVersion int              `json:"diagnosticsVersion"`
+	Seed               string           `json:"seed"`
+	DurationFrames     int              `json:"durationFrames"`
+	TotalDamage        float64          `json:"totalDamage"`
+	DPS                float64          `json:"dps"`
+	Members            []celestiaMember `json:"members"`
 }
 
 func celestiaRun(this js.Value, args []js.Value) (out interface{}) {
@@ -61,17 +66,36 @@ func celestiaRun(this js.Value, args []js.Value) (out interface{}) {
 	if err != nil {
 		return marshal(err)
 	}
+	// Count the native retry reason at each check. Upstream's failure intervals
+	// retain only the initial reason and can span changes from cooldown to energy.
+	blocked := make([]map[string]int, len(core.Player.Chars()))
+	for i := range blocked {
+		blocked[i] = map[string]int{}
+	}
+	core.Events.Subscribe(event.OnActionFailed, func(args ...any) {
+		index := args[0].(int)
+		reason := args[3].(action.Failure).String()
+		blocked[index][reason]++
+	}, "celestia-action-diagnostics")
 	result, err := sim.Run()
 	if err != nil {
 		return marshal(err)
 	}
-	summary := celestiaResult{Seed: args[1].String(), DurationFrames: result.Duration, TotalDamage: result.TotalDamage, DPS: result.DPS, Members: []celestiaMember{}}
-	for _, char := range result.Characters {
+	summary := celestiaResult{DiagnosticsVersion: 1, Seed: args[1].String(), DurationFrames: result.Duration, TotalDamage: result.TotalDamage, DPS: result.DPS, Members: []celestiaMember{}}
+	for index, char := range result.Characters {
 		damage := 0.0
 		for _, event := range char.DamageEvents {
 			damage += event.Damage
 		}
-		summary.Members = append(summary.Members, celestiaMember{char.Name, damage, char.ActiveTime, len(char.ActionEvents), len(char.FailedActions)})
+		counts := map[string]int{}
+		for _, event := range char.ActionEvents {
+			counts[event.Action]++
+		}
+		summary.Members = append(summary.Members, celestiaMember{
+			Key: char.Name, Damage: damage, ActiveFrames: char.ActiveTime,
+			Actions: len(char.ActionEvents), FailedIntervals: len(char.FailedActions),
+			ActionCounts: counts, BlockedAttempts: blocked[index],
+		})
 	}
 	data, err := json.Marshal(summary)
 	if err != nil {

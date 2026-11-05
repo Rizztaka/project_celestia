@@ -145,7 +145,12 @@ function CharPickerModal({
         className="relative w-full max-w-md rounded-2xl border border-white/10 bg-zinc-900 p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute right-4 top-4 text-zinc-500 hover:text-white">
+        <button
+          type="button"
+          aria-label="Close"
+          onClick={onClose}
+          className="absolute right-4 top-4 text-zinc-500 hover:text-white"
+        >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
@@ -704,8 +709,11 @@ function TheaterView({ roster }: { roster: RosterCharacter[] }) {
       {/* Season selector */}
       <div className="glass-panel flex flex-wrap items-center justify-between gap-4 rounded-2xl px-5 py-4">
         <div className="flex flex-wrap items-center gap-3">
-          <label className="text-sm font-medium text-zinc-400">Season</label>
+          <label htmlFor="season-select" className="text-sm font-medium text-zinc-400">
+            Season
+          </label>
           <select
+            id="season-select"
             value={selectedSeason}
             onChange={(e) => setSelectedSeason(e.target.value)}
             className="rounded-lg border border-white/10 bg-zinc-800 px-3 py-1.5 text-sm text-white outline-none focus:border-amber-500/60"
@@ -960,9 +968,12 @@ function AbyssView({ roster }: { roster: RosterCharacter[] }) {
       {/* Cycle selector + stats bar */}
       <div className="glass-panel flex flex-wrap items-center justify-between gap-4 rounded-2xl px-5 py-4">
         <div className="flex flex-wrap items-center gap-3">
-          <label className="text-sm font-medium text-zinc-400">Cycle</label>
+          <label htmlFor="cycle-select" className="text-sm font-medium text-zinc-400">
+            Cycle
+          </label>
           {cycles.length > 0 ? (
             <select
+              id="cycle-select"
               value={effectiveCycleId ?? ''}
               onChange={(e) => setSelectedCycleId(e.target.value)}
               className="rounded-lg border border-white/10 bg-zinc-800 px-3 py-1.5 text-sm text-white outline-none focus:border-violet-500/60"

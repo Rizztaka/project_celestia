@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 3,
+  "status": "unverified",
+  "source": {
+    "id": "official-genshin-7.1-update",
+    "url": "https://genshin.hoyoverse.com/en/news/detail/166383",
+    "payloadUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/a1b1f9d3315447cc/getContent?iAppId=32&iInfoId=166383&sLangKey=en-us",
+    "publishedOn": "2026-09-23",
+    "immutableRevision": null,
+    "reviewStatus": "unverified",
+    "independentReview": null,
+    "refetch": {
+      "retrievedOn": "2026-10-26",
+      "responseDate": "Mon, 26 Oct 2026 15:25:29 GMT",
+      "httpStatus": 200,
+      "byteLength": 55735,
+      "sha256": "fb270352333af4cfffcc49f5c80fb1bbff36b1daa7e2edbc6309a5961ea9b501",
+      "scope": "Fresh HTTPS retrieval matched local bytes; not independent historical provenance approval."
+    },
+    "revision": {
+      "responseDate": "Mon, 26 Oct 2026 14:14:58 GMT"
+    },
+    "artifact": {
+      "file": "official-7.1-source.json",
+      "byteLength": 55735,
+      "sha256": "fb270352333af4cfffcc49f5c80fb1bbff36b1daa7e2edbc6309a5961ea9b501",
+      "payloadUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/a1b1f9d3315447cc/getContent?iAppId=32&iInfoId=166383&sLangKey=en-us",
+      "responseDate": "Mon, 26 Oct 2026 14:14:58 GMT"
+    },
+    "retrievalTimestamp": "2026-10-26T14:14:58.000Z",
+    "extractionMethod": "Bounded content_v2 New Characters section; every heading and paragraph accounted for; 4/5-star claims only, no game IDs."
+  },
+  "extraction": {
+    "status": "parsed",
+    "publishedOn": "2026-09-23",
+    "entries": [
+      {
+        "name": "Vesna",
+        "element": "Anemo",
+        "weaponType": "Sword",
+        "releaseVersion": "7.1"
+      },
+      {
+        "name": "Vodyanitsa",
+        "element": "Hydro",
+        "weaponType": "Catalyst",
+        "releaseVersion": "7.1"
+      }
+    ],
+    "extractionMethod": "Bounded content_v2 New Characters section; every heading and paragraph accounted for; 4/5-star claims only, no game IDs."
+  },
+  "knownExclusions": [
+    "Parsed claims are limited to names, elements, weapon types and Version 7.1. Source provenance remains independently unapproved; local hashes and a fresh matching HTTP response are not historical approval.",
+    "Stable game IDs, release completeness, mechanics, progression, simulation and endgame applicability require separate evidence."
+  ]
+}

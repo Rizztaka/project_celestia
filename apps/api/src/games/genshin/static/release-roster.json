@@ -1,0 +1,1039 @@
+{
+  "schemaVersion": 2,
+  "targetVersion": "7.1",
+  "source": {
+    "id": "genshin-db",
+    "url": "https://github.com/theBowja/genshin-db/tree/d158715a69615c9730d060fbf4bc2c75cc48166e",
+    "revision": "d158715a69615c9730d060fbf4bc2c75cc48166e",
+    "registryMetadataRetrievedOn": "2026-10-26",
+    "archiveRetrievalStatus": "timed_out",
+    "artifactUrl": "https://registry.npmjs.org/genshin-db/-/genshin-db-5.2.14.tgz",
+    "upstreamIntegrity": "sha512-ynW5TYaEKJJOCUghETzv0CAe3OPUgtoKMWHxnpca9zyyrPmzEsYg4ATbplbdAh3ED0cc4fwLm83HxMquCGKX6w==",
+    "independentReview": null,
+    "packageVersion": "5.2.14",
+    "dataFile": "src/min/data.min.json",
+    "dataSha256": "948b4e005f9f23871a8045fc58a40fed63a2b473b402e42d33459a2ded9a4bbf",
+    "patchScope": "Playable character identity and release-version metadata through Version 7.1.",
+    "reviewStatus": "unverified"
+  },
+  "releaseNotice": {
+    "id": "official-genshin-7.1-update",
+    "url": "https://genshin.hoyoverse.com/en/news/detail/166383",
+    "publishedOn": "2026-09-23",
+    "patchScope": "Version 7.1 new playable characters listed in the official update notice."
+  },
+  "releaseEntries": [
+    {
+      "key": "KamisatoAyaka",
+      "gameId": 10000002,
+      "sourceName": "Kamisato Ayaka",
+      "element": "Cryo",
+      "weaponType": "Sword",
+      "releaseVersion": "2.0"
+    },
+    {
+      "key": "Jean",
+      "gameId": 10000003,
+      "sourceName": "Jean",
+      "element": "Anemo",
+      "weaponType": "Sword",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Aether",
+      "gameId": 10000005,
+      "sourceName": "Aether",
+      "element": "None",
+      "weaponType": "Sword",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Lisa",
+      "gameId": 10000006,
+      "sourceName": "Lisa",
+      "element": "Electro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Lumine",
+      "gameId": 10000007,
+      "sourceName": "Lumine",
+      "element": "None",
+      "weaponType": "Sword",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Barbara",
+      "gameId": 10000014,
+      "sourceName": "Barbara",
+      "element": "Hydro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Kaeya",
+      "gameId": 10000015,
+      "sourceName": "Kaeya",
+      "element": "Cryo",
+      "weaponType": "Sword",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Diluc",
+      "gameId": 10000016,
+      "sourceName": "Diluc",
+      "element": "Pyro",
+      "weaponType": "Claymore",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Razor",
+      "gameId": 10000020,
+      "sourceName": "Razor",
+      "element": "Electro",
+      "weaponType": "Claymore",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Amber",
+      "gameId": 10000021,
+      "sourceName": "Amber",
+      "element": "Pyro",
+      "weaponType": "Bow",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Venti",
+      "gameId": 10000022,
+      "sourceName": "Venti",
+      "element": "Anemo",
+      "weaponType": "Bow",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Xiangling",
+      "gameId": 10000023,
+      "sourceName": "Xiangling",
+      "element": "Pyro",
+      "weaponType": "Polearm",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Beidou",
+      "gameId": 10000024,
+      "sourceName": "Beidou",
+      "element": "Electro",
+      "weaponType": "Claymore",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Xingqiu",
+      "gameId": 10000025,
+      "sourceName": "Xingqiu",
+      "element": "Hydro",
+      "weaponType": "Sword",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Xiao",
+      "gameId": 10000026,
+      "sourceName": "Xiao",
+      "element": "Anemo",
+      "weaponType": "Polearm",
+      "releaseVersion": "1.3"
+    },
+    {
+      "key": "Ningguang",
+      "gameId": 10000027,
+      "sourceName": "Ningguang",
+      "element": "Geo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Klee",
+      "gameId": 10000029,
+      "sourceName": "Klee",
+      "element": "Pyro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Zhongli",
+      "gameId": 10000030,
+      "sourceName": "Zhongli",
+      "element": "Geo",
+      "weaponType": "Polearm",
+      "releaseVersion": "1.1"
+    },
+    {
+      "key": "Fischl",
+      "gameId": 10000031,
+      "sourceName": "Fischl",
+      "element": "Electro",
+      "weaponType": "Bow",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Bennett",
+      "gameId": 10000032,
+      "sourceName": "Bennett",
+      "element": "Pyro",
+      "weaponType": "Sword",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Tartaglia",
+      "gameId": 10000033,
+      "sourceName": "Tartaglia",
+      "element": "Hydro",
+      "weaponType": "Bow",
+      "releaseVersion": "1.1"
+    },
+    {
+      "key": "Noelle",
+      "gameId": 10000034,
+      "sourceName": "Noelle",
+      "element": "Geo",
+      "weaponType": "Claymore",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Qiqi",
+      "gameId": 10000035,
+      "sourceName": "Qiqi",
+      "element": "Cryo",
+      "weaponType": "Sword",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Chongyun",
+      "gameId": 10000036,
+      "sourceName": "Chongyun",
+      "element": "Cryo",
+      "weaponType": "Claymore",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Ganyu",
+      "gameId": 10000037,
+      "sourceName": "Ganyu",
+      "element": "Cryo",
+      "weaponType": "Bow",
+      "releaseVersion": "1.2"
+    },
+    {
+      "key": "Albedo",
+      "gameId": 10000038,
+      "sourceName": "Albedo",
+      "element": "Geo",
+      "weaponType": "Sword",
+      "releaseVersion": "1.2"
+    },
+    {
+      "key": "Diona",
+      "gameId": 10000039,
+      "sourceName": "Diona",
+      "element": "Cryo",
+      "weaponType": "Bow",
+      "releaseVersion": "1.1"
+    },
+    {
+      "key": "Mona",
+      "gameId": 10000041,
+      "sourceName": "Mona",
+      "element": "Hydro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Keqing",
+      "gameId": 10000042,
+      "sourceName": "Keqing",
+      "element": "Electro",
+      "weaponType": "Sword",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Sucrose",
+      "gameId": 10000043,
+      "sourceName": "Sucrose",
+      "element": "Anemo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "1.0"
+    },
+    {
+      "key": "Xinyan",
+      "gameId": 10000044,
+      "sourceName": "Xinyan",
+      "element": "Pyro",
+      "weaponType": "Claymore",
+      "releaseVersion": "1.1"
+    },
+    {
+      "key": "Rosaria",
+      "gameId": 10000045,
+      "sourceName": "Rosaria",
+      "element": "Cryo",
+      "weaponType": "Polearm",
+      "releaseVersion": "1.4"
+    },
+    {
+      "key": "HuTao",
+      "gameId": 10000046,
+      "sourceName": "Hu Tao",
+      "element": "Pyro",
+      "weaponType": "Polearm",
+      "releaseVersion": "1.3"
+    },
+    {
+      "key": "KaedeharaKazuha",
+      "gameId": 10000047,
+      "sourceName": "Kaedehara Kazuha",
+      "element": "Anemo",
+      "weaponType": "Sword",
+      "releaseVersion": "1.6"
+    },
+    {
+      "key": "Yanfei",
+      "gameId": 10000048,
+      "sourceName": "Yanfei",
+      "element": "Pyro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "1.5"
+    },
+    {
+      "key": "Yoimiya",
+      "gameId": 10000049,
+      "sourceName": "Yoimiya",
+      "element": "Pyro",
+      "weaponType": "Bow",
+      "releaseVersion": "2.0"
+    },
+    {
+      "key": "Thoma",
+      "gameId": 10000050,
+      "sourceName": "Thoma",
+      "element": "Pyro",
+      "weaponType": "Polearm",
+      "releaseVersion": "2.2"
+    },
+    {
+      "key": "Eula",
+      "gameId": 10000051,
+      "sourceName": "Eula",
+      "element": "Cryo",
+      "weaponType": "Claymore",
+      "releaseVersion": "1.5"
+    },
+    {
+      "key": "RaidenShogun",
+      "gameId": 10000052,
+      "sourceName": "Raiden Shogun",
+      "element": "Electro",
+      "weaponType": "Polearm",
+      "releaseVersion": "2.1"
+    },
+    {
+      "key": "Sayu",
+      "gameId": 10000053,
+      "sourceName": "Sayu",
+      "element": "Anemo",
+      "weaponType": "Claymore",
+      "releaseVersion": "2.0"
+    },
+    {
+      "key": "SangonomiyaKokomi",
+      "gameId": 10000054,
+      "sourceName": "Sangonomiya Kokomi",
+      "element": "Hydro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "2.1"
+    },
+    {
+      "key": "Gorou",
+      "gameId": 10000055,
+      "sourceName": "Gorou",
+      "element": "Geo",
+      "weaponType": "Bow",
+      "releaseVersion": "2.3"
+    },
+    {
+      "key": "KujouSara",
+      "gameId": 10000056,
+      "sourceName": "Kujou Sara",
+      "element": "Electro",
+      "weaponType": "Bow",
+      "releaseVersion": "2.1"
+    },
+    {
+      "key": "AratakiItto",
+      "gameId": 10000057,
+      "sourceName": "Arataki Itto",
+      "element": "Geo",
+      "weaponType": "Claymore",
+      "releaseVersion": "2.3"
+    },
+    {
+      "key": "YaeMiko",
+      "gameId": 10000058,
+      "sourceName": "Yae Miko",
+      "element": "Electro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "2.5"
+    },
+    {
+      "key": "ShikanoinHeizou",
+      "gameId": 10000059,
+      "sourceName": "Shikanoin Heizou",
+      "element": "Anemo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "2.8"
+    },
+    {
+      "key": "Yelan",
+      "gameId": 10000060,
+      "sourceName": "Yelan",
+      "element": "Hydro",
+      "weaponType": "Bow",
+      "releaseVersion": "2.7"
+    },
+    {
+      "key": "Kirara",
+      "gameId": 10000061,
+      "sourceName": "Kirara",
+      "element": "Dendro",
+      "weaponType": "Sword",
+      "releaseVersion": "3.7"
+    },
+    {
+      "key": "Aloy",
+      "gameId": 10000062,
+      "sourceName": "Aloy",
+      "element": "Cryo",
+      "weaponType": "Bow",
+      "releaseVersion": "2.1"
+    },
+    {
+      "key": "Shenhe",
+      "gameId": 10000063,
+      "sourceName": "Shenhe",
+      "element": "Cryo",
+      "weaponType": "Polearm",
+      "releaseVersion": "2.4"
+    },
+    {
+      "key": "YunJin",
+      "gameId": 10000064,
+      "sourceName": "Yun Jin",
+      "element": "Geo",
+      "weaponType": "Polearm",
+      "releaseVersion": "2.4"
+    },
+    {
+      "key": "KukiShinobu",
+      "gameId": 10000065,
+      "sourceName": "Kuki Shinobu",
+      "element": "Electro",
+      "weaponType": "Sword",
+      "releaseVersion": "2.7"
+    },
+    {
+      "key": "KamisatoAyato",
+      "gameId": 10000066,
+      "sourceName": "Kamisato Ayato",
+      "element": "Hydro",
+      "weaponType": "Sword",
+      "releaseVersion": "2.6"
+    },
+    {
+      "key": "Collei",
+      "gameId": 10000067,
+      "sourceName": "Collei",
+      "element": "Dendro",
+      "weaponType": "Bow",
+      "releaseVersion": "3.0"
+    },
+    {
+      "key": "Dori",
+      "gameId": 10000068,
+      "sourceName": "Dori",
+      "element": "Electro",
+      "weaponType": "Claymore",
+      "releaseVersion": "3.0"
+    },
+    {
+      "key": "Tighnari",
+      "gameId": 10000069,
+      "sourceName": "Tighnari",
+      "element": "Dendro",
+      "weaponType": "Bow",
+      "releaseVersion": "3.0"
+    },
+    {
+      "key": "Nilou",
+      "gameId": 10000070,
+      "sourceName": "Nilou",
+      "element": "Hydro",
+      "weaponType": "Sword",
+      "releaseVersion": "3.1"
+    },
+    {
+      "key": "Cyno",
+      "gameId": 10000071,
+      "sourceName": "Cyno",
+      "element": "Electro",
+      "weaponType": "Polearm",
+      "releaseVersion": "3.1"
+    },
+    {
+      "key": "Candace",
+      "gameId": 10000072,
+      "sourceName": "Candace",
+      "element": "Hydro",
+      "weaponType": "Polearm",
+      "releaseVersion": "3.1"
+    },
+    {
+      "key": "Nahida",
+      "gameId": 10000073,
+      "sourceName": "Nahida",
+      "element": "Dendro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "3.2"
+    },
+    {
+      "key": "Layla",
+      "gameId": 10000074,
+      "sourceName": "Layla",
+      "element": "Cryo",
+      "weaponType": "Sword",
+      "releaseVersion": "3.2"
+    },
+    {
+      "key": "Wanderer",
+      "gameId": 10000075,
+      "sourceName": "Wanderer",
+      "element": "Anemo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "3.3"
+    },
+    {
+      "key": "Faruzan",
+      "gameId": 10000076,
+      "sourceName": "Faruzan",
+      "element": "Anemo",
+      "weaponType": "Bow",
+      "releaseVersion": "3.3"
+    },
+    {
+      "key": "Yaoyao",
+      "gameId": 10000077,
+      "sourceName": "Yaoyao",
+      "element": "Dendro",
+      "weaponType": "Polearm",
+      "releaseVersion": "3.4"
+    },
+    {
+      "key": "Alhaitham",
+      "gameId": 10000078,
+      "sourceName": "Alhaitham",
+      "element": "Dendro",
+      "weaponType": "Sword",
+      "releaseVersion": "3.4"
+    },
+    {
+      "key": "Dehya",
+      "gameId": 10000079,
+      "sourceName": "Dehya",
+      "element": "Pyro",
+      "weaponType": "Claymore",
+      "releaseVersion": "3.5"
+    },
+    {
+      "key": "Mika",
+      "gameId": 10000080,
+      "sourceName": "Mika",
+      "element": "Cryo",
+      "weaponType": "Polearm",
+      "releaseVersion": "3.5"
+    },
+    {
+      "key": "Kaveh",
+      "gameId": 10000081,
+      "sourceName": "Kaveh",
+      "element": "Dendro",
+      "weaponType": "Claymore",
+      "releaseVersion": "3.6"
+    },
+    {
+      "key": "Baizhu",
+      "gameId": 10000082,
+      "sourceName": "Baizhu",
+      "element": "Dendro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "3.6"
+    },
+    {
+      "key": "Lynette",
+      "gameId": 10000083,
+      "sourceName": "Lynette",
+      "element": "Anemo",
+      "weaponType": "Sword",
+      "releaseVersion": "4.0"
+    },
+    {
+      "key": "Lyney",
+      "gameId": 10000084,
+      "sourceName": "Lyney",
+      "element": "Pyro",
+      "weaponType": "Bow",
+      "releaseVersion": "4.0"
+    },
+    {
+      "key": "Freminet",
+      "gameId": 10000085,
+      "sourceName": "Freminet",
+      "element": "Cryo",
+      "weaponType": "Claymore",
+      "releaseVersion": "4.0"
+    },
+    {
+      "key": "Wriothesley",
+      "gameId": 10000086,
+      "sourceName": "Wriothesley",
+      "element": "Cryo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "4.1"
+    },
+    {
+      "key": "Neuvillette",
+      "gameId": 10000087,
+      "sourceName": "Neuvillette",
+      "element": "Hydro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "4.1"
+    },
+    {
+      "key": "Charlotte",
+      "gameId": 10000088,
+      "sourceName": "Charlotte",
+      "element": "Cryo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "4.2"
+    },
+    {
+      "key": "Furina",
+      "gameId": 10000089,
+      "sourceName": "Furina",
+      "element": "Hydro",
+      "weaponType": "Sword",
+      "releaseVersion": "4.2"
+    },
+    {
+      "key": "Chevreuse",
+      "gameId": 10000090,
+      "sourceName": "Chevreuse",
+      "element": "Pyro",
+      "weaponType": "Polearm",
+      "releaseVersion": "4.3"
+    },
+    {
+      "key": "Navia",
+      "gameId": 10000091,
+      "sourceName": "Navia",
+      "element": "Geo",
+      "weaponType": "Claymore",
+      "releaseVersion": "4.3"
+    },
+    {
+      "key": "Gaming",
+      "gameId": 10000092,
+      "sourceName": "Gaming",
+      "element": "Pyro",
+      "weaponType": "Claymore",
+      "releaseVersion": "4.4"
+    },
+    {
+      "key": "Xianyun",
+      "gameId": 10000093,
+      "sourceName": "Xianyun",
+      "element": "Anemo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "4.4"
+    },
+    {
+      "key": "Chiori",
+      "gameId": 10000094,
+      "sourceName": "Chiori",
+      "element": "Geo",
+      "weaponType": "Sword",
+      "releaseVersion": "4.5"
+    },
+    {
+      "key": "Sigewinne",
+      "gameId": 10000095,
+      "sourceName": "Sigewinne",
+      "element": "Hydro",
+      "weaponType": "Bow",
+      "releaseVersion": "4.7"
+    },
+    {
+      "key": "Arlecchino",
+      "gameId": 10000096,
+      "sourceName": "Arlecchino",
+      "element": "Pyro",
+      "weaponType": "Polearm",
+      "releaseVersion": "4.6"
+    },
+    {
+      "key": "Sethos",
+      "gameId": 10000097,
+      "sourceName": "Sethos",
+      "element": "Electro",
+      "weaponType": "Bow",
+      "releaseVersion": "4.7"
+    },
+    {
+      "key": "Clorinde",
+      "gameId": 10000098,
+      "sourceName": "Clorinde",
+      "element": "Electro",
+      "weaponType": "Sword",
+      "releaseVersion": "4.7"
+    },
+    {
+      "key": "Emilie",
+      "gameId": 10000099,
+      "sourceName": "Emilie",
+      "element": "Dendro",
+      "weaponType": "Polearm",
+      "releaseVersion": "4.8"
+    },
+    {
+      "key": "Kachina",
+      "gameId": 10000100,
+      "sourceName": "Kachina",
+      "element": "Geo",
+      "weaponType": "Polearm",
+      "releaseVersion": "5.0"
+    },
+    {
+      "key": "Kinich",
+      "gameId": 10000101,
+      "sourceName": "Kinich",
+      "element": "Dendro",
+      "weaponType": "Claymore",
+      "releaseVersion": "5.0"
+    },
+    {
+      "key": "Mualani",
+      "gameId": 10000102,
+      "sourceName": "Mualani",
+      "element": "Hydro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "5.0"
+    },
+    {
+      "key": "Xilonen",
+      "gameId": 10000103,
+      "sourceName": "Xilonen",
+      "element": "Geo",
+      "weaponType": "Sword",
+      "releaseVersion": "5.1"
+    },
+    {
+      "key": "Chasca",
+      "gameId": 10000104,
+      "sourceName": "Chasca",
+      "element": "Anemo",
+      "weaponType": "Bow",
+      "releaseVersion": "5.2"
+    },
+    {
+      "key": "Ororon",
+      "gameId": 10000105,
+      "sourceName": "Ororon",
+      "element": "Electro",
+      "weaponType": "Bow",
+      "releaseVersion": "5.2"
+    },
+    {
+      "key": "Mavuika",
+      "gameId": 10000106,
+      "sourceName": "Mavuika",
+      "element": "Pyro",
+      "weaponType": "Claymore",
+      "releaseVersion": "5.3"
+    },
+    {
+      "key": "Citlali",
+      "gameId": 10000107,
+      "sourceName": "Citlali",
+      "element": "Cryo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "5.3"
+    },
+    {
+      "key": "LanYan",
+      "gameId": 10000108,
+      "sourceName": "Lan Yan",
+      "element": "Anemo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "5.3"
+    },
+    {
+      "key": "YumemizukiMizuki",
+      "gameId": 10000109,
+      "sourceName": "Yumemizuki Mizuki",
+      "element": "Anemo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "5.4"
+    },
+    {
+      "key": "Iansan",
+      "gameId": 10000110,
+      "sourceName": "Iansan",
+      "element": "Electro",
+      "weaponType": "Polearm",
+      "releaseVersion": "5.5"
+    },
+    {
+      "key": "Varesa",
+      "gameId": 10000111,
+      "sourceName": "Varesa",
+      "element": "Electro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "5.5"
+    },
+    {
+      "key": "Escoffier",
+      "gameId": 10000112,
+      "sourceName": "Escoffier",
+      "element": "Cryo",
+      "weaponType": "Polearm",
+      "releaseVersion": "5.6"
+    },
+    {
+      "key": "Ifa",
+      "gameId": 10000113,
+      "sourceName": "Ifa",
+      "element": "Anemo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "5.6"
+    },
+    {
+      "key": "Skirk",
+      "gameId": 10000114,
+      "sourceName": "Skirk",
+      "element": "Cryo",
+      "weaponType": "Sword",
+      "releaseVersion": "5.7"
+    },
+    {
+      "key": "Dahlia",
+      "gameId": 10000115,
+      "sourceName": "Dahlia",
+      "element": "Hydro",
+      "weaponType": "Sword",
+      "releaseVersion": "5.7"
+    },
+    {
+      "key": "Ineffa",
+      "gameId": 10000116,
+      "sourceName": "Ineffa",
+      "element": "Electro",
+      "weaponType": "Polearm",
+      "releaseVersion": "5.8"
+    },
+    {
+      "key": "Manekin",
+      "gameId": 10000117,
+      "sourceName": "Manekin",
+      "element": "None",
+      "weaponType": "Sword",
+      "releaseVersion": "6.1"
+    },
+    {
+      "key": "Manekina",
+      "gameId": 10000118,
+      "sourceName": "Manekina",
+      "element": "None",
+      "weaponType": "Sword",
+      "releaseVersion": "6.1"
+    },
+    {
+      "key": "Lauma",
+      "gameId": 10000119,
+      "sourceName": "Lauma",
+      "element": "Dendro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "6.0"
+    },
+    {
+      "key": "Flins",
+      "gameId": 10000120,
+      "sourceName": "Flins",
+      "element": "Electro",
+      "weaponType": "Polearm",
+      "releaseVersion": "6.0"
+    },
+    {
+      "key": "Aino",
+      "gameId": 10000121,
+      "sourceName": "Aino",
+      "element": "Hydro",
+      "weaponType": "Claymore",
+      "releaseVersion": "6.0"
+    },
+    {
+      "key": "Nefer",
+      "gameId": 10000122,
+      "sourceName": "Nefer",
+      "element": "Dendro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "6.1"
+    },
+    {
+      "key": "Durin",
+      "gameId": 10000123,
+      "sourceName": "Durin",
+      "element": "Pyro",
+      "weaponType": "Sword",
+      "releaseVersion": "6.2"
+    },
+    {
+      "key": "Jahoda",
+      "gameId": 10000124,
+      "sourceName": "Jahoda",
+      "element": "Anemo",
+      "weaponType": "Bow",
+      "releaseVersion": "6.2"
+    },
+    {
+      "key": "Columbina",
+      "gameId": 10000125,
+      "sourceName": "Columbina",
+      "element": "Hydro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "6.3"
+    },
+    {
+      "key": "Zibai",
+      "gameId": 10000126,
+      "sourceName": "Zibai",
+      "element": "Geo",
+      "weaponType": "Sword",
+      "releaseVersion": "6.3"
+    },
+    {
+      "key": "Illuga",
+      "gameId": 10000127,
+      "sourceName": "Illuga",
+      "element": "Geo",
+      "weaponType": "Polearm",
+      "releaseVersion": "6.3"
+    },
+    {
+      "key": "Varka",
+      "gameId": 10000128,
+      "sourceName": "Varka",
+      "element": "Anemo",
+      "weaponType": "Claymore",
+      "releaseVersion": "6.4"
+    },
+    {
+      "key": "Lohen",
+      "gameId": 10000129,
+      "sourceName": "Lohen",
+      "element": "Cryo",
+      "weaponType": "Polearm",
+      "releaseVersion": "6.6"
+    },
+    {
+      "key": "Linnea",
+      "gameId": 10000130,
+      "sourceName": "Linnea",
+      "element": "Geo",
+      "weaponType": "Bow",
+      "releaseVersion": "6.5"
+    },
+    {
+      "key": "Nicole",
+      "gameId": 10000131,
+      "sourceName": "Nicole",
+      "element": "Pyro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "6.6"
+    },
+    {
+      "key": "Prune",
+      "gameId": 10000132,
+      "sourceName": "Prune",
+      "element": "Anemo",
+      "weaponType": "Catalyst",
+      "releaseVersion": "6.6"
+    },
+    {
+      "key": "Sandrone",
+      "gameId": 10000133,
+      "sourceName": "Sandrone",
+      "element": "Cryo",
+      "weaponType": "Claymore",
+      "releaseVersion": "6.7"
+    },
+    {
+      "key": "Vodyanitsa",
+      "gameId": 10000140,
+      "sourceName": "Vodyanitsa",
+      "element": "Hydro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "7.1"
+    },
+    {
+      "key": "Vesna",
+      "gameId": 10000143,
+      "sourceName": "Vesna",
+      "element": "Anemo",
+      "weaponType": "Sword",
+      "releaseVersion": "7.1"
+    },
+    {
+      "key": "Alyosha",
+      "gameId": 10000148,
+      "sourceName": "Alyosha",
+      "element": "Electro",
+      "weaponType": "Polearm",
+      "releaseVersion": "7.0"
+    },
+    {
+      "key": "Odette",
+      "gameId": 10000150,
+      "sourceName": "Odette",
+      "element": "Cryo",
+      "weaponType": "Sword",
+      "releaseVersion": "7.0"
+    }
+  ],
+  "releaseAdditions": [
+    {
+      "key": "Vesna",
+      "gameId": 10000143,
+      "element": "Anemo",
+      "weaponType": "Sword",
+      "releaseVersion": "7.1"
+    },
+    {
+      "key": "Vodyanitsa",
+      "gameId": 10000140,
+      "element": "Hydro",
+      "weaponType": "Catalyst",
+      "releaseVersion": "7.1"
+    }
+  ],
+  "knownExclusions": [
+    "Release-version metadata is identity/release evidence only; it does not establish mechanics, simulation or endgame applicability.",
+    "Official release-note verification is separately checked for the Version 7.1 additions."
+  ]
+}

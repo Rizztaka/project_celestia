@@ -11,3 +11,11 @@ dist
 .local-maintenance/
 .scratch/
 .worktrees/
+# Windows reserved-device artifact created by NUL-based test redirection.
+NUL
+
+# Ignore local/untracked agent skills while preserving tracked canonical skills
+.agents/skills/*
+!.agents/skills/build-intelligence-engine/
+!.agents/skills/reverse-engineer-anything/
+!.agents/skills/scaffold-domain-feature/

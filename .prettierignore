@@ -11,6 +11,7 @@ yarn.lock
 .windsurf
 .claude
 .agents
+.kilo
 
 # Exact upstream/REA research bytes; hashes are verified by validate-research.mjs.
 # Keep authored plans, manifests and all application source in formatting checks.
@@ -59,3 +60,8 @@ docs/plans/contextual-guide-knowledge/k2-evidence/kqm-vv-trigger.json
 apps/api/src/games/genshin/static/knowledge-releases/releases/*/*.json
 docs/plans/contextual-guide-knowledge/k3-fixture-workflow/store/releases/*/*.json
 docs/plans/contextual-guide-knowledge/k3-evidence/failed-finalization-stage/releases/*/*.json
+
+# Pinned upstream/vendor bytes are verified by provenance tests, not reformatted.
+apps/api/src/games/genshin/static/official-7.1-source.json
+apps/api/src/games/genshin/static/official-7.1-source.html
+apps/web/public/vendor/**

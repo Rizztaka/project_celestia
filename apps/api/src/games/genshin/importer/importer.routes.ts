@@ -23,6 +23,15 @@ export function createImporterRoutes(safety: RequestSafety) {
     safety.import(importController.previewGenshinImport),
   );
   router.get('/import/status', requireAuth, safety.ordinaryJson, importController.getImportStatus);
+  router.get(
+    '/import/context',
+    (_req, res, next) => {
+      res.set('Cache-Control', 'no-store');
+      next();
+    },
+    requireAuth,
+    importController.getAccountContext,
+  );
 
   return router;
 }

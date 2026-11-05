@@ -2,10 +2,17 @@ import type { Request, Response } from 'express';
 
 import { successResponse } from '@/core/utils/response.js';
 
+import { ImportedAccountService } from './imported-account.service.js';
 import { GenshinImportService } from './importer.service.js';
 
 export class GenshinImportController {
   private readonly importService = new GenshinImportService();
+  private readonly accountContextService = new ImportedAccountService();
+
+  getAccountContext = async (req: Request, res: Response) => {
+    const result = await this.accountContextService.read(req.user!.id, req.query);
+    res.status(200).json(successResponse(result, 'Imported account context retrieved.'));
+  };
 
   getImportStatus = async (req: Request, res: Response) => {
     res

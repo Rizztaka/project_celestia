@@ -136,9 +136,12 @@ export function verifyEnkaProvenance({
   return {
     status: isVerified
       ? 'verified'
-      : [localByteIntegrity, metadataIntegrity, upstreamByteIntegrity, projectionIntegrity].includes(
-            'invalid',
-          )
+      : [
+            localByteIntegrity,
+            metadataIntegrity,
+            upstreamByteIntegrity,
+            projectionIntegrity,
+          ].includes('invalid')
         ? 'invalid'
         : 'unverified',
     localByteIntegrity,

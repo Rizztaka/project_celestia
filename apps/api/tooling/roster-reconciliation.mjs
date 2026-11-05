@@ -124,7 +124,8 @@ export function reconcileRoster(rows, evidence, targetVersion) {
     if (identity && !same(row, identity, ['element', 'weaponType']))
       add('identityEntries', 'claim_mismatch', row.gameId);
     const localElement =
-      [10000005, 10000007, 10000117, 10000118].includes(row.gameId) && character?.element === 'Adaptive'
+      [10000005, 10000007, 10000117, 10000118].includes(row.gameId) &&
+      character?.element === 'Adaptive'
         ? 'None'
         : character?.element;
     if (

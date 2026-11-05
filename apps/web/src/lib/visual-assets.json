@@ -6962,334 +6962,238 @@
       "name": "All-Devouring Narwhal",
       "file": "UI_MonsterIcon_Ptahur_Devourer",
       "kind": "weekly",
-      "dropKeys": [
-        "LightlessSilkString",
-        "LightlessEyeOfTheMaelstrom",
-        "LightlessMass"
-      ],
+      "dropKeys": ["LightlessSilkString", "LightlessEyeOfTheMaelstrom", "LightlessMass"],
       "location": "Fontaine"
     },
     "Azhdaha": {
       "name": "Azhdaha",
       "file": "UI_MonsterIcon_Dahaka",
       "kind": "weekly",
-      "dropKeys": [
-        "DragonLordsCrown",
-        "BloodjadeBranch",
-        "GildedScale"
-      ],
+      "dropKeys": ["DragonLordsCrown", "BloodjadeBranch", "GildedScale"],
       "location": "Liyue"
     },
     "Childe": {
       "name": "Childe",
       "file": "UI_MonsterIcon_Tartaglia",
       "kind": "weekly",
-      "dropKeys": [
-        "TuskOfMonocerosCaeli",
-        "ShardOfAFoulLegacy",
-        "ShadowOfTheWarrior"
-      ],
+      "dropKeys": ["TuskOfMonocerosCaeli", "ShardOfAFoulLegacy", "ShadowOfTheWarrior"],
       "location": "Liyue"
     },
     "Apep": {
       "name": "Guardian of Apep's Oasis",
       "file": "UI_MonsterIcon_Apep",
       "kind": "weekly",
-      "dropKeys": [
-        "WorldspanFern",
-        "PrimordialGreenbloom",
-        "Everamber"
-      ],
+      "dropKeys": ["WorldspanFern", "PrimordialGreenbloom", "Everamber"],
       "location": "Sumeru"
     },
     "IlDottore": {
       "name": "Il Dottore",
       "file": "UI_MonsterIcon_DrData",
       "kind": "weekly",
-      "dropKeys": [
-        "CounterfeitResin",
-        "TwistedWitheredBranch",
-        "ProfanedSprout"
-      ],
+      "dropKeys": ["CounterfeitResin", "TwistedWitheredBranch", "ProfanedSprout"],
       "location": "Unknown"
     },
     "Signora": {
       "name": "La Signora",
       "file": "UI_MonsterIcon_LaSignora",
       "kind": "weekly",
-      "dropKeys": [
-        "MoltenMoment",
-        "HellfireButterfly",
-        "AshenHeart"
-      ],
+      "dropKeys": ["MoltenMoment", "HellfireButterfly", "AshenHeart"],
       "location": "Inazuma"
     },
     "LordOfErodedPrimalFire": {
       "name": "Lord of Eroded Primal Fire",
       "file": "UI_MonsterIcon_TheAbyssXiuhcoatl",
       "kind": "weekly",
-      "dropKeys": [
-        "ErodedHorn",
-        "ErodedSunfire",
-        "ErodedScaleFeather"
-      ],
+      "dropKeys": ["ErodedHorn", "ErodedSunfire", "ErodedScaleFeather"],
       "location": "Natlan"
     },
     "Lupus": {
       "name": "Lupus Boreas, Dominator of Wolves",
       "file": "UI_MonsterIcon_LupiBoreas",
       "kind": "weekly",
-      "dropKeys": [
-        "TailOfBoreas",
-        "RingOfBoreas",
-        "SpiritLocketOfBoreas"
-      ],
+      "dropKeys": ["TailOfBoreas", "RingOfBoreas", "SpiritLocketOfBoreas"],
       "location": "Mondstadt"
     },
     "Shogun": {
       "name": "Magatsu Mitake Narukami no Mikoto",
       "file": "UI_MonsterIcon_Shougun_Mitakenarukami",
       "kind": "weekly",
-      "dropKeys": [
-        "MudraOfTheMaleficGeneral",
-        "TearsOfTheCalamitousGod",
-        "TheMeaningOfAeons"
-      ],
+      "dropKeys": ["MudraOfTheMaleficGeneral", "TearsOfTheCalamitousGod", "TheMeaningOfAeons"],
       "location": "Inazuma"
     },
     "Scaramouche": {
       "name": "Shouki no Kami, the Prodigal",
       "file": "UI_MonsterIcon_Nada",
       "kind": "weekly",
-      "dropKeys": [
-        "PuppetStrings",
-        "MirrorOfMushin",
-        "DakasBell"
-      ],
+      "dropKeys": ["PuppetStrings", "MirrorOfMushin", "DakasBell"],
       "location": "Sumeru"
     },
     "Dvalin": {
       "name": "Stormterror",
       "file": "UI_MonsterIcon_Dvalin",
       "kind": "weekly",
-      "dropKeys": [
-        "DvalinsPlume",
-        "DvalinsClaw",
-        "DvalinsSigh"
-      ],
+      "dropKeys": ["DvalinsPlume", "DvalinsClaw", "DvalinsSigh"],
       "location": "Mondstadt"
     },
     "TheDoctor": {
       "name": "The Doctor",
       "file": "UI_MonsterIcon_Dotorre_Moon",
       "kind": "weekly",
-      "dropKeys": [
-        "MaskOfTheVirtuousDoctor",
-        "MadmansRestraint",
-        "ElixirOfTheHeretic"
-      ],
+      "dropKeys": ["MaskOfTheVirtuousDoctor", "MadmansRestraint", "ElixirOfTheHeretic"],
       "location": "Unknown"
     },
     "TheGameBeforeTheGate": {
       "name": "The Game Before the Gate",
       "file": "UI_MonsterIcon_GiantChess",
       "kind": "weekly",
-      "dropKeys": [
-        "AscendedSampleKnight",
-        "AscendedSampleRook",
-        "AscendedSampleQueen"
-      ],
+      "dropKeys": ["AscendedSampleKnight", "AscendedSampleRook", "AscendedSampleQueen"],
       "location": "Mondstadt"
     },
     "TheKnave": {
       "name": "The Knave",
       "file": "UI_MonsterIcon_Nihil",
       "kind": "weekly",
-      "dropKeys": [
-        "FadingCandle",
-        "SilkenFeather",
-        "DenialAndJudgment"
-      ],
+      "dropKeys": ["FadingCandle", "SilkenFeather", "DenialAndJudgment"],
       "location": "Fontaine"
     },
     "AeonblightDrake": {
       "name": "Aeonblight Drake",
       "file": "UI_MonsterIcon_Gargoyle_Fafnir",
       "kind": "world",
-      "dropKeys": [
-        "PerpetualCaliber"
-      ],
+      "dropKeys": ["PerpetualCaliber"],
       "location": null
     },
     "AlgorithmOfSemiIntransientMatrixOfOverseerNetwork": {
       "name": "Algorithm of Semi-Intransient Matrix of Overseer Network",
       "file": "UI_MonsterIcon_Monolith_Starchild",
       "kind": "world",
-      "dropKeys": [
-        "LightGuidingTetrahedron"
-      ],
+      "dropKeys": ["LightGuidingTetrahedron"],
       "location": null
     },
     "AnemoHypostasis": {
       "name": "Anemo Hypostasis",
       "file": "UI_MonsterIcon_Effigy_Wind",
       "kind": "world",
-      "dropKeys": [
-        "HurricaneSeed"
-      ],
+      "dropKeys": ["HurricaneSeed"],
       "location": null
     },
     "BolteaterBathysmalVishap": {
       "name": "Bolteater Bathysmal Vishap",
       "file": "UI_MonsterIcon_Drake_Deepsea_Electric",
       "kind": "world",
-      "dropKeys": [
-        "DragonheirsFalseFin"
-      ],
+      "dropKeys": ["DragonheirsFalseFin"],
       "location": null
     },
     "ChimericWingedLion": {
       "name": "Chimeric Winged Lion",
       "file": "UI_MonsterIcon_Chimera_Manticore",
       "kind": "world",
-      "dropKeys": [
-        "SeveredTailOfTheSkyRoamer"
-      ],
+      "dropKeys": ["SeveredTailOfTheSkyRoamer"],
       "location": null
     },
     "CryoHypostasis": {
       "name": "Cryo Hypostasis",
       "file": "UI_MonsterIcon_Effigy_Ice",
       "kind": "world",
-      "dropKeys": [
-        "CrystallineBloom"
-      ],
+      "dropKeys": ["CrystallineBloom"],
       "location": null
     },
     "CryoRegisvine": {
       "name": "Cryo Regisvine",
       "file": "UI_MonsterIcon_Regisvine_Ice",
       "kind": "world",
-      "dropKeys": [
-        "HoarfrostCore"
-      ],
+      "dropKeys": ["HoarfrostCore"],
       "location": null
     },
     "DendroHypostasis": {
       "name": "Dendro Hypostasis",
       "file": "UI_MonsterIcon_Effigy_Grass",
       "kind": "world",
-      "dropKeys": [
-        "QuelledCreeper"
-      ],
+      "dropKeys": ["QuelledCreeper"],
       "location": null
     },
     "ElectroHypostasis": {
       "name": "Electro Hypostasis",
       "file": "UI_MonsterIcon_Effigy_Electric",
       "kind": "world",
-      "dropKeys": [
-        "LightningPrism"
-      ],
+      "dropKeys": ["LightningPrism"],
       "location": null
     },
     "ElectroRegisvine": {
       "name": "Electro Regisvine",
       "file": "UI_MonsterIcon_Regisvine_Electric",
       "kind": "world",
-      "dropKeys": [
-        "ThunderclapFruitcore"
-      ],
+      "dropKeys": ["ThunderclapFruitcore"],
       "location": null
     },
     "EmperorOfFireAndIron": {
       "name": "Emperor of Fire and Iron",
       "file": "UI_MonsterIcon_HermitCrab_Primo",
       "kind": "world",
-      "dropKeys": [
-        "EmperorsResolution"
-      ],
+      "dropKeys": ["EmperorsResolution"],
       "location": null
     },
     "ExperimentalFieldGenerator": {
       "name": "Experimental Field Generator",
       "file": "UI_MonsterIcon_MachinaIustitia_Gravitas",
       "kind": "world",
-      "dropKeys": [
-        "TourbillonDevice"
-      ],
+      "dropKeys": ["TourbillonDevice"],
       "location": null
     },
     "FrostnightHerra": {
       "name": "Frostnight Herra",
       "file": "UI_MonsterIcon_HerraFrost",
       "kind": "world",
-      "dropKeys": [
-        "RadiantAntler"
-      ],
+      "dropKeys": ["RadiantAntler"],
       "location": null
     },
     "GeoHypostasis": {
       "name": "Geo Hypostasis",
       "file": "UI_MonsterIcon_Effigy_Rock",
       "kind": "world",
-      "dropKeys": [
-        "BasaltPillar"
-      ],
+      "dropKeys": ["BasaltPillar"],
       "location": null
     },
     "GluttonousYumkasaurMountainKing": {
       "name": "Gluttonous Yumkasaur Mountain King",
       "file": "UI_MonsterIcon_Natsaurus_Hookwalker_Primo",
       "kind": "world",
-      "dropKeys": [
-        "OverripeFlamegranate"
-      ],
+      "dropKeys": ["OverripeFlamegranate"],
       "location": null
     },
     "GoldenWolflord": {
       "name": "Golden Wolflord",
       "file": "UI_MonsterIcon_Hound_Planelurker",
       "kind": "world",
-      "dropKeys": [
-        "RiftbornRegalia"
-      ],
+      "dropKeys": ["RiftbornRegalia"],
       "location": null
     },
     "GoldflameQucusaurTyrant": {
       "name": "Goldflame Qucusaur Tyrant",
       "file": "UI_MonsterIcon_Natsaurus_Flamingo_Primo",
       "kind": "world",
-      "dropKeys": [
-        "MarkOfTheBindingBlessing"
-      ],
+      "dropKeys": ["MarkOfTheBindingBlessing"],
       "location": null
     },
     "GuardianBladeOfDriftingSnow": {
       "name": "Guardian Blade of Drifting Snow",
       "file": "UI_MonsterIcon_Snegurochka_Contessa_02",
       "kind": "world",
-      "dropKeys": [
-        "VagabondsCrackedArmor"
-      ],
+      "dropKeys": ["VagabondsCrackedArmor"],
       "location": null
     },
     "HydroHypostasis": {
       "name": "Hydro Hypostasis",
       "file": "UI_MonsterIcon_Effigy_Water",
       "kind": "world",
-      "dropKeys": [
-        "DewOfRepudiation"
-      ],
+      "dropKeys": ["DewOfRepudiation"],
       "location": null
     },
     "HydroTulpa": {
       "name": "Hydro Tulpa",
       "file": "UI_MonsterIcon_Narcissusborn_Normal_01",
       "kind": "world",
-      "dropKeys": [
-        "WaterThatFailedToTranscend"
-      ],
+      "dropKeys": ["WaterThatFailedToTranscend"],
       "location": null
     },
     "IcewindSuite": {
@@ -7306,243 +7210,189 @@
       "name": "Immortal Construct",
       "file": "UI_MonsterIcon_Zharptitsa_02",
       "kind": "world",
-      "dropKeys": [
-        "UnscorchedBlossomBranch"
-      ],
+      "dropKeys": ["UnscorchedBlossomBranch"],
       "location": null
     },
     "IniquitousBaptist": {
       "name": "Iniquitous Baptist",
       "file": "UI_MonsterIcon_Invoker_Archdeacon",
       "kind": "world",
-      "dropKeys": [
-        "EvergloomRing"
-      ],
+      "dropKeys": ["EvergloomRing"],
       "location": null
     },
     "JadeplumeTerrorshroom": {
       "name": "Jadeplume Terrorshroom",
       "file": "UI_MonsterIcon_Fungus_Raptor",
       "kind": "world",
-      "dropKeys": [
-        "MajesticHookedBeak"
-      ],
+      "dropKeys": ["MajesticHookedBeak"],
       "location": null
     },
     "KnuckleDuckle": {
       "name": "Knuckle Duckle",
       "file": "UI_MonsterIcon_Gastrobot_01",
       "kind": "world",
-      "dropKeys": [
-        "PrecisionKuuvahkiStampingDie"
-      ],
+      "dropKeys": ["PrecisionKuuvahkiStampingDie"],
       "location": null
     },
     "LavaDragonStatue": {
       "name": "Lava Dragon Statue",
       "file": "UI_MonsterIcon_LavaTitan",
       "kind": "world",
-      "dropKeys": [
-        "SparklessStatueCore"
-      ],
+      "dropKeys": ["SparklessStatueCore"],
       "location": null
     },
     "LegatusGolem": {
       "name": "Legatus Golem",
       "file": "UI_MonsterIcon_Golem_Centaur",
       "kind": "world",
-      "dropKeys": [
-        "FragmentOfAGoldenMelody"
-      ],
+      "dropKeys": ["FragmentOfAGoldenMelody"],
       "location": null
     },
     "LordOfTheHiddenDepthsWhispererOfNightmares": {
       "name": "Lord of the Hidden Depths: Whisperer of Nightmares",
       "file": "UI_MonsterIcon_Lloigor_Primo",
       "kind": "world",
-      "dropKeys": [
-        "RemnantOfTheDreadwing"
-      ],
+      "dropKeys": ["RemnantOfTheDreadwing"],
       "location": null
     },
     "MaguuKenki": {
       "name": "Maguu Kenki",
       "file": "UI_MonsterIcon_Samurai_Ningyo",
       "kind": "world",
-      "dropKeys": [
-        "MarionetteCore"
-      ],
+      "dropKeys": ["MarionetteCore"],
       "location": null
     },
     "MillennialPearlSeahorse": {
       "name": "Millennial Pearl Seahorse",
       "file": "UI_MonsterIcon_SeaHorse_Primo_Electric",
       "kind": "world",
-      "dropKeys": [
-        "FontemerUnihorn"
-      ],
+      "dropKeys": ["FontemerUnihorn"],
       "location": null
     },
     "Oceanid": {
       "name": "Oceanid",
       "file": "UI_MonsterIcon_Oceanid",
       "kind": "world",
-      "dropKeys": [
-        "CleansingHeart"
-      ],
+      "dropKeys": ["CleansingHeart"],
       "location": null
     },
     "PerpetualMechanicalArray": {
       "name": "Perpetual Mechanical Array",
       "file": "UI_MonsterIcon_Apparatus_Perpetual",
       "kind": "world",
-      "dropKeys": [
-        "PerpetualHeart"
-      ],
+      "dropKeys": ["PerpetualHeart"],
       "location": null
     },
     "PrimoGeovishap": {
       "name": "Primo Geovishap",
       "file": "UI_MonsterIcon_Drake_Primo_Rock",
       "kind": "world",
-      "dropKeys": [
-        "JuvenileJade"
-      ],
+      "dropKeys": ["JuvenileJade"],
       "location": null
     },
     "PyroHypostasis": {
       "name": "Pyro Hypostasis",
       "file": "UI_MonsterIcon_Effigy_Fire",
       "kind": "world",
-      "dropKeys": [
-        "SmolderingPearl"
-      ],
+      "dropKeys": ["SmolderingPearl"],
       "location": null
     },
     "PyroRegisvine": {
       "name": "Pyro Regisvine",
       "file": "UI_MonsterIcon_Regisvine_Fire",
       "kind": "world",
-      "dropKeys": [
-        "EverflameSeed"
-      ],
+      "dropKeys": ["EverflameSeed"],
       "location": null
     },
     "RadiantMoonfly": {
       "name": "Radiant Moonfly",
       "file": "UI_MonsterIcon_Magbeast_Pergesa",
       "kind": "world",
-      "dropKeys": [
-        "LightbearingScaleFeather"
-      ],
+      "dropKeys": ["LightbearingScaleFeather"],
       "location": null
     },
     "RadiantMoongecko": {
       "name": "Radiant Moongecko",
       "file": "UI_MonsterIcon_Magbeast_Gecko",
       "kind": "world",
-      "dropKeys": [
-        "PrismaticSeveredTail"
-      ],
+      "dropKeys": ["PrismaticSeveredTail"],
       "location": null
     },
     "RimebiterBathysmalVishap": {
       "name": "Rimebiter Bathysmal Vishap",
       "file": "UI_MonsterIcon_Drake_Deepsea_Ice",
       "kind": "world",
-      "dropKeys": [
-        "DragonheirsFalseFin"
-      ],
+      "dropKeys": ["DragonheirsFalseFin"],
       "location": null
     },
     "RuinSerpent": {
       "name": "Ruin Serpent",
       "file": "UI_MonsterIcon_Nithhoggr_None",
       "kind": "world",
-      "dropKeys": [
-        "RunicFang"
-      ],
+      "dropKeys": ["RunicFang"],
       "location": null
     },
     "SecretSourceAutomatonConfigurationDevice": {
       "name": "Secret Source Automaton: Configuration Device",
       "file": "UI_MonsterIcon_DragonClaw",
       "kind": "world",
-      "dropKeys": [
-        "GoldInscribedSecretSourceCore"
-      ],
+      "dropKeys": ["GoldInscribedSecretSourceCore"],
       "location": null
     },
     "SecretSourceAutomatonOverseerDevice": {
       "name": "Secret Source Automaton: Overseer Device",
       "file": "UI_MonsterIcon_DragonCollar",
       "kind": "world",
-      "dropKeys": [
-        "SecretSourceAirflowAccumulator"
-      ],
+      "dropKeys": ["SecretSourceAirflowAccumulator"],
       "location": null
     },
     "SetekhWenut": {
       "name": "Setekh Wenut",
       "file": "UI_MonsterIcon_Sandworm",
       "kind": "world",
-      "dropKeys": [
-        "PseudoStamens"
-      ],
+      "dropKeys": ["PseudoStamens"],
       "location": null
     },
     "SolitarySuanni": {
       "name": "Solitary Suanni",
       "file": "UI_MonsterIcon_Hermit",
       "kind": "world",
-      "dropKeys": [
-        "CloudseamScale"
-      ],
+      "dropKeys": ["CloudseamScale"],
       "location": null
     },
     "SuperHeavyLandroverMechanizedFortress": {
       "name": "Super-Heavy Landrover: Mechanized Fortress",
       "file": "UI_MonsterIcon_Fatuimecha_AMP",
       "kind": "world",
-      "dropKeys": [
-        "CyclicMilitaryKuuvahkiCore"
-      ],
+      "dropKeys": ["CyclicMilitaryKuuvahkiCore"],
       "location": null
     },
     "TenebrousPapillaTypeI": {
       "name": "Tenebrous Papilla: Type I",
       "file": "UI_MonsterIcon_TheAbyss_Dendrite",
       "kind": "world",
-      "dropKeys": [
-        "EnsnaringGaze"
-      ],
+      "dropKeys": ["EnsnaringGaze"],
       "location": null
     },
     "ThunderManifestation": {
       "name": "Thunder Manifestation",
       "file": "UI_MonsterIcon_Raijin",
       "kind": "world",
-      "dropKeys": [
-        "StormBeads"
-      ],
+      "dropKeys": ["StormBeads"],
       "location": null
     },
     "WatcherFallenVigil": {
       "name": "Watcher: Fallen Vigil",
       "file": "UI_MonsterIcon_Watcher_Primo_01",
       "kind": "world",
-      "dropKeys": [
-        "PlumeOfTheFallenWatcher"
-      ],
+      "dropKeys": ["PlumeOfTheFallenWatcher"],
       "location": null
     },
     "WaywardHermeticSpiritspeaker": {
       "name": "Wayward Hermetic Spiritspeaker",
       "file": "UI_MonsterIcon_TribalWarrior_Udugan",
       "kind": "world",
-      "dropKeys": [
-        "TalismanOfTheEnigmaticLand"
-      ],
+      "dropKeys": ["TalismanOfTheEnigmaticLand"],
       "location": null
     }
   },

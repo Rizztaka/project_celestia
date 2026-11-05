@@ -7,9 +7,19 @@ import { fileURLToPath } from 'node:url';
 import { sourceCurrent } from '../../web/src/lib/build-analysis/coverage.ts';
 import { reviewedProfiles } from '../../web/src/lib/build-analysis/identity.ts';
 import { calculateCompanionCoverage } from './companion-coverage.mjs';
-import { ENKA_REVIEW_ANCHOR,retrievePinnedEnka, verifyEnkaProvenance } from './enka-provenance.mjs';
-import { OFFICIAL_RELEASE_REVIEW_ANCHOR,verifyOfficialReleaseEvidence } from './official-release-evidence.mjs';
-import { RELEASE_SOURCE_REVIEW_ANCHOR,verifyGenshinDbProvenance } from './release-source-provenance.mjs';
+import {
+  ENKA_REVIEW_ANCHOR,
+  retrievePinnedEnka,
+  verifyEnkaProvenance,
+} from './enka-provenance.mjs';
+import {
+  OFFICIAL_RELEASE_REVIEW_ANCHOR,
+  verifyOfficialReleaseEvidence,
+} from './official-release-evidence.mjs';
+import {
+  RELEASE_SOURCE_REVIEW_ANCHOR,
+  verifyGenshinDbProvenance,
+} from './release-source-provenance.mjs';
 
 const staticRoot = new URL('../src/games/genshin/static/', import.meta.url);
 const referenceRoot = new URL('profile-reference/', staticRoot);

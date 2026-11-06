@@ -10,8 +10,8 @@
  *   - Local React state: UI state (selected season/cycle, pickers, etc.)
  */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 import AbyssJointRecommendationView from '../components/endgame/AbyssJointRecommendationView';
 import OnslaughtMatrixView from '../components/endgame/OnslaughtMatrixView';
@@ -33,6 +33,8 @@ import {
   logAbyssRun,
   logTheaterRun,
 } from '../lib/api';
+import { UidWorkspaceContext } from '../lib/uid-workspace';
+import { useObservedRoster } from '../lib/use-observed-roster';
 
 // -------------------------------------------------------
 // Constants
@@ -1140,7 +1142,7 @@ const MODE_CONFIG: Record<ActiveMode, { label: string; icon: React.ReactNode; ac
   },
 };
 
-function NoAccountTrackerFallback() {
+function NoAccountTrackerFallback({ uid }: { uid?: string }) {
   return (
     <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-zinc-900/50 p-8 text-center backdrop-blur-md">
       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-400">
@@ -1153,22 +1155,48 @@ function NoAccountTrackerFallback() {
           />
         </svg>
       </div>
-      <h3 className="font-display text-lg font-bold text-white">No historical run records found</h3>
+      <h3 className="font-display text-lg font-bold text-white">Historical Tracker Requires Account</h3>
       <p className="max-w-md text-xs text-zinc-400">
-        Import your game data to record your chamber stars and historical clears. In the meantime,
-        use the Joint Optimizer tab above to compute optimal lineups.
+        {uid
+          ? 'You are viewing a public showcase. Historical run logging requires a Celestia account. Use the Joint Optimizer above to calculate optimal lineups for this UID.'
+          : 'Import your game data to record your chamber stars and historical clears. In the meantime, use the Joint Optimizer tab above to compute optimal lineups.'}
       </p>
       <Link
-        to="/import"
+        to={uid ? '/workspace/login' : '/import'}
         className="rounded-xl bg-violet-600 px-4 py-2 text-xs font-semibold text-white hover:bg-violet-500"
       >
-        Go to Import
+        {uid ? 'Sign In / Register' : 'Go to Import'}
       </Link>
     </div>
   );
 }
 
 export default function EndgamePage() {
+  const { uid } = useParams<{ uid?: string }>();
+  const workspaceContext = useContext(UidWorkspaceContext);
+  const observedHistory = useObservedRoster(uid ?? '', workspaceContext?.query?.data);
+
+  const observedRoster: RosterCharacter[] = (observedHistory.records ?? []).map((rec) => ({
+    id: rec.character.key,
+    characterKey: rec.character.key,
+    level: rec.character.level ?? 90,
+    ascension: rec.character.ascension ?? 6,
+    constellation: rec.character.constellation ?? 0,
+    talentNormal: 8,
+    talentSkill: 8,
+    talentBurst: 8,
+    equippedWeaponId: rec.character.weapon ? String(rec.character.weapon.id) : null,
+    equippedWeapon: rec.character.weapon
+      ? {
+          id: String(rec.character.weapon.id),
+          weaponKey: rec.character.weapon.name,
+          level: rec.character.weapon.level ?? 90,
+          refinement: rec.character.weapon.refinement ?? 1,
+          ascension: rec.character.weapon.ascension ?? 6,
+        }
+      : null,
+  }));
+
   const [activeMode, setActiveMode] = useState<ActiveMode>('ABYSS');
   const [abyssSubTab, setAbyssSubTab] = useState<'PLANNER' | 'TRACKER'>('PLANNER');
   const [theaterSubTab, setTheaterSubTab] = useState<'PLANNER' | 'TRACKER'>('PLANNER');
@@ -1176,15 +1204,17 @@ export default function EndgamePage() {
   const { data: rosterData, isLoading: rosterLoading } = useQuery({
     queryKey: ['roster'],
     queryFn: ({ signal }) => fetchGenshinRoster(signal),
+    enabled: !uid,
   });
 
   // We check for 404 (no account) to display graceful tracker fallback
   const { error: abyssError } = useQuery({
     queryKey: ['abyssHistory'],
     queryFn: fetchAbyssHistory,
+    enabled: !uid,
   });
 
-  if (rosterLoading) {
+  if (!uid && rosterLoading) {
     return (
       <main id="companion-content" tabIndex={-1} className="p-6">
         <div className="text-center">
@@ -1197,8 +1227,8 @@ export default function EndgamePage() {
     );
   }
 
-  const isNoAccount = abyssError instanceof ApiError && abyssError.status === 404;
-  const roster = rosterData?.characters ?? [];
+  const isNoAccount = !!uid || (abyssError instanceof ApiError && abyssError.status === 404);
+  const roster = uid ? observedRoster : (rosterData?.characters ?? []);
 
   return (
     <main
@@ -1322,7 +1352,7 @@ export default function EndgamePage() {
           abyssSubTab === 'PLANNER' ? (
             <AbyssJointRecommendationView roster={roster} />
           ) : isNoAccount ? (
-            <NoAccountTrackerFallback />
+            <NoAccountTrackerFallback uid={uid} />
           ) : (
             <AbyssView roster={roster} />
           )
@@ -1331,7 +1361,7 @@ export default function EndgamePage() {
         ) : theaterSubTab === 'PLANNER' ? (
           <TheaterActPlannerView roster={roster} />
         ) : isNoAccount ? (
-          <NoAccountTrackerFallback />
+          <NoAccountTrackerFallback uid={uid} />
         ) : (
           <TheaterView roster={roster} />
         )}

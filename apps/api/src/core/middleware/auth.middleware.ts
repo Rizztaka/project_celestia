@@ -122,3 +122,16 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction): Pr
     next();
   });
 };
+
+/**
+ * optionalAuth — attaches user context if Authorization header is present,
+ * but allows guest requests through to public/stateless calculations.
+ */
+export const optionalAuth = (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader?.startsWith('Bearer ')) {
+    next();
+    return Promise.resolve();
+  }
+  return requireAuth(req, res, next);
+};

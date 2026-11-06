@@ -145,6 +145,7 @@ export default function App() {
                   <Route path="roster" element={<UidRosterPage />} />
                   <Route path="teams" element={<UidTeamsPage />} />
                   <Route path="teams/:teamId" element={<UidTeamDetailsPage />} />
+                  <Route path="endgame" element={<EndgamePage />} />
                   <Route path="inventory" element={<UidEquipmentPage />} />
                   <Route path="showcase" element={<PublicShowcasePage />} />
                   <Route path="character/:id" element={<PublicShowcasePage />} />

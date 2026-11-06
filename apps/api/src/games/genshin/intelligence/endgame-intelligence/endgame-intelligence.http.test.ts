@@ -78,9 +78,19 @@ describe('Endgame Intelligence HTTP Routes Integration', () => {
       ],
     };
 
-    it('returns HTTP 401 when request is unauthenticated', async () => {
+    it('allows guest calculations when request is unauthenticated (returns HTTP 200)', async () => {
       const response = await api
         .post('/api/v1/games/genshin/intelligence/endgame/abyss-joint')
+        .send(validAbyssPayload);
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBe(true);
+    });
+
+    it('returns HTTP 401 when malformed bearer token is provided', async () => {
+      const response = await api
+        .post('/api/v1/games/genshin/intelligence/endgame/abyss-joint')
+        .set('Authorization', 'Bearer invalid-token')
         .send(validAbyssPayload);
 
       expect(response.status).toBe(401);
@@ -159,9 +169,19 @@ describe('Endgame Intelligence HTTP Routes Integration', () => {
       ],
     };
 
-    it('returns HTTP 401 when request is unauthenticated', async () => {
+    it('allows guest calculations when request is unauthenticated (returns HTTP 200)', async () => {
       const response = await api
         .post('/api/v1/games/genshin/intelligence/endgame/onslaught-joint')
+        .send(validOnslaughtPayload);
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBe(true);
+    });
+
+    it('returns HTTP 401 when malformed bearer token is provided', async () => {
+      const response = await api
+        .post('/api/v1/games/genshin/intelligence/endgame/onslaught-joint')
+        .set('Authorization', 'Bearer invalid-token')
         .send(validOnslaughtPayload);
 
       expect(response.status).toBe(401);
@@ -239,9 +259,19 @@ describe('Endgame Intelligence HTTP Routes Integration', () => {
       completedActs: [],
     };
 
-    it('returns HTTP 401 when request is unauthenticated', async () => {
+    it('allows guest calculations when request is unauthenticated (returns HTTP 200)', async () => {
       const response = await api
         .post('/api/v1/games/genshin/intelligence/endgame/theater-plan')
+        .send(validTheaterPayload);
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBe(true);
+    });
+
+    it('returns HTTP 401 when malformed bearer token is provided', async () => {
+      const response = await api
+        .post('/api/v1/games/genshin/intelligence/endgame/theater-plan')
+        .set('Authorization', 'Bearer invalid-token')
         .send(validTheaterPayload);
 
       expect(response.status).toBe(401);

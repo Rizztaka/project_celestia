@@ -101,6 +101,14 @@ export default function DashboardWelcome({
             </span>
             <UiIcon name="arrow" />
           </Link>
+          <Link className="shortcut-card" to={uid ? `${base}/endgame` : '/endgame'}>
+            <UiIcon name="endgame" />
+            <span>
+              <strong>Endgame Center</strong>
+              <small>Spiral Abyss, Onslaught & Theater planners</small>
+            </span>
+            <UiIcon name="arrow" />
+          </Link>
           {!uid ? (
             <Link className="shortcut-card" to="/planner?tab=farming">
               <UiIcon name="planner" />

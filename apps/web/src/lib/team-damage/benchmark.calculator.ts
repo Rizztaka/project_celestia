@@ -1,5 +1,6 @@
 import type { SavedUidTeam } from '../build-analysis/teams-storage';
 import type { DamageSettings, RotationStep } from './calculator';
+import { synthesizeTeamRotation } from './rotation-synthesizer.calculator';
 
 export const TEAM_BENCHMARK = Object.freeze({
   enemyLevel: 100,
@@ -14,18 +15,8 @@ export function benchmarkSettings(steps: RotationStep[]): DamageSettings {
 
 export function defaultRotation(team: SavedUidTeam, driver: string): RotationStep[] {
   if (!team.members.some((member) => member.characterKey === driver)) return [];
-  const step = (characterKey: string, action = 'skill', repeat = 1): RotationStep => ({
-    characterKey,
-    action,
-    repeat,
-    params: '',
-    waitFrames: 0,
+  return synthesizeTeamRotation({
+    teamMembers: team.members,
+    driverKey: driver,
   });
-  return [
-    ...team.members
-      .filter((member) => member.characterKey !== driver)
-      .map((member) => step(member.characterKey)),
-    step(driver),
-    step(driver, 'attack', 6),
-  ];
 }

@@ -111,12 +111,13 @@ export function calculateTeamComfort(memberKeys: string[]): TeamComfortScore {
 
 export interface MemberGearInput {
   character?: { key?: string };
-  weapon?: { id?: string | null };
-  artifacts?: Array<{ id?: string | null }>;
+  weapon?: { id?: string | number | null; instanceId?: string | null };
+  artifacts?: Array<{ id?: string | number | null; instanceId?: string | null }>;
 }
 
 /**
  * Validates that no two characters on the team share the exact same gear piece.
+ * Distinguishes instance UUIDs / explicit string identifiers from catalog item IDs.
  */
 export function validateGearExclusivity(members: MemberGearInput[]): {
   valid: boolean;
@@ -126,17 +127,30 @@ export function validateGearExclusivity(members: MemberGearInput[]): {
 
   for (const member of members) {
     const charKey = member.character?.key ?? 'unknown';
-    if (member.weapon?.id) {
-      const existing = gearUsage.get(member.weapon.id) ?? [];
+    const weaponKey =
+      member.weapon?.instanceId ??
+      (typeof member.weapon?.id === 'string' && !/^\d+$/.test(member.weapon.id)
+        ? member.weapon.id
+        : null);
+
+    if (weaponKey) {
+      const existing = gearUsage.get(weaponKey) ?? [];
       existing.push(charKey);
-      gearUsage.set(member.weapon.id, existing);
+      gearUsage.set(weaponKey, existing);
     }
+
     if (Array.isArray(member.artifacts)) {
       for (const art of member.artifacts) {
-        if (art.id) {
-          const existing = gearUsage.get(art.id) ?? [];
+        const artKey =
+          art.instanceId ??
+          (typeof art.id === 'string' && !/^\d+$/.test(art.id)
+            ? art.id
+            : null);
+
+        if (artKey) {
+          const existing = gearUsage.get(artKey) ?? [];
           existing.push(charKey);
-          gearUsage.set(art.id, existing);
+          gearUsage.set(artKey, existing);
         }
       }
     }

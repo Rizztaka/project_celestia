@@ -9,12 +9,18 @@ import type { SavedUidTeam } from '../build-analysis/teams-storage';
 import type { CharacterObservation } from '../observed-roster';
 import { benchmarkSettings, defaultRotation } from './benchmark.calculator';
 import { damageInput, engineCharacter } from './calculator';
+import {
+  calculateTeamComfort,
+  type TeamComfortScore,
+  validateGearExclusivity,
+} from './team-comfort.calculator';
 
 export interface AutoTeamCandidate {
   id: string;
   team: SavedUidTeam;
   config: string;
   favoriteCount: number;
+  comfort: TeamComfortScore;
 }
 
 export interface AutoTeamPool {
@@ -165,6 +171,27 @@ export function buildAutoTeamPool(
     const members = [driver, ...group];
     if (prefs.requiredForms.some((key) => !members.some((record) => record.character.key === key)))
       continue;
+
+    // Enforce gear exclusivity: no duplicate weapon or artifact piece across the lineup
+    const exclusivity = validateGearExclusivity(
+      members.map((m) => ({
+        character: { key: m.character.key },
+        weapon: m.character.weapon
+          ? {
+              id: m.character.weapon.id,
+              instanceId: (m.character.weapon as { instanceId?: string | null }).instanceId,
+            }
+          : undefined,
+        artifacts: Array.isArray(m.character.artifacts)
+          ? m.character.artifacts.map((a) => ({
+              id: a.id,
+              instanceId: (a as { instanceId?: string | null }).instanceId,
+            }))
+          : [],
+      })),
+    );
+    if (!exclusivity.valid) continue;
+
     const team = transientTeam(uid, String(candidates.length), members);
     const settings = benchmarkSettings(defaultRotation(team, driverKey));
     const input = damageInput(uid, team, [driver, ...roster], settings);
@@ -176,6 +203,7 @@ export function buildAutoTeamPool(
       favoriteCount: members.filter((record) =>
         prefs.favoriteCharacters.includes(formIdentity({ avatarId: record.character.id })),
       ).length,
+      comfort: calculateTeamComfort(members.map((m) => m.character.key)),
     });
   }
   const maxFavoriteCount = candidates.reduce(

@@ -152,9 +152,15 @@ export function searchTeamRotations(
   return { promise, cancel: () => session.close() };
 }
 
-/** Screen every generated team once, then verify the best five with identical seeds. */
+export interface SearchCandidateInput {
+  id: string;
+  config: string;
+  comfort?: { tier?: string; score?: number };
+}
+
+/** Screen every generated team once, then verify the best DPS and comfort finalists with identical seeds. */
 export function searchTeamCandidates(
-  candidates: { id: string; config: string }[],
+  candidates: SearchCandidateInput[],
   samples: number,
   progress: (message: string) => void,
 ) {
@@ -177,9 +183,31 @@ export function searchTeamCandidates(
       row.result ? [{ id: row.id, dps: row.result.dps }] : [],
     );
     if (!valid.length) throw new Error('No generated team could be simulated.');
-    const finalists = rankDamage(valid)
-      .slice(0, 5)
-      .map((row) => ({ ...candidates.find((candidate) => candidate.id === row.id)!, samples }));
+
+    // 1. Top 5 DPS finalists
+    const topDpsIds = rankDamage(valid).slice(0, 5).map((r) => r.id);
+
+    // 2. Top 3 Comfort finalists (from valid teams with high comfort score)
+    const validCandidateMap = new Map(candidates.map((c) => [c.id, c]));
+    const comfortCandidates = valid
+      .filter((r) => !topDpsIds.includes(r.id))
+      .map((r) => ({
+        id: r.id,
+        dps: r.dps,
+        comfortScore: validCandidateMap.get(r.id)?.comfort?.score ?? 0,
+        tier: validCandidateMap.get(r.id)?.comfort?.tier ?? 'balanced',
+      }))
+      .filter((c) => c.tier === 'comfort_first' || c.comfortScore >= 70)
+      .sort((a, b) => b.comfortScore - a.comfortScore || b.dps - a.dps)
+      .slice(0, 3)
+      .map((c) => c.id);
+
+    const finalistIds = [...new Set([...topDpsIds, ...comfortCandidates])];
+    const finalists = finalistIds.map((id) => ({
+      ...validCandidateMap.get(id)!,
+      samples,
+    }));
+
     const verified = await session.run(finalists, 'Verifying the strongest teams');
     return {
       tested: candidates.length,

@@ -49,6 +49,9 @@ export default function DashboardPage() {
             <Link className="button-secondary" to="/planner?tab=farming&newType=CHARACTER_TALENT">
               Create a manual goal
             </Link>
+            <Link className="button-secondary" to="/endgame">
+              Endgame Center
+            </Link>
           </div>
         </details>
         <TodayPlan />

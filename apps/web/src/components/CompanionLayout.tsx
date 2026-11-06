@@ -20,7 +20,7 @@ const supporting = [
 ] as const;
 const secondary = [
   ['/intelligence', 'Build lab'],
-  ['/endgame', 'Endgame records'],
+  ['/endgame', 'Endgame Center'],
   ['/simulators', 'Wish sandbox'],
 ] as const;
 

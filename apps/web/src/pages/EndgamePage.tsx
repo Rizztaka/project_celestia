@@ -1140,6 +1140,34 @@ const MODE_CONFIG: Record<ActiveMode, { label: string; icon: React.ReactNode; ac
   },
 };
 
+function NoAccountTrackerFallback() {
+  return (
+    <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-zinc-900/50 p-8 text-center backdrop-blur-md">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-400">
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+          />
+        </svg>
+      </div>
+      <h3 className="font-display text-lg font-bold text-white">No historical run records found</h3>
+      <p className="max-w-md text-xs text-zinc-400">
+        Import your game data to record your chamber stars and historical clears. In the meantime,
+        use the Joint Optimizer tab above to compute optimal lineups.
+      </p>
+      <Link
+        to="/import"
+        className="rounded-xl bg-violet-600 px-4 py-2 text-xs font-semibold text-white hover:bg-violet-500"
+      >
+        Go to Import
+      </Link>
+    </div>
+  );
+}
+
 export default function EndgamePage() {
   const [activeMode, setActiveMode] = useState<ActiveMode>('ABYSS');
   const [abyssSubTab, setAbyssSubTab] = useState<'PLANNER' | 'TRACKER'>('PLANNER');
@@ -1150,17 +1178,17 @@ export default function EndgamePage() {
     queryFn: ({ signal }) => fetchGenshinRoster(signal),
   });
 
-  // We also need abyssHistory to check for 404 (no account)
-  const { isLoading: abyssLoading, error: abyssError } = useQuery({
+  // We check for 404 (no account) to display graceful tracker fallback
+  const { error: abyssError } = useQuery({
     queryKey: ['abyssHistory'],
     queryFn: fetchAbyssHistory,
   });
 
-  if (abyssLoading || rosterLoading) {
+  if (rosterLoading) {
     return (
       <main id="companion-content" tabIndex={-1} className="p-6">
         <div className="text-center">
-          <h1 className="text-xl font-bold text-white">Endgame records</h1>
+          <h1 className="text-xl font-bold text-white">Endgame Center</h1>
           <p role="status" className="mt-4 text-sm text-zinc-500">
             Loading Endgame Center…
           </p>
@@ -1169,37 +1197,7 @@ export default function EndgamePage() {
     );
   }
 
-  if (abyssError && abyssError instanceof ApiError && abyssError.status === 404) {
-    return (
-      <main
-        id="companion-content"
-        tabIndex={-1}
-        className="flex flex-col items-center gap-4 p-6 text-center"
-      >
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-400">
-          <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-            />
-          </svg>
-        </div>
-        <h1 className="font-display text-xl font-bold text-white">Endgame records</h1>
-        <p className="max-w-sm text-sm text-zinc-400">
-          Import your game data first before using the Endgame Center.
-        </p>
-        <Link
-          to="/import"
-          className="mt-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-500"
-        >
-          Go to Import
-        </Link>
-      </main>
-    );
-  }
-
+  const isNoAccount = abyssError instanceof ApiError && abyssError.status === 404;
   const roster = rosterData?.characters ?? [];
 
   return (
@@ -1218,7 +1216,7 @@ export default function EndgamePage() {
         {/* Header */}
         <div className="mb-6">
           <p className="text-xs font-semibold uppercase tracking-widest text-violet-400">
-            Secondary tools · Saved endgame records
+            Endgame Center · Tactical Mode Intelligence
           </p>
           <h1 className="font-display mt-1 text-3xl font-bold tracking-tight text-white">
             {MODE_CONFIG[activeMode].label}
@@ -1323,6 +1321,8 @@ export default function EndgamePage() {
         {activeMode === 'ABYSS' ? (
           abyssSubTab === 'PLANNER' ? (
             <AbyssJointRecommendationView roster={roster} />
+          ) : isNoAccount ? (
+            <NoAccountTrackerFallback />
           ) : (
             <AbyssView roster={roster} />
           )
@@ -1330,6 +1330,8 @@ export default function EndgamePage() {
           <OnslaughtMatrixView roster={roster} />
         ) : theaterSubTab === 'PLANNER' ? (
           <TheaterActPlannerView roster={roster} />
+        ) : isNoAccount ? (
+          <NoAccountTrackerFallback />
         ) : (
           <TheaterView roster={roster} />
         )}

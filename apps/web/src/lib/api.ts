@@ -1,4 +1,7 @@
 import type {
+  AbyssJointRequestInput,
+  AbyssJointResponse,
+  CandidateEndgameTeamInput,
   CharacterReadinessRequestInput,
   CharacterReadinessResponse,
   CreateGoalRequest,
@@ -10,9 +13,13 @@ import type {
   GoalWriteResponse,
   MarginalInvestmentRequestInput,
   MarginalInvestmentResponse,
+  OnslaughtJointRequestInput,
+  OnslaughtJointResponse,
   PlanAdvice,
   PlanCommand,
   PlanSnapshot,
+  TheaterActPlanRequestInput,
+  TheaterActPlanResponse,
 } from '@celestia/api-contracts';
 
 export function fetchFarmingIntelligence(
@@ -916,6 +923,80 @@ export async function logTheaterRun(payload: LogTheaterRunPayload): Promise<Thea
     method: 'POST',
     body: JSON.stringify(payload),
   });
+}
+
+// ============================================================
+// Endgame Intelligence Functions (Milestone 4)
+// ============================================================
+
+export type {
+  AbyssJointRequestInput,
+  AbyssJointResponse,
+  CandidateEndgameTeamInput,
+  OnslaughtJointRequestInput,
+  OnslaughtJointResponse,
+  TheaterActPlanRequestInput,
+  TheaterActPlanResponse,
+};
+
+/**
+ * fetchAbyssJointRecommendation — POST /games/genshin/intelligence/endgame/abyss-joint
+ * Joint dual-half optimization for Spiral Abyss with shield breaking, geometry, and resistance adaptation.
+ */
+export async function fetchAbyssJointRecommendation(
+  payload: AbyssJointRequestInput,
+  signal?: AbortSignal,
+  session?: AccountSession,
+): Promise<AbyssJointResponse> {
+  return fetchApi<AbyssJointResponse>(
+    '/games/genshin/intelligence/endgame/abyss-joint',
+    {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      signal,
+    },
+    session,
+  );
+}
+
+/**
+ * fetchOnslaughtJointRecommendation — POST /games/genshin/intelligence/endgame/onslaught-joint
+ * 3-boss consecutive allocation with strict 12-character exclusivity for Stygian Onslaught.
+ */
+export async function fetchOnslaughtJointRecommendation(
+  payload: OnslaughtJointRequestInput,
+  signal?: AbortSignal,
+  session?: AccountSession,
+): Promise<OnslaughtJointResponse> {
+  return fetchApi<OnslaughtJointResponse>(
+    '/games/genshin/intelligence/endgame/onslaught-joint',
+    {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      signal,
+    },
+    session,
+  );
+}
+
+/**
+ * fetchTheaterActPlan — POST /games/genshin/intelligence/endgame/theater-plan
+ * Dynamic Act and Vigor scheduler with boss reserve preservation for Imaginarium Theater.
+ */
+export async function fetchTheaterActPlan(
+  payload: TheaterActPlanRequestInput,
+  signal?: AbortSignal,
+  session?: AccountSession,
+): Promise<TheaterActPlanResponse> {
+  return fetchApi<TheaterActPlanResponse>(
+    '/games/genshin/intelligence/endgame/theater-plan',
+    {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      signal,
+    },
+    session,
+  );
 }
 
 // ============================================================

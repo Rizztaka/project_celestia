@@ -26,7 +26,14 @@ Detailed contracts and acceptance: [implementation plan](implementation_plan.md)
   - [x] M3 subphase 4: bounded candidate pruning and 2-phase worker search pipeline (`auto-generator.calculator.ts`, `service.ts`).
   - [x] M3 subphase 5: dual-recommendation cards, visual rotation timeline, and workspace integration (`TeamRecommendationCard.tsx`, `RotationTimelineView.tsx`).
   - [x] M3 subphase 6: integration benchmarks, monorepo verification, and progress documentation (`m3-benchmarks.integration.test.js`, `team-search-progress.md`).
-- [ ] M4: solve joint Abyss/Onslaught teams and Theater cast/act planning.
+- [x] M4: solve joint Abyss/Onslaught teams and Theater cast/act planning; [verification](endgame-assignment-progress.md).
+  - [x] M4 subphase 1: shared contracts and versioned encounter specifications (`packages/api-contracts/src/genshin/endgame-planning.ts`, `apps/api/src/games/genshin/static/endgame-encounters.json`).
+  - [x] M4 subphase 2: Spiral Abyss dual-half joint disjoint solver with harmonic mean bottleneck scoring (`abyss-joint.calculator.ts`, `abyss-joint.explainer.ts`).
+  - [x] M4 subphase 3: Stygian Onslaught consecutive 3-boss allocator with strict 12-character exclusivity (`onslaught-joint.calculator.ts`, `onslaught-joint.explainer.ts`).
+  - [x] M4 subphase 4: Imaginarium Theater dynamic act & vigor planner with backward-chaining boss reserves (`theater-act-planner.calculator.ts`, `theater-act-planner.explainer.ts`).
+  - [x] M4 subphase 5: authenticated endgame intelligence service, controller, and routes under `/api/v1/games/genshin/intelligence/endgame/*` (`endgame-intelligence.routes.ts`, `endgame-intelligence.http.test.ts`).
+  - [x] M4 subphase 6: frontend endgame views, side-by-side Abyss cards, 3-boss matrix, and interactive 10-act timeline (`AbyssJointRecommendationView.tsx`, `OnslaughtMatrixView.tsx`, `TheaterActPlannerView.tsx`, `EndgamePage.tsx`).
+  - [x] M4 subphase 7: end-to-end integration benchmarks, monorepo gate verification, and evidence documentation (`m4-benchmarks.integration.test.js`, `endgame-assignment-progress.md`).
 - [ ] M5: replace heuristic pull verdicts with explicit account-value comparisons.
 - [ ] M6: restore and verify a separate fun simulator.
 - [ ] M6: compose automatic refresh and a convenient next-action summary.

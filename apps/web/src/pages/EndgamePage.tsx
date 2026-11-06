@@ -13,6 +13,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import AbyssJointRecommendationView from '../components/endgame/AbyssJointRecommendationView';
+import OnslaughtMatrixView from '../components/endgame/OnslaughtMatrixView';
+import TheaterActPlannerView from '../components/endgame/TheaterActPlannerView';
 import { GenshinAvatar } from '../components/GenshinAvatar';
 import TheaterCastBuilder from '../components/TheaterCastBuilder';
 import type {
@@ -1090,7 +1093,7 @@ function AbyssView({ roster }: { roster: RosterCharacter[] }) {
 // Main Page
 // -------------------------------------------------------
 
-type ActiveMode = 'ABYSS' | 'THEATER';
+type ActiveMode = 'ABYSS' | 'ONSLAUGHT' | 'THEATER';
 
 const MODE_CONFIG: Record<ActiveMode, { label: string; icon: React.ReactNode; accent: string }> = {
   ABYSS: {
@@ -1106,6 +1109,20 @@ const MODE_CONFIG: Record<ActiveMode, { label: string; icon: React.ReactNode; ac
       </svg>
     ),
     accent: 'text-violet-400',
+  },
+  ONSLAUGHT: {
+    label: 'Stygian Onslaught',
+    icon: (
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+        />
+      </svg>
+    ),
+    accent: 'text-rose-400',
   },
   THEATER: {
     label: 'Imaginarium Theater',
@@ -1125,6 +1142,8 @@ const MODE_CONFIG: Record<ActiveMode, { label: string; icon: React.ReactNode; ac
 
 export default function EndgamePage() {
   const [activeMode, setActiveMode] = useState<ActiveMode>('ABYSS');
+  const [abyssSubTab, setAbyssSubTab] = useState<'PLANNER' | 'TRACKER'>('PLANNER');
+  const [theaterSubTab, setTheaterSubTab] = useState<'PLANNER' | 'TRACKER'>('PLANNER');
 
   const { data: rosterData, isLoading: rosterLoading } = useQuery({
     queryKey: ['roster'],
@@ -1206,17 +1225,18 @@ export default function EndgamePage() {
           </h1>
           <p className="mt-2 text-zinc-400">
             {activeMode === 'ABYSS'
-              ? 'Track your teams and star ratings for each chamber.'
-              : 'Log your season runs, difficulty, acts cleared, and principal cast.'}
+              ? 'Joint dual-half team optimization and chamber run tracking.'
+              : activeMode === 'ONSLAUGHT'
+                ? '3-Boss consecutive allocation matrix with strict 12-character exclusivity.'
+                : 'Dynamic act and vigor planning with backward-chaining boss reserves.'}
           </p>
         </div>
 
         <p className="mb-6 text-sm text-zinc-400">
-          Saved records remain available. Legacy scoring, rotation and team assumptions are not
-          verified current-game guidance.
+          Saved records and intelligence engines remain synchronized with versioned encounter packs.
         </p>
         {/* Mode Tab Bar */}
-        <div className="bg-white/3 mb-8 flex gap-2 rounded-2xl border border-white/10 p-1.5">
+        <div className="bg-white/3 mb-6 flex gap-2 rounded-2xl border border-white/10 p-1.5">
           {(Object.keys(MODE_CONFIG) as ActiveMode[]).map((mode) => {
             const cfg = MODE_CONFIG[mode];
             const isActive = activeMode === mode;
@@ -1235,7 +1255,11 @@ export default function EndgamePage() {
                 {isActive && (
                   <span
                     className={`absolute bottom-1 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full ${
-                      mode === 'ABYSS' ? 'bg-violet-500' : 'bg-amber-500'
+                      mode === 'ABYSS'
+                        ? 'bg-violet-500'
+                        : mode === 'ONSLAUGHT'
+                          ? 'bg-rose-500'
+                          : 'bg-amber-500'
                     }`}
                   />
                 )}
@@ -1244,8 +1268,71 @@ export default function EndgamePage() {
           })}
         </div>
 
+        {/* Sub Tab Navigation for Modes with dual features */}
+        {activeMode === 'ABYSS' && (
+          <div className="mb-6 flex gap-2 border-b border-white/10 pb-3">
+            <button
+              onClick={() => setAbyssSubTab('PLANNER')}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                abyssSubTab === 'PLANNER'
+                  ? 'bg-violet-600 text-white shadow-sm'
+                  : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+              }`}
+            >
+              Joint Optimizer (M4)
+            </button>
+            <button
+              onClick={() => setAbyssSubTab('TRACKER')}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                abyssSubTab === 'TRACKER'
+                  ? 'bg-violet-600 text-white shadow-sm'
+                  : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+              }`}
+            >
+              Chamber Run Tracker
+            </button>
+          </div>
+        )}
+
+        {activeMode === 'THEATER' && (
+          <div className="mb-6 flex gap-2 border-b border-white/10 pb-3">
+            <button
+              onClick={() => setTheaterSubTab('PLANNER')}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                theaterSubTab === 'PLANNER'
+                  ? 'bg-amber-500 font-bold text-zinc-950 shadow-sm'
+                  : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+              }`}
+            >
+              Act & Vigor Planner (M4)
+            </button>
+            <button
+              onClick={() => setTheaterSubTab('TRACKER')}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                theaterSubTab === 'TRACKER'
+                  ? 'bg-amber-500 font-bold text-zinc-950 shadow-sm'
+                  : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+              }`}
+            >
+              Season Run Tracker
+            </button>
+          </div>
+        )}
+
         {/* Active View */}
-        {activeMode === 'ABYSS' ? <AbyssView roster={roster} /> : <TheaterView roster={roster} />}
+        {activeMode === 'ABYSS' ? (
+          abyssSubTab === 'PLANNER' ? (
+            <AbyssJointRecommendationView roster={roster} />
+          ) : (
+            <AbyssView roster={roster} />
+          )
+        ) : activeMode === 'ONSLAUGHT' ? (
+          <OnslaughtMatrixView roster={roster} />
+        ) : theaterSubTab === 'PLANNER' ? (
+          <TheaterActPlannerView roster={roster} />
+        ) : (
+          <TheaterView roster={roster} />
+        )}
       </div>
     </main>
   );

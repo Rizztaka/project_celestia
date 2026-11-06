@@ -9,6 +9,7 @@ import { createImporterRoutes } from './importer/importer.routes.js';
 import { artifactIntelligenceRoutes } from './intelligence/artifact-intelligence/artifact-intelligence.routes.js';
 import { buildInsightsRoutes } from './intelligence/build-insights/build-insights.routes.js';
 import { characterIntelligenceRoutes } from './intelligence/character-intelligence/character-intelligence.routes.js';
+import { endgameIntelligenceRoutes } from './intelligence/endgame-intelligence/endgame-intelligence.routes.js';
 import { farmingIntelligenceRoutes } from './intelligence/farming-intelligence/farming-intelligence.routes.js';
 import { guideKnowledgeRoutes } from './intelligence/guide-knowledge/guide-knowledge.routes.js';
 import { knowledgeIntelligenceRoutes } from './intelligence/knowledge-intelligence/knowledge-intelligence.routes.js';
@@ -66,6 +67,7 @@ export function createGenshinRoutes(safety: RequestSafety, showcaseService?: Sho
   router.use(readinessIntelligenceRoutes);
   router.use(marginalInvestmentRoutes);
   router.use(knowledgeIntelligenceRoutes);
+  router.use(endgameIntelligenceRoutes);
   router.use(endgameRoutes);
   router.use(pullSimulatorRoutes);
   return router;

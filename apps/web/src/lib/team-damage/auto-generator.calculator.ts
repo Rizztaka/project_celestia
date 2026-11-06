@@ -7,7 +7,7 @@ import {
 import { formIdentity } from '../build-analysis/identity';
 import type { SavedUidTeam } from '../build-analysis/teams-storage';
 import type { CharacterObservation } from '../observed-roster';
-import { benchmarkSettings, defaultRotation } from './benchmark.calculator';
+import { benchmarkSettings, defensibleRotation } from './benchmark.calculator';
 import { damageInput, engineCharacter } from './calculator';
 import {
   calculateTeamComfort,
@@ -193,7 +193,7 @@ export function buildAutoTeamPool(
     if (!exclusivity.valid) continue;
 
     const team = transientTeam(uid, String(candidates.length), members);
-    const settings = benchmarkSettings(defaultRotation(team, driverKey));
+    const settings = benchmarkSettings(defensibleRotation(team, driverKey));
     const input = damageInput(uid, team, [driver, ...roster], settings);
     if (!input.config) continue;
     candidates.push({

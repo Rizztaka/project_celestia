@@ -14,10 +14,8 @@ import { searchTeamCandidates } from '../lib/team-damage/service';
 import { writeTeamPreferences } from '../lib/team-preferences';
 import { useTeamPreferences } from '../lib/use-team-preferences';
 import { useAuthStore } from '../stores/auth.store';
-import { TeamPortrait } from './TeamCharacterPicker';
 import TeamPreferencesForm from './TeamPreferencesForm';
-
-const format = (value: number) => value.toLocaleString(undefined, { maximumFractionDigits: 0 });
+import TeamRecommendationCard from './TeamRecommendationCard';
 
 interface GeneratorProps {
   uid: string;
@@ -214,7 +212,6 @@ function TeamAutoGeneratorSession({
   const [running, setRunning] = useState(false);
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
-  const [savedId, setSavedId] = useState('');
   const [results, setResults] = useState<
     { candidate: AutoTeamCandidate; result: AutoTeamCandidate['team'] & { dps: number } }[]
   >([]);
@@ -242,7 +239,6 @@ function TeamAutoGeneratorSession({
     setResults([]);
     setError('');
     setStatus('');
-    setSavedId('');
   }
 
   async function generate() {
@@ -386,72 +382,44 @@ function TeamAutoGeneratorSession({
           </p>
           {results.length ? (
             <div className="team-auto-results" aria-label="Generated team results">
-              {results.map(({ candidate, result }, index) => (
-                <article key={candidate.id} className="team-auto-result">
-                  <header>
-                    <div>
-                      <span className="team-auto-rank">#{index + 1}</span>
-                      <div>
-                        <strong>{format(result.dps)} DPS</strong>
-                        <small>
-                          {index === 0 ? 'Best tested combination' : 'Verified candidate'} ·{' '}
-                          {samples} samples
-                        </small>
-                        {candidate.favoriteCount ? (
-                          <small>
-                            {candidate.favoriteCount} favorite
-                            {candidate.favoriteCount === 1 ? '' : 's'}
-                          </small>
-                        ) : null}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      className="button-secondary"
-                      disabled={savedId === candidate.id}
-                      onClick={async () => {
-                        setSavedId(candidate.id);
-                        try {
-                          await onSave({
-                            ...candidate.team,
-                            id: crypto.randomUUID(),
-                            name: `${names[selectedDriverKey] ?? 'DPS'} team`,
-                          });
-                        } catch (failure) {
-                          setError(
-                            failure instanceof Error ? failure.message : 'Could not save team.',
-                          );
-                          setSavedId('');
-                          return;
-                        }
-                        setStatus('Generated team saved below.');
-                      }}
-                    >
-                      {savedId === candidate.id ? 'Saved' : 'Save team'}
-                    </button>
-                  </header>
-                  <div className="team-auto-members">
-                    {candidate.team.members.map((member) => {
-                      const character = records.find(
-                        (record) => record.character.key === member.characterKey,
-                      )?.character;
-                      return character ? (
-                        <div key={member.characterKey}>
-                          <TeamPortrait character={character} />
-                          <strong>{character.name}</strong>
-                          <small>
-                            {member.characterKey === selectedDriverKey ? 'Main DPS' : 'Teammate'}
-                          </small>
-                        </div>
-                      ) : null;
-                    })}
-                  </div>
-                  <p>
-                    The selected {names[selectedDriverKey] ?? 'DPS'} stays on field in the default
-                    loop; the other three characters contribute their Skills first.
-                  </p>
-                </article>
-              ))}
+              {(() => {
+                const topDpsId = results[0]?.candidate.id;
+                const comfortAltId = results.find(
+                  (r) => r.candidate.comfort?.tier === 'comfort_first',
+                )?.candidate.id;
+
+                return results.map(({ candidate, result }, index) => (
+                  <TeamRecommendationCard
+                    key={candidate.id}
+                    rank={index + 1}
+                    isTopDps={candidate.id === topDpsId}
+                    isComfortAlternative={
+                      candidate.id === comfortAltId && candidate.id !== topDpsId
+                    }
+                    candidate={candidate}
+                    dps={result.dps}
+                    samples={samples}
+                    names={names}
+                    records={records}
+                    selectedDriverKey={selectedDriverKey}
+                    onSave={async () => {
+                      try {
+                        await onSave({
+                          ...candidate.team,
+                          id: crypto.randomUUID(),
+                          name: `${names[selectedDriverKey] ?? 'DPS'} team`,
+                        });
+                      } catch (failure) {
+                        setError(
+                          failure instanceof Error ? failure.message : 'Could not save team.',
+                        );
+                        return;
+                      }
+                      setStatus('Generated team saved below.');
+                    }}
+                  />
+                ));
+              })()}
             </div>
           ) : null}
         </>

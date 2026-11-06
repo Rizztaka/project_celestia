@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { defaultRotation } from '../../web/src/lib/team-damage/benchmark.calculator.ts';
+import {
+  defaultRotation,
+  defensibleRotation,
+} from '../../web/src/lib/team-damage/benchmark.calculator.ts';
 import {
   generateDefensibleRotationCandidates,
   synthesizeTeamRotation,
@@ -106,7 +109,7 @@ describe('defensible team rotation synthesis (M3.2)', () => {
     ]);
     expect(steps.at(-1)).toMatchObject({ action: 'attack', repeat: 6 });
 
-    // Reviewed team receives real Burst and buff steps in defaultRotation
+    // Reviewed team receives real Burst and buff steps in defensibleRotation
     const reviewedTeam = {
       version: 1,
       uid: '800000001',
@@ -119,7 +122,7 @@ describe('defensible team rotation synthesis (M3.2)', () => {
         { characterKey: '10000025:2501', roleId: 'unspecified' },
       ],
     };
-    const reviewedSteps = defaultRotation(reviewedTeam, '10000052:5201');
+    const reviewedSteps = defensibleRotation(reviewedTeam, '10000052:5201');
     expect(reviewedSteps.some((s) => s.action === 'burst')).toBe(true);
   });
 });

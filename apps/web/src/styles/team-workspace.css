@@ -1243,3 +1243,127 @@
     scroll-margin-top: 135px;
   }
 }
+
+
+/* M3 Dual-Recommendation & Rotation Timeline Styles */
+.team-auto-result.team-top-dps {
+  border: 1px solid rgba(217, 119, 6, 0.4);
+  box-shadow: 0 0 15px rgba(217, 119, 6, 0.1);
+}
+.team-auto-result.team-comfort-alt {
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
+}
+.team-badges-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.team-badge-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.team-badge-pill.dps-pill {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid #fbbf24;
+}
+.team-badge-pill.comfort-pill {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid #34d399;
+}
+.team-badge-pill.tier-comfort_first {
+  background: rgba(6, 182, 212, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(6, 182, 212, 0.4);
+}
+.team-badge-pill.tier-balanced {
+  background: rgba(148, 163, 184, 0.2);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+.team-badge-pill.tier-high_execution {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.4);
+}
+.team-comfort-explainer {
+  margin: 12px 0;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  font-size: 12px;
+  color: #cbd5e1;
+}
+.team-comfort-explainer .explainer-heading {
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 4px;
+  display: block;
+}
+.team-comfort-explainer ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.team-comfort-explainer li {
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+.rotation-timeline-wrapper {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.rotation-timeline-header {
+  margin-bottom: 8px;
+}
+.rotation-timeline-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.rotation-timeline-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+}
+.rotation-timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+.step-char-name {
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+.step-action-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.step-params-tag {
+  font-size: 10px;
+  color: #64748b;
+  font-family: monospace;
+}

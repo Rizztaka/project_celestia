@@ -13,8 +13,31 @@ export function benchmarkSettings(steps: RotationStep[]): DamageSettings {
   return { ...TEAM_BENCHMARK, steps: steps.map((step) => ({ ...step })) };
 }
 
+/**
+ * Standard fixed 5-step rotation loop for Section 5 damage lab compatibility.
+ */
 export function defaultRotation(team: SavedUidTeam, driver: string): RotationStep[] {
   if (!team.members.some((member) => member.characterKey === driver)) return [];
+  const step = (characterKey: string, action = 'skill', repeat = 1): RotationStep => ({
+    characterKey,
+    action,
+    repeat,
+    params: '',
+    waitFrames: 0,
+  });
+  return [
+    ...team.members
+      .filter((member) => member.characterKey !== driver)
+      .map((member) => step(member.characterKey)),
+    step(driver),
+    step(driver, 'attack', 6),
+  ];
+}
+
+/**
+ * M3 Defensible Rotation: role-ordered with real Bursts, buffs, and battery funneling.
+ */
+export function defensibleRotation(team: SavedUidTeam, driver: string): RotationStep[] {
   return synthesizeTeamRotation({
     teamMembers: team.members,
     driverKey: driver,

@@ -14,9 +14,7 @@ export function explainTeamComfort(comfort: TeamComfortScore): string[] {
   }
 
   if (comfort.metrics.hasSustainedHealing) {
-    points.push(
-      'Sustained healing keeps the team stable across aggressive combat encounters.',
-    );
+    points.push('Sustained healing keeps the team stable across aggressive combat encounters.');
   }
 
   if (comfort.metrics.interruptionResistanceTier === 'complete') {
@@ -24,9 +22,7 @@ export function explainTeamComfort(comfort: TeamComfortScore): string[] {
       'Complete interruption resistance prevents attack animation cancels from enemy strikes.',
     );
   } else if (comfort.metrics.interruptionResistanceTier === 'partial') {
-    points.push(
-      'Partial interruption resistance reduces stagger from light enemy attacks.',
-    );
+    points.push('Partial interruption resistance reduces stagger from light enemy attacks.');
   }
 
   if (comfort.metrics.executionFriction === 'strict') {

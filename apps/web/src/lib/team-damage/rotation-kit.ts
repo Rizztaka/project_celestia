@@ -1,12 +1,6 @@
 import type { RotationStep } from './calculator';
 
-export type RotationRole =
-  | 'aura_setup'
-  | 'buffer'
-  | 'debuffer'
-  | 'sub_dps'
-  | 'battery'
-  | 'driver';
+export type RotationRole = 'aura_setup' | 'buffer' | 'debuffer' | 'sub_dps' | 'battery' | 'driver';
 
 export interface CharacterActionSequence {
   characterKey: string;
@@ -46,10 +40,7 @@ export const reviewedRotationKits: Record<string, CharacterActionSequence> = {
     role: 'buffer',
     burstCost: 60,
     burstCooldownFrames: 900, // 15s
-    setupSteps: [
-      step('10000032:3201', 'burst'),
-      step('10000032:3201', 'skill'),
-    ],
+    setupSteps: [step('10000032:3201', 'burst'), step('10000032:3201', 'skill')],
     fieldSteps: [],
     energyPrerequisite: { minErPercent: 200 },
   },
@@ -60,10 +51,7 @@ export const reviewedRotationKits: Record<string, CharacterActionSequence> = {
     role: 'sub_dps',
     burstCost: 80,
     burstCooldownFrames: 1200, // 20s
-    setupSteps: [
-      step('10000023:2301', 'burst'),
-      step('10000023:2301', 'skill'),
-    ],
+    setupSteps: [step('10000023:2301', 'burst'), step('10000023:2301', 'skill')],
     fieldSteps: [],
     energyPrerequisite: { minErPercent: 180, requiresFunnel: true },
   },
@@ -104,10 +92,7 @@ export const reviewedRotationKits: Record<string, CharacterActionSequence> = {
     role: 'buffer',
     burstCost: 60,
     burstCooldownFrames: 900, // 15s
-    setupSteps: [
-      step('10000089:8901', 'skill'),
-      step('10000089:8901', 'burst'),
-    ],
+    setupSteps: [step('10000089:8901', 'skill'), step('10000089:8901', 'burst')],
     fieldSteps: [],
     energyPrerequisite: { minErPercent: 160 },
   },
@@ -133,10 +118,7 @@ export const reviewedRotationKits: Record<string, CharacterActionSequence> = {
     role: 'aura_setup',
     burstCost: 50,
     burstCooldownFrames: 810, // 13.5s
-    setupSteps: [
-      step('10000073:7301', 'skill'),
-      step('10000073:7301', 'burst'),
-    ],
+    setupSteps: [step('10000073:7301', 'skill'), step('10000073:7301', 'burst')],
     fieldSteps: [],
     energyPrerequisite: { minErPercent: 130 },
   },
@@ -147,13 +129,8 @@ export const reviewedRotationKits: Record<string, CharacterActionSequence> = {
     role: 'battery',
     burstCost: 90,
     burstCooldownFrames: 1080, // 18s
-    setupSteps: [
-      step('10000052:5201', 'skill'),
-    ],
-    fieldSteps: [
-      step('10000052:5201', 'burst'),
-      step('10000052:5201', 'attack', 9),
-    ],
+    setupSteps: [step('10000052:5201', 'skill')],
+    fieldSteps: [step('10000052:5201', 'burst'), step('10000052:5201', 'attack', 9)],
     energyPrerequisite: { minErPercent: 220 },
   },
 
@@ -181,10 +158,7 @@ export const reviewedRotationKits: Record<string, CharacterActionSequence> = {
     role: 'buffer',
     burstCost: 40,
     burstCooldownFrames: 720, // 12s
-    setupSteps: [
-      step('10000030:3001', 'skill'),
-      step('10000030:3001', 'burst'),
-    ],
+    setupSteps: [step('10000030:3001', 'skill'), step('10000030:3001', 'burst')],
     fieldSteps: [],
     energyPrerequisite: { minErPercent: 120 },
   },
@@ -195,9 +169,7 @@ export const reviewedRotationKits: Record<string, CharacterActionSequence> = {
     role: 'sub_dps',
     burstCost: 60,
     burstCooldownFrames: 900,
-    setupSteps: [
-      step('10000031:3101', 'skill'),
-    ],
+    setupSteps: [step('10000031:3101', 'skill')],
     fieldSteps: [],
   },
 
@@ -207,10 +179,7 @@ export const reviewedRotationKits: Record<string, CharacterActionSequence> = {
     role: 'debuffer',
     burstCost: 80,
     burstCooldownFrames: 1200,
-    setupSteps: [
-      step('10000043:4301', 'skill'),
-      step('10000043:4301', 'burst'),
-    ],
+    setupSteps: [step('10000043:4301', 'skill'), step('10000043:4301', 'burst')],
     fieldSteps: [],
     energyPrerequisite: { minErPercent: 180 },
   },
@@ -240,9 +209,6 @@ export function getCharacterRotationKit(
     burstCost,
     burstCooldownFrames: 900,
     setupSteps: [step(characterKey, 'skill')],
-    fieldSteps: [
-      step(characterKey, 'skill'),
-      step(characterKey, 'attack', 6),
-    ],
+    fieldSteps: [step(characterKey, 'skill'), step(characterKey, 'attack', 6)],
   };
 }

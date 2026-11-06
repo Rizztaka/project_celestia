@@ -61,11 +61,7 @@ describe('defensible team rotation synthesis (M3.2)', () => {
       driverKey: '10000052:5201',
     });
 
-    const candidateResult = generateDefensibleRotationCandidates(
-      baseRotation,
-      '10000052:5201',
-      48,
-    );
+    const candidateResult = generateDefensibleRotationCandidates(baseRotation, '10000052:5201', 48);
 
     expect(candidateResult.candidates.length).toBeGreaterThan(0);
     expect(candidateResult.candidates.length).toBeLessThanOrEqual(48);
@@ -74,9 +70,7 @@ describe('defensible team rotation synthesis (M3.2)', () => {
     expect(candidateResult.candidates[0].steps).toEqual(baseRotation);
 
     // All candidates must be unique
-    const uniqueKeys = new Set(
-      candidateResult.candidates.map((c) => JSON.stringify(c.steps)),
-    );
+    const uniqueKeys = new Set(candidateResult.candidates.map((c) => JSON.stringify(c.steps)));
     expect(uniqueKeys.size).toBe(candidateResult.candidates.length);
 
     // Total action count for every candidate must be bounded <= 200

@@ -104,22 +104,14 @@ describe('team comfort and statistical resolution (M3.3)', () => {
     const favoriteCounts = { team_a: 1, team_b: 3, team_c: 4 };
 
     // With priority 'damage': A ranks first by DPS
-    const damageRanked = resolveStatisticalRankings(
-      candidates,
-      'damage',
-      favoriteCounts,
-    );
+    const damageRanked = resolveStatisticalRankings(candidates, 'damage', favoriteCounts);
     expect(damageRanked.ranked[0].id).toBe('team_a');
     expect(damageRanked.ties.has('team_a')).toBe(true);
     expect(damageRanked.ties.has('team_b')).toBe(true);
     expect(damageRanked.ties.has('team_c')).toBe(false);
 
     // With priority 'favorites': B ranks first because A & B are in a statistical tie, and B has more favorites
-    const favRanked = resolveStatisticalRankings(
-      candidates,
-      'favorites',
-      favoriteCounts,
-    );
+    const favRanked = resolveStatisticalRankings(candidates, 'favorites', favoriteCounts);
     expect(favRanked.ranked[0].id).toBe('team_b');
     expect(favRanked.ranked[1].id).toBe('team_a');
     expect(favRanked.ranked[2].id).toBe('team_c');

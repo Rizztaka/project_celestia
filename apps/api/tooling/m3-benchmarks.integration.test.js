@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  defensibleRotation,
-} from '../../web/src/lib/team-damage/benchmark.calculator.ts';
+import { defensibleRotation } from '../../web/src/lib/team-damage/benchmark.calculator.ts';
 import {
   generateDefensibleRotationCandidates,
   synthesizeTeamRotation,
@@ -42,18 +40,12 @@ describe('M3 End-to-End Integration Benchmarks', () => {
     expect(burstChars.has('10000025:2501')).toBe(true);
 
     // Candidates generated within bounds
-    const candidates = generateDefensibleRotationCandidates(
-      rotation,
-      '10000052:5201',
-      48,
-    );
+    const candidates = generateDefensibleRotationCandidates(rotation, '10000052:5201', 48);
     expect(candidates.candidates.length).toBeGreaterThan(1);
     expect(candidates.candidates.length).toBeLessThanOrEqual(48);
 
     // Comfort profile: Bennett provides sustained healing
-    const comfort = calculateTeamComfort(
-      raidenNational.members.map((m) => m.characterKey),
-    );
+    const comfort = calculateTeamComfort(raidenNational.members.map((m) => m.characterKey));
     expect(comfort.metrics.hasSustainedHealing).toBe(true);
     expect(comfort.metrics.interruptionResistanceTier).toBe('complete'); // Raiden burst state
   });
@@ -78,18 +70,12 @@ describe('M3 End-to-End Integration Benchmarks', () => {
     });
 
     // Zhongli buff/shield comes before Xingqiu/Yelan and Hu Tao
-    const zhongliIdx = rotation.findIndex(
-      (s) => s.characterKey === '10000030:3001',
-    );
-    const huTaoIdx = rotation.findIndex(
-      (s) => s.characterKey === '10000046:4601',
-    );
+    const zhongliIdx = rotation.findIndex((s) => s.characterKey === '10000030:3001');
+    const huTaoIdx = rotation.findIndex((s) => s.characterKey === '10000046:4601');
     expect(zhongliIdx).toBeLessThan(huTaoIdx);
 
     // Comfort score is comfort_first (>= 80)
-    const comfort = calculateTeamComfort(
-      huTaoDoubleHydro.members.map((m) => m.characterKey),
-    );
+    const comfort = calculateTeamComfort(huTaoDoubleHydro.members.map((m) => m.characterKey));
     expect(comfort.score).toBeGreaterThanOrEqual(80);
     expect(comfort.tier).toBe('comfort_first');
     expect(comfort.metrics.hasShield).toBe(true);
@@ -113,11 +99,7 @@ describe('M3 End-to-End Integration Benchmarks', () => {
     ];
     const favoriteCounts = { team_meta: 0, team_fav: 2 };
 
-    const resolved = resolveStatisticalRankings(
-      candidates,
-      'favorites',
-      favoriteCounts,
-    );
+    const resolved = resolveStatisticalRankings(candidates, 'favorites', favoriteCounts);
     expect(resolved.ties.has('team_meta')).toBe(true);
     expect(resolved.ties.has('team_fav')).toBe(true);
     expect(resolved.ranked[0].id).toBe('team_fav'); // Broken by player favorite count

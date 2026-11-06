@@ -20,7 +20,9 @@ export default function RotationTimelineView({ steps, names = {} }: TimelineProp
   return (
     <div className="rotation-timeline-wrapper">
       <div className="rotation-timeline-header">
-        <span className="rotation-timeline-title">Synthesized Defensible Rotation ({steps.length} steps)</span>
+        <span className="rotation-timeline-title">
+          Synthesized Defensible Rotation ({steps.length} steps)
+        </span>
       </div>
       <div className="rotation-timeline-scroll" role="list" aria-label="Rotation timeline">
         {steps.map((step, idx) => {

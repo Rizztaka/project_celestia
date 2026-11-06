@@ -307,3 +307,32 @@ it('keeps unreadable saved preferences while allowing temporary search choices',
   expect(document.querySelector('.team-auto-results')).toBeTruthy();
   expect(dom.window.localStorage.getItem(teamPreferencesKey(uid))).toBe('unreadable');
 });
+
+it('renders statistical tie badge, error margin, and rotation timeline in recommendation cards', async () => {
+  await render();
+  await click('Generate best teams');
+  expect(pending.length).toBe(1);
+  const job = pending[0];
+  await act(async () =>
+    job.resolve({
+      tested: job.candidates.length,
+      failed: 0,
+      samples: job.samples,
+      ranked: [
+        {
+          id: job.candidates[0].id,
+          dps: 54000,
+          isStatisticallyTied: true,
+          result: { dps: 54000, errorMargin: 850 },
+        },
+      ],
+    }),
+  );
+  expect(document.querySelector('.stat-tie-pill')).toBeTruthy();
+  expect(document.querySelector('.stat-tie-pill').textContent).toBe('Statistical Tie');
+  expect(document.querySelector('.team-stats-row strong').textContent).toContain('± 850');
+  expect(document.querySelector('.rotation-timeline-wrapper')).toBeTruthy();
+  expect(document.querySelector('.rotation-timeline-title').textContent).toContain(
+    'Synthesized Defensible Rotation',
+  );
+});

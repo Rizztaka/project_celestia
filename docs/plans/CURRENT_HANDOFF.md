@@ -11,7 +11,7 @@
 > $DPS \pm 1.96 \cdot SE$), breaks ties using player favorites, and marks ties without false rank precision.
 > UI delivers dual-recommendation cards (`TeamRecommendationCard.tsx`) with $\pm$ error margin,
 > "Top Tested Damage", "Comfortable Alternative", and visual execution sequence (`RotationTimelineView.tsx`).
-> Monorepo verification: **43/43 tests pass across 9 test files**, TypeScript typechecks pass with 0 errors,
+> Monorepo verification: **44/44 tests pass across 9 test files**, TypeScript typechecks pass with 0 errors,
 > ESLint passes with 0 warnings, and companion catalog status confirms 126 release identities.
 > [Evidence and verification](autonomous-companion/team-search-progress.md). Continue to M4 endgame modes.
 

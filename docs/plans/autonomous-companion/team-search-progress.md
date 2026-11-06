@@ -97,10 +97,10 @@ All M3 test suites pass completely with zero failures:
 | `apps/api/tooling/team-search-pipeline.test.js`      | 2-phase search pipeline, gear conflict filtering, error margins & statistical tie ranking     |   3   | **PASSED** |
 | `apps/api/tooling/team-auto-pool.test.js`            | Auto-generation candidate filtering, driver pool validation                                   |   2   | **PASSED** |
 | `apps/api/tooling/uid-teams-client.test.js`          | Section 5 Damage Lab client integration & 5-step backward compatibility                       |  11   | **PASSED** |
-| `apps/api/tooling/team-auto-context-client.test.js`  | Team workspace auto-context, recommendation switching, and UI rendering                       |  10   | **PASSED** |
+| `apps/api/tooling/team-auto-context-client.test.js`  | Team workspace auto-context, recommendation switching, and UI rendering                       |  11   | **PASSED** |
 | `apps/api/tooling/m3-benchmarks.integration.test.js` | End-to-end integration: Raiden National, Hu Tao Double Hydro, gear exclusivity & tie-breaking |   3   | **PASSED** |
 
-**Total Tests Passing:** 43/43 across M3 scope.
+**Total Tests Passing:** 44/44 across M3 scope.
 
 ### Monorepo Health Checks
 

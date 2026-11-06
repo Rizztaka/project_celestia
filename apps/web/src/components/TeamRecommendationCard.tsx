@@ -11,6 +11,7 @@ interface CardProps {
   rank: number;
   isTopDps: boolean;
   isComfortAlternative: boolean;
+  isStatisticallyTied?: boolean;
   candidate: AutoTeamCandidate;
   dps: number;
   errorMargin?: number;
@@ -27,6 +28,7 @@ export default function TeamRecommendationCard({
   rank,
   isTopDps,
   isComfortAlternative,
+  isStatisticallyTied,
   candidate,
   dps,
   errorMargin,
@@ -65,6 +67,9 @@ export default function TeamRecommendationCard({
             {isTopDps ? <span className="team-badge-pill dps-pill">Top Tested Damage</span> : null}
             {isComfortAlternative ? (
               <span className="team-badge-pill comfort-pill">Comfortable Alternative</span>
+            ) : null}
+            {isStatisticallyTied ? (
+              <span className="team-badge-pill stat-tie-pill">Statistical Tie</span>
             ) : null}
             {comfort ? (
               <span className={`team-badge-pill tier-${comfort.tier}`}>
@@ -112,9 +117,7 @@ export default function TeamRecommendationCard({
             <div key={member.characterKey} className="team-member-chip">
               <TeamPortrait character={character} />
               <strong>{character.name}</strong>
-              <small>
-                {member.characterKey === selectedDriverKey ? 'Main DPS' : 'Teammate'}
-              </small>
+              <small>{member.characterKey === selectedDriverKey ? 'Main DPS' : 'Teammate'}</small>
             </div>
           ) : null;
         })}

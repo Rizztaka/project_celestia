@@ -1,3 +1,20 @@
+> **2026-11-06 autonomous companion — M3 team search & defensible rotations verified:**
+> Milestone 3 establishes deterministic, defensible team recommendation within Project Celestia's
+> Modular Monolith (`apps/web/src/lib/team-damage`). Reviewed kits cover key archetypes (Bennett,
+> Xiangling, Xingqiu, Yelan, Furina, Kazuha, Nahida, Raiden, Hu Tao, Zhongli, Fischl, Sucrose)
+> with role-ordered sequencing (`aura_setup` -> `buffer` -> `debuffer` -> `sub_dps` -> `battery` -> `driver`).
+> Gear exclusivity strictly rejects duplicate weapon/artifact instance IDs across candidates.
+> 4-dimension defensive comfort scoring (`team-comfort.calculator.ts`) and pure rationale generation
+> (`team-comfort.explainer.ts`) adhere strictly to ADR-0011. Two-phase search screens 12–48 candidate
+> combinations and simulates top 5 DPS plus top 3 comfort finalists across multi-sample iterations.
+> Statistical ranking (`resolveStatisticalRankings`) detects 95% CI overlap ($SE = \frac{SD}{\sqrt{N}}$,
+> $DPS \pm 1.96 \cdot SE$), breaks ties using player favorites, and marks ties without false rank precision.
+> UI delivers dual-recommendation cards (`TeamRecommendationCard.tsx`) with $\pm$ error margin,
+> "Top Tested Damage", "Comfortable Alternative", and visual execution sequence (`RotationTimelineView.tsx`).
+> Monorepo verification: **43/43 tests pass across 9 test files**, TypeScript typechecks pass with 0 errors,
+> ESLint passes with 0 warnings, and companion catalog status confirms 126 release identities.
+> [Evidence and verification](autonomous-companion/team-search-progress.md). Continue to M4 endgame modes.
+
 > **2026-10-26 M1 status correction:** Subphase 1 remains open because official-source
 > provenance is unresolved. Earlier `verified` labels and completion banners below
 > are historical claims, not independent approval. The authenticated imported-account

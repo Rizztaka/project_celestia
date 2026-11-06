@@ -142,10 +142,7 @@ export function validateGearExclusivity(members: MemberGearInput[]): {
     if (Array.isArray(member.artifacts)) {
       for (const art of member.artifacts) {
         const artKey =
-          art.instanceId ??
-          (typeof art.id === 'string' && !/^\d+$/.test(art.id)
-            ? art.id
-            : null);
+          art.instanceId ?? (typeof art.id === 'string' && !/^\d+$/.test(art.id) ? art.id : null);
 
         if (artKey) {
           const existing = gearUsage.get(artKey) ?? [];
@@ -173,9 +170,12 @@ export interface CandidateWithDamage {
   id: string;
   result: {
     dps: number;
-    min: number;
-    max: number;
+    min?: number;
+    max?: number;
+    minDps?: number;
+    maxDps?: number;
     stdDev?: number;
+    standardError?: number;
     errorMargin?: number;
   };
 }
@@ -195,9 +195,15 @@ export function resolveStatisticalRankings<T extends CandidateWithDamage>(
 
   // Pre-calculate CI half-width for each candidate
   const withCI = candidates.map((c) => {
+    const minVal = c.result.min ?? c.result.minDps ?? c.result.dps;
+    const maxVal = c.result.max ?? c.result.maxDps ?? c.result.dps;
     const margin =
       c.result.errorMargin ??
-      (c.result.stdDev ? c.result.stdDev * 1.0 : (c.result.max - c.result.min) / 4);
+      (c.result.standardError
+        ? 1.96 * c.result.standardError
+        : c.result.stdDev
+          ? 1.96 * c.result.stdDev
+          : (maxVal - minVal) / 4);
     return {
       candidate: c,
       dps: c.result.dps,

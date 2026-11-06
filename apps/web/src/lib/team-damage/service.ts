@@ -1,6 +1,7 @@
 import manifest from '../../../public/vendor/gcsim-v2.47.2/manifest.json';
 import { type EngineRun, summarizeRuns } from './calculator';
 import { rankDamage } from './rotation-search.calculator';
+import { resolveStatisticalRankings } from './team-comfort.calculator';
 
 export type DamageResult = ReturnType<typeof summarizeRuns>;
 export interface SimulationJob {
@@ -101,7 +102,8 @@ export interface TeamSearchResult {
   tested: number;
   failed: number;
   samples: number;
-  ranked: { id: string; result: DamageResult }[];
+  ranked: { id: string; dps: number; result: DamageResult; isStatisticallyTied?: boolean }[];
+  ties?: Set<string>;
 }
 /** Screen with seed 1; re-evaluate the top three and baseline using identical seeds 1..N. */
 export function searchTeamRotations(
@@ -158,11 +160,17 @@ export interface SearchCandidateInput {
   comfort?: { tier?: string; score?: number };
 }
 
+export interface SearchTeamCandidatesOptions {
+  priority?: 'damage' | 'favorites';
+  favoriteCounts?: Record<string, number>;
+}
+
 /** Screen every generated team once, then verify the best DPS and comfort finalists with identical seeds. */
 export function searchTeamCandidates(
   candidates: SearchCandidateInput[],
   samples: number,
   progress: (message: string) => void,
+  options?: SearchTeamCandidatesOptions,
 ) {
   if (!candidates.length) throw new Error('No complete supported team candidates were found.');
   if (!Number.isInteger(samples) || samples < 1 || samples > 50)
@@ -185,7 +193,9 @@ export function searchTeamCandidates(
     if (!valid.length) throw new Error('No generated team could be simulated.');
 
     // 1. Top 5 DPS finalists
-    const topDpsIds = rankDamage(valid).slice(0, 5).map((r) => r.id);
+    const topDpsIds = rankDamage(valid)
+      .slice(0, 5)
+      .map((r) => r.id);
 
     // 2. Top 3 Comfort finalists (from valid teams with high comfort score)
     const validCandidateMap = new Map(candidates.map((c) => [c.id, c]));
@@ -209,16 +219,27 @@ export function searchTeamCandidates(
     }));
 
     const verified = await session.run(finalists, 'Verifying the strongest teams');
+    const verifiedRows = verified.flatMap((row) =>
+      row.result ? [{ id: row.id, result: row.result }] : [],
+    );
+    const { ranked: statRanked, ties } = resolveStatisticalRankings(
+      verifiedRows,
+      options?.priority ?? 'damage',
+      options?.favoriteCounts ?? {},
+    );
+
     return {
       tested: candidates.length,
       failed:
         screened.filter((row) => !row.result).length + verified.filter((row) => !row.result).length,
       samples,
-      ranked: rankDamage(
-        verified.flatMap((row) =>
-          row.result ? [{ id: row.id, dps: row.result.dps, result: row.result }] : [],
-        ),
-      ),
+      ranked: statRanked.map((row) => ({
+        id: row.id,
+        dps: row.result.dps,
+        result: row.result,
+        isStatisticallyTied: ties.has(row.id),
+      })),
+      ties,
     };
   })().finally(() => session.close());
   return { promise, cancel: () => session.close() };

@@ -3,7 +3,7 @@
 **Document Version:** 1.0.0  
 **Phase:** Milestone 3 (Autonomous Companion — Team Search with Defensible Rotations, Comfort Scoring, and Gear Exclusivity)  
 **Status:** Implementation, Benchmarking & Verification Complete  
-**Date:** 2026-11-06  
+**Date:** 2026-11-06
 
 ---
 
@@ -23,6 +23,7 @@ Milestone 3 establishes a deterministic, defensible team recommendation engine w
 Milestone 3 implements and verifies six core architectural invariants:
 
 ### 1. Defensible Character Kit & Role-Ordered Sequencing
+
 - **Reviewed Kits**: Created `rotation-kit.ts` with reviewed action kits for key archetypes:
   - Bennett (`burst`, `skill`, `particle_wait`)
   - Xiangling (`burst`, `skill`)
@@ -41,12 +42,14 @@ Milestone 3 implements and verifies six core architectural invariants:
 - **Energy & Battery Funneling**: High-energy off-field DPS (e.g. Xiangling) receive explicit battery particle wait steps from dedicated battery supports (e.g. Bennett).
 
 ### 2. Gear Exclusivity (No Duplicate Equipment)
+
 - **Principle**: Real account loadouts cannot equip the same physical weapon or artifact instance on multiple characters simultaneously.
 - **Implementation**:
   - `validateGearExclusivity` checks for artifact and weapon conflicts across all 4 team members.
   - Correctly distinguishes between instance UUIDs (`instanceId`, `inst_*`) and catalog IDs, preventing false-positive rejections in synthetic mock fixtures while strictly rejecting true instance collisions in user account rosters.
 
 ### 3. Multidimensional Defensive Comfort Scoring
+
 - **Principle**: High DPS means nothing if a team is unplayable or fragile for average human execution.
 - **Implementation**:
   - `calculateTeamComfort`: Computes normalized 0–100 scores across 4 dimensions:
@@ -58,18 +61,24 @@ Milestone 3 implements and verifies six core architectural invariants:
   - `explainTeamComfort`: Generates human-readable badges, summary strings, and bulleted advantage/risk breakdowns.
 
 ### 4. Statistical Overlap & Anti-False-Precision
+
 - **Principle**: Minor simulation variance should not falsely assert that Team A is definitively superior to Team B when their confidence intervals overlap.
 - **Implementation**:
-  - `resolveStatisticalRankings`: Computes standard error ($SE = \frac{SD}{\sqrt{N}}$) and 95% confidence intervals ($DPS \pm 1.96 \cdot SE$).
-  - When the CI overlap fraction exceeds 50%, teams are marked with `isStatisticallyTied: true` and classified under an equivalent ranking tier, deferring to comfort and ease-of-use as the tie-breaker.
+  - `summarizeRuns`: Computes sample standard deviation ($SD$), standard error of the mean ($SE = \frac{SD}{\sqrt{N}}$), and 95% confidence intervals ($DPS \pm 1.96 \cdot SE$).
+  - `resolveStatisticalRankings`: Pre-calculates 95% CI error bounds for all evaluated finalists. Detects overlapping confidence intervals ($lower_i \le upper_{i+1} \land lower_{i+1} \le upper_i$) and marks candidate teams as statistical ties.
+  - When player preference selects `favorites`, tied candidate groups are reordered by favorite count descending without falsely inflating raw damage.
+  - End-to-end integration: `searchTeamCandidates` in `service.ts` routes multi-sample finalists through `resolveStatisticalRankings` with user priority and favorite counts, annotating each result with `isStatisticallyTied` and forwarding `errorMargin` to the UI.
 
 ### 5. Two-Phase Bounded Worker Pipeline
+
 - **Phase 1 (Screening)**: Evaluates the bounded candidate pool (capped at 12–48 viable archetype permutations) with fast 1-iteration screening to eliminate uncompetitive rosters without wasting worker thread cycles.
-- **Phase 2 (Multi-Sample Verification)**: Runs rigorous multi-iteration simulations (default 10 iterations) on the top 5 DPS candidates and top 3 comfort candidates to produce accurate mean DPS, standard deviation, error margins, and log traces.
+- **Phase 2 (Multi-Sample Verification)**: Runs rigorous multi-iteration simulations (default 10 iterations) on the top 5 DPS candidates and top 3 comfort candidates (`tier === 'comfort_first'` or comfort score $\ge 70$) to produce accurate mean DPS, standard deviation, error margins, and log traces.
+- `TeamAutoGenerator.tsx` propagates `candidate.comfort` to `searchTeamCandidates` so defensive finalists are guaranteed simulation in Phase 2.
 
 ### 6. Dual-Recommendation UI & Visual Timeline
+
 - **Components**:
-  - `TeamRecommendationCard`: Displays archetype badges, primary tag ("Top Tested Damage" vs "Comfortable Alternative"), mean DPS with $\pm$ margin, comfort rating pill, and advantage breakdown.
+  - `TeamRecommendationCard`: Displays archetype badges, primary tag ("Top Tested Damage" vs "Comfortable Alternative"), statistical tie badge ("Statistical Tie"), mean DPS with $\pm$ margin, comfort rating pill, and advantage breakdown.
   - `RotationTimelineView`: Visual horizontal execution sequence displaying each character's portrait, element badge, action type (`Burst`, `Skill`, `Combo`, `Plunge`), and timing markers.
   - Integrated into `TeamAutoGenerator.tsx` with dedicated responsive styles in `team-workspace.css`.
 
@@ -79,21 +88,22 @@ Milestone 3 implements and verifies six core architectural invariants:
 
 All M3 test suites pass completely with zero failures:
 
-| Test Suite | Focus / Description | Tests | Status |
-| :--- | :--- | :---: | :---: |
-| `apps/api/tooling/rotation-kit.test.js` | Kit retrieval, burst/skill definitions, and safe fallback generation | 3 | **PASSED** |
-| `apps/api/tooling/rotation-synthesizer.test.js` | Role-ordered sequencing, buff placement, and bounded candidate synthesis | 3 | **PASSED** |
-| `apps/api/tooling/team-benchmark.test.js` | Defensible rotation integration in team benchmark calculation | 4 | **PASSED** |
-| `apps/api/tooling/team-comfort.test.js` | Comfort scoring, gear exclusivity validation, statistical overlap | 4 | **PASSED** |
-| `apps/api/tooling/team-search-pipeline.test.js` | 2-phase search pipeline, gear conflict filtering, comfort ranking | 2 | **PASSED** |
-| `apps/api/tooling/team-auto-pool.test.js` | Auto-generation candidate filtering, driver pool validation | 2 | **PASSED** |
-| `apps/api/tooling/uid-teams-client.test.js` | Section 5 Damage Lab client integration & 5-step backward compatibility | 11 | **PASSED** |
-| `apps/api/tooling/team-auto-context-client.test.js` | Team workspace auto-context, recommendation switching, and UI rendering | 10 | **PASSED** |
-| `apps/api/tooling/m3-benchmarks.integration.test.js` | End-to-end integration: Raiden National, Hu Tao Double Hydro, gear exclusivity & tie-breaking | 3 | **PASSED** |
+| Test Suite                                           | Focus / Description                                                                           | Tests |   Status   |
+| :--------------------------------------------------- | :-------------------------------------------------------------------------------------------- | :---: | :--------: |
+| `apps/api/tooling/rotation-kit.test.js`              | Kit retrieval, burst/skill definitions, and safe fallback generation                          |   3   | **PASSED** |
+| `apps/api/tooling/rotation-synthesizer.test.js`      | Role-ordered sequencing, buff placement, and bounded candidate synthesis                      |   3   | **PASSED** |
+| `apps/api/tooling/team-benchmark.test.js`            | Defensible rotation integration in team benchmark calculation                                 |   4   | **PASSED** |
+| `apps/api/tooling/team-comfort.test.js`              | Comfort scoring, gear exclusivity validation, statistical overlap                             |   4   | **PASSED** |
+| `apps/api/tooling/team-search-pipeline.test.js`      | 2-phase search pipeline, gear conflict filtering, error margins & statistical tie ranking     |   3   | **PASSED** |
+| `apps/api/tooling/team-auto-pool.test.js`            | Auto-generation candidate filtering, driver pool validation                                   |   2   | **PASSED** |
+| `apps/api/tooling/uid-teams-client.test.js`          | Section 5 Damage Lab client integration & 5-step backward compatibility                       |  11   | **PASSED** |
+| `apps/api/tooling/team-auto-context-client.test.js`  | Team workspace auto-context, recommendation switching, and UI rendering                       |  10   | **PASSED** |
+| `apps/api/tooling/m3-benchmarks.integration.test.js` | End-to-end integration: Raiden National, Hu Tao Double Hydro, gear exclusivity & tie-breaking |   3   | **PASSED** |
 
-**Total Tests Passing:** 42/42 across M3 scope.
+**Total Tests Passing:** 43/43 across M3 scope.
 
 ### Monorepo Health Checks
+
 - **TypeScript Typecheck**:
   - `pnpm --filter @celestia/api run check-types`: 0 errors.
   - `pnpm --filter @celestia/web run check-types`: 0 errors.

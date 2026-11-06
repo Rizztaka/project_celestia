@@ -331,13 +331,24 @@ export function summarizeRuns(runs: EngineRun[]) {
   const count = runs.length;
   const diagnosticsAvailable = runs.every((run) => run.diagnosticsVersion === 1);
   const keys = runs[0].members.map((m) => m.key);
+  const dpsValues = runs.map((r) => r.dps);
+  const meanDps = dpsValues.reduce((s, v) => s + v, 0) / count;
+  const variance =
+    count > 1 ? dpsValues.reduce((s, v) => s + Math.pow(v - meanDps, 2), 0) / (count - 1) : 0;
+  const stdDev = Math.sqrt(variance);
+  const standardError = count > 1 ? stdDev / Math.sqrt(count) : 0;
+  const errorMargin = count > 1 ? 1.96 * standardError : 0;
+
   return {
     samples: count,
     diagnosticsAvailable,
     damage: runs.reduce((s, r) => s + r.totalDamage, 0) / count,
-    dps: runs.reduce((s, r) => s + r.dps, 0) / count,
-    minDps: Math.min(...runs.map((r) => r.dps)),
-    maxDps: Math.max(...runs.map((r) => r.dps)),
+    dps: meanDps,
+    minDps: Math.min(...dpsValues),
+    maxDps: Math.max(...dpsValues),
+    stdDev,
+    standardError,
+    errorMargin,
     members: keys.map((key) => {
       const rows = runs.map((r) => r.members.find((m) => m.key === key));
       if (rows.some((r) => !r)) throw new Error('SIMULATION_MEMBER_MISMATCH');

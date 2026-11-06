@@ -213,7 +213,14 @@ function TeamAutoGeneratorSession({
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
   const [results, setResults] = useState<
-    { candidate: AutoTeamCandidate; result: AutoTeamCandidate['team'] & { dps: number } }[]
+    {
+      candidate: AutoTeamCandidate;
+      result: AutoTeamCandidate['team'] & {
+        dps: number;
+        errorMargin?: number;
+        isStatisticallyTied?: boolean;
+      };
+    }[]
   >([]);
   const job = useRef<ReturnType<typeof searchTeamCandidates> | null>(null);
   useEffect(
@@ -251,10 +258,18 @@ function TeamAutoGeneratorSession({
     setStatus('Preparing candidate teams…');
     let handle: ReturnType<typeof searchTeamCandidates> | null = null;
     try {
+      const favoriteCounts = Object.fromEntries(
+        pool.candidates.map((c) => [c.id, c.favoriteCount]),
+      );
       handle = searchTeamCandidates(
-        pool.candidates.map((candidate) => ({ id: candidate.id, config: candidate.config })),
+        pool.candidates.map((candidate) => ({
+          id: candidate.id,
+          config: candidate.config,
+          comfort: candidate.comfort,
+        })),
         samples,
         setStatus,
+        { priority: preferences.priority, favoriteCounts },
       );
       job.current = handle;
       const search = await handle.promise;
@@ -262,8 +277,19 @@ function TeamAutoGeneratorSession({
       setResults(
         search.ranked.flatMap((row) => {
           const candidate = pool.candidates.find((entry) => entry.id === row.id);
+          const dps = 'dps' in row && typeof row.dps === 'number' ? row.dps : row.result.dps;
           return candidate
-            ? [{ candidate, result: { ...candidate.team, dps: row.result.dps } }]
+            ? [
+                {
+                  candidate,
+                  result: {
+                    ...candidate.team,
+                    dps,
+                    errorMargin: row.result?.errorMargin,
+                    isStatisticallyTied: row.isStatisticallyTied,
+                  },
+                },
+              ]
             : [];
         }),
       );
@@ -384,20 +410,30 @@ function TeamAutoGeneratorSession({
             <div className="team-auto-results" aria-label="Generated team results">
               {(() => {
                 const topDpsId = results[0]?.candidate.id;
-                const comfortAltId = results.find(
-                  (r) => r.candidate.comfort?.tier === 'comfort_first',
-                )?.candidate.id;
+                const otherCandidates = results.filter((r) => r.candidate.id !== topDpsId);
+                const bestComfort = otherCandidates
+                  .filter(
+                    (r) =>
+                      r.candidate.comfort?.tier === 'comfort_first' ||
+                      (r.candidate.comfort?.score ?? 0) >= 70,
+                  )
+                  .sort(
+                    (a, b) =>
+                      (b.candidate.comfort?.score ?? 0) - (a.candidate.comfort?.score ?? 0) ||
+                      b.result.dps - a.result.dps,
+                  )[0];
+                const comfortAltId = bestComfort?.candidate.id;
 
                 return results.map(({ candidate, result }, index) => (
                   <TeamRecommendationCard
                     key={candidate.id}
                     rank={index + 1}
                     isTopDps={candidate.id === topDpsId}
-                    isComfortAlternative={
-                      candidate.id === comfortAltId && candidate.id !== topDpsId
-                    }
+                    isComfortAlternative={candidate.id === comfortAltId}
+                    isStatisticallyTied={result.isStatisticallyTied}
                     candidate={candidate}
                     dps={result.dps}
+                    errorMargin={result.errorMargin}
                     samples={samples}
                     names={names}
                     records={records}

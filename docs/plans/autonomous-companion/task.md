@@ -19,7 +19,13 @@ Detailed contracts and acceptance: [implementation plan](implementation_plan.md)
   - [x] M2 subphase 1: character readiness evaluation against benchmark roles, encounters, and observed account contexts (`ready_for_target`, `needs_investment`, `conditional`, `insufficient_data`).
   - [x] M2 subphase 2: bounded marginal investment recommendations (talent priority, weapon suitability, energy thresholds, resource costs).
   - [x] M2 subphase 3: UI integration for contextual readiness indicators and upgrade actions within companion views.
-- [ ] M3: verify rotation candidates and improve DPS/comfort team search.
+- [x] M3: verify rotation candidates and improve DPS/comfort team search; [verification](team-search-progress.md).
+  - [x] M3 subphase 1: reviewed character rotation kits and action sequences (`rotation-kit.ts`).
+  - [x] M3 subphase 2: defensible team rotation synthesis and candidate generation (`rotation-synthesizer.calculator.ts`).
+  - [x] M3 subphase 3: comfort scoring, gear exclusivity validation, and statistical overlap resolution (`team-comfort.calculator.ts`, `team-comfort.explainer.ts`).
+  - [x] M3 subphase 4: bounded candidate pruning and 2-phase worker search pipeline (`auto-generator.calculator.ts`, `service.ts`).
+  - [x] M3 subphase 5: dual-recommendation cards, visual rotation timeline, and workspace integration (`TeamRecommendationCard.tsx`, `RotationTimelineView.tsx`).
+  - [x] M3 subphase 6: integration benchmarks, monorepo verification, and progress documentation (`m3-benchmarks.integration.test.js`, `team-search-progress.md`).
 - [ ] M4: solve joint Abyss/Onslaught teams and Theater cast/act planning.
 - [ ] M5: replace heuristic pull verdicts with explicit account-value comparisons.
 - [ ] M6: restore and verify a separate fun simulator.

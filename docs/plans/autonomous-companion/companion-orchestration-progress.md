@@ -104,13 +104,13 @@ Milestone 6 delivers the final two cornerstone requirements of the Autonomous En
 
 ### 2. Monorepo Quality Gates Summary
 
-| Gate | Command | Result |
-| :--- | :--- | :--- |
-| **API Contracts Build** | `pnpm --filter @celestia/api-contracts run build` | **PASSED** (0 errors) |
-| **API Typecheck** | `pnpm --filter @celestia/api run check-types` | **PASSED** (`tsc --noEmit`, 0 errors) |
-| **Web Typecheck** | `pnpm --filter @celestia/web run check-types` | **PASSED** (`tsc -b`, 0 errors) |
-| **API ESLint** | `pnpm --filter @celestia/api run lint` | **PASSED** (`--max-warnings 0`) |
-| **Web ESLint** | `pnpm --filter @celestia/web run lint` | **PASSED** (`--max-warnings 0`) |
-| **Production Web Build** | `pnpm --filter @celestia/web run build` | **PASSED** (Built in 738ms) |
-| **Git Diff Check** | `git diff --check` | **PASSED** (0 whitespace/formatting errors) |
-| **M6 Test Suite (36 tests)** | `vitest run ...` | **PASSED** (36/36 passing across 5 suites) |
+| Gate                         | Command                                           | Result                                      |
+| :--------------------------- | :------------------------------------------------ | :------------------------------------------ |
+| **API Contracts Build**      | `pnpm --filter @celestia/api-contracts run build` | **PASSED** (0 errors)                       |
+| **API Typecheck**            | `pnpm --filter @celestia/api run check-types`     | **PASSED** (`tsc --noEmit`, 0 errors)       |
+| **Web Typecheck**            | `pnpm --filter @celestia/web run check-types`     | **PASSED** (`tsc -b`, 0 errors)             |
+| **API ESLint**               | `pnpm --filter @celestia/api run lint`            | **PASSED** (`--max-warnings 0`)             |
+| **Web ESLint**               | `pnpm --filter @celestia/web run lint`            | **PASSED** (`--max-warnings 0`)             |
+| **Production Web Build**     | `pnpm --filter @celestia/web run build`           | **PASSED** (Built in 738ms)                 |
+| **Git Diff Check**           | `git diff --check`                                | **PASSED** (0 whitespace/formatting errors) |
+| **M6 Test Suite (36 tests)** | `vitest run ...`                                  | **PASSED** (36/36 passing across 5 suites)  |

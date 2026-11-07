@@ -15,7 +15,6 @@ export {
 } from './auth/auth.schema.js';
 export { type MeResponse, meResponseSchema } from './auth/me.schema.js';
 export * from './genshin/account-context.js';
-export * from './genshin/companion-summary.js';
 export type {
   AdviceAvailability,
   AdviceDomain,
@@ -65,6 +64,7 @@ export {
   type UnknownResinState,
   type WeeklyClaimsState,
 } from './genshin/companion.js';
+export * from './genshin/companion-summary.js';
 export * from './genshin/contextual-advice.js';
 export * from './genshin/contextual-release.js';
 export * from './genshin/endgame-planning.js';

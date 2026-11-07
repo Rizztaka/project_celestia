@@ -1061,6 +1061,8 @@ import type {
   WishBanner as Banner,
   WishRequest as SimulatePullsPayload,
   WishResult as SimulatePullsResult,
+  WishSandboxCatalog,
+  WishSandboxRequest,
 } from '@celestia/api-contracts';
 
 /**
@@ -1077,6 +1079,27 @@ export async function fetchBanners(): Promise<Banner[]> {
  */
 export async function simulatePulls(payload: SimulatePullsPayload): Promise<SimulatePullsResult> {
   return fetchApi<SimulatePullsResult>('/games/genshin/simulators/simulate-pulls', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+/**
+ * fetchSandboxCatalog — GET /games/genshin/simulators/sandbox/catalog
+ * Public stateless endpoint returning versioned catalog and disclaimer notices.
+ */
+export async function fetchSandboxCatalog(signal?: AbortSignal): Promise<WishSandboxCatalog> {
+  return fetchApi<WishSandboxCatalog>('/games/genshin/simulators/sandbox/catalog', { signal });
+}
+
+/**
+ * simulateSandboxPulls — POST /games/genshin/simulators/sandbox/pulls
+ * Public stateless endpoint running a gacha simulation with versioned rule checks.
+ */
+export async function simulateSandboxPulls(
+  payload: WishSandboxRequest,
+): Promise<SimulatePullsResult> {
+  return fetchApi<SimulatePullsResult>('/games/genshin/simulators/sandbox/pulls', {
     method: 'POST',
     body: JSON.stringify(payload),
   });
@@ -1115,6 +1138,41 @@ export interface ProgressionIntelligenceResponse {
  */
 export async function fetchProgressionIntelligence(): Promise<ProgressionIntelligenceResponse> {
   return fetchApi<ProgressionIntelligenceResponse>('/games/genshin/intelligence/progression');
+}
+
+// ============================================================
+// Companion Orchestration Summary (Milestone 6)
+// ============================================================
+
+import type { CompanionSummaryResponse } from '@celestia/api-contracts';
+
+/**
+ * fetchCompanionSummary — GET /games/genshin/intelligence/summary
+ * Returns the orchestrated companion summary for an authenticated user.
+ */
+export async function fetchCompanionSummary(
+  signal?: AbortSignal,
+  session?: AccountSession,
+): Promise<CompanionSummaryResponse> {
+  return fetchApi<CompanionSummaryResponse>(
+    '/games/genshin/intelligence/summary',
+    { signal },
+    session,
+  );
+}
+
+/**
+ * fetchPublicCompanionSummary — GET /games/genshin/public/uid/:uid/intelligence/summary
+ * Returns the orchestrated companion summary for a public showcase UID.
+ */
+export async function fetchPublicCompanionSummary(
+  uid: string,
+  signal?: AbortSignal,
+): Promise<CompanionSummaryResponse> {
+  return fetchApi<CompanionSummaryResponse>(
+    `/games/genshin/public/uid/${encodeURIComponent(uid)}/intelligence/summary`,
+    { signal },
+  );
 }
 
 // ============================================================

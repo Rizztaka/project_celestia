@@ -15,6 +15,7 @@ export {
 } from './auth/auth.schema.js';
 export { type MeResponse, meResponseSchema } from './auth/me.schema.js';
 export * from './genshin/account-context.js';
+export * from './genshin/companion-summary.js';
 export type {
   AdviceAvailability,
   AdviceDomain,

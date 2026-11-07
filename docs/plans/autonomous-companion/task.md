@@ -41,7 +41,12 @@ Detailed contracts and acceptance: [implementation plan](implementation_plan.md)
   - [x] M5 subphase 4: service, controller, and authenticated/public HTTP routes with partial showcase data guards (`pull-intelligence.service.ts`, `pull-intelligence.controller.ts`, `pull-intelligence.routes.ts`, `pull-intelligence.http.test.ts`).
   - [x] M5 subphase 5: interactive frontend account-value pulls view, preference sliders, constellation toggles, and wish savings integration (`AccountValuePullsView.tsx`, `PullPreferenceSliders.tsx`, `IntelligencePage.tsx`).
   - [x] M5 subphase 6: end-to-end integration benchmarks, monorepo verification, and progress documentation (`m5-benchmarks.integration.test.js`, `pull-intelligence-progress.md`).
-- [ ] M6: restore and verify a separate fun simulator.
-- [ ] M6: compose automatic refresh and a convenient next-action summary.
+- [x] M6: restore and verify a separate fun simulator; [verification](companion-orchestration-progress.md).
+  - [x] M6 subphase 1: pure client wish sandbox state machine and bounded local persistence (`wish-sandbox-session.ts`).
+  - [x] M6 subphase 2: interactive wish sandbox UI, scenario selection, pity overrides, and public/authenticated routes (`WishSandboxView.tsx`, `/simulators`).
+- [x] M6: compose automatic refresh and a convenient next-action summary; [verification](companion-orchestration-progress.md).
+  - [x] M6 subphase 3: shared contracts and companion summary orchestration backend (`companion-summary.calculator.ts`, `companion-summary.service.ts`).
+  - [x] M6 subphase 4: dashboard hero card, summary matrix, and reactive query invalidation (`NextActionSummaryCard.tsx`, `CompanionSummaryGrid.tsx`).
+  - [x] M6 subphase 5: end-to-end integration benchmarks, monorepo quality gates, and evidence documentation (`m6-benchmarks.integration.test.js`).
 
 The whole goal remains active. M0 does not mean the companion is complete.

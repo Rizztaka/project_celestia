@@ -38,6 +38,8 @@ const PasswordRecoveryPage = lazy(() => import('./pages/PasswordRecoveryPage'));
 const OAuthCallbackPage = lazy(() => import('./pages/OAuthCallbackPage'));
 const RosterPage = lazy(() => import('./pages/RosterPage'));
 const CharacterDetailPage = lazy(() => import('./pages/CharacterDetailPage'));
+const SimulatorsPage = lazy(() => import('./pages/SimulatorsPage'));
+const UidSimulatorsPage = lazy(() => import('./pages/UidSimulatorsPage'));
 const NikkeRosterPage = lazy(() =>
   import('./pages/nikke/NikkeRosterPage').then((m) => ({ default: m.NikkeRosterPage })),
 );
@@ -139,6 +141,7 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<GuestWorkspace />}>
                   <Route index element={<ShowcasePage />} />
+                  <Route path="simulators" element={<SimulatorsPage />} />
                 </Route>
                 <Route path="/showcase" element={<ShowcaseAlias />} />
                 <Route path="/u/:uid" element={<UidWorkspace />}>
@@ -151,6 +154,7 @@ export default function App() {
                   <Route path="inventory" element={<UidEquipmentPage />} />
                   <Route path="showcase" element={<PublicShowcasePage />} />
                   <Route path="character/:id" element={<PublicShowcasePage />} />
+                  <Route path="simulators" element={<UidSimulatorsPage />} />
                 </Route>
                 <Route path="/login" element={<Navigate to="/" replace />} />
                 <Route path="/register" element={<Navigate to="/" replace />} />
@@ -174,10 +178,7 @@ export default function App() {
                       <Route path="/intelligence" element={<IntelligencePage />} />
                       <Route path="/endgame" element={<EndgamePage />} />
                       <Route path="/nikke/roster" element={<NikkeRosterPage />} />
-                      <Route
-                        path="/simulators"
-                        element={<Navigate to="/planner?tab=savings" replace />}
-                      />
+                      <Route path="/simulators" element={<SimulatorsPage />} />
                     </Route>
                   </Route>
                 </Route>

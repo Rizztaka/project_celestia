@@ -3,15 +3,19 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { CompanionSummaryGrid } from '../components/dashboard/CompanionSummaryGrid';
+import { NextActionSummaryCard } from '../components/dashboard/NextActionSummaryCard';
 import DashboardWelcome from '../components/DashboardWelcome';
 import TodayPlan from '../components/TodayPlan';
 import { captureSession, isCurrentSession } from '../lib/account-session';
 import { ApiError, fetchApi } from '../lib/api';
+import { useCompanionSummary } from '../lib/use-companion-summary';
 import { useAuthStore } from '../stores/auth.store';
 
 export default function DashboardPage() {
   const logout = useAuthStore((state) => state.logout);
   const [session] = useState(captureSession);
+  const { summary } = useCompanionSummary();
   const me = useQuery({
     queryKey: ['me'],
     queryFn: ({ signal }) => fetchApi<MeResponse>('/auth/me', { signal }, session),
@@ -23,8 +27,14 @@ export default function DashboardPage() {
   }, [me.error, logout, session]);
   return (
     <div className="min-h-screen text-zinc-300">
-      <main id="companion-content" tabIndex={-1} className="today-page">
+      <main id="companion-content" tabIndex={-1} className="today-page space-y-6">
         <DashboardWelcome />
+        {summary && (
+          <div className="space-y-4">
+            <NextActionSummaryCard summary={summary} />
+            <CompanionSummaryGrid summary={summary} />
+          </div>
+        )}
         {me.error && (
           <p role="alert">
             Account details could not refresh. Your last confirmed panels remain available.

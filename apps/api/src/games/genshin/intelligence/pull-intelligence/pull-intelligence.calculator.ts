@@ -441,7 +441,8 @@ export function evaluateCounterfactualAddition(params: {
     savingsAdvice =
       'Moderate reserve: coin-flip on 50/50. Saving additional wishes recommended for security.';
   } else {
-    savingsAdvice = 'Low reserves: high risk of missing target. Saving recommended unless willing to top up.';
+    savingsAdvice =
+      'Low reserves: high risk of missing target. Saving recommended unless willing to top up.';
   }
 
   const budgetForecast: PullBudgetForecast = {
@@ -470,7 +471,10 @@ export function evaluateCounterfactualAddition(params: {
     strategicRecommendation = 'HIGH_ACCOUNT_VALUE';
   } else if (redundancyPenalty >= 30 && totalScore < 45) {
     strategicRecommendation = 'NICHE_OR_REDUNDANT';
-  } else if (totalScore < 35 || (hasBudgetSpecified && totalScore < 55 && acquisitionProbability < 0.35)) {
+  } else if (
+    totalScore < 35 ||
+    (hasBudgetSpecified && totalScore < 55 && acquisitionProbability < 0.35)
+  ) {
     strategicRecommendation = 'SAVE_RECOMMENDED';
   } else {
     strategicRecommendation = 'MODERATE_UPGRADE';

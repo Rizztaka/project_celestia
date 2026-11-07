@@ -1155,7 +1155,9 @@ function NoAccountTrackerFallback({ uid }: { uid?: string }) {
           />
         </svg>
       </div>
-      <h3 className="font-display text-lg font-bold text-white">Historical Tracker Requires Account</h3>
+      <h3 className="font-display text-lg font-bold text-white">
+        Historical Tracker Requires Account
+      </h3>
       <p className="max-w-md text-xs text-zinc-400">
         {uid
           ? 'You are viewing a public showcase. Historical run logging requires a Celestia account. Use the Joint Optimizer above to calculate optimal lineups for this UID.'

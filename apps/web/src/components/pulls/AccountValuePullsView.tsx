@@ -104,10 +104,7 @@ export function AccountValuePullsView({ uid, className = '' }: AccountValuePulls
   });
 
   return (
-    <section
-      aria-label="Account-Value Pulls"
-      className={`space-y-6 ${className}`}
-    >
+    <section aria-label="Account-Value Pulls" className={`space-y-6 ${className}`}>
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">
@@ -115,7 +112,8 @@ export function AccountValuePullsView({ uid, className = '' }: AccountValuePulls
           </span>
           <h2 className="text-2xl font-bold text-white">Account-Value Pulls</h2>
           <p className="mt-1 text-sm text-zinc-400">
-            Personalized counterfactual evaluation across team flexibility, endgame coverage, and wish budget.
+            Personalized counterfactual evaluation across team flexibility, endgame coverage, and
+            wish budget.
           </p>
         </div>
 
@@ -126,7 +124,8 @@ export function AccountValuePullsView({ uid, className = '' }: AccountValuePulls
         >
           <span>{showPreferences ? 'Hide Preferences' : 'Adjust Priorities & Budget'}</span>
           <span className="text-xs text-amber-400">
-            ({Math.round(weights.weightEndgame * 100)}% / {Math.round(weights.weightFlexibility * 100)}%)
+            ({Math.round(weights.weightEndgame * 100)}% /{' '}
+            {Math.round(weights.weightFlexibility * 100)}%)
           </span>
         </button>
       </header>
@@ -137,7 +136,9 @@ export function AccountValuePullsView({ uid, className = '' }: AccountValuePulls
           role="status"
           className="flex items-start gap-3 rounded-xl border border-amber-800/60 bg-amber-950/40 p-4 text-xs text-amber-200"
         >
-          <span className="text-base" aria-hidden="true">⚠️</span>
+          <span className="text-base" aria-hidden="true">
+            ⚠️
+          </span>
           <div>
             <strong className="block font-semibold">Partial Showcase Account Active</strong>
             Unobserved characters from public showcases are treated as unknown rather than unowned.
@@ -164,10 +165,15 @@ export function AccountValuePullsView({ uid, className = '' }: AccountValuePulls
       )}
 
       {query.isError && (
-        <div role="alert" className="glass-panel rounded-2xl border-red-900/60 p-6 text-sm text-red-300">
+        <div
+          role="alert"
+          className="glass-panel rounded-2xl border-red-900/60 p-6 text-sm text-red-300"
+        >
           <p className="font-medium">Could not evaluate pull intelligence.</p>
           <p className="mt-1 text-xs text-zinc-400">
-            {query.error instanceof Error ? query.error.message : 'Please check your connection and account state.'}
+            {query.error instanceof Error
+              ? query.error.message
+              : 'Please check your connection and account state.'}
           </p>
           <button
             type="button"
@@ -295,9 +301,7 @@ export function PullCard({
             </div>
           </div>
 
-          <span
-            className={`rounded-full border px-3 py-1 text-xs font-semibold ${verdict.color}`}
-          >
+          <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${verdict.color}`}>
             {verdict.label}
           </span>
         </div>
@@ -312,13 +316,13 @@ export function PullCard({
               onClick={() => handleModeSwitch('c0_unlock')}
               className={`rounded-lg px-2.5 py-1 text-xs font-medium transition ${
                 effectiveRec.mode === 'c0_unlock'
-                  ? 'bg-amber-500 text-zinc-950 font-semibold shadow-sm'
+                  ? 'bg-amber-500 font-semibold text-zinc-950 shadow-sm'
                   : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
               }`}
             >
               C0 Unlock
             </button>
-            <div className="inline-flex rounded-lg bg-zinc-900 p-0.5 border border-zinc-800">
+            <div className="inline-flex rounded-lg border border-zinc-800 bg-zinc-900 p-0.5">
               {[1, 2, 3, 6].map((c) => (
                 <button
                   key={c}
@@ -326,9 +330,8 @@ export function PullCard({
                   disabled={isComparing}
                   onClick={() => handleModeSwitch('constellation', c)}
                   className={`rounded-md px-2 py-0.5 text-xs transition ${
-                    effectiveRec.mode === 'constellation' &&
-                    effectiveRec.targetConstellation === c
-                      ? 'bg-amber-500/20 text-amber-300 font-semibold'
+                    effectiveRec.mode === 'constellation' && effectiveRec.targetConstellation === c
+                      ? 'bg-amber-500/20 font-semibold text-amber-300'
                       : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
@@ -354,7 +357,7 @@ export function PullCard({
             <span className="text-xs font-medium uppercase tracking-wider text-zinc-400">
               Account Value Score
               {isComparing && (
-                <span className="ml-2 animate-pulse text-amber-400 font-normal">
+                <span className="ml-2 animate-pulse font-normal text-amber-400">
                   (recalculating…)
                 </span>
               )}
@@ -398,8 +401,11 @@ export function PullCard({
           {/* Redundancy Penalty Notice */}
           {effectiveRec.breakdown.redundancyPenalty > 0 && (
             <div className="mt-2.5 rounded-lg border border-red-900/40 bg-red-950/20 px-3 py-1.5 text-xs text-red-300">
-              <span className="font-semibold">Redundancy -{effectiveRec.breakdown.redundancyPenalty}pts: </span>
-              Competes with owned {effectiveRec.breakdown.redundantWithOwned.map(artworkDisplayName).join(', ')}.
+              <span className="font-semibold">
+                Redundancy -{effectiveRec.breakdown.redundancyPenalty}pts:{' '}
+              </span>
+              Competes with owned{' '}
+              {effectiveRec.breakdown.redundantWithOwned.map(artworkDisplayName).join(', ')}.
             </div>
           )}
         </div>
@@ -437,11 +443,14 @@ export function PullCard({
       <div className="mt-5 border-t border-zinc-800/80 pt-3 text-xs">
         <div className="flex items-center justify-between text-zinc-400">
           <span>
-            Pulls: <strong className="text-white">{effectiveRec.budgetForecast.currentPullsAvailable}</strong>
+            Pulls:{' '}
+            <strong className="text-white">
+              {effectiveRec.budgetForecast.currentPullsAvailable}
+            </strong>
           </span>
           <span>
             Acquisition Chance:{' '}
-            <strong className="text-amber-400 font-mono">
+            <strong className="font-mono text-amber-400">
               {Math.round(effectiveRec.budgetForecast.acquisitionProbability * 100)}%
             </strong>
           </span>
@@ -495,9 +504,12 @@ function CustomHypotheticalWorkbench({
     <div className="glass-panel rounded-2xl border border-zinc-800 bg-zinc-950/50 p-5 text-sm text-zinc-300">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 className="text-base font-semibold text-white">Simulate Custom Counterfactual Pull</h3>
+          <h3 className="text-base font-semibold text-white">
+            Simulate Custom Counterfactual Pull
+          </h3>
           <p className="text-xs text-zinc-400">
-            Test hypothetical account-value gains for any unowned character, future constellation, or signature weapon.
+            Test hypothetical account-value gains for any unowned character, future constellation,
+            or signature weapon.
           </p>
         </div>
         <button
@@ -513,7 +525,9 @@ function CustomHypotheticalWorkbench({
         <div className="mt-5 space-y-6 border-t border-zinc-800/80 pt-5">
           <form onSubmit={handleSimulate} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <label className="block text-xs font-medium text-zinc-400">Target Character / Key</label>
+              <label className="block text-xs font-medium text-zinc-400">
+                Target Character / Key
+              </label>
               <select
                 value={targetKey}
                 onChange={(e) => setTargetKey(e.target.value)}
@@ -564,7 +578,9 @@ function CustomHypotheticalWorkbench({
 
             {mode === 'constellation' ? (
               <div>
-                <label className="block text-xs font-medium text-zinc-400">Target Constellation</label>
+                <label className="block text-xs font-medium text-zinc-400">
+                  Target Constellation
+                </label>
                 <select
                   value={targetConstellation}
                   onChange={(e) => setTargetConstellation(Number(e.target.value))}

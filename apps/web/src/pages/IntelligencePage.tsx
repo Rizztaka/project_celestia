@@ -51,12 +51,12 @@ export default function IntelligencePage() {
               <p className="eyebrow">BUILD LAB</p>
               <h2>Clear conditions. Grounded explanations.</h2>
               <p>
-                Open a character to check recorded weapon compatibility and artifact piece counts, then
-                compare a hypothetical weapon or set without changing your saved build.
+                Open a character to check recorded weapon compatibility and artifact piece counts,
+                then compare a hypothetical weapon or set without changing your saved build.
               </p>
               <p className="mt-4">
-                Complete item descriptions remain available when an effect has no executable rule. An
-                unknown trigger stays unknown.
+                Complete item descriptions remain available when an effect has no executable rule.
+                An unknown trigger stays unknown.
               </p>
             </div>
             <div>
@@ -68,8 +68,8 @@ export default function IntelligencePage() {
                 <li>Deepwood Memories, Gilded Dreams, Golden Troupe and Marechaussee Hunter</li>
               </ul>
               <p className="mt-4">
-                These checks explain applicability. They do not calculate damage, rank teams or promise
-                an optimal build.
+                These checks explain applicability. They do not calculate damage, rank teams or
+                promise an optimal build.
               </p>
             </div>
           </div>

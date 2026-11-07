@@ -16,7 +16,17 @@
       "hardPity": 90,
       "fatePointCap": 0,
       "standardFiveStarKeys": ["Diluc", "Jean", "Mona", "Qiqi", "Keqing", "Tighnari", "Dehya"],
-      "standardFourStarKeys": ["Barbara", "Razor", "Xiangling", "Beidou", "Xingqiu", "Fischl", "Bennett", "Noelle", "Sucrose"]
+      "standardFourStarKeys": [
+        "Barbara",
+        "Razor",
+        "Xiangling",
+        "Beidou",
+        "Xingqiu",
+        "Fischl",
+        "Bennett",
+        "Noelle",
+        "Sucrose"
+      ]
     },
     {
       "bannerId": "banner_citlali_active",
@@ -32,7 +42,17 @@
       "hardPity": 90,
       "fatePointCap": 0,
       "standardFiveStarKeys": ["Diluc", "Jean", "Mona", "Qiqi", "Keqing", "Tighnari", "Dehya"],
-      "standardFourStarKeys": ["Barbara", "Razor", "Xiangling", "Beidou", "Xingqiu", "Fischl", "Bennett", "Noelle", "Sucrose"]
+      "standardFourStarKeys": [
+        "Barbara",
+        "Razor",
+        "Xiangling",
+        "Beidou",
+        "Xingqiu",
+        "Fischl",
+        "Bennett",
+        "Noelle",
+        "Sucrose"
+      ]
     },
     {
       "bannerId": "banner_xilonen_active",
@@ -48,7 +68,17 @@
       "hardPity": 90,
       "fatePointCap": 0,
       "standardFiveStarKeys": ["Diluc", "Jean", "Mona", "Qiqi", "Keqing", "Tighnari", "Dehya"],
-      "standardFourStarKeys": ["Barbara", "Razor", "Xiangling", "Beidou", "Xingqiu", "Fischl", "Bennett", "Noelle", "Sucrose"]
+      "standardFourStarKeys": [
+        "Barbara",
+        "Razor",
+        "Xiangling",
+        "Beidou",
+        "Xingqiu",
+        "Fischl",
+        "Bennett",
+        "Noelle",
+        "Sucrose"
+      ]
     },
     {
       "bannerId": "weapon_53_active",
@@ -56,15 +86,34 @@
       "type": "WEAPON",
       "fiveStarKey": "AThousandBlazingSuns",
       "fiveStarKeys": ["AThousandBlazingSuns", "StarcallersWatch"],
-      "fourStarKeys": ["FavoniusSword", "SacrificialGreatsword", "FavoniusLance", "TheWidsith", "TheStringless"],
+      "fourStarKeys": [
+        "FavoniusSword",
+        "SacrificialGreatsword",
+        "FavoniusLance",
+        "TheWidsith",
+        "TheStringless"
+      ],
       "startDate": "2026-11-01",
       "endDate": "2029-12-31",
       "historical": false,
       "sourceUrl": "https://genshin.hoyoverse.com/en/news/detail/127690",
       "hardPity": 80,
       "fatePointCap": 1,
-      "standardFiveStarKeys": ["SkywardHarp", "SkywardAtlas", "SkywardPride", "SkywardSpine", "SkywardBlade", "AquilaFavonia"],
-      "standardFourStarKeys": ["FavoniusSword", "TheFlute", "SacrificialSword", "LionsRoar", "FavoniusGreatsword"]
+      "standardFiveStarKeys": [
+        "SkywardHarp",
+        "SkywardAtlas",
+        "SkywardPride",
+        "SkywardSpine",
+        "SkywardBlade",
+        "AquilaFavonia"
+      ],
+      "standardFourStarKeys": [
+        "FavoniusSword",
+        "TheFlute",
+        "SacrificialSword",
+        "LionsRoar",
+        "FavoniusGreatsword"
+      ]
     },
     {
       "bannerId": "banner_mavuika_phase1",

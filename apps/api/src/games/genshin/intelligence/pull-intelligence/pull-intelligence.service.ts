@@ -45,7 +45,10 @@ const { constellations: CONSTELLATION_BENCHMARKS } =
     constellations: ConstellationBenchmarksMap;
   };
 
-const CHARACTER_ELEMENTS = require('../../static/character-elements.json') as Record<string, string>;
+const CHARACTER_ELEMENTS = require('../../static/character-elements.json') as Record<
+  string,
+  string
+>;
 
 // Re-export response types for convenience
 export type { PullIntelligenceResponse, PullRecommendation };

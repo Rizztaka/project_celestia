@@ -32,7 +32,8 @@ export function PullPreferenceSliders({
       <div>
         <h3 className="text-base font-medium text-white">Priorities & Preferences</h3>
         <p className="mt-1 text-xs text-zinc-400">
-          Tune the multi-objective evaluation weights to prioritize what matters most to your playstyle.
+          Tune the multi-objective evaluation weights to prioritize what matters most to your
+          playstyle.
         </p>
       </div>
 
@@ -40,7 +41,9 @@ export function PullPreferenceSliders({
         <div>
           <div className="flex justify-between text-xs">
             <span>Endgame Clearance</span>
-            <span className="font-mono text-amber-400">{Math.round(weights.weightEndgame * 100)}%</span>
+            <span className="font-mono text-amber-400">
+              {Math.round(weights.weightEndgame * 100)}%
+            </span>
           </div>
           <input
             type="range"
@@ -55,7 +58,9 @@ export function PullPreferenceSliders({
         <div>
           <div className="flex justify-between text-xs">
             <span>Support Flexibility</span>
-            <span className="font-mono text-cyan-400">{Math.round(weights.weightFlexibility * 100)}%</span>
+            <span className="font-mono text-cyan-400">
+              {Math.round(weights.weightFlexibility * 100)}%
+            </span>
           </div>
           <input
             type="range"
@@ -70,7 +75,9 @@ export function PullPreferenceSliders({
         <div>
           <div className="flex justify-between text-xs">
             <span>Execution Comfort</span>
-            <span className="font-mono text-emerald-400">{Math.round(weights.weightComfort * 100)}%</span>
+            <span className="font-mono text-emerald-400">
+              {Math.round(weights.weightComfort * 100)}%
+            </span>
           </div>
           <input
             type="range"
@@ -85,7 +92,9 @@ export function PullPreferenceSliders({
         <div>
           <div className="flex justify-between text-xs">
             <span>Favorites Synergy</span>
-            <span className="font-mono text-purple-400">{Math.round(weights.weightFavorites * 100)}%</span>
+            <span className="font-mono text-purple-400">
+              {Math.round(weights.weightFavorites * 100)}%
+            </span>
           </div>
           <input
             type="range"
@@ -99,7 +108,9 @@ export function PullPreferenceSliders({
       </div>
 
       <div className="border-t border-zinc-800 pt-4">
-        <h4 className="text-xs font-medium uppercase tracking-wider text-zinc-400">Wish Budget Context</h4>
+        <h4 className="text-xs font-medium uppercase tracking-wider text-zinc-400">
+          Wish Budget Context
+        </h4>
         <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <label className="flex flex-col gap-1 text-xs">
             <span className="text-zinc-400">Primogems</span>
@@ -131,7 +142,9 @@ export function PullPreferenceSliders({
               min={0}
               max={89}
               value={budget.pity}
-              onChange={(e) => updateBudget('pity', Math.min(89, Math.max(0, Number(e.target.value))))}
+              onChange={(e) =>
+                updateBudget('pity', Math.min(89, Math.max(0, Number(e.target.value))))
+              }
               className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-white focus:border-amber-500"
             />
           </label>

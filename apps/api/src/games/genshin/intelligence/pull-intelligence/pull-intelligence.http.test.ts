@@ -12,29 +12,24 @@ vi.mock('@/core/config/env.js', () => ({
   },
 }));
 
-const {
-  mockPrismaSession,
-  mockPrismaUser,
-  mockPrismaAccount,
-  mockPrismaPref,
-  mockPrismaShowcase,
-} = vi.hoisted(() => ({
-  mockPrismaSession: {
-    findFirst: vi.fn(),
-  },
-  mockPrismaUser: {
-    findUnique: vi.fn(),
-  },
-  mockPrismaAccount: {
-    findUnique: vi.fn(),
-  },
-  mockPrismaPref: {
-    findUnique: vi.fn(),
-  },
-  mockPrismaShowcase: {
-    findUnique: vi.fn(),
-  },
-}));
+const { mockPrismaSession, mockPrismaUser, mockPrismaAccount, mockPrismaPref, mockPrismaShowcase } =
+  vi.hoisted(() => ({
+    mockPrismaSession: {
+      findFirst: vi.fn(),
+    },
+    mockPrismaUser: {
+      findUnique: vi.fn(),
+    },
+    mockPrismaAccount: {
+      findUnique: vi.fn(),
+    },
+    mockPrismaPref: {
+      findUnique: vi.fn(),
+    },
+    mockPrismaShowcase: {
+      findUnique: vi.fn(),
+    },
+  }));
 
 vi.mock('@/core/db/prisma.js', () => ({
   prisma: {

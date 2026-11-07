@@ -75,7 +75,7 @@ Milestone 6 delivers the final two cornerstone requirements of the Autonomous En
 - **Dashboard UI Presentation** (`apps/web/src/components/dashboard/`):
   - `NextActionSummaryCard.tsx`: Hero card with category color badge, actionable headline, primary action button linking directly to target workflow, interactive "Why this focus?" rationale drawer, and a direct "↻ Refresh" advice trigger.
   - `CompanionSummaryGrid.tsx`: 5-card responsive matrix displaying Ready Builds (M2), Top Upgrades with "Drop Today" badge (M2), Team Lineup (M3), Endgame Center (M4), and Wish Advisor (M5).
-  - Fully integrated into both `DashboardPage.tsx` (authenticated workspace) and `UidDashboardPage.tsx` (public showcase workspace).
+  - Integrated into `DashboardPage.tsx` (the authenticated companion home), while preserving the zero-unbudgeted-network cache contract of `UidDashboardPage.tsx`.
 
 ---
 

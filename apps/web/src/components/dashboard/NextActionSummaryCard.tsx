@@ -4,7 +4,15 @@ import { Link } from 'react-router-dom';
 
 import { UiIcon } from '../Ui';
 
-export function NextActionSummaryCard({ summary }: { summary: CompanionSummaryResponse }) {
+export function NextActionSummaryCard({
+  summary,
+  onRefresh,
+  isRefreshing = false,
+}: {
+  summary: CompanionSummaryResponse;
+  onRefresh?: () => void;
+  isRefreshing?: boolean;
+}) {
   const [showExplanation, setShowExplanation] = useState(false);
   const action = summary?.primaryAction;
   if (!action || !action.category) return null;
@@ -59,6 +67,17 @@ export function NextActionSummaryCard({ summary }: { summary: CompanionSummaryRe
           >
             {showExplanation ? 'Hide Rationale' : 'Why this focus?'}
           </button>
+          {onRefresh && (
+            <button
+              type="button"
+              onClick={onRefresh}
+              disabled={isRefreshing}
+              className="rounded-xl border border-zinc-700/80 bg-zinc-800/80 px-3 py-2.5 text-xs font-medium text-zinc-300 hover:bg-zinc-700 hover:text-white disabled:opacity-50"
+              title="Refresh companion advice"
+            >
+              {isRefreshing ? 'Refreshing...' : '↻ Refresh'}
+            </button>
+          )}
         </div>
       </div>
 

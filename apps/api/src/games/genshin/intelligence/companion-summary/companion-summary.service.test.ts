@@ -7,6 +7,7 @@ import { NotFoundError } from '@/core/errors/app-error.js';
 import type { GenshinCharacterService } from '../../characters/character.service.js';
 import type { ShowcaseService } from '../../showcase/showcase.service.js';
 import type { PullIntelligenceService } from '../pull-intelligence/pull-intelligence.service.js';
+import type { TeamIntelligenceService } from '../team-intelligence/team-intelligence.service.js';
 import { CompanionSummaryService } from './companion-summary.service.js';
 
 describe('CompanionSummaryService', () => {
@@ -16,6 +17,9 @@ describe('CompanionSummaryService', () => {
   let mockPullService: {
     getRecommendations: ReturnType<typeof vi.fn>;
     getPublicShowcaseRecommendations: ReturnType<typeof vi.fn>;
+  };
+  let mockTeamService: {
+    getRecommendations: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
@@ -94,6 +98,27 @@ describe('CompanionSummaryService', () => {
       }),
     };
 
+    mockTeamService = {
+      getRecommendations: vi.fn().mockResolvedValue({
+        recommendations: [
+          {
+            templateName: 'Mavuika Hypercarry',
+            archetype: 'Vaporize / Melt Burst',
+            reaction: 'vaporize',
+            score: 95,
+            isBuildable: true,
+            roster: [
+              { characterKey: 'Mavuika' },
+              { characterKey: 'Bennett' },
+              { characterKey: 'Xilonen' },
+              { characterKey: 'Citlali' },
+            ],
+            explanations: ['Exceptional Natlan burst scaling with double pyro resonance.'],
+          },
+        ],
+      }),
+    };
+
     service = new CompanionSummaryService(
       undefined,
       undefined,
@@ -101,6 +126,7 @@ describe('CompanionSummaryService', () => {
       mockPullService as unknown as PullIntelligenceService,
       mockCharacterService as unknown as GenshinCharacterService,
       mockShowcaseService as unknown as ShowcaseService,
+      mockTeamService as unknown as TeamIntelligenceService,
     );
   });
 
@@ -122,6 +148,8 @@ describe('CompanionSummaryService', () => {
     expect(summary.accountScope).toBe('authenticated');
     expect(summary.isPartialAccount).toBe(false);
     expect(summary.primaryAction).toBeDefined();
+    expect(summary.teamSuggestion).toBeDefined();
+    expect(summary.teamSuggestion?.teamName).toBe('Mavuika Hypercarry');
     expect(summary.narrativeOverview.length).toBeGreaterThan(0);
 
     const parsed = companionSummaryResponseSchema.safeParse(summary);

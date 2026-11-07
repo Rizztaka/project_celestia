@@ -9,22 +9,26 @@ export function useCompanionSummary(uid?: string) {
   const [session] = useState(captureSession);
   const queryClient = useQueryClient();
 
+  const isPublic = typeof uid === 'string';
+
   const queryKey = useMemo(
     () =>
-      uid
+      isPublic
         ? ['genshin', 'companion-summary', uid]
         : ['genshin', 'companion-summary', 'authenticated'],
-    [uid],
+    [isPublic, uid],
   );
 
   const query = useQuery<CompanionSummaryResponse>({
     queryKey,
     queryFn: ({ signal }) => {
-      if (uid) {
+      if (isPublic) {
+        if (!uid) throw new Error('UID is required for public companion summary.');
         return fetchPublicCompanionSummary(uid, signal);
       }
       return fetchCompanionSummary(signal, session);
     },
+    enabled: isPublic ? Boolean(uid) : true,
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });

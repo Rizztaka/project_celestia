@@ -15,7 +15,7 @@ import { useAuthStore } from '../stores/auth.store';
 export default function DashboardPage() {
   const logout = useAuthStore((state) => state.logout);
   const [session] = useState(captureSession);
-  const { summary } = useCompanionSummary();
+  const { summary, refetch, isFetching } = useCompanionSummary();
   const me = useQuery({
     queryKey: ['me'],
     queryFn: ({ signal }) => fetchApi<MeResponse>('/auth/me', { signal }, session),
@@ -31,7 +31,11 @@ export default function DashboardPage() {
         <DashboardWelcome />
         {summary && (
           <div className="space-y-4">
-            <NextActionSummaryCard summary={summary} />
+            <NextActionSummaryCard
+              summary={summary}
+              onRefresh={() => void refetch()}
+              isRefreshing={isFetching}
+            />
             <CompanionSummaryGrid summary={summary} />
           </div>
         )}

@@ -57,7 +57,11 @@ Milestone 6 delivers the final two cornerstone requirements of the Autonomous En
   - `apps/api/src/games/genshin/intelligence/companion-summary/companion-summary.explainer.ts`: Generates plain-English narrative bullet points explaining today's focus, encounter thresholds, drop schedules, endgame bottlenecks, and wish recommendations.
 
 - **Companion Summary Service & Routes**:
-  - `apps/api/src/games/genshin/intelligence/companion-summary/companion-summary.service.ts`: Orchestrates M2–M5 services in parallel using `Promise.allSettled` to prevent partial engine failures from crashing the companion dashboard.
+  - `apps/api/src/games/genshin/intelligence/companion-summary/companion-summary.service.ts`: Orchestrates M2–M5 services in parallel:
+    - M2 Character Readiness & Marginal Investment via `ReadinessIntelligenceService` and `MarginalInvestmentService`.
+    - M3 Team Lineup via `TeamIntelligenceService` (extracting top buildable meta templates and defensible rotations).
+    - M4 Endgame Joint Allocation via `EndgameIntelligenceService` (estimating Abyss harmonic clearance and Theater act capacity).
+    - M5 Pull Intelligence via `PullIntelligenceService` (assessing active banner account-value).
   - Correlates candidate material keys with server-date rotating domain drops from `domainSchedule.json`.
   - Mounted at `/api/v1/games/genshin/intelligence/summary` (authenticated) and `/api/v1/games/genshin/public/uid/:uid/intelligence/summary` (public showcase).
 
@@ -65,12 +69,13 @@ Milestone 6 delivers the final two cornerstone requirements of the Autonomous En
 
 - **TanStack Query Hook** (`apps/web/src/lib/use-companion-summary.ts`):
   - Provides `useCompanionSummary(uid?)` with 5-minute stale time.
-  - Provides `useInvalidateCompanionSummary()` to automatically refresh upon account syncs or roster mutations.
+  - Safely separates authenticated queries from public showcase queries using explicit `isPublic` gates.
+  - Automatically participates in `invalidateIntentQueries(client)` on import or account changes.
 
 - **Dashboard UI Presentation** (`apps/web/src/components/dashboard/`):
-  - `NextActionSummaryCard.tsx`: Hero card with category color badge, actionable headline, primary action button linking directly to target workflow, and expandable explanation drawer.
+  - `NextActionSummaryCard.tsx`: Hero card with category color badge, actionable headline, primary action button linking directly to target workflow, interactive "Why this focus?" rationale drawer, and a direct "↻ Refresh" advice trigger.
   - `CompanionSummaryGrid.tsx`: 5-card responsive matrix displaying Ready Builds (M2), Top Upgrades with "Drop Today" badge (M2), Team Lineup (M3), Endgame Center (M4), and Wish Advisor (M5).
-  - Integrated into `DashboardPage.tsx` with defensive fallback handling.
+  - Fully integrated into both `DashboardPage.tsx` (authenticated workspace) and `UidDashboardPage.tsx` (public showcase workspace).
 
 ---
 
@@ -80,13 +85,13 @@ Milestone 6 delivers the final two cornerstone requirements of the Autonomous En
 
 - **Wish Sandbox Unit Tests** (`apps/api/tooling/wish-sandbox-session.test.js`):
   - 14 tests verifying initial state, pity sharing across character banners, independent weapon pity, Fate Point reset on path switch, bounded 200-pull FIFO retention, and storage corruption recovery.
-  - Output: `✓ tooling/wish-sandbox-session.test.js (14 tests) 10ms`.
+  - Output: `✓ tooling/wish-sandbox-session.test.js (14 tests) 12ms`.
 
 - **Companion Summary Unit Tests** (`apps/api/src/games/genshin/intelligence/companion-summary/`):
   - `companion-summary.calculator.test.ts` (8 tests): Open domain prioritization, endgame fallback, pull advice elevation, team lineup synthesis, empty roster safety.
-  - `companion-summary.service.test.ts` (4 tests): Authenticated and public showcase synthesis, server domain date alignment.
+  - `companion-summary.service.test.ts` (4 tests): Authenticated and public showcase synthesis, team recommendation integration, server domain date alignment.
   - `companion-summary.http.test.ts` (4 tests): Express route validation, unauthenticated 401, public showcase 200.
-  - Output: `✓ 16 passed in 75ms`.
+  - Output: `✓ 16 passed in 73ms`.
 
 - **M6 Integration Benchmarks** (`apps/api/tooling/m6-benchmarks.integration.test.js`):
   - Benchmark 1: Synthesizes readiness, marginal investment, and domain schedule into `FARMING_AVAILABLE` action.
@@ -95,7 +100,7 @@ Milestone 6 delivers the final two cornerstone requirements of the Autonomous En
   - Benchmark 4: Handles safe degradation for empty roster and partial public showcase data with caveats.
   - Benchmark 5: Sub-100ms execution latency benchmark across 100 consecutive synthesis calculations (**3ms total, 0.03ms per iteration**).
   - Benchmark 6: Fictional wish sandbox state machine transitions and complete isolation from account data.
-  - Output: `✓ tooling/m6-benchmarks.integration.test.js (6 tests) 14ms`.
+  - Output: `✓ tooling/m6-benchmarks.integration.test.js (6 tests) 23ms`.
 
 ### 2. Monorepo Quality Gates Summary
 
@@ -106,6 +111,6 @@ Milestone 6 delivers the final two cornerstone requirements of the Autonomous En
 | **Web Typecheck** | `pnpm --filter @celestia/web run check-types` | **PASSED** (`tsc -b`, 0 errors) |
 | **API ESLint** | `pnpm --filter @celestia/api run lint` | **PASSED** (`--max-warnings 0`) |
 | **Web ESLint** | `pnpm --filter @celestia/web run lint` | **PASSED** (`--max-warnings 0`) |
-| **Production Web Build** | `pnpm --filter @celestia/web run build` | **PASSED** (Built in 835ms) |
+| **Production Web Build** | `pnpm --filter @celestia/web run build` | **PASSED** (Built in 738ms) |
 | **Git Diff Check** | `git diff --check` | **PASSED** (0 whitespace/formatting errors) |
-| **Full Monorepo Test Suite** | `pnpm test` | **PASSED** (143/143 test files, 1915 passed, 0 failures) |
+| **M6 Test Suite (36 tests)** | `vitest run ...` | **PASSED** (36/36 passing across 5 suites) |

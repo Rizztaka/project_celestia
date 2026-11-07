@@ -4,6 +4,7 @@ import type {
   MarginalInvestmentRequestInput,
   PullAdviceSnapshot,
   SupportedServerId,
+  TeamSuggestionSnapshot,
 } from '@celestia/api-contracts';
 
 import { prisma } from '@/core/db/prisma.js';
@@ -17,6 +18,7 @@ import { EndgameIntelligenceService } from '../endgame-intelligence/endgame-inte
 import { MarginalInvestmentService } from '../marginal-investment/marginal-investment.service.js';
 import { PullIntelligenceService } from '../pull-intelligence/pull-intelligence.service.js';
 import { ReadinessIntelligenceService } from '../readiness-intelligence/readiness-intelligence.service.js';
+import { TeamIntelligenceService } from '../team-intelligence/team-intelligence.service.js';
 import {
   calculateCompanionSummary,
   type EvaluatedCharacterReadiness,
@@ -46,6 +48,7 @@ export class CompanionSummaryService {
     private readonly pullService = new PullIntelligenceService(),
     private readonly characterService = new GenshinCharacterService(),
     private readonly showcaseService = new ShowcaseService(),
+    private readonly teamService = new TeamIntelligenceService(),
   ) {}
 
   /**
@@ -149,6 +152,28 @@ export class CompanionSummaryService {
       // Graceful fallback if pull engine cannot evaluate
     }
 
+    // Team Intelligence (M3)
+    let teamSuggestion: TeamSuggestionSnapshot | undefined;
+    try {
+      const teamRes = await this.teamService.getRecommendations(userId);
+      if (teamRes.recommendations.length > 0) {
+        const topTeam = teamRes.recommendations[0];
+        const memberKeys = topTeam.roster
+          .map((r) => r.characterKey)
+          .filter((k): k is string => Boolean(k));
+        teamSuggestion = {
+          teamName: topTeam.templateName,
+          members: memberKeys.length > 0 ? memberKeys : ['HuTao', 'Xingqiu', 'Yelan', 'Zhongli'],
+          archetype: topTeam.archetype,
+          comfortRating: topTeam.reaction,
+          keyAdvantage: topTeam.explanations[0] ?? 'High meta synergy and reaction efficiency.',
+          targetRoute: '/teams',
+        };
+      }
+    } catch {
+      // Graceful fallback if no team is buildable or roster < 4
+    }
+
     // Endgame status
     const endgameStatus: EvaluatedEndgameStatus = {
       abyssScore: Math.min(
@@ -168,6 +193,7 @@ export class CompanionSummaryService {
       openDomainFamilies: domainFamilies,
       endgameStatus,
       pullAdvice,
+      teamSuggestion,
       timestamp: now.toISOString(),
     });
 

@@ -1,6 +1,13 @@
-// -------------------------------------------------------
-// Types — shared with Explainer and Service
-// -------------------------------------------------------
+import type {
+  AccountValueBreakdown,
+  PullBudgetForecast,
+  PullBudgetInput,
+  PullRecommendation,
+  PullTargetMode,
+  PullTargetType,
+  PullUserWeights,
+  StrategicRecommendation,
+} from '@celestia/api-contracts';
 
 import type { CharacterInput } from '../character-intelligence/character-intelligence.calculator.js';
 import type { CharacterRecommendation } from '../character-intelligence/character-intelligence.service.js';
@@ -9,207 +16,507 @@ import type {
   TeamTemplate,
 } from '../team-intelligence/team-intelligence.calculator.js';
 
-// Re-export for convenience
+// Re-export CharacterInput
 export type { CharacterInput };
 
 export interface ActiveBanner {
   bannerId: string;
   name: string;
-  type: 'CHARACTER' | 'WEAPON';
+  type: 'CHARACTER' | 'WEAPON' | 'CHRONICLED';
   fiveStarKey: string;
+  fiveStarKeys?: string[];
   fourStarKeys: string[];
+  startDate?: string;
   endDate: string;
+  historical?: boolean;
 }
 
-export type PullRecommendationLabel = 'MUST_PULL' | 'GOOD_VALUE' | 'SKIP';
+export interface ConstellationBenchmark {
+  valueScore: number;
+  comfortBoost: number;
+  category: string;
+  description: string;
+}
 
-export interface PullScoreBreakdown {
-  bannerId: string;
-  bannerName: string;
-  fiveStarKey: string;
-  fourStarKeys: string[];
+export type ConstellationBenchmarksMap = Record<string, Record<string, ConstellationBenchmark>>;
 
-  // Score components
-  alreadyOwned: boolean;
-  ownershipPenalty: number; // 0 or -100
-  teamEnablerBonus: number; // 0..60
-  teamEnablerTemplateName: string | null;
-  synergyBonus: number; // 0..40
-  synergyWith: string[]; // top invested chars that synergize
-  fourStarGapBonus: number; // 0..20
+export interface CounterfactualTargetInput {
+  targetKey: string;
+  targetType: PullTargetType;
+  mode: PullTargetMode;
+  targetConstellation?: number;
+}
 
-  totalScore: number; // clamped 0-100
-  recommendation: PullRecommendationLabel;
+export interface AccountContextInput {
+  isPartialAccount?: boolean;
+  favorites?: string[];
+  ownedWeaponKeys?: string[];
+  characterElements?: Record<string, string>;
 }
 
 // -------------------------------------------------------
-// Constants
+// Pure Probability Calculation (Absorbing Markov Chain)
 // -------------------------------------------------------
 
-const TEAM_ENABLER_BONUS_S = 60;
-const TEAM_ENABLER_BONUS_A = 40;
-const SYNERGY_BONUS = 40;
-const FOUR_STAR_GAP_BONUS = 20;
-const OWNERSHIP_PENALTY = 100;
+export function calculatePullProbability(
+  pulls: number,
+  pity: number,
+  guaranteed: boolean,
+  isWeapon: boolean,
+): number {
+  if (pulls <= 0) return 0;
+  const hard = isWeapon ? 80 : 90;
+  const base = isWeapon ? 0.007 : 0.006;
+  const soft = isWeapon ? 63 : 74;
+  const initialTargetRate = isWeapon ? (guaranteed ? 0.5 : 0.375) : guaranteed ? 1 : 0.5;
 
-/**
- * A team score >= 75 is treated as "S-tier buildable".
- * A team score >= 55 is treated as "A-tier buildable".
- */
-const TIER_S_THRESHOLD = 75;
-const TIER_A_THRESHOLD = 55;
+  let first = new Array<number>(hard).fill(0);
+  let second = new Array<number>(hard).fill(0);
+  first[Math.max(0, Math.min(hard - 1, pity))] = 1;
+  let success = 0;
 
-/**
- * Number of the user's most-invested characters we consider for synergy.
- */
-const TOP_N_FOR_SYNERGY = 3;
+  for (let pull = 0; pull < Math.min(pulls, hard * 2); pull++) {
+    const nextFirst = new Array<number>(hard).fill(0);
+    const nextSecond = new Array<number>(hard).fill(0);
+    for (let current = 0; current < hard; current++) {
+      const next = current + 1;
+      const rate =
+        next >= hard
+          ? 1
+          : Math.min(1, base + Math.max(0, next - soft + 1) * (isWeapon ? 0.07 : 0.06));
+      success += first[current] * rate * initialTargetRate + second[current] * rate;
+      nextSecond[0] += first[current] * rate * (1 - initialTargetRate);
+      if (next < hard) {
+        nextFirst[next] += first[current] * (1 - rate);
+        nextSecond[next] += second[current] * (1 - rate);
+      }
+    }
+    first = nextFirst;
+    second = nextSecond;
+  }
+
+  return Math.min(1, Math.max(0, Number(success.toFixed(4))));
+}
 
 // -------------------------------------------------------
-// Pure calculation functions
+// Pure Evaluation Helpers
 // -------------------------------------------------------
 
 /**
- * Checks whether a character key appears as a candidate in any role of
- * any template at or above the given team score threshold.
- *
- * This lets us simulate "if the user owned X, which top-tier teams open up?"
+ * Calculates archetype flexibility: count of unique archetypes
+ * where characterKey appears as a candidate.
  */
-function findBestTeamEnabledBy(
+export function calculateArchetypeFlexibility(
   characterKey: string,
   templates: TeamTemplate[],
+): { score: number; archetypes: string[] } {
+  const matchingTemplates = templates.filter((t) =>
+    t.roles.some((r) => r.candidates.includes(characterKey)),
+  );
+
+  const archetypes = Array.from(new Set(matchingTemplates.map((t) => t.archetype)));
+  // Each archetype grants 25 points, capped at 100
+  const score = Math.min(100, archetypes.length * 25);
+  return { score, archetypes };
+}
+
+/**
+ * Calculates redundancy penalty: applies when target is an on-field carry
+ * and the player already possesses invested carries of the same element.
+ */
+export function calculateRedundancyPenalty(
+  targetKey: string,
   roster: CharacterInput[],
-  currentBreakdowns: TeamScoreBreakdown[],
+  templates: TeamTemplate[],
+  characterElements: Record<string, string> = {},
+): { penalty: number; redundantWith: string[] } {
+  // Check if target is considered an on-field DPS in templates
+  const isDpsCandidate = templates.some((t) =>
+    t.roles.some(
+      (r) =>
+        r.candidates.includes(targetKey) &&
+        (r.roleId.toLowerCase().includes('dps') || r.label.toLowerCase().includes('dps')),
+    ),
+  );
+
+  if (!isDpsCandidate) {
+    return { penalty: 0, redundantWith: [] };
+  }
+
+  const targetElement = characterElements[targetKey];
+  if (!targetElement) {
+    return { penalty: 0, redundantWith: [] };
+  }
+
+  // Find owned characters sharing the same element that are built carries
+  const redundantWith: string[] = [];
+  for (const char of roster) {
+    if (char.characterKey === targetKey) continue;
+    const element = characterElements[char.characterKey];
+    if (element !== targetElement) continue;
+
+    // Check if owned char is also a DPS candidate
+    const isOwnedDps = templates.some((t) =>
+      t.roles.some(
+        (r) =>
+          r.candidates.includes(char.characterKey) &&
+          (r.roleId.toLowerCase().includes('dps') || r.label.toLowerCase().includes('dps')),
+      ),
+    );
+
+    // Consider built if ascension >= 5 or level >= 70 or talents >= 6
+    const isBuilt = char.ascension >= 5 || char.level >= 70 || char.talentNormal >= 6;
+    if (isOwnedDps && isBuilt) {
+      redundantWith.push(char.characterKey);
+    }
+  }
+
+  // 20 points per redundant carry, up to 50 max
+  const penalty = Math.min(50, redundantWith.length * 20);
+  return { penalty, redundantWith };
+}
+
+/**
+ * Estimates team comfort impact: defensive capability and rotation ease.
+ */
+export function estimateComfortImpact(
+  targetKey: string,
+  targetType: PullTargetType,
+  mode: PullTargetMode,
+  constellationBoost = 0,
+): number {
+  if (targetType === 'weapon') {
+    return 15; // Weapons primarily offer stats/damage, minor comfort
+  }
+
+  if (mode === 'constellation' && constellationBoost > 0) {
+    return Math.min(100, 20 + constellationBoost);
+  }
+
+  // Defensive characters grant high baseline comfort
+  const shielders = ['Zhongli', 'Layla', 'Thoma', 'Diona', 'Kirara', 'Noelle', 'Dehya'];
+  const healers = [
+    'Kokomi',
+    'Baizhu',
+    'Jean',
+    'Barbara',
+    'Xianyun',
+    'KukiShinobu',
+    'Bennett',
+    'Yaoyao',
+    'Charlotte',
+    'Citlali',
+  ];
+  const universalBuffers = ['KaedeharaKazuha', 'Furina', 'Xilonen', 'Sucrose', 'Nahida', 'Yelan'];
+
+  if (shielders.includes(targetKey)) return 85;
+  if (healers.includes(targetKey)) return 75;
+  if (universalBuffers.includes(targetKey)) return 55;
+
+  return 25; // Default modest baseline for general units
+}
+
+/**
+ * Calculates favorite synergy score.
+ */
+export function calculateFavoriteSynergy(
+  targetKey: string,
+  favorites: string[],
+  templates: TeamTemplate[],
+  topInvestedKeys: string[] = [],
+): number {
+  if (favorites.length === 0) {
+    // Fall back to top-invested synergy if no favorites specified
+    const matching = templates.filter(
+      (t) =>
+        t.roles.some((r) => r.candidates.includes(targetKey)) &&
+        topInvestedKeys.some((k) => t.roles.some((r) => r.candidates.includes(k))),
+    );
+    return matching.length > 0 ? 50 : 20;
+  }
+
+  if (favorites.includes(targetKey)) {
+    return 100; // The pull target IS a favorite
+  }
+
+  // Check how many favorites share a template with target
+  const synergizingFavorites = favorites.filter((fav) =>
+    templates.some(
+      (t) =>
+        t.roles.some((r) => r.candidates.includes(targetKey)) &&
+        t.roles.some((r) => r.candidates.includes(fav)),
+    ),
+  );
+
+  if (synergizingFavorites.length >= 2) return 90;
+  if (synergizingFavorites.length === 1) return 65;
+  return 15;
+}
+
+// -------------------------------------------------------
+// Main Counterfactual Evaluation Function
+// -------------------------------------------------------
+
+export function evaluateCounterfactualAddition(params: {
+  target: CounterfactualTargetInput;
+  banner: ActiveBanner;
+  roster: CharacterInput[];
+  accountContext?: AccountContextInput;
+  templates: TeamTemplate[];
+  currentBreakdowns: TeamScoreBreakdown[];
+  characterRecs?: CharacterRecommendation[];
+  userWeights?: PullUserWeights;
+  budget?: PullBudgetInput;
+  constellationBenchmarks?: ConstellationBenchmarksMap;
   scoreAllTemplatesFn: (
     templates: TeamTemplate[],
     roster: CharacterInput[],
-  ) => TeamScoreBreakdown[],
-): { bonusScore: number; templateName: string | null } {
-  // Only try for templates the character appears in as a candidate
-  const relevantTemplates = templates.filter((t) =>
-    t.roles.some((r) => r.candidates.includes(characterKey)),
-  );
+  ) => TeamScoreBreakdown[];
+}): PullRecommendation {
+  const {
+    target,
+    banner,
+    roster,
+    accountContext = {},
+    templates,
+    currentBreakdowns,
+    characterRecs = [],
+    userWeights = {
+      weightEndgame: 0.35,
+      weightFlexibility: 0.25,
+      weightComfort: 0.2,
+      weightFavorites: 0.2,
+    },
+    budget = { primogems: 0, fates: 0, pity: 0, guaranteed: false },
+    constellationBenchmarks = {},
+    scoreAllTemplatesFn,
+  } = params;
 
-  if (relevantTemplates.length === 0) {
-    return { bonusScore: 0, templateName: null };
-  }
+  const isPartial = Boolean(accountContext.isPartialAccount);
+  const favorites = accountContext.favorites ?? [];
+  const ownedWeaponKeys = accountContext.ownedWeaponKeys ?? [];
+  const characterElements = accountContext.characterElements ?? {};
 
-  // Build a simulated roster with the character added (prevent duplicates)
-  const alreadyInRoster = roster.some((c) => c.characterKey === characterKey);
-  const simulatedRoster = alreadyInRoster
-    ? roster
-    : [
-        ...roster,
-        {
-          characterKey,
-          level: 80,
-          ascension: 6,
-          constellation: 0,
-          talentNormal: 6,
-          talentSkill: 6,
-          talentBurst: 6,
-          equippedWeapon: null,
-        },
-      ];
+  const existingChar = roster.find((c) => c.characterKey === target.targetKey);
+  const alreadyOwned = existingChar !== undefined;
+  const currentConstellation = existingChar ? existingChar.constellation : 0;
 
-  const simulatedBreakdowns = scoreAllTemplatesFn(relevantTemplates, simulatedRoster);
-
-  let bestBonus = 0;
-  let bestTemplateName: string | null = null;
-
-  for (const sim of simulatedBreakdowns) {
-    if (!sim.isBuildable) continue;
-
-    // Find the current (pre-pull) score for this template
-    const current = currentBreakdowns.find((b) => b.templateId === sim.templateId);
-    const currentScore = current?.score ?? 0;
-
-    // Only count if the pull actually improves it above a tier threshold
-    if (sim.score >= TIER_S_THRESHOLD && currentScore < TIER_S_THRESHOLD) {
-      const bonus = TEAM_ENABLER_BONUS_S;
-      if (bonus > bestBonus) {
-        bestBonus = bonus;
-        bestTemplateName = relevantTemplates.find((t) => t.id === sim.templateId)?.name ?? null;
-      }
-    } else if (sim.score >= TIER_A_THRESHOLD && currentScore < TIER_A_THRESHOLD) {
-      const bonus = TEAM_ENABLER_BONUS_A;
-      if (bonus > bestBonus) {
-        bestBonus = bonus;
-        bestTemplateName = relevantTemplates.find((t) => t.id === sim.templateId)?.name ?? null;
-      }
+  // Resolve target constellation if mode is constellation or already owned
+  let effectiveMode = target.mode;
+  let targetConstellation = target.targetConstellation;
+  if (target.targetType === 'character') {
+    if (alreadyOwned && effectiveMode === 'c0_unlock') {
+      effectiveMode = 'constellation';
+      targetConstellation = Math.min(6, currentConstellation + 1);
+    } else if (effectiveMode === 'constellation' && targetConstellation === undefined) {
+      targetConstellation = Math.min(6, currentConstellation + 1);
     }
   }
 
-  return { bonusScore: bestBonus, templateName: bestTemplateName };
-}
+  // 1. Archetype flexibility
+  const { score: flexibilityScore, archetypes } =
+    target.targetType === 'character'
+      ? calculateArchetypeFlexibility(target.targetKey, templates)
+      : { score: 30, archetypes: [] };
 
-/**
- * Checks how many of the user's top-N most invested characters frequently
- * appear alongside the banner character in team templates.
- *
- * "Frequently" means they share at least one template together.
- */
-function calculateSynergyBonus(
-  characterKey: string,
-  templates: TeamTemplate[],
-  topInvestedKeys: string[],
-): { bonus: number; synergyWith: string[] } {
-  const templatesWithCharacter = templates.filter((t) =>
-    t.roles.some((r) => r.candidates.includes(characterKey)),
+  // 2. Redundancy penalty
+  const { penalty: redundancyPenalty, redundantWith } =
+    target.targetType === 'character'
+      ? calculateRedundancyPenalty(target.targetKey, roster, templates, characterElements)
+      : { penalty: 0, redundantWith: [] };
+
+  // 3. Endgame impact & newly unlocked teams
+  let endgameCoverageImpact = 0;
+  let unlockedTeamsCount = 0;
+  const unlockedArchetypes: string[] = [];
+  let constellationComfortBoost = 0;
+
+  if (target.targetType === 'character' && effectiveMode === 'c0_unlock') {
+    // Simulate adding character at Level 80 C0
+    const simRoster: CharacterInput[] = [
+      ...roster,
+      {
+        characterKey: target.targetKey,
+        level: 80,
+        ascension: 6,
+        constellation: 0,
+        talentNormal: 6,
+        talentSkill: 6,
+        talentBurst: 6,
+        equippedWeapon: null,
+      },
+    ];
+
+    const simBreakdowns = scoreAllTemplatesFn(templates, simRoster);
+    for (const sim of simBreakdowns) {
+      if (!sim.isBuildable) continue;
+      const pre = currentBreakdowns.find((b) => b.templateId === sim.templateId);
+      const preScore = pre?.score ?? 0;
+      if (sim.score >= 55 && preScore < 55) {
+        unlockedTeamsCount++;
+        const tpl = templates.find((t) => t.id === sim.templateId);
+        if (tpl && !unlockedArchetypes.includes(tpl.archetype)) {
+          unlockedArchetypes.push(tpl.archetype);
+        }
+      }
+    }
+
+    const baselineGain = unlockedTeamsCount * 30;
+    endgameCoverageImpact = Math.min(100, Math.max(25, baselineGain));
+  } else if (effectiveMode === 'constellation') {
+    // Constellation benchmark lookup
+    const charBenchmarks = constellationBenchmarks[target.targetKey] ?? {};
+    const benchmark = targetConstellation ? charBenchmarks[String(targetConstellation)] : null;
+    if (benchmark) {
+      endgameCoverageImpact = benchmark.valueScore;
+      constellationComfortBoost = benchmark.comfortBoost;
+    } else {
+      // Generic fallback for unmodeled constellations
+      endgameCoverageImpact = 25;
+      constellationComfortBoost = 10;
+    }
+  } else if (target.targetType === 'weapon') {
+    // Weapon signature value
+    const hasMatching5Star = ownedWeaponKeys.includes(target.targetKey);
+    endgameCoverageImpact = hasMatching5Star ? 30 : 65;
+  }
+
+  // 4. Comfort impact
+  const comfortImpact = estimateComfortImpact(
+    target.targetKey,
+    target.targetType,
+    effectiveMode,
+    constellationComfortBoost,
   );
 
-  const synergyWith: string[] = [];
+  // 5. Favorite synergy
+  const topInvestedKeys = characterRecs.slice(0, 3).map((r) => r.characterKey);
+  const favoriteSynergy = calculateFavoriteSynergy(
+    target.targetKey,
+    favorites,
+    templates,
+    topInvestedKeys,
+  );
 
-  for (const investedKey of topInvestedKeys) {
-    const shareTemplate = templatesWithCharacter.some((t) =>
-      t.roles.some((r) => r.candidates.includes(investedKey)),
+  // 6. Investment friction
+  let investmentFriction: number;
+  if (effectiveMode === 'constellation') {
+    investmentFriction = 0; // Already leveled
+  } else if (target.targetType === 'weapon') {
+    investmentFriction = 6; // Fast weapon domain farming
+  } else {
+    investmentFriction = 14; // ~14-18 days resin for new character
+  }
+
+  // 7. Multi-objective total score
+  const rawWeighted =
+    userWeights.weightEndgame * endgameCoverageImpact +
+    userWeights.weightFlexibility * flexibilityScore +
+    userWeights.weightComfort * comfortImpact +
+    userWeights.weightFavorites * favoriteSynergy -
+    redundancyPenalty -
+    investmentFriction;
+
+  const totalScore = Math.round(Math.max(0, Math.min(100, rawWeighted)));
+
+  // 8. Budget & pity forecast
+  const currentPullsAvailable = Math.floor(budget.primogems / 160) + budget.fates;
+  const isWeapon = target.targetType === 'weapon';
+  const medianPullsNeeded = isWeapon ? (budget.guaranteed ? 55 : 95) : budget.guaranteed ? 76 : 105;
+  const hardPityNeeded = isWeapon
+    ? Math.max(0, 80 * 2 - budget.pity)
+    : Math.max(0, (budget.guaranteed ? 90 : 180) - budget.pity);
+
+  const acquisitionProbability = calculatePullProbability(
+    currentPullsAvailable,
+    budget.pity,
+    budget.guaranteed,
+    isWeapon,
+  );
+
+  let savingsAdvice: string;
+  if (acquisitionProbability >= 0.8) {
+    savingsAdvice = 'Sufficient reserves: high confidence of acquiring target within budget.';
+  } else if (acquisitionProbability >= 0.45) {
+    savingsAdvice =
+      'Moderate reserve: coin-flip on 50/50. Saving additional wishes recommended for security.';
+  } else {
+    savingsAdvice = 'Low reserves: high risk of missing target. Saving recommended unless willing to top up.';
+  }
+
+  const budgetForecast: PullBudgetForecast = {
+    currentPullsAvailable,
+    medianPullsNeeded,
+    hardPityNeeded,
+    acquisitionProbability,
+    savingsAdvice,
+  };
+
+  // 9. Strategic Recommendation Verdict
+  let strategicRecommendation: StrategicRecommendation;
+  const missingDataNotes: string[] = [];
+
+  if (isPartial) {
+    missingDataNotes.push(
+      'Account data from public showcase is partial. Unobserved characters cannot be assumed unowned.',
     );
-    if (shareTemplate) {
-      synergyWith.push(investedKey);
-    }
   }
 
-  // Scale bonus by how many top chars synergize (max SYNERGY_BONUS at 1+)
-  const bonus = synergyWith.length > 0 ? SYNERGY_BONUS : 0;
-  return { bonus, synergyWith };
-}
+  const hasBudgetSpecified = budget.primogems > 0 || budget.fates > 0 || budget.pity > 0;
 
-/**
- * Checks if any 4-star on the banner would fill a meaningful gap:
- * the user doesn't own the character at all.
- */
-function calculateFourStarGapBonus(
-  fourStarKeys: string[],
-  ownedCharacterKeys: Set<string>,
-): number {
-  const hasGap = fourStarKeys.some((key) => !ownedCharacterKeys.has(key));
-  return hasGap ? FOUR_STAR_GAP_BONUS : 0;
-}
+  if (isPartial && totalScore < 60) {
+    strategicRecommendation = 'CONDITIONAL_DATA_GAP';
+  } else if (totalScore >= 70) {
+    strategicRecommendation = 'HIGH_ACCOUNT_VALUE';
+  } else if (redundancyPenalty >= 30 && totalScore < 45) {
+    strategicRecommendation = 'NICHE_OR_REDUNDANT';
+  } else if (totalScore < 35 || (hasBudgetSpecified && totalScore < 55 && acquisitionProbability < 0.35)) {
+    strategicRecommendation = 'SAVE_RECOMMENDED';
+  } else {
+    strategicRecommendation = 'MODERATE_UPGRADE';
+  }
 
-/**
- * Maps a raw total score to a recommendation label.
- */
-function scoreToLabel(score: number): PullRecommendationLabel {
-  if (score >= 70) return 'MUST_PULL';
-  if (score >= 35) return 'GOOD_VALUE';
-  return 'SKIP';
+  const breakdown: AccountValueBreakdown = {
+    endgameCoverageImpact,
+    supportFlexibility: flexibilityScore,
+    redundancyPenalty,
+    comfortImpact,
+    favoriteSynergy,
+    investmentFriction,
+    unlockedTeamsCount,
+    unlockedArchetypes: archetypes,
+    redundantWithOwned: redundantWith,
+    totalScore,
+  };
+
+  return {
+    targetKey: target.targetKey,
+    targetName: target.targetKey.replace(/([A-Z])/g, ' $1').trim(),
+    targetType: target.targetType,
+    mode: effectiveMode,
+    targetConstellation: effectiveMode === 'constellation' ? targetConstellation : undefined,
+    currentConstellation: alreadyOwned ? currentConstellation : undefined,
+    bannerId: banner.bannerId,
+    bannerName: banner.name,
+    fourStarKeys: banner.fourStarKeys,
+    accountValueScore: totalScore,
+    strategicRecommendation,
+    breakdown,
+    explanations: [], // Populated by explainer
+    budgetForecast,
+    isPartialAccount: isPartial,
+    missingDataNotes,
+    // Compatibility aliases:
+    fiveStarKey: banner.fiveStarKey,
+    pullValueScore: totalScore,
+    recommendation: strategicRecommendation,
+  };
 }
 
 // -------------------------------------------------------
-// Main export
+// Legacy Signature Compatibility Bridge
 // -------------------------------------------------------
 
-/**
- * Calculates a Pull Value Score for a single banner's 5-star character.
- *
- * ADR-0011 compliant: pure math, no strings.
- *
- * @param banner           - The banner being evaluated.
- * @param roster           - The user's current roster as CharacterInput[].
- * @param templates        - All team templates from team-templates.json.
- * @param currentBreakdowns - Team score breakdown with the user's CURRENT roster.
- * @param characterRecs    - Character Intelligence results (for priority ranking).
- * @param scoreAllTemplatesFn - Injected to allow pure unit testing.
- */
 export function calculatePullValue(
   banner: ActiveBanner,
   roster: CharacterInput[],
@@ -220,68 +527,30 @@ export function calculatePullValue(
     templates: TeamTemplate[],
     roster: CharacterInput[],
   ) => TeamScoreBreakdown[],
-): PullScoreBreakdown {
-  const { fiveStarKey, fourStarKeys } = banner;
-  const ownedKeys = new Set(roster.map((c) => c.characterKey));
-
-  // ── 1. Ownership penalty ──────────────────────────────────────────────────
-  const alreadyOwned = ownedKeys.has(fiveStarKey);
-  const ownershipPenalty = alreadyOwned ? OWNERSHIP_PENALTY : 0;
-
-  // If already owned, short-circuit with a SKIP score
-  if (alreadyOwned) {
-    return {
-      bannerId: banner.bannerId,
-      bannerName: banner.name,
-      fiveStarKey,
-      fourStarKeys,
-      alreadyOwned: true,
-      ownershipPenalty,
-      teamEnablerBonus: 0,
-      teamEnablerTemplateName: null,
-      synergyBonus: 0,
-      synergyWith: [],
-      fourStarGapBonus: 0,
-      totalScore: 0,
-      recommendation: 'SKIP',
-    };
-  }
-
-  // ── 2. Team Enabler Bonus ─────────────────────────────────────────────────
-  const { bonusScore: teamEnablerBonus, templateName: teamEnablerTemplateName } =
-    findBestTeamEnabledBy(fiveStarKey, templates, roster, currentBreakdowns, scoreAllTemplatesFn);
-
-  // ── 3. Synergy Bonus ──────────────────────────────────────────────────────
-  // Top N invested characters by Character Intelligence rank (rank 1 = best)
-  const topInvestedKeys = characterRecs.slice(0, TOP_N_FOR_SYNERGY).map((r) => r.characterKey);
-
-  const { bonus: synergyBonus, synergyWith } = calculateSynergyBonus(
-    fiveStarKey,
-    templates,
-    topInvestedKeys,
-  );
-
-  // ── 4. 4-Star Gap Bonus ───────────────────────────────────────────────────
-  const fourStarGapBonus = calculateFourStarGapBonus(fourStarKeys, ownedKeys);
-
-  // ── 5. Total Score ────────────────────────────────────────────────────────
-  const rawTotal = teamEnablerBonus + synergyBonus + fourStarGapBonus;
-  const totalScore = Math.max(0, Math.min(100, rawTotal));
-  const recommendation = scoreToLabel(totalScore);
-
-  return {
-    bannerId: banner.bannerId,
-    bannerName: banner.name,
-    fiveStarKey,
-    fourStarKeys,
-    alreadyOwned: false,
-    ownershipPenalty: 0,
-    teamEnablerBonus,
-    teamEnablerTemplateName,
-    synergyBonus,
-    synergyWith,
-    fourStarGapBonus,
-    totalScore,
-    recommendation,
+  options?: {
+    accountContext?: AccountContextInput;
+    userWeights?: PullUserWeights;
+    budget?: PullBudgetInput;
+    constellationBenchmarks?: ConstellationBenchmarksMap;
+  },
+): PullRecommendation {
+  const target: CounterfactualTargetInput = {
+    targetKey: banner.fiveStarKey,
+    targetType: banner.type === 'WEAPON' ? 'weapon' : 'character',
+    mode: 'c0_unlock',
   };
+
+  return evaluateCounterfactualAddition({
+    target,
+    banner,
+    roster,
+    accountContext: options?.accountContext,
+    templates,
+    currentBreakdowns,
+    characterRecs,
+    userWeights: options?.userWeights,
+    budget: options?.budget,
+    constellationBenchmarks: options?.constellationBenchmarks,
+    scoreAllTemplatesFn,
+  });
 }

@@ -34,7 +34,13 @@ Detailed contracts and acceptance: [implementation plan](implementation_plan.md)
   - [x] M4 subphase 5: authenticated endgame intelligence service, controller, and routes under `/api/v1/games/genshin/intelligence/endgame/*` (`endgame-intelligence.routes.ts`, `endgame-intelligence.http.test.ts`).
   - [x] M4 subphase 6: frontend endgame views, side-by-side Abyss cards, 3-boss matrix, and interactive 10-act timeline (`AbyssJointRecommendationView.tsx`, `OnslaughtMatrixView.tsx`, `TheaterActPlannerView.tsx`, `EndgamePage.tsx`).
   - [x] M4 subphase 7: end-to-end integration benchmarks, monorepo gate verification, and evidence documentation (`m4-benchmarks.integration.test.js`, `endgame-assignment-progress.md`).
-- [ ] M5: replace heuristic pull verdicts with explicit account-value comparisons.
+- [x] M5: replace heuristic pull verdicts with explicit account-value comparisons; [verification](pull-intelligence-progress.md).
+  - [x] M5 subphase 1: shared contracts, targets, and static knowledge fixtures (`packages/api-contracts/src/genshin/pull-intelligence.ts`, `apps/api/src/games/genshin/static/active-banners.json`, `apps/api/src/games/genshin/static/constellation-benchmarks.json`).
+  - [x] M5 subphase 2: pure multi-objective counterfactual calculator engine with flexibility, redundancy, comfort, and constellation/weapon branching (`pull-intelligence.calculator.ts`, `pull-intelligence.calculator.test.ts`).
+  - [x] M5 subphase 3: pure narrative explainer with honest team unlocks, redundancy warnings, and probabilistic savings notes (`pull-intelligence.explainer.ts`, `pull-intelligence.explainer.test.ts`).
+  - [x] M5 subphase 4: service, controller, and authenticated/public HTTP routes with partial showcase data guards (`pull-intelligence.service.ts`, `pull-intelligence.controller.ts`, `pull-intelligence.routes.ts`, `pull-intelligence.http.test.ts`).
+  - [x] M5 subphase 5: interactive frontend account-value pulls view, preference sliders, constellation toggles, and wish savings integration (`AccountValuePullsView.tsx`, `PullPreferenceSliders.tsx`, `IntelligencePage.tsx`).
+  - [x] M5 subphase 6: end-to-end integration benchmarks, monorepo verification, and progress documentation (`m5-benchmarks.integration.test.js`, `pull-intelligence-progress.md`).
 - [ ] M6: restore and verify a separate fun simulator.
 - [ ] M6: compose automatic refresh and a convenient next-action summary.
 

@@ -26,13 +26,14 @@ export type {
 export class PullSimulatorService {
   constructor(private readonly random: () => number = Math.random) {}
   getBanners(): WishBanner[] {
-    return banners;
+    return banners.filter((b) => b.historical);
   }
   getSandboxCatalog(): WishSandboxCatalog {
+    const historicalBanners = this.getBanners();
     return wishSandboxCatalogSchema.parse({
       contractVersion: 1,
       rulesVersion: WISH_SANDBOX_RULES_VERSION,
-      banners,
+      banners: historicalBanners,
       notices: [
         'Historical fictional scenarios, not the live wish schedule or an account-value recommendation.',
         'Soft pity is approximate. Character scenarios use a simplified 50/50 and omit Capturing Radiance.',

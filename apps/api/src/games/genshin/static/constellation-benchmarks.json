@@ -1,0 +1,97 @@
+{
+  "_comment": "Reviewed high-impact Genshin Impact character constellation multipliers and benchmarks for Milestone 5 Account-Value Pulls.",
+  "constellations": {
+    "HuTao": {
+      "1": {
+        "valueScore": 45,
+        "comfortBoost": 40,
+        "category": "qol_and_dps",
+        "description": "Eliminates stamina cost for Charged Attacks during Paramita Papilio, drastically improving evasive mobility and combo execution."
+      }
+    },
+    "Furina": {
+      "1": {
+        "valueScore": 30,
+        "comfortBoost": 15,
+        "category": "damage_and_buff",
+        "description": "Grants 150 initial Fanfare upon Burst cast and increases the Fanfare cap by 100, providing an immediate teamwide damage amplification."
+      },
+      "2": {
+        "valueScore": 50,
+        "comfortBoost": 25,
+        "category": "damage_and_buff",
+        "description": "Accelerates Fanfare accumulation by 250% and converts excess Fanfare into massive Max HP for Furina."
+      }
+    },
+    "RaidenShogun": {
+      "2": {
+        "valueScore": 50,
+        "comfortBoost": 10,
+        "category": "dps_spike",
+        "description": "Secret Art: Musou Shinsetsu attacks ignore 60% of opponent DEF, unlocking premier hypercarry scaling."
+      }
+    },
+    "Raiden": {
+      "2": {
+        "valueScore": 50,
+        "comfortBoost": 10,
+        "category": "dps_spike",
+        "description": "Secret Art: Musou Shinsetsu attacks ignore 60% of opponent DEF, unlocking premier hypercarry scaling."
+      }
+    },
+    "Nahida": {
+      "2": {
+        "valueScore": 45,
+        "comfortBoost": 15,
+        "category": "team_dps",
+        "description": "Enables Bloom-related reactions to CRIT (20% CR, 100% CD) and shreds 30% opponent DEF upon triggering Quicken/Spread/Aggravate."
+      }
+    },
+    "Neuvillette": {
+      "1": {
+        "valueScore": 45,
+        "comfortBoost": 50,
+        "category": "interruption_resistance",
+        "description": "Grants uninterrupted poise during Charged Attack: Equitable Judgment and starts with 1 stack of Past Draconic Glories."
+      }
+    },
+    "Yelan": {
+      "1": {
+        "valueScore": 35,
+        "comfortBoost": 30,
+        "category": "energy_and_mobility",
+        "description": "Adds an extra charge of Lingering Lifeline, cutting Energy Recharge requirements by 25-35% and boosting overworld mobility."
+      },
+      "2": {
+        "valueScore": 40,
+        "comfortBoost": 10,
+        "category": "hydro_application",
+        "description": "Fires an extra coordinated water arrow dealing 14% Max HP as Hydro DMG, providing uninterrupted Hydro aura for Forward Vape and Bloom."
+      }
+    },
+    "KaedeharaKazuha": {
+      "2": {
+        "valueScore": 40,
+        "comfortBoost": 15,
+        "category": "reaction_buff",
+        "description": "Grants 200 Elemental Mastery to Kazuha and characters inside Autumn's Whirlwind, supercharging reaction teams."
+      }
+    },
+    "Zhongli": {
+      "2": {
+        "valueScore": 35,
+        "comfortBoost": 45,
+        "category": "coop_and_shield",
+        "description": "Planet Befall automatically generates a Jade Shield on all nearby active characters without requiring Hold Skill."
+      }
+    },
+    "Xilonen": {
+      "2": {
+        "valueScore": 45,
+        "comfortBoost": 20,
+        "category": "team_buff",
+        "description": "Enhances Samplers to grant permanent elemental buffs: Geo DMG +50%, Pyro ATK +45%, Hydro Max HP +45%, Cryo CRIT DMG +60%, Electro Energy +25."
+      }
+    }
+  }
+}

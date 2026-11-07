@@ -24,6 +24,7 @@ const UidEquipmentPage = lazy(() => import('./pages/UidEquipmentPage'));
 const UidTeamsPage = lazy(() => import('./pages/UidTeamsPage'));
 const UidTeamDetailsPage = lazy(() => import('./pages/UidTeamDetailsPage'));
 const EndgamePage = lazy(() => import('./pages/EndgamePage'));
+const UidPullsPage = lazy(() => import('./pages/UidPullsPage'));
 const ImportPage = lazy(() => import('./pages/ImportPage'));
 const IntelligencePage = lazy(() => import('./pages/IntelligencePage'));
 const InventoryPage = lazy(() => import('./pages/InventoryPage'));
@@ -146,6 +147,7 @@ export default function App() {
                   <Route path="teams" element={<UidTeamsPage />} />
                   <Route path="teams/:teamId" element={<UidTeamDetailsPage />} />
                   <Route path="endgame" element={<EndgamePage />} />
+                  <Route path="pulls" element={<UidPullsPage />} />
                   <Route path="inventory" element={<UidEquipmentPage />} />
                   <Route path="showcase" element={<PublicShowcasePage />} />
                   <Route path="character/:id" element={<PublicShowcasePage />} />

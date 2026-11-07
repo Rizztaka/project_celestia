@@ -13,7 +13,7 @@
           "roleId": "pyro_dps",
           "label": "Pyro DPS",
           "element": "Pyro",
-          "candidates": ["HuTao", "Diluc", "Yoimiya", "Lyney", "Klee", "Arlecchino"],
+          "candidates": ["HuTao", "Diluc", "Yoimiya", "Lyney", "Klee", "Arlecchino", "Mavuika"],
           "required": true,
           "flex": false,
           "weight": 35
@@ -40,7 +40,7 @@
           "roleId": "anemo_shred",
           "label": "Anemo Support",
           "element": "Anemo",
-          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti"],
+          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti", "Zhongli", "Xilonen"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -86,7 +86,7 @@
           "roleId": "anemo_flex",
           "label": "Anemo / Flex Support",
           "element": "Anemo",
-          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti", "Zhongli"],
+          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti", "Zhongli", "Xilonen"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -178,7 +178,7 @@
           "roleId": "flex_anemo",
           "label": "Anemo / Flex",
           "element": "Anemo",
-          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti", "Zhongli"],
+          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti", "Zhongli", "Xilonen"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -270,7 +270,7 @@
           "roleId": "flex_anemo",
           "label": "Anemo / Flex",
           "element": "Anemo",
-          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti", "Zhongli"],
+          "candidates": ["KaedeharaKazuha", "Sucrose", "Venti", "Zhongli", "Xilonen"],
           "required": false,
           "flex": true,
           "weight": 15
@@ -362,7 +362,7 @@
           "roleId": "healer_shielder",
           "label": "Healer / Shielder",
           "element": null,
-          "candidates": ["Diona", "Zhongli", "Bennett", "Barbara", "Kokomi"],
+          "candidates": ["Diona", "Zhongli", "Bennett", "Barbara", "Kokomi", "Citlali"],
           "required": false,
           "flex": true,
           "weight": 15

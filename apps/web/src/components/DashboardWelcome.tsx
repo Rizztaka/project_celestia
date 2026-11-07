@@ -109,6 +109,14 @@ export default function DashboardWelcome({
             </span>
             <UiIcon name="arrow" />
           </Link>
+          <Link className="shortcut-card" to={uid ? `${base}/pulls` : '/intelligence'}>
+            <UiIcon name="insights" />
+            <span>
+              <strong>Pull Value Advisor</strong>
+              <small>Account-value & counterfactual wish analysis</small>
+            </span>
+            <UiIcon name="arrow" />
+          </Link>
           {!uid ? (
             <Link className="shortcut-card" to="/planner?tab=farming">
               <UiIcon name="planner" />

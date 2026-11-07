@@ -91,5 +91,6 @@ export * from './genshin/readiness.js';
 export * from './genshin/showcase.js';
 export * from './genshin/team-preferences.js';
 export * from './genshin/theater.js';
+export * from './genshin/pull-intelligence.js';
 export * from './genshin/wishes.js';
 export { type CreateUserInput, createUserSchema } from './users/user.schema.js';

@@ -16,6 +16,7 @@ function UidNavigation({ uid, nickname }: { uid?: string; nickname?: string }) {
     [uid ? `${base}/roster` : '/?add=characters', 'Characters'],
     [uid ? `${base}/teams` : '/?add=teams', 'Teams'],
     [uid ? `${base}/endgame` : '/endgame', 'Endgame Center'],
+    [uid ? `${base}/pulls` : '/intelligence', 'Pull Advisor'],
   ] as const;
   const supporting = [
     [uid ? `${base}/showcase` : '/?add=profile', 'Public profile'],
@@ -26,6 +27,7 @@ function UidNavigation({ uid, nickname }: { uid?: string; nickname?: string }) {
     [primary[1][0]]: 'characters',
     [primary[2][0]]: 'characters',
     [primary[3][0]]: 'endgame',
+    [primary[4][0]]: 'insights',
     [supporting[0][0]]: 'settings',
     [supporting[1][0]]: 'insights',
   };

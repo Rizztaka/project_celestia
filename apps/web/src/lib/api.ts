@@ -730,34 +730,82 @@ export async function fetchPlannerIntelligence(): Promise<PlannerIntelligenceRes
 // Pull Intelligence Types & Functions (Milestone 4E)
 // ============================================================
 
-export type PullRecommendationLabel = 'MUST_PULL' | 'GOOD_VALUE' | 'SKIP';
+// ============================================================
+// Pull Intelligence Types & Functions (Milestone 5)
+// ============================================================
 
-export interface PullRecommendation {
-  bannerId: string;
-  bannerName: string;
-  fiveStarKey: string;
-  fourStarKeys: string[];
-  pullValueScore: number;
-  recommendation: PullRecommendationLabel;
-  explanations: string[];
-}
-
-export interface PullIntelligenceResponse {
-  recommendations: PullRecommendation[];
-  analysedAt: string;
-}
+export type {
+  AccountValueBreakdown,
+  PullBudgetForecast,
+  PullBudgetInput,
+  PullCompareRequest,
+  PullCompareResponse,
+  PullIntelligenceResponse,
+  PullRecommendation,
+  PullTargetMode,
+  PullUserWeights,
+  StrategicRecommendation,
+} from '@celestia/api-contracts';
 
 /**
  * fetchPullIntelligence — GET /games/genshin/intelligence/pulls
  *
- * Returns Pull Value recommendations for all currently active banners,
- * scored by how much each banner's 5-star would improve the user's roster,
- * team compositions, and synergy with their most-invested characters.
- *
+ * Returns Account-Value Pull recommendations for active banners.
  * Throws ApiError (404) if the user has no Genshin account.
  */
-export async function fetchPullIntelligence(): Promise<PullIntelligenceResponse> {
-  return fetchApi<PullIntelligenceResponse>('/games/genshin/intelligence/pulls');
+export async function fetchPullIntelligence(options?: {
+  weights?: import('@celestia/api-contracts').PullUserWeights;
+  budget?: import('@celestia/api-contracts').PullBudgetInput;
+  signal?: AbortSignal;
+}): Promise<import('@celestia/api-contracts').PullIntelligenceResponse> {
+  const query = new URLSearchParams();
+  if (options?.weights) query.set('weights', JSON.stringify(options.weights));
+  if (options?.budget) query.set('budget', JSON.stringify(options.budget));
+  const qs = query.toString() ? `?${query.toString()}` : '';
+  return fetchApi<import('@celestia/api-contracts').PullIntelligenceResponse>(
+    `/games/genshin/intelligence/pulls${qs}`,
+    { signal: options?.signal },
+  );
+}
+
+/**
+ * fetchPublicShowcasePullIntelligence — GET /games/genshin/public/uid/:uid/intelligence/pulls
+ */
+export async function fetchPublicShowcasePullIntelligence(
+  uid: string,
+  options?: {
+    weights?: import('@celestia/api-contracts').PullUserWeights;
+    budget?: import('@celestia/api-contracts').PullBudgetInput;
+    signal?: AbortSignal;
+  },
+): Promise<import('@celestia/api-contracts').PullIntelligenceResponse> {
+  const query = new URLSearchParams();
+  if (options?.weights) query.set('weights', JSON.stringify(options.weights));
+  if (options?.budget) query.set('budget', JSON.stringify(options.budget));
+  const qs = query.toString() ? `?${query.toString()}` : '';
+  return fetchApi<import('@celestia/api-contracts').PullIntelligenceResponse>(
+    `/games/genshin/public/uid/${encodeURIComponent(uid)}/intelligence/pulls${qs}`,
+    { signal: options?.signal },
+  );
+}
+
+/**
+ * compareHypotheticalPull — POST /games/genshin/intelligence/pulls/compare
+ */
+export async function compareHypotheticalPull(
+  request: import('@celestia/api-contracts').PullCompareRequest,
+  uid?: string,
+  signal?: AbortSignal,
+): Promise<import('@celestia/api-contracts').PullCompareResponse> {
+  const qs = uid ? `?uid=${encodeURIComponent(uid)}` : '';
+  return fetchApi<import('@celestia/api-contracts').PullCompareResponse>(
+    `/games/genshin/intelligence/pulls/compare${qs}`,
+    {
+      method: 'POST',
+      body: JSON.stringify(request),
+      signal,
+    },
+  );
 }
 
 // ============================================================

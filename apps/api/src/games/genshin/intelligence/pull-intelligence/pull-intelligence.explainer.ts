@@ -1,87 +1,134 @@
+import type { PullRecommendation } from '@celestia/api-contracts';
+
 // ADR-0011 compliant: pure string generation, no arithmetic.
-import type { PullScoreBreakdown } from './pull-intelligence.calculator.js';
+
+export function formatCharacterName(key: string): string {
+  return key.replace(/([A-Z])/g, ' $1').trim();
+}
 
 /**
- * Generates plain-language explanation bullets for a single banner's
- * Pull Value Score.
+ * Generates plain-language, transparent explanation bullets for an
+ * Account-Value Pull Recommendation.
  *
- * @param breakdown - The fully calculated score breakdown from the calculator.
- * @returns string[] of bullets shown on the frontend.
+ * @param rec - The fully calculated PullRecommendation from the calculator.
+ * @returns string[] of bullets shown in UI and API responses.
  */
-export function explainPullValue(breakdown: PullScoreBreakdown): string[] {
+export function explainPullValue(rec: PullRecommendation): string[] {
   const explanations: string[] = [];
-  const name = formatName(breakdown.fiveStarKey);
+  const name = formatCharacterName(rec.targetKey);
+  const { breakdown, budgetForecast, mode, targetType } = rec;
 
-  // ── 1. Already owned — short SKIP explanation ─────────────────────────────
-  if (breakdown.alreadyOwned) {
+  // ── 1. Target & Mode Context ──────────────────────────────────────────────
+  if (targetType === 'weapon') {
     explanations.push(
-      `You already have ${name} in your roster. Constellations are not yet tracked — this banner is rated as SKIP.`,
+      `Signature Weapon (${name}): Provides high base stats and targeted passives for optimal carry scaling.`,
     );
-    return explanations;
-  }
-
-  // ── 2. Team Enabler ───────────────────────────────────────────────────────
-  if (breakdown.teamEnablerBonus >= 60) {
+  } else if (mode === 'constellation') {
+    const constLabel = `C${rec.targetConstellation ?? (rec.currentConstellation ?? 0) + 1}`;
     explanations.push(
-      `Pulling ${name} unlocks the S-tier "${breakdown.teamEnablerTemplateName}" team composition — the highest-value outcome possible.`,
-    );
-  } else if (breakdown.teamEnablerBonus >= 40) {
-    explanations.push(
-      `Pulling ${name} enables the A-tier "${breakdown.teamEnablerTemplateName}" team composition with your current roster.`,
+      `Constellation Upgrade (${name} ${constLabel}): Upgrades existing owned character (currently C${rec.currentConstellation ?? 0}) with incremental multipliers and rotational advantages.`,
     );
   } else {
-    explanations.push(
-      `${name} does not unlock a new high-tier team with your current roster. Their team synergy bonus is low.`,
-    );
+    if (breakdown.unlockedTeamsCount > 0) {
+      explanations.push(
+        `Roster Enabler: Unlocks ${breakdown.unlockedTeamsCount} new buildable team composition(s) across ${breakdown.unlockedArchetypes.join(', ')}.`,
+      );
+    } else {
+      explanations.push(
+        `Roster Addition: Expands horizontal coverage across ${breakdown.unlockedArchetypes.length} archetype(s).`,
+      );
+    }
   }
 
-  // ── 3. Synergy with invested characters ───────────────────────────────────
-  if (breakdown.synergyWith.length > 0) {
-    const names = breakdown.synergyWith.map(formatName).join(', ');
+  // ── 2. Versatility vs Redundancy ──────────────────────────────────────────
+  if (breakdown.supportFlexibility >= 75) {
     explanations.push(
-      `Strong synergy detected with your most-invested characters: ${names}. ${name} frequently appears alongside them in proven team templates.`,
+      `High Archetype Flexibility: Slots effectively into ${breakdown.unlockedArchetypes.length || 3}+ proven team archetypes as a versatile support/enabler.`,
     );
-  } else {
+  } else if (breakdown.supportFlexibility <= 25 && targetType === 'character') {
     explanations.push(
-      `${name} does not synergize strongly with your current top-priority characters.`,
-    );
-  }
-
-  // ── 4. 4-star value ───────────────────────────────────────────────────────
-  if (breakdown.fourStarGapBonus > 0) {
-    const missingNames = breakdown.fourStarKeys.map(formatName).join(', ');
-    explanations.push(
-      `The banner's 4-stars (${missingNames}) include at least one you don't own yet — extra value from the featured 4-stars.`,
-    );
-  } else {
-    const fourStarNames = breakdown.fourStarKeys.map(formatName).join(', ');
-    explanations.push(
-      `You already own all featured 4-stars (${fourStarNames}) — no additional roster gains from the rate-up.`,
+      `Specialized Role: Primarily limited to narrow or dedicated team compositions.`,
     );
   }
 
-  // ── 5. Overall verdict ────────────────────────────────────────────────────
-  if (breakdown.recommendation === 'MUST_PULL') {
+  if (breakdown.redundancyPenalty > 0) {
+    const redundantList = breakdown.redundantWithOwned.map(formatCharacterName).join(', ');
     explanations.push(
-      `Overall verdict: MUST PULL — ${name} delivers high team value and strong synergy with your roster. Prioritise this banner.`,
+      `Redundancy Caution: Your account already possesses built carry options in this role (${redundantList}). Value is discounted due to role overlap.`,
     );
-  } else if (breakdown.recommendation === 'GOOD_VALUE') {
+  }
+
+  // ── 3. Execution Comfort & Defensive Utility ──────────────────────────────
+  if (breakdown.comfortImpact >= 70) {
     explanations.push(
-      `Overall verdict: GOOD VALUE — ${name} offers meaningful improvements but is not urgently needed. Pull if you have surplus primos.`,
+      `High Execution Comfort: Delivers premier defensive stability (shielding/healing), significantly easing Abyss and boss rotation execution.`,
+    );
+  } else if (breakdown.comfortImpact >= 50) {
+    explanations.push(
+      `Moderate Execution Comfort: Enhances rotation flexibility and teamwide survivability.`,
+    );
+  }
+
+  // ── 4. Player Favorites & Preferences ─────────────────────────────────────
+  if (breakdown.favoriteSynergy >= 90) {
+    explanations.push(
+      `Top Preference Alignment: Directly aligns with or supercharges your saved favorite characters.`,
+    );
+  } else if (breakdown.favoriteSynergy >= 60) {
+    explanations.push(
+      `Synergistic with Favorites: Proven synergy detected with characters on your favorites list.`,
+    );
+  }
+
+  // ── 5. Investment Load & Friction ─────────────────────────────────────────
+  if (breakdown.investmentFriction === 0) {
+    explanations.push(
+      `Zero Leveling Friction: Character is already ascended and leveled; constellation takes effect immediately.`,
+    );
+  } else if (breakdown.investmentFriction <= 8) {
+    explanations.push(
+      `Low Investment Burden: Weapon domain ascension requires minimal resin (~3-5 days) to max out.`,
     );
   } else {
     explanations.push(
-      `Overall verdict: SKIP — ${name} offers low incremental value for your current account state. Save your primos.`,
+      `Investment Required: Requires estimated ~14-18 days of resin for character ascension, boss materials, and talent books to reach combat readiness.`,
     );
+  }
+
+  // ── 6. Wish Budget & Strategic Savings ────────────────────────────────────
+  const probPercent = Math.round(budgetForecast.acquisitionProbability * 100);
+  explanations.push(
+    `Wish Budget Forecast: With ${budgetForecast.currentPullsAvailable} pulls available, acquisition probability is ~${probPercent}% (median needed: ~${budgetForecast.medianPullsNeeded} pulls). ${budgetForecast.savingsAdvice}`,
+  );
+
+  // ── 7. Overall Strategic Verdict ──────────────────────────────────────────
+  switch (rec.strategicRecommendation) {
+    case 'HIGH_ACCOUNT_VALUE':
+      explanations.push(
+        `Strategic Verdict: HIGH ACCOUNT VALUE — Delivers exceptional team-building returns and unblocks critical bottlenecks for your roster.`,
+      );
+      break;
+    case 'MODERATE_UPGRADE':
+      explanations.push(
+        `Strategic Verdict: MODERATE UPGRADE — Meaningful addition or solid comfort upgrade, though your existing roster operates well without it.`,
+      );
+      break;
+    case 'NICHE_OR_REDUNDANT':
+      explanations.push(
+        `Strategic Verdict: NICHE OR REDUNDANT — Competes directly with existing well-built characters. Recommend pulling only for aesthetic preference.`,
+      );
+      break;
+    case 'SAVE_RECOMMENDED':
+      explanations.push(
+        `Strategic Verdict: SAVE RECOMMENDED — Low incremental value or insufficient wish reserves to justify risking 50/50. Saving for high-priority targets is advised.`,
+      );
+      break;
+    case 'CONDITIONAL_DATA_GAP':
+      explanations.push(
+        `Strategic Verdict: CONDITIONAL (DATA GAP) — Account data from public showcase is partial. Final recommendation is conditional on unobserved roster.`,
+      );
+      break;
   }
 
   return explanations;
-}
-
-// -------------------------------------------------------
-// Internal helpers
-// -------------------------------------------------------
-
-function formatName(key: string): string {
-  return key.replace(/([A-Z])/g, ' $1').trim();
 }

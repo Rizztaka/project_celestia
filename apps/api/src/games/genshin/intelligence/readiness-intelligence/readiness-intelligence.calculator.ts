@@ -330,6 +330,314 @@ const defaultBenchmarks: Record<string, RoleBenchmarkProfile> = {
     minSupportStatThreshold: 500,
   },
 
+  // Hu Tao
+  'hutao:on_field_damage': {
+    roleId: 'on_field_damage',
+    roleName: 'On-Field Pyro Hypercarry',
+    targetLevel: 80,
+    targetAscension: 5,
+    priorityTalents: ['normal', 'skill', 'burst'],
+    minTalentLevels: { normal: 8, skill: 8, burst: 8 },
+    recommendedWeapons: [
+      'StaffOfHoma',
+      'StaffOfTheScarletSands',
+      'BalladOfTheFjords',
+      'DragonsBane',
+      'DragonBane',
+      'PrimordialJadeWingedSpear',
+      'Deathmatch',
+      'WhiteTassel',
+      'BlackcliffPole',
+    ],
+    minWeaponLevel: 80,
+    recommendedMainStats: {
+      sands: ['hpPercent', 'elementalMastery'],
+      goblet: ['pyroDmg'],
+      circlet: ['critRate', 'critDmg'],
+    },
+    conditionalMainStats: {
+      sands: { elementalMastery: 'reaction_context' },
+    },
+    recommendedSets: [
+      { setKey: 'CrimsonWitchOfFlames', pieces: 4 },
+      { setKey: 'MarechausseeHunter', pieces: 4 },
+      { setKey: 'ShimenawasReminiscence', pieces: 4 },
+      { setKey: 'GildedDreams', pieces: 4 },
+    ],
+    energyRechargeThreshold: 110,
+    scalingStat: 'hp',
+    minSupportStatThreshold: 28000,
+  },
+
+  // Raiden Shogun
+  'raidenshogun:on_field_damage': {
+    roleId: 'on_field_damage',
+    roleName: 'On-Field Electro Burst Carry',
+    targetLevel: 80,
+    targetAscension: 5,
+    priorityTalents: ['burst', 'skill'],
+    minTalentLevels: { burst: 8, skill: 8 },
+    recommendedWeapons: [
+      'EngulfingLightning',
+      'TheCatch',
+      'StaffOfTheScarletSands',
+      'StaffOfHoma',
+      'PrimordialJadeWingedSpear',
+      'SkywardSpine',
+      'WavebreakersFin',
+      'FavoniusLance',
+    ],
+    minWeaponLevel: 80,
+    recommendedMainStats: {
+      sands: ['energyRecharge', 'atkPercent'],
+      goblet: ['electroDmg', 'atkPercent'],
+      circlet: ['critRate', 'critDmg'],
+    },
+    recommendedSets: [{ setKey: 'EmblemOfSeveredFate', pieces: 4 }],
+    energyRechargeThreshold: 200,
+    scalingStat: 'er',
+    minSupportStatThreshold: 200,
+  },
+  'raidenshogun:off_field_damage': {
+    roleId: 'off_field_damage',
+    roleName: 'Off-Field Hyperbloom Trigger',
+    targetLevel: 90,
+    targetAscension: 6,
+    priorityTalents: ['skill'],
+    minTalentLevels: { skill: 8 },
+    recommendedWeapons: [
+      'DragonsBane',
+      'DragonBane',
+      'Moonpiercer',
+      'KitainCrossSpear',
+      'BalladOfTheFjords',
+    ],
+    minWeaponLevel: 80,
+    recommendedMainStats: {
+      sands: ['elementalMastery'],
+      goblet: ['elementalMastery'],
+      circlet: ['elementalMastery'],
+    },
+    recommendedSets: [
+      { setKey: 'FlowerOfParadiseLost', pieces: 4 },
+      { setKey: 'GildedDreams', pieces: 4 },
+    ],
+    energyRechargeThreshold: 100,
+    scalingStat: 'em',
+    minSupportStatThreshold: 700,
+  },
+  'raidenshogun:party_buff': {
+    roleId: 'party_buff',
+    roleName: 'Universal Battery & Burst Buffer',
+    targetLevel: 80,
+    targetAscension: 5,
+    priorityTalents: ['burst', 'skill'],
+    minTalentLevels: { burst: 8, skill: 8 },
+    recommendedWeapons: ['EngulfingLightning', 'TheCatch', 'FavoniusLance'],
+    minWeaponLevel: 80,
+    recommendedMainStats: {
+      sands: ['energyRecharge'],
+      goblet: ['electroDmg', 'atkPercent'],
+      circlet: ['critRate', 'critDmg'],
+    },
+    recommendedSets: [{ setKey: 'EmblemOfSeveredFate', pieces: 4 }],
+    energyRechargeThreshold: 220,
+    scalingStat: 'er',
+    minSupportStatThreshold: 220,
+  },
+
+  // Sandrone
+  'sandrone:on_field_damage': {
+    roleId: 'on_field_damage',
+    roleName: 'On-Field Stellar-Conduct Carry',
+    targetLevel: 80,
+    targetAscension: 5,
+    priorityTalents: ['normal', 'burst', 'skill'],
+    minTalentLevels: { normal: 8, burst: 8, skill: 6 },
+    recommendedWeapons: [
+      'ATeaspoonOfTranscendence',
+      'AThousandBlazingSuns',
+      'ForgedByTheGoldenMelody',
+      'BladeOfAtonement',
+      'TidalShadow',
+      'SerpentSpine',
+      'RedhornStonethresher',
+    ],
+    minWeaponLevel: 80,
+    recommendedMainStats: {
+      sands: ['atkPercent'],
+      goblet: ['atkPercent'],
+      circlet: ['critRate', 'critDmg'],
+    },
+    recommendedSets: [
+      { setKey: 'DisenchantmentInDeepShadow', pieces: 4 },
+      { setKey: 'GildedDreams', pieces: 4 },
+      { setKey: 'ADayCarvedFromRisingWinds', pieces: 4 },
+    ],
+    energyRechargeThreshold: 100,
+    scalingStat: 'atk',
+    minSupportStatThreshold: 2000,
+  },
+
+  // Odette
+  'odette:off_field_damage': {
+    roleId: 'off_field_damage',
+    roleName: 'Off-Field Cryo Sub-DPS & Stellar Glimmer Buffer',
+    targetLevel: 80,
+    targetAscension: 5,
+    priorityTalents: ['skill', 'burst'],
+    minTalentLevels: { skill: 8, burst: 6 },
+    recommendedWeapons: [
+      'WhitelakeFrostfeather',
+      'Absolution',
+      'Azurelight',
+      'UrakuMisugiri',
+      'LightOfFoliarIncision',
+      'CinnabarSpindle',
+      'WolfFang',
+      'FinaleOfTheDeep',
+      'AmenomaKageuchi',
+      'HarbingerOfDawn',
+    ],
+    minWeaponLevel: 80,
+    recommendedMainStats: {
+      sands: ['atkPercent'],
+      goblet: ['atkPercent'],
+      circlet: ['critRate', 'critDmg'],
+    },
+    recommendedSets: [
+      { setKey: 'HeartOfTheFurnace', pieces: 4 },
+      { setKey: 'DisenchantmentInDeepShadow', pieces: 4 },
+      { setKey: 'TenacityOfTheMillelith', pieces: 4 },
+    ],
+    energyRechargeThreshold: 100,
+    scalingStat: 'atk',
+    minSupportStatThreshold: 2200,
+  },
+
+  // Vodyanitsa
+  'vodyanitsa:healing_support': {
+    roleId: 'healing_support',
+    roleName: 'Off-Field Hydro Healer & Additive Base DMG Buffer',
+    targetLevel: 80,
+    targetAscension: 5,
+    priorityTalents: ['skill', 'burst'],
+    minTalentLevels: { skill: 8, burst: 6 },
+    recommendedWeapons: [
+      'HymnOfTheMaelstrom',
+      'ThrillingTalesOfDragonSlayers',
+      'ThrillingTales',
+      'PrototypeAmber',
+      'AshGravenDrinkingHorn',
+      'SacrificialJade',
+    ],
+    minWeaponLevel: 80,
+    recommendedMainStats: {
+      sands: ['hpPercent'],
+      goblet: ['hpPercent'],
+      circlet: ['hpPercent', 'healingBonus'],
+    },
+    recommendedSets: [
+      { setKey: 'TenacityOfTheMillelith', pieces: 4 },
+      { setKey: 'ScrollOfTheHeroOfCinderCity', pieces: 4 },
+      { setKey: 'VourukashasGlow', pieces: 2 },
+    ],
+    energyRechargeThreshold: 100,
+    scalingStat: 'hp',
+    minSupportStatThreshold: 40000,
+  },
+  'vodyanitsa:party_buff': {
+    roleId: 'party_buff',
+    roleName: 'Hydro RES Shred & Team Additive Buffer',
+    targetLevel: 80,
+    targetAscension: 5,
+    priorityTalents: ['skill', 'burst'],
+    minTalentLevels: { skill: 8, burst: 6 },
+    recommendedWeapons: [
+      'HymnOfTheMaelstrom',
+      'ThrillingTalesOfDragonSlayers',
+      'ThrillingTales',
+      'PrototypeAmber',
+      'AshGravenDrinkingHorn',
+    ],
+    minWeaponLevel: 80,
+    recommendedMainStats: {
+      sands: ['hpPercent'],
+      goblet: ['hpPercent'],
+      circlet: ['hpPercent'],
+    },
+    recommendedSets: [
+      { setKey: 'TenacityOfTheMillelith', pieces: 4 },
+      { setKey: 'ScrollOfTheHeroOfCinderCity', pieces: 4 },
+    ],
+    energyRechargeThreshold: 100,
+    scalingStat: 'hp',
+    minSupportStatThreshold: 40000,
+  },
+
+  // Chevreuse
+  'chevreuse:resistance_shred': {
+    roleId: 'resistance_shred',
+    roleName: 'Overload Shredder & Attack Buffer',
+    targetLevel: 80,
+    targetAscension: 5,
+    priorityTalents: ['skill', 'burst'],
+    minTalentLevels: { skill: 8, burst: 6 },
+    recommendedWeapons: [
+      'FavoniusLance',
+      'BlackTassel',
+      'RightfulReward',
+      'DialoguesOfTheDesertSages',
+      'SymphonistOfScents',
+    ],
+    minWeaponLevel: 80,
+    recommendedMainStats: {
+      sands: ['hpPercent', 'energyRecharge'],
+      goblet: ['hpPercent'],
+      circlet: ['hpPercent', 'healingBonus', 'critRate'],
+    },
+    conditionalMainStats: {
+      circlet: { critRate: 'favonius_proc' },
+    },
+    recommendedSets: [
+      { setKey: 'NoblesseOblige', pieces: 4 },
+      { setKey: 'SongOfDaysPast', pieces: 4 },
+      { setKey: 'ScrollOfTheHeroOfCinderCity', pieces: 4 },
+      { setKey: 'TenacityOfTheMillelith', pieces: 4 },
+    ],
+    energyRechargeThreshold: 100,
+    scalingStat: 'hp',
+    minSupportStatThreshold: 40000,
+  },
+  'chevreuse:healing_support': {
+    roleId: 'healing_support',
+    roleName: 'Chevreuse Healing Support',
+    targetLevel: 80,
+    targetAscension: 5,
+    priorityTalents: ['skill', 'burst'],
+    minTalentLevels: { skill: 8, burst: 6 },
+    recommendedWeapons: [
+      'FavoniusLance',
+      'BlackTassel',
+      'RightfulReward',
+      'DialoguesOfTheDesertSages',
+    ],
+    minWeaponLevel: 80,
+    recommendedMainStats: {
+      sands: ['hpPercent'],
+      goblet: ['hpPercent'],
+      circlet: ['hpPercent', 'healingBonus'],
+    },
+    recommendedSets: [
+      { setKey: 'SongOfDaysPast', pieces: 4 },
+      { setKey: 'NoblesseOblige', pieces: 4 },
+      { setKey: 'TenacityOfTheMillelith', pieces: 4 },
+    ],
+    energyRechargeThreshold: 100,
+    scalingStat: 'hp',
+    minSupportStatThreshold: 40000,
+  },
+
   // generic archetypes
   generic_dps: {
     roleId: 'on_field_damage',
@@ -405,19 +713,58 @@ export function resolveRoleBenchmark(
     return roleInput;
   }
 
-  const normalizedChar = characterKey.trim().toLowerCase();
-  const normalizedRole = roleInput ? roleInput.trim().toLowerCase() : '';
+  const cleanAlphanumeric = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const cleanWithUnderscores = (s: string) =>
+    s
+      .toLowerCase()
+      .trim()
+      .replace(/[-\s]/g, '_')
+      .replace(/[^a-z0-9_]/g, '');
 
-  // Check character:role exact key
-  if (normalizedRole && normalizedRole !== 'unspecified' && normalizedRole !== 'general_checks') {
-    const combinedKey = `${normalizedChar}:${normalizedRole}`;
+  const rawChar = cleanAlphanumeric(characterKey);
+  const aliasMap: Record<string, string> = {
+    hutao: 'hutao',
+    raiden: 'raidenshogun',
+    raidenshogun: 'raidenshogun',
+    chevreuse: 'chevreuse',
+    sandrone: 'sandrone',
+    odette: 'odette',
+    vodyanitsa: 'vodyanitsa',
+    kazuha: 'kaedeharakazuha',
+    kaedeharakazuha: 'kaedeharakazuha',
+    kokomi: 'sangonomiyakokomi',
+    ayaka: 'kamisatoayaka',
+    ayato: 'kamisatoayato',
+    itto: 'aratakiitto',
+    heizou: 'shikanoinheizou',
+    yae: 'yaemiko',
+    childe: 'tartaglia',
+    scaramouche: 'wanderer',
+  };
+  const normalizedChar = aliasMap[rawChar] ?? rawChar;
+  const roleStr = roleInput ? cleanWithUnderscores(roleInput) : '';
+  const roleAlphanumeric = roleInput ? cleanAlphanumeric(roleInput) : '';
+
+  // 1. Check exact character:role key (e.g. "hutao:on_field_damage")
+  if (roleStr && roleStr !== 'unspecified' && roleStr !== 'general_checks') {
+    const combinedKey = `${normalizedChar}:${roleStr}`;
     if (defaultBenchmarks[combinedKey]) {
       return defaultBenchmarks[combinedKey];
     }
+
+    // Also match ignoring underscores/dashes across all defined benchmarks
+    for (const [key, profile] of Object.entries(defaultBenchmarks)) {
+      const [bChar, bRole] = key.split(':');
+      if (bChar && bRole) {
+        if (cleanAlphanumeric(bChar) === normalizedChar && cleanAlphanumeric(bRole) === roleAlphanumeric) {
+          return profile;
+        }
+      }
+    }
   }
 
-  // If no explicit role was selected, check if character has a reviewed default benchmark profile
-  if (!normalizedRole || normalizedRole === 'unspecified' || normalizedRole === 'general_checks') {
+  // 2. If no explicit role was selected, check if character has a reviewed default benchmark profile
+  if (!roleStr || roleStr === 'unspecified' || roleStr === 'general_checks') {
     for (const [key, profile] of Object.entries(defaultBenchmarks)) {
       if (key.startsWith(`${normalizedChar}:`)) {
         return profile;
@@ -428,21 +775,30 @@ export function resolveRoleBenchmark(
     return null;
   }
 
-  // Check generic role
-  if (normalizedRole.includes('dps') || normalizedRole.includes('on_field')) {
+  // 3. Fallback generic roles
+  if (
+    roleStr.includes('dps') ||
+    roleStr.includes('on_field') ||
+    roleAlphanumeric.includes('onfield')
+  ) {
     return defaultBenchmarks.generic_dps;
   }
-  if (normalizedRole.includes('sub_dps') || normalizedRole.includes('off_field')) {
+  if (
+    roleStr.includes('sub_dps') ||
+    roleStr.includes('off_field') ||
+    roleAlphanumeric.includes('offfield') ||
+    roleAlphanumeric.includes('subdps')
+  ) {
     return defaultBenchmarks.generic_sub_dps;
   }
   if (
-    normalizedRole.includes('support') ||
-    normalizedRole.includes('buff') ||
-    normalizedRole.includes('healer') ||
-    normalizedRole.includes('shield') ||
-    normalizedRole.includes('shred') ||
-    normalizedRole.includes('trigger') ||
-    normalizedRole.includes('reaction')
+    roleStr.includes('support') ||
+    roleStr.includes('buff') ||
+    roleStr.includes('healer') ||
+    roleStr.includes('shield') ||
+    roleStr.includes('shred') ||
+    roleStr.includes('trigger') ||
+    roleStr.includes('reaction')
   ) {
     return defaultBenchmarks.generic_support;
   }
@@ -568,11 +924,18 @@ function evaluateWeapon(
   }
 
   const targetLevel = Math.max(benchmark.minWeaponLevel, encounter.minWeaponLevel || 80);
+  const cleanW = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const weaponKeyClean = cleanW(weapon.weaponKey);
   const isRecommended =
     benchmark.recommendedWeapons.length === 0 ||
-    benchmark.recommendedWeapons.some(
-      (w) => w.trim().toLowerCase() === weapon.weaponKey.trim().toLowerCase(),
-    );
+    benchmark.recommendedWeapons.some((w) => {
+      const recClean = cleanW(w);
+      return (
+        recClean === weaponKeyClean ||
+        weaponKeyClean.includes(recClean) ||
+        recClean.includes(weaponKeyClean)
+      );
+    });
 
   const levelRatio = Math.min(1.0, weapon.level / targetLevel);
   const baseScore = Math.round(levelRatio * 100);
@@ -746,10 +1109,11 @@ function evaluateSetActivation(
   let has4pcMatch = false;
   let has2pcMatch = false;
 
+  const cleanW = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
   for (const rec of benchmark.recommendedSets) {
-    const normalizedRecSet = rec.setKey.trim().toLowerCase();
+    const normalizedRecSet = cleanW(rec.setKey);
     for (const [observedSet, count] of Object.entries(setCounts)) {
-      if (observedSet.trim().toLowerCase() === normalizedRecSet) {
+      if (cleanW(observedSet) === normalizedRecSet) {
         if (rec.pieces === 4 && count >= 4) {
           has4pcMatch = true;
         } else if (count >= 2) {
@@ -1254,7 +1618,10 @@ export function calculateReadiness(
   const hasConditional = Object.values(dimensions).some((d) => d.status === 'conditional');
 
   // INVARIANT ENFORCEMENT
-  if (energyResult.evaluation.status === 'needs_investment') {
+  if (hasCoreMissingData || hasUnrecordedProgression) {
+    // Core missing data MUST return insufficient_data rather than a false positive
+    overallStatus = 'insufficient_data';
+  } else if (energyResult.evaluation.status === 'needs_investment') {
     // Energy deficit ALWAYS marks build needs_investment regardless of other stats
     overallStatus = 'needs_investment';
   } else if (
@@ -1262,9 +1629,6 @@ export function calculateReadiness(
     (hasLevelDeficit && request.character.level! < minCharLevel - 10)
   ) {
     overallStatus = 'needs_investment';
-  } else if (hasCoreMissingData || hasUnrecordedProgression) {
-    // Core missing data MUST return insufficient_data rather than a false positive
-    overallStatus = 'insufficient_data';
   } else if (
     energyResult.evaluation.status === 'conditional' ||
     hasConditional ||

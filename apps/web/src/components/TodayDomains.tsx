@@ -4,10 +4,12 @@ import {
   SERVER_POLICIES,
   type ShowcaseCharacter,
   type SupportedServerId,
+  teamCharacterIdentity,
 } from '@celestia/api-contracts';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useMemo, useState, useSyncExternalStore } from 'react';
 import { Link } from 'react-router-dom';
 
+import { readTeamPreferencesRaw, teamPreferencesEvent } from '../lib/team-preferences';
 import {
   charactersForDomain,
   farmingClock,
@@ -41,10 +43,12 @@ function DomainRow({
   domain,
   uid,
   characters,
+  goodEnoughSet,
 }: {
   domain: TodayDomain;
   uid?: string;
   characters: ShowcaseCharacter[];
+  goodEnoughSet?: Set<string>;
 }) {
   const relevant = charactersForDomain(domain, characters);
   return (
@@ -60,34 +64,42 @@ function DomainRow({
         <p>{domain.entrance}</p>
         {uid && relevant.length ? (
           <div className="farming-matches" aria-label="Matching characters">
-            {relevant.map((character) => (
-              <Link
-                key={character.key}
-                to={uidCharacterPath(uid, character.key)}
-                title={
-                  domain.kind === 'weapon'
-                    ? `${character.weapon?.name} · ${character.name}'s observed build`
-                    : `${character.name}'s observed build`
-                }
-                aria-label={
-                  domain.kind === 'weapon'
-                    ? `Open ${character.name} · ${character.weapon?.name}`
-                    : `Open ${character.name}`
-                }
-              >
-                {character.portrait ? (
-                  <img
-                    src={character.portrait}
-                    alt=""
-                    width={24}
-                    height={24}
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                  />
-                ) : null}
-                <span>{domain.kind === 'weapon' ? character.weapon?.name : character.name}</span>
-              </Link>
-            ))}
+            {relevant.map((character) => {
+              const isMuted =
+                goodEnoughSet?.has(teamCharacterIdentity(character.id)) ||
+                goodEnoughSet?.has(character.key);
+              return (
+                <Link
+                  key={character.key}
+                  to={uidCharacterPath(uid, character.key)}
+                  title={
+                    domain.kind === 'weapon'
+                      ? `${character.weapon?.name} · ${character.name}'s observed build${isMuted ? ' (Marked Good Enough)' : ''}`
+                      : `${character.name}'s observed build${isMuted ? ' (Marked Good Enough)' : ''}`
+                  }
+                  aria-label={
+                    domain.kind === 'weapon'
+                      ? `Open ${character.name} · ${character.weapon?.name}`
+                      : `Open ${character.name}`
+                  }
+                >
+                  {character.portrait ? (
+                    <img
+                      src={character.portrait}
+                      alt=""
+                      width={24}
+                      height={24}
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : null}
+                  <span>
+                    {domain.kind === 'weapon' ? character.weapon?.name : character.name}
+                    {isMuted ? ' ★' : ''}
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         ) : null}
       </div>
@@ -100,11 +112,13 @@ function DomainSection({
   domains,
   uid,
   characters,
+  goodEnoughSet,
 }: {
   kind: 'talent' | 'weapon';
   domains: TodayDomain[];
   uid?: string;
   characters: ShowcaseCharacter[];
+  goodEnoughSet?: Set<string>;
 }) {
   const [expanded, setExpanded] = useState(false);
   const id = useId();
@@ -123,7 +137,13 @@ function DomainSection({
       {domains.length ? (
         <ul id={`${id}-list`} className="farming-domain-list">
           {(expanded ? domains : domains.slice(0, 4)).map((domain) => (
-            <DomainRow key={domain.domainKey} domain={domain} uid={uid} characters={characters} />
+            <DomainRow
+              key={domain.domainKey}
+              domain={domain}
+              uid={uid}
+              characters={characters}
+              goodEnoughSet={goodEnoughSet}
+            />
           ))}
         </ul>
       ) : (
@@ -146,6 +166,15 @@ function DomainSection({
   );
 }
 
+function subscribePreferences(listener: () => void) {
+  window.addEventListener('storage', listener);
+  window.addEventListener(teamPreferencesEvent, listener);
+  return () => {
+    window.removeEventListener('storage', listener);
+    window.removeEventListener(teamPreferencesEvent, listener);
+  };
+}
+
 export default function TodayDomains({
   uid,
   characters = noCharacters,
@@ -165,6 +194,47 @@ export default function TodayDomains({
   const day = selectedDay ?? clock.weekday;
   const hasRoster = !!uid && characters.length > 0;
   const rosterOnly = scope === 'roster' && hasRoster;
+
+  const rawPrefs = useSyncExternalStore<string | null>(
+    subscribePreferences,
+    () => {
+      if (!uid) return null;
+      try {
+        const item = readTeamPreferencesRaw(uid);
+        return typeof item === 'string' ? item : null;
+      } catch {
+        return null;
+      }
+    },
+    () => null,
+  );
+
+  const goodEnoughSet = useMemo(() => {
+    if (!rawPrefs) return new Set<string>();
+    try {
+      const parsed = JSON.parse(rawPrefs);
+      if (Array.isArray(parsed?.goodEnoughCharacters)) {
+        return new Set<string>(parsed.goodEnoughCharacters as string[]);
+      }
+    } catch {
+      // Ignore non-json or unparsed data
+    }
+    return new Set<string>();
+  }, [rawPrefs]);
+
+  const activeCharacters = useMemo(
+    () =>
+      characters.filter(
+        (c) =>
+          !goodEnoughSet.has(teamCharacterIdentity(c.id)) &&
+          !goodEnoughSet.has(c.key),
+      ),
+    [characters, goodEnoughSet],
+  );
+  // If active characters exist, suppress domains that only match muted "Good Enough" builds
+  const targetCharacters =
+    activeCharacters.length > 0 ? activeCharacters : characters;
+
   useEffect(() => {
     const update = () => setNow(Date.now());
     const timer = setTimeout(update, Math.max(0, clock.nextReset - Date.now()) + 25);
@@ -180,12 +250,12 @@ export default function TodayDomains({
     .filter(
       (domain) =>
         domain.days.includes(day) &&
-        (!rosterOnly || charactersForDomain(domain, characters).length > 0),
+        (!rosterOnly || charactersForDomain(domain, targetCharacters).length > 0),
     )
     .sort((a, b) => {
       const matching =
-        Number(charactersForDomain(b, characters).length > 0) -
-        Number(charactersForDomain(a, characters).length > 0);
+        Number(charactersForDomain(b, targetCharacters).length > 0) -
+        Number(charactersForDomain(a, targetCharacters).length > 0);
       return matching || a.region.localeCompare(b.region) || a.family.localeCompare(b.family);
     });
   return (
@@ -282,6 +352,7 @@ export default function TodayDomains({
             domains={domains.filter((domain) => domain.kind === kind)}
             uid={uid}
             characters={characters}
+            goodEnoughSet={goodEnoughSet}
           />
         ))}
       </div>

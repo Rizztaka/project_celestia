@@ -99,10 +99,17 @@ export function explainMarginalInvestment(
     );
   }
 
-  // 2. Resource Requirements Details
+  // 2. Resource Requirements & Farming Domain Details
   if (action.costs.length > 0) {
-    const costDetails = action.costs.map((c) => `${c.count.toLocaleString()} ${c.name}`).join(', ');
-    explanations.push(`Materials Required: ${costDetails}.`);
+    const domainCost = action.costs.find((c) => c.name.startsWith('Domain:'));
+    if (domainCost) {
+      explanations.push(`Farming Target: Farm ${domainCost.name} to obtain optimal main stat pieces.`);
+    } else {
+      const costDetails = action.costs
+        .map((c) => `${c.count.toLocaleString()} ${c.name}`)
+        .join(', ');
+      explanations.push(`Materials Required: ${costDetails}.`);
+    }
   }
 
   // 3. Diminishing Returns & Farming Trap Context

@@ -109,11 +109,7 @@ export default function PublicCharacterAnalysis({
   }, [context, c]);
 
   const roleForReadiness =
-    roleId !== 'unspecified' && roleId !== 'general_checks'
-      ? roleId
-      : roles.length > 0
-        ? roles[0].id
-        : undefined;
+    roleId !== 'unspecified' && roleId !== 'general_checks' ? roleId : undefined;
 
   const readiness = useCharacterReadiness(character, {
     roleId: roleForReadiness,

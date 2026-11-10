@@ -96,6 +96,82 @@ export function findCatalogWeapon(weaponKey: string) {
   return null;
 }
 
+export const ARTIFACT_DOMAINS: Record<string, { domainName: string; domainKey: string }> = {
+  disenchantmentindeepshadow: {
+    domainName: 'Shadowed Citadel',
+    domainKey: 'DomainOfBlessingShadowedCitadel',
+  },
+  heartofthefurnace: {
+    domainName: 'Den of Solitary Beasts',
+    domainKey: 'DomainOfBlessingDenOfSolitaryBeasts',
+  },
+  adaycarvedfromrisingwinds: {
+    domainName: 'Windswept Crag',
+    domainKey: 'DomainOfBlessingWindsweptCrag',
+  },
+  emblemofseveredfate: {
+    domainName: 'Momiji-Dyed Court',
+    domainKey: 'MomijiDyedCourt',
+  },
+  shimenawasreminiscence: {
+    domainName: 'Momiji-Dyed Court',
+    domainKey: 'MomijiDyedCourt',
+  },
+  crimsonwitchofflames: {
+    domainName: 'Hidden Palace of Zhou Formula',
+    domainKey: 'HiddenPalaceOfZhouFormula',
+  },
+  tenacityofthemillelith: {
+    domainName: 'Ridge Watch',
+    domainKey: 'RidgeWatch',
+  },
+  viridescentvenerer: {
+    domainName: 'Valley of Remembrance',
+    domainKey: 'ValleyOfRemembrance',
+  },
+  noblesseoblige: {
+    domainName: 'Clear Pool and Mountain Cavern',
+    domainKey: 'ClearPoolAndMountainCavern',
+  },
+  goldentroupe: {
+    domainName: 'Den of Solitary Spring',
+    domainKey: 'DenOfSolitarySpring',
+  },
+  marechausseehunter: {
+    domainName: 'Den of Solitary Spring',
+    domainKey: 'DenOfSolitarySpring',
+  },
+  gildeddreams: {
+    domainName: 'Spire of Solitary Enlightenment',
+    domainKey: 'SpireOfSolitaryEnlightenment',
+  },
+  deepwoodmemories: {
+    domainName: 'Spire of Solitary Enlightenment',
+    domainKey: 'SpireOfSolitaryEnlightenment',
+  },
+  scrolloftheheroofcindercity: {
+    domainName: 'Sanctum of Rainbow Spirits',
+    domainKey: 'SanctumOfRainbowSpirits',
+  },
+  obsidiancodex: {
+    domainName: 'Sanctum of Rainbow Spirits',
+    domainKey: 'SanctumOfRainbowSpirits',
+  },
+  songofdayspast: {
+    domainName: 'Waterfall Wen',
+    domainKey: 'WaterfallWen',
+  },
+  flowerofparadiselost: {
+    domainName: 'City of Gold',
+    domainKey: 'CityOfGold',
+  },
+};
+
+export function getArtifactDomainInfo(setKey: string): { domainName: string; domainKey: string } | null {
+  const clean = setKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return ARTIFACT_DOMAINS[clean] ?? null;
+}
+
 // ---------------------------------------------------------------------------
 // Progression Cost Calculation (deterministic against progression-catalog.json)
 // ---------------------------------------------------------------------------
@@ -275,8 +351,15 @@ export function calculateMarginalInvestment(
   const rawCandidates: RawCandidateStep[] = [];
 
   // 1. Talent Candidates
-  const talentKeys = ['burst', 'skill', 'normal'] as const;
-  for (const t of talentKeys) {
+  // Order talent candidates strictly by role priority
+  const orderedTalents: Array<'normal' | 'skill' | 'burst'> = [...benchmark.priorityTalents];
+  for (const t of ['burst', 'skill', 'normal'] as const) {
+    if (!orderedTalents.includes(t)) {
+      orderedTalents.push(t);
+    }
+  }
+
+  for (const t of orderedTalents) {
     const rawTalentLevel = request.character.talents?.[t];
     if (rawTalentLevel === null || rawTalentLevel === undefined) {
       // Never generate talent candidates for null/unrecorded talents
@@ -284,6 +367,11 @@ export function calculateMarginalInvestment(
     }
     const currentTalentLevel = rawTalentLevel;
     const isPriority = benchmark.priorityTalents.includes(t);
+    // Non-priority talents should not be forced to 6 if the guide skips them
+    if (!isPriority && currentTalentLevel < 9) {
+      continue;
+    }
+
     const minBenchmarkLevel = benchmark.minTalentLevels[t] ?? (isPriority ? 8 : 6);
 
     if (currentTalentLevel < minBenchmarkLevel) {
@@ -453,6 +541,18 @@ export function calculateMarginalInvestment(
   const sandsArt = request.character.artifacts?.sands;
   let missingSandsForEr = false;
 
+  const topSet = benchmark.recommendedSets[0]?.setKey ?? '';
+  const domainInfo = topSet ? getArtifactDomainInfo(topSet) : null;
+  const domainCost: ResourceCostItem[] = domainInfo
+    ? [
+        {
+          materialKey: domainInfo.domainKey,
+          name: `Domain: ${domainInfo.domainName} (${topSet})`,
+          count: 1,
+        },
+      ]
+    : [];
+
   if (hasEnergyDeficit) {
     if (sandsArt) {
       if (sandsArt.mainStatKey !== 'energyRecharge') {
@@ -462,7 +562,7 @@ export function calculateMarginalInvestment(
           target: 'sands',
           currentLevel: sandsArt.level ?? 0,
           targetLevel: 20,
-          costs: [],
+          costs: domainCost,
           applyUpgrade: (char) => {
             if (char.artifacts?.sands) {
               char.artifacts = {
@@ -502,7 +602,7 @@ export function calculateMarginalInvestment(
         target: slot,
         currentLevel: art.level ?? 0,
         targetLevel: 20,
-        costs: [],
+        costs: domainCost,
         applyUpgrade: (char) => {
           if (char.artifacts?.[slot]) {
             char.artifacts = {
@@ -556,7 +656,20 @@ export function calculateMarginalInvestment(
 
     const normalizedCost = calculateNormalizedCost(candidate.costs);
     const multiplier = closesGap ? 2.5 : 1.0;
-    const rawEfficiency = (expectedScoreDelta * multiplier) / normalizedCost;
+    const rankIndex = benchmark.priorityTalents.indexOf(
+      candidate.target as 'normal' | 'skill' | 'burst',
+    );
+    const priorityWeight =
+      candidate.category === 'talent'
+        ? rankIndex === 0
+          ? 1.5
+          : rankIndex === 1
+            ? 1.2
+            : rankIndex >= 2
+              ? 1.0
+              : 0.5
+        : 1.0;
+    const rawEfficiency = ((expectedScoreDelta * multiplier) / normalizedCost) * priorityWeight;
     const efficiencyScore = Number((rawEfficiency * 100).toFixed(4));
 
     evaluatedCandidates.push({

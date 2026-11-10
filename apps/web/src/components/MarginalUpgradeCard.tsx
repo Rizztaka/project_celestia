@@ -133,9 +133,11 @@ export function MarginalUpgradeCard({
           {nextAction.costs.length > 0 && (
             <div>
               <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-neutral-400">
-                Required Progression Materials
+                {nextAction.category === 'artifact_main_stat'
+                  ? 'Domain Farming Target'
+                  : 'Required Progression Materials'}
               </span>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {nextAction.costs.map((cost) => (
                   <div
                     key={cost.materialKey}
@@ -144,9 +146,11 @@ export function MarginalUpgradeCard({
                     <span className="mr-2 truncate text-neutral-300" title={cost.name}>
                       {cost.name}
                     </span>
-                    <span className="shrink-0 font-mono font-medium text-amber-300/90">
-                      ×{cost.count.toLocaleString()}
-                    </span>
+                    {cost.materialKey !== 'ArtifactDomain' && (
+                      <span className="shrink-0 font-mono font-medium text-amber-300/90">
+                        ×{cost.count.toLocaleString()}
+                      </span>
+                    )}
                   </div>
                 ))}
               </div>

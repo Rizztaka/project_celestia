@@ -95,6 +95,21 @@ export function explainFinding(f: Finding) {
               ? 'This recorded weapon type does not match the character. Refresh the public observation before planning changes.'
               : 'Weapon identity or character type is unavailable; compatibility cannot be established.';
         break;
+      case 'weapon-tier': {
+        title = 'Weapon tier ranking';
+        const tier = value(f, 'tier');
+        const category = value(f, 'category');
+        const weaponName = value(f, 'weapon');
+        explanation =
+          tier === '1'
+            ? `Equipped weapon (${weaponName}) is verified Best-in-Slot (Tier 1: ${category}) according to KQM theorycrafting standards.`
+            : tier === '2'
+              ? `Equipped weapon (${weaponName}) is a verified competitive alternative (Tier 2: ${category}).`
+              : tier === '3'
+                ? `Equipped weapon (${weaponName}) is a verified budget/F2P option (Tier 3: ${category}).`
+                : `Equipped weapon (${weaponName}) is not in the reviewed weapon rankings for this role. Consider one of the recommended weapons.`;
+        break;
+      }
       case 'equipment-gaps':
         title = 'Equipment observation gaps';
         explanation =
@@ -123,11 +138,22 @@ export function explainFinding(f: Finding) {
         title = 'Stats to consider';
         explanation = `${list(value(f, 'priority'))}. ${value(f, 'character') === 'Sucrose' ? 'EM supports her reaction damage and sharing; Burst usage determines whether ER investment helps.' : 'These are contextual priorities, not universal numerical targets or a fixed CRIT ratio.'}`;
         break;
-      case 'energy-context':
-        title = 'Energy depends on the team';
-        explanation =
-          'Burst frequency, particle collection, teammates and weapon triggers affect ER needs. No exact requirement or deficit is inferred from these stats alone.';
+      case 'energy-context': {
+        const reason = value(f, 'reason');
+        const observed = value(f, 'observed');
+        if (reason === 'unnecessary_er') {
+          title = 'Unnecessary Energy Recharge';
+          explanation = `Observed ER (${observed}) exceeds recommended baseline for a build whose Burst is skipped or requires zero ER. Reallocating ER rolls into core scaling stats improves efficiency.`;
+        } else if (reason === 'energy_deficit') {
+          title = 'Energy Recharge deficit';
+          explanation = `Observed ER (${observed}) is below the verified rotation threshold (180%–200%+). Building additional ER or pairing with a battery teammate is required to sustain smooth rotations.`;
+        } else {
+          title = 'Energy depends on the team';
+          explanation =
+            'Burst frequency, particle collection, teammates and weapon triggers affect ER needs. No exact requirement or deficit is inferred from these stats alone.';
+        }
         break;
+      }
       case 'sucrose-energy':
         title = 'Burst is optional in this pattern';
         explanation =

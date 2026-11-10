@@ -13,7 +13,7 @@ import type {
   TriState,
 } from './types';
 import { artifactSlots, findingCategoryOrder, RULE_PACK_VERSION } from './types';
-import { canonicalEquipmentStat } from './units';
+import { canonicalCombatStat, canonicalEquipmentStat } from './units';
 
 const text = (code: string): FindingValue => ({ kind: 'text', code });
 export function orderFindings(findings: Finding[]) {
@@ -194,12 +194,71 @@ export function analyzeCharacter(
         { hypothesis: changed },
       );
     }
+    // Weapon Tier Ranking from KQM guide
+    if (profile.guide?.weapons && profile.guide.weapons.length > 0 && c.weapon) {
+      const cleanW = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const weaponKeyClean = cleanW(weapon?.referenceKey ?? c.weapon.referenceKey ?? '');
+      const weaponNameClean = cleanW(c.weapon.name ?? weapon?.name ?? '');
+      const matchedRec = profile.guide.weapons.find((w) => {
+        const recClean = cleanW(w.name);
+        return (
+          recClean === weaponKeyClean ||
+          recClean === weaponNameClean ||
+          (weaponNameClean.length > 3 &&
+            (weaponNameClean.includes(recClean) || recClean.includes(weaponNameClean)))
+        );
+      });
+
+      if (matchedRec) {
+        add(
+          'weapon-tier',
+          'conditional_alternative',
+          'true',
+          matchedRec.tier === 1 ? 'fits' : 'depends_on_conditions',
+          {
+            weapon: text(matchedRec.name),
+            tier: text(String(matchedRec.tier)),
+            category: text(matchedRec.category),
+          },
+        );
+      } else {
+        add(
+          'weapon-tier',
+          'source_mismatch',
+          'false',
+          'needs_attention',
+          {
+            weapon: text(c.weapon.name || 'equipped_weapon'),
+            tier: text('unranked'),
+            category: text('Alternative'),
+          },
+        );
+      }
+    }
     const talents = role.talentPriority.map((kind) => c.talents.find((t) => t.kind === kind));
+    const allTalentsKnown = talents.every(Boolean);
+    const primaryTalentKind = role.talentPriority[0];
+    const primaryTalent = c.talents.find((t) => t.kind === primaryTalentKind);
+    let talentOrderValid = true;
+    if (primaryTalent && talents.length > 1) {
+      for (let i = 1; i < role.talentPriority.length; i++) {
+        const secondary = c.talents.find((t) => t.kind === role.talentPriority[i]);
+        if (secondary && secondary.baseLevel > primaryTalent.baseLevel) {
+          talentOrderValid = false;
+          break;
+        }
+      }
+    }
+
     add(
       'talent-priority',
-      'progression',
-      talents.every(Boolean) ? 'true' : 'unknown',
-      talents.every(Boolean) ? 'depends_on_conditions' : 'not_enough_data',
+      talentOrderValid ? 'progression' : 'source_mismatch',
+      allTalentsKnown ? (talentOrderValid ? 'true' : 'false') : 'unknown',
+      allTalentsKnown
+        ? talentOrderValid
+          ? 'depends_on_conditions'
+          : 'needs_attention'
+        : 'not_enough_data',
       {
         priority: text(
           role.talentPriorityGroups
@@ -220,26 +279,89 @@ export function analyzeCharacter(
       priority: text(role.priorityStats.join(',')),
       character: text(profile.referenceKey),
     });
-    add(
-      c.avatarId === 10000114
-        ? 'no-energy-burst'
-        : c.avatarId === 10000043
-          ? 'sucrose-energy'
-          : c.avatarId === 10000047
-            ? 'kazuha-energy'
-            : 'energy-context',
-      'conditional_alternative',
-      'unknown',
-      'depends_on_conditions',
+
+    // Energy Recharge baseline evaluation against KQM guide
+    const erStat = c.stats.find(
+      (s) =>
+        s.id === 'FIGHT_PROP_CHARGE_EFFICIENCY' || canonicalCombatStat(s.id) === 'energyRecharge',
     );
+    const observedEr =
+      erStat != null ? (erStat.unit === 'ratio' ? erStat.raw * 100 : erStat.raw) : null;
+    const energyGuide = profile.guide?.energyRequirements?.toLowerCase() ?? '';
+    const isZeroEr =
+      energyGuide.includes('zero er') ||
+      energyGuide.includes('skip burst') ||
+      energyGuide.includes('not recommended to build er');
+
+    if (observedEr !== null) {
+      if (isZeroEr && observedEr > 140) {
+        add(
+          'energy-context',
+          'conditional_alternative',
+          'false',
+          'depends_on_conditions',
+          {
+            reason: text('unnecessary_er'),
+            observed: text(`${Math.round(observedEr)}%`),
+          },
+        );
+      } else if (
+        (energyGuide.includes('200%') || energyGuide.includes('200%–250%')) &&
+        observedEr < 180
+      ) {
+        add(
+          'energy-context',
+          'source_mismatch',
+          'false',
+          'needs_attention',
+          {
+            reason: text('energy_deficit'),
+            observed: text(`${Math.round(observedEr)}%`),
+          },
+        );
+      } else {
+        const specialEnergy = [10000114, 10000043, 10000047].includes(c.avatarId);
+        add(
+          c.avatarId === 10000114
+            ? 'no-energy-burst'
+            : c.avatarId === 10000043
+              ? 'sucrose-energy'
+              : c.avatarId === 10000047
+                ? 'kazuha-energy'
+                : 'energy-context',
+          'conditional_alternative',
+          specialEnergy ? 'unknown' : 'true',
+          specialEnergy ? 'depends_on_conditions' : 'fits',
+          { observed: text(`${Math.round(observedEr)}%`) },
+        );
+      }
+    } else {
+      add(
+        c.avatarId === 10000114
+          ? 'no-energy-burst'
+          : c.avatarId === 10000043
+            ? 'sucrose-energy'
+            : c.avatarId === 10000047
+              ? 'kazuha-energy'
+              : 'energy-context',
+        'conditional_alternative',
+        'unknown',
+        'depends_on_conditions',
+      );
+    }
+
     if (c.avatarId === 10000032)
       add('bennett-buff-scaling', 'conditional_alternative', 'true', 'depends_on_conditions');
     if (c.avatarId === 10000073)
       add('nahida-em-context', 'conditional_alternative', 'unknown', 'depends_on_conditions');
+
     const preferred =
       role.sets.find((s) => effectivePieces(s.referenceKey) >= s.pieces) ?? role.sets[0];
     const pieces = effectivePieces(preferred.referenceKey);
     const setKnown = hypotheticalSet || (exactArtifacts && !identityGaps.length);
+    const setTier = preferred.tier ?? 1;
+    const isTier1 = setTier === 1 && pieces >= preferred.pieces;
+
     add(
       'set-profile',
       pieces >= preferred.pieces
@@ -248,11 +370,17 @@ export function analyzeCharacter(
           ? 'source_mismatch'
           : 'missing_data',
       pieces >= preferred.pieces ? 'true' : setKnown ? 'false' : 'unknown',
-      pieces >= preferred.pieces ? 'fits' : setKnown ? 'depends_on_conditions' : 'not_enough_data',
+      pieces >= preferred.pieces
+        ? isTier1
+          ? 'fits'
+          : 'depends_on_conditions'
+        : setKnown
+          ? 'depends_on_conditions'
+          : 'not_enough_data',
       {
         set: text(preferred.referenceKey),
         pieces: { kind: 'pieces', count: pieces },
-        ...(preferred.tier ? { tier: text(String(preferred.tier)) } : {}),
+        tier: text(String(setTier)),
         ...(preferred.label ? { label: text(preferred.label) } : {}),
       },
       { hypothesis: !!hypotheticalSet },

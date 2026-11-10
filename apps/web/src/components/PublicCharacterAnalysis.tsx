@@ -155,7 +155,7 @@ export default function PublicCharacterAnalysis({
           <p className="build-kicker">UNDERSTAND THIS BUILD</p>
           <h2>Build analysis</h2>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+        <div className="flex flex-wrap items-center gap-2.5">
           {readiness.data && (
             <ContextualReadinessBadge
               status={readiness.data.status}
@@ -165,8 +165,7 @@ export default function PublicCharacterAnalysis({
           )}
           <button
             type="button"
-            className="button-secondary"
-            style={{ padding: '0.2rem 0.6rem', fontSize: '0.75rem', borderRadius: '1rem' }}
+            className="button-secondary rounded-full px-3 py-1 text-xs font-medium transition-colors hover:border-white/25 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
             onClick={toggleGoodEnough}
             title="Mark this character build as Good Enough to mute high-urgency farming alerts"
           >
@@ -257,14 +256,14 @@ export default function PublicCharacterAnalysis({
         </p>
       ) : null}
       {readiness.data?.dimensions && (
-        <div style={{ marginBlock: '1rem' }}>
+        <div className="my-4">
           <ReadinessDimensionsList
             dimensions={readiness.data.dimensions}
             explanations={readiness.data.explanations}
           />
         </div>
       )}
-      <div style={{ marginBlock: '1rem' }}>
+      <div className="my-4">
         <MarginalUpgradeCard
           marginalData={marginal.data}
           isLoading={marginal.isLoading}

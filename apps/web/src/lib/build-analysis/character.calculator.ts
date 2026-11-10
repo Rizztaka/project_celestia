@@ -249,7 +249,12 @@ export function analyzeCharacter(
           : 'missing_data',
       pieces >= preferred.pieces ? 'true' : setKnown ? 'false' : 'unknown',
       pieces >= preferred.pieces ? 'fits' : setKnown ? 'depends_on_conditions' : 'not_enough_data',
-      { set: text(preferred.referenceKey), pieces: { kind: 'pieces', count: pieces } },
+      {
+        set: text(preferred.referenceKey),
+        pieces: { kind: 'pieces', count: pieces },
+        ...(preferred.tier ? { tier: text(String(preferred.tier)) } : {}),
+        ...(preferred.label ? { label: text(preferred.label) } : {}),
+      },
       { hypothesis: !!hypotheticalSet },
     );
     if (team) {

@@ -8,7 +8,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 
 import { analyzeCharacter, roleOptions } from '../lib/build-analysis/character.calculator';
 import { roleLabels, statusLabels } from '../lib/build-analysis/explainer';
-import { reviewedProfiles } from '../lib/build-analysis/identity';
+import { profileForCharacter, reviewedProfiles } from '../lib/build-analysis/identity';
 import { normalizeObservation } from '../lib/build-analysis/snapshot';
 import { teamContext } from '../lib/build-analysis/team.calculator';
 import type { AnalysisInput, BuildRoleId } from '../lib/build-analysis/types';
@@ -21,6 +21,7 @@ import { useTeamPreferences } from '../lib/use-team-preferences';
 import { useAuthStore } from '../stores/auth.store';
 import { BuildAnalysisComparison } from './BuildAnalysisComparison';
 import { BuildAnalysisFindings } from './BuildAnalysisFindings';
+import { CharacterGuideCard } from './CharacterGuideCard';
 import ContextualReadinessBadge from './ContextualReadinessBadge';
 import MarginalUpgradeCard from './MarginalUpgradeCard';
 import ReadinessDimensionsList from './ReadinessDimensionsList';
@@ -46,6 +47,7 @@ export default function PublicCharacterAnalysis({
     [records, uid],
   );
   const c = normalized.find((r) => r.key === character.key);
+  const reviewedProfile = c ? profileForCharacter(c.avatarId, c.skillDepotId) : null;
   const roles = roleOptions(character);
   const requestedRole =
     localRole ??
@@ -269,6 +271,9 @@ export default function PublicCharacterAnalysis({
           isGoodEnough={isGoodEnough}
         />
       </div>
+      {reviewedProfile && (
+        <CharacterGuideCard profile={reviewedProfile} currentRoleId={analysis.roleId} />
+      )}
       <h3>Next steps</h3>
       {isGoodEnough ? (
         <details className="analysis-disclosure" open={false}>

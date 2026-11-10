@@ -672,7 +672,21 @@ describe('companion capability inventory', () => {
         simulation: 'missing',
         endgame: 'not_modeled',
       },
-      forms: [],
+      forms: [
+        {
+          avatarId: 10000143,
+          depotId: 14301,
+          element: 'Anemo',
+          exact: true,
+          formKey: '10000143:14301',
+          identitySource: 'reviewed_role_profile',
+          mechanics: 'partial',
+          mechanicsSource: 'enka-avatar-snapshot',
+          reviewStatus: 'partial',
+          reviewedRoles: ['on_field_damage'],
+          simulation: 'not_listed',
+        },
+      ],
     });
     expect(report.rows.find((row) => row.key === 'Furina').forms[0]).toMatchObject({
       formKey: '10000089:8901',

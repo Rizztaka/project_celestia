@@ -159,10 +159,15 @@ export function explainFinding(f: Finding) {
         explanation =
           'Skirk uses Serpent’s Subtlety rather than Energy. ER is not an investment priority for her Burst.';
         break;
-      case 'set-profile':
+      case 'set-profile': {
         title = 'Artifact set direction';
-        explanation = `${value(f, 'set').replace(/([a-z])([A-Z])/g, '$1 $2')} is the reviewed starting point for this role. ${truth === 'true' ? 'The required pieces are represented; combat activation is still conditional.' : truth === 'false' ? 'Consider its complete set when planning equipment. Other sets may have team-specific uses outside this rule.' : 'Unresolved pieces prevent an exact conclusion.'}`;
+        const setName = value(f, 'set').replace(/([a-z])([A-Z])/g, '$1 $2');
+        const tierLabel = value(f, 'label');
+        explanation = tierLabel
+          ? `${setName} (${tierLabel}) is reviewed for this role. ${truth === 'true' ? 'The required pieces are represented; combat activation is still conditional.' : truth === 'false' ? 'Consider this set or other reviewed options when planning equipment.' : 'Unresolved pieces prevent an exact conclusion.'}`
+          : `${setName} is the reviewed starting point for this role. ${truth === 'true' ? 'The required pieces are represented; combat activation is still conditional.' : truth === 'false' ? 'Consider its complete set when planning equipment. Other sets may have team-specific uses outside this rule.' : 'Unresolved pieces prevent an exact conclusion.'}`;
         break;
+      }
       case 'skirk-team':
         title = 'Skirk’s party Skill-level bonus';
         explanation =

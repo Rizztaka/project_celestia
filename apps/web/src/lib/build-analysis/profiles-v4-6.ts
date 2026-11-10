@@ -7,7 +7,11 @@ export const v46Profiles: ReviewedCharacterProfile[] = [
     referenceKey: 'Arlecchino',
     displayName: 'Arlecchino',
     defaultRoleId: 'on_field_damage',
-    evidenceIds: ['kqm-arlecchino-reaction-info', 'kqm-arlecchino-pyro-info', 'kqm-arlecchino-guide'],
+    evidenceIds: [
+      'kqm-arlecchino-reaction-info',
+      'kqm-arlecchino-pyro-info',
+      'kqm-arlecchino-guide',
+    ],
     roles: [
       {
         id: 'on_field_damage',
@@ -24,17 +28,78 @@ export const v46Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'elementalMastery', 'energyRecharge'],
         sets: [
-          { referenceKey: 'FragmentOfHarmonicWhimsy', pieces: 4, tier: 1, label: 'Best in Slot (+18% ATK and +54% All DMG Bonus at 3 stacks; effortlessly maintained via Bond of Life consumption)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 4, tier: 1, label: 'Best in Slot Alternative (+18% ATK and +35% Normal Attack DMG unconditionally for Polearms)' },
-          { referenceKey: 'UnfinishedReverie', pieces: 4, tier: 2, label: 'Alternative in Burning Teams (+18% ATK and up to +50% DMG Bonus when enemies are Burning)' },
-          { referenceKey: 'EchoesOfAnOffering', pieces: 4, tier: 2, label: 'Alternative (+18% ATK and +70% ATK Normal Attack Valley Rite proc on stable low ping)' },
-          { referenceKey: 'RetracingBolide', pieces: 4, tier: 2, label: 'Alternative with Shield (+35% Shield Strength and +40% Normal/Charged Attack DMG while protected by a shield)' },
-          { referenceKey: 'CrimsonWitchOfFlames', pieces: 4, tier: 2, label: 'Alternative in Reaction Teams (+15% Pyro DMG and +15% Vaporize/Melt DMG Bonus)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 2, label: 'Alternative in Reaction Teams (+80 EM and dynamic ATK%/EM bonuses in Vaporize/Overvape teams)' },
-          { referenceKey: 'FragmentOfHarmonicWhimsy', pieces: 2, tier: 3, label: 'Transitional 2pc Mix (+18% ATK)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 3, label: 'Transitional 2pc Mix (+18% ATK)' },
-          { referenceKey: 'CrimsonWitchOfFlames', pieces: 2, tier: 3, label: 'Transitional 2pc Mix (+15% Pyro DMG Bonus)' },
-          { referenceKey: 'GildedDreams', pieces: 2, tier: 3, label: 'Transitional 2pc Mix (+80 Elemental Mastery)' },
+          {
+            referenceKey: 'FragmentOfHarmonicWhimsy',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+18% ATK and +54% All DMG Bonus at 3 stacks; effortlessly maintained via Bond of Life consumption)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot Alternative (+18% ATK and +35% Normal Attack DMG unconditionally for Polearms)',
+          },
+          {
+            referenceKey: 'UnfinishedReverie',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative in Burning Teams (+18% ATK and up to +50% DMG Bonus when enemies are Burning)',
+          },
+          {
+            referenceKey: 'EchoesOfAnOffering',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative (+18% ATK and +70% ATK Normal Attack Valley Rite proc on stable low ping)',
+          },
+          {
+            referenceKey: 'RetracingBolide',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative with Shield (+35% Shield Strength and +40% Normal/Charged Attack DMG while protected by a shield)',
+          },
+          {
+            referenceKey: 'CrimsonWitchOfFlames',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative in Reaction Teams (+15% Pyro DMG and +15% Vaporize/Melt DMG Bonus)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative in Reaction Teams (+80 EM and dynamic ATK%/EM bonuses in Vaporize/Overvape teams)',
+          },
+          {
+            referenceKey: 'FragmentOfHarmonicWhimsy',
+            pieces: 2,
+            tier: 3,
+            label: 'Transitional 2pc Mix (+18% ATK)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 3,
+            label: 'Transitional 2pc Mix (+18% ATK)',
+          },
+          {
+            referenceKey: 'CrimsonWitchOfFlames',
+            pieces: 2,
+            tier: 3,
+            label: 'Transitional 2pc Mix (+15% Pyro DMG Bonus)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 2,
+            tier: 3,
+            label: 'Transitional 2pc Mix (+80 Elemental Mastery)',
+          },
         ],
       },
     ],
@@ -45,16 +110,16 @@ export const v46Profiles: ReviewedCharacterProfile[] = [
       energyRequirements:
         'Burst costs 60 Energy with a 15s CD. In optimal rotations, building ER substats is not recommended (100% ER baseline): her Burst resets her surplus Bond of Life accumulated across rotations and should only be used for emergency healing in shieldless teams. If casting Burst every rotation is required for survival: 120% ER in Triple Pyro (Bennett + Xiangling/Chevreuse); 140%–150% ER in Double Pyro (Bennett/Chevreuse); and 150%+ ER in Solo Pyro. Each Favonius proc lowers requirements by 10%–15%.',
       combatTips: [
-        'Early Skill Rotation Flow (5-Second Directive Maturation): Pre-C2, always open the rotation with Arlecchino\'s Elemental Skill (E), then immediately swap off to teammates to cast their skills, bursts, and buffs (taking 5+ seconds). When swapping back to Arlecchino, the Blood-Debt Directives will have matured into Blood-Debt Dues, granting the full 130% Bond of Life upon Charged Attack (CA) absorption. Absorbing unmatured Directives yields only 65% BoL!',
+        "Early Skill Rotation Flow (5-Second Directive Maturation): Pre-C2, always open the rotation with Arlecchino's Elemental Skill (E), then immediately swap off to teammates to cast their skills, bursts, and buffs (taking 5+ seconds). When swapping back to Arlecchino, the Blood-Debt Directives will have matured into Blood-Debt Dues, granting the full 130% Bond of Life upon Charged Attack (CA) absorption. Absorbing unmatured Directives yields only 65% BoL!",
         'In-Combat Healing Restriction & Defensive Support: Because Arlecchino cannot be healed by external healers in combat, shielders (Zhongli, Layla, Thoma, Citlali, Lan Yan) or damage-reduction buffers (Xingqiu, Beidou, Dehya) provide immense value and comfort, allowing her to stay alive without having to cast Burst and sacrifice her stored Bond of Life.',
-        'No HP-Scaling Trap: Arlecchino\'s damage scales entirely with ATK and percentage-based Bond of Life. A higher Max HP stat does NOT increase the damage bonus of Masque of the Red Death nor the percentage of Bond of Life absorbed. Avoid HP% main stats and substats entirely.',
+        "No HP-Scaling Trap: Arlecchino's damage scales entirely with ATK and percentage-based Bond of Life. A higher Max HP stat does NOT increase the damage bonus of Masque of the Red Death nor the percentage of Bond of Life absorbed. Avoid HP% main stats and substats entirely.",
         'Burst Timing Discipline: Avoid casting Burst mid-combo. Casting Burst clears all remaining Bond of Life and cancels Pyro infusion. If emergency healing is needed, delay Burst to the start of the next rotation right as her Skill comes off cooldown, or execute E -> Q -> CA to quickly refresh infusion.',
         'Normal Attack Combo Strings: In standard combat, execute 3x N6D or N3D / N5D combos. Because damage is frontloaded when Bond of Life percentage is highest, cancel recovery frames with quick dashes to rapidly cycle attacks.',
         'Constellation 1 & 2 Watersheds: C1 increases Masque of the Red Death ratio by an absolute +100% and grants interruption resistance during Normal Attacks. C2 immediately converts Directives into Blood-Debt Dues upon Skill cast (removing the 5s delay) and unleashes a 900% ATK AoE Pyro Balemoon Bloodfire blast when absorbed.',
       ],
       weapons: [
         {
-          name: 'Crimson Moon\'s Semblance',
+          name: "Crimson Moon's Semblance",
           tier: 1,
           rarity: 5,
           category: 'BiS',
@@ -126,7 +191,7 @@ export const v46Profiles: ReviewedCharacterProfile[] = [
             '33.1% CRIT Rate and +15% ATK stat stick, with additional DMG buffs in Burning/Burgeon teams.',
         },
         {
-          name: 'Dragon\'s Bane',
+          name: "Dragon's Bane",
           tier: 2,
           rarity: 4,
           category: 'Alternative',

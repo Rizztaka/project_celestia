@@ -7,7 +7,12 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
     referenceKey: 'Escoffier',
     displayName: 'Escoffier',
     defaultRoleId: 'resistance_shred',
-    evidenceIds: ['kqm-escoffier-freeze-info', 'kqm-escoffier-general-info', 'kqm-escoffier-guide', 'kqm-escoffier'],
+    evidenceIds: [
+      'kqm-escoffier-freeze-info',
+      'kqm-escoffier-general-info',
+      'kqm-escoffier-guide',
+      'kqm-escoffier',
+    ],
     roles: [
       {
         id: 'resistance_shred',
@@ -28,19 +33,22 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'TenacityOfTheMillelith',
             pieces: 4,
             tier: 1,
-            label: 'Best in Slot for team support (+20% HP & continuous +20% Teamwide ATK via automated Skill hits)',
+            label:
+              'Best in Slot for team support (+20% HP & continuous +20% Teamwide ATK via automated Skill hits)',
           },
           {
             referenceKey: 'ScrollOfTheHeroOfCinderCity',
             pieces: 4,
             tier: 1,
-            label: 'Best in Slot (+40% Teamwide Elemental DMG Bonus to Cryo/Hydro on reaction; provides 2pc energy refund)',
+            label:
+              'Best in Slot (+40% Teamwide Elemental DMG Bonus to Cryo/Hydro on reaction; provides 2pc energy refund)',
           },
           {
             referenceKey: 'NoblesseOblige',
             pieces: 4,
             tier: 2,
-            label: 'Alternative (+20% Teamwide ATK on Burst; used when teammates already hold TotM or Scroll)',
+            label:
+              'Alternative (+20% Teamwide ATK on Burst; used when teammates already hold TotM or Scroll)',
           },
           {
             referenceKey: 'GoldenTroupe',
@@ -121,14 +129,14 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
     guide: {
       sourceUrl: 'https://keqingmains.com/q/escoffier-quickguide/',
       playstyleSummary:
-        '5-star Cryo Polearm master chef from Fontaine specializing as a premier Cryo/Hydro resistance shredder, off-field Cryo sub-DPS, and teamwide healer. In teams consisting exclusively of Cryo and Hydro characters, Escoffier\'s A4 passive shreds up to an astounding 55% Cryo and Hydro RES with near-permanent uptime! Her Elemental Skill (Precision Saute) deploys automated culinary creations that unleash rapid, single-target off-field Cryo damage, while her Elemental Burst (Patissiere Supreme, 60 Energy, 15s CD) delivers powerful teamwide healing and continuous sustained regeneration. Because her debuffs do not depend on Freezing enemies, she functions flawlessly against unfreezable bosses as well as in Melt and Stellar-Conduct teams.',
+        "5-star Cryo Polearm master chef from Fontaine specializing as a premier Cryo/Hydro resistance shredder, off-field Cryo sub-DPS, and teamwide healer. In teams consisting exclusively of Cryo and Hydro characters, Escoffier's A4 passive shreds up to an astounding 55% Cryo and Hydro RES with near-permanent uptime! Her Elemental Skill (Precision Saute) deploys automated culinary creations that unleash rapid, single-target off-field Cryo damage, while her Elemental Burst (Patissiere Supreme, 60 Energy, 15s CD) delivers powerful teamwide healing and continuous sustained regeneration. Because her debuffs do not depend on Freezing enemies, she functions flawlessly against unfreezable bosses as well as in Melt and Stellar-Conduct teams.",
       energyRequirements:
         'In Triple Cryo: 120%–150% at C0 (100%–115% at C4). In Double Cryo: 130%–165% at C0 (100%–125% at C4). In Skirk teams: 155%–175% Triple Cryo, 185%–200% Double Cryo. In Solo Cryo: 160%–195% (Favonius Lance strongly recommended). If teamwide Burst healing is not required, ER can be deprioritized to maximize personal Skill damage.',
       combatTips: [
-        'Pure Cryo/Hydro Team Composition Requirement (55% RES Shred): Escoffier\'s signature A4 passive provides the highest unconditional elemental resistance shred in the game (up to 55% Cryo and Hydro RES) when the party is restricted entirely to Cryo and Hydro characters. This elevates Ayaka, Wriothesley, Skirk, Neuvillette, and Furina teams to unmatched damage ceilings without needing Anemo VV.',
-        'Boss Neutrality Invariant: Unlike conventional Freeze buffers who lose effectiveness when enemies cannot be Frozen, Escoffier\'s 55% RES shred applies on hit regardless of whether the enemy is frozen, making her exceptionally lethal against Abyss bosses.',
-        'Talent Priority (Skill > Burst >> NA): Escoffier\'s personal damage output is overwhelmingly concentrated in her Elemental Skill, while her Burst handles party sustain. Her Normal Attack talent contributes zero utility and should remain at Level 1.',
-        'Symphonist of Scents Synergy: Her signature 5★ polearm triggers an unconditional ATK% party buff whenever healing is triggered. Escoffier\'s A1 passive periodic healing seamlessly maintains this buff with near-100% uptime for snapshotting carries like Ayaka and Ganyu.',
+        "Pure Cryo/Hydro Team Composition Requirement (55% RES Shred): Escoffier's signature A4 passive provides the highest unconditional elemental resistance shred in the game (up to 55% Cryo and Hydro RES) when the party is restricted entirely to Cryo and Hydro characters. This elevates Ayaka, Wriothesley, Skirk, Neuvillette, and Furina teams to unmatched damage ceilings without needing Anemo VV.",
+        "Boss Neutrality Invariant: Unlike conventional Freeze buffers who lose effectiveness when enemies cannot be Frozen, Escoffier's 55% RES shred applies on hit regardless of whether the enemy is frozen, making her exceptionally lethal against Abyss bosses.",
+        "Talent Priority (Skill > Burst >> NA): Escoffier's personal damage output is overwhelmingly concentrated in her Elemental Skill, while her Burst handles party sustain. Her Normal Attack talent contributes zero utility and should remain at Level 1.",
+        "Symphonist of Scents Synergy: Her signature 5★ polearm triggers an unconditional ATK% party buff whenever healing is triggered. Escoffier's A1 passive periodic healing seamlessly maintains this buff with near-100% uptime for snapshotting carries like Ayaka and Ganyu.",
         'Favonius Lance & Frostbreath Utility: When running high-energy teammates (e.g. Skirk, Ayaka), Favonius Lance or the event polearm Frostbreath drastically smooths out party energy loops with consistent neutral particles.',
       ],
       weapons: [
@@ -137,21 +145,24 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: '5★ Signature Polearm and undisputed Best-in-Slot by a significant margin. High Base ATK, generous CRIT stats, and an ATK% buff for herself and the active carry refreshed continuously via A1 healing.',
+          notes:
+            '5★ Signature Polearm and undisputed Best-in-Slot by a significant margin. High Base ATK, generous CRIT stats, and an ATK% buff for herself and the active carry refreshed continuously via A1 healing.',
         },
         {
           name: 'Fractured Halo',
           rarity: 5,
           tier: 1,
           category: 'Alternative',
-          notes: '5★ Top-Tier 5★ Alternative. High base stats and unconditional damage boosts, particularly competitive with Shenhe buffs.',
+          notes:
+            '5★ Top-Tier 5★ Alternative. High base stats and unconditional damage boosts, particularly competitive with Shenhe buffs.',
         },
         {
           name: 'Calamity Queller',
           rarity: 5,
           tier: 1,
           category: 'Alternative',
-          notes: '5★ Massive ATK Weapon. Enormous 741 Base ATK and stacking off-field ATK% buffs provide top-tier raw stat output.',
+          notes:
+            '5★ Massive ATK Weapon. Enormous 741 Base ATK and stacking off-field ATK% buffs provide top-tier raw stat output.',
         },
         {
           name: 'Staff of Homa',
@@ -172,28 +183,32 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'BiS',
-          notes: '4★ Battle Pass Best-in-Slot. Provides 36.8% CRIT Rate and strong ATK buffs; rivals 5★ weapons in single-target fights.',
+          notes:
+            '4★ Battle Pass Best-in-Slot. Provides 36.8% CRIT Rate and strong ATK buffs; rivals 5★ weapons in single-target fights.',
         },
         {
           name: 'Favonius Lance',
           rarity: 4,
           tier: 1,
           category: 'Utility',
-          notes: '4★ Premier Battery Utility. Alleviates high Burst ER requirements for both Escoffier and energy-hungry teammates (Ayaka, Skirk).',
+          notes:
+            '4★ Premier Battery Utility. Alleviates high Burst ER requirements for both Escoffier and energy-hungry teammates (Ayaka, Skirk).',
         },
         {
           name: 'Frostbreath',
           rarity: 4,
           tier: 2,
           category: 'Alternative',
-          notes: '4★ Battle Pass Alternative. High ER secondary stat and 20%–40% ATK buff while batterying teammates.',
+          notes:
+            '4★ Battle Pass Alternative. High ER secondary stat and 20%–40% ATK buff while batterying teammates.',
         },
         {
-          name: 'Sacrificer\'s Staff',
+          name: "Sacrificer's Staff",
           rarity: 4,
           tier: 2,
           category: 'Alternative',
-          notes: '4★ Gacha Alternative. Provides ATK buffs and energy refund with permanent uptime after the first 3 Skill hits.',
+          notes:
+            '4★ Gacha Alternative. Provides ATK buffs and energy refund with permanent uptime after the first 3 Skill hits.',
         },
         {
           name: 'Primordial Jade Winged-Spear',
@@ -203,7 +218,7 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
           notes: '5★ Stat Stick. High 674 Base ATK and 22.1% CRIT Rate.',
         },
         {
-          name: 'Crimson Moon\'s Semblance',
+          name: "Crimson Moon's Semblance",
           rarity: 5,
           tier: 2,
           category: 'Alternative',
@@ -252,13 +267,15 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'ViridescentVenerer',
             pieces: 4,
             tier: 1,
-            label: 'Best in Slot (-40% Elemental RES shred on Swirl; unrivaled team damage amplification)',
+            label:
+              'Best in Slot (-40% Elemental RES shred on Swirl; unrivaled team damage amplification)',
           },
           {
             referenceKey: 'ScrollOfTheHeroOfCinderCity',
             pieces: 4,
             tier: 1,
-            label: 'Best in Slot Alternative (+40% Teamwide Elemental DMG Bonus via Nightsoul Blessing; ideal when another teammate holds VV)',
+            label:
+              'Best in Slot Alternative (+40% Teamwide Elemental DMG Bonus via Nightsoul Blessing; ideal when another teammate holds VV)',
           },
           {
             referenceKey: 'GildedDreams',
@@ -301,7 +318,8 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'ObsidianCodex',
             pieces: 4,
             tier: 1,
-            label: 'Best in Slot for personal damage (+15% DMG and +40% CRIT Rate during Nightsoul\'s Blessing)',
+            label:
+              "Best in Slot for personal damage (+15% DMG and +40% CRIT Rate during Nightsoul's Blessing)",
           },
           {
             referenceKey: 'ViridescentVenerer',
@@ -319,7 +337,8 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'NightOfTheSkysUnveiling',
             pieces: 4,
             tier: 2,
-            label: 'Alternative (+10% Lunar Reaction DMG bonus when paired with 2 Nod-Krai characters)',
+            label:
+              'Alternative (+10% Lunar Reaction DMG bonus when paired with 2 Nod-Krai characters)',
           },
         ],
       },
@@ -327,13 +346,13 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
     guide: {
       sourceUrl: 'https://keqingmains.com/q/ifa-quickguide/',
       playstyleSummary:
-        '4-star Anemo Catalyst veterinary doctor from Natlan\'s Flower-Feather Clan serving as a high-utility on-field Swirl driver, team healer, and 4pc Viridescent Venerer debuffer (or on-field Anemo DPS with Faruzan). Upon activating his Elemental Skill (Airborne Disease Prevention), Ifa enters Nightsoul\'s Blessing and hovers airborne on his companion sauroform, converting attacks into rapid Anemo Supporting Fire that continuously swirls elements and triggers team healing scaling from his Elemental Mastery. His Elemental Burst (Rite of Dispelling Winds, 60 Energy, 15s CD) fires an explosive wind shell that groups enemies and deals AoE Anemo damage.',
+        "4-star Anemo Catalyst veterinary doctor from Natlan's Flower-Feather Clan serving as a high-utility on-field Swirl driver, team healer, and 4pc Viridescent Venerer debuffer (or on-field Anemo DPS with Faruzan). Upon activating his Elemental Skill (Airborne Disease Prevention), Ifa enters Nightsoul's Blessing and hovers airborne on his companion sauroform, converting attacks into rapid Anemo Supporting Fire that continuously swirls elements and triggers team healing scaling from his Elemental Mastery. His Elemental Burst (Rite of Dispelling Winds, 60 Energy, 15s CD) fires an explosive wind shell that groups enemies and deals AoE Anemo damage.",
       energyRequirements:
         'In Solo Anemo Swirl teams: 160%–195% (20s rotation) or 135%–150% (25s rotation) at C0 (reduced to 110%–155% at C1+). In Anemo DPS teams with Faruzan: 130%–180% with pre-C6 Faruzan, down to 105%–145% with C6 Faruzan. Holding Favonius Codex reduces ER requirements by 15%–30% per proc. When playing pure Swirl DPS, Bursting every rotation is optional; building ER is only recommended when ER needs stay below 150%.',
       combatTips: [
-        'Character Level 90 Benchmark: Because Ifa\'s Swirl damage and electro-charged / chain-reaction triggers scale exponentially with character level, leveling Ifa to 90 provides an immense return on investment for his Swirl driver playstyle.',
-        'Airborne Sauroform Hover Stance: Ifa\'s Skill allows him to hover freely above enemy melee range and environmental hazards while unleashing Anemo barrage attacks, granting superior safety and field vision during intense Abyss encounters.',
-        'Elemental Mastery Healing Scaling: Ifa\'s A1 passive scales his party healing directly from his Elemental Mastery. Equipping triple EM artifacts (Sands, Goblet, Circlet) simultaneously maximizes his healing output, personal Swirl damage, and A4 passive bonuses.',
+        "Character Level 90 Benchmark: Because Ifa's Swirl damage and electro-charged / chain-reaction triggers scale exponentially with character level, leveling Ifa to 90 provides an immense return on investment for his Swirl driver playstyle.",
+        "Airborne Sauroform Hover Stance: Ifa's Skill allows him to hover freely above enemy melee range and environmental hazards while unleashing Anemo barrage attacks, granting superior safety and field vision during intense Abyss encounters.",
+        "Elemental Mastery Healing Scaling: Ifa's A1 passive scales his party healing directly from his Elemental Mastery. Equipping triple EM artifacts (Sands, Goblet, Circlet) simultaneously maximizes his healing output, personal Swirl damage, and A4 passive bonuses.",
         'Role Consolidation (Healer + 4pc VV Shred): By merging partywide sustain and 4pc Viridescent Venerer (-40% RES shred) into a single on-field driver slot, Ifa enables high-damage triple off-field carry teams (e.g. Furina + Yelan + Fischl, or Xiangling + Xingqiu + Bennett).',
       ],
       weapons: [
@@ -342,10 +361,11 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: '5★ Signature Swirl BiS. Grants up to 417 Elemental Mastery, maximizing Swirl damage and teamwide healing.',
+          notes:
+            '5★ Signature Swirl BiS. Grants up to 417 Elemental Mastery, maximizing Swirl damage and teamwide healing.',
         },
         {
-          name: 'Starcaller\'s Watch',
+          name: "Starcaller's Watch",
           rarity: 5,
           tier: 1,
           category: 'Alternative',
@@ -356,28 +376,32 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'Alternative',
-          notes: '5★ Team Support Catalyst. Provides 265 EM and buffs party members with bonus Elemental Mastery.',
+          notes:
+            '5★ Team Support Catalyst. Provides 265 EM and buffs party members with bonus Elemental Mastery.',
         },
         {
           name: 'Wandering Evenstar',
           rarity: 4,
           tier: 1,
           category: 'BiS',
-          notes: '4★ Support Best-in-Slot. Grants 165 EM and converts Ifa\'s high EM into a teamwide flat ATK buff.',
+          notes:
+            "4★ Support Best-in-Slot. Grants 165 EM and converts Ifa's high EM into a teamwide flat ATK buff.",
         },
         {
           name: 'Favonius Codex',
           rarity: 4,
           tier: 1,
           category: 'Utility',
-          notes: '4★ Battery Utility Best-in-Slot. Neutralizes party energy requirements and enables reliable burst rotations with modest CRIT Rate investment.',
+          notes:
+            '4★ Battery Utility Best-in-Slot. Neutralizes party energy requirements and enables reliable burst rotations with modest CRIT Rate investment.',
         },
         {
           name: 'Prototype Amber',
           rarity: 4,
           tier: 1,
           category: 'Utility',
-          notes: '4★ Team Healer Utility. Restores teamwide HP and refunds energy upon Burst, highly recommended for Furina Fanfare stacking.',
+          notes:
+            '4★ Team Healer Utility. Restores teamwide HP and refunds energy upon Burst, highly recommended for Furina Fanfare stacking.',
         },
         {
           name: 'Sacrificial Fragments',
@@ -387,7 +411,7 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
           notes: '4★ High EM 4-Star. 221 EM secondary stat to amplify Swirl and heal scaling.',
         },
         {
-          name: 'Nightweaver\'s Looking Glass',
+          name: "Nightweaver's Looking Glass",
           rarity: 5,
           tier: 2,
           category: 'Alternative',
@@ -398,7 +422,8 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 2,
           category: 'Utility',
-          notes: '4★ Reaction Support. Grants Elemental DMG% buffs to Electro, Hydro, or Dendro teammates upon triggering Swirl / Electro-Charged / Aggravate.',
+          notes:
+            '4★ Reaction Support. Grants Elemental DMG% buffs to Electro, Hydro, or Dendro teammates upon triggering Swirl / Electro-Charged / Aggravate.',
         },
         {
           name: 'Etherlight Spindlelute',
@@ -419,21 +444,24 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
           rarity: 3,
           tier: 3,
           category: 'F2P',
-          notes: '3★ F2P Budget Stat Stick. Provides 187 EM for accessible early-game Swirl scaling.',
+          notes:
+            '3★ F2P Budget Stat Stick. Provides 187 EM for accessible early-game Swirl scaling.',
         },
         {
           name: 'Cashflow Supervision',
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: '5★ Best-in-Slot for Anemo DPS build. High Base ATK, CRIT Rate, and Normal Attack DMG% (best with Furina).',
+          notes:
+            '5★ Best-in-Slot for Anemo DPS build. High Base ATK, CRIT Rate, and Normal Attack DMG% (best with Furina).',
         },
         {
-          name: 'Tulaytullah\'s Remembrance',
+          name: "Tulaytullah's Remembrance",
           rarity: 5,
           tier: 1,
           category: 'Alternative',
-          notes: '5★ Anemo DPS Alternative. 674 Base ATK, 44.1% CRIT DMG, and stacking Normal Attack buffs.',
+          notes:
+            '5★ Anemo DPS Alternative. 674 Base ATK, 44.1% CRIT DMG, and stacking Normal Attack buffs.',
         },
         {
           name: 'The Widsith',
@@ -443,7 +471,7 @@ export const v56Profiles: ReviewedCharacterProfile[] = [
           notes: '4★ Premier Anemo DPS 4★. 55.1% CRIT DMG and explosive frontloaded song buffs.',
         },
         {
-          name: 'Surf\'s Up',
+          name: "Surf's Up",
           rarity: 5,
           tier: 2,
           category: 'Alternative',

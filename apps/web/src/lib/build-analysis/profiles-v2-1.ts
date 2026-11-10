@@ -24,9 +24,24 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent', 'elementalMastery'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot (+20% ER and converts ER to Burst DMG up to +75%)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 2, label: 'Alternative with Furina (+36% Crit Rate from HP fluctuations)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 2, label: 'Alternative in Aggravate / Quickbloom teams' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+20% ER and converts ER to Burst DMG up to +75%)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative with Furina (+36% Crit Rate from HP fluctuations)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative in Aggravate / Quickbloom teams',
+          },
         ],
       },
       {
@@ -39,10 +54,30 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['elementalMastery', 'energyRecharge'],
         sets: [
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 4, tier: 1, label: 'Best in Slot (+80 EM and up to +140% Hyperbloom reaction DMG)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Best in Slot (+80 EM and up to +150 EM party reaction buff)' },
-          { referenceKey: 'GildedDreams', pieces: 2, tier: 2, label: 'Alternative 2pc EM (+80 EM)' },
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 2, tier: 2, label: 'Alternative 2pc EM (+80 EM)' },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+80 EM and up to +140% Hyperbloom reaction DMG)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+80 EM and up to +150 EM party reaction buff)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc EM (+80 EM)',
+          },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc EM (+80 EM)',
+          },
         ],
       },
       {
@@ -55,8 +90,18 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot (+20% ER and maximises Burst personal damage and battery)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 2, label: 'Alternative Support (Skill procs provide continuous +20% team ATK)' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+20% ER and maximises Burst personal damage and battery)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Support (Skill procs provide continuous +20% team ATK)',
+          },
         ],
       },
     ],
@@ -68,7 +113,7 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         '200%–250% ER for standard Burst rotations; up to 270% when equipping Engulfing Lightning to optimize ER-to-ATK conversion and A4 passive scaling. In Hyperbloom teams, ER is irrelevant as she relies solely on her Skill.',
       combatTips: [
         'Musou Isshin converted attacks scale strictly from Elemental Burst talent multipliers, NOT Normal Attack talent levels. Leave her Normal Attack talent at Level 1.',
-        'Chakra Desiderata accumulates Resolve stacks whenever party members cast their Bursts (0.15–0.3 stacks per Energy consumed). Always execute all teammate Bursts prior to unleashing Raiden\'s Burst for maximum damage.',
+        "Chakra Desiderata accumulates Resolve stacks whenever party members cast their Bursts (0.15–0.3 stacks per Energy consumed). Always execute all teammate Bursts prior to unleashing Raiden's Burst for maximum damage.",
         'A4 Passive (Enlightened One): For each 1% ER above 100%, Raiden gains +0.4% Electro DMG Bonus and +0.6% greater Energy restoration from Musou Isshin hits.',
         'During Musou Isshin, Raiden possesses complete interruption immunity and is unaffected by Electro-Charged reaction self-damage.',
         'For Hyperbloom trigger setups, level Raiden to 90 as transformative reaction damage scales directly with character level and Elemental Mastery (aim for 900–1000+ EM).',
@@ -79,91 +124,104 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
           tier: 1,
           rarity: 5,
           category: 'BiS',
-          notes: 'Signature weapon and undisputed BiS for on-field Burst DPS. Converts ER above 100% into ATK% and grants +30%–50% ER upon Burst cast, perfectly harmonizing with Emblem of Severed Fate and A4 passive.',
+          notes:
+            'Signature weapon and undisputed BiS for on-field Burst DPS. Converts ER above 100% into ATK% and grants +30%–50% ER upon Burst cast, perfectly harmonizing with Emblem of Severed Fate and A4 passive.',
         },
         {
           name: 'The Catch',
           tier: 1,
           rarity: 4,
           category: 'BiS',
-          notes: 'Outstanding free-to-play weapon obtainable through fishing. At R5, provides 45.9% ER, +32% Burst DMG Bonus, and +12% Burst Crit Rate, rivalling many 5-star polearms.',
+          notes:
+            'Outstanding free-to-play weapon obtainable through fishing. At R5, provides 45.9% ER, +32% Burst DMG Bonus, and +12% Burst Crit Rate, rivalling many 5-star polearms.',
         },
         {
           name: 'Staff of the Scarlet Sands',
           tier: 1,
           rarity: 5,
           category: 'Alternative',
-          notes: 'Top-tier offensive 5-star option with 44.1% Crit Rate. Exceptionally powerful in Aggravate, Quickbloom, or Bennett teams where EM buffs are converted into bonus ATK.',
+          notes:
+            'Top-tier offensive 5-star option with 44.1% Crit Rate. Exceptionally powerful in Aggravate, Quickbloom, or Bennett teams where EM buffs are converted into bonus ATK.',
         },
         {
           name: 'Staff of Homa',
           tier: 1,
           rarity: 5,
           category: 'Alternative',
-          notes: 'Substantial 66.2% Crit DMG substat with unconditional HP-to-ATK conversion. Highly competitive when ER requirements are met through artifacts.',
+          notes:
+            'Substantial 66.2% Crit DMG substat with unconditional HP-to-ATK conversion. Highly competitive when ER requirements are met through artifacts.',
         },
         {
           name: 'Primordial Jade Winged-Spear',
           tier: 1,
           rarity: 5,
           category: 'Alternative',
-          notes: 'High 674 Base ATK and Crit Rate substat. Raiden quickly stacks its on-hit ATK% and DMG% passive during her initial Musou Isshin combo.',
+          notes:
+            'High 674 Base ATK and Crit Rate substat. Raiden quickly stacks its on-hit ATK% and DMG% passive during her initial Musou Isshin combo.',
         },
         {
-          name: 'Dragon\'s Bane',
+          name: "Dragon's Bane",
           tier: 1,
           rarity: 4,
           category: 'BiS',
-          notes: 'Undisputed Best in Slot for Hyperbloom trigger role. Provides a massive 221 Elemental Mastery substat with zero refinement requirement.',
+          notes:
+            'Undisputed Best in Slot for Hyperbloom trigger role. Provides a massive 221 Elemental Mastery substat with zero refinement requirement.',
         },
         {
           name: 'Skyward Spine',
           tier: 2,
           rarity: 5,
           category: 'Alternative',
-          notes: 'High Base ATK, 36.8% ER substat, +8% Crit Rate, and +12% Normal Attack Speed which enables smoother N3D/N4D Burst attack strings.',
+          notes:
+            'High Base ATK, 36.8% ER substat, +8% Crit Rate, and +12% Normal Attack Speed which enables smoother N3D/N4D Burst attack strings.',
         },
         {
           name: 'Ballad of the Fjords',
           tier: 2,
           rarity: 4,
           category: 'Alternative',
-          notes: 'Battle Pass polearm with high Crit Rate and up to +240 EM passive in multi-element teams, excelling in Aggravate and Quickbloom.',
+          notes:
+            'Battle Pass polearm with high Crit Rate and up to +240 EM passive in multi-element teams, excelling in Aggravate and Quickbloom.',
         },
         {
-          name: 'Wavebreaker\'s Fin',
+          name: "Wavebreaker's Fin",
           tier: 2,
           rarity: 4,
           category: 'Alternative',
-          notes: 'High Base ATK polearm that scales Burst DMG% based on total party Burst energy costs, particularly devastating at R3–R5 in high-energy teams.',
+          notes:
+            'High Base ATK polearm that scales Burst DMG% based on total party Burst energy costs, particularly devastating at R3–R5 in high-energy teams.',
         },
         {
           name: 'Deathmatch',
           tier: 2,
           rarity: 4,
           category: 'Alternative',
-          notes: 'Solid stat stick providing 36.8% Crit Rate and bonus ATK% depending on opponent count.',
+          notes:
+            'Solid stat stick providing 36.8% Crit Rate and bonus ATK% depending on opponent count.',
         },
         {
           name: 'Moonpiercer',
           tier: 2,
           rarity: 4,
           category: 'F2P',
-          notes: 'Craftable EM polearm for Hyperbloom/Aggravate that spawns a Leaf of Revival granting +16%–32% ATK to a party member.',
+          notes:
+            'Craftable EM polearm for Hyperbloom/Aggravate that spawns a Leaf of Revival granting +16%–32% ATK to a party member.',
         },
         {
           name: 'Kitain Cross Spear',
           tier: 2,
           rarity: 4,
           category: 'F2P',
-          notes: 'Craftable EM polearm with flat Energy refund on Skill hit, helpful for hybrid builds or comfortable Burst rotations.',
+          notes:
+            'Craftable EM polearm with flat Energy refund on Skill hit, helpful for hybrid builds or comfortable Burst rotations.',
         },
         {
           name: 'Favonius Lance',
           tier: 3,
           rarity: 4,
           category: 'Utility',
-          notes: 'Provides high ER and generates neutral energy particles for the whole team, but substantially lowers Raiden\'s personal damage.',
+          notes:
+            "Provides high ER and generates neutral energy particles for the whole team, but substantially lowers Raiden's personal damage.",
         },
       ],
     },
@@ -186,11 +244,38 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'hpPercent', 'maxHp', 'elementalMastery'],
         sets: [
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 1, label: 'Best in Slot for Healing & Sub-DPS (Sea-Dyed Foam deals up to ~30k physical AOE damage)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 1, label: 'Best in Slot Off-Field Team Support (Bake-Kurage ticks guarantee 100% uptime on +20% ATK)' },
-          { referenceKey: 'SongOfDaysPast', pieces: 4, tier: 2, label: 'Alternative Support (Converts healing into flat damage addition)' },
-          { referenceKey: 'MaidenBeloved', pieces: 4, tier: 2, label: 'Alternative Maximum Healing (+15% Healing Bonus and +20% incoming heals)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative Support (+120 Team EM on Elemental Reaction)' },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot for Healing & Sub-DPS (Sea-Dyed Foam deals up to ~30k physical AOE damage)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot Off-Field Team Support (Bake-Kurage ticks guarantee 100% uptime on +20% ATK)',
+          },
+          {
+            referenceKey: 'SongOfDaysPast',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Support (Converts healing into flat damage addition)',
+          },
+          {
+            referenceKey: 'MaidenBeloved',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Maximum Healing (+15% Healing Bonus and +20% incoming heals)',
+          },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Support (+120 Team EM on Elemental Reaction)',
+          },
         ],
       },
       {
@@ -203,8 +288,18 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'hpPercent', 'maxHp', 'elementalMastery'],
         sets: [
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 1, label: 'Best in Slot for On-Field Driver & Teamwide Healing' },
-          { referenceKey: 'HeartOfDepth', pieces: 4, tier: 2, label: 'Alternative (+15% Hydro DMG and +30% Normal/Charged Attack DMG)' },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot for On-Field Driver & Teamwide Healing',
+          },
+          {
+            referenceKey: 'HeartOfDepth',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+15% Hydro DMG and +30% Normal/Charged Attack DMG)',
+          },
         ],
       },
       {
@@ -217,9 +312,24 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['elementalMastery', 'hpPercent', 'energyRecharge', 'maxHp'],
         sets: [
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 4, tier: 1, label: 'Best in Slot Bloom Reaction DMG (+80 EM and up to +140% Bloom DMG)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Best in Slot EM Stacking (+80 EM and +150 EM party reaction buff)' },
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 2, label: 'Alternative Bloom & Healing Hybrid' },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Bloom Reaction DMG (+80 EM and up to +140% Bloom DMG)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot EM Stacking (+80 EM and +150 EM party reaction buff)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Bloom & Healing Hybrid',
+          },
         ],
       },
       {
@@ -232,20 +342,30 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'hpPercent', 'maxHp'],
         sets: [
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 1, label: 'Best in Slot Buffer (100% uptime on team +20% ATK from Bake-Kurage)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative Team EM Buffer (+120 Team EM)' },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Buffer (100% uptime on team +20% ATK from Bake-Kurage)',
+          },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Team EM Buffer (+120 Team EM)',
+          },
         ],
       },
     ],
     guide: {
       sourceUrl: 'https://keqingmains.com/q/kokomi-quickguide/',
       playstyleSummary:
-        'Premier Hydro healer, off-field AoE applicator, and on-field reaction enabler/driver. Kokomi summons Bake-Kurage providing continuous Hydro application and high-potency periodic healing. Through Nereid\'s Ascension (Burst), she refreshes Bake-Kurage\'s uptime and gains Ceremonial Garment, boosting all Normal Attacks, Charged Attacks, and jellyfish DMG based on her Max HP while healing the entire party on hit.',
+        "Premier Hydro healer, off-field AoE applicator, and on-field reaction enabler/driver. Kokomi summons Bake-Kurage providing continuous Hydro application and high-potency periodic healing. Through Nereid's Ascension (Burst), she refreshes Bake-Kurage's uptime and gains Ceremonial Garment, boosting all Normal Attacks, Charged Attacks, and jellyfish DMG based on her Max HP while healing the entire party on hit.",
       energyRequirements:
         'On-field: 145%–180% with Prototype Amber (185%–220% in solo Hydro without ER weapons). Off-field: 200%+ ER if bursting every rotation to maintain 100% jellyfish uptime; 100% (zero ER required) in Skill-only Freeze rotations where jellyfish repositioning is not required.',
       combatTips: [
         'Passive "Flawless Strategy" decreases Kokomi\'s Crit Rate by 100% while granting +25% Healing Bonus. Never build Crit Rate or Crit DMG on Kokomi; prioritize HP%, ER, Healing Bonus, and EM.',
-        'A4 Passive (Song of Pearls): When Nereid\'s Ascension is active, Normal and Charged Attack DMG receives a bonus equal to 15% of her total Healing Bonus value.',
+        "A4 Passive (Song of Pearls): When Nereid's Ascension is active, Normal and Charged Attack DMG receives a bonus equal to 15% of her total Healing Bonus value.",
         'A1 Passive (Tamakushi Casket): Unleashing Burst immediately resets the 12s duration of Bake-Kurage on field. Timing her Burst just before the jellyfish expires achieves infinite 100% Hydro application uptime.',
         'Thrilling Tales of Dragon Slayers (TTDS) provides a massive +48% ATK buff for 10s to whichever character swaps in next, serving as a core staple in Freeze (Ayaka/Ganyu) and Vaporize setups.',
       ],
@@ -255,49 +375,56 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
           tier: 1,
           rarity: 5,
           category: 'BiS',
-          notes: 'Signature weapon providing 49.6% HP, +10% Healing Bonus, Normal Attack DMG increase based on Max HP, and flat Energy regeneration during Burst.',
+          notes:
+            'Signature weapon providing 49.6% HP, +10% Healing Bonus, Normal Attack DMG increase based on Max HP, and flat Energy regeneration during Burst.',
         },
         {
           name: 'Prototype Amber',
           tier: 1,
           rarity: 4,
           category: 'BiS',
-          notes: 'Best in Slot generalist and accessible craftable weapon. Provides 41.3% HP, regenerates up to 18 flat Energy post-Burst (substantially reducing ER requirements), and heals all party members for 18% of their Max HP.',
+          notes:
+            'Best in Slot generalist and accessible craftable weapon. Provides 41.3% HP, regenerates up to 18 flat Energy post-Burst (substantially reducing ER requirements), and heals all party members for 18% of their Max HP.',
         },
         {
           name: 'Thrilling Tales of Dragon Slayers',
           tier: 1,
           rarity: 3,
           category: 'BiS',
-          notes: 'Top tier support weapon. Provides 35.2% HP substat and an indispensable +48% ATK buff to the next active character, making it the premier option in Freeze (Ayaka/Ganyu) teams.',
+          notes:
+            'Top tier support weapon. Provides 35.2% HP substat and an indispensable +48% ATK buff to the next active character, making it the premier option in Freeze (Ayaka/Ganyu) teams.',
         },
         {
           name: 'Hakushin Ring',
           tier: 1,
           rarity: 4,
           category: 'Alternative',
-          notes: 'Craftable Inazuma Catalyst tailored for Electro-Charged (Taser) teams. Grants ER substat and +10%–20% Elemental DMG Bonus for both Hydro and Electro upon triggering an Electro reaction.',
+          notes:
+            'Craftable Inazuma Catalyst tailored for Electro-Charged (Taser) teams. Grants ER substat and +10%–20% Elemental DMG Bonus for both Hydro and Electro upon triggering an Electro reaction.',
         },
         {
           name: 'Sacrificial Fragments',
           tier: 1,
           rarity: 4,
           category: 'Utility',
-          notes: 'Offers massive 221 EM substat for Nilou Bloom teams and allows on-demand Bake-Kurage repositioning by resetting Skill cooldown upon damage.',
+          notes:
+            'Offers massive 221 EM substat for Nilou Bloom teams and allows on-demand Bake-Kurage repositioning by resetting Skill cooldown upon damage.',
         },
         {
-          name: 'Jadefall\'s Splendor',
+          name: "Jadefall's Splendor",
           tier: 2,
           rarity: 5,
           category: 'Alternative',
-          notes: 'Provides 49.6% HP substat and flat Energy restoration upon Burst cast and shield generation, offering marginal personal damage gains over Prototype Amber.',
+          notes:
+            'Provides 49.6% HP substat and flat Energy restoration upon Burst cast and shield generation, offering marginal personal damage gains over Prototype Amber.',
         },
         {
           name: 'Favonius Codex',
           tier: 2,
           rarity: 4,
           category: 'Utility',
-          notes: 'High ER substat. While Kokomi cannot normally crit due to -100% Crit Rate, Lunar-Charged teams can trigger its white particle generation through reaction crits.',
+          notes:
+            'High ER substat. While Kokomi cannot normally crit due to -100% Crit Rate, Lunar-Charged teams can trigger its white particle generation through reaction crits.',
         },
         {
           name: 'A Thousand Floating Dreams',
@@ -327,11 +454,36 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot for Personal Damage & ER Conversion (+20% ER)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot Team Support (+20% Team ATK on Burst if unheld by teammates)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 2, label: 'Alternative Support for snapshotting characters' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 2, tier: 2, label: 'Alternative 2pc ER (+20% ER)' },
-          { referenceKey: 'NoblesseOblige', pieces: 2, tier: 2, label: 'Alternative 2pc Burst DMG (+20% Burst DMG)' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot for Personal Damage & ER Conversion (+20% ER)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Team Support (+20% Team ATK on Burst if unheld by teammates)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Support for snapshotting characters',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc ER (+20% ER)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc Burst DMG (+20% Burst DMG)',
+          },
         ],
       },
       {
@@ -344,19 +496,30 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'energyRecharge', 'atkPercent'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot (+20% ER and up to +75% Titanbreaker Burst DMG)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative Burst & Support Hybrid' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+20% ER and up to +75% Titanbreaker Burst DMG)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Burst & Support Hybrid',
+          },
         ],
       },
     ],
     guide: {
-      sourceUrl: 'https://kqm-uploads.keqingmains.com/wp-content/uploads/2024/09/Kujou_Sara_5.0_-_cote__euphorysm.png',
+      sourceUrl:
+        'https://kqm-uploads.keqingmains.com/wp-content/uploads/2024/09/Kujou_Sara_5.0_-_cote__euphorysm.png',
       playstyleSummary:
-        'Specialized Electro hypercarry buffer and Burst nuke support. Tengu Juurai provides an ATK bonus that scales strictly on Sara\'s Base ATK (character base + weapon base ATK). At Constellation 6, she becomes the premier hypercarry amplifier in the game for Electro units like Raiden Shogun and Keqing by bestowing a massive +60% Electro Crit DMG bonus to characters receiving her buff.',
+        "Specialized Electro hypercarry buffer and Burst nuke support. Tengu Juurai provides an ATK bonus that scales strictly on Sara's Base ATK (character base + weapon base ATK). At Constellation 6, she becomes the premier hypercarry amplifier in the game for Electro units like Raiden Shogun and Keqing by bestowing a massive +60% Electro Crit DMG bonus to characters receiving her buff.",
       energyRequirements:
         '140%–160% ER in teams with Raiden Shogun or triple Electro; 180%–200% in Electro-Charged or standard double Electro setups; 220%+ if playing as solo Electro.',
       combatTips: [
-        'Tengu Juurai\'s ATK buff scales EXCLUSIVELY with Sara\'s Base ATK (Character base + Weapon base). Artifact ATK% mainstats and substats do NOT increase the buff provided to teammates.',
+        "Tengu Juurai's ATK buff scales EXCLUSIVELY with Sara's Base ATK (Character base + Weapon base). Artifact ATK% mainstats and substats do NOT increase the buff provided to teammates.",
         'Constellation 6 (Sin of Pride) grants +60% Electro Crit DMG to characters buffed by Tengu Juurai. This buff lasts 6s and transforms Raiden Shogun and Keqing into devastating hypercarries.',
         'At Constellation 2 (Dark Wings), casting her Skill leaves a weaker Crowfeather at her original position that detonates automatically, removing the necessity of performing a Charged Aimed Shot during high-speed rotations.',
         'Subjugation: Koukou Sendou (Burst) unleashes Titanbreaker dealing colossal single-instance Electro damage, then expands into 4 Stormclusters that also grant the full Tengu Juurai ATK buff.',
@@ -367,42 +530,48 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
           tier: 1,
           rarity: 5,
           category: 'BiS',
-          notes: 'Best in Slot generalist weapon. Possesses an extraordinary 674 Base ATK maximizing her Tengu Juurai ATK buff, paired with unconditional 22.1% Crit Rate and +20% Crit DMG for her Burst.',
+          notes:
+            'Best in Slot generalist weapon. Possesses an extraordinary 674 Base ATK maximizing her Tengu Juurai ATK buff, paired with unconditional 22.1% Crit Rate and +20% Crit DMG for her Burst.',
         },
         {
           name: 'Elegy for the End',
           tier: 1,
           rarity: 5,
           category: 'BiS',
-          notes: 'Premier team support bow. Combines a high 608 Base ATK with 55.1% ER and an unyielding team buff of +100 EM and +20% ATK upon triggering Millennial Movement.',
+          notes:
+            'Premier team support bow. Combines a high 608 Base ATK with 55.1% ER and an unyielding team buff of +100 EM and +20% ATK upon triggering Millennial Movement.',
         },
         {
           name: 'Polar Star',
           tier: 1,
           rarity: 5,
           category: 'Alternative',
-          notes: '608 Base ATK with 33.1% Crit Rate and Skill/Burst DMG buffs, greatly boosting personal Burst nuke potential.',
+          notes:
+            '608 Base ATK with 33.1% Crit Rate and Skill/Burst DMG buffs, greatly boosting personal Burst nuke potential.',
         },
         {
           name: 'Aqua Simulacra',
           tier: 1,
           rarity: 5,
           category: 'Alternative',
-          notes: 'Massive 88.2% Crit DMG substat and unconditional +20% DMG bonus, though lower 542 Base ATK yields slightly smaller teammate buffs.',
+          notes:
+            'Massive 88.2% Crit DMG substat and unconditional +20% DMG bonus, though lower 542 Base ATK yields slightly smaller teammate buffs.',
         },
         {
           name: 'Fading Twilight',
           tier: 1,
           rarity: 4,
           category: 'F2P',
-          notes: 'Top F2P recommendation. Features high 565 Base ATK for a 4-star, 30.6% ER substat, and ramping DMG% bonus for her Burst.',
+          notes:
+            'Top F2P recommendation. Features high 565 Base ATK for a 4-star, 30.6% ER substat, and ramping DMG% bonus for her Burst.',
         },
         {
           name: 'Favonius Warbow',
           tier: 1,
           rarity: 4,
           category: 'Utility',
-          notes: 'Exceptional team utility bow. Grants 61.3% ER to comfortably satisfy high burst costs and reliably feeds neutral particles to energy-demanding teammates.',
+          notes:
+            'Exceptional team utility bow. Grants 61.3% ER to comfortably satisfy high burst costs and reliably feeds neutral particles to energy-demanding teammates.',
         },
         {
           name: 'Sacrificial Bow',
@@ -416,21 +585,23 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 4,
           category: 'Alternative',
-          notes: '565 Base ATK with up to +40% off-field damage bonus for Sara\'s Burst.',
+          notes: "565 Base ATK with up to +40% off-field damage bonus for Sara's Burst.",
         },
         {
-          name: 'Mouun\'s Moon',
+          name: "Mouun's Moon",
           tier: 2,
           rarity: 4,
           category: 'Alternative',
-          notes: 'High 565 Base ATK with passive that boosts Burst DMG based on total party Burst energy costs.',
+          notes:
+            'High 565 Base ATK with passive that boosts Burst DMG based on total party Burst energy costs.',
         },
         {
           name: 'The Stringless',
           tier: 2,
           rarity: 4,
           category: 'Alternative',
-          notes: 'Boosts Skill and Burst DMG by up to +48%, but lower 510 Base ATK reduces her team ATK buff.',
+          notes:
+            'Boosts Skill and Burst DMG by up to +48%, but lower 510 Base ATK reduces her team ATK buff.',
         },
       ],
     },
@@ -441,12 +612,7 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
     referenceKey: 'Aloy',
     displayName: 'Aloy',
     defaultRoleId: 'on_field_damage',
-    evidenceIds: [
-      'kqm-aloy-freeze',
-      'kqm-aloy-melt',
-      'kqm-aloy-support',
-      'kqm-aloy-guide',
-    ],
+    evidenceIds: ['kqm-aloy-freeze', 'kqm-aloy-melt', 'kqm-aloy-support', 'kqm-aloy-guide'],
     roles: [
       {
         id: 'on_field_damage',
@@ -458,11 +624,36 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'elementalMastery', 'energyRecharge'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot for Burst Nuke (+20% ER and converts ER to Burst DMG)' },
-          { referenceKey: 'Lavawalker', pieces: 4, tier: 1, label: 'Best in Slot Reverse Melt (+35% DMG against Pyro-affected opponents)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Best in Slot EM Stacking (+80 EM and up to +150 EM in Melt teams)' },
-          { referenceKey: 'BlizzardStrayer', pieces: 2, tier: 2, label: 'Alternative 2pc Cryo DMG (+15% Cryo DMG)' },
-          { referenceKey: 'NoblesseOblige', pieces: 2, tier: 2, label: 'Alternative 2pc Burst DMG (+20% Burst DMG)' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot for Burst Nuke (+20% ER and converts ER to Burst DMG)',
+          },
+          {
+            referenceKey: 'Lavawalker',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Reverse Melt (+35% DMG against Pyro-affected opponents)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot EM Stacking (+80 EM and up to +150 EM in Melt teams)',
+          },
+          {
+            referenceKey: 'BlizzardStrayer',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc Cryo DMG (+15% Cryo DMG)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc Burst DMG (+20% Burst DMG)',
+          },
         ],
       },
       {
@@ -475,9 +666,25 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent'],
         sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot Support (40-cost Burst guarantees near 100% uptime on +20% Team ATK)' },
-          { referenceKey: 'BlizzardStrayer', pieces: 4, tier: 1, label: 'Best in Slot Personal Damage in Freeze (+40% Crit Rate vs Frozen enemies)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 2, label: 'Alternative with Furina (+36% Crit Rate on HP changes)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot Support (40-cost Burst guarantees near 100% uptime on +20% Team ATK)',
+          },
+          {
+            referenceKey: 'BlizzardStrayer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Personal Damage in Freeze (+40% Crit Rate vs Frozen enemies)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative with Furina (+36% Crit Rate on HP changes)',
+          },
         ],
       },
       {
@@ -490,8 +697,18 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'energyRecharge'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot Off-Field Burst Nuke (+20% ER)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative Support Hybrid' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Off-Field Burst Nuke (+20% ER)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Support Hybrid',
+          },
         ],
       },
     ],
@@ -513,49 +730,56 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
           tier: 1,
           rarity: 5,
           category: 'BiS',
-          notes: 'Best in Slot overall weapon. Increases Skill and Burst DMG by +12%–24% and accumulates up to +48% ATK by interweaving Normal Attacks and Aimed Shots into rotations.',
+          notes:
+            'Best in Slot overall weapon. Increases Skill and Burst DMG by +12%–24% and accumulates up to +48% ATK by interweaving Normal Attacks and Aimed Shots into rotations.',
         },
         {
           name: 'Aqua Simulacra',
           tier: 1,
           rarity: 5,
           category: 'Alternative',
-          notes: 'Tremendous 88.2% Crit DMG substat with universal +20% DMG bonus when near opponents.',
+          notes:
+            'Tremendous 88.2% Crit DMG substat with universal +20% DMG bonus when near opponents.',
         },
         {
           name: 'Skyward Harp',
           tier: 1,
           rarity: 5,
           category: 'Alternative',
-          notes: 'High Base ATK, 22.1% Crit Rate, and +20% Crit DMG, providing reliable baseline scaling across all playstyles.',
+          notes:
+            'High Base ATK, 22.1% Crit Rate, and +20% Crit DMG, providing reliable baseline scaling across all playstyles.',
         },
         {
           name: 'The Stringless',
           tier: 1,
           rarity: 4,
           category: 'BiS',
-          notes: 'Best in Slot 4-star weapon for Reverse Melt. Provides 165 EM and up to +48% Skill and Burst DMG Bonus.',
+          notes:
+            'Best in Slot 4-star weapon for Reverse Melt. Provides 165 EM and up to +48% Skill and Burst DMG Bonus.',
         },
         {
           name: 'Sacrificial Bow',
           tier: 1,
           rarity: 4,
           category: 'BiS',
-          notes: 'Best in Slot utility and battery weapon. Resets Skill cooldown to grant another massive hit of Cryo damage, guarantees Rushing Ice Coil stacks, and doubles Cryo particle generation.',
+          notes:
+            'Best in Slot utility and battery weapon. Resets Skill cooldown to grant another massive hit of Cryo damage, guarantees Rushing Ice Coil stacks, and doubles Cryo particle generation.',
         },
         {
           name: 'Favonius Warbow',
           tier: 1,
           rarity: 4,
           category: 'Utility',
-          notes: 'Premier team battery weapon providing 61.3% ER and consistent neutral energy particles.',
+          notes:
+            'Premier team battery weapon providing 61.3% ER and consistent neutral energy particles.',
         },
         {
           name: 'Elegy for the End',
           tier: 1,
           rarity: 5,
           category: 'Alternative',
-          notes: 'Top tier buffer weapon providing 55.1% ER and partywide +100 EM and +20% ATK upon trigger.',
+          notes:
+            'Top tier buffer weapon providing 55.1% ER and partywide +100 EM and +20% ATK upon trigger.',
         },
         {
           name: 'Thundering Pulse',
@@ -576,7 +800,8 @@ export const v21Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 4,
           category: 'F2P',
-          notes: 'Craftable bow providing substantial ATK% buff upon hitting a weak point with an Aimed Shot.',
+          notes:
+            'Craftable bow providing substantial ATK% buff upon hitting a weak point with an Aimed Shot.',
         },
         {
           name: 'Song of Stillness',

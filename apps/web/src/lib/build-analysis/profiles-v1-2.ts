@@ -19,12 +19,42 @@ export const v12Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['def', 'critRate', 'critDmg', 'energyRecharge'],
         sets: [
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 1, label: 'Best in Slot (+70% Skill DMG off-field)' },
-          { referenceKey: 'HuskOfOpulentDreams', pieces: 4, tier: 1, label: 'Best in Slot Alternative (+54% DEF, +24% Geo DMG)' },
-          { referenceKey: 'ArchaicPetra', pieces: 4, tier: 2, label: 'Alternative (35% Team Elemental DMG on Crystallize)' },
-          { referenceKey: 'GoldenTroupe', pieces: 2, tier: 2, label: 'Alternative 2pc (+20% Skill DMG)' },
-          { referenceKey: 'HuskOfOpulentDreams', pieces: 2, tier: 2, label: 'Alternative 2pc (+30% DEF)' },
-          { referenceKey: 'ArchaicPetra', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Geo DMG)' },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+70% Skill DMG off-field)',
+          },
+          {
+            referenceKey: 'HuskOfOpulentDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Alternative (+54% DEF, +24% Geo DMG)',
+          },
+          {
+            referenceKey: 'ArchaicPetra',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (35% Team Elemental DMG on Crystallize)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+20% Skill DMG)',
+          },
+          {
+            referenceKey: 'HuskOfOpulentDreams',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+30% DEF)',
+          },
+          {
+            referenceKey: 'ArchaicPetra',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+15% Geo DMG)',
+          },
         ],
       },
       {
@@ -37,8 +67,18 @@ export const v12Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'def', 'critRate', 'critDmg'],
         sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (Team ATK on Burst)' },
-          { referenceKey: 'ArchaicPetra', pieces: 4, tier: 1, label: 'Best in Slot (35% Team Elemental DMG)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Team ATK on Burst)',
+          },
+          {
+            referenceKey: 'ArchaicPetra',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (35% Team Elemental DMG)',
+          },
         ],
       },
     ],
@@ -60,21 +100,24 @@ export const v12Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'BiS',
-          notes: 'Event-exclusive custom signature sword; provides 69% DEF and increases Skill DMG by 80% of DEF',
+          notes:
+            'Event-exclusive custom signature sword; provides 69% DEF and increases Skill DMG by 80% of DEF',
         },
         {
           name: 'Uraku Misugiri',
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Chiori signature sword; massive Crit DMG, +DEF, and +48% Skill DMG on Geo trigger',
+          notes:
+            'Chiori signature sword; massive Crit DMG, +DEF, and +48% Skill DMG on Geo trigger',
         },
         {
           name: 'Harbinger of Dawn',
           rarity: 3,
           tier: 1,
           category: 'Alternative',
-          notes: 'Incredible 3-star F2P weapon; grants 28% Crit Rate and 46.9% Crit DMG as long as HP stays above 90% (trivial from off-field)',
+          notes:
+            'Incredible 3-star F2P weapon; grants 28% Crit Rate and 46.9% Crit DMG as long as HP stays above 90% (trivial from off-field)',
         },
         {
           name: 'Primordial Jade Cutter',
@@ -119,11 +162,36 @@ export const v12Profiles: ReviewedCharacterProfile[] = [
         conditionalMainStats: { Sands: { elementalMastery: 'reaction_context' } },
         priorityStats: ['critDmg', 'critRate', 'atk', 'elementalMastery', 'energyRecharge'],
         sets: [
-          { referenceKey: 'WanderersTroupe', pieces: 4, tier: 1, label: 'Best in Slot (Melt: +80 EM, +35% Charged Attack)' },
-          { referenceKey: 'ShimenawasReminiscence', pieces: 4, tier: 1, label: 'Best in Slot (Melt: +50% Charged Attack)' },
-          { referenceKey: 'BlizzardStrayer', pieces: 4, tier: 1, label: 'Best in Slot (Freeze: +40% Crit Rate)' },
-          { referenceKey: 'UnfinishedReverie', pieces: 4, tier: 2, label: 'Alternative (Burn-Melt: +50% All-DMG)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 2, label: 'Alternative (with Furina)' },
+          {
+            referenceKey: 'WanderersTroupe',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Melt: +80 EM, +35% Charged Attack)',
+          },
+          {
+            referenceKey: 'ShimenawasReminiscence',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Melt: +50% Charged Attack)',
+          },
+          {
+            referenceKey: 'BlizzardStrayer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Freeze: +40% Crit Rate)',
+          },
+          {
+            referenceKey: 'UnfinishedReverie',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Burn-Melt: +50% All-DMG)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (with Furina)',
+          },
         ],
       },
       {
@@ -136,9 +204,24 @@ export const v12Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atk'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot (Burst Uptime & DMG)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (Team ATK Buff)' },
-          { referenceKey: 'BlizzardStrayer', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Cryo)' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Burst Uptime & DMG)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Team ATK Buff)',
+          },
+          {
+            referenceKey: 'BlizzardStrayer',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+15% Cryo)',
+          },
         ],
       },
     ],
@@ -156,11 +239,12 @@ export const v12Profiles: ReviewedCharacterProfile[] = [
       ],
       weapons: [
         {
-          name: 'Hunter\'s Path',
+          name: "Hunter's Path",
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Exceptional in Melt; massive Crit Rate and converts EM into enormous Charged Attack flat damage',
+          notes:
+            'Exceptional in Melt; massive Crit Rate and converts EM into enormous Charged Attack flat damage',
         },
         {
           name: 'The First Great Magic',
@@ -177,11 +261,12 @@ export const v12Profiles: ReviewedCharacterProfile[] = [
           notes: 'Huge 88.2% Crit DMG with unconditional 20% all-DMG bonus',
         },
         {
-          name: 'Amos\' Bow',
+          name: "Amos' Bow",
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Thematic signature bow; ramps up Frostflake Bloom damage significantly with flight time',
+          notes:
+            'Thematic signature bow; ramps up Frostflake Bloom damage significantly with flight time',
         },
         {
           name: 'Polar Star',
@@ -195,14 +280,16 @@ export const v12Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'F2P',
-          notes: 'Inazuma craftable bow boosting Normal/Charged Attack; perfect for Melt where Burst is held',
+          notes:
+            'Inazuma craftable bow boosting Normal/Charged Attack; perfect for Melt where Burst is held',
         },
         {
           name: 'Prototype Crescent',
           rarity: 4,
           tier: 2,
           category: 'F2P',
-          notes: 'Craftable bow granting immense ATK% and movement speed buffs upon hitting enemy weak spots',
+          notes:
+            'Craftable bow granting immense ATK% and movement speed buffs upon hitting enemy weak spots',
         },
         {
           name: 'Song of Stillness',

@@ -19,9 +19,19 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['elementalMastery', 'energyRecharge', 'critRate'],
         sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot (40% Resistance Shred)' },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (40% Resistance Shred)',
+          },
           { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative (Team EM Buff)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative (Team ATK Buff)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Team ATK Buff)',
+          },
         ],
       },
       {
@@ -56,7 +66,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Exceptional EM substat and team ATK/normal attack damage buff on elemental trigger',
+          notes:
+            'Exceptional EM substat and team ATK/normal attack damage buff on elemental trigger',
         },
         {
           name: 'Favonius Sword',
@@ -107,10 +118,25 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'energyRecharge'],
         sets: [
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 1, label: 'Best in Slot (Skill Quickswap)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (Support / Team ATK)' },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Skill Quickswap)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Support / Team ATK)',
+          },
           { referenceKey: 'ArchaicPetra', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Geo)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 2, label: 'Alternative 2pc (+18% ATK)' },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+18% ATK)',
+          },
         ],
       },
       {
@@ -122,17 +148,14 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           Circlet: ['critRate', 'critDmg'],
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent'],
-        sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot' },
-        ],
+        sets: [{ referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot' }],
       },
     ],
     guide: {
       sourceUrl: 'https://keqingmains.com/geo-traveler/',
       playstyleSummary:
         'High-damage quickswap Geo construct generator and team battery. Burst grants +10% Crit Rate and stagger resistance to allies inside the circle.',
-      energyRequirements:
-        '130% - 160% ER with a second Geo unit; 170%+ in solo Geo teams.',
+      energyRequirements: '130% - 160% ER with a second Geo unit; 170%+ in solo Geo teams.',
       combatTips: [
         'Aim Starfell Sword (E) slightly away from under large bosses so the meteorite detonates immediately or does not elevate enemies unreachable for melee carries.',
         'C1 Wake of Earth grants party members +10% Crit Rate within the barrier.',
@@ -195,8 +218,18 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate'],
         sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (40-cost Burst Buffer)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative (120 EM Team Buff)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (40-cost Burst Buffer)',
+          },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (120 EM Team Buff)',
+          },
         ],
       },
       {
@@ -209,7 +242,12 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critDmg', 'elementalMastery', 'atkPercent', 'critRate'],
         sets: [
-          { referenceKey: 'WanderersTroupe', pieces: 4, tier: 1, label: 'Best in Slot (Charged Attack)' },
+          {
+            referenceKey: 'WanderersTroupe',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Charged Attack)',
+          },
           { referenceKey: 'ShimenawasReminiscence', pieces: 4, tier: 2, label: 'Alternative' },
         ],
       },
@@ -218,8 +256,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
       sourceUrl: 'https://keqingmains.com/q/amber-quickguide/',
       playstyleSummary:
         'Fast 40-cost Burst support wielding Elegy of the End and Noblesse Oblige, or sniper Melt DPS with weakspot-targeted Aimed Shots.',
-      energyRequirements:
-        '~130% - 160% ER with Favonius or Elegy; Burst cost is just 40.',
+      energyRequirements: '~130% - 160% ER with Favonius or Elegy; Burst cost is just 40.',
       combatTips: [
         'Baron Bunny taunts enemies and provides Cryo-shield melting through rapid 6-hit Burst rain.',
         'C6 grants the entire team +15% ATK and +15% movement speed for 10s upon casting Burst.',
@@ -231,7 +268,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Triggers buff almost instantly on Amber multi-hit Burst, granting team 100 EM and 20% ATK',
+          notes:
+            'Triggers buff almost instantly on Amber multi-hit Burst, granting team 100 EM and 20% ATK',
         },
         {
           name: 'Favonius Warbow',
@@ -255,7 +293,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           notes: 'Craftable bow that boosts ATK% upon hitting weak points',
         },
         {
-          name: 'Sharpshooter\'s Oath',
+          name: "Sharpshooter's Oath",
           rarity: 3,
           tier: 2,
           category: 'F2P',
@@ -282,10 +320,30 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot (Burst Uptime & DMG)' },
-          { referenceKey: 'BlizzardStrayer', pieces: 4, tier: 1, label: 'Best in Slot (Freeze Teams)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative (Team Buffer)' },
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 2, label: 'Alternative (Skill focused)' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Burst Uptime & DMG)',
+          },
+          {
+            referenceKey: 'BlizzardStrayer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Freeze Teams)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Team Buffer)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Skill focused)',
+          },
         ],
       },
       {
@@ -299,7 +357,12 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         priorityStats: ['critRate', 'critDmg', 'atkPercent'],
         sets: [
           { referenceKey: 'PaleFlame', pieces: 4, tier: 1, label: 'Best in Slot (Physical)' },
-          { referenceKey: 'BlizzardStrayer', pieces: 4, tier: 1, label: 'Best in Slot (Cryo Infusion)' },
+          {
+            referenceKey: 'BlizzardStrayer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Cryo Infusion)',
+          },
         ],
       },
     ],
@@ -337,7 +400,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           notes: 'Best utility weapon for battery duties and team energy smoothness',
         },
         {
-          name: 'Lion\'s Roar',
+          name: "Lion's Roar",
           rarity: 4,
           tier: 2,
           category: 'Alternative',
@@ -372,7 +435,12 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         priorityStats: ['energyRecharge', 'elementalMastery', 'critRate'],
         sets: [
           { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (Support)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 2, label: 'Alternative (Burst ER & DMG)' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Burst ER & DMG)',
+          },
           { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative (Team EM)' },
         ],
       },
@@ -386,9 +454,24 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['elementalMastery', 'energyRecharge', 'critRate', 'critDmg'],
         sets: [
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Best in Slot (Hyperbloom/Aggravate)' },
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 4, tier: 1, label: 'Best in Slot (Pure Hyperbloom)' },
-          { referenceKey: 'ThunderingFury', pieces: 4, tier: 2, label: 'Alternative (Cooldown Reset)' },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Hyperbloom/Aggravate)',
+          },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Pure Hyperbloom)',
+          },
+          {
+            referenceKey: 'ThunderingFury',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Cooldown Reset)',
+          },
         ],
       },
     ],
@@ -412,7 +495,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           notes: 'Provides massive EM to Lisa and party-wide EM buffs',
         },
         {
-          name: 'Kagura\'s Verity',
+          name: "Kagura's Verity",
           rarity: 5,
           tier: 1,
           category: 'BiS',
@@ -437,7 +520,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 2,
           category: 'F2P',
-          notes: 'Craftable catalyst granting elemental damage bonuses upon triggering Electro reactions',
+          notes:
+            'Craftable catalyst granting elemental damage bonuses upon triggering Electro reactions',
         },
       ],
     },
@@ -460,9 +544,19 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['maxHp', 'energyRecharge'],
         sets: [
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 1, label: 'Best in Slot (Healing & Physical Foam Damage)' },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Healing & Physical Foam Damage)',
+          },
           { referenceKey: 'MaidenBeloved', pieces: 4, tier: 2, label: 'Alternative (Max Healing)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative (Reaction Support)' },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Reaction Support)',
+          },
         ],
       },
       {
@@ -475,9 +569,19 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['elementalMastery', 'maxHp', 'energyRecharge'],
         sets: [
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 4, tier: 1, label: 'Best in Slot (Bloom DMG)' },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Bloom DMG)',
+          },
           { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Best in Slot (EM Stacking)' },
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 2, label: 'Alternative (Hybrid Bloom/Heal)' },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Hybrid Bloom/Heal)',
+          },
         ],
       },
     ],
@@ -505,7 +609,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'F2P',
-          notes: 'Craftable catalyst providing HP% and teamwide flat energy/HP restoration on Burst',
+          notes:
+            'Craftable catalyst providing HP% and teamwide flat energy/HP restoration on Burst',
         },
         {
           name: 'Everlasting Moonglow',
@@ -549,10 +654,30 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'defPercent', 'energyRecharge'],
         sets: [
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 1, label: 'Best in Slot (with Furina)' },
-          { referenceKey: 'HuskOfOpulentDreams', pieces: 4, tier: 1, label: 'Best in Slot (General Geo Carry)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 4, tier: 2, label: 'Alternative (+35% Normal ATK DMG)' },
-          { referenceKey: 'RetracingBolide', pieces: 4, tier: 2, label: 'Alternative (+40% Normal/Charged DMG)' },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (with Furina)',
+          },
+          {
+            referenceKey: 'HuskOfOpulentDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (General Geo Carry)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+35% Normal ATK DMG)',
+          },
+          {
+            referenceKey: 'RetracingBolide',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+40% Normal/Charged DMG)',
+          },
         ],
       },
       {
@@ -564,9 +689,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           Circlet: ['defPercent', 'healingBonus'],
         },
         priorityStats: ['defPercent', 'def'],
-        sets: [
-          { referenceKey: 'HuskOfOpulentDreams', pieces: 4, tier: 1, label: 'Best in Slot' },
-        ],
+        sets: [{ referenceKey: 'HuskOfOpulentDreams', pieces: 4, tier: 1, label: 'Best in Slot' }],
       },
     ],
     guide: {
@@ -593,14 +716,16 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'Alternative',
-          notes: 'BP Claymore offering Crit Rate and up to 50% all-damage bonus, perfectly protected by shields',
+          notes:
+            'BP Claymore offering Crit Rate and up to 50% all-damage bonus, perfectly protected by shields',
         },
         {
           name: 'Whiteblind',
           rarity: 4,
           tier: 2,
           category: 'F2P',
-          notes: 'Craftable claymore offering immense DEF% and ATK% stacking on normal/charged hits',
+          notes:
+            'Craftable claymore offering immense DEF% and ATK% stacking on normal/charged hits',
         },
         {
           name: 'Favonius Greatsword',
@@ -630,9 +755,24 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'maxHp', 'critRate'],
         sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (+20% Team ATK on Burst)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative (120 EM Reaction Teams)' },
-          { referenceKey: 'ScrollOfTheHeroOfCinderCity', pieces: 4, tier: 2, label: 'Alternative (Nightsoul Teams)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+20% Team ATK on Burst)',
+          },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (120 EM Reaction Teams)',
+          },
+          {
+            referenceKey: 'ScrollOfTheHeroOfCinderCity',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Nightsoul Teams)',
+          },
         ],
       },
       {
@@ -644,9 +784,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           Circlet: ['critRate', 'critDmg'],
         },
         priorityStats: ['critRate', 'critDmg', 'elementalMastery', 'energyRecharge'],
-        sets: [
-          { referenceKey: 'CrimsonWitchOfFlames', pieces: 4, tier: 1, label: 'Best in Slot' },
-        ],
+        sets: [{ referenceKey: 'CrimsonWitchOfFlames', pieces: 4, tier: 1, label: 'Best in Slot' }],
       },
     ],
     guide: {
@@ -688,7 +826,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'F2P',
-          notes: 'Craftable sword with high Base ATK (565), ER substat, and Leaf of Consciousness EM drop',
+          notes:
+            'Craftable sword with high Base ATK (565), ER substat, and Leaf of Consciousness EM drop',
         },
         {
           name: 'The Alley Flash',
@@ -726,9 +865,24 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'energyRecharge', 'elementalMastery'],
         sets: [
           { referenceKey: 'PaleFlame', pieces: 4, tier: 1, label: 'Best in Slot (Physical)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 4, tier: 1, label: 'Best in Slot (Physical Alternative)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Best in Slot (Rainbow EM Driver)' },
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 4, tier: 2, label: 'Alternative (Burgeon/Hyperbloom)' },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Physical Alternative)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Rainbow EM Driver)',
+          },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Burgeon/Hyperbloom)',
+          },
         ],
       },
     ],
@@ -736,8 +890,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
       sourceUrl: 'https://keqingmains.com/q/razor-quickguide/',
       playstyleSummary:
         'High attack-speed Claymore carry who excels either as a traditional Physical hypercarry with Superconduct, or as a full-EM Rainbow driver triggering Overload, Hyperbloom, and Burgeon simultaneously inside Bennett C6 field.',
-      energyRequirements:
-        '110% - 130% ER; Electro Sigils and Burst refund provide self-battery.',
+      energyRequirements: '110% - 130% ER; Electro Sigils and Burst refund provide self-battery.',
       combatTips: [
         'Lightning Fang increases Normal ATK speed and grants interruption immunity while dealing companion Electro attacks.',
         'Tap Skill produces Electro Sigils (up to 3) granting 20% ER each; hold Skill consumes them to generate flat energy.',
@@ -752,7 +905,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           notes: 'Highest Base ATK claymore with Physical DMG% and team ATK/Attack Speed buff',
         },
         {
-          name: 'Wolf\'s Gravestone',
+          name: "Wolf's Gravestone",
           rarity: 5,
           tier: 1,
           category: 'BiS',
@@ -800,10 +953,30 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot (Damage & ER)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative (Team Buffer)' },
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 2, label: 'Alternative (Counter Focused)' },
-          { referenceKey: 'ThunderingFury', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Electro)' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Damage & ER)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Team Buffer)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Counter Focused)',
+          },
+          {
+            referenceKey: 'ThunderingFury',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+15% Electro)',
+          },
         ],
       },
     ],
@@ -811,8 +984,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
       sourceUrl: 'https://keqingmains.com/q/beidou-quickguide/',
       playstyleSummary:
         'Queen of 2-to-multiple target content. Stormbreaker discharges bouncing lightning chains across enemies on active normal and charged attacks, with damage reduction and interruption resistance.',
-      energyRequirements:
-        '140% - 160% ER with Fischl as battery; 180% - 220% as solo Electro.',
+      energyRequirements: '140% - 160% ER with Fischl as battery; 180% - 220% as solo Electro.',
       combatTips: [
         'Stormbreaker (Q) discharges bounce up to 5 times (at C2), making Beidou damage scaling absurdly high against exactly 2 to 3 targets.',
         'Perfect parry with Tidecaller (E) instantly generates the maximum 4 Electro particles and deals huge burst damage.',
@@ -820,7 +992,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
       ],
       weapons: [
         {
-          name: 'Wolf\'s Gravestone',
+          name: "Wolf's Gravestone",
           rarity: 5,
           tier: 1,
           category: 'BiS',
@@ -876,10 +1048,30 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         conditionalMainStats: { Sands: { elementalMastery: 'reaction_context' } },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'elementalMastery', 'energyRecharge'],
         sets: [
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 1, label: 'Best in Slot (+70% Skill DMG off-field)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 2, label: 'Alternative (Aggravate teams)' },
-          { referenceKey: 'ThunderingFury', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Electro)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 2, label: 'Alternative 2pc (+18% ATK)' },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+70% Skill DMG off-field)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Aggravate teams)',
+          },
+          {
+            referenceKey: 'ThunderingFury',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+15% Electro)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+18% ATK)',
+          },
         ],
       },
     ],
@@ -887,8 +1079,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
       sourceUrl: 'https://keqingmains.com/fischl/',
       playstyleSummary:
         'Premier off-field Electro sub-DPS and battery. Oz continuously attacks targets and triggers the devastating A4 Passive (Undone Be Thy Sinful Hex) on Electro-related reactions with no internal cooldown (ICD).',
-      energyRequirements:
-        '100% - 120% ER; Oz generates abundant Electro particles continuously.',
+      energyRequirements: '100% - 120% ER; Oz generates abundant Electro particles continuously.',
       combatTips: [
         'Alternate Skill and Burst on successive rotations to maintain near 100% Oz field uptime.',
         'A4 Passive strikes with 80% ATK whenever the on-field character triggers an Electro-related reaction; pairs astronomically well with Dendro (Quicken/Aggravate).',
@@ -952,9 +1143,24 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         conditionalMainStats: { Sands: { elementalMastery: 'reaction_context' } },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'elementalMastery', 'atkPercent'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot (Uptime & Massive Burst DMG)' },
-          { referenceKey: 'CrimsonWitchOfFlames', pieces: 4, tier: 2, label: 'Alternative (Vaporize/Melt)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative (Support role)' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Uptime & Massive Burst DMG)',
+          },
+          {
+            referenceKey: 'CrimsonWitchOfFlames',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Vaporize/Melt)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Support role)',
+          },
         ],
       },
     ],
@@ -997,10 +1203,11 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'F2P',
-          notes: 'The undisputed best free weapon; obtainable via Inazuma fishing; gives ER, Burst Crit Rate, and Burst DMG%',
+          notes:
+            'The undisputed best free weapon; obtainable via Inazuma fishing; gives ER, Burst Crit Rate, and Burst DMG%',
         },
         {
-          name: 'Dragon\'s Bane',
+          name: "Dragon's Bane",
           rarity: 4,
           tier: 2,
           category: 'Alternative',
@@ -1034,9 +1241,24 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot (Burst Uptime & DMG)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative (Team ATK Buff)' },
-          { referenceKey: 'HeartOfDepth', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Hydro)' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Burst Uptime & DMG)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Team ATK Buff)',
+          },
+          {
+            referenceKey: 'HeartOfDepth',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+15% Hydro)',
+          },
         ],
       },
     ],
@@ -1058,14 +1280,16 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'BiS',
-          notes: 'Uncontested best-in-slot 4-star weapon for Xingqiu; double skill cast batteries burst completely',
+          notes:
+            'Uncontested best-in-slot 4-star weapon for Xingqiu; double skill cast batteries burst completely',
         },
         {
           name: 'Primordial Jade Cutter',
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Highest damage ceiling when energy requirements are covered by Raiden/double Hydro',
+          notes:
+            'Highest damage ceiling when energy requirements are covered by Raiden/double Hydro',
         },
         {
           name: 'Favonius Sword',
@@ -1102,10 +1326,30 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'elementalMastery', 'atkPercent', 'energyRecharge'],
         sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (40-cost Burst Buffer)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 2, label: 'Alternative (Burst DMG)' },
-          { referenceKey: 'BlizzardStrayer', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Cryo)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 2, label: 'Alternative 2pc (+18% ATK)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (40-cost Burst Buffer)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Burst DMG)',
+          },
+          {
+            referenceKey: 'BlizzardStrayer',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+15% Cryo)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+18% ATK)',
+          },
         ],
       },
       {
@@ -1127,8 +1371,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
       sourceUrl: 'https://keqingmains.com/q/chongyun-quickguide/',
       playstyleSummary:
         'Quickswap burst nuker and Cryo infusion support. His Frost Field infuses melee weapons with Cryo and grants 8% ATK speed, while his 40-cost Burst drops 3 (4 at C6) massive spirit blades that can each Melt independently on Pyro aura.',
-      energyRequirements:
-        '120% - 140% ER; Burst cost is just 40.',
+      energyRequirements: '120% - 140% ER; Burst cost is just 40.',
       combatTips: [
         'Cloud-Parting Star (Q) drops 3 blades (4 at C6). If applied to a strong Pyro aura (Bennett burst or Xiangling), all blades can trigger Reverse Melt for huge burst damage.',
         'Frost Field (E) infuses Sword, Claymore, and Polearm normal/charged attacks with Cryo; take care not to override Physical hypercarries.',
@@ -1136,7 +1379,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
       ],
       weapons: [
         {
-          name: 'Wolf\'s Gravestone',
+          name: "Wolf's Gravestone",
           rarity: 5,
           tier: 1,
           category: 'BiS',
@@ -1191,10 +1434,30 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'energyRecharge'],
         sets: [
-          { referenceKey: 'NighttimeWhispersInTheEchoingWoods', pieces: 4, tier: 1, label: 'Best in Slot (+50% Geo DMG)' },
-          { referenceKey: 'ArchaicPetra', pieces: 2, tier: 1, label: 'Best in Slot 2pc (+15% Geo)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 1, label: 'Best in Slot 2pc (+18% ATK)' },
-          { referenceKey: 'NoblesseOblige', pieces: 2, tier: 2, label: 'Alternative 2pc (+20% Burst)' },
+          {
+            referenceKey: 'NighttimeWhispersInTheEchoingWoods',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+50% Geo DMG)',
+          },
+          {
+            referenceKey: 'ArchaicPetra',
+            pieces: 2,
+            tier: 1,
+            label: 'Best in Slot 2pc (+15% Geo)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 1,
+            label: 'Best in Slot 2pc (+18% ATK)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+20% Burst)',
+          },
         ],
       },
       {
@@ -1216,8 +1479,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
       sourceUrl: 'https://keqingmains.com/q/ningguang-quickguide/',
       playstyleSummary:
         'Single-target Geo artillery carry or fast quickswap burst nuker. Casts Jade Screen for damage and a 12% Geo DMG bonus gate, followed by Starshatter which fires homing Geo gems that double when passing through the screen.',
-      energyRequirements:
-        '120% - 130% ER; 40 energy cost makes burst ready every rotation.',
+      energyRequirements: '120% - 130% ER; 40 energy cost makes burst ready every rotation.',
       combatTips: [
         'Optimal normal attack combo: 1 Normal Attack -> Charged Attack. Normal attacks grant Star Jades that make Charged Attacks consume ZERO stamina.',
         'Always pass characters through Jade Screen (E) to gain +12% Geo DMG bonus for 10 seconds.',
@@ -1257,7 +1519,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 2,
           category: 'F2P',
-          notes: 'Fontaine craftable catalyst granting elemental damage bonus upon clearing Bond of Life',
+          notes:
+            'Fontaine craftable catalyst granting elemental damage bonus upon clearing Bond of Life',
         },
         {
           name: 'Thrilling Tales of Dragon Slayers',
@@ -1287,7 +1550,12 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['elementalMastery', 'energyRecharge'],
         sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot (40% Resistance Shred & Swirl DMG)' },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (40% Resistance Shred & Swirl DMG)',
+          },
           { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative (Team EM Buff)' },
         ],
       },
@@ -1300,9 +1568,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           Circlet: ['elementalMastery'],
         },
         priorityStats: ['elementalMastery', 'energyRecharge'],
-        sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot' },
-        ],
+        sets: [{ referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot' }],
       },
     ],
     guide: {
@@ -1350,7 +1616,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 2,
           category: 'F2P',
-          notes: 'Craftable catalyst granting elemental damage bonuses when triggering Electro reactions',
+          notes:
+            'Craftable catalyst granting elemental damage bonuses when triggering Electro reactions',
         },
       ],
     },
@@ -1373,8 +1640,18 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['elementalMastery', 'energyRecharge', 'critRate', 'critDmg', 'atkPercent'],
         sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot (40% Resistance Shred & Swirl DMG)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative (Team ATK Buff)' },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (40% Resistance Shred & Swirl DMG)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Team ATK Buff)',
+          },
         ],
       },
     ],
@@ -1395,7 +1672,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Uncontested best support bow; procs Millennial Movement buff in seconds, giving 100 EM and 20% ATK',
+          notes:
+            'Uncontested best support bow; procs Millennial Movement buff in seconds, giving 100 EM and 20% ATK',
         },
         {
           name: 'The Stringless',
@@ -1446,8 +1724,18 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'energyRecharge'],
         sets: [
-          { referenceKey: 'CrimsonWitchOfFlames', pieces: 4, tier: 1, label: 'Best in Slot (Vaporize/Mono Pyro)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 1, label: 'Best in Slot (with Furina)' },
+          {
+            referenceKey: 'CrimsonWitchOfFlames',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Vaporize/Mono Pyro)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (with Furina)',
+          },
           { referenceKey: 'Lavawalker', pieces: 4, tier: 1, label: 'Best in Slot (Mono Pyro)' },
           { referenceKey: 'ShimenawasReminiscence', pieces: 4, tier: 2, label: 'Alternative' },
         ],
@@ -1461,9 +1749,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           Circlet: ['critRate', 'critDmg'],
         },
         priorityStats: ['critRate', 'critDmg', 'energyRecharge', 'atkPercent'],
-        sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot' },
-        ],
+        sets: [{ referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot' }],
       },
     ],
     guide: {
@@ -1484,10 +1770,11 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Crit Rate and movement speed greatly improve Klee positioning and sustained damage',
+          notes:
+            'Crit Rate and movement speed greatly improve Klee positioning and sustained damage',
         },
         {
-          name: 'Kagura\'s Verity',
+          name: "Kagura's Verity",
           rarity: 5,
           tier: 1,
           category: 'BiS',
@@ -1535,9 +1822,24 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'atkPercent', 'critRate'],
         sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot (40% Resistance Shred & Swirl)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative (Team ATK Buff)' },
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 2, label: 'Alternative (Healing & Foam DMG)' },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (40% Resistance Shred & Swirl)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Team ATK Buff)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Healing & Foam DMG)',
+          },
         ],
       },
       {
@@ -1549,9 +1851,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           Circlet: ['elementalMastery'],
         },
         priorityStats: ['elementalMastery', 'energyRecharge'],
-        sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot' },
-        ],
+        sets: [{ referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot' }],
       },
     ],
     guide: {
@@ -1622,10 +1922,30 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'elementalMastery', 'atkPercent', 'energyRecharge'],
         sets: [
-          { referenceKey: 'CrimsonWitchOfFlames', pieces: 4, tier: 1, label: 'Best in Slot (Full 3-stack Skill synergy)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 1, label: 'Best in Slot (with Furina)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 4, tier: 2, label: 'Alternative (+35% Normal Attack)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 2, label: 'Alternative (Vaporize/Melt)' },
+          {
+            referenceKey: 'CrimsonWitchOfFlames',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Full 3-stack Skill synergy)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (with Furina)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+35% Normal Attack)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Vaporize/Melt)',
+          },
         ],
       },
     ],
@@ -1633,8 +1953,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
       sourceUrl: 'https://keqingmains.com/q/diluc-quickguide/',
       playstyleSummary:
         'Consistent, steady Pyro on-field carry weaving Searing Onslaught skills between normal attacks to constantly Vaporize or Melt, or an explosive Plunging carry with Xianyun.',
-      energyRequirements:
-        '110% - 130% ER; 40-cost burst has near 100% Pyro infusion uptime.',
+      energyRequirements: '110% - 130% ER; 40-cost burst has near 100% Pyro infusion uptime.',
       combatTips: [
         'Crimson Witch of Flames 4pc was custom-tailored for Diluc: his 3-cast Skill (E-E-E) effortlessly reaches the maximum 3 stacks (+22.5% Pyro DMG and +15% Vape/Melt DMG).',
         'Weave normal attacks between skill casts (N1 -> E -> N1 -> E -> N1 -> E) to maintain continuous Hydro aura consumption from Xingqiu/Yelan.',
@@ -1664,7 +1983,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           notes: 'Top 4-star claymore providing Crit Rate and up to 50% all-DMG bonus',
         },
         {
-          name: 'Wolf\'s Gravestone',
+          name: "Wolf's Gravestone",
           rarity: 5,
           tier: 1,
           category: 'Alternative',
@@ -1675,7 +1994,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 2,
           category: 'Alternative',
-          notes: 'High EM substat and +36% DMG bonus against enemies affected by Hydro or Pyro in Vaporize comps',
+          notes:
+            'High EM substat and +36% DMG bonus against enemies affected by Hydro or Pyro in Vaporize comps',
         },
         {
           name: 'Mailed Flower',
@@ -1705,10 +2025,25 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'elementalMastery'],
         sets: [
-          { referenceKey: 'ThunderingFury', pieces: 4, tier: 1, label: 'Best in Slot (Skill Cooldown Reset & Aggravate)' },
+          {
+            referenceKey: 'ThunderingFury',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Skill Cooldown Reset & Aggravate)',
+          },
           { referenceKey: 'GildedDreams', pieces: 4, tier: 2, label: 'Alternative (Aggravate EM)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 2, label: 'Alternative 2pc (+18% ATK)' },
-          { referenceKey: 'ThunderingFury', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Electro)' },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+18% ATK)',
+          },
+          {
+            referenceKey: 'ThunderingFury',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+15% Electro)',
+          },
         ],
       },
     ],
@@ -1729,7 +2064,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Unmatched signature performance; Crit DMG and 3 stacks of Elemental DMG% maintained effortlessly',
+          notes:
+            'Unmatched signature performance; Crit DMG and 3 stacks of Elemental DMG% maintained effortlessly',
         },
         {
           name: 'Primordial Jade Cutter',
@@ -1746,7 +2082,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           notes: 'BP sword with Crit Rate and Normal/Charged Attack damage bonus',
         },
         {
-          name: 'Lion\'s Roar',
+          name: "Lion's Roar",
           rarity: 4,
           tier: 1,
           category: 'Alternative',
@@ -1780,9 +2116,24 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent'],
         sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (Support Buffer)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot (Burst Nuke / ER Conversion)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 2, label: 'Alternative (Skill Taunt Buffer)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Support Buffer)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Burst Nuke / ER Conversion)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Skill Taunt Buffer)',
+          },
           { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative (Team EM Buff)' },
         ],
       },
@@ -1795,9 +2146,7 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           Circlet: ['critRate', 'critDmg'],
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'elementalMastery'],
-        sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot' },
-        ],
+        sets: [{ referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot' }],
       },
     ],
     guide: {
@@ -1817,7 +2166,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 3,
           tier: 1,
           category: 'Utility',
-          notes: 'Stacks 48% ATK buff on top of Mona 60% Omen DMG bonus for staggering team burst windows',
+          notes:
+            'Stacks 48% ATK buff on top of Mona 60% Omen DMG bonus for staggering team burst windows',
         },
         {
           name: 'Favonius Codex',
@@ -1831,7 +2181,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 2,
           category: 'F2P',
-          notes: 'Enables Mona to fulfill the healer role in Furina or Freeze teams while providing flat energy',
+          notes:
+            'Enables Mona to fulfill the healer role in Furina or Freeze teams while providing flat energy',
         },
         {
           name: 'The Widsith',
@@ -1861,9 +2212,24 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['atkPercent', 'energyRecharge', 'critRate'],
         sets: [
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 1, label: 'Best in Slot (Transforms Overhealing into 30k Physical Sea-Dyed Foam Pops)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 2, label: 'Alternative (Skill Orb Buffer)' },
-          { referenceKey: 'MaidenBeloved', pieces: 4, tier: 3, label: 'Transitional (Pure Healing)' },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Transforms Overhealing into 30k Physical Sea-Dyed Foam Pops)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Skill Orb Buffer)',
+          },
+          {
+            referenceKey: 'MaidenBeloved',
+            pieces: 4,
+            tier: 3,
+            label: 'Transitional (Pure Healing)',
+          },
         ],
       },
       {
@@ -1898,7 +2264,8 @@ export const v1Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'BiS',
-          notes: 'Uncontested best weapon for Qiqi; resets the massive 30s Skill cooldown for 100% healing uptime',
+          notes:
+            'Uncontested best weapon for Qiqi; resets the massive 30s Skill cooldown for 100% healing uptime',
         },
         {
           name: 'Favonius Sword',

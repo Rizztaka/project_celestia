@@ -35,7 +35,7 @@ export const v61Profiles: ReviewedCharacterProfile[] = [
             pieces: 4,
             tier: 2,
             label:
-              'Alternative (+80 EM & up to +150 EM; solid placeholder while farming 4pc Sky\'s Unveiling)',
+              "Alternative (+80 EM & up to +150 EM; solid placeholder while farming 4pc Sky's Unveiling)",
           },
           {
             referenceKey: 'GildedDreams',
@@ -53,7 +53,7 @@ export const v61Profiles: ReviewedCharacterProfile[] = [
       energyRequirements:
         'Nefer should NOT build Energy Recharge (0% additional ER / 100% baseline). Her Burst is only cast as a tactical downtime filler during dash cancel combos when waiting for Verdant Dew generation.',
       combatTips: [
-        'Skill Priority Invariant (Skill >> Burst >> NA): Nefer\'s personal damage is overwhelmingly concentrated in her Shadow Dance enhanced Charged Attacks, which scale from Elemental Skill talent levels and EM. Character Level 80/90 is sufficient for talent levels and A6 CRIT DMG (Lunar-Bloom does not scale with character level). Her Normal Attack should remain at Level 1.',
+        "Skill Priority Invariant (Skill >> Burst >> NA): Nefer's personal damage is overwhelmingly concentrated in her Shadow Dance enhanced Charged Attacks, which scale from Elemental Skill talent levels and EM. Character Level 80/90 is sufficient for talent levels and A6 CRIT DMG (Lunar-Bloom does not scale with character level). Her Normal Attack should remain at Level 1.",
         'Zero ER Invariant (100% Base ER): Never build ER substats or ER sands on Nefer. All offensive stat budget must be invested strictly into CRIT and EM.',
         'Dash-Cancel Tech (E 3[CD] E CD CQ CD): Dash-canceling her special Charged Attacks accelerates rotation tempo and provides continuous invulnerability frames (i-frames), eliminating the need for a dedicated shielder or healer.',
         'Lauma Synergy (Ascendant Gleam & RES Shred): Nefer requires at least one Nod-Krai teammate to achieve Moonsign: Ascendant Gleam. Lauma is her premier support by far, providing simultaneous Hydro/Dendro RES shred, off-field Dendro application, and Moonsign elevation.',

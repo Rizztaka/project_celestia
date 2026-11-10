@@ -47,8 +47,7 @@ export const v62Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'ADayCarvedFromRisingWinds',
             pieces: 4,
             tier: 2,
-            label:
-              'Alternative for Hybrid Support / Personal Damage (ATK% and CRIT Rate bonuses)',
+            label: 'Alternative for Hybrid Support / Personal Damage (ATK% and CRIT Rate bonuses)',
           },
           {
             referenceKey: 'ScrollOfTheHeroOfCinderCity',
@@ -83,7 +82,7 @@ export const v62Profiles: ReviewedCharacterProfile[] = [
             pieces: 4,
             tier: 1,
             label:
-              'Best in Slot (Unequivocal best personal DPS set; grants massive ATK% and CRIT Rate bonuses upon Witch\'s Homework completion)',
+              "Best in Slot (Unequivocal best personal DPS set; grants massive ATK% and CRIT Rate bonuses upon Witch's Homework completion)",
           },
           {
             referenceKey: 'CelestialGift',
@@ -114,7 +113,7 @@ export const v62Profiles: ReviewedCharacterProfile[] = [
         '120-150% as Solo Pyro; 100-150% with +1 Pyro; 100-110% with +2 Pyros; +15% per missed Favonius proc.',
       combatTips: [
         'Dual Stance Mechanics (Light vs Darkness): Durin operates in two distinct states—Light (off-field support, applying Pyro and granting team buffs and RES shred) and Darkness (on-field/burst DPS, converting his strikes into massive Melt/Vape damage).',
-        'Hexerei Synergy & A1 RES Shred: Having at least one other Hexerei character (e.g. Nicole, Alice, Prune) on the team maxes out Durin\'s A1 passive resistance shred and Melt/Vape damage amplification.',
+        "Hexerei Synergy & A1 RES Shred: Having at least one other Hexerei character (e.g. Nicole, Alice, Prune) on the team maxes out Durin's A1 passive resistance shred and Melt/Vape damage amplification.",
         'Durcole Duo (Durin + Nicole): Nicole provides a sturdy shield, teamwide ATK buffs, and holds 4pc Celestial Gift, forming a premier support backbone that elevates on-field hypercarries like Varka, Arlecchino, and Lohen.',
         'Talent Priority (Burst > Skill >> NA): Both his support utility and burst nukes scale primarily from his Elemental Burst, followed by Skill. His Normal Attack contributes negligible damage and should remain at Level 1.',
       ],
@@ -148,7 +147,8 @@ export const v62Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'Alternative',
-          notes: '5★ Stat Stick offering 33.1% CRIT Rate and unconditional +12% Elemental DMG bonus.',
+          notes:
+            '5★ Stat Stick offering 33.1% CRIT Rate and unconditional +12% Elemental DMG bonus.',
         },
         {
           name: 'Azurelight',
@@ -320,10 +320,10 @@ export const v62Profiles: ReviewedCharacterProfile[] = [
       energyRequirements:
         '240-300%+ as Solo Anemo; 225-250% with +2 Electro; 165-215% with +1 Anemo; C4 or Favonius Warbow reduces requirements by ~35-50%.',
       combatTips: [
-        'ATK-Scaling Party Sustainer: Jahoda\'s healing scales directly with her ATK stat. Prioritize reaching her steep ER requirements first (via ER Sands and substats), then invest into ATK% and CRIT Rate (for Favonius Warbow procs).',
-        'Purr-loined Treasure Flask Absorption: In Ascendant Gleam teams, Jahoda\'s Skill absorbs Pyro, Hydro, Electro, or Cryo from opponents, charging her flask to unleash coordinated off-field elemental strikes alongside team attacks.',
-        'Favonius Warbow Priority: Given her extreme 240-300%+ ER requirements as solo Anemo, Favonius Warbow is her premier weapon by a landslide, generating neutral particles that ease both her own and her teammates\' burst rotations.',
-        'C6 Moonsign Buff Ceiling: At C6, Jahoda\'s Burst bestows massive CRIT stats upon Moonsign teammates, establishing her as a premier offensive support in Nod-Krai compositions.',
+        "ATK-Scaling Party Sustainer: Jahoda's healing scales directly with her ATK stat. Prioritize reaching her steep ER requirements first (via ER Sands and substats), then invest into ATK% and CRIT Rate (for Favonius Warbow procs).",
+        "Purr-loined Treasure Flask Absorption: In Ascendant Gleam teams, Jahoda's Skill absorbs Pyro, Hydro, Electro, or Cryo from opponents, charging her flask to unleash coordinated off-field elemental strikes alongside team attacks.",
+        "Favonius Warbow Priority: Given her extreme 240-300%+ ER requirements as solo Anemo, Favonius Warbow is her premier weapon by a landslide, generating neutral particles that ease both her own and her teammates' burst rotations.",
+        "C6 Moonsign Buff Ceiling: At C6, Jahoda's Burst bestows massive CRIT stats upon Moonsign teammates, establishing her as a premier offensive support in Nod-Krai compositions.",
         'Talent Priority (Burst > Skill >> NA): Level her Burst to maximize party healing output. Her personal Skill damage is negligible and Normal Attacks should stay at Level 1.',
       ],
       weapons: [

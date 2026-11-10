@@ -79,7 +79,8 @@ export const v60Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'NightOfTheSkysUnveiling',
             pieces: 4,
             tier: 1,
-            label: 'Best in Slot (+10% Lunar Reaction DMG & high personal damage in Ascendant Gleam)',
+            label:
+              'Best in Slot (+10% Lunar Reaction DMG & high personal damage in Ascendant Gleam)',
           },
           {
             referenceKey: 'SilkenMoonsSerenade',
@@ -105,14 +106,14 @@ export const v60Profiles: ReviewedCharacterProfile[] = [
     guide: {
       sourceUrl: 'https://keqingmains.com/q/lauma-quickguide/',
       playstyleSummary:
-        'Lauma is a 5-star Dendro Catalyst off-field support and sub-DPS. She provides consistent off-field Dendro application, teamwide elemental resistance shred (benefiting both Dendro/Hydro DPS and Hyperbloom/Bloom/Burgeon/Lunar-Bloom reactions), and increases the party\'s Moonsign level.',
+        "Lauma is a 5-star Dendro Catalyst off-field support and sub-DPS. She provides consistent off-field Dendro application, teamwide elemental resistance shred (benefiting both Dendro/Hydro DPS and Hyperbloom/Bloom/Burgeon/Lunar-Bloom reactions), and increases the party's Moonsign level.",
       energyRequirements:
         '170-210% as Solo Dendro (2 Skills per Burst); 140-175% with 2nd Dendro (2 Skills); 210-225% with 2nd Dendro (1 Skill); 160-165% with Nefer + Dendro teammate.',
       combatTips: [
         'Skill and Burst Priority (Skill = Burst > Character Level 90 >> NA): Both her Skill (Aura of Vernal Bloom) and Burst contribute significantly to team buffs and Dendro application. Character Level 90 is recommended for transformative reaction damage, while Normal Attacks should remain at Level 1.',
-        'Universal RES Shred & Team Synergies: Lauma\'s signature RES Shred applies to both Hydro and Dendro, benefiting Hyperbloom, Nilou Bloom, Burgeon, and direct Dendro/Hydro DPS units (Columbina, Nahida, Neuvillette).',
+        "Universal RES Shred & Team Synergies: Lauma's signature RES Shred applies to both Hydro and Dendro, benefiting Hyperbloom, Nilou Bloom, Burgeon, and direct Dendro/Hydro DPS units (Columbina, Nahida, Neuvillette).",
         'Prototype Amber Healing Enabler: In teams without a dedicated healer (e.g. Columbina + Nahida), equipping Prototype Amber on Lauma or teammates provides steady partywide sustain without sacrificing much utility.',
-        'Moonsign Elevation: As a Nod-Krai character, Lauma raises the party Moonsign level, supercharging 4pc Silken Moon\'s Serenade to grant 120 EM and +10% Lunar Reaction DMG.',
+        "Moonsign Elevation: As a Nod-Krai character, Lauma raises the party Moonsign level, supercharging 4pc Silken Moon's Serenade to grant 120 EM and +10% Lunar Reaction DMG.",
       ],
       weapons: [
         {
@@ -243,7 +244,7 @@ export const v60Profiles: ReviewedCharacterProfile[] = [
             pieces: 4,
             tier: 2,
             label:
-              'Alternative (+80 EM & up to +150 EM or +14% ATK; excellent placeholder while farming 4pc Sky\'s Unveiling)',
+              "Alternative (+80 EM & up to +150 EM or +14% ATK; excellent placeholder while farming 4pc Sky's Unveiling)",
           },
           {
             referenceKey: 'ThunderingFury',
@@ -269,9 +270,9 @@ export const v60Profiles: ReviewedCharacterProfile[] = [
         '110-135% at C0; 115-145% at C1; ~25-30% lower ER requirement when equipped with signature weapon Bloodsoaked Ruins (due to flat 12-energy refund).',
       combatTips: [
         'Elemental Burst Priority (Burst > Level 90 >> Skill / NA): His primary damage output is concentrated in his enhanced Burst detonations and Lunar-Charged reactions. Character Level 90 is crucial for maximizing reaction base damage, while Normal Attack talent can remain at Level 1.',
-        'Nod-Krai Teammate Requirement: Flins\'s Lunar-Charged kit requires at least one Nod-Krai teammate (Ineffa, Aino, or Lauma) to reach Ascendant Gleam (Moonsign Level 2) and unleash his maximum damage potential.',
+        "Nod-Krai Teammate Requirement: Flins's Lunar-Charged kit requires at least one Nod-Krai teammate (Ineffa, Aino, or Lauma) to reach Ascendant Gleam (Moonsign Level 2) and unleash his maximum damage potential.",
         'Columbina Synergy: Columbina is his premier Hydro teammate, enabling continuous Hydro application and Lunar-Charged triggers.',
-        'Staff of the Scarlet Sands CRIT Warning: When running Staff of the Scarlet Sands (44.1% CRIT Rate) alongside 4pc Night of the Sky\'s Unveiling (+30% CRIT Rate), be cautious not to overcap on CRIT Rate from substats.',
+        "Staff of the Scarlet Sands CRIT Warning: When running Staff of the Scarlet Sands (44.1% CRIT Rate) alongside 4pc Night of the Sky's Unveiling (+30% CRIT Rate), be cautious not to overcap on CRIT Rate from substats.",
       ],
       weapons: [
         {
@@ -319,7 +320,8 @@ export const v60Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 2,
           category: 'Alternative',
-          notes: '4★ Alternative offering strong base stats and supportive/offensive passive utility.',
+          notes:
+            '4★ Alternative offering strong base stats and supportive/offensive passive utility.',
         },
         {
           name: 'Fractured Halo',
@@ -427,8 +429,7 @@ export const v60Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'Instructor',
             pieces: 4,
             tier: 2,
-            label:
-              'Alternative (+120 Teamwide EM upon triggering an elemental reaction on-field)',
+            label: 'Alternative (+120 Teamwide EM upon triggering an elemental reaction on-field)',
           },
           {
             referenceKey: 'ScrollOfTheHeroOfCinderCity',
@@ -483,13 +484,13 @@ export const v60Profiles: ReviewedCharacterProfile[] = [
     guide: {
       sourceUrl: 'https://keqingmains.com/q/aino-quickguide/',
       playstyleSummary:
-        'Aino is a 4-star Hydro Claymore support and off-field enabler freely available through the Nod-Krai Archon Quest. She applies consistent off-field AoE Hydro via her Elemental Burst, raises the team\'s Moonsign level (vital for Flins), and enables Overvape and Lunar-Charged compositions.',
+        "Aino is a 4-star Hydro Claymore support and off-field enabler freely available through the Nod-Krai Archon Quest. She applies consistent off-field AoE Hydro via her Elemental Burst, raises the team's Moonsign level (vital for Flins), and enables Overvape and Lunar-Charged compositions.",
       energyRequirements:
         '190-250%+ standard; 155-205% with Favonius Greatsword; ~40% less with C4; <160% with 2 Skills per Burst.',
       combatTips: [
-        'Zero Talent Investment Invariant: Aino\'s utility comes entirely from her Burst\'s Hydro application, Moonsign passive, and A4 EM-scaling transformative reactions. Her talent multipliers scale from ATK and contribute negligible damage; all three talents (NA, Skill, Burst) can comfortably stay at Level 1.',
+        "Zero Talent Investment Invariant: Aino's utility comes entirely from her Burst's Hydro application, Moonsign passive, and A4 EM-scaling transformative reactions. Her talent multipliers scale from ATK and contribute negligible damage; all three talents (NA, Skill, Burst) can comfortably stay at Level 1.",
         'Favonius Greatsword Priority: Favonius Greatsword is her undisputed Best-in-Slot weapon, neutralizing her steep 190-250% ER requirements while generating clear particles to battery energy-hungry teammates.',
-        'Moonsign Elevation for Flins: Aino increases the team\'s Moonsign Level by 1, allowing Flins to activate Ascendant Gleam (Level 2) and gain his full 30% CRIT Rate and Lunar-Charged bonuses.',
+        "Moonsign Elevation for Flins: Aino increases the team's Moonsign Level by 1, allowing Flins to activate Ascendant Gleam (Level 2) and gain his full 30% CRIT Rate and Lunar-Charged bonuses.",
         'Overvape Enabler with Ineffa: When paired with Ineffa, Aino maintains consistent Electro-Charged/Lunar-Charged auras that allow Pyro on-field carries (Arlecchino, Mavuika, Bennett) to trigger simultaneous Overloaded and Vaporize (Overvape).',
       ],
       weapons: [

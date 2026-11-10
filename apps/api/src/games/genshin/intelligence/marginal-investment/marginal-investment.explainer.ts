@@ -103,7 +103,9 @@ export function explainMarginalInvestment(
   if (action.costs.length > 0) {
     const domainCost = action.costs.find((c) => c.name.startsWith('Domain:'));
     if (domainCost) {
-      explanations.push(`Farming Target: Farm ${domainCost.name} to obtain optimal main stat pieces.`);
+      explanations.push(
+        `Farming Target: Farm ${domainCost.name} to obtain optimal main stat pieces.`,
+      );
     } else {
       const costDetails = action.costs
         .map((c) => `${c.count.toLocaleString()} ${c.name}`)

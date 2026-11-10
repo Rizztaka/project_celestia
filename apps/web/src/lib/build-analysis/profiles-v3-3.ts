@@ -25,12 +25,42 @@ export const v33Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'energyRecharge'],
         sets: [
-          { referenceKey: 'DesertPavilionChronicle', pieces: 4, tier: 1, label: 'Best in Slot (+15% Anemo DMG, +10% NA SPD, +40% NA/CA/PA DMG bonus)' },
-          { referenceKey: 'ShimenawasReminiscence', pieces: 4, tier: 1, label: 'Resin-Efficient BiS (+18% ATK, +50% NA/CA DMG bonus for 15 Energy)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 1, label: 'BiS with Furina (+15% NA/CA DMG, up to +36% Crit Rate)' },
-          { referenceKey: 'EchoesOfAnOffering', pieces: 4, tier: 2, label: 'Alternative (+18% ATK, 70% ATK NA proc; competitive at C6 and low ping)' },
-          { referenceKey: 'DesertPavilionChronicle', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Anemo DMG)' },
-          { referenceKey: 'ViridescentVenerer', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Anemo DMG)' },
+          {
+            referenceKey: 'DesertPavilionChronicle',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+15% Anemo DMG, +10% NA SPD, +40% NA/CA/PA DMG bonus)',
+          },
+          {
+            referenceKey: 'ShimenawasReminiscence',
+            pieces: 4,
+            tier: 1,
+            label: 'Resin-Efficient BiS (+18% ATK, +50% NA/CA DMG bonus for 15 Energy)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 1,
+            label: 'BiS with Furina (+15% NA/CA DMG, up to +36% Crit Rate)',
+          },
+          {
+            referenceKey: 'EchoesOfAnOffering',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+18% ATK, 70% ATK NA proc; competitive at C6 and low ping)',
+          },
+          {
+            referenceKey: 'DesertPavilionChronicle',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Anemo DMG)',
+          },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Anemo DMG)',
+          },
         ],
       },
     ],
@@ -101,8 +131,7 @@ export const v33Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 5,
           category: 'Alternative',
-          notes:
-            'High base ATK, +33.1% ATK substat, and unconditional +12% Elemental DMG bonus.',
+          notes: 'High base ATK, +33.1% ATK substat, and unconditional +12% Elemental DMG bonus.',
         },
         {
           name: 'Solar Pearl',
@@ -147,12 +176,44 @@ export const v33Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent'],
         sets: [
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 1, label: 'Best in Slot at C6 (+20% HP, 100% uptime on party +20% ATK and +30% Shield Strength)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Pre-C6 BiS (+20% party ATK for 12s on Burst cast)' },
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Dual-Carry BiS (-40% Pyro/Hydro/Electro/Cryo RES shred to buff sub-DPS teammates)' },
-          { referenceKey: 'TheExile', pieces: 4, tier: 2, label: 'Team Battery (+20% ER, restores 6 flat energy to party on Burst)' },
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 2, label: 'Personal Damage BiS at C6 (+70% Skill DMG on Pressurized Collapses)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% ER)' },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot at C6 (+20% HP, 100% uptime on party +20% ATK and +30% Shield Strength)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Pre-C6 BiS (+20% party ATK for 12s on Burst cast)',
+          },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Dual-Carry BiS (-40% Pyro/Hydro/Electro/Cryo RES shred to buff sub-DPS teammates)',
+          },
+          {
+            referenceKey: 'TheExile',
+            pieces: 4,
+            tier: 2,
+            label: 'Team Battery (+20% ER, restores 6 flat energy to party on Burst)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 2,
+            label: 'Personal Damage BiS at C6 (+70% Skill DMG on Pressurized Collapses)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% ER)',
+          },
         ],
       },
     ],
@@ -190,8 +251,7 @@ export const v33Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 4,
           category: 'F2P',
-          notes:
-            '30.6% ER and high 565 Base ATK to boost A4 flat damage scaling.',
+          notes: '30.6% ER and high 565 Base ATK to boost A4 flat damage scaling.',
         },
         {
           name: 'End of the Line',

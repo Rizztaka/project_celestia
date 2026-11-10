@@ -126,12 +126,12 @@ export const v63Profiles: ReviewedCharacterProfile[] = [
       playstyleSummary:
         'Columbina is a 5-star Hydro Catalyst user who commands the Welkin Moon and Moonsign mechanics. She excels both as an on-field Lunar-Bloom driver dealing direct Lunar Reaction damage with enhanced Charged Attacks, and as a potent off-field Hydro sub-DPS and support whose Burst amplifies the DMG Bonus of all Lunar Reactions (Lunar-Charged, Lunar-Bloom, Lunar-Crystallize) across the team.',
       energyRequirements:
-        'Bursting every rotation requires 140–180% ER depending on team Favonius procs and teammates. However, in personal DPS setups, Columbina should cast her Burst whenever it is available rather than sacrificing offensive HP% and CRIT stats to force high ER. Holding Nocturne\'s Curtain Call or Favonius Codex substantially alleviates ER needs.',
+        "Bursting every rotation requires 140–180% ER depending on team Favonius procs and teammates. However, in personal DPS setups, Columbina should cast her Burst whenever it is available rather than sacrificing offensive HP% and CRIT stats to force high ER. Holding Nocturne's Curtain Call or Favonius Codex substantially alleviates ER needs.",
       combatTips: [
         'Burst When Available Invariant: Building excessive ER to force Bursting every rotation in personal DPS setups is a net damage loss compared to maximizing HP% and CRIT; cast Burst whenever naturally charged.',
         'Talent Priority: On-field DPS prioritizes NA = Skill >= Lv. 90 >= Burst. Off-field support prioritizes Skill = Burst > Lv. 90 >> NA (NA remains at Level 1).',
         'Moonsign & Ascendant Gleam: In Moonsign teams, Columbina provides continuous Hydro application and elevated reaction multipliers. Pair with Nod-Krai characters (Ineffa, Lauma, Zibai, Illuga) for full synergy.',
-        'Sacrificial Jade Overcap Warning: With her innate CRIT Rate ascension and A1 passive, pairing with 4pc Night of the Sky\'s Unveiling (+30% CRIT Rate) risks severe overcapping when using CRIT Rate weapons like Sacrificial Jade.',
+        "Sacrificial Jade Overcap Warning: With her innate CRIT Rate ascension and A1 passive, pairing with 4pc Night of the Sky's Unveiling (+30% CRIT Rate) risks severe overcapping when using CRIT Rate weapons like Sacrificial Jade.",
       ],
       weapons: [
         {
@@ -180,7 +180,7 @@ export const v63Profiles: ReviewedCharacterProfile[] = [
           tier: 1,
           category: 'Alternative',
           notes:
-            '4★ Battle Pass BiS (High CRIT Rate, HP% and EM; watch for CRIT Rate overcapping with 4pc Sky\'s Unveiling)',
+            "4★ Battle Pass BiS (High CRIT Rate, HP% and EM; watch for CRIT Rate overcapping with 4pc Sky's Unveiling)",
         },
         {
           name: 'Favonius Codex',
@@ -291,14 +291,13 @@ export const v63Profiles: ReviewedCharacterProfile[] = [
             pieces: 4,
             tier: 2,
             label:
-              'Alternative Placeholder (+54% DEF & +24% Geo DMG; significantly behind Sky\'s Unveiling)',
+              "Alternative Placeholder (+54% DEF & +24% Geo DMG; significantly behind Sky's Unveiling)",
           },
           {
             referenceKey: 'GladiatorsFinale',
             pieces: 2,
             tier: 3,
-            label:
-              'Transitional 2pc mix (2pc Husk of Opulent Dreams +30% DEF / +80 EM / +20% ER)',
+            label: 'Transitional 2pc mix (2pc Husk of Opulent Dreams +30% DEF / +80 EM / +20% ER)',
           },
         ],
       },
@@ -306,14 +305,14 @@ export const v63Profiles: ReviewedCharacterProfile[] = [
     guide: {
       sourceUrl: 'https://keqingmains.com/q/zibai-quickguide/',
       playstyleSummary:
-        'Zibai is a 5-star Geo sword hypercarry, the mythical White Horse Adeptus of Liyue. She utilizes her Elemental Skill to enter Lunar Phase Shift mode, converting Normal and Charged Attacks to non-overrideable Geo damage while consuming Phase Shift Radiance to unleash explosive Spirit Steed\'s Stride strikes that deal massive direct Lunar-Crystallize reaction damage.',
+        "Zibai is a 5-star Geo sword hypercarry, the mythical White Horse Adeptus of Liyue. She utilizes her Elemental Skill to enter Lunar Phase Shift mode, converting Normal and Charged Attacks to non-overrideable Geo damage while consuming Phase Shift Radiance to unleash explosive Spirit Steed's Stride strikes that deal massive direct Lunar-Crystallize reaction damage.",
       energyRequirements:
         'In Triple Geo teams with Linnea, Zibai requires only 105–125% ER with 1 Favonius proc to Burst every rotation. In other teams with 130%+ ER requirements, prioritize DEF% and CRIT stats and use her Burst whenever naturally available without building dedicated ER.',
       combatTips: [
         'Normal Attack Level 1 Invariant: Zibai does NOT need Normal Attack talent levels; all Geo Normal Attack and Lunar-Crystallize scaling resides completely inside her Skill talent.',
         'Talent Priority: Skill > Character Level 90 = Burst (NA at Level 1). Level 90 is strongly recommended to maximize base DEF and Lunar-Crystallize reaction base damage.',
         'DEF% Goblet Invariant: A DEF% Goblet is strongly recommended over Geo DMG% or EM because both her direct Geo and direct Lunar-Crystallize hits scale with DEF.',
-        'Four Skill Charges: Consuming all 4 Spirit Steed\'s Stride charges is paramount, as the Lunar-Crystallize strikes represent roughly 50% of her total damage output at C0.',
+        "Four Skill Charges: Consuming all 4 Spirit Steed's Stride charges is paramount, as the Lunar-Crystallize strikes represent roughly 50% of her total damage output at C0.",
         'Ascendant Gleam & Teambuilding: Requires at least one Nod-Krai teammate (Columbina, Ineffa, Illuga) for Ascendant Gleam, one Geo teammate for Geo Resonance, and one Hydro teammate for continuous Lunar-Crystallize triggers.',
       ],
       weapons: [
@@ -362,7 +361,8 @@ export const v63Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 2,
           category: 'Alternative',
-          notes: '5★ Stat Stick (Massive DEF% secondary stat and minor teamwide Elemental DMG buff)',
+          notes:
+            '5★ Stat Stick (Massive DEF% secondary stat and minor teamwide Elemental DMG buff)',
         },
         {
           name: 'Splendor of Tranquil Waters',
@@ -384,7 +384,7 @@ export const v63Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 3,
           category: 'Alternative',
-          notes: '5★ Stat Stick (44.1% CRIT Rate; watch for overcapping with 4pc Sky\'s Unveiling)',
+          notes: "5★ Stat Stick (44.1% CRIT Rate; watch for overcapping with 4pc Sky's Unveiling)",
         },
       ],
     },
@@ -430,8 +430,7 @@ export const v63Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'ScrollOfTheHeroOfCinderCity',
             pieces: 4,
             tier: 2,
-            label:
-              'Alternative (+12% Geo and Hydro DMG for 15s upon triggering Lunar-Crystallize)',
+            label: 'Alternative (+12% Geo and Hydro DMG for 15s upon triggering Lunar-Crystallize)',
           },
           {
             referenceKey: 'NoblesseOblige',
@@ -452,15 +451,15 @@ export const v63Profiles: ReviewedCharacterProfile[] = [
     guide: {
       sourceUrl: 'https://keqingmains.com/q/illuga-quickguide/',
       playstyleSummary:
-        'Illuga is a 4-star Geo polearm buffer from Nod-Krai, youngest squad leader of the Nightmare Orioles. He serves as the dedicated support for Geo and Lunar-Crystallize damage dealers (especially Zibai, Navia, and Itto), providing an Additive Base DMG Bonus (akin to Shenhe\'s Icy Quills) scaled from his Elemental Mastery, alongside EM and Geo CRIT buffs.',
+        "Illuga is a 4-star Geo polearm buffer from Nod-Krai, youngest squad leader of the Nightmare Orioles. He serves as the dedicated support for Geo and Lunar-Crystallize damage dealers (especially Zibai, Navia, and Itto), providing an Additive Base DMG Bonus (akin to Shenhe's Icy Quills) scaled from his Elemental Mastery, alongside EM and Geo CRIT buffs.",
       energyRequirements:
         'At C0, Illuga requires 160–185% ER in Double Geo (155–175% in Triple Geo) with Zibai. C1 decreases ER requirements by 25–35% (down to 125–150%). Equipping Favonius Lance reduces ER requirements by an additional 15–30%.',
       combatTips: [
-        'Nightingale\'s Song Additive Buff: Illuga\'s core buff grants Additive Base DMG to the active character\'s Geo and direct Lunar-Crystallize attacks based purely on his total EM. Maximize EM on all artifact slots.',
+        "Nightingale's Song Additive Buff: Illuga's core buff grants Additive Base DMG to the active character's Geo and direct Lunar-Crystallize attacks based purely on his total EM. Maximize EM on all artifact slots.",
         'Talent Priority: Burst > Character Level 90 (at C2). Elemental Skill and Normal Attacks deal negligible damage and can remain at Level 1.',
-        'C2 Constellation Value: At C0–C1, Illuga only maintains 8s of buff uptime on 4pc Silken Moon\'s Serenade. C2 grants off-field Geo damage, ensuring permanent 100% buff uptime.',
+        "C2 Constellation Value: At C0–C1, Illuga only maintains 8s of buff uptime on 4pc Silken Moon's Serenade. C2 grants off-field Geo damage, ensuring permanent 100% buff uptime.",
         'Favonius Lance & CRIT Rate: When holding Favonius Lance to battery the team, equip a CRIT Rate Circlet to ensure consistent particle procs.',
-        'Columbina Synergy: Columbina is Illuga\'s premier Hydro teammate, enabling consistent Lunar-Crystallize triggers and Moonsign harmony.',
+        "Columbina Synergy: Columbina is Illuga's premier Hydro teammate, enabling consistent Lunar-Crystallize triggers and Moonsign harmony.",
       ],
       weapons: [
         {
@@ -469,7 +468,7 @@ export const v63Profiles: ReviewedCharacterProfile[] = [
           tier: 1,
           category: 'BiS',
           notes:
-            '4★ Wish BiS (Highest EM of any Polearm at 221 EM; maximizes his Nightingale\'s Song EM-scaling additive buff)',
+            "4★ Wish BiS (Highest EM of any Polearm at 221 EM; maximizes his Nightingale's Song EM-scaling additive buff)",
         },
         {
           name: 'Favonius Lance',

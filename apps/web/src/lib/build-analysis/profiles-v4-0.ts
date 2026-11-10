@@ -20,26 +20,63 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critDmg', 'critRate', 'atkPercent', 'atk', 'energyRecharge'],
         sets: [
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 1, label: 'Best in Slot (+36% CRIT Rate and +15% Charged Attack DMG via Prop Arrow HP consumption)' },
-          { referenceKey: 'Lavawalker', pieces: 4, tier: 1, label: 'Best in Slot (+35% DMG unconditionally against enemies affected by Pyro in Mono Pyro)' },
-          { referenceKey: 'VermillionHereafter', pieces: 4, tier: 2, label: 'Alternative (Massive ATK% stacking when Bursting every rotation)' },
-          { referenceKey: 'ShimenawasReminiscence', pieces: 4, tier: 2, label: 'Alternative (+50% Charged Attack DMG when Bursting every other rotation)' },
-          { referenceKey: 'WanderersTroupe', pieces: 4, tier: 2, label: 'Alternative (+35% Charged Attack DMG unconditionally for bow users)' },
-          { referenceKey: 'RetracingBolide', pieces: 4, tier: 3, label: 'Transitional (+40% Charged Attack DMG when protected by a shield)' },
-          { referenceKey: 'DesertPavilionChronicle', pieces: 4, tier: 3, label: 'Transitional (+40% Charged Attack DMG after hitting with a Charged Attack)' },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+36% CRIT Rate and +15% Charged Attack DMG via Prop Arrow HP consumption)',
+          },
+          {
+            referenceKey: 'Lavawalker',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+35% DMG unconditionally against enemies affected by Pyro in Mono Pyro)',
+          },
+          {
+            referenceKey: 'VermillionHereafter',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Massive ATK% stacking when Bursting every rotation)',
+          },
+          {
+            referenceKey: 'ShimenawasReminiscence',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+50% Charged Attack DMG when Bursting every other rotation)',
+          },
+          {
+            referenceKey: 'WanderersTroupe',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+35% Charged Attack DMG unconditionally for bow users)',
+          },
+          {
+            referenceKey: 'RetracingBolide',
+            pieces: 4,
+            tier: 3,
+            label: 'Transitional (+40% Charged Attack DMG when protected by a shield)',
+          },
+          {
+            referenceKey: 'DesertPavilionChronicle',
+            pieces: 4,
+            tier: 3,
+            label: 'Transitional (+40% Charged Attack DMG after hitting with a Charged Attack)',
+          },
         ],
       },
     ],
     guide: {
       sourceUrl: 'https://keqingmains.com/q/lyney-quickguide/',
       playstyleSummary:
-        '5-star Pyro bow on-field carry specializing in Charged Prop Arrows, Grin-Malkin Hat taunts, and explosive Pyrotechnic Strike detonators. Lyney charges his Bow to Level 2 to fire Prop Arrows, which summon taunting Grin-Malkin Hats and consume up to 20% of his HP (when above 60% HP) to generate Prop Surplus stacks. Bewildering Lights (Elemental Skill) detonates active Hats into AoE Pyrotechnic Strikes and cashes in all Prop Surplus stacks to deal heavy frontloaded Pyro damage and regenerate Lyney\'s HP. Wondrous Trick: Miracle Parade (Elemental Burst) transforms Lyney into an agile Grin-Malkin Cat, showering flames upon nearby foes before detonating into fireworks and granting an additional Hat and Prop Surplus stack. His A4 Passive Conclusive Ovation grants an astonishing +60% to +100% universal DMG bonus against Pyro-affected enemies when fielding 3 Pyro teammates, making him the premier Mono Pyro hypercarry.',
+        "5-star Pyro bow on-field carry specializing in Charged Prop Arrows, Grin-Malkin Hat taunts, and explosive Pyrotechnic Strike detonators. Lyney charges his Bow to Level 2 to fire Prop Arrows, which summon taunting Grin-Malkin Hats and consume up to 20% of his HP (when above 60% HP) to generate Prop Surplus stacks. Bewildering Lights (Elemental Skill) detonates active Hats into AoE Pyrotechnic Strikes and cashes in all Prop Surplus stacks to deal heavy frontloaded Pyro damage and regenerate Lyney's HP. Wondrous Trick: Miracle Parade (Elemental Burst) transforms Lyney into an agile Grin-Malkin Cat, showering flames upon nearby foes before detonating into fireworks and granting an additional Hat and Prop Surplus stack. His A4 Passive Conclusive Ovation grants an astonishing +60% to +100% universal DMG bonus against Pyro-affected enemies when fielding 3 Pyro teammates, making him the premier Mono Pyro hypercarry.",
       energyRequirements:
         '125%–150% ER when casting Burst every rotation (favored for maximizing invulnerability frames, Prop Surplus stacks, and AoE burst). 100% (base ER) when casting Burst every other rotation or skipping Burst in favor of additional Charged Shots.',
       combatTips: [
         'Prop Surplus Stacking Loop: Fire 3–4 Level 2 Prop Arrows while above 60% Max HP to build maximum Prop Surplus stacks before casting Skill to maximize damage and self-healing.',
         'Burst Early-Cancel Tech: Press Skill while in Grin-Malkin Cat Burst form to immediately detonate into fireworks without wasting valuable on-field buff uptime.',
-        'VV Shred Window Alignment: To ensure his Burst explosion benefits from 4pc Viridescent Venerer\'s 10-second Pyro RES shred, cast Burst no later than after 2 Charged Shots in standard rotations.',
+        "VV Shred Window Alignment: To ensure his Burst explosion benefits from 4pc Viridescent Venerer's 10-second Pyro RES shred, cast Burst no later than after 2 Charged Shots in standard rotations.",
         'A4 Conclusive Ovation Mono Pyro Rule: Lyney receives +60% DMG against Pyro-affected enemies, plus an additional +20% for each Pyro party member other than Lyney (capped at +100% DMG bonus with 3 Pyro teammates). Avoid triggering Vaporize or Melt which wipe off the Pyro aura!',
         'Dedicated Healer Requirement: Prop Arrows only consume HP and generate Prop Surplus stacks when Lyney is strictly above 60% Max HP. Bennett is essential to keep Lyney continuously above this threshold while providing massive Flat ATK buffs.',
       ],
@@ -65,8 +102,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
           tier: 1,
           rarity: 5,
           category: 'BiS',
-          notes:
-            'High 608 Base ATK, 66.2% CRIT DMG, and unconditional +20% ATK buff.',
+          notes: 'High 608 Base ATK, 66.2% CRIT DMG, and unconditional +20% ATK buff.',
         },
         {
           name: 'Skyward Harp',
@@ -138,7 +174,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
           rarity: 3,
           category: 'F2P',
           notes:
-            'Early-game 3-star option providing 31.2% CRIT Rate and +60% DMG bonus within 0.3s arrow flight when buffed by Bennett\'s Flat ATK.',
+            "Early-game 3-star option providing 31.2% CRIT Rate and +60% DMG bonus within 0.3s arrow flight when buffed by Bennett's Flat ATK.",
         },
       ],
     },
@@ -149,7 +185,12 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
     referenceKey: 'Lynette',
     displayName: 'Lynette',
     defaultRoleId: 'resistance_shred',
-    evidenceIds: ['kqm-lynette-support', 'kqm-lynette-reaction', 'kqm-lynette-dps', 'kqm-lynette-guide'],
+    evidenceIds: [
+      'kqm-lynette-support',
+      'kqm-lynette-reaction',
+      'kqm-lynette-dps',
+      'kqm-lynette-guide',
+    ],
     roles: [
       {
         id: 'resistance_shred',
@@ -165,12 +206,44 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent', 'elementalMastery'],
         sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot (-40% Elemental RES shred and +60% Swirl DMG for Pyro/Hydro/Electro/Cryo carries)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (+20% Team ATK on Burst cast if another teammate already holds 4pc VV)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 2, label: 'Alternative (Converts high ER requirements into substantial Burst DMG bonus)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 2, label: 'Alternative (+36% CRIT Rate triggered by Skill HP drain and healing)' },
-          { referenceKey: 'ViridescentVenerer', pieces: 2, tier: 3, label: 'Transitional 2pc Mix (+15% Anemo DMG)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 2, tier: 3, label: 'Transitional 2pc Mix (+20% Energy Recharge)' },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (-40% Elemental RES shred and +60% Swirl DMG for Pyro/Hydro/Electro/Cryo carries)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+20% Team ATK on Burst cast if another teammate already holds 4pc VV)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Converts high ER requirements into substantial Burst DMG bonus)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+36% CRIT Rate triggered by Skill HP drain and healing)',
+          },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 2,
+            tier: 3,
+            label: 'Transitional 2pc Mix (+15% Anemo DMG)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 2,
+            tier: 3,
+            label: 'Transitional 2pc Mix (+20% Energy Recharge)',
+          },
         ],
       },
       {
@@ -184,12 +257,45 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'energyRecharge', 'atk'],
         sets: [
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 1, label: 'Best in Slot (+36% CRIT Rate and +15% NA/CA DMG stacked via Skill HP drain and heal)' },
-          { referenceKey: 'DesertPavilionChronicle', pieces: 4, tier: 1, label: 'Best in Slot (+15% Anemo, +10% Attack SPD, and +40% NA/CA DMG after Charged Attack)' },
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot (Dual-carry driver shredding teammate elements while dealing Anemo carry damage)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 2, label: 'Alternative (Burst-focused on-field carry build)' },
-          { referenceKey: 'DesertPavilionChronicle', pieces: 2, tier: 3, label: 'Transitional 2pc Mix (+15% Anemo DMG)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 2, tier: 3, label: 'Transitional 2pc Mix (+15% Normal and Charged Attack DMG)' },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+36% CRIT Rate and +15% NA/CA DMG stacked via Skill HP drain and heal)',
+          },
+          {
+            referenceKey: 'DesertPavilionChronicle',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+15% Anemo, +10% Attack SPD, and +40% NA/CA DMG after Charged Attack)',
+          },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (Dual-carry driver shredding teammate elements while dealing Anemo carry damage)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Burst-focused on-field carry build)',
+          },
+          {
+            referenceKey: 'DesertPavilionChronicle',
+            pieces: 2,
+            tier: 3,
+            label: 'Transitional 2pc Mix (+15% Anemo DMG)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 2,
+            tier: 3,
+            label: 'Transitional 2pc Mix (+15% Normal and Charged Attack DMG)',
+          },
         ],
       },
       {
@@ -203,11 +309,37 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['elementalMastery', 'energyRecharge', 'critRate', 'atkPercent'],
         sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot (+60% Swirl DMG and -40% Elemental RES shred for Hyperbloom/Electro-Charged)' },
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 4, tier: 1, label: 'Best in Slot (+80 EM and up to +140% Hyperbloom reaction damage)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Best in Slot (+80 EM and high flat EM stacking via elemental diversity)' },
-          { referenceKey: 'GildedDreams', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+80 Elemental Mastery)' },
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+80 Elemental Mastery)' },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+60% Swirl DMG and -40% Elemental RES shred for Hyperbloom/Electro-Charged)',
+          },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+80 EM and up to +140% Hyperbloom reaction damage)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+80 EM and high flat EM stacking via elemental diversity)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+80 Elemental Mastery)',
+          },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+80 Elemental Mastery)',
+          },
         ],
       },
     ],
@@ -219,10 +351,10 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
         'Burst costs 70 Energy. Off-field Support: Solo Anemo (1 Skill) requires 240%+ ER (180%–200% with Favonius); Solo Anemo with 2 Skills (C4 or Sacrificial) requires 140%–175% ER (115%–160% with Favonius); Double Anemo requires 145%–175% ER (105%–145% with Favonius); Triple Anemo with Faruzan requires 120%–160% ER (100%–120% with Favonius). On-field C6 Carry: 100%–130% ER.',
       combatTips: [
         'Bogglecat Box Indestructible Taunt: Unlike many player summons, the Bogglecat Box cannot take damage or be destroyed prematurely, providing 12 seconds of guaranteed aggro distraction in multi-target encounters.',
-        'Dynamic Burst Mechanics: Lynette\'s Burst does NOT snapshot stats; its damage continuously updates as buffs (such as Bennett\'s Burst or Furina\'s Fanfare) are gained or expired.',
+        "Dynamic Burst Mechanics: Lynette's Burst does NOT snapshot stats; its damage continuously updates as buffs (such as Bennett's Burst or Furina's Fanfare) are gained or expired.",
         'C1 Vortex Grouping & C4 Extra Charge: C1 unleashes a suction vortex at the target struck by Hold Skill; C4 grants a second Skill charge, allowing two consecutive Skills to double particle generation, grouping, and C6 infusion uptime.',
         'C6 Anemo Infusion Rotation: Stagger Skill uses (`E -> combo -> E -> combo`) to sustain up to 12s of uninterrupted Anemo Infusion. `N2C` is her highest DPS combo, while `N3D` produces the highest Swirl trigger frequency for reaction driving.',
-        'Bennett C6 Infusion Warning: Bennett\'s C6 Pyro Infusion overrides Lynette\'s C6 Anemo Infusion! Avoid pairing C6 Lynette Anemo carry with C6 Bennett.',
+        "Bennett C6 Infusion Warning: Bennett's C6 Pyro Infusion overrides Lynette's C6 Anemo Infusion! Avoid pairing C6 Lynette Anemo carry with C6 Bennett.",
       ],
       weapons: [
         {
@@ -290,7 +422,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
             'High Base ATK, 44.1% CRIT DMG, and universal DMG bonus scaling with Bond of Life.',
         },
         {
-          name: 'Xiphos\' Moonlight',
+          name: "Xiphos' Moonlight",
           tier: 1,
           rarity: 4,
           category: 'Alternative',
@@ -311,7 +443,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           category: 'F2P',
           notes:
-            'Craftable Fontaine sword; grants 25% Bond of Life on Skill, which Lynette\'s innate 25% Max HP heal clears instantly to gain +150 to +300 Flat ATK.',
+            "Craftable Fontaine sword; grants 25% Bond of Life on Skill, which Lynette's innate 25% Max HP heal clears instantly to gain +150 to +300 Flat ATK.",
         },
         {
           name: 'Iron Sting',
@@ -334,8 +466,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 5,
           category: 'Alternative',
-          notes:
-            'High 608 Base ATK with 55.1% ER and CRIT Rate; usable 5★ ER stat stick.',
+          notes: 'High 608 Base ATK with 55.1% ER and CRIT Rate; usable 5★ ER stat stick.',
         },
         {
           name: 'Amenoma Kageuchi',
@@ -350,8 +481,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
           tier: 3,
           rarity: 3,
           category: 'F2P',
-          notes:
-            'Accessible 3★ ER sword providing 51.7% ER for budget support setups.',
+          notes: 'Accessible 3★ ER sword providing 51.7% ER for budget support setups.',
         },
       ],
     },
@@ -375,21 +505,63 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critDmg', 'critRate', 'atkPercent', 'energyRecharge', 'elementalMastery'],
         sets: [
-          { referenceKey: 'PaleFlame', pieces: 4, tier: 1, label: 'Best in Slot (+50% Physical DMG and +18% ATK for Physical Skill DPS)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 1, label: 'Best in Slot (+36% CRIT Rate and +15% NA/CA DMG with Furina)' },
-          { referenceKey: 'BlizzardStrayer', pieces: 4, tier: 1, label: 'Best in Slot (Up to +40% CRIT Rate for Cryo Skill Level 0 spam in Freeze teams)' },
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 1, label: 'Best in Slot (+45% to +70% Skill DMG for Cryo Level 0 Shattering Pressure spam)' },
-          { referenceKey: 'PaleFlame', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+25% Physical DMG)' },
-          { referenceKey: 'BloodstainedChivalry', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+25% Physical DMG)' },
-          { referenceKey: 'GoldenTroupe', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 4, tier: 3, label: 'Transitional (+18% ATK and +35% Normal Attack DMG)' },
+          {
+            referenceKey: 'PaleFlame',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+50% Physical DMG and +18% ATK for Physical Skill DPS)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+36% CRIT Rate and +15% NA/CA DMG with Furina)',
+          },
+          {
+            referenceKey: 'BlizzardStrayer',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (Up to +40% CRIT Rate for Cryo Skill Level 0 spam in Freeze teams)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+45% to +70% Skill DMG for Cryo Level 0 Shattering Pressure spam)',
+          },
+          {
+            referenceKey: 'PaleFlame',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+25% Physical DMG)',
+          },
+          {
+            referenceKey: 'BloodstainedChivalry',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+25% Physical DMG)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 4,
+            tier: 3,
+            label: 'Transitional (+18% ATK and +35% Normal Attack DMG)',
+          },
         ],
       },
     ],
     guide: {
       sourceUrl: 'https://keqingmains.com/q/freminet-quickguide/',
       playstyleSummary:
-        '4-star Cryo Claymore on-field carry blending Physical damage, Cryo strikes, and Shatter reaction mechanics. Pressurized Floe (Elemental Skill) performs an upward Cryo thrust and enters Pers Timer for 10s: while active, his Skill converts into Shattering Pressure, and Normal Attacks release waves of frost dealing Cryo DMG while raising Pers\'s Pressure Level from 0 to 4. Level 0 deals 100% Cryo DMG; Levels 1–3 deal mixed Cryo and Physical DMG; Level 4 borrows the power of fully-pressurized Pers to deliver a devastating 100% Physical strike. Shadowhunter\'s Ambush (Burst, 60 Energy cost) deals AoE Cryo DMG, resets Skill cooldown, and activates Subnautical Hunter for 10s: Skill cooldown is reduced by 70%, frost wave damage is doubled, and each Normal Attack increases Pressure Level by 2 instead of 1. His A4 Passive Parallel Condensers grants +40% Shattering Pressure DMG for 5s after triggering Shatter, uniquely rewarding pairing with off-field Hydro teammates.',
+        "4-star Cryo Claymore on-field carry blending Physical damage, Cryo strikes, and Shatter reaction mechanics. Pressurized Floe (Elemental Skill) performs an upward Cryo thrust and enters Pers Timer for 10s: while active, his Skill converts into Shattering Pressure, and Normal Attacks release waves of frost dealing Cryo DMG while raising Pers's Pressure Level from 0 to 4. Level 0 deals 100% Cryo DMG; Levels 1–3 deal mixed Cryo and Physical DMG; Level 4 borrows the power of fully-pressurized Pers to deliver a devastating 100% Physical strike. Shadowhunter's Ambush (Burst, 60 Energy cost) deals AoE Cryo DMG, resets Skill cooldown, and activates Subnautical Hunter for 10s: Skill cooldown is reduced by 70%, frost wave damage is doubled, and each Normal Attack increases Pressure Level by 2 instead of 1. His A4 Passive Parallel Condensers grants +40% Shattering Pressure DMG for 5s after triggering Shatter, uniquely rewarding pairing with off-field Hydro teammates.",
       energyRequirements:
         'Burst costs 60 Energy. Pre-C2: 150%–200% ER (Solo Cryo) or 130%–160% ER (Double Cryo). Post-C2: 110%–140% ER (C2 refunds 2–3 Energy per Shattering Pressure cast, generating 9–12 flat Energy per rotation and slashing ER requirements drastically).',
       combatTips: [
@@ -397,7 +569,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
         'Physical Carry Combo: Under Burst, execute `E -> Q -> N2E -> 3x [E -> N2E -> N1] -> E -> N3E`. Because each Normal Attack grants +2 Pressure Levels during Burst, just 2 Normal Attacks instantly charge Pers to Level 4!',
         'Cryo Carry Combo: Under Burst, execute `E -> Q -> E -> 4x [E -> N1 -> E] -> E` to spam 5 to 6 Level 0 Shattering Pressure strikes per rotation.',
         'A4 Parallel Condensers Shatter Synergy: Triggering Shatter grants +40% Shattering Pressure DMG for 5 seconds. Pairing Freminet with an off-field Hydro applier (Furina, Xingqiu, Yelan) is essential to freeze enemies and trigger Shatter with his heavy claymore hits.',
-        'Preemptive Skill Before Burst: Freminet\'s Pers Timer state carries over when casting Burst. Always cast Skill before Burst (`E -> Q`) to reset the cooldown and maximize Subnautical Hunter buff duration.',
+        "Preemptive Skill Before Burst: Freminet's Pers Timer state carries over when casting Burst. Always cast Skill before Burst (`E -> Q`) to reset the cooldown and maximize Subnautical Hunter buff duration.",
         'Constellation 2 Energy Watershed: C2 restores 2 Energy upon unleashing Shattering Pressure (3 Energy for Level 4), virtually eliminating his energy concerns and allowing full offensive stat investment.',
       ],
       weapons: [
@@ -470,8 +642,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 5,
           category: 'Alternative',
-          notes:
-            'High ATK% stat stick doubling its ATK buffs when protected by a shield.',
+          notes: 'High ATK% stat stick doubling its ATK buffs when protected by a shield.',
         },
         {
           name: 'Verdict',
@@ -541,15 +712,59 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
           Goblet: ['hydroDmg'],
           Circlet: ['critRate', 'critDmg'],
         },
-        priorityStats: ['critRate', 'critDmg', 'atkPercent', 'elementalMastery', 'hpPercent', 'energyRecharge'],
+        priorityStats: [
+          'critRate',
+          'critDmg',
+          'atkPercent',
+          'elementalMastery',
+          'hpPercent',
+          'energyRecharge',
+        ],
         sets: [
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 1, label: 'Best in Slot (+36% CRIT Rate stacked rapidly via Suffusion HP drain during Hold Skill)' },
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 1, label: 'Best in Slot (+45% Skill DMG bonus boosting Dewdrop and Torrent Surge damage)' },
-          { referenceKey: 'NymphsDream', pieces: 4, tier: 2, label: 'Alternative (Stacking Hydro DMG% and ATK% buffs)' },
-          { referenceKey: 'HeartOfDepth', pieces: 4, tier: 2, label: 'Alternative (+15% Hydro DMG and +30% Normal/Charged Attack DMG)' },
-          { referenceKey: 'Lavawalker', pieces: 4, tier: 3, label: 'Transitional (+35% DMG against Pyro-affected enemies in Forward Vaporize teams)' },
-          { referenceKey: 'GoldenTroupe', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)' },
-          { referenceKey: 'HeartOfDepth', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Hydro DMG Bonus)' },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+36% CRIT Rate stacked rapidly via Suffusion HP drain during Hold Skill)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+45% Skill DMG bonus boosting Dewdrop and Torrent Surge damage)',
+          },
+          {
+            referenceKey: 'NymphsDream',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Stacking Hydro DMG% and ATK% buffs)',
+          },
+          {
+            referenceKey: 'HeartOfDepth',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+15% Hydro DMG and +30% Normal/Charged Attack DMG)',
+          },
+          {
+            referenceKey: 'Lavawalker',
+            pieces: 4,
+            tier: 3,
+            label:
+              'Transitional (+35% DMG against Pyro-affected enemies in Forward Vaporize teams)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)',
+          },
+          {
+            referenceKey: 'HeartOfDepth',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Hydro DMG Bonus)',
+          },
         ],
       },
       {
@@ -566,12 +781,43 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'elementalMastery', 'critRate', 'maxHp', 'hpPercent'],
         sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (+20% Team ATK on Burst cast for supportive rotations)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 1, label: 'Best in Slot (+120 EM teamwide buffer upon triggering elemental reactions)' },
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 4, tier: 1, label: 'Best in Slot (Maximizes Bountiful Bloom core damage in Nilou Bloom teams)' },
-          { referenceKey: 'DeepwoodMemories', pieces: 4, tier: 1, label: 'Best in Slot (-30% Dendro RES shred in Nilou Bloom / Hyperbloom if no ally equips it)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 2, label: 'Alternative (High flat EM stacking for Bloom reactions)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 2, label: 'Alternative (+20% HP and team ATK buff on Torrent Surge hit)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+20% Team ATK on Burst cast for supportive rotations)',
+          },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+120 EM teamwide buffer upon triggering elemental reactions)',
+          },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Maximizes Bountiful Bloom core damage in Nilou Bloom teams)',
+          },
+          {
+            referenceKey: 'DeepwoodMemories',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (-30% Dendro RES shred in Nilou Bloom / Hyperbloom if no ally equips it)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (High flat EM stacking for Bloom reactions)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+20% HP and team ATK buff on Torrent Surge hit)',
+          },
         ],
       },
     ],
@@ -582,11 +828,11 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
       energyRequirements:
         'Personal DPS / Hold Skill: 100%–120% ER (Burst is clunky and generally skipped or used every other rotation in favor of pure offensive stats). Support / Noblesse Buffer / Bloom Enabler: 200%–260% ER (80 energy cost demands high ER investment or Favonius Sword to cast Burst reliably every 20-second rotation).',
       combatTips: [
-        'Suffusion HP Manipulation: Hold Skill drains HP continuously while above 50% HP, allowing Hydro Traveler to effortlessly maintain max stacks on 4pc Marechaussee Hunter and charge Furina\'s Fanfare stacks.',
+        "Suffusion HP Manipulation: Hold Skill drains HP continuously while above 50% HP, allowing Hydro Traveler to effortlessly maintain max stacks on 4pc Marechaussee Hunter and charge Furina's Fanfare stacks.",
         'Interruption Vulnerability: The Traveler is stationary during Hold Skill and can be easily staggered, which cancels the skill prematurely and prevents Torrent Surge and particle generation! Always pair with a strong shielder (Zhongli, Layla, Kirara) or unlock C4 Aquacrest Aegis.',
         'Sourcewater Droplets & C1 Energy: Hold Skill drops up to 4 Sourcewater Droplets. Collecting them restores 7% HP each, and at C1 restores 2 Energy per droplet.',
         'Rising Waters Bubble Trajectory: The Burst bubble moves straight forward through enemies and cannot be stopped by Geo constructs or walls. Cast it directly into large enemy hitboxes or dense mobs to maximize hit counts.',
-        'C6 Teammate Healing Nuance: At C6, picking up a Sourcewater Droplet restores 6% Max HP to the party member with the lowest HP percentage. Note: this healing scales with the teammate\'s Max HP, NOT the Traveler\'s HP!',
+        "C6 Teammate Healing Nuance: At C6, picking up a Sourcewater Droplet restores 6% Max HP to the party member with the lowest HP percentage. Note: this healing scales with the teammate's Max HP, NOT the Traveler's HP!",
         'Pneuma Arkhe Thorn: Torrent Surge unleashes a Spiritbreath Thorn every 9s dealing Pneuma-aligned Hydro DMG to stun Ousia Fontaine clockwork meka.',
       ],
       weapons: [
@@ -667,8 +913,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 4,
           category: 'F2P',
-          notes:
-            'Craftable Inazuma sword; grants ATK% and refunds flat Energy upon casting Burst.',
+          notes: 'Craftable Inazuma sword; grants ATK% and refunds flat Energy upon casting Burst.',
         },
         {
           name: 'Fleuve Cendre Ferryman',
@@ -683,8 +928,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 4,
           category: 'Alternative',
-          notes:
-            '45.9% ER event sword granting +32% Skill DMG and +12% Skill CRIT Rate.',
+          notes: '45.9% ER event sword granting +32% Skill DMG and +12% Skill CRIT Rate.',
         },
         {
           name: 'Sacrificial Sword',
@@ -695,7 +939,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
             '61.3% ER; resets Skill cooldown on Torrent Surge hit, allowing a second Hold Skill cast.',
         },
         {
-          name: 'Lion\'s Roar',
+          name: "Lion's Roar",
           tier: 2,
           rarity: 4,
           category: 'Alternative',
@@ -703,7 +947,7 @@ export const v40Profiles: ReviewedCharacterProfile[] = [
             'High ATK% and up to +36% DMG bonus against enemies affected by Pyro or Electro (Forward Vaporize / Electro-Charged).',
         },
         {
-          name: 'Xiphos\' Moonlight',
+          name: "Xiphos' Moonlight",
           tier: 2,
           rarity: 4,
           category: 'Alternative',

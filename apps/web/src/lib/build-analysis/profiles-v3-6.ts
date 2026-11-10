@@ -23,29 +23,77 @@ export const v36Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'maxHp', 'hpPercent', 'healingBonus', 'critRate'],
         sets: [
-          { referenceKey: 'DeepwoodMemories', pieces: 4, tier: 1, label: 'Best in Slot (-30% Dendro RES shred for Bloom, Hyperbloom, Burgeon, and Spread teams)' },
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 1, label: 'Best in Slot Healing & Sub-DPS (continuous Clam foam damage from team Skill and Burst heals)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot Aggravate (+20% Team ATK for 12s on Burst)' },
-          { referenceKey: 'ScrollOfTheHeroOfCinderCity', pieces: 4, tier: 2, label: 'Alternative (+12% Elemental DMG bonus to reacted elements)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Reaction Buffer (+120 EM teamwide upon triggering reaction on-field)' },
-          { referenceKey: 'SongOfDaysPast', pieces: 4, tier: 2, label: 'Alternative (+15% Healing Bonus & Additive Base DMG Bonus for active character)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% HP)' },
-          { referenceKey: 'OceanHuedClam', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Healing Bonus)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Energy Recharge)' },
+          {
+            referenceKey: 'DeepwoodMemories',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (-30% Dendro RES shred for Bloom, Hyperbloom, Burgeon, and Spread teams)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot Healing & Sub-DPS (continuous Clam foam damage from team Skill and Burst heals)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Aggravate (+20% Team ATK for 12s on Burst)',
+          },
+          {
+            referenceKey: 'ScrollOfTheHeroOfCinderCity',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+12% Elemental DMG bonus to reacted elements)',
+          },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 2,
+            label: 'Reaction Buffer (+120 EM teamwide upon triggering reaction on-field)',
+          },
+          {
+            referenceKey: 'SongOfDaysPast',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative (+15% Healing Bonus & Additive Base DMG Bonus for active character)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% HP)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Healing Bonus)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Energy Recharge)',
+          },
         ],
       },
     ],
     guide: {
       sourceUrl: 'https://keqingmains.com/q/baizhu-quickguide/',
       playstyleSummary:
-        '5-star Dendro healer and shield-like defensive buffer. Universal Diagnosis (Elemental Skill) dispatches a Gossamer Sprite that darts around up to 3 nearby enemies dealing Dendro damage, before returning to heal all active party members based on Baizhu\'s Max HP. Holistic Revivification (Burst, 80 Energy cost) enters the Pulsing Clarity state for 14 seconds: generates a Seamless Shield every 2.5s that absorbs Dendro damage with 250% effectiveness, heals the active character, and fires Spiritvein Dendro projectiles. His A4 Passive (All Things Are of the Earth) buffs the reaction damage of active characters healed by Seamless Shields by up to +100% Bloom/Hyperbloom/Burgeon and +40% Aggravate/Spread (capping at 50,000 Max HP).',
+        "5-star Dendro healer and shield-like defensive buffer. Universal Diagnosis (Elemental Skill) dispatches a Gossamer Sprite that darts around up to 3 nearby enemies dealing Dendro damage, before returning to heal all active party members based on Baizhu's Max HP. Holistic Revivification (Burst, 80 Energy cost) enters the Pulsing Clarity state for 14 seconds: generates a Seamless Shield every 2.5s that absorbs Dendro damage with 250% effectiveness, heals the active character, and fires Spiritvein Dendro projectiles. His A4 Passive (All Things Are of the Earth) buffs the reaction damage of active characters healed by Seamless Shields by up to +100% Bloom/Hyperbloom/Burgeon and +40% Aggravate/Spread (capping at 50,000 Max HP).",
       energyRequirements:
         'Burst costs 80 Energy, demanding substantial ER: In Solo Dendro: 210%–250% ER with R1 Jadefall / R5 Prototype Amber (or 250%–290% with Favonius Codex; 320%–370% on other weapons without ER passives). In Double Dendro (Nahida/Alhaitham): 125%–160% ER. In Double Electro (Fischl/Raiden): 140%–170% ER. Each team Favonius proc shaves ~10% ER. At C1 (granting a second Skill charge), ER requirements drop by 30%–50%.',
       combatTips: [
-        'A4 50,000 Max HP Cap: Baizhu\'s A4 passive reaction bonus increases with every 1,000 HP up to 50,000 Max HP (+2% Bloom/Hyperbloom/Burgeon per 1,000 HP, +0.8% Aggravate/Spread per 1,000 HP). HP% is preferred over Healing Bonus on Circlet until hitting 50,000 HP.',
+        "A4 50,000 Max HP Cap: Baizhu's A4 passive reaction bonus increases with every 1,000 HP up to 50,000 Max HP (+2% Bloom/Hyperbloom/Burgeon per 1,000 HP, +0.8% Aggravate/Spread per 1,000 HP). HP% is preferred over Healing Bonus on Circlet until hitting 50,000 HP.",
         'Seamless Shield Mechanics: Seamless Shields are fragile pseudo-shields designed to break upon impact; each time a shield breaks or expires, it regenerates 2.5s later, providing continuous interruption resistance refreshes and single-target healing rather than unbreakable tanking.',
-        'Teamwide Burst Healing on Skill: Universal Diagnosis (Skill) heals the ENTIRE team simultaneously regardless of who is on-field, making Baizhu one of the best healers in the game for immediately stacking Furina\'s Fanfare.',
-        '4pc Deepwood Multi-Target Limitations: Baizhu\'s Skill hits only 3 enemies, and Burst Spiritveins hit only single targets with tiny AoE. In heavy mob AoE chambers, Nahida or an Anemo Swirler may be a more consistent Deepwood holder.',
+        "Teamwide Burst Healing on Skill: Universal Diagnosis (Skill) heals the ENTIRE team simultaneously regardless of who is on-field, making Baizhu one of the best healers in the game for immediately stacking Furina's Fanfare.",
+        "4pc Deepwood Multi-Target Limitations: Baizhu's Skill hits only 3 enemies, and Burst Spiritveins hit only single targets with tiny AoE. In heavy mob AoE chambers, Nahida or an Anemo Swirler may be a more consistent Deepwood holder.",
         'Favonius Codex Optimization: Baizhu needs roughly 30%–40% Crit Rate (or a Crit Rate Circlet) to reliably trigger Favonius Codex on Skill cast without needing to weave in slow melee Normal Attacks.',
       ],
       weapons: [
@@ -102,8 +150,7 @@ export const v36Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 5,
           category: 'Alternative',
-          notes:
-            '265 EM substat; grants partywide +40 EM buff and self EM / Dendro DMG bonus.',
+          notes: '265 EM substat; grants partywide +40 EM buff and self EM / Dendro DMG bonus.',
         },
       ],
     },
@@ -130,13 +177,51 @@ export const v36Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'elementalMastery', 'critRate', 'atkPercent'],
         sets: [
-          { referenceKey: 'DeepwoodMemories', pieces: 4, tier: 1, label: 'Best in Slot (-30% Dendro RES shred with 100% uptime from on-field Dendro attacks)' },
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 1, label: 'Best in Slot Bloom/Burgeon (converts core rupture self-healing into massive Clam foam physical damage)' },
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 4, tier: 2, label: 'Alternative (+80 EM, up to +140% Bloom DMG bonus when Kaveh has high core ownership)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 2, label: 'Alternative (+80 EM, up to +150 EM via reactions)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Reaction Buffer (+120 EM teamwide buffer)' },
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+80 EM)' },
-          { referenceKey: 'GildedDreams', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+80 EM)' },
+          {
+            referenceKey: 'DeepwoodMemories',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (-30% Dendro RES shred with 100% uptime from on-field Dendro attacks)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot Bloom/Burgeon (converts core rupture self-healing into massive Clam foam physical damage)',
+          },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative (+80 EM, up to +140% Bloom DMG bonus when Kaveh has high core ownership)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+80 EM, up to +150 EM via reactions)',
+          },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 2,
+            label: 'Reaction Buffer (+120 EM teamwide buffer)',
+          },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+80 EM)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+80 EM)',
+          },
         ],
       },
       {
@@ -153,10 +238,30 @@ export const v36Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'elementalMastery', 'critRate'],
         sets: [
-          { referenceKey: 'DeepwoodMemories', pieces: 4, tier: 1, label: 'Best in Slot (-30% Dendro RES shred)' },
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 1, label: 'Best in Slot Bloom Sustain & Damage' },
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 4, tier: 2, label: 'Alternative (+80 EM, Bloom reaction bonus)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 2, label: 'Alternative (+80 EM, reaction EM stacking)' },
+          {
+            referenceKey: 'DeepwoodMemories',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (-30% Dendro RES shred)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Bloom Sustain & Damage',
+          },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+80 EM, Bloom reaction bonus)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+80 EM, reaction EM stacking)',
+          },
         ],
       },
     ],
@@ -168,10 +273,10 @@ export const v36Profiles: ReviewedCharacterProfile[] = [
         'Burst costs 80 Energy, requiring substantial ER to burst every rotation: With Favonius Greatsword: 160%–190% ER in Double Dendro, or 200%–220% ER in Solo Dendro. Without Favonius: 180%–210% ER in Double Dendro, reaching 220%–250% ER in Solo Dendro. Sacrificial Greatsword extra Skill cast reduces ER needs by ~20%.',
       combatTips: [
         'A1 An Architect’s Undertaking Self-Healing: When Dendro Cores (including Burgeon damage) damage Kaveh, he regenerates HP equal to 300% of his Elemental Mastery every 0.5s. High EM turns enemy-damaging explosions into massive personal healing!',
-        'Core Ownership Nuance: Detonating cores with Kaveh\'s Skill or Burst does NOT grant Kaveh ownership of the Dendro Cores! Core damage is calculated using the Elemental Mastery and character level of whoever triggered the Bloom reaction (typically the off-field Hydro applier like Xingqiu, Yelan, or Nilou).',
-        'Burst Dendro Conversion Persistence: Kaveh\'s Dendro Infusion and Bloom damage buffs are immediately canceled if he leaves the field! Complete your full on-field attack string before swapping.',
+        "Core Ownership Nuance: Detonating cores with Kaveh's Skill or Burst does NOT grant Kaveh ownership of the Dendro Cores! Core damage is calculated using the Elemental Mastery and character level of whoever triggered the Bloom reaction (typically the off-field Hydro applier like Xingqiu, Yelan, or Nilou).",
+        "Burst Dendro Conversion Persistence: Kaveh's Dendro Infusion and Bloom damage buffs are immediately canceled if he leaves the field! Complete your full on-field attack string before swapping.",
         'C1 A Golden Age Safeguard: Casting Skill grants Kaveh +50% Dendro RES and +25% incoming healing bonus for 3 seconds, significantly increasing his survivability in heavy Bloom detonation spikes.',
-        'Claymore Shatter Synergy: In Freeze-Bloom (Shatterbloom) teams with a Cryo teammate, Kaveh\'s blunt claymore attacks trigger Shatter on frozen enemies while simultaneously generating and detonating Dendro Cores.',
+        "Claymore Shatter Synergy: In Freeze-Bloom (Shatterbloom) teams with a Cryo teammate, Kaveh's blunt claymore attacks trigger Shatter on frozen enemies while simultaneously generating and detonating Dendro Cores.",
       ],
       weapons: [
         {
@@ -180,15 +285,14 @@ export const v36Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           category: 'BiS',
           notes:
-            '61.3% ER; high clear particle generation triggered multiple times per rotation eases his and teammates\' steep 80 energy Burst costs.',
+            "61.3% ER; high clear particle generation triggered multiple times per rotation eases his and teammates' steep 80 energy Burst costs.",
         },
         {
           name: 'Makhaira Aquamarine',
           tier: 1,
           rarity: 4,
           category: 'BiS',
-          notes:
-            '165 EM; converts high EM into personal and party flat ATK buffs.',
+          notes: '165 EM; converts high EM into personal and party flat ATK buffs.',
         },
         {
           name: 'Mailed Flower',
@@ -243,8 +347,7 @@ export const v36Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 4,
           category: 'F2P',
-          notes:
-            '30.6% ER and up to +48% ATK; solid ER stat stick for burst uptime.',
+          notes: '30.6% ER and up to +48% ATK; solid ER stat stick for burst uptime.',
         },
         {
           name: 'Skyward Pride',

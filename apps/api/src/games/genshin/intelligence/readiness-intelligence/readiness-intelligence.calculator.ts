@@ -756,7 +756,10 @@ export function resolveRoleBenchmark(
     for (const [key, profile] of Object.entries(defaultBenchmarks)) {
       const [bChar, bRole] = key.split(':');
       if (bChar && bRole) {
-        if (cleanAlphanumeric(bChar) === normalizedChar && cleanAlphanumeric(bRole) === roleAlphanumeric) {
+        if (
+          cleanAlphanumeric(bChar) === normalizedChar &&
+          cleanAlphanumeric(bRole) === roleAlphanumeric
+        ) {
           return profile;
         }
       }

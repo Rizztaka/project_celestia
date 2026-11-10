@@ -167,7 +167,9 @@ export const ARTIFACT_DOMAINS: Record<string, { domainName: string; domainKey: s
   },
 };
 
-export function getArtifactDomainInfo(setKey: string): { domainName: string; domainKey: string } | null {
+export function getArtifactDomainInfo(
+  setKey: string,
+): { domainName: string; domainKey: string } | null {
   const clean = setKey.toLowerCase().replace(/[^a-z0-9]/g, '');
   return ARTIFACT_DOMAINS[clean] ?? null;
 }

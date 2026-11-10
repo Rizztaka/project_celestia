@@ -23,13 +23,48 @@ export const v25Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'elementalMastery', 'energyRecharge'],
         sets: [
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 1, label: 'Best in Slot for Raw & Off-Field Skill Damage (+70% Skill DMG off-field)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Best in Slot for Aggravate & Reaction Damage (+80 EM, high EM/ATK stacking)' },
-          { referenceKey: 'DisenchantmentInDeepShadow', pieces: 4, tier: 1, label: 'Best in Slot for Stellar-Conduct Teams (+Stellar-Conduct DMG & Crit Rate)' },
-          { referenceKey: 'ThunderingFury', pieces: 2, tier: 2, label: 'Alternative 2pc Mix (+15% Electro DMG)' },
-          { referenceKey: 'GoldenTroupe', pieces: 2, tier: 2, label: 'Alternative 2pc Mix (+20% Skill DMG)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 2, label: 'Supportive Alternative (+20% Team ATK with continuous turret strikes)' },
-          { referenceKey: 'UnfinishedReverie', pieces: 4, tier: 2, label: 'Best in Slot for Quickburn Teams (+50% DMG near Burning enemies)' },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot for Raw & Off-Field Skill Damage (+70% Skill DMG off-field)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot for Aggravate & Reaction Damage (+80 EM, high EM/ATK stacking)',
+          },
+          {
+            referenceKey: 'DisenchantmentInDeepShadow',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot for Stellar-Conduct Teams (+Stellar-Conduct DMG & Crit Rate)',
+          },
+          {
+            referenceKey: 'ThunderingFury',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc Mix (+15% Electro DMG)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc Mix (+20% Skill DMG)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 2,
+            label: 'Supportive Alternative (+20% Team ATK with continuous turret strikes)',
+          },
+          {
+            referenceKey: 'UnfinishedReverie',
+            pieces: 4,
+            tier: 2,
+            label: 'Best in Slot for Quickburn Teams (+50% DMG near Burning enemies)',
+          },
         ],
       },
       {
@@ -42,10 +77,31 @@ export const v25Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'elementalMastery', 'energyRecharge'],
         sets: [
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Best in Slot for On-Field Aggravate / Driver (+80 EM, high reaction scaling)' },
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 1, label: 'Competitive On-Field Option (retains +45% Skill DMG on-field)' },
-          { referenceKey: 'ThunderingFury', pieces: 4, tier: 2, label: 'Aggravate Driver (+15% Electro DMG, +20% Aggravate DMG, -1s Skill CD on reactions)' },
-          { referenceKey: 'NightOfTheSkysUnveiling', pieces: 4, tier: 2, label: 'Best in Slot for On-Field Lunar-Charged Compositions' },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot for On-Field Aggravate / Driver (+80 EM, high reaction scaling)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 1,
+            label: 'Competitive On-Field Option (retains +45% Skill DMG on-field)',
+          },
+          {
+            referenceKey: 'ThunderingFury',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Aggravate Driver (+15% Electro DMG, +20% Aggravate DMG, -1s Skill CD on reactions)',
+          },
+          {
+            referenceKey: 'NightOfTheSkysUnveiling',
+            pieces: 4,
+            tier: 2,
+            label: 'Best in Slot for On-Field Lunar-Charged Compositions',
+          },
         ],
       },
     ],
@@ -57,9 +113,9 @@ export const v25Profiles: ReviewedCharacterProfile[] = [
         'Bursting every rotation with Raiden Shogun: 140%–150% (C0) / 100% (C1+). Off-field with Fischl: 130%–140% (C0) / 100% (C1+). On-field with Fischl: 100%–110%. Solo Electro / without battery: 160%–180%+ ER. Bursting every other rotation or Skill-only playstyle: 100% (no ER investment needed). C1 refunds up to 24 flat energy per Burst.',
       combatTips: [
         'Totem Placement (EEE): Deploy all three Sesshou Sakura in a triangle or connected pattern so each links together to reach Level 3 (or Level 4 at C2). Never place totems too close to one another, or the previous totem will be immediately destroyed!',
-        'Dynamic Scaling (No Snapshot): Sesshou Sakura do NOT snapshot stats on cast. They dynamically recalculate damage in real time, fully benefiting from active buffs such as Nahida\'s Shrine of Maya, Furina\'s Fanfare, or Kazuha\'s A4 Electro DMG Bonus while Yae is off-field.',
+        "Dynamic Scaling (No Snapshot): Sesshou Sakura do NOT snapshot stats on cast. They dynamically recalculate damage in real time, fully benefiting from active buffs such as Nahida's Shrine of Maya, Furina's Fanfare, or Kazuha's A4 Electro DMG Bonus while Yae is off-field.",
         'Burst & Cooldown Reset: Great Secret Art: Tenko Kenshin destroys nearby Sesshou Sakura and drops one Tenko Thunderbolt per destroyed totem. Her A1 passive resets 1 charge of Elemental Skill per destroyed totem, allowing you to redeploy all 3 turrets (EEE -> Team Rotations -> Q -> EEE).',
-        'Aggravate & CA Tech: While her turrets adhere to standard 3-hit ICD, Yae Miko\'s Charged Attack possesses NO internal cooldown, allowing every CA to trigger Aggravate. Weave N2CJ or N2CD combos to cancel the long end-lag animation with jump or dash.',
+        "Aggravate & CA Tech: While her turrets adhere to standard 3-hit ICD, Yae Miko's Charged Attack possesses NO internal cooldown, allowing every CA to trigger Aggravate. Weave N2CJ or N2CD combos to cancel the long end-lag animation with jump or dash.",
         'Interruption Vulnerability: Yae lacks invulnerability frames (i-frames) during her Skill dash and possesses no base interruption resistance. Pair her with shielders (Zhongli, Nicole, Kirara) or coordinate E casts during boss attack downtimes.',
         'Elemental Mastery Value (A4): Enlightened Blessing grants +0.15% Sesshou Sakura DMG for every point of EM. In Aggravate teams, EM substats hold equivalent damage value to ATK% substats.',
       ],
@@ -70,7 +126,7 @@ export const v25Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           category: 'BiS',
           notes:
-            "Signature weapon and uncontested BiS. 66.2% Crit DMG with 608 Base ATK. Yae fully stacks its +36% Skill DMG and +12% All Elemental DMG passive effortlessly with three consecutive Skill casts.",
+            'Signature weapon and uncontested BiS. 66.2% Crit DMG with 608 Base ATK. Yae fully stacks its +36% Skill DMG and +12% All Elemental DMG passive effortlessly with three consecutive Skill casts.',
         },
         {
           name: 'Reliquary of Truth',
@@ -78,7 +134,7 @@ export const v25Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           category: 'Alternative',
           notes:
-            'Top-tier 5★ stat stick with massive Crit secondary stats and powerful damage passives. Can even surpass Kagura\'s Verity in teams where Yae Bursts every rotation.',
+            "Top-tier 5★ stat stick with massive Crit secondary stats and powerful damage passives. Can even surpass Kagura's Verity in teams where Yae Bursts every rotation.",
         },
         {
           name: 'Vivid Notions',
@@ -102,7 +158,7 @@ export const v25Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           category: 'Alternative',
           notes:
-            'Huge 265 EM sub-stat directly amplifies Yae\'s Aggravate reaction damage and A4 passive, while providing teamwide EM buffs for reaction synergy.',
+            "Huge 265 EM sub-stat directly amplifies Yae's Aggravate reaction damage and A4 passive, while providing teamwide EM buffs for reaction synergy.",
         },
         {
           name: 'Lost Prayer to the Sacred Winds',
@@ -158,7 +214,7 @@ export const v25Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           category: 'Utility',
           notes:
-            'Converts Yae\'s EM into flat ATK for herself and the entire party every 10s. Highly effective in reaction teams with invested sub-DPS teammates.',
+            "Converts Yae's EM into flat ATK for herself and the entire party every 10s. Highly effective in reaction teams with invested sub-DPS teammates.",
         },
       ],
     },

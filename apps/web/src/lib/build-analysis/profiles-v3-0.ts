@@ -22,18 +22,43 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'elementalMastery', 'atkPercent', 'energyRecharge'],
         sets: [
-          { referenceKey: 'WanderersTroupe', pieces: 4, tier: 1, label: 'Best in Slot (+80 EM, +35% Charged Attack DMG unconditionally)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Best in Slot (+80 EM, high EM/ATK stacking with Hunter\'s Path)' },
-          { referenceKey: 'DeepwoodMemories', pieces: 4, tier: 1, label: 'Best in Slot if no other party holder (-30% Dendro RES Shred)' },
-          { referenceKey: 'DeepwoodMemories', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Dendro DMG)' },
-          { referenceKey: 'WanderersTroupe', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+80 EM)' },
+          {
+            referenceKey: 'WanderersTroupe',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+80 EM, +35% Charged Attack DMG unconditionally)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 1,
+            label: "Best in Slot (+80 EM, high EM/ATK stacking with Hunter's Path)",
+          },
+          {
+            referenceKey: 'DeepwoodMemories',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot if no other party holder (-30% Dendro RES Shred)',
+          },
+          {
+            referenceKey: 'DeepwoodMemories',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Dendro DMG)',
+          },
+          {
+            referenceKey: 'WanderersTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+80 EM)',
+          },
         ],
       },
     ],
     guide: {
       sourceUrl: 'https://keqingmains.com/q/tighnari-quickguide/',
       playstyleSummary:
-        'Premier 5-star single-target Dendro quickswap carry and Spread specialist. Vijnana-Khanda (Skill) creates a Vijnana-Khanda field that taunts and confuses enemies while granting Vijnana Suffusion, reducing the charge time of his next three Wreath Arrows by 2.4 seconds (rendering them virtually instantaneous). Each Wreath Arrow splits into 4 homing Clusterbloom Arrows upon hit. Fashioner\'s Tanglevine Shaft (Burst) fires 6 homing Tanglevine Shafts that split into secondary waves, delivering massive burst damage with a low 40 energy cost.',
+        "Premier 5-star single-target Dendro quickswap carry and Spread specialist. Vijnana-Khanda (Skill) creates a Vijnana-Khanda field that taunts and confuses enemies while granting Vijnana Suffusion, reducing the charge time of his next three Wreath Arrows by 2.4 seconds (rendering them virtually instantaneous). Each Wreath Arrow splits into 4 homing Clusterbloom Arrows upon hit. Fashioner's Tanglevine Shaft (Burst) fires 6 homing Tanglevine Shafts that split into secondary waves, delivering massive burst damage with a low 40 energy cost.",
       energyRequirements:
         'Low 40 Energy Burst cost. 2 Skills per Burst: 100%–110% ER. 1 Skill per Burst in Double Dendro: 130%–140% ER. 1 Skill per Burst in Solo Dendro: 150%–160% ER. A teammate Favonius proc reduces requirements by ~10%.',
       combatTips: [
@@ -50,7 +75,7 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           category: 'BiS',
           notes:
-            "Signature bow and uncontested BiS. 44.1% Crit Rate, +12% All Elemental DMG, and converts 160% of EM into flat Charged Attack damage.",
+            'Signature bow and uncontested BiS. 44.1% Crit Rate, +12% All Elemental DMG, and converts 160% of EM into flat Charged Attack damage.',
         },
         {
           name: 'The First Great Magic',
@@ -140,12 +165,42 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'atkPercent', 'elementalMastery'],
         sets: [
-          { referenceKey: 'DeepwoodMemories', pieces: 4, tier: 1, label: 'Uncontested Best in Slot for Team Damage (-30% Dendro RES Shred)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Alternative Buffer (+20% Team ATK on Burst if another Deepwood exists)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative Team Buffer (+120 EM to party on reaction)' },
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 2, label: 'Alternative Sub-DPS (+70% Skill Boomerang DMG off-field)' },
-          { referenceKey: 'DeepwoodMemories', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Dendro DMG)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% ER)' },
+          {
+            referenceKey: 'DeepwoodMemories',
+            pieces: 4,
+            tier: 1,
+            label: 'Uncontested Best in Slot for Team Damage (-30% Dendro RES Shred)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Alternative Buffer (+20% Team ATK on Burst if another Deepwood exists)',
+          },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Team Buffer (+120 EM to party on reaction)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Sub-DPS (+70% Skill Boomerang DMG off-field)',
+          },
+          {
+            referenceKey: 'DeepwoodMemories',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Dendro DMG)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% ER)',
+          },
         ],
       },
     ],
@@ -199,8 +254,7 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 4,
           category: 'Alternative',
-          notes:
-            'Event 4★ bow providing 30.6% ER and cycling DMG bonuses from 12% to 28%.',
+          notes: 'Event 4★ bow providing 30.6% ER and cycling DMG bonuses from 12% to 28%.',
         },
       ],
     },
@@ -231,12 +285,42 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'maxHp', 'critRate'],
         sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot Support (+20% Team ATK on Burst)' },
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 1, label: 'Best in Slot Healing & Clam Foam Damage (+15% Healing Bonus)' },
-          { referenceKey: 'SongOfDaysPast', pieces: 4, tier: 1, label: 'Supportive Alternative (converts continuous healing into flat base DMG)' },
-          { referenceKey: 'TheExile', pieces: 4, tier: 2, label: 'Supportive Battery (+6 flat Energy to party members upon Burst)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% HP)' },
-          { referenceKey: 'OceanHuedClam', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Healing Bonus)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Support (+20% Team ATK on Burst)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Healing & Clam Foam Damage (+15% Healing Bonus)',
+          },
+          {
+            referenceKey: 'SongOfDaysPast',
+            pieces: 4,
+            tier: 1,
+            label: 'Supportive Alternative (converts continuous healing into flat base DMG)',
+          },
+          {
+            referenceKey: 'TheExile',
+            pieces: 4,
+            tier: 2,
+            label: 'Supportive Battery (+6 flat Energy to party members upon Burst)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% HP)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Healing Bonus)',
+          },
         ],
       },
       {
@@ -249,10 +333,30 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['elementalMastery', 'energyRecharge', 'maxHp'],
         sets: [
-          { referenceKey: 'FlowerOfParadiseLost', pieces: 4, tier: 1, label: 'Best in Slot for Hyperbloom Damage (+80 EM, up to +140% Hyperbloom DMG)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Best in Slot Alternative (+80 EM, high EM stacking)' },
-          { referenceKey: 'WanderersTroupe', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+80 EM)' },
-          { referenceKey: 'GildedDreams', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+80 EM)' },
+          {
+            referenceKey: 'FlowerOfParadiseLost',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot for Hyperbloom Damage (+80 EM, up to +140% Hyperbloom DMG)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Alternative (+80 EM, high EM stacking)',
+          },
+          {
+            referenceKey: 'WanderersTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+80 EM)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+80 EM)',
+          },
         ],
       },
       {
@@ -265,17 +369,28 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'elementalMastery', 'energyRecharge'],
         sets: [
-          { referenceKey: 'ThunderingFury', pieces: 4, tier: 1, label: 'Best in Slot Aggravate (+15% Electro DMG, +20% Aggravate DMG, -1s Skill CD on reactions)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 1, label: 'Alternative Aggravate DPS (+80 EM, ATK/EM scaling)' },
+          {
+            referenceKey: 'ThunderingFury',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot Aggravate (+15% Electro DMG, +20% Aggravate DMG, -1s Skill CD on reactions)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 1,
+            label: 'Alternative Aggravate DPS (+80 EM, ATK/EM scaling)',
+          },
         ],
       },
     ],
     guide: {
       sourceUrl: 'https://keqingmains.com/q/dori-quickguide/',
       playstyleSummary:
-        'Versatile 4-star Electro healer, flat energy battery, and multi-archetype driver. Alcazarzaray\'s Exactitude (Burst) summons a Jinni that tethers directly to the active character, continuously restoring HP based on Dori\'s Max HP and regenerating up to 2.5 flat energy per pulse. The connector line between character and Jinni deals continuous Electro damage, serving as a lethal Hyperbloom trigger or self-infusing Electro for Jean Sunfire-style reactions. At C6, using Skill infuses her attacks with Electro, transforming her into an active driver.',
+        "Versatile 4-star Electro healer, flat energy battery, and multi-archetype driver. Alcazarzaray's Exactitude (Burst) summons a Jinni that tethers directly to the active character, continuously restoring HP based on Dori's Max HP and regenerating up to 2.5 flat energy per pulse. The connector line between character and Jinni deals continuous Electro damage, serving as a lethal Hyperbloom trigger or self-infusing Electro for Jean Sunfire-style reactions. At C6, using Skill infuses her attacks with Electro, transforming her into an active driver.",
       energyRequirements:
-        'High 80 Energy Burst cost. Support (with Favonius): 180%–220% ER in Solo Electro; 140%–160% in Double Electro. Without Favonius: 210%–260% in Solo Electro; 160%–180% in Double Electro. Having Raiden or Fischl reduces requirements by 30%–60%. A4 passive restores flat energy when Skill hits opponents based on Dori\'s ER.',
+        "High 80 Energy Burst cost. Support (with Favonius): 180%–220% ER in Solo Electro; 140%–160% in Double Electro. Without Favonius: 210%–260% in Solo Electro; 160%–180% in Double Electro. Having Raiden or Fischl reduces requirements by 30%–60%. A4 passive restores flat energy when Skill hits opponents based on Dori's ER.",
       combatTips: [
         'Jinni Connector Line Positioning: The visual tether connecting the Jinni to the active character deals Electro DMG to any enemy crossing it. Position yourself so enemies stand between you and the Jinni to trigger continuous Hyperblooms or Aggravates!',
         'Flat Energy Battery: The Jinni generates up to 2.5 flat energy per tick for whichever active character is tethered, making Dori an exceptional battery for energy-hungry carries (e.g. Xiao, Eula, Itto).',
@@ -290,7 +405,7 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           category: 'BiS',
           notes:
-            'Undisputed best support claymore. 61.3% ER and neutral energy particle generation solves both Dori\'s 80-cost Burst and the entire party\'s energy needs.',
+            "Undisputed best support claymore. 61.3% ER and neutral energy particle generation solves both Dori's 80-cost Burst and the entire party's energy needs.",
         },
         {
           name: 'Sacrificial Greatsword',
@@ -338,7 +453,7 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           category: 'BiS',
           notes:
-            '165 EM sub-stat that converts Dori\'s stacked EM into flat ATK buffs for herself and the entire party.',
+            "165 EM sub-stat that converts Dori's stacked EM into flat ATK buffs for herself and the entire party.",
         },
         {
           name: 'Redhorn Stonethresher',
@@ -381,12 +496,42 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'elementalMastery', 'atkPercent'],
         sets: [
-          { referenceKey: 'DeepwoodMemories', pieces: 4, tier: 1, label: 'Uncontested Best in Slot (-30% Dendro RES Shred for Bloom/Hyperbloom/Spread)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Supportive Alternative (+20% Team ATK on Burst)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Alternative Personal Damage (+20% ER, up to +75% Burst DMG)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative Team Buffer (+120 EM to party upon triggering reaction)' },
-          { referenceKey: 'DeepwoodMemories', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Dendro DMG)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% ER)' },
+          {
+            referenceKey: 'DeepwoodMemories',
+            pieces: 4,
+            tier: 1,
+            label: 'Uncontested Best in Slot (-30% Dendro RES Shred for Bloom/Hyperbloom/Spread)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Supportive Alternative (+20% Team ATK on Burst)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Alternative Personal Damage (+20% ER, up to +75% Burst DMG)',
+          },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative Team Buffer (+120 EM to party upon triggering reaction)',
+          },
+          {
+            referenceKey: 'DeepwoodMemories',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Dendro DMG)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% ER)',
+          },
         ],
       },
     ],
@@ -398,7 +543,7 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
         'High 80 Energy Burst cost. 2 Skills per rotation (Solo Dendro): 200%–250% ER (250%–300% with 1 Skill). 2 Skills in Double Dendro: 160%–200% ER (200%–250% in Nilou Bloom). 2 Skills in Double Electro: 190%–230% ER. Each teammate Favonius proc reduces requirements by 10%–30%.',
       combatTips: [
         'Lotuslight Transfiguration Rules: The Lea Lotus Lamp can undergo only ONE transfiguration: Hydro expands its attack AoE and radius; Electro increases attack speed; Pyro detonates the Lamp immediately, causing it to explode and vanish! Always touch the Lamp with Hydro or Electro BEFORE introducing Pyro in Burgeon teams!',
-        'A1 EM Ramp (Verdant Overgrowth): The Lamp gains 1 stack of Overflowing Lotuslight every second, buffing the active character\'s Elemental Mastery by 6 per stack (up to +60 EM at 10 stacks).',
+        "A1 EM Ramp (Verdant Overgrowth): The Lamp gains 1 stack of Overflowing Lotuslight every second, buffing the active character's Elemental Mastery by 6 per stack (up to +60 EM at 10 stacks).",
         'A4 EM Conversion (Verdant Luxury): Every point of EM increases Razorgrass Blade DMG by 0.15% and Surgent Manifestation DMG by 0.1%.',
         'Particle Catching Technique: Cast Skill and perform 1–2 Normal Attacks while waiting to catch the Dendro particles on Traveler before swapping off to minimize team energy requirements.',
         'Constellation 1 Energy Refund: When Razorgrass Blade hits an opponent, Traveler regenerates 3.5 flat energy, easing rotation energy pressure.',
@@ -449,8 +594,7 @@ export const v30Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 5,
           category: 'Alternative',
-          notes:
-            '55.1% ER secondary stat with high base ATK; excellent high-ER stat stick.',
+          notes: '55.1% ER secondary stat with high base ATK; excellent high-ER stat stick.',
         },
         {
           name: 'Fleuve Cendre Ferryman',

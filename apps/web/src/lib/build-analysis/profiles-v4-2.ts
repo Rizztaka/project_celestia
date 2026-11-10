@@ -20,14 +20,57 @@ export const v42Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'hpPercent', 'maxHp'],
         sets: [
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 1, label: 'Best in Slot (+70% Elemental Skill DMG while off-field, maximizing Salon Member damage output)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 2, label: 'Alternative (+20% HP and 100% uptime on +20% Team ATK and +30% Shield Strength via Salon Member attacks)' },
-          { referenceKey: 'ScrollOfTheHeroOfCinderCity', pieces: 4, tier: 2, label: 'Alternative (+12% to +40% Elemental DMG Bonus for teammates in Natlan/Nightsoul compositions)' },
-          { referenceKey: 'SilkenMoonsSerenade', pieces: 4, tier: 2, label: 'Alternative (Team EM buff in Nod-Krai compositions)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 2, label: 'Alternative (Decent option for C6 carry playstyles)' },
-          { referenceKey: 'GoldenTroupe', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% HP)' },
-          { referenceKey: 'HeartOfDepth', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Hydro DMG Bonus)' },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+70% Elemental Skill DMG while off-field, maximizing Salon Member damage output)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative (+20% HP and 100% uptime on +20% Team ATK and +30% Shield Strength via Salon Member attacks)',
+          },
+          {
+            referenceKey: 'ScrollOfTheHeroOfCinderCity',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative (+12% to +40% Elemental DMG Bonus for teammates in Natlan/Nightsoul compositions)',
+          },
+          {
+            referenceKey: 'SilkenMoonsSerenade',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Team EM buff in Nod-Krai compositions)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Decent option for C6 carry playstyles)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% HP)',
+          },
+          {
+            referenceKey: 'HeartOfDepth',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Hydro DMG Bonus)',
+          },
         ],
       },
       {
@@ -41,14 +84,57 @@ export const v42Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'critRate', 'critDmg', 'hpPercent', 'maxHp'],
         sets: [
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 1, label: 'Best in Slot (+70% Elemental Skill DMG while off-field, maximizing Salon Member damage output)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 2, label: 'Alternative (+20% HP and 100% uptime on +20% Team ATK and +30% Shield Strength via Salon Member attacks)' },
-          { referenceKey: 'ScrollOfTheHeroOfCinderCity', pieces: 4, tier: 2, label: 'Alternative (+12% to +40% Elemental DMG Bonus for teammates in Natlan/Nightsoul compositions)' },
-          { referenceKey: 'SilkenMoonsSerenade', pieces: 4, tier: 2, label: 'Alternative (Team EM buff in Nod-Krai compositions)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 2, label: 'Alternative (Decent option for C6 carry playstyles)' },
-          { referenceKey: 'GoldenTroupe', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% HP)' },
-          { referenceKey: 'HeartOfDepth', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Hydro DMG Bonus)' },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+70% Elemental Skill DMG while off-field, maximizing Salon Member damage output)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative (+20% HP and 100% uptime on +20% Team ATK and +30% Shield Strength via Salon Member attacks)',
+          },
+          {
+            referenceKey: 'ScrollOfTheHeroOfCinderCity',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative (+12% to +40% Elemental DMG Bonus for teammates in Natlan/Nightsoul compositions)',
+          },
+          {
+            referenceKey: 'SilkenMoonsSerenade',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Team EM buff in Nod-Krai compositions)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Decent option for C6 carry playstyles)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% HP)',
+          },
+          {
+            referenceKey: 'HeartOfDepth',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Hydro DMG Bonus)',
+          },
         ],
       },
     ],
@@ -97,7 +183,7 @@ export const v42Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           category: 'BiS',
           notes:
-            '66.2% HP substat and +20% HP passive, converting Furina\'s massive HP pool into a partywide Elemental Mastery buff for team damage in Vaporize, Bloom, and reaction setups.',
+            "66.2% HP substat and +20% HP passive, converting Furina's massive HP pool into a partywide Elemental Mastery buff for team damage in Vaporize, Bloom, and reaction setups.",
         },
         {
           name: 'Favonius Sword',
@@ -185,15 +271,63 @@ export const v42Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'atkPercent', 'atk', 'critRate', 'healingBonus'],
         sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (+20% Team ATK for 12s on Burst cast every rotation)' },
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 1, label: 'Best in Slot (+15% Healing Bonus and converts massive burst healing into 30,000 damage bubble detonations)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 2, label: 'Alternative (+20% Team ATK with Hold Skill Finisher Frame 12s mark duration)' },
-          { referenceKey: 'BlizzardStrayer', pieces: 4, tier: 2, label: 'Alternative (+40% CRIT Rate in Freeze teams for 100% Favonius Codex proc consistency)' },
-          { referenceKey: 'SongOfDaysPast', pieces: 4, tier: 2, label: 'Alternative (+15% Healing Bonus and Yearning damage buff based on healing recorded)' },
-          { referenceKey: 'MaidenBeloved', pieces: 4, tier: 2, label: 'Alternative (+15% Healing Bonus and +20% Team Healing for 10s on Skill/Burst)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Energy Recharge)' },
-          { referenceKey: 'OceanHuedClam', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Healing Bonus)' },
-          { referenceKey: 'NoblesseOblige', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Elemental Burst DMG)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+20% Team ATK for 12s on Burst cast every rotation)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+15% Healing Bonus and converts massive burst healing into 30,000 damage bubble detonations)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+20% Team ATK with Hold Skill Finisher Frame 12s mark duration)',
+          },
+          {
+            referenceKey: 'BlizzardStrayer',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative (+40% CRIT Rate in Freeze teams for 100% Favonius Codex proc consistency)',
+          },
+          {
+            referenceKey: 'SongOfDaysPast',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Alternative (+15% Healing Bonus and Yearning damage buff based on healing recorded)',
+          },
+          {
+            referenceKey: 'MaidenBeloved',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+15% Healing Bonus and +20% Team Healing for 10s on Skill/Burst)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Energy Recharge)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Healing Bonus)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Elemental Burst DMG)',
+          },
         ],
       },
       {
@@ -207,29 +341,64 @@ export const v42Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'atkPercent', 'critRate', 'critDmg', 'atk'],
         sets: [
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 1, label: 'Best in Slot (+70% Skill DMG for Hold Skill Focused Impression ticks)' },
-          { referenceKey: 'BlizzardStrayer', pieces: 4, tier: 1, label: 'Best in Slot (+40% CRIT Rate in Freeze teams)' },
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 2, label: 'Alternative (Healing to Clam bubble damage)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative (Team ATK buffer)' },
-          { referenceKey: 'GoldenTroupe', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)' },
-          { referenceKey: 'BlizzardStrayer', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Cryo DMG Bonus)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Energy Recharge)' },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+70% Skill DMG for Hold Skill Focused Impression ticks)',
+          },
+          {
+            referenceKey: 'BlizzardStrayer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+40% CRIT Rate in Freeze teams)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Healing to Clam bubble damage)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Team ATK buffer)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)',
+          },
+          {
+            referenceKey: 'BlizzardStrayer',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Cryo DMG Bonus)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Energy Recharge)',
+          },
         ],
       },
     ],
     guide: {
       sourceUrl: 'https://keqingmains.com/q/charlotte-quickguide/',
       playstyleSummary:
-        '4-star Cryo Catalyst investigative journalist from Fontaine specializing in instantaneous teamwide burst healing and sustained off-field Cryo application. Still Photo: Comprehensive Confirmation (Elemental Burst, 80 Energy cost, 20s CD) summons a Kamera Newsroom field providing immediate massive partywide healing scaling with Charlotte\'s ATK, followed by continuous active character healing and AoE Cryo damage for 4s. Framing: Freezing Point Composition (Elemental Skill) can be Tapped for a quick snapshot applying Snappy Silhouette (deals Cryo DMG every 1.5s for 6s; generates 3 Cryo particles; 12s CD) or Held up to 2s to expand a viewfinder to Finisher Frame, applying Focused Impression to up to 5 enemies (deals Cryo DMG every 1.5s for 12s, 8 ticks; generates 5 Cryo particles; 18s CD). Charlotte shines as one of the premier 4★ teamwide healers for Furina teams, instantly capping Fanfare points while providing Freeze synergy for Cryo and Hydro carries.',
+        "4-star Cryo Catalyst investigative journalist from Fontaine specializing in instantaneous teamwide burst healing and sustained off-field Cryo application. Still Photo: Comprehensive Confirmation (Elemental Burst, 80 Energy cost, 20s CD) summons a Kamera Newsroom field providing immediate massive partywide healing scaling with Charlotte's ATK, followed by continuous active character healing and AoE Cryo damage for 4s. Framing: Freezing Point Composition (Elemental Skill) can be Tapped for a quick snapshot applying Snappy Silhouette (deals Cryo DMG every 1.5s for 6s; generates 3 Cryo particles; 12s CD) or Held up to 2s to expand a viewfinder to Finisher Frame, applying Focused Impression to up to 5 enemies (deals Cryo DMG every 1.5s for 12s, 8 ticks; generates 5 Cryo particles; 18s CD). Charlotte shines as one of the premier 4★ teamwide healers for Furina teams, instantly capping Fanfare points while providing Freeze synergy for Cryo and Hydro carries.",
       energyRequirements:
         'Burst costs 80 Energy and is essential for party survival and Furina Fanfare generation: With R5 Prototype Amber: Solo Cryo ~185%–200%; Double Cryo ~160%–180%; Triple Cryo ~140%–160%. With Other Weapons (Favonius Codex / TTDS): Solo Cryo ~230%–260%+; Double Cryo ~190%–220%; Triple Cryo ~170%–190%. Favonius procs reduce ER by ~15%–20%; C4 refunds up to 10 Energy, reducing ER by ~20%–25%.',
       combatTips: [
-        'Furina Synergy & Instant Fanfare: Charlotte\'s Burst provides colossal instantaneous teamwide healing, instantly maxing out Furina\'s Fanfare stacks from 0 to full in a single frame. When equipped with Prototype Amber, the subsequent 6s team healing also triggers Furina\'s A1 Endless Waltz for further team HP restoration.',
+        "Furina Synergy & Instant Fanfare: Charlotte's Burst provides colossal instantaneous teamwide healing, instantly maxing out Furina's Fanfare stacks from 0 to full in a single frame. When equipped with Prototype Amber, the subsequent 6s team healing also triggers Furina's A1 Endless Waltz for further team HP restoration.",
         'Tap vs Hold Skill Optimization: Tap Skill has a swift animation and 12s CD (generating 3 particles); Hold Skill requires standing vulnerable for ~2s to reach Finisher Frame, but lasts 12s and generates 5 particles (with 18s CD). In standard fast rotations, Tap Skill (`tEQ`) is strongly preferred to maintain smooth rotations unless pairing with 4pc Tenacity.',
-        'Prototype Amber Supremacy: Despite Charlotte healing from ATK and Prototype Amber carrying an HP% substat, Prototype Amber\'s 18 flat energy refund and +18% team HP healing (further amplified by Charlotte\'s Healing Bonus circlet) make it her mathematically superior weapon over all ATK% weapons.',
-        'Favonius Battery Utility: Favonius Codex provides 45.9% ER and generates 6 neutral energy particles on CRIT. Charlotte\'s multi-hit Burst (9 hits) easily triggers Favonius particles even with modest CRIT Rate (25%–35%).',
+        "Prototype Amber Supremacy: Despite Charlotte healing from ATK and Prototype Amber carrying an HP% substat, Prototype Amber's 18 flat energy refund and +18% team HP healing (further amplified by Charlotte's Healing Bonus circlet) make it her mathematically superior weapon over all ATK% weapons.",
+        "Favonius Battery Utility: Favonius Codex provides 45.9% ER and generates 6 neutral energy particles on CRIT. Charlotte's multi-hit Burst (9 hits) easily triggers Favonius particles even with modest CRIT Rate (25%–35%).",
         'Pneuma Arkhe Strike: Charged Attack calls down a Spiritbreath Thorn dealing Pneuma-aligned Cryo damage every 6s to disable Ousia Clockwork Meka.',
-        'C4 Energy Refund: Constellation 4 restores 2 Energy whenever Charlotte\'s Burst hits enemies marked by her Skill (up to 5 times / 10 Energy total per Burst), noticeably reducing her high ER requirements.',
+        "C4 Energy Refund: Constellation 4 restores 2 Energy whenever Charlotte's Burst hits enemies marked by her Skill (up to 5 times / 10 Energy total per Burst), noticeably reducing her high ER requirements.",
       ],
       weapons: [
         {
@@ -238,7 +407,7 @@ export const v42Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           category: 'F2P',
           notes:
-            'Craftable Liyue catalyst and undisputed BiS for healing. Refunds up to 18 flat Energy over 6s and heals the entire team for 18% Max HP, drastically easing Charlotte\'s ER requirements and triggering Furina\'s A1 overheal.',
+            "Craftable Liyue catalyst and undisputed BiS for healing. Refunds up to 18 flat Energy over 6s and heals the entire team for 18% Max HP, drastically easing Charlotte's ER requirements and triggering Furina's A1 overheal.",
         },
         {
           name: 'Favonius Codex',
@@ -286,7 +455,7 @@ export const v42Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           category: 'Alternative',
           notes:
-            'Colossal 674 Base ATK and 33.1% ATK substat, boosting Charlotte\'s raw ATK scaling for massive healing numbers at very low ER thresholds.',
+            "Colossal 674 Base ATK and 33.1% ATK substat, boosting Charlotte's raw ATK scaling for massive healing numbers at very low ER thresholds.",
         },
         {
           name: 'Flowing Purity',
@@ -301,8 +470,7 @@ export const v42Profiles: ReviewedCharacterProfile[] = [
           tier: 3,
           rarity: 4,
           category: 'Alternative',
-          notes:
-            '55.1% CRIT DMG catalyst for aggressive sub-DPS burst damage.',
+          notes: '55.1% CRIT DMG catalyst for aggressive sub-DPS burst damage.',
         },
       ],
     },

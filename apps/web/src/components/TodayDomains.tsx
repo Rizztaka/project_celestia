@@ -225,15 +225,12 @@ export default function TodayDomains({
   const activeCharacters = useMemo(
     () =>
       characters.filter(
-        (c) =>
-          !goodEnoughSet.has(teamCharacterIdentity(c.id)) &&
-          !goodEnoughSet.has(c.key),
+        (c) => !goodEnoughSet.has(teamCharacterIdentity(c.id)) && !goodEnoughSet.has(c.key),
       ),
     [characters, goodEnoughSet],
   );
   // If active characters exist, suppress domains that only match muted "Good Enough" builds
-  const targetCharacters =
-    activeCharacters.length > 0 ? activeCharacters : characters;
+  const targetCharacters = activeCharacters.length > 0 ? activeCharacters : characters;
 
   useEffect(() => {
     const update = () => setNow(Date.now());

@@ -19,16 +19,42 @@ export const v15Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'energyRecharge', 'atk'],
         sets: [
-          { referenceKey: 'PaleFlame', pieces: 4, tier: 1, label: 'Best in Slot (+50% Physical DMG, +18% ATK at 2 stacks)' },
-          { referenceKey: 'PaleFlame', pieces: 2, tier: 1, label: 'Best in Slot 2pc (+25% Physical DMG)' },
-          { referenceKey: 'BloodstainedChivalry', pieces: 2, tier: 1, label: 'Best in Slot 2pc (+25% Physical DMG)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 2, label: 'Alternative (with Furina: +36% Crit Rate)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 4, tier: 2, label: 'Alternative (+18% ATK, +35% Normal Attack DMG)' },
+          {
+            referenceKey: 'PaleFlame',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+50% Physical DMG, +18% ATK at 2 stacks)',
+          },
+          {
+            referenceKey: 'PaleFlame',
+            pieces: 2,
+            tier: 1,
+            label: 'Best in Slot 2pc (+25% Physical DMG)',
+          },
+          {
+            referenceKey: 'BloodstainedChivalry',
+            pieces: 2,
+            tier: 1,
+            label: 'Best in Slot 2pc (+25% Physical DMG)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (with Furina: +36% Crit Rate)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+18% ATK, +35% Normal Attack DMG)',
+          },
         ],
       },
     ],
     guide: {
-      sourceUrl: 'https://kqm-uploads.keqingmains.com/wp-content/uploads/2024/10/Eula-Infographic.png',
+      sourceUrl:
+        'https://kqm-uploads.keqingmains.com/wp-content/uploads/2024/10/Eula-Infographic.png',
       playstyleSummary:
         'Premier Physical hypercarry and Burst nuke specialist. Channels Glacial Illumination (Burst) to create a Lightfall Sword that charges by accumulating hits from Normal Attacks, Elemental Skills, and Elemental Bursts over 7 seconds before violently detonating in a massive AoE Physical explosion.',
       energyRequirements:
@@ -46,14 +72,16 @@ export const v15Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Eula signature claymore; huge 741 base ATK, Physical DMG substat, +ATK%, and team ATK SPD buff upon trigger',
+          notes:
+            'Eula signature claymore; huge 741 base ATK, Physical DMG substat, +ATK%, and team ATK SPD buff upon trigger',
         },
         {
           name: 'Beacon of the Reed Sea',
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: '33.1% Crit Rate with massive unconditional ATK buffs upon Skill use and taking damage',
+          notes:
+            '33.1% Crit Rate with massive unconditional ATK buffs upon Skill use and taking damage',
         },
         {
           name: 'Redhorn Stonethresher',
@@ -63,7 +91,7 @@ export const v15Profiles: ReviewedCharacterProfile[] = [
           notes: 'Massive 88.2% Crit DMG with flat damage bonus to Normal Attacks scaling off DEF',
         },
         {
-          name: 'Wolf\'s Gravestone',
+          name: "Wolf's Gravestone",
           rarity: 5,
           tier: 1,
           category: 'Alternative',
@@ -74,21 +102,24 @@ export const v15Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'Alternative',
-          notes: 'Immense ATK% stacking; outstanding when paired with a reliable shielder (Zhongli, Diona)',
+          notes:
+            'Immense ATK% stacking; outstanding when paired with a reliable shielder (Zhongli, Diona)',
         },
         {
           name: 'Serpent Spine',
           rarity: 4,
           tier: 1,
           category: 'BiS',
-          notes: 'Battle Pass claymore; 27.6% Crit Rate and up to 50% all-DMG bonus at R5 (best protected with a shield)',
+          notes:
+            'Battle Pass claymore; 27.6% Crit Rate and up to 50% all-DMG bonus at R5 (best protected with a shield)',
         },
         {
           name: 'Skyward Pride',
           rarity: 5,
           tier: 2,
           category: 'Alternative',
-          notes: 'High base ATK, 36.8% ER comfort for 80-cost burst, and vacuum blades deal Physical damage',
+          notes:
+            'High base ATK, 36.8% ER comfort for 80-cost burst, and vacuum blades deal Physical damage',
         },
         {
           name: 'Tidal Shadow',
@@ -126,12 +157,42 @@ export const v15Profiles: ReviewedCharacterProfile[] = [
         conditionalMainStats: { Sands: { elementalMastery: 'reaction_context' } },
         priorityStats: ['critRate', 'critDmg', 'elementalMastery', 'atk', 'energyRecharge'],
         sets: [
-          { referenceKey: 'CrimsonWitchOfFlames', pieces: 4, tier: 1, label: 'Best in Slot (+15% Pyro DMG and +15% Vaporize reaction DMG)' },
-          { referenceKey: 'WanderersTroupe', pieces: 4, tier: 1, label: 'Best in Slot (+80 EM and +35% Charged Attack DMG)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 1, label: 'Best in Slot (with Furina: +36% Crit Rate, +15% Normal/Charged)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 2, label: 'Alternative (+80 EM and high ATK/EM bonus in rainbow comps)' },
-          { referenceKey: 'CrimsonWitchOfFlames', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Pyro DMG)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 2, label: 'Alternative 2pc (+18% ATK)' },
+          {
+            referenceKey: 'CrimsonWitchOfFlames',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+15% Pyro DMG and +15% Vaporize reaction DMG)',
+          },
+          {
+            referenceKey: 'WanderersTroupe',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+80 EM and +35% Charged Attack DMG)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (with Furina: +36% Crit Rate, +15% Normal/Charged)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+80 EM and high ATK/EM bonus in rainbow comps)',
+          },
+          {
+            referenceKey: 'CrimsonWitchOfFlames',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+15% Pyro DMG)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+18% ATK)',
+          },
         ],
       },
       {
@@ -144,15 +205,36 @@ export const v15Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'maxHp', 'hpPercent'],
         sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (+20% Team ATK on Burst)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 2, tier: 1, label: 'Best in Slot 2pc (+20% HP for shield)' },
-          { referenceKey: 'VourukashasGlow', pieces: 2, tier: 1, label: 'Best in Slot 2pc (+20% HP for shield)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 2, label: 'Alternative (+120 Team EM on Reaction)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+20% Team ATK on Burst)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 2,
+            tier: 1,
+            label: 'Best in Slot 2pc (+20% HP for shield)',
+          },
+          {
+            referenceKey: 'VourukashasGlow',
+            pieces: 2,
+            tier: 1,
+            label: 'Best in Slot 2pc (+20% HP for shield)',
+          },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+120 Team EM on Reaction)',
+          },
         ],
       },
     ],
     guide: {
-      sourceUrl: 'https://kqm-uploads.keqingmains.com/wp-content/uploads/2024/12/Yanfei_5.3_-_cote.png',
+      sourceUrl:
+        'https://kqm-uploads.keqingmains.com/wp-content/uploads/2024/12/Yanfei_5.3_-_cote.png',
       playstyleSummary:
         'Versatile Pyro catalyst specialist capable of serving either as a long-range Pyro Charged Attack hypercarry (weaving Scarlet Seals to execute heavy Vaporize/Overload attacks) or as "Tankfei" at C4 (a premier defensive shielder and Prototype Amber party healer).',
       energyRequirements:
@@ -160,8 +242,8 @@ export const v15Profiles: ReviewedCharacterProfile[] = [
       combatTips: [
         'Scarlet Seal Management: Normal Attacks, Signed Edict (E), and Done Deal (Q) grant Scarlet Seals. Each seal reduces stamina cost by 15% and expands Charged Attack AoE and damage. Always cast Charged Attack at 3 or 4 seals (N3C or N4C combo).',
         'Done Deal (Burst): Instantly grants maximum Scarlet Seals, increases Charged Attack damage by 33%~55%, and automatically generates a seal every second (Brilliance effect), enabling rapid N2C or N1C rotations.',
-        'Blazing Eye (A4 Passive): When Yanfei\'s Charged Attack lands a critical hit, it deals an additional AoE Pyro damage instance equal to 80% of her ATK, which counts as Charged Attack damage.',
-        'Tankfei (C4 Shield Support): Constellation 4 creates a shield absorbing damage equal to 45% of Yanfei\'s Max HP for 15s upon casting Burst. Combined with Prototype Amber, she simultaneously provides shields, party healing, and Noblesse buffs.',
+        "Blazing Eye (A4 Passive): When Yanfei's Charged Attack lands a critical hit, it deals an additional AoE Pyro damage instance equal to 80% of her ATK, which counts as Charged Attack damage.",
+        "Tankfei (C4 Shield Support): Constellation 4 creates a shield absorbing damage equal to 45% of Yanfei's Max HP for 15s upon casting Burst. Combined with Prototype Amber, she simultaneously provides shields, party healing, and Noblesse buffs.",
       ],
       weapons: [
         {
@@ -169,35 +251,40 @@ export const v15Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Premier 5-star DPS catalyst; 33.1% Crit Rate, 10% movement speed, and ramping elemental damage while on field',
+          notes:
+            'Premier 5-star DPS catalyst; 33.1% Crit Rate, 10% movement speed, and ramping elemental damage while on field',
         },
         {
           name: 'Tome of the Eternal Flow',
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Massive 88.2% Crit DMG with huge Charged Attack DMG bonus when HP fluctuates (exceptional with Furina)',
+          notes:
+            'Massive 88.2% Crit DMG with huge Charged Attack DMG bonus when HP fluctuates (exceptional with Furina)',
         },
         {
           name: 'The Widsith',
           rarity: 4,
           tier: 1,
           category: 'BiS',
-          notes: 'Top 4-star DPS catalyst; 55.1% Crit DMG and immense 10s ATK, Elemental DMG, or EM buff upon taking the field',
+          notes:
+            'Top 4-star DPS catalyst; 55.1% Crit DMG and immense 10s ATK, Elemental DMG, or EM buff upon taking the field',
         },
         {
           name: 'Prototype Amber',
           rarity: 4,
           tier: 1,
           category: 'BiS',
-          notes: 'Best-in-Slot for C4 Tankfei; provides 41.3% HP, refunds 18 flat energy over 6s, and heals the entire party by 18% Max HP',
+          notes:
+            'Best-in-Slot for C4 Tankfei; provides 41.3% HP, refunds 18 flat energy over 6s, and heals the entire party by 18% Max HP',
         },
         {
           name: 'Sacrificial Jade',
           rarity: 4,
           tier: 1,
           category: 'Alternative',
-          notes: 'Battle Pass catalyst; 36.8% Crit Rate, +64% Max HP and +80 EM when off-field for 5s',
+          notes:
+            'Battle Pass catalyst; 36.8% Crit Rate, +64% Max HP and +80 EM when off-field for 5s',
         },
         {
           name: 'Skyward Atlas',
@@ -211,7 +298,8 @@ export const v15Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 2,
           category: 'Alternative',
-          notes: 'Battle Pass catalyst; Crit Rate and alternating Normal Attack / Skill damage buffs',
+          notes:
+            'Battle Pass catalyst; Crit Rate and alternating Normal Attack / Skill damage buffs',
         },
         {
           name: 'Favonius Codex',
@@ -225,7 +313,8 @@ export const v15Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 3,
           category: 'F2P',
-          notes: 'Craftable catalyst providing EM substat and elemental damage bonus upon triggering reactions',
+          notes:
+            'Craftable catalyst providing EM substat and elemental damage bonus upon triggering reactions',
         },
       ],
     },

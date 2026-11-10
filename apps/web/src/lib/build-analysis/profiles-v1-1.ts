@@ -20,12 +20,42 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
         conditionalMainStats: { Sands: { elementalMastery: 'reaction_context' } },
         priorityStats: ['critRate', 'critDmg', 'atk', 'elementalMastery', 'energyRecharge'],
         sets: [
-          { referenceKey: 'NymphsDream', pieces: 4, tier: 1, label: 'Best in Slot (+25% Hydro, +25% ATK)' },
-          { referenceKey: 'HeartOfDepth', pieces: 4, tier: 1, label: 'Best in Slot Alternative (+15% Hydro, +30% Normal/Charged)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 2, label: 'Alternative (with Furina)' },
-          { referenceKey: 'HeartOfDepth', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Hydro)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 2, label: 'Alternative 2pc (+18% ATK)' },
-          { referenceKey: 'NoblesseOblige', pieces: 2, tier: 2, label: 'Alternative 2pc (+20% Burst DMG)' },
+          {
+            referenceKey: 'NymphsDream',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+25% Hydro, +25% ATK)',
+          },
+          {
+            referenceKey: 'HeartOfDepth',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Alternative (+15% Hydro, +30% Normal/Charged)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (with Furina)',
+          },
+          {
+            referenceKey: 'HeartOfDepth',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+15% Hydro)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+18% ATK)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+20% Burst DMG)',
+          },
         ],
       },
       {
@@ -61,7 +91,8 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Custom signature bow granting Crit Rate and up to 48% ATK and 24% Skill/Burst DMG',
+          notes:
+            'Custom signature bow granting Crit Rate and up to 48% ATK and 24% Skill/Burst DMG',
         },
         {
           name: 'Aqua Simulacra',
@@ -82,7 +113,8 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'Alternative',
-          notes: 'BP bow with Crit Rate and cyclone grouping effect that synergizes with quadratic Riptide',
+          notes:
+            'BP bow with Crit Rate and cyclone grouping effect that synergizes with quadratic Riptide',
         },
         {
           name: 'Skyward Harp',
@@ -134,11 +166,36 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
         conditionalMainStats: { Circlet: { critRate: 'favonius_proc' } },
         priorityStats: ['maxHp', 'critRate', 'energyRecharge'],
         sets: [
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 1, label: 'Best in Slot (+20% HP, +20% Team ATK, +30% Shield Strength)' },
-          { referenceKey: 'ArchaicPetra', pieces: 4, tier: 1, label: 'Best in Slot Alternative (+35% Elemental DMG on Crystal Pick)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative (Team ATK on Burst)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 2, tier: 2, label: 'Alternative 2pc (+20% HP)' },
-          { referenceKey: 'VourukashasGlow', pieces: 2, tier: 2, label: 'Alternative 2pc (+20% HP)' },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+20% HP, +20% Team ATK, +30% Shield Strength)',
+          },
+          {
+            referenceKey: 'ArchaicPetra',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Alternative (+35% Elemental DMG on Crystal Pick)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Team ATK on Burst)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+20% HP)',
+          },
+          {
+            referenceKey: 'VourukashasGlow',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+20% HP)',
+          },
           { referenceKey: 'Instructor', pieces: 4, tier: 3, label: 'Transitional (120 EM Buffer)' },
         ],
       },
@@ -152,7 +209,12 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'maxHp', 'atk', 'energyRecharge'],
         sets: [
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 4, tier: 1, label: 'Best in Slot (Burst Nuke)' },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Burst Nuke)',
+          },
           { referenceKey: 'NoblesseOblige', pieces: 2, tier: 1, label: '2pc Burst + 2pc Geo/HP' },
           { referenceKey: 'ArchaicPetra', pieces: 2, tier: 1, label: '2pc Geo (+15% Geo)' },
         ],
@@ -176,21 +238,24 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
           rarity: 3,
           tier: 1,
           category: 'BiS',
-          notes: 'Unmatched 46.9% HP substat; the ultimate low-investment weapon for maximum shield durability',
+          notes:
+            'Unmatched 46.9% HP substat; the ultimate low-investment weapon for maximum shield durability',
         },
         {
           name: 'Favonius Lance',
           rarity: 4,
           tier: 1,
           category: 'Utility',
-          notes: 'Premier utility polearm; generates white particles for the entire party with a Crit Rate circlet',
+          notes:
+            'Premier utility polearm; generates white particles for the entire party with a Crit Rate circlet',
         },
         {
           name: 'Staff of Homa',
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes: 'Provides +20% HP and converts Max HP to massive ATK for hybrid shield/burst nukes',
+          notes:
+            'Provides +20% HP and converts Max HP to massive ATK for hybrid shield/burst nukes',
         },
         {
           name: 'The Catch',
@@ -204,7 +269,8 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 2,
           category: 'F2P',
-          notes: 'Fontaine craftable polearm providing HP% and energy refund upon receiving healing',
+          notes:
+            'Fontaine craftable polearm providing HP% and energy refund upon receiving healing',
         },
         {
           name: 'Vortex Vanquisher',
@@ -235,11 +301,36 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
         conditionalMainStats: { Circlet: { critRate: 'favonius_proc' } },
         priorityStats: ['energyRecharge', 'maxHp', 'critRate'],
         sets: [
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (+20% Team ATK on Burst)' },
-          { referenceKey: 'Instructor', pieces: 4, tier: 1, label: 'Best in Slot Alternative (120 EM Reaction Buff)' },
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 2, tier: 2, label: 'Alternative 2pc (+20% HP)' },
-          { referenceKey: 'MaidenBeloved', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Healing)' },
-          { referenceKey: 'OceanHuedClam', pieces: 2, tier: 2, label: 'Alternative 2pc (+15% Healing)' },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+20% Team ATK on Burst)',
+          },
+          {
+            referenceKey: 'Instructor',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot Alternative (120 EM Reaction Buff)',
+          },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+20% HP)',
+          },
+          {
+            referenceKey: 'MaidenBeloved',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+15% Healing)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc (+15% Healing)',
+          },
         ],
       },
     ],
@@ -247,8 +338,7 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
       sourceUrl: 'https://keqingmains.com/q/diona-quickguide/',
       playstyleSummary:
         'Versatile 4-star support combining Cryo shielding, continuous healing circles, movement speed buffs/stamina reduction, and battery utility for energy-hungry Cryo carries like Ayaka and Eula.',
-      energyRequirements:
-        '160% - 190% ER with Sacrificial Bow (R3+); 200%+ with Favonius Warbow.',
+      energyRequirements: '160% - 190% ER with Sacrificial Bow (R3+); 200%+ with Favonius Warbow.',
       combatTips: [
         'Always HOLD Skill (Icy Paws) instead of tapping: Hold fires 5 paws (creating an 80% stronger shield lasting 12s) and generates 3-4 Cryo particles.',
         'Sacrificial Bow is Diona best weapon: each of the 5 paws has an independent chance to proc the cooldown reset, making double Hold E virtually guaranteed at high refinements.',
@@ -261,7 +351,8 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'BiS',
-          notes: 'Uncontested best weapon; 5 paws give 5 proc chances to reset skill, allowing near 100% shield uptime and 8 Cryo particles',
+          notes:
+            'Uncontested best weapon; 5 paws give 5 proc chances to reset skill, allowing near 100% shield uptime and 8 Cryo particles',
         },
         {
           name: 'Favonius Warbow',
@@ -306,10 +397,30 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
         conditionalMainStats: { Circlet: { critRate: 'favonius_proc' } },
         priorityStats: ['def', 'energyRecharge', 'critRate'],
         sets: [
-          { referenceKey: 'TenacityOfTheMillelith', pieces: 4, tier: 1, label: 'Best in Slot (+20% Team ATK via Lv. 3 Shield pulses)' },
-          { referenceKey: 'HuskOfOpulentDreams', pieces: 2, tier: 1, label: 'Best in Slot 2pc (+30% DEF)' },
-          { referenceKey: 'DefendersWill', pieces: 2, tier: 1, label: 'Best in Slot 2pc (+30% DEF)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative (Team ATK on Burst)' },
+          {
+            referenceKey: 'TenacityOfTheMillelith',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+20% Team ATK via Lv. 3 Shield pulses)',
+          },
+          {
+            referenceKey: 'HuskOfOpulentDreams',
+            pieces: 2,
+            tier: 1,
+            label: 'Best in Slot 2pc (+30% DEF)',
+          },
+          {
+            referenceKey: 'DefendersWill',
+            pieces: 2,
+            tier: 1,
+            label: 'Best in Slot 2pc (+30% DEF)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Team ATK on Burst)',
+          },
         ],
       },
       {
@@ -322,10 +433,25 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critDmg', 'atk', 'critRate', 'energyRecharge'],
         sets: [
-          { referenceKey: 'PaleFlame', pieces: 2, tier: 1, label: '2pc Physical + 2pc Bloodstained' },
-          { referenceKey: 'BloodstainedChivalry', pieces: 2, tier: 1, label: '2pc Physical (+50% Total Physical DMG)' },
+          {
+            referenceKey: 'PaleFlame',
+            pieces: 2,
+            tier: 1,
+            label: '2pc Physical + 2pc Bloodstained',
+          },
+          {
+            referenceKey: 'BloodstainedChivalry',
+            pieces: 2,
+            tier: 1,
+            label: '2pc Physical (+50% Total Physical DMG)',
+          },
           { referenceKey: 'PaleFlame', pieces: 4, tier: 1, label: 'Best in Slot (Full Stacks)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 2, label: 'Alternative (with Furina)' },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (with Furina)',
+          },
         ],
       },
     ],
@@ -371,7 +497,7 @@ export const v11Profiles: ReviewedCharacterProfile[] = [
           notes: 'Craftable claymore providing huge DEF% for shield thickness',
         },
         {
-          name: 'Wolf\'s Gravestone',
+          name: "Wolf's Gravestone",
           rarity: 5,
           tier: 1,
           category: 'Alternative',

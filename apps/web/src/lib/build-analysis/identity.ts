@@ -103,7 +103,6 @@ export interface ReviewedCharacterProfile {
   guide?: CharacterGuideDetails;
 }
 
-
 // All Version 1.0 through 2.0 verified profiles plus post-launch meta anchors reviewed against sources.json
 export const reviewedProfiles: ReviewedCharacterProfile[] = [
   ...v1Profiles,

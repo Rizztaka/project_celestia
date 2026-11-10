@@ -35,8 +35,7 @@ export const v65Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'AubadeOfMorningstarAndMoon',
             pieces: 4,
             tier: 1,
-            label:
-              'Best in Slot in Ascendant Gleam (+60% Lunar Reaction DMG while off-field)',
+            label: 'Best in Slot in Ascendant Gleam (+60% Lunar Reaction DMG while off-field)',
           },
           {
             referenceKey: 'SilkenMoonsSerenade',
@@ -49,8 +48,7 @@ export const v65Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'Instructor',
             pieces: 4,
             tier: 2,
-            label:
-              'Support Alternative (+120 Teamwide EM upon reaction trigger)',
+            label: 'Support Alternative (+120 Teamwide EM upon reaction trigger)',
           },
           {
             referenceKey: 'TenacityOfTheMillelith',
@@ -63,8 +61,7 @@ export const v65Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'GladiatorsFinale',
             pieces: 2,
             tier: 3,
-            label:
-              'Transitional 2pc mix (2pc Husk +30% DEF / +80 EM / +20% ER)',
+            label: 'Transitional 2pc mix (2pc Husk +30% DEF / +80 EM / +20% ER)',
           },
         ],
       },
@@ -77,10 +74,10 @@ export const v65Profiles: ReviewedCharacterProfile[] = [
         '100% ER (baseline) when bursting every other rotation (recommended). Bursting every rotation requires 170–185% ER (~15–20% less per Favonius proc). If skipping her Burst to conserve field time, ER can safely be ignored.',
       combatTips: [
         'Burst Every Other Rotation Invariant: Building 170–185% ER to burst every rotation sacrifices substantial DEF% and CRIT; bursting every other rotation with 100% baseline ER is optimal for team DPS.',
-        'Talent Priority (Skill > Character Level 90 >> Burst): Linnea\'s damage is overwhelmingly concentrated in her Elemental Skill companion Lumi. Level 90 is crucial for base DEF and Lunar-Crystallize damage. Burst provides healing, while Normal Attacks contribute zero utility and should remain at Level 1.',
+        "Talent Priority (Skill > Character Level 90 >> Burst): Linnea's damage is overwhelmingly concentrated in her Elemental Skill companion Lumi. Level 90 is crucial for base DEF and Lunar-Crystallize damage. Burst provides healing, while Normal Attacks contribute zero utility and should remain at Level 1.",
         'DEF% Goblet Invariant: A DEF% Goblet is strongly recommended over Geo DMG% because her direct Lunar-Crystallize hits, team healing, and A4 EM buffs all scale with DEF.',
-        'Moondrifts as Geo Constructs: The Moondrifts left behind by Lunar-Crystallize reactions count as Geo Constructs, triggering synergy with Zhongli\'s Stele resonances and Chiori\'s dolls.',
-        'Columbina & Zibai Synergy: Columbina is Linnea\'s premier Hydro enabler, while Zibai acts as her top Geo hypercarry partner in Triple Geo compositions.',
+        "Moondrifts as Geo Constructs: The Moondrifts left behind by Lunar-Crystallize reactions count as Geo Constructs, triggering synergy with Zhongli's Stele resonances and Chiori's dolls.",
+        "Columbina & Zibai Synergy: Columbina is Linnea's premier Hydro enabler, while Zibai acts as her top Geo hypercarry partner in Triple Geo compositions.",
       ],
       weapons: [
         {
@@ -96,16 +93,14 @@ export const v65Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'Alternative',
-          notes:
-            '5★ BiS Alternative (88.2% CRIT DMG & universal off-field DMG% bonus)',
+          notes: '5★ BiS Alternative (88.2% CRIT DMG & universal off-field DMG% bonus)',
         },
         {
           name: 'Elegy for the End',
           rarity: 5,
           tier: 1,
           category: 'Utility',
-          notes:
-            '5★ Support BiS (55.1% ER, 60 EM & teamwide +100 EM, +20% ATK buff)',
+          notes: '5★ Support BiS (55.1% ER, 60 EM & teamwide +100 EM, +20% ATK buff)',
         },
         {
           name: 'Slingshot',
@@ -141,8 +136,7 @@ export const v65Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 2,
           category: 'F2P',
-          notes:
-            '4★ Craftable F2P Alternative (ER secondary stat and EM buff on reaction)',
+          notes: '4★ Craftable F2P Alternative (ER secondary stat and EM buff on reaction)',
         },
         {
           name: 'Favonius Warbow',

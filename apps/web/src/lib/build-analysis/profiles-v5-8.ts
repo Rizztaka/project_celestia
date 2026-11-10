@@ -56,8 +56,7 @@ export const v58Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'NightOfTheSkysUnveiling',
             pieces: 4,
             tier: 2,
-            label:
-              'Alternative (+10% Lunar Reaction DMG & on-field quickswap burst bonus)',
+            label: 'Alternative (+10% Lunar Reaction DMG & on-field quickswap burst bonus)',
           },
           {
             referenceKey: 'ThunderingFury',
@@ -85,7 +84,7 @@ export const v58Profiles: ReviewedCharacterProfile[] = [
         'Standard E Q Combo: Cast Skill (E) to summon Birgitta and gain Optical Flow Shield Barrier, then immediately Burst (Q) to trigger A4 EM buff and deploy rocket punches before swapping to carry.',
         'Extended Rotation Stagger (E > Team > Q): On longer rotation teams (>25s), cast Skill at start, rotate teammates, then cast Burst to reset Birgitta duration to 100%.',
         'Level 90 Invariant: Lunar-Charged is a transformative-style lunar reaction scaling dramatically with character level. Level 90 is mandatory to maximize her team damage output.',
-        'ATK Ceiling Goal (2000 ATK): Her A4 passive grants active party members bonus EM equal to 6% of Ineffa\'s ATK, and her A1 / A3 passives scale Lunar-Charged base damage directly from ATK.',
+        "ATK Ceiling Goal (2000 ATK): Her A4 passive grants active party members bonus EM equal to 6% of Ineffa's ATK, and her A1 / A3 passives scale Lunar-Charged base damage directly from ATK.",
         'Overvape & Electro-Charged Conversion: Ineffa allows Pyro DPS units (e.g. Mavuika, Arlecchino, Hu Tao) to trigger simultaneous Overloaded and Vaporize (Overvape) due to continuous dual-aura preservation.',
         'Normal Attack Unleveled Invariant: All Birgitta attacks and Lunar-Charged reactions scale from Skill, A1/A3 passives, and character level; her Normal Attack should remain at Level 1.',
       ],

@@ -20,12 +20,44 @@ export const v45Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'defPercent', 'atkPercent', 'energyRecharge'],
         sets: [
-          { referenceKey: 'GoldenTroupe', pieces: 4, tier: 1, label: 'Best in Slot (+70% Elemental Skill DMG bonus while off-field; massively buffs Tamoto slashes, A1 sweeps, and C2/C4 Kinu dolls)' },
-          { referenceKey: 'HuskOfOpulentDreams', pieces: 4, tier: 1, label: 'Best in Slot Alternative (+54% DEF and +24% Geo DMG Bonus at full Curiosity stacks; competitive runner-up)' },
-          { referenceKey: 'GoldenTroupe', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)' },
-          { referenceKey: 'HuskOfOpulentDreams', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+30% DEF)' },
-          { referenceKey: 'ArchaicPetra', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Geo DMG Bonus)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+18% ATK)' },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+70% Elemental Skill DMG bonus while off-field; massively buffs Tamoto slashes, A1 sweeps, and C2/C4 Kinu dolls)',
+          },
+          {
+            referenceKey: 'HuskOfOpulentDreams',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot Alternative (+54% DEF and +24% Geo DMG Bonus at full Curiosity stacks; competitive runner-up)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)',
+          },
+          {
+            referenceKey: 'HuskOfOpulentDreams',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+30% DEF)',
+          },
+          {
+            referenceKey: 'ArchaicPetra',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Geo DMG Bonus)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+18% ATK)',
+          },
         ],
       },
       {
@@ -39,11 +71,37 @@ export const v45Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'defPercent', 'atkPercent', 'energyRecharge'],
         sets: [
-          { referenceKey: 'HuskOfOpulentDreams', pieces: 4, tier: 1, label: 'Best in Slot (+54% DEF and +24% Geo DMG Bonus at 4 Curiosity stacks; premier on-field set and BiS for C6)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 4, tier: 2, label: 'Alternative (+18% ATK and +35% Normal Attack DMG for sword wielders)' },
-          { referenceKey: 'GoldenTroupe', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)' },
-          { referenceKey: 'HuskOfOpulentDreams', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+30% DEF)' },
-          { referenceKey: 'ArchaicPetra', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Geo DMG Bonus)' },
+          {
+            referenceKey: 'HuskOfOpulentDreams',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+54% DEF and +24% Geo DMG Bonus at 4 Curiosity stacks; premier on-field set and BiS for C6)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+18% ATK and +35% Normal Attack DMG for sword wielders)',
+          },
+          {
+            referenceKey: 'GoldenTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Elemental Skill DMG)',
+          },
+          {
+            referenceKey: 'HuskOfOpulentDreams',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+30% DEF)',
+          },
+          {
+            referenceKey: 'ArchaicPetra',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Geo DMG Bonus)',
+          },
         ],
       },
     ],
@@ -54,8 +112,8 @@ export const v45Profiles: ReviewedCharacterProfile[] = [
       energyRequirements:
         'Burst costs 50 Energy with a 13.5s CD. In optimal rotations, building ER substats is not recommended because her Burst damage does not justify diverting offensive stats away from Skill damage. If casting Burst every rotation is desired: 110%–130% ER with triple Geo (Itto + Gorou + Zhongli); 150%–170% ER with Xilonen (2 Skills); 170%–190% ER with Navia (2 Skills); 200%–220% ER with Zhongli pillar hits; and 260%–290% ER in solo Geo (Noelle). Each Favonius proc reduces ER needs by 5%–15%.',
       combatTips: [
-        'Automaton Tamoto Construct Synergy: Tamoto lasts 17s with slashes every 3.6s. To summon the second Tamoto and double off-field damage output at C0, ensure a Geo Construct (Zhongli pillar, Albedo solar isotoma, Geo Traveler boulders, Ushi) is on field when casting Skill or within Tamoto\'s duration. At C1, simply bringing any second Geo party member summons the second Tamoto and extends attack range by 50%.',
-        'A1 Tapestry Quickswap Execution: Double-tapping Elemental Skill immediately triggers Tapestry, swapping instantly to the next character in line without triggering standard switch cooldowns. This enables seamless, ultra-fast rotations while priming Tamoto\'s Seize the Moment coordinated slashes.',
+        "Automaton Tamoto Construct Synergy: Tamoto lasts 17s with slashes every 3.6s. To summon the second Tamoto and double off-field damage output at C0, ensure a Geo Construct (Zhongli pillar, Albedo solar isotoma, Geo Traveler boulders, Ushi) is on field when casting Skill or within Tamoto's duration. At C1, simply bringing any second Geo party member summons the second Tamoto and extends attack range by 50%.",
+        "A1 Tapestry Quickswap Execution: Double-tapping Elemental Skill immediately triggers Tapestry, swapping instantly to the next character in line without triggering standard switch cooldowns. This enables seamless, ultra-fast rotations while priming Tamoto's Seize the Moment coordinated slashes.",
         'A1 Tailoring On-Field Infusion: Tapping Normal Attack after Skill grants 5s of Geo Infusion. In on-field driver or Lunar-Crystallize setups, execute N1C (Normal 1 -> Charged Attack) dash cancels for maximum motion value.',
         'Stat Allocation Priority: Prioritize CRIT Rate / CRIT DMG > DEF% > ATK%. While Chiori has dual ATK and DEF scaling, her DEF coefficients are vastly higher and benefit significantly from character level 90. DEF% Goblet can rival or outperform Geo DMG% Goblet depending on team buffs and weapon passive.',
         'A4 Passive The Finisher: Triggering Crystallize grants Chiori +20% Geo DMG Bonus for 20 seconds. In Geo + PHEC teams, Crystallize shields generated by Tamoto or teammates ensure permanent 100% uptime on this buff.',
@@ -100,7 +158,7 @@ export const v45Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           category: 'Alternative',
           notes:
-            'Event-exclusive 4★ weapon providing 69.0% DEF and boosting Elemental Skill DMG by 80% of DEF. Outstanding synergy with Chiori\'s high base DEF and DEF scalings.',
+            "Event-exclusive 4★ weapon providing 69.0% DEF and boosting Elemental Skill DMG by 80% of DEF. Outstanding synergy with Chiori's high base DEF and DEF scalings.",
         },
         {
           name: 'Flute of Ezpitzal',

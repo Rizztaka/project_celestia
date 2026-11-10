@@ -19,10 +19,32 @@ export const v28Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['elementalMastery', 'energyRecharge', 'critRate', 'critDmg', 'atkPercent'],
         sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Uncontested Best in Slot (+15% Anemo DMG, +60% Swirl DMG, -40% Elemental RES shred)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 2, label: 'Pure Swirl / Hyperbloom Alternative (+80 EM, high EM stacking if another VV holder exists)' },
-          { referenceKey: 'ViridescentVenerer', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Anemo DMG)' },
-          { referenceKey: 'WanderersTroupe', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+80 EM)' },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Uncontested Best in Slot (+15% Anemo DMG, +60% Swirl DMG, -40% Elemental RES shred)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 2,
+            label:
+              'Pure Swirl / Hyperbloom Alternative (+80 EM, high EM stacking if another VV holder exists)',
+          },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Anemo DMG)',
+          },
+          {
+            referenceKey: 'WanderersTroupe',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+80 EM)',
+          },
         ],
       },
       {
@@ -35,24 +57,50 @@ export const v28Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['critRate', 'critDmg', 'atkPercent', 'elementalMastery', 'energyRecharge'],
         sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot for Mixed Team Damage (-40% RES shred benefits off-field sub-DPS)' },
-          { referenceKey: 'DesertPavilionChronicle', pieces: 4, tier: 1, label: 'Best in Slot Hypercarry (+15% Anemo DMG, +10% Normal Attack SPD, +40% NA/CA DMG)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 1, label: 'Best in Slot with Furina (+36% Crit Rate from HP fluctuation)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 2, label: 'Alternative 2pc Mix (+18% ATK)' },
-          { referenceKey: 'ViridescentVenerer', pieces: 2, tier: 2, label: 'Alternative 2pc Mix (+15% Anemo DMG)' },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot for Mixed Team Damage (-40% RES shred benefits off-field sub-DPS)',
+          },
+          {
+            referenceKey: 'DesertPavilionChronicle',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot Hypercarry (+15% Anemo DMG, +10% Normal Attack SPD, +40% NA/CA DMG)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot with Furina (+36% Crit Rate from HP fluctuation)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc Mix (+18% ATK)',
+          },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 2,
+            tier: 2,
+            label: 'Alternative 2pc Mix (+15% Anemo DMG)',
+          },
         ],
       },
     ],
     guide: {
       sourceUrl: 'https://keqingmains.com/q/heizou-quickguide/',
       playstyleSummary:
-        'Inazuma\'s prodigy detective and agile 4-star Anemo melee catalyst user. Excels across three flexible roles: an on-field Swirl driver applying rapid Anemo fisticuffs to trigger Electro-Charged or Bloom reactions, a 4pc Viridescent Venerer resistance shred support buffing team EM via A4, and an on-field Anemo nuker unleashing massive 4-stack Conviction Heartstopper Strikes. His 40-cost, 12s cooldown Burst (Windmuster Kick) groups enemies and detonates Iris explosions.',
+        "Inazuma's prodigy detective and agile 4-star Anemo melee catalyst user. Excels across three flexible roles: an on-field Swirl driver applying rapid Anemo fisticuffs to trigger Electro-Charged or Bloom reactions, a 4pc Viridescent Venerer resistance shred support buffing team EM via A4, and an on-field Anemo nuker unleashing massive 4-stack Conviction Heartstopper Strikes. His 40-cost, 12s cooldown Burst (Windmuster Kick) groups enemies and detonates Iris explosions.",
       energyRequirements:
         'On-field Driver / DPS: 100%–110% ER with 2 Skill uses per rotation (170%–180% with 1 Skill at C0–C3; 130%–140% at C4+). Quickswap Support: 120%–130% with 2 Skill uses (200%+ with 1 Skill). C4 restores up to 13.5 energy upon Burst explosion, reducing ER requirements across all team archetypes down to 100% baseline.',
       combatTips: [
-        'Conviction Strike (Heartstopper E): Gaining 4 Declension stacks triggers the Conviction effect, vastly increasing Heartstopper Strike\'s damage and AoE. Never hold E to manually charge stacks; instead, build stacks instantly through on-field Swirls via A1 Paradoxical Practice!',
-        'Melee Attack Combos: Heizou\'s Normal and Charged Attacks do not share an ICD. Performing a hold-attack (N1C) triggers two distinct Swirls instantaneously, granting 2 Declension stacks in under half a second.',
-        'A4 EM Party Buff (Penetrative Reasoning): Landing Heartstopper Strike buffs all party members\' (excluding Heizou) Elemental Mastery by 80 for 10s, boosting team reaction damage.',
+        "Conviction Strike (Heartstopper E): Gaining 4 Declension stacks triggers the Conviction effect, vastly increasing Heartstopper Strike's damage and AoE. Never hold E to manually charge stacks; instead, build stacks instantly through on-field Swirls via A1 Paradoxical Practice!",
+        "Melee Attack Combos: Heizou's Normal and Charged Attacks do not share an ICD. Performing a hold-attack (N1C) triggers two distinct Swirls instantaneously, granting 2 Declension stacks in under half a second.",
+        "A4 EM Party Buff (Penetrative Reasoning): Landing Heartstopper Strike buffs all party members' (excluding Heizou) Elemental Mastery by 80 for 10s, boosting team reaction damage.",
         'Windmuster Kick (Burst) Mechanics: 40 energy cost, 12s cooldown. Kicks a Vacuum Slugger that pulls enemies and inflicts Windmuster Iris on up to 4 enemies affected by Hydro/Pyro/Cryo/Electro, detonating for corresponding elemental AoE damage after a short delay.',
         'Quickswap Nuke Combo: Open with N1C -> Q -> N1 -> E. This guarantees max 4 Declension stacks, triggers 4pc VV resistance shred, and launches a max-power Conviction punch in under 2 seconds.',
         'Driver Level 90 Imperative: When played as an on-field Swirl driver in Electro-Charged or Hyperbloom teams, leveling Heizou to 90 is critical for base Swirl transformative damage.',

@@ -20,13 +20,52 @@ export const v44Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'atkPercent', 'atk', 'healingBonus', 'critRate'],
         sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot (-40% Elemental RES Shred for Pyro, Hydro, Electro, Cryo plunge carries or off-field sub-DPS units)' },
-          { referenceKey: 'SongOfDaysPast', pieces: 4, tier: 1, label: 'Best in Slot (+15% Healing Bonus and Yearning additive damage buff based on recorded healing; premier choice for Xiao or Anemo/Geo teams)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 1, label: 'Best in Slot (+20% Team ATK for 12s on Burst cast; top choice in Xiao teams if no teammate holds Noblesse)' },
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 1, label: 'Best in Slot (+15% Healing Bonus and converts massive burst healing into 30,000 damage bubble detonations)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+18% ATK)' },
-          { referenceKey: 'ShimenawasReminiscence', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+18% ATK)' },
-          { referenceKey: 'EmblemOfSeveredFate', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+20% Energy Recharge)' },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (-40% Elemental RES Shred for Pyro, Hydro, Electro, Cryo plunge carries or off-field sub-DPS units)',
+          },
+          {
+            referenceKey: 'SongOfDaysPast',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+15% Healing Bonus and Yearning additive damage buff based on recorded healing; premier choice for Xiao or Anemo/Geo teams)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+20% Team ATK for 12s on Burst cast; top choice in Xiao teams if no teammate holds Noblesse)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+15% Healing Bonus and converts massive burst healing into 30,000 damage bubble detonations)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+18% ATK)',
+          },
+          {
+            referenceKey: 'ShimenawasReminiscence',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+18% ATK)',
+          },
+          {
+            referenceKey: 'EmblemOfSeveredFate',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+20% Energy Recharge)',
+          },
         ],
       },
       {
@@ -40,10 +79,30 @@ export const v44Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'atkPercent', 'atk', 'healingBonus'],
         sets: [
-          { referenceKey: 'SongOfDaysPast', pieces: 4, tier: 1, label: 'Best in Slot (+15% Healing Bonus and Yearning team damage bonus)' },
-          { referenceKey: 'OceanHuedClam', pieces: 4, tier: 1, label: 'Best in Slot (Healing into Foam bubble damage)' },
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot (-40% RES Shred support)' },
-          { referenceKey: 'NoblesseOblige', pieces: 4, tier: 2, label: 'Alternative (+20% Team ATK on Burst)' },
+          {
+            referenceKey: 'SongOfDaysPast',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+15% Healing Bonus and Yearning team damage bonus)',
+          },
+          {
+            referenceKey: 'OceanHuedClam',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (Healing into Foam bubble damage)',
+          },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (-40% RES Shred support)',
+          },
+          {
+            referenceKey: 'NoblesseOblige',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+20% Team ATK on Burst)',
+          },
         ],
       },
       {
@@ -57,21 +116,31 @@ export const v44Profiles: ReviewedCharacterProfile[] = [
         },
         priorityStats: ['energyRecharge', 'atkPercent', 'critRate', 'atk'],
         sets: [
-          { referenceKey: 'ViridescentVenerer', pieces: 4, tier: 1, label: 'Best in Slot (-40% Swirled Elemental RES Shred)' },
-          { referenceKey: 'SongOfDaysPast', pieces: 4, tier: 2, label: 'Alternative (Healing support)' },
+          {
+            referenceKey: 'ViridescentVenerer',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (-40% Swirled Elemental RES Shred)',
+          },
+          {
+            referenceKey: 'SongOfDaysPast',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (Healing support)',
+          },
         ],
       },
     ],
     guide: {
       sourceUrl: 'https://keqingmains.com/q/xianyun-quickguide/',
       playstyleSummary:
-        '5-star Anemo Catalyst adeptus (Cloud Retainer) operating as a revolutionary plunging attack enabler, universal buffer, and premier teamwide burst healer. White Clouds at Dawn (Elemental Skill, 12s CD) enters Cloud Transmogrification, allowing her to leap forward using Skyladder up to 3 times before converting her Plunging Attack into Driftcloud Wave (generating 5 Anemo particles on hit and granting up to +10% Plunging Attack CRIT Rate for 16s via A1 Galefeather Pursuit). In standard combat, tapping Skill once (1x E -> Plunge) is optimal to minimize field time. Stars Gather at Dusk (Elemental Burst, 70 Energy cost, 18s CD, 16s duration) summons Starwicker, delivering instantaneous teamwide burst healing scaling with ATK followed by continuous active character healing. Starwicker grants 8 stacks of Adeptal Assistance, boosting party jump height so ANY character can perform continuous Plunging Attacks! Her A4 Passive Consider, the Adeptus in Her Realm increases active character Plunging Attack damage by 200% of Xianyun\'s ATK (capped at +9,000 base damage at 4,500 ATK), acting as an additive base DMG boost that scales with the plunge attacker\'s DMG% and CRIT multipliers.',
+        "5-star Anemo Catalyst adeptus (Cloud Retainer) operating as a revolutionary plunging attack enabler, universal buffer, and premier teamwide burst healer. White Clouds at Dawn (Elemental Skill, 12s CD) enters Cloud Transmogrification, allowing her to leap forward using Skyladder up to 3 times before converting her Plunging Attack into Driftcloud Wave (generating 5 Anemo particles on hit and granting up to +10% Plunging Attack CRIT Rate for 16s via A1 Galefeather Pursuit). In standard combat, tapping Skill once (1x E -> Plunge) is optimal to minimize field time. Stars Gather at Dusk (Elemental Burst, 70 Energy cost, 18s CD, 16s duration) summons Starwicker, delivering instantaneous teamwide burst healing scaling with ATK followed by continuous active character healing. Starwicker grants 8 stacks of Adeptal Assistance, boosting party jump height so ANY character can perform continuous Plunging Attacks! Her A4 Passive Consider, the Adeptus in Her Realm increases active character Plunging Attack damage by 200% of Xianyun's ATK (capped at +9,000 base damage at 4,500 ATK), acting as an additive base DMG boost that scales with the plunge attacker's DMG% and CRIT multipliers.",
       energyRequirements:
-        'Burst costs 70 Energy and must be cast every rotation to sustain Starwicker jumping and teamwide healing: With Crane\'s Echoing Call: Solo Anemo 190%–260% ER; With Xiao 140%–150% ER; With Xiao + C6 Faruzan 100%–120% ER. With Other Catalysts (Favonius / Oathsworn / ATK weapons): Solo Anemo 220%–300% ER (170%–190% with Favonius Codex); With Xiao 200%–210% ER; With Xiao + C6 Faruzan 120%–135% ER. Teammate Favonius procs reduce requirements by 10%–20% each.',
+        "Burst costs 70 Energy and must be cast every rotation to sustain Starwicker jumping and teamwide healing: With Crane's Echoing Call: Solo Anemo 190%–260% ER; With Xiao 140%–150% ER; With Xiao + C6 Faruzan 100%–120% ER. With Other Catalysts (Favonius / Oathsworn / ATK weapons): Solo Anemo 220%–300% ER (170%–190% with Favonius Codex); With Xiao 200%–210% ER; With Xiao + C6 Faruzan 120%–135% ER. Teammate Favonius procs reduce requirements by 10%–20% each.",
       combatTips: [
-        'Adeptal Assistance Jump Mechanics: Starwicker grants 8 stacks of Adeptal Assistance during its 16s duration. Each time the active character jumps and unleashes a Plunging Attack, 1 stack is consumed, boosting jump height to maximum and triggering Xianyun\'s colossal A4 additive base damage bonus.',
+        "Adeptal Assistance Jump Mechanics: Starwicker grants 8 stacks of Adeptal Assistance during its 16s duration. Each time the active character jumps and unleashes a Plunging Attack, 1 stack is consumed, boosting jump height to maximum and triggering Xianyun's colossal A4 additive base damage bonus.",
         'Single E Tap vs Triple Jump: In pre-C6 combat rotations, always press Skill once (`1x E -> Plunge`). Leaping 3 times generates the exact same 5 Anemo particles and triggers the A1 buff, but wastes 2+ seconds of field time and cuts into teammate buff uptimes (Bennett, Furina, Faruzan).',
-        'A4 4,500 ATK Cap Rule: Consider, the Adeptus in Her Realm grants 200% of Xianyun\'s ATK as flat base damage to Plunging Attacks up to a maximum cap of +9,000 damage at 4,500 ATK. Prioritize Energy Recharge first to ensure 100% Burst uptime, then invest all remaining stats into ATK% Sands, Goblet, and Circlet.',
+        "A4 4,500 ATK Cap Rule: Consider, the Adeptus in Her Realm grants 200% of Xianyun's ATK as flat base damage to Plunging Attacks up to a maximum cap of +9,000 damage at 4,500 ATK. Prioritize Energy Recharge first to ensure 100% Burst uptime, then invest all remaining stats into ATK% Sands, Goblet, and Circlet.",
         'C2 God-Tier Plunge Scaling: Constellation 2 grants +20% ATK for 15s after casting Skill and doubles her A4 buff to 400% of her ATK, with the cap doubled to an astounding +18,000 base damage at 4,500 ATK (the most transformative C2 support spike in Genshin history).',
         'Universal Enabler Synergies: Enables top-tier plunging carries: Xiao (eliminates energy and health attrition), Gaming (drastically amplifies Charmed Cloudstrider Pyro plunges), Diluc (Dragonstrike-tier plunge multipliers), Hu Tao (jump cancel into plunge), and Furina (effortlessly caps 300 Fanfare via massive teamwide healing).',
       ],
@@ -138,7 +207,7 @@ export const v44Profiles: ReviewedCharacterProfile[] = [
           rarity: 3,
           category: 'Alternative',
           notes:
-            '3★ support catalyst granting +48% ATK to the next swapped carry (Xiao, Gaming, Diluc); lower personal ATK contribution is compensated by the carry\'s massive ATK gain.',
+            "3★ support catalyst granting +48% ATK to the next swapped carry (Xiao, Gaming, Diluc); lower personal ATK contribution is compensated by the carry's massive ATK gain.",
         },
         {
           name: 'Prototype Amber',
@@ -168,23 +237,72 @@ export const v44Profiles: ReviewedCharacterProfile[] = [
           Goblet: ['pyroDmg', 'atkPercent'],
           Circlet: ['critRate', 'critDmg'],
         },
-        priorityStats: ['critRate', 'critDmg', 'elementalMastery', 'atkPercent', 'energyRecharge', 'atk'],
+        priorityStats: [
+          'critRate',
+          'critDmg',
+          'elementalMastery',
+          'atkPercent',
+          'energyRecharge',
+          'atk',
+        ],
         sets: [
-          { referenceKey: 'CrimsonWitchOfFlames', pieces: 4, tier: 1, label: 'Best in Slot (+15% Pyro DMG, +15% Melt/Vape reaction DMG, and maxes out 3 stacks for +22.5% Pyro DMG via frequent Skill casts)' },
-          { referenceKey: 'MarechausseeHunter', pieces: 4, tier: 1, label: 'Best in Slot (+36% CRIT Rate via Bestial Ascent HP drain and healing; beware of CRIT Rate overcap at C6)' },
-          { referenceKey: 'LongNightsOath', pieces: 4, tier: 1, label: 'Best in Slot (+20% Skill/Burst DMG and stacking Plunging Attack DMG)' },
-          { referenceKey: 'GildedDreams', pieces: 4, tier: 2, label: 'Alternative (+80 EM and stacking ATK/EM buffs for Melt and Vaporize teams)' },
-          { referenceKey: 'VermillionHereafter', pieces: 4, tier: 2, label: 'Alternative (+18% ATK and stacking ATK% on continuous HP loss)' },
-          { referenceKey: 'CrimsonWitchOfFlames', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+15% Pyro DMG Bonus)' },
-          { referenceKey: 'GildedDreams', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+80 Elemental Mastery)' },
-          { referenceKey: 'GladiatorsFinale', pieces: 2, tier: 2, label: 'Transitional 2pc Mix (+18% ATK)' },
+          {
+            referenceKey: 'CrimsonWitchOfFlames',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+15% Pyro DMG, +15% Melt/Vape reaction DMG, and maxes out 3 stacks for +22.5% Pyro DMG via frequent Skill casts)',
+          },
+          {
+            referenceKey: 'MarechausseeHunter',
+            pieces: 4,
+            tier: 1,
+            label:
+              'Best in Slot (+36% CRIT Rate via Bestial Ascent HP drain and healing; beware of CRIT Rate overcap at C6)',
+          },
+          {
+            referenceKey: 'LongNightsOath',
+            pieces: 4,
+            tier: 1,
+            label: 'Best in Slot (+20% Skill/Burst DMG and stacking Plunging Attack DMG)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+80 EM and stacking ATK/EM buffs for Melt and Vaporize teams)',
+          },
+          {
+            referenceKey: 'VermillionHereafter',
+            pieces: 4,
+            tier: 2,
+            label: 'Alternative (+18% ATK and stacking ATK% on continuous HP loss)',
+          },
+          {
+            referenceKey: 'CrimsonWitchOfFlames',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+15% Pyro DMG Bonus)',
+          },
+          {
+            referenceKey: 'GildedDreams',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+80 Elemental Mastery)',
+          },
+          {
+            referenceKey: 'GladiatorsFinale',
+            pieces: 2,
+            tier: 2,
+            label: 'Transitional 2pc Mix (+18% ATK)',
+          },
         ],
       },
     ],
     guide: {
       sourceUrl: 'https://keqingmains.com/q/gaming-quickguide/',
       playstyleSummary:
-        '4-star Pyro Claymore guard of the Sword and Strongbox transport agency delivering premiere on-field Pyro plunging damage through his Wushou dance arts. Bestial Ascent (Elemental Skill, 6s CD) pounces forward, launching Gaming high into the air upon colliding with a target or surface; pressing Plunging Attack converts into Charmed Cloudstrider, dealing non-overrideable AoE Pyro Plunging Attack DMG (scaling with Skill level, NOT Normal Attack level!). Landing consumes 15% Max HP (cannot drop below 10%). Suanni\'s Gilded Dance (Elemental Burst, 60 Energy cost, 15s CD, 12s duration) summons companion Suanni Man Chai, dealing AoE Pyro damage and healing Gaming for 30% Max HP. Man Chai rolls to a nearby enemy and rushes back to Gaming: whenever Man Chai reunites with Gaming while above 50% HP, Bestial Ascent\'s cooldown is INSTANTLY reset! Landing a Charmed Cloudstrider plunge immediately summons Man Chai again, enabling 4 to 6 devastating forward Melt or reverse Vaporize Pyro plunges per rotation.',
+        "4-star Pyro Claymore guard of the Sword and Strongbox transport agency delivering premiere on-field Pyro plunging damage through his Wushou dance arts. Bestial Ascent (Elemental Skill, 6s CD) pounces forward, launching Gaming high into the air upon colliding with a target or surface; pressing Plunging Attack converts into Charmed Cloudstrider, dealing non-overrideable AoE Pyro Plunging Attack DMG (scaling with Skill level, NOT Normal Attack level!). Landing consumes 15% Max HP (cannot drop below 10%). Suanni's Gilded Dance (Elemental Burst, 60 Energy cost, 15s CD, 12s duration) summons companion Suanni Man Chai, dealing AoE Pyro damage and healing Gaming for 30% Max HP. Man Chai rolls to a nearby enemy and rushes back to Gaming: whenever Man Chai reunites with Gaming while above 50% HP, Bestial Ascent's cooldown is INSTANTLY reset! Landing a Charmed Cloudstrider plunge immediately summons Man Chai again, enabling 4 to 6 devastating forward Melt or reverse Vaporize Pyro plunges per rotation.",
       energyRequirements:
         'Burst costs 60 Energy and must be cast every rotation to summon Man Chai and reset Skill cooldowns: With C0–C3: In Melt teams 150%–180% ER (170%–180% with Bennett 1x Tap E; 150% with 2x Tap E); In Vape teams 125%–145% ER. With C4–C6 (refunds 2 Energy per Charmed Cloudstrider hit, generating 10–12 Energy per rotation): In Melt teams 115%–135% ER; In Vape teams 100%–110% ER. Each team Favonius proc reduces requirements by 15%–20%.',
       combatTips: [
@@ -240,16 +358,14 @@ export const v44Profiles: ReviewedCharacterProfile[] = [
           tier: 1,
           rarity: 5,
           category: 'BiS',
-          notes:
-            '22.1% CRIT Rate and +20% ATK stat stick with high Base ATK.',
+          notes: '22.1% CRIT Rate and +20% ATK stat stick with high Base ATK.',
         },
         {
           name: 'Beacon of the Reed Sea',
           tier: 1,
           rarity: 5,
           category: 'BiS',
-          notes:
-            '33.1% CRIT Rate and ATK buffs upon taking damage or hitting with Skill.',
+          notes: '33.1% CRIT Rate and ATK buffs upon taking damage or hitting with Skill.',
         },
         {
           name: 'Mailed Flower',
@@ -273,7 +389,7 @@ export const v44Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           category: 'F2P',
           notes:
-            'Fontaine craftable claymore offering 41.3% ATK substat and up to +48% ATK when receiving healing (easily triggered by Gaming\'s self-healing and team healers).',
+            "Fontaine craftable claymore offering 41.3% ATK substat and up to +48% ATK when receiving healing (easily triggered by Gaming's self-healing and team healers).",
         },
         {
           name: "Wolf's Gravestone",
@@ -288,8 +404,7 @@ export const v44Profiles: ReviewedCharacterProfile[] = [
           tier: 2,
           rarity: 5,
           category: 'Alternative',
-          notes:
-            'High ATK% secondary stat and doubled ATK buffs when protected by a shield.',
+          notes: 'High ATK% secondary stat and doubled ATK buffs when protected by a shield.',
         },
         {
           name: 'Blackcliff Slasher',

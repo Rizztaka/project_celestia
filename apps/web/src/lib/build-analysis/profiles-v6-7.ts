@@ -54,9 +54,9 @@ export const v67Profiles: ReviewedCharacterProfile[] = [
       energyRequirements:
         '100% baseline when bursting every other rotation or when ER requirements exceed 140% (where building ER is a DPS loss compared to offensive stats). If aiming to burst every rotation with Favonius teammates: 130–165% with +1 Cryo, or 120–140% with +2 Cryo / +2 Electro. Sandrone should not sacrifice ATK% or CRIT for ER and should use Burst when naturally available.',
       combatTips: [
-        'ATK% Goblet Over Cryo DMG%: Sandrone\'s primary damage is direct Stellar-Conduct, which scales with ATK, CRIT, and EM. Cryo DMG Bonus does not affect Stellar-Conduct reaction damage, making ATK% Goblet the optimal choice.',
-        'Talent Priority (Normal Attack > Burst > Skill): Her personal damage overwhelmingly originates from Fagio\'s Charged Attack beam strikes governed by the Normal Attack talent. Level 80/90 is sufficient before pushing 90.',
-        'Burst Every Other Rotation Invariant: Sandrone\'s Burst deals high damage and consumes A1 Refined Tactics stacks, but investing in >140% ER hurts her team DPS. In practice, 100% baseline ER with Burst every other rotation is recommended.',
+        "ATK% Goblet Over Cryo DMG%: Sandrone's primary damage is direct Stellar-Conduct, which scales with ATK, CRIT, and EM. Cryo DMG Bonus does not affect Stellar-Conduct reaction damage, making ATK% Goblet the optimal choice.",
+        "Talent Priority (Normal Attack > Burst > Skill): Her personal damage overwhelmingly originates from Fagio's Charged Attack beam strikes governed by the Normal Attack talent. Level 80/90 is sufficient before pushing 90.",
+        "Burst Every Other Rotation Invariant: Sandrone's Burst deals high damage and consumes A1 Refined Tactics stacks, but investing in >140% ER hurts her team DPS. In practice, 100% baseline ER with Burst every other rotation is recommended.",
         'Skill Cancels & Fagio Repair: Sandrone can cancel her Skill (hovercraft) animation via Normal Attack (N0 cancel: tap N1 then immediately start Charged Attack) or Dash (ED cancel) to shorten field time while ensuring Fagio cools down its Decoding Power below 50.',
       ],
       weapons: [
@@ -97,7 +97,7 @@ export const v67Profiles: ReviewedCharacterProfile[] = [
           tier: 1,
           category: 'F2P',
           notes:
-            '4★ Craftable F2P BiS (Sandrone\'s best accessible 4★ option in teams with a healer like Qiqi, Diona, or Escoffier)',
+            "4★ Craftable F2P BiS (Sandrone's best accessible 4★ option in teams with a healer like Qiqi, Diona, or Escoffier)",
         },
         {
           name: 'Mailed Flower',

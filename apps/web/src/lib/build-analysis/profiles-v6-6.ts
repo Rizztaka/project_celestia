@@ -28,28 +28,25 @@ export const v66Profiles: ReviewedCharacterProfile[] = [
             pieces: 4,
             tier: 1,
             label:
-              'Best in Slot (+40% ATK & +20% CRIT Rate upon completing Witch\'s Homework as a Hexerei character)',
+              "Best in Slot (+40% ATK & +20% CRIT Rate upon completing Witch's Homework as a Hexerei character)",
           },
           {
             referenceKey: 'MarechausseeHunter',
             pieces: 4,
             tier: 1,
-            label:
-              'Best in Slot with Furina (+15% Normal/Charged DMG & +36% CRIT Rate)',
+            label: 'Best in Slot with Furina (+15% Normal/Charged DMG & +36% CRIT Rate)',
           },
           {
             referenceKey: 'UnfinishedReverie',
             pieces: 4,
             tier: 1,
-            label:
-              'Best in Slot in Burnmelt Teams (+50% DMG while Burning is active)',
+            label: 'Best in Slot in Burnmelt Teams (+50% DMG while Burning is active)',
           },
           {
             referenceKey: 'BlizzardStrayer',
             pieces: 4,
             tier: 2,
-            label:
-              'Alternative in Freeze Compositions (+15% Cryo DMG & up to +40% CRIT Rate)',
+            label: 'Alternative in Freeze Compositions (+15% Cryo DMG & up to +40% CRIT Rate)',
           },
           {
             referenceKey: 'GladiatorsFinale',
@@ -69,8 +66,8 @@ export const v66Profiles: ReviewedCharacterProfile[] = [
       combatTips: [
         'Zero ER Invariant: Lohen does not build Energy Recharge; his damage is overwhelmingly loaded into his Elemental Skill stance. Cast Burst whenever available as filler.',
         'Talent Priority (Skill > Burst >> NA): Skill levels govern his enhanced Cryo strikes and damage multipliers. Normal Attack talent is not utilized and remains at Level 1.',
-        'Hexerei Synergy: As a Hexerei character, Lohen activates Witch\'s Homework and 4pc A Day Carved From Rising Winds (+20% CRIT Rate) when paired with Hexerei teammates like Nicole, Durin, or Prune.',
-        'Melt Driver Dynamics: Lohen\'s rapid Cryo application allows off-field Pyro sub-DPS units (Durin / Xiangling) to trigger massive Forward Melt hits, while in Burning teams Lohen triggers continuous Reverse Melt.',
+        "Hexerei Synergy: As a Hexerei character, Lohen activates Witch's Homework and 4pc A Day Carved From Rising Winds (+20% CRIT Rate) when paired with Hexerei teammates like Nicole, Durin, or Prune.",
+        "Melt Driver Dynamics: Lohen's rapid Cryo application allows off-field Pyro sub-DPS units (Durin / Xiangling) to trigger massive Forward Melt hits, while in Burning teams Lohen triggers continuous Reverse Melt.",
       ],
       weapons: [
         {
@@ -94,24 +91,21 @@ export const v66Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'Alternative',
-          notes:
-            '5★ Premier Stat Stick (66.2% CRIT DMG & HP-to-ATK conversion)',
+          notes: '5★ Premier Stat Stick (66.2% CRIT DMG & HP-to-ATK conversion)',
         },
         {
           name: 'Calamity Queller',
           rarity: 5,
           tier: 1,
           category: 'Alternative',
-          notes:
-            '5★ High Base ATK Alternative (741 Base ATK and generous Elemental DMG buffs)',
+          notes: '5★ High Base ATK Alternative (741 Base ATK and generous Elemental DMG buffs)',
         },
         {
           name: 'Staff of the Scarlet Sands',
           rarity: 5,
           tier: 1,
           category: 'Alternative',
-          notes:
-            '5★ Melt BiS Alternative (44.1% CRIT Rate & converts EM to Flat ATK)',
+          notes: '5★ Melt BiS Alternative (44.1% CRIT Rate & converts EM to Flat ATK)',
         },
         {
           name: 'Lumidouce Elegy',
@@ -125,8 +119,7 @@ export const v66Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'Alternative',
-          notes:
-            '4★ Battle Pass BiS (36.8% CRIT Rate and strong single-target ATK buffs)',
+          notes: '4★ Battle Pass BiS (36.8% CRIT Rate and strong single-target ATK buffs)',
         },
         {
           name: 'Blackcliff Pole',
@@ -140,14 +133,16 @@ export const v66Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 2,
           category: 'Alternative',
-          notes: '4★ Battle Pass Alternative (27.6% CRIT Rate & +120–240 EM in multi-element teams)',
+          notes:
+            '4★ Battle Pass Alternative (27.6% CRIT Rate & +120–240 EM in multi-element teams)',
         },
         {
           name: 'Favonius Lance',
           rarity: 4,
           tier: 2,
           category: 'Utility',
-          notes: '4★ Utility Battery Alternative (Generates neutral particles on CRIT to battery team)',
+          notes:
+            '4★ Utility Battery Alternative (Generates neutral particles on CRIT to battery team)',
         },
         {
           name: 'White Tassel',
@@ -192,15 +187,13 @@ export const v66Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'NoblesseOblige',
             pieces: 4,
             tier: 1,
-            label:
-              'Best in Slot Alternative (+20% Teamwide ATK for 12s on Burst)',
+            label: 'Best in Slot Alternative (+20% Teamwide ATK for 12s on Burst)',
           },
           {
             referenceKey: 'ScrollOfTheHeroOfCinderCity',
             pieces: 4,
             tier: 2,
-            label:
-              'Alternative (+40% Teamwide Elemental DMG bonus upon triggering reaction)',
+            label: 'Alternative (+40% Teamwide Elemental DMG bonus upon triggering reaction)',
           },
           {
             referenceKey: 'GladiatorsFinale',
@@ -218,7 +211,7 @@ export const v66Profiles: ReviewedCharacterProfile[] = [
       energyRequirements:
         '200–230% ER as Solo Pyro; drops by ~30–50% with signature weapon Angelos Heptades, by ~20–50% with +1 Pyro (Durin/Bennett) or Venti, and by ~10–20% per Favonius proc. In pure Skill buffer/shielder rotations where Burst is omitted, ER can be completely ignored.',
       combatTips: [
-        'Triple ATK% Main Stat Priority: Nicole\'s shield absorption and teamwide Flat ATK buff scale exclusively from her total ATK. Triple ATK% (Sands, Goblet, Circlet) with ER substats maximizes her utility.',
+        "Triple ATK% Main Stat Priority: Nicole's shield absorption and teamwide Flat ATK buff scale exclusively from her total ATK. Triple ATK% (Sands, Goblet, Circlet) with ER substats maximizes her utility.",
         'Talent Priority (Skill > Burst >> NA): Skill provides her shield and Flat ATK sharing; Burst adds coordinated Pyro strikes. Her Normal Attack contributes negligible utility and should remain at Level 1.',
         'Hexerei Backbone (Durcole & Varka Cores): Pair Nicole with Hexerei teammates (Durin, Prune, Varka, Lohen) to activate the full 2-character requirement of 4pc Celestial Gift (+40% teamwide Elemental DMG%).',
         'Flexible Burst Invariant: In short buff window rotations or high-ER requirements without Pyro batteries, Nicole can skip casting Burst entirely to preserve field time and zero out ER constraints.',
@@ -283,8 +276,7 @@ export const v66Profiles: ReviewedCharacterProfile[] = [
           rarity: 4,
           tier: 1,
           category: 'Utility',
-          notes:
-            '4★ Utility Battery BiS (45.9% ER & neutral energy particle generation on CRIT)',
+          notes: '4★ Utility Battery BiS (45.9% ER & neutral energy particle generation on CRIT)',
         },
         {
           name: 'Thrilling Tales of Dragon Slayers',
@@ -359,15 +351,13 @@ export const v66Profiles: ReviewedCharacterProfile[] = [
             referenceKey: 'ScrollOfTheHeroOfCinderCity',
             pieces: 4,
             tier: 2,
-            label:
-              'Alternative (+40% Teamwide Elemental DMG bonus upon triggering reaction)',
+            label: 'Alternative (+40% Teamwide Elemental DMG bonus upon triggering reaction)',
           },
           {
             referenceKey: 'NoblesseOblige',
             pieces: 4,
             tier: 2,
-            label:
-              'Alternative (+20% Teamwide ATK for 12s on Burst)',
+            label: 'Alternative (+20% Teamwide ATK for 12s on Burst)',
           },
           {
             referenceKey: 'GladiatorsFinale',
@@ -385,7 +375,7 @@ export const v66Profiles: ReviewedCharacterProfile[] = [
       energyRequirements:
         '245–285% ER as Solo Anemo; 185–205% with +1 Anemo. Favonius Codex reduces ER requirements by 30–60%. C1 reduces ER requirements by 30–50%.',
       combatTips: [
-        'Zero Talent Investment Invariant: Prune\'s buffing capabilities scale from her ATK stat and passive talents, not talent multipliers. All three talents (Normal Attack, Skill, Burst) can comfortably remain at Level 1.',
+        "Zero Talent Investment Invariant: Prune's buffing capabilities scale from her ATK stat and passive talents, not talent multipliers. All three talents (Normal Attack, Skill, Burst) can comfortably remain at Level 1.",
         'Level 80/90 Sufficiency: Leveling Prune from 80/90 to 90 provides only a minuscule increase to base ATK; resources are better spent optimizing artifact main stats and ER substats.',
         'High ER Invariant & Favonius Codex: With severe ER requirements (245–285% solo Anemo), Favonius Codex paired with a CRIT Rate circlet or high ER Sands is practically mandatory for reliable Burst rotations.',
         'Varka Premier Buffer: Prune simultaneously fulfills both the Anemo resonance and Hexerei teammate requirements for Varka, granting teamwide DMG% and massive ATK buffs.',
@@ -396,16 +386,14 @@ export const v66Profiles: ReviewedCharacterProfile[] = [
           rarity: 5,
           tier: 1,
           category: 'BiS',
-          notes:
-            '5★ High Base ATK BiS (674 Base ATK maximizes her ATK-scaling teamwide DMG% buff)',
+          notes: '5★ High Base ATK BiS (674 Base ATK maximizes her ATK-scaling teamwide DMG% buff)',
         },
         {
           name: 'Memory of Dust',
           rarity: 5,
           tier: 1,
           category: 'Alternative',
-          notes:
-            '5★ High ATK Alternative (Generous ATK% bonuses to amplify her A4 buff ceiling)',
+          notes: '5★ High ATK Alternative (Generous ATK% bonuses to amplify her A4 buff ceiling)',
         },
         {
           name: 'Cashflow Supervision',

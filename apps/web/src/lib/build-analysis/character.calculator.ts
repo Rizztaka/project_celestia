@@ -222,17 +222,11 @@ export function analyzeCharacter(
           },
         );
       } else {
-        add(
-          'weapon-tier',
-          'source_mismatch',
-          'false',
-          'needs_attention',
-          {
-            weapon: text(c.weapon.name || 'equipped_weapon'),
-            tier: text('unranked'),
-            category: text('Alternative'),
-          },
-        );
+        add('weapon-tier', 'source_mismatch', 'false', 'needs_attention', {
+          weapon: text(c.weapon.name || 'equipped_weapon'),
+          tier: text('unranked'),
+          category: text('Alternative'),
+        });
       }
     }
     const talents = role.talentPriority.map((kind) => c.talents.find((t) => t.kind === kind));
@@ -295,30 +289,18 @@ export function analyzeCharacter(
 
     if (observedEr !== null) {
       if (isZeroEr && observedEr > 140) {
-        add(
-          'energy-context',
-          'conditional_alternative',
-          'false',
-          'depends_on_conditions',
-          {
-            reason: text('unnecessary_er'),
-            observed: text(`${Math.round(observedEr)}%`),
-          },
-        );
+        add('energy-context', 'conditional_alternative', 'false', 'depends_on_conditions', {
+          reason: text('unnecessary_er'),
+          observed: text(`${Math.round(observedEr)}%`),
+        });
       } else if (
         (energyGuide.includes('200%') || energyGuide.includes('200%–250%')) &&
         observedEr < 180
       ) {
-        add(
-          'energy-context',
-          'source_mismatch',
-          'false',
-          'needs_attention',
-          {
-            reason: text('energy_deficit'),
-            observed: text(`${Math.round(observedEr)}%`),
-          },
-        );
+        add('energy-context', 'source_mismatch', 'false', 'needs_attention', {
+          reason: text('energy_deficit'),
+          observed: text(`${Math.round(observedEr)}%`),
+        });
       } else {
         const specialEnergy = [10000114, 10000043, 10000047].includes(c.avatarId);
         add(

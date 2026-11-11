@@ -10,8 +10,8 @@ export function explainAdvice(result: ReturnType<typeof calculateAdvice>): strin
       'Harbinger of Dawn is not recorded on this character. Select the hypothetical example to explore its passive without changing equipment or implying ownership.',
     ];
   const lines: string[] = [];
-  if ('provenanceNotices' in result && Array.isArray((result as any).provenanceNotices)) {
-    lines.push(...((result as any).provenanceNotices as string[]));
+  if ('provenanceNotices' in result && Array.isArray(result.provenanceNotices)) {
+    lines.push(...result.provenanceNotices);
   }
   lines.push(
     result.basis === 'hypothetical'

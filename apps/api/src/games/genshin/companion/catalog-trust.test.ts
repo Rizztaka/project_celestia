@@ -316,7 +316,7 @@ describe('C2b source-bound catalog', () => {
 
   it('rejects advice when evidence authority is untrusted or tampered', () => {
     const input = fixture();
-    (input.manifest[0]!.sources[0] as any).authority = 'community';
+    (input.manifest[0]!.sources[0] as { authority: string }).authority = 'community';
     expect(new GenshinCatalogTrust(input).getAdvice(goal)).toMatchObject({
       available: false,
       reason: 'No primary or owner evidence covers these upgrade costs.',

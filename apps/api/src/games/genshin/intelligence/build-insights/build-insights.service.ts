@@ -138,24 +138,33 @@ export class BuildInsightsService {
       );
     const provenanceNotice =
       'Equipment assignment based on unverified snapshot; recommendations are conditional.';
+    const rowRecord = row as unknown as Record<string, unknown> | null;
+    const weaponRecord = rowRecord?.weapon as Record<string, unknown> | null | undefined;
+    const artifactsList = Array.isArray(rowRecord?.artifacts)
+      ? (rowRecord.artifacts as Record<string, unknown>[])
+      : [];
+    const receiptsList = Array.isArray(rowRecord?.receipts)
+      ? (rowRecord.receipts as Record<string, unknown>[])
+      : [];
+
     const isUnverifiedSnapshot =
       row !== null &&
       (!row.weaponRelationConsistent ||
         !row.artifactRelationsConsistent ||
-        (row as any).weapon?.reason === 'provenance_unknown' ||
-        (row as any).weapon?.reason === 'inconsistent_relation' ||
-        (row as any).artifacts?.some(
-          (a: any) =>
+        weaponRecord?.reason === 'provenance_unknown' ||
+        weaponRecord?.reason === 'inconsistent_relation' ||
+        artifactsList.some(
+          (a) =>
             a?.reason === 'provenance_unknown' || a?.reason === 'inconsistent_relation',
         ) ||
-        (row as any).receipts?.some(
-          (r: any) =>
+        receiptsList.some(
+          (r) =>
             r?.status === 'unknown' ||
             r?.reason === 'provenance_unknown' ||
             r?.reason === 'inconsistent_relation',
         ) ||
-        (row as any).provenance_unknown === true ||
-        (row as any).provenanceUnknown === true);
+        rowRecord?.provenance_unknown === true ||
+        rowRecord?.provenanceUnknown === true);
 
     const provenanceNotices: string[] = isUnverifiedSnapshot ? [provenanceNotice] : [];
 

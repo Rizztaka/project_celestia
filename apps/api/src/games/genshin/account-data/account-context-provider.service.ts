@@ -12,7 +12,7 @@ import {
   type ShowcaseSnapshot,
   showcaseUidSchema,
 } from '@celestia/api-contracts';
-import type { GenshinArtifact, GenshinWeapon, Prisma } from '@prisma/client';
+import type { GenshinAccount, GenshinArtifact, GenshinWeapon, Prisma } from '@prisma/client';
 
 import { prisma } from '@/core/db/prisma.js';
 import { NotFoundError } from '@/core/errors/app-error.js';
@@ -331,7 +331,21 @@ export class AccountContextProvider {
         options?.accountId ? { accountId: options.accountId } : {},
       );
       if (!imported.context.accountId) {
-        imported = await this.readFallbackSnapshot(userId, options?.accountId);
+        imported = await this.readFallbackSnapshot(userId, options?.accountId, null);
+      } else if (imported.evidence.characters.length === 0) {
+        const fallback = await this.readFallbackSnapshot(userId, options?.accountId, {
+          id: imported.context.accountId,
+          userId,
+          uid: imported.context.uid,
+          nickname: null,
+          adventureRank: null,
+          worldLevel: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        } satisfies GenshinAccount);
+        if (fallback.evidence.characters.length > 0) {
+          imported = fallback;
+        }
       }
     } catch (error) {
       if (error instanceof NotFoundError) {
@@ -758,8 +772,15 @@ export class AccountContextProvider {
     };
   }
 
-  private async readFallbackSnapshot(userId: string, requestedAccountId?: string) {
-    const account = await prisma.genshinAccount.findUnique({ where: { userId } });
+  private async readFallbackSnapshot(
+    userId: string,
+    requestedAccountId?: string,
+    existingAccount?: GenshinAccount | null,
+  ) {
+    const account =
+      existingAccount !== undefined
+        ? existingAccount
+        : await prisma.genshinAccount.findUnique({ where: { userId } });
     if (!account || (requestedAccountId && requestedAccountId !== account.id)) {
       throw new NotFoundError('No Genshin Impact account found. Please import your data first.');
     }

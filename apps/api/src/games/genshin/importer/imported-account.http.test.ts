@@ -19,6 +19,7 @@ vi.mock('@/core/db/prisma.js', () => ({
   prisma: {
     session: { findFirst: storage.session },
     user: { findUnique: async ({ where }: { where: { id: string } }) => ({ id: where.id }) },
+    genshinAccount: { findUnique: storage.snapshot },
     $transaction: async (read: (tx: unknown) => unknown) =>
       read({ genshinAccount: { findUnique: storage.snapshot } }),
   },

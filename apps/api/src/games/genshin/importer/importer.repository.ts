@@ -38,9 +38,7 @@ export class GenshinImportRepository {
   }
 
   readSnapshot(userId: string): Promise<ImportSnapshot> {
-    return this.db.$transaction((tx) => this.snapshot(tx, userId), {
-      isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead,
-    });
+    return this.snapshot(this.db, userId);
   }
   async commit(
     userId: string,
@@ -95,12 +93,12 @@ export class GenshinImportRepository {
       throw error;
     }
   }
-  private async snapshot(tx: Prisma.TransactionClient, userId: string) {
+  private async snapshot(tx: Prisma.TransactionClient | PrismaClient, userId: string) {
     const state = await tx.genshinAccount.findUnique({
       where: { userId },
       include: snapshotInclude,
     });
-    if (state)
+    if (state?.characters)
       assertImportCounts({
         characters: state.characters.length,
         weapons: state.weapons.length,

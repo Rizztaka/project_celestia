@@ -21,7 +21,7 @@ export class ImportedAccountService {
     // owner-scoped, bounded repeatable-read repository, never through a public UID.
     const state = await this.repository.readSnapshot(owner);
     if (
-      (state && state.userId !== owner) ||
+      (state && typeof state.userId === 'string' && state.userId !== owner) ||
       (selection.accountId && selection.accountId !== state?.id)
     )
       throw new NotFoundError('Account not found.');

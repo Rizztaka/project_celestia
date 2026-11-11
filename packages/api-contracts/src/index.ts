@@ -87,6 +87,7 @@ export {
 } from './genshin/import.schema.js';
 export * from './genshin/marginal-investment.js';
 export * from './genshin/plan.js';
+export * from './genshin/planner-optimization.js';
 export * from './genshin/profile-reference.js';
 export * from './genshin/pull-intelligence.js';
 export * from './genshin/readiness.js';

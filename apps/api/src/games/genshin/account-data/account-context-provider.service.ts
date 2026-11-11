@@ -83,6 +83,27 @@ for (const [key, entry] of Object.entries(rawCatalog)) {
   }
 }
 
+const KNOWN_CHARACTER_ALIASES: Record<string, string> = {
+  kokomi: 'SangonomiyaKokomi',
+  ayaka: 'KamisatoAyaka',
+  ayato: 'KamisatoAyato',
+  yae: 'YaeMiko',
+  kazuha: 'KaedeharaKazuha',
+  raiden: 'RaidenShogun',
+  sara: 'KujouSara',
+  heizou: 'ShikanoinHeizou',
+  shinobu: 'KukiShinobu',
+  itto: 'AratakiItto',
+  childe: 'Tartaglia',
+  hutao: 'HuTao',
+};
+
+for (const [alias, canonicalKey] of Object.entries(KNOWN_CHARACTER_ALIASES)) {
+  if (!NORMALIZED_NAME_TO_KEY.has(alias) && Object.hasOwn(rawCatalog, canonicalKey)) {
+    NORMALIZED_NAME_TO_KEY.set(alias, canonicalKey);
+  }
+}
+
 const compareStrings = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 
 function computeDigest(value: unknown): string {

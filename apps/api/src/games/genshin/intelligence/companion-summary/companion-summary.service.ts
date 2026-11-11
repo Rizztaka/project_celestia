@@ -14,6 +14,13 @@ import type {
 
 const require = createRequire(import.meta.url);
 const CHARACTER_ELEMENTS: Record<string, string> = require('../../static/character-elements.json');
+const DEFAULT_ENCOUNTERS = require('../../static/endgame-encounters.json') as {
+  cycleId?: string;
+  theaterSeason?: { seasonId?: string } | null;
+};
+
+const DEFAULT_ABYSS_CYCLE_ID = DEFAULT_ENCOUNTERS.cycleId ?? '5.2-1';
+const DEFAULT_THEATER_SEASON_ID = DEFAULT_ENCOUNTERS.theaterSeason?.seasonId ?? '2026-11-01';
 
 import {
   AccountContextProvider,
@@ -36,7 +43,10 @@ import {
   type ShowcaseCharacterRecord,
 } from '../readiness-intelligence/readiness-input.adapter.js';
 import { ReadinessIntelligenceService } from '../readiness-intelligence/readiness-intelligence.service.js';
-import { TeamIntelligenceService } from '../team-intelligence/team-intelligence.service.js';
+import {
+  TeamIntelligenceService,
+  type TeamRecommendation,
+} from '../team-intelligence/team-intelligence.service.js';
 import {
   calculateCompanionSummary,
   type EvaluatedCharacterReadiness,
@@ -117,6 +127,18 @@ function deriveContextCaveatsAndNotices(params: {
   return { extraCaveats, provenanceNotices };
 }
 
+function toTeamSuggestionSnapshot(rec: TeamRecommendation): TeamSuggestionSnapshot {
+  const memberKeys = rec.roster.map((r) => r.characterKey).filter((k): k is string => Boolean(k));
+  return {
+    teamName: rec.templateName,
+    members: memberKeys.length > 0 ? memberKeys : ['HuTao', 'Xingqiu', 'Yelan', 'Zhongli'],
+    archetype: rec.archetype,
+    comfortRating: rec.reaction,
+    keyAdvantage: rec.explanations[0] ?? 'High meta synergy and reaction efficiency.',
+    targetRoute: '/teams',
+  };
+}
+
 export class CompanionSummaryService {
   private readonly accountContextProvider: AccountContextProvider;
   private readonly readinessService: ReadinessIntelligenceService;
@@ -132,7 +154,7 @@ export class CompanionSummaryService {
     pullService?: PullIntelligenceService,
     characterService = new GenshinCharacterService(),
     showcaseService = new ShowcaseService(),
-    teamService = new TeamIntelligenceService(),
+    teamService?: TeamIntelligenceService,
     explicitProvider?: AccountContextProvider,
   ) {
     if (providerOrReadinessService && 'getForUser' in providerOrReadinessService) {
@@ -141,7 +163,8 @@ export class CompanionSummaryService {
       this.marginalService = marginalService;
       this.endgameService = endgameService;
       this.pullService = pullService ?? new PullIntelligenceService(this.accountContextProvider);
-      this.teamService = teamService;
+      this.teamService =
+        teamService ?? new TeamIntelligenceService(this.accountContextProvider, characterService);
     } else {
       this.readinessService = providerOrReadinessService ?? new ReadinessIntelligenceService();
       this.marginalService = marginalService;
@@ -157,13 +180,14 @@ export class CompanionSummaryService {
           showcaseService,
           this.accountContextProvider,
         );
-      this.teamService = teamService;
+      this.teamService =
+        teamService ?? new TeamIntelligenceService(this.accountContextProvider, characterService);
     }
   }
 
   /**
    * Generates orchestrated companion summary for an authenticated user account
-   * using the unified `AccountContextProvider` and canonical readiness input adapter.
+   * using the unified `AccountContextProvider`, real team search, and the three endgame solvers.
    */
   async getSummary(userId: string): Promise<CompanionSummaryResponse> {
     const resolved = await this.accountContextProvider.getForUser(userId);
@@ -176,43 +200,56 @@ export class CompanionSummaryService {
     const openDropKeySet = new Set(openDomains.flatMap((d) => d.dropKeys));
     const domainFamilies = openDomains.map((d) => d.drops[0] ?? d.name);
 
-    // Resolve Team Intelligence first so party members inform rotation_energy readiness
+    // 1. Evaluate team recommendations for the roster
+    let teamRecommendations: TeamRecommendation[] = [];
     let teamSuggestion: TeamSuggestionSnapshot | undefined;
-    try {
-      const teamRes = await this.teamService.getRecommendations(userId);
-      if (teamRes.recommendations.length > 0) {
-        const topTeam = teamRes.recommendations[0]!;
-        const memberKeys = topTeam.roster
-          .map((r) => r.characterKey)
-          .filter((k): k is string => Boolean(k));
-        teamSuggestion = {
-          teamName: topTeam.templateName,
-          members: memberKeys.length > 0 ? memberKeys : ['HuTao', 'Xingqiu', 'Yelan', 'Zhongli'],
-          archetype: topTeam.archetype,
-          comfortRating: topTeam.reaction,
-          keyAdvantage: topTeam.explanations[0] ?? 'High meta synergy and reaction efficiency.',
-          targetRoute: '/teams',
-        };
+
+    if (typeof this.teamService.getRecommendationsForRoster === 'function') {
+      try {
+        teamRecommendations = this.teamService.getRecommendationsForRoster(rawRoster, {
+          limit: 8,
+        });
+        if (teamRecommendations.length > 0) {
+          teamSuggestion = toTeamSuggestionSnapshot(teamRecommendations[0]!);
+        }
+      } catch {
+        // Fallback below
       }
-    } catch {
-      // Graceful fallback if no team is buildable or roster < 4
+    }
+
+    if (!teamSuggestion && typeof this.teamService.getRecommendations === 'function') {
+      try {
+        const teamRes = await this.teamService.getRecommendations(userId);
+        if (teamRes.recommendations.length > 0) {
+          teamRecommendations = teamRes.recommendations;
+          teamSuggestion = toTeamSuggestionSnapshot(teamRes.recommendations[0]!);
+        }
+      } catch {
+        // Graceful fallback if no team is buildable or roster < 4
+      }
     }
 
     const partyMembers =
       teamSuggestion?.members ??
       (rawRoster.length > 0 ? rawRoster.slice(0, 4).map((c) => c.characterKey) : undefined);
 
-    const { readinessList, upgradesList, skippedUnverifiedCharacters, conflictedCharacters } =
-      this.evaluateCharacters({
-        rawRoster,
-        artifacts,
-        accountContext,
-        openDropKeySet,
-        isShowcase: false,
-        teamMembers: partyMembers,
-      });
+    // 2. Evaluate character readiness and marginal upgrades with real observed inputs
+    const {
+      readinessList,
+      upgradesList,
+      skippedUnverifiedCharacters,
+      conflictedCharacters,
+      verifiedRoster,
+    } = this.evaluateCharacters({
+      rawRoster,
+      artifacts,
+      accountContext,
+      openDropKeySet,
+      isShowcase: false,
+      teamMembers: partyMembers,
+    });
 
-    // Pull Intelligence
+    // 3. Pull Intelligence
     let pullAdvice: PullAdviceSnapshot | undefined;
     try {
       const pullsResponse = await this.pullService.getRecommendations(userId);
@@ -229,15 +266,12 @@ export class CompanionSummaryService {
       // Graceful fallback if pull engine cannot evaluate
     }
 
-    const endgameStatus: EvaluatedEndgameStatus = {
-      abyssScore: Math.min(
-        100,
-        Math.round((readinessList.filter((r) => r.status === 'ready_for_target').length / 8) * 100),
-      ),
-      abyssReady: readinessList.filter((r) => r.status === 'ready_for_target').length >= 8,
-      onslaughtReady: readinessList.filter((r) => r.status === 'ready_for_target').length >= 12,
-      theaterMaxActs: Math.min(10, Math.floor(readinessList.length / 2)),
-    };
+    // 4. Evaluate Endgame Status via the 3 real endgame solvers
+    const endgameStatus = this.evaluateEndgameStatus({
+      teamRecommendations,
+      rawRoster: verifiedRoster,
+      artifacts,
+    });
 
     const isPartialAccount =
       accountContext.scope === 'public_uid' && accountContext.rosterScope === 'partial';
@@ -277,7 +311,7 @@ export class CompanionSummaryService {
 
   /**
    * Generates orchestrated companion summary for a public showcase UID
-   * using the unified `AccountContextProvider` and canonical readiness input adapter.
+   * using the unified `AccountContextProvider`, real team search, and the three endgame solvers.
    */
   async getPublicShowcaseSummary(uid: string): Promise<CompanionSummaryResponse> {
     const resolved = await this.accountContextProvider.getForShowcase(uid);
@@ -291,25 +325,54 @@ export class CompanionSummaryService {
     const domainFamilies = openDomains.map((d) => d.drops[0] ?? d.name);
 
     const showcaseChars = snapshot?.characters ?? [];
+
+    // 1. Evaluate team recommendations for the showcase roster
+    let teamRecommendations: TeamRecommendation[] = [];
+    let teamSuggestion: TeamSuggestionSnapshot | undefined;
+
+    const teamServiceInstance =
+      typeof this.teamService.getRecommendationsForRoster === 'function'
+        ? this.teamService
+        : new TeamIntelligenceService(this.accountContextProvider);
+
+    try {
+      const rosterForTeams = showcaseChars.length > 0 ? showcaseChars : rawRoster;
+      teamRecommendations = teamServiceInstance.getRecommendationsForRoster(rosterForTeams, {
+        limit: 8,
+      });
+      if (teamRecommendations.length > 0) {
+        teamSuggestion = toTeamSuggestionSnapshot(teamRecommendations[0]!);
+      }
+    } catch {
+      // Graceful fallback if showcase has < 4 characters or no buildable template
+    }
+
     const partyMembers =
-      showcaseChars.length > 0
+      teamSuggestion?.members ??
+      (showcaseChars.length > 0
         ? showcaseChars.slice(0, 4).map((c) => resolveCharacterKey(c.key, c.id, c.name))
         : rawRoster.length > 0
           ? rawRoster.slice(0, 4).map((c) => c.characterKey)
-          : undefined;
+          : undefined);
 
-    const { readinessList, upgradesList, skippedUnverifiedCharacters, conflictedCharacters } =
-      this.evaluateCharacters({
-        rawRoster,
-        artifacts,
-        accountContext,
-        openDropKeySet,
-        isShowcase: true,
-        showcaseCharacters: showcaseChars,
-        teamMembers: partyMembers,
-      });
+    // 2. Evaluate character readiness and marginal upgrades
+    const {
+      readinessList,
+      upgradesList,
+      skippedUnverifiedCharacters,
+      conflictedCharacters,
+      verifiedRoster,
+    } = this.evaluateCharacters({
+      rawRoster,
+      artifacts,
+      accountContext,
+      openDropKeySet,
+      isShowcase: true,
+      showcaseCharacters: showcaseChars,
+      teamMembers: partyMembers,
+    });
 
-    // Pull Intelligence
+    // 3. Pull Intelligence
     let pullAdvice: PullAdviceSnapshot | undefined;
     try {
       const pullsResponse = await this.pullService.getPublicShowcaseRecommendations(uid);
@@ -326,15 +389,12 @@ export class CompanionSummaryService {
       // Fallback
     }
 
-    const endgameStatus: EvaluatedEndgameStatus = {
-      abyssScore: Math.min(
-        100,
-        Math.round((readinessList.filter((r) => r.status === 'ready_for_target').length / 8) * 100),
-      ),
-      abyssReady: readinessList.filter((r) => r.status === 'ready_for_target').length >= 8,
-      onslaughtReady: readinessList.filter((r) => r.status === 'ready_for_target').length >= 12,
-      theaterMaxActs: Math.min(10, Math.floor(readinessList.length / 2)),
-    };
+    // 4. Evaluate Endgame Status via the 3 real endgame solvers
+    const endgameStatus = this.evaluateEndgameStatus({
+      teamRecommendations,
+      rawRoster: verifiedRoster,
+      artifacts,
+    });
 
     const isPartialAccount = accountContext.rosterScope === 'partial';
 
@@ -346,6 +406,7 @@ export class CompanionSummaryService {
       openDomainFamilies: domainFamilies,
       endgameStatus,
       pullAdvice,
+      teamSuggestion,
       skippedUnverifiedCharacters,
       timestamp: now.toISOString(),
     });
@@ -371,6 +432,136 @@ export class CompanionSummaryService {
   }
 
   /**
+   * Evaluates Spiral Abyss (dual-half joint solver), Stygian Onslaught (3-boss disjoint solver),
+   * and Imaginarium Theater (dynamic act & vigor planner) using candidate teams built from the
+   * player's verified roster. Gracefully falls back when the roster is too small.
+   */
+  public evaluateEndgameStatus(params: {
+    teamRecommendations: ReadonlyArray<TeamRecommendation>;
+    rawRoster: ReadonlyArray<CharacterWithWeapon>;
+    artifacts?: ReadonlyArray<Artifact>;
+  }): EvaluatedEndgameStatus {
+    const { teamRecommendations, rawRoster, artifacts } = params;
+
+    const teamBuilder =
+      typeof this.teamService.buildCandidateEndgameTeams === 'function'
+        ? this.teamService
+        : new TeamIntelligenceService(this.accountContextProvider);
+
+    const candidateTeams = teamBuilder.buildCandidateEndgameTeams(
+      teamRecommendations,
+      rawRoster,
+      artifacts,
+    );
+
+    let abyssScore = 0;
+    let abyssReady = false;
+    let onslaughtReady = false;
+    let onslaughtScore = 0;
+    let theaterMaxActs = 0;
+
+    // 1. Spiral Abyss Dual-Half Joint Solver (requires >= 2 candidate teams with >= 8 distinct characters)
+    if (candidateTeams.length >= 2) {
+      try {
+        const abyssJoint = this.endgameService.evaluateAbyssJoint({
+          cycleId: DEFAULT_ABYSS_CYCLE_ID,
+          floor: 12,
+          chamber: 1,
+          candidateTeams,
+        });
+        abyssScore = Math.min(100, Math.max(0, Math.round(abyssJoint.jointScore)));
+        abyssReady =
+          abyssJoint.isJointOptimal ||
+          (abyssJoint.firstHalf.score >= 50 && abyssJoint.secondHalf.score >= 50);
+      } catch {
+        abyssScore = 0;
+        abyssReady = false;
+      }
+    }
+
+    // 2. Stygian Onslaught 3-Boss Allocation Solver (requires >= 3 candidate teams with >= 12 distinct characters)
+    if (candidateTeams.length >= 3) {
+      try {
+        const onslaughtJoint = this.endgameService.evaluateOnslaughtJoint({
+          cycleId: DEFAULT_ABYSS_CYCLE_ID,
+          candidateTeams,
+        });
+        onslaughtReady = onslaughtJoint.allStagesCleared;
+        onslaughtScore = Math.min(100, Math.max(0, Math.round(onslaughtJoint.jointScore)));
+      } catch {
+        onslaughtReady = false;
+        onslaughtScore = 0;
+      }
+    }
+
+    // 3. Imaginarium Theater Dynamic Act & Vigor Planner (requires >= 10 cast keys)
+    const uniqueCastKeys: string[] = [];
+    for (const char of rawRoster) {
+      if (char.characterKey && !uniqueCastKeys.includes(char.characterKey)) {
+        uniqueCastKeys.push(char.characterKey);
+      }
+    }
+
+    if (uniqueCastKeys.length >= 10) {
+      try {
+        const remainingVigor: Record<string, number> = {};
+        for (const key of uniqueCastKeys) {
+          remainingVigor[key] = 2;
+        }
+        const theaterPlan = this.endgameService.evaluateTheaterActPlan({
+          seasonId: DEFAULT_THEATER_SEASON_ID,
+          difficulty: 'VISIONARY',
+          castKeys: uniqueCastKeys,
+          currentAct: 1,
+          remainingVigor,
+        });
+        theaterMaxActs = Math.min(10, theaterPlan.projectedSchedule.length);
+      } catch {
+        theaterMaxActs = 0;
+      }
+    }
+
+    // 4. Derive suggestedAction from the lowest-scoring endgame dimension
+    const theaterNormalizedScore = Math.round((theaterMaxActs / 10) * 100);
+    let suggestedAction: string;
+
+    if (abyssReady && onslaughtReady && theaterMaxActs >= 8) {
+      suggestedAction =
+        'Roster is endgame-capable across Spiral Abyss Floor 12, Stygian Onslaught, and Imaginarium Theater.';
+    } else {
+      const dimensions: Array<{ name: 'abyss' | 'theater' | 'onslaught'; score: number }> = [
+        { name: 'abyss', score: abyssReady ? Math.max(70, abyssScore) : abyssScore },
+        { name: 'theater', score: theaterNormalizedScore },
+        {
+          name: 'onslaught',
+          score: onslaughtReady ? Math.max(70, onslaughtScore) : onslaughtScore,
+        },
+      ];
+      dimensions.sort((a, b) => a.score - b.score);
+      const weakest = dimensions[0]!.name;
+
+      if (weakest === 'abyss' || !abyssReady) {
+        suggestedAction =
+          'Reinforce second-half disjoint team ER & elemental shield counters for Spiral Abyss Floor 12.';
+      } else if (weakest === 'theater') {
+        suggestedAction =
+          'Expand horizontal elemental cast depth (10+ combat-ready units) to sustain Imaginarium Theater vigor across all acts.';
+      } else {
+        suggestedAction =
+          'Develop a third disjoint 4-character squad with sustain and boss mechanic counters for Stygian Onslaught.';
+      }
+    }
+
+    return {
+      abyssScore,
+      abyssReady,
+      onslaughtReady,
+      theaterMaxActs,
+      suggestedAction,
+    };
+  }
+
+  /**
    * Evaluates character readiness and marginal upgrades using `buildAuthenticatedReadinessInput`
    * and `buildShowcaseReadinessInput`, passing real observed artifacts, stats, talents,
    * weapon details, constellation, and team energy context.
@@ -388,6 +579,7 @@ export class CompanionSummaryService {
     upgradesList: EvaluatedMarginalUpgrade[];
     skippedUnverifiedCharacters: string[];
     conflictedCharacters: string[];
+    verifiedRoster: CharacterWithWeapon[];
   } {
     const {
       rawRoster,
@@ -412,6 +604,7 @@ export class CompanionSummaryService {
     const upgradesList: EvaluatedMarginalUpgrade[] = [];
     const skippedUnverifiedCharacters: string[] = [];
     const conflictedCharacters: string[] = [];
+    const verifiedRoster: CharacterWithWeapon[] = [];
 
     const totalCount = isShowcase
       ? Math.max(rawRoster.length, showcaseCharacters?.length ?? 0)
@@ -459,6 +652,10 @@ export class CompanionSummaryService {
 
       if (charContext?.buildState === 'missing') {
         continue;
+      }
+
+      if (char) {
+        verifiedRoster.push({ ...char, characterKey });
       }
 
       let buildInput: CharacterReadinessRequestInput;
@@ -516,6 +713,7 @@ export class CompanionSummaryService {
       upgradesList,
       skippedUnverifiedCharacters,
       conflictedCharacters,
+      verifiedRoster,
     };
   }
 }

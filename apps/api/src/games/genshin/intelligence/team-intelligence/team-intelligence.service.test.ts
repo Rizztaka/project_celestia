@@ -1,3 +1,4 @@
+import { candidateEndgameTeamSchema } from '@celestia/api-contracts';
 import type { GenshinAccount } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -11,7 +12,9 @@ vi.mock('@/core/db/prisma.js', () => ({
 }));
 
 // ── Mock GenshinCharacterService ────────────────────────────────────────────
-const mockGetCharactersForUser = vi.fn();
+const { mockGetCharactersForUser } = vi.hoisted(() => ({
+  mockGetCharactersForUser: vi.fn(),
+}));
 vi.mock('../../characters/character.service.js', () => ({
   GenshinCharacterService: vi.fn().mockImplementation(() => ({
     getCharactersForUser: mockGetCharactersForUser,
@@ -21,6 +24,8 @@ vi.mock('../../characters/character.service.js', () => ({
 // ── Import after mocks are in place ─────────────────────────────────────────
 import { prisma } from '@/core/db/prisma.js';
 
+import type { Artifact } from '../../account-data/account-context-provider.service.js';
+import type { CharacterWithWeapon } from '../../characters/character.repository.js';
 import {
   calculateTeamScore,
   type CharacterInput,
@@ -160,7 +165,6 @@ describe('TeamIntelligenceService', () => {
   });
 
   it('throws UnprocessableError (422) when no buildable team exists in the roster', async () => {
-    // A roster of 4 characters where none match any required role candidates.
     const weirdRoster: CharacterInput[] = [
       {
         characterKey: 'Amber',
@@ -219,11 +223,10 @@ describe('TeamIntelligenceService', () => {
     const result = await service.getRecommendations('user-1');
 
     expect(result.recommendations).toHaveLength(3);
-    expect(result.recommendations[0].rank).toBe(1);
-    expect(result.recommendations[1].rank).toBe(2);
-    expect(result.recommendations[2].rank).toBe(3);
+    expect(result.recommendations[0]!.rank).toBe(1);
+    expect(result.recommendations[1]!.rank).toBe(2);
+    expect(result.recommendations[2]!.rank).toBe(3);
 
-    // All returned teams must be buildable.
     for (const rec of result.recommendations) {
       expect(rec.isBuildable).toBe(true);
     }
@@ -237,7 +240,7 @@ describe('TeamIntelligenceService', () => {
     const scores = result.recommendations.map((r) => r.score);
 
     for (let i = 0; i < scores.length - 1; i++) {
-      expect(scores[i]).toBeGreaterThanOrEqual(scores[i + 1]);
+      expect(scores[i]!).toBeGreaterThanOrEqual(scores[i + 1]!);
     }
   });
 
@@ -261,6 +264,90 @@ describe('TeamIntelligenceService', () => {
     expect(() => new Date(result.analysedAt)).not.toThrow();
     expect(new Date(result.analysedAt).toISOString()).toBe(result.analysedAt);
   });
+
+  describe('getRecommendationsForRoster & buildCandidateEndgameTeams', () => {
+    it('evaluates buildable teams directly from a roster without database queries', () => {
+      const recs = service.getRecommendationsForRoster(fullNationalRoster);
+
+      expect(recs.length).toBeGreaterThan(0);
+      expect(recs[0]!.templateName).toBe('National Vaporize');
+      expect(recs[0]!.isBuildable).toBe(true);
+    });
+
+    it('builds valid CandidateEndgameTeam entries with disjoint squads, primaryElement, baseDps, comfortScore, and gear assignments', () => {
+      const twelveUnitRoster: CharacterWithWeapon[] = [
+        'HuTao',
+        'Xingqiu',
+        'Bennett',
+        'KaedeharaKazuha',
+        'Nahida',
+        'Kokomi',
+        'KukiShinobu',
+        'Yelan',
+        'KamisatoAyaka',
+        'Mona',
+        'Diona',
+        'Zhongli',
+      ].map((characterKey, index) => ({
+        id: `char-${index + 1}`,
+        accountId: 'account-1',
+        characterKey,
+        level: 90,
+        ascension: 6,
+        constellation: 0,
+        talentNormal: 8,
+        talentSkill: 8,
+        talentBurst: 8,
+        equippedWeaponId: `weapon-${index + 1}`,
+        equippedWeapon: {
+          id: `weapon-${index + 1}`,
+          accountId: 'account-1',
+          weaponKey: 'FavoniusSword',
+          level: 90,
+          ascension: 6,
+          refinement: 5,
+          locked: true,
+          createdAt: new Date('2026-10-20T00:00:00Z'),
+          updatedAt: new Date('2026-10-20T00:00:00Z'),
+        },
+        createdAt: new Date('2026-10-20T00:00:00Z'),
+        updatedAt: new Date('2026-10-20T00:00:00Z'),
+      }));
+
+      const artifacts: Artifact[] = [
+        {
+          id: 'art-1',
+          accountId: 'account-1',
+          setKey: 'CrimsonWitchOfFlames',
+          slotKey: 'flower',
+          level: 20,
+          rarity: 5,
+          mainStatKey: 'hp',
+          subStats: [],
+          locked: true,
+          equippedCharacterId: 'char-1',
+          createdAt: new Date('2026-10-20T00:00:00Z'),
+          updatedAt: new Date('2026-10-20T00:00:00Z'),
+        },
+      ];
+
+      const recs = service.getRecommendationsForRoster(twelveUnitRoster, { limit: 5 });
+      const candidates = service.buildCandidateEndgameTeams(recs, twelveUnitRoster, artifacts);
+
+      expect(candidates.length).toBeGreaterThanOrEqual(3);
+      for (const team of candidates) {
+        expect(candidateEndgameTeamSchema.safeParse(team).success).toBe(true);
+        expect(team.memberKeys).toHaveLength(4);
+        expect(team.baseDps).toBeGreaterThan(0);
+        expect(team.comfortScore).toBeGreaterThanOrEqual(45);
+        expect(team.gear.length).toBeGreaterThan(0);
+      }
+
+      // First team includes HuTao with equipped artifact 'art-1'
+      const huTaoTeam = candidates.find((t) => t.memberKeys.includes('HuTao'));
+      expect(huTaoTeam?.gear.some((g) => g.artifactInstanceIds.includes('art-1'))).toBe(true);
+    });
+  });
 });
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -275,14 +362,12 @@ describe('calculateTeamScore', () => {
   });
 
   it('buildability: returns isBuildable=false when a required role is missing', () => {
-    // No Hydro enabler in this roster
     const rosterNoHydro = [huTao, bennett, kazuha, diluc];
     const breakdown = calculateTeamScore(nationalTemplate, rosterNoHydro);
     expect(breakdown.isBuildable).toBe(false);
   });
 
   it('deduplication: the same character cannot fill two roles', () => {
-    // Roster with only HuTao and Xingqiu — HuTao should not appear twice
     const sparseRoster = [huTao, xingqiu];
     const breakdown = calculateTeamScore(nationalTemplate, sparseRoster);
 
@@ -293,8 +378,6 @@ describe('calculateTeamScore', () => {
   });
 
   it('role assignment: prefers higher-investment candidate when two qualify for the same role', () => {
-    // Both HuTao (fully built) and Diluc (moderately built) are Pyro DPS candidates.
-    // HuTao should win the pyro_dps slot.
     const roster = [diluc, huTao, xingqiu, bennett];
     const breakdown = calculateTeamScore(nationalTemplate, roster);
 
@@ -309,23 +392,19 @@ describe('calculateTeamScore', () => {
   });
 
   it('role coverage: partial fill produces proportional coverage', () => {
-    // Only pyro_dps (weight 35) and hydro_enabler (weight 30) filled.
-    // Total weight = 100, filled weight = 65. Expected = round(65/100 * 50) = 33
-    const roster = [huTao, xingqiu]; // No bennett or kazuha
+    const roster = [huTao, xingqiu];
     const breakdown = calculateTeamScore(nationalTemplate, roster);
 
     expect(breakdown.subScores.roleCoverage).toBe(33);
   });
 
   it('resonance bonus: two Pyro characters in National team yields 12', () => {
-    // HuTao (Pyro) + Bennett (Pyro) → Pyro Resonance (high-value element)
     const roster = [huTao, xingqiu, bennett, kazuha];
     const breakdown = calculateTeamScore(nationalTemplate, roster);
     expect(breakdown.subScores.resonanceBonus).toBe(12);
   });
 
   it('resonance bonus: no resonance when all characters are different elements', () => {
-    // Freeze template with no resonance: Ayaka(Cryo), Mona(Hydro), KukiShinobu(Electro), Kazuha(Anemo)
     const ayaka: CharacterInput = {
       characterKey: 'Ayaka',
       level: 80,
@@ -348,26 +427,22 @@ describe('calculateTeamScore', () => {
     };
     const roster = [ayaka, mona, kazuha];
     const breakdown = calculateTeamScore(freezeTemplate, roster);
-    // Only Ayaka and Mona have defined elements in freeze template roles; they are different
     expect(breakdown.subScores.resonanceBonus).toBe(0);
   });
 
   it('reaction completeness: both elements covered → 8 points', () => {
-    // National Vaporize needs Pyro + Hydro. HuTao=Pyro, Xingqiu=Hydro.
     const roster = [huTao, xingqiu, bennett, kazuha];
     const breakdown = calculateTeamScore(nationalTemplate, roster);
     expect(breakdown.subScores.reactionCompleteness).toBe(8);
   });
 
   it('reaction completeness: only one element covered → 4 points', () => {
-    // Only Pyro covered (HuTao, Bennett), no Hydro
     const roster = [huTao, bennett, kazuha, diluc];
     const breakdown = calculateTeamScore(nationalTemplate, roster);
     expect(breakdown.subScores.reactionCompleteness).toBe(4);
   });
 
   it('reaction completeness: neither element covered → 0 points', () => {
-    // Freeze template needs Cryo + Hydro. Roster has none.
     const roster = [huTao, bennett, fischl, kazuha];
     const breakdown = calculateTeamScore(freezeTemplate, roster);
     expect(breakdown.subScores.reactionCompleteness).toBe(0);
@@ -387,14 +462,14 @@ describe('calculateTeamScore', () => {
     expect(first).toEqual(second);
   });
 
-  it('scoreAllTemplates returns all 8 templates sorted by score descending', () => {
+  it('scoreAllTemplates returns all templates sorted by score descending', () => {
     const roster = [huTao, xingqiu, bennett, kazuha, diluc, fischl];
     const results = scoreAllTemplates(ALL_TEMPLATES, roster);
 
     expect(results).toHaveLength(ALL_TEMPLATES.length);
 
     for (let i = 0; i < results.length - 1; i++) {
-      expect(results[i].score).toBeGreaterThanOrEqual(results[i + 1].score);
+      expect(results[i]!.score).toBeGreaterThanOrEqual(results[i + 1]!.score);
     }
   });
 

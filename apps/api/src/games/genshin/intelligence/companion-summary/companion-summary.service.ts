@@ -17,6 +17,7 @@ const CHARACTER_ELEMENTS: Record<string, string> = require('../../static/charact
 
 import {
   AccountContextProvider,
+  type Artifact,
   resolveAccountFreshness,
   resolveCharacterFormIdentity,
   resolveCharacterKey,
@@ -29,6 +30,11 @@ import { ShowcaseService } from '../../showcase/showcase.service.js';
 import { EndgameIntelligenceService } from '../endgame-intelligence/endgame-intelligence.service.js';
 import { MarginalInvestmentService } from '../marginal-investment/marginal-investment.service.js';
 import { PullIntelligenceService } from '../pull-intelligence/pull-intelligence.service.js';
+import {
+  buildAuthenticatedReadinessInput,
+  buildShowcaseReadinessInput,
+  type ShowcaseCharacterRecord,
+} from '../readiness-intelligence/readiness-input.adapter.js';
 import { ReadinessIntelligenceService } from '../readiness-intelligence/readiness-intelligence.service.js';
 import { TeamIntelligenceService } from '../team-intelligence/team-intelligence.service.js';
 import {
@@ -47,6 +53,8 @@ function serverFromUid(uid: string): SupportedServerId {
 }
 
 const TARGET_ENCOUNTER = {
+  encounterId: 'abyss_12',
+  name: 'Spiral Abyss Floor 12',
   difficulty: 'abyss_12' as const,
   minCharacterLevel: 80,
   minWeaponLevel: 80,
@@ -155,11 +163,12 @@ export class CompanionSummaryService {
 
   /**
    * Generates orchestrated companion summary for an authenticated user account
-   * using the unified `AccountContextProvider`.
+   * using the unified `AccountContextProvider` and canonical readiness input adapter.
    */
   async getSummary(userId: string): Promise<CompanionSummaryResponse> {
-    const { context: accountContext, rawRoster } =
-      await this.accountContextProvider.getForUser(userId);
+    const resolved = await this.accountContextProvider.getForUser(userId);
+    const { context: accountContext, rawRoster } = resolved;
+    const artifacts: Artifact[] = resolved.artifacts ?? [];
 
     const server: SupportedServerId = serverFromUid(accountContext.uid ?? '');
     const now = new Date();
@@ -167,32 +176,7 @@ export class CompanionSummaryService {
     const openDropKeySet = new Set(openDomains.flatMap((d) => d.dropKeys));
     const domainFamilies = openDomains.map((d) => d.drops[0] ?? d.name);
 
-    const { readinessList, upgradesList, skippedUnverifiedCharacters, conflictedCharacters } =
-      this.evaluateRosterBuilds({
-        rawRoster,
-        accountContext,
-        openDropKeySet,
-        isShowcase: false,
-      });
-
-    // Pull Intelligence
-    let pullAdvice: PullAdviceSnapshot | undefined;
-    try {
-      const pullsResponse = await this.pullService.getRecommendations(userId);
-      if (pullsResponse.recommendations.length > 0) {
-        const top = pullsResponse.recommendations[0]!;
-        pullAdvice = {
-          recommendation: top.strategicRecommendation,
-          targetBannerName: top.bannerName,
-          targetCharacterKey: top.targetKey,
-          keyReason: top.explanations[0] ?? 'Account value evaluation.',
-        };
-      }
-    } catch {
-      // Graceful fallback if pull engine cannot evaluate
-    }
-
-    // Team Intelligence
+    // Resolve Team Intelligence first so party members inform rotation_energy readiness
     let teamSuggestion: TeamSuggestionSnapshot | undefined;
     try {
       const teamRes = await this.teamService.getRecommendations(userId);
@@ -212,6 +196,37 @@ export class CompanionSummaryService {
       }
     } catch {
       // Graceful fallback if no team is buildable or roster < 4
+    }
+
+    const partyMembers =
+      teamSuggestion?.members ??
+      (rawRoster.length > 0 ? rawRoster.slice(0, 4).map((c) => c.characterKey) : undefined);
+
+    const { readinessList, upgradesList, skippedUnverifiedCharacters, conflictedCharacters } =
+      this.evaluateCharacters({
+        rawRoster,
+        artifacts,
+        accountContext,
+        openDropKeySet,
+        isShowcase: false,
+        teamMembers: partyMembers,
+      });
+
+    // Pull Intelligence
+    let pullAdvice: PullAdviceSnapshot | undefined;
+    try {
+      const pullsResponse = await this.pullService.getRecommendations(userId);
+      if (pullsResponse.recommendations.length > 0) {
+        const top = pullsResponse.recommendations[0]!;
+        pullAdvice = {
+          recommendation: top.strategicRecommendation,
+          targetBannerName: top.bannerName,
+          targetCharacterKey: top.targetKey,
+          keyReason: top.explanations[0] ?? 'Account value evaluation.',
+        };
+      }
+    } catch {
+      // Graceful fallback if pull engine cannot evaluate
     }
 
     const endgameStatus: EvaluatedEndgameStatus = {
@@ -262,14 +277,12 @@ export class CompanionSummaryService {
 
   /**
    * Generates orchestrated companion summary for a public showcase UID
-   * using the unified `AccountContextProvider`.
+   * using the unified `AccountContextProvider` and canonical readiness input adapter.
    */
   async getPublicShowcaseSummary(uid: string): Promise<CompanionSummaryResponse> {
-    const {
-      context: accountContext,
-      snapshot,
-      rawRoster,
-    } = await this.accountContextProvider.getForShowcase(uid);
+    const resolved = await this.accountContextProvider.getForShowcase(uid);
+    const { context: accountContext, snapshot, rawRoster } = resolved;
+    const artifacts: Artifact[] = resolved.artifacts ?? [];
 
     const server = serverFromUid(accountContext.uid ?? uid);
     const now = new Date();
@@ -277,13 +290,23 @@ export class CompanionSummaryService {
     const openDropKeySet = new Set(openDomains.flatMap((d) => d.dropKeys));
     const domainFamilies = openDomains.map((d) => d.drops[0] ?? d.name);
 
+    const showcaseChars = snapshot?.characters ?? [];
+    const partyMembers =
+      showcaseChars.length > 0
+        ? showcaseChars.slice(0, 4).map((c) => resolveCharacterKey(c.key, c.id, c.name))
+        : rawRoster.length > 0
+          ? rawRoster.slice(0, 4).map((c) => c.characterKey)
+          : undefined;
+
     const { readinessList, upgradesList, skippedUnverifiedCharacters, conflictedCharacters } =
-      this.evaluateRosterBuilds({
+      this.evaluateCharacters({
         rawRoster,
+        artifacts,
         accountContext,
         openDropKeySet,
         isShowcase: true,
-        showcaseCharacters: snapshot?.characters,
+        showcaseCharacters: showcaseChars,
+        teamMembers: partyMembers,
       });
 
     // Pull Intelligence
@@ -347,21 +370,34 @@ export class CompanionSummaryService {
     };
   }
 
-  private evaluateRosterBuilds(params: {
+  /**
+   * Evaluates character readiness and marginal upgrades using `buildAuthenticatedReadinessInput`
+   * and `buildShowcaseReadinessInput`, passing real observed artifacts, stats, talents,
+   * weapon details, constellation, and team energy context.
+   */
+  public evaluateCharacters(params: {
     rawRoster: CharacterWithWeapon[];
+    artifacts?: ReadonlyArray<Artifact>;
     accountContext: AccountContext;
     openDropKeySet: Set<string>;
     isShowcase: boolean;
-    showcaseCharacters?: NonNullable<
-      Awaited<ReturnType<AccountContextProvider['getForShowcase']>>['snapshot']
-    >['characters'];
+    showcaseCharacters?: ReadonlyArray<ShowcaseCharacterRecord>;
+    teamMembers?: ReadonlyArray<string>;
   }): {
     readinessList: EvaluatedCharacterReadiness[];
     upgradesList: EvaluatedMarginalUpgrade[];
     skippedUnverifiedCharacters: string[];
     conflictedCharacters: string[];
   } {
-    const { rawRoster, accountContext, openDropKeySet, isShowcase, showcaseCharacters } = params;
+    const {
+      rawRoster,
+      artifacts = [],
+      accountContext,
+      openDropKeySet,
+      isShowcase,
+      showcaseCharacters,
+      teamMembers,
+    } = params;
 
     const charContextByFormKey = new Map<string, AccountCharacterContext>(
       accountContext.characters.map((c) => [c.formKey, c]),
@@ -377,17 +413,27 @@ export class CompanionSummaryService {
     const skippedUnverifiedCharacters: string[] = [];
     const conflictedCharacters: string[] = [];
 
-    for (let idx = 0; idx < rawRoster.length; idx++) {
-      const char = rawRoster[idx]!;
+    const totalCount = isShowcase
+      ? Math.max(rawRoster.length, showcaseCharacters?.length ?? 0)
+      : rawRoster.length;
+
+    for (let idx = 0; idx < totalCount; idx++) {
+      const char = rawRoster[idx];
       const showcaseChar = showcaseCharacters?.[idx];
+      const rawKey = showcaseChar?.key ?? char?.characterKey ?? '';
       const characterKey = resolveCharacterKey(
-        char.characterKey,
+        char?.characterKey ?? rawKey,
         showcaseChar?.id,
         showcaseChar?.name,
       );
 
-      if (!CHARACTER_ELEMENTS[characterKey] && !/^(Traveler|Aether|Lumine)/.test(characterKey)) {
-        skippedUnverifiedCharacters.push(characterKey);
+      if (
+        !characterKey ||
+        (!CHARACTER_ELEMENTS[characterKey] && !/^(Traveler|Aether|Lumine)/.test(characterKey))
+      ) {
+        if (characterKey) {
+          skippedUnverifiedCharacters.push(characterKey);
+        }
         continue;
       }
 
@@ -415,48 +461,21 @@ export class CompanionSummaryService {
         continue;
       }
 
-      const talentsOmittedInContext = Boolean(
-        isShowcase &&
-        (charContext?.missingData.some(
-          (m) => m.dimension === 'talents' && m.status === 'omitted',
-        ) ??
-          !showcaseChar?.talents?.length),
-      );
-
-      const buildInput: CharacterReadinessRequestInput = {
-        character: {
-          characterKey,
-          level: isShowcase ? (showcaseChar?.level ?? char.level) : char.level,
-          ascension: isShowcase ? null : char.ascension,
-          constellation: char.constellation,
-          talents: talentsOmittedInContext
-            ? {
-                normal: null,
-                skill: null,
-                burst: null,
-              }
-            : {
-                normal: char.talentNormal,
-                skill: char.talentSkill,
-                burst: char.talentBurst,
-              },
-          weapon: char.equippedWeapon
-            ? {
-                weaponKey: char.equippedWeapon.weaponKey,
-                level: char.equippedWeapon.level,
-                refinement: char.equippedWeapon.refinement,
-              }
-            : null,
-          artifacts: {
-            flower: null,
-            plume: null,
-            sands: null,
-            goblet: null,
-            circlet: null,
-          },
-        },
-        targetEncounter: TARGET_ENCOUNTER,
-      };
+      let buildInput: CharacterReadinessRequestInput;
+      if (isShowcase && showcaseChar) {
+        buildInput = buildShowcaseReadinessInput(showcaseChar, teamMembers, {
+          targetEncounter: TARGET_ENCOUNTER,
+          showcaseCharacters,
+          roster: rawRoster,
+        });
+      } else if (char) {
+        buildInput = buildAuthenticatedReadinessInput(char, artifacts, teamMembers, {
+          targetEncounter: TARGET_ENCOUNTER,
+          roster: rawRoster,
+        });
+      } else {
+        continue;
+      }
 
       try {
         const readResult = this.readinessService.evaluateReadiness(buildInput);
@@ -470,6 +489,9 @@ export class CompanionSummaryService {
         const margInput: MarginalInvestmentRequestInput = {
           character: buildInput.character,
           targetEncounter: TARGET_ENCOUNTER,
+          ...(buildInput.teamEnergyContext !== undefined
+            ? { teamEnergyContext: buildInput.teamEnergyContext }
+            : {}),
         };
         const margResult = this.marginalService.evaluate(margInput);
 

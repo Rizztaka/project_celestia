@@ -309,6 +309,8 @@ export const accountContextSchema = z
 export type AccountDataSource = z.infer<typeof accountDataSourceSchema>;
 export type AccountCharacterContext = z.infer<typeof accountCharacterContextSchema>;
 export type AccountContext = z.infer<typeof accountContextSchema>;
+export type AccountContextFreshness = z.infer<typeof accountContextFreshnessSchema>;
+export type AccountContextMissingData = z.infer<typeof accountContextMissingDataSchema>;
 
 const storedId = z.string().min(1);
 const storedNumber = z.number().finite().nullable();

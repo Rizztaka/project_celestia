@@ -52,6 +52,22 @@ export const strategicRecommendationSchema = z.enum([
 ]);
 export type StrategicRecommendation = z.infer<typeof strategicRecommendationSchema>;
 
+export const pullConfidenceSchema = z.enum([
+  'VERIFIED',
+  'UNVERIFIED',
+  'STALE',
+  'SIMULATED_SCENARIO',
+]);
+export type PullConfidence = z.infer<typeof pullConfidenceSchema>;
+
+export const pullResponseStatusSchema = z.enum([
+  'AVAILABLE',
+  'UNAVAILABLE',
+  'CONDITIONAL',
+  'HISTORICAL_BENCHMARK',
+]);
+export type PullResponseStatus = z.infer<typeof pullResponseStatusSchema>;
+
 export const accountValueBreakdownSchema = z
   .object({
     endgameCoverageImpact: z.number().min(0).max(100),
@@ -101,6 +117,9 @@ export const pullRecommendationSchema = z
     budgetForecast: pullBudgetForecastSchema,
     isPartialAccount: z.boolean(),
     missingDataNotes: z.array(z.string()),
+    simulation: z.boolean().optional(),
+    confidence: pullConfidenceSchema.optional(),
+    provenanceNotices: z.array(z.string()).optional(),
     // Backwards-compatibility aliases for legacy consumers:
     fiveStarKey: z.string().optional(),
     pullValueScore: z.number().optional(),
@@ -115,6 +134,10 @@ export type PullRecommendation = z.infer<typeof pullRecommendationSchema>;
 
 export const pullIntelligenceResponseSchema = z
   .object({
+    available: z.boolean().default(true),
+    reason: z.string().optional(),
+    status: pullResponseStatusSchema.optional(),
+    confidence: pullConfidenceSchema.optional(),
     recommendations: z.array(pullRecommendationSchema),
     userWeights: pullUserWeightsSchema,
     isPartialAccount: z.boolean(),

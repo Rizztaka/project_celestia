@@ -136,6 +136,29 @@ export class BuildInsightsService {
         { min: query.pieces!, max: query.pieces! },
         'hypothetical',
       );
+    const provenanceNotice =
+      'Equipment assignment based on unverified snapshot; recommendations are conditional.';
+    const isUnverifiedSnapshot =
+      row !== null &&
+      (!row.weaponRelationConsistent ||
+        !row.artifactRelationsConsistent ||
+        (row as any).weapon?.reason === 'provenance_unknown' ||
+        (row as any).weapon?.reason === 'inconsistent_relation' ||
+        (row as any).artifacts?.some(
+          (a: any) =>
+            a?.reason === 'provenance_unknown' || a?.reason === 'inconsistent_relation',
+        ) ||
+        (row as any).receipts?.some(
+          (r: any) =>
+            r?.status === 'unknown' ||
+            r?.reason === 'provenance_unknown' ||
+            r?.reason === 'inconsistent_relation',
+        ) ||
+        (row as any).provenance_unknown === true ||
+        (row as any).provenanceUnknown === true);
+
+    const provenanceNotices: string[] = isUnverifiedSnapshot ? [provenanceNotice] : [];
+
     return {
       contractVersion: 1,
       engineVersion: 'deterministic-build-v1',
@@ -151,6 +174,7 @@ export class BuildInsightsService {
       weaponOptions: profile.weapons,
       artifactOptions: profile.artifactSets,
       limitations: [
+        ...(isUnverifiedSnapshot ? [provenanceNotice] : []),
         'Evaluates the imported equipment snapshot. Missing assignments and current combat conditions remain unknown.',
         'Executable rules cover weapon type, set piece bounds, Harbinger HP gating and the two/four-piece requirements of Deepwood, Gilded, Golden Troupe and Marechaussee Hunter. Other effects remain sourced references.',
         'Four-piece eligibility does not establish activation, target coverage, uptime or team suitability. No damage, ER target or optimal-build ranking is calculated.',
@@ -160,6 +184,7 @@ export class BuildInsightsService {
             ]
           : []),
       ],
+      ...(provenanceNotices.length > 0 ? { provenanceNotices } : {}),
     };
   }
   private observation(row: CharacterEquipmentRow | null) {

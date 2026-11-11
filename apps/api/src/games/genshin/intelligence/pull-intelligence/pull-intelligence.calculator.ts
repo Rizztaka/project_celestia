@@ -29,6 +29,9 @@ export interface ActiveBanner {
   startDate?: string;
   endDate: string;
   historical?: boolean;
+  simulation?: boolean;
+  sourceUrl?: string;
+  rulesSource?: string;
 }
 
 export interface ConstellationBenchmark {
@@ -493,6 +496,17 @@ export function evaluateCounterfactualAddition(params: {
     totalScore,
   };
 
+  const isSimulation = Boolean(
+    banner.historical ||
+      banner.simulation ||
+      banner.bannerId.startsWith('custom_') ||
+      (banner.sourceUrl && !banner.sourceUrl.startsWith('http')),
+  );
+  const confidence = isSimulation ? ('SIMULATED_SCENARIO' as const) : ('VERIFIED' as const);
+  const provenanceNotices: string[] = isSimulation
+    ? ['Simulated scenario: evaluated outside of verified active banner window.']
+    : [];
+
   return {
     targetKey: target.targetKey,
     targetName: target.targetKey.replace(/([A-Z])/g, ' $1').trim(),
@@ -510,6 +524,9 @@ export function evaluateCounterfactualAddition(params: {
     budgetForecast,
     isPartialAccount: isPartial,
     missingDataNotes,
+    simulation: isSimulation,
+    confidence,
+    provenanceNotices,
     // Compatibility aliases:
     fiveStarKey: banner.fiveStarKey,
     pullValueScore: totalScore,

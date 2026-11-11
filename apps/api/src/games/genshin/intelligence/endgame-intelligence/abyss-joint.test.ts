@@ -376,6 +376,52 @@ describe('M4 Subphase 4.2 — Spiral Abyss Joint Disjoint Solver', () => {
 
       const explanations = explainAbyssJoint(result);
       expect(explanations.some((e) => e.includes('[ARCHIVED / HISTORICAL CYCLE]'))).toBe(true);
+      expect(
+        explanations.some((e) =>
+          e.includes('Recommendations are based on historical cycle benchmarks (v4.8-1)'),
+        ),
+      ).toBe(true);
+    });
+
+    it('downgrades current cycle to HISTORICAL_BENCHMARK when evaluated after expiry date', () => {
+      const expiredDateRequest = {
+        cycleId: '5.2-1',
+        floor: 12,
+        chamber: 1,
+        referenceDate: '2030-01-01T00:00:00Z',
+        candidateTeams: [
+          {
+            id: 't1',
+            name: 'T1',
+            memberKeys: ['Bennett', 'Xiangling', 'Xingqiu', 'RaidenShogun'],
+            baseDps: 60000,
+            comfortScore: 70,
+          },
+          {
+            id: 't2',
+            name: 'T2',
+            memberKeys: ['Keqing', 'Fischl', 'Nahida', 'KaedeharaKazuha'],
+            baseDps: 55000,
+            comfortScore: 65,
+          },
+        ],
+      };
+
+      const result = solveAbyssJoint(expiredDateRequest);
+      expect(result.isCurrentCycle).toBe(false);
+      expect(result.isExpired).toBe(true);
+      expect(result.status).toBe('HISTORICAL_BENCHMARK');
+      expect(result.expirationNote).toContain('expired on');
+
+      const explanations = explainAbyssJoint(result);
+      expect(
+        explanations.some((e) =>
+          e.includes(
+            'Recommendations are based on historical cycle benchmarks (v5.2-1). Live chamber geometry and buff changes may alter performance.',
+          ),
+        ),
+      ).toBe(true);
+      expect(explanations.some((e) => e.includes('Joint clearance score'))).toBe(true);
     });
   });
 });

@@ -190,12 +190,8 @@ describe('CharacterIntelligenceService', () => {
       result.recommendations.some((r) => r.characterKey === 'UnknownCharXYZ') ||
       result.skipped.some((s) => s.characterKey === 'UnknownCharXYZ');
     expect(found).toBe(true);
-
-    // Recommendation should include the fallback warning
-    const rec = result.recommendations.find((r) => r.characterKey === 'UnknownCharXYZ');
-    if (rec) {
-      expect(rec.explanations.some((e) => e.includes('No detailed meta profile'))).toBe(true);
-    }
+    expect(result.skippedUnverifiedCharacters).toContain('UnknownCharXYZ');
+    expect(result.recommendations.some((r) => r.characterKey === 'UnknownCharXYZ')).toBe(false);
   });
   it('does not treat sourced biography metadata as a verified build ranking', async () => {
     vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValueOnce(mockAccount);

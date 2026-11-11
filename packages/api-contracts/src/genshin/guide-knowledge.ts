@@ -67,6 +67,7 @@ export const guideAdviceSchema = z
       .strict(),
     limitations: z.array(z.string()),
     externalReading: z.string().url(),
+    provenanceNotices: z.array(z.string()).optional(),
   })
   .strict();
 export type GuideAdvice = z.infer<typeof guideAdviceSchema>;

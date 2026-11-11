@@ -39,6 +39,7 @@ export interface CompanionSummaryCalculationInput {
   endgameStatus: EvaluatedEndgameStatus;
   teamSuggestion?: TeamSuggestionSnapshot;
   pullAdvice?: PullAdviceSnapshot;
+  skippedUnverifiedCharacters?: string[];
   timestamp?: string;
 }
 
@@ -48,6 +49,7 @@ export interface CompanionSummaryCalculationResult {
   accountScope: 'authenticated' | 'public_showcase';
   isPartialAccount: boolean;
   missingDataCaveats: string[];
+  skippedUnverifiedCharacters?: string[];
   primaryAction: CompanionSummaryPrimaryAction;
   readyBuildsSummary: {
     readyCount: number;
@@ -201,6 +203,11 @@ export function calculateCompanionSummary(
       `${unrecordedTalents.length} character build(s) have unrecorded weapon or talent levels; marginal investment calculations were safely constrained.`,
     );
   }
+  if (input.skippedUnverifiedCharacters && input.skippedUnverifiedCharacters.length > 0) {
+    missingDataCaveats.push(
+      `Unverified character(s) [${input.skippedUnverifiedCharacters.join(', ')}] omitted from readiness assessment due to missing reference metadata.`,
+    );
+  }
 
   return {
     contractVersion: 1,
@@ -208,6 +215,7 @@ export function calculateCompanionSummary(
     accountScope: input.accountScope,
     isPartialAccount: input.isPartialAccount,
     missingDataCaveats,
+    skippedUnverifiedCharacters: input.skippedUnverifiedCharacters,
     primaryAction,
     readyBuildsSummary,
     topMarginalInvestments,

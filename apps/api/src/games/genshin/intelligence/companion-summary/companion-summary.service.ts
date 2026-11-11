@@ -1,3 +1,5 @@
+import { createRequire } from 'node:module';
+
 import type {
   CharacterReadinessRequestInput,
   CompanionSummaryResponse,
@@ -6,6 +8,9 @@ import type {
   SupportedServerId,
   TeamSuggestionSnapshot,
 } from '@celestia/api-contracts';
+
+const require = createRequire(import.meta.url);
+const CHARACTER_ELEMENTS: Record<string, string> = require('../../static/character-elements.json');
 
 import { prisma } from '@/core/db/prisma.js';
 import { NotFoundError } from '@/core/errors/app-error.js';
@@ -73,8 +78,17 @@ export class CompanionSummaryService {
 
     const readinessList: EvaluatedCharacterReadiness[] = [];
     const upgradesList: EvaluatedMarginalUpgrade[] = [];
+    const skippedUnverifiedCharacters: string[] = [];
 
     for (const char of rawRoster) {
+      if (
+        !CHARACTER_ELEMENTS[char.characterKey] &&
+        !/^(Traveler|Aether|Lumine)/.test(char.characterKey)
+      ) {
+        skippedUnverifiedCharacters.push(char.characterKey);
+        continue;
+      }
+
       const buildInput: CharacterReadinessRequestInput = {
         character: {
           characterKey: char.characterKey,
@@ -194,6 +208,7 @@ export class CompanionSummaryService {
       endgameStatus,
       pullAdvice,
       teamSuggestion,
+      skippedUnverifiedCharacters,
       timestamp: now.toISOString(),
     });
 
@@ -223,8 +238,14 @@ export class CompanionSummaryService {
     const chars = showcaseResult.snapshot.characters;
     const readinessList: EvaluatedCharacterReadiness[] = [];
     const upgradesList: EvaluatedMarginalUpgrade[] = [];
+    const skippedUnverifiedCharacters: string[] = [];
 
     for (const char of chars) {
+      if (!CHARACTER_ELEMENTS[char.key] && !/^(Traveler|Aether|Lumine)/.test(char.key)) {
+        skippedUnverifiedCharacters.push(char.key);
+        continue;
+      }
+
       const buildInput: CharacterReadinessRequestInput = {
         character: {
           characterKey: char.key,
@@ -320,6 +341,7 @@ export class CompanionSummaryService {
       openDomainFamilies: domainFamilies,
       endgameStatus,
       pullAdvice,
+      skippedUnverifiedCharacters,
       timestamp: now.toISOString(),
     });
 

@@ -32,9 +32,50 @@ import { explainPullValue } from './pull-intelligence.explainer.js';
 
 const require = createRequire(import.meta.url);
 
-const { banners: ALL_BANNERS } = require('../../static/active-banners.json') as {
-  banners: (ActiveBanner & { historical?: boolean; startDate?: string })[];
+const rawBannersData = require('../../static/active-banners.json') as {
+  banners: (ActiveBanner & {
+    historical?: boolean;
+    startDate?: string;
+    sourceUrl?: string;
+    simulation?: boolean;
+  })[];
+  rulesSource?: string;
 };
+
+const ALL_BANNERS = rawBannersData.banners;
+const RULES_SOURCE = rawBannersData.rulesSource;
+
+export function isValidUrl(val: unknown): boolean {
+  if (typeof val !== 'string' || !val.trim()) return false;
+  try {
+    const url = new URL(val);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+export function getVerifiedActiveBanners(
+  banners: typeof ALL_BANNERS = ALL_BANNERS,
+  rulesSource: string | null | undefined = RULES_SOURCE,
+  now: Date = new Date(),
+) {
+  const isRulesVerified =
+    rulesSource !== undefined ? isValidUrl(rulesSource) : isValidUrl(RULES_SOURCE);
+  if (!isRulesVerified) return [];
+
+  return banners.filter((b) => {
+    if (b.historical || b.simulation) return false;
+    if (!isValidUrl(b.sourceUrl)) return false;
+    if (b.startDate) {
+      const start = new Date(b.startDate);
+      if (isNaN(start.getTime()) || start > now) return false;
+    }
+    const end = new Date(b.endDate);
+    if (isNaN(end.getTime()) || end <= now) return false;
+    return true;
+  });
+}
 
 const { templates: META_TEMPLATES } = require('../../static/team-templates.json') as {
   templates: TeamTemplate[];
@@ -139,14 +180,9 @@ export class PullIntelligenceService {
       // Non-fatal
     }
 
-    // 6. Filter active banners
+    // 6. Filter active banners with provenance and date gating
     const now = new Date();
-    const activeBanners = ALL_BANNERS.filter(
-      (b) =>
-        !b.historical &&
-        (!b.startDate || new Date(b.startDate) <= now) &&
-        new Date(b.endDate) > now,
-    );
+    const activeBanners = getVerifiedActiveBanners(ALL_BANNERS, RULES_SOURCE, now);
 
     const userWeights: PullUserWeights = options?.weights ?? {
       weightEndgame: 0.35,
@@ -161,6 +197,19 @@ export class PullIntelligenceService {
       pity: 0,
       guaranteed: false,
     };
+
+    if (activeBanners.length === 0) {
+      return {
+        available: false,
+        reason: 'No verified active banners currently live.',
+        status: 'UNAVAILABLE',
+        confidence: 'STALE',
+        recommendations: [],
+        userWeights,
+        isPartialAccount: false,
+        analyzedAt: now.toISOString(),
+      };
+    }
 
     // 7. Evaluate each active banner
     const recommendations: PullRecommendation[] = activeBanners
@@ -195,6 +244,9 @@ export class PullIntelligenceService {
       .sort((a, b) => b.accountValueScore - a.accountValueScore);
 
     return {
+      available: true,
+      status: 'AVAILABLE',
+      confidence: 'VERIFIED',
       recommendations,
       userWeights,
       isPartialAccount: false,
@@ -242,12 +294,7 @@ export class PullIntelligenceService {
     const currentBreakdowns = scoreAllTemplates(META_TEMPLATES, roster);
 
     const now = new Date();
-    const activeBanners = ALL_BANNERS.filter(
-      (b) =>
-        !b.historical &&
-        (!b.startDate || new Date(b.startDate) <= now) &&
-        new Date(b.endDate) > now,
-    );
+    const activeBanners = getVerifiedActiveBanners(ALL_BANNERS, RULES_SOURCE, now);
 
     const userWeights: PullUserWeights = options?.weights ?? {
       weightEndgame: 0.35,
@@ -262,6 +309,19 @@ export class PullIntelligenceService {
       pity: 0,
       guaranteed: false,
     };
+
+    if (activeBanners.length === 0) {
+      return {
+        available: false,
+        reason: 'No verified active banners currently live.',
+        status: 'UNAVAILABLE',
+        confidence: 'STALE',
+        recommendations: [],
+        userWeights,
+        isPartialAccount: true,
+        analyzedAt: now.toISOString(),
+      };
+    }
 
     const recommendations: PullRecommendation[] = activeBanners
       .map((banner) => {
@@ -295,6 +355,9 @@ export class PullIntelligenceService {
       .sort((a, b) => b.accountValueScore - a.accountValueScore);
 
     return {
+      available: true,
+      status: 'AVAILABLE',
+      confidence: 'VERIFIED',
       recommendations,
       userWeights,
       isPartialAccount: true,
@@ -375,6 +438,7 @@ export class PullIntelligenceService {
       fiveStarKey: input.targetKey,
       fourStarKeys: [],
       endDate: '2099-01-01',
+      simulation: true,
     };
 
     const target = {

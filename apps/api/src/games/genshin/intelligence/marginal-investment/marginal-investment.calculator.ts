@@ -326,6 +326,14 @@ export function calculateMarginalInvestment(
   const currentReadiness = calculateReadiness(request);
   const benchmark = resolveRoleBenchmark(request.character.characterKey, request.roleProfile);
 
+  const unsupportedProgressionTargets: string[] = [];
+  if (findCatalogCharacter(request.character.characterKey) === null) {
+    unsupportedProgressionTargets.push(request.character.characterKey);
+  }
+  if (request.character.weapon && findCatalogWeapon(request.character.weapon.weaponKey) === null) {
+    unsupportedProgressionTargets.push(request.character.weapon.weaponKey);
+  }
+
   if (!benchmark) {
     return {
       currentReadiness,
@@ -337,17 +345,9 @@ export function calculateMarginalInvestment(
         hasEnergyDeficit: false,
         missingSandsForEr: false,
         totalCandidatesEvaluated: 0,
-        unsupportedProgressionTargets: [],
+        unsupportedProgressionTargets,
       },
     };
-  }
-
-  const unsupportedProgressionTargets: string[] = [];
-  if (findCatalogCharacter(request.character.characterKey) === null) {
-    unsupportedProgressionTargets.push(request.character.characterKey);
-  }
-  if (request.character.weapon && findCatalogWeapon(request.character.weapon.weaponKey) === null) {
-    unsupportedProgressionTargets.push(request.character.weapon.weaponKey);
   }
 
   const rawCandidates: RawCandidateStep[] = [];

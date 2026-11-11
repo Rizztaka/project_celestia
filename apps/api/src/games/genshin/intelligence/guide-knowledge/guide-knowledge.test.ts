@@ -308,4 +308,22 @@ describe('K1 bounded knowledge and evaluator', () => {
       service.read('owner', 'Keqing', { contractVersion: '1', userId: 'foreign' }),
     ).rejects.toThrow();
   });
+  it('degrades to conditional advice and emits provenance notice when equipment has provenance_unknown', () => {
+    const unverified = equipment();
+    unverified.weapon = { state: 'unknown', item: null, reason: 'provenance_unknown' };
+    const result = calculateAdvice(pack, unverified, scenario('above_90'));
+    expect(result.conclusion).toBe('conditional');
+    expect(result.modeledCritRatePp).toBeNull();
+    expect(result.provenanceNotices).toEqual([
+      'Equipment assignment based on unverified snapshot; recommendations are conditional.',
+    ]);
+    const explanations = explainAdvice(result);
+    expect(explanations).toContain(
+      'Equipment assignment based on unverified snapshot; recommendations are conditional.',
+    );
+    expect(explanations).toContain(
+      'The passive contribution remains conditional. Unknown HP or refinement cannot establish an active contribution.',
+    );
+    expect(explanations.join(' ')).not.toContain('modeled passive contribution is');
+  });
 });

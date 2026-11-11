@@ -9,11 +9,17 @@ export function explainAdvice(result: ReturnType<typeof calculateAdvice>): strin
     return [
       'Harbinger of Dawn is not recorded on this character. Select the hypothetical example to explore its passive without changing equipment or implying ownership.',
     ];
-  const lines = [
+  const lines: string[] = [];
+  if ('provenanceNotices' in result && Array.isArray((result as any).provenanceNotices)) {
+    lines.push(...((result as any).provenanceNotices as string[]));
+  }
+  lines.push(
     result.basis === 'hypothetical'
       ? 'Hypothetical Harbinger of Dawn example; this does not record ownership or equip a weapon.'
-      : 'Using the recorded Harbinger of Dawn and its stored refinement. This import snapshot is not live game state.',
-  ];
+      : result.basis === 'no_weapon_scenario'
+        ? 'Weapon assignment is unverified or unknown. This import snapshot is not live game state.'
+        : 'Using the recorded Harbinger of Dawn and its stored refinement. This import snapshot is not live game state.',
+  );
   if (result.conditionalCritRatePp === null)
     lines.push(
       'Refinement is unknown. An exact CRIT Rate contribution is unavailable; R5 is not assumed.',

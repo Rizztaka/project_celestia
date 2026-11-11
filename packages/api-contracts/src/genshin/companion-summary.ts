@@ -88,6 +88,8 @@ export const companionSummaryResponseSchema = z
     accountScope: z.enum(['authenticated', 'public_showcase']),
     isPartialAccount: z.boolean(),
     missingDataCaveats: z.array(z.string().min(1).max(300)),
+    skippedUnverifiedCharacters: z.array(z.string()).optional(),
+    provenanceNotices: z.array(z.string()).optional(),
     primaryAction: companionSummaryPrimaryActionSchema,
     readyBuildsSummary: z
       .object({

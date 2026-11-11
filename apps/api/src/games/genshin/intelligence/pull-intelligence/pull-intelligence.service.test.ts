@@ -202,5 +202,153 @@ describe('PullIntelligenceService (Milestone 5)', () => {
     expect(result.comparison.accountValueScore).toBeGreaterThan(30);
     expect(result.comparison.budgetForecast.currentPullsAvailable).toBe(120);
     expect(result.comparison.budgetForecast.acquisitionProbability).toBeGreaterThan(0.9);
+    expect(result.comparison.simulation).toBe(true);
+    expect(result.comparison.confidence).toBe('SIMULATED_SCENARIO');
+    expect(result.comparison.explanations).toEqual(
+      expect.arrayContaining([expect.stringContaining('Simulated Scenario')]),
+    );
+  });
+
+  it('degrades to available: false when all banners are expired', async () => {
+    vi.mocked(prisma.genshinAccount.findUnique).mockResolvedValue({
+      id: 'acc-1',
+      userId: MOCK_USER_ID,
+      server: 'os_asia',
+    } as unknown as GenshinAccount);
+
+    // Set system time far into the future when 2029-12-31 is expired
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2035-01-01'));
+
+    try {
+      const result = await service.getRecommendations(MOCK_USER_ID);
+
+      expect(result.available).toBe(false);
+      expect(result.status).toBe('UNAVAILABLE');
+      expect(result.confidence).toBe('STALE');
+      expect(result.reason).toBe('No verified active banners currently live.');
+      expect(result.recommendations).toHaveLength(0);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('degrades to available: false for public showcase when all banners are expired', async () => {
+    vi.spyOn(mockShowcaseService, 'lookup').mockResolvedValue({
+      source: 'enka.network',
+      delivery: 'cached',
+      snapshot: {
+        uid: '800000001',
+        nickname: 'Traveler',
+        signature: '',
+        adventureRank: 60,
+        worldLevel: 8,
+        characters: [],
+      },
+      fetchedAt: new Date().toISOString(),
+      nextRefreshAt: new Date().toISOString(),
+      issue: null,
+    });
+
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2035-01-01'));
+
+    try {
+      const result = await service.getPublicShowcaseRecommendations('800000001');
+
+      expect(result.available).toBe(false);
+      expect(result.status).toBe('UNAVAILABLE');
+      expect(result.confidence).toBe('STALE');
+      expect(result.reason).toBe('No verified active banners currently live.');
+      expect(result.recommendations).toHaveLength(0);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  describe('getVerifiedActiveBanners provenance gating', () => {
+    it('rejects banners with missing or invalid rulesSource', async () => {
+      const { getVerifiedActiveBanners } = await import('./pull-intelligence.service.js');
+      const sample = [
+        {
+          bannerId: 'b1',
+          name: 'Test',
+          type: 'CHARACTER' as const,
+          fiveStarKey: 'Mavuika',
+          fourStarKeys: [],
+          startDate: '2026-01-01',
+          endDate: '2028-01-01',
+          sourceUrl: 'https://example.com/banner',
+        },
+      ];
+      expect(getVerifiedActiveBanners(sample, 'not-a-url', new Date('2026-06-01'))).toEqual([]);
+      expect(getVerifiedActiveBanners(sample, '', new Date('2026-06-01'))).toEqual([]);
+      expect(getVerifiedActiveBanners(sample, null, new Date('2026-06-01'))).toEqual([]);
+    });
+
+    it('rejects banners with missing or invalid sourceUrl, or flagged historical/simulation', async () => {
+      const { getVerifiedActiveBanners } = await import('./pull-intelligence.service.js');
+      const sample = [
+        {
+          bannerId: 'b1',
+          name: 'Test Valid',
+          type: 'CHARACTER' as const,
+          fiveStarKey: 'Mavuika',
+          fourStarKeys: [],
+          startDate: '2026-01-01',
+          endDate: '2028-01-01',
+          sourceUrl: 'https://example.com/banner',
+        },
+        {
+          bannerId: 'b2',
+          name: 'Test Invalid Url',
+          type: 'CHARACTER' as const,
+          fiveStarKey: 'Citlali',
+          fourStarKeys: [],
+          startDate: '2026-01-01',
+          endDate: '2028-01-01',
+          sourceUrl: 'invalid-url',
+        },
+        {
+          bannerId: 'b3',
+          name: 'Test Historical',
+          type: 'CHARACTER' as const,
+          fiveStarKey: 'Xilonen',
+          fourStarKeys: [],
+          startDate: '2026-01-01',
+          endDate: '2028-01-01',
+          sourceUrl: 'https://example.com/banner',
+          historical: true,
+        },
+        {
+          bannerId: 'b4',
+          name: 'Test Simulation',
+          type: 'CHARACTER' as const,
+          fiveStarKey: 'Venti',
+          fourStarKeys: [],
+          startDate: '2026-01-01',
+          endDate: '2028-01-01',
+          sourceUrl: 'https://example.com/banner',
+          simulation: true,
+        },
+        {
+          bannerId: 'b5',
+          name: 'Test Expired',
+          type: 'CHARACTER' as const,
+          fiveStarKey: 'Zhongli',
+          fourStarKeys: [],
+          startDate: '2025-01-01',
+          endDate: '2025-12-31',
+          sourceUrl: 'https://example.com/banner',
+        },
+      ];
+      const verified = getVerifiedActiveBanners(
+        sample,
+        'https://genshin.hoyoverse.com',
+        new Date('2026-06-01'),
+      );
+      expect(verified).toHaveLength(1);
+      expect(verified[0]!.bannerId).toBe('b1');
+    });
   });
 });

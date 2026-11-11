@@ -144,6 +144,7 @@ export const abyssJointRequestSchema = z
     chamber: z.number().int().min(1).max(3).default(1),
     candidateTeams: z.array(candidateEndgameTeamSchema).min(2),
     encounterOverride: abyssChamberConfigSchema.optional(),
+    referenceDate: z.string().optional(),
   })
   .strict();
 export type AbyssJointRequest = z.infer<typeof abyssJointRequestSchema>;
@@ -173,6 +174,7 @@ export const abyssJointResponseSchema = z
     cycleId: z.string(),
     floor: z.number(),
     chamber: z.number(),
+    status: z.enum(['CURRENT_CYCLE', 'HISTORICAL_BENCHMARK']).optional(),
     isCurrentCycle: z.boolean().default(true),
     isExpired: z.boolean().default(false),
     expirationNote: z.string().nullable().default(null),
@@ -191,6 +193,7 @@ export const abyssJointResponseSchema = z
       .nullable()
       .default(null),
     explanations: z.array(z.string()),
+    provenanceNotices: z.array(z.string()).optional(),
   })
   .strict();
 export type AbyssJointResponse = z.infer<typeof abyssJointResponseSchema>;

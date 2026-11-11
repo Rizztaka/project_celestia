@@ -156,4 +156,18 @@ describe('read-only source-backed service', () => {
     ])
       expect(buildInsightQuerySchema.safeParse(q).success).toBe(false);
   });
+  it('flags unverified snapshot provenance and degrades recommendations conditionally', async () => {
+    const unverifiedRow = {
+      ...row('Albedo'),
+      weaponRelationConsistent: false,
+    };
+    const svc = new BuildInsightsService({ readForUser: async () => unverifiedRow });
+    const result = await svc.read('owner', 'Albedo', {});
+    expect(result.provenanceNotices).toEqual([
+      'Equipment assignment based on unverified snapshot; recommendations are conditional.',
+    ]);
+    expect(result.limitations).toContain(
+      'Equipment assignment based on unverified snapshot; recommendations are conditional.',
+    );
+  });
 });

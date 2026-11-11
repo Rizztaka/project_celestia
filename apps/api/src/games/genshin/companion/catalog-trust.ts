@@ -103,7 +103,7 @@ const domainSchema = z
   .strict();
 const sourceSchema = z
   .object({
-    authority: z.enum(['primary', 'owner']),
+    authority: z.enum(['primary', 'owner', 'community']),
     reference: z.string().min(1),
     localEvidence: z.string().min(1),
     verifier: z.string().min(1),
@@ -221,6 +221,12 @@ export class GenshinCatalogTrust {
       return unavailable('Ambiguous catalog evidence covers these costs.');
     const claim = covering[0];
     if (!claim) return unavailable('No primary or owner evidence covers these upgrade costs.');
+    if (
+      claim.sources.length === 0 ||
+      claim.sources.some((s) => s.authority !== 'primary' && s.authority !== 'owner')
+    ) {
+      return unavailable('No primary or owner evidence covers these upgrade costs.');
+    }
     if (claim.conflicts.length > 0)
       return unavailable(`Unresolved source conflict: ${claim.conflicts.join('; ')}`);
     try {

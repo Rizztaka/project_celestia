@@ -24,6 +24,8 @@ const characterProfiles: Record<
   StaticCharacterProfile
 > = require('../../static/character-profiles.json');
 
+const CHARACTER_ELEMENTS: Record<string, string> = require('../../static/character-elements.json');
+
 const FALLBACK_PROFILE: StaticCharacterProfile = {
   metaTier: 3,
   role: 'sub_dps',
@@ -51,6 +53,7 @@ export interface SkippedCharacter {
 export interface IntelligenceResponse {
   recommendations: CharacterRecommendation[];
   skipped: SkippedCharacter[];
+  skippedUnverifiedCharacters?: string[];
   analysedAt: string;
 }
 
@@ -93,8 +96,18 @@ export class CharacterIntelligenceService {
     // ── 3. Score every character ──────────────────────────────────────────
     const recommendations: Array<CharacterRecommendation & { _sortScore: number }> = [];
     const skipped: SkippedCharacter[] = [];
+    const skippedUnverifiedCharacters: string[] = [];
 
     for (const char of roster) {
+      if (!CHARACTER_ELEMENTS[char.characterKey]) {
+        skippedUnverifiedCharacters.push(char.characterKey);
+        skipped.push({
+          characterKey: char.characterKey,
+          reason: 'Unverified character: not present in character reference index or elemental registry.',
+        });
+        continue;
+      }
+
       const metadata = characterProfiles[char.characterKey];
       const profile = metadata?.metaTier ? metadata : null;
       const hasFallbackProfile = profile === null;
@@ -155,6 +168,7 @@ export class CharacterIntelligenceService {
     return {
       recommendations: top5,
       skipped,
+      skippedUnverifiedCharacters,
       analysedAt: new Date().toISOString(),
     };
   }

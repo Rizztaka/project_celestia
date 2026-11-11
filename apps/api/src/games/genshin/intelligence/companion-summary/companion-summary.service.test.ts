@@ -176,9 +176,51 @@ describe('CompanionSummaryService', () => {
     expect(parsed.success).toBe(true);
   });
 
-  it('throws NotFoundError when public showcase snapshot is missing', async () => {
-    mockShowcaseService.lookup.mockResolvedValueOnce({ snapshot: null });
+  it('isolates unverified roster characters into skippedUnverifiedCharacters and caveats', async () => {
+    vi.spyOn(prisma.genshinAccount, 'findUnique').mockResolvedValue({
+      id: 'acc-1',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      userId: 'user-1',
+      uid: '800000001',
+      nickname: 'Traveler',
+      adventureRank: 60,
+      worldLevel: 8,
+    });
 
-    await expect(service.getPublicShowcaseSummary('899999999')).rejects.toThrow(NotFoundError);
+    mockCharacterService.getCharactersForUser.mockResolvedValueOnce([
+      {
+        characterKey: 'Bennett',
+        level: 80,
+        ascension: 5,
+        constellation: 5,
+        talentNormal: 1,
+        talentSkill: 6,
+        talentBurst: 9,
+        equippedWeapon: null,
+      },
+      {
+        characterKey: 'UnindexedCharacterXYZ',
+        level: 80,
+        ascension: 5,
+        constellation: 0,
+        talentNormal: 6,
+        talentSkill: 6,
+        talentBurst: 6,
+        equippedWeapon: null,
+      },
+    ]);
+
+    const summary = await service.getSummary('user-1');
+
+    expect(summary.skippedUnverifiedCharacters).toContain('UnindexedCharacterXYZ');
+    expect(
+      summary.missingDataCaveats.some((c) =>
+        c.includes('Unverified character(s) [UnindexedCharacterXYZ] omitted from readiness assessment'),
+      ),
+    ).toBe(true);
+
+    const parsed = companionSummaryResponseSchema.safeParse(summary);
+    expect(parsed.success).toBe(true);
   });
 });

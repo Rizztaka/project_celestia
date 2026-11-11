@@ -59,6 +59,7 @@ export const buildInsightsResponseSchema = z
     weaponOptions: z.array(z.object({ key, name: z.string() }).strict()),
     artifactOptions: z.array(z.object({ key, name: z.string() }).strict()),
     limitations: z.array(z.string()),
+    provenanceNotices: z.array(z.string()).optional(),
   })
   .strict();
 export type BuildInsightsResponse = z.infer<typeof buildInsightsResponseSchema>;

@@ -407,6 +407,7 @@ export interface AbyssJointCalculationResult {
   cycleId: string;
   floor: number;
   chamber: number;
+  status: 'CURRENT_CYCLE' | 'HISTORICAL_BENCHMARK';
   isCurrentCycle: boolean;
   isExpired: boolean;
   expirationNote: string | null;
@@ -428,7 +429,10 @@ export interface AbyssJointCalculationResult {
   };
 }
 
-export function solveAbyssJoint(input: AbyssJointRequestInput): AbyssJointCalculationResult {
+export function solveAbyssJoint(
+  input: AbyssJointRequestInput,
+  referenceDate?: Date,
+): AbyssJointCalculationResult {
   const parsed = abyssJointRequestSchema.parse(input);
   const candidates = parsed.candidateTeams;
 
@@ -545,27 +549,31 @@ export function solveAbyssJoint(input: AbyssJointRequestInput): AbyssJointCalcul
     };
   }
 
-  const packStatus = evaluateEncounterPackStatus(parsed.cycleId);
+    const refDate =
+      referenceDate ?? (parsed.referenceDate ? new Date(parsed.referenceDate) : new Date());
+    const packStatus = evaluateEncounterPackStatus(parsed.cycleId, refDate);
+    const isCurrent = packStatus.isCurrentCycle && !packStatus.isExpired;
 
-  return {
-    cycleId: parsed.cycleId,
-    floor: parsed.floor,
-    chamber: parsed.chamber,
-    isCurrentCycle: packStatus.isCurrentCycle,
-    isExpired: packStatus.isExpired,
-    expirationNote: packStatus.expirationNote,
-    firstHalf: bestPair.firstHalf,
-    secondHalf: bestPair.secondHalf,
-    jointScore: bestPair.jointScore,
-    isJointOptimal: greedyComparison
-      ? bestPair.jointScore >= greedyComparison.greedyJointScore
-      : true,
-    greedyComparison,
-    metadata: {
-      disjointPairsEvaluated,
-      totalCandidates: candidates.length,
-      greedyFirstTeamId: greedyFirstTeam.id,
-      greedySecondTeamId: greedySecondTeam ? greedySecondTeam.id : null,
-    },
-  };
+    return {
+      cycleId: parsed.cycleId,
+      floor: parsed.floor,
+      chamber: parsed.chamber,
+      status: isCurrent ? 'CURRENT_CYCLE' : 'HISTORICAL_BENCHMARK',
+      isCurrentCycle: isCurrent,
+      isExpired: packStatus.isExpired,
+      expirationNote: packStatus.expirationNote,
+      firstHalf: bestPair.firstHalf,
+      secondHalf: bestPair.secondHalf,
+      jointScore: bestPair.jointScore,
+      isJointOptimal: greedyComparison
+        ? bestPair.jointScore >= greedyComparison.greedyJointScore
+        : true,
+      greedyComparison,
+      metadata: {
+        disjointPairsEvaluated,
+        totalCandidates: candidates.length,
+        greedyFirstTeamId: greedyFirstTeam.id,
+        greedySecondTeamId: greedySecondTeam ? greedySecondTeam.id : null,
+      },
+    };
 }

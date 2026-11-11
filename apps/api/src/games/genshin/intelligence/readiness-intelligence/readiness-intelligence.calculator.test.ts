@@ -506,5 +506,33 @@ describe('Readiness Intelligence Calculator', () => {
       expect(result.dimensions.set_activation.status).toBe('insufficient_data');
       expect(result.status).toBe('insufficient_data');
     });
+
+    it('rejects unindexed/unverified characters and explains data gap without guessing scaling', async () => {
+      const { explainReadiness } = await import('./readiness-intelligence.explainer.js');
+      const unverifiedBuild: CharacterReadinessRequestInput = {
+        character: {
+          characterKey: 'NonExistentHero_999',
+          level: 90,
+          ascension: 6,
+          talents: { normal: 10, skill: 10, burst: 10 },
+          weapon: { weaponKey: 'FavoniusSword', level: 90 },
+        },
+        roleProfile: 'on_field_dps',
+      };
+
+      const result = calculateReadiness(unverifiedBuild);
+      expect(result.status).toBe('insufficient_data');
+      expect(result.score).toBe(0);
+      expect(result.missingData.some((m) => m.reason === 'unverified_character_reference')).toBe(true);
+
+      const explanations = explainReadiness(result);
+      expect(
+        explanations.some((e) =>
+          e.includes(
+            'Unverified character: "NonExistentHero_999" is not present in the verified character reference index',
+          ),
+        ),
+      ).toBe(true);
+    });
   });
 });

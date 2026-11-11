@@ -6,9 +6,16 @@ import type { ReadinessCalculatorResult } from './readiness-intelligence.calcula
  * concise, human-readable rationale without performing calculations or altering results.
  */
 export function explainReadiness(result: ReadinessCalculatorResult): string[] {
-  const explanations: string[] = [];
   const meta = result.metadata;
   const dims = result.dimensions;
+
+  if (dims.talents.missingReasons.includes('unverified_character_reference')) {
+    return [
+      `Unverified character: "${meta.characterKey}" is not present in the verified character reference index or elemental registry. Readiness benchmarks and scaling cannot be determined.`,
+    ];
+  }
+
+  const explanations: string[] = [];
 
   // 1. Overall Status Summary
   if (result.status === 'ready_for_target') {

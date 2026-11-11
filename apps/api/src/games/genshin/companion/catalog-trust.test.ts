@@ -304,4 +304,22 @@ describe('C2b source-bound catalog', () => {
       route: { available: false },
     });
   });
+
+  it('rejects advice when material cost fingerprint is tampered or mismatched', () => {
+    const input = fixture();
+    input.manifest[0]!.fingerprint = 'a'.repeat(64);
+    expect(new GenshinCatalogTrust(input).getAdvice(goal)).toMatchObject({
+      available: false,
+      reason: 'Verified costs or required material references changed; review the evidence again.',
+    });
+  });
+
+  it('rejects advice when evidence authority is untrusted or tampered', () => {
+    const input = fixture();
+    (input.manifest[0]!.sources[0] as any).authority = 'community';
+    expect(new GenshinCatalogTrust(input).getAdvice(goal)).toMatchObject({
+      available: false,
+      reason: 'No primary or owner evidence covers these upgrade costs.',
+    });
+  });
 });

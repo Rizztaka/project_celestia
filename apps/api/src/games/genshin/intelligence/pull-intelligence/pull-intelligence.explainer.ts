@@ -130,5 +130,19 @@ export function explainPullValue(rec: PullRecommendation): string[] {
       break;
   }
 
+  // ── 8. Simulation & Provenance Notice ─────────────────────────────────────
+  if (rec.simulation || rec.confidence === 'SIMULATED_SCENARIO') {
+    explanations.push(
+      'Simulated Scenario: Recommendation is evaluated under hypothetical or historical simulation conditions, not verified live active wishes.',
+    );
+  }
+  if (rec.provenanceNotices && rec.provenanceNotices.length > 0) {
+    for (const notice of rec.provenanceNotices) {
+      if (!explanations.includes(notice)) {
+        explanations.push(`Data Provenance Notice: ${notice}`);
+      }
+    }
+  }
+
   return explanations;
 }

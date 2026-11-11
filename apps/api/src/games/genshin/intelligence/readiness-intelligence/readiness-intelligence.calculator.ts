@@ -1,3 +1,5 @@
+import { createRequire } from 'node:module';
+
 import {
   type CharacterReadinessRequest,
   type CharacterReadinessRequestInput,
@@ -11,6 +13,9 @@ import {
   type ReadinessTeamEnergyContext,
   type RoleBenchmarkProfile,
 } from '@celestia/api-contracts';
+
+const require = createRequire(import.meta.url);
+const CHARACTER_ELEMENTS: Record<string, string> = require('../../static/character-elements.json');
 
 // ---------------------------------------------------------------------------
 // Internal Calculator Types (adhering strictly to ADR-0011: no UI/prose text)
@@ -125,6 +130,8 @@ export function normalizeStatKey(key: string): string {
       return key;
   }
 }
+
+export const cleanAlphanumeric = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
 
 export function normalizeSlot(slot: string): 'flower' | 'plume' | 'sands' | 'goblet' | 'circlet' {
   const s = slot.trim().toLowerCase();
@@ -778,7 +785,17 @@ export function resolveRoleBenchmark(
     return null;
   }
 
-  // 3. Fallback generic roles
+  // 3. Fallback generic roles (only for verified characters)
+  const isVerified = Boolean(
+    CHARACTER_ELEMENTS[characterKey] ||
+      CHARACTER_ELEMENTS[rawChar] ||
+      CHARACTER_ELEMENTS[normalizedChar] ||
+      /^(Traveler|Aether|Lumine)/.test(characterKey),
+  );
+  if (!isVerified) {
+    return null;
+  }
+
   if (
     roleStr.includes('dps') ||
     roleStr.includes('on_field') ||
@@ -1417,7 +1434,32 @@ export function calculateReadiness(
     rotationLengthSeconds: 20,
   };
 
-  if (!benchmark) {
+  const rawKey = request.character.characterKey;
+  const isVerifiedCharacter = Boolean(
+    CHARACTER_ELEMENTS[rawKey] ||
+      CHARACTER_ELEMENTS[cleanAlphanumeric(rawKey)] ||
+      /^(Traveler|Aether|Lumine)/.test(rawKey),
+  );
+
+  if (!benchmark || !isVerifiedCharacter) {
+    const missingReasons = !isVerifiedCharacter
+      ? ['unspecified_role_profile', 'unverified_character_reference']
+      : ['unspecified_role_profile'];
+    const missingData: ReadinessMissingData[] = [
+      {
+        dimension: 'talents',
+        status: 'missing',
+        reason: 'unspecified_role_profile',
+      },
+    ];
+    if (!isVerifiedCharacter) {
+      missingData.push({
+        dimension: 'talents',
+        status: 'unsupported',
+        reason: 'unverified_character_reference',
+      });
+    }
+
     const dimensions: Record<ReadinessDimension, CalculatorDimensionEvaluation> = {
       talents: {
         dimension: 'talents',
@@ -1425,7 +1467,7 @@ export function calculateReadiness(
         score: 0,
         isReady: false,
         details: {},
-        missingReasons: ['unspecified_role_profile'],
+        missingReasons,
       },
       weapon: {
         dimension: 'weapon',
@@ -1433,7 +1475,7 @@ export function calculateReadiness(
         score: 0,
         isReady: false,
         details: {},
-        missingReasons: ['unspecified_role_profile'],
+        missingReasons,
       },
       main_stats: {
         dimension: 'main_stats',
@@ -1441,7 +1483,7 @@ export function calculateReadiness(
         score: 0,
         isReady: false,
         details: {},
-        missingReasons: ['unspecified_role_profile'],
+        missingReasons,
       },
       set_activation: {
         dimension: 'set_activation',
@@ -1449,7 +1491,7 @@ export function calculateReadiness(
         score: 0,
         isReady: false,
         details: {},
-        missingReasons: ['unspecified_role_profile'],
+        missingReasons,
       },
       rotation_energy: {
         dimension: 'rotation_energy',
@@ -1457,7 +1499,7 @@ export function calculateReadiness(
         score: 0,
         isReady: false,
         details: {},
-        missingReasons: ['unspecified_role_profile'],
+        missingReasons,
       },
       support_output: {
         dimension: 'support_output',
@@ -1465,7 +1507,7 @@ export function calculateReadiness(
         score: 0,
         isReady: false,
         details: {},
-        missingReasons: ['unspecified_role_profile'],
+        missingReasons,
       },
     };
 
@@ -1473,13 +1515,7 @@ export function calculateReadiness(
       status: 'insufficient_data',
       score: 0,
       dimensions,
-      missingData: [
-        {
-          dimension: 'talents',
-          status: 'missing',
-          reason: 'unspecified_role_profile',
-        },
-      ],
+      missingData,
       metadata: {
         characterKey: request.character.characterKey,
         roleId: 'unspecified',

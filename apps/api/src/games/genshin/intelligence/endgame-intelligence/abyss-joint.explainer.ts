@@ -11,10 +11,13 @@ export function explainAbyssJoint(result: AbyssJointCalculationResult): string[]
   const points: string[] = [];
 
   // 1. Overall Header
-  if (!result.isCurrentCycle) {
+  if (!result.isCurrentCycle || result.isExpired) {
     points.push(
-      `[ARCHIVED / HISTORICAL CYCLE] Note: Cycle ${result.cycleId} is not the active cycle. ${result.expirationNote ?? 'Historical manual preset evaluated.'}`,
+      `[ARCHIVED / HISTORICAL CYCLE] Recommendations are based on historical cycle benchmarks (v${result.cycleId}). Live chamber geometry and buff changes may alter performance.`,
     );
+    if (result.expirationNote) {
+      points.push(`Cycle note: ${result.expirationNote}`);
+    }
   }
   points.push(
     `Spiral Abyss Floor ${result.floor} Chamber ${result.chamber} (Cycle: ${result.cycleId}) — Joint Disjoint Recommendation:`,

@@ -87,7 +87,15 @@ export function calculateAdvice(
     supported && basis !== 'no_weapon_scenario' && refinement !== null
       ? pack.claims[0].effect.values[refinement - 1]
       : null;
-  const conclusion: GuideAdvice['conclusion'] = !supported
+  const isEquipmentUnverified =
+    equipment.weapon.state === 'unknown' || !equipment.artifactRelationsConsistent;
+  const provenanceNotices: string[] = [];
+  if (isEquipmentUnverified) {
+    provenanceNotices.push(
+      'Equipment assignment based on unverified snapshot; recommendations are conditional.',
+    );
+  }
+  const baseConclusion: GuideAdvice['conclusion'] = !supported
     ? 'unsupported'
     : basis === 'no_weapon_scenario'
       ? 'no_weapon_scenario'
@@ -96,6 +104,12 @@ export function calculateAdvice(
         : applicability === 'true'
           ? 'active'
           : 'conditional';
+  const conclusion: GuideAdvice['conclusion'] =
+    !supported
+      ? 'unsupported'
+      : isEquipmentUnverified && basis !== 'hypothetical'
+        ? 'conditional'
+        : baseConclusion;
   return {
     coverage: supported ? ('supported' as const) : ('unsupported' as const),
     basis,
@@ -106,5 +120,6 @@ export function calculateAdvice(
     modeledCritRatePp:
       conclusion === 'active' ? conditionalCritRatePp : conclusion === 'inactive' ? 0 : null,
     trace,
+    ...(provenanceNotices.length > 0 ? { provenanceNotices } : {}),
   };
 }

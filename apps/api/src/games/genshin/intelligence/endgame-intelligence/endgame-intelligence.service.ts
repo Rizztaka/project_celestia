@@ -29,10 +29,18 @@ export class EndgameIntelligenceService {
     const calcResult: AbyssJointCalculationResult = solveAbyssJoint(request);
     const explanations: string[] = explainAbyssJoint(calcResult);
 
+    const provenanceNotices: string[] =
+      !calcResult.isCurrentCycle || calcResult.isExpired
+        ? [
+            `Recommendations are based on historical cycle benchmarks (v${calcResult.cycleId}). Live chamber geometry and buff changes may alter performance.`,
+          ]
+        : [];
+
     return {
       cycleId: calcResult.cycleId,
       floor: calcResult.floor,
       chamber: calcResult.chamber,
+      status: calcResult.status,
       isCurrentCycle: calcResult.isCurrentCycle,
       isExpired: calcResult.isExpired,
       expirationNote: calcResult.expirationNote,
@@ -42,6 +50,7 @@ export class EndgameIntelligenceService {
       isJointOptimal: calcResult.isJointOptimal,
       greedyComparison: calcResult.greedyComparison,
       explanations,
+      provenanceNotices,
     };
   }
 

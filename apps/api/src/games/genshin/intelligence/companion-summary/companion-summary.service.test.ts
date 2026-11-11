@@ -216,7 +216,9 @@ describe('CompanionSummaryService', () => {
     expect(summary.skippedUnverifiedCharacters).toContain('UnindexedCharacterXYZ');
     expect(
       summary.missingDataCaveats.some((c) =>
-        c.includes('Unverified character(s) [UnindexedCharacterXYZ] omitted from readiness assessment'),
+        c.includes(
+          'Unverified character(s) [UnindexedCharacterXYZ] omitted from readiness assessment',
+        ),
       ),
     ).toBe(true);
 

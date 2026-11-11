@@ -154,8 +154,7 @@ export class BuildInsightsService {
         weaponRecord?.reason === 'provenance_unknown' ||
         weaponRecord?.reason === 'inconsistent_relation' ||
         artifactsList.some(
-          (a) =>
-            a?.reason === 'provenance_unknown' || a?.reason === 'inconsistent_relation',
+          (a) => a?.reason === 'provenance_unknown' || a?.reason === 'inconsistent_relation',
         ) ||
         receiptsList.some(
           (r) =>

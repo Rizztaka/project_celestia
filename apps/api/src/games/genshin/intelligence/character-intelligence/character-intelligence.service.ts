@@ -103,7 +103,8 @@ export class CharacterIntelligenceService {
         skippedUnverifiedCharacters.push(char.characterKey);
         skipped.push({
           characterKey: char.characterKey,
-          reason: 'Unverified character: not present in character reference index or elemental registry.',
+          reason:
+            'Unverified character: not present in character reference index or elemental registry.',
         });
         continue;
       }

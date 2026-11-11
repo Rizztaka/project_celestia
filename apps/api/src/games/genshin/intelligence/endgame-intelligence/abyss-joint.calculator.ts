@@ -549,31 +549,31 @@ export function solveAbyssJoint(
     };
   }
 
-    const refDate =
-      referenceDate ?? (parsed.referenceDate ? new Date(parsed.referenceDate) : new Date());
-    const packStatus = evaluateEncounterPackStatus(parsed.cycleId, refDate);
-    const isCurrent = packStatus.isCurrentCycle && !packStatus.isExpired;
+  const refDate =
+    referenceDate ?? (parsed.referenceDate ? new Date(parsed.referenceDate) : new Date());
+  const packStatus = evaluateEncounterPackStatus(parsed.cycleId, refDate);
+  const isCurrent = packStatus.isCurrentCycle && !packStatus.isExpired;
 
-    return {
-      cycleId: parsed.cycleId,
-      floor: parsed.floor,
-      chamber: parsed.chamber,
-      status: isCurrent ? 'CURRENT_CYCLE' : 'HISTORICAL_BENCHMARK',
-      isCurrentCycle: isCurrent,
-      isExpired: packStatus.isExpired,
-      expirationNote: packStatus.expirationNote,
-      firstHalf: bestPair.firstHalf,
-      secondHalf: bestPair.secondHalf,
-      jointScore: bestPair.jointScore,
-      isJointOptimal: greedyComparison
-        ? bestPair.jointScore >= greedyComparison.greedyJointScore
-        : true,
-      greedyComparison,
-      metadata: {
-        disjointPairsEvaluated,
-        totalCandidates: candidates.length,
-        greedyFirstTeamId: greedyFirstTeam.id,
-        greedySecondTeamId: greedySecondTeam ? greedySecondTeam.id : null,
-      },
-    };
+  return {
+    cycleId: parsed.cycleId,
+    floor: parsed.floor,
+    chamber: parsed.chamber,
+    status: isCurrent ? 'CURRENT_CYCLE' : 'HISTORICAL_BENCHMARK',
+    isCurrentCycle: isCurrent,
+    isExpired: packStatus.isExpired,
+    expirationNote: packStatus.expirationNote,
+    firstHalf: bestPair.firstHalf,
+    secondHalf: bestPair.secondHalf,
+    jointScore: bestPair.jointScore,
+    isJointOptimal: greedyComparison
+      ? bestPair.jointScore >= greedyComparison.greedyJointScore
+      : true,
+    greedyComparison,
+    metadata: {
+      disjointPairsEvaluated,
+      totalCandidates: candidates.length,
+      greedyFirstTeamId: greedyFirstTeam.id,
+      greedySecondTeamId: greedySecondTeam ? greedySecondTeam.id : null,
+    },
+  };
 }

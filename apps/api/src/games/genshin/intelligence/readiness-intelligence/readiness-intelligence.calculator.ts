@@ -788,9 +788,9 @@ export function resolveRoleBenchmark(
   // 3. Fallback generic roles (only for verified characters)
   const isVerified = Boolean(
     CHARACTER_ELEMENTS[characterKey] ||
-      CHARACTER_ELEMENTS[rawChar] ||
-      CHARACTER_ELEMENTS[normalizedChar] ||
-      /^(Traveler|Aether|Lumine)/.test(characterKey),
+    CHARACTER_ELEMENTS[rawChar] ||
+    CHARACTER_ELEMENTS[normalizedChar] ||
+    /^(Traveler|Aether|Lumine)/.test(characterKey),
   );
   if (!isVerified) {
     return null;
@@ -1437,8 +1437,8 @@ export function calculateReadiness(
   const rawKey = request.character.characterKey;
   const isVerifiedCharacter = Boolean(
     CHARACTER_ELEMENTS[rawKey] ||
-      CHARACTER_ELEMENTS[cleanAlphanumeric(rawKey)] ||
-      /^(Traveler|Aether|Lumine)/.test(rawKey),
+    CHARACTER_ELEMENTS[cleanAlphanumeric(rawKey)] ||
+    /^(Traveler|Aether|Lumine)/.test(rawKey),
   );
 
   if (!benchmark || !isVerifiedCharacter) {

@@ -523,7 +523,9 @@ describe('Readiness Intelligence Calculator', () => {
       const result = calculateReadiness(unverifiedBuild);
       expect(result.status).toBe('insufficient_data');
       expect(result.score).toBe(0);
-      expect(result.missingData.some((m) => m.reason === 'unverified_character_reference')).toBe(true);
+      expect(result.missingData.some((m) => m.reason === 'unverified_character_reference')).toBe(
+        true,
+      );
 
       const explanations = explainReadiness(result);
       expect(

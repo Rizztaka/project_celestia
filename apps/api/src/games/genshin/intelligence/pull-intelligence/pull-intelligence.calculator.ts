@@ -498,9 +498,9 @@ export function evaluateCounterfactualAddition(params: {
 
   const isSimulation = Boolean(
     banner.historical ||
-      banner.simulation ||
-      banner.bannerId.startsWith('custom_') ||
-      (banner.sourceUrl && !banner.sourceUrl.startsWith('http')),
+    banner.simulation ||
+    banner.bannerId.startsWith('custom_') ||
+    (banner.sourceUrl && !banner.sourceUrl.startsWith('http')),
   );
   const confidence = isSimulation ? ('SIMULATED_SCENARIO' as const) : ('VERIFIED' as const);
   const provenanceNotices: string[] = isSimulation

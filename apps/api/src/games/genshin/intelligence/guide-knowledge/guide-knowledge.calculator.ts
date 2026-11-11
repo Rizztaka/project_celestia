@@ -104,12 +104,11 @@ export function calculateAdvice(
         : applicability === 'true'
           ? 'active'
           : 'conditional';
-  const conclusion: GuideAdvice['conclusion'] =
-    !supported
-      ? 'unsupported'
-      : isEquipmentUnverified && basis !== 'hypothetical'
-        ? 'conditional'
-        : baseConclusion;
+  const conclusion: GuideAdvice['conclusion'] = !supported
+    ? 'unsupported'
+    : isEquipmentUnverified && basis !== 'hypothetical'
+      ? 'conditional'
+      : baseConclusion;
   return {
     coverage: supported ? ('supported' as const) : ('unsupported' as const),
     basis,

@@ -611,7 +611,7 @@ export class AccountContextProvider {
 
     const observedTimes = characterContexts
       .flatMap((c) => (c.observedAt ? [c.observedAt] : []))
-      .sort();
+      .sort((a, b) => a.localeCompare(b));
 
     const overallFreshness: AccountContextFreshness =
       characterContexts.length === 0

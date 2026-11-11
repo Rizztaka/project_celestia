@@ -287,7 +287,9 @@ function validCounters(value: unknown): value is Record<string, number> {
 }
 
 function averageCounters(rows: Record<string, number>[]) {
-  const keys = [...new Set(rows.flatMap((row) => Object.keys(row)))].sort();
+  const keys = [...new Set(rows.flatMap((row) => Object.keys(row)))].sort((a, b) =>
+    a.localeCompare(b),
+  );
   return Object.fromEntries(
     keys.map((key) => [
       key,

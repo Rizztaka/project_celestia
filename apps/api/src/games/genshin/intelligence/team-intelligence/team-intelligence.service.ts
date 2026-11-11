@@ -412,7 +412,7 @@ export class TeamIntelligenceService {
       baseScore: number,
       template?: TeamTemplate,
     ) => {
-      const sig = [...memberKeys].sort().join('|');
+      const sig = [...memberKeys].sort((a, b) => a.localeCompare(b)).join('|');
       if (seenSignatures.has(sig)) return;
       seenSignatures.add(sig);
 

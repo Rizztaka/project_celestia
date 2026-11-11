@@ -260,7 +260,7 @@ export function WishSandboxView({ uid }: { uid?: string }) {
                       onChange={(e) =>
                         setSession((prev) =>
                           updatePityOverrides(prev, currentBanner, {
-                            pity5: parseInt(e.target.value, 10) || 0,
+                            pity5: Number.parseInt(e.target.value, 10) || 0,
                           }),
                         )
                       }
@@ -281,7 +281,7 @@ export function WishSandboxView({ uid }: { uid?: string }) {
                       onChange={(e) =>
                         setSession((prev) =>
                           updatePityOverrides(prev, currentBanner, {
-                            pity4: parseInt(e.target.value, 10) || 0,
+                            pity4: Number.parseInt(e.target.value, 10) || 0,
                           }),
                         )
                       }
@@ -317,7 +317,7 @@ export function WishSandboxView({ uid }: { uid?: string }) {
                         onChange={(e) =>
                           setSession((prev) =>
                             updatePityOverrides(prev, currentBanner, {
-                              fatePoints: (parseInt(e.target.value, 10) || 0) as 0 | 1,
+                              fatePoints: (Number.parseInt(e.target.value, 10) || 0) as 0 | 1,
                             }),
                           )
                         }

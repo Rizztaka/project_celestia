@@ -106,7 +106,7 @@ export function publicAccountContext(
       },
       {
         dimension: 'depots',
-        status: character.skillDepotId === null ? 'unknown' : 'unknown',
+        status: 'unknown',
         reason:
           character.skillDepotId === null
             ? 'skill_depot_is_unknown'
@@ -162,11 +162,11 @@ export function publicAccountContext(
   }
   const observedTimes = characters
     .flatMap((character) => (character.observedAt ? [character.observedAt] : []))
-    .sort();
+    .sort((a, b) => a.localeCompare(b));
   const retrievedTimes = selected
     .map((entry) => entry.retrievedAt)
     .filter((value): value is string => !!value && Number.isFinite(Date.parse(value)))
-    .sort();
+    .sort((a, b) => a.localeCompare(b));
   const uniqueIssues = [
     ...new Map(issues.map((issue) => [`${issue.formKey}:${issue.code}`, issue])).values(),
   ].sort((a, b) => a.formKey.localeCompare(b.formKey, 'en') || a.code.localeCompare(b.code, 'en'));

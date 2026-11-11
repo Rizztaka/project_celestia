@@ -53,7 +53,7 @@ export function evaluateSeasonStatus(
 
   if (activeSeason.validUntil) {
     const expiry = new Date(activeSeason.validUntil);
-    if (!isNaN(expiry.getTime()) && referenceDate > expiry) {
+    if (!Number.isNaN(expiry.getTime()) && referenceDate > expiry) {
       return {
         isCurrentSeason: false,
         isExpired: true,

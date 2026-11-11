@@ -30,7 +30,7 @@ const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const text = (bytes) => Buffer.from(bytes).toString('utf8');
 const decodeHtml = (html) =>
   html
-    .replace(/<\/p\s*>|<br\s*\/?\s*>/gi, '\n')
+    .replace(/<\/p\s*>|<br\s*\/?>/gi, '\n')
     .replace(/<[^>]*>/g, '')
     .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
@@ -101,7 +101,7 @@ export function extractOfficialReleasePayload(sourceBytes) {
   };
   for (const line of lines.slice(start + 1, end)) {
     const heading =
-      /^"[^"\n]+"\s+([^()\n]+?)\s+\((Anemo|Geo|Electro|Dendro|Hydro|Pyro|Cryo)\)\s+\([45]-Star\)$/.exec(
+      /^"[^"\n]+"\s+([^\s()\n]+(?:\s+[^\s()\n]+)*)\s+\((Anemo|Geo|Electro|Dendro|Hydro|Pyro|Cryo)\)\s+\([45]-Star\)$/.exec(
         line,
       );
     if (heading) {

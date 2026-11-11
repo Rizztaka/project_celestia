@@ -77,10 +77,10 @@ export function getVerifiedActiveBanners(
     if (!isValidUrl(b.sourceUrl)) return false;
     if (b.startDate) {
       const start = new Date(b.startDate);
-      if (isNaN(start.getTime()) || start > now) return false;
+      if (Number.isNaN(start.getTime()) || start > now) return false;
     }
     const end = new Date(b.endDate);
-    if (isNaN(end.getTime()) || end <= now) return false;
+    if (Number.isNaN(end.getTime()) || end <= now) return false;
     return true;
   });
 }

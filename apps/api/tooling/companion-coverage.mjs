@@ -104,13 +104,13 @@ export function calculateCompanionCoverage({
           .filter((profile) => profile.sourceHashMatched)
           .map((profile) => ({
             form: `${profile.avatarId}:${profile.skillDepotId}`,
-            roles: profile.roles.map((role) => role.id).sort(),
-            evidenceIds: [...profile.evidenceIds].sort(),
+            roles: profile.roles.map((role) => role.id).sort((a, b) => a.localeCompare(b)),
+            evidenceIds: [...profile.evidenceIds].sort((a, b) => a.localeCompare(b)),
           })),
         blockedRoleForms: profiles
           .filter((profile) => !profile.sourceHashMatched)
           .map((profile) => `${profile.avatarId}:${profile.skillDepotId}`)
-          .sort(),
+          .sort((a, b) => a.localeCompare(b)),
         rosterStatus: rosterById.has(gameId) ? 'matched_unverified' : 'local_only',
         knowledge: {
           description,
@@ -122,7 +122,7 @@ export function calculateCompanionCoverage({
       };
     })
     .sort((a, b) => a.key.localeCompare(b.key, 'en'));
-  const keysWhere = (predicate) => rows.filter(predicate).map((row) => row.key);
+  const keysWhere = (predicate) => rows.filter((row) => predicate(row)).map((row) => row.key);
   const localIds = new Set(rows.map((row) => row.gameId));
   const reconciliation = reconcileRoster(
     rows,

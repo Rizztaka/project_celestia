@@ -525,10 +525,11 @@ function CustomHypotheticalWorkbench({
         <div className="mt-5 space-y-6 border-t border-zinc-800/80 pt-5">
           <form onSubmit={handleSimulate} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <label className="block text-xs font-medium text-zinc-400">
+              <label htmlFor="pull-target-key" className="block text-xs font-medium text-zinc-400">
                 Target Character / Key
               </label>
               <select
+                id="pull-target-key"
                 value={targetKey}
                 onChange={(e) => setTargetKey(e.target.value)}
                 className="mt-1.5 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-xs text-white focus:border-amber-500"
@@ -542,8 +543,11 @@ function CustomHypotheticalWorkbench({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-zinc-400">Target Type</label>
+              <label htmlFor="pull-target-type" className="block text-xs font-medium text-zinc-400">
+                Target Type
+              </label>
               <select
+                id="pull-target-type"
                 value={targetType}
                 onChange={(e) => {
                   const val = e.target.value as 'character' | 'weapon';
@@ -559,8 +563,11 @@ function CustomHypotheticalWorkbench({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-zinc-400">Evaluation Mode</label>
+              <label htmlFor="pull-target-mode" className="block text-xs font-medium text-zinc-400">
+                Evaluation Mode
+              </label>
               <select
+                id="pull-target-mode"
                 value={mode}
                 onChange={(e) => setMode(e.target.value as PullTargetMode)}
                 className="mt-1.5 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-xs text-white focus:border-amber-500"
@@ -578,10 +585,14 @@ function CustomHypotheticalWorkbench({
 
             {mode === 'constellation' ? (
               <div>
-                <label className="block text-xs font-medium text-zinc-400">
+                <label
+                  htmlFor="pull-target-constellation"
+                  className="block text-xs font-medium text-zinc-400"
+                >
                   Target Constellation
                 </label>
                 <select
+                  id="pull-target-constellation"
                   value={targetConstellation}
                   onChange={(e) => setTargetConstellation(Number(e.target.value))}
                   className="mt-1.5 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-xs text-white focus:border-amber-500"

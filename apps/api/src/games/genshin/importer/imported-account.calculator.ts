@@ -178,7 +178,7 @@ export function importedAccountContext(state: ImportSnapshot): ImportedAccountCo
         entries
           .map((entry) => entry.updatedAt)
           .filter((value): value is string => value !== null)
-          .sort()
+          .sort((a, b) => a.localeCompare(b))
           .at(-1) ?? null,
     };
     contexts.push({
@@ -284,7 +284,7 @@ export function importedAccountContext(state: ImportSnapshot): ImportedAccountCo
           characters
             .map((character) => character.updatedAt)
             .filter((value): value is string => value !== null)
-            .sort()
+            .sort((a, b) => a.localeCompare(b))
             .at(-1) ?? null,
       },
       ...receipts.map((receipt) => ({

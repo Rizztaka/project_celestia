@@ -101,12 +101,15 @@ export const teamPreferencesResponseSchema = z
   .strict();
 export type TeamPreferencesWrite = z.infer<typeof teamPreferencesWriteSchema>;
 export type TeamPreferencesResponse = z.infer<typeof teamPreferencesResponseSchema>;
-export function defaultTeamSearchPreferences(
-  uid: string | null,
-  scope: Pick<TeamSearchPreferences, 'ownerId' | 'accountId'> = {
+const DEFAULT_PREFERENCES_SCOPE: Pick<TeamSearchPreferences, 'ownerId' | 'accountId'> =
+  Object.freeze({
     ownerId: null,
     accountId: null,
-  },
+  });
+
+export function defaultTeamSearchPreferences(
+  uid: string | null,
+  scope: Pick<TeamSearchPreferences, 'ownerId' | 'accountId'> = DEFAULT_PREFERENCES_SCOPE,
 ): TeamSearchPreferences {
   return teamSearchPreferencesSchema.parse({
     version: 1,

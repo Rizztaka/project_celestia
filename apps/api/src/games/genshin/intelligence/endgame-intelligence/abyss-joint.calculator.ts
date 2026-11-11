@@ -77,7 +77,7 @@ export function evaluateEncounterPackStatus(
 
   if (defaultEncounters.expiryDate) {
     const expiry = new Date(defaultEncounters.expiryDate);
-    if (!isNaN(expiry.getTime()) && referenceDate > expiry) {
+    if (!Number.isNaN(expiry.getTime()) && referenceDate > expiry) {
       return {
         isCurrentCycle: false,
         isExpired: true,

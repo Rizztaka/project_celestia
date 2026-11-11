@@ -6,10 +6,12 @@ import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 
 const revision = 'caf738dc807a646e2eee7e7b572f225dd6deb510';
-const source = resolve(process.argv[2] ?? '');
-const go = resolve(process.argv[3] ?? '');
 if (!process.argv[2] || !process.argv[3])
   throw new Error('Pass the extracted pinned gcsim source and Go binary paths.');
+if (process.argv[2].includes('\0') || process.argv[3].includes('\0'))
+  throw new Error('Invalid path argument.');
+const source = resolve(process.cwd(), process.argv[2]);
+const go = resolve(process.cwd(), process.argv[3]);
 const here = fileURLToPath(new URL('.', import.meta.url));
 const publicRoot = resolve(here, '../../../web/public/vendor/gcsim-v2.47.2');
 const metadataRoot = resolve(here, '../../../web/src/lib/team-damage');

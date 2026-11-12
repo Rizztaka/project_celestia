@@ -26,6 +26,10 @@ import {
   type TemplateRoleResult,
 } from './team-intelligence.calculator.js';
 import { explainTeamScore } from './team-intelligence.explainer.js';
+import {
+  type SimulationStatus,
+  TeamSimulationService,
+} from './team-simulation.service.js';
 
 // -------------------------------------------------------
 // Static data — loaded once at module init
@@ -106,6 +110,9 @@ export interface TeamRecommendation {
   isBuildable: boolean;
   roster: TeamRosterSlot[];
   explanations: string[];
+  simulatedDps?: number;
+  errorMargin?: number;
+  simulationStatus?: SimulationStatus;
 }
 
 export interface TeamIntelligenceResponse {
@@ -253,16 +260,38 @@ function estimateMemberInvestmentDps(
   return Math.max(25, Math.min(100, Math.round(baseScore * levelFactor)));
 }
 
+export function completeFourMembers(
+  initialKeys: string[],
+  pool: ReadonlyArray<CharacterInput>,
+): [string, string, string, string] | null {
+  const members: string[] = [];
+  for (const k of initialKeys) {
+    if (k && !members.includes(k)) {
+      members.push(k);
+    }
+  }
+  for (const candidate of pool) {
+    if (members.length >= 4) break;
+    if (!members.includes(candidate.characterKey)) {
+      members.push(candidate.characterKey);
+    }
+  }
+  if (members.length < 4) return null;
+  return [members[0]!, members[1]!, members[2]!, members[3]!];
+}
+
 // -------------------------------------------------------
 // Service
 // -------------------------------------------------------
 
 export class TeamIntelligenceService {
   private readonly accountContextProvider: AccountContextProvider;
+  public readonly teamSimulationService: TeamSimulationService;
 
   constructor(
     accountContextProvider?: AccountContextProvider,
     characterService = new GenshinCharacterService(),
+    teamSimulationService = new TeamSimulationService(),
   ) {
     this.accountContextProvider =
       accountContextProvider ??
@@ -271,6 +300,46 @@ export class TeamIntelligenceService {
         new ShowcaseService(),
         characterService,
       );
+    this.teamSimulationService = teamSimulationService;
+  }
+
+  /**
+   * Evaluates meta team templates directly against a provided roster and
+   * runs real GCSim simulations on top candidate lineups.
+   */
+  async getSimulatedRecommendationsForRoster(
+    rosterInput: ReadonlyArray<RosterRecordInput>,
+    options?: { limit?: number; simulateTopN?: number },
+  ): Promise<TeamRecommendation[]> {
+    const recommendations = this.getRecommendationsForRoster(rosterInput, options);
+    if (recommendations.length === 0) {
+      return [];
+    }
+
+    const normalizedRoster = normalizeRosterToCharacterInputs(rosterInput);
+    const sortedRoster = [...normalizedRoster].sort(
+      (a, b) => b.level - a.level || b.ascension - a.ascension,
+    );
+
+    const simulateCount = Math.max(1, options?.simulateTopN ?? 1);
+    const toSimulate = Math.min(recommendations.length, simulateCount);
+
+    for (let i = 0; i < toSimulate; i++) {
+      const rec = recommendations[i]!;
+      const filledKeys = rec.roster
+        .map((s) => s.characterKey)
+        .filter((k): k is string => Boolean(k));
+      const completed = completeFourMembers(filledKeys, sortedRoster);
+
+      if (completed) {
+        const simResult = await this.teamSimulationService.simulateTeam(completed);
+        rec.simulatedDps = simResult.simulatedDps;
+        rec.errorMargin = simResult.errorMargin;
+        rec.simulationStatus = simResult.simulationStatus;
+      }
+    }
+
+    return recommendations;
   }
 
   /**
@@ -385,39 +454,23 @@ export class TeamIntelligenceService {
       return gearList;
     };
 
-    const completeFourMembers = (
-      initialKeys: string[],
-      pool: ReadonlyArray<CharacterInput>,
-    ): [string, string, string, string] | null => {
-      const members: string[] = [];
-      for (const k of initialKeys) {
-        if (k && !members.includes(k)) {
-          members.push(k);
-        }
-      }
-      for (const candidate of pool) {
-        if (members.length >= 4) break;
-        if (!members.includes(candidate.characterKey)) {
-          members.push(candidate.characterKey);
-        }
-      }
-      if (members.length < 4) return null;
-      return [members[0]!, members[1]!, members[2]!, members[3]!];
-    };
-
     const addCandidateTeam = (
       id: string,
       name: string,
       memberKeys: [string, string, string, string],
       baseScore: number,
       template?: TeamTemplate,
+      simulatedDps?: number,
     ) => {
       const sig = [...memberKeys].sort((a, b) => a.localeCompare(b)).join('|');
       if (seenSignatures.has(sig)) return;
       seenSignatures.add(sig);
 
       const primaryElement = resolvePrimaryElement(memberKeys, template);
-      const baseDps = estimateMemberInvestmentDps(memberKeys, charMap, baseScore);
+      const baseDps =
+        typeof simulatedDps === 'number' && simulatedDps > 0
+          ? Math.round(simulatedDps)
+          : estimateMemberInvestmentDps(memberKeys, charMap, baseScore);
       const comfortScore = computeTeamComfortScore(memberKeys);
       const gear = buildGearForMembers(memberKeys);
 
@@ -453,6 +506,7 @@ export class TeamIntelligenceService {
         completed,
         rec.score,
         template,
+        rec.simulatedDps,
       );
     }
 
@@ -514,7 +568,10 @@ export class TeamIntelligenceService {
    *  - UnprocessableError (422) if the roster has fewer than 4 characters.
    *  - UnprocessableError (422) if no buildable team can be assembled.
    */
-  async getRecommendations(userId: string): Promise<TeamIntelligenceResponse> {
+  async getRecommendations(
+    userId: string,
+    options?: { simulate?: boolean },
+  ): Promise<TeamIntelligenceResponse> {
     const { context: accountContext, rawRoster } =
       await this.accountContextProvider.getForUser(userId);
 
@@ -540,7 +597,12 @@ export class TeamIntelligenceService {
       );
     }
 
-    const recommendations = this.getRecommendationsForRoster(verifiedRoster, { limit: 3 });
+    const recommendations = options?.simulate
+      ? await this.getSimulatedRecommendationsForRoster(verifiedRoster, {
+          limit: 3,
+          simulateTopN: 1,
+        })
+      : this.getRecommendationsForRoster(verifiedRoster, { limit: 3 });
 
     if (recommendations.length === 0) {
       throw new UnprocessableError(

@@ -144,7 +144,14 @@ export function CompanionSummaryGrid({
 
           {summary.teamSuggestion ? (
             <div className="mt-2 space-y-2 text-xs">
-              <p className="font-semibold text-white">{summary.teamSuggestion.teamName}</p>
+              <div className="flex items-center justify-between gap-1">
+                <p className="font-semibold text-white">{summary.teamSuggestion.teamName}</p>
+                {typeof summary.teamSuggestion.simulatedDps === 'number' && (
+                  <span className="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-bold text-emerald-300 whitespace-nowrap">
+                    ~{Math.round(summary.teamSuggestion.simulatedDps).toLocaleString()} DPS (gcsim tested)
+                  </span>
+                )}
+              </div>
               <div className="flex flex-wrap gap-1.5">
                 {summary.teamSuggestion.members.map((charKey) => (
                   <div

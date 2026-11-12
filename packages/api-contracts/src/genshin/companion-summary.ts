@@ -28,6 +28,9 @@ export const teamSuggestionSnapshotSchema = z
     comfortRating: z.string().max(100).optional(),
     keyAdvantage: z.string().min(1).max(300),
     targetRoute: z.string().min(1).max(200),
+    simulatedDps: z.number().min(0).optional(),
+    errorMargin: z.number().min(0).optional(),
+    simulationStatus: z.enum(['VERIFIED_SIMULATION', 'SCREENED', 'HEURISTIC_FALLBACK']).optional(),
   })
   .strict();
 export type TeamSuggestionSnapshot = z.infer<typeof teamSuggestionSnapshotSchema>;

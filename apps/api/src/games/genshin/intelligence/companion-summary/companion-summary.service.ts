@@ -136,6 +136,9 @@ function toTeamSuggestionSnapshot(rec: TeamRecommendation): TeamSuggestionSnapsh
     comfortRating: rec.reaction,
     keyAdvantage: rec.explanations[0] ?? 'High meta synergy and reaction efficiency.',
     targetRoute: '/teams',
+    ...(typeof rec.simulatedDps === 'number' ? { simulatedDps: rec.simulatedDps } : {}),
+    ...(typeof rec.errorMargin === 'number' ? { errorMargin: rec.errorMargin } : {}),
+    ...(rec.simulationStatus ? { simulationStatus: rec.simulationStatus } : {}),
   };
 }
 
@@ -204,7 +207,21 @@ export class CompanionSummaryService {
     let teamRecommendations: TeamRecommendation[] = [];
     let teamSuggestion: TeamSuggestionSnapshot | undefined;
 
-    if (typeof this.teamService.getRecommendationsForRoster === 'function') {
+    if (typeof this.teamService.getSimulatedRecommendationsForRoster === 'function') {
+      try {
+        teamRecommendations = await this.teamService.getSimulatedRecommendationsForRoster(
+          rawRoster,
+          { limit: 8, simulateTopN: 1 },
+        );
+        if (teamRecommendations.length > 0) {
+          teamSuggestion = toTeamSuggestionSnapshot(teamRecommendations[0]!);
+        }
+      } catch {
+        // Fallback below
+      }
+    }
+
+    if (!teamSuggestion && typeof this.teamService.getRecommendationsForRoster === 'function') {
       try {
         teamRecommendations = this.teamService.getRecommendationsForRoster(rawRoster, {
           limit: 8,
@@ -337,9 +354,16 @@ export class CompanionSummaryService {
 
     try {
       const rosterForTeams = showcaseChars.length > 0 ? showcaseChars : rawRoster;
-      teamRecommendations = teamServiceInstance.getRecommendationsForRoster(rosterForTeams, {
-        limit: 8,
-      });
+      if (typeof teamServiceInstance.getSimulatedRecommendationsForRoster === 'function') {
+        teamRecommendations = await teamServiceInstance.getSimulatedRecommendationsForRoster(
+          rosterForTeams,
+          { limit: 8, simulateTopN: 1 },
+        );
+      } else {
+        teamRecommendations = teamServiceInstance.getRecommendationsForRoster(rosterForTeams, {
+          limit: 8,
+        });
+      }
       if (teamRecommendations.length > 0) {
         teamSuggestion = toTeamSuggestionSnapshot(teamRecommendations[0]!);
       }

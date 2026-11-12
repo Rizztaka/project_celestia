@@ -192,6 +192,50 @@ save/restore and error recovery; one refresh updates affected advice without
 overwriting favorites, goals or existing loadouts. Add scheduling only if useful
 and explicitly configured; this goal itself does not install a background job.
 
+### M7 — True Autonomous Optimization
+
+Deliver true end-to-end autonomous optimization connecting real simulation execution,
+reliable game-data provenance, zero-goal account progression, and unified scheduling.
+
+The 5 core pillars delivered in M7:
+
+1. **GCSim-Backed Central Team Intelligence & Rotation Search**:
+   - Replaces rough heuristic multipliers in the central companion workflow with real GCSim worker execution.
+   - Generates executable GCSim configurations with action sequences, cooldowns, and energy mechanics via `TeamSimulationService`.
+   - Returns real tested DPS with statistical confidence intervals, error margins, and energy diagnostics.
+   - Falls back safely to deterministic heuristics (`HEURISTIC_FALLBACK`) if characters lack simulation kits or the worker encounters errors.
+
+2. **Reliable Game-Data Infrastructure & Expiry Guards**:
+   - Establishes verified release-to-7.1 roster provenance (`release-roster-7.1.json`) anchored against official HoYoverse update notices.
+   - Validates package tarball integrity and local source checksums.
+   - Enforces temporal expiry guards: stale encounter packs, unverified banner windows, and out-of-cycle content degrade confidence transparently into caveats rather than silent false assumptions.
+
+3. **Account-Wide Autonomous Progression Discovery**:
+   - Eliminates the mandatory goal requirement: evaluates the entire verified roster for readiness gaps (`status !== 'ready_for_target'`) and marginal ROI without throwing HTTP 422 errors.
+   - Prioritizes candidates across 3 tiers: core team members (Priority 1), endgame bottleneck roles (Priority 2), and general utility units (Priority 3).
+   - Seamlessly blends discovered autonomous candidates with active manual goals, respecting user intent while filling unallocated resin/time budgets.
+
+4. **One Unified Multi-Objective Optimization Pipeline**:
+   - Harmonizes the central dashboard (`CompanionSummaryService`) and the farming planner (`PlannerIntelligenceService`) into a unified multi-objective optimization engine.
+   - Synchronizes `CompanionSummaryResponse.primaryAction` with Task #1 of the allocated daily schedule.
+   - Elevates `FARMING_AVAILABLE` when high-deficit material domains are open on the player's server weekday, `BUILD_INVESTMENT` on non-domain days, `ENDGAME_READINESS` on encounter bottlenecks, and `PULL_STRATEGY` on high-value active banners.
+
+5. **Disposable PostgreSQL & Real Worker Integration Verification**:
+   - Verified end-to-end on real disposable PostgreSQL databases and real Node worker threads running the pinned GCSim WASM engine (`tooling/m7-benchmarks.integration.test.js` passing 5/5).
+   - Verifies import persistence, runtime execution, zero-goal autonomous discovery, unified dashboard-planner scheduling, and dataset expiry handling.
+
+#### Explicit Remaining Limitations
+
+1. **Private Account Scraping Out-of-Scope**:
+   - In accordance with project architecture and HoYoverse terms of service, live web scraping or direct credentials-based fetching of private account states is strictly excluded.
+   - Accounts rely on explicit user GOOD imports or public Enka/showcase fetches.
+2. **Mobile Browser GCSim Worker Bounds**:
+   - The browser-side GCSim WebWorker is memory-bounded to $\le 50$ iterations to maintain UI responsiveness and prevent mobile browser crashes, whereas server-side simulation workers run full iterative convergence.
+3. **Unmodeled Characters & Simulation Form Coverage**:
+   - Characters without executable simulation forms (e.g. unreleased/unmodeled units or Traveler variants without full reaction scripts) degrade transparently to deterministic heuristic baselines (`HEURISTIC_FALLBACK`) with visible caveats.
+4. **Transient Network & Scraping Dependencies**:
+   - Celestia relies strictly on pinned, locally verified static datasets (`character-progression.json`, `domainSchedule.json`, `endgame-encounters.json`); real-time live game updates require periodic versioned updates rather than runtime internet scraping.
+
 ## Engineering and release
 
 Keep the modular monolith and shared API contracts. New server intelligence

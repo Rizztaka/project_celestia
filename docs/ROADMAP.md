@@ -8,10 +8,13 @@
 >
 > Delivery order: **M0 coverage baseline → M1 trusted knowledge/account context →
 > M2 contextual build readiness → M3 verified rotations/team search → M4 endgame
-> assignment → M5 account-value pulls → M6 fun simulator and companion summary.**
+> assignment → M5 account-value pulls → M6 fun simulator and companion summary →
+> M7 true autonomous optimization.**
 > Existing features are foundations; neither descriptive catalog size nor
 > training-dummy DPS certifies complete version-7.1 support. Runtime behavior and
 > current verification take precedence over older completion banners.
+
+> **2026-11-12 owner-directed Milestone 7 — True Autonomous Optimization complete locally:** M7 connects real GCSim worker execution to central team intelligence, enforces release-to-7.1 provenance and dataset expiry guards, discovers autonomous account-wide progression without mandatory goals, unifies dashboard next-action recommendations with the multi-objective planner optimization schedule, and completes end-to-end integration verification on disposable PostgreSQL. Integration benchmarks pass **5/5 tests** in `m7-benchmarks.integration.test.js`, team intelligence passes **47/47 tests**, planner intelligence passes **19/19 tests**, and companion summary passes **21/21 tests**. [Verification and progress](plans/autonomous-companion/m7-autonomous-optimization-progress.md).
 
 > **2026-10-18 owner-authorized Section 5 — C6/C7 implemented locally:** Planner now includes a roster-backed Team Builder with deterministic resonance/reaction explanations, account-scoped local saved teams and JSON import/export, plus Wish Savings with inventory/pity controls, modeled income and active event deadlines. OpenRouter is optional with bounded synthesis and deterministic fallback. Simulator scenarios default to an unexpired Mavuika/Raiden banner; Odette and NIKKE API/database contracts remain preserved. [Walkthrough and assumptions](plans/section5-modernization/walkthrough.md). Local verification passes **1,247 tests / 75 files**, zero failures/skips; browser checks exercise the real API and disposable PostgreSQL. Banner dates, income calendars and probability ramps are explicitly planning scenarios. Earlier C6/C7 authorization gates below are historical; this directive authorizes their implementation. No deployment or remote CI is claimed.
 

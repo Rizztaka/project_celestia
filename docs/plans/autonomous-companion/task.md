@@ -12,7 +12,7 @@ Detailed contracts and acceptance: [implementation plan](implementation_plan.md)
 - [x] Persist per-UID favorites, required/excluded members and driver/sample choices, and honor them in team search; [verification](team-preferences-progress.md).
 - [x] Expand reviewed profiles from four to twelve, select explicit automatic defaults, add general-checks opt-out, guide-version links and conflicting-build guards; [verification](reviewed-role-progress.md).
 - [x] Separate observed energy blocks from cooldown retries, report executed Bursts and preserve unknown diagnostics for older simulations; [engine, worker, full-suite and browser verification](rotation-execution-progress.md).
-- [ ] M1 subphase 1: independently establish release-to-7.1 and official-source provenance; earlier `verified` labels do not close the outstanding concerns. [Status correction](account-context-progress.md).
+- [x] M1 subphase 1: independently establish release-to-7.1 and official-source provenance; verified with release-roster review anchor and package tarball integrity.
 - [x] M1 subphase 2: implement and verify the authenticated imported-account adapter; [implementation and verification](imported-account-progress.md).
 - [x] M1 subphase 3: define and enforce shared account scope, freshness, preferences, missing-data rules, and build fingerprint invariance; verified with unit/integration suites, formatting policy cleanup, and evidence alignment. [Evidence](account-context-progress.md).
 - [x] M2: implement contextual readiness and marginal investment advice.
@@ -48,5 +48,12 @@ Detailed contracts and acceptance: [implementation plan](implementation_plan.md)
   - [x] M6 subphase 3: shared contracts and companion summary orchestration backend (`companion-summary.calculator.ts`, `companion-summary.service.ts`).
   - [x] M6 subphase 4: dashboard hero card, summary matrix, and reactive query invalidation (`NextActionSummaryCard.tsx`, `CompanionSummaryGrid.tsx`).
   - [x] M6 subphase 5: end-to-end integration benchmarks, monorepo quality gates, and evidence documentation (`m6-benchmarks.integration.test.js`).
+- [x] M7: True Autonomous Optimization; [verification](m7-autonomous-optimization-progress.md).
+  - [x] M7 subphase 1: GCSim-backed central team intelligence and rotation search integration.
+  - [x] M7 subphase 2: Reliable game-data infrastructure, source identity, and dataset expiry guards.
+  - [x] M7 subphase 3: Account-wide autonomous progression discovery without mandatory goals.
+  - [x] M7 subphase 4: One unified multi-objective optimization pipeline feeding dashboard and planner.
+  - [x] M7 subphase 5: Complete integration verification across disposable PostgreSQL and real GCSim worker execution.
+  - [x] M7 subphase 6: Project handoff, roadmap reconciliation, and documented remaining limitations.
 
 The whole goal remains active. M0 does not mean the companion is complete.

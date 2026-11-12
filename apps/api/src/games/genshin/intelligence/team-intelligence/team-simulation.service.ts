@@ -211,7 +211,7 @@ export class TeamSimulationService {
     options?: SimulateTeamOptions,
   ): Promise<TeamSimulationResult> {
     const startTime = Date.now();
-    const timeoutMs = options?.timeoutMs ?? 10000;
+    const timeoutMs = options?.timeoutMs ?? 20000;
     const samples = Math.max(1, options?.samples ?? 1);
     const baseSeed = options?.seed ?? 1;
 

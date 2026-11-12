@@ -25,8 +25,13 @@ import {
 } from '../../account-data/account-context-provider.service.js';
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
 import { GenshinRecordedStockRepository } from '../../companion/recorded-stock.repository.js';
-import { calculateMarginalInvestment } from '../marginal-investment/marginal-investment.calculator.js';
+import {
+  calculateMarginalInvestment,
+} from '../marginal-investment/marginal-investment.calculator.js';
 import { buildAuthenticatedReadinessInput } from '../readiness-intelligence/readiness-input.adapter.js';
+import {
+  discoverAutonomousProgression,
+} from './autonomous-progression.calculator.js';
 import {
   optimizePlannerSchedule,
   type PlannerCandidateInput,
@@ -295,98 +300,127 @@ export class PlannerIntelligenceService {
     });
     const duplicates = duplicateGoalIds(rows);
     const goals = rows.filter((goal) => goal.status === 'active');
-    if (goals.length === 0) {
-      throw new UnprocessableError(
-        'No active goals. Your routine remains available; manage goals in the Planner.',
-      );
-    }
 
     // 6. Build goal availability & optimization candidates
     const availability: AdviceAvailability[] = [];
     const candidates: PlannerCandidateInput[] = [];
 
-    for (const goal of goals) {
-      if (duplicates.has(goal.id)) {
-        availability.push({
-          goalId: goal.id,
-          targetKey: goal.targetKey,
-          available: false,
-          reason: duplicateGoalReason,
-        });
-        continue;
-      }
-
-      if (dismissedGoalIds.has(goal.id)) {
-        availability.push({
-          goalId: goal.id,
-          targetKey: goal.targetKey,
-          available: false,
-          reason: 'Goal is dismissed for the current period.',
-        });
-        continue;
-      }
-
-      const advice = provider.getGoalAdvice(goal);
-      const route = advice.available
-        ? advice.route
-        : { available: false as const, reason: advice.reason };
-      const availableToday =
-        route.available && (dayOfWeek === 6 || route.domain.days.includes(dayOfWeek));
-
-      availability.push({
-        goalId: goal.id,
-        targetKey: goal.targetKey,
-        available: availableToday,
-        reason: !route.available
-          ? route.reason
-          : !availableToday
-            ? 'This verified source is closed today.'
-            : null,
-      });
-
-      if (!advice.available) continue;
-
-      const { expectedScoreDelta, closesGap } = evaluateGoalMarginalDelta({
-        goal,
+    if (goals.length === 0) {
+      // Zero manual goals: scan roster autonomously to discover progression upgrades
+      const autoDiscovery = discoverAutonomousProgression({
         rawRoster,
         artifacts,
       });
 
-      if (route.available) {
-        candidates.push({
-          candidateId: goal.id,
-          goalId: goal.id,
-          actionType: resolveActionType(goal.goalType),
-          targetKey: goal.targetKey,
-          talentType: goal.talentType,
-          domainKey: route.domain.domainKey,
-          domainName: route.domain.name,
-          resourceName: route.domain.drops.join(', '),
-          openDays: route.domain.days,
-          resinPerRun: route.domain.resinPerClaim,
-          requiredMaterials: advice.costs,
-          domainDropKeys: route.domain.dropKeys,
-          goalPriority: goal.priority,
-          expectedScoreDelta,
-          closesGap,
+      for (const autoCand of autoDiscovery.candidates) {
+        candidates.push(autoCand);
+
+        const availableToday =
+          dayOfWeek === 6 || autoCand.openDays.includes(dayOfWeek);
+
+        availability.push({
+          goalId: autoCand.candidateId,
+          targetKey: autoCand.targetKey,
+          available: availableToday,
+          reason: availableToday ? null : 'This verified source is closed today.',
         });
-      } else if (goal.goalType === 'CHARACTER_ASCENSION') {
-        candidates.push({
-          candidateId: goal.id,
+      }
+    } else {
+      for (const goal of goals) {
+        if (duplicates.has(goal.id)) {
+          availability.push({
+            goalId: goal.id,
+            targetKey: goal.targetKey,
+            available: false,
+            reason: duplicateGoalReason,
+          });
+          continue;
+        }
+
+        if (dismissedGoalIds.has(goal.id)) {
+          availability.push({
+            goalId: goal.id,
+            targetKey: goal.targetKey,
+            available: false,
+            reason: 'Goal is dismissed for the current period.',
+          });
+          continue;
+        }
+
+        const advice = provider.getGoalAdvice(goal);
+        const route = advice.available
+          ? advice.route
+          : { available: false as const, reason: advice.reason };
+        const availableToday =
+          route.available && (dayOfWeek === 6 || route.domain.days.includes(dayOfWeek));
+
+        availability.push({
           goalId: goal.id,
-          actionType: 'world_boss',
           targetKey: goal.targetKey,
-          talentType: null,
-          domainKey: 'WorldBoss',
-          domainName: 'World Boss',
-          resourceName: `${goal.targetKey} Ascension Materials`,
-          openDays: [0, 1, 2, 3, 4, 5, 6],
-          resinPerRun: WORLD_BOSS_RESIN,
-          requiredMaterials: advice.costs,
-          goalPriority: goal.priority,
-          expectedScoreDelta,
-          closesGap,
+          available: availableToday,
+          reason: !route.available
+            ? route.reason
+            : !availableToday
+              ? 'This verified source is closed today.'
+              : null,
         });
+
+        if (!advice.available) continue;
+
+        const { expectedScoreDelta, closesGap } = evaluateGoalMarginalDelta({
+          goal,
+          rawRoster,
+          artifacts,
+        });
+
+        if (route.available) {
+          candidates.push({
+            candidateId: goal.id,
+            goalId: goal.id,
+            actionType: resolveActionType(goal.goalType),
+            targetKey: goal.targetKey,
+            talentType: goal.talentType,
+            domainKey: route.domain.domainKey,
+            domainName: route.domain.name,
+            resourceName: route.domain.drops.join(', '),
+            openDays: route.domain.days,
+            resinPerRun: route.domain.resinPerClaim,
+            requiredMaterials: advice.costs,
+            domainDropKeys: route.domain.dropKeys,
+            goalPriority: goal.priority,
+            expectedScoreDelta,
+            closesGap,
+          });
+        } else if (goal.goalType === 'CHARACTER_ASCENSION') {
+          candidates.push({
+            candidateId: goal.id,
+            goalId: goal.id,
+            actionType: 'world_boss',
+            targetKey: goal.targetKey,
+            talentType: null,
+            domainKey: 'WorldBoss',
+            domainName: 'World Boss',
+            resourceName: `${goal.targetKey} Ascension Materials`,
+            openDays: [0, 1, 2, 3, 4, 5, 6],
+            resinPerRun: WORLD_BOSS_RESIN,
+            requiredMaterials: advice.costs,
+            goalPriority: goal.priority,
+            expectedScoreDelta,
+            closesGap,
+          });
+        }
+      }
+
+      // Discover additional autonomous candidates to fill remaining resin/time budget
+      const autoDiscovery = discoverAutonomousProgression({
+        rawRoster,
+        artifacts,
+        manualGoals: goals,
+        yieldToManualGoals: true,
+      });
+
+      for (const autoCand of autoDiscovery.candidates) {
+        candidates.push(autoCand);
       }
     }
 
@@ -425,13 +459,27 @@ export class PlannerIntelligenceService {
     });
 
     const goalById = new Map<string, UpgradeGoal>(goals.map((g) => [g.id, g]));
+    const candidateById = new Map<string, PlannerCandidateInput>(
+      candidates.map((c) => [c.candidateId, c]),
+    );
     const route: PlannerRouteItem[] = rankedPlan.map((action) => {
       const matchedGoal = action.goalId ? goalById.get(action.goalId) : undefined;
+      const matchedCand = candidateById.get(action.actionId);
+      const resolvedGoalType =
+        matchedGoal?.goalType ??
+        (action.actionType === 'domain_weapon'
+          ? 'WEAPON_ASCENSION'
+          : action.actionType === 'world_boss'
+            ? 'CHARACTER_ASCENSION'
+            : 'CHARACTER_TALENT');
+      const resolvedTalentType =
+        matchedGoal?.talentType ?? matchedCand?.talentType ?? null;
+
       return {
         goalId: action.goalId ?? action.actionId,
         targetKey: action.targetKey,
-        goalType: matchedGoal?.goalType ?? 'CHARACTER_TALENT',
-        talentType: matchedGoal?.talentType ?? null,
+        goalType: resolvedGoalType,
+        talentType: resolvedTalentType,
         domainName: action.domainName,
         resinCost: action.resinCost,
         runs: action.runs,

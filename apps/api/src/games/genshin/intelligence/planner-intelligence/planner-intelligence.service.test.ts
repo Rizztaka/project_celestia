@@ -411,4 +411,25 @@ describe('PlannerIntelligenceService (Multi-Objective Optimization Planner)', ()
     expect(rec.route.every((r) => r.goalId !== 'goal-hutao-burst')).toBe(true);
     expect(rec.route[0]?.goalId).toBe('goal-dragons-bane-asc');
   });
+
+  it('autonomously discovers progression candidates and generates a valid plan when account has 0 manual goals', async () => {
+    vi.mocked(prisma.upgradeGoal.findMany).mockResolvedValueOnce([]);
+
+    const plan = await service.getOptimizedPlan('user-1');
+
+    expect(optimizationPlannerResponseSchema.safeParse(plan).success).toBe(true);
+    expect(plan.rankedPlan.length).toBeGreaterThan(0);
+    // Discovered candidates have null goalId
+    expect(plan.rankedPlan.every((action) => action.goalId === null)).toBe(true);
+    expect(plan.rankedPlan.some((action) => action.actionId.includes('auto-'))).toBe(true);
+
+    // Also test getRecommendations with 0 manual goals
+    vi.mocked(prisma.upgradeGoal.findMany).mockResolvedValueOnce([]);
+    const rec = await service.getRecommendations('user-1');
+
+    expect(rec.goals.length).toBeGreaterThan(0);
+    expect(rec.goals.every((g) => g.goalId.startsWith('auto-'))).toBe(true);
+    expect(rec.route.length).toBeGreaterThan(0);
+    expect(rec.route[0]?.goalId).toContain('auto-');
+  });
 });

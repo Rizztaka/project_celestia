@@ -75,6 +75,7 @@ export function getVerifiedActiveBanners(
   return banners.filter((b) => {
     if (b.historical || b.simulation) return false;
     if (!isValidUrl(b.sourceUrl)) return false;
+    if (b.source && b.source.verified === false) return false;
     if (b.startDate) {
       const start = new Date(b.startDate);
       if (Number.isNaN(start.getTime()) || start > now) return false;
@@ -450,7 +451,7 @@ export class PullIntelligenceService {
       scoreAllTemplatesFn: scoreAllTemplates,
     });
 
-    this.applyCanonicalContextMetadata(rec, accountContext, conflictedCharacterKeys);
+    this.applyCanonicalContextMetadata(rec, accountContext, conflictedCharacterKeys, banner);
     rec.explanations = explainPullValue(rec);
 
     return {
@@ -546,7 +547,7 @@ export class PullIntelligenceService {
           scoreAllTemplatesFn: scoreAllTemplates,
         });
 
-        this.applyCanonicalContextMetadata(rec, accountContext, conflictedCharacterKeys);
+        this.applyCanonicalContextMetadata(rec, accountContext, conflictedCharacterKeys, banner, now);
         rec.explanations = explainPullValue(rec);
         return rec;
       })
@@ -564,16 +565,97 @@ export class PullIntelligenceService {
   }
 
   /**
+   * Evaluates a single banner recommendation directly against a provided or fallback context,
+   * enforcing strict dataset verification and expiry checks (ADR-0011).
+   */
+  evaluateBannerRecommendation(
+    banner: ActiveBanner,
+    options?: {
+      accountContext?: AccountContext & { freshness?: AccountContextFreshness };
+      rawRoster?: CharacterWithWeapon[];
+      ownedWeaponKeys?: string[];
+      favorites?: string[];
+      weights?: PullUserWeights;
+      budget?: PullBudgetInput;
+      referenceDate?: Date;
+    },
+  ): PullRecommendation {
+    const now = options?.referenceDate ?? new Date();
+    const accountContext = options?.accountContext ?? createHypotheticalFallbackContext();
+    const rawRoster = options?.rawRoster ?? [];
+    const ownedWeaponKeys = options?.ownedWeaponKeys ?? [];
+    const favorites = options?.favorites ?? [];
+
+    const { roster, conflictedCharacterKeys } = mapVerifiedRosterFromContext(
+      rawRoster,
+      accountContext,
+    );
+    const currentBreakdowns = scoreAllTemplates(META_TEMPLATES, roster);
+
+    const userWeights: PullUserWeights = options?.weights ?? {
+      weightEndgame: 0.35,
+      weightFlexibility: 0.25,
+      weightComfort: 0.2,
+      weightFavorites: 0.2,
+    };
+
+    const budget: PullBudgetInput = options?.budget ?? {
+      primogems: 0,
+      fates: 0,
+      pity: 0,
+      guaranteed: false,
+    };
+
+    const target = {
+      targetKey: banner.fiveStarKey,
+      targetType: (banner.type === 'WEAPON' ? 'weapon' : 'character') as 'character' | 'weapon',
+      mode: (banner.type === 'WEAPON' ? 'signature_weapon' : 'c0_unlock') as PullTargetMode,
+    };
+
+    const isPartialRoster = accountContext.rosterScope === 'partial';
+    const isPublicShowcase = accountContext.scope === 'public_uid';
+    const responseIsPartial = isPublicShowcase ? isPartialRoster : false;
+
+    const rec = evaluateCounterfactualAddition({
+      target,
+      banner,
+      roster,
+      accountContext: {
+        ...accountContext,
+        isPartialAccount: responseIsPartial,
+        favorites,
+        ownedWeaponKeys,
+        characterElements: CHARACTER_ELEMENTS,
+      },
+      templates: META_TEMPLATES,
+      currentBreakdowns,
+      characterRecs: [],
+      userWeights,
+      budget,
+      constellationBenchmarks: CONSTELLATION_BENCHMARKS,
+      scoreAllTemplatesFn: scoreAllTemplates,
+      referenceDate: now,
+    });
+
+    this.applyCanonicalContextMetadata(rec, accountContext, conflictedCharacterKeys, banner, now);
+    rec.explanations = explainPullValue(rec);
+    return rec;
+  }
+
+  /**
    * Enforces canonical AccountContext invariants on a calculated PullRecommendation:
    * 1. Partial roster scope (`rosterScope === 'partial'`): absent characters are `ownership: 'unknown'`,
    *    never treated as confirmed unowned role deficits.
    * 2. Stale freshness (`freshness === 'stale'`): attaches provenance notice and downgrades live confidence.
    * 3. Conflicted builds (`buildState === 'conflicted'`): flags skipped conflicted character builds.
+   * 4. Dataset trust: degrades unverified or expired banners to CONDITIONAL_DATA_GAP.
    */
   private applyCanonicalContextMetadata(
     rec: PullRecommendation,
     accountContext: AccountContext & { freshness?: AccountContextFreshness },
     conflictedCharacterKeys: string[],
+    banner?: ActiveBanner,
+    now = new Date(),
   ): void {
     const freshness = resolveAccountFreshness(accountContext);
     const isPartialRoster = accountContext.rosterScope === 'partial';
@@ -601,6 +683,35 @@ export class PullIntelligenceService {
       }
       if (!rec.simulation && rec.confidence !== 'SIMULATED_SCENARIO') {
         rec.confidence = 'STALE';
+      }
+    }
+
+    if (banner) {
+      const isBannerUnverified = banner.source ? banner.source.verified === false : false;
+      const isBannerExpired = banner.endDate ? new Date(banner.endDate) <= now : false;
+
+      if (isBannerUnverified || isBannerExpired) {
+        rec.strategicRecommendation = 'CONDITIONAL_DATA_GAP';
+        rec.confidence = isBannerUnverified ? 'UNVERIFIED' : 'STALE';
+        rec.provenanceNotices = rec.provenanceNotices ?? [];
+        if (isBannerUnverified) {
+          const unverifiedNotice = `Banner dataset "${banner.name}" is unverified. Strategic recommendation degraded to CONDITIONAL_DATA_GAP.`;
+          if (!rec.provenanceNotices.includes(unverifiedNotice)) {
+            rec.provenanceNotices.push(unverifiedNotice);
+          }
+          if (!rec.missingDataNotes.includes(unverifiedNotice)) {
+            rec.missingDataNotes.push(unverifiedNotice);
+          }
+        }
+        if (isBannerExpired) {
+          const expiredNotice = `Banner dataset "${banner.name}" expired on ${banner.endDate}. Strategic recommendation degraded to CONDITIONAL_DATA_GAP.`;
+          if (!rec.provenanceNotices.includes(expiredNotice)) {
+            rec.provenanceNotices.push(expiredNotice);
+          }
+          if (!rec.missingDataNotes.includes(expiredNotice)) {
+            rec.missingDataNotes.push(expiredNotice);
+          }
+        }
       }
     }
   }

@@ -51,6 +51,14 @@ export function evaluateSeasonStatus(
     };
   }
 
+  if (defaultEncounters.source && !defaultEncounters.source.verified) {
+    return {
+      isCurrentSeason: false,
+      isExpired: true,
+      expirationNote: `Theater season "${activeSeason.seasonId}" has unverified source. Operating in historical/unverified mode.`,
+    };
+  }
+
   if (activeSeason.validUntil) {
     const expiry = new Date(activeSeason.validUntil);
     if (!Number.isNaN(expiry.getTime()) && referenceDate > expiry) {
@@ -58,6 +66,17 @@ export function evaluateSeasonStatus(
         isCurrentSeason: false,
         isExpired: true,
         expirationNote: `Theater season "${activeSeason.seasonId}" expired on ${activeSeason.validUntil}. Operating in historical mode.`,
+      };
+    }
+  }
+
+  if (defaultEncounters.expiryDate) {
+    const expiry = new Date(defaultEncounters.expiryDate);
+    if (!Number.isNaN(expiry.getTime()) && referenceDate > expiry) {
+      return {
+        isCurrentSeason: false,
+        isExpired: true,
+        expirationNote: `Theater season "${activeSeason.seasonId}" expired on ${defaultEncounters.expiryDate}. Operating in historical mode.`,
       };
     }
   }
@@ -288,13 +307,15 @@ export interface TheaterActPlanCalculationResult {
 
 export function solveTheaterActPlan(
   input: TheaterActPlanRequestInput,
+  referenceDate?: Date,
 ): TheaterActPlanCalculationResult {
   const parsed = theaterActPlanRequestSchema.parse(input);
   const config = DIFFICULTY_CONFIGS[parsed.difficulty];
   const totalActs = config.totalActs;
   const bossActs = config.bossActs;
 
-  const seasonStatus = evaluateSeasonStatus(parsed.seasonId);
+  const refDate = referenceDate ?? new Date();
+  const seasonStatus = evaluateSeasonStatus(parsed.seasonId, refDate);
   const activeSeason = defaultEncounters.theaterSeason;
   const ineligibleCastExcluded: Array<{ characterKey: string; reason: string }> = [];
 

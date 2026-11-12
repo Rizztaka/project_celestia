@@ -32,6 +32,11 @@ export interface ActiveBanner {
   simulation?: boolean;
   sourceUrl?: string;
   rulesSource?: string;
+  source?: {
+    id?: string;
+    url?: string;
+    verified?: boolean;
+  };
 }
 
 export interface ConstellationBenchmark {
@@ -275,6 +280,7 @@ export function evaluateCounterfactualAddition(params: {
     templates: TeamTemplate[],
     roster: CharacterInput[],
   ) => TeamScoreBreakdown[];
+  referenceDate?: Date;
 }): PullRecommendation {
   const {
     target,
@@ -467,8 +473,23 @@ export function evaluateCounterfactualAddition(params: {
   }
 
   const hasBudgetSpecified = budget.primogems > 0 || budget.fates > 0 || budget.pity > 0;
+  const now = params.referenceDate ?? new Date();
+  const isBannerUnverified = banner.source ? banner.source.verified === false : false;
+  const isBannerExpired = banner.endDate ? new Date(banner.endDate) <= now : false;
 
-  if (isPartial && totalScore < 60) {
+  if (isBannerUnverified || isBannerExpired) {
+    strategicRecommendation = 'CONDITIONAL_DATA_GAP';
+    if (isBannerUnverified) {
+      missingDataNotes.push(
+        `Banner "${banner.name}" source is unverified. Strategic recommendation degraded to CONDITIONAL_DATA_GAP.`,
+      );
+    }
+    if (isBannerExpired) {
+      missingDataNotes.push(
+        `Banner "${banner.name}" expired on ${banner.endDate}. Strategic recommendation degraded to CONDITIONAL_DATA_GAP.`,
+      );
+    }
+  } else if (isPartial && totalScore < 60) {
     strategicRecommendation = 'CONDITIONAL_DATA_GAP';
   } else if (totalScore >= 70) {
     strategicRecommendation = 'HIGH_ACCOUNT_VALUE';
@@ -502,10 +523,22 @@ export function evaluateCounterfactualAddition(params: {
     banner.bannerId.startsWith('custom_') ||
     (banner.sourceUrl && !banner.sourceUrl.startsWith('http')),
   );
-  const confidence = isSimulation ? ('SIMULATED_SCENARIO' as const) : ('VERIFIED' as const);
+  let confidence: PullConfidence = isSimulation ? ('SIMULATED_SCENARIO' as const) : ('VERIFIED' as const);
+  if (isBannerUnverified) {
+    confidence = 'UNVERIFIED' as const;
+  } else if (isBannerExpired) {
+    confidence = 'STALE' as const;
+  }
+
   const provenanceNotices: string[] = isSimulation
     ? ['Simulated scenario: evaluated outside of verified active banner window.']
     : [];
+  if (isBannerUnverified) {
+    provenanceNotices.push(`Unverified banner dataset: "${banner.name}".`);
+  }
+  if (isBannerExpired) {
+    provenanceNotices.push(`Expired banner dataset: "${banner.name}" ended ${banner.endDate}.`);
+  }
 
   return {
     targetKey: target.targetKey,

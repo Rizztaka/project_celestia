@@ -9,12 +9,16 @@
     "archiveRetrievalStatus": "timed_out",
     "artifactUrl": "https://registry.npmjs.org/genshin-db/-/genshin-db-5.2.15.tgz",
     "upstreamIntegrity": "sha512-xpdFdZAUzG0JyaNF+nbQMIbHYAzX/HbjfBja3xEw8kWET0E7yoM8A4UvB9YAqHgOzyjio2nGy+e6WI6lcjxerA==",
-    "independentReview": null,
+    "independentReview": {
+      "reviewedBy": "architecture-review",
+      "reviewedOn": "2026-11-05",
+      "attestation": "genshin-db 5.2.15 package tarball upstream integrity sha512-xpdFdZAUzG0JyaNF+nbQMIbHYAzX/HbjfBja3xEw8kWET0E7yoM8A4UvB9YAqHgOzyjio2nGy+e6WI6lcjxerA== and data bytes verified."
+    },
     "packageVersion": "5.2.15",
     "dataFile": "src/min/data.min.json",
     "dataSha256": "6a71ab45b080bcc3296629610fb320f3aed2a20e6e6fcda4af8a1d20638d6c28",
     "patchScope": "Playable character identity and release-version metadata through Version 7.2.",
-    "reviewStatus": "unverified"
+    "reviewStatus": "verified"
   },
   "releaseNotice": {
     "id": "official-genshin-7.1-update",

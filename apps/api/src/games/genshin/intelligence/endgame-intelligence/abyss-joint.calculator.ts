@@ -75,6 +75,14 @@ export function evaluateEncounterPackStatus(
     };
   }
 
+  if (defaultEncounters.source && !defaultEncounters.source.verified) {
+    return {
+      isCurrentCycle: false,
+      isExpired: true,
+      expirationNote: `Encounter pack "${currentCycleId}" has unverified source. Operating in historical/unverified mode.`,
+    };
+  }
+
   if (defaultEncounters.expiryDate) {
     const expiry = new Date(defaultEncounters.expiryDate);
     if (!Number.isNaN(expiry.getTime()) && referenceDate > expiry) {

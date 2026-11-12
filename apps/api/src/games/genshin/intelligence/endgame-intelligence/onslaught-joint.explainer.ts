@@ -11,7 +11,7 @@ export function explainOnslaughtJoint(result: OnslaughtJointCalculationResult): 
   const points: string[] = [];
 
   // 1. Overall Header
-  if (!result.isCurrentCycle) {
+  if (!result.isCurrentCycle || result.isExpired) {
     points.push(
       `[ARCHIVED / HISTORICAL CYCLE] Note: Cycle ${result.cycleId} is not the active cycle. ${result.expirationNote ?? 'Historical manual preset evaluated.'}`,
     );

@@ -8,7 +8,7 @@ export const releaseSourcePin = Object.freeze({
   version: '5.2.15',
   path: 'src/min/data.min.json',
   sha256: '6a71ab45b080bcc3296629610fb320f3aed2a20e6e6fcda4af8a1d20638d6c28',
-  rosterSha256: 'ccd746890b6fb7ce03d0cab596f63694e630c72f9dde42300352e75b90e152c3',
+  rosterSha256: 'b4e198136ee4f9e9c67378249e5d600471a5cb19f79ab8ab6c6e61c27efaa5df',
   revision: '8e5badd60b5d894284ccc927a56c9683529d2592',
   url: 'https://github.com/theBowja/genshin-db/tree/8e5badd60b5d894284ccc927a56c9683529d2592',
   artifactUrl: 'https://registry.npmjs.org/genshin-db/-/genshin-db-5.2.15.tgz',

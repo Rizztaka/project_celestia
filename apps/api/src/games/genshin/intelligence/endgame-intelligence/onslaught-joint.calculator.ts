@@ -286,6 +286,7 @@ export interface OnslaughtJointCalculationResult {
 
 export function solveOnslaughtJoint(
   input: OnslaughtJointRequestInput,
+  referenceDate?: Date,
 ): OnslaughtJointCalculationResult {
   const parsed = onslaughtJointRequestSchema.parse(input);
   const candidates = parsed.candidateTeams;
@@ -366,7 +367,8 @@ export function solveOnslaughtJoint(
   }
 
   const allStagesCleared = bestAssignment.stages.every((s) => s.stageScore > 0);
-  const packStatus = evaluateEncounterPackStatus(parsed.cycleId);
+  const refDate = referenceDate ?? new Date();
+  const packStatus = evaluateEncounterPackStatus(parsed.cycleId, refDate);
   const hasMechanicGaps = bestAssignment.stages.some((s) => s.unsupportedMechanics.length > 0);
 
   return {

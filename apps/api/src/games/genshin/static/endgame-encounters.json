@@ -1,6 +1,12 @@
 {
   "_comment": "Versioned encounter definitions for Endgame Center (Milestone 4). Verified against game version 5.2. Expired packs lose current_cycle status; zero calendar guesswork.",
   "version": "5.2-1",
+  "source": {
+    "id": "official-genshin-5.2",
+    "revision": "5.2.0-abyss",
+    "patchScope": "Version 5.2 Floor 12 and Theater",
+    "verified": true
+  },
   "cycleId": "5.2-1",
   "effectiveDate": "2026-11-01T04:00:00Z",
   "expiryDate": "2026-12-01T03:59:59Z",

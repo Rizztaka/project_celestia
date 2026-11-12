@@ -10,7 +10,7 @@ export function explainTheaterActPlan(result: TheaterActPlanCalculationResult): 
   const points: string[] = [];
 
   // 1. Season & Status Header
-  if (!result.isCurrentSeason) {
+  if (!result.isCurrentSeason || result.isExpired) {
     points.push(
       `[ARCHIVED / HISTORICAL SEASON] Note: Season ${result.seasonId} is not active. ${result.expirationNote ?? 'Evaluating historical draft configuration.'}`,
     );

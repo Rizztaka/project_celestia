@@ -69,6 +69,7 @@ export const optimizationPlannerResponseSchema = z
     timeBudgetMinutes: z.number().min(0),
     timeUntilCapped: z.string().optional(),
     rankedPlan: z.array(optimizationPlanActionSchema),
+    allocatedPlan: z.array(optimizationPlanActionSchema).optional(),
     alternatives: z.array(optimizationPlanAlternativeSchema),
     unallocatedResin: z.number().int().min(0),
     totalEstimatedMinutes: z.number().min(0),

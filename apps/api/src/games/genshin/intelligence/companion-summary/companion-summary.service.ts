@@ -7,10 +7,13 @@ import type {
   CharacterReadinessRequestInput,
   CompanionSummaryResponse,
   MarginalInvestmentRequestInput,
+  OptimizationPlanAction,
+  OptimizationPlannerResponse,
   PullAdviceSnapshot,
   SupportedServerId,
   TeamSuggestionSnapshot,
 } from '@celestia/api-contracts';
+import { optimizationPlannerResponseSchema } from '@celestia/api-contracts';
 
 const require = createRequire(import.meta.url);
 const CHARACTER_ELEMENTS: Record<string, string> = require('../../static/character-elements.json');
@@ -32,10 +35,19 @@ import {
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
 import { GenshinCharacterService } from '../../characters/character.service.js';
 import { getOpenDomains } from '../../companion/domain-schedule.js';
+import { getServerWeekday } from '../../companion/server-clock.js';
 import { ImportedAccountService } from '../../importer/imported-account.service.js';
 import { ShowcaseService } from '../../showcase/showcase.service.js';
 import { EndgameIntelligenceService } from '../endgame-intelligence/endgame-intelligence.service.js';
 import { MarginalInvestmentService } from '../marginal-investment/marginal-investment.service.js';
+import { discoverAutonomousProgression } from '../planner-intelligence/autonomous-progression.calculator.js';
+import { PlannerIntelligenceService } from '../planner-intelligence/planner-intelligence.service.js';
+import { optimizePlannerSchedule } from '../planner-intelligence/planner-optimization.calculator.js';
+import {
+  explainOptimizationAlternative,
+  explainOptimizationSummary,
+  toOptimizationPlanAction,
+} from '../planner-intelligence/planner-optimization.explainer.js';
 import { PullIntelligenceService } from '../pull-intelligence/pull-intelligence.service.js';
 import {
   buildAuthenticatedReadinessInput,
@@ -149,6 +161,7 @@ export class CompanionSummaryService {
   private readonly endgameService: EndgameIntelligenceService;
   private readonly pullService: PullIntelligenceService;
   private readonly teamService: TeamIntelligenceService;
+  private readonly plannerService: PlannerIntelligenceService;
 
   constructor(
     providerOrReadinessService?: AccountContextProvider | ReadinessIntelligenceService,
@@ -159,6 +172,7 @@ export class CompanionSummaryService {
     showcaseService = new ShowcaseService(),
     teamService?: TeamIntelligenceService,
     explicitProvider?: AccountContextProvider,
+    plannerService?: PlannerIntelligenceService,
   ) {
     if (providerOrReadinessService && 'getForUser' in providerOrReadinessService) {
       this.accountContextProvider = providerOrReadinessService;
@@ -168,6 +182,8 @@ export class CompanionSummaryService {
       this.pullService = pullService ?? new PullIntelligenceService(this.accountContextProvider);
       this.teamService =
         teamService ?? new TeamIntelligenceService(this.accountContextProvider, characterService);
+      this.plannerService =
+        plannerService ?? new PlannerIntelligenceService(this.accountContextProvider);
     } else {
       this.readinessService = providerOrReadinessService ?? new ReadinessIntelligenceService();
       this.marginalService = marginalService;
@@ -185,6 +201,8 @@ export class CompanionSummaryService {
         );
       this.teamService =
         teamService ?? new TeamIntelligenceService(this.accountContextProvider, characterService);
+      this.plannerService =
+        plannerService ?? new PlannerIntelligenceService(this.accountContextProvider);
     }
   }
 
@@ -290,6 +308,18 @@ export class CompanionSummaryService {
       artifacts,
     });
 
+    // 5. Optimization Planner Schedule (Milestone 7 Unified Pipeline)
+    let optimizedPlan:
+      | (OptimizationPlannerResponse & { allocatedPlan?: OptimizationPlanAction[] })
+      | undefined;
+    try {
+      if (this.plannerService && typeof this.plannerService.getOptimizedPlan === 'function') {
+        optimizedPlan = await this.plannerService.getOptimizedPlan(userId);
+      }
+    } catch {
+      // Graceful fallback if planner encounters missing routine snapshot, unknown resin, or edge cases
+    }
+
     const isPartialAccount =
       accountContext.scope === 'public_uid' && accountContext.rosterScope === 'partial';
 
@@ -304,6 +334,7 @@ export class CompanionSummaryService {
       teamSuggestion,
       skippedUnverifiedCharacters,
       timestamp: now.toISOString(),
+      optimizedPlan,
     });
 
     const { extraCaveats, provenanceNotices } = deriveContextCaveatsAndNotices({
@@ -420,6 +451,51 @@ export class CompanionSummaryService {
       artifacts,
     });
 
+    // 5. Autonomous Progression Optimization for Showcase (Milestone 7 Unified Pipeline)
+    let showcaseOptimizedPlan:
+      | (OptimizationPlannerResponse & { allocatedPlan?: OptimizationPlanAction[] })
+      | undefined;
+    try {
+      const autoDiscovery = discoverAutonomousProgression({
+        rawRoster: verifiedRoster,
+        artifacts,
+        teamMemberKeys: partyMembers,
+      });
+
+      if (autoDiscovery.candidates.length > 0) {
+        const dayOfWeek = getServerWeekday(now, server);
+        const calcResult = optimizePlannerSchedule({
+          candidates: autoDiscovery.candidates,
+          recordedInventory: {},
+          currentResin: 160,
+          dailyResinBudget: 160,
+          timeBudgetMinutes: 30,
+          dayOfWeek: dayOfWeek ?? 0,
+        });
+
+        const rankedPlan = calcResult.rankedPlan.map(toOptimizationPlanAction);
+        const alternatives = calcResult.alternatives.map(explainOptimizationAlternative);
+        const summaryText = explainOptimizationSummary(calcResult);
+
+        const optimization: OptimizationPlannerResponse = optimizationPlannerResponseSchema.parse({
+          summary: summaryText,
+          currentResin: calcResult.currentResin,
+          effectiveResinBudget: calcResult.effectiveResinBudget,
+          timeBudgetMinutes: calcResult.timeBudgetMinutes,
+          timeUntilCapped: 'Capped',
+          rankedPlan,
+          alternatives,
+          unallocatedResin: calcResult.unallocatedResin,
+          totalEstimatedMinutes: calcResult.totalEstimatedMinutes,
+          analysedAt: now.toISOString(),
+        });
+
+        showcaseOptimizedPlan = Object.assign(optimization, { allocatedPlan: rankedPlan });
+      }
+    } catch {
+      // Graceful fallback for showcase optimization
+    }
+
     const isPartialAccount = accountContext.rosterScope === 'partial';
 
     const calcResult = calculateCompanionSummary({
@@ -433,6 +509,7 @@ export class CompanionSummaryService {
       teamSuggestion,
       skippedUnverifiedCharacters,
       timestamp: now.toISOString(),
+      optimizedPlan: showcaseOptimizedPlan,
     });
 
     const { extraCaveats, provenanceNotices } = deriveContextCaveatsAndNotices({

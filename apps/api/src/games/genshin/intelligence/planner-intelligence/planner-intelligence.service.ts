@@ -445,7 +445,7 @@ export class PlannerIntelligenceService {
     const timeUntilCapped = formatTimeUntilCapped(capTime, now);
     const analysedAt = now.toISOString();
 
-    const optimization: OptimizationPlannerResponse = optimizationPlannerResponseSchema.parse({
+    const parsedOptimization = optimizationPlannerResponseSchema.parse({
       summary: summaryText,
       currentResin: calcResult.currentResin,
       effectiveResinBudget: calcResult.effectiveResinBudget,
@@ -457,6 +457,11 @@ export class PlannerIntelligenceService {
       totalEstimatedMinutes: calcResult.totalEstimatedMinutes,
       analysedAt,
     });
+
+    const optimization: OptimizationPlannerResponse & { allocatedPlan: typeof rankedPlan } = Object.assign(
+      parsedOptimization,
+      { allocatedPlan: rankedPlan },
+    );
 
     const goalById = new Map<string, UpgradeGoal>(goals.map((g) => [g.id, g]));
     const candidateById = new Map<string, PlannerCandidateInput>(

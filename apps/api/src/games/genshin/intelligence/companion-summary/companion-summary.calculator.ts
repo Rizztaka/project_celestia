@@ -1,6 +1,8 @@
 import type {
   CompanionSummaryPrimaryAction,
   EndgameStatusSnapshot,
+  OptimizationPlanAction,
+  OptimizationPlannerResponse,
   PullAdviceSnapshot,
   ReadyBuildSummaryItem,
   TeamSuggestionSnapshot,
@@ -41,6 +43,7 @@ export interface CompanionSummaryCalculationInput {
   pullAdvice?: PullAdviceSnapshot;
   skippedUnverifiedCharacters?: string[];
   timestamp?: string;
+  optimizedPlan?: OptimizationPlannerResponse & { allocatedPlan?: OptimizationPlanAction[] };
 }
 
 export interface CompanionSummaryCalculationResult {
@@ -105,6 +108,41 @@ export function calculateCompanionSummary(
     };
   });
 
+  const planActions: OptimizationPlanAction[] =
+    (input.optimizedPlan as any)?.allocatedPlan ?? input.optimizedPlan?.rankedPlan ?? [];
+
+  // If input upgradesList was empty (e.g. 0 manual goals) but optimizer produced actions,
+  // enrich topMarginalInvestments from optimizer schedule
+  if (mappedUpgrades.length === 0 && planActions.length > 0) {
+    for (const action of planActions.slice(0, 3)) {
+      const isDomainAction =
+        action.actionType === 'domain_talent' ||
+        action.actionType === 'domain_weapon' ||
+        action.actionType === 'domain_artifact';
+      const isDomainToday =
+        isDomainAction &&
+        (action.timeGated ||
+          openDomainSet.size === 0 ||
+          Array.from(openDomainSet).some(
+            (f) =>
+              (action.resourceName && action.resourceName.toLowerCase().includes(f)) ||
+              action.domainName.toLowerCase().includes(f),
+          ));
+      const actionType =
+        action.actionType === 'domain_weapon' ? 'WEAPON_ASCENSION' : 'TALENT_UPGRADE';
+      const actionDetail = action.resourceName ?? action.domainName;
+
+      mappedUpgrades.push({
+        characterKey: action.targetKey,
+        actionType,
+        actionDetail,
+        efficiencyScore: Math.min(100, Math.round(action.efficiencyScore)),
+        todayDomainAvailable: isDomainToday,
+        domainFamily: action.resourceName ?? action.domainName,
+      });
+    }
+  }
+
   // Sort by open today first, then efficiency score descending
   const topMarginalInvestments = [...mappedUpgrades]
     .sort((a, b) => {
@@ -142,52 +180,138 @@ export function calculateCompanionSummary(
         : 'Roster is endgame-capable for current Abyss cycle.'),
   };
 
-  // 4. Determine Primary Action
+  // 5. Determine Primary Action
   let primaryAction: CompanionSummaryPrimaryAction;
 
-  const todayUpgrade = topMarginalInvestments.find((u) => u.todayDomainAvailable);
+  if (input.optimizedPlan && planActions.length > 0) {
+    const topAction = planActions[0]!;
+    const isDomainAction =
+      topAction.actionType === 'domain_talent' ||
+      topAction.actionType === 'domain_weapon' ||
+      topAction.actionType === 'domain_artifact';
 
-  if (todayUpgrade) {
-    primaryAction = {
-      category: 'FARMING_AVAILABLE',
-      priority: 'HIGH',
-      headline: `Today's Domain: Upgrade ${todayUpgrade.characterKey}'s ${todayUpgrade.actionDetail}`,
-      subtext: `Materials for ${todayUpgrade.domainFamily ?? 'upgrade'} are active today. Yields high marginal ROI (+${todayUpgrade.efficiencyScore.toFixed(0)} score).`,
-      targetRoute: '/planner?tab=farming',
-    };
-  } else if (topMarginalInvestments.length > 0 && topMarginalInvestments[0].efficiencyScore >= 40) {
-    const top = topMarginalInvestments[0];
-    primaryAction = {
-      category: 'BUILD_INVESTMENT',
-      priority: 'HIGH',
-      headline: `Priority Upgrade: ${top.characterKey} (${top.actionDetail})`,
-      subtext: `High-impact resin investment for target encounter readiness (+${top.efficiencyScore.toFixed(0)} score).`,
-      targetRoute: `/roster/${top.characterKey}`,
-    };
-  } else if (!endgameSnapshot.abyssReady) {
-    primaryAction = {
-      category: 'ENDGAME_READINESS',
-      priority: 'MEDIUM',
-      headline: 'Strengthen Roster for Spiral Abyss Floor 12',
-      subtext: `Current joint team clearance score: ${endgameSnapshot.abyssScore.toFixed(0)}/100. Review disjoint team allocations.`,
-      targetRoute: '/endgame',
-    };
-  } else if (input.pullAdvice && input.pullAdvice.recommendation === 'HIGH_ACCOUNT_VALUE') {
-    primaryAction = {
-      category: 'PULL_STRATEGY',
-      priority: 'MEDIUM',
-      headline: `High Value Pull: ${input.pullAdvice.targetCharacterKey}`,
-      subtext: `${input.pullAdvice.keyReason}`,
-      targetRoute: '/intelligence',
-    };
+    const isDomainOpenToday =
+      isDomainAction &&
+      (topAction.timeGated ||
+        openDomainSet.size === 0 ||
+        Array.from(openDomainSet).some(
+          (f) =>
+            (topAction.resourceName && topAction.resourceName.toLowerCase().includes(f)) ||
+            topAction.domainName.toLowerCase().includes(f),
+        ));
+
+    if ((topAction as any).category === 'ENDGAME_READINESS') {
+      primaryAction = {
+        category: 'ENDGAME_READINESS',
+        priority: 'HIGH',
+        headline: (topAction as any).headline ?? 'Strengthen Roster for Spiral Abyss Floor 12',
+        subtext:
+          (topAction as any).subtext ??
+          `Joint team clearance score: ${endgameSnapshot.abyssScore.toFixed(0)}/100.`,
+        targetRoute: '/endgame',
+      };
+    } else if ((topAction as any).category === 'PULL_STRATEGY') {
+      primaryAction = {
+        category: 'PULL_STRATEGY',
+        priority: 'HIGH',
+        headline: (topAction as any).headline ?? `High Value Pull: ${topAction.targetKey}`,
+        subtext: (topAction as any).subtext ?? 'High account-value banner is active.',
+        targetRoute: '/intelligence',
+      };
+    } else if (isDomainOpenToday) {
+      const detail = topAction.resourceName
+        ? `Upgrade ${topAction.targetKey}'s ${topAction.resourceName}`
+        : `${topAction.domainName} for ${topAction.targetKey}`;
+      primaryAction = {
+        category: 'FARMING_AVAILABLE',
+        priority: 'HIGH',
+        headline: `Today's Domain: ${detail}`,
+        subtext: `Allocated ${topAction.runs} run(s) at ${topAction.domainName} (${topAction.resinCost} Resin). Yields high marginal ROI (+${topAction.efficiencyScore.toFixed(0)} score).`,
+        targetRoute: '/planner?tab=farming',
+      };
+    } else {
+      // Boss ascension, character level, weapon ascension, or domain closed today
+      const detail = topAction.resourceName ?? topAction.domainName;
+      primaryAction = {
+        category: 'BUILD_INVESTMENT',
+        priority: 'HIGH',
+        headline: `Priority Upgrade: ${topAction.targetKey} (${detail})`,
+        subtext: `High-impact resin investment for target encounter readiness (+${topAction.efficiencyScore.toFixed(0)} score).`,
+        targetRoute: `/roster/${topAction.targetKey}`,
+      };
+    }
+  } else if (input.optimizedPlan && planActions.length === 0) {
+    if (!endgameSnapshot.abyssReady) {
+      primaryAction = {
+        category: 'ENDGAME_READINESS',
+        priority: 'MEDIUM',
+        headline: 'Strengthen Roster for Spiral Abyss Floor 12',
+        subtext: `Current joint team clearance score: ${endgameSnapshot.abyssScore.toFixed(0)}/100. Review disjoint team allocations.`,
+        targetRoute: '/endgame',
+      };
+    } else if (input.pullAdvice && input.pullAdvice.recommendation === 'HIGH_ACCOUNT_VALUE') {
+      primaryAction = {
+        category: 'PULL_STRATEGY',
+        priority: 'MEDIUM',
+        headline: `High Value Pull: ${input.pullAdvice.targetCharacterKey}`,
+        subtext: `${input.pullAdvice.keyReason}`,
+        targetRoute: '/intelligence',
+      };
+    } else {
+      primaryAction = {
+        category: 'BUILD_INVESTMENT',
+        priority: 'INFO',
+        headline: 'Roster in Balanced Standing',
+        subtext: 'Core characters meet current target encounter benchmarks.',
+        targetRoute: '/roster',
+      };
+    }
   } else {
-    primaryAction = {
-      category: 'BUILD_INVESTMENT',
-      priority: 'INFO',
-      headline: 'Roster in Balanced Standing',
-      subtext: 'Core characters meet current target encounter benchmarks.',
-      targetRoute: '/roster',
-    };
+    // Fallback: existing behavior when optimizedPlan is not provided
+    const todayUpgrade = topMarginalInvestments.find((u) => u.todayDomainAvailable);
+
+    if (todayUpgrade) {
+      primaryAction = {
+        category: 'FARMING_AVAILABLE',
+        priority: 'HIGH',
+        headline: `Today's Domain: Upgrade ${todayUpgrade.characterKey}'s ${todayUpgrade.actionDetail}`,
+        subtext: `Materials for ${todayUpgrade.domainFamily ?? 'upgrade'} are active today. Yields high marginal ROI (+${todayUpgrade.efficiencyScore.toFixed(0)} score).`,
+        targetRoute: '/planner?tab=farming',
+      };
+    } else if (topMarginalInvestments.length > 0 && topMarginalInvestments[0].efficiencyScore >= 40) {
+      const top = topMarginalInvestments[0];
+      primaryAction = {
+        category: 'BUILD_INVESTMENT',
+        priority: 'HIGH',
+        headline: `Priority Upgrade: ${top.characterKey} (${top.actionDetail})`,
+        subtext: `High-impact resin investment for target encounter readiness (+${top.efficiencyScore.toFixed(0)} score).`,
+        targetRoute: `/roster/${top.characterKey}`,
+      };
+    } else if (!endgameSnapshot.abyssReady) {
+      primaryAction = {
+        category: 'ENDGAME_READINESS',
+        priority: 'MEDIUM',
+        headline: 'Strengthen Roster for Spiral Abyss Floor 12',
+        subtext: `Current joint team clearance score: ${endgameSnapshot.abyssScore.toFixed(0)}/100. Review disjoint team allocations.`,
+        targetRoute: '/endgame',
+      };
+    } else if (input.pullAdvice && input.pullAdvice.recommendation === 'HIGH_ACCOUNT_VALUE') {
+      primaryAction = {
+        category: 'PULL_STRATEGY',
+        priority: 'MEDIUM',
+        headline: `High Value Pull: ${input.pullAdvice.targetCharacterKey}`,
+        subtext: `${input.pullAdvice.keyReason}`,
+        targetRoute: '/intelligence',
+      };
+    } else {
+      primaryAction = {
+        category: 'BUILD_INVESTMENT',
+        priority: 'INFO',
+        headline: 'Roster in Balanced Standing',
+        subtext: 'Core characters meet current target encounter benchmarks.',
+        targetRoute: '/roster',
+      };
+    }
   }
 
   // 5. Build missing data caveats

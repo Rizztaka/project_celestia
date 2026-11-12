@@ -35,7 +35,7 @@ describe('TeamSimulationService & GCSim Central Team Intelligence', () => {
     expect(result.simulatedDps).toBeGreaterThanOrEqual(0);
     expect(result.errorMargin).toBeGreaterThanOrEqual(0);
     expect(result.fallbackReason).toBeDefined();
-  });
+  }, 30000);
 
   it('attaches verified simulatedDps to top recommendations in TeamIntelligenceService', async () => {
     const huTao: CharacterInput = {

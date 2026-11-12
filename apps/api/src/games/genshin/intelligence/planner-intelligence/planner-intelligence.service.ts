@@ -185,7 +185,7 @@ export class PlannerIntelligenceService {
     options?: OptimizationPlannerRequestInput,
   ): Promise<OptimizationPlannerResponse> {
     const parsedOptions = optimizationPlannerRequestSchema.parse(options ?? {});
-    const { optimization } = await this.computeUnifiedPlannerState(userId, parsedOptions);
+    const { optimization } = await this.computeUnifiedPlannerState(userId, parsedOptions, false);
     return optimization;
   }
 
@@ -196,20 +196,22 @@ export class PlannerIntelligenceService {
    *
    * Throws:
    *  - NotFoundError (404) if the user has no Genshin account.
-   *  - UnprocessableError (422) if server not selected, resin unknown, or no goals.
+   *  - UnprocessableError (422) if server not selected, resin unknown, or no active goals
+   *    exist when stored goals are present.
    */
   async getRecommendations(
     userId: string,
     options?: OptimizationPlannerRequestInput,
   ): Promise<PlannerIntelligenceResponse> {
     const parsedOptions = optimizationPlannerRequestSchema.parse(options ?? {});
-    const { response } = await this.computeUnifiedPlannerState(userId, parsedOptions);
+    const { response } = await this.computeUnifiedPlannerState(userId, parsedOptions, true);
     return response;
   }
 
   private async computeUnifiedPlannerState(
     userId: string,
     options: OptimizationPlannerRequestInput,
+    requireActiveGoalsIfStored = false,
   ): Promise<{
     response: PlannerIntelligenceResponse;
     optimization: OptimizationPlannerResponse;
@@ -300,6 +302,14 @@ export class PlannerIntelligenceService {
     });
     const duplicates = duplicateGoalIds(rows);
     const goals = rows.filter((goal) => goal.status === 'active');
+
+    // If user has existing stored goals in the database but none of them are active,
+    // preserve backwards compatibility for legacy goal-based routes
+    if (goals.length === 0 && rows.length > 0 && requireActiveGoalsIfStored) {
+      throw new UnprocessableError(
+        'No active goals. Your routine remains available; manage goals in the Planner.',
+      );
+    }
 
     // 6. Build goal availability & optimization candidates
     const availability: AdviceAvailability[] = [];

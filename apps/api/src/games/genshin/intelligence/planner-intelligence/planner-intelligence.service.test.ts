@@ -432,4 +432,27 @@ describe('PlannerIntelligenceService (Multi-Objective Optimization Planner)', ()
     expect(rec.route.length).toBeGreaterThan(0);
     expect(rec.route[0]?.goalId).toContain('auto-');
   });
+
+  it('preserves legacy 422 behavior in getRecommendations when goals exist in DB but all are completed/archived/paused', async () => {
+    vi.mocked(prisma.upgradeGoal.findMany).mockResolvedValueOnce([
+      {
+        id: 'archived-goal-1',
+        userId: 'user-1',
+        goalType: 'CHARACTER_TALENT',
+        targetKey: 'HuTao',
+        fromPhase: 1,
+        toPhase: 6,
+        talentType: 'normal',
+        status: 'archived',
+        priority: 1,
+        revision: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
+
+    await expect(service.getRecommendations('user-1')).rejects.toThrow(
+      'No active goals. Your routine remains available; manage goals in the Planner.',
+    );
+  });
 });

@@ -15,5 +15,6 @@ out/
 
 # Logs and system
 *.log
+*.tsbuildinfo
 .DS_Store
 Thumbs.db

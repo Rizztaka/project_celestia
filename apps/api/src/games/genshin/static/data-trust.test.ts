@@ -222,7 +222,7 @@ describe('M7 Data Trust & Provenance Reconciliation (Task 1)', () => {
   });
 
   describe('d) active-banners.json source verification and PullIntelligenceService degradation', () => {
-    it('active banners have verified source metadata', () => {
+    it('active banners have verified source metadata and patch scope', () => {
       const bannersData = JSON.parse(
         readFileSync(new URL('./active-banners.json', import.meta.url), 'utf8'),
       );

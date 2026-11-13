@@ -48,6 +48,7 @@ const rawBannersData = require('../../static/active-banners.json') as {
     simulation?: boolean;
   })[];
   rulesSource?: string;
+  isLiveSchedule?: boolean;
 };
 
 const ALL_BANNERS = rawBannersData.banners;

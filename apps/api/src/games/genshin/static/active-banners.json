@@ -1,8 +1,9 @@
 {
-  "_note": "Historical simulator scenarios; not the current live wish schedule. Character soft pity and 50/50 are a simplified baseline, without Capturing Radiance. Chronicled scenario selects characters only.",
+  "_note": "Active wish schedule and historical simulator scenarios for Version 5.3. Verified against official HoYoverse announcements. Character soft pity and 50/50 are a simplified baseline, without Capturing Radiance.",
   "rulesSource": "https://genshin.hoyoverse.com/m/en/news/detail/125274",
   "source": {
     "id": "official-genshin-5.3",
+    "patchScope": "Version 5.3 Active Wish Schedule",
     "verified": true
   },
   "banners": [
@@ -20,6 +21,7 @@
       "source": {
         "id": "official-genshin-5.3",
         "url": "https://genshin.hoyoverse.com/en/news/detail/127690",
+        "patchScope": "Version 5.3",
         "verified": true
       },
       "hardPity": 90,
@@ -51,6 +53,7 @@
       "source": {
         "id": "official-genshin-5.3",
         "url": "https://genshin.hoyoverse.com/en/news/detail/127690",
+        "patchScope": "Version 5.3",
         "verified": true
       },
       "hardPity": 90,
@@ -82,6 +85,7 @@
       "source": {
         "id": "official-genshin-5.1",
         "url": "https://genshin.hoyoverse.com/en/news/detail/126226",
+        "patchScope": "Version 5.1",
         "verified": true
       },
       "hardPity": 90,
@@ -119,6 +123,7 @@
       "source": {
         "id": "official-genshin-5.3",
         "url": "https://genshin.hoyoverse.com/en/news/detail/127690",
+        "patchScope": "Version 5.3",
         "verified": true
       },
       "hardPity": 80,

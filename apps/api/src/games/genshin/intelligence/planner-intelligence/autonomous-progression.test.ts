@@ -245,7 +245,9 @@ describe('discoverAutonomousProgression (Account-Wide Autonomous Discovery)', ()
     const firstCandidate = calcResult.candidates[0]!;
     const explanations = explainAutonomousCandidate(firstCandidate);
     expect(explanations.length).toBeGreaterThan(0);
-    expect(explanations.some((e) => e.includes('Autonomous Upgrade') || e.includes('Progression'))).toBe(true);
+    expect(
+      explanations.some((e) => e.includes('Autonomous Upgrade') || e.includes('Progression')),
+    ).toBe(true);
 
     const summary = explainAutonomousProgressionSummary(calcResult);
     expect(summary).toContain('Discovered');

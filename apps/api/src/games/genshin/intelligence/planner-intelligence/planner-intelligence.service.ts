@@ -25,13 +25,9 @@ import {
 } from '../../account-data/account-context-provider.service.js';
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
 import { GenshinRecordedStockRepository } from '../../companion/recorded-stock.repository.js';
-import {
-  calculateMarginalInvestment,
-} from '../marginal-investment/marginal-investment.calculator.js';
+import { calculateMarginalInvestment } from '../marginal-investment/marginal-investment.calculator.js';
 import { buildAuthenticatedReadinessInput } from '../readiness-intelligence/readiness-input.adapter.js';
-import {
-  discoverAutonomousProgression,
-} from './autonomous-progression.calculator.js';
+import { discoverAutonomousProgression } from './autonomous-progression.calculator.js';
 import {
   optimizePlannerSchedule,
   type PlannerCandidateInput,
@@ -325,8 +321,7 @@ export class PlannerIntelligenceService {
       for (const autoCand of autoDiscovery.candidates) {
         candidates.push(autoCand);
 
-        const availableToday =
-          dayOfWeek === 6 || autoCand.openDays.includes(dayOfWeek);
+        const availableToday = dayOfWeek === 6 || autoCand.openDays.includes(dayOfWeek);
 
         availability.push({
           goalId: autoCand.candidateId,
@@ -468,10 +463,8 @@ export class PlannerIntelligenceService {
       analysedAt,
     });
 
-    const optimization: OptimizationPlannerResponse & { allocatedPlan: typeof rankedPlan } = Object.assign(
-      parsedOptimization,
-      { allocatedPlan: rankedPlan },
-    );
+    const optimization: OptimizationPlannerResponse & { allocatedPlan: typeof rankedPlan } =
+      Object.assign(parsedOptimization, { allocatedPlan: rankedPlan });
 
     const goalById = new Map<string, UpgradeGoal>(goals.map((g) => [g.id, g]));
     const candidateById = new Map<string, PlannerCandidateInput>(
@@ -487,8 +480,7 @@ export class PlannerIntelligenceService {
           : action.actionType === 'world_boss'
             ? 'CHARACTER_ASCENSION'
             : 'CHARACTER_TALENT');
-      const resolvedTalentType =
-        matchedGoal?.talentType ?? matchedCand?.talentType ?? null;
+      const resolvedTalentType = matchedGoal?.talentType ?? matchedCand?.talentType ?? null;
 
       return {
         goalId: action.goalId ?? action.actionId,

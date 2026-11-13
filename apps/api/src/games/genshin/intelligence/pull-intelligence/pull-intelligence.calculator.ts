@@ -524,7 +524,9 @@ export function evaluateCounterfactualAddition(params: {
     banner.bannerId.startsWith('custom_') ||
     (banner.sourceUrl && !banner.sourceUrl.startsWith('http')),
   );
-  let confidence: PullConfidence = isSimulation ? ('SIMULATED_SCENARIO' as const) : ('VERIFIED' as const);
+  let confidence: PullConfidence = isSimulation
+    ? ('SIMULATED_SCENARIO' as const)
+    : ('VERIFIED' as const);
   if (isBannerUnverified) {
     confidence = 'UNVERIFIED' as const;
   } else if (isBannerExpired) {

@@ -8,10 +8,7 @@ import {
   getArtifactDomainInfo,
 } from '../marginal-investment/marginal-investment.calculator.js';
 import { buildAuthenticatedReadinessInput } from '../readiness-intelligence/readiness-input.adapter.js';
-import {
-  type PlannerCandidateInput,
-  WORLD_BOSS_RESIN,
-} from './planner-optimization.calculator.js';
+import { type PlannerCandidateInput, WORLD_BOSS_RESIN } from './planner-optimization.calculator.js';
 
 // ---------------------------------------------------------------------------
 // Calculator Types (Strict ADR-0011: Zero Prose, Pure Math & Deterministic Types)

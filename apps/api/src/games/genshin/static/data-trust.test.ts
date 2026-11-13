@@ -10,18 +10,14 @@ import {
   solveAbyssJoint,
 } from '../intelligence/endgame-intelligence/abyss-joint.calculator.js';
 import { explainAbyssJoint } from '../intelligence/endgame-intelligence/abyss-joint.explainer.js';
-import {
-  solveOnslaughtJoint,
-} from '../intelligence/endgame-intelligence/onslaught-joint.calculator.js';
+import { solveOnslaughtJoint } from '../intelligence/endgame-intelligence/onslaught-joint.calculator.js';
 import { explainOnslaughtJoint } from '../intelligence/endgame-intelligence/onslaught-joint.explainer.js';
 import {
   evaluateSeasonStatus,
   solveTheaterActPlan,
 } from '../intelligence/endgame-intelligence/theater-act-planner.calculator.js';
 import { explainTheaterActPlan } from '../intelligence/endgame-intelligence/theater-act-planner.explainer.js';
-import {
-  type ActiveBanner,
-} from '../intelligence/pull-intelligence/pull-intelligence.calculator.js';
+import { type ActiveBanner } from '../intelligence/pull-intelligence/pull-intelligence.calculator.js';
 import { PullIntelligenceService } from '../intelligence/pull-intelligence/pull-intelligence.service.js';
 
 const require = createRequire(import.meta.url);
@@ -44,9 +40,7 @@ let verifyGenshinDbProvenance: (params: Record<string, unknown>) => {
 
 describe('M7 Data Trust & Provenance Reconciliation (Task 1)', () => {
   beforeAll(async () => {
-    const mod = (await import(
-      '../../../../tooling/release-source-provenance.mjs' as string
-    )) as {
+    const mod = (await import('../../../../tooling/release-source-provenance.mjs' as string)) as {
       RELEASE_SOURCE_REVIEW_ANCHOR: ReviewAnchor;
       verifyGenshinDbProvenance: typeof verifyGenshinDbProvenance;
     };
@@ -152,7 +146,9 @@ describe('M7 Data Trust & Provenance Reconciliation (Task 1)', () => {
       expect(onslaughtResult.isExpired).toBe(true);
       expect(onslaughtResult.isCurrentCycle).toBe(false);
       const onslaughtExplanations = explainOnslaughtJoint(onslaughtResult);
-      expect(onslaughtExplanations.some((e) => e.includes('ARCHIVED / HISTORICAL CYCLE'))).toBe(true);
+      expect(onslaughtExplanations.some((e) => e.includes('ARCHIVED / HISTORICAL CYCLE'))).toBe(
+        true,
+      );
 
       // 3. Imaginarium Theater
       const theaterSeasonStatus = evaluateSeasonStatus('2026-11-01', expiredDate);
@@ -164,15 +160,53 @@ describe('M7 Data Trust & Provenance Reconciliation (Task 1)', () => {
           seasonId: '2026-11-01',
           difficulty: 'VISIONARY',
           castKeys: [
-            'Bennett', 'Xiangling', 'Xingqiu', 'Yelan', 'Fischl', 'KaedeharaKazuha',
-            'Furina', 'Nahida', 'Zhongli', 'RaidenShogun', 'HuTao', 'Arlecchino',
-            'Keqing', 'Diluc', 'Yoimiya', 'Kachina', 'Diona', 'Sayu', 'Collei', 'Chevreuse', 'Mika', 'Layla'
+            'Bennett',
+            'Xiangling',
+            'Xingqiu',
+            'Yelan',
+            'Fischl',
+            'KaedeharaKazuha',
+            'Furina',
+            'Nahida',
+            'Zhongli',
+            'RaidenShogun',
+            'HuTao',
+            'Arlecchino',
+            'Keqing',
+            'Diluc',
+            'Yoimiya',
+            'Kachina',
+            'Diona',
+            'Sayu',
+            'Collei',
+            'Chevreuse',
+            'Mika',
+            'Layla',
           ],
           currentAct: 1,
           remainingVigor: {
-            Bennett: 2, Xiangling: 2, Xingqiu: 2, Yelan: 2, Fischl: 2, KaedeharaKazuha: 2,
-            Furina: 2, Nahida: 2, Zhongli: 2, RaidenShogun: 2, HuTao: 2, Arlecchino: 2,
-            Keqing: 2, Diluc: 2, Yoimiya: 2, Kachina: 2, Diona: 2, Sayu: 2, Collei: 2, Chevreuse: 2, Mika: 2, Layla: 2
+            Bennett: 2,
+            Xiangling: 2,
+            Xingqiu: 2,
+            Yelan: 2,
+            Fischl: 2,
+            KaedeharaKazuha: 2,
+            Furina: 2,
+            Nahida: 2,
+            Zhongli: 2,
+            RaidenShogun: 2,
+            HuTao: 2,
+            Arlecchino: 2,
+            Keqing: 2,
+            Diluc: 2,
+            Yoimiya: 2,
+            Kachina: 2,
+            Diona: 2,
+            Sayu: 2,
+            Collei: 2,
+            Chevreuse: 2,
+            Mika: 2,
+            Layla: 2,
           },
           completedActs: [],
         },
@@ -181,7 +215,9 @@ describe('M7 Data Trust & Provenance Reconciliation (Task 1)', () => {
       expect(theaterResult.isExpired).toBe(true);
       expect(theaterResult.isCurrentSeason).toBe(false);
       const theaterExplanations = explainTheaterActPlan(theaterResult);
-      expect(theaterExplanations.some((e) => e.includes('ARCHIVED / HISTORICAL SEASON'))).toBe(true);
+      expect(theaterExplanations.some((e) => e.includes('ARCHIVED / HISTORICAL SEASON'))).toBe(
+        true,
+      );
     });
   });
 

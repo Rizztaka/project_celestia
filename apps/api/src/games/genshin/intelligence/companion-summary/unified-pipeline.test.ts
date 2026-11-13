@@ -37,12 +37,44 @@ function makeTwelveCharacterRoster() {
     { key: 'HuTao', normal: 8, skill: 8, burst: 6, level: 80, asc: 5, weapon: 'DragonsBane' },
     { key: 'Xingqiu', normal: 1, skill: 8, burst: 8, level: 80, asc: 5, weapon: 'FavoniusSword' },
     { key: 'Bennett', normal: 1, skill: 1, burst: 8, level: 80, asc: 5, weapon: 'FavoniusSword' },
-    { key: 'KaedeharaKazuha', normal: 6, skill: 8, burst: 8, level: 90, asc: 6, weapon: 'IronSting' },
-    { key: 'Nahida', normal: 1, skill: 9, burst: 8, level: 90, asc: 6, weapon: 'SacrificialFragments' },
-    { key: 'SangonomiyaKokomi', normal: 6, skill: 8, burst: 8, level: 85, asc: 5, weapon: 'ThrillingTales' },
+    {
+      key: 'KaedeharaKazuha',
+      normal: 6,
+      skill: 8,
+      burst: 8,
+      level: 90,
+      asc: 6,
+      weapon: 'IronSting',
+    },
+    {
+      key: 'Nahida',
+      normal: 1,
+      skill: 9,
+      burst: 8,
+      level: 90,
+      asc: 6,
+      weapon: 'SacrificialFragments',
+    },
+    {
+      key: 'SangonomiyaKokomi',
+      normal: 6,
+      skill: 8,
+      burst: 8,
+      level: 85,
+      asc: 5,
+      weapon: 'ThrillingTales',
+    },
     { key: 'KukiShinobu', normal: 1, skill: 8, burst: 6, level: 90, asc: 6, weapon: 'IronSting' },
     { key: 'Yelan', normal: 1, skill: 8, burst: 8, level: 90, asc: 6, weapon: 'FavoniusWarbow' },
-    { key: 'KamisatoAyaka', normal: 8, skill: 8, burst: 8, level: 90, asc: 6, weapon: 'AmenomaKageuchi' },
+    {
+      key: 'KamisatoAyaka',
+      normal: 8,
+      skill: 8,
+      burst: 8,
+      level: 90,
+      asc: 6,
+      weapon: 'AmenomaKageuchi',
+    },
     { key: 'Mona', normal: 1, skill: 6, burst: 8, level: 80, asc: 5, weapon: 'FavoniusCodex' },
     { key: 'Diona', normal: 1, skill: 8, burst: 8, level: 80, asc: 5, weapon: 'SacrificialBow' },
     { key: 'Zhongli', normal: 1, skill: 8, burst: 8, level: 90, asc: 6, weapon: 'BlackTassel' },
@@ -249,7 +281,8 @@ describe('One Unified Optimization Pipeline (Companion Summary + Planner)', () =
     const opt = plannerResult.optimization as
       | { allocatedPlan?: Array<{ targetKey: string; timeGated?: boolean; actionType: string }> }
       | undefined;
-    const topAllocatedAction = opt?.allocatedPlan?.[0] ?? plannerResult.optimization?.rankedPlan?.[0];
+    const topAllocatedAction =
+      opt?.allocatedPlan?.[0] ?? plannerResult.optimization?.rankedPlan?.[0];
     expect(topAllocatedAction).toBeDefined();
 
     expect(summary.primaryAction.headline).toContain(topAllocatedAction!.targetKey);

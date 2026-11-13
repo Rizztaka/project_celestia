@@ -284,7 +284,10 @@ export function calculateCompanionSummary(
         subtext: `Materials for ${todayUpgrade.domainFamily ?? 'upgrade'} are active today. Yields high marginal ROI (+${todayUpgrade.efficiencyScore.toFixed(0)} score).`,
         targetRoute: '/planner?tab=farming',
       };
-    } else if (topMarginalInvestments.length > 0 && topMarginalInvestments[0].efficiencyScore >= 40) {
+    } else if (
+      topMarginalInvestments.length > 0 &&
+      topMarginalInvestments[0].efficiencyScore >= 40
+    ) {
       const top = topMarginalInvestments[0];
       primaryAction = {
         category: 'BUILD_INVESTMENT',

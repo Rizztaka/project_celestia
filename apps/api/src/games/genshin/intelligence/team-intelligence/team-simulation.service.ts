@@ -293,17 +293,15 @@ export class TeamSimulationService {
       const errorMargin = count > 1 ? 1.96 * standardError : 0;
 
       const firstRun = rawRuns[0]!;
-      const memberDiagnostics: MemberActionDiagnostics[] = (firstRun.members ?? []).map(
-        (m) => ({
-          key: m.key ?? '',
-          damage: m.damage ?? 0,
-          dps: (m.damage ?? 0) / ((firstRun.durationFrames ?? 1200) / 60),
-          actions: m.actions ?? 0,
-          waits: m.failedIntervals ?? 0,
-          actionCounts: m.actionCounts ?? null,
-          blockedAttempts: m.blockedAttempts ?? null,
-        }),
-      );
+      const memberDiagnostics: MemberActionDiagnostics[] = (firstRun.members ?? []).map((m) => ({
+        key: m.key ?? '',
+        damage: m.damage ?? 0,
+        dps: (m.damage ?? 0) / ((firstRun.durationFrames ?? 1200) / 60),
+        actions: m.actions ?? 0,
+        waits: m.failedIntervals ?? 0,
+        actionCounts: m.actionCounts ?? null,
+        blockedAttempts: m.blockedAttempts ?? null,
+      }));
 
       return {
         simulatedDps: meanDps,

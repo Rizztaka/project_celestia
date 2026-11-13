@@ -225,7 +225,7 @@ const { mockDbHolder, createInMemoryPrisma } = vi.hoisted(() => {
       },
       genshinPlanPreferences: {
         findUnique: async ({ where }) =>
-          where?.userId ? preferences.get(where.userId) ?? null : null,
+          where?.userId ? (preferences.get(where.userId) ?? null) : null,
       },
       genshinPlanDismissal: {
         findMany: async () => [],
@@ -946,7 +946,9 @@ describe('Milestone 7 Complete Integration Verification Benchmarks', () => {
       expect(onslaughtResult.isExpired).toBe(true);
       expect(onslaughtResult.isCurrentCycle).toBe(false);
       const onslaughtExplanations = explainOnslaughtJoint(onslaughtResult);
-      expect(onslaughtExplanations.some((e) => e.includes('ARCHIVED / HISTORICAL CYCLE'))).toBe(true);
+      expect(onslaughtExplanations.some((e) => e.includes('ARCHIVED / HISTORICAL CYCLE'))).toBe(
+        true,
+      );
 
       const theaterSeasonStatus = evaluateSeasonStatus('2026-11-01', expiredDate);
       expect(theaterSeasonStatus.isExpired).toBe(true);
@@ -1012,7 +1014,9 @@ describe('Milestone 7 Complete Integration Verification Benchmarks', () => {
       expect(theaterResult.isExpired).toBe(true);
       expect(theaterResult.isCurrentSeason).toBe(false);
       const theaterExplanations = explainTheaterActPlan(theaterResult);
-      expect(theaterExplanations.some((e) => e.includes('ARCHIVED / HISTORICAL SEASON'))).toBe(true);
+      expect(theaterExplanations.some((e) => e.includes('ARCHIVED / HISTORICAL SEASON'))).toBe(
+        true,
+      );
 
       // 2. Unverified or expired pull banners
       const pullService = new PullIntelligenceService();

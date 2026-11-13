@@ -10,9 +10,7 @@ import type {
 /**
  * Generates human rationales for a discovered autonomous progression candidate.
  */
-export function explainAutonomousCandidate(
-  candidate: DiscoveredProgressionCandidate,
-): string[] {
+export function explainAutonomousCandidate(candidate: DiscoveredProgressionCandidate): string[] {
   const explanations: string[] = [];
 
   // 1. Prioritization Rationale
@@ -63,9 +61,7 @@ export function explainAutonomousCandidate(
   );
 
   // 4. Marginal ROI & Gap Impact
-  const gapNote = candidate.closesGap
-    ? ' (closes key encounter readiness gap)'
-    : '';
+  const gapNote = candidate.closesGap ? ' (closes key encounter readiness gap)' : '';
   explanations.push(
     `Expected Marginal ROI: +${candidate.expectedScoreDelta} readiness score delta${gapNote} (efficiency score: ${candidate.marginalEfficiency}).`,
   );
@@ -76,10 +72,7 @@ export function explainAutonomousCandidate(
 /**
  * Summarizes the autonomous progression discovery scan for logging and display.
  */
-export function explainAutonomousProgressionSummary(
-  result: DiscoveredProgressionResult,
-): string {
-  const { totalCharactersScanned, underInvestedCount, discoveredCandidateCount } =
-    result.metadata;
+export function explainAutonomousProgressionSummary(result: DiscoveredProgressionResult): string {
+  const { totalCharactersScanned, underInvestedCount, discoveredCandidateCount } = result.metadata;
   return `Discovered ${discoveredCandidateCount} progression candidate(s) across ${underInvestedCount} under-invested character(s) from a scan of ${totalCharactersScanned} roster unit(s).`;
 }

@@ -547,7 +547,13 @@ export class PullIntelligenceService {
           scoreAllTemplatesFn: scoreAllTemplates,
         });
 
-        this.applyCanonicalContextMetadata(rec, accountContext, conflictedCharacterKeys, banner, now);
+        this.applyCanonicalContextMetadata(
+          rec,
+          accountContext,
+          conflictedCharacterKeys,
+          banner,
+          now,
+        );
         rec.explanations = explainPullValue(rec);
         return rec;
       })

@@ -310,8 +310,7 @@ export class CompanionSummaryService {
 
     // 5. Optimization Planner Schedule (Milestone 7 Unified Pipeline)
     let optimizedPlan:
-      | (OptimizationPlannerResponse & { allocatedPlan?: OptimizationPlanAction[] })
-      | undefined;
+      (OptimizationPlannerResponse & { allocatedPlan?: OptimizationPlanAction[] }) | undefined;
     try {
       if (this.plannerService && typeof this.plannerService.getOptimizedPlan === 'function') {
         optimizedPlan = await this.plannerService.getOptimizedPlan(userId);
@@ -453,8 +452,7 @@ export class CompanionSummaryService {
 
     // 5. Autonomous Progression Optimization for Showcase (Milestone 7 Unified Pipeline)
     let showcaseOptimizedPlan:
-      | (OptimizationPlannerResponse & { allocatedPlan?: OptimizationPlanAction[] })
-      | undefined;
+      (OptimizationPlannerResponse & { allocatedPlan?: OptimizationPlanAction[] }) | undefined;
     try {
       const autoDiscovery = discoverAutonomousProgression({
         rawRoster: verifiedRoster,

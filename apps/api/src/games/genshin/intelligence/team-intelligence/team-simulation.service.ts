@@ -121,7 +121,7 @@ export class TeamSimulationService {
     members: CandidateMemberInput[],
     options?: SimulateTeamOptions,
   ): { config: string; resolvedKeys: string[] } {
-    const duration = options?.duration ?? 45;
+    const duration = options?.duration ?? 20;
     const enemyLevel = options?.enemyLevel ?? 100;
     const resistance = (options?.resistance ?? 10) / 100;
 

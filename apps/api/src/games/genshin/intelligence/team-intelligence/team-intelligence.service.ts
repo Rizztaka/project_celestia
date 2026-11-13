@@ -26,10 +26,7 @@ import {
   type TemplateRoleResult,
 } from './team-intelligence.calculator.js';
 import { explainTeamScore } from './team-intelligence.explainer.js';
-import {
-  type SimulationStatus,
-  TeamSimulationService,
-} from './team-simulation.service.js';
+import { type SimulationStatus, TeamSimulationService } from './team-simulation.service.js';
 
 // -------------------------------------------------------
 // Static data — loaded once at module init
@@ -332,7 +329,9 @@ export class TeamIntelligenceService {
       const completed = completeFourMembers(filledKeys, sortedRoster);
 
       if (completed) {
-        const simResult = await this.teamSimulationService.simulateTeam(completed);
+        const simResult = await this.teamSimulationService.simulateTeam(completed, {
+          duration: 20,
+        });
         rec.simulatedDps = simResult.simulatedDps;
         rec.errorMargin = simResult.errorMargin;
         rec.simulationStatus = simResult.simulationStatus;

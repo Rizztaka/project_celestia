@@ -33,6 +33,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.7.0(vite@6.4.6(jiti@2.7.0)(lightningcss@1.33.0))
+      genshin-db:
+        specifier: ^5.2.15
+        version: 5.2.15
       tailwindcss:
         specifier: ^4.0.9
         version: 4.3.5
@@ -675,6 +678,12 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
+  fuzzysort@1.9.0:
+    resolution: {integrity: sha512-MOxCT0qLTwLqmEwc7UtU045RKef7mc8Qz8eR4r2bLNEq9dy/c3ZKMEFp6IEst69otkQdFZ4FfgH2dmZD+ddX1g==}
+
+  genshin-db@5.2.15:
+    resolution: {integrity: sha512-xpdFdZAUzG0JyaNF+nbQMIbHYAzX/HbjfBja3xEw8kWET0E7yoM8A4UvB9YAqHgOzyjio2nGy+e6WI6lcjxerA==}
+
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
     engines: {node: '>=6.9.0'}
@@ -799,6 +808,9 @@ packages:
   obug@3.0.0:
     resolution: {integrity: sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw==}
     engines: {node: '>=12.20.0'}
+
+  pako@2.2.0:
+    resolution: {integrity: sha512-zJq6RP/5q+TO2OpFV3FHzlPnFjmkb7Nc99a5SNjJE+uu/PkpChs+NIZSSzbBoD+6kjiISXjfYdwj1ZRQ81dz/w==}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -1463,6 +1475,13 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
+  fuzzysort@1.9.0: {}
+
+  genshin-db@5.2.15:
+    dependencies:
+      fuzzysort: 1.9.0
+      pako: 2.2.0
+
   gensync@1.0.0-beta.2: {}
 
   graceful-fs@4.2.12: {}
@@ -1543,6 +1562,8 @@ snapshots:
   node-releases@2.0.63: {}
 
   obug@3.0.0: {}
+
+  pako@2.2.0: {}
 
   picocolors@1.1.1: {}
 

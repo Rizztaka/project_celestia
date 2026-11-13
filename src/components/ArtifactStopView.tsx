@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { CHARACTERS } from '../data/characters';
 import { calculateArtifactStopPoint } from '../engines/artifact-stop';
-import { PieChart, Clock, Zap } from 'lucide-react';
+import type { Character } from '../types/genshin';
+import { PieChart, Clock, Zap, Info } from 'lucide-react';
+import { CharacterPortrait } from './CharacterPortrait';
+import { CharacterDetailModal } from './CharacterDetailModal';
 
 export const ArtifactStopView: React.FC = () => {
   const [selectedChar, setSelectedChar] = useState<string>('Nefer');
   const [critRate, setCritRate] = useState<number>(65);
   const [critDmg, setCritDmg] = useState<number>(140);
   const [isEmScaler, setIsEmScaler] = useState<boolean>(true);
+  const [modalCharacter, setModalCharacter] = useState<Character | null>(null);
 
   const char = CHARACTERS.find((c) => c.id === selectedChar) || CHARACTERS[0];
   const result = calculateArtifactStopPoint(char.name, critRate, critDmg, isEmScaler);
@@ -41,28 +45,49 @@ export const ArtifactStopView: React.FC = () => {
             Build Stats Input
           </h2>
 
-          {/* Character selector */}
-          <div className="space-y-1.5">
+          {/* Character selector with Portrait Preview */}
+          <div className="space-y-2">
             <label className="text-xs font-semibold text-zinc-300">Target Character:</label>
-            <select
-              value={selectedChar}
-              onChange={(e) => {
-                const newId = e.target.value;
-                setSelectedChar(newId);
-                if (newId === 'Nefer' || newId === 'Nilou' || newId === 'KukiShinobu') {
-                  setIsEmScaler(true);
-                } else {
-                  setIsEmScaler(false);
-                }
-              }}
-              className="w-full bg-[#181b28] border border-[#282e44] text-zinc-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#d4af37]"
-            >
-              {CHARACTERS.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name} ({c.element} · {c.roles[0]})
-                </option>
-              ))}
-            </select>
+            <div className="flex items-center gap-3 bg-[#181b28] p-2 rounded-xl border border-[#282e44]">
+              <CharacterPortrait
+                src={char.icon}
+                name={char.name}
+                element={char.element}
+                rarity={char.rarity}
+                size="md"
+              />
+              <div className="flex-1 min-w-0">
+                <select
+                  value={selectedChar}
+                  onChange={(e) => {
+                    const newId = e.target.value;
+                    setSelectedChar(newId);
+                    if (newId === 'Nefer' || newId === 'Nilou' || newId === 'KukiShinobu') {
+                      setIsEmScaler(true);
+                    } else {
+                      setIsEmScaler(false);
+                    }
+                  }}
+                  className="w-full bg-transparent text-zinc-100 text-sm focus:outline-none cursor-pointer"
+                >
+                  {CHARACTERS.map((c) => (
+                    <option key={c.id} value={c.id} className="bg-[#181b28] text-zinc-200">
+                      {c.name} ({c.element} · {c.roles[0]})
+                    </option>
+                  ))}
+                </select>
+                <div className="text-[10px] text-zinc-400 mt-0.5 flex items-center justify-between">
+                  <span>{char.roles[0]} · {char.weapon}</span>
+                  <button
+                    onClick={() => setModalCharacter(char)}
+                    className="text-[#d4af37] hover:underline flex items-center gap-0.5 cursor-pointer font-semibold"
+                  >
+                    <Info className="w-2.5 h-2.5" />
+                    <span>View Build</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Crit Rate Slider */}
@@ -192,6 +217,12 @@ export const ArtifactStopView: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Interactive Character Details Modal */}
+      <CharacterDetailModal
+        character={modalCharacter}
+        onClose={() => setModalCharacter(null)}
+      />
     </div>
   );
 };

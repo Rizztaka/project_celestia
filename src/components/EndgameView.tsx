@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { analyzeEndgameReadiness } from '../engines/endgame-helper';
+import type { Character } from '../types/genshin';
 import { ShieldAlert, ShieldCheck, AlertCircle, Swords } from 'lucide-react';
+import { CharacterDetailModal } from './CharacterDetailModal';
+import { CharacterPortrait } from './CharacterPortrait';
 
 interface EndgameViewProps {
   ownedIds: string[];
 }
 
 export const EndgameView: React.FC<EndgameViewProps> = ({ ownedIds }) => {
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const analysis = analyzeEndgameReadiness(ownedIds);
 
   return (
@@ -21,7 +25,7 @@ export const EndgameView: React.FC<EndgameViewProps> = ({ ownedIds }) => {
           Endgame Stage & Shield Counters
         </h1>
         <p className="text-sm text-zinc-400 mt-1 max-w-2xl">
-          Analyzes active Floor 12 chamber shield barriers, boss invulnerability mechanics, and maps your owned roster against required elemental counters.
+          Analyzes active Floor 12 chamber shield barriers, boss invulnerability mechanics, and maps your owned roster against required elemental counters. Click any counter to inspect details.
         </p>
       </div>
 
@@ -86,12 +90,21 @@ export const EndgameView: React.FC<EndgameViewProps> = ({ ownedIds }) => {
                   <div className="flex flex-wrap gap-1.5">
                     {item.usableCounters.length > 0 ? (
                       item.usableCounters.map((c) => (
-                        <span
+                        <button
                           key={c.id}
-                          className="text-xs bg-[#1a1e2f] text-zinc-200 px-2.5 py-1 rounded-lg border border-[#293047] font-medium"
+                          onClick={() => setSelectedCharacter(c)}
+                          className="flex items-center gap-1.5 text-xs bg-[#1a1e2f] hover:bg-[#252b42] text-zinc-200 px-2 py-1 rounded-lg border border-[#293047] hover:border-[#d4af37]/50 font-medium transition-colors cursor-pointer"
+                          title="Click to view character details"
                         >
-                          {c.name} ({c.element})
-                        </span>
+                          <CharacterPortrait
+                            src={c.icon}
+                            name={c.name}
+                            element={c.element}
+                            size="xs"
+                          />
+                          <span>{c.name}</span>
+                          <span className="text-[10px] text-zinc-400">({c.element})</span>
+                        </button>
                       ))
                     ) : (
                       <span className="text-xs text-rose-400 italic">
@@ -113,6 +126,13 @@ export const EndgameView: React.FC<EndgameViewProps> = ({ ownedIds }) => {
           );
         })}
       </div>
+
+      {/* Interactive Character Details Modal */}
+      <CharacterDetailModal
+        character={selectedCharacter}
+        onClose={() => setSelectedCharacter(null)}
+        isOwned={selectedCharacter ? ownedIds.includes(selectedCharacter.id) : false}
+      />
     </div>
   );
 };

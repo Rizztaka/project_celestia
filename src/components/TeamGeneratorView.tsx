@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { CHARACTERS } from '../data/characters';
 import { generateBestTeams } from '../engines/team-generator';
-import { Sparkles, Shield, Zap } from 'lucide-react';
+import type { Character } from '../types/genshin';
+import { Sparkles, Shield, Zap, Info } from 'lucide-react';
+import { CharacterDetailModal } from './CharacterDetailModal';
+import { CharacterPortrait } from './CharacterPortrait';
 
 interface TeamGeneratorViewProps {
   ownedIds: string[];
@@ -19,6 +22,7 @@ const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string 
 
 export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({ ownedIds }) => {
   const [focusId, setFocusId] = useState<string>('');
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
 
   const teams = generateBestTeams(ownedIds, focusId || undefined);
   const featuredCarries = ['Nefer', 'Mavuika', 'HuTao', 'Alhaitham', 'Clorinde', 'Neuvillette', 'Navia'];
@@ -37,7 +41,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({ ownedIds }
               Best Team Recommendations
             </h1>
             <p className="text-sm text-zinc-400 mt-1 max-w-2xl">
-              Calculates optimal 4-slot compositions from your owned roster ({ownedIds.length} characters) balancing elemental resonance, reaction chains, buffer multipliers, and survivability.
+              Calculates optimal 4-slot compositions from your owned roster ({ownedIds.length} characters) balancing elemental resonance, reaction chains, buffer multipliers, and survivability. Click any character to view build and talents.
             </p>
           </div>
 
@@ -120,7 +124,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({ ownedIds }
               </div>
             </div>
 
-            {/* 4 Characters Row */}
+            {/* 4 Characters Row with Portraits */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {team.members.map((member, mIdx) => {
                 const color = ELEMENT_COLORS[member.element] || {
@@ -131,23 +135,44 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({ ownedIds }
                 return (
                   <div
                     key={member.id + mIdx}
-                    className={`rounded-xl p-3 border ${color.border} ${color.bg} flex flex-col justify-between`}
+                    onClick={() => setSelectedCharacter(member)}
+                    className={`group rounded-xl p-3 border ${color.border} ${color.bg} hover:border-[#d4af37] hover:scale-[1.02] transition-all duration-150 cursor-pointer flex flex-col justify-between shadow-sm`}
+                    title="Click to view full build and talents"
                   >
                     <div>
-                      <div className="flex items-center justify-between text-[11px] mb-1">
+                      {/* Element & Weapon */}
+                      <div className="flex items-center justify-between text-[11px] mb-2">
                         <span className={`font-bold ${color.text}`}>{member.element}</span>
                         <span className="text-zinc-400 text-[10px]">{member.weapon}</span>
                       </div>
-                      <div className="text-base font-bold text-zinc-100 leading-tight">
-                        {member.name}
+
+                      {/* Character Portrait & Name */}
+                      <div className="flex items-center gap-2.5">
+                        <CharacterPortrait
+                          src={member.icon}
+                          name={member.name}
+                          element={member.element}
+                          size="md"
+                          className="group-hover:border-[#d4af37]/60"
+                        />
+                        <div className="min-w-0">
+                          <div className="text-sm font-bold text-zinc-100 group-hover:text-[#d4af37] transition-colors leading-tight truncate">
+                            {member.name}
+                          </div>
+                          <div className="text-[10px] text-zinc-400 truncate mt-0.5">
+                            {member.roles[0]}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="mt-3 pt-2 border-t border-white/5 flex items-center justify-between">
-                      <span className="text-[10px] uppercase font-bold text-zinc-400">
-                        {member.roles[0]}
-                      </span>
+
+                    <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between">
                       <span className="text-[10px] text-[#d4af37] font-semibold">
                         {'★'.repeat(member.rarity)}
+                      </span>
+                      <span className="text-[9px] text-zinc-400 group-hover:text-zinc-200 flex items-center gap-0.5">
+                        <Info className="w-2.5 h-2.5" />
+                        <span>Build</span>
                       </span>
                     </div>
                   </div>
@@ -192,6 +217,13 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({ ownedIds }
           </div>
         ))}
       </div>
+
+      {/* Interactive Character Detail Modal */}
+      <CharacterDetailModal
+        character={selectedCharacter}
+        onClose={() => setSelectedCharacter(null)}
+        isOwned={selectedCharacter ? ownedIds.includes(selectedCharacter.id) : false}
+      />
     </div>
   );
 };

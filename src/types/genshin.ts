@@ -2,6 +2,51 @@ export type Element = 'Pyro' | 'Hydro' | 'Anemo' | 'Electro' | 'Dendro' | 'Cryo'
 export type WeaponType = 'Sword' | 'Claymore' | 'Polearm' | 'Bow' | 'Catalyst';
 export type CharacterRole = 'On-Field DPS' | 'Off-Field DPS' | 'Buffer/Shred' | 'Sustain';
 
+export interface CharacterTalent {
+  name: string;
+  type: 'normal' | 'skill' | 'burst' | 'sprint' | 'passive';
+  description: string;
+  icon?: string;
+}
+
+export interface CharacterConstellation {
+  level: number;
+  name: string;
+  description: string;
+  icon?: string;
+}
+
+export interface CharacterStats {
+  hp: number;
+  attack: number;
+  defense: number;
+  specializedStat: string;
+  specializedValue: string;
+}
+
+export interface RecommendedWeapon {
+  name: string;
+  rarity: number;
+  reason?: string;
+}
+
+export interface RecommendedArtifact {
+  name: string;
+  pieces: number;
+  reason?: string;
+}
+
+export interface RecommendedBuild {
+  weapons: RecommendedWeapon[];
+  artifacts: RecommendedArtifact[];
+  mainStats?: {
+    sands: string[];
+    goblet: string[];
+    circlet: string[];
+  };
+  subStats?: string[];
+}
+
 export interface Character {
   id: string;
   name: string;
@@ -12,7 +57,14 @@ export interface Character {
   // Synergy tags for team archetypes & reaction chains
   tags: string[];
   icon?: string;
+  sideIcon?: string;
   description?: string;
+  title?: string;
+  constellationName?: string;
+  stats?: CharacterStats;
+  talents?: CharacterTalent[];
+  constellations?: CharacterConstellation[];
+  build?: RecommendedBuild;
 }
 
 export interface OwnedCharacter {
@@ -52,3 +104,4 @@ export interface ArtifactStopRecommendation {
   resinEfficiency: number; // 0 - 100%
   advice: string;
 }
+

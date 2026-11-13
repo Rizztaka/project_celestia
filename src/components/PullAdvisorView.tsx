@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { evaluatePullRecommendations } from '../engines/pull-advisor';
-import { Compass, CheckCircle2, AlertTriangle, Check } from 'lucide-react';
+import type { Character } from '../types/genshin';
+import { Compass, CheckCircle2, AlertTriangle, Check, Info } from 'lucide-react';
+import { CharacterDetailModal } from './CharacterDetailModal';
+import { CharacterPortrait } from './CharacterPortrait';
 
 interface PullAdvisorViewProps {
   ownedIds: string[];
 }
 
 export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({ ownedIds }) => {
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const recommendations = evaluatePullRecommendations(ownedIds);
 
   const tierColors = {
@@ -28,7 +32,7 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({ ownedIds }) =>
           Who Should You Pull Next?
         </h1>
         <p className="text-sm text-zinc-400 mt-1 max-w-2xl">
-          Evaluates account holes, missing support archetypes (universal buffers, off-field Hydro/Dendro enablers), and direct character synergies against your {ownedIds.length} owned units.
+          Evaluates account holes, missing support archetypes (universal buffers, off-field Hydro/Dendro enablers), and direct character synergies against your {ownedIds.length} owned units. Click any candidate to view full kit and build.
         </p>
 
         <div className="mt-4 flex items-center gap-2 text-xs bg-[#10121b] text-emerald-400 px-3 py-2 rounded-xl border border-emerald-500/20 w-fit">
@@ -45,12 +49,22 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({ ownedIds }) =>
             className="bg-[#12141d] border border-[#23273a] hover:border-[#d4af37]/40 rounded-2xl p-5 transition-all shadow-md flex flex-col justify-between space-y-4"
           >
             <div>
-              {/* Header row */}
+              {/* Header row with Portrait */}
               <div className="flex items-center justify-between gap-2 border-b border-[#1f2334] pb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#202538] to-[#141724] border border-[#30364e] flex items-center justify-center text-sm font-bold text-[#d4af37]">
-                    #{idx + 1}
+                  <div className="relative shrink-0">
+                    <CharacterPortrait
+                      src={item.character.icon}
+                      name={item.character.name}
+                      element={item.character.element}
+                      size="md"
+                      className="border-[#2e354e]"
+                    />
+                    <div className="absolute -bottom-1.5 -left-1 bg-black/90 px-1.5 py-0.2 rounded text-[10px] font-bold text-[#d4af37] border border-[#d4af37]/40">
+                      #{idx + 1}
+                    </div>
                   </div>
+
                   <div>
                     <div className="text-lg font-bold text-zinc-100 leading-tight">
                       {item.character.name}
@@ -109,12 +123,25 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({ ownedIds }) =>
             </div>
 
             <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-zinc-400">
-              <span>Rarity: {'★'.repeat(item.character.rarity)}</span>
-              <span>Tags: {item.character.tags.slice(0, 3).join(', ')}</span>
+              <span className="text-[#d4af37]">{'★'.repeat(item.character.rarity)}</span>
+              <button
+                onClick={() => setSelectedCharacter(item.character)}
+                className="flex items-center gap-1 text-[#d4af37] hover:underline font-semibold cursor-pointer"
+              >
+                <Info className="w-3.5 h-3.5" />
+                <span>View Talents & Build</span>
+              </button>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Character Details Modal */}
+      <CharacterDetailModal
+        character={selectedCharacter}
+        onClose={() => setSelectedCharacter(null)}
+        isOwned={selectedCharacter ? ownedIds.includes(selectedCharacter.id) : false}
+      />
     </div>
   );
 };

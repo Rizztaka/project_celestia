@@ -109,7 +109,7 @@ export function calculateCompanionSummary(
   });
 
   const planActions: OptimizationPlanAction[] =
-    (input.optimizedPlan as any)?.allocatedPlan ?? input.optimizedPlan?.rankedPlan ?? [];
+    input.optimizedPlan?.allocatedPlan ?? input.optimizedPlan?.rankedPlan ?? [];
 
   // If input upgradesList was empty (e.g. 0 manual goals) but optimizer produced actions,
   // enrich topMarginalInvestments from optimizer schedule
@@ -200,22 +200,28 @@ export function calculateCompanionSummary(
             topAction.domainName.toLowerCase().includes(f),
         ));
 
-    if ((topAction as any).category === 'ENDGAME_READINESS') {
+    const extendedMeta = topAction as {
+      category?: string;
+      headline?: string;
+      subtext?: string;
+    };
+
+    if (extendedMeta.category === 'ENDGAME_READINESS') {
       primaryAction = {
         category: 'ENDGAME_READINESS',
         priority: 'HIGH',
-        headline: (topAction as any).headline ?? 'Strengthen Roster for Spiral Abyss Floor 12',
+        headline: extendedMeta.headline ?? 'Strengthen Roster for Spiral Abyss Floor 12',
         subtext:
-          (topAction as any).subtext ??
+          extendedMeta.subtext ??
           `Joint team clearance score: ${endgameSnapshot.abyssScore.toFixed(0)}/100.`,
         targetRoute: '/endgame',
       };
-    } else if ((topAction as any).category === 'PULL_STRATEGY') {
+    } else if (extendedMeta.category === 'PULL_STRATEGY') {
       primaryAction = {
         category: 'PULL_STRATEGY',
         priority: 'HIGH',
-        headline: (topAction as any).headline ?? `High Value Pull: ${topAction.targetKey}`,
-        subtext: (topAction as any).subtext ?? 'High account-value banner is active.',
+        headline: extendedMeta.headline ?? `High Value Pull: ${topAction.targetKey}`,
+        subtext: extendedMeta.subtext ?? 'High account-value banner is active.',
         targetRoute: '/intelligence',
       };
     } else if (isDomainOpenToday) {

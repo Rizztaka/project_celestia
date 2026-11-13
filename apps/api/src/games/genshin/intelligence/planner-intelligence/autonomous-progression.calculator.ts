@@ -229,7 +229,7 @@ export function discoverAutonomousProgression(
       }
 
       const costKeys = upgrade.costs.map((c) => c.materialKey);
-      let domainKey: string | null = null;
+      let domainKey: string | null;
       let domainName: string;
       let resourceName: string;
       let openDays: ReadonlyArray<number>;

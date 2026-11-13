@@ -191,7 +191,6 @@ describe('One Unified Optimization Pipeline (Companion Summary + Planner)', () =
       {
         id: 'goal-hutao-burst',
         userId: 'user-1',
-        accountId: 'acc-1',
         goalType: GoalType.CHARACTER_TALENT,
         targetKey: 'HuTao',
         talentType: 'burst',
@@ -247,11 +246,14 @@ describe('One Unified Optimization Pipeline (Companion Summary + Planner)', () =
     const plannerResult = await plannerService.getRecommendations('user-1');
     const summary = await summaryService.getSummary('user-1');
 
-    const topAllocatedAction = (plannerResult.optimization as any)?.allocatedPlan?.[0] ?? plannerResult.optimization?.rankedPlan?.[0];
+    const opt = plannerResult.optimization as
+      | { allocatedPlan?: Array<{ targetKey: string; timeGated?: boolean; actionType: string }> }
+      | undefined;
+    const topAllocatedAction = opt?.allocatedPlan?.[0] ?? plannerResult.optimization?.rankedPlan?.[0];
     expect(topAllocatedAction).toBeDefined();
 
-    expect(summary.primaryAction.headline).toContain(topAllocatedAction.targetKey);
-    if (topAllocatedAction.timeGated || topAllocatedAction.actionType.startsWith('domain_')) {
+    expect(summary.primaryAction.headline).toContain(topAllocatedAction!.targetKey);
+    if (topAllocatedAction!.timeGated || topAllocatedAction!.actionType.startsWith('domain_')) {
       expect(summary.primaryAction.targetRoute).toBe('/planner?tab=farming');
     }
   });

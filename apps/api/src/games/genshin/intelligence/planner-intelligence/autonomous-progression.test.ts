@@ -1,15 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
 import type { CharacterWithWeapon } from '../../characters/character.repository.js';
-import { calculatePriorityWeight } from './planner-optimization.calculator.js';
-import {
-  type AutonomousProgressionParams,
-  discoverAutonomousProgression,
-} from './autonomous-progression.calculator.js';
+import { discoverAutonomousProgression } from './autonomous-progression.calculator.js';
 import {
   explainAutonomousCandidate,
   explainAutonomousProgressionSummary,
 } from './autonomous-progression.explainer.js';
+import { calculatePriorityWeight } from './planner-optimization.calculator.js';
 
 // ---------------------------------------------------------------------------
 // Test Fixtures

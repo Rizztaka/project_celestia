@@ -1,16 +1,10 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { describe, expect, it } from 'vitest';
 
-import type {
-  CandidateEndgameTeamInput,
-  OnslaughtBossConfig,
-} from '@celestia/api-contracts';
-import {
-  RELEASE_SOURCE_REVIEW_ANCHOR,
-  verifyGenshinDbProvenance,
-} from '../../../../tooling/release-source-provenance.mjs';
+import type { CandidateEndgameTeamInput } from '@celestia/api-contracts';
+import { beforeAll, describe, expect, it } from 'vitest';
+
 import {
   evaluateEncounterPackStatus,
   solveAbyssJoint,
@@ -35,7 +29,31 @@ const sourceBytes = readFileSync(require.resolve('genshin-db/src/min/data.min.js
 const rosterBytes = readFileSync(new URL('./release-roster.json', import.meta.url));
 const rosterHash = readFileSync(new URL('./release-roster.sha256', import.meta.url), 'utf8').trim();
 
+interface ReviewAnchor {
+  reviewedBy: string;
+  reviewedOn: string;
+  attestation: string;
+}
+
+let RELEASE_SOURCE_REVIEW_ANCHOR: ReviewAnchor;
+let verifyGenshinDbProvenance: (params: Record<string, unknown>) => {
+  status: string;
+  provenance: string;
+  independentRosterAnchor: unknown;
+};
+
 describe('M7 Data Trust & Provenance Reconciliation (Task 1)', () => {
+  beforeAll(async () => {
+    const mod = (await import(
+      '../../../../tooling/release-source-provenance.mjs' as string
+    )) as {
+      RELEASE_SOURCE_REVIEW_ANCHOR: ReviewAnchor;
+      verifyGenshinDbProvenance: typeof verifyGenshinDbProvenance;
+    };
+    RELEASE_SOURCE_REVIEW_ANCHOR = mod.RELEASE_SOURCE_REVIEW_ANCHOR;
+    verifyGenshinDbProvenance = mod.verifyGenshinDbProvenance;
+  });
+
   describe('a) genshin-db release provenance verification', () => {
     it('returns status: verified and provenance: verified with independent review anchor', () => {
       const manifest = JSON.parse(rosterBytes.toString('utf8')).source;
@@ -173,7 +191,8 @@ describe('M7 Data Trust & Provenance Reconciliation (Task 1)', () => {
         readFileSync(new URL('./active-banners.json', import.meta.url), 'utf8'),
       );
       const activeBanners = bannersData.banners.filter(
-        (b: any) => !b.historical && !b.simulation,
+        (b: { historical?: boolean; simulation?: boolean; source?: { verified?: boolean } }) =>
+          !b.historical && !b.simulation,
       );
       expect(activeBanners.length).toBeGreaterThan(0);
       for (const b of activeBanners) {

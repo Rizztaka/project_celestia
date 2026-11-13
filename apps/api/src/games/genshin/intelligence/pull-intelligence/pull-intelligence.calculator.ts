@@ -2,6 +2,7 @@ import type {
   AccountValueBreakdown,
   PullBudgetForecast,
   PullBudgetInput,
+  PullConfidence,
   PullRecommendation,
   PullTargetMode,
   PullTargetType,

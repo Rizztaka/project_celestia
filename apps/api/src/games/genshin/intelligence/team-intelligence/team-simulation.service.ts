@@ -90,6 +90,22 @@ export function normalizeToGcsimKey(rawKey: string): string {
   return GCSIM_ALIASES[clean] ?? clean;
 }
 
+export interface RawMemberSimulationResult {
+  key?: string;
+  damage?: number;
+  actions?: number;
+  failedIntervals?: number;
+  actionCounts?: Record<string, number> | null;
+  blockedAttempts?: Record<string, number> | null;
+}
+
+export interface RawSimulationRunResult {
+  dps?: number;
+  error?: string | null;
+  durationFrames?: number;
+  members?: RawMemberSimulationResult[];
+}
+
 export class TeamSimulationService {
   private readonly runnerUrl: URL;
 
@@ -172,7 +188,7 @@ export class TeamSimulationService {
   private runWorker(
     workerData: Array<{ config: string; seed: number }>,
     timeoutMs: number,
-  ): Promise<any[]> {
+  ): Promise<RawSimulationRunResult[]> {
     return new Promise((resolve, reject) => {
       const worker = new Worker(this.runnerUrl, {
         workerData,
@@ -183,7 +199,7 @@ export class TeamSimulationService {
         reject(new Error(`GCSim simulation timed out after ${timeoutMs}ms`));
       }, timeoutMs);
 
-      worker.once('message', (result) => {
+      worker.once('message', (result: RawSimulationRunResult[]) => {
         clearTimeout(timer);
         resolve(result);
       });
@@ -264,7 +280,7 @@ export class TeamSimulationService {
       }
 
       const count = rawRuns.length;
-      const dpsValues = rawRuns.map((r: any) => (typeof r.dps === 'number' ? r.dps : 0));
+      const dpsValues = rawRuns.map((r) => (typeof r.dps === 'number' ? r.dps : 0));
       const meanDps = dpsValues.reduce((sum: number, v: number) => sum + v, 0) / count;
 
       const variance =
@@ -276,9 +292,9 @@ export class TeamSimulationService {
       const standardError = count > 1 ? stdDev / Math.sqrt(count) : 0;
       const errorMargin = count > 1 ? 1.96 * standardError : 0;
 
-      const firstRun = rawRuns[0];
+      const firstRun = rawRuns[0]!;
       const memberDiagnostics: MemberActionDiagnostics[] = (firstRun.members ?? []).map(
-        (m: any) => ({
+        (m) => ({
           key: m.key ?? '',
           damage: m.damage ?? 0,
           dps: (m.damage ?? 0) / ((firstRun.durationFrames ?? 1200) / 60),

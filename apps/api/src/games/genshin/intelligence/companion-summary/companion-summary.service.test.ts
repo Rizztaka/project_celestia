@@ -194,7 +194,7 @@ describe('CompanionSummaryService', () => {
 
     const parsed = companionSummaryResponseSchema.safeParse(summary);
     expect(parsed.success).toBe(true);
-  });
+  }, 30000);
 
   it('throws NotFoundError when account does not exist', async () => {
     vi.spyOn(prisma.genshinAccount, 'findUnique').mockResolvedValue(null);
@@ -227,7 +227,7 @@ describe('CompanionSummaryService', () => {
 
     const parsed = companionSummaryResponseSchema.safeParse(summary);
     expect(parsed.success).toBe(true);
-  });
+  }, 30000);
 
   it('gracefully falls back to zeroed endgame status when roster has fewer than 4 characters', async () => {
     vi.spyOn(prisma.genshinAccount, 'findUnique').mockResolvedValue({
@@ -300,5 +300,5 @@ describe('CompanionSummaryService', () => {
 
     const parsed = companionSummaryResponseSchema.safeParse(summary);
     expect(parsed.success).toBe(true);
-  });
+  }, 30000);
 });

@@ -27,6 +27,7 @@ export const optimizationPlanActionSchema = z
     marginalScoreDelta: z.number().min(0).optional(),
     closesReadinessGap: z.boolean().optional(),
     resourceName: z.string().optional(),
+    inventoryStatus: z.enum(['observed', 'unknown']).optional(),
     explanations: z.array(z.string()),
   })
   .strict();

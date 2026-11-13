@@ -71,6 +71,7 @@ export interface EvaluatedPlannerCandidate {
   closesGap: boolean;
   efficiencyScore: number;
   desiredRuns: number;
+  inventoryStatus?: 'observed' | 'unknown';
 }
 
 export interface CalculatedOptimizationAction {
@@ -91,6 +92,7 @@ export interface CalculatedOptimizationAction {
   closesReadinessGap: boolean;
   priority: number;
   isCondensed?: boolean;
+  inventoryStatus?: 'observed' | 'unknown';
 }
 
 export interface CalculatedOptimizationAlternative {
@@ -103,6 +105,7 @@ export interface CalculatedOptimizationAlternative {
 export interface OptimizationPlannerCalculationInput {
   candidates: ReadonlyArray<PlannerCandidateInput>;
   recordedInventory: Readonly<Record<string, number>>;
+  isInventoryKnown?: boolean;
   currentResin: number;
   dailyResinBudget?: number | null;
   customResinBudget?: number | null;
@@ -175,12 +178,15 @@ export function calculateMaterialDeficitWeight(
   requiredMaterials: Readonly<Record<string, number>>,
   recordedInventory: Readonly<Record<string, number>>,
   relevantDropKeys?: ReadonlyArray<string>,
+  isInventoryKnown = true,
 ): {
   deficitRatio: number;
   totalRequired: number;
   totalDeficit: number;
   deficitsByMaterial: Record<string, number>;
+  inventoryStatus: 'observed' | 'unknown';
 } {
+  const inventoryStatus = isInventoryKnown ? 'observed' : 'unknown';
   const allEntries = Object.entries(requiredMaterials).filter(([, qty]) => qty > 0);
   if (allEntries.length === 0) {
     return {
@@ -188,6 +194,7 @@ export function calculateMaterialDeficitWeight(
       totalRequired: 0,
       totalDeficit: 0,
       deficitsByMaterial: {},
+      inventoryStatus,
     };
   }
 
@@ -225,6 +232,7 @@ export function calculateMaterialDeficitWeight(
       totalRequired,
       totalDeficit: 0,
       deficitsByMaterial,
+      inventoryStatus,
     };
   }
 
@@ -237,6 +245,7 @@ export function calculateMaterialDeficitWeight(
     totalRequired,
     totalDeficit,
     deficitsByMaterial,
+    inventoryStatus,
   };
 }
 
@@ -299,6 +308,7 @@ export function evaluatePlannerCandidate(
   candidate: PlannerCandidateInput,
   recordedInventory: Readonly<Record<string, number>>,
   dayOfWeek: number,
+  isInventoryKnown = true,
 ): EvaluatedPlannerCandidate {
   const {
     factor: timeGatingFactor,
@@ -316,6 +326,7 @@ export function evaluatePlannerCandidate(
     candidate.requiredMaterials,
     recordedInventory,
     candidate.domainDropKeys,
+    isInventoryKnown,
   );
 
   const marginalImpact = calculateMarginalImpact(candidate.expectedScoreDelta, candidate.closesGap);
@@ -363,6 +374,7 @@ export function evaluatePlannerCandidate(
     closesGap: candidate.closesGap,
     efficiencyScore,
     desiredRuns,
+    inventoryStatus: deficitResult.inventoryStatus,
   };
 }
 
@@ -401,8 +413,9 @@ export function optimizePlannerSchedule(
     ? input.candidates.filter((c) => c.goalId !== null && focusSet.has(c.goalId))
     : input.candidates;
 
+  const isInventoryKnown = input.isInventoryKnown ?? true;
   const evaluatedCandidates = filteredCandidates.map((c) =>
-    evaluatePlannerCandidate(c, input.recordedInventory, input.dayOfWeek),
+    evaluatePlannerCandidate(c, input.recordedInventory, input.dayOfWeek, isInventoryKnown),
   );
 
   // Eligible for today's primary resin allocation: open today, positive deficit, positive efficiency
@@ -452,6 +465,7 @@ export function optimizePlannerSchedule(
       marginalScoreDelta: cand.expectedScoreDelta,
       closesReadinessGap: cand.closesGap,
       priority: cand.goalPriority,
+      inventoryStatus: cand.inventoryStatus,
     });
   }
 

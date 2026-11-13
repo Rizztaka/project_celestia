@@ -27,6 +27,7 @@ import type { CharacterWithWeapon } from '../../characters/character.repository.
 import { GenshinRecordedStockRepository } from '../../companion/recorded-stock.repository.js';
 import { calculateMarginalInvestment } from '../marginal-investment/marginal-investment.calculator.js';
 import { buildAuthenticatedReadinessInput } from '../readiness-intelligence/readiness-input.adapter.js';
+import { TeamIntelligenceService } from '../team-intelligence/team-intelligence.service.js';
 import { discoverAutonomousProgression } from './autonomous-progression.calculator.js';
 import {
   optimizePlannerSchedule,
@@ -152,15 +153,18 @@ export class PlannerIntelligenceService {
   private _routineService: RoutineService | null;
   private readonly accountContextProvider: AccountContextProvider;
   private readonly stockRepository: GenshinRecordedStockRepository;
+  private readonly teamService: TeamIntelligenceService;
 
   constructor(
     accountContextProvider = new AccountContextProvider(),
     stockRepository = new GenshinRecordedStockRepository(),
     routineService: RoutineService | null = null,
+    teamService = new TeamIntelligenceService(),
   ) {
     this.accountContextProvider = accountContextProvider;
     this.stockRepository = stockRepository;
     this._routineService = routineService;
+    this.teamService = teamService;
   }
 
   private get routineService(): RoutineService {
@@ -250,12 +254,21 @@ export class PlannerIntelligenceService {
     const currentResin = snapshot.resin.currentAmount;
 
     // 3. Fetch recorded material stock inventory
-    let recordedInventory: Record<string, number>;
+    let recordedInventory: Record<string, number> = {};
+    let isInventoryKnown = false;
     try {
       const stockSnapshot = await this.stockRepository.readForUser(userId);
-      recordedInventory = stockSnapshot.inventory ?? {};
+      if (stockSnapshot?.inventory) {
+        recordedInventory = stockSnapshot.inventory;
+        isInventoryKnown = Boolean(
+          stockSnapshot.stockBasis?.importedAt ||
+            stockSnapshot.stockBasis?.source ||
+            Object.keys(stockSnapshot.inventory).length > 0,
+        );
+      }
     } catch {
       recordedInventory = {};
+      isInventoryKnown = false;
     }
 
     // 4. Fetch user plan preferences (dailyResinBudget) & active period goal dismissals
@@ -308,6 +321,32 @@ export class PlannerIntelligenceService {
     }
 
     // 6. Build goal availability & optimization candidates
+    // 6.1 Derive core team members and endgame bottlenecks for progression priorities
+    let teamMemberKeys: string[] = [];
+    const bottleneckCharacterKeys = new Set<string>();
+    try {
+      const topTeams = this.teamService.getRecommendationsForRoster(rawRoster, { limit: 1 });
+      if (topTeams.length > 0 && topTeams[0]?.roster) {
+        teamMemberKeys = topTeams[0].roster
+          .map((slot) => slot.characterKey)
+          .filter((key): key is string => typeof key === 'string' && key.length > 0);
+      }
+      if (rawRoster.length >= 8) {
+        const candidateEndgame = this.teamService.buildCandidateEndgameTeams(
+          rawRoster as unknown as ReadonlyArray<CharacterWithWeapon>,
+        );
+        for (let i = 1; i < candidateEndgame.length; i++) {
+          for (const key of candidateEndgame[i]!.memberKeys) {
+            if (!teamMemberKeys.includes(key)) {
+              bottleneckCharacterKeys.add(key);
+            }
+          }
+        }
+      }
+    } catch {
+      teamMemberKeys = [];
+    }
+
     const availability: AdviceAvailability[] = [];
     const candidates: PlannerCandidateInput[] = [];
 
@@ -316,6 +355,8 @@ export class PlannerIntelligenceService {
       const autoDiscovery = discoverAutonomousProgression({
         rawRoster,
         artifacts,
+        teamMemberKeys,
+        bottleneckCharacterKeys,
       });
 
       for (const autoCand of autoDiscovery.candidates) {
@@ -421,6 +462,8 @@ export class PlannerIntelligenceService {
         rawRoster,
         artifacts,
         manualGoals: goals,
+        teamMemberKeys,
+        bottleneckCharacterKeys,
         yieldToManualGoals: true,
       });
 
@@ -433,6 +476,7 @@ export class PlannerIntelligenceService {
     const calcResult = optimizePlannerSchedule({
       candidates,
       recordedInventory,
+      isInventoryKnown,
       currentResin,
       dailyResinBudget,
       customResinBudget: options.customResinBudget,

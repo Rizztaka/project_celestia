@@ -459,4 +459,27 @@ describe('PlannerIntelligenceService (Multi-Objective Optimization Planner)', ()
       'No active goals. Your routine remains available; manage goals in the Planner.',
     );
   });
+
+  it('marks inventoryStatus as unknown when materials are unrecorded and reflects this in plan explanations', async () => {
+    mockStockRepository.readForUser.mockResolvedValueOnce({
+      inventory: {},
+      stockBasis: {
+        kind: 'recorded_import',
+        importedAt: null,
+        source: null,
+        scope: null,
+        suppliedEntryCount: null,
+      },
+    });
+
+    const plan = await service.getOptimizedPlan('user-1');
+
+    expect(plan.rankedPlan.length).toBeGreaterThan(0);
+    expect(plan.rankedPlan[0]?.inventoryStatus).toBe('unknown');
+    expect(
+      plan.rankedPlan[0]?.explanations.some((exp) =>
+        exp.includes('inventory stock unrecorded; assuming full deficit'),
+      ),
+    ).toBe(true);
+  });
 });

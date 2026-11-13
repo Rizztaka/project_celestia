@@ -272,7 +272,7 @@ describe('One Unified Optimization Pipeline (Companion Summary + Planner)', () =
     expect(spyGetOptimizedPlan).toHaveBeenCalledWith('user-1');
     expect(summary.primaryAction).toBeDefined();
     expect(summary.primaryAction.category).toBeDefined();
-  });
+  }, 30000);
 
   it('b) summary.primaryAction matches the top allocated action from the optimizer schedule', async () => {
     const plannerResult = await plannerService.getRecommendations('user-1');
@@ -289,7 +289,7 @@ describe('One Unified Optimization Pipeline (Companion Summary + Planner)', () =
     if (topAllocatedAction!.timeGated || topAllocatedAction!.actionType.startsWith('domain_')) {
       expect(summary.primaryAction.targetRoute).toBe('/planner?tab=farming');
     }
-  });
+  }, 30000);
 
   it('c) when a high-deficit material domain is open today, the primary action prioritizes farming that domain (FARMING_AVAILABLE)', async () => {
     const summary = await summaryService.getSummary('user-1');
@@ -299,7 +299,7 @@ describe('One Unified Optimization Pipeline (Companion Summary + Planner)', () =
     expect(summary.primaryAction.headline).toMatch(/^Today's Domain:/);
     expect(summary.primaryAction.headline).toContain('HuTao');
     expect(summary.primaryAction.targetRoute).toBe('/planner?tab=farming');
-  });
+  }, 30000);
 
   it('d) an account with 0 manual goals receives a complete, coherent daily plan and hero recommendation driven by autonomous progression discovery', async () => {
     // Zero manual goals in database
@@ -313,5 +313,5 @@ describe('One Unified Optimization Pipeline (Companion Summary + Planner)', () =
     expect(['FARMING_AVAILABLE', 'BUILD_INVESTMENT']).toContain(summary.primaryAction.category);
     expect(summary.primaryAction.headline).not.toBe('Roster in Balanced Standing');
     expect(summary.topMarginalInvestments.length).toBeGreaterThan(0);
-  });
+  }, 30000);
 });

@@ -52,10 +52,16 @@ export function explainOptimizedAction(action: CalculatedOptimizationAction): st
     );
   }
 
-  const deficitPct = Math.round(action.materialDeficitRatio * 100);
-  explanations.push(
-    `Material Deficit Weight: ${deficitPct}% of required materials remain unfulfilled after accounting for recorded inventory stock.`,
-  );
+  if (action.inventoryStatus === 'unknown') {
+    explanations.push(
+      `Material Deficit Weight: 100% (inventory stock unrecorded; assuming full deficit).`,
+    );
+  } else {
+    const deficitPct = Math.round(action.materialDeficitRatio * 100);
+    explanations.push(
+      `Material Deficit Weight: ${deficitPct}% of required materials remain unfulfilled after accounting for recorded inventory stock.`,
+    );
+  }
 
   if (action.marginalScoreDelta > 0) {
     const gapText = action.closesReadinessGap
@@ -91,6 +97,7 @@ export function toOptimizationPlanAction(
     marginalScoreDelta: action.marginalScoreDelta,
     closesReadinessGap: action.closesReadinessGap,
     resourceName: action.resourceName,
+    inventoryStatus: action.inventoryStatus,
     explanations: explainOptimizedAction(action),
   };
 }

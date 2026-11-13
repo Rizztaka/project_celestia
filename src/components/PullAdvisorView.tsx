@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { evaluatePullRecommendations } from '../engines/pull-advisor';
 import type { Character } from '../types/genshin';
 import { Compass, CheckCircle2, AlertTriangle, Check, Info } from 'lucide-react';
@@ -11,7 +11,10 @@ interface PullAdvisorViewProps {
 
 export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({ ownedIds }) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
-  const recommendations = evaluatePullRecommendations(ownedIds);
+  const recommendations = useMemo(
+    () => evaluatePullRecommendations(ownedIds),
+    [ownedIds],
+  );
 
   const tierColors = {
     'Must Pull': 'bg-amber-500/20 text-amber-300 border-amber-500/40',

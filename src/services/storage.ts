@@ -21,7 +21,9 @@ export function getSavedRoster(): string[] {
     const raw = localStorage.getItem(ROSTER_KEY);
     if (!raw) return DEFAULT_ROSTER;
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_ROSTER;
+    if (!Array.isArray(parsed) || parsed.length === 0) return DEFAULT_ROSTER;
+    const valid = parsed.filter((id): id is string => typeof id === 'string' && id.trim().length > 0);
+    return valid.length > 0 ? valid : DEFAULT_ROSTER;
   } catch {
     return DEFAULT_ROSTER;
   }

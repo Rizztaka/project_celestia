@@ -89,6 +89,16 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   const [activeTab, setActiveTab] = useState<'build' | 'talents' | 'constellations'>('build');
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  // Lock body scroll while modal is active
+  useEffect(() => {
+    if (!character) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [character]);
+
   // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { analyzeEndgameReadiness } from '../engines/endgame-helper';
 import type { Character } from '../types/genshin';
 import { ShieldAlert, ShieldCheck, AlertCircle, Swords } from 'lucide-react';
@@ -11,7 +11,7 @@ interface EndgameViewProps {
 
 export const EndgameView: React.FC<EndgameViewProps> = ({ ownedIds }) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
-  const analysis = analyzeEndgameReadiness(ownedIds);
+  const analysis = useMemo(() => analyzeEndgameReadiness(ownedIds), [ownedIds]);
 
   return (
     <div className="space-y-6">

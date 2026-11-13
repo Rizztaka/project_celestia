@@ -135,6 +135,23 @@ export async function fetchShowcaseFromEnka(uid: string): Promise<EnkaFetchResul
     return { success: false, avatarIds: [], error: 'Invalid UID. Genshin UIDs are 9 or 10 digits.' };
   }
 
+  const parseEnkaData = (data: any): EnkaFetchResult => {
+    const avatarList: number[] = data?.playerInfo?.showAvatarInfoList?.map((a: { avatarId: number }) => a.avatarId) || [];
+    const matchedKeys: string[] = [];
+
+    for (const id of avatarList) {
+      if (ENKA_ID_MAP[id]) {
+        matchedKeys.push(ENKA_ID_MAP[id]);
+      }
+    }
+
+    return {
+      success: true,
+      nickname: data?.playerInfo?.nickname || 'Traveler',
+      avatarIds: matchedKeys,
+    };
+  };
+
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 6000);
@@ -155,28 +172,32 @@ export async function fetchShowcaseFromEnka(uid: string): Promise<EnkaFetchResul
     }
 
     const data = await res.json();
-    const avatarList: number[] = data?.playerInfo?.showAvatarInfoList?.map((a: { avatarId: number }) => a.avatarId) || [];
-    const matchedKeys: string[] = [];
+    return parseEnkaData(data);
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : String(err);
 
-    for (const id of avatarList) {
-      if (ENKA_ID_MAP[id]) {
-        matchedKeys.push(ENKA_ID_MAP[id]);
+    // If direct fetch aborted (timeout), don't retry proxy
+    if (errorMsg.includes('abort')) {
+      return { success: false, avatarIds: [], error: 'Network timed out connecting to Enka.' };
+    }
+
+    // Try fallback CORS proxy for browser environments with strict CORS policies
+    try {
+      const proxyRes = await fetch(
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://enka.network/api/uid/${cleanUid}`)}`,
+      );
+      if (proxyRes.ok) {
+        const data = await proxyRes.json();
+        return parseEnkaData(data);
       }
+    } catch {
+      // Ignore proxy error and fall through to friendly error message
     }
 
     return {
-      success: true,
-      nickname: data?.playerInfo?.nickname || 'Traveler',
-      avatarIds: matchedKeys,
-    };
-  } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : String(err);
-    return {
       success: false,
       avatarIds: [],
-      error: errorMsg.includes('abort')
-        ? 'Network timed out connecting to Enka.'
-        : 'Could not connect directly to Enka. You can still select characters manually below!',
+      error: 'Could not connect directly to Enka. You can still select characters manually below!',
     };
   }
 }

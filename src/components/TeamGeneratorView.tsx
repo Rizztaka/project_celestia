@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { CHARACTERS } from '../data/characters';
 import { generateBestTeams } from '../engines/team-generator';
 import type { Character } from '../types/genshin';
@@ -24,7 +24,10 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({ ownedIds }
   const [focusId, setFocusId] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
 
-  const teams = generateBestTeams(ownedIds, focusId || undefined);
+  const teams = useMemo(
+    () => generateBestTeams(ownedIds, focusId || undefined),
+    [ownedIds, focusId],
+  );
   const featuredCarries = ['Nefer', 'Mavuika', 'HuTao', 'Alhaitham', 'Clorinde', 'Neuvillette', 'Navia'];
 
   return (

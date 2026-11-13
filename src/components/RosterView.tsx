@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { CHARACTERS } from '../data/characters';
 import type { Character, Element } from '../types/genshin';
 import { Search, Check, Plus, Trash2, RotateCcw, Info } from 'lucide-react';
@@ -42,13 +42,16 @@ export const RosterView: React.FC<RosterViewProps> = ({
   const [search, setSearch] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
 
-  const ownedSet = new Set(ownedIds);
+  const ownedSet = useMemo(() => new Set(ownedIds), [ownedIds]);
 
-  const filtered = CHARACTERS.filter((c) => {
-    const matchesElem = filterElement === 'All' || c.element === filterElement;
-    const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase());
-    return matchesElem && matchesSearch;
-  });
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return CHARACTERS.filter((c) => {
+      const matchesElem = filterElement === 'All' || c.element === filterElement;
+      const matchesSearch = !q || c.name.toLowerCase().includes(q);
+      return matchesElem && matchesSearch;
+    });
+  }, [filterElement, search]);
 
   return (
     <div className="space-y-6">

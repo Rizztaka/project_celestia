@@ -141,12 +141,20 @@ describe('CompanionSummary pure calculator & explainer', () => {
     expect(parsed.success).toBe(true);
   });
 
-  it('explainer produces clean, actionable narrative points', () => {
+  it('explainer produces clean, actionable narrative points with epistemological layer tags', () => {
     const calcResult = calculateCompanionSummary(baseInput);
     const explanations = explainCompanionSummary(calcResult);
 
     expect(explanations.length).toBeGreaterThanOrEqual(4);
     expect(explanations[0]).toContain("Today's Focus [FARMING_AVAILABLE]");
+    expect(
+      explanations.every(
+        (e) =>
+          e.startsWith('[Game Rule]') ||
+          e.startsWith('[Simulated]') ||
+          e.startsWith('[Comfort & Goals]'),
+      ),
+    ).toBe(true);
     expect(explanations.some((e) => e.includes('Encounter Readiness: 7 of 8'))).toBe(true);
     expect(
       explanations.some((e) => e.includes('Active Drop Schedules: Materials for Bennett')),

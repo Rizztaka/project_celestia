@@ -4,18 +4,70 @@ import { Link } from 'react-router-dom';
 
 import { UiIcon } from '../Ui';
 
+function parseEpistemologicalPoint(point: string): {
+  badge: { label: string; className: string } | null;
+  text: string;
+} {
+  if (point.startsWith('[Game Rule]')) {
+    return {
+      badge: {
+        label: 'Game Rule',
+        className: 'border-emerald-500/40 bg-emerald-950/60 text-emerald-300',
+      },
+      text: point.replace('[Game Rule]', '').trim(),
+    };
+  }
+  if (point.startsWith('[Simulated]')) {
+    return {
+      badge: {
+        label: 'GCSim Simulation',
+        className: 'border-cyan-500/40 bg-cyan-950/60 text-cyan-300',
+      },
+      text: point.replace('[Simulated]', '').trim(),
+    };
+  }
+  if (point.startsWith('[Comfort & Goals]')) {
+    return {
+      badge: {
+        label: 'Comfort & Goals',
+        className: 'border-indigo-500/40 bg-indigo-950/60 text-indigo-300',
+      },
+      text: point.replace('[Comfort & Goals]', '').trim(),
+    };
+  }
+  return { badge: null, text: point };
+}
+
 export function NextActionSummaryCard({
   summary,
   onRefresh,
   isRefreshing = false,
+  uid,
 }: {
   summary: CompanionSummaryResponse;
   onRefresh?: () => void;
   isRefreshing?: boolean;
+  uid?: string;
 }) {
   const [showExplanation, setShowExplanation] = useState(false);
   const action = summary?.primaryAction;
   if (!action || !action.category) return null;
+
+  const resolveTarget = (route: string) => {
+    if (!uid) return route;
+    if (route.startsWith('/teams')) return `/u/${uid}/teams`;
+    if (route.startsWith('/endgame')) return `/u/${uid}/endgame`;
+    if (route.startsWith('/intelligence')) return `/u/${uid}/pulls`;
+    if (route.startsWith('/roster/')) {
+      const key = route.replace('/roster/', '');
+      return `/u/${uid}/character/${key}`;
+    }
+    if (route.startsWith('/roster')) return `/u/${uid}/roster`;
+    if (route.startsWith('/planner')) return `/u/${uid}#today-domains`;
+    return route;
+  };
+
+  const finalRoute = resolveTarget(action.targetRoute);
 
   const categoryBadgeColors: Record<PrimaryActionCategory, string> = {
     FARMING_AVAILABLE:
@@ -55,7 +107,7 @@ export function NextActionSummaryCard({
 
         <div className="flex flex-shrink-0 flex-wrap items-center gap-2.5">
           <Link
-            to={action.targetRoute}
+            to={finalRoute}
             className="rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 hover:from-indigo-400 hover:to-indigo-500"
           >
             Take Action <UiIcon name="arrow" />
@@ -85,14 +137,24 @@ export function NextActionSummaryCard({
       {showExplanation && (
         <div className="animate-fadeIn mt-5 space-y-2 border-t border-zinc-800/80 pt-4 text-xs text-zinc-300">
           <h3 className="text-[11px] font-semibold uppercase tracking-wider text-white">
-            Synthesized Reasoning & Sources (M2–M5)
+            Synthesized Reasoning & Evidentiary Layers (ADR-0011)
           </h3>
-          <ul className="list-inside list-disc space-y-1.5 text-zinc-400">
-            {summary.narrativeOverview.map((point, idx) => (
-              <li key={idx} className="leading-relaxed">
-                {point}
-              </li>
-            ))}
+          <ul className="space-y-2 pt-1 text-zinc-300">
+            {summary.narrativeOverview.map((point, idx) => {
+              const { badge, text } = parseEpistemologicalPoint(point);
+              return (
+                <li key={idx} className="flex items-start gap-2 leading-relaxed">
+                  {badge && (
+                    <span
+                      className={`shrink-0 rounded-md border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${badge.className}`}
+                    >
+                      {badge.label}
+                    </span>
+                  )}
+                  <span className="text-zinc-300">{text}</span>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

@@ -1,3 +1,12 @@
+> **2026-11-13 core experience & account unity — M8 verified:**
+> Milestone 8 achieves the four core pillars identified in the independent product review:
+>
+> 1. **Zero-Friction UID-First Parity:** `UidDashboardPage.tsx` now loads and mounts the full companion intelligence suite (`NextActionSummaryCard` and `CompanionSummaryGrid`) via `useCompanionSummary(uid)`. Any visitor entering a 9-digit UID immediately receives an opinionated hero next action, GCSim 20s rotation simulation insights, and daily domain schedule.
+> 2. **Calm Account Synchronization:** `AccountSyncCard.tsx` replaces noisy raw debug tables with an executive status panel displaying source identity, freshness status, observed roster scope, and change diffs, with raw diagnostics collapsed behind an inspectable disclosure.
+> 3. **Epistemological Layer Attribution (ADR-0011):** `companion-summary.explainer.ts` and `NextActionSummaryCard.tsx` classify every synthesized reasoning bullet into its explicit evidentiary layer: `[Game Rule]` (mechanics and drop schedules), `[Simulated]` (measured GCSim 20s WASM rotation DPS and 95% CI error margin), and `[Comfort & Goals]` (defensive comfort, energy sufficiency, and player favorites).
+> 4. **Account Connection Security (ADR-0012):** Formally established UID Public Showcase (Enka.Network) as the canonical zero-friction onboarding path, and GOOD JSON import as the canonical complete inventory path. Manual developer-tools session cookie pasting is permanently deprecated and banned for account safety.
+> 5. **Data-Trust Transparency:** Unshowcased characters and unequipped gear are strictly bounded as `inventoryStatus: 'unknown'` rather than assumed unowned or 0.
+>
 > **2026-11-13 autonomous companion — M7.1 correctness and integration closure verified:**
 > Milestone 7.1 resolves all six findings identified in the independent review of Milestone 7 (M7).
 > The central companion is now fully verified against actual imported account builds, current game state, and real simulation execution:

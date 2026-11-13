@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { AccountSyncCard } from '../components/dashboard/AccountSyncCard';
 import { CompanionSummaryGrid } from '../components/dashboard/CompanionSummaryGrid';
 import { NextActionSummaryCard } from '../components/dashboard/NextActionSummaryCard';
 import DashboardWelcome from '../components/DashboardWelcome';
@@ -29,6 +30,11 @@ export default function DashboardPage() {
     <div className="min-h-screen text-zinc-300">
       <main id="companion-content" tabIndex={-1} className="today-page space-y-6">
         <DashboardWelcome />
+        <AccountSyncCard
+          summary={summary}
+          onRefresh={() => void refetch()}
+          isRefreshing={isFetching}
+        />
         {summary && (
           <div className="space-y-4">
             <NextActionSummaryCard

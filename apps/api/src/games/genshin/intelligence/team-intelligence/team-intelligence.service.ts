@@ -26,7 +26,11 @@ import {
   type TemplateRoleResult,
 } from './team-intelligence.calculator.js';
 import { explainTeamScore } from './team-intelligence.explainer.js';
-import { type SimulationStatus, TeamSimulationService } from './team-simulation.service.js';
+import {
+  type SimulationMemberInput,
+  type SimulationStatus,
+  TeamSimulationService,
+} from './team-simulation.service.js';
 
 // -------------------------------------------------------
 // Static data — loaded once at module init
@@ -254,7 +258,8 @@ function estimateMemberInvestmentDps(
   }
   const avgLevel = count > 0 ? totalLevel / count : 80;
   const levelFactor = Math.min(1.1, Math.max(0.6, avgLevel / 80));
-  return Math.max(25, Math.min(100, Math.round(baseScore * levelFactor)));
+  // Scale to realistic DPS range (~40k–65k) so endgame solvers evaluate on a consistent scale
+  return Math.round(baseScore * 550 * levelFactor);
 }
 
 export function completeFourMembers(
@@ -306,7 +311,7 @@ export class TeamIntelligenceService {
    */
   async getSimulatedRecommendationsForRoster(
     rosterInput: ReadonlyArray<RosterRecordInput>,
-    options?: { limit?: number; simulateTopN?: number },
+    options?: { limit?: number; simulateTopN?: number; artifacts?: ReadonlyArray<Artifact> },
   ): Promise<TeamRecommendation[]> {
     const recommendations = this.getRecommendationsForRoster(rosterInput, options);
     if (recommendations.length === 0) {
@@ -317,6 +322,14 @@ export class TeamIntelligenceService {
     const sortedRoster = [...normalizedRoster].sort(
       (a, b) => b.level - a.level || b.ascension - a.ascension,
     );
+    const charMap = new Map<string, CharacterInput>(sortedRoster.map((c) => [c.characterKey, c]));
+
+    const rawCharByKey = new Map<string, CharacterWithWeapon>();
+    for (const item of rosterInput) {
+      if ('id' in item && typeof item.id === 'string' && 'characterKey' in item) {
+        rawCharByKey.set(item.characterKey, item as CharacterWithWeapon);
+      }
+    }
 
     const simulateCount = Math.max(1, options?.simulateTopN ?? 1);
     const toSimulate = Math.min(recommendations.length, simulateCount);
@@ -329,13 +342,58 @@ export class TeamIntelligenceService {
       const completed = completeFourMembers(filledKeys, sortedRoster);
 
       if (completed) {
-        const simResult = await this.teamSimulationService.simulateTeam(completed, {
+        const memberInputs: SimulationMemberInput[] = completed.map((charKey) => {
+          const charInput = charMap.get(charKey);
+          const rawChar = rawCharByKey.get(charKey);
+          const charArts =
+            rawChar && options?.artifacts
+              ? options.artifacts
+                  .filter((a) => a.equippedCharacterId === rawChar.id)
+                  .map((a) => ({
+                    setKey: a.setKey,
+                    slotKey: a.slotKey,
+                    mainStatKey: a.mainStatKey,
+                    level: a.level,
+                    rarity: a.rarity,
+                    subStats: Array.isArray(a.subStats)
+                      ? (a.subStats as Array<{ key: string; value: number }>)
+                      : [],
+                  }))
+              : [];
+
+          return {
+            characterKey: charKey,
+            level: charInput?.level ?? 90,
+            constellation: charInput?.constellation ?? 0,
+            talentNormal: charInput?.talentNormal ?? 8,
+            talentSkill: charInput?.talentSkill ?? 8,
+            talentBurst: charInput?.talentBurst ?? 8,
+            equippedWeapon: charInput?.equippedWeapon ?? null,
+            equippedArtifacts: charArts,
+          };
+        });
+
+        const simResult = await this.teamSimulationService.simulateTeam(memberInputs, {
           duration: 20,
         });
         rec.simulatedDps = simResult.simulatedDps;
         rec.errorMargin = simResult.errorMargin;
         rec.simulationStatus = simResult.simulationStatus;
       }
+    }
+
+    // Re-rank recommendations by simulated DPS descending among simulated candidates
+    recommendations.sort((a, b) => {
+      const dpsA = typeof a.simulatedDps === 'number' && a.simulatedDps > 0 ? a.simulatedDps : 0;
+      const dpsB = typeof b.simulatedDps === 'number' && b.simulatedDps > 0 ? b.simulatedDps : 0;
+      if (dpsB !== dpsA) {
+        return dpsB - dpsA;
+      }
+      return b.score - a.score;
+    });
+
+    for (let i = 0; i < recommendations.length; i++) {
+      recommendations[i]!.rank = i + 1;
     }
 
     return recommendations;

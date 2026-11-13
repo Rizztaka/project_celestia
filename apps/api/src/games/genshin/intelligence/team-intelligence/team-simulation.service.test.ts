@@ -7,6 +7,69 @@ import { TeamSimulationService } from './team-simulation.service.js';
 describe('TeamSimulationService & GCSim Central Team Intelligence', () => {
   const simulationService = new TeamSimulationService();
 
+  it('translates equipped weapons and artifact stats into deterministic GCSim configs', () => {
+    const configResult = simulationService.generateConfig([
+      {
+        characterKey: 'HuTao',
+        level: 90,
+        constellation: 1,
+        talentNormal: 10,
+        talentSkill: 10,
+        talentBurst: 8,
+        equippedWeapon: {
+          weaponKey: 'StaffOfHoma',
+          level: 90,
+          refinement: 1,
+        },
+        equippedArtifacts: [
+          {
+            setKey: 'CrimsonWitchOfFlames',
+            slotKey: 'flower',
+            mainStatKey: 'hp',
+            level: 20,
+            subStats: [
+              { key: 'critRate_', value: 10.5 },
+              { key: 'critDMG_', value: 21.0 },
+            ],
+          },
+          {
+            setKey: 'CrimsonWitchOfFlames',
+            slotKey: 'plume',
+            mainStatKey: 'atk',
+            level: 20,
+            subStats: [
+              { key: 'eleMas', value: 42 },
+              { key: 'critRate_', value: 7.0 },
+            ],
+          },
+          {
+            setKey: 'CrimsonWitchOfFlames',
+            slotKey: 'sands',
+            mainStatKey: 'hp_',
+            level: 20,
+            subStats: [{ key: 'critDMG_', value: 14.0 }],
+          },
+          {
+            setKey: 'CrimsonWitchOfFlames',
+            slotKey: 'goblet',
+            mainStatKey: 'pyro_dmg_',
+            level: 20,
+            subStats: [{ key: 'critRate_', value: 3.9 }],
+          },
+        ],
+      },
+      'Xingqiu',
+      'Yelan',
+      'Zhongli',
+    ]);
+
+    expect(configResult.config).toContain('hutao add weapon="staffofhoma" refine=1 lvl=90/90;');
+    expect(configResult.config).toContain('hutao add set="crimsonwitchofflames" count=4;');
+    expect(configResult.config).toContain('hutao add stats');
+    expect(configResult.config).toContain('cr=');
+    expect(configResult.config).toContain('cd=');
+  });
+
   it('executes GCSim simulation for a 4-member team and returns verified simulation metrics', async () => {
     const members = ['HuTao', 'Xingqiu', 'Yelan', 'Zhongli'];
     const result = await simulationService.simulateTeam(members, {
@@ -98,4 +161,42 @@ describe('TeamSimulationService & GCSim Central Team Intelligence', () => {
     expect(candidateTeams.length).toBeGreaterThan(0);
     expect(candidateTeams[0]!.baseDps).toBe(Math.round(topRec.simulatedDps!));
   }, 35000);
+
+  it('ranks multiple simulated candidates by simulated DPS descending', async () => {
+    const mockSimulationService = {
+      simulateTeam: async (members: Array<{ characterKey?: string } | string>) => {
+        const firstKey = typeof members[0] === 'string' ? members[0] : members[0]?.characterKey;
+        // Return 75,000 DPS for Bennett-led teams, 50,000 for others
+        const dps = firstKey?.toLowerCase().includes('bennett') ? 75000 : 50000;
+        return {
+          simulatedDps: dps,
+          errorMargin: 100,
+          simulationStatus: 'VERIFIED_SIMULATION' as const,
+          samples: 1,
+          members: [],
+        };
+      },
+    } as unknown as TeamSimulationService;
+
+    const teamService = new TeamIntelligenceService(undefined, undefined, mockSimulationService);
+    const roster: CharacterInput[] = [
+      { characterKey: 'HuTao', level: 90, ascension: 6, constellation: 0, talentNormal: 8, talentSkill: 8, talentBurst: 8, equippedWeapon: null },
+      { characterKey: 'Xingqiu', level: 90, ascension: 6, constellation: 6, talentNormal: 6, talentSkill: 8, talentBurst: 10, equippedWeapon: null },
+      { characterKey: 'Yelan', level: 90, ascension: 6, constellation: 0, talentNormal: 1, talentSkill: 9, talentBurst: 9, equippedWeapon: null },
+      { characterKey: 'Zhongli', level: 90, ascension: 6, constellation: 0, talentNormal: 1, talentSkill: 9, talentBurst: 8, equippedWeapon: null },
+      { characterKey: 'Bennett', level: 90, ascension: 6, constellation: 5, talentNormal: 1, talentSkill: 8, talentBurst: 10, equippedWeapon: null },
+      { characterKey: 'Xiangling', level: 90, ascension: 6, constellation: 4, talentNormal: 1, talentSkill: 8, talentBurst: 10, equippedWeapon: null },
+      { characterKey: 'RaidenShogun', level: 90, ascension: 6, constellation: 0, talentNormal: 1, talentSkill: 9, talentBurst: 10, equippedWeapon: null },
+    ];
+
+    const results = await teamService.getSimulatedRecommendationsForRoster(roster, {
+      limit: 3,
+      simulateTopN: 3,
+    });
+
+    expect(results.length).toBeGreaterThanOrEqual(2);
+    expect(results[0]!.simulatedDps).toBeGreaterThanOrEqual(results[1]!.simulatedDps!);
+    expect(results[0]!.rank).toBe(1);
+    expect(results[1]!.rank).toBe(2);
+  });
 });

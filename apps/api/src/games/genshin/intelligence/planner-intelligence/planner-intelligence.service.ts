@@ -262,8 +262,8 @@ export class PlannerIntelligenceService {
         recordedInventory = stockSnapshot.inventory;
         isInventoryKnown = Boolean(
           stockSnapshot.stockBasis?.importedAt ||
-            stockSnapshot.stockBasis?.source ||
-            Object.keys(stockSnapshot.inventory).length > 0,
+          stockSnapshot.stockBasis?.source ||
+          Object.keys(stockSnapshot.inventory).length > 0,
         );
       }
     } catch {

@@ -8,16 +8,16 @@ Following the independent review of Milestone 7 (M7), Milestone 7.1 delivers rig
 
 ### Review Findings Addressed
 
-| Finding | Pre-M7.1 State | M7.1 Resolution |
-| :--- | :--- | :--- |
-| **GCSim Build Truthfulness** | GCSim was fed starter weapons, blank artifact stats, and C0 default inputs regardless of the imported account. | `team-simulation.service.ts` translates actual equipped weapons, refinements, levels, artifact sets (2pc/4pc), and aggregated main/substats directly into GCSim syntax. |
-| **Multi-Candidate Simulation & Ranking** | Static templates ranked teams first; only 1 candidate was simulated; simulation results did not determine ranking. | `team-intelligence.service.ts` simulates multiple candidate teams and re-ranks recommendations by `simulatedDps` descending. |
-| **Endgame Scaling Inconsistency** | `estimateMemberInvestmentDps` produced values from 25–100, clashing with simulated DPS (~40k–65k). | Heuristic baseline scaled consistently to realistic DPS (`~40k–65k`) using `Math.round(baseScore * 550 * levelFactor)`. |
-| **Game-Data Trust & Provenance** | Simulation fixtures in `active-banners.json` carried future expiry dates up to 2029 without active schedule provenance. | Banner schedule reconciled with `patchScope: "Version 5.3 Active Wish Schedule"`. Expired and future unverified schedules degrade to `historical: true` with strict fail-closed handling (`CONDITIONAL_DATA_GAP`). |
-| **Autonomous Progression Priorities** | Main planner called `discoverAutonomousProgression` without `teamMemberKeys` or `bottleneckCharacterKeys`, dropping candidates to Tier 3. | Planner derives core team members from `TeamIntelligenceService` and bottleneck characters from disjoint endgame squads, correctly applying Priority 1 (Core Team) and Priority 2 (Bottlenecks). |
-| **Inventory Stock Distinction** | Missing material inventory defaulted to `{}` without distinguishing unrecorded inventory from confirmed zero stock. | Added `isInventoryKnown?: boolean` and `inventoryStatus: 'observed' \| 'unknown'`. Actions explicitly explain when inventory is unrecorded versus observed. |
-| **Real-Account Journey Verification** | Benchmarks ran in isolated stages; no single continuous test proved the full account journey in PostgreSQL. | Created `tooling/m7-1-real-journey.integration.test.js` validating GOOD import -> DB persistence -> context resolution -> real-build GCSim simulation -> autonomous plan -> companion dashboard. |
-| **Handoff Tracking Reconcilation** | `CURRENT_HANDOFF.md` lagged at M3 from November 6. | Reconciled `CURRENT_HANDOFF.md`, task checklists, and progress documents with full verifiable evidence. |
+| Finding                                  | Pre-M7.1 State                                                                                                                            | M7.1 Resolution                                                                                                                                                                                                    |
+| :--------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **GCSim Build Truthfulness**             | GCSim was fed starter weapons, blank artifact stats, and C0 default inputs regardless of the imported account.                            | `team-simulation.service.ts` translates actual equipped weapons, refinements, levels, artifact sets (2pc/4pc), and aggregated main/substats directly into GCSim syntax.                                            |
+| **Multi-Candidate Simulation & Ranking** | Static templates ranked teams first; only 1 candidate was simulated; simulation results did not determine ranking.                        | `team-intelligence.service.ts` simulates multiple candidate teams and re-ranks recommendations by `simulatedDps` descending.                                                                                       |
+| **Endgame Scaling Inconsistency**        | `estimateMemberInvestmentDps` produced values from 25–100, clashing with simulated DPS (~40k–65k).                                        | Heuristic baseline scaled consistently to realistic DPS (`~40k–65k`) using `Math.round(baseScore * 550 * levelFactor)`.                                                                                            |
+| **Game-Data Trust & Provenance**         | Simulation fixtures in `active-banners.json` carried future expiry dates up to 2029 without active schedule provenance.                   | Banner schedule reconciled with `patchScope: "Version 5.3 Active Wish Schedule"`. Expired and future unverified schedules degrade to `historical: true` with strict fail-closed handling (`CONDITIONAL_DATA_GAP`). |
+| **Autonomous Progression Priorities**    | Main planner called `discoverAutonomousProgression` without `teamMemberKeys` or `bottleneckCharacterKeys`, dropping candidates to Tier 3. | Planner derives core team members from `TeamIntelligenceService` and bottleneck characters from disjoint endgame squads, correctly applying Priority 1 (Core Team) and Priority 2 (Bottlenecks).                   |
+| **Inventory Stock Distinction**          | Missing material inventory defaulted to `{}` without distinguishing unrecorded inventory from confirmed zero stock.                       | Added `isInventoryKnown?: boolean` and `inventoryStatus: 'observed' \| 'unknown'`. Actions explicitly explain when inventory is unrecorded versus observed.                                                        |
+| **Real-Account Journey Verification**    | Benchmarks ran in isolated stages; no single continuous test proved the full account journey in PostgreSQL.                               | Created `tooling/m7-1-real-journey.integration.test.js` validating GOOD import -> DB persistence -> context resolution -> real-build GCSim simulation -> autonomous plan -> companion dashboard.                   |
+| **Handoff Tracking Reconcilation**       | `CURRENT_HANDOFF.md` lagged at M3 from November 6.                                                                                        | Reconciled `CURRENT_HANDOFF.md`, task checklists, and progress documents with full verifiable evidence.                                                                                                            |
 
 ---
 
@@ -81,6 +81,7 @@ Following the independent review of Milestone 7 (M7), Milestone 7.1 delivers rig
 ## Verification Evidence & Quality Gates
 
 ### 1. Real-Account Journey Integration Test
+
 ```
  RUN  v3.2.7 apps/api
 
@@ -93,6 +94,7 @@ Following the independent review of Milestone 7 (M7), Milestone 7.1 delivers rig
 ```
 
 ### 2. M7 Benchmarks Suite
+
 ```
  RUN  v3.2.7 apps/api
 
@@ -108,6 +110,7 @@ Following the independent review of Milestone 7 (M7), Milestone 7.1 delivers rig
 ```
 
 ### 3. Domain Intelligence Test Suites
+
 - **Planner Intelligence:** 21/21 tests passed across 3 files (`planner-intelligence.service.test.ts`, `planner-optimization.calculator.test.ts`, `autonomous-progression.test.ts`).
 - **Companion Summary & Unified Pipeline:** 25/25 tests passed across 4 files (`companion-summary.service.test.ts`, `unified-pipeline.test.ts`, `companion-summary.calculator.test.ts`, `companion-summary.http.test.ts`).
 - **Team Intelligence & Simulation:** 48/48 tests passed across 3 files (`team-intelligence.service.test.ts`, `team-simulation.service.test.ts`, `team-intelligence.calculator.test.ts`).

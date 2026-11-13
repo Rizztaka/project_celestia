@@ -9,20 +9,17 @@
 ## What Was Implemented
 
 ### Phase 1 — Contracts (Completed prior session)
-
 - [`packages/api-contracts/src/genshin/companion.ts`](file:///D:/Genshin%20Personal/project-celestia/packages/api-contracts/src/genshin/companion.ts) — Full V2 contract with Zod schemas, error codes, and all response/request types.
 - [`packages/api-contracts/src/index.ts`](file:///D:/Genshin%20Personal/project-celestia/packages/api-contracts/src/index.ts) — Re-exports all new V2 types.
 
 ### Phase 2 — Storage
 
 **Prisma schema** ([`schema.prisma`](file:///D:/Genshin%20Personal/project-celestia/apps/api/prisma/schema.prisma)):
-
 - Added `GenshinRoutineState` model (userId PK, no synthetic id, no game FK).
 - Added back-relation on `User` model.
 - `DailyCompanion` and `WeeklyBossState` back-relations annotated as "Frozen after C2a cutover."
 
 **Migration** ([`20260927170000_add_genshin_routine_state/migration.sql`](file:///D:/Genshin%20Personal/project-celestia/apps/api/prisma/migrations/20260927170000_add_genshin_routine_state/migration.sql)):
-
 - Additive only — no ALTER/UPDATE/DELETE to existing tables.
 - Five CHECK constraints enforced at DB level: `revision >= 0`, `serverId IN ('asia') OR NULL`, resin pair nullability, resin 0–200 range, weekly claims 0–1000 range.
 - Foreign key with CASCADE DELETE.
@@ -31,7 +28,6 @@
 ### Phase 3 — Clock / Policy (Pure, Injected)
 
 **[`server-clock.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/games/genshin/companion/server-clock.ts):**
-
 - `getLastDailyBoundary(now)` / `getNextDailyBoundary(now)` — 20:00 UTC daily reset.
 - `getLastWeeklyBoundary(now)` / `getNextWeeklyBoundary(now)` — Sunday 20:00 UTC weekly reset.
 - `getAsiaServerWeekday(now)` — 0=Monday…6=Sunday (unified, replaces two duplicate implementations).
@@ -40,7 +36,6 @@
 - **All functions take explicit `now: Date` — never call `new Date()` internally.**
 
 **[`routine-policy.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/games/genshin/companion/routine-policy.ts):**
-
 - `projectResinState(amount, recordedAt, now)` — ticks-based projection, caps at 200, handles null/future/out-of-range.
 - `projectWeeklyClaimsState(claims)` — discount rule not verified; always returns null estimates with reason.
 - `buildTaskDescriptors(state, now, serverSelected)` — projects daily flags as false on period mismatch.
@@ -50,7 +45,6 @@
 ### Phase 4 — Repository
 
 **[`routine.repository.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/platform/companion/routine.repository.ts):**
-
 - `findByUserId` — read-only, outside transaction.
 - `findByUserIdInTx` / `createInTx` / `updateInTx` — transaction-scoped write helpers.
 - `findLegacyCompanion` / `findLegacyWeeklyBossState` — read-only legacy accessors.
@@ -58,7 +52,6 @@
 ### Phase 5 — Service (Atomic Write Kernel)
 
 **[`routine.service.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/platform/companion/routine.service.ts):**
-
 - `getSnapshot` — READ ONLY. Never writes. Returns V2 projection from current row.
 - `patchSettings` / `patchChecklist` / `patchResin` / `patchWeeklyClaims` — all use `atomicWrite`.
 - `atomicWrite` kernel:
@@ -71,24 +64,20 @@
 ### Phase 6 — Interface Extension
 
 **[`companion.interfaces.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/core/contracts/companion.interfaces.ts):**
-
 - Added `getServerWeekday(serverId, now)` — provider returns weekday without exposing game clock constants to platform layer.
 - Added `buildLegacySummary(params)` — provider builds legacy summary without platform importing Genshin types.
 
 **[`genshin-companion.provider.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/games/genshin/companion/genshin-companion.provider.ts):**
-
 - Implements both new interface methods by delegating to `server-clock.ts`.
 
 ### Phase 7 — Controller & Routes
 
 **[`routine.controller.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/platform/companion/routine.controller.ts):**
-
 - `GET /companion/routine?contractVersion=2` — read-only snapshot.
 - `PATCH /companion/routine/settings`, `/checklist`, `/resin`, `/weekly-claims` — four write endpoints.
 - V1 compat handlers (`v1GetDailyCompat`, etc.) — return 409 `COMPANION_CLIENT_UPDATE_REQUIRED`.
 
 **[`companion.routes.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/platform/companion/companion.routes.ts):**
-
 - Registers V2 `/routine/*` routes.
 - Replaces V1 `/daily`, `/resin`, `/checklist`, `/weekly-bosses/*` with 409 compat handlers.
 - Goals and events routes unchanged.
@@ -96,12 +85,10 @@
 ### Phase 8 — Legacy Cleanup / Migration of Duplicate Helpers
 
 **`goal.service.ts`:**
-
 - Removed local `getAsiaServerWeekday()` — now imports from `server-clock.ts`.
 - `getTodayDomains` samples `now` once and passes it explicitly.
 
 **`planner-intelligence.service.ts`:**
-
 - Removed legacy `DailyCompanionService` dependency for resin.
 - Removed local `projectCurrentResin` and `getUtcDayOfWeek`.
 - Now uses `RoutineService.getSnapshot` for resin, `getAsiaServerWeekday(now)` for domain weekday.
@@ -111,11 +98,11 @@
 
 ## Tests
 
-| File                                                                                                                                   | Tests      | Result                       |
-| -------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ---------------------------- |
-| [`server-clock.test.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/games/genshin/companion/server-clock.test.ts)     | 24         | ✅ All pass                  |
-| [`routine-policy.test.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/games/genshin/companion/routine-policy.test.ts) | 31         | ✅ All pass                  |
-| [`routine.service.test.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/platform/companion/routine.service.test.ts)    | Scaffolded | Integration with mocked repo |
+| File | Tests | Result |
+|------|-------|--------|
+| [`server-clock.test.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/games/genshin/companion/server-clock.test.ts) | 24 | ✅ All pass |
+| [`routine-policy.test.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/games/genshin/companion/routine-policy.test.ts) | 31 | ✅ All pass |
+| [`routine.service.test.ts`](file:///D:/Genshin%20Personal/project-celestia/apps/api/src/platform/companion/routine.service.test.ts) | Scaffolded | Integration with mocked repo |
 
 TypeScript: `npx tsc --noEmit` exits with code 0.
 

@@ -65,3 +65,7 @@ docs/plans/contextual-guide-knowledge/k3-evidence/failed-finalization-stage/rele
 apps/api/src/games/genshin/static/official-7.1-source.json
 apps/api/src/games/genshin/static/official-7.1-source.html
 apps/web/public/vendor/**
+
+# Historical preserved evidence and formatting exceptions verified by verification.mjs
+docs/plans/c2a-clock-task-reliability/sonnet-walkthrough-submitted.md
+docs/plans/c5-companion-beta/*.json

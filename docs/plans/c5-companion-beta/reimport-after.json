@@ -52,7 +52,9 @@
       "completionReason": null,
       "predecessorId": null,
       "needsReview": false,
-      "limitations": ["No primary or owner evidence covers these upgrade costs."]
+      "limitations": [
+        "No primary or owner evidence covers these upgrade costs."
+      ]
     }
   ],
   "focus": [
@@ -207,7 +209,9 @@
       "serverWeekday": 3
     },
     "preferences": {
-      "enabledRoutineKinds": ["commissions"],
+      "enabledRoutineKinds": [
+        "commissions"
+      ],
       "dailyResinBudget": 70
     },
     "goalRevisions": [
@@ -244,7 +248,9 @@
           "needsReview": false,
           "limitations": []
         },
-        "dismissed": ["week"]
+        "dismissed": [
+          "week"
+        ]
       },
       {
         "goal": {
@@ -263,7 +269,9 @@
           "completionReason": null,
           "predecessorId": null,
           "needsReview": false,
-          "limitations": ["No primary or owner evidence covers these upgrade costs."]
+          "limitations": [
+            "No primary or owner evidence covers these upgrade costs."
+          ]
         },
         "dismissed": []
       }

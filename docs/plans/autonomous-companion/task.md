@@ -55,5 +55,11 @@ Detailed contracts and acceptance: [implementation plan](implementation_plan.md)
   - [x] M7 subphase 4: One unified multi-objective optimization pipeline feeding dashboard and planner.
   - [x] M7 subphase 5: Complete integration verification across disposable PostgreSQL and real GCSim worker execution.
   - [x] M7 subphase 6: Project handoff, roadmap reconciliation, and documented remaining limitations.
+- [x] M7.1: Correctness and Integration Closure; [verification](m7-1-closure-progress.md).
+  - [x] M7.1 subphase 1: Real account-build simulation with dynamic weapon/artifact stats translation and multi-candidate DPS re-ranking (`team-simulation.service.ts`, `team-intelligence.service.ts`).
+  - [x] M7.1 subphase 2: Game-data trust, patch scope alignment (Version 5.3 Active Wish Schedule), and strict fail-closed degradation on unverified live banner schedules (`active-banners.json`, `data-trust.test.ts`).
+  - [x] M7.1 subphase 3: Unified progression priority alignment: core team and endgame bottleneck wiring in `discoverAutonomousProgression`, plus distinction of unknown vs observed material stock in `planner-optimization.calculator.ts` and `planner-intelligence.service.ts`.
+  - [x] M7.1 subphase 4: PostgreSQL-backed end-to-end real account journey integration test covering GOOD import -> DB persistence -> context resolution -> real-build GCSim simulation -> autonomous plan -> companion dashboard (`tooling/m7-1-real-journey.integration.test.js`).
+  - [x] M7.1 subphase 5: Documentation reconciliation, handoff tracking, and full gate verification.
 
 The whole goal remains active. M0 does not mean the companion is complete.

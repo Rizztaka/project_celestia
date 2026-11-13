@@ -333,7 +333,9 @@ export class PlannerIntelligenceService {
       }
       if (rawRoster.length >= 8) {
         const candidateEndgame = this.teamService.buildCandidateEndgameTeams(
-          rawRoster as unknown as ReadonlyArray<CharacterWithWeapon>,
+          topTeams,
+          rawRoster,
+          artifacts,
         );
         for (let i = 1; i < candidateEndgame.length; i++) {
           for (const key of candidateEndgame[i]!.memberKeys) {

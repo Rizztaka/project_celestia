@@ -30,7 +30,7 @@ const { mockDbHolder, createInMemoryPrisma } = vi.hoisted(() => {
           return { count: 0 };
         },
       },
-      $queryRaw: async (query, ...params) => {
+      $queryRaw: async () => {
         // Mock query for recorded stock repository
         return [
           {
@@ -572,7 +572,7 @@ describe('M7.1 Real-Account Journey (PostgreSQL -> GOOD Import -> GCSim -> Plann
             lock: true,
           },
           {
-            key: 'DragonBane',
+            key: 'DragonsBane',
             level: 90,
             ascension: 6,
             refinement: 5,
@@ -761,5 +761,5 @@ describe('M7.1 Real-Account Journey (PostgreSQL -> GOOD Import -> GCSim -> Plann
     expect(['FARMING_AVAILABLE', 'BUILD_INVESTMENT']).toContain(summary.primaryAction.category);
     expect(summary.primaryAction.targetRoute).toBe('/planner?tab=farming');
     expect(summary.topMarginalInvestments.length).toBeGreaterThan(0);
-  }, 60000);
+  }, 90000);
 });

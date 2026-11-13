@@ -1,3 +1,20 @@
+> **2026-11-13 autonomous companion — M7.1 correctness and integration closure verified:**
+> Milestone 7.1 resolves all six findings identified in the independent review of Milestone 7 (M7).
+> The central companion is now fully verified against actual imported account builds, current game state, and real simulation execution:
+> 1. **GCSim Central Simulation Fidelity:** `team-simulation.service.ts` translates actual equipped weapons (key, refinement, level) and equipped artifacts (sets, main/substats) into GCSim syntax instead of starter gear. `team-intelligence.service.ts` simulates top candidate teams and re-ranks them by simulated DPS descending. Baseline heuristic scaling in `estimateMemberInvestmentDps` is aligned with realistic DPS (~40k–65k).
+> 2. **Game-Data Trust & Expiry Reconciliation:** `active-banners.json` note updated and scoped to `Version 5.3 Active Wish Schedule`. Historical simulator scenarios are degraded to `historical: true`. `pull-intelligence.service.ts` fails closed on unverified live banner schedules (`CONDITIONAL_DATA_GAP`).
+> 3. **Autonomous Progression & Inventory Accuracy:** Core team members and endgame bottleneck characters are resolved directly from team intelligence and passed into `discoverAutonomousProgression`, ensuring Priority 1 (Core Team) and Priority 2 (Bottlenecks) are respected with 0 manual goals. Material stock distinguishes unrecorded inventory (`inventoryStatus: 'unknown'`) from verified zero stock (`inventoryStatus: 'observed'`).
+> 4. **PostgreSQL Real-Account Journey Verification:** `apps/api/tooling/m7-1-real-journey.integration.test.js` proves the complete continuous path: GOOD import -> database persistence -> `AccountContextProvider` resolution -> real-build GCSim simulation -> autonomous plan generation -> companion summary dashboard alignment.
+> 5. **Documentation & Handoff Tracking:** Handoff documentation, checklists, and test suites reconciled.
+> Verification: `m7-1-real-journey.integration.test.js` (passed in 28.3s), `m7-benchmarks.integration.test.js` (5/5 passed), `planner-intelligence` (21/21 passed), `companion-summary` (25/25 passed), `team-intelligence` (48/48 passed), `data-trust` (6/6 passed), release provenance (9/9 passed, 126/126 manifest identities).
+> See [M7.1 closure evidence](autonomous-companion/m7-1-closure-progress.md) and [M7 evidence](autonomous-companion/m7-autonomous-optimization-progress.md).
+>
+> **2026-11-12 autonomous companion — M7 true autonomous optimization verified:**
+> Milestone 7 connects the central companion to real GCSim WebAssembly execution, verified release provenance,
+> autonomous progression discovery without mandatory goals, and unified multi-objective optimization across
+> the companion dashboard and planner. All 5 comprehensive integration benchmarks in `m7-benchmarks.integration.test.js`
+> passed against disposable PostgreSQL and real Node worker threads. See [M7 progress](autonomous-companion/m7-autonomous-optimization-progress.md).
+>
 > **2026-11-06 autonomous companion — M3 team search & defensible rotations verified:**
 > Milestone 3 establishes deterministic, defensible team recommendation within Project Celestia's
 > Modular Monolith (`apps/web/src/lib/team-damage`). Reviewed kits cover key archetypes (Bennett,

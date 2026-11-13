@@ -229,7 +229,7 @@ export class CompanionSummaryService {
       try {
         teamRecommendations = await this.teamService.getSimulatedRecommendationsForRoster(
           rawRoster,
-          { limit: 8, simulateTopN: 1 },
+          { limit: 8, simulateTopN: 1, artifacts },
         );
         if (teamRecommendations.length > 0) {
           teamSuggestion = toTeamSuggestionSnapshot(teamRecommendations[0]!);

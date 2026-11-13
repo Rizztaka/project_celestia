@@ -423,8 +423,8 @@ export function optimizePlannerSchedule(
     .filter((c) => c.isOpenToday && c.materialDeficitRatio > 0 && c.efficiencyScore > 0)
     .sort(
       (a, b) =>
-        b.efficiencyScore - a.efficiencyScore ||
         a.goalPriority - b.goalPriority ||
+        b.efficiencyScore - a.efficiencyScore ||
         (a.candidateId < b.candidateId ? -1 : a.candidateId > b.candidateId ? 1 : 0),
     );
 

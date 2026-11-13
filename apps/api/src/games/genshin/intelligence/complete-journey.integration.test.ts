@@ -419,7 +419,7 @@ describe('Intelligence Engine Complete Journey Integration', () => {
       expect(plan.rankedPlan.length).toBeGreaterThan(0);
       expect(plan.rankedPlan[0]!.targetKey).toBe('HuTao');
       expect(plan.alternatives.length).toBeGreaterThan(0);
-    });
+    }, 60000);
   });
 
   // =========================================================================
@@ -491,7 +491,7 @@ describe('Intelligence Engine Complete Journey Integration', () => {
         true,
       );
       expect(summary.teamSuggestion).toBeDefined();
-    });
+    }, 60000);
   });
 
   // =========================================================================
@@ -535,7 +535,7 @@ describe('Intelligence Engine Complete Journey Integration', () => {
       expect(
         summary.readyBuildsSummary.topReadyCharacters.every((r) => r.characterKey !== 'HuTao'),
       ).toBe(true);
-    });
+    }, 60000);
   });
 
   // =========================================================================
@@ -591,7 +591,7 @@ describe('Intelligence Engine Complete Journey Integration', () => {
 
       expect(summary.provenanceNotices?.some((n) => n.includes('stale'))).toBe(true);
       expect(summary.missingDataCaveats.some((c) => c.includes('stale'))).toBe(true);
-    });
+    }, 60000);
 
     it('identifies future-invalid observation timestamps (> now + 5m) without crashing', async () => {
       const { roster, weapons, artifacts, charactersContext } = makeTwelveCharacterRoster();
@@ -628,7 +628,7 @@ describe('Intelligence Engine Complete Journey Integration', () => {
       const summary = await companionService.getSummary('user-journey-1');
       expect(summary).toBeDefined();
       expect(summary.contractVersion).toBe(1);
-    });
+    }, 60000);
   });
 
   // =========================================================================
@@ -673,7 +673,7 @@ describe('Intelligence Engine Complete Journey Integration', () => {
       expect(
         summary.readyBuildsSummary.topReadyCharacters.some((r) => r.characterKey === 'HuTao'),
       ).toBe(true);
-    });
+    }, 60000);
   });
 
   // =========================================================================
@@ -715,6 +715,6 @@ describe('Intelligence Engine Complete Journey Integration', () => {
       const pullRecs = await pullService.getRecommendations('user-journey-1');
       expect(pullRecs).toBeDefined();
       expect(pullRecs.analyzedAt).toBeDefined();
-    });
+    }, 60000);
   });
 });

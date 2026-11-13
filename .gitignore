@@ -1,22 +1,19 @@
-node_modules
-dist
-.turbo
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Environment files
 .env
-.env.*
-!.env.example
-!.env.deploy.example
+.env.local
+*.local
 
-# Local recovery material, temporary research, and optional nested checkouts.
-.local-archive/
-.local-maintenance/
-.scratch/
-.cache/
-.worktrees/
-# Windows reserved-device artifact created by NUL-based test redirection.
-NUL
-
-# Ignore local/untracked agent skills while preserving tracked canonical skills
-.agents/skills/*
-!.agents/skills/build-intelligence-engine/
-!.agents/skills/reverse-engineer-anything/
-!.agents/skills/scaffold-domain-feature/
+# Logs and system
+*.log
+.DS_Store
+Thumbs.db

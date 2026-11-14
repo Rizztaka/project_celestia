@@ -47,6 +47,59 @@ export interface RecommendedBuild {
   subStats?: string[];
 }
 
+export type RotationActionType =
+  | 'skill'
+  | 'hold-skill'
+  | 'burst'
+  | 'normal'
+  | 'charged'
+  | 'plunge'
+  | 'dash'
+  | 'jump'
+  | 'swap';
+
+export interface RotationAction {
+  type: RotationActionType;
+  label: string; // e.g. 'E', 'hE', 'Q', '3CA', 'N2CD'
+  description?: string;
+  timingSeconds?: number;
+}
+
+export type RotationStage =
+  | 'sustain-setup'
+  | 'sub-dps'
+  | 'buffer-shred'
+  | 'on-field-carry';
+
+export interface CharacterRotationProfile {
+  primarySequence: RotationAction[];
+  alternateSequence?: RotationAction[];
+  stage: RotationStage;
+  estimatedFieldTime: number; // in seconds
+  notes: string;
+  tags?: string[];
+}
+
+export interface TeamRotationStep {
+  stepNumber: number;
+  characterId: string;
+  characterName: string;
+  icon?: string;
+  element: Element;
+  stage: RotationStage;
+  stageLabel: string;
+  actions: RotationAction[];
+  fieldTime: number;
+  tip?: string;
+}
+
+export interface SynthesizedTeamRotation {
+  steps: TeamRotationStep[];
+  totalCycleTime: number;
+  summaryString: string;
+  warnings?: string[];
+}
+
 export interface Character {
   id: string;
   name: string;
@@ -65,6 +118,7 @@ export interface Character {
   talents?: CharacterTalent[];
   constellations?: CharacterConstellation[];
   build?: RecommendedBuild;
+  rotationProfile?: CharacterRotationProfile;
 }
 
 export interface OwnedCharacter {
@@ -83,6 +137,7 @@ export interface TeamRecommendation {
   comfortScore: number;
   reasons: string[];
   rotation: string;
+  steppedRotation?: SynthesizedTeamRotation;
   resonance: string[];
 }
 

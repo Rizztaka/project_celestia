@@ -2,9 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { CHARACTERS } from '../data/characters';
 import { generateBestTeams } from '../engines/team-generator';
 import type { Character } from '../types/genshin';
-import { Sparkles, Shield, Zap, Info } from 'lucide-react';
+import { Sparkles, Shield, Zap, Info, Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
+import { RotationBadgeList } from './RotationBadgeList';
 
 interface TeamGeneratorViewProps {
   ownedIds: string[];
@@ -23,6 +24,7 @@ const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string 
 export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({ ownedIds }) => {
   const [focusId, setFocusId] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
 
   const teams = useMemo(
     () => generateBestTeams(ownedIds, focusId || undefined),
@@ -197,18 +199,99 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({ ownedIds }
               </div>
             )}
 
-            {/* Rotation Breakdown & Strategy */}
-            <div className="bg-[#0e1017] p-3.5 rounded-xl border border-[#1b1f2e] text-xs space-y-2">
-              <div>
-                <span className="text-zinc-400 font-semibold uppercase tracking-wider block text-[10px] mb-0.5">
-                  Recommended Execution Rotation:
+            {/* Stepped Rotation Breakdown & Strategy */}
+            <div className="bg-[#0e1017] p-3.5 rounded-xl border border-[#1b1f2e] text-xs space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1b1f2e] pb-2">
+                <span className="text-zinc-300 font-bold uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-[#d4af37]" />
+                  <span>Strategic Execution Rotation</span>
                 </span>
+                {team.steppedRotation && (
+                  <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-[#181c2c] text-[#d4af37] border border-[#d4af37]/30 flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    <span>~{team.steppedRotation.totalCycleTime}s Cycle</span>
+                  </span>
+                )}
+              </div>
+
+              {team.steppedRotation && team.steppedRotation.steps.length > 0 ? (
+                <div className="space-y-2">
+                  {/* Step Cards Flow */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                    {team.steppedRotation.steps.map((step) => {
+                      return (
+                        <div
+                          key={step.stepNumber}
+                          className="bg-[#121522] border border-[#202538] hover:border-[#2f3652] p-2.5 rounded-lg flex flex-col justify-between gap-2 transition-colors relative group"
+                        >
+                          <div className="flex items-center justify-between gap-1.5">
+                            <div className="flex items-center gap-2">
+                              <CharacterPortrait
+                                src={step.icon}
+                                name={step.characterName}
+                                element={step.element}
+                                size="sm"
+                              />
+                              <div className="min-w-0">
+                                <div className="text-xs font-bold text-zinc-100 truncate">
+                                  {step.characterName}
+                                </div>
+                                <div className="text-[9px] text-zinc-400 font-semibold uppercase truncate">
+                                  Step {step.stepNumber}
+                                </div>
+                              </div>
+                            </div>
+                            <span className="text-[9px] font-mono text-zinc-400 bg-[#191d2d] px-1.5 py-0.5 rounded border border-[#272e48] shrink-0">
+                              ~{step.fieldTime}s
+                            </span>
+                          </div>
+
+                          <div className="bg-[#0b0d16] p-1.5 rounded border border-[#1a1e30]">
+                            <RotationBadgeList actions={step.actions} size="sm" />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Collapsible Strategy Tips */}
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setExpandedTeamId(expandedTeamId === team.id ? null : team.id)}
+                      className="text-[11px] font-semibold text-zinc-400 hover:text-zinc-200 flex items-center gap-1 transition-colors cursor-pointer"
+                    >
+                      <span>{expandedTeamId === team.id ? 'Hide Strategy Tips' : 'Show Tactical Strategy & Tips'}</span>
+                      {expandedTeamId === team.id ? (
+                        <ChevronUp className="w-3.5 h-3.5" />
+                      ) : (
+                        <ChevronDown className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+
+                    {expandedTeamId === team.id && (
+                      <div className="mt-2 space-y-1.5 bg-[#121522] p-2.5 rounded-lg border border-[#202538] text-[11px]">
+                        {team.steppedRotation.steps.map((step) => (
+                          <div key={step.stepNumber} className="flex items-start gap-2 text-zinc-300">
+                            <span className="text-[#d4af37] font-bold shrink-0 font-mono">
+                              [Step {step.stepNumber} · {step.characterName}]:
+                            </span>
+                            <span className="leading-relaxed">
+                              {step.tip || 'Execute standard action sequence.'}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
                 <p className="text-zinc-200 font-mono text-[11px] leading-relaxed bg-[#141724] p-2 rounded border border-[#22273d]">
                   {team.rotation}
                 </p>
-              </div>
+              )}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-zinc-300 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-zinc-300 pt-1 border-t border-[#1b1f2e]/60">
                 {team.reasons.map((reason, rIdx) => (
                   <div key={rIdx} className="flex items-start gap-1.5">
                     <span className="text-[#d4af37]">✓</span>

@@ -9,8 +9,12 @@ import {
   BookOpen,
   Award,
   Layers,
+  Zap,
+  Info,
 } from 'lucide-react';
 import { CharacterPortrait } from './CharacterPortrait';
+import { resolveCharacterRotationProfile } from '../engines/rotation-synthesizer';
+import { RotationBadgeList } from './RotationBadgeList';
 
 interface CharacterDetailModalProps {
   character: Character | null;
@@ -87,7 +91,15 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   onToggleOwned,
 }) => {
   const [activeTab, setActiveTab] = useState<'build' | 'talents' | 'constellations'>('build');
+  const [showAlternateRotation, setShowAlternateRotation] = useState<boolean>(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Reset alternate rotation view on character switch
+  useEffect(() => {
+    setShowAlternateRotation(false);
+  }, [character?.id]);
+
+  const rotationProfile = character ? resolveCharacterRotationProfile(character) : null;
 
   // Lock body scroll while modal is active
   useEffect(() => {
@@ -294,6 +306,75 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       </div>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {/* Recommended Combo & Rotation */}
+              {rotationProfile && (
+                <div className="bg-[#131622] border border-[#23273b] p-4 rounded-xl space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#202538] pb-2.5">
+                    <div className="flex items-center gap-2">
+                      <span className="flex items-center gap-1.5 text-xs font-bold text-[#d4af37]">
+                        <Zap className="w-3.5 h-3.5" />
+                        <span>Recommended Combo & Execution</span>
+                      </span>
+                      <span
+                        className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
+                          rotationProfile.stage === 'on-field-carry'
+                            ? 'bg-purple-500/15 text-purple-300 border-purple-500/30'
+                            : rotationProfile.stage === 'buffer-shred'
+                            ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                            : rotationProfile.stage === 'sustain-setup'
+                            ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                            : 'bg-sky-500/15 text-sky-300 border-sky-500/30'
+                        }`}
+                      >
+                        {rotationProfile.stage === 'on-field-carry'
+                          ? 'On-Field Carry'
+                          : rotationProfile.stage === 'buffer-shred'
+                          ? 'Buffer & Shred'
+                          : rotationProfile.stage === 'sustain-setup'
+                          ? 'Sustain & Setup'
+                          : 'Sub-DPS Deployer'}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-mono text-zinc-300 flex items-center gap-1 bg-[#1a1e30] px-2 py-0.5 rounded border border-[#29304a]">
+                        <span>⏱️</span>
+                        <span>~{rotationProfile.estimatedFieldTime}s Field Time</span>
+                      </span>
+                      {rotationProfile.alternateSequence && (
+                        <button
+                          type="button"
+                          onClick={() => setShowAlternateRotation(!showAlternateRotation)}
+                          className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#1e2337] hover:bg-[#282e49] text-zinc-300 hover:text-zinc-100 border border-[#2e3552] transition-colors cursor-pointer"
+                        >
+                          {showAlternateRotation ? 'Standard Combo' : 'Variant / Battery'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Badges */}
+                  <div className="bg-[#0b0c14] p-3 rounded-lg border border-[#1d2133]">
+                    <RotationBadgeList
+                      actions={
+                        showAlternateRotation && rotationProfile.alternateSequence
+                          ? rotationProfile.alternateSequence
+                          : rotationProfile.primarySequence
+                      }
+                      size="md"
+                    />
+                  </div>
+
+                  {/* Strategy Notes */}
+                  {rotationProfile.notes && (
+                    <div className="text-[11px] text-zinc-300 leading-relaxed bg-[#171a2b]/70 p-2.5 rounded border border-[#262c45] flex items-start gap-2">
+                      <Info className="w-3.5 h-3.5 text-[#d4af37] shrink-0 mt-0.5" />
+                      <span>{rotationProfile.notes}</span>
+                    </div>
+                  )}
                 </div>
               )}
 

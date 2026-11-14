@@ -1,5 +1,6 @@
 import type { Character, TeamRecommendation } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
+import { synthesizeTeamRotation } from './rotation-synthesizer';
 
 interface ArchetypeTemplate {
   name: string;
@@ -155,6 +156,7 @@ function generateTeamsFromPool(
 
       if (thirdSlot) {
         const members = [nefer, bestHydro, secondSlot, thirdSlot];
+        const stepped = synthesizeTeamRotation(members);
         results.push({
           id: 'team-nefer-lunar',
           name: 'Nefer · Lunar-Bloom Symphony',
@@ -169,7 +171,9 @@ function generateTeamsFromPool(
             'Special Charged Attacks deal massive non-split Dendro reaction damage.',
           ],
           rotation:
+            stepped.summaryString ||
             'Support Skill/Burst → Hydro Enabler Q/E → Nefer E (Shadow Dance) → Special Charged Attack chain',
+          steppedRotation: stepped,
           resonance: calculateResonance(members),
         });
       }
@@ -231,6 +235,7 @@ function generateTeamsFromPool(
 
       if (chosen.length === 4) {
         const hasSustain = chosen.some((m) => m.roles.includes('Sustain'));
+        const stepped = synthesizeTeamRotation(chosen);
         results.push({
           id: `team-${template.archetype}-${lead.id}`.toLowerCase(),
           name: `${lead.name} · ${template.name}`,
@@ -246,7 +251,8 @@ function generateTeamsFromPool(
               ? `${chosen[3].name} guarantees safe clear windows with survivability.`
               : 'High aggressive offensive output with minimal downtime.',
           ],
-          rotation: template.rotation,
+          rotation: stepped.summaryString || template.rotation,
+          steppedRotation: stepped,
           resonance: calculateResonance(chosen),
         });
         break; // One strong variant per archetype

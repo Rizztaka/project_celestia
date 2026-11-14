@@ -1,12 +1,17 @@
 import type { ArtifactStopRecommendation } from '../types/genshin';
 
+export * from './artifact-probability';
+
+/**
+ * Legacy & quick-estimate stop point calculator for backwards compatibility.
+ * Delegates to the new probability engine for consistent Roll Value (RV) math.
+ */
 export function calculateArtifactStopPoint(
   characterName: string,
   critRate: number,
   critDmg: number,
   isEmOrDefScaler: boolean = false,
 ): ArtifactStopRecommendation {
-  // Total Artifact CV = (CR * 2) + CD
   const cv = Math.round(critRate * 2 + critDmg);
 
   if (isEmOrDefScaler) {

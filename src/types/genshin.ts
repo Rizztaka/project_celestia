@@ -214,6 +214,105 @@ export interface ArtifactStopRecommendation {
 }
 
 // ---------------------------------------------------------
+// Artifact Roll Value & Diminishing Returns Engine Types
+// ---------------------------------------------------------
+
+export type ArtifactSlot = 'flower' | 'plume' | 'sands' | 'goblet' | 'circlet';
+
+export type StatKey =
+  | 'hp'
+  | 'hp_'
+  | 'atk'
+  | 'atk_'
+  | 'def'
+  | 'def_'
+  | 'eleMas'
+  | 'enerRech_'
+  | 'critRate_'
+  | 'critDMG_'
+  | 'heal_'
+  | 'physical_dmg_'
+  | 'pyro_dmg_'
+  | 'hydro_dmg_'
+  | 'dendro_dmg_'
+  | 'electro_dmg_'
+  | 'anemo_dmg_'
+  | 'cryo_dmg_'
+  | 'geo_dmg_';
+
+export interface ArtifactSubstat {
+  key: StatKey;
+  value: number;
+  rollValue?: number; // e.g. 100% = 1 max roll
+}
+
+export interface ArtifactPiece {
+  id?: string;
+  slotKey: ArtifactSlot;
+  setKey?: string;
+  rarity: number; // typically 5
+  level: number; // 0 - 20
+  mainStatKey: StatKey;
+  substats: ArtifactSubstat[];
+  location?: string; // Character key
+}
+
+export interface CharacterStatWeightConfig {
+  characterId: string;
+  characterName: string;
+  preferredMainStats: {
+    sands: StatKey[];
+    goblet: StatKey[];
+    circlet: StatKey[];
+  };
+  statWeights: Partial<Record<StatKey, number>>; // 0.0 to 1.0
+  erRequirement?: number; // Target ER percentage (e.g. 160)
+  targetSets?: string[];
+}
+
+export interface SlotUpgradeProbability {
+  slotKey: ArtifactSlot;
+  slotName: string;
+  currentPiece: ArtifactPiece | null;
+  currentRollValue: number; // Total RV% on piece (e.g. 540%)
+  currentUsefulRolls: number; // Equivalent max rolls (e.g. 5.4)
+  upgradeProbabilityPerRun: number; // Probability that 1 domain run beats this piece
+  expectedRunsForUpgrade: number; // Runs to reach 50% upgrade chance
+  expectedDaysForUpgrade: number; // Days of resin (180/day = 9 runs/day)
+  status: 'Near Ceiling' | 'Diminishing Returns' | 'High ROI';
+  recommendation: string;
+}
+
+export interface DiminishingReturnsPoint {
+  days: number;
+  resin: number;
+  probability: number; // 0.0 to 1.0 (e.g. 0.85 = 85%)
+}
+
+export interface GuaranteedAlternative {
+  title: string;
+  costResin: number;
+  daysResin: number;
+  guaranteedGain: string;
+  description: string;
+}
+
+export interface ArtifactStopAnalysisResult {
+  characterId: string;
+  characterName: string;
+  totalRollValue: number;
+  totalUsefulRolls: number;
+  averageSlotRollValue: number;
+  overallStatus: 'Ready / Stop Farming' | 'High ROI' | 'Diminishing Returns';
+  daysToNextUpgrade: number; // 50% confidence days for weakest link
+  weakestSlot: SlotUpgradeProbability | null;
+  slotBreakdown: Record<ArtifactSlot, SlotUpgradeProbability>;
+  curve: DiminishingReturnsPoint[];
+  guaranteedAlternative: GuaranteedAlternative;
+  advice: string;
+}
+
+// ---------------------------------------------------------
 // Imaginarium Theater & Abyss Dual-Team Types
 // ---------------------------------------------------------
 

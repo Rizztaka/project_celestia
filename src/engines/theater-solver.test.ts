@@ -216,6 +216,45 @@ describe('Imaginarium Theater Engine', () => {
       expect(act10).toBeDefined();
       expect(act10?.team.some((c) => c.id === 'Mavuika')).toBe(true);
     });
+
+    it('strictly caps user locks at maximum 4 characters per act', () => {
+      // User attempts to lock 6 characters into Act 1
+      const userLocks: Record<number, string[]> = {
+        1: ['Mavuika', 'Bennett', 'Furina', 'Xingqiu', 'KaedeharaKazuha', 'Chasca'],
+      };
+
+      const { acts } = autoDraftTheaterSchedule(
+        allSeason1Chars,
+        'Normal',
+        season1,
+        userLocks,
+      );
+
+      const act1 = acts.find((a) => a.actNumber === 1)!;
+      expect(act1.team).toHaveLength(4);
+    });
+
+    it('never mutates a user-locked act during anti-cloning pass', () => {
+      // Explicitly lock Act 1 and Act 2 with the same 4 characters
+      const userLocks: Record<number, string[]> = {
+        1: ['Mavuika', 'Bennett', 'Furina', 'Xingqiu'],
+        2: ['Mavuika', 'Bennett', 'Furina', 'Xingqiu'],
+      };
+
+      const { acts } = autoDraftTheaterSchedule(
+        allSeason1Chars,
+        'Normal',
+        season1,
+        userLocks,
+      );
+
+      const act1 = acts.find((a) => a.actNumber === 1)!;
+      const act2 = acts.find((a) => a.actNumber === 2)!;
+
+      // Since both are explicitly user-locked, their compositions must be preserved
+      expect(act1.team.map((m) => m.id)).toEqual(['Mavuika', 'Bennett', 'Furina', 'Xingqiu']);
+      expect(act2.team.map((m) => m.id)).toEqual(['Mavuika', 'Bennett', 'Furina', 'Xingqiu']);
+    });
   });
 
   describe('swapTheaterActMember', () => {
@@ -419,6 +458,39 @@ describe('Imaginarium Theater Engine', () => {
       expect(updatedAct1.team.some((m) => m.id === availableChar.id)).toBe(true);
       expect(result.vigorState[availableChar.id]).toBe(initialVigor - 1);
     });
+
+    it('defaults remaining vigor to 2 if character is omitted from vigorState during swap', () => {
+      const allSeason1Chars = CHARACTERS.filter(
+        (c) =>
+          season1.elements.includes(c.element) ||
+          season1.specialGuestIds.includes(c.id),
+      );
+
+      const { acts } = autoDraftTheaterSchedule(
+        allSeason1Chars,
+        'Normal',
+        season1,
+      );
+
+      const act1 = acts[0];
+      const oldChar = act1.team[0];
+      const newChar = allSeason1Chars.find(
+        (c) => !act1.team.some((m) => m.id === c.id),
+      )!;
+
+      // Pass an empty vigorState where newChar is omitted
+      const result = swapTheaterActMember(
+        acts,
+        1,
+        oldChar.id,
+        newChar.id,
+        {},
+      );
+
+      expect(result.error).toBeUndefined();
+      // Should default to 2 - 1 = 1
+      expect(result.vigorState[newChar.id]).toBe(1);
+    });
   });
 
   describe('removeTheaterActMember', () => {
@@ -497,6 +569,34 @@ describe('Imaginarium Theater Engine', () => {
       expect(vigor[char2.id]).toBe(1); // used in 1 act -> 2 - 1 = 1
       expect(vigor[char3.id]).toBe(1); // used in 1 act -> 2 - 1 = 1
       expect(vigor['Other']).toBe(2);  // used in 0 acts -> 2 - 0 = 2
+    });
+
+    it('correctly tracks vigor for characters in acts who were omitted from allEligibleIds', () => {
+      const char1 = CHARACTERS[0];
+      const char2 = CHARACTERS[1];
+
+      const acts = [
+        {
+          actNumber: 1,
+          type: 'Normal' as const,
+          recommendedArchetypes: [],
+          team: [char1, char2],
+        },
+        {
+          actNumber: 2,
+          type: 'Normal' as const,
+          recommendedArchetypes: [],
+          team: [char1],
+        },
+      ];
+
+      // Omit char1 and char2 from eligible IDs list
+      const vigor = calculateVigorState(acts, []);
+
+      // char1 used twice -> starts at 2, becomes 0
+      expect(vigor[char1.id]).toBe(0);
+      // char2 used once -> starts at 2, becomes 1
+      expect(vigor[char2.id]).toBe(1);
     });
   });
 });

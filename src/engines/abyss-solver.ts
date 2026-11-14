@@ -42,9 +42,11 @@ export function evaluateChamberMechanicCoverage(
   const team1HasNonHydroCounters = teamA.members.some((m) =>
     ['Pyro', 'Dendro', 'Cryo', 'Electro'].includes(m.element),
   );
-  const team1PureHydro = teamA.members.every((m) => m.element === 'Hydro');
-  const chamber1FirstSatisfied = team1HasNonHydroCounters && !team1PureHydro;
-  const chamber1FirstStatus = chamber1FirstSatisfied
+  const team1PureHydro = teamA.members.length > 0 && teamA.members.every((m) => m.element === 'Hydro');
+  const chamber1FirstSatisfied = teamA.members.length > 0 && team1HasNonHydroCounters && !team1PureHydro;
+  const chamber1FirstStatus = teamA.members.length === 0
+    ? 'Warning: Incomplete team for Hydro Phantasms'
+    : chamber1FirstSatisfied
     ? 'Counters Hydro Phantasm & Consecrated Beasts with non-Hydro burst'
     : 'Caution: Heavy Hydro reliance against Hydro-immune Phantasms';
   if (chamber1FirstSatisfied) score += 30;
@@ -52,7 +54,9 @@ export function evaluateChamberMechanicCoverage(
   // Second Half: Pyro Lector -> Rapid Hydro shield breaker required
   const team2HasHydro = teamB.members.some((m) => m.element === 'Hydro');
   const chamber1SecondSatisfied = team2HasHydro;
-  const chamber1SecondStatus = chamber1SecondSatisfied
+  const chamber1SecondStatus = teamB.members.length === 0
+    ? 'Warning: Incomplete team for Pyro Lector'
+    : chamber1SecondSatisfied
     ? 'Rapid Hydro shield-shredder active for Pyro Lector'
     : 'Warning: Missing Hydro shield-breaker for Pyro Lector';
   if (chamber1SecondSatisfied) score += 60;
@@ -61,8 +65,10 @@ export function evaluateChamberMechanicCoverage(
   // --- Chamber 2 (12-2) ---
   // First Half: Maguu Kenki Trio -> High AoE & Sustain
   const team1HasSustain = teamA.members.some((m) => m.roles.includes('Sustain'));
-  const chamber2FirstSatisfied = team1HasSustain || teamA.synergyScore >= 90;
-  const chamber2FirstStatus = chamber2FirstSatisfied
+  const chamber2FirstSatisfied = teamA.members.length > 0 && (team1HasSustain || teamA.synergyScore >= 90);
+  const chamber2FirstStatus = teamA.members.length === 0
+    ? 'Warning: Incomplete team for Kenki Trio'
+    : chamber2FirstSatisfied
     ? 'High AoE burst & survivability ready for Kenki Trio'
     : 'Caution: Risk of burst damage deaths against Kenki Trio';
   if (chamber2FirstSatisfied) score += 20;
@@ -70,7 +76,9 @@ export function evaluateChamberMechanicCoverage(
   // Second Half: Aeonblight Drake -> Bow user STRICTLY required
   const team2HasBow = teamB.members.some((m) => m.weapon === 'Bow');
   const chamber2SecondSatisfied = team2HasBow;
-  const chamber2SecondStatus = chamber2SecondSatisfied
+  const chamber2SecondStatus = teamB.members.length === 0
+    ? 'Warning: Incomplete team for Aeonblight Drake'
+    : chamber2SecondSatisfied
     ? 'Bow user equipped to disable flying Aeonblight Drake thrusters'
     : 'Critical: No Bow user to ground flying Aeonblight Drake';
   if (chamber2SecondSatisfied) score += 100;
@@ -82,7 +90,9 @@ export function evaluateChamberMechanicCoverage(
     (m) => NATLAN_NIGHTSOUL_IDS.has(m.id) || m.tags.includes('Nightsoul'),
   );
   const chamber3FirstSatisfied = team1HasNightsoul;
-  const chamber3FirstStatus = chamber3FirstSatisfied
+  const chamber3FirstStatus = teamA.members.length === 0
+    ? 'Warning: Incomplete team for Natlan Wayob'
+    : chamber3FirstSatisfied
     ? 'Nightsoul blessing: 300% faster Nightspirit shield break'
     : 'Standard shield break (slower without Natlan units)';
   if (chamber3FirstSatisfied) score += 40;
@@ -90,7 +100,9 @@ export function evaluateChamberMechanicCoverage(
   // Second Half: Iniquitous Baptist -> Multi-element counters (Electro, Pyro, Cryo shields)
   const team2Elements = new Set(teamB.members.map((m) => m.element));
   const chamber3SecondSatisfied = team2Elements.size >= 3;
-  const chamber3SecondStatus = chamber3SecondSatisfied
+  const chamber3SecondStatus = teamB.members.length === 0
+    ? 'Warning: Incomplete team for Iniquitous Baptist'
+    : chamber3SecondSatisfied
     ? `Tri-element coverage (${Array.from(team2Elements).join(', ')}) ready for rotating shields`
     : 'Caution: Less than 3 elements against rotating shields';
   if (chamber3SecondSatisfied) score += 40;
@@ -122,6 +134,22 @@ export function evaluateChamberMechanicCoverage(
   return { coverage, totalScore: score };
 }
 
+function calculateResonance(members: Character[]): string[] {
+  const counts: Record<string, number> = {};
+  for (const m of members) {
+    counts[m.element] = (counts[m.element] || 0) + 1;
+  }
+  const resonances: string[] = [];
+  if ((counts['Pyro'] ?? 0) >= 2) resonances.push('Fervent Flames: +25% ATK');
+  if ((counts['Hydro'] ?? 0) >= 2) resonances.push('Soothing Water: +25% Max HP');
+  if ((counts['Dendro'] ?? 0) >= 2) resonances.push('Sprawling Greenery: +50 to +100 EM');
+  if ((counts['Cryo'] ?? 0) >= 2) resonances.push('Shattering Ice: +15% CRIT Rate against Frozen/Cryo');
+  if ((counts['Geo'] ?? 0) >= 2) resonances.push('Enduring Rock: +15% Shield Strength & +15% DMG dealt');
+  if ((counts['Anemo'] ?? 0) >= 2) resonances.push('Impetuous Winds: -15% Stamina & +10% Movement Speed');
+  if ((counts['Electro'] ?? 0) >= 2) resonances.push('High Voltage: Electro reactions generate Energy particles');
+  return resonances;
+}
+
 /**
  * Builds a fallback team of 4 characters from available pool when standard archetypes do not match.
  */
@@ -132,19 +160,19 @@ function buildFallbackTeam(pool: Character[], teamId: string, teamName: string):
   const carry = pool.find((c) => c.roles.includes('On-Field DPS')) || pool[0];
   if (carry) chosen.push(carry);
 
-  const buffer = pool.find((c) => !chosen.includes(c) && c.roles.includes('Buffer/Shred'));
+  const buffer = pool.find((c) => !chosen.some((x) => x.id === c.id) && c.roles.includes('Buffer/Shred'));
   if (buffer) chosen.push(buffer);
 
-  const subDps = pool.find((c) => !chosen.includes(c) && c.roles.includes('Off-Field DPS'));
+  const subDps = pool.find((c) => !chosen.some((x) => x.id === c.id) && c.roles.includes('Off-Field DPS'));
   if (subDps) chosen.push(subDps);
 
-  const sustain = pool.find((c) => !chosen.includes(c) && c.roles.includes('Sustain'));
+  const sustain = pool.find((c) => !chosen.some((x) => x.id === c.id) && c.roles.includes('Sustain'));
   if (sustain) chosen.push(sustain);
 
   // Fill up to 4
   for (const c of pool) {
     if (chosen.length >= 4) break;
-    if (!chosen.includes(c)) chosen.push(c);
+    if (!chosen.some((x) => x.id === c.id)) chosen.push(c);
   }
 
   const stepped = synthesizeTeamRotation(chosen);
@@ -159,7 +187,7 @@ function buildFallbackTeam(pool: Character[], teamId: string, teamName: string):
     reasons: ['Balanced combat composition constructed from remaining roster.'],
     rotation: stepped.summaryString || 'Execute support skills followed by carry combo.',
     steppedRotation: stepped,
-    resonance: [],
+    resonance: calculateResonance(chosen),
   };
 }
 
@@ -170,6 +198,7 @@ function buildFallbackTeam(pool: Character[], teamId: string, teamName: string):
 export function solveAbyssDualTeams(ownedIds: string[]): AbyssDualTeamPlan {
   const ownedSet = new Set(ownedIds);
   const ownedChars = CHARACTERS.filter((c) => ownedSet.has(c.id));
+  const uniqueOwnedIds = Array.from(ownedSet);
 
   // If player has fewer than 8 characters, gracefully create best-effort teams
   if (ownedChars.length < 8) {
@@ -191,7 +220,7 @@ export function solveAbyssDualTeams(ownedIds: string[]): AbyssDualTeamPlan {
   }
 
   // 1. Generate candidate primary teams from full owned roster
-  const candidateTeams = generateBestTeams(ownedIds);
+  const candidateTeams = generateBestTeams(uniqueOwnedIds);
 
   interface ScoredPair {
     firstHalfTeam: TeamRecommendation;
@@ -204,6 +233,14 @@ export function solveAbyssDualTeams(ownedIds: string[]): AbyssDualTeamPlan {
 
   // Helper to test a pair in both orientations (A=First, B=Second and B=First, A=Second)
   const considerPair = (teamA: TeamRecommendation, teamB: TeamRecommendation) => {
+    // Ensure all characters in both teams are strictly owned by the player
+    if (
+      teamA.members.some((m) => !ownedSet.has(m.id)) ||
+      teamB.members.some((m) => !ownedSet.has(m.id))
+    ) {
+      return;
+    }
+
     // Check strict disjointness
     const teamAIds = new Set(teamA.members.map((m) => m.id));
     if (teamB.members.some((m) => teamAIds.has(m.id))) {
@@ -244,9 +281,10 @@ export function solveAbyssDualTeams(ownedIds: string[]): AbyssDualTeamPlan {
   // 2. Iterate through candidate teams, and for each, generate secondary candidate teams from remaining roster
   for (const team1 of candidateTeams) {
     const team1Ids = new Set(team1.members.map((m) => m.id));
-    const remainingIds = ownedIds.filter((id) => !team1Ids.has(id));
+    const remainingChars = ownedChars.filter((c) => !team1Ids.has(c.id));
 
-    if (remainingIds.length >= 4) {
+    if (remainingChars.length >= 4) {
+      const remainingIds = remainingChars.map((c) => c.id);
       const secondaryTeams = generateBestTeams(remainingIds);
 
       if (secondaryTeams.length > 0) {
@@ -255,7 +293,6 @@ export function solveAbyssDualTeams(ownedIds: string[]): AbyssDualTeamPlan {
         }
       } else {
         // Fallback team from remaining pool
-        const remainingChars = CHARACTERS.filter((c) => remainingIds.includes(c.id));
         const fallbackTeam2 = buildFallbackTeam(
           remainingChars,
           `team-sub-${team1.id}`,

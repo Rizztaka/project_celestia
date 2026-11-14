@@ -175,4 +175,70 @@ describe('Spiral Abyss Floor 12 Dual-Team Solver', () => {
     // Since Nefer is Nod-Krai (not Natlan/Nightsoul), First Half should NOT be marked satisfied
     expect(chamber3.firstHalfSatisfied).toBe(false);
   });
+
+  it('handles owned roster with duplicate IDs without duplicating characters or breaking disjointness', () => {
+    // Provide a list with duplicates
+    const duplicateRoster = [
+      'Bennett', 'Bennett', 'Bennett',
+      'Xiangling', 'Furina', 'Yelan',
+      'KaedeharaKazuha', 'Zhongli', 'Nahida', 'RaidenShogun',
+    ];
+
+    const plan = solveAbyssDualTeams(duplicateRoster);
+    const firstHalfIds = plan.firstHalfTeam.members.map((c) => c.id);
+    const secondHalfIds = plan.secondHalfTeam.members.map((c) => c.id);
+
+    // Each team must have unique members
+    expect(new Set(firstHalfIds).size).toBe(firstHalfIds.length);
+    expect(new Set(secondHalfIds).size).toBe(secondHalfIds.length);
+
+    // Zero overlap between first and second half
+    const overlap = firstHalfIds.filter((id) => secondHalfIds.includes(id));
+    expect(overlap).toHaveLength(0);
+  });
+
+  it('strictly ensures all drafted characters belong to the user owned roster', () => {
+    const limitedRoster = [
+      'Amber', 'Kaeya', 'Lisa', 'Barbara',
+      'Noelle', 'Xiangling', 'Collei', 'Lynette',
+    ];
+
+    const plan = solveAbyssDualTeams(limitedRoster);
+    const allDrafted = [
+      ...plan.firstHalfTeam.members,
+      ...plan.secondHalfTeam.members,
+    ];
+
+    allDrafted.forEach((char) => {
+      expect(limitedRoster).toContain(char.id);
+    });
+  });
+
+  it('does not produce false "Heavy Hydro reliance" warning on empty teams', () => {
+    const emptyTeam = {
+      id: 'empty',
+      name: 'Empty Team',
+      archetype: 'None',
+      members: [],
+      synergyScore: 0,
+      comfortScore: 0,
+      reasons: [],
+      rotation: '',
+      resonance: [],
+    };
+
+    const { coverage } = evaluateChamberMechanicCoverage(emptyTeam, emptyTeam);
+    const chamber1 = coverage.find((c) => c.chamber === 1)!;
+    expect(chamber1.firstHalfStatus).toMatch(/incomplete/i);
+    expect(chamber1.firstHalfStatus).not.toMatch(/heavy hydro reliance/i);
+    expect(chamber1.secondHalfStatus).toMatch(/incomplete/i);
+  });
+
+  it('computes elemental resonance for fallback teams', () => {
+    // Roster of Pyro resonance: Bennett + Xiangling
+    const smallRoster = ['Bennett', 'Xiangling', 'Amber', 'KaedeharaKazuha'];
+    const plan = solveAbyssDualTeams(smallRoster);
+    expect(plan.firstHalfTeam.resonance).toBeDefined();
+    expect(plan.firstHalfTeam.resonance.some((r) => r.includes('Fervent Flames'))).toBe(true);
+  });
 });

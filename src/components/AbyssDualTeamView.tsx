@@ -237,7 +237,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({ ownedIds }
             </div>
 
             {/* Stepped Rotation Accordion */}
-            {teamA.steppedRotation && (
+            {teamA.steppedRotation && teamA.steppedRotation.steps.length > 0 && (
               <div className="bg-[#0e1018] rounded-xl border border-[#1b2032] overflow-hidden">
                 <button
                   type="button"
@@ -368,7 +368,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({ ownedIds }
             </div>
 
             {/* Stepped Rotation Accordion */}
-            {teamB.steppedRotation && (
+            {teamB.steppedRotation && teamB.steppedRotation.steps.length > 0 && (
               <div className="bg-[#0e1018] rounded-xl border border-[#1b2032] overflow-hidden">
                 <button
                   type="button"
@@ -428,6 +428,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({ ownedIds }
         <CharacterDetailModal
           character={selectedCharacter}
           onClose={() => setSelectedCharacter(null)}
+          isOwned={ownedIds.includes(selectedCharacter.id)}
         />
       )}
     </div>

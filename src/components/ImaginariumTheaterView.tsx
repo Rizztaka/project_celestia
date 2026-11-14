@@ -179,8 +179,12 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
       return;
     }
 
-    setSchedule(res.acts);
+    const actsWithLock = res.acts.map((a) =>
+      a.actNumber === swapTarget.actNumber ? { ...a, isLocked: true } : a,
+    );
+    setSchedule(actsWithLock);
     setVigorState(res.vigorState);
+    setLockedActNumbers((prev) => new Set(prev).add(swapTarget.actNumber));
     setSwapTarget(null);
   };
 
@@ -188,8 +192,12 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
   const handleRemoveMember = (actNumber: number, charId: string) => {
     const res = removeTheaterActMember(schedule, actNumber, charId, vigorState);
     if (!res.error) {
-      setSchedule(res.acts);
+      const actsWithLock = res.acts.map((a) =>
+        a.actNumber === actNumber ? { ...a, isLocked: true } : a,
+      );
+      setSchedule(actsWithLock);
       setVigorState(res.vigorState);
+      setLockedActNumbers((prev) => new Set(prev).add(actNumber));
     }
   };
 
@@ -686,6 +694,13 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                   const vigor = vigorState[c.id] ?? 2;
                   return !isAlreadyInAct && vigor > 0;
                 })
+                .sort((a, b) => {
+                  const vigorA = vigorState[a.id] ?? 2;
+                  const vigorB = vigorState[b.id] ?? 2;
+                  if (vigorB !== vigorA) return vigorB - vigorA;
+                  if (b.rarity !== a.rarity) return b.rarity - a.rarity;
+                  return a.name.localeCompare(b.name);
+                })
                 .map((candidate) => {
                   const vigor = vigorState[candidate.id] ?? 2;
                   const color = ELEMENT_BADGES[candidate.element];
@@ -752,6 +767,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
         <CharacterDetailModal
           character={selectedCharacter}
           onClose={() => setSelectedCharacter(null)}
+          isOwned={ownedIds.includes(selectedCharacter.id)}
         />
       )}
     </div>

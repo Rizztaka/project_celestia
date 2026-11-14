@@ -72,11 +72,10 @@ export function calculateVigorState(
 
   for (const act of acts) {
     for (const member of act.team) {
-      if (vigor[member.id] !== undefined) {
-        vigor[member.id] = Math.max(0, vigor[member.id] - 1);
-      } else {
-        vigor[member.id] = 1;
+      if (vigor[member.id] === undefined) {
+        vigor[member.id] = 2;
       }
+      vigor[member.id] = Math.max(0, vigor[member.id] - 1);
     }
   }
 
@@ -190,7 +189,7 @@ export function autoDraftTheaterSchedule(
       if (act) {
         for (const id of lockedIds) {
           const char = charMap.get(id);
-          if (char && (vigor[id] ?? 0) > 0 && !act.team.some((m) => m.id === id)) {
+          if (char && act.team.length < 4 && (vigor[id] ?? 0) > 0 && !act.team.some((m) => m.id === id)) {
             act.team.push(char);
             vigor[id] = (vigor[id] ?? 0) - 1;
             act.isLocked = true;
@@ -241,17 +240,23 @@ export function autoDraftTheaterSchedule(
         const setJ = new Set(acts[j].team.map((m) => m.id));
         const isClone = acts[i].team.every((m) => setJ.has(m.id));
         if (isClone) {
-          const setI = new Set(acts[i].team.map((m) => m.id));
+          // If both acts are locked by the user, respect user locks and do not mutate
+          if (acts[i].isLocked && acts[j].isLocked) continue;
+
+          // Target the act that is not locked by the user
+          const targetAct = !acts[i].isLocked ? acts[i] : acts[j];
+          const targetSet = new Set(targetAct.team.map((m) => m.id));
+
           const replacement = candidates.find(
-            (c) => !setI.has(c.id) && (vigor[c.id] ?? 0) > 0,
+            (c) => !targetSet.has(c.id) && (vigor[c.id] ?? 0) > 0,
           );
           if (replacement) {
-            const replaceIdx = acts[i].team.findIndex(
+            const replaceIdx = targetAct.team.findIndex(
               (m) => !m.roles.includes('On-Field DPS'),
             );
             const targetIdx = replaceIdx !== -1 ? replaceIdx : 3;
-            const oldChar = acts[i].team[targetIdx];
-            acts[i].team[targetIdx] = replacement;
+            const oldChar = targetAct.team[targetIdx];
+            targetAct.team[targetIdx] = replacement;
             vigor[oldChar.id] = (vigor[oldChar.id] ?? 0) + 1;
             vigor[replacement.id] = (vigor[replacement.id] ?? 0) - 1;
           }
@@ -470,7 +475,7 @@ export function swapTheaterActMember(
     };
   }
 
-  const availableVigor = vigorState[newCharId] ?? 0;
+  const availableVigor = vigorState[newCharId] ?? 2;
   if (availableVigor <= 0) {
     return {
       acts: currentActs,
@@ -505,7 +510,7 @@ export function swapTheaterActMember(
 
     const updatedVigor = {
       ...vigorState,
-      [newCharId]: Math.max(0, (vigorState[newCharId] ?? 0) - 1),
+      [newCharId]: Math.max(0, (vigorState[newCharId] ?? 2) - 1),
     };
 
     return {
@@ -534,7 +539,7 @@ export function swapTheaterActMember(
   const updatedVigor = {
     ...vigorState,
     [oldCharId]: Math.min(2, (vigorState[oldCharId] ?? 0) + 1),
-    [newCharId]: Math.max(0, (vigorState[newCharId] ?? 0) - 1),
+    [newCharId]: Math.max(0, (vigorState[newCharId] ?? 2) - 1),
   };
 
   return {

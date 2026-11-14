@@ -1,5 +1,6 @@
 import fs from 'fs';
 import genshindb from 'genshin-db';
+import { KQM_BUILDS } from './data/kqm-builds.mjs';
 
 // Complete role sets for all characters
 const SUSTAINS = new Set([
@@ -33,8 +34,9 @@ function formatSpecializedStat(text, val) {
   return `+${(val * 100).toFixed(1)}%`;
 }
 
-// Curated builds for major meta & popular characters
+// Curated builds for all characters aligned with KeqingMains (KQM) standards
 const CURATED_BUILDS = {
+  ...KQM_BUILDS,
   Furina: {
     weapons: [
       { name: 'Splendor of Tranquil Waters', rarity: 5, reason: 'Signature: Massive HP% and Elemental Skill DMG bonus scaling with team HP fluctuations' },

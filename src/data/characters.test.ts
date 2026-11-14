@@ -153,4 +153,32 @@ describe('Rich Character Database Verification', () => {
     expect(furina?.tags).toContain('Fanfare');
     expect(furina?.build?.artifacts.some((a) => a.name.includes('Golden Troupe'))).toBe(true);
   });
+
+  it('verifies KQM authoritative builds for key elemental carries and staples', () => {
+    // Xiangling
+    const xiangling = CHARACTERS.find((c) => c.id === 'Xiangling');
+    expect(xiangling?.build?.weapons.some((w) => w.name === 'The Catch')).toBe(true);
+    expect(xiangling?.build?.artifacts.some((a) => a.name === 'Emblem of Severed Fate')).toBe(true);
+    expect(xiangling?.build?.subStats?.some((s) => s.includes('Energy Recharge'))).toBe(true);
+
+    // Xingqiu
+    const xingqiu = CHARACTERS.find((c) => c.id === 'Xingqiu');
+    expect(xingqiu?.build?.weapons.some((w) => w.name === 'Sacrificial Sword')).toBe(true);
+    expect(xingqiu?.build?.artifacts.some((a) => a.name === 'Emblem of Severed Fate')).toBe(true);
+
+    // Alhaitham
+    const alhaitham = CHARACTERS.find((c) => c.id === 'Alhaitham');
+    expect(alhaitham?.build?.weapons.some((w) => w.name === 'Light of Foliar Incision')).toBe(true);
+    expect(alhaitham?.build?.artifacts.some((a) => a.name === 'Gilded Dreams')).toBe(true);
+
+    // Kamisato Ayaka
+    const ayaka = CHARACTERS.find((c) => c.id === 'KamisatoAyaka');
+    expect(ayaka?.build?.weapons.some((w) => w.name === 'Mistsplitter Reforged')).toBe(true);
+    expect(ayaka?.build?.artifacts.some((a) => a.name === 'Blizzard Strayer')).toBe(true);
+
+    // Navia
+    const navia = CHARACTERS.find((c) => c.id === 'Navia');
+    expect(navia?.build?.weapons.some((w) => w.name === 'Verdict')).toBe(true);
+    expect(navia?.build?.artifacts.some((a) => a.name.includes('Nighttime Whispers'))).toBe(true);
+  });
 });

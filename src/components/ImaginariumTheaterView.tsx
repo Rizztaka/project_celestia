@@ -5,6 +5,7 @@ import type {
   TheaterDifficulty,
   TheaterActPlan,
   TheaterSeasonConfig,
+  OwnedCharacterProfile,
 } from '../types/genshin';
 import {
   THEATER_SEASONS,
@@ -36,6 +37,7 @@ import {
 
 interface ImaginariumTheaterViewProps {
   ownedIds: string[];
+  profiles?: Record<string, OwnedCharacterProfile>;
 }
 
 const ALL_ELEMENTS: Element[] = [
@@ -60,6 +62,7 @@ const ELEMENT_BADGES: Record<Element, { bg: string; text: string; border: string
 
 export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
   ownedIds,
+  profiles,
 }) => {
   const [selectedSeasonId, setSelectedSeasonId] = useState<string>(THEATER_SEASONS[0].id);
   const [customElements, setCustomElements] = useState<Element[]>(['Pyro', 'Hydro', 'Anemo']);
@@ -107,6 +110,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
       difficulty,
       activeSeason,
       Object.keys(userLocks).length > 0 ? userLocks : undefined,
+      profiles,
     );
 
     const actsWithLocks = res.acts.map((a) => ({
@@ -774,6 +778,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
           character={selectedCharacter}
           onClose={() => setSelectedCharacter(null)}
           isOwned={ownedIds.includes(selectedCharacter.id)}
+          profile={profiles ? profiles[selectedCharacter.id] : undefined}
         />
       )}
     </div>

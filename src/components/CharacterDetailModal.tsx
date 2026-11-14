@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import type { Character, Element } from '../types/genshin';
+import type { Character, Element, OwnedCharacterProfile } from '../types/genshin';
 import {
   X,
   Swords,
@@ -21,6 +21,8 @@ interface CharacterDetailModalProps {
   onClose: () => void;
   isOwned?: boolean;
   onToggleOwned?: (id: string) => void;
+  profile?: OwnedCharacterProfile;
+  onUpdateProfile?: (profile: OwnedCharacterProfile) => void;
 }
 
 const ELEMENT_THEMES: Record<
@@ -89,6 +91,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   onClose,
   isOwned,
   onToggleOwned,
+  profile,
+  onUpdateProfile,
 }) => {
   const [activeTab, setActiveTab] = useState<'build' | 'talents' | 'constellations'>('build');
   const [showAlternateRotation, setShowAlternateRotation] = useState<boolean>(false);
@@ -193,6 +197,46 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   </span>
                 ))}
               </div>
+
+              {/* Interactive Constellation Selector when owned */}
+              {isOwned && onUpdateProfile && (
+                <div className="pt-2 flex flex-wrap items-center gap-2">
+                  <span className="text-[11px] font-semibold text-zinc-400">Constellation:</span>
+                  <div className="flex items-center gap-1 bg-[#10121d] p-0.5 rounded-lg border border-[#24293f]">
+                    {[0, 1, 2, 3, 4, 5, 6].map((lvl) => (
+                      <button
+                        key={lvl}
+                        onClick={() =>
+                          onUpdateProfile({
+                            id: character.id,
+                            level: profile?.level ?? 90,
+                            constellation: lvl,
+                            weapon: profile?.weapon,
+                            talents: profile?.talents,
+                          })
+                        }
+                        className={`w-6 h-6 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
+                          (profile?.constellation ?? 0) === lvl
+                            ? 'bg-[#d4af37] text-black font-extrabold shadow-sm'
+                            : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
+                        }`}
+                      >
+                        C{lvl}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Equipped Weapon Preview */}
+              {profile?.weapon && (
+                <div className="pt-1 flex items-center gap-2 text-xs text-zinc-300">
+                  <Swords className="w-3.5 h-3.5 text-[#d4af37]" />
+                  <span>
+                    Equipped: <strong className="text-zinc-100">{profile.weapon.name}</strong> (Lv. {profile.weapon.level}, R{profile.weapon.refinement})
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Owned status button if handler provided */}
@@ -565,43 +609,67 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           {/* TAB 3: CONSTELLATIONS */}
           {activeTab === 'constellations' && (
             <div className="space-y-3">
-              {character.constellations?.map((c) => (
-                <div
-                  key={c.level}
-                  className="bg-[#131622] border border-[#23273a] p-4 rounded-xl space-y-2 hover:border-[#d4af37]/40 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    {c.icon ? (
-                      <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#2d344d] p-1 shrink-0 flex items-center justify-center">
-                        <img
-                          src={c.icon}
-                          alt={c.name}
-                          className="w-full h-full object-contain"
-                          onError={(e) => {
-                            const parent = (e.target as HTMLElement).parentElement;
-                            if (parent) parent.style.display = 'none';
-                          }}
-                        />
+              {character.constellations?.map((c) => {
+                const isUnlocked = isOwned && (profile?.constellation ?? 0) >= c.level;
+                return (
+                  <div
+                    key={c.level}
+                    className={`border p-4 rounded-xl space-y-2 transition-colors ${
+                      isUnlocked
+                        ? 'bg-[#151928] border-[#d4af37]/60 shadow-sm shadow-[#d4af37]/5'
+                        : 'bg-[#131622] border-[#23273a] opacity-80'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        {c.icon ? (
+                          <div
+                            className={`w-10 h-10 rounded-xl bg-black/60 border p-1 shrink-0 flex items-center justify-center ${
+                              isUnlocked ? 'border-[#d4af37]/50' : 'border-[#2d344d]'
+                            }`}
+                          >
+                            <img
+                              src={c.icon}
+                              alt={c.name}
+                              className="w-full h-full object-contain"
+                              onError={(e) => {
+                                const parent = (e.target as HTMLElement).parentElement;
+                                if (parent) parent.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#2d344d] p-1 shrink-0 flex items-center justify-center text-[#d4af37]">
+                            <Sparkles className="w-5 h-5" />
+                          </div>
+                        )}
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`text-xs font-extrabold px-2 py-0.5 rounded border ${
+                                isUnlocked
+                                  ? 'bg-[#d4af37] text-black border-[#d4af37]'
+                                  : 'bg-[#d4af37]/15 text-[#d4af37] border-[#d4af37]/40'
+                              }`}
+                            >
+                              C{c.level}
+                            </span>
+                            <span className="text-sm font-bold text-zinc-100">{c.name}</span>
+                          </div>
+                        </div>
                       </div>
-                    ) : (
-                      <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#2d344d] p-1 shrink-0 flex items-center justify-center text-[#d4af37]">
-                        <Sparkles className="w-5 h-5" />
-                      </div>
-                    )}
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-extrabold px-2 py-0.5 rounded bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/40">
-                          C{c.level}
+                      {isUnlocked && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-500/40">
+                          ACTIVE
                         </span>
-                        <span className="text-sm font-bold text-zinc-100">{c.name}</span>
-                      </div>
+                      )}
                     </div>
+                    <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-line pl-0.5 break-words">
+                      {c.description}
+                    </p>
                   </div>
-                  <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-line pl-0.5 break-words">
-                    {c.description}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

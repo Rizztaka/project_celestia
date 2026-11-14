@@ -121,11 +121,64 @@ export interface Character {
   rotationProfile?: CharacterRotationProfile;
 }
 
+export interface EquippedWeapon {
+  name: string;
+  key: string;
+  level: number;
+  refinement: number;
+  rarity?: number;
+  ascension?: number;
+}
+
+export interface OwnedCharacterProfile {
+  id: string;
+  level: number;
+  constellation: number;
+  ascension?: number;
+  talents?: {
+    auto: number;
+    skill: number;
+    burst: number;
+  };
+  weapon?: EquippedWeapon;
+}
+
+export interface GOODCharacter {
+  key: string;
+  level: number;
+  constellation: number;
+  ascension?: number;
+  talent?: {
+    auto?: number;
+    skill?: number;
+    burst?: number;
+  };
+}
+
+export interface GOODWeapon {
+  key: string;
+  level: number;
+  ascension?: number;
+  refinement?: number;
+  location?: string;
+  lock?: boolean;
+}
+
+export interface GOODData {
+  format: 'GOOD' | string;
+  version: number;
+  source: string;
+  characters?: GOODCharacter[];
+  weapons?: GOODWeapon[];
+  artifacts?: any[];
+}
+
 export interface OwnedCharacter {
   id: string;
   level: number;
   constellation: number;
   talents?: { normal: number; skill: number; burst: number };
+  weapon?: EquippedWeapon;
 }
 
 export interface TeamRecommendation {

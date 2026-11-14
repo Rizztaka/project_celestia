@@ -1,0 +1,234 @@
+import { describe, it, expect } from 'vitest';
+import {
+  parseGOODJSON,
+  mapGOODToCelestiaProfiles,
+  mergeRosterProfiles,
+  exportToGOODJSON,
+  formatWeaponKeyToName,
+} from './good-parser';
+import type { GOODData, OwnedCharacterProfile } from '../types/genshin';
+
+describe('GOOD Parser Service', () => {
+  const sampleGOODJson = JSON.stringify({
+    format: 'GOOD',
+    version: 2,
+    source: 'GenshinOptimizer',
+    characters: [
+      {
+        key: 'HuTao',
+        level: 90,
+        constellation: 1,
+        ascension: 6,
+        talent: { auto: 10, skill: 10, burst: 9 },
+      },
+      {
+        key: 'Furina',
+        level: 90,
+        constellation: 2,
+        ascension: 6,
+        talent: { auto: 6, skill: 10, burst: 10 },
+      },
+      {
+        key: 'Bennett',
+        level: 80,
+        constellation: 5,
+        ascension: 5,
+        talent: { auto: 1, skill: 6, burst: 9 },
+      },
+    ],
+    weapons: [
+      {
+        key: 'StaffOfHoma',
+        level: 90,
+        refinement: 1,
+        ascension: 6,
+        location: 'HuTao',
+        lock: true,
+      },
+      {
+        key: 'SplendorOfTranquilWaters',
+        level: 90,
+        refinement: 1,
+        ascension: 6,
+        location: 'Furina',
+        lock: true,
+      },
+      {
+        key: 'SapwoodBlade',
+        level: 90,
+        refinement: 5,
+        ascension: 6,
+        location: 'Bennett',
+        lock: true,
+      },
+      {
+        key: 'FavoniusSword',
+        level: 80,
+        refinement: 3,
+        location: '',
+        lock: false,
+      },
+    ],
+    artifacts: [
+      {
+        setKey: 'CrimsonWitchOfFlames',
+        slotKey: 'flower',
+        rarity: 5,
+        mainStatKey: 'hp',
+        level: 20,
+        location: 'HuTao',
+      },
+      {
+        setKey: 'GoldenTroupe',
+        slotKey: 'flower',
+        rarity: 5,
+        mainStatKey: 'hp',
+        level: 20,
+        location: 'Furina',
+      },
+    ],
+  });
+
+  describe('parseGOODJSON', () => {
+    it('successfully parses valid GOOD JSON', () => {
+      const result = parseGOODJSON(sampleGOODJson);
+      expect(result.success).toBe(true);
+      expect(result.data).toBeDefined();
+      expect(result.data?.format).toBe('GOOD');
+      expect(result.data?.characters?.length).toBe(3);
+      expect(result.data?.weapons?.length).toBe(4);
+      expect(result.data?.artifacts?.length).toBe(2);
+    });
+
+    it('rejects malformed JSON', () => {
+      const result = parseGOODJSON('{ not valid json');
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Invalid JSON');
+    });
+
+    it('rejects JSON without format: GOOD', () => {
+      const result = parseGOODJSON(JSON.stringify({ someKey: 'value' }));
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Not a recognized GOOD format');
+    });
+
+    it('rejects JSON without a characters array', () => {
+      const result = parseGOODJSON(JSON.stringify({ format: 'GOOD', version: 1 }));
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Missing characters array');
+    });
+  });
+
+  describe('mapGOODToCelestiaProfiles', () => {
+    it('maps characters, clamps stats, and attaches equipped weapons', () => {
+      const parsed = parseGOODJSON(sampleGOODJson);
+      expect(parsed.data).toBeDefined();
+      const mapped = mapGOODToCelestiaProfiles(parsed.data!);
+
+      expect(mapped.summary.importedCharacters).toBe(3);
+      expect(mapped.summary.importedWeapons).toBe(3); // 3 equipped to characters
+      expect(mapped.rawArtifacts.length).toBe(2);
+
+      // Verify Hu Tao profile
+      const huTao = mapped.profiles['HuTao'];
+      expect(huTao).toBeDefined();
+      expect(huTao.id).toBe('HuTao');
+      expect(huTao.level).toBe(90);
+      expect(huTao.constellation).toBe(1);
+      expect(huTao.talents?.auto).toBe(10);
+      expect(huTao.weapon).toBeDefined();
+      expect(huTao.weapon?.key).toBe('StaffOfHoma');
+      expect(huTao.weapon?.name).toBe('Staff of Homa');
+      expect(huTao.weapon?.level).toBe(90);
+      expect(huTao.weapon?.refinement).toBe(1);
+
+      // Verify Furina profile
+      const furina = mapped.profiles['Furina'];
+      expect(furina.constellation).toBe(2);
+      expect(furina.weapon?.key).toBe('SplendorOfTranquilWaters');
+    });
+
+    it('clamps constellations between 0 and 6 and levels between 1 and 90', () => {
+      const customData: GOODData = {
+        format: 'GOOD',
+        version: 1,
+        source: 'CustomTest',
+        characters: [
+          { key: 'Nefer', level: 120, constellation: 10 },
+          { key: 'Mavuika', level: 0, constellation: -2 },
+        ],
+      };
+      const mapped = mapGOODToCelestiaProfiles(customData);
+      expect(mapped.profiles['Nefer'].level).toBe(90);
+      expect(mapped.profiles['Nefer'].constellation).toBe(6);
+      expect(mapped.profiles['Mavuika'].level).toBe(1);
+      expect(mapped.profiles['Mavuika'].constellation).toBe(0);
+    });
+  });
+
+  describe('mergeRosterProfiles', () => {
+    const existing: Record<string, OwnedCharacterProfile> = {
+      Xiangling: { id: 'Xiangling', level: 80, constellation: 4 },
+      Bennett: { id: 'Bennett', level: 70, constellation: 1 },
+    };
+
+    const incoming: Record<string, OwnedCharacterProfile> = {
+      Bennett: { id: 'Bennett', level: 90, constellation: 5 },
+      Furina: { id: 'Furina', level: 90, constellation: 2 },
+    };
+
+    it('preserves existing non-conflicting characters when overwriteAll is false', () => {
+      const merged = mergeRosterProfiles(existing, incoming, false);
+      expect(Object.keys(merged)).toHaveLength(3);
+      expect(merged['Xiangling'].level).toBe(80); // Preserved
+      expect(merged['Bennett'].level).toBe(90); // Updated
+      expect(merged['Bennett'].constellation).toBe(5); // Updated
+      expect(merged['Furina']).toBeDefined(); // Added
+    });
+
+    it('wipes non-imported characters when overwriteAll is true', () => {
+      const merged = mergeRosterProfiles(existing, incoming, true);
+      expect(Object.keys(merged)).toHaveLength(2);
+      expect(merged['Xiangling']).toBeUndefined(); // Wiped
+      expect(merged['Bennett'].level).toBe(90);
+      expect(merged['Furina'].level).toBe(90);
+    });
+  });
+
+  describe('exportToGOODJSON', () => {
+    it('produces round-trip valid GOOD JSON', () => {
+      const profiles: Record<string, OwnedCharacterProfile> = {
+        HuTao: {
+          id: 'HuTao',
+          level: 90,
+          constellation: 1,
+          talents: { auto: 10, skill: 10, burst: 9 },
+          weapon: {
+            name: 'Staff of Homa',
+            key: 'StaffOfHoma',
+            level: 90,
+            refinement: 1,
+          },
+        },
+      };
+
+      const exportedStr = exportToGOODJSON(profiles, [{ dummy: 'artifact' }]);
+      const reparsed = parseGOODJSON(exportedStr);
+      expect(reparsed.success).toBe(true);
+      expect(reparsed.data?.format).toBe('GOOD');
+      expect(reparsed.data?.characters?.[0].key).toBe('HuTao');
+      expect(reparsed.data?.characters?.[0].constellation).toBe(1);
+      expect(reparsed.data?.weapons?.[0].key).toBe('StaffOfHoma');
+      expect(reparsed.data?.weapons?.[0].location).toBe('HuTao');
+      expect(reparsed.data?.artifacts?.length).toBe(1);
+    });
+  });
+
+  describe('formatWeaponKeyToName', () => {
+    it('turns PascalCase weapon keys into spaced names', () => {
+      expect(formatWeaponKeyToName('StaffOfHoma')).toBe('Staff of Homa');
+      expect(formatWeaponKeyToName('SplendorOfTranquilWaters')).toBe('Splendor of Tranquil Waters');
+      expect(formatWeaponKeyToName('FavoniusSword')).toBe('Favonius Sword');
+    });
+  });
+});

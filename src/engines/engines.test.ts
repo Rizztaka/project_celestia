@@ -26,6 +26,23 @@ describe('Celestia v2 Core Engines', () => {
       expect(vapeTeam).toBeDefined();
       expect(vapeTeam?.resonance.some((r) => r.includes('Fervent Flames') || r.includes('Soothing Water'))).toBe(true);
     });
+
+    it('boosts synergy score and appends reasons when constellation milestones are met', () => {
+      const owned = ['Xiangling', 'Bennett', 'Xingqiu', 'RaidenShogun'];
+      const baseTeams = generateBestTeams(owned);
+      const baseVape = baseTeams.find((t) => t.archetype === 'Vaporize') || baseTeams[0];
+
+      const boostedProfiles = {
+        Xiangling: { id: 'Xiangling', level: 90, constellation: 4 },
+        Bennett: { id: 'Bennett', level: 90, constellation: 1 },
+      };
+      const boostedTeams = generateBestTeams(owned, undefined, boostedProfiles);
+      const boostedVape = boostedTeams.find((t) => t.archetype === 'Vaporize') || boostedTeams[0];
+
+      expect(boostedVape.synergyScore).toBeGreaterThanOrEqual(baseVape.synergyScore);
+      expect(boostedVape.reasons.some((r) => r.includes('Xiangling C4'))).toBe(true);
+      expect(boostedVape.reasons.some((r) => r.includes('Bennett C1'))).toBe(true);
+    });
   });
 
   describe('Pull Advisor', () => {

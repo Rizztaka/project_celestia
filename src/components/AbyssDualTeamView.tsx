@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import type { Character, AbyssDualTeamPlan } from '../types/genshin';
+import type { Character, AbyssDualTeamPlan, OwnedCharacterProfile } from '../types/genshin';
 import { solveAbyssDualTeams } from '../engines/abyss-solver';
 import { CharacterPortrait } from './CharacterPortrait';
 import { CharacterDetailModal } from './CharacterDetailModal';
@@ -18,6 +18,7 @@ import {
 
 interface AbyssDualTeamViewProps {
   ownedIds: string[];
+  profiles?: Record<string, OwnedCharacterProfile>;
 }
 
 const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -30,15 +31,18 @@ const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string 
   Geo: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/30' },
 };
 
-export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({ ownedIds }) => {
+export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
+  ownedIds,
+  profiles,
+}) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [expandedRotationA, setExpandedRotationA] = useState<boolean>(true);
   const [expandedRotationB, setExpandedRotationB] = useState<boolean>(true);
 
   // Compute dual team plan
   const plan: AbyssDualTeamPlan = useMemo(() => {
-    return solveAbyssDualTeams(ownedIds);
-  }, [ownedIds]);
+    return solveAbyssDualTeams(ownedIds, profiles);
+  }, [ownedIds, profiles]);
 
   const teamA = plan.firstHalfTeam;
   const teamB = plan.secondHalfTeam;
@@ -429,6 +433,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({ ownedIds }
           character={selectedCharacter}
           onClose={() => setSelectedCharacter(null)}
           isOwned={ownedIds.includes(selectedCharacter.id)}
+          profile={profiles ? profiles[selectedCharacter.id] : undefined}
         />
       )}
     </div>

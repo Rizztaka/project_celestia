@@ -1,4 +1,4 @@
-import type { Character, TeamRecommendation } from '../types/genshin';
+import type { Character, TeamRecommendation, OwnedCharacterProfile } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import { synthesizeTeamRotation } from './rotation-synthesizer';
 
@@ -103,21 +103,97 @@ function calculateResonance(members: Character[]): string[] {
   return resonances;
 }
 
+export function applyConstellationModifiers(
+  team: Character[],
+  baseSynergy: number,
+  profiles?: Record<string, OwnedCharacterProfile>,
+): { synergyScore: number; extraReasons: string[] } {
+  if (!profiles) return { synergyScore: baseSynergy, extraReasons: [] };
+
+  let synergyScore = baseSynergy;
+  const extraReasons: string[] = [];
+
+  for (const member of team) {
+    const prof = profiles[member.id];
+    if (!prof) continue;
+
+    const c = prof.constellation;
+    if (member.id === 'Xiangling' && c >= 4) {
+      synergyScore += 4;
+      extraReasons.push('Xiangling C4: Pyronado duration increased by +40% (+4s uptime).');
+    }
+    if (member.id === 'Bennett' && c >= 1) {
+      synergyScore += 3;
+      extraReasons.push('Bennett C1: Fantastic Voyage ATK buff has no HP restriction.');
+    }
+    if (member.id === 'Bennett' && c >= 6) {
+      const hasPhysicalOrConflict = team.some((m) =>
+        ['Eula', 'Razor', 'Keqing', 'Ayaka'].includes(m.id),
+      );
+      if (hasPhysicalOrConflict) {
+        extraReasons.push(
+          'Caution: Bennett C6 Pyro Infusion overrides Physical/Normal attack damage.',
+        );
+      } else {
+        synergyScore += 3;
+        extraReasons.push(
+          'Bennett C6: +15% Pyro DMG Bonus for Sword, Claymore, and Polearm carries.',
+        );
+      }
+    }
+    if (member.id === 'Faruzan' && c >= 6) {
+      synergyScore += 7;
+      extraReasons.push(
+        'Faruzan C6: Pressurized Collapse pressurized vortexes provide massive Anemo CRIT DMG & energy particles.',
+      );
+    }
+    if (member.id === 'Furina' && c >= 2) {
+      synergyScore += 6;
+      extraReasons.push(
+        'Furina C2: Hyper-accelerated Fanfare ramping and massive HP overflow.',
+      );
+    } else if (member.id === 'Furina' && c >= 1) {
+      synergyScore += 3;
+      extraReasons.push('Furina C1: Grants 150 immediate Fanfare stacks on Burst cast.');
+    }
+    if (member.id === 'Nahida' && c >= 2) {
+      synergyScore += 6;
+      extraReasons.push('Nahida C2: Critical Bloom/Hyperbloom & Quicken DEF shred.');
+    }
+    if (member.id === 'RaidenShogun' && c >= 2) {
+      synergyScore += 6;
+      extraReasons.push(
+        'Raiden Shogun C2: Secret Art: Musou Shinsetsu ignores 60% of opponent DEF.',
+      );
+    }
+    if (member.id === 'Xilonen' && c >= 2) {
+      synergyScore += 5;
+      extraReasons.push(
+        'Xilonen C2: Universal party buffs based on element types without triggering Sampler state.',
+      );
+    }
+  }
+
+  return { synergyScore: Math.min(100, synergyScore), extraReasons };
+}
+
 export function generateBestTeams(
   availableIds: string[],
   focusCharacterId?: string,
+  rosterProfiles?: Record<string, OwnedCharacterProfile>,
 ): TeamRecommendation[] {
   const pool = CHARACTERS.filter((c) => availableIds.includes(c.id));
   if (pool.length < 4) {
     // If fewer than 4 owned, fallback to using all characters for guidance
-    return generateTeamsFromPool(CHARACTERS, focusCharacterId);
+    return generateTeamsFromPool(CHARACTERS, focusCharacterId, rosterProfiles);
   }
-  return generateTeamsFromPool(pool, focusCharacterId);
+  return generateTeamsFromPool(pool, focusCharacterId, rosterProfiles);
 }
 
 function generateTeamsFromPool(
   pool: Character[],
   focusId?: string,
+  rosterProfiles?: Record<string, OwnedCharacterProfile>,
 ): TeamRecommendation[] {
   const results: TeamRecommendation[] = [];
   const focus = focusId ? pool.find((c) => c.id === focusId) : undefined;
@@ -157,18 +233,20 @@ function generateTeamsFromPool(
       if (thirdSlot) {
         const members = [nefer, bestHydro, secondSlot, thirdSlot];
         const stepped = synthesizeTeamRotation(members);
+        const neferMods = applyConstellationModifiers(members, 98, rosterProfiles);
         results.push({
           id: 'team-nefer-lunar',
           name: 'Nefer · Lunar-Bloom Symphony',
           archetype: 'Lunar-Bloom',
           members,
-          synergyScore: 98,
+          synergyScore: neferMods.synergyScore,
           comfortScore: members.some((m) => m.roles.includes('Sustain')) ? 95 : 75,
           reasons: [
             'Nefer converts all blooms into high-velocity Seeds of Deceit.',
             `${bestHydro.name} provides sustained off-field Hydro application to trigger Lunar-Bloom.`,
             `${secondSlot.name} supplies EM boosting or Dendro resonance.`,
             'Special Charged Attacks deal massive non-split Dendro reaction damage.',
+            ...neferMods.extraReasons,
           ],
           rotation:
             stepped.summaryString ||
@@ -236,12 +314,13 @@ function generateTeamsFromPool(
       if (chosen.length === 4) {
         const hasSustain = chosen.some((m) => m.roles.includes('Sustain'));
         const stepped = synthesizeTeamRotation(chosen);
+        const constMods = applyConstellationModifiers(chosen, template.baseSynergy, rosterProfiles);
         results.push({
           id: `team-${template.archetype}-${lead.id}`.toLowerCase(),
           name: `${lead.name} · ${template.name}`,
           archetype: template.archetype,
           members: chosen,
-          synergyScore: template.baseSynergy,
+          synergyScore: constMods.synergyScore,
           comfortScore: hasSustain ? 92 : 72,
           reasons: [
             `${lead.name} acts as the core ${lead.roles[0]} driving ${template.archetype}.`,
@@ -250,6 +329,7 @@ function generateTeamsFromPool(
             hasSustain
               ? `${chosen[3].name} guarantees safe clear windows with survivability.`
               : 'High aggressive offensive output with minimal downtime.',
+            ...constMods.extraReasons,
           ],
           rotation: stepped.summaryString || template.rotation,
           steppedRotation: stepped,

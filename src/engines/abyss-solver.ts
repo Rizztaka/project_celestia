@@ -3,6 +3,7 @@ import type {
   TeamRecommendation,
   AbyssDualTeamPlan,
   AbyssChamberCoverage,
+  OwnedCharacterProfile,
 } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import { generateBestTeams } from './team-generator';
@@ -195,7 +196,10 @@ function buildFallbackTeam(pool: Character[], teamId: string, teamName: string):
  * Solves the unified Spiral Abyss Floor 12 pairing:
  * Finds two completely disjoint teams (TeamA ∩ TeamB = ∅) maximizing chamber shield & mechanic clearance.
  */
-export function solveAbyssDualTeams(ownedIds: string[]): AbyssDualTeamPlan {
+export function solveAbyssDualTeams(
+  ownedIds: string[],
+  rosterProfiles?: Record<string, OwnedCharacterProfile>,
+): AbyssDualTeamPlan {
   const ownedSet = new Set(ownedIds);
   const ownedChars = CHARACTERS.filter((c) => ownedSet.has(c.id));
   const uniqueOwnedIds = Array.from(ownedSet);
@@ -220,7 +224,7 @@ export function solveAbyssDualTeams(ownedIds: string[]): AbyssDualTeamPlan {
   }
 
   // 1. Generate candidate primary teams from full owned roster
-  const candidateTeams = generateBestTeams(uniqueOwnedIds);
+  const candidateTeams = generateBestTeams(uniqueOwnedIds, undefined, rosterProfiles);
 
   interface ScoredPair {
     firstHalfTeam: TeamRecommendation;

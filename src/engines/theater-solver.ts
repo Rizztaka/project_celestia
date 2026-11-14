@@ -3,6 +3,7 @@ import type {
   TheaterActPlan,
   TheaterDifficulty,
   TheaterSeasonConfig,
+  OwnedCharacterProfile,
 } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import { THEATER_DIFFICULTIES, THEATER_BOSS_INFO } from '../data/theater-seasons';
@@ -101,6 +102,7 @@ export function autoDraftTheaterSchedule(
   difficulty: TheaterDifficulty,
   season: TheaterSeasonConfig,
   userLocks?: Record<number, string[]>,
+  rosterProfiles?: Record<string, OwnedCharacterProfile>,
 ): TheaterScheduleResult {
   const diffConfig = THEATER_DIFFICULTIES[difficulty];
   const totalActs = diffConfig.acts;
@@ -222,13 +224,13 @@ export function autoDraftTheaterSchedule(
     .sort((a, b) => b.actNumber - a.actNumber);
 
   for (const act of bossActsToSchedule) {
-    fillActTeam(act, candidates, vigor, true, usedPairCounts, bossCarriesAssigned);
+    fillActTeam(act, candidates, vigor, true, usedPairCounts, bossCarriesAssigned, rosterProfiles);
   }
 
   // 3. Draft Regular Acts (Acts 1, 2, 4, 5, 7, 9) spreading vigor cleanly
   const regularActsToSchedule = acts.filter((a) => a.type !== 'Boss');
   for (const act of regularActsToSchedule) {
-    fillActTeam(act, candidates, vigor, false, usedPairCounts, bossCarriesAssigned);
+    fillActTeam(act, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
   }
 
   // 4. Anti-cloning safeguard:
@@ -286,8 +288,26 @@ function scoreCandidateForAct(
   usedPairCounts: Map<string, number>,
   bossCarriesAssigned: Set<string>,
   currentVigor: number,
+  rosterProfiles?: Record<string, OwnedCharacterProfile>,
 ): number {
   let score = c.rarity === 5 ? 80 : 40;
+
+  // Investment bonuses from roster profiles
+  if (rosterProfiles && rosterProfiles[c.id]) {
+    const prof = rosterProfiles[c.id];
+    score += Math.round((prof.level / 90) * 15);
+    score += prof.constellation * (c.rarity === 4 ? 4 : 5);
+    if (prof.weapon) {
+      score += Math.round((prof.weapon.level / 90) * 10);
+      score += prof.weapon.refinement * 2;
+    }
+    // High-investment characters are prioritized for Climax Acts (7+) and Boss acts
+    if (isBoss || act.actNumber >= 7) {
+      if (prof.constellation >= 2 || prof.level >= 85) {
+        score += 25;
+      }
+    }
+  }
 
   // Role fit
   if (roleSlot === 'Carry') {
@@ -362,6 +382,7 @@ function fillActTeam(
   isBoss: boolean,
   usedPairCounts: Map<string, number>,
   bossCarriesAssigned: Set<string>,
+  rosterProfiles?: Record<string, OwnedCharacterProfile>,
 ) {
   if (act.team.length >= 4) return;
 
@@ -389,6 +410,7 @@ function fillActTeam(
         usedPairCounts,
         bossCarriesAssigned,
         remVigor,
+        rosterProfiles,
       );
 
       if (score > bestScore) {

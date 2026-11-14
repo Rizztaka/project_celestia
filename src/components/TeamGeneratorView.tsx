@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { CHARACTERS } from '../data/characters';
 import { generateBestTeams } from '../engines/team-generator';
-import type { Character } from '../types/genshin';
+import type { Character, OwnedCharacterProfile } from '../types/genshin';
 import { Sparkles, Shield, Zap, Info, Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
@@ -9,6 +9,7 @@ import { RotationBadgeList } from './RotationBadgeList';
 
 interface TeamGeneratorViewProps {
   ownedIds: string[];
+  profiles?: Record<string, OwnedCharacterProfile>;
 }
 
 const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -21,14 +22,17 @@ const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string 
   Geo: { bg: 'bg-amber-950/40', text: 'text-amber-400', border: 'border-amber-500/30' },
 };
 
-export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({ ownedIds }) => {
+export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
+  ownedIds,
+  profiles,
+}) => {
   const [focusId, setFocusId] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
 
   const teams = useMemo(
-    () => generateBestTeams(ownedIds, focusId || undefined),
-    [ownedIds, focusId],
+    () => generateBestTeams(ownedIds, focusId || undefined, profiles),
+    [ownedIds, focusId, profiles],
   );
   const featuredCarries = ['Nefer', 'Mavuika', 'HuTao', 'Alhaitham', 'Clorinde', 'Neuvillette', 'Navia'];
 
@@ -309,6 +313,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({ ownedIds }
         character={selectedCharacter}
         onClose={() => setSelectedCharacter(null)}
         isOwned={selectedCharacter ? ownedIds.includes(selectedCharacter.id) : false}
+        profile={selectedCharacter && profiles ? profiles[selectedCharacter.id] : undefined}
       />
     </div>
   );

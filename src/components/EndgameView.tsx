@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { analyzeEndgameReadiness } from '../engines/endgame-helper';
-import type { Character } from '../types/genshin';
+import type { Character, OwnedCharacterProfile } from '../types/genshin';
 import {
   ShieldAlert,
   ShieldCheck,
@@ -18,9 +18,13 @@ import { AbyssDualTeamView } from './AbyssDualTeamView';
 
 interface EndgameViewProps {
   ownedIds: string[];
+  profiles?: Record<string, OwnedCharacterProfile>;
 }
 
-export const EndgameView: React.FC<EndgameViewProps> = ({ ownedIds }) => {
+export const EndgameView: React.FC<EndgameViewProps> = ({
+  ownedIds,
+  profiles,
+}) => {
   const [activeSubTab, setActiveSubTab] = useState<'theater' | 'abyss'>('theater');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [showDetailedChamberGuide, setShowDetailedChamberGuide] = useState<boolean>(false);
@@ -60,13 +64,13 @@ export const EndgameView: React.FC<EndgameViewProps> = ({ ownedIds }) => {
 
       {/* Sub-tab 1: Imaginarium Theater */}
       {activeSubTab === 'theater' && (
-        <ImaginariumTheaterView ownedIds={ownedIds} />
+        <ImaginariumTheaterView ownedIds={ownedIds} profiles={profiles} />
       )}
 
       {/* Sub-tab 2: Spiral Abyss Floor 12 */}
       {activeSubTab === 'abyss' && (
         <div className="space-y-6">
-          <AbyssDualTeamView ownedIds={ownedIds} />
+          <AbyssDualTeamView ownedIds={ownedIds} profiles={profiles} />
 
           {/* Collapsible Chamber & Enemy Deep Dive */}
           <div className="bg-[#12141f] border border-[#22273e] rounded-2xl overflow-hidden">
@@ -193,6 +197,7 @@ export const EndgameView: React.FC<EndgameViewProps> = ({ ownedIds }) => {
           character={selectedCharacter}
           onClose={() => setSelectedCharacter(null)}
           isOwned={ownedIds.includes(selectedCharacter.id)}
+          profile={profiles ? profiles[selectedCharacter.id] : undefined}
         />
       )}
     </div>

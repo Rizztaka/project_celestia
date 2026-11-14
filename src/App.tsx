@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Navbar } from './components/Navbar';
 import { TeamGeneratorView } from './components/TeamGeneratorView';
 import { PullAdvisorView } from './components/PullAdvisorView';
@@ -6,17 +6,18 @@ import { EndgameView } from './components/EndgameView';
 import { ArtifactStopView } from './components/ArtifactStopView';
 import { RosterView } from './components/RosterView';
 import {
-  getSavedRoster,
-  saveRoster,
+  getSavedProfiles,
+  saveProfiles,
   getSavedUid,
   saveUid,
 } from './services/storage';
 import { fetchShowcaseFromEnka } from './services/enka';
+import type { OwnedCharacterProfile } from './types/genshin';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('teams');
-  const [ownedIds, setOwnedIds] = useState<string[]>(getSavedRoster);
+  const [profiles, setProfiles] = useState<Record<string, OwnedCharacterProfile>>(getSavedProfiles);
   const [uid, setUidState] = useState<string>(getSavedUid);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [notification, setNotification] = useState<{
@@ -24,10 +25,13 @@ export const App: React.FC = () => {
     message: string;
   } | null>(null);
 
-  // Sync roster updates to localStorage
+  // Derived owned character IDs list
+  const ownedIds = useMemo(() => Object.keys(profiles), [profiles]);
+
+  // Sync roster profiles & legacy list to localStorage
   useEffect(() => {
-    saveRoster(ownedIds);
-  }, [ownedIds]);
+    saveProfiles(profiles);
+  }, [profiles]);
 
   const handleSetUid = (newUid: string) => {
     setUidState(newUid);
@@ -35,9 +39,44 @@ export const App: React.FC = () => {
   };
 
   const handleToggleOwned = (id: string) => {
-    setOwnedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
-    );
+    setProfiles((prev) => {
+      const next = { ...prev };
+      if (next[id]) {
+        delete next[id];
+      } else {
+        next[id] = { id, level: 90, constellation: 0 };
+      }
+      return next;
+    });
+  };
+
+  const handleSetRoster = (ids: string[]) => {
+    setProfiles((prev) => {
+      const next: Record<string, OwnedCharacterProfile> = {};
+      for (const id of ids) {
+        next[id] = prev[id] || { id, level: 90, constellation: 0 };
+      }
+      return next;
+    });
+  };
+
+  const handleUpdateProfile = (updated: OwnedCharacterProfile) => {
+    setProfiles((prev) => ({
+      ...prev,
+      [updated.id]: updated,
+    }));
+  };
+
+  const handleImportProfiles = (
+    newProfiles: Record<string, OwnedCharacterProfile>,
+    message: string,
+  ) => {
+    setProfiles(newProfiles);
+    setNotification({
+      type: 'success',
+      message,
+    });
+    setTimeout(() => setNotification(null), 5000);
   };
 
   const handleSyncShowcase = async () => {
@@ -49,8 +88,16 @@ export const App: React.FC = () => {
     setIsSyncing(false);
 
     if (result.success && result.avatarIds.length > 0) {
-      // Merge unique characters
-      setOwnedIds((prev) => Array.from(new Set([...prev, ...result.avatarIds])));
+      setProfiles((prev) => {
+        const next = { ...prev };
+        for (const id of result.avatarIds) {
+          if (!next[id]) {
+            next[id] = { id, level: 90, constellation: 0 };
+          }
+        }
+        return next;
+      });
+
       setNotification({
         type: 'success',
         message: `Synced ${result.avatarIds.length} characters from ${result.nickname ?? 'Traveler'}'s showcase!`,
@@ -114,15 +161,22 @@ export const App: React.FC = () => {
 
         {/* Main Content Area */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          {activeTab === 'teams' && <TeamGeneratorView ownedIds={ownedIds} />}
+          {activeTab === 'teams' && (
+            <TeamGeneratorView ownedIds={ownedIds} profiles={profiles} />
+          )}
           {activeTab === 'pulls' && <PullAdvisorView ownedIds={ownedIds} />}
-          {activeTab === 'endgame' && <EndgameView ownedIds={ownedIds} />}
+          {activeTab === 'endgame' && (
+            <EndgameView ownedIds={ownedIds} profiles={profiles} />
+          )}
           {activeTab === 'artifacts' && <ArtifactStopView />}
           {activeTab === 'roster' && (
             <RosterView
               ownedIds={ownedIds}
+              profiles={profiles}
               onToggleOwned={handleToggleOwned}
-              onSetRoster={setOwnedIds}
+              onSetRoster={handleSetRoster}
+              onUpdateProfile={handleUpdateProfile}
+              onImportProfiles={handleImportProfiles}
             />
           )}
         </main>

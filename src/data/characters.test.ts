@@ -2,8 +2,23 @@ import { describe, it, expect } from 'vitest';
 import { CHARACTERS } from './characters';
 
 describe('Rich Character Database Verification', () => {
-  it('contains all 120 playable characters with full data', () => {
-    expect(CHARACTERS.length).toBeGreaterThanOrEqual(120);
+  it('contains all 122 playable characters through Version 7.2 with full data', () => {
+    expect(CHARACTERS.length).toBeGreaterThanOrEqual(122);
+  });
+
+  it('includes Version 7.2 Snezhnaya characters Mitya and Valeriy with complete data', () => {
+    const snezhnaya72 = ['Mitya', 'Valeriy'];
+    for (const key of snezhnaya72) {
+      const char = CHARACTERS.find((c) => c.id === key);
+      expect(char, `Missing 7.2 character ${key}`).toBeDefined();
+      expect(char?.name).toBeTruthy();
+      expect(char?.element).toBe('Electro');
+      expect(char?.stats?.hp).toBeGreaterThan(0);
+      expect(char?.talents?.length).toBeGreaterThanOrEqual(5);
+      expect(char?.constellations?.length).toBe(6);
+      expect(char?.build?.weapons.length).toBeGreaterThanOrEqual(2);
+      expect(char?.build?.artifacts.length).toBeGreaterThanOrEqual(1);
+    }
   });
 
   it('includes key meta & latest characters: Nefer, Mavuika, Xilonen, Citlali, Furina', () => {

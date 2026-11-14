@@ -5,7 +5,7 @@ export interface EnkaFetchResult {
   error?: string;
 }
 
-// Complete Enka gameId mapping for all 120 characters
+// Complete Enka gameId mapping for all 122 characters
 const ENKA_ID_MAP: Record<number, string> = {
   10000121: 'Aino',
   10000038: 'Albedo',
@@ -76,6 +76,7 @@ const ENKA_ID_MAP: Record<number, string> = {
   10000084: 'Lyney',
   10000106: 'Mavuika',
   10000080: 'Mika',
+  10000136: 'Mitya',
   10000041: 'Mona',
   10000102: 'Mualani',
   10000073: 'Nahida',
@@ -105,6 +106,7 @@ const ENKA_ID_MAP: Record<number, string> = {
   10000033: 'Tartaglia',
   10000050: 'Thoma',
   10000069: 'Tighnari',
+  10000137: 'Valeriy',
   10000111: 'Varesa',
   10000128: 'Varka',
   10000022: 'Venti',

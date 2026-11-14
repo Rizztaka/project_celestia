@@ -7,7 +7,7 @@ const SUSTAINS = new Set([
   'SangonomiyaKokomi', 'Sayu', 'Thoma', 'KukiShinobu', 'Dori', 'Layla',
   'Yaoyao', 'Baizhu', 'Mika', 'Kirara', 'Charlotte', 'Chevreuse',
   'Xianyun', 'Sigewinne', 'Xilonen', 'Citlali', 'Escoffier', 'Ifa',
-  'Dahlia', 'Illuga', 'Prune', 'Vodyanitsa'
+  'Dahlia', 'Illuga', 'Prune', 'Vodyanitsa', 'Valeriy'
 ]);
 
 const BUFFERS = new Set([
@@ -15,14 +15,14 @@ const BUFFERS = new Set([
   'Shenhe', 'KujouSara', 'Candace', 'Mika', 'Furina', 'Chevreuse',
   'Xianyun', 'Xilonen', 'Citlali', 'Nahida', 'Mona', 'Iansan', 'Lauma',
   'LanYan', 'Escoffier', 'Ifa', 'Ineffa', 'Jahoda', 'Columbina', 'Illuga',
-  'Nicole', 'Prune', 'Vodyanitsa', 'Vesna', 'Venti', 'Albedo'
+  'Nicole', 'Prune', 'Vodyanitsa', 'Vesna', 'Venti', 'Albedo', 'Mitya', 'Valeriy'
 ]);
 
 const OFF_FIELD_DPS = new Set([
   'Xiangling', 'Xingqiu', 'Fischl', 'Beidou', 'Rosaria', 'Albedo', 'Yelan',
   'YaeMiko', 'Collei', 'KukiShinobu', 'Nahida', 'Layla', 'Dehya', 'Lynette',
   'Furina', 'Chiori', 'Emilie', 'Kachina', 'Ororon', 'Mavuika', 'Kaeya', 'Lisa', 'Aino',
-  'Ineffa', 'Durin', 'Jahoda', 'Columbina', 'Linnea', 'Nicole', 'Sandrone', 'Odette', 'Venti'
+  'Ineffa', 'Durin', 'Jahoda', 'Columbina', 'Linnea', 'Nicole', 'Sandrone', 'Odette', 'Venti', 'Mitya', 'Valeriy'
 ]);
 
 function formatSpecializedStat(text, val) {
@@ -344,6 +344,43 @@ const CURATED_BUILDS = {
       circlet: ['CRIT Rate', 'CRIT DMG']
     },
     subStats: ['CRIT Rate', 'CRIT DMG', 'ATK%', 'Energy Recharge']
+  },
+  Mitya: {
+    weapons: [
+      { name: 'Reliquary of Truth', rarity: 5, reason: 'Signature: Huge CRIT DMG and reaction damage amplification' },
+      { name: 'Lost Prayer to the Sacred Winds', rarity: 5, reason: 'Standard 5★: 33.1% CRIT Rate with stacking elemental DMG bonus' },
+      { name: 'The Widsith', rarity: 4, reason: 'High CRIT DMG with massive burst buffs on deployment' },
+      { name: 'Sacrificial Jade', rarity: 4, reason: 'Battle Pass staple: High CRIT Rate with HP and EM boost' },
+      { name: 'Flowing Purity', rarity: 4, reason: 'Craftable Fontaine catalyst providing high ATK and elemental DMG' }
+    ],
+    artifacts: [
+      { name: 'Gilded Dreams', pieces: 4, reason: 'Best in Slot: High Elemental Mastery and ATK scaling in reaction comps' },
+      { name: 'Golden Troupe', pieces: 4, reason: '+70% Skill DMG bonus for off-field turret and detection core play' }
+    ],
+    mainStats: {
+      sands: ['ATK%', 'Elemental Mastery'],
+      goblet: ['Electro DMG Bonus'],
+      circlet: ['CRIT Rate', 'CRIT DMG']
+    },
+    subStats: ['CRIT Rate', 'CRIT DMG', 'Elemental Mastery', 'ATK%', 'Energy Recharge']
+  },
+  Valeriy: {
+    weapons: [
+      { name: 'Peak Patrol Song', rarity: 5, reason: 'Support stat-stick amplifying team elemental damage bonus' },
+      { name: 'Favonius Sword', rarity: 4, reason: 'Universal Battery: High ER substat providing neutral energy particles' },
+      { name: 'Fleuve Cendre Ferryman', rarity: 4, reason: 'F2P fishing sword: High ER and Skill CRIT Rate' },
+      { name: 'The Flute', rarity: 4, reason: 'High ATK% substat to enhance shield scaling and coordinated strikes' }
+    ],
+    artifacts: [
+      { name: 'Noblesse Oblige', pieces: 4, reason: 'Premier Support: +20% party-wide ATK on burst cast' },
+      { name: 'Tenacity of the Millelith', pieces: 4, reason: '+20% ATK and +30% shield strength from off-field skill attacks' }
+    ],
+    mainStats: {
+      sands: ['ATK%', 'Energy Recharge'],
+      goblet: ['ATK%', 'Electro DMG Bonus'],
+      circlet: ['CRIT Rate', 'ATK%']
+    },
+    subStats: ['ATK%', 'Energy Recharge', 'CRIT Rate', 'Elemental Mastery']
   }
 };
 
@@ -522,9 +559,10 @@ for (const queryName of allCharacterNames) {
   const gChar = genshindb.characters(queryName);
   if (!gChar) continue;
   if (!gChar.elementText || gChar.elementText === 'None') continue;
-  if (!gChar.images?.filename_icon) continue;
+  if (gChar.name === 'Manekin' || gChar.name === 'Manekina') continue;
 
   const key = gChar.name.replace(/[^a-zA-Z0-9]/g, '');
+  if (!gChar.images?.filename_icon && key !== 'Mitya' && key !== 'Valeriy') continue;
   const name = gChar.name;
   const element = gChar.elementText;
   const weapon = gChar.weaponText;
@@ -545,8 +583,9 @@ for (const queryName of allCharacterNames) {
   if (key === 'Xilonen') tags.push('Cinder-City', 'Universal-Buffer', 'RES-Shred');
   if (element === 'Anemo') tags.push('VV', 'Swirl');
   if (['Bennett', 'Xiangling', 'HuTao', 'Diluc', 'Yoimiya', 'Arlecchino', 'Gaming', 'Mavuika', 'Durin'].includes(key)) tags.push('Vaporize', 'Melt');
-  if (['KukiShinobu', 'RaidenShogun', 'Dori', 'Ineffa'].includes(key)) tags.push('Hyperbloom-Trigger');
+  if (['KukiShinobu', 'RaidenShogun', 'Dori', 'Ineffa', 'Mitya', 'Valeriy'].includes(key)) tags.push('Hyperbloom-Trigger');
   if (element === 'Dendro') tags.push('Quicken', 'Spread', 'Bloom');
+  if (['Mitya', 'Valeriy'].includes(key)) tags.push('Stellar-Conduct', 'Snezhnaya', 'Superconduct');
 
   const desc = gChar.description ? gChar.description.replace(/[\r\n]+/g, ' ') : `${name} is a ${rarity}-star ${element} ${weapon} wielder.`;
 
@@ -629,8 +668,9 @@ for (const queryName of allCharacterNames) {
     });
   }
 
-  const iconUrl = `https://enka.network/ui/${gChar.images.filename_icon}.png`;
-  const sideIconUrl = gChar.images.filename_sideIcon ? `https://enka.network/ui/${gChar.images.filename_sideIcon}.png` : undefined;
+  const iconFilename = gChar.images?.filename_icon || ('UI_AvatarIcon_' + key);
+  const iconUrl = 'https://enka.network/ui/' + iconFilename + '.png';
+  const sideIconUrl = gChar.images?.filename_sideIcon ? 'https://enka.network/ui/' + gChar.images.filename_sideIcon + '.png' : undefined;
 
   const characterRecord = {
     id: key,
@@ -674,71 +714,9 @@ const stats = fs.statSync('src/data/characters.ts');
 console.log('Successfully generated', characterEntries.length, 'characters into src/data/characters.ts');
 console.log('Total file size:', (stats.size / 1024).toFixed(1), 'KB (Lightweight < 1MB requirement met!)');
 
-// Write enka map
-const enkaFileContent = `export interface EnkaFetchResult {
-  success: boolean;
-  nickname?: string;
-  avatarIds: string[];
-  error?: string;
-}
-
-// Complete Enka gameId mapping for all ${characterEntries.length} characters
-const ENKA_ID_MAP: Record<number, string> = {
-${enkaEntries.join('\n')}
-};
-
-export async function fetchShowcaseFromEnka(uid: string): Promise<EnkaFetchResult> {
-  const cleanUid = uid.trim();
-  if (!/^\\d{9,10}$/.test(cleanUid)) {
-    return { success: false, avatarIds: [], error: 'Invalid UID. Genshin UIDs are 9 or 10 digits.' };
-  }
-
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 6000);
-
-    const res = await fetch(\`https://enka.network/api/uid/\${cleanUid}\`, {
-      headers: { 'User-Agent': 'Celestia-Client/2.0' },
-      signal: controller.signal,
-    }).finally(() => clearTimeout(timeout));
-
-    if (!res.ok) {
-      if (res.status === 404) {
-        return { success: false, avatarIds: [], error: 'Player UID not found on Enka. Ensure the UID is correct.' };
-      }
-      if (res.status === 429) {
-        return { success: false, avatarIds: [], error: 'Enka rate limit reached. Please wait a moment and try again.' };
-      }
-      return { success: false, avatarIds: [], error: \`Enka returned status code \${res.status}.\` };
-    }
-
-    const data = await res.json();
-    const avatarList: number[] = data?.playerInfo?.showAvatarInfoList?.map((a: { avatarId: number }) => a.avatarId) || [];
-    const matchedKeys: string[] = [];
-
-    for (const id of avatarList) {
-      if (ENKA_ID_MAP[id]) {
-        matchedKeys.push(ENKA_ID_MAP[id]);
-      }
-    }
-
-    return {
-      success: true,
-      nickname: data?.playerInfo?.nickname || 'Traveler',
-      avatarIds: matchedKeys,
-    };
-  } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : String(err);
-    return {
-      success: false,
-      avatarIds: [],
-      error: errorMsg.includes('abort')
-        ? 'Network timed out connecting to Enka.'
-        : 'Could not connect directly to Enka. You can still select characters manually below!',
-    };
-  }
-}
-`;
-
-fs.writeFileSync('src/services/enka.ts', enkaFileContent);
+// Update ENKA_ID_MAP in src/services/enka.ts
+let enkaContent = fs.readFileSync('src/services/enka.ts', 'utf8');
+const newMap = `// Complete Enka gameId mapping for all ${characterEntries.length} characters\nconst ENKA_ID_MAP: Record<number, string> = {\n${enkaEntries.join('\n')}\n};`;
+enkaContent = enkaContent.replace(/\/\/ Complete Enka gameId mapping[\s\S]*?const ENKA_ID_MAP[\s\S]*?\};/, newMap);
+fs.writeFileSync('src/services/enka.ts', enkaContent);
 console.log('Successfully updated src/services/enka.ts with complete mapping for', characterEntries.length, 'characters');

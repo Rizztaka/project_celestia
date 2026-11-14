@@ -1,4 +1,42 @@
-import type { CharacterStatWeightConfig, StatKey } from '../types/genshin';
+import type { ArtifactSlot, CharacterStatWeightConfig, StatKey } from '../types/genshin';
+
+/**
+ * Level 20 5-star maximum main stat values by slot.
+ */
+export const MAIN_STAT_MAX_VALUES: Record<ArtifactSlot, Partial<Record<StatKey, number>>> = {
+  flower: { hp: 4780 },
+  plume: { atk: 311 },
+  sands: {
+    hp_: 46.6,
+    atk_: 46.6,
+    def_: 58.3,
+    enerRech_: 51.8,
+    eleMas: 186.5,
+  },
+  goblet: {
+    hp_: 46.6,
+    atk_: 46.6,
+    def_: 58.3,
+    eleMas: 186.5,
+    pyro_dmg_: 46.6,
+    hydro_dmg_: 46.6,
+    dendro_dmg_: 46.6,
+    electro_dmg_: 46.6,
+    anemo_dmg_: 46.6,
+    cryo_dmg_: 46.6,
+    geo_dmg_: 46.6,
+    physical_dmg_: 58.3,
+  },
+  circlet: {
+    hp_: 46.6,
+    atk_: 46.6,
+    def_: 58.3,
+    critRate_: 31.1,
+    critDMG_: 62.2,
+    heal_: 35.9,
+    eleMas: 186.5,
+  },
+};
 
 /**
  * 100% Maximum 5-star Artifact Substat roll values (Akasha / KQM standard).

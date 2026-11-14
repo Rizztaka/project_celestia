@@ -6,6 +6,7 @@ import {
   findWeakestSlot,
   getGuaranteedAlternative,
   estimateBuildFromSliders,
+  extractEquippedArtifactsForCharacter,
 } from './artifact-probability';
 import type { ArtifactPiece } from '../types/genshin';
 import { getCharacterStatWeights } from '../data/artifact-weights';
@@ -175,6 +176,59 @@ describe('Artifact Probability & Roll Value Engine', () => {
       expect(result.slotBreakdown.circlet).toBeDefined();
       expect(result.curve.length).toBe(60);
       expect(result.overallStatus).toBeDefined();
+    });
+  });
+
+  describe('extractEquippedArtifactsForCharacter & Robustness', () => {
+    it('extracts equipped artifacts and filters out NaN or invalid substats', () => {
+      const mockRaw = [
+        {
+          slotKey: 'flower',
+          setKey: 'DeepwoodMemories',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'hp',
+          location: 'Nefer',
+          substats: [
+            { key: 'eleMas', value: 40 },
+            { key: 'critRate_', value: 7.0 },
+            { key: 'bad_stat', value: 'invalid' }, // string
+            { key: 'empty_stat', value: 0 },
+          ],
+        },
+        {
+          slotKey: 'plume',
+          setKey: 'DeepwoodMemories',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'atk',
+          location: 'HuTao', // different character
+          substats: [{ key: 'critDMG_', value: 20 }],
+        },
+      ];
+
+      const extracted = extractEquippedArtifactsForCharacter(mockRaw, 'nefer');
+      expect(extracted.flower).toBeDefined();
+      expect(extracted.flower?.substats.length).toBe(2);
+      expect(extracted.flower?.substats[0].rollValue).toBeGreaterThan(0);
+      expect(extracted.plume).toBeUndefined(); // Belongs to HuTao
+    });
+
+    it('accurately computes DEF% drop rates on Goblet for DEF scalers (Xilonen)', () => {
+      const xilonenWeights = getCharacterStatWeights('Xilonen');
+      const analysis = calculateSlotUpgradeProbability('goblet', null, xilonenWeights);
+      // DEF% goblet should have ~19.25% drop rate weight (higher than 5% elemental goblet)
+      expect(analysis.upgradeProbabilityPerRun).toBeGreaterThan(0.015);
+      expect(analysis.expectedRunsForUpgrade).toBeLessThan(50);
+    });
+
+    it('guards against NaN probabilities in diminishing returns curves', () => {
+      const curve = generateDiminishingReturnsCurve(NaN, 10);
+      expect(curve.length).toBe(10);
+      for (const pt of curve) {
+        expect(isNaN(pt.probability)).toBe(false);
+        expect(pt.probability).toBeGreaterThanOrEqual(0);
+      }
     });
   });
 });

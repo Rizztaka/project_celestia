@@ -60,8 +60,10 @@ export const ArtifactStopView: React.FC = () => {
 
   // Active slots depending on view mode
   const activeSlots = useMemo(() => {
-    if (viewMode === 'equipped' && equippedCount > 0) {
-      return { ...equippedFromRoster, ...customSlots };
+    if (viewMode === 'equipped') {
+      if (equippedCount > 0 || Object.keys(customSlots).length > 0) {
+        return { ...equippedFromRoster, ...customSlots };
+      }
     }
     if (viewMode === 'builder') {
       return customSlots;
@@ -141,11 +143,8 @@ export const ArtifactStopView: React.FC = () => {
                   const newId = e.target.value;
                   setSelectedCharId(newId);
                   setCustomSlots({});
-                  if (newId === 'Nefer' || newId === 'Nilou' || newId === 'KukiShinobu') {
-                    setIsReactionScaler(true);
-                  } else {
-                    setIsReactionScaler(false);
-                  }
+                  const newConfig = getCharacterStatWeights(newId);
+                  setIsReactionScaler((newConfig.statWeights.eleMas ?? 0) >= 0.8);
                 }}
                 className="bg-[#181b28] text-zinc-100 font-bold text-sm px-3 py-1.5 rounded-xl border border-[#282e44] focus:outline-none cursor-pointer"
               >
@@ -427,6 +426,22 @@ export const ArtifactStopView: React.FC = () => {
             </div>
           )}
 
+          {/* Builder Notice if in Builder Mode */}
+          {viewMode === 'builder' && Object.keys(customSlots).length > 0 && (
+            <div className="bg-[#161926] border border-[#2b3248] p-3.5 rounded-xl flex items-center justify-between text-xs">
+              <span className="text-zinc-300">
+                Customizing {Object.keys(customSlots).length} of 5 artifact slots.
+              </span>
+              <button
+                onClick={handleResetCustomSlots}
+                className="text-xs text-[#d4af37] hover:underline flex items-center gap-1 cursor-pointer font-semibold ml-2"
+              >
+                <RefreshCw className="w-3 h-3" />
+                <span>Clear All Pieces</span>
+              </button>
+            </div>
+          )}
+
           {/* 5-Slot Cards Section */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -506,10 +521,10 @@ const EditSlotModal: React.FC<EditSlotModalProps> = ({
     initialPiece?.mainStatKey || defaultMainStat,
   );
   const [substats, setSubstats] = useState<Array<{ key: StatKey; value: number }>>([
-    { key: initialPiece?.substats[0]?.key || 'critRate_', value: initialPiece?.substats[0]?.value || 3.9 },
-    { key: initialPiece?.substats[1]?.key || 'critDMG_', value: initialPiece?.substats[1]?.value || 14.8 },
-    { key: initialPiece?.substats[2]?.key || 'enerRech_', value: initialPiece?.substats[2]?.value || 5.8 },
-    { key: initialPiece?.substats[3]?.key || 'atk_', value: initialPiece?.substats[3]?.value || 5.3 },
+    { key: initialPiece?.substats[0]?.key || 'critRate_', value: initialPiece?.substats[0]?.value ?? 3.9 },
+    { key: initialPiece?.substats[1]?.key || 'critDMG_', value: initialPiece?.substats[1]?.value ?? 14.8 },
+    { key: initialPiece?.substats[2]?.key || 'enerRech_', value: initialPiece?.substats[2]?.value ?? 5.8 },
+    { key: initialPiece?.substats[3]?.key || 'atk_', value: initialPiece?.substats[3]?.value ?? 5.3 },
   ]);
 
   const statOptions: Array<{ key: StatKey; label: string }> = [

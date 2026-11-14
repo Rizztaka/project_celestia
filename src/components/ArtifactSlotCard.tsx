@@ -1,5 +1,9 @@
 import React from 'react';
-import type { SlotUpgradeProbability } from '../types/genshin';
+import type { SlotUpgradeProbability, StatKey } from '../types/genshin';
+import {
+  MAIN_STAT_MAX_VALUES,
+  MAX_SUBSTAT_VALUES,
+} from '../data/artifact-weights';
 import {
   Flower,
   Feather,
@@ -41,19 +45,43 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
   };
 
   const formatStatLabel = (key: string, value: number) => {
-    const isPercent = key.endsWith('_') || key === 'enerRech_' || key === 'critRate_' || key === 'critDMG_';
+    const isPercent = key.endsWith('_');
     const displayKey = key
-      .replace(/_/g, '')
-      .replace('critRate', 'CR')
-      .replace('critDMG', 'CD')
-      .replace('enerRech', 'ER')
+      .replace('critRate_', 'CR')
+      .replace('critDMG_', 'CD')
+      .replace('enerRech_', 'ER')
       .replace('eleMas', 'EM')
+      .replace('heal_', 'Healing Bonus')
+      .replace('pyro_dmg_', 'Pyro DMG')
+      .replace('hydro_dmg_', 'Hydro DMG')
+      .replace('dendro_dmg_', 'Dendro DMG')
+      .replace('electro_dmg_', 'Electro DMG')
+      .replace('anemo_dmg_', 'Anemo DMG')
+      .replace('cryo_dmg_', 'Cryo DMG')
+      .replace('geo_dmg_', 'Geo DMG')
+      .replace('physical_dmg_', 'Physical DMG')
+      .replace('atk_', 'ATK')
+      .replace('hp_', 'HP')
+      .replace('def_', 'DEF')
       .replace('atk', 'ATK')
       .replace('hp', 'HP')
-      .replace('def', 'DEF')
-      .replace('dmg', ' DMG');
+      .replace('def', 'DEF');
 
-    return `${displayKey} ${isPercent ? `+${value}%` : `+${value}`}`;
+    const formattedVal = value >= 1000 ? value.toLocaleString() : value;
+    return `${displayKey} ${isPercent ? `+${formattedVal}%` : `+${formattedVal}`}`;
+  };
+
+  const getMainStatDisplay = () => {
+    if (!currentPiece) {
+      if (slotKey === 'flower') return 'HP +4,780';
+      if (slotKey === 'plume') return 'ATK +311';
+      return 'Target Main Stat';
+    }
+    const maxVal =
+      MAIN_STAT_MAX_VALUES[slotKey]?.[currentPiece.mainStatKey] ??
+      (currentPiece.mainStatKey.endsWith('_') ? 46.6 : 311);
+    const val = currentPiece.level === 20 ? maxVal : Math.round(maxVal * 0.7);
+    return formatStatLabel(currentPiece.mainStatKey, val);
   };
 
   const getStatusBadge = () => {
@@ -119,32 +147,32 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
         <div className="bg-[#181b28] px-3 py-1.5 rounded-xl border border-[#262c40] mb-3 flex items-center justify-between">
           <span className="text-[11px] text-zinc-400 font-medium">Main Stat</span>
           <span className="text-xs font-bold text-[#d4af37]">
-            {currentPiece
-              ? formatStatLabel(currentPiece.mainStatKey, currentPiece.level === 20 ? 46.6 : 30)
-              : slotKey === 'flower'
-              ? 'HP +4,780'
-              : slotKey === 'plume'
-              ? 'ATK +311'
-              : 'Target Main Stat'}
+            {getMainStatDisplay()}
           </span>
         </div>
 
         {/* Substats List */}
         <div className="space-y-1 mb-3">
           {currentPiece?.substats && currentPiece.substats.length > 0 ? (
-            currentPiece.substats.map((sub, idx) => (
-              <div
-                key={idx}
-                className="flex items-center justify-between text-[11px] bg-[#141722]/80 px-2.5 py-1 rounded-lg border border-[#1e2334]"
-              >
-                <span className="text-zinc-300 font-mono">
-                  {formatStatLabel(sub.key, sub.value)}
-                </span>
-                <span className="text-[10px] text-zinc-500 font-mono">
-                  {sub.rollValue ? `${sub.rollValue}% RV` : ''}
-                </span>
-              </div>
-            ))
+            currentPiece.substats.map((sub, idx) => {
+              const maxVal = MAX_SUBSTAT_VALUES[sub.key as StatKey] ?? 0;
+              const rv =
+                sub.rollValue ??
+                (maxVal > 0 ? Math.round((sub.value / maxVal) * 100) : 0);
+              return (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between text-[11px] bg-[#141722]/80 px-2.5 py-1 rounded-lg border border-[#1e2334]"
+                >
+                  <span className="text-zinc-300 font-mono">
+                    {formatStatLabel(sub.key, sub.value)}
+                  </span>
+                  <span className="text-[10px] text-zinc-500 font-mono">
+                    {rv > 0 ? `${rv}% RV` : ''}
+                  </span>
+                </div>
+              );
+            })
           ) : (
             <div className="text-[11px] text-zinc-500 italic py-2 text-center bg-[#151722] rounded-lg border border-[#1e2334]">
               Estimated substats based on build sliders

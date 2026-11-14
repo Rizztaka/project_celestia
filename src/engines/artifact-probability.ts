@@ -6,6 +6,7 @@ import type {
   DiminishingReturnsPoint,
   GuaranteedAlternative,
   SlotUpgradeProbability,
+  StatKey,
 } from '../types/genshin';
 import {
   DOMAIN_CONSTANTS,
@@ -40,6 +41,7 @@ export function calculatePieceRollValue(
     if (maxVal <= 0 || !sub.value) continue;
 
     const rawRoll = (sub.value / maxVal) * 100; // e.g. 100% = 1 max roll
+    sub.rollValue = Math.round(rawRoll);
     const weight = config.statWeights[sub.key] ?? 0;
 
     rawRollValue += rawRoll;
@@ -81,23 +83,25 @@ function getBaseSlotCandidateDropRate(
     }
     case 'goblet': {
       // Elemental goblet is ~5% each.
-      const preferred = config.preferredMainStats.goblet;
+      const preferred = config.preferredMainStats?.goblet ?? [];
       let weight = 0;
       for (const p of preferred) {
         if (p.includes('dmg_')) weight += 0.05;
         else if (p === 'eleMas') weight += 0.025;
-        else if (p === 'atk_' || p === 'hp_') weight += 0.1925;
+        else if (p === 'atk_' || p === 'hp_' || p === 'def_') weight += 0.1925;
       }
       return baseChance * (weight || 0.05);
     }
     case 'circlet': {
-      const preferred = config.preferredMainStats.circlet;
+      const preferred = config.preferredMainStats?.circlet ?? [];
       let weight = 0;
       if (preferred.includes('critRate_')) weight += 0.1;
       if (preferred.includes('critDMG_')) weight += 0.1;
       if (preferred.includes('heal_')) weight += 0.1;
       if (preferred.includes('eleMas')) weight += 0.04;
       if (preferred.includes('hp_')) weight += 0.22;
+      if (preferred.includes('atk_')) weight += 0.22;
+      if (preferred.includes('def_')) weight += 0.22;
       return baseChance * (weight || 0.2);
     }
   }
@@ -132,13 +136,17 @@ export function calculateSlotUpgradeProbability(
   const substatUpgradeChance = getSubstatUpgradeProbability(weightedRollValue);
 
   // Upgrade probability per single 20-resin domain run
-  const upgradeProbabilityPerRun = Math.max(0.00001, baseDropRate * substatUpgradeChance);
+  const rawP = baseDropRate * substatUpgradeChance;
+  const upgradeProbabilityPerRun =
+    !rawP || isNaN(rawP) ? 0.00001 : Math.min(0.999, Math.max(0.00001, rawP));
 
   // Runs needed for 50% chance of at least 1 upgrade: 1 - (1 - p)^N = 0.5 => N = ln(0.5)/ln(1-p)
-  const expectedRunsForUpgrade = Math.max(
-    1,
-    Math.round(Math.log(0.5) / Math.log(1 - upgradeProbabilityPerRun)),
-  );
+  const logDenominator = Math.log(1 - upgradeProbabilityPerRun);
+  const expectedRunsForUpgrade =
+    !logDenominator || isNaN(logDenominator) || logDenominator === 0
+      ? 1
+      : Math.max(1, Math.round(Math.log(0.5) / logDenominator));
+
   const expectedDaysForUpgrade = Number(
     (expectedRunsForUpgrade / DOMAIN_CONSTANTS.RUNS_PER_DAY).toFixed(1),
   );
@@ -180,7 +188,7 @@ export function generateDiminishingReturnsCurve(
   maxDays: number = 60,
 ): DiminishingReturnsPoint[] {
   const points: DiminishingReturnsPoint[] = [];
-  const safeP = Math.min(0.999, Math.max(0.00001, pPerRun));
+  const safeP = !pPerRun || isNaN(pPerRun) ? 0.00001 : Math.min(0.999, Math.max(0.00001, pPerRun));
 
   for (let day = 1; day <= maxDays; day++) {
     const runs = day * DOMAIN_CONSTANTS.RUNS_PER_DAY;
@@ -263,11 +271,23 @@ export function extractEquippedArtifactsForCharacter(
           mainStatKey: art.mainStatKey,
           substats: Array.isArray(art.substats)
             ? art.substats
-                .filter((s: any) => s && s.key && s.value)
-                .map((s: any) => ({
-                  key: s.key,
-                  value: Number(s.value),
-                }))
+                .filter(
+                  (s: any) =>
+                    s &&
+                    s.key &&
+                    s.value !== undefined &&
+                    !isNaN(Number(s.value)) &&
+                    Number(s.value) > 0,
+                )
+                .map((s: any) => {
+                  const numVal = Number(s.value);
+                  const maxVal = MAX_SUBSTAT_VALUES[s.key as StatKey] ?? 0;
+                  return {
+                    key: s.key,
+                    value: numVal,
+                    rollValue: maxVal > 0 ? Math.round((numVal / maxVal) * 100) : undefined,
+                  };
+                })
             : [],
           location: art.location,
         };

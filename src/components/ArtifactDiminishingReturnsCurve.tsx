@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useId } from 'react';
 import type { DiminishingReturnsPoint } from '../types/genshin';
 import { TrendingUp, HelpCircle } from 'lucide-react';
 
@@ -14,8 +14,7 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
   totalRollValue,
 }) => {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-
-  if (!curve || curve.length === 0) return null;
+  const gradientId = useId();
 
   const width = 640;
   const height = 240;
@@ -24,27 +23,38 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
   const innerWidth = width - padding.left - padding.right;
   const innerHeight = height - padding.top - padding.bottom;
 
-  const maxDays = curve[curve.length - 1].days;
+  const maxDays = curve && curve.length > 0 ? curve[curve.length - 1].days : 60;
 
   // Scales
   const getX = (days: number) => padding.left + (days / maxDays) * innerWidth;
   const getY = (prob: number) => padding.top + innerHeight - prob * innerHeight;
 
-  // Build SVG path
-  const pathD = curve.reduce((acc, pt, index) => {
-    const x = getX(pt.days);
-    const y = getY(pt.probability);
-    return `${acc} ${index === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
-  }, '');
+  // Memoized paths and milestones
+  const { pathD, areaD, p50, p80, p90 } = useMemo(() => {
+    if (!curve || curve.length === 0) {
+      return { pathD: '', areaD: '', p50: undefined, p80: undefined, p90: undefined };
+    }
 
-  const areaD = `${pathD} L ${getX(maxDays)} ${getY(0)} L ${getX(curve[0].days)} ${getY(0)} Z`;
+    const path = curve.reduce((acc, pt, index) => {
+      const x = getX(pt.days);
+      const y = getY(pt.probability);
+      return `${acc} ${index === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
+    }, '');
 
-  // Find 50%, 80%, 90% confidence points
-  const p50 = curve.find((pt) => pt.probability >= 0.5);
-  const p80 = curve.find((pt) => pt.probability >= 0.8);
-  const p90 = curve.find((pt) => pt.probability >= 0.9);
+    const area = `${path} L ${getX(maxDays)} ${getY(0)} L ${getX(curve[0].days)} ${getY(0)} Z`;
+    const m50 = curve.find((pt) => pt.probability >= 0.5);
+    const m80 = curve.find((pt) => pt.probability >= 0.8);
+    const m90 = curve.find((pt) => pt.probability >= 0.9);
 
-  const activePoint = hoverIndex !== null ? curve[hoverIndex] : p50 || curve[Math.floor(curve.length / 2)];
+    return { pathD: path, areaD: area, p50: m50, p80: m80, p90: m90 };
+  }, [curve, maxDays, innerWidth, innerHeight]);
+
+  if (!curve || curve.length === 0) return null;
+
+  const activePoint =
+    hoverIndex !== null && curve[hoverIndex]
+      ? curve[hoverIndex]
+      : p50 || curve[Math.floor(curve.length / 2)];
 
   return (
     <div className="bg-[#12141d] border border-[#23273a] p-5 rounded-2xl shadow-lg space-y-4">
@@ -74,7 +84,7 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
           onMouseLeave={() => setHoverIndex(null)}
         >
           <defs>
-            <linearGradient id="curveGradient" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#d4af37" stopOpacity="0.4" />
               <stop offset="60%" stopColor="#10b981" stopOpacity="0.15" />
               <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
@@ -149,7 +159,7 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
           </text>
 
           {/* Area Fill */}
-          <path d={areaD} fill="url(#curveGradient)" />
+          <path d={areaD} fill={`url(#${gradientId})`} />
 
           {/* Main Curve Line */}
           <path
@@ -258,7 +268,7 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
           })}
 
           {/* Hover indicator crosshair */}
-          {hoverIndex !== null && (
+          {hoverIndex !== null && curve[hoverIndex] && (
             <g pointerEvents="none">
               <line
                 x1={getX(curve[hoverIndex].days)}

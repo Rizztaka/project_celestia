@@ -120,11 +120,17 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     setShortfallSuggestions(res.shortfallSuggestions || []);
   };
 
+  // Serialized key of eligible IDs to detect any roster composition shift even with identical count
+  const eligibleKey = useMemo(
+    () => filteredRoster.eligible.map((c) => c.id).sort().join(','),
+    [filteredRoster.eligible],
+  );
+
   // Re-generate schedule when season, difficulty or eligible roster fundamentally shifts
   useEffect(() => {
     setLockedActNumbers(new Set());
     handleGenerateSchedule(new Set());
-  }, [activeSeason.id, difficulty, filteredRoster.eligible.length]);
+  }, [activeSeason.id, difficulty, eligibleKey]);
 
   const diffConfig = THEATER_DIFFICULTIES[difficulty];
   const requiredChars = diffConfig.requiredCharacters;

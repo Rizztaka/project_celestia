@@ -208,7 +208,8 @@ export function autoDraftTheaterSchedule(
     return score;
   };
 
-  const candidates = Array.from(charMap.values()).sort(
+  // Candidates for auto-drafting are strictly the eligible roster for this season
+  const candidates = [...eligible].sort(
     (a, b) => scoreBase(b) - scoreBase(a),
   );
 
@@ -538,7 +539,7 @@ export function swapTheaterActMember(
 
   const updatedVigor = {
     ...vigorState,
-    [oldCharId]: Math.min(2, (vigorState[oldCharId] ?? 0) + 1),
+    [oldCharId]: Math.min(2, (vigorState[oldCharId] ?? 1) + 1),
     [newCharId]: Math.max(0, (vigorState[newCharId] ?? 2) - 1),
   };
 
@@ -582,7 +583,7 @@ export function removeTheaterActMember(
 
   const updatedVigor = {
     ...vigorState,
-    [charId]: Math.min(2, (vigorState[charId] ?? 0) + 1),
+    [charId]: Math.min(2, (vigorState[charId] ?? 1) + 1),
   };
 
   return {

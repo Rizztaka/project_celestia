@@ -598,5 +598,38 @@ describe('Imaginarium Theater Engine', () => {
       // char2 used once -> starts at 2, becomes 1
       expect(vigor[char2.id]).toBe(1);
     });
+
+    it('does not bleed out-of-pool user-locked characters into unlocked act candidate drafts', () => {
+      const season1 = THEATER_SEASONS[0];
+      // Pick 20 eligible characters
+      const eligible = CHARACTERS.filter(
+        (c) =>
+          season1.elements.includes(c.element) ||
+          season1.specialGuestIds.includes(c.id),
+      ).slice(0, 20);
+
+      // Find a character that is strictly NOT eligible in season 1 (e.g. an unlisted element/guest)
+      const outOfPoolChar = CHARACTERS.find(
+        (c) =>
+          !season1.elements.includes(c.element) &&
+          !season1.specialGuestIds.includes(c.id),
+      )!;
+
+      // Lock outOfPoolChar into Act 1
+      const userLocks: Record<number, string[]> = {
+        1: [outOfPoolChar.id],
+      };
+
+      const result = autoDraftTheaterSchedule(eligible, 'Hard', season1, userLocks);
+
+      // Act 1 must contain the locked out-of-pool character
+      expect(result.acts[0].team.some((m) => m.id === outOfPoolChar.id)).toBe(true);
+
+      // All OTHER unlocked acts (Acts 2 through 8) MUST NOT contain outOfPoolChar
+      for (let i = 1; i < result.acts.length; i++) {
+        const containsOutOfPool = result.acts[i].team.some((m) => m.id === outOfPoolChar.id);
+        expect(containsOutOfPool).toBe(false);
+      }
+    });
   });
 });

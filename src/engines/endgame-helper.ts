@@ -55,7 +55,7 @@ export const CURRENT_ABYSS_CHAMBERS: AbyssChamberGuide[] = [
     enemies: ['Local Legend: Natlan Wayob / Automaton'],
     shieldTypes: ['Nightspirit Shield'],
     recommendedElements: ['Nightsoul', 'Pyro', 'Dendro'],
-    tips: 'Natlan characters (Nefer, Mavuika, Xilonen, Citlali, Kinich) drain Nightspirit shields 300% faster.',
+    tips: 'Natlan characters (Mavuika, Xilonen, Citlali, Kinich, Chasca) drain Nightspirit shields 300% faster.',
   },
   {
     floor: 12,

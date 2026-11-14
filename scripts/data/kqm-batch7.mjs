@@ -2,10 +2,10 @@
 export const KQM_BATCH_7 = {
   Aino: {
     weapons: [
-      { name: 'Aqua Simulacra', rarity: 5, reason: '88.2% CRIT DMG with universal damage bonus for off-field Hydro sub-DPS' },
-      { name: 'The Stringless', rarity: 4, reason: 'High EM with +48% Skill and Burst DMG multipliers on Hydro reactions' },
-      { name: 'Favonius Warbow', rarity: 4, reason: 'Universal Battery BiS: High ER generating neutral energy particles for teammates' },
-      { name: 'Chain Breaker', rarity: 4, reason: 'High ATK% and EM scaling based on team elemental variety' }
+      { name: 'Serpent Spine', rarity: 4, reason: 'Premier 4★: 27.6% CRIT Rate with universal damage bonus for Hydro sub-DPS' },
+      { name: "Wolf's Gravestone", rarity: 5, reason: 'Massive ATK% stat stick with party execution buff on low health enemies' },
+      { name: 'Favonius Greatsword', rarity: 4, reason: 'Universal Battery: High ER generating neutral energy particles for teammates' },
+      { name: 'Tidal Shadow', rarity: 4, reason: 'Fontaine Craftable: High base ATK and +48% ATK buff triggered upon healing' }
     ],
     artifacts: [
       { name: 'Golden Troupe', pieces: 4, reason: 'Best in Slot: Colossal +70% off-field Elemental Skill DMG' },
@@ -20,10 +20,10 @@ export const KQM_BATCH_7 = {
   },
   Flins: {
     weapons: [
-      { name: 'Mistsplitter Reforged', rarity: 5, reason: 'High Base ATK, CRIT DMG, and stacking elemental damage bonus' },
-      { name: 'Uraku Misugiri', rarity: 5, reason: '88.2% CRIT DMG with DEF% buffs and +48% Elemental Skill damage bonus' },
-      { name: 'Finale of the Deep', rarity: 4, reason: 'High ATK Craftable: Bond of Life synergy providing massive flat ATK' },
-      { name: 'Amenoma Kageuchi', rarity: 4, reason: 'Craftable F2P: Restores flat energy on burst to ensure rotation consistency' }
+      { name: 'Staff of Homa', rarity: 5, reason: '66.2% CRIT DMG with massive ATK conversion and flat damage scaling' },
+      { name: 'Primordial Jade Winged-Spear', rarity: 5, reason: 'High Base ATK, CRIT Rate, and stacking on-field damage bonus' },
+      { name: 'Deathmatch', rarity: 4, reason: 'Battle Pass Top: 36.8% CRIT Rate with reliable ATK and DEF buffs' },
+      { name: 'Favonius Lance', rarity: 4, reason: 'Universal Battery: High ER generating neutral energy particles for rotations' }
     ],
     artifacts: [
       { name: 'Nighttime Whispers in the Echoing Woods', pieces: 4, reason: 'Best in Slot: +18% ATK and +50% Geo DMG while protected by Crystallize shields' },
@@ -144,9 +144,10 @@ export const KQM_BATCH_7 = {
   },
   Lohen: {
     weapons: [
-      { name: "Wolf's Gravestone", rarity: 5, reason: 'Enormous ATK stat stick with teamwide execution buff on low health targets' },
-      { name: 'Serpent Spine', rarity: 4, reason: 'Premier 4★ BiS: 27.6% CRIT Rate with up to +50% universal damage bonus' },
-      { name: 'Tidal Shadow', rarity: 4, reason: 'Craftable F2P: Up to +48% ATK buff easily triggered upon receiving healing' }
+      { name: 'Staff of Homa', rarity: 5, reason: '66.2% CRIT DMG with massive ATK conversion' },
+      { name: 'Primordial Jade Winged-Spear', rarity: 5, reason: 'High Base ATK, CRIT Rate, and stacking on-field damage' },
+      { name: 'Crescent Pike', rarity: 4, reason: 'Physical Carry BiS: Craftable polearm adding colossal extra attack damage instances' },
+      { name: 'Deathmatch', rarity: 4, reason: '36.8% CRIT Rate making artifact stat balancing effortless' }
     ],
     artifacts: [
       { name: 'Pale Flame', pieces: 4, reason: 'Physical Carry BiS: Stacks up to +50% Physical DMG and +18% ATK' },
@@ -179,9 +180,9 @@ export const KQM_BATCH_7 = {
   },
   Prune: {
     weapons: [
-      { name: 'Favonius Sword', rarity: 4, reason: 'Universal Battery BiS: High ER generating neutral energy particles for teammates' },
-      { name: "The Dockhand's Assistant", rarity: 4, reason: 'High HP% substat for HP-scaling healing and shielding' },
-      { name: 'Fleuve Cendre Ferryman', rarity: 4, reason: 'F2P Fishing Sword: High ER with bonus Skill CRIT Rate' }
+      { name: 'Prototype Amber', rarity: 4, reason: 'Craftable Sustain BiS: High HP% substat, refunds 18 energy and heals team by 18% on burst' },
+      { name: 'Thrilling Tales of Dragon Slayers', rarity: 3, reason: 'Hypercarry Buffer: Passes massive +48% ATK buff to switching main carry' },
+      { name: 'Favonius Codex', rarity: 4, reason: 'Universal Battery: High ER generating neutral particles to guarantee burst uptime' }
     ],
     artifacts: [
       { name: 'Ocean-Hued Clam', pieces: 4, reason: 'Best in Slot: Converts continuous party healing into 30k physical bubble damage' },
@@ -196,10 +197,10 @@ export const KQM_BATCH_7 = {
   },
   Sandrone: {
     weapons: [
-      { name: 'Lost Prayer to the Sacred Winds', rarity: 5, reason: 'High 33.1% CRIT Rate with movement speed and stacking damage bonus' },
-      { name: "Kagura's Verity", rarity: 5, reason: '66.2% CRIT DMG with skill damage buffs stacking on puppet summons' },
-      { name: 'The Widsith', rarity: 4, reason: 'Premier 4★ Nuke: High CRIT DMG with massive 10s burst damage multipliers' },
-      { name: 'Flowing Purity', rarity: 4, reason: 'Craftable Fontaine Catalyst: High base ATK and all-elemental damage bonus' }
+      { name: 'Redhorn Stonethresher', rarity: 5, reason: '88.2% CRIT DMG with massive DEF-to-Normal and Skill damage conversion' },
+      { name: 'Serpent Spine', rarity: 4, reason: 'Battle Pass Top: Universal damage bonus stacking up to +50% all DMG' },
+      { name: "Wolf's Gravestone", rarity: 5, reason: 'Enormous ATK% stat stick with party execution buff on low health targets' },
+      { name: 'Tidal Shadow', rarity: 4, reason: 'Fontaine Craftable: High base ATK and +48% ATK buff triggered upon healing' }
     ],
     artifacts: [
       { name: 'Golden Troupe', pieces: 4, reason: 'Undisputed Best in Slot: Colossal +70% off-field puppet Elemental Skill DMG' },
@@ -214,10 +215,10 @@ export const KQM_BATCH_7 = {
   },
   Alyosha: {
     weapons: [
-      { name: 'Mistsplitter Reforged', rarity: 5, reason: 'High Base ATK, CRIT DMG, and stacking Cryo DMG bonus' },
-      { name: 'Uraku Misugiri', rarity: 5, reason: '88.2% CRIT DMG with DEF/ATK buffs and +48% Skill DMG bonus' },
-      { name: 'Finale of the Deep', rarity: 4, reason: 'High ATK Craftable: Bond of Life synergy providing massive flat ATK' },
-      { name: 'Amenoma Kageuchi', rarity: 4, reason: 'Craftable F2P: Restores flat energy on burst to ensure rotation consistency' }
+      { name: 'Staff of Homa', rarity: 5, reason: '66.2% CRIT DMG with massive HP-to-ATK conversion and flat ATK scaling' },
+      { name: 'Primordial Jade Winged-Spear', rarity: 5, reason: 'High Base ATK, CRIT Rate, and stacking damage bonus' },
+      { name: 'The Catch', rarity: 4, reason: 'Premier F2P: High ER with +32% Burst DMG and +12% Burst CRIT Rate' },
+      { name: 'Deathmatch', rarity: 4, reason: 'Battle Pass Top: 36.8% CRIT Rate making Cryo Blizzard Strayer ratios effortless' }
     ],
     artifacts: [
       { name: 'Blizzard Strayer', pieces: 4, reason: 'Best in Slot: +15% Cryo DMG and +40% CRIT Rate against frozen targets' },
@@ -232,10 +233,10 @@ export const KQM_BATCH_7 = {
   },
   Odette: {
     weapons: [
-      { name: 'Aqua Simulacra', rarity: 5, reason: '88.2% CRIT DMG with universal +20% damage bonus active off-field' },
-      { name: 'Polar Star', rarity: 5, reason: 'High CRIT Rate and skill damage buffs stacking with on-field summon' },
-      { name: 'The Stringless', rarity: 4, reason: 'High EM with +48% Skill and Burst DMG multipliers on Hydro reactions' },
-      { name: 'Favonius Warbow', rarity: 4, reason: 'Universal Battery BiS: High ER generating neutral energy particles for teammates' }
+      { name: 'Mistsplitter Reforged', rarity: 5, reason: 'High Base ATK, CRIT DMG, and stacking elemental damage bonus' },
+      { name: 'Primordial Jade Cutter', rarity: 5, reason: 'Massive 44.1% CRIT Rate with bonus HP-to-ATK conversion' },
+      { name: 'Fleuve Cendre Ferryman', rarity: 4, reason: 'Best F2P Fishing Sword: High ER with +16% Skill CRIT Rate' },
+      { name: 'Favonius Sword', rarity: 4, reason: 'Universal Battery: High ER generating neutral energy particles for teammates' }
     ],
     artifacts: [
       { name: 'Golden Troupe', pieces: 4, reason: 'Best in Slot: Colossal +70% off-field Elemental Skill DMG' },
@@ -250,10 +251,10 @@ export const KQM_BATCH_7 = {
   },
   Vesna: {
     weapons: [
-      { name: 'A Thousand Floating Dreams', rarity: 5, reason: 'High EM substat providing personal damage buffs and sharing EM with teammates' },
-      { name: 'The Widsith', rarity: 4, reason: 'Premier 4★: 55.1% CRIT DMG with massive 10s burst buffs across ATK, DMG, and EM' },
-      { name: 'Favonius Codex', rarity: 4, reason: 'Universal Battery: High ER generating neutral particles to guarantee burst uptime' },
-      { name: 'Hakushin Ring', rarity: 4, reason: 'Craftable Team Buffer: Grants +20% Electro and element DMG bonuses on reactions' }
+      { name: 'Freedom-Sworn', rarity: 5, reason: 'Premier 5★ Support: High EM granting party Normal/Charged and ATK% buffs on reactions' },
+      { name: "Xiphos' Moonlight", rarity: 4, reason: 'EM Battery: Converts EM directly into personal and party Energy Recharge' },
+      { name: 'Favonius Sword', rarity: 4, reason: 'Universal Battery: High ER generating neutral energy particles for teammates' },
+      { name: 'Iron Sting', rarity: 4, reason: 'Craftable F2P: High 165 EM substat maximizing Aggravate reaction damage' }
     ],
     artifacts: [
       { name: 'Noblesse Oblige', pieces: 4, reason: 'Best Support BiS: +20% party-wide ATK buff on burst cast' },
@@ -268,9 +269,9 @@ export const KQM_BATCH_7 = {
   },
   Vodyanitsa: {
     weapons: [
-      { name: 'Favonius Lance', rarity: 4, reason: 'Universal Battery BiS: High ER generating neutral particles on crit hits' },
-      { name: 'Rightful Reward', rarity: 4, reason: 'Craftable Fontaine Polearm: HP% substat and refunds burst energy upon healing' },
-      { name: 'Black Tassel', rarity: 3, reason: 'F2P Stat Stick: Readily accessible 46.9% HP substat for maximum healing output' }
+      { name: 'Prototype Amber', rarity: 4, reason: 'Craftable Sustain BiS: High HP% substat, refunds 18 energy and heals team by 18% on burst' },
+      { name: 'Thrilling Tales of Dragon Slayers', rarity: 3, reason: 'Hypercarry Buffer: 35.2% HP substat and passes massive +48% ATK buff to incoming carry' },
+      { name: 'Favonius Codex', rarity: 4, reason: 'Universal Battery: High ER generating neutral particles to guarantee burst uptime' }
     ],
     artifacts: [
       { name: 'Ocean-Hued Clam', pieces: 4, reason: 'Best in Slot: Converts continuous party healing into 30k physical bubble damage' },
@@ -302,9 +303,10 @@ export const KQM_BATCH_7 = {
   },
   Ifa: {
     weapons: [
-      { name: 'Favonius Warbow', rarity: 4, reason: 'Universal Battery BiS: High 61.3% ER generating neutral particles for team rotations' },
-      { name: 'Elegy for the End', rarity: 5, reason: 'Premier 5★ Support: High ER granting party-wide +100 EM and +20% ATK buffs' },
-      { name: 'The Stringless', rarity: 4, reason: 'Sub-DPS BiS: High EM with +48% Skill and Burst DMG multipliers' }
+      { name: 'Favonius Codex', rarity: 4, reason: 'Universal Battery BiS: High ER generating neutral particles for team rotations' },
+      { name: 'Thrilling Tales of Dragon Slayers', rarity: 3, reason: 'Premier Support: Passes colossal +48% ATK buff to switching main carry' },
+      { name: 'Prototype Amber', rarity: 4, reason: 'Craftable Sustain BiS: Restores flat energy and heals party by 18% on burst' },
+      { name: 'Sacrificial Fragments', rarity: 4, reason: 'High EM with skill reset for maximum reaction triggering' }
     ],
     artifacts: [
       { name: 'Scroll of the Hero of Cinder City', pieces: 4, reason: 'Undisputed Best in Slot: Grants party-wide +40% elemental damage bonus on Nightsoul trigger' },

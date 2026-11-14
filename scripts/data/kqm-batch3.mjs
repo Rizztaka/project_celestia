@@ -213,10 +213,10 @@ export const KQM_BATCH_3 = {
   },
   LanYan: {
     weapons: [
-      { name: 'Favonius Sword', rarity: 4, reason: 'Universal Battery BiS: High ER substat generating neutral energy particles for party' },
-      { name: 'Freedom-Sworn', rarity: 5, reason: 'Support 5★: Grants party Normal/Charged and ATK% buffs on triggering reactions' },
-      { name: 'Fleuve Cendre Ferryman', rarity: 4, reason: 'F2P Fishing Sword: High ER and +16% Skill CRIT Rate' },
-      { name: 'Sacrificial Sword', rarity: 4, reason: 'Skill Reset: Double skill charge for rapid shield replenishment' }
+      { name: 'Favonius Codex', rarity: 4, reason: 'Universal Battery BiS: High ER substat generating neutral energy particles for party' },
+      { name: 'Thrilling Tales of Dragon Slayers', rarity: 3, reason: 'Support 3★: Grants colossal +48% ATK buff to incoming carry' },
+      { name: 'Sacrificial Fragments', rarity: 4, reason: 'Skill Reset: High EM and cooldown reset for double skill swirl application' },
+      { name: 'Flowing Purity', rarity: 4, reason: 'Craftable Fontaine Catalyst: High base ATK and all-elemental DMG bonus' }
     ],
     artifacts: [
       { name: 'Viridescent Venerer', pieces: 4, reason: 'Support BiS: 40% elemental RES shred to swirled elements' },

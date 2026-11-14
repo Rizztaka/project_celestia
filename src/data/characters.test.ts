@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import genshindb from 'genshin-db';
 import { CHARACTERS } from './characters';
 
 describe('Rich Character Database Verification', () => {
@@ -180,5 +181,23 @@ describe('Rich Character Database Verification', () => {
     const navia = CHARACTERS.find((c) => c.id === 'Navia');
     expect(navia?.build?.weapons.some((w) => w.name === 'Verdict')).toBe(true);
     expect(navia?.build?.artifacts.some((a) => a.name.includes('Nighttime Whispers'))).toBe(true);
+  });
+
+  it('guarantees 100% weapon type matching for every recommended weapon across all characters', () => {
+    const mismatches: { char: string; charWeapon: string; weapon: string; weaponType: string }[] = [];
+    for (const char of CHARACTERS) {
+      for (const w of char.build?.weapons || []) {
+        const gw = genshindb.weapons(w.name);
+        if (gw && gw.weaponText && gw.weaponText !== char.weapon) {
+          mismatches.push({
+            char: char.name,
+            charWeapon: char.weapon,
+            weapon: w.name,
+            weaponType: gw.weaponText
+          });
+        }
+      }
+    }
+    expect(mismatches).toEqual([]);
   });
 });

@@ -1,138 +1,200 @@
 import React, { useState, useMemo } from 'react';
 import { analyzeEndgameReadiness } from '../engines/endgame-helper';
 import type { Character } from '../types/genshin';
-import { ShieldAlert, ShieldCheck, AlertCircle, Swords } from 'lucide-react';
+import {
+  ShieldAlert,
+  ShieldCheck,
+  AlertCircle,
+  Swords,
+  Crown,
+  ChevronDown,
+  ChevronUp,
+  Target,
+} from 'lucide-react';
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
+import { ImaginariumTheaterView } from './ImaginariumTheaterView';
+import { AbyssDualTeamView } from './AbyssDualTeamView';
 
 interface EndgameViewProps {
   ownedIds: string[];
 }
 
 export const EndgameView: React.FC<EndgameViewProps> = ({ ownedIds }) => {
+  const [activeSubTab, setActiveSubTab] = useState<'theater' | 'abyss'>('theater');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [showDetailedChamberGuide, setShowDetailedChamberGuide] = useState<boolean>(false);
+
   const analysis = useMemo(() => analyzeEndgameReadiness(ownedIds), [ownedIds]);
 
   return (
     <div className="space-y-6">
-      {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#141624] via-[#1a1e32] to-[#141624] p-6 rounded-2xl border border-[#262c44] shadow-lg">
-        <div className="flex items-center gap-2 text-[#d4af37] text-xs font-bold tracking-wider uppercase mb-1">
-          <Swords className="w-4 h-4" />
-          <span>Spiral Abyss Floor 12 & Boss Strategy</span>
+      {/* Top Endgame Navigation Switcher */}
+      <div className="flex items-center justify-between bg-[#121422] p-1.5 rounded-2xl border border-[#232943] shadow-md">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <button
+            onClick={() => setActiveSubTab('theater')}
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer ${
+              activeSubTab === 'theater'
+                ? 'bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0d0f17] shadow-lg scale-[1.02]'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#181c2e]'
+            }`}
+          >
+            <Crown className="w-4 h-4" />
+            <span>Imaginarium Theater (Visionary)</span>
+          </button>
+
+          <button
+            onClick={() => setActiveSubTab('abyss')}
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer ${
+              activeSubTab === 'abyss'
+                ? 'bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0d0f17] shadow-lg scale-[1.02]'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#181c2e]'
+            }`}
+          >
+            <Swords className="w-4 h-4" />
+            <span>Spiral Abyss Floor 12 (Dual Half)</span>
+          </button>
         </div>
-        <h1 className="text-2xl font-bold text-zinc-100 font-serif">
-          Endgame Stage & Shield Counters
-        </h1>
-        <p className="text-sm text-zinc-400 mt-1 max-w-2xl">
-          Analyzes active Floor 12 chamber shield barriers, boss invulnerability mechanics, and maps your owned roster against required elemental counters. Click any counter to inspect details.
-        </p>
       </div>
 
-      {/* Chamber Analysis Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {analysis.map((item, idx) => {
-          const isReady = item.verdict === 'Ready to Clear';
-          return (
-            <div
-              key={idx}
-              className="bg-[#12141d] border border-[#23273a] rounded-2xl p-5 space-y-4 shadow-md flex flex-col justify-between"
+      {/* Sub-tab 1: Imaginarium Theater */}
+      {activeSubTab === 'theater' && (
+        <ImaginariumTheaterView ownedIds={ownedIds} />
+      )}
+
+      {/* Sub-tab 2: Spiral Abyss Floor 12 */}
+      {activeSubTab === 'abyss' && (
+        <div className="space-y-6">
+          <AbyssDualTeamView ownedIds={ownedIds} />
+
+          {/* Collapsible Chamber & Enemy Deep Dive */}
+          <div className="bg-[#12141f] border border-[#22273e] rounded-2xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setShowDetailedChamberGuide(!showDetailedChamberGuide)}
+              className="w-full p-4 flex items-center justify-between text-xs font-bold text-zinc-300 hover:text-zinc-100 transition-colors cursor-pointer bg-[#151828]"
             >
-              <div>
-                <div className="flex items-center justify-between border-b border-[#1f2334] pb-3">
-                  <div>
-                    <span className="text-xs font-bold text-[#d4af37]">
-                      12-{item.chamber.chamber} · {item.chamber.half}
-                    </span>
-                    <h3 className="text-base font-bold text-zinc-100 mt-0.5">
-                      {item.chamber.enemies.join(' & ')}
-                    </h3>
-                  </div>
+              <div className="flex items-center gap-2">
+                <Target className="w-4 h-4 text-[#d4af37]" />
+                <span>Enemy Lineup & Chamber Shield Reference Guide</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-zinc-400">
+                <span>{showDetailedChamberGuide ? 'Hide Reference' : 'View Reference'}</span>
+                {showDetailedChamberGuide ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </div>
+            </button>
 
-                  <span
-                    className={`text-xs font-bold px-2.5 py-1 rounded-full border flex items-center gap-1 ${
-                      isReady
-                        ? 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30'
-                        : 'bg-rose-950/40 text-rose-400 border-rose-500/30'
-                    }`}
-                  >
-                    {isReady ? (
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                    ) : (
-                      <ShieldAlert className="w-3.5 h-3.5" />
-                    )}
-                    <span>{item.verdict}</span>
-                  </span>
-                </div>
+            {showDetailedChamberGuide && (
+              <div className="p-5 border-t border-[#1f243a]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {analysis.map((item, idx) => {
+                    const isReady = item.verdict === 'Ready to Clear';
+                    return (
+                      <div
+                        key={idx}
+                        className="bg-[#0e1018] border border-[#20253a] rounded-xl p-4 space-y-3 flex flex-col justify-between"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between border-b border-[#1b1f32] pb-2.5">
+                            <div>
+                              <span className="text-xs font-bold text-[#d4af37]">
+                                12-{item.chamber.chamber} · {item.chamber.half}
+                              </span>
+                              <h4 className="text-sm font-bold text-zinc-100 mt-0.5">
+                                {item.chamber.enemies.join(' & ')}
+                              </h4>
+                            </div>
 
-                {/* Shield types & recommended */}
-                <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                  <div className="bg-[#181b28] px-2.5 py-1 rounded-lg border border-[#262c3f]">
-                    <span className="text-zinc-400">Shield: </span>
-                    <span className="text-rose-400 font-semibold">{item.chamber.shieldTypes.join(', ')}</span>
-                  </div>
-                  <div className="bg-[#181b28] px-2.5 py-1 rounded-lg border border-[#262c3f]">
-                    <span className="text-zinc-400">Required: </span>
-                    <span className="text-[#d4af37] font-semibold">{item.chamber.recommendedElements.join(', ')}</span>
-                  </div>
-                </div>
+                            <span
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1 ${
+                                isReady
+                                  ? 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30'
+                                  : 'bg-rose-950/40 text-rose-400 border-rose-500/30'
+                              }`}
+                            >
+                              {isReady ? (
+                                <ShieldCheck className="w-3 h-3" />
+                              ) : (
+                                <ShieldAlert className="w-3 h-3" />
+                              )}
+                              <span>{item.verdict}</span>
+                            </span>
+                          </div>
 
-                {/* Tips */}
-                <p className="mt-3 text-xs text-zinc-300 bg-[#0e1017] p-3 rounded-xl border border-[#1b1f2e] leading-relaxed">
-                  💡 {item.chamber.tips}
-                </p>
+                          <div className="mt-2.5 flex flex-wrap gap-2 text-xs">
+                            <div className="bg-[#141724] px-2 py-0.5 rounded border border-[#22273c]">
+                              <span className="text-zinc-400 text-[11px]">Shield: </span>
+                              <span className="text-rose-400 font-semibold text-[11px]">
+                                {item.chamber.shieldTypes.join(', ')}
+                              </span>
+                            </div>
+                            <div className="bg-[#141724] px-2 py-0.5 rounded border border-[#22273c]">
+                              <span className="text-zinc-400 text-[11px]">Required: </span>
+                              <span className="text-[#d4af37] font-semibold text-[11px]">
+                                {item.chamber.recommendedElements.join(', ')}
+                              </span>
+                            </div>
+                          </div>
 
-                {/* Counter units from your roster */}
-                <div className="mt-3">
-                  <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block mb-1.5">
-                    Your Usable Counter Characters:
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {item.usableCounters.length > 0 ? (
-                      item.usableCounters.map((c) => (
-                        <button
-                          key={c.id}
-                          onClick={() => setSelectedCharacter(c)}
-                          className="flex items-center gap-1.5 text-xs bg-[#1a1e2f] hover:bg-[#252b42] text-zinc-200 px-2 py-1 rounded-lg border border-[#293047] hover:border-[#d4af37]/50 font-medium transition-colors cursor-pointer"
-                          title="Click to view character details"
-                        >
-                          <CharacterPortrait
-                            src={c.icon}
-                            name={c.name}
-                            element={c.element}
-                            size="xs"
-                          />
-                          <span>{c.name}</span>
-                          <span className="text-[10px] text-zinc-400">({c.element})</span>
-                        </button>
-                      ))
-                    ) : (
-                      <span className="text-xs text-rose-400 italic">
-                        No optimal counter found in your active roster!
-                      </span>
-                    )}
-                  </div>
+                          <p className="mt-2.5 text-xs text-zinc-300 bg-[#0a0c13] p-2.5 rounded-lg border border-[#171a28] leading-relaxed">
+                            💡 {item.chamber.tips}
+                          </p>
+
+                          <div className="mt-2.5">
+                            <span className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider block mb-1">
+                              Your Usable Counter Characters:
+                            </span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {item.usableCounters.length > 0 ? (
+                                item.usableCounters.map((c) => (
+                                  <button
+                                    key={c.id}
+                                    onClick={() => setSelectedCharacter(c)}
+                                    className="flex items-center gap-1 text-[11px] bg-[#161928] hover:bg-[#20253a] text-zinc-200 px-2 py-0.5 rounded-lg border border-[#242b42] hover:border-[#d4af37]/50 font-medium transition-colors cursor-pointer"
+                                  >
+                                    <CharacterPortrait
+                                      src={c.icon}
+                                      name={c.name}
+                                      element={c.element}
+                                      size="xs"
+                                    />
+                                    <span>{c.name}</span>
+                                  </button>
+                                ))
+                              ) : (
+                                <span className="text-xs text-rose-400 italic">
+                                  No optimal counter found in your active roster!
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {item.missingElements.length > 0 && (
+                          <div className="flex items-center gap-1.5 text-xs text-rose-400 bg-rose-950/20 border border-rose-500/20 p-2 rounded-lg mt-2">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>Missing elements: {item.missingElements.join(', ')}</span>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
+            )}
+          </div>
+        </div>
+      )}
 
-              {/* Missing elements alert */}
-              {item.missingElements.length > 0 && (
-                <div className="flex items-center gap-1.5 text-xs text-rose-400 bg-rose-950/20 border border-rose-500/20 p-2 rounded-xl">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>Missing counter elements in owned roster: {item.missingElements.join(', ')}</span>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Interactive Character Details Modal */}
-      <CharacterDetailModal
-        character={selectedCharacter}
-        onClose={() => setSelectedCharacter(null)}
-        isOwned={selectedCharacter ? ownedIds.includes(selectedCharacter.id) : false}
-      />
+      {/* Character Details Modal */}
+      {selectedCharacter && (
+        <CharacterDetailModal
+          character={selectedCharacter}
+          onClose={() => setSelectedCharacter(null)}
+          isOwned={ownedIds.includes(selectedCharacter.id)}
+        />
+      )}
     </div>
   );
 };

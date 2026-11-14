@@ -160,3 +160,58 @@ export interface ArtifactStopRecommendation {
   advice: string;
 }
 
+// ---------------------------------------------------------
+// Imaginarium Theater & Abyss Dual-Team Types
+// ---------------------------------------------------------
+
+export type TheaterDifficulty = 'Normal' | 'Hard' | 'Visionary';
+export type TheaterActType = 'Normal' | 'Defense' | 'Boss';
+
+export interface TheaterBossRequirement {
+  actNumber: number;
+  bossName: string;
+  hazardDescription?: string;
+  recommendedArchetypes: string[];
+}
+
+export interface TheaterCharacterVigor {
+  characterId: string;
+  remainingVigor: number;
+  usedInActs: number[];
+}
+
+export interface TheaterActPlan {
+  actNumber: number;
+  type: TheaterActType;
+  bossName?: string;
+  recommendedArchetypes: string[];
+  team: Character[];
+  isLocked?: boolean;
+}
+
+export interface TheaterSeasonConfig {
+  id: string;
+  name: string;
+  elements: Element[];
+  openingCastIds: string[];
+  specialGuestIds: string[];
+  bosses: Record<number, string>;
+}
+
+export interface AbyssChamberCoverage {
+  chamber: number;
+  firstHalfStatus: string;
+  secondHalfStatus: string;
+  firstHalfSatisfied: boolean;
+  secondHalfSatisfied: boolean;
+}
+
+export interface AbyssDualTeamPlan {
+  firstHalfTeam: TeamRecommendation;
+  secondHalfTeam: TeamRecommendation;
+  chamberCoverage: AbyssChamberCoverage[];
+  overallScore: number;
+  warnings?: string[];
+}
+
+

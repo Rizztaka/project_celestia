@@ -135,10 +135,18 @@ export function applyConstellationModifiers(
           'Caution: Bennett C6 Pyro Infusion overrides Physical/Normal attack damage.',
         );
       } else {
-        synergyScore += 3;
-        extraReasons.push(
-          'Bennett C6: +15% Pyro DMG Bonus for Sword, Claymore, and Polearm carries.',
+        const hasPyroMelee = team.some(
+          (m) =>
+            m.id !== 'Bennett' &&
+            m.element === 'Pyro' &&
+            ['Sword', 'Claymore', 'Polearm'].includes(m.weapon),
         );
+        if (hasPyroMelee) {
+          synergyScore += 3;
+          extraReasons.push(
+            'Bennett C6: +15% Pyro DMG Bonus for Sword, Claymore, and Polearm carries.',
+          );
+        }
       }
     }
     if (member.id === 'Faruzan' && c >= 6) {

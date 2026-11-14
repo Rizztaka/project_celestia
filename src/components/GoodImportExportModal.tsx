@@ -98,8 +98,12 @@ export const GoodImportExportModal: React.FC<GoodImportExportModalProps> = ({
     const merged = mergeRosterProfiles(profiles, parsedResult.profiles, overwriteAll);
 
     // If artifacts were present in the GOOD file, persist them
+    let artifactWarning = '';
     if (parsedResult.rawArtifacts && parsedResult.rawArtifacts.length > 0) {
-      saveArtifacts(parsedResult.rawArtifacts);
+      const savedOk = saveArtifacts(parsedResult.rawArtifacts);
+      if (!savedOk) {
+        artifactWarning = ' (Note: Artifact inventory exceeded browser localStorage limit)';
+      }
     }
 
     const count = Object.keys(parsedResult.profiles).length;
@@ -107,7 +111,7 @@ export const GoodImportExportModal: React.FC<GoodImportExportModalProps> = ({
       parsedResult.summary.importedWeapons > 0
         ? ` with ${parsedResult.summary.importedWeapons} equipped weapons`
         : ''
-    } from ${sourceName || 'GOOD JSON'}!`;
+    } from ${sourceName || 'GOOD JSON'}!${artifactWarning}`;
 
     onImportSuccess(merged, msg);
     onClose();
@@ -214,16 +218,31 @@ export const GoodImportExportModal: React.FC<GoodImportExportModalProps> = ({
 
               {/* Paste fallback */}
               <div>
-                <label className="block text-xs font-semibold text-zinc-400 mb-1.5 flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5" />
-                  <span>Or paste raw GOOD JSON text</span>
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-xs font-semibold text-zinc-400 flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>Or paste raw GOOD JSON text</span>
+                  </label>
+                  {rawText.trim() && (
+                    <button
+                      type="button"
+                      onClick={() => handleProcessJSON(rawText)}
+                      className="text-[11px] text-[#d4af37] hover:underline font-semibold cursor-pointer"
+                    >
+                      Load / Parse
+                    </button>
+                  )}
+                </div>
                 <textarea
                   value={rawText}
                   onChange={(e) => {
                     setRawText(e.target.value);
-                    if (e.target.value.trim().startsWith('{')) {
-                      handleProcessJSON(e.target.value);
+                    setErrorMsg('');
+                  }}
+                  onPaste={(e) => {
+                    const pasted = e.clipboardData.getData('text');
+                    if (pasted.trim().startsWith('{')) {
+                      handleProcessJSON(pasted);
                     }
                   }}
                   placeholder='{"format": "GOOD", "version": 2, "characters": [...]}'

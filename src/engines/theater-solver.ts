@@ -227,8 +227,10 @@ export function autoDraftTheaterSchedule(
     fillActTeam(act, candidates, vigor, true, usedPairCounts, bossCarriesAssigned, rosterProfiles);
   }
 
-  // 3. Draft Regular Acts (Acts 1, 2, 4, 5, 7, 9) spreading vigor cleanly
-  const regularActsToSchedule = acts.filter((a) => a.type !== 'Boss');
+  // 3. Draft Regular Acts descending (e.g. Acts 9, 7, 5, 4, 2, 1) to prioritize harder later stages
+  const regularActsToSchedule = acts
+    .filter((a) => a.type !== 'Boss')
+    .sort((a, b) => b.actNumber - a.actNumber);
   for (const act of regularActsToSchedule) {
     fillActTeam(act, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
   }

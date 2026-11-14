@@ -23,11 +23,10 @@ export const DEFAULT_ROSTER = [
 export function getSavedRoster(): string[] {
   try {
     const raw = localStorage.getItem(ROSTER_KEY);
-    if (!raw) return DEFAULT_ROSTER;
+    if (raw === null) return DEFAULT_ROSTER;
     const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed) || parsed.length === 0) return DEFAULT_ROSTER;
-    const valid = parsed.filter((id): id is string => typeof id === 'string' && id.trim().length > 0);
-    return valid.length > 0 ? valid : DEFAULT_ROSTER;
+    if (!Array.isArray(parsed)) return DEFAULT_ROSTER;
+    return parsed.filter((id): id is string => typeof id === 'string' && id.trim().length > 0);
   } catch {
     return DEFAULT_ROSTER;
   }
@@ -44,9 +43,9 @@ export function saveRoster(ids: string[]): void {
 export function getSavedProfiles(): Record<string, OwnedCharacterProfile> {
   try {
     const raw = localStorage.getItem(PROFILES_KEY);
-    if (raw) {
+    if (raw !== null) {
       const parsed = JSON.parse(raw);
-      if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
         return parsed as Record<string, OwnedCharacterProfile>;
       }
     }
@@ -54,7 +53,7 @@ export function getSavedProfiles(): Record<string, OwnedCharacterProfile> {
     console.error('Failed to read profiles from localStorage:', e);
   }
 
-  // Fallback: Build initial profiles from saved roster IDs
+  // Fallback for first-time uninitialized visits: build baseline from saved/default roster
   const fallbackIds = getSavedRoster();
   const baseline: Record<string, OwnedCharacterProfile> = {};
   for (const id of fallbackIds) {
@@ -88,11 +87,13 @@ export function getSavedArtifacts(): any[] {
   }
 }
 
-export function saveArtifacts(artifacts: any[]): void {
+export function saveArtifacts(artifacts: any[]): boolean {
   try {
     localStorage.setItem(ARTIFACTS_KEY, JSON.stringify(artifacts));
+    return true;
   } catch (e) {
-    console.error('Failed to save artifacts to localStorage:', e);
+    console.warn('Failed to save artifacts to localStorage (quota exceeded):', e);
+    return false;
   }
 }
 

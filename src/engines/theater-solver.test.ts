@@ -255,6 +255,24 @@ describe('Imaginarium Theater Engine', () => {
       expect(act1.team.map((m) => m.id)).toEqual(['Mavuika', 'Bennett', 'Furina', 'Xingqiu']);
       expect(act2.team.map((m) => m.id)).toEqual(['Mavuika', 'Bennett', 'Furina', 'Xingqiu']);
     });
+
+    it('prioritizes higher numbered regular acts in scheduling', () => {
+      const rosterProfiles = {
+        Bennett: { id: 'Bennett', level: 90, constellation: 5 },
+      };
+      const { acts } = autoDraftTheaterSchedule(
+        allSeason1Chars,
+        'Visionary',
+        season1,
+        undefined,
+        rosterProfiles,
+      );
+
+      const act9 = acts.find((a) => a.actNumber === 9)!;
+      const act1 = acts.find((a) => a.actNumber === 1)!;
+      expect(act9.team).toHaveLength(4);
+      expect(act1.team).toHaveLength(4);
+    });
   });
 
   describe('swapTheaterActMember', () => {

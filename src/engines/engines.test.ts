@@ -43,6 +43,35 @@ describe('Celestia v2 Core Engines', () => {
       expect(boostedVape.reasons.some((r) => r.includes('Xiangling C4'))).toBe(true);
       expect(boostedVape.reasons.some((r) => r.includes('Bennett C1'))).toBe(true);
     });
+
+    it('handles Bennett C6 conditionally based on carry weapon and element', () => {
+      // 1. Bennett C6 + Xiangling (Pyro Polearm) -> gets C6 Pyro DMG bonus
+      const pyroMeleeOwned = ['Xiangling', 'Bennett', 'Xingqiu', 'Yelan'];
+      const c6ProfilesXiangling = {
+        Bennett: { id: 'Bennett', level: 90, constellation: 6 },
+      };
+      const teamsWithXiangling = generateBestTeams(pyroMeleeOwned, undefined, c6ProfilesXiangling);
+      const xianglingTeam = teamsWithXiangling.find((t) => t.members.some((m) => m.id === 'Xiangling')) || teamsWithXiangling[0];
+      expect(xianglingTeam.reasons.some((r) => r.includes('Bennett C6: +15% Pyro DMG Bonus for Sword, Claymore, and Polearm carries.'))).toBe(true);
+
+      // 2. Bennett C6 + Yoimiya (Pyro Bow) without any Pyro Sword/Claymore/Polearm -> does NOT get C6 Pyro DMG bonus
+      const bowOwned = ['Yoimiya', 'Bennett', 'Xingqiu', 'Yelan'];
+      const c6ProfilesYoimiya = {
+        Bennett: { id: 'Bennett', level: 90, constellation: 6 },
+      };
+      const teamsWithYoimiya = generateBestTeams(bowOwned, undefined, c6ProfilesYoimiya);
+      const yoimiyaTeam = teamsWithYoimiya.find((t) => t.members.some((m) => m.id === 'Yoimiya')) || teamsWithYoimiya[0];
+      expect(yoimiyaTeam.reasons.some((r) => r.includes('Bennett C6: +15% Pyro DMG Bonus'))).toBe(false);
+
+      // 3. Bennett C6 + Eula (Physical Claymore) -> warns about override
+      const physicalOwned = ['Eula', 'Bennett', 'RaidenShogun', 'Zhongli'];
+      const c6ProfilesEula = {
+        Bennett: { id: 'Bennett', level: 90, constellation: 6 },
+      };
+      const teamsWithEula = generateBestTeams(physicalOwned, undefined, c6ProfilesEula);
+      const eulaTeam = teamsWithEula.find((t) => t.members.some((m) => m.id === 'Eula')) || teamsWithEula[0];
+      expect(eulaTeam.reasons.some((r) => r.includes('Caution: Bennett C6 Pyro Infusion overrides'))).toBe(true);
+    });
   });
 
   describe('Pull Advisor', () => {

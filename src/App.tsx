@@ -236,7 +236,13 @@ export const App: React.FC = () => {
               onUpdateProfile={handleUpdateProfile}
             />
           )}
-          {activeTab === 'pulls' && <PullAdvisorView ownedIds={ownedIds} />}
+          {activeTab === 'pulls' && (
+            <PullAdvisorView
+              ownedIds={ownedIds}
+              profiles={profiles}
+              weapons={weapons}
+            />
+          )}
           {activeTab === 'endgame' && (
             <EndgameView ownedIds={ownedIds} profiles={profiles} />
           )}

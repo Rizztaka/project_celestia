@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { evaluateComprehensivePullROI, evaluatePullRecommendations } from './pull-advisor';
+import { evaluateComprehensivePullROI } from './pull-advisor';
 import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../types/genshin';
 
 describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {

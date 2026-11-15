@@ -1,6 +1,6 @@
 import React from 'react';
 import type { PullBudgetState } from '../types/genshin';
-import { Sparkles, Shield, Target, Plus, RotateCcw } from 'lucide-react';
+import { Sparkles, Shield, Target, RotateCcw } from 'lucide-react';
 
 export interface PullBudgetCardProps {
   budget: PullBudgetState;

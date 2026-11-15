@@ -1,11 +1,9 @@
 import type {
-  Character,
   EnhancedPullAdvice,
   OwnedCharacterProfile,
   OwnedWeapon,
   PullAdvice,
   PullBudgetState,
-  PullTargetType,
 } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import { BANNER_PHASES } from '../data/banners';

@@ -1,5 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import type { Character, Element, OwnedCharacterProfile } from '../types/genshin';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import type {
+  Character,
+  Element,
+  OwnedCharacterProfile,
+  OwnedWeapon,
+} from '../types/genshin';
 import {
   X,
   Swords,
@@ -11,10 +16,14 @@ import {
   Layers,
   Zap,
   Info,
+  Sliders,
 } from 'lucide-react';
 import { CharacterPortrait } from './CharacterPortrait';
 import { resolveCharacterRotationProfile } from '../engines/rotation-synthesizer';
 import { RotationBadgeList } from './RotationBadgeList';
+import { rankWeaponsForCharacter } from '../engines/weapon-solver';
+import { getSavedWeapons, saveWeapons } from '../services/storage';
+import { WEAPONS_BY_TYPE, getWeaponByKey } from '../data/weapons';
 
 interface CharacterDetailModalProps {
   character: Character | null;
@@ -23,6 +32,8 @@ interface CharacterDetailModalProps {
   onToggleOwned?: (id: string) => void;
   profile?: OwnedCharacterProfile;
   onUpdateProfile?: (profile: OwnedCharacterProfile) => void;
+  weapons?: OwnedWeapon[];
+  onUpdateWeapons?: (weapons: OwnedWeapon[]) => void;
 }
 
 const ELEMENT_THEMES: Record<
@@ -93,10 +104,144 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   onToggleOwned,
   profile,
   onUpdateProfile,
+  weapons,
+  onUpdateWeapons,
 }) => {
   const [activeTab, setActiveTab] = useState<'build' | 'talents' | 'constellations'>('build');
   const [showAlternateRotation, setShowAlternateRotation] = useState<boolean>(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const activeWeapons = useMemo(() => weapons || getSavedWeapons(), [weapons]);
+
+  const rankedOwnedWeapons = useMemo(() => {
+    if (!character) return [];
+    return rankWeaponsForCharacter(character, activeWeapons);
+  }, [character, activeWeapons]);
+
+  const [showManualCustomizer, setShowManualCustomizer] = useState(false);
+  const [customWeaponKey, setCustomWeaponKey] = useState<string>('');
+  const [customLevel, setCustomLevel] = useState<number>(profile?.weapon?.level ?? 90);
+  const [customRefinement, setCustomRefinement] = useState<number>(profile?.weapon?.refinement ?? 1);
+
+  // Sync customizer defaults with character weapon type
+  useEffect(() => {
+    if (character) {
+      const typeList = WEAPONS_BY_TYPE[character.weapon] || [];
+      setCustomWeaponKey(profile?.weapon?.key || typeList[0]?.key || '');
+      setCustomLevel(profile?.weapon?.level ?? 90);
+      setCustomRefinement(profile?.weapon?.refinement ?? 1);
+    }
+  }, [character?.id, profile?.weapon?.key]);
+
+  const handleEquipWeapon = (weaponToEquip: OwnedWeapon) => {
+    if (!character) return;
+
+    if (onUpdateProfile) {
+      onUpdateProfile({
+        id: character.id,
+        level: profile?.level ?? 90,
+        constellation: profile?.constellation ?? 0,
+        talents: profile?.talents,
+        weapon: {
+          key: weaponToEquip.key,
+          name: weaponToEquip.name,
+          level: weaponToEquip.level,
+          refinement: weaponToEquip.refinement,
+          rarity: weaponToEquip.rarity,
+          ascension: weaponToEquip.ascension,
+        },
+      });
+    }
+
+    const updatedWeapons = activeWeapons.map((w) => {
+      if (w.id === weaponToEquip.id) {
+        return { ...w, location: character.id };
+      }
+      if (w.location === character.id) {
+        return { ...w, location: undefined };
+      }
+      return w;
+    });
+
+    if (onUpdateWeapons) {
+      onUpdateWeapons(updatedWeapons);
+    } else {
+      saveWeapons(updatedWeapons);
+    }
+  };
+
+  const handleSaveCustomWeapon = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!character) return;
+    const dbW = getWeaponByKey(customWeaponKey);
+    if (!dbW) return;
+
+    const newEquipped = {
+      key: dbW.key,
+      name: dbW.name,
+      level: customLevel,
+      refinement: customRefinement,
+      rarity: dbW.rarity,
+    };
+
+    if (onUpdateProfile) {
+      onUpdateProfile({
+        id: character.id,
+        level: profile?.level ?? 90,
+        constellation: profile?.constellation ?? 0,
+        talents: profile?.talents,
+        weapon: newEquipped,
+      });
+    }
+
+    // 1. Unequip any weapon currently on this character into bag (preserving it in inventory)
+    const baseWeapons = activeWeapons.map((w) => {
+      if (w.location === character.id) {
+        return { ...w, location: undefined };
+      }
+      return w;
+    });
+
+    // 2. Look for an existing unequipped instance of this weapon in bag to reuse
+    const unequippedIndex = baseWeapons.findIndex(
+      (w) => w.key === dbW.key && (!w.location || !w.location.trim()),
+    );
+
+    let updatedWeapons: OwnedWeapon[];
+    if (unequippedIndex >= 0) {
+      updatedWeapons = baseWeapons.map((w, idx) => {
+        if (idx === unequippedIndex) {
+          return {
+            ...w,
+            level: customLevel,
+            refinement: customRefinement,
+            location: character.id,
+          };
+        }
+        return w;
+      });
+    } else {
+      const newOwned: OwnedWeapon = {
+        id: `${dbW.key}_${Date.now()}`,
+        key: dbW.key,
+        name: dbW.name,
+        level: customLevel,
+        refinement: customRefinement,
+        rarity: dbW.rarity,
+        location: character.id,
+        lock: true,
+      };
+      updatedWeapons = [newOwned, ...baseWeapons];
+    }
+
+    if (onUpdateWeapons) {
+      onUpdateWeapons(updatedWeapons);
+    } else {
+      saveWeapons(updatedWeapons);
+    }
+
+    setShowManualCustomizer(false);
+  };
 
   // Reset alternate rotation view on character switch
   useEffect(() => {
@@ -421,6 +566,181 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   )}
                 </div>
               )}
+
+              {/* Best Owned Weapons Section */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-zinc-200 flex items-center gap-1.5">
+                    <Swords className="w-4 h-4 text-[#d4af37]" />
+                    <span>Best Owned Weapons ({rankedOwnedWeapons.length})</span>
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setShowManualCustomizer(!showManualCustomizer)}
+                    className="text-xs text-[#d4af37] hover:underline flex items-center gap-1 cursor-pointer font-semibold"
+                  >
+                    <Sliders className="w-3.5 h-3.5" />
+                    <span>{showManualCustomizer ? 'Close Editor' : 'Customise Weapon'}</span>
+                  </button>
+                </div>
+
+                {/* Collapsible Manual Customizer */}
+                {showManualCustomizer && (
+                  <form
+                    onSubmit={handleSaveCustomWeapon}
+                    className="bg-[#10121d] border border-[#2b3149] p-4 rounded-xl space-y-3"
+                  >
+                    <div className="text-xs font-bold text-[#d4af37]">
+                      Equip Custom {character.weapon}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[11px] text-zinc-400 font-semibold">Weapon Model</label>
+                        <select
+                          value={customWeaponKey}
+                          onChange={(e) => setCustomWeaponKey(e.target.value)}
+                          className="w-full bg-[#181c2c] border border-[#282f48] text-xs text-zinc-100 rounded-lg p-1.5 focus:outline-none focus:border-[#d4af37]"
+                        >
+                          {(WEAPONS_BY_TYPE[character.weapon] || []).map((w) => (
+                            <option key={w.key} value={w.key}>
+                              {'★'.repeat(w.rarity)} {w.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-zinc-400 font-semibold">Level</span>
+                          <span className="text-[#d4af37] font-bold">Lv. {customLevel}</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="1"
+                          max="90"
+                          value={customLevel}
+                          onChange={(e) => setCustomLevel(Number(e.target.value))}
+                          className="w-full accent-[#d4af37] cursor-pointer"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] text-zinc-400 font-semibold">Refinement</label>
+                        <select
+                          value={customRefinement}
+                          onChange={(e) => setCustomRefinement(Number(e.target.value))}
+                          className="w-full bg-[#181c2c] border border-[#282f48] text-xs text-zinc-100 rounded-lg p-1.5 focus:outline-none focus:border-[#d4af37]"
+                        >
+                          {[1, 2, 3, 4, 5].map((r) => (
+                            <option key={r} value={r}>
+                              R{r}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end gap-2 pt-1 border-t border-[#1e2336]">
+                      <button
+                        type="button"
+                        onClick={() => setShowManualCustomizer(false)}
+                        className="px-3 py-1 rounded-lg text-xs text-zinc-400 hover:text-zinc-200"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-3 py-1 rounded-lg text-xs font-bold bg-[#d4af37] text-black hover:bg-[#e5c158]"
+                      >
+                        Equip This Weapon
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* Ranked Owned Weapons Cards */}
+                {rankedOwnedWeapons.length === 0 ? (
+                  <div className="bg-[#131622] border border-[#23273a] p-3.5 rounded-xl text-center text-xs text-zinc-400">
+                    No owned {character.weapon} found in armory. Use the Weapon Customizer above to add one!
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-2">
+                    {rankedOwnedWeapons.map((res) => {
+                      const w = res.weapon as OwnedWeapon;
+                      const isEquippedHere =
+                        w.location === character.id ||
+                        (profile?.weapon?.key === w.key && profile?.weapon?.level === w.level);
+
+                      return (
+                        <div
+                          key={w.id}
+                          className={`p-3 rounded-xl border flex items-center justify-between gap-3 transition-colors ${
+                            isEquippedHere
+                              ? 'bg-emerald-950/20 border-emerald-500/40'
+                              : 'bg-[#131622] border-[#23273a] hover:border-[#38405e]'
+                          }`}
+                        >
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-bold text-zinc-100">{w.name}</span>
+                              <span className="text-xs text-[#d4af37] font-semibold">
+                                {'★'.repeat(w.rarity || 4)}
+                              </span>
+                              <span className="text-[10px] font-mono font-bold text-amber-400">
+                                R{w.refinement}
+                              </span>
+                              <span className="text-[10px] font-mono text-zinc-400">
+                                Lv. {w.level}
+                              </span>
+                              <span
+                                className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${
+                                  res.tier === 'BiS'
+                                    ? 'bg-[#d4af37]/20 text-[#d4af37] border-[#d4af37]/30'
+                                    : res.tier === 'Optimal'
+                                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                                    : res.tier === 'Great'
+                                    ? 'bg-sky-500/20 text-sky-300 border-sky-500/30'
+                                    : 'bg-zinc-800 text-zinc-300 border-zinc-700'
+                                }`}
+                              >
+                                {res.tier} ({res.relativePercentage}%)
+                              </span>
+                            </div>
+
+                            <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                              {res.reason}
+                            </p>
+
+                            {res.equippedOn && res.equippedOn !== character.id && (
+                              <span className="inline-block mt-1 text-[11px] text-amber-300/80">
+                                Currently equipped on <strong>{res.equippedOn}</strong>
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="shrink-0">
+                            {isEquippedHere ? (
+                              <div className="px-3 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-1">
+                                <Check className="w-3.5 h-3.5" />
+                                <span>Equipped</span>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => handleEquipWeapon(w)}
+                                className="px-3 py-1.5 rounded-xl bg-[#1e2336] hover:bg-[#d4af37] text-zinc-200 hover:text-black border border-[#2d344e] text-xs font-bold transition-all cursor-pointer"
+                              >
+                                Equip
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
 
               {/* Recommended Weapons */}
               {character.build?.weapons && (

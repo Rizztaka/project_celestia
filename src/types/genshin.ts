@@ -130,6 +130,46 @@ export interface EquippedWeapon {
   ascension?: number;
 }
 
+export interface WeaponData {
+  key: string;
+  name: string;
+  weaponType: WeaponType;
+  rarity: 3 | 4 | 5;
+  baseAtk: number; // At Lv. 90
+  subStatType?: StatKey | string;
+  subStatValue?: string; // e.g. '66.2%' or '165'
+  passiveName?: string;
+  passiveDesc?: string;
+  tags?: string[]; // e.g. ['crit', 'energy', 'em', 'normal-buff', 'team-buff']
+  icon?: string;
+}
+
+export interface OwnedWeapon extends EquippedWeapon {
+  id: string; // Unique instance ID
+  location?: string; // Character ID if equipped, or empty/undefined if in bag
+  lock?: boolean;
+}
+
+export interface WeaponScoreResult {
+  weapon: OwnedWeapon | WeaponData;
+  score: number; // 0 - 100+
+  relativePercentage: number; // 100% = BiS
+  tier: 'BiS' | 'Optimal' | 'Great' | 'Usable' | 'Suboptimal';
+  reason: string;
+  isOwned: boolean;
+  isEquipped: boolean;
+  equippedOn?: string;
+}
+
+export interface TeamWeaponAssignment {
+  characterId: string;
+  characterName: string;
+  assignedWeapon: OwnedWeapon;
+  scoreResult: WeaponScoreResult;
+  isBorrowed: boolean;
+  borrowedFrom?: string; // Character name/ID if borrowed
+}
+
 export interface OwnedCharacterProfile {
   id: string;
   level: number;
@@ -192,6 +232,7 @@ export interface TeamRecommendation {
   rotation: string;
   steppedRotation?: SynthesizedTeamRotation;
   resonance: string[];
+  weaponAssignments?: TeamWeaponAssignment[];
 }
 
 export interface PullAdvice {

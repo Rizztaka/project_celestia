@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Users, Compass, ShieldCheck, PieChart, RefreshCw } from 'lucide-react';
+import { Sparkles, Users, Compass, ShieldCheck, PieChart, RefreshCw, Swords } from 'lucide-react';
 
 interface NavbarProps {
   activeTab: string;
@@ -9,6 +9,8 @@ interface NavbarProps {
   onSyncShowcase: () => void;
   isSyncing: boolean;
   ownedCount: number;
+  weaponCount?: number;
+  onOpenArmory?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -19,6 +21,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSyncShowcase,
   isSyncing,
   ownedCount,
+  weaponCount,
+  onOpenArmory,
 }) => {
   const tabs = [
     { id: 'teams', label: 'Best Teams', icon: Sparkles },
@@ -69,15 +73,31 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* UID Sync Control */}
+          {/* UID Sync Control & Armory Trigger */}
           <div className="flex items-center gap-2">
+            {onOpenArmory && (
+              <button
+                onClick={onOpenArmory}
+                className="bg-[#181c2c] hover:bg-[#22273e] text-zinc-200 hover:text-[#d4af37] border border-[#2a3048] hover:border-[#d4af37]/40 px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                title="Armory & Conflict Resolver"
+              >
+                <Swords className="w-3.5 h-3.5 text-[#d4af37]" />
+                <span className="hidden sm:inline">Armory</span>
+                {weaponCount !== undefined && (
+                  <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#272e48] text-amber-300 font-mono">
+                    {weaponCount}
+                  </span>
+                )}
+              </button>
+            )}
+
             <div className="relative">
               <input
                 type="text"
                 placeholder="Enter UID..."
                 value={uid}
                 onChange={(e) => setUid(e.target.value)}
-                className="bg-[#141622] border border-[#262a3b] text-xs text-zinc-200 rounded-lg px-3 py-1.5 w-32 sm:w-36 focus:outline-none focus:border-[#d4af37] transition-colors"
+                className="bg-[#141622] border border-[#262a3b] text-xs text-zinc-200 rounded-lg px-3 py-1.5 w-28 sm:w-36 focus:outline-none focus:border-[#d4af37] transition-colors"
                 maxLength={10}
               />
             </div>

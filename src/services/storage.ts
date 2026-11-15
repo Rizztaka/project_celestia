@@ -1,8 +1,9 @@
-import type { OwnedCharacterProfile } from '../types/genshin';
+import type { OwnedCharacterProfile, OwnedWeapon } from '../types/genshin';
 
 const ROSTER_KEY = 'celestia_v2_owned_roster';
 const PROFILES_KEY = 'celestia_v2_roster_profiles';
 const ARTIFACTS_KEY = 'celestia_v2_raw_artifacts';
+const WEAPONS_KEY = 'celestia_v2_raw_weapons';
 const UID_KEY = 'celestia_v2_active_uid';
 
 // Default starter roster so new users have an instant rich experience
@@ -22,6 +23,7 @@ export const DEFAULT_ROSTER = [
 
 export function getSavedRoster(): string[] {
   try {
+    if (typeof localStorage === 'undefined') return DEFAULT_ROSTER;
     const raw = localStorage.getItem(ROSTER_KEY);
     if (raw === null) return DEFAULT_ROSTER;
     const parsed = JSON.parse(raw);
@@ -34,6 +36,7 @@ export function getSavedRoster(): string[] {
 
 export function saveRoster(ids: string[]): void {
   try {
+    if (typeof localStorage === 'undefined') return;
     localStorage.setItem(ROSTER_KEY, JSON.stringify(ids));
   } catch (e) {
     console.error('Failed to save roster to localStorage:', e);
@@ -42,11 +45,13 @@ export function saveRoster(ids: string[]): void {
 
 export function getSavedProfiles(): Record<string, OwnedCharacterProfile> {
   try {
-    const raw = localStorage.getItem(PROFILES_KEY);
-    if (raw !== null) {
-      const parsed = JSON.parse(raw);
-      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-        return parsed as Record<string, OwnedCharacterProfile>;
+    if (typeof localStorage !== 'undefined') {
+      const raw = localStorage.getItem(PROFILES_KEY);
+      if (raw !== null) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          return parsed as Record<string, OwnedCharacterProfile>;
+        }
       }
     }
   } catch (e) {
@@ -68,6 +73,7 @@ export function getSavedProfiles(): Record<string, OwnedCharacterProfile> {
 
 export function saveProfiles(profiles: Record<string, OwnedCharacterProfile>): void {
   try {
+    if (typeof localStorage === 'undefined') return;
     localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
     // Keep legacy owned roster in sync
     saveRoster(Object.keys(profiles));
@@ -78,6 +84,7 @@ export function saveProfiles(profiles: Record<string, OwnedCharacterProfile>): v
 
 export function getSavedArtifacts(): any[] {
   try {
+    if (typeof localStorage === 'undefined') return [];
     const raw = localStorage.getItem(ARTIFACTS_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
@@ -89,6 +96,7 @@ export function getSavedArtifacts(): any[] {
 
 export function saveArtifacts(artifacts: any[]): boolean {
   try {
+    if (typeof localStorage === 'undefined') return false;
     localStorage.setItem(ARTIFACTS_KEY, JSON.stringify(artifacts));
     return true;
   } catch (e) {
@@ -97,8 +105,139 @@ export function saveArtifacts(artifacts: any[]): boolean {
   }
 }
 
+export const DEFAULT_WEAPONS: OwnedWeapon[] = [
+  {
+    id: 'starter_prototype_rancour',
+    key: 'PrototypeRancour',
+    name: 'Prototype Rancour',
+    level: 90,
+    refinement: 1,
+    rarity: 4,
+    location: '',
+  },
+  {
+    id: 'starter_favonius_sword',
+    key: 'FavoniusSword',
+    name: 'Favonius Sword',
+    level: 90,
+    refinement: 3,
+    rarity: 4,
+    location: '',
+  },
+  {
+    id: 'starter_favonius_warbow',
+    key: 'FavoniusWarbow',
+    name: 'Favonius Warbow',
+    level: 90,
+    refinement: 1,
+    rarity: 4,
+    location: '',
+  },
+  {
+    id: 'starter_the_catch',
+    key: 'TheCatch',
+    name: 'The Catch',
+    level: 90,
+    refinement: 5,
+    rarity: 4,
+    location: '',
+  },
+  {
+    id: 'starter_dragons_bane',
+    key: 'DragonsBane',
+    name: "Dragon's Bane",
+    level: 90,
+    refinement: 3,
+    rarity: 4,
+    location: '',
+  },
+  {
+    id: 'starter_favonius_lance',
+    key: 'FavoniusLance',
+    name: 'Favonius Lance',
+    level: 90,
+    refinement: 3,
+    rarity: 4,
+    location: '',
+  },
+  {
+    id: 'starter_thrilling_tales',
+    key: 'ThrillingTalesOfDragonSlayers',
+    name: 'Thrilling Tales of Dragon Slayers',
+    level: 90,
+    refinement: 5,
+    rarity: 3,
+    location: '',
+  },
+  {
+    id: 'starter_sacrificial_fragments',
+    key: 'SacrificialFragments',
+    name: 'Sacrificial Fragments',
+    level: 90,
+    refinement: 3,
+    rarity: 4,
+    location: '',
+  },
+];
+
+export function getSavedWeapons(): OwnedWeapon[] {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const raw = localStorage.getItem(WEAPONS_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed as OwnedWeapon[];
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('Failed to read weapons from localStorage:', e);
+  }
+
+  // Fallback 1: Extract equipped weapons from saved profiles
+  const profiles = getSavedProfiles();
+  const extractedWeapons: OwnedWeapon[] = [];
+  let index = 0;
+  for (const prof of Object.values(profiles)) {
+    if (prof.weapon && prof.weapon.key) {
+      index++;
+      extractedWeapons.push({
+        id: `${prof.weapon.key}_${prof.id}_${index}`,
+        key: prof.weapon.key,
+        name: prof.weapon.name,
+        level: prof.weapon.level,
+        refinement: prof.weapon.refinement,
+        rarity: prof.weapon.rarity,
+        ascension: prof.weapon.ascension,
+        location: prof.id,
+        lock: true,
+      });
+    }
+  }
+
+  if (extractedWeapons.length > 0) {
+    return extractedWeapons;
+  }
+
+  // Fallback 2: Default starter weapons
+  return DEFAULT_WEAPONS;
+}
+
+export function saveWeapons(weapons: OwnedWeapon[]): boolean {
+  try {
+    if (typeof localStorage === 'undefined') return false;
+    localStorage.setItem(WEAPONS_KEY, JSON.stringify(weapons));
+    return true;
+  } catch (e) {
+    console.warn('Failed to save weapons to localStorage:', e);
+    return false;
+  }
+}
+
 export function getSavedUid(): string {
   try {
+    if (typeof localStorage === 'undefined') return '';
     return localStorage.getItem(UID_KEY) || '';
   } catch {
     return '';
@@ -107,6 +246,7 @@ export function getSavedUid(): string {
 
 export function saveUid(uid: string): void {
   try {
+    if (typeof localStorage === 'undefined') return;
     localStorage.setItem(UID_KEY, uid);
   } catch (e) {
     console.error('Failed to save uid to localStorage:', e);

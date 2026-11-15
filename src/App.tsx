@@ -10,14 +10,19 @@ import {
   saveProfiles,
   getSavedUid,
   saveUid,
+  getSavedWeapons,
+  saveWeapons,
 } from './services/storage';
 import { fetchShowcaseFromEnka } from './services/enka';
-import type { OwnedCharacterProfile } from './types/genshin';
+import type { OwnedCharacterProfile, OwnedWeapon } from './types/genshin';
+import { WeaponConflictModal } from './components/WeaponConflictModal';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('teams');
   const [profiles, setProfiles] = useState<Record<string, OwnedCharacterProfile>>(getSavedProfiles);
+  const [weapons, setWeapons] = useState<OwnedWeapon[]>(getSavedWeapons);
+  const [isArmoryOpen, setIsArmoryOpen] = useState<boolean>(false);
   const [uid, setUidState] = useState<string>(getSavedUid);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [notification, setNotification] = useState<{
@@ -33,6 +38,16 @@ export const App: React.FC = () => {
     saveProfiles(profiles);
   }, [profiles]);
 
+  // Sync weapons bag to localStorage
+  useEffect(() => {
+    saveWeapons(weapons);
+  }, [weapons]);
+
+  const handleUpdateWeapons = (newWeapons: OwnedWeapon[]) => {
+    setWeapons(newWeapons);
+    saveWeapons(newWeapons);
+  };
+
   const handleSetUid = (newUid: string) => {
     setUidState(newUid);
     saveUid(newUid);
@@ -43,6 +58,10 @@ export const App: React.FC = () => {
       const next = { ...prev };
       if (next[id]) {
         delete next[id];
+        // Unequip weapon into bag if character is removed
+        setWeapons((wPrev) =>
+          wPrev.map((w) => (w.location === id ? { ...w, location: undefined } : w)),
+        );
       } else {
         next[id] = { id, level: 90, constellation: 0 };
       }
@@ -58,6 +77,11 @@ export const App: React.FC = () => {
       }
       return next;
     });
+    setWeapons((wPrev) =>
+      wPrev.map((w) =>
+        w.location && !ids.includes(w.location) ? { ...w, location: undefined } : w,
+      ),
+    );
   };
 
   const handleUpdateProfile = (updated: OwnedCharacterProfile) => {
@@ -65,13 +89,53 @@ export const App: React.FC = () => {
       ...prev,
       [updated.id]: updated,
     }));
+
+    if (updated.weapon) {
+      setWeapons((prev) => {
+        let matched = false;
+        const next = prev.map((w) => {
+          if (w.key === updated.weapon?.key && (!w.location || w.location === updated.id)) {
+            matched = true;
+            return {
+              ...w,
+              location: updated.id,
+              level: updated.weapon.level,
+              refinement: updated.weapon.refinement,
+            };
+          }
+          if (w.location === updated.id && w.key !== updated.weapon?.key) {
+            return { ...w, location: undefined };
+          }
+          return w;
+        });
+
+        if (!matched && updated.weapon) {
+          next.unshift({
+            id: `${updated.weapon.key}_${Date.now()}`,
+            key: updated.weapon.key,
+            name: updated.weapon.name,
+            level: updated.weapon.level,
+            refinement: updated.weapon.refinement,
+            rarity: updated.weapon.rarity,
+            location: updated.id,
+            lock: true,
+          });
+        }
+        return next;
+      });
+    }
   };
 
   const handleImportProfiles = (
     newProfiles: Record<string, OwnedCharacterProfile>,
     message: string,
+    importedWeapons?: OwnedWeapon[],
   ) => {
     setProfiles(newProfiles);
+    if (importedWeapons && importedWeapons.length > 0) {
+      setWeapons(importedWeapons);
+      saveWeapons(importedWeapons);
+    }
     setNotification({
       type: 'success',
       message,
@@ -129,6 +193,8 @@ export const App: React.FC = () => {
           onSyncShowcase={handleSyncShowcase}
           isSyncing={isSyncing}
           ownedCount={ownedIds.length}
+          weaponCount={weapons.length}
+          onOpenArmory={() => setIsArmoryOpen(true)}
         />
 
         {/* Sync Toast Notification */}
@@ -162,7 +228,13 @@ export const App: React.FC = () => {
         {/* Main Content Area */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {activeTab === 'teams' && (
-            <TeamGeneratorView ownedIds={ownedIds} profiles={profiles} />
+            <TeamGeneratorView
+              ownedIds={ownedIds}
+              profiles={profiles}
+              weapons={weapons}
+              onUpdateWeapons={handleUpdateWeapons}
+              onUpdateProfile={handleUpdateProfile}
+            />
           )}
           {activeTab === 'pulls' && <PullAdvisorView ownedIds={ownedIds} />}
           {activeTab === 'endgame' && (
@@ -177,10 +249,23 @@ export const App: React.FC = () => {
               onSetRoster={handleSetRoster}
               onUpdateProfile={handleUpdateProfile}
               onImportProfiles={handleImportProfiles}
+              weapons={weapons}
+              onUpdateWeapons={handleUpdateWeapons}
+              onOpenArmory={() => setIsArmoryOpen(true)}
             />
           )}
         </main>
       </div>
+
+      {/* Global Weapon Armory & Conflict Resolver Modal */}
+      <WeaponConflictModal
+        isOpen={isArmoryOpen}
+        onClose={() => setIsArmoryOpen(false)}
+        weapons={weapons}
+        onUpdateWeapons={handleUpdateWeapons}
+        profiles={profiles}
+        onUpdateProfiles={setProfiles}
+      />
 
       {/* Footer */}
       <footer className="border-t border-[#1c2030] bg-[#0c0d13] py-6 mt-12 text-center text-xs text-zinc-500">

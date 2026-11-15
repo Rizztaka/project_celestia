@@ -4,7 +4,9 @@ import type {
   GOODWeapon,
   OwnedCharacterProfile,
   EquippedWeapon,
+  OwnedWeapon,
 } from '../types/genshin';
+import { getWeaponByKey } from '../data/weapons';
 
 // Common prepositions and conjunctions to keep lowercase in Genshin weapon names
 const LOWERCASE_WORDS = new Set(['of', 'the', 'in', 'for', 'and', 'to']);
@@ -74,6 +76,7 @@ export function parseGOODJSON(jsonString: string): {
 
 export interface GOODMapResult {
   profiles: Record<string, OwnedCharacterProfile>;
+  rawWeapons: OwnedWeapon[];
   rawArtifacts: any[];
   summary: {
     importedCharacters: number;
@@ -91,12 +94,40 @@ export function mapGOODToCelestiaProfiles(good: GOODData): GOODMapResult {
   const characters = good.characters || [];
   const weapons = good.weapons || [];
   const rawArtifacts = Array.isArray(good.artifacts) ? good.artifacts : [];
+  const rawWeapons: OwnedWeapon[] = [];
 
   // Index weapons by location (character key)
   const weaponByLocation = new Map<string, GOODWeapon>();
-  for (const w of weapons) {
-    if (w.location && typeof w.location === 'string' && w.location.trim().length > 0) {
-      weaponByLocation.set(w.location, w);
+  for (let idx = 0; idx < weapons.length; idx++) {
+    const w = weapons[idx];
+    if (!w || !w.key) continue;
+    const cleanKey = w.key.trim();
+    if (!cleanKey) continue;
+
+    const dbWeapon = getWeaponByKey(cleanKey);
+    const name = dbWeapon?.name || formatWeaponKeyToName(cleanKey);
+    const level = Math.max(1, Math.min(90, Math.floor(Number(w.level) || 1)));
+    const refinement = Math.max(1, Math.min(5, Math.floor(Number(w.refinement) || 1)));
+    const location =
+      w.location && typeof w.location === 'string' && w.location.trim().length > 0
+        ? w.location.trim()
+        : undefined;
+
+    const ownedWeapon: OwnedWeapon = {
+      id: `${cleanKey}_${idx}`,
+      key: dbWeapon?.key || cleanKey,
+      name,
+      level,
+      refinement,
+      ascension: w.ascension,
+      rarity: dbWeapon?.rarity,
+      location,
+      lock: Boolean(w.lock),
+    };
+    rawWeapons.push(ownedWeapon);
+
+    if (location) {
+      weaponByLocation.set(location, w);
     }
   }
 
@@ -115,11 +146,13 @@ export function mapGOODToCelestiaProfiles(good: GOODData): GOODMapResult {
     const equipped = weaponByLocation.get(key);
     if (equipped && equipped.key) {
       equippedWeaponCount++;
+      const dbWeapon = getWeaponByKey(equipped.key);
       weapon = {
-        key: equipped.key,
-        name: formatWeaponKeyToName(equipped.key),
+        key: dbWeapon?.key || equipped.key,
+        name: dbWeapon?.name || formatWeaponKeyToName(equipped.key),
         level: Math.max(1, Math.min(90, Math.floor(Number(equipped.level) || 1))),
         refinement: Math.max(1, Math.min(5, Math.floor(Number(equipped.refinement) || 1))),
+        rarity: dbWeapon?.rarity,
         ascension: equipped.ascension,
       };
     }
@@ -142,6 +175,7 @@ export function mapGOODToCelestiaProfiles(good: GOODData): GOODMapResult {
 
   return {
     profiles,
+    rawWeapons,
     rawArtifacts,
     summary: {
       importedCharacters: Object.keys(profiles).length,
@@ -149,6 +183,20 @@ export function mapGOODToCelestiaProfiles(good: GOODData): GOODMapResult {
       importedArtifacts: rawArtifacts.length,
     },
   };
+}
+
+/**
+ * Calculates standard default ascension level for a given weapon level (0-6).
+ */
+export function calculateDefaultAscension(level: number): number {
+  const lvl = Math.floor(level || 1);
+  if (lvl > 80) return 6;
+  if (lvl > 70) return 5;
+  if (lvl > 60) return 4;
+  if (lvl > 50) return 3;
+  if (lvl > 40) return 2;
+  if (lvl > 20) return 1;
+  return 0;
 }
 
 /**
@@ -169,11 +217,45 @@ export function mergeRosterProfiles(
 }
 
 /**
- * Serializes current roster profiles and preserved artifacts into standard GOOD v2 format.
+ * Merges imported weapons with existing weapons bag.
+ * In merge mode, preserves existing weapons and adds or updates incoming ones.
+ */
+export function mergeWeapons(
+  existing: OwnedWeapon[],
+  incoming: OwnedWeapon[],
+  overwriteAll: boolean,
+): OwnedWeapon[] {
+  if (overwriteAll) {
+    return [...incoming];
+  }
+
+  const existingMap = new Map<string, OwnedWeapon>();
+  for (const w of existing) {
+    existingMap.set(w.id, w);
+  }
+
+  const merged = [...existing];
+  for (const inc of incoming) {
+    if (existingMap.has(inc.id)) {
+      const idx = merged.findIndex((w) => w.id === inc.id);
+      if (idx >= 0) {
+        merged[idx] = inc;
+      }
+    } else {
+      merged.push(inc);
+    }
+  }
+
+  return merged;
+}
+
+/**
+ * Serializes current roster profiles, preserved artifacts, and weapons into standard GOOD v2 format.
  */
 export function exportToGOODJSON(
   profiles: Record<string, OwnedCharacterProfile>,
   rawArtifacts?: any[],
+  rawWeapons?: OwnedWeapon[],
 ): string {
   const characters: GOODCharacter[] = [];
   const weapons: GOODWeapon[] = [];
@@ -183,7 +265,7 @@ export function exportToGOODJSON(
       key: profile.id,
       level: profile.level,
       constellation: profile.constellation,
-      ascension: profile.ascension,
+      ascension: profile.ascension ?? calculateDefaultAscension(profile.level),
       talent: profile.talents
         ? {
             auto: profile.talents.auto,
@@ -192,16 +274,35 @@ export function exportToGOODJSON(
           }
         : undefined,
     });
+  }
 
-    if (profile.weapon && profile.weapon.key) {
+  if (rawWeapons && rawWeapons.length > 0) {
+    for (const rw of rawWeapons) {
+      const dbW = getWeaponByKey(rw.key);
+      const goodKey = dbW?.key || rw.key.replace(/[^a-zA-Z0-9]/g, '');
       weapons.push({
-        key: profile.weapon.key,
-        level: profile.weapon.level,
-        refinement: profile.weapon.refinement,
-        ascension: profile.weapon.ascension,
-        location: profile.id,
-        lock: true,
+        key: goodKey,
+        level: rw.level,
+        refinement: rw.refinement,
+        ascension: rw.ascension ?? calculateDefaultAscension(rw.level),
+        location: rw.location || '',
+        lock: rw.lock ?? false,
       });
+    }
+  } else {
+    for (const profile of Object.values(profiles)) {
+      if (profile.weapon && profile.weapon.key) {
+        const dbW = getWeaponByKey(profile.weapon.key);
+        const goodKey = dbW?.key || profile.weapon.key.replace(/[^a-zA-Z0-9]/g, '');
+        weapons.push({
+          key: goodKey,
+          level: profile.weapon.level,
+          refinement: profile.weapon.refinement,
+          ascension: profile.weapon.ascension ?? calculateDefaultAscension(profile.weapon.level),
+          location: profile.id,
+          lock: true,
+        });
+      }
     }
   }
 
@@ -216,3 +317,5 @@ export function exportToGOODJSON(
 
   return JSON.stringify(exportPayload, null, 2);
 }
+
+export const exportProfilesToGOOD = exportToGOODJSON;

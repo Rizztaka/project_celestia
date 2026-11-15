@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { CHARACTERS } from '../data/characters';
-import type { Character, Element, OwnedCharacterProfile } from '../types/genshin';
+import type { Character, Element, OwnedCharacterProfile, OwnedWeapon } from '../types/genshin';
 import {
   Search,
   Check,
@@ -27,7 +27,11 @@ interface RosterViewProps {
   onImportProfiles?: (
     newProfiles: Record<string, OwnedCharacterProfile>,
     message: string,
+    importedWeapons?: OwnedWeapon[],
   ) => void;
+  weapons?: OwnedWeapon[];
+  onUpdateWeapons?: (weapons: OwnedWeapon[]) => void;
+  onOpenArmory?: () => void;
 }
 
 const ELEMENTS: ('All' | Element)[] = [
@@ -58,6 +62,9 @@ export const RosterView: React.FC<RosterViewProps> = ({
   onSetRoster,
   onUpdateProfile,
   onImportProfiles,
+  weapons,
+  onUpdateWeapons,
+  onOpenArmory,
 }) => {
   const [filterElement, setFilterElement] = useState<'All' | Element>('All');
   const [search, setSearch] = useState<string>('');
@@ -110,6 +117,17 @@ export const RosterView: React.FC<RosterViewProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {onOpenArmory && (
+            <button
+              onClick={onOpenArmory}
+              className="px-3.5 py-1.5 rounded-xl bg-[#1e2336] text-zinc-200 text-xs font-semibold hover:bg-[#282f48] border border-[#2d344e] flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+              title="Open Armory & Weapon Manager"
+            >
+              <Swords className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>Armory ({weapons?.length || 0})</span>
+            </button>
+          )}
+
           {/* GOOD Format Import/Export Trigger */}
           <button
             onClick={() => setIsGoodModalOpen(true)}
@@ -315,6 +333,8 @@ export const RosterView: React.FC<RosterViewProps> = ({
         onToggleOwned={onToggleOwned}
         profile={selectedCharacter ? profiles[selectedCharacter.id] : undefined}
         onUpdateProfile={onUpdateProfile}
+        weapons={weapons}
+        onUpdateWeapons={onUpdateWeapons}
       />
 
       {/* Universal GOOD Format Import/Export Modal */}
@@ -322,9 +342,10 @@ export const RosterView: React.FC<RosterViewProps> = ({
         isOpen={isGoodModalOpen}
         onClose={() => setIsGoodModalOpen(false)}
         profiles={profiles}
-        onImportSuccess={(newProfiles, msg) => {
+        weapons={weapons}
+        onImportSuccess={(newProfiles, msg, importedWeapons) => {
           if (onImportProfiles) {
-            onImportProfiles(newProfiles, msg);
+            onImportProfiles(newProfiles, msg, importedWeapons);
           }
         }}
       />

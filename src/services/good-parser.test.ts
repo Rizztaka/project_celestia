@@ -3,6 +3,8 @@ import {
   parseGOODJSON,
   mapGOODToCelestiaProfiles,
   mergeRosterProfiles,
+  mergeWeapons,
+  calculateDefaultAscension,
   exportToGOODJSON,
   formatWeaponKeyToName,
 } from './good-parser';
@@ -127,6 +129,9 @@ describe('GOOD Parser Service', () => {
 
       expect(mapped.summary.importedCharacters).toBe(3);
       expect(mapped.summary.importedWeapons).toBe(3); // 3 equipped to characters
+      expect(mapped.rawWeapons.length).toBe(4); // 3 equipped + 1 unequipped bag weapon
+      expect(mapped.rawWeapons[0].id).toBeDefined();
+      expect(mapped.rawWeapons.find((w) => w.key === 'FavoniusSword')?.location).toBeUndefined();
       expect(mapped.rawArtifacts.length).toBe(2);
 
       // Verify Hu Tao profile
@@ -221,6 +226,113 @@ describe('GOOD Parser Service', () => {
       expect(reparsed.data?.weapons?.[0].key).toBe('StaffOfHoma');
       expect(reparsed.data?.weapons?.[0].location).toBe('HuTao');
       expect(reparsed.data?.artifacts?.length).toBe(1);
+    });
+
+    it('serializes full rawWeapons bag when provided', () => {
+      const profiles: Record<string, OwnedCharacterProfile> = {
+        HuTao: {
+          id: 'HuTao',
+          level: 90,
+          constellation: 1,
+        },
+      };
+
+      const rawWeapons = [
+        {
+          id: 'w_1',
+          key: 'StaffOfHoma',
+          name: 'Staff of Homa',
+          level: 90,
+          refinement: 1,
+          location: 'HuTao',
+        },
+        {
+          id: 'w_2',
+          key: 'FavoniusLance',
+          name: 'Favonius Lance',
+          level: 80,
+          refinement: 5,
+          location: '',
+        },
+      ];
+
+      const exportedStr = exportToGOODJSON(profiles, [], rawWeapons);
+      const reparsed = parseGOODJSON(exportedStr);
+      expect(reparsed.success).toBe(true);
+      expect(reparsed.data?.weapons?.length).toBe(2);
+      expect(reparsed.data?.weapons?.[1].key).toBe('FavoniusLance');
+      expect(reparsed.data?.weapons?.[1].refinement).toBe(5);
+      // Valid default ascension populated
+      expect(reparsed.data?.weapons?.[0].ascension).toBe(6);
+      expect(reparsed.data?.weapons?.[1].ascension).toBe(5);
+    });
+  });
+
+  describe('calculateDefaultAscension', () => {
+    it('calculates correct ascension phases for various levels', () => {
+      expect(calculateDefaultAscension(90)).toBe(6);
+      expect(calculateDefaultAscension(85)).toBe(6);
+      expect(calculateDefaultAscension(80)).toBe(5);
+      expect(calculateDefaultAscension(70)).toBe(4);
+      expect(calculateDefaultAscension(60)).toBe(3);
+      expect(calculateDefaultAscension(50)).toBe(2);
+      expect(calculateDefaultAscension(20)).toBe(0);
+      expect(calculateDefaultAscension(1)).toBe(0);
+    });
+  });
+
+  describe('mergeWeapons', () => {
+    it('preserves existing weapons when overwriteAll is false', () => {
+      const existing = [
+        {
+          id: 'w_existing_1',
+          key: 'StaffOfHoma',
+          name: 'Staff of Homa',
+          level: 90,
+          refinement: 1,
+          location: 'HuTao',
+        },
+      ];
+      const incoming = [
+        {
+          id: 'w_incoming_2',
+          key: 'TheCatch',
+          name: 'The Catch',
+          level: 90,
+          refinement: 5,
+          location: 'Xiangling',
+        },
+      ];
+
+      const merged = mergeWeapons(existing, incoming, false);
+      expect(merged.length).toBe(2);
+      expect(merged.map((w) => w.key)).toContain('StaffOfHoma');
+      expect(merged.map((w) => w.key)).toContain('TheCatch');
+    });
+
+    it('overwrites all weapons when overwriteAll is true', () => {
+      const existing = [
+        {
+          id: 'w_existing_1',
+          key: 'StaffOfHoma',
+          name: 'Staff of Homa',
+          level: 90,
+          refinement: 1,
+        },
+      ];
+      const incoming = [
+        {
+          id: 'w_incoming_2',
+          key: 'TheCatch',
+          name: 'The Catch',
+          level: 90,
+          refinement: 5,
+        },
+      ];
+
+      const overwritten = mergeWeapons(existing, incoming, true);
+      expect(overwritten.length).toBe(1);
+      expect(overwritten[0].key).toBe('TheCatch');
     });
   });
 

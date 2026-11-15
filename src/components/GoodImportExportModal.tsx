@@ -11,23 +11,26 @@ import {
   ShieldCheck,
   Check,
 } from 'lucide-react';
-import type { OwnedCharacterProfile } from '../types/genshin';
+import type { OwnedCharacterProfile, OwnedWeapon } from '../types/genshin';
 import {
   parseGOODJSON,
   mapGOODToCelestiaProfiles,
   exportToGOODJSON,
   mergeRosterProfiles,
+  mergeWeapons,
   type GOODMapResult,
 } from '../services/good-parser';
-import { getSavedArtifacts, saveArtifacts } from '../services/storage';
+import { getSavedArtifacts, saveArtifacts, getSavedWeapons, saveWeapons } from '../services/storage';
 
 interface GoodImportExportModalProps {
   isOpen: boolean;
   onClose: () => void;
   profiles: Record<string, OwnedCharacterProfile>;
+  weapons?: OwnedWeapon[];
   onImportSuccess: (
     mergedProfiles: Record<string, OwnedCharacterProfile>,
     message: string,
+    importedWeapons?: OwnedWeapon[],
   ) => void;
 }
 
@@ -35,6 +38,7 @@ export const GoodImportExportModal: React.FC<GoodImportExportModalProps> = ({
   isOpen,
   onClose,
   profiles,
+  weapons,
   onImportSuccess,
 }) => {
   const [activeTab, setActiveTab] = useState<'import' | 'export'>('import');
@@ -97,6 +101,14 @@ export const GoodImportExportModal: React.FC<GoodImportExportModalProps> = ({
 
     const merged = mergeRosterProfiles(profiles, parsedResult.profiles, overwriteAll);
 
+    // Merge or overwrite weapons inventory based on mode
+    let resolvedWeapons: OwnedWeapon[] | undefined = undefined;
+    if (parsedResult.rawWeapons && parsedResult.rawWeapons.length > 0) {
+      const currentWeapons = weapons || getSavedWeapons();
+      resolvedWeapons = mergeWeapons(currentWeapons, parsedResult.rawWeapons, overwriteAll);
+      saveWeapons(resolvedWeapons);
+    }
+
     // If artifacts were present in the GOOD file, persist them
     let artifactWarning = '';
     if (parsedResult.rawArtifacts && parsedResult.rawArtifacts.length > 0) {
@@ -107,19 +119,21 @@ export const GoodImportExportModal: React.FC<GoodImportExportModalProps> = ({
     }
 
     const count = Object.keys(parsedResult.profiles).length;
+    const weaponCount = parsedResult.rawWeapons?.length ?? parsedResult.summary.importedWeapons;
     const msg = `Successfully imported ${count} character profiles${
-      parsedResult.summary.importedWeapons > 0
-        ? ` with ${parsedResult.summary.importedWeapons} equipped weapons`
+      weaponCount > 0
+        ? ` and ${weaponCount} weapons`
         : ''
     } from ${sourceName || 'GOOD JSON'}!${artifactWarning}`;
 
-    onImportSuccess(merged, msg);
+    onImportSuccess(merged, msg, resolvedWeapons);
     onClose();
   };
 
   const handleDownloadExport = () => {
     const artifacts = getSavedArtifacts();
-    const jsonStr = exportToGOODJSON(profiles, artifacts);
+    const activeWeapons = weapons || getSavedWeapons();
+    const jsonStr = exportToGOODJSON(profiles, artifacts, activeWeapons);
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -133,7 +147,8 @@ export const GoodImportExportModal: React.FC<GoodImportExportModalProps> = ({
 
   const handleCopyExport = () => {
     const artifacts = getSavedArtifacts();
-    const jsonStr = exportToGOODJSON(profiles, artifacts);
+    const activeWeapons = weapons || getSavedWeapons();
+    const jsonStr = exportToGOODJSON(profiles, artifacts, activeWeapons);
     navigator.clipboard.writeText(jsonStr);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -283,7 +298,7 @@ export const GoodImportExportModal: React.FC<GoodImportExportModalProps> = ({
                     </div>
                     <div className="bg-[#12141f] p-2.5 rounded-lg border border-[#23283b]">
                       <div className="text-base font-bold text-zinc-100 font-serif">
-                        {parsedResult.summary.importedWeapons}
+                        {parsedResult.rawWeapons?.length ?? parsedResult.summary.importedWeapons}
                       </div>
                       <div className="text-[10px] text-zinc-400 uppercase tracking-wider mt-0.5">
                         Weapons
@@ -327,7 +342,7 @@ export const GoodImportExportModal: React.FC<GoodImportExportModalProps> = ({
                 <div className="pt-2 flex items-center gap-4 text-xs font-mono text-zinc-400">
                   <span>Characters: {Object.keys(profiles).length}</span>
                   <span>
-                    Equipped Weapons: {Object.values(profiles).filter((p) => p.weapon).length}
+                    Weapons: {(weapons || getSavedWeapons()).length}
                   </span>
                   <span>Preserved Artifacts: {getSavedArtifacts().length}</span>
                 </div>

@@ -1,15 +1,36 @@
 import React, { useState, useMemo } from 'react';
 import { CHARACTERS } from '../data/characters';
 import { generateBestTeams } from '../engines/team-generator';
-import type { Character, OwnedCharacterProfile } from '../types/genshin';
-import { Sparkles, Shield, Zap, Info, Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import type {
+  Character,
+  OwnedCharacterProfile,
+  OwnedWeapon,
+  TeamWeaponAssignment,
+} from '../types/genshin';
+import {
+  Sparkles,
+  Shield,
+  Zap,
+  Info,
+  Clock,
+  ChevronDown,
+  ChevronUp,
+  Swords,
+  X,
+} from 'lucide-react';
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { RotationBadgeList } from './RotationBadgeList';
+import { rankWeaponsForCharacter, scoreWeaponForCharacter } from '../engines/weapon-solver';
+import { getSavedWeapons } from '../services/storage';
+import { getWeaponByKey } from '../data/weapons';
 
 interface TeamGeneratorViewProps {
   ownedIds: string[];
   profiles?: Record<string, OwnedCharacterProfile>;
+  weapons?: OwnedWeapon[];
+  onUpdateWeapons?: (weapons: OwnedWeapon[]) => void;
+  onUpdateProfile?: (profile: OwnedCharacterProfile) => void;
 }
 
 const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -25,14 +46,28 @@ const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string 
 export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
   ownedIds,
   profiles,
+  weapons,
+  onUpdateWeapons,
+  onUpdateProfile,
 }) => {
   const [focusId, setFocusId] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
+  const [quickSwapTarget, setQuickSwapTarget] = useState<{
+    teamId: string;
+    character: Character;
+    teamMembers: Character[];
+    currentAssignment?: TeamWeaponAssignment;
+  } | null>(null);
+  const [customAssignments, setCustomAssignments] = useState<
+    Record<string, Record<string, TeamWeaponAssignment>>
+  >({});
+
+  const weaponBag = useMemo(() => weapons || getSavedWeapons(), [weapons]);
 
   const teams = useMemo(
-    () => generateBestTeams(ownedIds, focusId || undefined, profiles),
-    [ownedIds, focusId, profiles],
+    () => generateBestTeams(ownedIds, focusId || undefined, profiles, weaponBag),
+    [ownedIds, focusId, profiles, weaponBag],
   );
   const featuredCarries = ['Nefer', 'Mavuika', 'HuTao', 'Alhaitham', 'Clorinde', 'Neuvillette', 'Navia'];
 
@@ -184,6 +219,68 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                         <span>Build</span>
                       </span>
                     </div>
+
+                    {/* Weapon Badge & Quick Swap */}
+                    {(() => {
+                      const assignment =
+                        customAssignments[team.id]?.[member.id] ||
+                        team.weaponAssignments?.find((wa) => wa.characterId === member.id);
+                      if (!assignment) return null;
+                      return (
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setQuickSwapTarget({
+                              teamId: team.id,
+                              character: member,
+                              teamMembers: team.members,
+                              currentAssignment: assignment,
+                            });
+                          }}
+                          className="mt-2 pt-2 border-t border-white/10 flex flex-col gap-1 text-[11px] hover:bg-black/25 -mx-1 px-1.5 py-1 rounded-lg transition-colors cursor-pointer"
+                          title="Click to view owned weapon options & quick-swap"
+                        >
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="font-semibold text-zinc-200 truncate flex items-center gap-1 text-[11px]">
+                              <Swords className="w-3 h-3 text-[#d4af37] shrink-0" />
+                              <span className="truncate">{assignment.assignedWeapon.name}</span>
+                            </span>
+                            <span className="font-mono font-bold text-amber-400 text-[10px] shrink-0">
+                              R{assignment.assignedWeapon.refinement}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between text-[10px]">
+                            <span className="text-zinc-400 font-mono text-[10px]">
+                              Lv. {assignment.assignedWeapon.level}
+                            </span>
+                            <div className="flex items-center gap-1">
+                              {assignment.isBorrowed && (
+                                <span
+                                  className="px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[9px] font-bold"
+                                  title={`Borrowed from ${CHARACTERS.find((c) => c.id === assignment.borrowedFrom)?.name || assignment.borrowedFrom}`}
+                                >
+                                  Borrowed
+                                </span>
+                              )}
+                              <span
+                                className={`px-1.5 py-0.2 rounded text-[9px] font-bold border ${
+                                  assignment.scoreResult.tier === 'BiS'
+                                    ? 'bg-[#d4af37]/20 text-[#d4af37] border-[#d4af37]/30'
+                                    : assignment.scoreResult.tier === 'Optimal'
+                                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                                    : assignment.scoreResult.tier === 'Great'
+                                    ? 'bg-sky-500/20 text-sky-300 border-sky-500/30'
+                                    : 'bg-zinc-800 text-zinc-300 border-zinc-700'
+                                }`}
+                              >
+                                {assignment.scoreResult.tier}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                 );
               })}
@@ -314,7 +411,210 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
         onClose={() => setSelectedCharacter(null)}
         isOwned={selectedCharacter ? ownedIds.includes(selectedCharacter.id) : false}
         profile={selectedCharacter && profiles ? profiles[selectedCharacter.id] : undefined}
+        onUpdateProfile={onUpdateProfile}
+        weapons={weapons}
+        onUpdateWeapons={onUpdateWeapons}
       />
+
+      {/* Quick Swap Weapon Popover/Modal */}
+      {quickSwapTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#12141e] border border-[#262c44] w-full max-w-lg rounded-2xl p-5 shadow-2xl space-y-4 text-zinc-100">
+            <div className="flex items-center justify-between border-b border-[#202538] pb-3">
+              <div className="flex items-center gap-2">
+                <Swords className="w-4 h-4 text-[#d4af37]" />
+                <h3 className="text-sm font-bold text-zinc-100">
+                  Swap Weapon: {quickSwapTarget.character.name}
+                </h3>
+              </div>
+              <button
+                onClick={() => setQuickSwapTarget(null)}
+                className="text-zinc-400 hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-xs text-zinc-400">
+              Select an owned {quickSwapTarget.character.weapon} from your armory to assign to {quickSwapTarget.character.name} for this team composition.
+            </p>
+
+            <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
+              {rankWeaponsForCharacter(
+                quickSwapTarget.character,
+                weaponBag,
+                quickSwapTarget.teamMembers,
+              ).map((scoreRes) => {
+                const w = scoreRes.weapon as OwnedWeapon;
+                const isCurrent =
+                  quickSwapTarget.currentAssignment?.assignedWeapon.id === w.id;
+                return (
+                  <div
+                    key={w.id}
+                    className={`p-3 rounded-xl border flex items-center justify-between gap-3 ${
+                      isCurrent
+                        ? 'bg-[#d4af37]/10 border-[#d4af37]/40'
+                        : 'bg-[#181b28] border-[#252a3f] hover:border-[#384060]'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-zinc-100">{w.name}</span>
+                        <span className="text-xs text-[#d4af37]">{'★'.repeat(w.rarity || 4)}</span>
+                        <span className="text-[10px] font-mono font-bold text-amber-300">
+                          R{w.refinement}
+                        </span>
+                        <span className="text-[10px] font-mono text-zinc-400">
+                          Lv. {w.level}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span
+                          className={`text-[9px] px-1.5 py-0.2 rounded font-bold border ${
+                            scoreRes.tier === 'BiS'
+                              ? 'bg-[#d4af37]/20 text-[#d4af37] border-[#d4af37]/30'
+                              : scoreRes.tier === 'Optimal'
+                              ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                              : 'bg-zinc-800 text-zinc-300 border-zinc-700'
+                          }`}
+                        >
+                          {scoreRes.tier} ({scoreRes.relativePercentage}%)
+                        </span>
+                        {scoreRes.equippedOn && scoreRes.equippedOn !== quickSwapTarget.character.id && (
+                          <span className="text-[10px] text-zinc-400">
+                            Equipped on {scoreRes.equippedOn}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        const newAssignment: TeamWeaponAssignment = {
+                          characterId: quickSwapTarget.character.id,
+                          characterName: quickSwapTarget.character.name,
+                          assignedWeapon: w,
+                          scoreResult: scoreRes,
+                          isBorrowed: Boolean(
+                            w.location &&
+                              w.location !== quickSwapTarget.character.id &&
+                              w.location !== quickSwapTarget.character.name,
+                          ),
+                          borrowedFrom: w.location,
+                        };
+
+                        const prevWeapon = quickSwapTarget.currentAssignment?.assignedWeapon;
+                        const otherMemberUsingW = quickSwapTarget.teamMembers.find((m) => {
+                          if (m.id === quickSwapTarget.character.id) return false;
+                          const mAssign =
+                            customAssignments[quickSwapTarget.teamId]?.[m.id] ||
+                            teams
+                              .find((t) => t.id === quickSwapTarget.teamId)
+                              ?.weaponAssignments?.find((wa) => wa.characterId === m.id);
+                          return mAssign?.assignedWeapon.id === w.id;
+                        });
+
+                        const updatedTeamCustoms: Record<string, TeamWeaponAssignment> = {
+                          ...(customAssignments[quickSwapTarget.teamId] || {}),
+                          [quickSwapTarget.character.id]: newAssignment,
+                        };
+
+                        // If another member on this team already used this weapon instance, resolve the conflict
+                        if (otherMemberUsingW) {
+                          const dbPrev = prevWeapon ? getWeaponByKey(prevWeapon.key) : undefined;
+                          if (dbPrev && dbPrev.weaponType === otherMemberUsingW.weapon && prevWeapon) {
+                            const swappedScore = scoreWeaponForCharacter(
+                              otherMemberUsingW,
+                              prevWeapon,
+                              quickSwapTarget.teamMembers,
+                            );
+                            updatedTeamCustoms[otherMemberUsingW.id] = {
+                              characterId: otherMemberUsingW.id,
+                              characterName: otherMemberUsingW.name,
+                              assignedWeapon: prevWeapon,
+                              scoreResult: swappedScore,
+                              isBorrowed: Boolean(
+                                prevWeapon.location &&
+                                  prevWeapon.location !== otherMemberUsingW.id &&
+                                  prevWeapon.location !== otherMemberUsingW.name,
+                              ),
+                              borrowedFrom: prevWeapon.location,
+                            };
+                          } else {
+                            const availableForOther = rankWeaponsForCharacter(
+                              otherMemberUsingW,
+                              weaponBag.filter((wb) => wb.id !== w.id),
+                              quickSwapTarget.teamMembers,
+                            );
+                            if (availableForOther.length > 0) {
+                              const bestNext = availableForOther[0];
+                              const nextW = bestNext.weapon as OwnedWeapon;
+                              updatedTeamCustoms[otherMemberUsingW.id] = {
+                                characterId: otherMemberUsingW.id,
+                                characterName: otherMemberUsingW.name,
+                                assignedWeapon: nextW,
+                                scoreResult: bestNext,
+                                isBorrowed: Boolean(
+                                  nextW.location &&
+                                    nextW.location !== otherMemberUsingW.id &&
+                                    nextW.location !== otherMemberUsingW.name,
+                                ),
+                                borrowedFrom: nextW.location,
+                              };
+                            }
+                          }
+                        }
+
+                        setCustomAssignments((prev) => ({
+                          ...prev,
+                          [quickSwapTarget.teamId]: updatedTeamCustoms,
+                        }));
+
+                        // If equipped permanently, update global profile/weapons
+                        if (onUpdateProfile && profiles && profiles[quickSwapTarget.character.id]) {
+                          onUpdateProfile({
+                            ...profiles[quickSwapTarget.character.id],
+                            weapon: {
+                              key: w.key,
+                              name: w.name,
+                              level: w.level,
+                              refinement: w.refinement,
+                              rarity: w.rarity,
+                            },
+                          });
+                        }
+
+                        if (onUpdateWeapons && weapons) {
+                          const nextWeapons = weapons.map((item) => {
+                            if (item.id === w.id) {
+                              return { ...item, location: quickSwapTarget.character.id };
+                            }
+                            // If another weapon had this character as location, unequip
+                            if (item.location === quickSwapTarget.character.id) {
+                              return { ...item, location: undefined };
+                            }
+                            return item;
+                          });
+                          onUpdateWeapons(nextWeapons);
+                        }
+
+                        setQuickSwapTarget(null);
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                        isCurrent
+                          ? 'bg-[#d4af37] text-black'
+                          : 'bg-[#22273c] text-zinc-200 hover:bg-[#2e3552]'
+                      }`}
+                    >
+                      {isCurrent ? 'Current' : 'Select'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

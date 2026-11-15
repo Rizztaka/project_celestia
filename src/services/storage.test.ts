@@ -6,8 +6,12 @@ import {
   saveRoster,
   getSavedArtifacts,
   saveArtifacts,
+  getSavedWeapons,
+  saveWeapons,
   DEFAULT_ROSTER,
+  DEFAULT_WEAPONS,
 } from './storage';
+import type { OwnedWeapon } from '../types/genshin';
 
 describe('Storage Service - Persistence and Reset Semantics', () => {
   let store: Record<string, string> = {};
@@ -64,5 +68,57 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
 
     const loaded = getSavedArtifacts();
     expect(loaded).toEqual(mockArtifacts);
+  });
+
+  it('returns DEFAULT_WEAPONS when localStorage and profiles have no weapons', () => {
+    const weapons = getSavedWeapons();
+    expect(weapons.length).toBeGreaterThan(0);
+    expect(weapons).toEqual(DEFAULT_WEAPONS);
+  });
+
+  it('extracts weapons from profiles when WEAPONS_KEY is empty', () => {
+    saveProfiles({
+      HuTao: {
+        id: 'HuTao',
+        level: 90,
+        constellation: 1,
+        weapon: {
+          key: 'StaffOfHoma',
+          name: 'Staff of Homa',
+          level: 90,
+          refinement: 1,
+        },
+      },
+    });
+
+    const weapons = getSavedWeapons();
+    expect(weapons.length).toBe(1);
+    expect(weapons[0].key).toBe('StaffOfHoma');
+    expect(weapons[0].location).toBe('HuTao');
+  });
+
+  it('saves and restores weapons inventory from localStorage', () => {
+    const testBag: OwnedWeapon[] = [
+      {
+        id: 'w_1',
+        key: 'StaffOfHoma',
+        name: 'Staff of Homa',
+        level: 90,
+        refinement: 1,
+        location: 'HuTao',
+      },
+      {
+        id: 'w_2',
+        key: 'FavoniusLance',
+        name: 'Favonius Lance',
+        level: 80,
+        refinement: 3,
+        location: '',
+      },
+    ];
+
+    expect(saveWeapons(testBag)).toBe(true);
+    const loaded = getSavedWeapons();
+    expect(loaded).toEqual(testBag);
   });
 });

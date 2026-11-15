@@ -1,6 +1,13 @@
-import type { Character, TeamRecommendation, OwnedCharacterProfile } from '../types/genshin';
+import type {
+  Character,
+  TeamRecommendation,
+  OwnedCharacterProfile,
+  OwnedWeapon,
+} from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import { synthesizeTeamRotation } from './rotation-synthesizer';
+import { assignOptimalTeamWeapons } from './weapon-solver';
+import { getSavedWeapons } from '../services/storage';
 
 interface ArchetypeTemplate {
   name: string;
@@ -189,22 +196,27 @@ export function generateBestTeams(
   availableIds: string[],
   focusCharacterId?: string,
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
+  ownedWeapons?: OwnedWeapon[],
 ): TeamRecommendation[] {
   const pool = CHARACTERS.filter((c) => availableIds.includes(c.id));
   if (pool.length < 4) {
     // If fewer than 4 owned, fallback to using all characters for guidance
-    return generateTeamsFromPool(CHARACTERS, focusCharacterId, rosterProfiles);
+    return generateTeamsFromPool(CHARACTERS, focusCharacterId, rosterProfiles, ownedWeapons);
   }
-  return generateTeamsFromPool(pool, focusCharacterId, rosterProfiles);
+  return generateTeamsFromPool(pool, focusCharacterId, rosterProfiles, ownedWeapons);
 }
+
+export const generateTeamRecommendations = generateBestTeams;
 
 function generateTeamsFromPool(
   pool: Character[],
   focusId?: string,
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
+  ownedWeapons?: OwnedWeapon[],
 ): TeamRecommendation[] {
   const results: TeamRecommendation[] = [];
   const focus = focusId ? pool.find((c) => c.id === focusId) : undefined;
+  const weaponBag = ownedWeapons || getSavedWeapons();
 
   // 1. Check for Nefer first if present or focused
   const nefer = pool.find((c) => c.id === 'Nefer');
@@ -242,6 +254,7 @@ function generateTeamsFromPool(
         const members = [nefer, bestHydro, secondSlot, thirdSlot];
         const stepped = synthesizeTeamRotation(members);
         const neferMods = applyConstellationModifiers(members, 98, rosterProfiles);
+        const weaponAssignments = assignOptimalTeamWeapons(members, weaponBag, rosterProfiles);
         results.push({
           id: 'team-nefer-lunar',
           name: 'Nefer · Lunar-Bloom Symphony',
@@ -261,6 +274,7 @@ function generateTeamsFromPool(
             'Support Skill/Burst → Hydro Enabler Q/E → Nefer E (Shadow Dance) → Special Charged Attack chain',
           steppedRotation: stepped,
           resonance: calculateResonance(members),
+          weaponAssignments,
         });
       }
     }
@@ -323,6 +337,7 @@ function generateTeamsFromPool(
         const hasSustain = chosen.some((m) => m.roles.includes('Sustain'));
         const stepped = synthesizeTeamRotation(chosen);
         const constMods = applyConstellationModifiers(chosen, template.baseSynergy, rosterProfiles);
+        const weaponAssignments = assignOptimalTeamWeapons(chosen, weaponBag, rosterProfiles);
         results.push({
           id: `team-${template.archetype}-${lead.id}`.toLowerCase(),
           name: `${lead.name} · ${template.name}`,
@@ -342,6 +357,7 @@ function generateTeamsFromPool(
           rotation: stepped.summaryString || template.rotation,
           steppedRotation: stepped,
           resonance: calculateResonance(chosen),
+          weaponAssignments,
         });
         break; // One strong variant per archetype
       }

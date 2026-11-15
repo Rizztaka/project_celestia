@@ -13,6 +13,16 @@ export interface GachaOddsResult {
   primogemsNeeded: number;
 }
 
+/**
+ * Calculates total available pulls from primogems and intertwined fates.
+ * Defensively handles non-integers, floats, negative values, and NaN.
+ */
+export function calculateTotalPulls(primogems: number, fates: number): number {
+  const safePrimos = Math.max(0, Math.floor(Number(primogems) || 0));
+  const safeFates = Math.max(0, Math.floor(Number(fates) || 0));
+  return Math.floor(safePrimos / 160) + safeFates;
+}
+
 // Character banner constants
 const CHAR_BASE_RATE = 0.006;
 const CHAR_SOFT_PITY_START = 74;
@@ -91,7 +101,8 @@ function computeTargetPmf(
   fatePoints: number = 0,
 ): { pmf: number[]; guaranteedPulls: number } {
   if (bannerType === 'character') {
-    const clampedPity = Math.max(0, Math.min(CHAR_HARD_PITY - 1, currentPity));
+    const safeRawPity = Math.floor(Number(currentPity) || 0);
+    const clampedPity = Math.max(0, Math.min(CHAR_HARD_PITY - 1, safeRawPity));
     const cycle1 = computeSingleCyclePmf(getCharacterPullRate, CHAR_HARD_PITY, clampedPity);
 
     if (isGuaranteed) {
@@ -123,10 +134,12 @@ function computeTargetPmf(
     return { pmf, guaranteedPulls };
   } else {
     // Weapon Banner
-    const clampedPity = Math.max(0, Math.min(WEAPON_HARD_PITY - 1, currentPity));
+    const safeRawPity = Math.floor(Number(currentPity) || 0);
+    const clampedPity = Math.max(0, Math.min(WEAPON_HARD_PITY - 1, safeRawPity));
     const cycle1 = computeSingleCyclePmf(getWeaponPullRate, WEAPON_HARD_PITY, clampedPity);
 
-    if (fatePoints >= 1) {
+    const safeFate = Math.floor(Math.max(0, Number(fatePoints) || 0));
+    if (safeFate >= 1) {
       const guaranteedPulls = WEAPON_HARD_PITY - clampedPity;
       return { pmf: cycle1, guaranteedPulls };
     }
@@ -164,7 +177,7 @@ function analyzeOdds(
   guaranteedPulls: number,
   pullsAvailable: number,
 ): GachaOddsResult {
-  const safePulls = Math.max(0, Math.floor(pullsAvailable));
+  const safePulls = Math.max(0, Math.floor(Number(pullsAvailable) || 0));
 
   let cumulativeProbability = 0;
   if (safePulls >= guaranteedPulls) {

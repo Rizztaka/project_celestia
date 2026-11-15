@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import type {
   Character,
   EnhancedPullAdvice,
@@ -41,6 +41,8 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
   const [bannerFilter, setBannerFilter] = useState<string>('banner_5_3_phase_1');
   const [budget, setBudget] = useState<PullBudgetState>(() => getSavedPullBudget());
   const [simulationToast, setSimulationToast] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Sync budget changes with persistent localStorage
   const handleBudgetChange = (newBudget: PullBudgetState) => {
@@ -49,10 +51,11 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
   };
 
   const effectiveProfiles = useMemo(() => {
-    if (profiles && Object.keys(profiles).length > 0) return profiles;
-    const map: Record<string, OwnedCharacterProfile> = {};
+    const map: Record<string, OwnedCharacterProfile> = { ...(profiles || {}) };
     for (const id of ownedIds) {
-      map[id] = { id, level: 90, constellation: 0 };
+      if (!map[id]) {
+        map[id] = { id, level: 90, constellation: 0 };
+      }
     }
     return map;
   }, [profiles, ownedIds]);
@@ -67,6 +70,10 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
       bannerFilter,
     );
   }, [effectiveProfiles, effectiveWeapons, budget, bannerFilter]);
+
+  const displayedRecommendations = showAll
+    ? recommendations
+    : recommendations.slice(0, 12);
 
   const tierColors: Record<EnhancedPullAdvice['tier'], string> = {
     'Must Pull': 'bg-amber-500/20 text-amber-300 border-amber-500/40',
@@ -98,10 +105,16 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
   };
 
   const handleSimulatePull = (item: EnhancedPullAdvice) => {
+    if (toastTimerRef.current) {
+      clearTimeout(toastTimerRef.current);
+    }
     setSimulationToast(
       `Simulated: ${item.name} (${item.targetLevelText}) with ${(item.odds.cumulativeProbability * 100).toFixed(1)}% pull chance!`,
     );
-    setTimeout(() => setSimulationToast(null), 4000);
+    toastTimerRef.current = setTimeout(() => {
+      setSimulationToast(null);
+      toastTimerRef.current = null;
+    }, 4000);
   };
 
   return (
@@ -150,7 +163,7 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {BANNER_PHASES.slice(0, 5).map((phase) => (
+          {BANNER_PHASES.map((phase) => (
             <button
               key={phase.id}
               onClick={() => setBannerFilter(phase.id)}
@@ -178,7 +191,7 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
 
       {/* Target Recommendations Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {recommendations.slice(0, 12).map((item, idx) => {
+        {displayedRecommendations.map((item, idx) => {
           const char = CHARACTERS.find((c) => c.id === item.characterId);
 
           // Probability styling
@@ -351,6 +364,17 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
           );
         })}
       </div>
+
+      {recommendations.length > 12 && (
+        <div className="flex justify-center pt-2">
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="px-5 py-2.5 rounded-xl bg-[#161926] hover:bg-[#202538] text-zinc-300 hover:text-zinc-100 border border-[#2b334d] text-xs font-semibold cursor-pointer transition-colors shadow-sm"
+          >
+            {showAll ? 'Show Top 12 Targets' : `View All ${recommendations.length} Targets`}
+          </button>
+        </div>
+      )}
 
       {recommendations.length === 0 && (
         <div className="bg-[#12141d] border border-[#23273a] rounded-2xl p-8 text-center text-zinc-400">

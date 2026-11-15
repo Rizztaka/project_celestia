@@ -59,4 +59,16 @@ describe('PullBudgetCard Component', () => {
 
     expect(html).toContain('50/50');
   });
+
+  it('renders numeric pity inputs alongside sliders for exact input entry', () => {
+    const html = renderToString(
+      <PullBudgetCard budget={mockBudget} onChangeBudget={() => {}} />
+    );
+
+    // Number inputs for pity values
+    expect(html).toContain('value="45"');
+    expect(html).toContain('value="25"');
+    expect(html).toContain('/ 90');
+    expect(html).toContain('/ 80');
+  });
 });

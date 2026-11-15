@@ -1,17 +1,14 @@
 import React from 'react';
 import type { PullBudgetState } from '../types/genshin';
+import { calculateTotalPulls } from '../engines/gacha-math';
 import { Sparkles, Shield, Target, RotateCcw } from 'lucide-react';
+
+export { calculateTotalPulls };
 
 export interface PullBudgetCardProps {
   budget: PullBudgetState;
   onChangeBudget: (newBudget: PullBudgetState) => void;
   className?: string;
-}
-
-export function calculateTotalPulls(primogems: number, fates: number): number {
-  const safePrimos = Math.max(0, primogems || 0);
-  const safeFates = Math.max(0, fates || 0);
-  return Math.floor(safePrimos / 160) + safeFates;
 }
 
 export const PullBudgetCard: React.FC<PullBudgetCardProps> = ({
@@ -24,17 +21,17 @@ export const PullBudgetCard: React.FC<PullBudgetCardProps> = ({
   const handleUpdate = (field: keyof PullBudgetState, val: number | boolean) => {
     let nextBudget = { ...budget };
     if (field === 'primogems') {
-      nextBudget.primogems = Math.max(0, Number(val) || 0);
+      nextBudget.primogems = Math.max(0, Math.floor(Number(val)) || 0);
     } else if (field === 'fates') {
-      nextBudget.fates = Math.max(0, Number(val) || 0);
+      nextBudget.fates = Math.max(0, Math.floor(Number(val)) || 0);
     } else if (field === 'characterPity') {
-      nextBudget.characterPity = Math.max(0, Math.min(89, Number(val) || 0));
+      nextBudget.characterPity = Math.max(0, Math.min(89, Math.floor(Number(val)) || 0));
     } else if (field === 'characterGuaranteed') {
       nextBudget.characterGuaranteed = Boolean(val);
     } else if (field === 'weaponPity') {
-      nextBudget.weaponPity = Math.max(0, Math.min(79, Number(val) || 0));
+      nextBudget.weaponPity = Math.max(0, Math.min(79, Math.floor(Number(val)) || 0));
     } else if (field === 'weaponFatePoints') {
-      nextBudget.weaponFatePoints = Math.max(0, Math.min(1, Number(val) || 0));
+      nextBudget.weaponFatePoints = Math.max(0, Math.min(1, Math.floor(Number(val)) || 0));
     }
     onChangeBudget(nextBudget);
   };
@@ -173,9 +170,17 @@ export const PullBudgetCard: React.FC<PullBudgetCardProps> = ({
               <Target className="w-3.5 h-3.5 text-purple-400" />
               <span>Character Pity</span>
             </div>
-            <span className="font-mono text-sm font-bold text-purple-300">
-              {budget.characterPity} / 90
-            </span>
+            <div className="flex items-center gap-1">
+              <input
+                type="number"
+                min={0}
+                max={89}
+                value={budget.characterPity}
+                onChange={(e) => handleUpdate('characterPity', parseInt(e.target.value) || 0)}
+                className="w-12 bg-[#151824] border border-[#282e44] focus:border-purple-400 text-purple-300 px-1.5 py-0.5 rounded font-mono text-xs text-right outline-none font-bold"
+              />
+              <span className="font-mono text-xs text-zinc-500 font-bold">/ 90</span>
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -235,9 +240,17 @@ export const PullBudgetCard: React.FC<PullBudgetCardProps> = ({
               <Shield className="w-3.5 h-3.5 text-amber-400" />
               <span>Weapon Pity (5.0+)</span>
             </div>
-            <span className="font-mono text-sm font-bold text-amber-300">
-              {budget.weaponPity} / 80
-            </span>
+            <div className="flex items-center gap-1">
+              <input
+                type="number"
+                min={0}
+                max={79}
+                value={budget.weaponPity}
+                onChange={(e) => handleUpdate('weaponPity', parseInt(e.target.value) || 0)}
+                className="w-12 bg-[#151824] border border-[#282e44] focus:border-amber-400 text-amber-300 px-1.5 py-0.5 rounded font-mono text-xs text-right outline-none font-bold"
+              />
+              <span className="font-mono text-xs text-zinc-500 font-bold">/ 80</span>
+            </div>
           </div>
 
           <div className="space-y-3">

@@ -11,6 +11,7 @@ import { getWeaponByKey } from '../data/weapons';
 import {
   calculateCharacterBannerOdds,
   calculateWeaponBannerOdds,
+  calculateTotalPulls,
 } from './gacha-math';
 
 // Notable 5-star target pool for accounts
@@ -105,6 +106,12 @@ const SIGNATURE_WEAPONS: Record<string, SignatureWeaponConfig> = {
         penaltyPct: 8,
         penaltyReason: 'Favonius Sword provides team energy recharge and smooth burst rotations.',
       },
+      {
+        key: 'FluteOfEzpitzal',
+        minRefinement: 4,
+        penaltyPct: 7,
+        penaltyReason: 'Flute of Ezpitzal provides high DEF% bonus crafted specifically for Natlan Geo users.',
+      },
     ],
   },
   Mavuika: {
@@ -117,6 +124,18 @@ const SIGNATURE_WEAPONS: Record<string, SignatureWeaponConfig> = {
         minRefinement: 1,
         penaltyPct: 10,
         penaltyReason: 'Beacon of the Reed Sea provides strong high CRIT Rate alternative.',
+      },
+      {
+        key: 'SerpentSpine',
+        minRefinement: 4,
+        penaltyPct: 9,
+        penaltyReason: 'Serpent Spine (R4-R5) grants massive universal all-damage bonus stacks.',
+      },
+      {
+        key: 'EarthShaker',
+        minRefinement: 4,
+        penaltyPct: 7,
+        penaltyReason: 'Earth Shaker R5 provides high Skill DMG upon triggering Pyro reactions.',
       },
     ],
   },
@@ -168,7 +187,20 @@ const SIGNATURE_WEAPONS: Record<string, SignatureWeaponConfig> = {
     weaponKey: 'StarcallerSWatch',
     name: "Starcaller's Watch",
     baseUpliftPct: 18,
-    substitutes: [],
+    substitutes: [
+      {
+        key: 'FavoniusCodex',
+        minRefinement: 1,
+        penaltyPct: 8,
+        penaltyReason: 'Favonius Codex guarantees smooth burst uptime for teamwide Cryo application.',
+      },
+      {
+        key: 'SacrificialFragments',
+        minRefinement: 3,
+        penaltyPct: 7,
+        penaltyReason: 'Sacrificial Fragments provides massive EM to buff Melt/Superconduct reactions.',
+      },
+    ],
   },
   Nefer: {
     weaponKey: 'ReliquaryOfTruth',
@@ -180,6 +212,12 @@ const SIGNATURE_WEAPONS: Record<string, SignatureWeaponConfig> = {
         minRefinement: 1,
         penaltyPct: 12,
         penaltyReason: 'Sacrificial Jade provides CRIT Rate and 80 EM.',
+      },
+      {
+        key: 'LostPrayerToTheSacredWinds',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'Lost Prayer to the Sacred Winds provides high base CRIT Rate.',
       },
     ],
   },
@@ -199,6 +237,12 @@ const SIGNATURE_WEAPONS: Record<string, SignatureWeaponConfig> = {
         minRefinement: 1,
         penaltyPct: 8,
         penaltyReason: 'Favonius Sword ensures reliable burst uptime.',
+      },
+      {
+        key: 'IronSting',
+        minRefinement: 4,
+        penaltyPct: 6,
+        penaltyReason: 'Iron Sting R5 provides free EM for elemental damage bonus scaling.',
       },
     ],
   },
@@ -227,6 +271,12 @@ const SIGNATURE_WEAPONS: Record<string, SignatureWeaponConfig> = {
     baseUpliftPct: 20,
     substitutes: [
       {
+        key: 'ElegyForTheEnd',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'Elegy for the End provides top-tier teamwide EM and ATK buffing alongside high ER.',
+      },
+      {
         key: 'FavoniusWarbow',
         minRefinement: 3,
         penaltyPct: 8,
@@ -245,19 +295,214 @@ const SIGNATURE_WEAPONS: Record<string, SignatureWeaponConfig> = {
         penaltyPct: 10,
         penaltyReason: 'The Catch R5 provides +32% Burst DMG and +12% Burst CRIT Rate for free.',
       },
+      {
+        key: 'StaffOfHoma',
+        minRefinement: 1,
+        penaltyPct: 9,
+        penaltyReason: 'Staff of Homa provides immense 66.2% CRIT DMG and bonus ATK based on HP.',
+      },
     ],
   },
   Chasca: {
     weaponKey: 'AstralVultureSCrimsonPlumage',
     name: "Astral Vulture's Crimson Plumage",
     baseUpliftPct: 20,
-    substitutes: [],
+    substitutes: [
+      {
+        key: 'TheFirstGreatMagic',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'The First Great Magic provides 66.2% CRIT DMG and charged attack buffs.',
+      },
+      {
+        key: 'AquaSimulacra',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'Aqua Simulacra provides 88.2% CRIT DMG and universal damage bonus.',
+      },
+    ],
   },
   Clorinde: {
     weaponKey: 'Absolution',
     name: 'Absolution',
     baseUpliftPct: 20,
-    substitutes: [],
+    substitutes: [
+      {
+        key: 'MistsplitterReforged',
+        minRefinement: 1,
+        penaltyPct: 11,
+        penaltyReason: 'Mistsplitter Reforged provides 44.1% CRIT DMG and massive elemental DMG bonus.',
+      },
+      {
+        key: 'HaranGeppakuFutsu',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'Haran Geppaku Futsu provides 33.1% CRIT Rate and +40% normal attack DMG.',
+      },
+      {
+        key: 'TheBlackSword',
+        minRefinement: 4,
+        penaltyPct: 8,
+        penaltyReason: 'The Black Sword R4-R5 provides high CRIT Rate and normal attack damage.',
+      },
+    ],
+  },
+  HuTao: {
+    weaponKey: 'StaffOfHoma',
+    name: 'Staff of Homa',
+    baseUpliftPct: 24,
+    substitutes: [
+      {
+        key: 'DragonsBane',
+        minRefinement: 4,
+        penaltyPct: 12,
+        penaltyReason: "Dragon's Bane (R4-R5) provides 221 EM and up to +36% DMG against Pyro/Hydro affected targets.",
+      },
+      {
+        key: 'CrimsonMoonSSemblance',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: "Crimson Moon's Semblance provides high CRIT Rate and strong base attack.",
+      },
+      {
+        key: 'Deathmatch',
+        minRefinement: 4,
+        penaltyPct: 9,
+        penaltyReason: 'Deathmatch provides up to 36.8% CRIT Rate and consistent ATK boost.',
+      },
+    ],
+  },
+  Chiori: {
+    weaponKey: 'UrakuMisugiri',
+    name: 'Uraku Misugiri',
+    baseUpliftPct: 22,
+    substitutes: [
+      {
+        key: 'CinnabarSpindle',
+        minRefinement: 1,
+        penaltyPct: 12,
+        penaltyReason: 'Cinnabar Spindle R5 provides massive DEF-scaled Elemental Skill damage.',
+      },
+      {
+        key: 'PrimordialJadeCutter',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'Primordial Jade Cutter provides 44.1% CRIT Rate and bonus ATK.',
+      },
+      {
+        key: 'HarbingerOfDawn',
+        minRefinement: 5,
+        penaltyPct: 8,
+        penaltyReason: 'Harbinger of Dawn R5 gives 28% CRIT Rate and 46.9% CRIT DMG for off-field Chiori.',
+      },
+    ],
+  },
+  Lyney: {
+    weaponKey: 'TheFirstGreatMagic',
+    name: 'The First Great Magic',
+    baseUpliftPct: 22,
+    substitutes: [
+      {
+        key: 'AquaSimulacra',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'Aqua Simulacra provides 88.2% CRIT DMG and unconditional 20% all-DMG bonus.',
+      },
+      {
+        key: 'SongOfStillness',
+        minRefinement: 4,
+        penaltyPct: 7,
+        penaltyReason: 'Song of Stillness R5 craftable bow provides up to +32% DMG after receiving healing.',
+      },
+    ],
+  },
+  Navia: {
+    weaponKey: 'Verdict',
+    name: 'Verdict',
+    baseUpliftPct: 22,
+    substitutes: [
+      {
+        key: 'SerpentSpine',
+        minRefinement: 4,
+        penaltyPct: 12,
+        penaltyReason: 'Serpent Spine (R4-R5) gives 27.6% CRIT Rate and up to +50% all-DMG bonus.',
+      },
+      {
+        key: 'WolfsGravestone',
+        minRefinement: 1,
+        penaltyPct: 8,
+        penaltyReason: "Wolf's Gravestone provides massive ATK% scaling and party buff.",
+      },
+    ],
+  },
+  Alhaitham: {
+    weaponKey: 'LightOfFoliarIncision',
+    name: 'Light of Foliar Incision',
+    baseUpliftPct: 22,
+    substitutes: [
+      {
+        key: 'PrimordialJadeCutter',
+        minRefinement: 1,
+        penaltyPct: 11,
+        penaltyReason: 'Primordial Jade Cutter provides 44.1% CRIT Rate and universal high ATK.',
+      },
+      {
+        key: 'MistsplitterReforged',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'Mistsplitter Reforged grants high elemental DMG bonus.',
+      },
+      {
+        key: 'HarbingerOfDawn',
+        minRefinement: 5,
+        penaltyPct: 8,
+        penaltyReason: 'Harbinger of Dawn R5 provides high CRIT Rate/DMG when protected by shields.',
+      },
+    ],
+  },
+  Kinich: {
+    weaponKey: 'FangOfTheMountainKing',
+    name: 'Fang of the MountainKing',
+    baseUpliftPct: 22,
+    substitutes: [
+      {
+        key: 'BeaconOfTheReedSea',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'Beacon of the Reed Sea provides 33.1% CRIT Rate and ATK stacking.',
+      },
+      {
+        key: 'SerpentSpine',
+        minRefinement: 4,
+        penaltyPct: 10,
+        penaltyReason: 'Serpent Spine provides 27.6% CRIT Rate and all-damage bonus stacks.',
+      },
+      {
+        key: 'EarthShaker',
+        minRefinement: 4,
+        penaltyPct: 8,
+        penaltyReason: 'Earth Shaker R5 provides up to +32% Skill DMG upon triggering Pyro reactions.',
+      },
+    ],
+  },
+  Xianyun: {
+    weaponKey: 'CraneSEchoingCall',
+    name: "Crane's Echoing Call",
+    baseUpliftPct: 18,
+    substitutes: [
+      {
+        key: 'OathswornEye',
+        minRefinement: 4,
+        penaltyPct: 9,
+        penaltyReason: 'Oathsworn Eye R5 provides high ATK% and +48% Energy Recharge on skill cast.',
+      },
+      {
+        key: 'FavoniusCodex',
+        minRefinement: 1,
+        penaltyPct: 8,
+        penaltyReason: 'Favonius Codex generates neutral energy particles for the entire plunge team.',
+      },
+    ],
   },
 };
 
@@ -273,6 +518,7 @@ interface ConstellationSpike {
 }
 
 const CONSTELLATION_SPIKES: ConstellationSpike[] = [
+  // Furina C1 & C2
   {
     characterId: 'Furina',
     name: 'Furina',
@@ -300,6 +546,21 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
       'Transforms Furina into one of the highest personal DPS sub-carries in Genshin.',
     ],
   },
+
+  // Nahida C1 & C2
+  {
+    characterId: 'Nahida',
+    name: 'Nahida',
+    targetLevel: 1,
+    targetLevelText: 'C1 Seed of Stored Knowledge',
+    baseUpliftPct: 12,
+    baseScore: 82,
+    description: 'Party member elemental types count +1 for Pyro, Electro, and Hydro under Shrine of Maya.',
+    benefits: [
+      'Unlocks maximum Tri-Karma trigger interval and elemental bonus even without double-element teams.',
+      'Direct stepping-stone to C2 DEF Shred and Crit reactions.',
+    ],
+  },
   {
     characterId: 'Nahida',
     name: 'Nahida',
@@ -313,6 +574,8 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
       '30% flat DEF reduction boosts entire team damage across Quicken/Aggravate/Spread.',
     ],
   },
+
+  // Neuvillette C1 & C2
   {
     characterId: 'Neuvillette',
     name: 'Neuvillette',
@@ -324,6 +587,34 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
     benefits: [
       'Zero knockback without needing a dedicated shielder like Zhongli.',
       'Unlocks full 3-stack beam damage multiplier with Hydro teammates (e.g. Furina).',
+    ],
+  },
+  {
+    characterId: 'Neuvillette',
+    name: 'Neuvillette',
+    targetLevel: 2,
+    targetLevelText: 'C2 Draconic Crit Amplification',
+    baseUpliftPct: 18,
+    baseScore: 89,
+    description: 'Past Draconic Glories grants +14% CRIT DMG per stack, up to +42% CRIT DMG on charged attacks.',
+    benefits: [
+      'Massive raw CRIT DMG scaling on Neuvillette continuous hydro beam.',
+      'Elevates personal hypercarry DPS ceiling without additional setup.',
+    ],
+  },
+
+  // Raiden Shogun C1 & C2
+  {
+    characterId: 'RaidenShogun',
+    name: 'Raiden Shogun',
+    targetLevel: 1,
+    targetLevelText: 'C1 Ominous Inscription',
+    baseUpliftPct: 10,
+    baseScore: 81,
+    description: 'Chakra Desiderata gathers Resolve 80% faster from Electro bursts and 20% faster from other elements.',
+    benefits: [
+      'Allows maximum Resolve stacks in fast rotations without requiring 80-cost bursts.',
+      'Direct prerequisite stepping-stone to C2 DEF Ignore.',
     ],
   },
   {
@@ -339,6 +630,22 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
       'Shreds through Spiral Abyss Floor 12 bosses in a single burst window.',
     ],
   },
+
+  // Xilonen C1 & C2
+  {
+    characterId: 'Xilonen',
+    name: 'Xilonen',
+    targetLevel: 1,
+    targetLevelText: "C1 Sabre-Tooth's Tenacity",
+    baseUpliftPct: 10,
+    baseScore: 82,
+    description: 'Nightsoul point and Phlogiston consumption reduced by 30%, with complete stagger resistance during Nightsoul.',
+    benefits: [
+      'Enhanced overworld exploration mobility and rock-climbing longevity.',
+      'Poise resistance prevents stagger during buff setup rotations.',
+      'Direct path to C2 Element Specific Amplification.',
+    ],
+  },
   {
     characterId: 'Xilonen',
     name: 'Xilonen',
@@ -352,6 +659,8 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
       'Universal +40% HP bonus directly supercharges Neuvillette and Furina.',
     ],
   },
+
+  // Arlecchino C1 & C2
   {
     characterId: 'Arlecchino',
     name: 'Arlecchino',
@@ -363,6 +672,34 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
     benefits: [
       'Massive ~24% personal DPS increase across normal attack combos.',
       'High interruption resistance allows aggressive unshielded play.',
+    ],
+  },
+  {
+    characterId: 'Arlecchino',
+    name: 'Arlecchino',
+    targetLevel: 2,
+    targetLevelText: 'C2 All Desires, Ashen',
+    baseUpliftPct: 20,
+    baseScore: 88,
+    description: 'Blood-Debt Direct upgrades immediately to Blood-Debt Due; absorbing it triggers 900% AoE Pyro DMG and +20% resistances.',
+    benefits: [
+      'Zero delay setup: immediately absorbs maximum Bond of Life on skill cast.',
+      'Explosive 900% ATK AoE Pyro nuke on every rotation.',
+    ],
+  },
+
+  // Mavuika C1 & C2
+  {
+    characterId: 'Mavuika',
+    name: 'Mavuika',
+    targetLevel: 1,
+    targetLevelText: 'C1 Ancient Name Awakening',
+    baseUpliftPct: 12,
+    baseScore: 83,
+    description: 'Fighting Spirit cap increased to 200, and immediately grants 40 Fighting Spirit upon burst cast.',
+    benefits: [
+      'Faster maximum burst scaling and higher uptime.',
+      'Direct stepping-stone to C2 Nightsoul DEF shred.',
     ],
   },
   {
@@ -378,6 +715,21 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
       'Elevates Pyro on-field and off-field supremacy.',
     ],
   },
+
+  // Nefer C1 & C2
+  {
+    characterId: 'Nefer',
+    name: 'Nefer',
+    targetLevel: 1,
+    targetLevelText: 'C1 Veil of Deceit',
+    baseUpliftPct: 12,
+    baseScore: 81,
+    description: 'Initial Phantasm stack threshold reduced and elevates reaction damage scaling.',
+    benefits: [
+      'Accelerates Lunar-Bloom reaction setup speed.',
+      'Direct stepping-stone to C2 Veil Expansion.',
+    ],
+  },
   {
     characterId: 'Nefer',
     name: 'Nefer',
@@ -389,6 +741,22 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
     benefits: [
       'Extends Veil duration and increases EM buff to +200.',
       'Colossal Lunar-Bloom reaction damage spikes.',
+    ],
+  },
+
+  // Kaedehara Kazuha C1 & C2
+  {
+    characterId: 'KaedeharaKazuha',
+    name: 'Kaedehara Kazuha',
+    targetLevel: 1,
+    targetLevelText: 'C1 Senzan Hashi',
+    baseUpliftPct: 12,
+    baseScore: 84,
+    description: 'Chihayaburu CD reduced by 10%, and using Kazuha Slash resets Chihayaburu CD.',
+    benefits: [
+      'Double swirl skill cast per rotation generates massive energy particles.',
+      'Double grouping pulls and smooth rotation reset.',
+      'Direct stepping-stone to C2 EM field.',
     ],
   },
   {
@@ -404,6 +772,51 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
       'Further increases Kazuha personal elemental DMG bonus share.',
     ],
   },
+
+  // Hu Tao C1
+  {
+    characterId: 'HuTao',
+    name: 'Hu Tao',
+    targetLevel: 1,
+    targetLevelText: 'C1 Crimson Bouquet',
+    baseUpliftPct: 22,
+    baseScore: 92,
+    description: 'Paramita Papilio Charge Attacks do not consume stamina.',
+    benefits: [
+      'Completely eliminates stamina management during burst window.',
+      'Enables dash cancels instead of jump cancels, boosting combo count and DPS by ~22%.',
+    ],
+  },
+
+  // Zhongli C1 & C2
+  {
+    characterId: 'Zhongli',
+    name: 'Zhongli',
+    targetLevel: 1,
+    targetLevelText: 'C1 Echoes of the Earth',
+    baseUpliftPct: 8,
+    baseScore: 78,
+    description: 'Increases maximum Stone Stele count to 2 simultaneously.',
+    benefits: [
+      'Doubles Geo resonance pulses and Tenacity of the Millelith trigger consistency.',
+      'Improves Geo particle battery generation.',
+    ],
+  },
+  {
+    characterId: 'Zhongli',
+    name: 'Zhongli',
+    targetLevel: 2,
+    targetLevelText: 'C2 Whatever, Stones and Jade',
+    baseUpliftPct: 15,
+    baseScore: 86,
+    description: 'Planet Befall grants a Jade Shield to all party members on cast.',
+    benefits: [
+      'Provides instant zero-downtime shields on burst without holding Skill.',
+      'Top-tier multiplayer and co-op teamwide shielding.',
+    ],
+  },
+
+  // Yelan C1 & C2
   {
     characterId: 'Yelan',
     name: 'Yelan',
@@ -415,6 +828,94 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
     benefits: [
       'Lowers energy recharge needs down to ~140-150%, allowing HP% or offensive sands.',
       'Top-tier overworld sprint chaining.',
+    ],
+  },
+  {
+    characterId: 'Yelan',
+    name: 'Yelan',
+    targetLevel: 2,
+    targetLevelText: 'C2 Taking All Comers',
+    baseUpliftPct: 20,
+    baseScore: 91,
+    description: 'Coordinated attacks fire an additional water arrow dealing 14% Max HP Hydro DMG every 1.8s.',
+    benefits: [
+      'Enables solo-Hydro Vaporize with Hu Tao by eliminating Pyro aura override.',
+      'Substantial +20% personal damage uplift across entire burst duration.',
+    ],
+  },
+
+  // Chasca C1
+  {
+    characterId: 'Chasca',
+    name: 'Chasca',
+    targetLevel: 1,
+    targetLevelText: "C1 Cylinder's Floating Feather",
+    baseUpliftPct: 18,
+    baseScore: 88,
+    description: 'Nightsoul point consumption reduced by 30% and guarantees elemental conversion on shadow bullets.',
+    benefits: [
+      'Guarantees all 6 conversion bullets in rainbow compositions.',
+      'Significantly extended flight and sniping duration.',
+    ],
+  },
+
+  // Clorinde C1
+  {
+    characterId: 'Clorinde',
+    name: 'Clorinde',
+    targetLevel: 1,
+    targetLevelText: "C1 Pass the Candle's Flame",
+    baseUpliftPct: 15,
+    baseScore: 85,
+    description: 'Nightvigil normal attacks trigger 2 additional Shadowpiercing strikes dealing 30% ATK Electro DMG.',
+    benefits: [
+      'Increases hit count and Electro reaction triggers during Nightvigil state.',
+      '+15% sustained personal damage output.',
+    ],
+  },
+
+  // Citlali C1
+  {
+    characterId: 'Citlali',
+    name: 'Citlali',
+    targetLevel: 1,
+    targetLevelText: "C1 Dawn's Frosty Whisper",
+    baseUpliftPct: 14,
+    baseScore: 84,
+    description: 'Opal Shield absorption increased by 20% and triggers additional Cryo damage pulses.',
+    benefits: [
+      'Thicker shield protection and reliable off-field Cryo application.',
+      'Higher Melt reaction consistency for Pyro teammates.',
+    ],
+  },
+
+  // Chiori C1
+  {
+    characterId: 'Chiori',
+    name: 'Chiori',
+    targetLevel: 1,
+    targetLevelText: 'C1 Six-Spun Silk Applique',
+    baseUpliftPct: 18,
+    baseScore: 88,
+    description: 'Automaton Yoto trigger AoE +50%, and summons an additional doll if another Geo character is in party (no construct needed).',
+    benefits: [
+      'Removes the Geo construct restriction entirely, unlocking dual dolls with Navia or Noelle.',
+      'Massive ~35% off-field damage increase in non-construct Geo teams.',
+    ],
+  },
+
+  // Lyney C1
+  {
+    characterId: 'Lyney',
+    name: 'Lyney',
+    targetLevel: 1,
+    targetLevelText: 'C1 Whimsical Wonders',
+    baseUpliftPct: 16,
+    baseScore: 85,
+    description: 'Can have up to 2 Grin-Malkin Hats simultaneously, and Prop Arrows summon an extra hat every 15s.',
+    benefits: [
+      'Double taunts and double Pyrotechnic Strike explosions.',
+      'Accelerates Prop Surplus stack generation.',
     ],
   },
 ];
@@ -560,7 +1061,7 @@ export function evaluateComprehensivePullROI(
   budget: PullBudgetState,
   bannerFilter?: string,
 ): EnhancedPullAdvice[] {
-  const totalPulls = Math.max(0, Math.floor(budget.primogems / 160) + budget.fates);
+  const totalPulls = calculateTotalPulls(budget.primogems, budget.fates);
   const charOdds = calculateCharacterBannerOdds(
     totalPulls,
     budget.characterPity,
@@ -756,6 +1257,61 @@ export function evaluateComprehensivePullROI(
         uplift = 25;
         unlocked.push('Lunar-Bloom Special Reaction DPS');
         benefits.push('Devastating Dendro on-field carry with unique Seed of Deceit reaction mechanics.');
+      } else if (char.id === 'RaidenShogun') {
+        score = 92;
+        uplift = 25;
+        unlocked.push('Universal Battery & Burst DPS');
+        benefits.push('Recharges whole party bursts while dealing devastating on-field Electro damage.');
+      } else if (char.id === 'Xianyun') {
+        score = 91;
+        uplift = 25;
+        unlocked.push('Universal Plunge Archetype & Teamwide Healing');
+        benefits.push('Unlocks plunging attacks for any DPS character alongside continuous party healing.');
+      } else if (char.id === 'HuTao') {
+        score = 89;
+        uplift = 26;
+        unlocked.push('Top-Tier Single-Target Pyro Carry');
+        benefits.push('Devastating Vaporize and Melt damage scaling with unmatched single-target DPS.');
+      } else if (char.id === 'Chasca') {
+        score = 88;
+        uplift = 24;
+        unlocked.push('Multi-Elemental Nightsoul Conversion Shelling');
+        benefits.push('High damage multi-elemental conversion bullets adaptable to any party composition.');
+      } else if (char.id === 'Kinich') {
+        score = 88;
+        uplift = 24;
+        unlocked.push('Nightsoul Burgeon & Burning DPS');
+        benefits.push('Acrobatic high-mobility grapple loops with massive Dendro scaling in Burning/Burgeon.');
+      } else if (char.id === 'Clorinde') {
+        score = 88;
+        uplift = 24;
+        unlocked.push('Bond of Life Electro Carry');
+        benefits.push('Rapid piercing gunshot and thrust normal attacks with self-sustaining Bond of Life.');
+      } else if (char.id === 'Alhaitham') {
+        score = 88;
+        uplift = 25;
+        unlocked.push('Premier Spread & Hyperbloom Dendro Carry');
+        benefits.push('Mirror sword projection rain providing top-tier Dendro application and personal damage.');
+      } else if (char.id === 'Navia') {
+        score = 87;
+        uplift = 24;
+        unlocked.push('Crystallize Shrapnel Burst DPS');
+        benefits.push('Instant 6-shrapnel blast hits delivering massive burst damage with flexible teammates.');
+      } else if (char.id === 'Baizhu') {
+        score = 88;
+        uplift = 18;
+        unlocked.push('Dendro Shielding & Reaction DMG Buffing');
+        benefits.push('Continuous healing, interruption shields, and reaction damage amplification for Bloom/Quicken.');
+      } else if (char.id === 'Lyney') {
+        score = 86;
+        uplift = 24;
+        unlocked.push('Mono-Pyro Trickster DPS');
+        benefits.push('High charged shot Prop Arrow damage amplified by Pyro teammates.');
+      } else if (char.id === 'Chiori') {
+        score = 85;
+        uplift = 22;
+        unlocked.push('Geo Sub-DPS & Dual Doll Off-Field Damage');
+        benefits.push('Zero-effort off-field Geo damage that scales with DEF and ATK.');
       } else {
         score = 70;
         uplift = 18;
@@ -830,7 +1386,7 @@ export function evaluateComprehensivePullROI(
     // Check if player already owns this signature weapon
     const ownsSignature =
       ownedWeapons.some((w) => w.key === sigConfig.weaponKey) ||
-      ownedProfiles[charId]?.weapon?.key === sigConfig.weaponKey;
+      Object.values(ownedProfiles).some((p) => p.weapon?.key === sigConfig.weaponKey);
 
     if (ownsSignature) {
       if (selectedBanner) {
@@ -859,17 +1415,17 @@ export function evaluateComprehensivePullROI(
     ];
     let caution: string | undefined;
 
-    // Check substitutes
+    // Check substitutes across all owned weapons and profiles (using highest refinement owned)
     for (const sub of sigConfig.substitutes) {
-      const matchingWeapon =
-        ownedWeapons.find((w) => w.key === sub.key) ||
-        (ownedProfiles[charId]?.weapon?.key === sub.key
-          ? ownedProfiles[charId].weapon
-          : undefined);
+      const ownedMatches = ownedWeapons.filter((w) => w.key === sub.key);
+      const equippedMatches = Object.values(ownedProfiles)
+        .map((p) => p.weapon)
+        .filter((w): w is NonNullable<typeof w> => w?.key === sub.key);
 
-      if (matchingWeapon) {
-        const ref = matchingWeapon.refinement ?? 1;
-        if (!sub.minRefinement || ref >= sub.minRefinement) {
+      const allMatches = [...ownedMatches, ...equippedMatches];
+      if (allMatches.length > 0) {
+        const maxRef = Math.max(...allMatches.map((w) => w.refinement ?? 1));
+        if (!sub.minRefinement || maxRef >= sub.minRefinement) {
           uplift = Math.max(4, uplift - sub.penaltyPct);
           score = Math.max(35, score - sub.penaltyPct * 2);
           caution = sub.penaltyReason;

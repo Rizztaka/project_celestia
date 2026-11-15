@@ -3,10 +3,39 @@ import {
   calculateCharacterBannerOdds,
   calculateWeaponBannerOdds,
   generateProbabilityDistribution,
+  calculateTotalPulls,
 } from './gacha-math';
 
 describe('Gacha Math Engine (5.x Rules)', () => {
+  describe('calculateTotalPulls', () => {
+    it('accurately calculates pull conversions and floors floats', () => {
+      expect(calculateTotalPulls(16000, 20)).toBe(120);
+      expect(calculateTotalPulls(159, 10.8)).toBe(10);
+      expect(calculateTotalPulls(-500, -10)).toBe(0);
+      expect(calculateTotalPulls(NaN as any, NaN as any)).toBe(0);
+    });
+  });
+
   describe('calculateCharacterBannerOdds', () => {
+    it('gracefully handles float, negative, or NaN pity values without crashing', () => {
+      // Float pity 73.5 should floor to 73 without RangeError
+      const resultFloat = calculateCharacterBannerOdds(10, 73.5, false);
+      expect(resultFloat.guaranteedPulls).toBe(90 - 73 + 90); // 107
+      expect(resultFloat.cumulativeProbability).toBeGreaterThan(0);
+
+      // NaN should default to 0 pity
+      const resultNaN = calculateCharacterBannerOdds(10, NaN as any, false);
+      expect(resultNaN.guaranteedPulls).toBe(180);
+
+      // Negative should clamp to 0 pity
+      const resultNeg = calculateCharacterBannerOdds(10, -50, false);
+      expect(resultNeg.guaranteedPulls).toBe(180);
+
+      // Out of bounds pity (>= 90) should clamp to 89
+      const resultHigh = calculateCharacterBannerOdds(1, 150, true);
+      expect(resultHigh.guaranteedPulls).toBe(1);
+      expect(resultHigh.cumulativeProbability).toBe(1.0);
+    });
     it('returns 0 probability when 0 pulls available', () => {
       const result = calculateCharacterBannerOdds(0, 0, false);
       expect(result.cumulativeProbability).toBe(0);

@@ -17,7 +17,7 @@ export const BANNER_PHASES: BannerPhase[] = [
   {
     id: 'banner_5_3_phase_1',
     version: '5.3',
-    phaseName: '5.3 Phase 1: Ignition & Starlight',
+    phaseName: '5.3 P1: Mavuika & Citlali',
     startDate: '2025-01-01',
     endDate: '2025-01-21',
     characterBanners: [
@@ -31,7 +31,7 @@ export const BANNER_PHASES: BannerPhase[] = [
   {
     id: 'banner_5_3_phase_2',
     version: '5.3',
-    phaseName: '5.3 Phase 2: Moonlit Retribution',
+    phaseName: '5.3 P2: Arlecchino & Clorinde',
     startDate: '2025-01-21',
     endDate: '2025-02-11',
     characterBanners: [
@@ -43,9 +43,23 @@ export const BANNER_PHASES: BannerPhase[] = [
     },
   },
   {
+    id: 'banner_5_4_phase_1',
+    version: '5.4',
+    phaseName: '5.4 P1: Nefer & Furina',
+    startDate: '2025-02-12',
+    endDate: '2025-03-04',
+    characterBanners: [
+      { characterId: 'Nefer', signatureWeaponKey: 'ReliquaryOfTruth' },
+      { characterId: 'Furina', signatureWeaponKey: 'SplendorOfTranquilWaters' },
+    ],
+    weaponBanner: {
+      featuredWeapons: ['ReliquaryOfTruth', 'SplendorOfTranquilWaters'],
+    },
+  },
+  {
     id: 'banner_5_2_phase_2',
     version: '5.2',
-    phaseName: '5.2 Phase 2: Bedrock & Inexorable Tides',
+    phaseName: '5.2 P2: Neuvillette & Zhongli',
     startDate: '2024-12-10',
     endDate: '2024-12-31',
     characterBanners: [
@@ -59,7 +73,7 @@ export const BANNER_PHASES: BannerPhase[] = [
   {
     id: 'banner_5_2_phase_1',
     version: '5.2',
-    phaseName: '5.2 Phase 1: Wings Across Plumes',
+    phaseName: '5.2 P1: Chasca & Lyney',
     startDate: '2024-11-20',
     endDate: '2024-12-10',
     characterBanners: [
@@ -71,23 +85,9 @@ export const BANNER_PHASES: BannerPhase[] = [
     },
   },
   {
-    id: 'banner_5_1_phase_1',
-    version: '5.1',
-    phaseName: '5.1 Phase 1: Song of Rolling Rocks',
-    startDate: '2024-10-09',
-    endDate: '2024-10-29',
-    characterBanners: [
-      { characterId: 'Xilonen', signatureWeaponKey: 'PeakPatrolSong' },
-      { characterId: 'Chiori', signatureWeaponKey: 'UrakuMisugiri' },
-    ],
-    weaponBanner: {
-      featuredWeapons: ['PeakPatrolSong', 'UrakuMisugiri'],
-    },
-  },
-  {
     id: 'banner_5_1_phase_2',
     version: '5.1',
-    phaseName: '5.1 Phase 2: Wisdom & Butterfly Dreams',
+    phaseName: '5.1 P2: Nahida & Hu Tao',
     startDate: '2024-10-29',
     endDate: '2024-11-19',
     characterBanners: [
@@ -99,17 +99,17 @@ export const BANNER_PHASES: BannerPhase[] = [
     },
   },
   {
-    id: 'banner_5_4_phase_1',
-    version: '5.4',
-    phaseName: '5.4 Phase 1: Nod-Krai Premiere',
-    startDate: '2025-02-12',
-    endDate: '2025-03-04',
+    id: 'banner_5_1_phase_1',
+    version: '5.1',
+    phaseName: '5.1 P1: Xilonen & Chiori',
+    startDate: '2024-10-09',
+    endDate: '2024-10-29',
     characterBanners: [
-      { characterId: 'Nefer', signatureWeaponKey: 'ReliquaryOfTruth' },
-      { characterId: 'Furina', signatureWeaponKey: 'SplendorOfTranquilWaters' },
+      { characterId: 'Xilonen', signatureWeaponKey: 'PeakPatrolSong' },
+      { characterId: 'Chiori', signatureWeaponKey: 'UrakuMisugiri' },
     ],
     weaponBanner: {
-      featuredWeapons: ['ReliquaryOfTruth', 'SplendorOfTranquilWaters'],
+      featuredWeapons: ['PeakPatrolSong', 'UrakuMisugiri'],
     },
   },
 ];

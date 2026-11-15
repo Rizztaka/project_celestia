@@ -244,6 +244,35 @@ export interface PullAdvice {
   caution?: string;
 }
 
+import type { GachaOddsResult } from '../engines/gacha-math';
+
+export type PullTargetType = 'C0_Character' | 'Constellation' | 'Signature_Weapon';
+
+export interface PullBudgetState {
+  primogems: number;
+  fates: number;
+  characterPity: number;
+  characterGuaranteed: boolean;
+  weaponPity: number;
+  weaponFatePoints: number; // 0 or 1
+}
+
+export interface EnhancedPullAdvice {
+  id: string;
+  name: string;
+  targetType: PullTargetType;
+  characterId: string;
+  weaponKey?: string;
+  targetLevelText: string; // e.g. "C0 New Unlock", "C2 Peak Spike", "R1 Signature"
+  score: number; // 0 to 100 composite ROI
+  tier: 'Must Pull' | 'High Value' | 'Situational' | 'Skip / Redundant';
+  teamDamageUpliftPct: number;
+  unlockedArchetypes: string[];
+  accountBenefits: string[];
+  caution?: string;
+  odds: GachaOddsResult;
+}
+
 export interface ArtifactStopRecommendation {
   characterName: string;
   currentCv: number;

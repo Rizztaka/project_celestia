@@ -1,10 +1,20 @@
-import type { OwnedCharacterProfile, OwnedWeapon } from '../types/genshin';
+import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../types/genshin';
 
 const ROSTER_KEY = 'celestia_v2_owned_roster';
 const PROFILES_KEY = 'celestia_v2_roster_profiles';
 const ARTIFACTS_KEY = 'celestia_v2_raw_artifacts';
 const WEAPONS_KEY = 'celestia_v2_raw_weapons';
 const UID_KEY = 'celestia_v2_active_uid';
+const PULL_BUDGET_KEY = 'celestia_v2_pull_budget';
+
+export const DEFAULT_PULL_BUDGET: PullBudgetState = {
+  primogems: 0,
+  fates: 0,
+  characterPity: 0,
+  characterGuaranteed: false,
+  weaponPity: 0,
+  weaponFatePoints: 0,
+};
 
 // Default starter roster so new users have an instant rich experience
 export const DEFAULT_ROSTER = [
@@ -252,3 +262,66 @@ export function saveUid(uid: string): void {
     console.error('Failed to save uid to localStorage:', e);
   }
 }
+
+export function getSavedPullBudget(): PullBudgetState {
+  try {
+    if (typeof localStorage === 'undefined') return { ...DEFAULT_PULL_BUDGET };
+    const raw = localStorage.getItem(PULL_BUDGET_KEY);
+    if (!raw) return { ...DEFAULT_PULL_BUDGET };
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return { ...DEFAULT_PULL_BUDGET };
+    }
+
+    const primogems =
+      typeof parsed.primogems === 'number' && !isNaN(parsed.primogems)
+        ? Math.max(0, Math.floor(parsed.primogems))
+        : DEFAULT_PULL_BUDGET.primogems;
+
+    const fates =
+      typeof parsed.fates === 'number' && !isNaN(parsed.fates)
+        ? Math.max(0, Math.floor(parsed.fates))
+        : DEFAULT_PULL_BUDGET.fates;
+
+    const characterPity =
+      typeof parsed.characterPity === 'number' && !isNaN(parsed.characterPity)
+        ? Math.max(0, Math.min(89, Math.floor(parsed.characterPity)))
+        : DEFAULT_PULL_BUDGET.characterPity;
+
+    const characterGuaranteed =
+      typeof parsed.characterGuaranteed === 'boolean'
+        ? parsed.characterGuaranteed
+        : DEFAULT_PULL_BUDGET.characterGuaranteed;
+
+    const weaponPity =
+      typeof parsed.weaponPity === 'number' && !isNaN(parsed.weaponPity)
+        ? Math.max(0, Math.min(79, Math.floor(parsed.weaponPity)))
+        : DEFAULT_PULL_BUDGET.weaponPity;
+
+    const weaponFatePoints =
+      typeof parsed.weaponFatePoints === 'number' && !isNaN(parsed.weaponFatePoints)
+        ? Math.max(0, Math.min(1, Math.floor(parsed.weaponFatePoints)))
+        : DEFAULT_PULL_BUDGET.weaponFatePoints;
+
+    return {
+      primogems,
+      fates,
+      characterPity,
+      characterGuaranteed,
+      weaponPity,
+      weaponFatePoints,
+    };
+  } catch {
+    return { ...DEFAULT_PULL_BUDGET };
+  }
+}
+
+export function savePullBudget(budget: PullBudgetState): void {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(PULL_BUDGET_KEY, JSON.stringify(budget));
+  } catch (e) {
+    console.error('Failed to save pull budget to localStorage:', e);
+  }
+}
+

@@ -10,8 +10,11 @@ import {
   saveWeapons,
   DEFAULT_ROSTER,
   DEFAULT_WEAPONS,
+  getSavedPullBudget,
+  savePullBudget,
+  DEFAULT_PULL_BUDGET,
 } from './storage';
-import type { OwnedWeapon } from '../types/genshin';
+import type { OwnedWeapon, PullBudgetState } from '../types/genshin';
 
 describe('Storage Service - Persistence and Reset Semantics', () => {
   let store: Record<string, string> = {};
@@ -120,5 +123,56 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
     expect(saveWeapons(testBag)).toBe(true);
     const loaded = getSavedWeapons();
     expect(loaded).toEqual(testBag);
+  });
+
+  describe('Pull Budget Persistence', () => {
+    it('returns DEFAULT_PULL_BUDGET when uninitialized', () => {
+      expect(localStorage.getItem('celestia_v2_pull_budget')).toBeNull();
+      const budget = getSavedPullBudget();
+      expect(budget).toEqual(DEFAULT_PULL_BUDGET);
+    });
+
+    it('saves and restores pull budget correctly', () => {
+      const budget: PullBudgetState = {
+        primogems: 16000,
+        fates: 25,
+        characterPity: 45,
+        characterGuaranteed: true,
+        weaponPity: 20,
+        weaponFatePoints: 1,
+      };
+
+      savePullBudget(budget);
+      expect(localStorage.getItem('celestia_v2_pull_budget')).not.toBeNull();
+
+      const restored = getSavedPullBudget();
+      expect(restored).toEqual(budget);
+    });
+
+    it('gracefully handles malformed or out-of-range storage data', () => {
+      localStorage.setItem('celestia_v2_pull_budget', 'invalid json{');
+      expect(getSavedPullBudget()).toEqual(DEFAULT_PULL_BUDGET);
+
+      // Clamp out-of-range values
+      localStorage.setItem(
+        'celestia_v2_pull_budget',
+        JSON.stringify({
+          primogems: -500,
+          fates: -10,
+          characterPity: 120, // max is 89
+          characterGuaranteed: 'yes', // should be boolean
+          weaponPity: -5,
+          weaponFatePoints: 3, // max is 1
+        }),
+      );
+
+      const sanitized = getSavedPullBudget();
+      expect(sanitized.primogems).toBe(0);
+      expect(sanitized.fates).toBe(0);
+      expect(sanitized.characterPity).toBe(89);
+      expect(sanitized.characterGuaranteed).toBe(false);
+      expect(sanitized.weaponPity).toBe(0);
+      expect(sanitized.weaponFatePoints).toBe(1);
+    });
   });
 });

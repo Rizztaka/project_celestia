@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { solveAbyssDualTeams, evaluateChamberMechanicCoverage } from './abyss-solver';
+import { solveAbyssDualTeams, evaluateChamberMechanicCoverage, swapAbyssDualHalves } from './abyss-solver';
 import { CHARACTERS } from '../data/characters';
+import { ABYSS_CYCLES } from '../data/abyss-schedules';
 
 describe('Spiral Abyss Floor 12 Dual-Team Solver', () => {
   // A comprehensive owned roster with various archetypes:
@@ -240,5 +241,90 @@ describe('Spiral Abyss Floor 12 Dual-Team Solver', () => {
     const plan = solveAbyssDualTeams(smallRoster);
     expect(plan.firstHalfTeam.resonance).toBeDefined();
     expect(plan.firstHalfTeam.resonance.some((r) => r.includes('Fervent Flames'))).toBe(true);
+  });
+
+  describe('Endgame Guidance 2.0 Multi-Cycle & Half-Swap Additions', () => {
+    it('supports evaluating against different official cycles (5.2, 5.1)', () => {
+      const cycle52 = ABYSS_CYCLES.find((c) => c.id === 'cycle-5-2');
+      expect(cycle52).toBeDefined();
+
+      const plan52 = solveAbyssDualTeams(comprehensiveRoster, undefined, cycle52);
+      expect(plan52.cycleId).toBe('cycle-5-2');
+      expect(plan52.chamberCoverage).toHaveLength(3);
+    });
+
+    it('attaches exact shield break time and RES shred metrics to chamber halves', () => {
+      const plan = solveAbyssDualTeams(comprehensiveRoster);
+      const chamber1 = plan.chamberCoverage.find((c) => c.chamber === 1);
+      expect(chamber1).toBeDefined();
+
+      // Second half of 12-1 has Pyro Lector shield
+      const secondMetrics = chamber1?.secondHalfMetrics;
+      expect(secondMetrics).toBeDefined();
+      expect(secondMetrics?.shieldBreakRating).toBeDefined();
+      expect(secondMetrics?.shieldBreakTime).toBeLessThanOrEqual(10.0);
+      expect(secondMetrics?.effectiveResShred).toBeGreaterThanOrEqual(0);
+    });
+
+    it('swaps first and second half teams cleanly with swapAbyssDualHalves and preserves 0-overlap', () => {
+      const originalPlan = solveAbyssDualTeams(comprehensiveRoster);
+      const swapped = swapAbyssDualHalves(originalPlan);
+
+      // Names and IDs must match in swapped positions
+      expect(swapped.firstHalfTeam.name).toBe(originalPlan.secondHalfTeam.name);
+      expect(swapped.secondHalfTeam.name).toBe(originalPlan.firstHalfTeam.name);
+
+      const firstIds = new Set(swapped.firstHalfTeam.members.map((m) => m.id));
+      const secondIds = new Set(swapped.secondHalfTeam.members.map((m) => m.id));
+
+      // Disjointness check
+      for (const id of firstIds) {
+        expect(secondIds.has(id)).toBe(false);
+      }
+      expect(swapped.chamberCoverage).toHaveLength(3);
+    });
+
+    it('correctly flags a Hydro carry team as unsatisfied against 12-1-A Hydro Phantasms even with Zhongli present', () => {
+      const neuvillette = CHARACTERS.find((c) => c.id === 'Neuvillette')!;
+      const furina = CHARACTERS.find((c) => c.id === 'Furina')!;
+      const xingqiu = CHARACTERS.find((c) => c.id === 'Xingqiu')!;
+      const zhongli = CHARACTERS.find((c) => c.id === 'Zhongli')!;
+
+      const hydroCarryTeam = {
+        id: 'team-neuv',
+        name: 'Neuvillette Hypercarry',
+        archetype: 'Hypercarry',
+        members: [neuvillette, furina, xingqiu, zhongli],
+        synergyScore: 90,
+        comfortScore: 90,
+        reasons: [],
+        rotation: '',
+        resonance: [],
+      };
+
+      const secondTeam = {
+        id: 'team-pyro',
+        name: 'Arlecchino Overload',
+        archetype: 'Overload',
+        members: [
+          CHARACTERS.find((c) => c.id === 'Arlecchino')!,
+          CHARACTERS.find((c) => c.id === 'Bennett')!,
+          CHARACTERS.find((c) => c.id === 'Fischl')!,
+          CHARACTERS.find((c) => c.id === 'Yelan')!,
+        ],
+        synergyScore: 90,
+        comfortScore: 85,
+        reasons: [],
+        rotation: '',
+        resonance: [],
+      };
+
+      const { coverage } = evaluateChamberMechanicCoverage(hydroCarryTeam, secondTeam);
+      const chamber1 = coverage.find((c) => c.chamber === 1)!;
+
+      // Because Neuvillette is the primary carry and is Hydro, and there is no non-Hydro DPS, First Half MUST NOT be satisfied
+      expect(chamber1.firstHalfSatisfied).toBe(false);
+      expect(chamber1.firstHalfStatus).toMatch(/immune|reliance/i);
+    });
   });
 });

@@ -5,6 +5,8 @@ import {
   swapTheaterActMember,
   removeTheaterActMember,
   calculateVigorState,
+  evaluateBossActMatchup,
+  recommendSupportCastBorrow,
 } from './theater-solver';
 import { THEATER_SEASONS } from '../data/theater-seasons';
 import { CHARACTERS } from '../data/characters';
@@ -648,6 +650,110 @@ describe('Imaginarium Theater Engine', () => {
         const containsOutOfPool = result.acts[i].team.some((m) => m.id === outOfPoolChar.id);
         expect(containsOutOfPool).toBe(false);
       }
+    });
+  });
+
+  describe('Endgame Guidance 2.0 Boss Ratings & Support Borrow Advisor', () => {
+    const mavuika = CHARACTERS.find((c) => c.id === 'Mavuika')!;
+    const furina = CHARACTERS.find((c) => c.id === 'Furina')!;
+    const bennett = CHARACTERS.find((c) => c.id === 'Bennett')!;
+    const xilonen = CHARACTERS.find((c) => c.id === 'Xilonen')!;
+    const fischl = CHARACTERS.find((c) => c.id === 'Fischl')!;
+    const baizhu = CHARACTERS.find((c) => c.id === 'Baizhu')!;
+
+    it('rates Centaur Automaton matchup as S rating when Natlan Nightsoul and top synergy present', () => {
+      const team = [mavuika, furina, bennett, xilonen];
+      const res = evaluateBossActMatchup(team, 'Centaur Automaton');
+
+      expect(res.rating).toBe('S');
+      expect(res.score).toBeGreaterThanOrEqual(85);
+      expect(res.counterHighlights.some((h) => h.includes('Nightsoul'))).toBe(true);
+    });
+
+    it('rates Jadeplume Terrorshroom higher when Electro stunner is present', () => {
+      const electroTeam = [mavuika, fischl, bennett, furina];
+      const noElectroTeam = [mavuika, furina, bennett, baizhu];
+
+      const electroRes = evaluateBossActMatchup(electroTeam, 'Jadeplume Terrorshroom');
+      const noElectroRes = evaluateBossActMatchup(noElectroTeam, 'Jadeplume Terrorshroom');
+
+      expect(electroRes.score).toBeGreaterThan(noElectroRes.score);
+      expect(electroRes.counterHighlights.some((h) => h.includes('Electro'))).toBe(true);
+    });
+
+    it('returns C rating for empty team', () => {
+      const res = evaluateBossActMatchup([], 'Maguu Kenki');
+      expect(res.rating).toBe('C');
+      expect(res.score).toBe(0);
+    });
+
+    it('recommends top 3 support cast characters not currently owned by the user', () => {
+      // User only owns 4 characters
+      const smallOwnedIds = ['Bennett', 'Xiangling', 'Xingqiu', 'Sucrose'];
+      const eligible = CHARACTERS.filter((c) => smallOwnedIds.includes(c.id));
+
+      const borrows = recommendSupportCastBorrow(eligible, season1, smallOwnedIds);
+
+      expect(borrows).toHaveLength(3);
+      // Strict feasibility: borrowed characters MUST NOT be owned
+      borrows.forEach((borrow) => {
+        expect(smallOwnedIds).not.toContain(borrow.id);
+        // And MUST match season elements, guests, or opening cast
+        const isSeasonElem = season1.elements.includes(borrow.element);
+        const isGuest = season1.specialGuestIds.includes(borrow.id);
+        const isOpening = season1.openingCastIds.includes(borrow.id);
+        expect(isSeasonElem || isGuest || isOpening).toBe(true);
+      });
+    });
+
+    it('automatically attaches bossMatchup to autoDrafted boss acts', () => {
+      const allSeason1Chars = CHARACTERS.filter(
+        (c) =>
+          season1.elements.includes(c.element) ||
+          season1.specialGuestIds.includes(c.id),
+      );
+
+      const result = autoDraftTheaterSchedule(allSeason1Chars, 'Visionary', season1);
+      // Acts 3, 6, 8, 10 are boss acts in Visionary
+      const bossActs = result.acts.filter((a) => a.type === 'Boss');
+      expect(bossActs.length).toBe(4);
+      bossActs.forEach((act) => {
+        expect(act.bossMatchup).toBeDefined();
+        expect(['S', 'A', 'B', 'C']).toContain(act.bossMatchup?.rating);
+      });
+    });
+
+    it('penalizes Hydro carry against 100% immune Hydro Tulpa and assigns C rating', () => {
+      const neuvillette = CHARACTERS.find((c) => c.id === 'Neuvillette')!;
+      const sigewinne = CHARACTERS.find((c) => c.id === 'Sigewinne')!;
+      const kazuha = CHARACTERS.find((c) => c.id === 'KaedeharaKazuha')!;
+      const furina = CHARACTERS.find((c) => c.id === 'Furina')!;
+
+      const res = evaluateBossActMatchup([neuvillette, furina, sigewinne, kazuha], 'Hydro Tulpa');
+      expect(res.rating).toBe('C');
+      expect(res.score).toBeLessThanOrEqual(45);
+      expect(res.counterHighlights.some((h) => h.includes('0 DMG to Immune Tulpa'))).toBe(true);
+    });
+
+    it('penalizes team lacking Electro stunner against ASIMON stealth camouflage', () => {
+      const teamNoElectro = [
+        CHARACTERS.find((c) => c.id === 'Mavuika')!,
+        CHARACTERS.find((c) => c.id === 'Furina')!,
+        CHARACTERS.find((c) => c.id === 'Bennett')!,
+        CHARACTERS.find((c) => c.id === 'KaedeharaKazuha')!,
+      ];
+      const teamWithElectro = [
+        CHARACTERS.find((c) => c.id === 'Mavuika')!,
+        CHARACTERS.find((c) => c.id === 'Fischl')!,
+        CHARACTERS.find((c) => c.id === 'Bennett')!,
+        CHARACTERS.find((c) => c.id === 'KaedeharaKazuha')!,
+      ];
+
+      const resNoElectro = evaluateBossActMatchup(teamNoElectro, 'Algorithm of Semi-Intransient Matrix');
+      const resWithElectro = evaluateBossActMatchup(teamWithElectro, 'Algorithm of Semi-Intransient Matrix');
+
+      expect(resWithElectro.score).toBeGreaterThan(resNoElectro.score);
+      expect(resWithElectro.counterHighlights.some((h) => h.includes('Stealth Breaker'))).toBe(true);
     });
   });
 });

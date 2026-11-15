@@ -1,4 +1,6 @@
 import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../types/genshin';
+import type { AbyssCycleConfig } from '../data/abyss-schedules';
+import { createCustomSandboxCycle } from '../data/abyss-schedules';
 
 const ROSTER_KEY = 'celestia_v2_owned_roster';
 const PROFILES_KEY = 'celestia_v2_roster_profiles';
@@ -6,6 +8,8 @@ const ARTIFACTS_KEY = 'celestia_v2_raw_artifacts';
 const WEAPONS_KEY = 'celestia_v2_raw_weapons';
 const UID_KEY = 'celestia_v2_active_uid';
 const PULL_BUDGET_KEY = 'celestia_v2_pull_budget';
+const ABYSS_CYCLE_ID_KEY = 'celestia_v2_abyss_cycle_id';
+const CUSTOM_ABYSS_KEY = 'celestia_v2_custom_abyss';
 
 export const DEFAULT_PULL_BUDGET: PullBudgetState = {
   primogems: 0,
@@ -322,6 +326,55 @@ export function savePullBudget(budget: PullBudgetState): void {
     localStorage.setItem(PULL_BUDGET_KEY, JSON.stringify(budget));
   } catch (e) {
     console.error('Failed to save pull budget to localStorage:', e);
+  }
+}
+
+export function getSavedAbyssCycleId(): string {
+  try {
+    if (typeof localStorage === 'undefined') return 'cycle-5-3';
+    const saved = localStorage.getItem(ABYSS_CYCLE_ID_KEY) || 'cycle-5-3';
+    const validIds = new Set(['cycle-5-3', 'cycle-5-2', 'cycle-5-1', 'custom-sandbox']);
+    return validIds.has(saved) ? saved : 'cycle-5-3';
+  } catch {
+    return 'cycle-5-3';
+  }
+}
+
+export function saveAbyssCycleId(id: string): void {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(ABYSS_CYCLE_ID_KEY, id);
+  } catch (e) {
+    console.error('Failed to save abyss cycle id to localStorage:', e);
+  }
+}
+
+export function getSavedCustomAbyss(): AbyssCycleConfig {
+  try {
+    if (typeof localStorage === 'undefined') return createCustomSandboxCycle();
+    const raw = localStorage.getItem(CUSTOM_ABYSS_KEY);
+    if (!raw) return createCustomSandboxCycle();
+    const parsed = JSON.parse(raw);
+    if (
+      !parsed ||
+      typeof parsed !== 'object' ||
+      !Array.isArray(parsed.chambers) ||
+      parsed.chambers.length !== 3
+    ) {
+      return createCustomSandboxCycle();
+    }
+    return parsed as AbyssCycleConfig;
+  } catch {
+    return createCustomSandboxCycle();
+  }
+}
+
+export function saveCustomAbyss(cycle: AbyssCycleConfig): void {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(CUSTOM_ABYSS_KEY, JSON.stringify(cycle));
+  } catch (e) {
+    console.error('Failed to save custom abyss to localStorage:', e);
   }
 }
 

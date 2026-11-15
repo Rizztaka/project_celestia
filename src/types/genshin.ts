@@ -402,6 +402,13 @@ export interface TheaterCharacterVigor {
   usedInActs: number[];
 }
 
+export interface BossMatchupRating {
+  rating: 'S' | 'A' | 'B' | 'C';
+  score: number;
+  reason: string;
+  counterHighlights: string[];
+}
+
 export interface TheaterActPlan {
   actNumber: number;
   type: TheaterActType;
@@ -409,6 +416,7 @@ export interface TheaterActPlan {
   recommendedArchetypes: string[];
   team: Character[];
   isLocked?: boolean;
+  bossMatchup?: BossMatchupRating;
 }
 
 export interface TheaterSeasonConfig {
@@ -420,12 +428,23 @@ export interface TheaterSeasonConfig {
   bosses: Record<number, string>;
 }
 
+export interface ChamberHalfMetrics {
+  shieldBreakTime?: number;
+  shieldBreakRating?: 'Fast' | 'Medium' | 'Slow' | 'Ineffective';
+  shieldBreakBreakdown?: string;
+  effectiveResShred?: number;
+  resShredSources?: string[];
+  effectiveDmgMultiplier?: number;
+}
+
 export interface AbyssChamberCoverage {
   chamber: number;
   firstHalfStatus: string;
   secondHalfStatus: string;
   firstHalfSatisfied: boolean;
   secondHalfSatisfied: boolean;
+  firstHalfMetrics?: ChamberHalfMetrics;
+  secondHalfMetrics?: ChamberHalfMetrics;
 }
 
 export interface AbyssDualTeamPlan {
@@ -434,6 +453,7 @@ export interface AbyssDualTeamPlan {
   chamberCoverage: AbyssChamberCoverage[];
   overallScore: number;
   warnings?: string[];
+  cycleId?: string;
 }
 
 

@@ -13,6 +13,10 @@ import {
   getSavedPullBudget,
   savePullBudget,
   DEFAULT_PULL_BUDGET,
+  getSavedAbyssCycleId,
+  saveAbyssCycleId,
+  getSavedCustomAbyss,
+  saveCustomAbyss,
 } from './storage';
 import type { OwnedWeapon, PullBudgetState } from '../types/genshin';
 
@@ -173,6 +177,40 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
       expect(sanitized.characterGuaranteed).toBe(false);
       expect(sanitized.weaponPity).toBe(0);
       expect(sanitized.weaponFatePoints).toBe(1);
+    });
+  });
+
+  describe('Abyss Cycle & Custom Sandbox Persistence', () => {
+    it('returns default cycle-5-3 when uninitialized', () => {
+      expect(getSavedAbyssCycleId()).toBe('cycle-5-3');
+    });
+
+    it('persists and restores custom cycle selection', () => {
+      saveAbyssCycleId('cycle-5-2');
+      expect(getSavedAbyssCycleId()).toBe('cycle-5-2');
+    });
+
+    it('saves and restores custom abyss sandbox configuration', () => {
+      const customConfig = getSavedCustomAbyss();
+      expect(customConfig.isCustom).toBe(true);
+      expect(customConfig.chambers).toHaveLength(3);
+
+      customConfig.name = 'My Custom Test Chamber';
+      saveCustomAbyss(customConfig);
+
+      const reloaded = getSavedCustomAbyss();
+      expect(reloaded.name).toBe('My Custom Test Chamber');
+    });
+
+    it('sanitizes invalid or unrecognized abyss cycle IDs to cycle-5-3', () => {
+      localStorage.setItem('celestia_v2_abyss_cycle_id', 'unknown-old-cycle-4-2');
+      expect(getSavedAbyssCycleId()).toBe('cycle-5-3');
+    });
+
+    it('falls back to fresh sandbox if custom abyss in localStorage is corrupted or lacks 3 chambers', () => {
+      localStorage.setItem('celestia_v2_custom_abyss', JSON.stringify({ chambers: [] }));
+      const fallback = getSavedCustomAbyss();
+      expect(fallback.chambers).toHaveLength(3);
     });
   });
 });

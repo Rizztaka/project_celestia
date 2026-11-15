@@ -13,11 +13,14 @@ import {
   THEATER_BOSS_INFO,
   createCustomSeason,
 } from '../data/theater-seasons';
+import { CHARACTERS } from '../data/characters';
 import {
   filterEligibleTheaterRoster,
   autoDraftTheaterSchedule,
   swapTheaterActMember,
   removeTheaterActMember,
+  evaluateBossActMatchup,
+  recommendSupportCastBorrow,
 } from '../engines/theater-solver';
 import { CharacterPortrait } from './CharacterPortrait';
 import { CharacterDetailModal } from './CharacterDetailModal';
@@ -33,6 +36,9 @@ import {
   Unlock,
   Plus,
   Trash2,
+  Users,
+  CheckCircle2,
+  UserPlus,
 } from 'lucide-react';
 
 interface ImaginariumTheaterViewProps {
@@ -74,6 +80,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
   const [lockedActNumbers, setLockedActNumbers] = useState<Set<number>>(new Set());
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [modalError, setModalError] = useState<string | null>(null);
+  const [borrowedCharId, setBorrowedCharId] = useState<string | null>(null);
 
   // Swap / Add modal state
   const [swapTarget, setSwapTarget] = useState<{
@@ -95,6 +102,21 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     return filterEligibleTheaterRoster(ownedIds, activeSeason);
   }, [ownedIds, activeSeason]);
 
+  // Support Cast Borrow recommendations (top 3 unowned characters matching element/guest)
+  const recommendedBorrows = useMemo(() => {
+    return recommendSupportCastBorrow(filteredRoster.eligible, activeSeason, ownedIds);
+  }, [filteredRoster.eligible, activeSeason, ownedIds]);
+
+  // Effective eligible cast including borrowed friend character
+  const effectiveEligible = useMemo(() => {
+    if (!borrowedCharId) return filteredRoster.eligible;
+    const borrowedChar = CHARACTERS.find((c) => c.id === borrowedCharId);
+    if (!borrowedChar || filteredRoster.eligible.some((c) => c.id === borrowedCharId)) {
+      return filteredRoster.eligible;
+    }
+    return [borrowedChar, ...filteredRoster.eligible];
+  }, [filteredRoster.eligible, borrowedCharId]);
+
   // Generate initial or updated schedule respecting user-locked acts
   const handleGenerateSchedule = (currentLocked = lockedActNumbers) => {
     const userLocks: Record<number, string[]> = {};
@@ -106,7 +128,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     }
 
     const res = autoDraftTheaterSchedule(
-      filteredRoster.eligible,
+      effectiveEligible,
       difficulty,
       activeSeason,
       Object.keys(userLocks).length > 0 ? userLocks : undefined,
@@ -126,15 +148,25 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
 
   // Serialized key of eligible IDs to detect any roster composition shift even with identical count
   const eligibleKey = useMemo(
-    () => filteredRoster.eligible.map((c) => c.id).sort().join(','),
-    [filteredRoster.eligible],
+    () => effectiveEligible.map((c) => c.id).sort().join(','),
+    [effectiveEligible],
   );
 
-  // Re-generate schedule when season, difficulty or eligible roster fundamentally shifts
+  // Clear borrowed character when season changes
+  useEffect(() => {
+    setBorrowedCharId(null);
+  }, [activeSeason.id]);
+
+  // Re-generate schedule when season or difficulty fundamentally shifts
   useEffect(() => {
     setLockedActNumbers(new Set());
     handleGenerateSchedule(new Set());
-  }, [activeSeason.id, difficulty, eligibleKey]);
+  }, [activeSeason.id, difficulty]);
+
+  // Re-generate schedule while preserving user locks when roster or borrowed character shifts
+  useEffect(() => {
+    handleGenerateSchedule(lockedActNumbers);
+  }, [eligibleKey]);
 
   const diffConfig = THEATER_DIFFICULTIES[difficulty];
   const requiredChars = diffConfig.requiredCharacters;
@@ -189,9 +221,14 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
       return;
     }
 
-    const actsWithLock = res.acts.map((a) =>
-      a.actNumber === swapTarget.actNumber ? { ...a, isLocked: true } : a,
-    );
+    const actsWithLock = res.acts.map((a) => {
+      const isTarget = a.actNumber === swapTarget.actNumber;
+      const updated = isTarget ? { ...a, isLocked: true } : a;
+      if (updated.bossName) {
+        updated.bossMatchup = evaluateBossActMatchup(updated.team, updated.bossName);
+      }
+      return updated;
+    });
     setSchedule(actsWithLock);
     setVigorState(res.vigorState);
     setLockedActNumbers((prev) => new Set(prev).add(swapTarget.actNumber));
@@ -202,9 +239,14 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
   const handleRemoveMember = (actNumber: number, charId: string) => {
     const res = removeTheaterActMember(schedule, actNumber, charId, vigorState);
     if (!res.error) {
-      const actsWithLock = res.acts.map((a) =>
-        a.actNumber === actNumber ? { ...a, isLocked: true } : a,
-      );
+      const actsWithLock = res.acts.map((a) => {
+        const isTarget = a.actNumber === actNumber;
+        const updated = isTarget ? { ...a, isLocked: true } : a;
+        if (updated.bossName) {
+          updated.bossMatchup = evaluateBossActMatchup(updated.team, updated.bossName);
+        }
+        return updated;
+      });
       setSchedule(actsWithLock);
       setVigorState(res.vigorState);
       setLockedActNumbers((prev) => new Set(prev).add(actNumber));
@@ -389,6 +431,118 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
         </div>
       )}
 
+      {/* Support Cast Borrow Recommendation Banner */}
+      <div className="bg-gradient-to-r from-[#151726] via-[#1a1d30] to-[#151726] border border-[#2b3352] rounded-2xl p-5 space-y-3 shadow-lg">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#222842] pb-3">
+          <div className="flex items-center gap-2.5">
+            <Users className="w-5 h-5 text-[#d4af37]" />
+            <div>
+              <h2 className="text-sm font-bold text-zinc-100 flex items-center gap-2 uppercase tracking-wider">
+                <span>Support Cast Borrow Advisor</span>
+                <span className="text-[10px] font-mono text-[#d4af37] bg-[#161a2b] border border-[#d4af37]/30 px-2 py-0.5 rounded-full lowercase">
+                  1 Friend Slot Available
+                </span>
+              </h2>
+              <p className="text-xs text-zinc-400 mt-0.5">
+                Borrow a high-impact carry or support character from friends to conquer this season's apex boss mechanics.
+              </p>
+            </div>
+          </div>
+
+          {borrowedCharId && (
+            <div className="flex items-center gap-2 bg-emerald-950/60 border border-emerald-500/40 px-3 py-1.5 rounded-xl text-xs">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span className="text-emerald-300 font-semibold">
+                Active Borrow: {CHARACTERS.find((c) => c.id === borrowedCharId)?.name}
+              </span>
+              <button
+                type="button"
+                onClick={() => setBorrowedCharId(null)}
+                className="text-zinc-400 hover:text-rose-300 ml-1 cursor-pointer"
+                title="Return borrowed character"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Top 3 Borrow Recommendations */}
+        {recommendedBorrows.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+            {recommendedBorrows.map((char) => {
+              const isBorrowed = borrowedCharId === char.id;
+              const color = ELEMENT_BADGES[char.element] || {
+                bg: 'bg-zinc-800',
+                text: 'text-zinc-200',
+                border: 'border-zinc-700',
+              };
+
+              return (
+                <div
+                  key={char.id}
+                  className={`bg-[#111320] border rounded-xl p-3 flex flex-col justify-between gap-2.5 transition-all ${
+                    isBorrowed
+                      ? 'border-emerald-500/60 bg-emerald-950/20 shadow-md ring-1 ring-emerald-500/40'
+                      : 'border-[#232942] hover:border-[#d4af37]/50'
+                  }`}
+                >
+                  <div
+                    onClick={() => setSelectedCharacter(char)}
+                    className="flex items-center gap-3 cursor-pointer"
+                  >
+                    <CharacterPortrait
+                      src={char.icon}
+                      name={char.name}
+                      element={char.element}
+                      rarity={char.rarity}
+                      size="sm"
+                    />
+                    <div className="truncate">
+                      <div className="text-xs font-bold text-zinc-100 truncate">
+                        {char.name}
+                      </div>
+                      <div className={`text-[10px] ${color.text} font-medium`}>
+                        {char.element} · {char.roles[0]}
+                      </div>
+                      <div className="text-[10px] text-zinc-400 mt-0.5 truncate">
+                        {char.roles.slice(1).join(', ') || char.weapon}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setBorrowedCharId(isBorrowed ? null : char.id)}
+                    className={`w-full py-1.5 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                      isBorrowed
+                        ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                        : 'bg-[#1b2034] hover:bg-[#272e4b] text-[#d4af37] border border-[#d4af37]/30'
+                    }`}
+                  >
+                    {isBorrowed ? (
+                      <>
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Borrowed (Active)</span>
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="w-3.5 h-3.5" />
+                        <span>Borrow Character</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-xs text-zinc-400 italic py-1">
+            Your roster already possesses all premier characters eligible for this season.
+          </div>
+        )}
+      </div>
+
       {/* Eligible Roster & Vigor Strip */}
       <div className="bg-[#12141e] border border-[#21263c] rounded-2xl p-4 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1d2236] pb-2.5">
@@ -398,7 +552,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
               Eligible Theater Cast & Vigor Gauge
             </h2>
             <span className="text-xs bg-[#1a1e30] text-zinc-400 font-mono px-2 py-0.5 rounded-full border border-[#272e48]">
-              {filteredRoster.eligible.length} Available
+              {effectiveEligible.length} Available
             </span>
           </div>
 
@@ -420,8 +574,9 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
 
         {/* Scrollable Cast Strip */}
         <div className="flex gap-2 overflow-x-auto pb-2 pt-1 scrollbar-thin">
-          {filteredRoster.eligible.map((char) => {
+          {effectiveEligible.map((char) => {
             const vigor = vigorState[char.id] ?? 2;
+            const isBorrowed = char.id === borrowedCharId;
             const vigorBadge =
               vigor === 2
                 ? 'bg-emerald-950/70 text-emerald-300 border-emerald-500/40'
@@ -433,8 +588,12 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
               <div
                 key={char.id}
                 onClick={() => setSelectedCharacter(char)}
-                className="group shrink-0 bg-[#161928] hover:bg-[#1e2338] border border-[#252c46] hover:border-[#d4af37]/50 rounded-xl p-2 w-20 flex flex-col items-center gap-1.5 cursor-pointer transition-colors relative"
-                title={`${char.name} (${char.element} ${char.weapon}) - Click to inspect`}
+                className={`group shrink-0 rounded-xl p-2 w-20 flex flex-col items-center gap-1.5 cursor-pointer transition-colors relative border ${
+                  isBorrowed
+                    ? 'bg-emerald-950/30 border-emerald-500/60 hover:bg-emerald-950/50'
+                    : 'bg-[#161928] hover:bg-[#1e2338] border-[#252c46] hover:border-[#d4af37]/50'
+                }`}
+                title={`${char.name} (${char.element} ${char.weapon})${isBorrowed ? ' - Friend Borrow' : ''} - Click to inspect`}
               >
                 <CharacterPortrait
                   src={char.icon}
@@ -446,11 +605,18 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                 <span className="text-[10px] font-semibold text-zinc-200 truncate w-full text-center">
                   {char.name}
                 </span>
-                <span
-                  className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-full border ${vigorBadge}`}
-                >
-                  {vigor} Vigor
-                </span>
+                <div className="flex flex-col items-center gap-0.5">
+                  <span
+                    className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-full border ${vigorBadge}`}
+                  >
+                    {vigor} Vigor
+                  </span>
+                  {isBorrowed && (
+                    <span className="text-[8px] font-bold text-emerald-400">
+                      Borrow
+                    </span>
+                  )}
+                </div>
               </div>
             );
           })}
@@ -476,6 +642,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
             const isBoss = act.type === 'Boss';
             const isLocked = lockedActNumbers.has(act.actNumber);
             const bossInfo = act.bossName ? THEATER_BOSS_INFO[act.bossName] : undefined;
+            const bossMatchup = act.bossMatchup || (act.bossName ? evaluateBossActMatchup(act.team, act.bossName) : undefined);
 
             return (
               <div
@@ -521,6 +688,23 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                     </div>
 
                     <div className="flex items-center gap-2">
+                      {isBoss && bossMatchup && (
+                        <span
+                          className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded-full border ${
+                            bossMatchup.rating === 'S'
+                              ? 'bg-emerald-950/70 text-emerald-300 border-emerald-500/50'
+                              : bossMatchup.rating === 'A'
+                              ? 'bg-sky-950/70 text-sky-300 border-sky-500/50'
+                              : bossMatchup.rating === 'B'
+                              ? 'bg-amber-950/70 text-amber-300 border-amber-500/50'
+                              : 'bg-rose-950/70 text-rose-300 border-rose-500/50'
+                          }`}
+                          title={bossMatchup.reason}
+                        >
+                          Rating {bossMatchup.rating} ({bossMatchup.score}pts)
+                        </span>
+                      )}
+
                       {isBoss && (
                         <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-950/40 border border-amber-500/30 px-2 py-0.5 rounded-full">
                           Apex Boss Act
@@ -565,6 +749,35 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                           </span>
                         ))}
                       </div>
+
+                      {/* Boss Matchup Score & Counter Highlights */}
+                      {bossMatchup && (
+                        <div className="mt-2 pt-2 border-t border-[#1e2338] space-y-1">
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className="font-semibold text-zinc-300">
+                              Clear Rating: <strong className={bossMatchup.rating === 'S' ? 'text-emerald-300' : bossMatchup.rating === 'A' ? 'text-sky-300' : bossMatchup.rating === 'B' ? 'text-amber-300' : 'text-rose-400'}>{bossMatchup.rating} Tier</strong>
+                            </span>
+                            <span className="text-[10px] text-zinc-400 font-mono">
+                              Counter Score: {bossMatchup.score}/100
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-zinc-300 leading-snug">
+                            {bossMatchup.reason}
+                          </div>
+                          {bossMatchup.counterHighlights && bossMatchup.counterHighlights.length > 0 && (
+                            <div className="flex flex-wrap gap-1 pt-0.5">
+                              {bossMatchup.counterHighlights.map((hl) => (
+                                <span
+                                  key={hl}
+                                  className="text-[9px] bg-emerald-950/50 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.2 rounded"
+                                >
+                                  ✓ {hl}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
 
@@ -697,7 +910,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
 
             {/* Candidate List */}
             <div className="max-h-72 overflow-y-auto space-y-1.5 pr-1 scrollbar-thin">
-              {filteredRoster.eligible
+              {effectiveEligible
                 .filter((c) => {
                   const act = schedule.find((a) => a.actNumber === swapTarget.actNumber);
                   const isAlreadyInAct = act?.team.some((m) => m.id === c.id);
@@ -714,11 +927,16 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                 .map((candidate) => {
                   const vigor = vigorState[candidate.id] ?? 2;
                   const color = ELEMENT_BADGES[candidate.element];
+                  const isBorrowed = candidate.id === borrowedCharId;
 
                   return (
                     <div
                       key={candidate.id}
-                      className="flex items-center justify-between bg-[#181c2e] hover:bg-[#20263e] border border-[#27304e] p-2.5 rounded-xl transition-colors"
+                      className={`flex items-center justify-between border p-2.5 rounded-xl transition-colors ${
+                        isBorrowed
+                          ? 'bg-emerald-950/20 border-emerald-500/50 hover:bg-emerald-950/30'
+                          : 'bg-[#181c2e] hover:bg-[#20263e] border-[#27304e]'
+                      }`}
                     >
                       <div className="flex items-center gap-2.5">
                         <CharacterPortrait
@@ -729,8 +947,13 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                           size="sm"
                         />
                         <div>
-                          <div className="text-xs font-bold text-zinc-100">
-                            {candidate.name}
+                          <div className="text-xs font-bold text-zinc-100 flex items-center gap-1.5">
+                            <span>{candidate.name}</span>
+                            {isBorrowed && (
+                              <span className="text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.2 rounded">
+                                Friend Borrow
+                              </span>
+                            )}
                           </div>
                           <div className="text-[10px] text-zinc-400 flex items-center gap-1.5">
                             <span className={color.text}>{candidate.element}</span>
@@ -757,7 +980,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                   );
                 })}
 
-              {filteredRoster.eligible.filter((c) => {
+              {effectiveEligible.filter((c) => {
                 const act = schedule.find((a) => a.actNumber === swapTarget.actNumber);
                 const isAlreadyInAct = act?.team.some((m) => m.id === c.id);
                 const vigor = vigorState[c.id] ?? 2;

@@ -4,9 +4,11 @@ import type {
   TheaterDifficulty,
   TheaterSeasonConfig,
   OwnedCharacterProfile,
+  BossMatchupRating,
 } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import { THEATER_DIFFICULTIES, THEATER_BOSS_INFO } from '../data/theater-seasons';
+import { isNightsoulCharacter } from './combat-mechanics';
 
 export interface FilteredTheaterRoster {
   eligible: Character[];
@@ -267,6 +269,13 @@ export function autoDraftTheaterSchedule(
           }
         }
       }
+    }
+  }
+
+  // Attach boss matchup rating for boss acts
+  for (const act of acts) {
+    if (act.bossName) {
+      act.bossMatchup = evaluateBossActMatchup(act.team, act.bossName);
     }
   }
 
@@ -614,4 +623,256 @@ export function removeTheaterActMember(
     acts: updatedActs,
     vigorState: updatedVigor,
   };
+}
+
+/**
+ * Evaluates clear rating and mechanical suitability of a 4-person team against an apex boss.
+ */
+export function evaluateBossActMatchup(
+  team: Character[],
+  bossName: string,
+): BossMatchupRating {
+  if (!team || team.length === 0) {
+    return {
+      rating: 'C',
+      score: 0,
+      reason: 'No characters assigned to this boss encounter.',
+      counterHighlights: [],
+    };
+  }
+
+  const bossInfo = THEATER_BOSS_INFO[bossName];
+  let score = 30; // Base baseline
+  const highlights: string[] = [];
+
+  const roles = new Set(team.flatMap((m) => m.roles));
+  const elements = new Set(team.map((m) => m.element));
+  const memberTags = new Set(team.flatMap((m) => m.tags));
+
+  // Role balance
+  if (roles.has('On-Field DPS')) {
+    score += 20;
+    highlights.push('Dedicated Carry');
+  } else {
+    score -= 10;
+  }
+
+  if (roles.has('Buffer/Shred') || roles.has('Off-Field DPS')) {
+    score += 15;
+    highlights.push('Sub-DPS / Amplification');
+  }
+
+  if (roles.has('Sustain')) {
+    score += 15;
+    highlights.push('Sustain Support');
+  }
+
+  // Archetype matching
+  if (bossInfo) {
+    for (const arch of bossInfo.recommendedArchetypes) {
+      if (memberTags.has(arch)) {
+        score += 10;
+        highlights.push(`${arch} Archetype Match`);
+      }
+    }
+  }
+
+  // Boss-specific mechanics
+  if (bossName === 'Centaur Automaton') {
+    const hasNightsoul = team.some((m) => isNightsoulCharacter(m));
+    if (hasNightsoul) {
+      score += 30;
+      highlights.push('Natlan Nightsoul Node Breaker (+300% speed)');
+    } else {
+      score -= 15;
+    }
+  } else if (bossName === 'Jadeplume Terrorshroom') {
+    const hasElectro = elements.has('Electro');
+    const carry = team.find((m) => m.roles.includes('On-Field DPS'));
+    const isCarryDendro = carry && carry.element === 'Dendro';
+
+    if (hasElectro) {
+      score += 25;
+      highlights.push('Electro Activated State Stunner');
+    } else {
+      score -= 15;
+    }
+    if (isCarryDendro) {
+      score -= 30;
+      highlights.push('Warning: Dendro Carry Faces 80% Dendro RES');
+    }
+    if (team.every((m) => m.element === 'Dendro')) {
+      score -= 40;
+    }
+  } else if (bossName === 'Icewind Suite: Coppelia') {
+    const hasPyroOrMelt = elements.has('Pyro') || memberTags.has('Melt');
+    if (hasPyroOrMelt) {
+      score += 25;
+      highlights.push('Pyro Shield Disruption');
+    }
+  } else if (bossName === 'Maguu Kenki') {
+    const hasHighSustain = team.some((m) => m.roles.includes('Sustain'));
+    if (hasHighSustain) {
+      score += 20;
+      highlights.push('High Resilience vs Melee Slashes');
+    }
+  } else if (bossName === 'Millennial Pearl Seahorse') {
+    const hasBreakers = elements.has('Pyro') || elements.has('Cryo') || elements.has('Dendro');
+    const carry = team.find((m) => m.roles.includes('On-Field DPS'));
+    const isCarryElectro = carry && carry.element === 'Electro';
+
+    if (hasBreakers) {
+      score += 25;
+      highlights.push('Pearl Shatterer (Pyro/Cryo/Dendro)');
+    } else {
+      score -= 25;
+    }
+    if (isCarryElectro && !hasBreakers) {
+      score -= 35;
+      highlights.push('Warning: Electro Carry Without Shield Breakers');
+    }
+    if (team.every((m) => m.element === 'Electro')) {
+      score -= 40;
+    }
+  } else if (bossName === 'Algorithm of Semi-Intransient Matrix') {
+    const hasQuickenOrElectro = elements.has('Electro') || (elements.has('Dendro') && elements.has('Electro'));
+    if (hasQuickenOrElectro) {
+      score += 30;
+      highlights.push('Catalyze/Electro Stealth Breaker');
+    } else {
+      score -= 20;
+    }
+  } else if (bossName === 'Iniquitous Baptist') {
+    if (elements.size >= 3) {
+      score += 25;
+      highlights.push('Rainbow Multi-Shield Counter');
+    } else {
+      score -= 20;
+    }
+  } else if (bossName === 'Hydro Tulpa') {
+    const hasReaction = elements.has('Pyro') || elements.has('Dendro') || elements.has('Electro');
+    const carry = team.find((m) => m.roles.includes('On-Field DPS'));
+    const isCarryHydro = carry && carry.element === 'Hydro';
+    const hasNonHydroDps = team.some(
+      (m) => (m.roles.includes('On-Field DPS') || m.roles.includes('Off-Field DPS')) && m.element !== 'Hydro',
+    );
+
+    if (hasReaction) {
+      score += 25;
+      highlights.push('Forward Reaction Trigger (Vape/Bloom)');
+    }
+    if (isCarryHydro && !hasNonHydroDps) {
+      score -= 50;
+      highlights.push('Critical: Hydro Carry Deals 0 DMG to Immune Tulpa');
+    }
+    if (team.every((m) => m.element === 'Hydro')) {
+      score -= 60;
+    }
+  }
+
+  score = Math.max(10, Math.min(100, score));
+
+  let rating: 'S' | 'A' | 'B' | 'C';
+  let reason: string;
+
+  if (score >= 85) {
+    rating = 'S';
+    reason = 'Optimal counters & burst: Perfect mechanical synergy and elemental counters.';
+  } else if (score >= 65) {
+    rating = 'A';
+    reason = 'Solid counters: Capable of handling boss mechanics with adequate survivability.';
+  } else if (score >= 45) {
+    rating = 'B';
+    reason = 'Passable: Can clear, but lacks optimal elemental or defensive counters.';
+  } else {
+    rating = 'C';
+    reason = 'Struggles with mechanics: Missing key counters or role requirements.';
+  }
+
+  return {
+    rating,
+    score,
+    reason,
+    counterHighlights: Array.from(new Set(highlights)),
+  };
+}
+
+/**
+ * Recommends top 3 support cast characters to borrow from friends.
+ * Feasibility Rule: Suggests ONLY characters the player does NOT currently own,
+ * who strictly match the active season's element or guest cast.
+ */
+export function recommendSupportCastBorrow(
+  eligible: Character[],
+  season: TheaterSeasonConfig,
+  ownedIds?: string[],
+): Character[] {
+  const ownedSet = new Set(ownedIds ?? eligible.map((c) => c.id));
+  const seasonElements = new Set(season.elements);
+  const guestSet = new Set(season.specialGuestIds);
+  const openingSet = new Set(season.openingCastIds);
+
+  // Candidates: characters NOT owned, but eligible by element, guest status, or opening cast
+  const candidates = CHARACTERS.filter((c) => {
+    if (ownedSet.has(c.id)) return false;
+    return seasonElements.has(c.element) || guestSet.has(c.id) || openingSet.has(c.id);
+  });
+
+  if (candidates.length === 0) return [];
+
+  // Identify apex boss for the season (Act 10 or highest act boss)
+  const bossActs = Object.keys(season.bosses).map(Number).sort((a, b) => b - a);
+  const apexBossAct = bossActs[0];
+  const apexBossName = apexBossAct ? season.bosses[apexBossAct] : undefined;
+
+  const scoredCandidates = candidates.map((char) => {
+    let value = 0;
+
+    // 5-star priority
+    if (char.rarity === 5) value += 30;
+
+    // Key roles
+    if (char.roles.includes('On-Field DPS')) value += 30;
+    if (char.roles.includes('Buffer/Shred')) value += 35;
+    if (char.roles.includes('Sustain')) value += 20;
+
+    // Premier meta supports & carries
+    const premierIds = new Set([
+      'Furina',
+      'Mavuika',
+      'Xilonen',
+      'KaedeharaKazuha',
+      'Nahida',
+      'Bennett',
+      'Zhongli',
+      'Neuvillette',
+      'Arlecchino',
+      'Citlali',
+      'Chasca',
+      'Kinich',
+      'RaidenShogun',
+      'Yelan',
+    ]);
+    if (premierIds.has(char.id)) value += 40;
+
+    // Nightsoul bonus for Natlan bosses (e.g. Centaur Automaton)
+    if (apexBossName === 'Centaur Automaton' && isNightsoulCharacter(char)) {
+      value += 40;
+    }
+
+    // Boss weakness matching
+    if (apexBossName) {
+      const bossInfo = THEATER_BOSS_INFO[apexBossName];
+      if (bossInfo) {
+        for (const arch of bossInfo.recommendedArchetypes) {
+          if (char.tags.includes(arch)) value += 15;
+        }
+      }
+    }
+
+    return { char, value };
+  });
+
+  scoredCandidates.sort((a, b) => b.value - a.value);
+  return scoredCandidates.slice(0, 3).map((item) => item.char);
 }

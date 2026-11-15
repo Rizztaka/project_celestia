@@ -137,7 +137,7 @@ export function scoreWeaponForCharacter(
   let refinementBonus = (refinement - 1) * 2.5;
 
   // Key weapon passive refinement weightings
-  const keyUpper = dbWeapon.key.toUpperCase();
+  const keyUpper = (dbWeapon.key || dbWeapon.name).toUpperCase().replace(/[^A-Z0-9]/g, '');
   if (keyUpper.includes('THECATCH')) {
     refinementBonus += refinement * 2.0; // Significant scaling on Burst DMG & CRIT
   } else if (keyUpper.includes('FAVONIUS')) {
@@ -308,9 +308,15 @@ export function assignOptimalTeamWeapons(
     const deficit = needed - existingForType.length;
     if (deficit > 0) {
       const typeDefaults: WeaponData[] = WEAPONS_BY_TYPE[wType as WeaponType] || [];
-      const fallbackOptions = typeDefaults.filter(
-        (tw: WeaponData) => tw.rarity === 4 || tw.rarity === 3,
+      const existingKeys = new Set(bag.map((b) => b.key));
+      let fallbackOptions = typeDefaults.filter(
+        (tw: WeaponData) => (tw.rarity === 4 || tw.rarity === 3) && !existingKeys.has(tw.key),
       );
+      if (fallbackOptions.length === 0) {
+        fallbackOptions = typeDefaults.filter(
+          (tw: WeaponData) => tw.rarity === 4 || tw.rarity === 3,
+        );
+      }
 
       for (let d = 0; d < deficit; d++) {
         const fallbackDb = fallbackOptions[d % fallbackOptions.length];

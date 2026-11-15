@@ -7,6 +7,9 @@ export interface CharacterTalent {
   type: 'normal' | 'skill' | 'burst' | 'sprint' | 'passive';
   description: string;
   icon?: string;
+  scalingKey?: string;
+  cooldown?: number | string;
+  energyCost?: number;
 }
 
 export interface CharacterConstellation {
@@ -134,14 +137,42 @@ export interface WeaponData {
   key: string;
   name: string;
   weaponType: WeaponType;
-  rarity: 3 | 4 | 5;
-  baseAtk: number; // At Lv. 90
+  rarity: 1 | 2 | 3 | 4 | 5;
+  isCombatWeapon: boolean;
+  baseAtk: number; // At Lv. 90 (or max level for 1★/2★)
   subStatType?: StatKey | string;
   subStatValue?: string; // e.g. '66.2%' or '165'
   passiveName?: string;
   passiveDesc?: string;
+  refinements?: {
+    r1?: string;
+    r2?: string;
+    r3?: string;
+    r4?: string;
+    r5?: string;
+  };
+  ascensionCosts?: Record<string, number>;
   tags?: string[]; // e.g. ['crit', 'energy', 'em', 'normal-buff', 'team-buff']
   icon?: string;
+}
+
+export interface ArtifactSetMaster {
+  id: string;
+  name: string;
+  minRarity: number;
+  maxRarity: number;
+  effect1Pc?: string;
+  effect2Pc?: string;
+  effect4Pc?: string;
+  pieces?: {
+    flower?: { name: string; icon?: string; description?: string };
+    plume?: { name: string; icon?: string; description?: string };
+    sands?: { name: string; icon?: string; description?: string };
+    goblet?: { name: string; icon?: string; description?: string };
+    circlet?: { name: string; icon?: string; description?: string };
+  };
+  icon?: string;
+  isCombatSet: boolean;
 }
 
 export interface OwnedWeapon extends EquippedWeapon {

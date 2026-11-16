@@ -88,6 +88,8 @@ export const BANNER_PHASES: BannerPhase[] = [
     weaponBanner: {
       featuredWeapons: ['AThousandBlazingSuns', 'StarcallerSWatch'],
     },
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
   },
   {
     id: 'banner_5_3_phase_2',
@@ -102,6 +104,8 @@ export const BANNER_PHASES: BannerPhase[] = [
     weaponBanner: {
       featuredWeapons: ['CrimsonMoonSSemblance', 'Absolution'],
     },
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
   },
   {
     id: 'banner_5_4_phase_1',
@@ -116,6 +120,8 @@ export const BANNER_PHASES: BannerPhase[] = [
     weaponBanner: {
       featuredWeapons: ['ReliquaryOfTruth', 'SplendorOfTranquilWaters'],
     },
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
   },
   {
     id: 'banner_5_2_phase_2',
@@ -130,6 +136,8 @@ export const BANNER_PHASES: BannerPhase[] = [
     weaponBanner: {
       featuredWeapons: ['TomeOfTheEternalFlow', 'VortexVanquisher'],
     },
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
   },
   {
     id: 'banner_5_2_phase_1',
@@ -144,6 +152,8 @@ export const BANNER_PHASES: BannerPhase[] = [
     weaponBanner: {
       featuredWeapons: ['AstralVultureSCrimsonPlumage', 'TheFirstGreatMagic'],
     },
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
   },
   {
     id: 'banner_5_1_phase_2',
@@ -158,6 +168,8 @@ export const BANNER_PHASES: BannerPhase[] = [
     weaponBanner: {
       featuredWeapons: ['AThousandFloatingDreams', 'StaffOfHoma'],
     },
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
   },
   {
     id: 'banner_5_1_phase_1',
@@ -172,6 +184,8 @@ export const BANNER_PHASES: BannerPhase[] = [
     weaponBanner: {
       featuredWeapons: ['PeakPatrolSong', 'UrakuMisugiri'],
     },
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
   },
 ];
 

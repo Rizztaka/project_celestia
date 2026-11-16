@@ -90,7 +90,7 @@ Key regional progression:
 | **Yelan** | `Yelan` | 5★ | Bow | Liyue | On-Field DPS, Off-Field DPS | Emblem of Severed Fate — Aqua Simulacra / Favonius Warbow |
 | **Aino** | `Aino` | 4★ | Claymore | Nod-Krai | On-Field DPS, Off-Field DPS | Golden Troupe / Emblem of Severed Fate — Serpent Spine / Wolf's Gravestone |
 | **Barbara** | `Barbara` | 4★ | Catalyst | Mondstadt | Sustain | Ocean-Hued Clam / Maiden Beloved — Thrilling Tales of Dragon Slayers / Prototype Amber |
-| **Candace** | `Candace` | 4★ | Polearm | Sumeru | Buffer/Shred | Noblesse Oblige / The Exile — Favonius Lance / The Catch |
+| **Candace** | `Candace` | 4★ | Polearm | Sumeru | Buffer/Shred | Noblesse Oblige / The Exile — Favonius Lance / "The Catch" |
 | **Dahlia** | `Dahlia` | 4★ | Sword | Mondstadt | Sustain | Noblesse Oblige / Tenacity of the Millelith — Favonius Sword / The Dockhand's Assistant |
 | **Xingqiu** | `Xingqiu` | 4★ | Sword | Liyue | On-Field DPS, Off-Field DPS | Emblem of Severed Fate / Noblesse Oblige — Sacrificial Sword / Favonius Sword |
 
@@ -114,7 +114,7 @@ Key regional progression:
 | **Chevreuse** | `Chevreuse` | 4★ | Polearm | Fontaine | Sustain, Buffer/Shred | Noblesse Oblige / Song of Days Past — Rightful Reward / Favonius Lance |
 | **Gaming** | `Gaming` | 4★ | Claymore | Liyue | On-Field DPS | Marechaussee Hunter / Crimson Witch of Flames — Serpent Spine / Beacon of the Reed Sea |
 | **Thoma** | `Thoma` | 4★ | Polearm | Inazuma | Sustain | Flower of Paradise Lost / Gilded Dreams — Kitain Cross Spear / Dragon's Bane |
-| **Xiangling** | `Xiangling` | 4★ | Polearm | Liyue | On-Field DPS, Off-Field DPS | Emblem of Severed Fate / Crimson Witch of Flames — The Catch / Staff of the Scarlet Sands |
+| **Xiangling** | `Xiangling` | 4★ | Polearm | Liyue | On-Field DPS, Off-Field DPS | Emblem of Severed Fate / Crimson Witch of Flames — "The Catch" / Staff of the Scarlet Sands |
 | **Xinyan** | `Xinyan` | 4★ | Claymore | Liyue | On-Field DPS | Pale Flame / Tenacity of the Millelith — Redhorn Stonethresher / Wolf's Gravestone |
 | **Yanfei** | `Yanfei` | 4★ | Catalyst | Liyue | On-Field DPS | Wanderer's Troupe / Crimson Witch of Flames — Lost Prayer to the Sacred Winds / The Widsith |
 
@@ -150,15 +150,15 @@ Key regional progression:
 | :--- | :--- | :---: | :--- | :--- | :--- | :--- |
 | **Clorinde** | `Clorinde` | 5★ | Sword | Fontaine | On-Field DPS | Fragment of Harmonic Whimsy / Gladiator's Finale — Absolution / Mistsplitter Reforged |
 | **Cyno** | `Cyno` | 5★ | Polearm | Sumeru | On-Field DPS | Gilded Dreams / Thundering Fury — Staff of the Scarlet Sands / Staff of Homa |
-| **Flins** | `Flins` | 5★ | Polearm | Fontaine | On-Field DPS | Nighttime Whispers in the Echoing Woods / Gladiator's Finale — Staff of Homa / Primordial Jade Winged-Spear |
+| **Flins** | `Flins` | 5★ | Polearm | Fontaine | On-Field DPS | Thundering Fury / Golden Troupe — Staff of Homa / Primordial Jade Winged-Spear |
 | **Ineffa** | `Ineffa` | 5★ | Polearm | Natlan | Buffer/Shred, Off-Field DPS | Scroll of the Hero of Cinder City / Golden Troupe — Staff of the Scarlet Sands / Favonius Lance |
 | **Keqing** | `Keqing` | 5★ | Sword | Liyue | On-Field DPS | Thundering Fury / Thundering Fury — Mistsplitter Reforged / Primordial Jade Cutter |
 | **Mitya** | `Mitya` | 5★ | Catalyst | Snezhnaya | Buffer/Shred, Off-Field DPS | Gilded Dreams / Golden Troupe — Reliquary of Truth / Lost Prayer to the Sacred Winds |
-| **Raiden Shogun** | `RaidenShogun` | 5★ | Polearm | Inazuma | On-Field DPS | Emblem of Severed Fate — Engulfing Lightning / The Catch |
+| **Raiden Shogun** | `RaidenShogun` | 5★ | Polearm | Inazuma | On-Field DPS | Emblem of Severed Fate — Engulfing Lightning / "The Catch" |
 | **Traveler (Electro)** | `TravelerElectro` | 5★ | Sword | Outlander / Traveler | Buffer/Shred, Off-Field DPS | Emblem of Severed Fate / Noblesse Oblige — Favonius Sword / Sacrificial Sword |
 | **Varesa** | `Varesa` | 5★ | Catalyst | Natlan | On-Field DPS | Obsidian Codex / Marechaussee Hunter — Lost Prayer to the Sacred Winds / Sacrificial Jade |
 | **Yae Miko** | `YaeMiko` | 5★ | Catalyst | Inazuma | On-Field DPS, Off-Field DPS | Golden Troupe / Gilded Dreams — Kagura's Verity / A Thousand Floating Dreams |
-| **Alyosha** | `Alyosha` | 4★ | Polearm | Snezhnaya | On-Field DPS | Blizzard Strayer / Noblesse Oblige — Staff of Homa / Primordial Jade Winged-Spear |
+| **Alyosha** | `Alyosha` | 4★ | Polearm | Snezhnaya | On-Field DPS | Emblem of Severed Fate / Thundering Fury — Staff of Homa / Primordial Jade Winged-Spear |
 | **Beidou** | `Beidou` | 4★ | Claymore | Liyue | On-Field DPS, Off-Field DPS | Emblem of Severed Fate / Noblesse Oblige — Wolf's Gravestone / Serpent Spine |
 | **Dori** | `Dori` | 4★ | Claymore | Sumeru | Sustain | Noblesse Oblige / The Exile — Favonius Greatsword / Sacrificial Greatsword |
 | **Fischl** | `Fischl` | 4★ | Bow | Mondstadt | On-Field DPS, Off-Field DPS | Golden Troupe / Thundering Fury — Aqua Simulacra / Polar Star |
@@ -181,7 +181,7 @@ Key regional progression:
 | **Traveler (Anemo)** | `TravelerAnemo` | 5★ | Sword | Outlander / Traveler | Buffer/Shred, Off-Field DPS | Viridescent Venerer / Noblesse Oblige — Freedom-Sworn / Favonius Sword |
 | **Varka** | `Varka` | 5★ | Claymore | Mondstadt | On-Field DPS | Desert Pavilion Chronicle / Viridescent Venerer — Wolf's Gravestone / Redhorn Stonethresher |
 | **Venti** | `Venti` | 5★ | Bow | Mondstadt | Buffer/Shred, Off-Field DPS | Viridescent Venerer / Noblesse Oblige — Elegy for the End / The Stringless |
-| **Vesna** | `Vesna` | 5★ | Sword | Snezhnaya | Buffer/Shred | Noblesse Oblige / Thundering Fury — Freedom-Sworn / Xiphos' Moonlight |
+| **Vesna** | `Vesna` | 5★ | Sword | Snezhnaya | Buffer/Shred | Viridescent Venerer / Noblesse Oblige — Freedom-Sworn / Xiphos' Moonlight |
 | **Wanderer** | `Wanderer` | 5★ | Catalyst | Sumeru | On-Field DPS | Desert Pavilion Chronicle / Shimenawa's Reminiscence — Tulaytullah's Remembrance / Lost Prayer to the Sacred Winds |
 | **Xianyun** | `Xianyun` | 5★ | Catalyst | Liyue | Sustain, Buffer/Shred | Song of Days Past / Viridescent Venerer — Crane's Echoing Call / Oathsworn Eye |
 | **Xiao** | `Xiao` | 5★ | Polearm | Liyue | On-Field DPS | Vermillion Hereafter / Marechaussee Hunter — Primordial Jade Winged-Spear / Staff of Homa |
@@ -208,7 +208,7 @@ Key regional progression:
 | **Traveler (Geo)** | `TravelerGeo` | 5★ | Sword | Outlander / Traveler | Off-Field DPS, Buffer/Shred | Golden Troupe / Archaic Petra — Primordial Jade Cutter / Festering Desire |
 | **Xilonen** | `Xilonen` | 5★ | Sword | Natlan | Sustain, Buffer/Shred | Scroll of the Hero of Cinder City / Husk of Opulent Dreams — Peak Patrol Song / Favonius Sword |
 | **Zhongli** | `Zhongli` | 5★ | Polearm | Liyue | Sustain | Tenacity of the Millelith / Noblesse Oblige — Black Tassel / Staff of Homa |
-| **Zibai** | `Zibai` | 5★ | Sword | Liyue | On-Field DPS | Gilded Dreams / Deepwood Memories — Light of Foliar Incision / Favonius Sword |
+| **Zibai** | `Zibai` | 5★ | Sword | Liyue | On-Field DPS | Husk of Opulent Dreams / Archaic Petra — Light of Foliar Incision / Favonius Sword |
 | **Gorou** | `Gorou` | 4★ | Bow | Inazuma | Buffer/Shred | The Exile / Husk of Opulent Dreams — Favonius Warbow / Elegy for the End |
 | **Illuga** | `Illuga` | 4★ | Polearm | Natlan | Sustain, Buffer/Shred | Noblesse Oblige / Tenacity of the Millelith — Favonius Lance / Rightful Reward |
 | **Kachina** | `Kachina` | 4★ | Polearm | Natlan | On-Field DPS, Off-Field DPS | Scroll of the Hero of Cinder City / Husk of Opulent Dreams — Footprint of the Rainbow / Favonius Lance |
@@ -259,9 +259,9 @@ Key regional progression:
 | **Mitya** | Electro | 5★ | Catalyst | Buffer/Shred, Off-Field DPS | Gilded Dreams, Golden Troupe |
 | **Sandrone** | Cryo | 5★ | Claymore | On-Field DPS, Off-Field DPS | Golden Troupe, Marechaussee Hunter |
 | **Tartaglia** | Hydro | 5★ | Bow | On-Field DPS | Nymph's Dream, Heart of Depth |
-| **Vesna** | Anemo | 5★ | Sword | Buffer/Shred | Noblesse Oblige, Thundering Fury |
+| **Vesna** | Anemo | 5★ | Sword | Buffer/Shred | Viridescent Venerer, Noblesse Oblige |
 | **Vodyanitsa** | Hydro | 5★ | Catalyst | Sustain, Buffer/Shred | Ocean-Hued Clam, Song of Days Past |
-| **Alyosha** | Electro | 4★ | Polearm | On-Field DPS | Blizzard Strayer, Noblesse Oblige |
+| **Alyosha** | Electro | 4★ | Polearm | On-Field DPS | Emblem of Severed Fate, Thundering Fury |
 | **Valeriy** | Electro | 4★ | Sword | Sustain, Buffer/Shred, Off-Field DPS | Noblesse Oblige, Tenacity of the Millelith |
 
 #### Natlan (14 Characters)
@@ -290,7 +290,7 @@ Key regional progression:
 | **Clorinde** | Electro | 5★ | Sword | On-Field DPS | Fragment of Harmonic Whimsy, Gladiator's Finale |
 | **Emilie** | Dendro | 5★ | Polearm | On-Field DPS, Off-Field DPS | Unfinished Reverie, Deepwood Memories |
 | **Escoffier** | Cryo | 5★ | Polearm | Sustain, Buffer/Shred | Noblesse Oblige, Ocean-Hued Clam |
-| **Flins** | Electro | 5★ | Polearm | On-Field DPS | Nighttime Whispers in the Echoing Woods, Gladiator's Finale |
+| **Flins** | Electro | 5★ | Polearm | On-Field DPS | Thundering Fury, Golden Troupe |
 | **Furina** | Hydro | 5★ | Sword | Buffer/Shred, Off-Field DPS | Golden Troupe, Tenacity of the Millelith |
 | **Lyney** | Pyro | 5★ | Bow | On-Field DPS | Marechaussee Hunter, Lavawalker |
 | **Navia** | Geo | 5★ | Claymore | On-Field DPS | Nighttime Whispers in the Echoing Woods, Golden Troupe |
@@ -359,7 +359,7 @@ Key regional progression:
 | **Xiao** | Anemo | 5★ | Polearm | On-Field DPS | Vermillion Hereafter, Marechaussee Hunter |
 | **Yelan** | Hydro | 5★ | Bow | On-Field DPS, Off-Field DPS | Emblem of Severed Fate |
 | **Zhongli** | Geo | 5★ | Polearm | Sustain | Tenacity of the Millelith, Noblesse Oblige |
-| **Zibai** | Geo | 5★ | Sword | On-Field DPS | Gilded Dreams, Deepwood Memories |
+| **Zibai** | Geo | 5★ | Sword | On-Field DPS | Husk of Opulent Dreams, Archaic Petra |
 | **Beidou** | Electro | 4★ | Claymore | On-Field DPS, Off-Field DPS | Emblem of Severed Fate, Noblesse Oblige |
 | **Chongyun** | Cryo | 4★ | Claymore | On-Field DPS | Noblesse Oblige, Emblem of Severed Fate |
 | **Gaming** | Pyro | 4★ | Claymore | On-Field DPS | Marechaussee Hunter, Crimson Witch of Flames |
@@ -476,27 +476,27 @@ The Celestia engine tracks **64 Master Artifact Sets** in `src/data/artifacts-ma
 
 | # | Artifact Set | 2-Piece Bonus | 4-Piece Bonus / Strategic Role | Primary Users in Celestia |
 | :---: | :--- | :--- | :--- | :--- |
-| 1 | **Archaic Petra** | Geo DMG Bonus +15% | Upon obtaining an Elemental Shard from Crystallize, all party members gain 35% DMG Bonus for that element for 10s. | Ningguang, Traveler (Geo) |
-| 2 | **Blizzard Strayer** | Cryo DMG Bonus +15% | When attacking an opponent affected by Cryo, CRIT Rate +20%. If frozen, CRIT Rate +20% additional (up to +40%). | Aloy, Alyosha, Freminet, Ganyu, Kaeya, +4 more |
+| 1 | **Archaic Petra** | Geo DMG Bonus +15% | Upon obtaining an Elemental Shard from Crystallize, all party members gain 35% DMG Bonus for that element for 10s. | Ningguang, Zibai, Traveler (Geo) |
+| 2 | **Blizzard Strayer** | Cryo DMG Bonus +15% | When attacking an opponent affected by Cryo, CRIT Rate +20%. If frozen, CRIT Rate +20% additional (up to +40%). | Aloy, Freminet, Ganyu, Kaeya, Kamisato Ayaka, +3 more |
 | 3 | **Bloodstained Chivalry** | Physical DMG Bonus +25% | After defeating an opponent, Charged Attack DMG +50% and stamina cost reduced to 0 for 10s. | Eula |
 | 4 | **Crimson Witch of Flames** | Pyro DMG Bonus +15% | Overloaded/Burning/Burgeon DMG +40%. Vaporize/Melt DMG +15%. Skill cast increases 2pc bonus by 50% (max 3 stacks). | Diluc, Gaming, Hu Tao, Klee, Mavuika, +3 more |
-| 5 | **Deepwood Memories** | Dendro DMG Bonus +15% | Skill or Burst hit reduces target's Dendro RES by 30% for 8s (triggers off-field). | Alhaitham, Baizhu, Collei, Columbina, Emilie, +9 more |
+| 5 | **Deepwood Memories** | Dendro DMG Bonus +15% | Skill or Burst hit reduces target's Dendro RES by 30% for 8s (triggers off-field). | Alhaitham, Baizhu, Collei, Columbina, Emilie, +8 more |
 | 6 | **Desert Pavilion Chronicle** | Anemo DMG Bonus +15% | Charged Attack hit increases Normal ATK SPD by 10% and Normal/Charged/Plunging DMG by 40% for 15s. | Chasca, Shikanoin Heizou, Varka, Wanderer, Xiao |
 | 7 | **Echoes of an Offering** | ATK +18% | Normal Attack hit has 36% chance to trigger Valley Rite, increasing Normal Attack DMG by 70% of ATK. | Kamisato Ayato, Wanderer |
-| 8 | **Emblem of Severed Fate** | Energy Recharge +20% | Increases Elemental Burst DMG by 25% of Energy Recharge (max 75% bonus at 300% ER). | Aino, Beidou, Chongyun, Durin, Faruzan, +12 more |
+| 8 | **Emblem of Severed Fate** | Energy Recharge +20% | Increases Elemental Burst DMG by 25% of Energy Recharge (max 75% bonus at 300% ER). | Aino, Alyosha, Beidou, Chongyun, Durin, +13 more |
 | 9 | **Flower of Paradise Lost** | Elemental Mastery +80 | Bloom, Hyperbloom, and Burgeon reaction DMG +40%. Extra +25% per stack on trigger (max 4 stacks). | Kaveh, Kuki Shinobu, Thoma |
 | 10 | **Fragment of Harmonic Whimsy** | ATK +18% | When the value of a Bond of Life increases or decreases, character deals 18% increased DMG for 6s (max 3 stacks, +54%). | Arlecchino, Clorinde, Skirk |
-| 11 | **Gilded Dreams** | Elemental Mastery +80 | Within 8s of reaction, gains ATK +14% for same-element teammates and +50 EM for different-element teammates (max 3 stacks). | Alhaitham, Cyno, Dehya, Diluc, Ineffa, +11 more |
-| 12 | **Gladiator's Finale** | ATK +18% | If wielder uses Sword, Claymore, or Polearm, Normal Attack DMG +35%. | Arlecchino, Clorinde, Cyno, Flins, Kamisato Ayato, +4 more |
-| 13 | **Golden Troupe** | Elemental Skill DMG +20% | Increases Elemental Skill DMG by 25%. When off-field, Skill DMG is further increased by 25% (total +70% off-field). | Aino, Albedo, Chiori, Columbina, Durin, +13 more |
+| 11 | **Gilded Dreams** | Elemental Mastery +80 | Within 8s of reaction, gains ATK +14% for same-element teammates and +50 EM for different-element teammates (max 3 stacks). | Alhaitham, Cyno, Dehya, Diluc, Ineffa, +10 more |
+| 12 | **Gladiator's Finale** | ATK +18% | If wielder uses Sword, Claymore, or Polearm, Normal Attack DMG +35%. | Arlecchino, Clorinde, Cyno, Kamisato Ayato, Lohen, +3 more |
+| 13 | **Golden Troupe** | Elemental Skill DMG +20% | Increases Elemental Skill DMG by 25%. When off-field, Skill DMG is further increased by 25% (total +70% off-field). | Aino, Albedo, Chiori, Columbina, Durin, +14 more |
 | 14 | **Heart of Depth** | Hydro DMG Bonus +15% | After using Elemental Skill, Normal and Charged Attack DMG +30% for 15s. | Kamisato Ayato, Mualani, Neuvillette, Tartaglia |
-| 15 | **Husk of Opulent Dreams** | DEF +30% | Gains Curiosity stacks on-field (Geo hit) and off-field (every 3s). Each stack grants +6% DEF and +6% Geo DMG (max 4 stacks, +24%). | Albedo, Arataki Itto, Chiori, Gorou, Kachina, +3 more |
+| 15 | **Husk of Opulent Dreams** | DEF +30% | Gains Curiosity stacks on-field (Geo hit) and off-field (every 3s). Each stack grants +6% DEF and +6% Geo DMG (max 4 stacks, +24%). | Albedo, Arataki Itto, Chiori, Gorou, Kachina, +4 more |
 | 16 | **Instructor** | Elemental Mastery +80 | Triggering an Elemental Reaction increases all party members' Elemental Mastery by 120 for 8s. | Amber, Barbara, Bennett, Collei, Sucrose, +2 more |
 | 17 | **Lavawalker** | Pyro RES +40% | Increases DMG against opponents affected by Pyro by 35%. | Klee, Lyney |
 | 18 | **Maiden Beloved** | Character Healing Effectiveness +15% | Using an Elemental Skill or Burst increases healing received by all party members by 20% for 10s. | Barbara, Diona |
 | 19 | **Marechaussee Hunter** | Normal & Charged Attack DMG +15% | When current HP increases or decreases, CRIT Rate +12% for 5s (max 3 stacks, +36% total CRIT Rate). | Arataki Itto, Gaming, Hu Tao, Lynette, Lyney, +9 more |
-| 20 | **Nighttime Whispers in the Echoing Woods** | ATK +18% | Using an Elemental Skill grants +20% Geo DMG for 10s. When shielded by Crystallize, grants +150% additional effect (total +50% Geo DMG). | Flins, Navia, Ningguang |
-| 21 | **Noblesse Oblige** | Elemental Burst DMG +20% | Using an Elemental Burst increases all party members' ATK by 20% for 12s (does not stack). | Aloy, Alyosha, Amber, Beidou, Bennett, +38 more |
+| 20 | **Nighttime Whispers in the Echoing Woods** | ATK +18% | Using an Elemental Skill grants +20% Geo DMG for 10s. When shielded by Crystallize, grants +150% additional effect (total +50% Geo DMG). | Navia, Ningguang |
+| 21 | **Noblesse Oblige** | Elemental Burst DMG +20% | Using an Elemental Burst increases all party members' ATK by 20% for 12s (does not stack). | Aloy, Amber, Beidou, Bennett, Candace, +37 more |
 | 22 | **Nymph's Dream** | Hydro DMG Bonus +15% | Normal/Charged/Plunge/Skill/Burst hits grant Mirrored Nymph stacks (+ATK% & +Hydro DMG%, up to +25% ATK and +15% Hydro). | Tartaglia, Traveler (Hydro) |
 | 23 | **Obsidian Codex** | DMG dealt +15% while in Nightsoul's Blessing | While on-field character is in Nightsoul's Blessing, consuming Nightsoul points increases CRIT Rate by 40% for 6s. | Chasca, Kinich, Mavuika, Mualani, Varesa, +1 more |
 | 24 | **Ocean-Hued Clam** | Healing Bonus +15% | Accumulates healing (including overheal) for 3s, then detonates a Sea-Dyed Foam dealing 90% of accumulated heal as Physical DMG (up to ~30k DMG). | Baizhu, Barbara, Charlotte, Dori, Escoffier, +9 more |
@@ -507,10 +507,10 @@ The Celestia engine tracks **64 Master Artifact Sets** in `src/data/artifacts-ma
 | 29 | **Song of Days Past** | Healing Bonus +15% | Records healing up to 15,000 HP for 6s, then grants Yearning buff adding 8% of recorded healing to active character's hits (max 5 hits). | Baizhu, Charlotte, Chevreuse, Sigewinne, Vodyanitsa, +1 more |
 | 30 | **Tenacity of the Millelith** | HP +20% | When an Elemental Skill hits an opponent, all party members gain +20% ATK and +30% Shield Strength for 3s (triggers off-field). | Chevreuse, Citlali, Dahlia, Dehya, Diona, +13 more |
 | 31 | **The Exile** | Energy Recharge +20% | Using an Elemental Burst regenerates 2 Energy for all party members (excluding wielder) every 2s for 6s (6 Energy total). | Candace, Dori, Faruzan, Gorou, Yun Jin |
-| 32 | **Thundering Fury** | Electro DMG Bonus +15% | Overloaded, Electro-Charged, Superconduct, and Hyperbloom DMG +40%, Aggravate bonus +20%. Triggering reactions reduces Skill CD by 1s (0.8s CD). | Clorinde, Cyno, Fischl, Keqing, Lisa, +1 more |
+| 32 | **Thundering Fury** | Electro DMG Bonus +15% | Overloaded, Electro-Charged, Superconduct, and Hyperbloom DMG +40%, Aggravate bonus +20%. Triggering reactions reduces Skill CD by 1s (0.8s CD). | Alyosha, Clorinde, Cyno, Fischl, Flins, +2 more |
 | 33 | **Unfinished Reverie** | ATK +18% | After leaving combat for 3s, DMG +50%. In combat, if no Burning opponents are nearby, DMG bonus decreases by 10% every second; with Burning, it increases by 10% (up to 50%). | Emilie, Kinich |
 | 34 | **Vermillion Hereafter** | ATK +18% | After Burst, gains Nascent Light (+8% ATK). Each time HP decreases, ATK increases by 10% (max 4 stacks, up to +66% ATK total). | Xiao |
-| 35 | **Viridescent Venerer** | Anemo DMG Bonus +15% | Swirl DMG +60%. Decreases opponent's Elemental RES to the element infused in the Swirl by 40% for 10s. | Jahoda, Jean, Kaedehara Kazuha, Lan Yan, Lynette, +8 more |
+| 35 | **Viridescent Venerer** | Anemo DMG Bonus +15% | Swirl DMG +60%. Decreases opponent's Elemental RES to the element infused in the Swirl by 40% for 10s. | Jahoda, Jean, Kaedehara Kazuha, Lan Yan, Lynette, +9 more |
 | 36 | **Vourukasha's Glow** | HP +20% | Skill and Burst DMG +10%. When taking DMG, gains +8% Skill/Burst DMG for 5s (max 5 stacks, +50% total bonus). | Dehya, Nilou |
 | 37 | **Wanderer's Troupe** | Elemental Mastery +80 | If wielder uses Catalyst or Bow, Charged Attack DMG +35%. | Ganyu, Sethos, Tighnari, Yanfei |
 
@@ -758,6 +758,7 @@ The Celestia engine tracks **64 Master Artifact Sets** in `src/data/artifacts-ma
 | **2026-11-15** | Weapon Signature Hallucinations | Hallucinated 8 fictitious weapons (Void-Severing Edge, Glacial Colossus, Boreas' Northern Wrath, etc.) and fabricated class rarity distributions | All **76 authentic 5★ weapons** must be derived from `src/data/weapons.ts` with correct class counts (19 Swords, 11 Claymores, 13 Polearms, 12 Bows, 21 Catalysts). | Hallucination from memory instead of reading `WEAPONS_DATA`. Remediation: Programmatic generation directly from SSOT and automated Vitest validation. |
 | **2026-11-15** | GenshinDB Complete SSOT Expansion | Limited data to 122 characters, 246 weapons, and 37 artifact sets without modular talent scaling | Expanded to **128 canonical playable characters** (including 6 element-specific Traveler configurations), **256 weapons** (all 1★ to 5★ with R1–R5 curves), **64 Master Artifact Sets**, and **Level 1–15 modular talent scaling**. | Comprehensive SSOT synchronization directly from `genshin-db` v5.2.15+ and authoritative game data. |
 | **2026-11-15** | Artifact ID & Weapon Key Integrity | Overwrote Resolution of Sojourner with duplicate ID `10001` for Initiate; created duplicate `PrizedIsshinBlade` keys overwriting weapon index | Assigned unique ID `10000` to Initiate and distinct keys `PrizedIsshinBlade`, `PrizedIsshinBlade1`, `PrizedIsshinBlade2` with authentic stats across all 256 weapons, 128 calibrated rotations, and talent scaling aliases. | Failure to enforce uniqueness on synthetic additions and name-based weapon iterations. Remediation: Added unique ID validation, verbose extraction, and full rotation calibration. |
+| **2026-11-16** | Build & Stat Weight Calibration | 10 Batch 7 characters had mismatched goblet elements, wrong artifact sets (e.g. Cryo on Electro Alyosha, Geo on Electro Flins), and weapon/artifact typos; fallback weights hardcoded `pyro_dmg_` and ATK% for 113 characters; Kokomi crit-zeroing logic bypassed fallback weights; alias lookups ('Kokomi', 'Ayaka', etc.) fell back to Pyro ATK% | All 128 characters have matching goblet elements/damage bonuses, accurate BiS artifact sets and wielder descriptions; `getCharacterStatWeights` dynamically synthesizes weights and goblets from character SSOT data with comprehensive alias resolution and zeroed crit for Kokomi; weapon solver guarantees 0 crit weight for Kokomi; target set typos corrected | Data ingestion drift in Batch 7 script and static fallback in artifact-weights. Remediation: Synchronized character builds, implemented dynamic stat weight synthesis and alias resolver in `getCharacterStatWeights`, moved Kokomi crit-zeroing outside undefined guard in `weapon-solver.ts`, fixed targetSets typos, and added comprehensive invariant tests. |
 
 ### How to Log a New Correction:
 1. Open this file: `docs/knowledge/celestia-reference.md`.

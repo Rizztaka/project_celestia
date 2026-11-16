@@ -113,17 +113,17 @@ export function scoreWeaponForCharacter(
     const statWeights = (weightConfig.statWeights || {}) as Record<string, number>;
     let w = statWeights[dbWeapon.subStatType];
 
-    // If character is not in curated weight configs, infer from character.build
-    if (w === undefined) {
+    const isKokomi =
+      character.id === 'SangonomiyaKokomi' ||
+      character.name.toLowerCase().includes('kokomi');
+
+    if (isKokomi && (dbWeapon.subStatType === 'critRate_' || dbWeapon.subStatType === 'critDMG_')) {
+      w = 0;
+    } else if (w === undefined) {
       const sandsStats = character.build?.mainStats?.sands || [];
       const subStats = character.build?.subStats || [];
-      const isKokomi =
-        character.id === 'SangonomiyaKokomi' ||
-        character.name.toLowerCase().includes('kokomi');
 
-      if (isKokomi && (dbWeapon.subStatType === 'critRate_' || dbWeapon.subStatType === 'critDMG_')) {
-        w = 0;
-      } else if (
+      if (
         (dbWeapon.subStatType === 'def_' && sandsStats.includes('DEF%')) ||
         (dbWeapon.subStatType === 'hp_' && sandsStats.includes('HP%')) ||
         (dbWeapon.subStatType === 'eleMas' && sandsStats.includes('Elemental Mastery'))

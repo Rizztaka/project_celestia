@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import genshindb from 'genshin-db';
 import { CHARACTERS } from './characters';
+import { ARTIFACTS_MASTER } from './artifacts-master';
+import { getCharacterStatWeights } from './artifact-weights';
+import { getWeaponByKey, getWeaponByName } from './weapons';
+import { scoreWeaponForCharacter } from '../engines/weapon-solver';
 
 describe('Rich Character Database Verification', () => {
   it('contains all 122 playable characters through Version 7.2 with full data', () => {
@@ -337,5 +341,183 @@ describe('Rich Character Database Verification', () => {
     expect(normalizeWeaponKey(999 as any)).toBe('');
     expect(normalizeWeaponKey({ key: 'test' } as any)).toBe('');
     expect(normalizeWeaponKey([1, 2] as any)).toBe('');
+  });
+});
+
+describe('Dedicated Character & Build Invariant Suite', () => {
+  const OPPOSING_ELEMENTS: Record<string, string[]> = {
+    Pyro: ['Hydro', 'Cryo', 'Electro', 'Anemo', 'Geo', 'Dendro'],
+    Hydro: ['Pyro', 'Cryo', 'Electro', 'Anemo', 'Geo', 'Dendro'],
+    Cryo: ['Pyro', 'Hydro', 'Electro', 'Anemo', 'Geo', 'Dendro'],
+    Electro: ['Pyro', 'Hydro', 'Cryo', 'Anemo', 'Geo', 'Dendro'],
+    Anemo: ['Pyro', 'Hydro', 'Cryo', 'Electro', 'Geo', 'Dendro'],
+    Geo: ['Pyro', 'Hydro', 'Cryo', 'Electro', 'Anemo', 'Dendro'],
+    Dendro: ['Pyro', 'Hydro', 'Cryo', 'Electro', 'Anemo', 'Geo'],
+  };
+
+  const OPPOSING_STAT_KEYS: Record<string, string[]> = {
+    Pyro: ['hydro_dmg_', 'cryo_dmg_', 'electro_dmg_', 'anemo_dmg_', 'geo_dmg_', 'dendro_dmg_'],
+    Hydro: ['pyro_dmg_', 'cryo_dmg_', 'electro_dmg_', 'anemo_dmg_', 'geo_dmg_', 'dendro_dmg_'],
+    Cryo: ['pyro_dmg_', 'hydro_dmg_', 'electro_dmg_', 'anemo_dmg_', 'geo_dmg_', 'dendro_dmg_'],
+    Electro: ['pyro_dmg_', 'hydro_dmg_', 'cryo_dmg_', 'anemo_dmg_', 'geo_dmg_', 'dendro_dmg_'],
+    Anemo: ['pyro_dmg_', 'hydro_dmg_', 'cryo_dmg_', 'electro_dmg_', 'geo_dmg_', 'dendro_dmg_'],
+    Geo: ['pyro_dmg_', 'hydro_dmg_', 'cryo_dmg_', 'electro_dmg_', 'anemo_dmg_', 'dendro_dmg_'],
+    Dendro: ['pyro_dmg_', 'hydro_dmg_', 'cryo_dmg_', 'electro_dmg_', 'anemo_dmg_', 'geo_dmg_'],
+  };
+
+  it('guarantees for all 128 characters that goblet element matches character element and never contains an opposing element', () => {
+    expect(CHARACTERS.length).toBe(128);
+
+    for (const char of CHARACTERS) {
+      const goblets = char.build?.mainStats?.goblet || [];
+      expect(goblets.length, `Character ${char.name} has no goblet main stats`).toBeGreaterThan(0);
+
+      const opposing = OPPOSING_ELEMENTS[char.element] || [];
+      for (const g of goblets) {
+        for (const opp of opposing) {
+          expect(
+            g,
+            `Character ${char.name} (${char.element}) has opposing element goblet "${g}"`
+          ).not.toContain(`${opp} DMG Bonus`);
+        }
+      }
+    }
+  });
+
+  it('guarantees every recommended weapon in character builds matches character weapon type and exists in WEAPONS_DATA', () => {
+    for (const char of CHARACTERS) {
+      for (const w of char.build?.weapons || []) {
+        const dbWeapon = getWeaponByKey(w.name) || getWeaponByName(w.name);
+        expect(
+          dbWeapon,
+          `Character ${char.name} recommended weapon "${w.name}" not found in WEAPONS_DATA`
+        ).toBeDefined();
+        expect(
+          dbWeapon?.weaponType,
+          `Character ${char.name} (${char.weapon}) has weapon "${w.name}" of type ${dbWeapon?.weaponType}`
+        ).toBe(char.weapon);
+      }
+    }
+  });
+
+  it('guarantees every recommended artifact in character builds exists in ARTIFACTS_MASTER', () => {
+    const masterNames = new Set(ARTIFACTS_MASTER.map((a) => a.name));
+
+    for (const char of CHARACTERS) {
+      for (const art of char.build?.artifacts || []) {
+        expect(
+          masterNames.has(art.name),
+          `Character ${char.name} recommended artifact "${art.name}" not found in ARTIFACTS_MASTER`
+        ).toBe(true);
+      }
+    }
+  });
+
+  it('guarantees getCharacterStatWeights returns matching goblet element without opposing elements for all 128 characters', () => {
+    for (const char of CHARACTERS) {
+      const config = getCharacterStatWeights(char.id);
+      expect(config, `Missing stat weights config for ${char.id}`).toBeDefined();
+
+      const opposingKeys = OPPOSING_STAT_KEYS[char.element] || [];
+      for (const oppKey of opposingKeys) {
+        expect(
+          config.preferredMainStats.goblet,
+          `Character ${char.name} (${char.element}) has opposing goblet key "${oppKey}" in stat weights`
+        ).not.toContain(oppKey);
+      }
+
+      // If preferred goblet contains an elemental damage bonus, it must match character's own element
+      const elemKey = `${char.element.toLowerCase()}_dmg_`;
+      const nonMatchingElemental = config.preferredMainStats.goblet.filter(
+        (k) => k.endsWith('_dmg_') && k !== 'physical_dmg_' && k !== elemKey
+      );
+      expect(
+        nonMatchingElemental,
+        `Character ${char.name} (${char.element}) has mismatched elemental goblet keys: ${nonMatchingElemental.join(', ')}`
+      ).toEqual([]);
+    }
+  });
+
+  it('guarantees Kokomi weapon solver zeroing logic assigns 0 stat weight points to critRate_ and critDMG_', () => {
+    // Both SangonomiyaKokomi and alias Kokomi must return 0 crit weights and Hydro goblet
+    const kokomiWeights1 = getCharacterStatWeights('SangonomiyaKokomi');
+    const kokomiWeights2 = getCharacterStatWeights('Kokomi');
+    expect(kokomiWeights1.statWeights.critRate_).toBe(0);
+    expect(kokomiWeights1.statWeights.critDMG_).toBe(0);
+    expect(kokomiWeights2.statWeights.critRate_).toBe(0);
+    expect(kokomiWeights2.statWeights.critDMG_).toBe(0);
+    expect(kokomiWeights1.preferredMainStats.goblet).toContain('hydro_dmg_');
+    expect(kokomiWeights2.preferredMainStats.goblet).toContain('hydro_dmg_');
+
+    const kokomi = CHARACTERS.find((c) => c.id === 'SangonomiyaKokomi')!;
+    expect(kokomi).toBeDefined();
+
+    const widsith = getWeaponByKey('TheWidsith')!; // critDMG_ substat, 510 Base ATK
+    const solarPearl = getWeaponByKey('SolarPearl')!; // critRate_ substat, 510 Base ATK
+    const amber = getWeaponByKey('PrototypeAmber')!; // hp_ substat, 510 Base ATK
+    expect(widsith).toBeDefined();
+    expect(solarPearl).toBeDefined();
+    expect(amber).toBeDefined();
+
+    const widsithScore = scoreWeaponForCharacter(kokomi, widsith);
+    const solarPearlScore = scoreWeaponForCharacter(kokomi, solarPearl);
+    const amberScore = scoreWeaponForCharacter(kokomi, amber);
+
+    // Kokomi cannot crit: Prototype Amber (HP%) must vastly outperform both Crit weapons
+    expect(amberScore.score).toBeGreaterThan(widsithScore.score);
+    expect(amberScore.score).toBeGreaterThan(solarPearlScore.score);
+
+    // Since both Widsith and Solar Pearl have 510 Base ATK and unlisted 4★ status,
+    // both receive exactly 0 substat points and identical scores
+    expect(widsithScore.score).toBe(solarPearlScore.score);
+  });
+
+  it('guarantees getCharacterStatWeights resolves common character aliases cleanly without fallback drift', () => {
+    const aliasExpectations: { alias: string; expectedElement: string; expectedId: string }[] = [
+      { alias: 'Kokomi', expectedElement: 'Hydro', expectedId: 'SangonomiyaKokomi' },
+      { alias: 'Ayaka', expectedElement: 'Cryo', expectedId: 'KamisatoAyaka' },
+      { alias: 'Ayato', expectedElement: 'Hydro', expectedId: 'KamisatoAyato' },
+      { alias: 'Itto', expectedElement: 'Geo', expectedId: 'AratakiItto' },
+      { alias: 'Childe', expectedElement: 'Hydro', expectedId: 'Tartaglia' },
+      { alias: 'Yae', expectedElement: 'Electro', expectedId: 'YaeMiko' },
+      { alias: 'Sara', expectedElement: 'Electro', expectedId: 'KujouSara' },
+      { alias: 'Heizou', expectedElement: 'Anemo', expectedId: 'ShikanoinHeizou' },
+      { alias: 'Mizuki', expectedElement: 'Anemo', expectedId: 'YumemizukiMizuki' },
+    ];
+
+    for (const { alias, expectedElement, expectedId } of aliasExpectations) {
+      const config = getCharacterStatWeights(alias);
+      expect(config.characterId, `Alias "${alias}" should resolve to ${expectedId}`).toBe(expectedId);
+      const elemKey = `${expectedElement.toLowerCase()}_dmg_`;
+      expect(
+        config.preferredMainStats.goblet,
+        `Alias "${alias}" should have ${elemKey} in goblet`
+      ).toContain(elemKey);
+      expect(
+        config.preferredMainStats.goblet,
+        `Alias "${alias}" should not have pyro_dmg_ fallback`
+      ).not.toContain('pyro_dmg_');
+    }
+  });
+
+  it('guarantees Alyosha build has consistent Electro damage bonuses and sanitized descriptions', () => {
+    const alyosha = CHARACTERS.find((c) => c.id === 'Alyosha')!;
+    expect(alyosha).toBeDefined();
+    expect(alyosha.element).toBe('Electro');
+    expect(alyosha.build?.mainStats?.goblet).toEqual(['Electro DMG Bonus']);
+
+    const artNames = alyosha.build?.artifacts.map((a) => a.name) || [];
+    expect(artNames).toContain('Emblem of Severed Fate');
+    expect(artNames).toContain('Thundering Fury');
+
+    const deathmatch = alyosha.build?.weapons.find((w) => w.name === 'Deathmatch');
+    expect(deathmatch).toBeDefined();
+    expect(deathmatch?.reason).not.toContain('Cryo');
+    expect(deathmatch?.reason).not.toContain('Blizzard Strayer');
+    expect(deathmatch?.reason).toContain('ATK and DEF buffs');
+
+    const theCatch = alyosha.build?.weapons.find((w) => w.name === '"The Catch"');
+    expect(theCatch).toBeDefined();
+    expect(theCatch?.reason).toContain('Electro burst DMG');
   });
 });

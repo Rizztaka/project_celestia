@@ -1,4 +1,5 @@
 import type { ArtifactSlot, CharacterStatWeightConfig, StatKey } from '../types/genshin';
+import { CHARACTERS } from './characters';
 
 /**
  * Level 20 5-star maximum main stat values by slot.
@@ -157,7 +158,7 @@ export const CHARACTER_STAT_WEIGHTS: Record<string, CharacterStatWeightConfig> =
       hp_: 0.2,
     },
     erRequirement: 170,
-    targetSets: ['Scroll of the Hero of City of Cinder'],
+    targetSets: ['Scroll of the Hero of Cinder City'],
   },
   Bennett: {
     characterId: 'Bennett',
@@ -284,7 +285,7 @@ export const CHARACTER_STAT_WEIGHTS: Record<string, CharacterStatWeightConfig> =
       atk_: 0.3,
     },
     erRequirement: 110,
-    targetSets: ['Crimson Witch of Flames', 'Shimenawas Reminiscence'],
+    targetSets: ['Crimson Witch of Flames', "Shimenawa's Reminiscence"],
   },
   Raiden: {
     characterId: 'Raiden',
@@ -338,7 +339,7 @@ export const CHARACTER_STAT_WEIGHTS: Record<string, CharacterStatWeightConfig> =
       enerRech_: 0.5,
     },
     erRequirement: 140,
-    targetSets: ['Vourukashas Glow', 'Tenacity of the Millelith'],
+    targetSets: ["Vourukasha's Glow", 'Tenacity of the Millelith'],
   },
   KukiShinobu: {
     characterId: 'KukiShinobu',
@@ -357,39 +358,271 @@ export const CHARACTER_STAT_WEIGHTS: Record<string, CharacterStatWeightConfig> =
     erRequirement: 130,
     targetSets: ['Flower of Paradise Lost', 'Gilded Dreams'],
   },
+  SangonomiyaKokomi: {
+    characterId: 'SangonomiyaKokomi',
+    characterName: 'Sangonomiya Kokomi',
+    preferredMainStats: {
+      sands: ['hp_', 'enerRech_'],
+      goblet: ['hydro_dmg_', 'hp_'],
+      circlet: ['heal_', 'hp_'],
+    },
+    statWeights: {
+      hp_: 1.0,
+      heal_: 1.0,
+      enerRech_: 0.85,
+      hp: 0.4,
+      eleMas: 0.4,
+      atk_: 0.2,
+      critRate_: 0,
+      critDMG_: 0,
+    },
+    erRequirement: 160,
+    targetSets: ['Ocean-Hued Clam', 'Tenacity of the Millelith'],
+  },
+};
+
+export const CHARACTER_ALIASES: Record<string, string> = {
+  kazuha: 'KaedeharaKazuha',
+  raiden: 'RaidenShogun',
+  ayaka: 'KamisatoAyaka',
+  ayato: 'KamisatoAyato',
+  itto: 'AratakiItto',
+  kokomi: 'SangonomiyaKokomi',
+  heizou: 'ShikanoinHeizou',
+  sara: 'KujouSara',
+  shinobu: 'KukiShinobu',
+  mizuki: 'YumemizukiMizuki',
+  childe: 'Tartaglia',
+  yae: 'YaeMiko',
+  baizhu: 'Baizhu',
+};
+
+const GOBLET_STAT_MAP: Record<string, StatKey> = {
+  'Pyro DMG Bonus': 'pyro_dmg_',
+  'Hydro DMG Bonus': 'hydro_dmg_',
+  'Dendro DMG Bonus': 'dendro_dmg_',
+  'Electro DMG Bonus': 'electro_dmg_',
+  'Anemo DMG Bonus': 'anemo_dmg_',
+  'Cryo DMG Bonus': 'cryo_dmg_',
+  'Geo DMG Bonus': 'geo_dmg_',
+  'Physical DMG Bonus': 'physical_dmg_',
+  'HP%': 'hp_',
+  'DEF%': 'def_',
+  'ATK%': 'atk_',
+  'Elemental Mastery': 'eleMas',
+};
+
+const SANDS_STAT_MAP: Record<string, StatKey> = {
+  'HP%': 'hp_',
+  'DEF%': 'def_',
+  'Energy Recharge': 'enerRech_',
+  'Elemental Mastery': 'eleMas',
+  'ATK%': 'atk_',
 };
 
 /**
- * Returns character-specific stat weights if present, or synthesizes a reasonable default.
+ * Returns character-specific stat weights if present, or synthesizes an authoritative config
+ * from character SSOT data (roles, element, build sands/goblet/subStats).
  */
 export function getCharacterStatWeights(characterIdOrName: string): CharacterStatWeightConfig {
-  const normalized = characterIdOrName.replace(/[\s\-_]/g, '');
+  if (!characterIdOrName || typeof characterIdOrName !== 'string') {
+    return {
+      characterId: 'unknown',
+      characterName: 'Unknown',
+      preferredMainStats: {
+        sands: ['atk_'],
+        goblet: ['pyro_dmg_'],
+        circlet: ['critRate_', 'critDMG_'],
+      },
+      statWeights: {
+        critRate_: 1.0,
+        critDMG_: 1.0,
+        atk_: 0.75,
+        enerRech_: 0.6,
+        eleMas: 0.4,
+        atk: 0.2,
+      },
+      erRequirement: 130,
+      targetSets: [],
+    };
+  }
+
+  const normalized = characterIdOrName.replace(/[\s\-_]/g, '').toLowerCase();
+  const resolvedAlias = CHARACTER_ALIASES[normalized]?.toLowerCase() || normalized;
+
   for (const [key, config] of Object.entries(CHARACTER_STAT_WEIGHTS)) {
+    const normKey = key.replace(/[\s\-_]/g, '').toLowerCase();
+    const normName = config.characterName.replace(/[\s\-_]/g, '').toLowerCase();
     if (
-      key.toLowerCase() === normalized.toLowerCase() ||
-      config.characterName.replace(/[\s\-_]/g, '').toLowerCase() === normalized.toLowerCase()
+      normKey === normalized ||
+      normName === normalized ||
+      normKey === resolvedAlias ||
+      normName === resolvedAlias
     ) {
       return config;
     }
   }
 
-  // Generic fallback: Balanced Crit Carry
+  // Look up character from SSOT data
+  const char = CHARACTERS.find((c) => {
+    const cId = c.id.toLowerCase();
+    const cName = c.name.replace(/[\s\-_]/g, '').toLowerCase();
+    return (
+      cId === normalized ||
+      cName === normalized ||
+      cId === resolvedAlias ||
+      cName === resolvedAlias ||
+      cId.endsWith(normalized) ||
+      cName.endsWith(normalized) ||
+      (normalized.length >= 4 && (cId.includes(normalized) || cName.includes(normalized)))
+    );
+  });
+
+  if (char) {
+    const isKokomi =
+      char.id === 'SangonomiyaKokomi' ||
+      char.name.toLowerCase().includes('kokomi');
+
+    // Dynamically infer sands from char.build?.mainStats?.sands
+    const sandsStrings = char.build?.mainStats?.sands || [];
+    const mappedSands: StatKey[] = sandsStrings
+      .map((s) => SANDS_STAT_MAP[s])
+      .filter((s): s is StatKey => !!s);
+    const preferredSands: StatKey[] =
+      mappedSands.length > 0 ? Array.from(new Set(mappedSands)) : ['atk_'];
+
+    // Dynamically determine goblet from element and build
+    const elemKey = `${char.element.toLowerCase()}_dmg_` as StatKey;
+    const isPhysical = char.build?.mainStats?.goblet?.some((g) =>
+      g.toLowerCase().includes('physical')
+    );
+    const preferredGoblet: StatKey[] = isPhysical ? ['physical_dmg_'] : [elemKey];
+
+    if (char.build?.mainStats?.goblet) {
+      for (const g of char.build.mainStats.goblet) {
+        const mapped = GOBLET_STAT_MAP[g];
+        if (mapped && !preferredGoblet.includes(mapped)) {
+          if (
+            mapped === elemKey ||
+            mapped === 'physical_dmg_' ||
+            ['hp_', 'def_', 'atk_', 'eleMas'].includes(mapped)
+          ) {
+            preferredGoblet.push(mapped);
+          }
+        }
+      }
+    }
+
+    // Infer circlet
+    const preferredCirclet: StatKey[] = isKokomi
+      ? ['heal_', 'hp_']
+      : ['critRate_', 'critDMG_'];
+    if (preferredSands.includes('hp_') && !preferredCirclet.includes('hp_'))
+      preferredCirclet.push('hp_');
+    if (preferredSands.includes('def_') && !preferredCirclet.includes('def_'))
+      preferredCirclet.push('def_');
+    if (preferredSands.includes('eleMas') && !preferredCirclet.includes('eleMas'))
+      preferredCirclet.push('eleMas');
+
+    // Adjust statWeights accordingly
+    const hasDef = preferredSands.includes('def_');
+    const hasHp = preferredSands.includes('hp_');
+    const hasEm = preferredSands.includes('eleMas');
+    const hasEr = preferredSands.includes('enerRech_');
+
+    const statWeights: Partial<Record<StatKey, number>> = {};
+
+    if (isKokomi) {
+      statWeights.hp_ = 1.0;
+      statWeights.heal_ = 1.0;
+      statWeights.enerRech_ = 0.85;
+      statWeights.hp = 0.4;
+      statWeights.eleMas = 0.4;
+      statWeights.atk_ = 0.2;
+      statWeights.critRate_ = 0;
+      statWeights.critDMG_ = 0;
+    } else if (hasDef) {
+      statWeights.def_ = 1.0;
+      statWeights.critRate_ = 1.0;
+      statWeights.critDMG_ = 1.0;
+      statWeights.enerRech_ = hasEr ? 0.85 : 0.6;
+      statWeights.def = 0.35;
+      statWeights.atk_ = 0.2;
+      if (hasEm) statWeights.eleMas = 0.5;
+    } else if (hasHp) {
+      statWeights.hp_ = 1.0;
+      statWeights.critRate_ = 1.0;
+      statWeights.critDMG_ = 1.0;
+      statWeights.enerRech_ = hasEr ? 0.85 : 0.6;
+      statWeights.hp = 0.35;
+      statWeights.atk_ = 0.2;
+      if (hasEm) statWeights.eleMas = 0.5;
+    } else if (hasEm) {
+      statWeights.eleMas = 1.0;
+      statWeights.critRate_ = 1.0;
+      statWeights.critDMG_ = 1.0;
+      statWeights.enerRech_ = hasEr ? 0.85 : 0.6;
+      statWeights.atk_ = 0.6;
+      statWeights.atk = 0.2;
+    } else {
+      // Default: balanced ATK% / Crit carry
+      statWeights.critRate_ = 1.0;
+      statWeights.critDMG_ = 1.0;
+      statWeights.atk_ = 0.75;
+      statWeights.enerRech_ = hasEr ? 0.85 : 0.6;
+      statWeights.eleMas = 0.4;
+      statWeights.atk = 0.2;
+    }
+
+    const targetSets = char.build?.artifacts?.map((a) => a.name) || [];
+    const erRequirement = hasEr ? 160 : 130;
+
+    return {
+      characterId: char.id,
+      characterName: char.name,
+      preferredMainStats: {
+        sands: preferredSands,
+        goblet: preferredGoblet,
+        circlet: preferredCirclet,
+      },
+      statWeights,
+      erRequirement,
+      targetSets,
+    };
+  }
+
+  const isFallbackKokomi =
+    normalized.includes('kokomi') || resolvedAlias.includes('kokomi');
+
+  // Generic fallback if character is completely unknown
   return {
     characterId: characterIdOrName,
     characterName: characterIdOrName,
     preferredMainStats: {
-      sands: ['atk_'],
-      goblet: ['pyro_dmg_'], // placeholder elemental dmg
-      circlet: ['critRate_', 'critDMG_'],
+      sands: isFallbackKokomi ? ['hp_'] : ['atk_'],
+      goblet: isFallbackKokomi ? ['hydro_dmg_'] : ['pyro_dmg_'],
+      circlet: isFallbackKokomi ? ['heal_', 'hp_'] : ['critRate_', 'critDMG_'],
     },
-    statWeights: {
-      critRate_: 1.0,
-      critDMG_: 1.0,
-      atk_: 0.75,
-      enerRech_: 0.6,
-      eleMas: 0.4,
-      atk: 0.2,
-    },
+    statWeights: isFallbackKokomi
+      ? {
+          hp_: 1.0,
+          heal_: 1.0,
+          enerRech_: 0.85,
+          hp: 0.4,
+          eleMas: 0.4,
+          atk_: 0.2,
+          critRate_: 0,
+          critDMG_: 0,
+        }
+      : {
+          critRate_: 1.0,
+          critDMG_: 1.0,
+          atk_: 0.75,
+          enerRech_: 0.6,
+          eleMas: 0.4,
+          atk: 0.2,
+        },
     erRequirement: 130,
+    targetSets: [],
   };
 }

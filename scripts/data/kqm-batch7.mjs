@@ -26,12 +26,12 @@ export const KQM_BATCH_7 = {
       { name: 'Favonius Lance', rarity: 4, reason: 'Universal Battery: High ER generating neutral energy particles for rotations' }
     ],
     artifacts: [
-      { name: 'Nighttime Whispers in the Echoing Woods', pieces: 4, reason: 'Best in Slot: +18% ATK and +50% Geo DMG while protected by Crystallize shields' },
-      { name: "Gladiator's Finale", pieces: 4, reason: 'Permanent +35% Normal Attack damage for sword wielders' }
+      { name: 'Thundering Fury', pieces: 4, reason: 'Best in Slot: Electro reaction DMG and skill cooldown reduction for polearm wielders' },
+      { name: 'Golden Troupe', pieces: 4, reason: 'Sub-DPS BiS: Colossal +70% off-field Elemental Skill DMG' }
     ],
     mainStats: {
       sands: ['ATK%'],
-      goblet: ['Geo DMG Bonus'],
+      goblet: ['Electro DMG Bonus'],
       circlet: ['CRIT Rate', 'CRIT DMG']
     },
     subStats: ['CRIT Rate', 'CRIT DMG', 'ATK%', 'Energy Recharge (~120%)']
@@ -115,12 +115,12 @@ export const KQM_BATCH_7 = {
       { name: 'Iron Sting', rarity: 4, reason: 'Craftable 165 EM sword maximizing reaction damage' }
     ],
     artifacts: [
-      { name: 'Gilded Dreams', pieces: 4, reason: 'Best in Slot: Massive EM and ATK% buffs in Dendro reaction teams' },
-      { name: 'Deepwood Memories', pieces: 4, reason: 'Provides 30% Dendro RES shred if no other team member carries the set' }
+      { name: 'Husk of Opulent Dreams', pieces: 4, reason: 'Best in Slot: Stacks up to +54% DEF and +24% Geo DMG' },
+      { name: 'Archaic Petra', pieces: 4, reason: 'Support BiS: +35% elemental DMG bonus to crystallize elements' }
     ],
     mainStats: {
       sands: ['Elemental Mastery'],
-      goblet: ['Dendro DMG Bonus'],
+      goblet: ['Geo DMG Bonus'],
       circlet: ['CRIT Rate', 'CRIT DMG']
     },
     subStats: ['Elemental Mastery', 'CRIT Rate', 'CRIT DMG', 'Energy Recharge (~120-140%)', 'ATK%']
@@ -133,11 +133,11 @@ export const KQM_BATCH_7 = {
     ],
     artifacts: [
       { name: 'Golden Troupe', pieces: 4, reason: 'Best in Slot: Colossal +70% off-field Elemental Skill DMG' },
-      { name: 'Emblem of Severed Fate', pieces: 4, reason: 'Burst Sub-DPS: Directly converts necessary ER into Hydro burst damage' }
+      { name: 'Emblem of Severed Fate', pieces: 4, reason: 'Burst Sub-DPS: Directly converts necessary ER into Geo burst damage' }
     ],
     mainStats: {
       sands: ['ATK%', 'Energy Recharge'],
-      goblet: ['Hydro DMG Bonus'],
+      goblet: ['Geo DMG Bonus'],
       circlet: ['CRIT Rate', 'CRIT DMG']
     },
     subStats: ['CRIT Rate', 'CRIT DMG', 'Energy Recharge (~140-160%)', 'ATK%']
@@ -151,7 +151,7 @@ export const KQM_BATCH_7 = {
     ],
     artifacts: [
       { name: 'Pale Flame', pieces: 4, reason: 'Physical Carry BiS: Stacks up to +50% Physical DMG and +18% ATK' },
-      { name: "Gladiator's Finale", pieces: 4, reason: 'Permanent +35% Normal Attack damage for claymore wielders' }
+      { name: "Gladiator's Finale", pieces: 4, reason: 'Permanent +35% Normal Attack damage for polearm wielders' }
     ],
     mainStats: {
       sands: ['ATK%'],
@@ -208,7 +208,7 @@ export const KQM_BATCH_7 = {
     ],
     mainStats: {
       sands: ['ATK%'],
-      goblet: ['Geo DMG Bonus', 'Electro DMG Bonus'],
+      goblet: ['Cryo DMG Bonus', 'ATK%'],
       circlet: ['CRIT Rate', 'CRIT DMG']
     },
     subStats: ['CRIT Rate', 'CRIT DMG', 'ATK%', 'Energy Recharge (~120%)']
@@ -217,16 +217,16 @@ export const KQM_BATCH_7 = {
     weapons: [
       { name: 'Staff of Homa', rarity: 5, reason: '66.2% CRIT DMG with massive HP-to-ATK conversion and flat ATK scaling' },
       { name: 'Primordial Jade Winged-Spear', rarity: 5, reason: 'High Base ATK, CRIT Rate, and stacking damage bonus' },
-      { name: 'The Catch', rarity: 4, reason: 'Premier F2P: High ER with +32% Burst DMG and +12% Burst CRIT Rate' },
-      { name: 'Deathmatch', rarity: 4, reason: 'Battle Pass Top: 36.8% CRIT Rate making Cryo Blizzard Strayer ratios effortless' }
+      { name: '"The Catch"', rarity: 4, reason: 'Premier F2P: High ER with +32% Burst DMG and +12% Burst CRIT Rate for Electro burst DMG' },
+      { name: 'Deathmatch', rarity: 4, reason: 'Battle Pass Top: 36.8% CRIT Rate with reliable ATK and DEF buffs' }
     ],
     artifacts: [
-      { name: 'Blizzard Strayer', pieces: 4, reason: 'Best in Slot: +15% Cryo DMG and +40% CRIT Rate against frozen targets' },
-      { name: 'Noblesse Oblige', pieces: 4, reason: '+20% party-wide ATK buff upon burst cast' }
+      { name: 'Emblem of Severed Fate', pieces: 4, reason: 'Burst Sub-DPS: Directly converts necessary ER into Electro burst DMG' },
+      { name: 'Thundering Fury', pieces: 4, reason: 'Electro reaction DMG and skill cooldown reduction' }
     ],
     mainStats: {
       sands: ['ATK%'],
-      goblet: ['Cryo DMG Bonus'],
+      goblet: ['Electro DMG Bonus'],
       circlet: ['CRIT Rate', 'CRIT DMG']
     },
     subStats: ['CRIT Rate', 'CRIT DMG', 'ATK%', 'Energy Recharge (~120-130%)']
@@ -240,11 +240,11 @@ export const KQM_BATCH_7 = {
     ],
     artifacts: [
       { name: 'Golden Troupe', pieces: 4, reason: 'Best in Slot: Colossal +70% off-field Elemental Skill DMG' },
-      { name: 'Emblem of Severed Fate', pieces: 4, reason: 'Burst Sub-DPS: Directly converts necessary ER into Hydro burst damage' }
+      { name: 'Emblem of Severed Fate', pieces: 4, reason: 'Burst Sub-DPS: Directly converts necessary ER into Cryo burst damage' }
     ],
     mainStats: {
       sands: ['ATK%', 'Energy Recharge'],
-      goblet: ['Hydro DMG Bonus'],
+      goblet: ['Cryo DMG Bonus'],
       circlet: ['CRIT Rate', 'CRIT DMG']
     },
     subStats: ['CRIT Rate', 'CRIT DMG', 'Energy Recharge (~140-160%)', 'ATK%']
@@ -257,12 +257,12 @@ export const KQM_BATCH_7 = {
       { name: 'Iron Sting', rarity: 4, reason: 'Craftable F2P: High 165 EM substat maximizing Aggravate reaction damage' }
     ],
     artifacts: [
-      { name: 'Noblesse Oblige', pieces: 4, reason: 'Best Support BiS: +20% party-wide ATK buff on burst cast' },
-      { name: 'Thundering Fury', pieces: 4, reason: 'Aggravate reaction damage and skill cooldown reduction' }
+      { name: 'Viridescent Venerer', pieces: 4, reason: 'Best in Slot: 40% elemental RES shred to swirled elements' },
+      { name: 'Noblesse Oblige', pieces: 4, reason: 'Best Support BiS: +20% party-wide ATK buff on burst cast' }
     ],
     mainStats: {
       sands: ['Energy Recharge', 'Elemental Mastery'],
-      goblet: ['Electro DMG Bonus'],
+      goblet: ['Anemo DMG Bonus'],
       circlet: ['CRIT Rate', 'CRIT DMG']
     },
     subStats: ['Energy Recharge (to ~160-180%)', 'CRIT Rate', 'CRIT DMG', 'Elemental Mastery', 'ATK%']
@@ -314,7 +314,7 @@ export const KQM_BATCH_7 = {
     ],
     mainStats: {
       sands: ['Energy Recharge', 'HP%'],
-      goblet: ['HP%', 'Pyro DMG Bonus'],
+      goblet: ['Anemo DMG Bonus', 'Elemental Mastery', 'HP%'],
       circlet: ['Healing Bonus', 'HP%']
     },
     subStats: ['HP%', 'Energy Recharge (~160-180%)', 'CRIT Rate (for Favonius)', 'Elemental Mastery']
@@ -348,7 +348,7 @@ export const KQM_BATCH_7 = {
     ],
     mainStats: {
       sands: ['ATK%', 'Elemental Mastery'],
-      goblet: ['Pyro DMG Bonus'],
+      goblet: ['Electro DMG Bonus'],
       circlet: ['CRIT Rate', 'CRIT DMG']
     },
     subStats: ['CRIT Rate', 'CRIT DMG', 'ATK%', 'Elemental Mastery', 'Energy Recharge (~120%)']

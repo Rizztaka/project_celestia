@@ -28,6 +28,7 @@ All agents must adhere to the local repository data files as the definitive auth
 - **Artifact Sets**: Exactly **64 Master Artifact Sets** in `src/data/artifacts-master.ts` (with 37 combat sets modeled with roll valuation and weight profiles in `src/data/artifact-weights.ts` and `src/data/characters.ts`).
 - **Talent Scaling**: Modular parameter curves across Level 1–15 in `src/data/talent-scaling/` for all 128 characters.
 - **Ledger Preservation**: `scripts/generate-reference.cjs` parses and preserves the Verified Corrections Ledger when synchronizing markdown documentation with data files.
+- **Build & Stat Weight Calibration**: Synchronized builds and descriptions for all 10 Batch 7 characters (Alyosha, Flins, Ifa, Linnea, Lohen, Odette, Sandrone, Varesa, Vesna, Zibai); implemented dynamic stat weight synthesis with comprehensive character alias resolution (`Kokomi`, `Ayaka`, `Itto`, `Childe`, `Yae`, etc.) in `getCharacterStatWeights`; guaranteed 0 crit weight for Sangonomiya Kokomi in both stat weights and weapon solver; corrected targetSets typos for Scroll of the Hero of Cinder City, Shimenawa's Reminiscence, and Vourukasha's Glow.
 
 ## 5. Project Stack & Environment
 - **Runtime / Framework**: React 19 + Vite + TypeScript (see `package.json`)

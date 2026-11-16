@@ -488,7 +488,7 @@ export function getSavedPullBudget(): PullBudgetState {
         ? Math.max(0, Math.min(1, Math.floor(parsed.weaponFatePoints)))
         : DEFAULT_PULL_BUDGET.weaponFatePoints;
 
-    return {
+    const result: PullBudgetState = {
       primogems,
       fates,
       characterPity,
@@ -496,6 +496,12 @@ export function getSavedPullBudget(): PullBudgetState {
       weaponPity,
       weaponFatePoints,
     };
+
+    if (typeof parsed.consecutiveLossCount === 'number' && !isNaN(parsed.consecutiveLossCount)) {
+      result.consecutiveLossCount = Math.max(0, Math.min(5, Math.floor(parsed.consecutiveLossCount)));
+    }
+
+    return result;
   } catch {
     return { ...DEFAULT_PULL_BUDGET };
   }

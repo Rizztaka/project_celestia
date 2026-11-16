@@ -1373,6 +1373,7 @@ export function evaluateComprehensivePullROI(
     totalPulls,
     budget.characterPity,
     budget.characterGuaranteed,
+    budget.consecutiveLossCount ?? 0,
   );
   const weapOdds = calculateWeaponBannerOdds(
     totalPulls,

@@ -287,6 +287,7 @@ export interface PullBudgetState {
   fates: number;
   characterPity: number;
   characterGuaranteed: boolean;
+  consecutiveLossCount?: number;
   weaponPity: number;
   weaponFatePoints: number; // 0 or 1
 }

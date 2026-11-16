@@ -4,6 +4,7 @@ import {
   calculateWeaponBannerOdds,
   generateProbabilityDistribution,
   calculateTotalPulls,
+  calculateRadianceWinRate,
 } from './gacha-math';
 
 describe('Gacha Math Engine (5.x Rules)', () => {
@@ -16,7 +17,48 @@ describe('Gacha Math Engine (5.x Rules)', () => {
     });
   });
 
+  describe('calculateRadianceWinRate (Capturing Radiance State Machine)', () => {
+    it('returns base 55% at 0 consecutive losses', () => {
+      expect(calculateRadianceWinRate(0)).toBeCloseTo(0.55, 4);
+      expect(calculateRadianceWinRate()).toBeCloseTo(0.55, 4);
+    });
+
+    it('returns escalating ~77.5% at 1 consecutive loss', () => {
+      expect(calculateRadianceWinRate(1)).toBeCloseTo(0.775, 4);
+    });
+
+    it('returns 100% (guaranteed) at 2 or more consecutive losses', () => {
+      expect(calculateRadianceWinRate(2)).toBe(1.0);
+      expect(calculateRadianceWinRate(3)).toBe(1.0);
+    });
+
+    it('defensively handles negative numbers, floats, and NaNs', () => {
+      expect(calculateRadianceWinRate(-1)).toBeCloseTo(0.55, 4);
+      expect(calculateRadianceWinRate(1.9)).toBeCloseTo(0.775, 4);
+      expect(calculateRadianceWinRate(NaN as any)).toBeCloseTo(0.55, 4);
+    });
+  });
+
   describe('calculateCharacterBannerOdds', () => {
+    it('accounts for Capturing Radiance consecutive loss streak', () => {
+      // 0 losses (baseline): ~63.5% cumulative probability at 90 pulls
+      const res0 = calculateCharacterBannerOdds(90, 0, false, 0);
+      expect(res0.guaranteedPulls).toBe(180);
+      expect(res0.cumulativeProbability).toBeCloseTo(0.635, 2);
+
+      // 1 loss streak: ~81.7% cumulative probability at 90 pulls
+      const res1 = calculateCharacterBannerOdds(90, 0, false, 1);
+      expect(res1.guaranteedPulls).toBe(180);
+      expect(res1.cumulativeProbability).toBeGreaterThan(0.775);
+      expect(res1.cumulativeProbability).toBeGreaterThan(res0.cumulativeProbability);
+
+      // 2 losses streak: 100% win rate -> guaranteed on 1st 5-star (90 pulls)
+      const res2 = calculateCharacterBannerOdds(90, 0, false, 2);
+      expect(res2.guaranteedPulls).toBe(90);
+      expect(res2.cumulativeProbability).toBe(1.0);
+      expect(res2.primogemsNeeded).toBe(0);
+    });
+
     it('gracefully handles float, negative, or NaN pity values without crashing', () => {
       // Float pity 73.5 should floor to 73 without RangeError
       const resultFloat = calculateCharacterBannerOdds(10, 73.5, false);

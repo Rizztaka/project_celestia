@@ -28,7 +28,22 @@ const CHAR_BASE_RATE = 0.006;
 const CHAR_SOFT_PITY_START = 74;
 const CHAR_HARD_PITY = 90;
 const CHAR_SOFT_INCREMENT = 0.06;
-const CHAR_WIN_RATE_5_0 = 0.55; // 5.0+ Capturing Radiance net win rate
+
+/**
+ * State-aware Capturing Radiance probability model (Genshin 5.0+).
+ * Evaluates the net win rate for a non-guaranteed 5-star pull:
+ * P(Win) = 0.50 + 0.50 * P(Radiance | streak)
+ * Base Radiance activation rate is ~10% (net ~55% win rate).
+ * With consecutive 50/50 losses, Radiance chance escalates:
+ * - 0 losses: 10% Radiance -> 55.0% net win rate
+ * - 1 loss:   55% Radiance -> 77.5% net win rate
+ * - 2+ losses: 100% Radiance -> 100% guaranteed featured win
+ */
+export function calculateRadianceWinRate(consecutiveLosses: number = 0): number {
+  const safeLosses = Math.max(0, Math.floor(Number(consecutiveLosses) || 0));
+  const conditionalRadiance = Math.min(1.0, 0.10 + 0.45 * safeLosses);
+  return 0.50 + 0.50 * conditionalRadiance;
+}
 
 // Weapon banner constants (5.0+)
 const WEAPON_BASE_RATE = 0.007;
@@ -93,19 +108,24 @@ function computeSingleCyclePmf(
 /**
  * Computes the PMF of pulls needed to acquire the target item.
  * Index k represents total additional pulls.
+ * For character banner, auxiliaryState represents consecutiveLosses.
+ * For weapon banner, auxiliaryState represents fatePoints.
  */
 function computeTargetPmf(
   bannerType: 'character' | 'weapon',
   currentPity: number,
   isGuaranteed: boolean,
-  fatePoints: number = 0,
+  auxiliaryState: number = 0,
 ): { pmf: number[]; guaranteedPulls: number } {
   if (bannerType === 'character') {
+    const consecutiveLosses = auxiliaryState;
     const safeRawPity = Math.floor(Number(currentPity) || 0);
     const clampedPity = Math.max(0, Math.min(CHAR_HARD_PITY - 1, safeRawPity));
     const cycle1 = computeSingleCyclePmf(getCharacterPullRate, CHAR_HARD_PITY, clampedPity);
 
-    if (isGuaranteed) {
+    const winRate = calculateRadianceWinRate(consecutiveLosses);
+
+    if (isGuaranteed || winRate >= 1.0) {
       const guaranteedPulls = CHAR_HARD_PITY - clampedPity;
       return { pmf: cycle1, guaranteedPulls };
     }
@@ -114,7 +134,6 @@ function computeTargetPmf(
     const guaranteedPulls = (CHAR_HARD_PITY - clampedPity) + CHAR_HARD_PITY;
     const pmf: number[] = new Array(guaranteedPulls + 1).fill(0);
 
-    const winRate = CHAR_WIN_RATE_5_0;
     const lossRate = 1.0 - winRate;
 
     // Win on 1st 5-star
@@ -134,6 +153,7 @@ function computeTargetPmf(
     return { pmf, guaranteedPulls };
   } else {
     // Weapon Banner
+    const fatePoints = auxiliaryState;
     const safeRawPity = Math.floor(Number(currentPity) || 0);
     const clampedPity = Math.max(0, Math.min(WEAPON_HARD_PITY - 1, safeRawPity));
     const cycle1 = computeSingleCyclePmf(getWeaponPullRate, WEAPON_HARD_PITY, clampedPity);
@@ -222,8 +242,9 @@ export function calculateCharacterBannerOdds(
   pullsAvailable: number,
   currentPity: number,
   isGuaranteed: boolean,
+  consecutiveLosses: number = 0,
 ): GachaOddsResult {
-  const { pmf, guaranteedPulls } = computeTargetPmf('character', currentPity, isGuaranteed);
+  const { pmf, guaranteedPulls } = computeTargetPmf('character', currentPity, isGuaranteed, consecutiveLosses);
   return analyzeOdds(pmf, guaranteedPulls, pullsAvailable);
 }
 
@@ -240,9 +261,9 @@ export function generateProbabilityDistribution(
   bannerType: 'character' | 'weapon',
   currentPity: number,
   isGuaranteed: boolean,
-  fatePoints: number = 0,
+  auxiliaryState: number = 0,
 ): Array<{ pulls: number; probability: number }> {
-  const { pmf, guaranteedPulls } = computeTargetPmf(bannerType, currentPity, isGuaranteed, fatePoints);
+  const { pmf, guaranteedPulls } = computeTargetPmf(bannerType, currentPity, isGuaranteed, auxiliaryState);
 
   const distribution: Array<{ pulls: number; probability: number }> = [];
   distribution.push({ pulls: 0, probability: 0 });

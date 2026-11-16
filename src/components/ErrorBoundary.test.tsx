@@ -60,4 +60,26 @@ describe('ErrorBoundary Component', () => {
     expect(updatedState).toEqual({ hasError: false, error: undefined });
     expect(boundary.state.hasError).toBe(false);
   });
+
+  it('renders Download Error Report button and exposes sanitized diagnostic payload', () => {
+    const boundary = new ErrorBoundary({
+      children: <div>Child</div>,
+    });
+    boundary.state = {
+      hasError: true,
+      error: new Error('Render crash in TestComponent'),
+    };
+
+    const rendered = boundary.render();
+    const html = renderToString(rendered as React.ReactElement);
+
+    expect(html).toContain('Download Error Report');
+
+    const report = boundary.generateErrorReport();
+    expect(report.error).toBe('Render crash in TestComponent');
+    expect(report.timestamp).toBeDefined();
+    expect(typeof report.schemaVersion).toBe('number');
+    expect(typeof report.rosterCount).toBe('number');
+    expect(typeof report.weaponCount).toBe('number');
+  });
 });

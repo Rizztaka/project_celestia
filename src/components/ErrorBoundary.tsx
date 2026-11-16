@@ -1,5 +1,5 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
-import { AlertTriangle, RotateCcw } from 'lucide-react';
+import { AlertTriangle, RotateCcw, Download } from 'lucide-react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -10,6 +10,19 @@ interface ErrorBoundaryProps {
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
+  errorInfo?: ErrorInfo;
+}
+
+export interface ErrorReportData {
+  timestamp: string;
+  error: string;
+  stack?: string;
+  componentStack?: string;
+  userAgent: string;
+  url: string;
+  schemaVersion: number;
+  rosterCount: number;
+  weaponCount: number;
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
@@ -23,7 +36,56 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Celestia View Error caught by ErrorBoundary:', error, errorInfo);
+    this.setState({ errorInfo });
   }
+
+  public generateErrorReport(): ErrorReportData {
+    let rosterCount = 0;
+    let weaponCount = 0;
+    let schemaVersion = 2;
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const rosterRaw = localStorage.getItem('celestia_v2_owned_roster');
+        rosterCount = rosterRaw ? JSON.parse(rosterRaw).length : 0;
+        const weaponsRaw = localStorage.getItem('celestia_v2_raw_weapons');
+        weaponCount = weaponsRaw ? JSON.parse(weaponsRaw).length : 0;
+        const vRaw = localStorage.getItem('celestia_schema_version');
+        schemaVersion = vRaw ? parseInt(vRaw, 10) : 2;
+      }
+    } catch {
+      // ignore
+    }
+
+    return {
+      timestamp: new Date().toISOString(),
+      error: this.state.error?.message || 'Unknown Error',
+      stack: this.state.error?.stack || '',
+      componentStack: this.state.errorInfo?.componentStack || '',
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Node/Test',
+      url: typeof window !== 'undefined' ? window.location?.href || '' : '',
+      schemaVersion,
+      rosterCount,
+      weaponCount,
+    };
+  }
+
+  public handleDownloadReport = () => {
+    try {
+      const report = this.generateErrorReport();
+      const jsonString = JSON.stringify(report, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `celestia-error-${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Failed to download error report:', err);
+    }
+  };
 
   private handleRetry = () => {
     try {
@@ -31,7 +93,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     } catch (err) {
       console.error('Error in ErrorBoundary onRetry callback:', err);
     }
-    this.setState({ hasError: false, error: undefined });
+    this.setState({ hasError: false, error: undefined, errorInfo: undefined });
   };
 
   private handleReload = () => {
@@ -59,19 +121,27 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-3 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
             <button
               onClick={this.handleRetry}
-              className="px-4 py-2 rounded-xl bg-[#1c2032] hover:bg-[#252b44] text-zinc-200 text-xs font-semibold border border-[#2b3350] transition-colors cursor-pointer flex items-center gap-1.5"
+              className="px-3.5 py-2 rounded-xl bg-[#1c2032] hover:bg-[#252b44] text-zinc-200 text-xs font-semibold border border-[#2b3350] transition-colors cursor-pointer flex items-center gap-1.5"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Try Again</span>
             </button>
             <button
               onClick={this.handleReload}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0a0b0e] text-xs font-bold hover:brightness-110 transition-all cursor-pointer shadow-sm"
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0a0b0e] text-xs font-bold hover:brightness-110 transition-all cursor-pointer shadow-sm"
             >
               Reload Page
+            </button>
+            <button
+              onClick={this.handleDownloadReport}
+              className="px-3.5 py-2 rounded-xl bg-purple-950/40 hover:bg-purple-900/60 text-purple-300 text-xs font-semibold border border-purple-500/30 transition-colors cursor-pointer flex items-center gap-1.5"
+              title="Download sanitized diagnostic error report"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Download Error Report</span>
             </button>
           </div>
         </div>

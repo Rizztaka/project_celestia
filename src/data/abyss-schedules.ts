@@ -41,6 +41,10 @@ export interface AbyssCycleConfig {
   buffDescription: string;
   chambers: AbyssChamberConfig[];
   isCustom?: boolean;
+  effectiveStartDate?: string;
+  effectiveEndDate?: string;
+  sourceUrl?: string;
+  verifiedAt?: string;
 }
 
 const DEFAULT_RES: Record<Element | 'Physical', number> = {
@@ -62,6 +66,10 @@ export const ABYSS_CYCLES: AbyssCycleConfig[] = [
     id: 'cycle-7-2',
     version: '7.2',
     phase: 'Phase 1',
+    effectiveStartDate: '2026-11-16',
+    effectiveEndDate: '2026-12-16',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
     name: 'Version 7.2 · Phase 1: Stellar Fracture - Polestar Domain',
     buffDescription:
       'Characters with Polestar alignment or triggering Cryo/Hydro/Electro reactions gain +40% Polestar resonance DMG and +30% CRIT DMG. Triggering Hexerei or Lunar reactions unleashes a Stellar Nova shockwave.',
@@ -117,7 +125,7 @@ export const ABYSS_CYCLES: AbyssCycleConfig[] = [
           mechanics: {
             shieldType: 'Pyro',
             shieldUnits: 36,
-            recommendedElements: ['Hydro', 'Electro', 'Cryo'],
+            recommendedElements: ['Hydro', 'Electro'],
             prohibitedElements: ['Pyro'],
             description: 'Intense Pyro shields requiring rapid Hydro or elemental shield-shredding.',
           },
@@ -747,4 +755,13 @@ export function createCustomSandboxCycle(): AbyssCycleConfig {
     isCustom: true,
     chambers: JSON.parse(JSON.stringify(base.chambers)),
   };
+}
+
+export function getActiveAbyssCycle(date: Date = new Date()): AbyssCycleConfig {
+  const dateStr = date.toISOString().slice(0, 10);
+  const matched = ABYSS_CYCLES.find((c) => {
+    if (!c.effectiveStartDate || !c.effectiveEndDate) return false;
+    return dateStr >= c.effectiveStartDate && dateStr <= c.effectiveEndDate;
+  });
+  return matched ?? ABYSS_CYCLES[0];
 }

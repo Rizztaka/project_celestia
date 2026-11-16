@@ -6,8 +6,10 @@ import { WEAPONS_DATA, WEAPONS_BY_KEY, getWeaponByKey } from './weapons';
 import { ARTIFACTS_MASTER, ARTIFACTS_BY_ID, getArtifactSet } from './artifacts-master';
 import { AVAILABLE_SCALING_KEYS, getTalentScaling } from './talent-scaling';
 import { CHARACTER_ROTATIONS, getCharacterRotation } from './character-rotations';
-import { ABYSS_CYCLES, DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from './abyss-schedules';
-import { THEATER_SEASONS, DEFAULT_ACTIVE_THEATER_SEASON_ID } from './theater-seasons';
+import { ABYSS_CYCLES, DEFAULT_ACTIVE_ABYSS_CYCLE_ID, getActiveAbyssCycle } from './abyss-schedules';
+import { THEATER_SEASONS, DEFAULT_ACTIVE_THEATER_SEASON_ID, getActiveTheaterSeason } from './theater-seasons';
+import { BANNER_PHASES, getActiveBannerPhase } from './banners';
+import { CURRENT_ABYSS_CHAMBERS } from '../engines/endgame-helper';
 
 describe('Persistent Reference SSOT Verification', () => {
   const rootDir = process.cwd();
@@ -212,24 +214,87 @@ describe('Persistent Reference SSOT Verification', () => {
     expect(ABYSS_CYCLES.some((c) => c.id === 'cycle-5-1')).toBe(true);
   });
 
-  it('registers active Version 7.2 Imaginarium Theater seasons (season-7-snezhnaya & season-7-nod-krai)', () => {
-    expect(DEFAULT_ACTIVE_THEATER_SEASON_ID).toBe('season-7-snezhnaya-cryo-hydro-electro');
-    expect(THEATER_SEASONS[0].id).toBe('season-7-snezhnaya-cryo-hydro-electro');
-    const snezhnayaSeason = THEATER_SEASONS.find(
-      (s) => s.id === 'season-7-snezhnaya-cryo-hydro-electro'
+  it('registers active Version 7.2 Imaginarium Theater seasons (season-7-2-hydro-electro-geo & upcoming)', () => {
+    expect(DEFAULT_ACTIVE_THEATER_SEASON_ID).toBe('season-7-2-hydro-electro-geo');
+    expect(THEATER_SEASONS[0].id).toBe('season-7-2-hydro-electro-geo');
+    const activeSeason = THEATER_SEASONS.find(
+      (s) => s.id === 'season-7-2-hydro-electro-geo'
     );
-    expect(snezhnayaSeason).toBeDefined();
-    expect(snezhnayaSeason?.elements).toEqual(['Cryo', 'Hydro', 'Electro']);
-    expect(snezhnayaSeason?.openingCastIds).toContain('Columbina');
-    expect(snezhnayaSeason?.openingCastIds).toContain('Skirk');
+    expect(activeSeason).toBeDefined();
+    expect(activeSeason?.elements).toEqual(['Hydro', 'Electro', 'Geo']);
+    expect(activeSeason?.openingCastIds).toEqual(['Columbina', 'Clorinde', 'Navia', 'Furina', 'Mitya', 'Zhongli']);
+    expect(activeSeason?.specialGuestIds).toEqual(['Mavuika', 'Nahida', 'Chasca', 'KaedeharaKazuha']);
+    expect(activeSeason?.sourceUrl).toBeDefined();
+    expect(activeSeason?.verifiedAt).toBeDefined();
 
-    const nodKraiSeason = THEATER_SEASONS.find(
-      (s) => s.id === 'season-7-nod-krai-anemo-pyro-geo'
+    const upcomingSeason = THEATER_SEASONS.find(
+      (s) => s.id === 'season-7-2-dec-pyro-hydro-geo'
     );
-    expect(nodKraiSeason).toBeDefined();
-    expect(nodKraiSeason?.elements).toEqual(['Anemo', 'Pyro', 'Geo']);
-    expect(nodKraiSeason?.openingCastIds).toContain('Linnea');
-    expect(nodKraiSeason?.openingCastIds).toContain('Mavuika');
+    expect(upcomingSeason).toBeDefined();
+    expect(upcomingSeason?.elements).toEqual(['Pyro', 'Hydro', 'Geo']);
+  });
+
+  it('verifies BannerPhase SSOT, 7.2 Phase 1 four-stars, and getActiveBannerPhase', () => {
+    const phase1 = BANNER_PHASES.find((p) => p.id === 'banner_7_2_phase_1');
+    expect(phase1).toBeDefined();
+    expect(phase1?.featured4StarIds).toEqual(['Valeriy', 'Charlotte', 'Rosaria']);
+    expect(phase1?.characterBanners).toEqual([
+      { characterId: 'Mitya', signatureWeaponKey: 'StarsealedEdict' },
+      { characterId: 'Furina', signatureWeaponKey: 'SplendorOfTranquilWaters' },
+    ]);
+    expect(phase1?.sourceUrl).toBeDefined();
+    expect(phase1?.verifiedAt).toBeDefined();
+
+    // Date aware resolution
+    const activeNov = getActiveBannerPhase(new Date('2026-11-16'));
+    expect(activeNov?.id).toBe('banner_7_2_phase_1');
+
+    const activeLateNov = getActiveBannerPhase(new Date('2026-11-25'));
+    expect(activeLateNov?.id).toBe('banner_7_2_phase_2');
+
+    const outOfBounds = getActiveBannerPhase(new Date('2030-01-01'));
+    expect(outOfBounds).toBeUndefined();
+  });
+
+  it('verifies date-aware Imaginarium Theater season resolution across boundaries', () => {
+    const activeNov = getActiveTheaterSeason(new Date('2026-11-16'));
+    expect(activeNov.id).toBe('season-7-2-hydro-electro-geo');
+    expect(activeNov.elements).toEqual(['Hydro', 'Electro', 'Geo']);
+
+    const activeDec = getActiveTheaterSeason(new Date('2026-12-15'));
+    expect(activeDec.id).toBe('season-7-2-dec-pyro-hydro-geo');
+    expect(activeDec.elements).toEqual(['Pyro', 'Hydro', 'Geo']);
+
+    // Fallback to active season if out of range
+    const fallback = getActiveTheaterSeason(new Date('2030-01-01'));
+    expect(fallback).toBeDefined();
+    expect(fallback.id).toBe(THEATER_SEASONS[0].id);
+  });
+
+  it('verifies Abyss cycle-7-2 metadata and date-aware resolution', () => {
+    const cycle72 = ABYSS_CYCLES.find((c) => c.id === 'cycle-7-2');
+    expect(cycle72).toBeDefined();
+    expect(cycle72?.effectiveStartDate).toBe('2026-11-16');
+    expect(cycle72?.effectiveEndDate).toBe('2026-12-16');
+    expect(cycle72?.sourceUrl).toBeDefined();
+    expect(cycle72?.verifiedAt).toBeDefined();
+
+    const activeCycle = getActiveAbyssCycle(new Date('2026-11-16'));
+    expect(activeCycle.id).toBe('cycle-7-2');
+  });
+
+  it('verifies endgame-helper derives CURRENT_ABYSS_CHAMBERS directly from getActiveAbyssCycle', () => {
+    const activeCycle = getActiveAbyssCycle();
+    expect(CURRENT_ABYSS_CHAMBERS.length).toBe(activeCycle.chambers.length * 2);
+
+    const c1FirstHalf = CURRENT_ABYSS_CHAMBERS.find((c) => c.chamber === 1 && c.half === 'First Half');
+    expect(c1FirstHalf).toBeDefined();
+    expect(c1FirstHalf?.floor).toBe(12);
+
+    const c1SecondHalf = CURRENT_ABYSS_CHAMBERS.find((c) => c.chamber === 1 && c.half === 'Second Half');
+    expect(c1SecondHalf).toBeDefined();
+    expect(c1SecondHalf?.recommendedElements).toContain('Hydro');
+    expect(c1SecondHalf?.enemies).toContain('Abyss Lector: Fathomless Flames');
   });
 
   it('validates dynamic talent scaling curves and parameters for key modern and canonical characters', async () => {

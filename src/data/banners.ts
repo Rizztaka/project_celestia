@@ -12,6 +12,8 @@ export interface BannerPhase {
   weaponBanner: {
     featuredWeapons: string[];
   };
+  sourceUrl?: string;
+  verifiedAt?: string;
 }
 
 export const BANNER_PHASES: BannerPhase[] = [
@@ -25,10 +27,12 @@ export const BANNER_PHASES: BannerPhase[] = [
       { characterId: 'Mitya', signatureWeaponKey: 'StarsealedEdict' },
       { characterId: 'Furina', signatureWeaponKey: 'SplendorOfTranquilWaters' },
     ],
-    featured4StarIds: ['Valeriy'],
+    featured4StarIds: ['Valeriy', 'Charlotte', 'Rosaria'],
     weaponBanner: {
       featuredWeapons: ['StarsealedEdict', 'SplendorOfTranquilWaters'],
     },
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
   },
   {
     id: 'banner_7_2_phase_2',
@@ -43,6 +47,8 @@ export const BANNER_PHASES: BannerPhase[] = [
     weaponBanner: {
       featuredWeapons: ['LightOfFoliarIncision', 'AquaSimulacra'],
     },
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
   },
   {
     id: 'banner_7_2_natlan_chronicled',
@@ -66,6 +72,8 @@ export const BANNER_PHASES: BannerPhase[] = [
         'VividNotions',
       ],
     },
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
   },
   {
     id: 'banner_5_3_phase_1',
@@ -166,3 +174,10 @@ export const BANNER_PHASES: BannerPhase[] = [
     },
   },
 ];
+
+export function getActiveBannerPhase(date: Date = new Date()): BannerPhase | undefined {
+  const dateStr = date.toISOString().slice(0, 10);
+  return BANNER_PHASES.find(
+    (phase) => dateStr >= phase.startDate && dateStr <= phase.endDate,
+  );
+}

@@ -457,6 +457,11 @@ export interface TheaterSeasonConfig {
   openingCastIds: string[];
   specialGuestIds: string[];
   bosses: Record<number, string>;
+  version?: string;
+  effectiveStartDate?: string;
+  effectiveEndDate?: string;
+  sourceUrl?: string;
+  verifiedAt?: string;
 }
 
 export interface ChamberHalfMetrics {

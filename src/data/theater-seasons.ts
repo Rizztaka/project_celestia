@@ -76,9 +76,59 @@ export const THEATER_DIFFICULTIES: Record<
   Visionary: { acts: 10, requiredCharacters: 22, bossActs: [3, 6, 8, 10] },
 };
 
-export const DEFAULT_ACTIVE_THEATER_SEASON_ID = 'season-7-snezhnaya-cryo-hydro-electro';
+export const DEFAULT_ACTIVE_THEATER_SEASON_ID = 'season-7-2-hydro-electro-geo';
 
 export const THEATER_SEASONS: TheaterSeasonConfig[] = [
+  {
+    id: 'season-7-2-hydro-electro-geo',
+    name: 'Version 7.2 · November 2026 (Hydro / Electro / Geo)',
+    version: '7.2',
+    effectiveStartDate: '2026-11-01',
+    effectiveEndDate: '2026-12-01',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
+    elements: ['Hydro', 'Electro', 'Geo'],
+    openingCastIds: [
+      'Columbina',
+      'Clorinde',
+      'Navia',
+      'Furina',
+      'Mitya',
+      'Zhongli',
+    ],
+    specialGuestIds: ['Mavuika', 'Nahida', 'Chasca', 'KaedeharaKazuha'],
+    bosses: {
+      3: 'Maguu Kenki',
+      6: 'Icewind Suite: Coppelia',
+      8: 'Iniquitous Baptist',
+      10: 'Hydro Tulpa',
+    },
+  },
+  {
+    id: 'season-7-2-dec-pyro-hydro-geo',
+    name: 'Version 7.2 · December 2026 (Pyro / Hydro / Geo)',
+    version: '7.2',
+    effectiveStartDate: '2026-12-01',
+    effectiveEndDate: '2027-01-01',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-11-16',
+    elements: ['Pyro', 'Hydro', 'Geo'],
+    openingCastIds: [
+      'Mavuika',
+      'Linnea',
+      'Navia',
+      'Furina',
+      'Zhongli',
+      'Bennett',
+    ],
+    specialGuestIds: ['Columbina', 'Nahida', 'Clorinde', 'KaedeharaKazuha'],
+    bosses: {
+      3: 'Jadeplume Terrorshroom',
+      6: 'Centaur Automaton',
+      8: 'Algorithm of Semi-Intransient Matrix',
+      10: 'Icewind Suite: Coppelia',
+    },
+  },
   {
     id: 'season-7-snezhnaya-cryo-hydro-electro',
     name: 'Version 7.2 · Frost & Thunder (Cryo / Hydro / Electro)',
@@ -178,4 +228,13 @@ export function createCustomSeason(
       10: 'Centaur Automaton',
     },
   };
+}
+
+export function getActiveTheaterSeason(date: Date = new Date()): TheaterSeasonConfig {
+  const dateStr = date.toISOString().slice(0, 10);
+  const matched = THEATER_SEASONS.find((s) => {
+    if (!s.effectiveStartDate || !s.effectiveEndDate) return false;
+    return dateStr >= s.effectiveStartDate && dateStr <= s.effectiveEndDate;
+  });
+  return matched ?? THEATER_SEASONS[0];
 }

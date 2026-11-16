@@ -170,6 +170,56 @@ describe('Account Backup & Restore Service', () => {
     const result = validateBackupData(invalidBudgetPayload);
     expect(result.valid).toBe(false);
     expect(result.errors.length).toBeGreaterThan(0);
+
+    // 5. Rejects non-finite numbers (NaN, Infinity)
+    const nanBudgetPayload = {
+      ...invalidBudgetPayload,
+      pullBudget: {
+        primogems: NaN,
+        fates: Infinity,
+        characterPity: 0,
+        characterGuaranteed: false,
+        weaponPity: 0,
+        weaponFatePoints: 0,
+      },
+    };
+    expect(validateBackupData(nanBudgetPayload).valid).toBe(false);
+
+    // 6. Rejects unauthorized or hallucinated character IDs
+    const fakeCharPayload = {
+      format: 'celestia_native',
+      version: 2,
+      gameVersion: '7.2',
+      exportedAt: new Date().toISOString(),
+      roster: ['UnauthorizedCharacter_XYZ'],
+      profiles: {},
+      rawWeapons: [],
+      rawArtifacts: [],
+      pullBudget: {
+        primogems: 0,
+        fates: 0,
+        characterPity: 0,
+        characterGuaranteed: false,
+        weaponPity: 0,
+        weaponFatePoints: 0,
+      },
+      demoMode: false,
+    };
+    const fakeCharResult = validateBackupData(fakeCharPayload);
+    expect(fakeCharResult.valid).toBe(false);
+    expect(fakeCharResult.errors.some((e) => e.includes('Unauthorized or invalid character ID'))).toBe(true);
+
+    // 7. Rejects unauthorized character profile keys
+    const fakeProfilePayload = {
+      ...fakeCharPayload,
+      roster: ['Mavuika'],
+      profiles: {
+        FakeHero123: { id: 'FakeHero123', level: 90, constellation: 0 },
+      },
+    };
+    const fakeProfileResult = validateBackupData(fakeProfilePayload);
+    expect(fakeProfileResult.valid).toBe(false);
+    expect(fakeProfileResult.errors.some((e) => e.includes('Unauthorized or invalid character profile key'))).toBe(true);
   });
 
   it('imports valid backup, stores celestia_backup_pre_restore safety snapshot, and allows rollback', () => {
@@ -220,5 +270,70 @@ describe('Account Backup & Restore Service', () => {
     expect(getSavedRoster()).toEqual(['Bennett']);
     expect(getSavedProfiles()['Bennett'].constellation).toBe(5);
     expect(getSavedProfiles()['Skirk']).toBeUndefined();
+  });
+
+  it('preserves roster characters that do not have custom profile entries during import', () => {
+    // A backup where roster has 3 characters, but only 1 has an entry in profiles
+    const partialProfilesBackup: CelestiaBackupData = {
+      format: 'celestia_native',
+      version: 2,
+      gameVersion: '7.2',
+      exportedAt: new Date().toISOString(),
+      roster: ['Mavuika', 'Furina', 'Bennett'],
+      profiles: {
+        Mavuika: { id: 'Mavuika', level: 90, constellation: 2 },
+      },
+      rawWeapons: [],
+      rawArtifacts: [],
+      pullBudget: {
+        primogems: 0,
+        fates: 0,
+        characterPity: 0,
+        characterGuaranteed: false,
+        consecutiveLossCount: 0,
+        weaponPity: 0,
+        weaponFatePoints: 0,
+      },
+      demoMode: false,
+    };
+
+    const importResult = importAccountBackup(partialProfilesBackup);
+    expect(importResult.success).toBe(true);
+
+    // All 3 roster members must be preserved, not wiped by saveProfiles
+    const restoredRoster = getSavedRoster();
+    expect(restoredRoster).toContain('Mavuika');
+    expect(restoredRoster).toContain('Furina');
+    expect(restoredRoster).toContain('Bennett');
+    expect(restoredRoster).toHaveLength(3);
+  });
+
+  it('cleanses custom abyss sandbox when importing backup without custom abyss config', () => {
+    localStorage.setItem('celestia_v2_custom_abyss', JSON.stringify({ customFloor: true }));
+
+    const simpleBackup: CelestiaBackupData = {
+      format: 'celestia_native',
+      version: 2,
+      gameVersion: '7.2',
+      exportedAt: new Date().toISOString(),
+      roster: ['Furina'],
+      profiles: { Furina: { id: 'Furina', level: 90, constellation: 0 } },
+      rawWeapons: [],
+      rawArtifacts: [],
+      pullBudget: {
+        primogems: 0,
+        fates: 0,
+        characterPity: 0,
+        characterGuaranteed: false,
+        consecutiveLossCount: 0,
+        weaponPity: 0,
+        weaponFatePoints: 0,
+      },
+      demoMode: false,
+    };
+
+    const res = importAccountBackup(simpleBackup);
+    expect(res.success).toBe(true);
+    expect(localStorage.getItem('celestia_v2_custom_abyss')).toBeNull();
   });
 });

@@ -1,5 +1,7 @@
 import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../types/genshin';
 import type { AbyssCycleConfig } from '../data/abyss-schedules';
+import { DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from '../data/abyss-schedules';
+import { CHARACTERS } from '../data/characters';
 import {
   getSavedRoster,
   getSavedProfiles,
@@ -21,6 +23,11 @@ import {
   rollbackToBackup,
   CURRENT_SCHEMA_VERSION,
 } from './storage';
+
+const CANONICAL_CHARACTER_IDS = new Set<string>([
+  ...CHARACTERS.map((c) => c.id),
+  'Traveler',
+]);
 
 export interface CelestiaBackupData {
   format: 'celestia_native';
@@ -80,20 +87,61 @@ export function validateBackupData(data: unknown): ValidationResult {
     errors.push('Unrecognized backup format. Expected "celestia_native".');
   }
 
-  if (typeof payload.version !== 'number' || payload.version < 1 || payload.version > CURRENT_SCHEMA_VERSION) {
+  if (
+    typeof payload.version !== 'number' ||
+    !Number.isInteger(payload.version) ||
+    payload.version < 1 ||
+    payload.version > CURRENT_SCHEMA_VERSION
+  ) {
     errors.push(`Unsupported schema version: ${payload.version}. Max supported version is ${CURRENT_SCHEMA_VERSION}.`);
   }
 
   if (!Array.isArray(payload.roster)) {
     errors.push('Roster must be an array of character IDs.');
+  } else {
+    for (const id of payload.roster) {
+      if (typeof id !== 'string' || !CANONICAL_CHARACTER_IDS.has(id)) {
+        errors.push(`Unauthorized or invalid character ID in roster: "${id}".`);
+        break;
+      }
+    }
   }
 
   if (!payload.profiles || typeof payload.profiles !== 'object' || Array.isArray(payload.profiles)) {
     errors.push('Profiles must be a dictionary of character profiles.');
+  } else {
+    for (const [charId, prof] of Object.entries(payload.profiles)) {
+      if (charId === '__proto__' || charId === 'constructor' || charId === 'prototype') continue;
+      if (!CANONICAL_CHARACTER_IDS.has(charId)) {
+        errors.push(`Unauthorized or invalid character profile key: "${charId}".`);
+        break;
+      }
+      if (!prof || typeof prof !== 'object' || Array.isArray(prof)) {
+        errors.push(`Profile for "${charId}" must be a valid profile object.`);
+        break;
+      }
+      const p = prof as any;
+      if (p.level !== undefined && (!Number.isFinite(p.level) || p.level < 1 || p.level > 90)) {
+        errors.push(`Character "${charId}" level must be between 1 and 90.`);
+      }
+      if (
+        p.constellation !== undefined &&
+        (!Number.isFinite(p.constellation) || p.constellation < 0 || p.constellation > 6)
+      ) {
+        errors.push(`Character "${charId}" constellation must be between 0 and 6.`);
+      }
+    }
   }
 
   if (!Array.isArray(payload.rawWeapons)) {
     errors.push('Weapons must be an array of weapon objects.');
+  } else {
+    for (const w of payload.rawWeapons) {
+      if (!w || typeof w !== 'object' || Array.isArray(w)) {
+        errors.push('Each weapon in weapons armory must be a valid object.');
+        break;
+      }
+    }
   }
 
   if (!Array.isArray(payload.rawArtifacts)) {
@@ -104,23 +152,42 @@ export function validateBackupData(data: unknown): ValidationResult {
     errors.push('Pull budget configuration is missing or invalid.');
   } else {
     const pb = payload.pullBudget;
-    if (typeof pb.primogems !== 'number' || pb.primogems < 0) {
-      errors.push('Primogems must be a non-negative number.');
+    if (typeof pb.primogems !== 'number' || !Number.isFinite(pb.primogems) || pb.primogems < 0) {
+      errors.push('Primogems must be a non-negative finite number.');
     }
-    if (typeof pb.fates !== 'number' || pb.fates < 0) {
-      errors.push('Fates must be a non-negative number.');
+    if (typeof pb.fates !== 'number' || !Number.isFinite(pb.fates) || pb.fates < 0) {
+      errors.push('Fates must be a non-negative finite number.');
     }
-    if (typeof pb.characterPity !== 'number' || pb.characterPity < 0 || pb.characterPity > 89) {
+    if (
+      typeof pb.characterPity !== 'number' ||
+      !Number.isFinite(pb.characterPity) ||
+      pb.characterPity < 0 ||
+      pb.characterPity > 89
+    ) {
       errors.push(`Character pity must be between 0 and 89 (received ${pb.characterPity}).`);
     }
-    if (typeof pb.weaponPity !== 'number' || pb.weaponPity < 0 || pb.weaponPity > 79) {
+    if (
+      typeof pb.weaponPity !== 'number' ||
+      !Number.isFinite(pb.weaponPity) ||
+      pb.weaponPity < 0 ||
+      pb.weaponPity > 79
+    ) {
       errors.push(`Weapon pity must be between 0 and 79 (received ${pb.weaponPity}).`);
     }
-    if (typeof pb.weaponFatePoints !== 'number' || pb.weaponFatePoints < 0 || pb.weaponFatePoints > 1) {
+    if (
+      typeof pb.weaponFatePoints !== 'number' ||
+      !Number.isFinite(pb.weaponFatePoints) ||
+      (pb.weaponFatePoints !== 0 && pb.weaponFatePoints !== 1)
+    ) {
       errors.push(`Weapon Fate Points must be 0 or 1 (received ${pb.weaponFatePoints}).`);
     }
     if (pb.consecutiveLossCount !== undefined) {
-      if (typeof pb.consecutiveLossCount !== 'number' || pb.consecutiveLossCount < 0 || pb.consecutiveLossCount > 5) {
+      if (
+        typeof pb.consecutiveLossCount !== 'number' ||
+        !Number.isFinite(pb.consecutiveLossCount) ||
+        pb.consecutiveLossCount < 0 ||
+        pb.consecutiveLossCount > 5
+      ) {
         errors.push(`Consecutive loss count must be between 0 and 5.`);
       }
     }
@@ -152,19 +219,28 @@ export function importAccountBackup(backup: CelestiaBackupData): { success: bool
     // Safety: snapshot current state before overwriting
     createSafetySnapshot('celestia_backup_pre_restore');
 
-    // Overwrite stored state
-    saveRoster(backup.roster || []);
+    // Overwrite stored state:
+    // IMPORTANT: saveProfiles internally calls saveRoster(Object.keys(profiles)),
+    // so save profiles FIRST, then explicitly save backup.roster to ensure
+    // characters with default profiles in backup.roster are not wiped out!
     saveProfiles(backup.profiles || {});
+    saveRoster(backup.roster || Object.keys(backup.profiles || {}));
     saveWeapons(backup.rawWeapons || []);
     saveArtifacts(backup.rawArtifacts || []);
     savePullBudget(backup.pullBudget);
 
     if (backup.abyssCycleId) {
       saveAbyssCycleId(backup.abyssCycleId);
+    } else {
+      saveAbyssCycleId(DEFAULT_ACTIVE_ABYSS_CYCLE_ID);
     }
+
     if (backup.customAbyssConfig) {
       saveCustomAbyss(backup.customAbyssConfig);
+    } else if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('celestia_v2_custom_abyss');
     }
+
     setDemoModeEnabled(Boolean(backup.demoMode));
 
     if (typeof localStorage !== 'undefined') {

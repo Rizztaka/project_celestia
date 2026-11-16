@@ -262,6 +262,7 @@ interface RosterViewProps {
   isDemoMode?: boolean;
   onToggleDemoMode?: (enabled: boolean) => void;
   onResetAccount?: () => void;
+  onRestoreAccount?: () => void;
 }
 
 const ELEMENTS: ('All' | Element)[] = [
@@ -299,6 +300,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
   isDemoMode = false,
   onToggleDemoMode,
   onResetAccount,
+  onRestoreAccount,
 }) => {
   const [filterElement, setFilterElement] = useState<'All' | Element>('All');
   const [filterRegion, setFilterRegion] = useState<NationRegion>('All');
@@ -799,7 +801,15 @@ export const RosterView: React.FC<RosterViewProps> = ({
         isOpen={isBackupModalOpen}
         onClose={() => setIsBackupModalOpen(false)}
         onRestoreSuccess={() => {
-          window.location.reload();
+          if (onRestoreAccount) {
+            onRestoreAccount();
+          } else if (typeof window !== 'undefined' && window.location && typeof window.location.reload === 'function') {
+            try {
+              window.location.reload();
+            } catch {
+              // Ignore in environments where reload is unavailable
+            }
+          }
         }}
       />
     </div>

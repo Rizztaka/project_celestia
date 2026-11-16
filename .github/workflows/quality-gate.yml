@@ -39,4 +39,6 @@ jobs:
         run: node scripts/generate-reference.cjs
 
       - name: Ensure clean working tree (no untracked diffs or artifacts)
-        run: git diff --exit-code
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"

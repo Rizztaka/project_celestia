@@ -19,7 +19,8 @@ import {
 import { fetchShowcaseFromEnka } from './services/enka';
 import type { OwnedCharacterProfile, OwnedWeapon } from './types/genshin';
 import { getWeaponByKey } from './data/weapons';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Database } from 'lucide-react';
+import { AccountBackupModal } from './components/AccountBackupModal';
 
 function createRetryableLazy<T extends React.ComponentType<any>>(
   loader: () => Promise<{ default: T }>,
@@ -96,6 +97,7 @@ export const App: React.FC = () => {
   const [profiles, setProfiles] = useState<Record<string, OwnedCharacterProfile>>(getSavedProfiles);
   const [weapons, setWeapons] = useState<OwnedWeapon[]>(getSavedWeapons);
   const [isArmoryOpen, setIsArmoryOpen] = useState<boolean>(false);
+  const [isBackupModalOpen, setIsBackupModalOpen] = useState<boolean>(false);
   const [isDemoMode, setIsDemoMode] = useState<boolean>(isDemoModeEnabled);
   const [uid, setUidState] = useState<string>(getSavedUid);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
@@ -103,6 +105,14 @@ export const App: React.FC = () => {
     type: 'success' | 'error';
     message: string;
   } | null>(null);
+
+  const handleRestoreAccount = () => {
+    setProfiles(getSavedProfiles());
+    setWeapons(getSavedWeapons());
+    setIsDemoMode(isDemoModeEnabled());
+    setUidState(getSavedUid());
+    handleResetViews();
+  };
 
   // Derived owned character IDs list
   const ownedIds = useMemo(() => Object.keys(profiles), [profiles]);
@@ -373,6 +383,7 @@ export const App: React.FC = () => {
                       isDemoMode={isDemoMode}
                       onToggleDemoMode={handleToggleDemoMode}
                       onResetAccount={handleResetAccount}
+                      onRestoreAccount={handleRestoreAccount}
                     />
                   )}
                 </>
@@ -396,9 +407,27 @@ export const App: React.FC = () => {
         </Suspense>
       )}
 
+      {/* Global Account Backup & Restore Modal */}
+      {isBackupModalOpen && (
+        <AccountBackupModal
+          isOpen={isBackupModalOpen}
+          onClose={() => setIsBackupModalOpen(false)}
+          onRestoreSuccess={handleRestoreAccount}
+        />
+      )}
+
       {/* Footer */}
       <footer className="border-t border-[#1c2030] bg-[#0c0d13] py-6 mt-12 text-center text-xs text-zinc-500">
-        <div className="max-w-7xl mx-auto px-4 space-y-1">
+        <div className="max-w-7xl mx-auto px-4 space-y-2">
+          <div className="flex items-center justify-center gap-4">
+            <button
+              onClick={() => setIsBackupModalOpen(true)}
+              className="text-xs text-purple-400 hover:text-purple-300 transition-colors cursor-pointer flex items-center gap-1.5"
+            >
+              <Database className="w-3.5 h-3.5" />
+              <span>Backup & Restore Account</span>
+            </button>
+          </div>
           <p className="text-zinc-400 font-medium">
             Celestia v2 · Built for Speed & Accuracy. 100% Client-Side. Zero Backend Delays.
           </p>

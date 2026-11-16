@@ -35,8 +35,10 @@ export function createSafetySnapshot(snapshotKey: string): boolean {
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && (key.startsWith('celestia_') || KNOWN_STORAGE_KEYS.includes(key as any))) {
-        // Do not nest snapshots inside snapshots
-        if (key === snapshotKey || key.startsWith('celestia_backup_')) continue;
+        // Do not nest snapshots inside snapshots or allow prototype pollution keys
+        if (key === snapshotKey || key.startsWith('celestia_backup_') || key === '__proto__' || key === 'constructor' || key === 'prototype') {
+          continue;
+        }
         const val = localStorage.getItem(key);
         if (val !== null) {
           snapshot[key] = val;
@@ -57,10 +59,29 @@ export function rollbackToBackup(backupKey: string): boolean {
     const raw = localStorage.getItem(backupKey);
     if (!raw) return false;
     const parsed = JSON.parse(raw);
-    if (!parsed || typeof parsed !== 'object') return false;
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return false;
 
-    // Restore each key-value pair from the snapshot
+    // 1. Collect all current celestia keys in localStorage before mutation
+    const currentKeys: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && (key.startsWith('celestia_') || KNOWN_STORAGE_KEYS.includes(key as any))) {
+        if (!key.startsWith('celestia_backup_')) {
+          currentKeys.push(key);
+        }
+      }
+    }
+
+    // 2. Remove keys that were added after the snapshot was taken
+    for (const key of currentKeys) {
+      if (!Object.prototype.hasOwnProperty.call(parsed, key)) {
+        localStorage.removeItem(key);
+      }
+    }
+
+    // 3. Restore each key-value pair from the snapshot
     for (const [key, value] of Object.entries(parsed)) {
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue;
       if (typeof value === 'string') {
         localStorage.setItem(key, value);
       }
@@ -202,6 +223,8 @@ export function migrateStorageIfNeeded(): MigrationResult {
     };
   } catch (e) {
     console.error('Storage migration failed:', e);
+    // Safely attempt rollback if snapshot exists
+    rollbackToBackup('celestia_backup_v1');
     return {
       migrated: false,
       fromVersion: 0,

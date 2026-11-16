@@ -82,4 +82,21 @@ describe('ErrorBoundary Component', () => {
     expect(typeof report.rosterCount).toBe('number');
     expect(typeof report.weaponCount).toBe('number');
   });
+
+  it('sanitizes user uid query parameters from the diagnostic report url', () => {
+    vi.stubGlobal('window', {
+      location: {
+        href: 'https://celestia.genshin.dev/?tab=roster&uid=800123456',
+      },
+    });
+
+    const boundary = new ErrorBoundary({ children: <div>Child</div> });
+    boundary.state = { hasError: true, error: new Error('Simulated failure') };
+
+    const report = boundary.generateErrorReport();
+    expect(report.url).toContain('uid=%5BREDACTED%5D');
+    expect(report.url).not.toContain('800123456');
+
+    vi.unstubAllGlobals();
+  });
 });

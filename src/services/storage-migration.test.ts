@@ -150,9 +150,10 @@ describe('Storage Schema Versioning & Non-Destructive Migration Engine', () => {
     expect(snapshotOk).toBe(true);
     expect(localStorage.getItem('celestia_test_snapshot')).not.toBeNull();
 
-    // Mutate state
+    // Mutate state and add a new key that was NOT in the snapshot
     localStorage.setItem('celestia_v2_active_uid', '999999999');
     localStorage.setItem('celestia_v2_owned_roster', JSON.stringify(['Furina', 'Bennett']));
+    localStorage.setItem('celestia_v2_custom_abyss', JSON.stringify({ custom: true }));
 
     // Rollback
     const rollbackOk = rollbackToBackup('celestia_test_snapshot');
@@ -160,6 +161,24 @@ describe('Storage Schema Versioning & Non-Destructive Migration Engine', () => {
 
     expect(localStorage.getItem('celestia_v2_active_uid')).toBe('800000001');
     expect(JSON.parse(localStorage.getItem('celestia_v2_owned_roster')!)).toEqual(['Mavuika']);
+    // Newly introduced keys must be completely removed upon rollback
+    expect(localStorage.getItem('celestia_v2_custom_abyss')).toBeNull();
+  });
+
+  it('rejects prototype pollution attempts during rollback', () => {
+    localStorage.setItem(
+      'celestia_malicious_snapshot',
+      JSON.stringify({
+        celestia_v2_active_uid: '123456789',
+        __proto__: { polluted: true },
+        constructor: { evil: true },
+      }),
+    );
+
+    const rollbackOk = rollbackToBackup('celestia_malicious_snapshot');
+    expect(rollbackOk).toBe(true);
+    expect(localStorage.getItem('celestia_v2_active_uid')).toBe('123456789');
+    expect((Object.prototype as any).polluted).toBeUndefined();
   });
 
   it('returns false when attempting to rollback from non-existent backup key', () => {

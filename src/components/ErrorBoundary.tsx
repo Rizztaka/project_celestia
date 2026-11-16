@@ -56,13 +56,27 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       // ignore
     }
 
+    // Sanitize URL to strip sensitive query parameters like UID
+    let sanitizedUrl = '';
+    try {
+      if (typeof window !== 'undefined' && window.location?.href) {
+        const parsedUrl = new URL(window.location.href);
+        if (parsedUrl.searchParams.has('uid')) {
+          parsedUrl.searchParams.set('uid', '[REDACTED]');
+        }
+        sanitizedUrl = parsedUrl.toString();
+      }
+    } catch {
+      sanitizedUrl = typeof window !== 'undefined' ? window.location?.href || '' : '';
+    }
+
     return {
       timestamp: new Date().toISOString(),
       error: this.state.error?.message || 'Unknown Error',
       stack: this.state.error?.stack || '',
       componentStack: this.state.errorInfo?.componentStack || '',
       userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Node/Test',
-      url: typeof window !== 'undefined' ? window.location?.href || '' : '',
+      url: sanitizedUrl,
       schemaVersion,
       rosterCount,
       weaponCount,
@@ -97,7 +111,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   };
 
   private handleReload = () => {
-    window.location.reload();
+    try {
+      if (typeof window !== 'undefined' && window.location && typeof window.location.reload === 'function') {
+        window.location.reload();
+      }
+    } catch (err) {
+      console.warn('Window reload failed:', err);
+    }
   };
 
   public render() {

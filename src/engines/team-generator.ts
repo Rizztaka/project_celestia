@@ -5,11 +5,12 @@ import type {
   OwnedWeapon,
 } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
+import { getWeaponByKey } from '../data/weapons';
 import { synthesizeTeamRotation } from './rotation-synthesizer';
 import { assignOptimalTeamWeapons } from './weapon-solver';
 import { getSavedWeapons } from '../services/storage';
 
-interface ArchetypeTemplate {
+export interface ArchetypeTemplate {
   name: string;
   archetype: string;
   leadTags: string[];
@@ -102,6 +103,132 @@ const TEMPLATES: ArchetypeTemplate[] = [
     baseSynergy: 94,
   },
 ];
+
+/**
+ * Evaluates candidate character suitability for a team slot across 4 dimensions:
+ * 1. Role match (up to 30 pts)
+ * 2. Elemental resonance & archetype elemental requirements (up to 25 pts)
+ * 3. Synergy tag overlap with template (up to 25 pts)
+ * 4. Armory weapon availability & profile investment (up to 20 pts)
+ * Total: 0–100 pts
+ */
+export function scoreCandidateForSlot(
+  candidate: Character,
+  role: 'Buffer' | 'SubDPS' | 'Sustain',
+  template: ArchetypeTemplate,
+  currentMembers: Character[],
+  weaponBag: OwnedWeapon[],
+  profiles?: Record<string, OwnedCharacterProfile>,
+): number {
+  let roleScore = 0;
+  let resonanceScore = 0;
+  let tagScore = 0;
+  let weaponScore = 0;
+
+  // 1. Role match (up to 30 pts)
+  if (role === 'Buffer') {
+    if (candidate.roles.includes('Buffer/Shred')) {
+      roleScore += 20;
+    }
+    const bufferTags = [
+      'Universal-Buffer',
+      'VV',
+      'Cinder-City',
+      'ATK-Buffer',
+      'EM-Buffer',
+      'RES-Shred',
+      'Huge-ATK-Buff',
+    ];
+    if (candidate.tags.some((t) => bufferTags.includes(t))) {
+      roleScore += 10;
+    }
+  } else if (role === 'SubDPS') {
+    if (candidate.roles.includes('Off-Field DPS')) {
+      roleScore += 25;
+    } else if (candidate.roles.includes('On-Field DPS')) {
+      roleScore += 10;
+    }
+    const subDpsTags = ['Hydro-App', 'Electro-Battery', 'Dendro-Core', 'Nightsoul', 'Off-Field'];
+    if (candidate.tags.some((t) => subDpsTags.includes(t))) {
+      roleScore += 5;
+    }
+  } else if (role === 'Sustain') {
+    if (candidate.roles.includes('Sustain')) {
+      roleScore += 25;
+    }
+    const sustainTags = ['Healer', 'Shield', 'Team-Healer'];
+    if (candidate.tags.some((t) => sustainTags.includes(t))) {
+      roleScore += 5;
+    }
+  }
+  roleScore = Math.min(30, Math.max(0, roleScore));
+
+  // 2. Elemental resonance & required elements (up to 25 pts)
+  if (template.requiredElements && template.requiredElements.includes(candidate.element)) {
+    const isMissingRequired = !currentMembers.some((m) => m.element === candidate.element);
+    resonanceScore += isMissingRequired ? 20 : 10;
+  }
+  const sameElementCount = currentMembers.filter((m) => m.element === candidate.element).length;
+  if (sameElementCount === 1) {
+    // Adding candidate creates a 2-member resonance
+    resonanceScore += 5;
+  }
+  resonanceScore = Math.min(25, Math.max(0, resonanceScore));
+
+  // 3. Synergy tag overlap (up to 25 pts)
+  if (template.supportTags && template.supportTags.length > 0) {
+    let matchedCount = 0;
+    for (const tag of template.supportTags) {
+      if (candidate.tags.includes(tag)) {
+        matchedCount++;
+      }
+    }
+    tagScore += matchedCount * 7;
+  }
+  if (
+    candidate.tags.includes('VV') ||
+    candidate.tags.includes('Cinder-City') ||
+    candidate.tags.includes('Universal-Buffer')
+  ) {
+    tagScore += 6;
+  }
+  tagScore = Math.min(25, Math.max(0, tagScore));
+
+  // 4. Weapon availability & investment in armory (up to 20 pts)
+  weaponScore = 8; // Baseline class availability
+  if (weaponBag && weaponBag.length > 0) {
+    const matchingWeapons = weaponBag.filter((w) => {
+      const db = getWeaponByKey(w.key) || getWeaponByKey(w.name);
+      return db && db.weaponType === candidate.weapon;
+    });
+
+    if (matchingWeapons.length > 0) {
+      const has5Star = matchingWeapons.some((w) => {
+        const db = getWeaponByKey(w.key) || getWeaponByKey(w.name);
+        return db && db.rarity === 5;
+      });
+      const has4Star = matchingWeapons.some((w) => {
+        const db = getWeaponByKey(w.key) || getWeaponByKey(w.name);
+        return db && db.rarity === 4;
+      });
+
+      if (has5Star) {
+        weaponScore = 14;
+      } else if (has4Star) {
+        weaponScore = 10;
+      }
+    }
+  }
+
+  if (profiles && profiles[candidate.id]) {
+    const prof = profiles[candidate.id];
+    if (prof.level >= 80) weaponScore += 3;
+    if (prof.constellation > 0) weaponScore += 3;
+  }
+  weaponScore = Math.min(20, Math.max(0, weaponScore));
+
+  return Math.min(100, Math.max(0, roleScore + resonanceScore + tagScore + weaponScore));
+}
 
 function calculateResonance(members: Character[]): string[] {
   const counts: Record<string, number> = {};
@@ -298,6 +425,7 @@ function generateTeamsFromPool(
           archetype: 'Lunar-Bloom',
           members,
           synergyScore: neferMods.synergyScore,
+          compositionCompatibilityScore: neferMods.synergyScore,
           comfortScore: members.some((m) => m.roles.includes('Sustain')) ? 95 : 75,
           reasons: [
             'Nefer converts all blooms into high-velocity Seeds of Deceit.',
@@ -322,13 +450,18 @@ function generateTeamsFromPool(
     if (results.some((r) => r.archetype === template.archetype)) continue;
 
     // Find candidates matching lead tags or focus
+    const focusCanLead =
+      focus &&
+      (template.leadTags.some((tag) => focus.tags.includes(tag)) ||
+        (focus.roles.includes('On-Field DPS') &&
+          (!template.requiredElements || template.requiredElements.includes(focus.element))));
+
     const leadCandidates = pool.filter((c) => {
+      if (focusCanLead) {
+        return c.id === focus.id;
+      }
       if (focus && c.id === focus.id) {
-        return (
-          template.leadTags.some((tag) => c.tags.includes(tag)) ||
-          !template.requiredElements ||
-          template.requiredElements.includes(c.element)
-        );
+        return template.leadTags.some((tag) => c.tags.includes(tag));
       }
       return (
         template.leadTags.some((tag) => c.tags.includes(tag)) ||
@@ -349,43 +482,111 @@ function generateTeamsFromPool(
       // Gather complementary supports: Sub-DPS, Buffer, Sustain
       const others = pool.filter((c) => c.id !== lead.id);
 
-      // Find best buffer
-      const buffer =
-        others.find((c) => c.roles.includes('Buffer/Shred') && c.id !== lead.id) ||
-        others.find((c) => c.tags.includes('VV') || c.tags.includes('Cinder-City'));
-
-      // Find best off-field sub-dps
-      const subDps = others.find(
-        (c) =>
-          c.roles.includes('Off-Field DPS') &&
-          c.id !== lead.id &&
-          c.id !== buffer?.id &&
-          (template.requiredElements ? template.requiredElements.includes(c.element) : true),
-      );
-
-      // Find best sustain
-      const sustain = others.find(
-        (c) =>
-          c.roles.includes('Sustain') &&
-          c.id !== lead.id &&
-          c.id !== buffer?.id &&
-          c.id !== subDps?.id,
-      );
-
       const chosen: Character[] = [lead];
       if (focus && focus.id !== lead.id && !chosen.some((m) => m.id === focus.id)) {
         chosen.push(focus);
       }
-      if (subDps && !chosen.some((m) => m.id === subDps.id)) chosen.push(subDps);
-      if (buffer && !chosen.some((m) => m.id === buffer.id)) chosen.push(buffer);
-      if (sustain && !chosen.some((m) => m.id === sustain.id)) chosen.push(sustain);
 
-      // Fill up to 4 if needed
-      for (const candidate of others) {
+      // If template has requiredElements not yet in chosen, prioritize fulfilling them first
+      const missingElements = (template.requiredElements || []).filter(
+        (el) => !chosen.some((m) => m.element === el),
+      );
+
+      for (const missingEl of missingElements) {
         if (chosen.length >= 4) break;
-        if (!chosen.some((m) => m.id === candidate.id)) {
-          chosen.push(candidate);
+        const matchingCandidates = others
+          .filter((c) => !chosen.some((m) => m.id === c.id) && c.element === missingEl)
+          .map((c) => {
+            const sSub = scoreCandidateForSlot(c, 'SubDPS', template, chosen, weaponBag, rosterProfiles);
+            const sBuf = scoreCandidateForSlot(c, 'Buffer', template, chosen, weaponBag, rosterProfiles);
+            const sSus = scoreCandidateForSlot(c, 'Sustain', template, chosen, weaponBag, rosterProfiles);
+            return { character: c, score: Math.max(sSub, sBuf, sSus) };
+          })
+          .sort((a, b) => b.score - a.score);
+
+        if (matchingCandidates.length > 0) {
+          chosen.push(matchingCandidates[0].character);
         }
+      }
+
+      // Check missing roles
+      const needsSubDps = !chosen.some((m) => m.roles.includes('Off-Field DPS'));
+      const needsBuffer = !chosen.some(
+        (m) =>
+          m.roles.includes('Buffer/Shred') ||
+          m.tags.includes('VV') ||
+          m.tags.includes('Cinder-City') ||
+          m.tags.includes('Universal-Buffer'),
+      );
+      const needsSustain = !chosen.some((m) => m.roles.includes('Sustain'));
+
+      // Slot 1: Best Sub-DPS (Off-Field DPS enabler) if still needed
+      if (needsSubDps && chosen.length < 4) {
+        const subDpsCandidates = others
+          .filter((c) => !chosen.some((m) => m.id === c.id))
+          .map((c) => ({
+            character: c,
+            score: scoreCandidateForSlot(c, 'SubDPS', template, chosen, weaponBag, rosterProfiles),
+          }))
+          .sort((a, b) => b.score - a.score);
+
+        if (subDpsCandidates.length > 0 && subDpsCandidates[0].score >= 20) {
+          chosen.push(subDpsCandidates[0].character);
+        }
+      }
+
+      // Slot 2: Best Buffer / Shred if still needed
+      if (needsBuffer && chosen.length < 4) {
+        const bufferCandidates = others
+          .filter((c) => !chosen.some((m) => m.id === c.id))
+          .map((c) => ({
+            character: c,
+            score: scoreCandidateForSlot(c, 'Buffer', template, chosen, weaponBag, rosterProfiles),
+          }))
+          .sort((a, b) => b.score - a.score);
+
+        if (bufferCandidates.length > 0 && bufferCandidates[0].score >= 20) {
+          chosen.push(bufferCandidates[0].character);
+        }
+      }
+
+      // Slot 3: Best Sustain (Healer / Shielder) if still needed
+      if (needsSustain && chosen.length < 4) {
+        const sustainCandidates = others
+          .filter((c) => !chosen.some((m) => m.id === c.id))
+          .map((c) => ({
+            character: c,
+            score: scoreCandidateForSlot(c, 'Sustain', template, chosen, weaponBag, rosterProfiles),
+          }))
+          .sort((a, b) => b.score - a.score);
+
+        if (sustainCandidates.length > 0 && sustainCandidates[0].score >= 20) {
+          chosen.push(sustainCandidates[0].character);
+        }
+      }
+
+      // Fill remaining slots up to 4 if needed using best general score
+      while (chosen.length < 4) {
+        const remaining = others
+          .filter((c) => !chosen.some((m) => m.id === c.id))
+          .map((c) => {
+            const sSub = scoreCandidateForSlot(c, 'SubDPS', template, chosen, weaponBag, rosterProfiles);
+            const sBuf = scoreCandidateForSlot(c, 'Buffer', template, chosen, weaponBag, rosterProfiles);
+            const sSus = scoreCandidateForSlot(c, 'Sustain', template, chosen, weaponBag, rosterProfiles);
+            return { character: c, score: Math.max(sSub, sBuf, sSus) };
+          })
+          .sort((a, b) => b.score - a.score);
+
+        if (remaining.length === 0) break;
+        chosen.push(remaining[0].character);
+      }
+
+      // Ensure all required elements are present
+      if (
+        template.requiredElements &&
+        !template.requiredElements.every((el) => chosen.some((m) => m.element === el))
+      ) {
+        continue;
       }
 
       if (chosen.length === 4) {
@@ -399,6 +600,7 @@ function generateTeamsFromPool(
           archetype: template.archetype,
           members: chosen,
           synergyScore: constMods.synergyScore,
+          compositionCompatibilityScore: constMods.synergyScore,
           comfortScore: hasSustain ? 92 : 72,
           reasons: [
             `${lead.name} acts as the core ${lead.roles[0]} driving ${template.archetype}.`,

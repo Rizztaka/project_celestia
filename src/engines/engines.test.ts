@@ -1,11 +1,76 @@
 import { describe, it, expect } from 'vitest';
-import { generateBestTeams } from './team-generator';
+import { generateBestTeams, scoreCandidateForSlot } from './team-generator';
 import { evaluatePullRecommendations } from './pull-advisor';
 import { calculateArtifactStopPoint } from './artifact-stop';
 import { analyzeEndgameReadiness } from './endgame-helper';
 
 describe('Celestia v2 Core Engines', () => {
   describe('Team Generator (Speed + Accuracy)', () => {
+    it('prioritizes high-synergy candidates over arbitrary array order and exposes compositionCompatibilityScore', () => {
+      // Inverted order: put non-synergistic or weaker options before premier options
+      const invertedRoster = [
+        'HuTao',
+        'Amber',
+        'Dori',
+        'Barbara',
+        'KaedeharaKazuha',
+        'Xingqiu',
+        'Bennett',
+      ];
+      const teams = generateBestTeams(invertedRoster, 'HuTao');
+      const vape = teams.find((t) => t.archetype === 'Vaporize');
+      expect(vape).toBeDefined();
+
+      // Should have picked Xingqiu over Barbara for Hydro subDPS, and Bennett or Kazuha over Amber/Dori
+      const memberIds = vape!.members.map((m) => m.id);
+      expect(memberIds).toContain('Xingqiu');
+      expect(memberIds).toContain('HuTao');
+      expect(memberIds).not.toContain('Amber');
+      expect(memberIds).not.toContain('Dori');
+
+      // Verify compositionCompatibilityScore is populated and equals synergyScore
+      expect(vape!.compositionCompatibilityScore).toBeDefined();
+      expect(vape!.compositionCompatibilityScore).toBe(vape!.synergyScore);
+    });
+
+    it('scoreCandidateForSlot rates candidates based on role, resonance, tags, and weapons', () => {
+      const mockTemplate = {
+        name: 'Vaporize Ascendance',
+        archetype: 'Vaporize',
+        leadTags: ['Vaporize'],
+        requiredElements: ['Pyro', 'Hydro'],
+        supportTags: ['Hydro-App', 'VV', 'Cinder-City', 'Huge-ATK-Buff', 'Universal-Buffer'],
+        rotation: '',
+        baseSynergy: 94,
+      };
+
+      const kazuha = {
+        id: 'KaedeharaKazuha',
+        name: 'Kaedehara Kazuha',
+        element: 'Anemo' as const,
+        weapon: 'Sword' as const,
+        rarity: 5 as const,
+        roles: ['Buffer/Shred' as const],
+        tags: ['VV', 'Universal-Buffer', 'Crowd-Control'],
+      };
+
+      const amber = {
+        id: 'Amber',
+        name: 'Amber',
+        element: 'Pyro' as const,
+        weapon: 'Bow' as const,
+        rarity: 4 as const,
+        roles: ['Off-Field DPS' as const],
+        tags: ['Taunt'],
+      };
+
+      const scoreKazuha = scoreCandidateForSlot(kazuha, 'Buffer', mockTemplate, [], []);
+      const scoreAmber = scoreCandidateForSlot(amber, 'Buffer', mockTemplate, [], []);
+
+      expect(scoreKazuha).toBeGreaterThan(scoreAmber);
+      expect(scoreKazuha).toBeGreaterThan(50);
+    });
+
     it('generates a premier Lunar-Bloom team when Nefer is owned', () => {
       const owned = ['Nefer', 'Furina', 'Nahida', 'KukiShinobu', 'Xingqiu'];
       const teams = generateBestTeams(owned, 'Nefer');

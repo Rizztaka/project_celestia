@@ -260,6 +260,7 @@ export interface TeamRecommendation {
   archetype: string;
   members: Character[];
   synergyScore: number;
+  compositionCompatibilityScore?: number;
   comfortScore: number;
   reasons: string[];
   rotation: string;

@@ -112,6 +112,7 @@ export interface Character {
   roles: CharacterRole[];
   // Synergy tags for team archetypes & reaction chains
   tags: string[];
+  isOwned?: boolean;
   icon?: string;
   sideIcon?: string;
   description?: string;
@@ -264,6 +265,7 @@ export interface TeamRecommendation {
   steppedRotation?: SynthesizedTeamRotation;
   resonance: string[];
   weaponAssignments?: TeamWeaponAssignment[];
+  isTheoretical?: boolean;
 }
 
 export interface PullAdvice {

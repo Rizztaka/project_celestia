@@ -72,6 +72,45 @@ describe('Celestia v2 Core Engines', () => {
       const eulaTeam = teamsWithEula.find((t) => t.members.some((m) => m.id === 'Eula')) || teamsWithEula[0];
       expect(eulaTeam.reasons.some((r) => r.includes('Caution: Bennett C6 Pyro Infusion overrides'))).toBe(true);
     });
+
+    it('enforces strict ownership and returns empty array when fewer than 4 characters owned', () => {
+      // 0 owned
+      const emptyTeams = generateBestTeams([]);
+      expect(emptyTeams).toEqual([]);
+
+      // 1-3 owned
+      const partialTeams = generateBestTeams(['Furina', 'Neuvillette']);
+      expect(partialTeams).toEqual([]);
+
+      // With allowCatalogFallback = true, returns theoretical catalog teams
+      const fallbackTeams = generateBestTeams(['Furina', 'Neuvillette'], undefined, undefined, undefined, true);
+      expect(fallbackTeams.length).toBeGreaterThan(0);
+      expect(fallbackTeams[0].isTheoretical).toBe(true);
+
+      // Owned characters should have isOwned: true, unowned should have isOwned: false
+      const sampleTeam = fallbackTeams[0];
+      for (const member of sampleTeam.members) {
+        if (member.id === 'Furina' || member.id === 'Neuvillette') {
+          expect(member.isOwned).toBe(true);
+        } else {
+          expect(member.isOwned).toBe(false);
+        }
+      }
+    });
+
+    it('strictly enforces focus-character ownership constraint', () => {
+      // 4 owned, but focus character is unowned
+      const owned = ['Furina', 'Neuvillette', 'KaedeharaKazuha', 'Zhongli'];
+      const teamsUnownedFocus = generateBestTeams(owned, 'HuTao');
+      expect(teamsUnownedFocus).toEqual([]);
+
+      // 4 owned, focus character IS owned -> every team MUST contain the focus character
+      const teamsOwnedFocus = generateBestTeams(owned, 'Neuvillette');
+      expect(teamsOwnedFocus.length).toBeGreaterThan(0);
+      for (const team of teamsOwnedFocus) {
+        expect(team.members.some((m) => m.id === 'Neuvillette')).toBe(true);
+      }
+    });
   });
 
   describe('Pull Advisor', () => {

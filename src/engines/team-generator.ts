@@ -92,6 +92,15 @@ const TEMPLATES: ArchetypeTemplate[] = [
     rotation: 'Sub-DPS E Q → Xianyun E Q (Jump buff + healing) → Bennett Q → Carry continuous high-jump plunge attacks',
     baseSynergy: 92,
   },
+  {
+    name: 'Tidal Hypercarry',
+    archetype: 'Hydro Hypercarry',
+    leadTags: ['Hydro', 'Catalyst', 'On-Field DPS'],
+    requiredElements: ['Hydro'],
+    supportTags: ['Universal-Buffer', 'VV', 'Team-Healer', 'Hydro-App'],
+    rotation: 'Support Skill/Burst → Buffer VV Shred / Shield → Hydro enabler → Hydro Carry continuous attacks',
+    baseSynergy: 94,
+  },
 ];
 
 function calculateResonance(members: Character[]): string[] {
@@ -197,13 +206,33 @@ export function generateBestTeams(
   focusCharacterId?: string,
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
   ownedWeapons?: OwnedWeapon[],
+  allowCatalogFallback: boolean = false,
 ): TeamRecommendation[] {
-  const pool = CHARACTERS.filter((c) => availableIds.includes(c.id));
-  if (pool.length < 4) {
-    // If fewer than 4 owned, fallback to using all characters for guidance
-    return generateTeamsFromPool(CHARACTERS, focusCharacterId, rosterProfiles, ownedWeapons);
+  const ownedSet = new Set(availableIds);
+  const pool = CHARACTERS.filter((c) => ownedSet.has(c.id));
+
+  // If focus character is specified and not owned:
+  if (focusCharacterId && !ownedSet.has(focusCharacterId) && !allowCatalogFallback) {
+    return [];
   }
-  return generateTeamsFromPool(pool, focusCharacterId, rosterProfiles, ownedWeapons);
+
+  if (pool.length < 4) {
+    if (!allowCatalogFallback) {
+      return [];
+    }
+    const catalogPool = CHARACTERS.map((c) => ({
+      ...c,
+      isOwned: ownedSet.has(c.id),
+    }));
+    const teams = generateTeamsFromPool(catalogPool, focusCharacterId, rosterProfiles, ownedWeapons);
+    return teams.map((t) => ({ ...t, isTheoretical: true }));
+  }
+
+  const ownedPool = pool.map((c) => ({
+    ...c,
+    isOwned: true,
+  }));
+  return generateTeamsFromPool(ownedPool, focusCharacterId, rosterProfiles, ownedWeapons);
 }
 
 export const generateTeamRecommendations = generateBestTeams;
@@ -284,14 +313,29 @@ function generateTeamsFromPool(
   for (const template of TEMPLATES) {
     if (results.some((r) => r.archetype === template.archetype)) continue;
 
-    // Find candidates matching lead tags
-    const leadCandidates = pool.filter((c) =>
-      template.leadTags.some((tag) => c.tags.includes(tag)),
-    );
+    // Find candidates matching lead tags or focus
+    const leadCandidates = pool.filter((c) => {
+      if (focus && c.id === focus.id) {
+        return (
+          template.leadTags.some((tag) => c.tags.includes(tag)) ||
+          !template.requiredElements ||
+          template.requiredElements.includes(c.element)
+        );
+      }
+      return (
+        template.leadTags.some((tag) => c.tags.includes(tag)) ||
+        (c.roles.includes('On-Field DPS') &&
+          (!template.requiredElements || template.requiredElements.includes(c.element)))
+      );
+    });
 
     for (const lead of leadCandidates) {
-      if (focus && lead.id !== focus.id && !template.supportTags.some((t) => focus.tags.includes(t))) {
-        continue;
+      if (focus && lead.id !== focus.id) {
+        const canFitAsSupport =
+          template.supportTags.some((t) => focus.tags.includes(t)) ||
+          (template.requiredElements ? template.requiredElements.includes(focus.element) : false) ||
+          focus.roles.some((r) => ['Off-Field DPS', 'Buffer/Shred', 'Sustain'].includes(r));
+        if (!canFitAsSupport) continue;
       }
 
       // Gather complementary supports: Sub-DPS, Buffer, Sustain
@@ -321,14 +365,17 @@ function generateTeamsFromPool(
       );
 
       const chosen: Character[] = [lead];
-      if (subDps) chosen.push(subDps);
-      if (buffer && !chosen.includes(buffer)) chosen.push(buffer);
-      if (sustain && !chosen.includes(sustain)) chosen.push(sustain);
+      if (focus && focus.id !== lead.id && !chosen.some((m) => m.id === focus.id)) {
+        chosen.push(focus);
+      }
+      if (subDps && !chosen.some((m) => m.id === subDps.id)) chosen.push(subDps);
+      if (buffer && !chosen.some((m) => m.id === buffer.id)) chosen.push(buffer);
+      if (sustain && !chosen.some((m) => m.id === sustain.id)) chosen.push(sustain);
 
       // Fill up to 4 if needed
       for (const candidate of others) {
         if (chosen.length >= 4) break;
-        if (!chosen.includes(candidate)) {
+        if (!chosen.some((m) => m.id === candidate.id)) {
           chosen.push(candidate);
         }
       }
@@ -362,6 +409,10 @@ function generateTeamsFromPool(
         break; // One strong variant per archetype
       }
     }
+  }
+
+  if (focus) {
+    return results.filter((r) => r.members.some((m) => m.id === focus.id)).slice(0, 6);
   }
 
   return results.slice(0, 6);

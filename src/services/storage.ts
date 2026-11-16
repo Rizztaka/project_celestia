@@ -11,6 +11,7 @@ const UID_KEY = 'celestia_v2_active_uid';
 const PULL_BUDGET_KEY = 'celestia_v2_pull_budget';
 const ABYSS_CYCLE_ID_KEY = 'celestia_v2_abyss_cycle_id';
 const CUSTOM_ABYSS_KEY = 'celestia_v2_custom_abyss';
+const DEMO_MODE_KEY = 'celestia_v2_demo_mode';
 
 export const DEFAULT_PULL_BUDGET: PullBudgetState = {
   primogems: 0,
@@ -21,8 +22,8 @@ export const DEFAULT_PULL_BUDGET: PullBudgetState = {
   weaponFatePoints: 0,
 };
 
-// Default starter roster so new users have an instant rich experience
-export const DEFAULT_ROSTER = [
+// Calibrated demo starter roster for testing and exploration
+export const DEMO_ROSTER = [
   'Nefer',
   'Xilonen',
   'Mavuika',
@@ -36,16 +37,68 @@ export const DEFAULT_ROSTER = [
   'Diona',
 ];
 
+// Truthful accounts: first-time users start with an authentic empty roster (0 characters)
+export const DEFAULT_ROSTER: string[] = [];
+
+export function isDemoModeEnabled(): boolean {
+  try {
+    if (typeof localStorage === 'undefined') return false;
+    return localStorage.getItem(DEMO_MODE_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+export function setDemoModeEnabled(enabled: boolean): void {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(DEMO_MODE_KEY, enabled ? 'true' : 'false');
+  } catch (e) {
+    console.error('Failed to save demo mode state:', e);
+  }
+}
+
+export function getDemoProfiles(): Record<string, OwnedCharacterProfile> {
+  const baseline: Record<string, OwnedCharacterProfile> = {};
+  for (const id of DEMO_ROSTER) {
+    baseline[id] = {
+      id,
+      level: 90,
+      constellation: 0,
+    };
+  }
+  return baseline;
+}
+
+export function resetAccountData(): void {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.removeItem(ROSTER_KEY);
+    localStorage.removeItem(PROFILES_KEY);
+    localStorage.removeItem(WEAPONS_KEY);
+    localStorage.removeItem(ARTIFACTS_KEY);
+    localStorage.setItem(DEMO_MODE_KEY, 'false');
+  } catch (e) {
+    console.error('Failed to reset account data:', e);
+  }
+}
+
 export function getSavedRoster(): string[] {
   try {
-    if (typeof localStorage === 'undefined') return DEFAULT_ROSTER;
+    if (typeof localStorage === 'undefined') {
+      return isDemoModeEnabled() ? DEMO_ROSTER : DEFAULT_ROSTER;
+    }
     const raw = localStorage.getItem(ROSTER_KEY);
-    if (raw === null) return DEFAULT_ROSTER;
+    if (raw === null) {
+      return isDemoModeEnabled() ? DEMO_ROSTER : DEFAULT_ROSTER;
+    }
     const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return DEFAULT_ROSTER;
+    if (!Array.isArray(parsed)) {
+      return isDemoModeEnabled() ? DEMO_ROSTER : DEFAULT_ROSTER;
+    }
     return parsed.filter((id): id is string => typeof id === 'string' && id.trim().length > 0);
   } catch {
-    return DEFAULT_ROSTER;
+    return isDemoModeEnabled() ? DEMO_ROSTER : DEFAULT_ROSTER;
   }
 }
 
@@ -84,17 +137,11 @@ export function getSavedProfiles(): Record<string, OwnedCharacterProfile> {
     console.error('Failed to read profiles from localStorage:', e);
   }
 
-  // Fallback for first-time uninitialized visits: build baseline from saved/default roster
-  const fallbackIds = getSavedRoster();
-  const baseline: Record<string, OwnedCharacterProfile> = {};
-  for (const id of fallbackIds) {
-    baseline[id] = {
-      id,
-      level: 90,
-      constellation: 0,
-    };
+  // Fallback for first-time uninitialized visits
+  if (isDemoModeEnabled()) {
+    return getDemoProfiles();
   }
-  return baseline;
+  return {};
 }
 
 export function saveProfiles(profiles: Record<string, OwnedCharacterProfile>): void {
@@ -131,7 +178,7 @@ export function saveArtifacts(artifacts: any[]): boolean {
   }
 }
 
-export const DEFAULT_WEAPONS: OwnedWeapon[] = [
+export const DEMO_WEAPONS: OwnedWeapon[] = [
   {
     id: 'starter_prototype_rancour',
     key: 'PrototypeRancour',
@@ -206,13 +253,15 @@ export const DEFAULT_WEAPONS: OwnedWeapon[] = [
   },
 ];
 
+export const DEFAULT_WEAPONS: OwnedWeapon[] = [];
+
 export function getSavedWeapons(): OwnedWeapon[] {
   try {
     if (typeof localStorage !== 'undefined') {
       const raw = localStorage.getItem(WEAPONS_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           return (parsed as OwnedWeapon[]).map((w) => {
             const canonical = getWeaponByKey(w.key) || getWeaponByKey(w.name);
             if (!canonical) return w;
@@ -256,8 +305,107 @@ export function getSavedWeapons(): OwnedWeapon[] {
     return extractedWeapons;
   }
 
-  // Fallback 2: Default starter weapons
+  // Fallback 2: If Demo Mode is enabled, return starter weapons
+  if (isDemoModeEnabled()) {
+    return DEMO_WEAPONS;
+  }
+
+  // Otherwise return authentic empty armory
   return DEFAULT_WEAPONS;
+}
+
+export function equipWeaponToCharacter(
+  weaponId: string,
+  characterId: string,
+  currentWeapons: OwnedWeapon[],
+  currentProfiles: Record<string, OwnedCharacterProfile>,
+): {
+  updatedWeapons: OwnedWeapon[];
+  updatedProfiles: Record<string, OwnedCharacterProfile>;
+  transferredFrom?: string;
+} {
+  const targetWeapon = currentWeapons.find((w) => w.id === weaponId);
+  if (!targetWeapon) {
+    return {
+      updatedWeapons: currentWeapons,
+      updatedProfiles: currentProfiles,
+    };
+  }
+
+  const transferredFrom =
+    targetWeapon.location && targetWeapon.location !== characterId
+      ? targetWeapon.location
+      : undefined;
+
+  const canonical = getWeaponByKey(targetWeapon.key) || getWeaponByKey(targetWeapon.name);
+  const equippedWeaponData = {
+    key: canonical?.key || targetWeapon.key,
+    name: canonical?.name || targetWeapon.name,
+    level: targetWeapon.level,
+    refinement: targetWeapon.refinement,
+    rarity: canonical?.rarity || targetWeapon.rarity || 4,
+    ascension: targetWeapon.ascension,
+  };
+
+  // 1. Update weapons list:
+  // - weaponId gets equipped to characterId
+  // - Any weapon previously equipped on characterId is unassigned back to bag
+  const updatedWeapons = currentWeapons.map((w) => {
+    if (w.id === weaponId) {
+      return { ...w, location: characterId };
+    }
+    if (w.location === characterId && w.id !== weaponId) {
+      return { ...w, location: undefined };
+    }
+    return w;
+  });
+
+  // 2. Update profiles:
+  const updatedProfiles: Record<string, OwnedCharacterProfile> = { ...currentProfiles };
+
+  if (transferredFrom && updatedProfiles[transferredFrom]) {
+    updatedProfiles[transferredFrom] = {
+      ...updatedProfiles[transferredFrom],
+      weapon: undefined,
+    };
+  }
+
+  const existingProfile = updatedProfiles[characterId] || {
+    id: characterId,
+    level: 90,
+    constellation: 0,
+  };
+  updatedProfiles[characterId] = {
+    ...existingProfile,
+    weapon: equippedWeaponData,
+  };
+
+  return {
+    updatedWeapons,
+    updatedProfiles,
+    transferredFrom,
+  };
+}
+
+export function unequipWeaponFromCharacter(
+  characterId: string,
+  currentWeapons: OwnedWeapon[],
+  currentProfiles: Record<string, OwnedCharacterProfile>,
+): {
+  updatedWeapons: OwnedWeapon[];
+  updatedProfiles: Record<string, OwnedCharacterProfile>;
+} {
+  const updatedWeapons = currentWeapons.map((w) =>
+    w.location === characterId ? { ...w, location: undefined } : w,
+  );
+  const updatedProfiles: Record<string, OwnedCharacterProfile> = { ...currentProfiles };
+  if (updatedProfiles[characterId]) {
+    updatedProfiles[characterId] = {
+      ...updatedProfiles[characterId],
+      weapon: undefined,
+    };
+  }
+  return { updatedWeapons, updatedProfiles };
 }
 
 export function saveWeapons(weapons: OwnedWeapon[]): boolean {

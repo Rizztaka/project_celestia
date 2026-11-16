@@ -10,6 +10,14 @@ import {
   saveWeapons,
   DEFAULT_ROSTER,
   DEFAULT_WEAPONS,
+  DEMO_ROSTER,
+  DEMO_WEAPONS,
+  isDemoModeEnabled,
+  setDemoModeEnabled,
+  getDemoProfiles,
+  resetAccountData,
+  equipWeaponToCharacter,
+  unequipWeaponFromCharacter,
   getSavedPullBudget,
   savePullBudget,
   DEFAULT_PULL_BUDGET,
@@ -41,15 +49,59 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
     vi.stubGlobal('localStorage', mockLocalStorage);
   });
 
-  it('returns DEFAULT_ROSTER on brand-new uninitialized visit', () => {
+  it('returns empty collections on brand-new uninitialized visit with demo mode OFF', () => {
     expect(localStorage.getItem('celestia_v2_owned_roster')).toBeNull();
     expect(localStorage.getItem('celestia_v2_roster_profiles')).toBeNull();
+    expect(localStorage.getItem('celestia_v2_raw_weapons')).toBeNull();
+    expect(isDemoModeEnabled()).toBe(false);
 
     const roster = getSavedRoster();
+    expect(roster).toEqual([]);
     expect(roster).toEqual(DEFAULT_ROSTER);
 
     const profiles = getSavedProfiles();
-    expect(Object.keys(profiles)).toEqual(DEFAULT_ROSTER);
+    expect(profiles).toEqual({});
+
+    const weapons = getSavedWeapons();
+    expect(weapons).toEqual([]);
+    expect(weapons).toEqual(DEFAULT_WEAPONS);
+  });
+
+  it('activates and restores DEMO_ROSTER and DEMO_WEAPONS when demo mode is enabled', () => {
+    setDemoModeEnabled(true);
+    expect(isDemoModeEnabled()).toBe(true);
+
+    const roster = getSavedRoster();
+    expect(roster.length).toBe(11);
+    expect(roster).toEqual(DEMO_ROSTER);
+
+    const profiles = getSavedProfiles();
+    expect(Object.keys(profiles).length).toBe(11);
+    expect(Object.keys(profiles)).toEqual(DEMO_ROSTER);
+
+    const weapons = getSavedWeapons();
+    expect(weapons.length).toBe(8);
+    expect(weapons).toEqual(DEMO_WEAPONS);
+
+    // Turn demo mode off
+    setDemoModeEnabled(false);
+    expect(isDemoModeEnabled()).toBe(false);
+    expect(getSavedRoster()).toEqual([]);
+    expect(getSavedProfiles()).toEqual({});
+    expect(getSavedWeapons()).toEqual([]);
+  });
+
+  it('resets account data cleanly using resetAccountData', () => {
+    setDemoModeEnabled(true);
+    saveRoster(['Furina']);
+    saveProfiles({ Furina: { id: 'Furina', level: 90, constellation: 2 } });
+
+    resetAccountData();
+
+    expect(isDemoModeEnabled()).toBe(false);
+    expect(getSavedRoster()).toEqual([]);
+    expect(getSavedProfiles()).toEqual({});
+    expect(getSavedWeapons()).toEqual([]);
   });
 
   it('persists and restores an intentionally cleared empty roster without resurrecting defaults', () => {
@@ -78,10 +130,153 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
     expect(loaded).toEqual(mockArtifacts);
   });
 
-  it('returns DEFAULT_WEAPONS when localStorage and profiles have no weapons', () => {
-    const weapons = getSavedWeapons();
-    expect(weapons.length).toBeGreaterThan(0);
-    expect(weapons).toEqual(DEFAULT_WEAPONS);
+  it('atomic weapon equip moves weapon from Character B to Character A cleanly with no duplicate phantom copies', () => {
+    const initialWeapons: OwnedWeapon[] = [
+      {
+        id: 'starter_the_catch',
+        key: 'TheCatch',
+        name: '"The Catch"',
+        level: 90,
+        refinement: 5,
+        rarity: 4,
+        location: 'Xiangling',
+      },
+      {
+        id: 'starter_favonius_lance',
+        key: 'FavoniusLance',
+        name: 'Favonius Lance',
+        level: 90,
+        refinement: 3,
+        rarity: 4,
+        location: '',
+      },
+    ];
+
+    const initialProfiles: Record<string, OwnedCharacterProfile> = {
+      Xiangling: {
+        id: 'Xiangling',
+        level: 90,
+        constellation: 4,
+        weapon: {
+          key: 'TheCatch',
+          name: '"The Catch"',
+          level: 90,
+          refinement: 5,
+          rarity: 4,
+        },
+      },
+      RaidenShogun: {
+        id: 'RaidenShogun',
+        level: 90,
+        constellation: 2,
+      },
+    };
+
+    const { updatedWeapons, updatedProfiles, transferredFrom } = equipWeaponToCharacter(
+      'starter_the_catch',
+      'RaidenShogun',
+      initialWeapons,
+      initialProfiles,
+    );
+
+    expect(transferredFrom).toBe('Xiangling');
+    expect(updatedWeapons.length).toBe(2); // Zero phantom duplicates created!
+    expect(updatedWeapons.find((w) => w.id === 'starter_the_catch')?.location).toBe('RaidenShogun');
+
+    // Xiangling's profile must have its weapon removed
+    expect(updatedProfiles['Xiangling']?.weapon).toBeUndefined();
+
+    // Raiden Shogun's profile must receive the weapon
+    expect(updatedProfiles['RaidenShogun']?.weapon?.key).toBe('TheCatch');
+    expect(updatedProfiles['RaidenShogun']?.weapon?.level).toBe(90);
+  });
+
+  it('atomic weapon equip unequips character A previous weapon into bag when equipping a new weapon', () => {
+    const initialWeapons: OwnedWeapon[] = [
+      {
+        id: 'w_old',
+        key: 'FavoniusLance',
+        name: 'Favonius Lance',
+        level: 80,
+        refinement: 1,
+        rarity: 4,
+        location: 'RaidenShogun',
+      },
+      {
+        id: 'w_new',
+        key: 'TheCatch',
+        name: '"The Catch"',
+        level: 90,
+        refinement: 5,
+        rarity: 4,
+        location: '',
+      },
+    ];
+
+    const initialProfiles: Record<string, OwnedCharacterProfile> = {
+      RaidenShogun: {
+        id: 'RaidenShogun',
+        level: 90,
+        constellation: 0,
+        weapon: {
+          key: 'FavoniusLance',
+          name: 'Favonius Lance',
+          level: 80,
+          refinement: 1,
+          rarity: 4,
+        },
+      },
+    };
+
+    const { updatedWeapons, updatedProfiles, transferredFrom } = equipWeaponToCharacter(
+      'w_new',
+      'RaidenShogun',
+      initialWeapons,
+      initialProfiles,
+    );
+
+    expect(transferredFrom).toBeUndefined();
+    expect(updatedWeapons.find((w) => w.id === 'w_new')?.location).toBe('RaidenShogun');
+    expect(updatedWeapons.find((w) => w.id === 'w_old')?.location).toBeUndefined(); // Back in bag!
+    expect(updatedProfiles['RaidenShogun']?.weapon?.key).toBe('TheCatch');
+  });
+
+  it('unequips character weapon into bag cleanly', () => {
+    const initialWeapons: OwnedWeapon[] = [
+      {
+        id: 'w_1',
+        key: 'TheCatch',
+        name: '"The Catch"',
+        level: 90,
+        refinement: 5,
+        rarity: 4,
+        location: 'RaidenShogun',
+      },
+    ];
+
+    const initialProfiles: Record<string, OwnedCharacterProfile> = {
+      RaidenShogun: {
+        id: 'RaidenShogun',
+        level: 90,
+        constellation: 0,
+        weapon: {
+          key: 'TheCatch',
+          name: '"The Catch"',
+          level: 90,
+          refinement: 5,
+          rarity: 4,
+        },
+      },
+    };
+
+    const { updatedWeapons, updatedProfiles } = unequipWeaponFromCharacter(
+      'RaidenShogun',
+      initialWeapons,
+      initialProfiles,
+    );
+
+    expect(updatedWeapons[0].location).toBeUndefined();
+    expect(updatedProfiles['RaidenShogun']?.weapon).toBeUndefined();
   });
 
   it('extracts weapons from profiles when WEAPONS_KEY is empty', () => {

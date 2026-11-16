@@ -26,7 +26,14 @@ import { CharacterPortrait } from './CharacterPortrait';
 import { resolveCharacterRotationProfile } from '../engines/rotation-synthesizer';
 import { RotationBadgeList } from './RotationBadgeList';
 import { rankWeaponsForCharacter } from '../engines/weapon-solver';
-import { getSavedWeapons, saveWeapons, syncArmoryOnProfileUpdate } from '../services/storage';
+import {
+  getSavedWeapons,
+  saveWeapons,
+  getSavedProfiles,
+  saveProfiles,
+  equipWeaponToCharacter,
+  syncArmoryOnProfileUpdate,
+} from '../services/storage';
 import { WEAPONS_BY_TYPE, getWeaponByKey } from '../data/weapons';
 import { getTalentScaling, type TalentScalingData } from '../data/talent-scaling';
 
@@ -86,6 +93,8 @@ interface CharacterDetailModalProps {
   onToggleOwned?: (id: string) => void;
   profile?: OwnedCharacterProfile;
   onUpdateProfile?: (profile: OwnedCharacterProfile) => void;
+  profiles?: Record<string, OwnedCharacterProfile>;
+  onUpdateProfiles?: (profiles: Record<string, OwnedCharacterProfile>) => void;
   weapons?: OwnedWeapon[];
   onUpdateWeapons?: (weapons: OwnedWeapon[]) => void;
   onSelectCharacter?: (char: Character) => void;
@@ -159,6 +168,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   onToggleOwned,
   profile,
   onUpdateProfile,
+  profiles,
+  onUpdateProfiles,
   weapons,
   onUpdateWeapons,
   onSelectCharacter,
@@ -172,6 +183,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
   const [activeTab, setActiveTab] = useState<'build' | 'talents' | 'constellations'>('build');
   const [showAlternateRotation, setShowAlternateRotation] = useState<boolean>(false);
+  const [transferToast, setTransferToast] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const activeWeapons = useMemo(() => weapons || getSavedWeapons(), [weapons]);
@@ -246,34 +258,29 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
   const handleEquipWeapon = (weaponToEquip: OwnedWeapon) => {
     if (!character) return;
-    const canonicalWeapon = getWeaponByKey(weaponToEquip.key) || getWeaponByKey(weaponToEquip.name);
 
-    if (onUpdateProfile) {
-      onUpdateProfile({
-        id: character.id,
-        level: profile?.level ?? 90,
-        constellation: profile?.constellation ?? 0,
-        talents: profile?.talents,
-        weapon: {
-          key: canonicalWeapon?.key || weaponToEquip.key,
-          name: canonicalWeapon?.name || weaponToEquip.name,
-          level: weaponToEquip.level,
-          refinement: weaponToEquip.refinement,
-          rarity: canonicalWeapon?.rarity || weaponToEquip.rarity || 4,
-          ascension: weaponToEquip.ascension,
-        },
-      });
+    const currentProfiles = profiles || getSavedProfiles();
+    const { updatedWeapons, updatedProfiles, transferredFrom } = equipWeaponToCharacter(
+      weaponToEquip.id,
+      character.id,
+      activeWeapons,
+      currentProfiles,
+    );
+
+    if (transferredFrom) {
+      setTransferToast(`Transferred ${weaponToEquip.name} from ${transferredFrom}`);
+      setTimeout(() => setTransferToast(null), 4000);
     }
 
-    const updatedWeapons = activeWeapons.map((w) => {
-      if (w.id === weaponToEquip.id) {
-        return { ...w, location: character.id };
-      }
-      if (w.location === character.id) {
-        return { ...w, location: undefined };
-      }
-      return w;
-    });
+    if (onUpdateProfiles) {
+      onUpdateProfiles(updatedProfiles);
+    } else {
+      saveProfiles(updatedProfiles);
+    }
+
+    if (onUpdateProfile && updatedProfiles[character.id]) {
+      onUpdateProfile(updatedProfiles[character.id]);
+    }
 
     if (onUpdateWeapons) {
       onUpdateWeapons(updatedWeapons);
@@ -778,6 +785,23 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       </button>
                     </div>
                   </form>
+                )}
+
+                {/* Transfer Notification Toast */}
+                {transferToast && (
+                  <div className="bg-amber-950/70 border border-amber-500/50 text-amber-200 px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between shadow-md">
+                    <span className="flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span>{transferToast}</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setTransferToast(null)}
+                      className="text-amber-400 hover:text-white text-xs ml-2 cursor-pointer font-bold"
+                    >
+                      ✕
+                    </button>
+                  </div>
                 )}
 
                 {/* Ranked Owned Weapons Cards */}

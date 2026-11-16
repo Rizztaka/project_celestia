@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { renderToString } from 'react-dom/server';
 import { ErrorBoundary } from './ErrorBoundary';
 
@@ -35,5 +35,29 @@ describe('ErrorBoundary Component', () => {
     expect(html).toContain('Failed to load module');
     expect(html).toContain('Try Again');
     expect(html).toContain('Reload Page');
+  });
+
+  it('executes onRetry callback and resets error state on handleRetry', () => {
+    const onRetry = vi.fn();
+    const boundary = new ErrorBoundary({
+      children: <div>Child</div>,
+      onRetry,
+    });
+    boundary.state = {
+      hasError: true,
+      error: new Error('Failed to fetch dynamically imported module'),
+    };
+
+    let updatedState: any = null;
+    boundary.setState = ((updater: any) => {
+      updatedState = typeof updater === 'function' ? updater(boundary.state) : updater;
+      boundary.state = { ...boundary.state, ...updatedState };
+    }) as any;
+
+    (boundary as any).handleRetry();
+
+    expect(onRetry).toHaveBeenCalledTimes(1);
+    expect(updatedState).toEqual({ hasError: false, error: undefined });
+    expect(boundary.state.hasError).toBe(false);
   });
 });

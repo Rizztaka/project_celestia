@@ -499,7 +499,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
               <button
                 key={nation}
                 onClick={() => setFilterRegion(nation)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
+                className={`px-3 py-1.5 min-h-[44px] flex items-center justify-center rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
                   filterRegion === nation
                     ? 'bg-[#d4af37] text-black font-bold shadow-sm'
                     : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
@@ -523,7 +523,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
                 <button
                   key={elem}
                   onClick={() => setFilterElement(elem)}
-                  className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
+                  className={`px-2.5 py-1.5 min-h-[44px] flex items-center justify-center rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
                     filterElement === elem
                       ? 'bg-[#d4af37] text-black font-bold shadow-sm'
                       : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
@@ -546,7 +546,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
                 <button
                   key={wType}
                   onClick={() => setFilterWeapon(wType)}
-                  className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
+                  className={`px-2.5 py-1.5 min-h-[44px] flex items-center justify-center rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
                     filterWeapon === wType
                       ? 'bg-[#d4af37] text-black font-bold shadow-sm'
                       : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
@@ -572,7 +572,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
                 onClick={() =>
                   setFilterTravelerElement(filterTravelerElement === tElem ? 'All' : tElem)
                 }
-                className={`px-2 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer shrink-0 ${
+                className={`px-2 py-1 min-h-[44px] flex items-center justify-center rounded-lg text-[11px] font-bold transition-all cursor-pointer shrink-0 ${
                   filterTravelerElement === tElem
                     ? 'bg-[#d4af37] text-black font-extrabold shadow-sm'
                     : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
@@ -597,7 +597,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
             <div
               key={char.id}
               onClick={() => setSelectedCharacter(char)}
-              style={{ contentVisibility: 'auto', containIntrinsicSize: '160px' }}
+              style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 220px' }}
               className={`group rounded-2xl p-3 border transition-all duration-150 cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden ${
                 isOwned
                   ? 'bg-[#151926] border-[#d4af37]/60 shadow-md shadow-[#d4af37]/5 hover:border-[#d4af37]'

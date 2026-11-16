@@ -4,6 +4,7 @@ import { AlertTriangle, RotateCcw } from 'lucide-react';
 interface ErrorBoundaryProps {
   children: ReactNode;
   fallbackTitle?: string;
+  onRetry?: () => void;
 }
 
 interface ErrorBoundaryState {
@@ -25,6 +26,11 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   private handleRetry = () => {
+    try {
+      this.props.onRetry?.();
+    } catch (err) {
+      console.error('Error in ErrorBoundary onRetry callback:', err);
+    }
     this.setState({ hasError: false, error: undefined });
   };
 

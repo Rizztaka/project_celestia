@@ -14,6 +14,7 @@ interface NavbarProps {
   isDemoMode?: boolean;
   onToggleDemoMode?: (enabled: boolean) => void;
   isTabPending?: boolean;
+  pendingTab?: string | null;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -29,6 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   isDemoMode = false,
   onToggleDemoMode,
   isTabPending = false,
+  pendingTab,
 }) => {
   const tabs = [
     { id: 'teams', label: 'Best Teams', icon: Sparkles },
@@ -68,7 +70,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           <nav className="hidden md:flex items-center gap-1 bg-[#141622] p-1 rounded-xl border border-[#232738]">
             {tabs.map((tab) => {
               const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
+              const isTargetPending = isTabPending && pendingTab === tab.id;
+              const isActive = (pendingTab || activeTab) === tab.id;
               return (
                 <button
                   key={tab.id}
@@ -77,7 +80,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     isActive
                       ? 'bg-[#d4af37] text-[#0a0b0e] shadow-md font-bold'
                       : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1c2030]'
-                  }`}
+                  } ${isTargetPending ? 'animate-pulse' : ''}`}
                 >
                   <Icon className="w-3.5 h-3.5" />
                   <span>{tab.label}</span>
@@ -156,14 +159,15 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="md:hidden flex items-center justify-around py-1 border-t border-[#1c2030] overflow-x-auto touch-pan-x [-webkit-overflow-scrolling:touch]">
           {tabs.map((tab) => {
             const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
+            const isTargetPending = isTabPending && pendingTab === tab.id;
+            const isActive = (pendingTab || activeTab) === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex flex-col items-center justify-center gap-1 min-h-[44px] py-1 px-2.5 text-[10px] font-medium transition-colors cursor-pointer shrink-0 ${
                   isActive ? 'text-[#d4af37] font-bold' : 'text-zinc-400'
-                }`}
+                } ${isTargetPending ? 'animate-pulse' : ''}`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{tab.label.split(' ')[0]}</span>

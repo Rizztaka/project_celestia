@@ -18,34 +18,80 @@ import {
 } from './services/storage';
 import { fetchShowcaseFromEnka } from './services/enka';
 import type { OwnedCharacterProfile, OwnedWeapon } from './types/genshin';
-import { WeaponConflictModal } from './components/WeaponConflictModal';
 import { getWeaponByKey } from './data/weapons';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
-const TeamGeneratorView = React.lazy(() =>
+function createRetryableLazy<T extends React.ComponentType<any>>(
+  loader: () => Promise<{ default: T }>,
+  maxRetries = 2
+) {
+  let loadWithRetries = () =>
+    new Promise<{ default: T }>((resolve, reject) => {
+      let attempts = 0;
+      const attempt = () => {
+        loader()
+          .then(resolve)
+          .catch((err) => {
+            attempts++;
+            if (attempts <= maxRetries) {
+              setTimeout(attempt, 500 * attempts);
+            } else {
+              reject(err);
+            }
+          });
+      };
+      attempt();
+    });
+
+  let LazyComp = React.lazy(loadWithRetries);
+  const Wrapper: React.FC<React.ComponentProps<T>> & { reset: () => void } = ((props: any) => {
+    return <LazyComp {...props} />;
+  }) as any;
+  Wrapper.reset = () => {
+    LazyComp = React.lazy(loadWithRetries);
+  };
+  return Wrapper;
+}
+
+const TeamGeneratorView = createRetryableLazy(() =>
   import('./components/TeamGeneratorView').then((m) => ({ default: m.TeamGeneratorView }))
 );
-const PullAdvisorView = React.lazy(() =>
+const PullAdvisorView = createRetryableLazy(() =>
   import('./components/PullAdvisorView').then((m) => ({ default: m.PullAdvisorView }))
 );
-const EndgameView = React.lazy(() =>
+const EndgameView = createRetryableLazy(() =>
   import('./components/EndgameView').then((m) => ({ default: m.EndgameView }))
 );
-const ArtifactStopView = React.lazy(() =>
+const ArtifactStopView = createRetryableLazy(() =>
   import('./components/ArtifactStopView').then((m) => ({ default: m.ArtifactStopView }))
 );
-const RosterView = React.lazy(() =>
+const RosterView = createRetryableLazy(() =>
   import('./components/RosterView').then((m) => ({ default: m.RosterView }))
+);
+const WeaponConflictModal = React.lazy(() =>
+  import('./components/WeaponConflictModal').then((m) => ({ default: m.WeaponConflictModal }))
 );
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('teams');
+  const [pendingTab, setPendingTab] = useState<string | null>(null);
   const [isTabPending, startTransition] = useTransition();
 
   const handleSelectTab = (tab: string) => {
+    if (tab === activeTab) return;
+    setPendingTab(tab);
     startTransition(() => {
       setActiveTab(tab);
+      setPendingTab(null);
     });
+  };
+
+  const handleResetViews = () => {
+    TeamGeneratorView.reset();
+    PullAdvisorView.reset();
+    EndgameView.reset();
+    ArtifactStopView.reset();
+    RosterView.reset();
   };
   const [profiles, setProfiles] = useState<Record<string, OwnedCharacterProfile>>(getSavedProfiles);
   const [weapons, setWeapons] = useState<OwnedWeapon[]>(getSavedWeapons);
@@ -241,6 +287,7 @@ export const App: React.FC = () => {
           activeTab={activeTab}
           setActiveTab={handleSelectTab}
           isTabPending={isTabPending}
+          pendingTab={pendingTab}
           uid={uid}
           setUid={handleSetUid}
           onSyncShowcase={handleSyncShowcase}
@@ -282,47 +329,53 @@ export const App: React.FC = () => {
 
         {/* Main Content Area */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <ErrorBoundary>
-            <Suspense fallback={<ViewSkeleton type={activeTab} />}>
-              {activeTab === 'teams' && (
-                <TeamGeneratorView
-                  ownedIds={ownedIds}
-                  profiles={profiles}
-                  weapons={weapons}
-                  onUpdateWeapons={handleUpdateWeapons}
-                  onUpdateProfile={handleUpdateProfile}
-                  onUpdateProfiles={handleUpdateProfiles}
-                  isDemoMode={isDemoMode}
-                  onToggleDemoMode={handleToggleDemoMode}
-                />
-              )}
-              {activeTab === 'pulls' && (
-                <PullAdvisorView
-                  ownedIds={ownedIds}
-                  profiles={profiles}
-                  weapons={weapons}
-                />
-              )}
-              {activeTab === 'endgame' && (
-                <EndgameView ownedIds={ownedIds} profiles={profiles} />
-              )}
-              {activeTab === 'artifacts' && <ArtifactStopView />}
-              {activeTab === 'roster' && (
-                <RosterView
-                  ownedIds={ownedIds}
-                  profiles={profiles}
-                  onToggleOwned={handleToggleOwned}
-                  onSetRoster={handleSetRoster}
-                  onUpdateProfile={handleUpdateProfile}
-                  onUpdateProfiles={handleUpdateProfiles}
-                  onImportProfiles={handleImportProfiles}
-                  weapons={weapons}
-                  onUpdateWeapons={handleUpdateWeapons}
-                  onOpenArmory={() => setIsArmoryOpen(true)}
-                  isDemoMode={isDemoMode}
-                  onToggleDemoMode={handleToggleDemoMode}
-                  onResetAccount={handleResetAccount}
-                />
+          <ErrorBoundary onRetry={handleResetViews}>
+            <Suspense fallback={<ViewSkeleton type={pendingTab || activeTab} />}>
+              {isTabPending && pendingTab ? (
+                <ViewSkeleton type={pendingTab} />
+              ) : (
+                <>
+                  {activeTab === 'teams' && (
+                    <TeamGeneratorView
+                      ownedIds={ownedIds}
+                      profiles={profiles}
+                      weapons={weapons}
+                      onUpdateWeapons={handleUpdateWeapons}
+                      onUpdateProfile={handleUpdateProfile}
+                      onUpdateProfiles={handleUpdateProfiles}
+                      isDemoMode={isDemoMode}
+                      onToggleDemoMode={handleToggleDemoMode}
+                    />
+                  )}
+                  {activeTab === 'pulls' && (
+                    <PullAdvisorView
+                      ownedIds={ownedIds}
+                      profiles={profiles}
+                      weapons={weapons}
+                    />
+                  )}
+                  {activeTab === 'endgame' && (
+                    <EndgameView ownedIds={ownedIds} profiles={profiles} />
+                  )}
+                  {activeTab === 'artifacts' && <ArtifactStopView />}
+                  {activeTab === 'roster' && (
+                    <RosterView
+                      ownedIds={ownedIds}
+                      profiles={profiles}
+                      onToggleOwned={handleToggleOwned}
+                      onSetRoster={handleSetRoster}
+                      onUpdateProfile={handleUpdateProfile}
+                      onUpdateProfiles={handleUpdateProfiles}
+                      onImportProfiles={handleImportProfiles}
+                      weapons={weapons}
+                      onUpdateWeapons={handleUpdateWeapons}
+                      onOpenArmory={() => setIsArmoryOpen(true)}
+                      isDemoMode={isDemoMode}
+                      onToggleDemoMode={handleToggleDemoMode}
+                      onResetAccount={handleResetAccount}
+                    />
+                  )}
+                </>
               )}
             </Suspense>
           </ErrorBoundary>
@@ -330,14 +383,18 @@ export const App: React.FC = () => {
       </div>
 
       {/* Global Weapon Armory & Conflict Resolver Modal */}
-      <WeaponConflictModal
-        isOpen={isArmoryOpen}
-        onClose={() => setIsArmoryOpen(false)}
-        weapons={weapons}
-        onUpdateWeapons={handleUpdateWeapons}
-        profiles={profiles}
-        onUpdateProfiles={setProfiles}
-      />
+      {isArmoryOpen && (
+        <Suspense fallback={null}>
+          <WeaponConflictModal
+            isOpen={isArmoryOpen}
+            onClose={() => setIsArmoryOpen(false)}
+            weapons={weapons}
+            onUpdateWeapons={handleUpdateWeapons}
+            profiles={profiles}
+            onUpdateProfiles={setProfiles}
+          />
+        </Suspense>
+      )}
 
       {/* Footer */}
       <footer className="border-t border-[#1c2030] bg-[#0c0d13] py-6 mt-12 text-center text-xs text-zinc-500">

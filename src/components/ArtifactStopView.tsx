@@ -621,7 +621,7 @@ export const ArtifactStopView: React.FC = () => {
                     <button
                       key={r.id}
                       onClick={() => setRarityFilter(r.id as any)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
+                      className={`px-3 py-1.5 min-h-[44px] flex items-center justify-center rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
                         rarityFilter === r.id
                           ? 'bg-[#d4af37] text-black font-bold shadow-sm'
                           : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
@@ -647,7 +647,7 @@ export const ArtifactStopView: React.FC = () => {
                     <button
                       key={c.id}
                       onClick={() => setCombatFilter(c.id as any)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
+                      className={`px-3 py-1.5 min-h-[44px] flex items-center justify-center rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
                         combatFilter === c.id
                           ? 'bg-[#d4af37] text-black font-bold shadow-sm'
                           : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
@@ -672,7 +672,7 @@ export const ArtifactStopView: React.FC = () => {
               return (
                 <div
                   key={set.id}
-                  style={{ contentVisibility: 'auto', containIntrinsicSize: '200px' }}
+                  style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 240px' }}
                   className="bg-[#121420] border border-[#23283c] hover:border-[#38405e] rounded-2xl p-4.5 space-y-3.5 transition-all shadow-sm flex flex-col justify-between"
                 >
                   <div className="space-y-3">

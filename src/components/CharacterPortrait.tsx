@@ -70,11 +70,14 @@ export const CharacterPortrait: React.FC<CharacterPortraitProps> = ({
     setHasError(false);
   }, [src]);
 
-  const parts = name.trim().split(/\s+/);
+  const safeName = (name || '').trim();
+  const parts = safeName ? safeName.split(/\s+/) : [];
   const initials =
     parts.length >= 2
       ? (parts[0][0] + parts[1][0]).toUpperCase()
-      : name.slice(0, 2).toUpperCase();
+      : safeName
+        ? safeName.slice(0, 2).toUpperCase()
+        : '?';
 
   const sizeConfig = SIZE_MAP[size];
   const textColor = element ? ELEMENT_TEXT_COLORS[element] : 'text-[#d4af37]';
@@ -87,7 +90,7 @@ export const CharacterPortrait: React.FC<CharacterPortraitProps> = ({
         {src && !hasError ? (
           <img
             src={src}
-            alt={name}
+            alt={name || 'Character'}
             className={`${sizeConfig.img} aspect-square`}
             loading="lazy"
             decoding="async"

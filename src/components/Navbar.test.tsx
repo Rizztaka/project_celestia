@@ -38,4 +38,12 @@ describe('Navbar Component', () => {
     const html = renderToString(<Navbar {...defaultProps} />);
     expect(html).toContain('min-h-[44px]');
   });
+
+  it('highlights target pending tab and adds pulse animation during tab switch', () => {
+    const html = renderToString(
+      <Navbar {...defaultProps} activeTab="teams" isTabPending={true} pendingTab="pulls" />
+    );
+    expect(html).toContain('Pull Advisor');
+    expect(html).toContain('animate-pulse');
+  });
 });

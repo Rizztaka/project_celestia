@@ -52,6 +52,8 @@ describe('ViewSkeleton Components', () => {
     const artifactsHtml = renderToString(<ViewSkeleton type="artifacts" />);
     const rosterHtml = renderToString(<ViewSkeleton type="roster" />);
     const fallbackHtml = renderToString(<ViewSkeleton type="unknown" />);
+    const undefinedHtml = renderToString(<ViewSkeleton />);
+    const emptyHtml = renderToString(<ViewSkeleton type="" />);
 
     expect(teamsHtml).toContain('data-skeleton="teams"');
     expect(pullsHtml).toContain('data-skeleton="pulls"');
@@ -59,5 +61,7 @@ describe('ViewSkeleton Components', () => {
     expect(artifactsHtml).toContain('data-skeleton="artifacts"');
     expect(rosterHtml).toContain('data-skeleton="roster"');
     expect(fallbackHtml).toContain('data-skeleton="generic"');
+    expect(undefinedHtml).toContain('data-skeleton="generic"');
+    expect(emptyHtml).toContain('data-skeleton="generic"');
   });
 });

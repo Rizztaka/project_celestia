@@ -43,4 +43,15 @@ describe('CharacterPortrait Component', () => {
     expect(html).toContain('FU');
     expect(html).toContain('text-sky-400');
   });
+
+  it('handles empty or blank name gracefully without crashing', () => {
+    const html = renderToString(
+      <CharacterPortrait
+        name=""
+        element="Pyro"
+      />
+    );
+    expect(html).toContain('?');
+    expect(html).toContain('text-rose-400');
+  });
 });

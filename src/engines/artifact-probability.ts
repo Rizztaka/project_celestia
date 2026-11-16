@@ -109,22 +109,19 @@ function getBaseSlotCandidateDropRate(
 
 /**
  * Probability that a dropped candidate piece rolls substats exceeding target RV.
- * Calibrated against standard 5-star artifact substat distributions.
+ * Calibrated against standard 5-star artifact substat distributions using a
+ * continuous logistic decay curve.
  */
-function getSubstatUpgradeProbability(targetRV: number): number {
-  if (targetRV <= 0) return 0.98;
-  if (targetRV <= 120) return 0.88;
-  if (targetRV <= 220) return 0.62;
-  if (targetRV <= 320) return 0.32;
-  if (targetRV <= 420) return 0.11;
-  if (targetRV <= 520) return 0.028;
-  if (targetRV <= 620) return 0.0055;
-  if (targetRV <= 720) return 0.00065;
-  return 0.00008;
+export function getSubstatUpgradeProbability(targetRV: number): number {
+  if (targetRV <= 0) return 0.99;
+  // Calibrated continuous logistic curve modeling 4-roll & 5-roll artifact distributions
+  const z = (targetRV - 320) / 110;
+  const p = 1 / (1 + Math.exp(1.8 * z));
+  return Math.max(0.00005, Math.min(0.99, Number(p.toFixed(5))));
 }
 
 /**
- * Calculates per-slot upgrade probability and expected runs/days of resin.
+ * Calculates per-slot upgrade probability and dual expected runs (median 50% milestone vs mean 1/p).
  */
 export function calculateSlotUpgradeProbability(
   slot: ArtifactSlot,
@@ -142,10 +139,19 @@ export function calculateSlotUpgradeProbability(
 
   // Runs needed for 50% chance of at least 1 upgrade: 1 - (1 - p)^N = 0.5 => N = ln(0.5)/ln(1-p)
   const logDenominator = Math.log(1 - upgradeProbabilityPerRun);
-  const expectedRunsForUpgrade =
+  const medianRunsForUpgrade =
     !logDenominator || isNaN(logDenominator) || logDenominator === 0
       ? 1
-      : Math.max(1, Math.round(Math.log(0.5) / logDenominator));
+      : Math.max(1, Math.ceil(Math.log(0.5) / logDenominator));
+
+  // Mathematical expectation E[X] = 1/p
+  const meanExpectedRuns =
+    upgradeProbabilityPerRun > 0
+      ? Math.min(100000, Math.ceil(1 / upgradeProbabilityPerRun))
+      : 100000;
+
+  // expectedRunsForUpgrade serves as backward-compatible alias to median runs
+  const expectedRunsForUpgrade = medianRunsForUpgrade;
 
   const expectedDaysForUpgrade = Number(
     (expectedRunsForUpgrade / DOMAIN_CONSTANTS.RUNS_PER_DAY).toFixed(1),
@@ -173,6 +179,8 @@ export function calculateSlotUpgradeProbability(
     currentUsefulRolls: usefulRolls,
     upgradeProbabilityPerRun,
     expectedRunsForUpgrade,
+    medianRunsForUpgrade,
+    meanExpectedRuns,
     expectedDaysForUpgrade,
     status,
     recommendation,

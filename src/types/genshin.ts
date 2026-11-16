@@ -383,6 +383,8 @@ export interface SlotUpgradeProbability {
   currentUsefulRolls: number; // Equivalent max rolls (e.g. 5.4)
   upgradeProbabilityPerRun: number; // Probability that 1 domain run beats this piece
   expectedRunsForUpgrade: number; // Runs to reach 50% upgrade chance
+  medianRunsForUpgrade?: number; // 50% milestone runs
+  meanExpectedRuns?: number; // Mathematical expectation (1/p)
   expectedDaysForUpgrade: number; // Days of resin (180/day = 9 runs/day)
   status: 'Near Ceiling' | 'Diminishing Returns' | 'High ROI';
   recommendation: string;

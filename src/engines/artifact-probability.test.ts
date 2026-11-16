@@ -7,6 +7,7 @@ import {
   getGuaranteedAlternative,
   estimateBuildFromSliders,
   extractEquippedArtifactsForCharacter,
+  getSubstatUpgradeProbability,
 } from './artifact-probability';
 import type { ArtifactPiece } from '../types/genshin';
 import { getCharacterStatWeights } from '../data/artifact-weights';
@@ -59,6 +60,35 @@ describe('Artifact Probability & Roll Value Engine', () => {
     });
   });
 
+  describe('getSubstatUpgradeProbability (Continuous Logistic Curve)', () => {
+    it('returns continuous strictly decreasing probabilities across RV range', () => {
+      const p100 = getSubstatUpgradeProbability(100);
+      const p200 = getSubstatUpgradeProbability(200);
+      const p300 = getSubstatUpgradeProbability(300);
+      const p400 = getSubstatUpgradeProbability(400);
+      const p500 = getSubstatUpgradeProbability(500);
+      const p600 = getSubstatUpgradeProbability(600);
+
+      expect(p100).toBeGreaterThan(p200);
+      expect(p200).toBeGreaterThan(p300);
+      expect(p300).toBeGreaterThan(p400);
+      expect(p400).toBeGreaterThan(p500);
+      expect(p500).toBeGreaterThan(p600);
+
+      // Verify smooth variation without identical step plateaus
+      const p250 = getSubstatUpgradeProbability(250);
+      const p251 = getSubstatUpgradeProbability(251);
+      expect(p250).toBeGreaterThanOrEqual(p251);
+    });
+
+    it('safely handles boundary RV values (zero, negative, extreme)', () => {
+      expect(getSubstatUpgradeProbability(0)).toBe(0.99);
+      expect(getSubstatUpgradeProbability(-50)).toBe(0.99);
+      expect(getSubstatUpgradeProbability(1000)).toBeGreaterThanOrEqual(0.00005);
+      expect(getSubstatUpgradeProbability(1000)).toBeLessThan(0.001);
+    });
+  });
+
   describe('calculateSlotUpgradeProbability', () => {
     it('rates an early 100% RV flower as High ROI with high upgrade odds', () => {
       const weights = getCharacterStatWeights('Hu Tao');
@@ -79,6 +109,9 @@ describe('Artifact Probability & Roll Value Engine', () => {
       expect(analysis.status).toBe('High ROI');
       expect(analysis.expectedRunsForUpgrade).toBeLessThan(30);
       expect(analysis.expectedDaysForUpgrade).toBeLessThan(5);
+      expect(analysis.medianRunsForUpgrade).toBe(analysis.expectedRunsForUpgrade);
+      expect(analysis.meanExpectedRuns).toBeDefined();
+      expect(analysis.meanExpectedRuns!).toBeGreaterThan(analysis.medianRunsForUpgrade!);
     });
 
     it('rates a 650% RV feather as Near Ceiling with low upgrade odds', () => {

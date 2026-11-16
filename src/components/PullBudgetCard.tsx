@@ -28,6 +28,8 @@ export const PullBudgetCard: React.FC<PullBudgetCardProps> = ({
       nextBudget.characterPity = Math.max(0, Math.min(89, Math.floor(Number(val)) || 0));
     } else if (field === 'characterGuaranteed') {
       nextBudget.characterGuaranteed = Boolean(val);
+    } else if (field === 'consecutiveLossCount') {
+      nextBudget.consecutiveLossCount = Math.max(0, Math.min(5, Math.floor(Number(val)) || 0));
     } else if (field === 'weaponPity') {
       nextBudget.weaponPity = Math.max(0, Math.min(79, Math.floor(Number(val)) || 0));
     } else if (field === 'weaponFatePoints') {
@@ -47,6 +49,7 @@ export const PullBudgetCard: React.FC<PullBudgetCardProps> = ({
       fates: 0,
       characterPity: 0,
       characterGuaranteed: false,
+      consecutiveLossCount: 0,
       weaponPity: 0,
       weaponFatePoints: 0,
     });
@@ -230,6 +233,42 @@ export const PullBudgetCard: React.FC<PullBudgetCardProps> = ({
                 </span>
               </button>
             </div>
+
+            {/* Capturing Radiance Consecutive Losses Stepper (5.0+) */}
+            {!budget.characterGuaranteed && (
+              <div className="pt-1 flex items-center justify-between text-xs bg-[#151824] border border-[#23283c] px-2.5 py-1.5 rounded-lg">
+                <span className="text-zinc-400 text-[11px] flex items-center gap-1.5">
+                  <span>Radiance Streak:</span>
+                  <span className="text-purple-300 font-bold font-mono">
+                    {budget.consecutiveLossCount ?? 0} {budget.consecutiveLossCount === 1 ? 'loss' : 'losses'}
+                  </span>
+                </span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    title="Decrease consecutive loss count"
+                    disabled={(budget.consecutiveLossCount ?? 0) <= 0}
+                    onClick={() =>
+                      handleUpdate('consecutiveLossCount', Math.max(0, (budget.consecutiveLossCount ?? 0) - 1))
+                    }
+                    className="w-5 h-5 rounded bg-[#1f2438] hover:bg-[#2b334d] disabled:opacity-40 text-zinc-300 flex items-center justify-center font-bold text-xs cursor-pointer transition-colors"
+                  >
+                    -
+                  </button>
+                  <button
+                    type="button"
+                    title="Increase consecutive loss count"
+                    disabled={(budget.consecutiveLossCount ?? 0) >= 3}
+                    onClick={() =>
+                      handleUpdate('consecutiveLossCount', Math.min(3, (budget.consecutiveLossCount ?? 0) + 1))
+                    }
+                    className="w-5 h-5 rounded bg-[#1f2438] hover:bg-[#2b334d] disabled:opacity-40 text-zinc-300 flex items-center justify-center font-bold text-xs cursor-pointer transition-colors"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

@@ -22,6 +22,7 @@ import { CharacterPortrait } from './CharacterPortrait';
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { ArtifactDiminishingReturnsCurve } from './ArtifactDiminishingReturnsCurve';
 import { ArtifactSlotCard } from './ArtifactSlotCard';
+import { InfoTooltip } from './InfoTooltip';
 import {
   analyzeArtifactBuild,
   estimateBuildFromSliders,
@@ -352,8 +353,12 @@ export const ArtifactStopView: React.FC = () => {
               </div>
 
               <div className="bg-[#181b28] p-3 rounded-xl border border-[#282e44] text-center">
-                <span className="text-[10px] text-zinc-400 font-semibold uppercase block">
-                  Upgrade Odds
+                <span className="text-[10px] text-zinc-400 font-semibold uppercase flex items-center justify-center gap-1">
+                  <span>Approx. Upgrade Odds</span>
+                  <InfoTooltip
+                    title="Approximate Upgrade Probability"
+                    content="Continuous logistic model evaluating substat roll distributions. Days to upgrade represent the 50% milestone at 180 resin/day."
+                  />
                 </span>
                 <span className="text-xl font-extrabold text-emerald-400 mt-0.5 block font-mono flex items-center justify-center gap-1">
                   <Clock className="w-4 h-4" />

@@ -14,6 +14,7 @@ import { getSavedPullBudget, savePullBudget } from '../services/storage';
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { PullBudgetCard } from './PullBudgetCard';
+import { InfoTooltip } from './InfoTooltip';
 import {
   Compass,
   CheckCircle2,
@@ -277,8 +278,12 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
                     >
                       {item.tier}
                     </span>
-                    <span className="text-xs font-bold text-amber-400">
-                      ROI: {item.score}/100
+                    <span className="text-xs font-bold text-amber-400 flex items-center gap-1">
+                      <span>Account Value: {item.score}/100</span>
+                      <InfoTooltip
+                        title="Estimated Account Value"
+                        content="Composite score (0-100) quantifying marginal DPS uplift, team archetype unlocks, and gacha pull probability."
+                      />
                     </span>
                   </div>
                 </div>

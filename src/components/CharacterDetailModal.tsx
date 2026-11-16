@@ -26,6 +26,7 @@ import { CharacterPortrait } from './CharacterPortrait';
 import { resolveCharacterRotationProfile } from '../engines/rotation-synthesizer';
 import { RotationBadgeList } from './RotationBadgeList';
 import { rankWeaponsForCharacter } from '../engines/weapon-solver';
+import { InfoTooltip } from './InfoTooltip';
 import {
   getSavedWeapons,
   saveWeapons,
@@ -739,7 +740,11 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-zinc-200 flex items-center gap-1.5">
                     <Swords className="w-4 h-4 text-[#d4af37]" />
-                    <span>Best Owned Weapons ({rankedOwnedWeapons.length})</span>
+                    <span>Estimated Weapon Suitability ({rankedOwnedWeapons.length})</span>
+                    <InfoTooltip
+                      title="Estimated Weapon Suitability"
+                      content="Ranks weapons by class compatibility, base ATK, optimal substats, refinements, and team synergy."
+                    />
                   </h3>
                   <button
                     type="button"
@@ -898,8 +903,9 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                     ? 'bg-sky-500/20 text-sky-300 border-sky-500/30'
                                     : 'bg-zinc-800 text-zinc-300 border-zinc-700'
                                 }`}
+                                title="Estimated Weapon Suitability"
                               >
-                                {res.tier} ({res.relativePercentage}%)
+                                {res.tier} ({res.suitabilityScore ?? res.relativePercentage}% Suitability)
                               </span>
                             </div>
 

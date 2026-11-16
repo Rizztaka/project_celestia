@@ -23,6 +23,7 @@ import {
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { RotationBadgeList } from './RotationBadgeList';
+import { InfoTooltip } from './InfoTooltip';
 import { rankWeaponsForCharacter, scoreWeaponForCharacter } from '../engines/weapon-solver';
 import { getSavedWeapons, getSavedProfiles, equipWeaponToCharacter } from '../services/storage';
 import { getWeaponByKey } from '../data/weapons';
@@ -220,8 +221,16 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                 <div className="flex items-center gap-1.5 bg-[#181b28] px-3 py-1.5 rounded-xl border border-[#252a3f]">
                   <Zap className="w-4 h-4 text-amber-400" />
                   <div>
-                    <div className="text-[10px] text-zinc-400 uppercase font-semibold">Synergy</div>
-                    <div className="text-sm font-bold text-amber-300">{team.synergyScore}/100</div>
+                    <div className="text-[10px] text-zinc-400 uppercase font-semibold flex items-center gap-1">
+                      <span>Compatibility</span>
+                      <InfoTooltip
+                        title="Composition Compatibility Score"
+                        content="Multi-factor evaluation (0-100%) synthesizing role suitability, elemental resonance matching, archetype reaction synergy tags, and armory weapon readiness."
+                      />
+                    </div>
+                    <div className="text-sm font-bold text-amber-300">
+                      {team.compositionCompatibilityScore ?? team.synergyScore}/100
+                    </div>
                   </div>
                 </div>
 
@@ -376,9 +385,22 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
             {/* Stepped Rotation Breakdown & Strategy */}
             <div className="bg-[#0e1017] p-3.5 rounded-xl border border-[#1b1f2e] text-xs space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1b1f2e] pb-2">
-                <span className="text-zinc-300 font-bold uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5 text-[#d4af37]" />
-                  <span>Strategic Execution Rotation</span>
+                <span className="text-zinc-300 font-bold uppercase tracking-wider text-[11px] flex items-center gap-2">
+                  <span className="flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5 text-[#d4af37]" />
+                    <span>Strategic Execution Rotation</span>
+                  </span>
+                  {team.steppedRotation && (
+                    team.steppedRotation.isCurated ? (
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 shadow-xs">
+                        ✦ Curated Rotation
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-400 border border-zinc-700/50 flex items-center gap-1">
+                        ⚡ Role Fallback Rotation
+                      </span>
+                    )
+                  )}
                 </span>
                 {team.steppedRotation && (
                   <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-[#181c2c] text-[#d4af37] border border-[#d4af37]/30 flex items-center gap-1">

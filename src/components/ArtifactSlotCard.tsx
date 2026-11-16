@@ -1,5 +1,6 @@
 import React from 'react';
 import type { SlotUpgradeProbability, StatKey } from '../types/genshin';
+import { InfoTooltip } from './InfoTooltip';
 import {
   MAIN_STAT_MAX_VALUES,
   MAX_SUBSTAT_VALUES,
@@ -190,11 +191,32 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
           </span>
         </div>
 
-        <div className="flex items-center justify-between text-[11px]">
-          <span className="text-zinc-400">50% Upgrade Odds:</span>
-          <span className="font-semibold text-emerald-400 font-mono">
-            ~{expectedRunsForUpgrade} runs <span className="text-zinc-500">({expectedDaysForUpgrade}d)</span>
-          </span>
+        <div className="space-y-1.5 pt-1">
+          <div className="flex items-center justify-between text-[11px]">
+            <span className="text-zinc-400 flex items-center gap-1">
+              <span>50% Milestone:</span>
+              <InfoTooltip
+                title="Median Runs (50% Milestone)"
+                content="Discrete number of runs needed to reach >= 50% cumulative probability of obtaining an upgrade."
+              />
+            </span>
+            <span className="font-semibold text-emerald-400 font-mono">
+              ~{analysis.medianRunsForUpgrade ?? expectedRunsForUpgrade} runs <span className="text-zinc-500">({expectedDaysForUpgrade}d)</span>
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between text-[11px]">
+            <span className="text-zinc-400 flex items-center gap-1">
+              <span>Average Expected (1/p):</span>
+              <InfoTooltip
+                title="Mean Expected Runs (1/p)"
+                content="Mathematical expectation E[X] = 1/p. Because the geometric distribution is right-skewed, the average expected runs is strictly higher than the median 50% milestone."
+              />
+            </span>
+            <span className="font-semibold text-sky-400 font-mono">
+              ~{analysis.meanExpectedRuns ?? Math.ceil(1 / Math.max(0.00001, analysis.upgradeProbabilityPerRun))} runs
+            </span>
+          </div>
         </div>
 
         {onEdit && (

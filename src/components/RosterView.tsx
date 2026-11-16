@@ -16,10 +16,12 @@ import {
   Globe,
   Compass,
   Sparkles,
+  Database,
 } from 'lucide-react';
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { GoodImportExportModal } from './GoodImportExportModal';
+import { AccountBackupModal } from './AccountBackupModal';
 
 export type NationRegion =
   | 'All'
@@ -305,6 +307,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
   const [search, setSearch] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [isGoodModalOpen, setIsGoodModalOpen] = useState<boolean>(false);
+  const [isBackupModalOpen, setIsBackupModalOpen] = useState<boolean>(false);
 
   const ownedSet = useMemo(() => new Set(ownedIds), [ownedIds]);
 
@@ -377,6 +380,15 @@ export const RosterView: React.FC<RosterViewProps> = ({
           >
             <Layers className="w-3.5 h-3.5" />
             <span>Import / Export (GOOD)</span>
+          </button>
+
+          {/* Native Celestia Account Backup & Restore Trigger */}
+          <button
+            onClick={() => setIsBackupModalOpen(true)}
+            className="px-3.5 py-1.5 rounded-xl bg-purple-500/15 text-purple-300 text-xs font-semibold hover:bg-purple-500/25 border border-purple-500/40 flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+          >
+            <Database className="w-3.5 h-3.5" />
+            <span>Account Backup</span>
           </button>
 
           <button
@@ -779,6 +791,15 @@ export const RosterView: React.FC<RosterViewProps> = ({
           if (onImportProfiles) {
             onImportProfiles(newProfiles, msg, importedWeapons);
           }
+        }}
+      />
+
+      {/* Celestia Native Account Backup & Restore Modal */}
+      <AccountBackupModal
+        isOpen={isBackupModalOpen}
+        onClose={() => setIsBackupModalOpen(false)}
+        onRestoreSuccess={() => {
+          window.location.reload();
         }}
       />
     </div>

@@ -9,7 +9,6 @@ import {
   getSavedProfiles,
   saveProfiles,
   getSavedWeapons,
-  saveWeapons,
   getSavedPullBudget,
   savePullBudget,
   isDemoModeEnabled,
@@ -34,7 +33,6 @@ import { solveAbyssDualTeams } from '../engines/abyss-solver';
 import { filterEligibleTheaterRoster } from '../engines/theater-solver';
 import { calculateRadianceWinRate, calculateTotalPulls } from '../engines/gacha-math';
 import { THEATER_SEASONS } from '../data/theater-seasons';
-import { CHARACTERS } from '../data/characters';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 
 describe('Celestia v2 — End-to-End User Journeys (Audit Simulation)', () => {

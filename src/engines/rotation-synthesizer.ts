@@ -16,10 +16,27 @@ import { getCharacterRotation } from '../data/character-rotations';
  * 3. Intelligent default fallback based on role/element
  */
 export function resolveCharacterRotationProfile(character: Character): CharacterRotationProfile {
-  if (character.rotationProfile) return character.rotationProfile;
+  if (character.rotationProfile) {
+    return {
+      ...character.rotationProfile,
+      isCurated: true,
+      curationSource: 'character',
+    };
+  }
   const curated = getCharacterRotation(character.id) || getCharacterRotation(character.name);
-  if (curated) return curated;
-  return getDefaultRotationProfile(character);
+  if (curated) {
+    return {
+      ...curated,
+      isCurated: true,
+      curationSource: 'database',
+    };
+  }
+  const fallback = getDefaultRotationProfile(character);
+  return {
+    ...fallback,
+    isCurated: false,
+    curationSource: 'fallback',
+  };
 }
 
 /**
@@ -149,6 +166,8 @@ export function synthesizeTeamRotation(members: Character[]): SynthesizedTeamRot
       character: m,
       profile,
       stage: profile.stage,
+      isCurated: Boolean(profile.isCurated),
+      curationSource: profile.curationSource || 'fallback',
     };
   });
 
@@ -190,6 +209,8 @@ export function synthesizeTeamRotation(members: Character[]): SynthesizedTeamRot
       actions,
       fieldTime,
       tip: entry.profile.notes,
+      isCurated: entry.isCurated,
+      curationSource: entry.curationSource,
     };
   });
 
@@ -203,9 +224,14 @@ export function synthesizeTeamRotation(members: Character[]): SynthesizedTeamRot
 
   const summaryString = summaryParts.join(' → ');
 
+  const allCurated = memberEntries.length > 0 && memberEntries.every((e) => e.isCurated);
+  const anyCharacter = memberEntries.some((e) => e.curationSource === 'character');
+
   return {
     steps,
     totalCycleTime: Math.round(totalCycleTime * 10) / 10,
     summaryString,
+    isCurated: allCurated,
+    curationSource: allCurated ? (anyCharacter ? 'character' : 'database') : 'fallback',
   };
 }

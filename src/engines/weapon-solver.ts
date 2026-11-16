@@ -49,9 +49,10 @@ export function scoreWeaponForCharacter(
     return {
       weapon: resolvedIncompatible,
       score: 0,
+      suitabilityScore: 0,
       relativePercentage: 0,
       tier: 'Suboptimal',
-      reason: `Incompatible weapon type (requires ${character.weapon}).`,
+      reason: `Incompatible weapon type (requires ${character.weapon}). Estimated Weapon Suitability: 0%.`,
       isOwned,
       isEquipped,
       equippedOn,
@@ -259,6 +260,7 @@ export function scoreWeaponForCharacter(
   if (level < 90) {
     reasons.push(`Current Level: ${level}/90.`);
   }
+  reasons.push(`Estimated Weapon Suitability: ${relativePercentage}%.`);
 
   const resolvedWeapon: OwnedWeapon | WeaponData =
     isOwned && dbWeapon
@@ -273,6 +275,7 @@ export function scoreWeaponForCharacter(
   return {
     weapon: resolvedWeapon,
     score,
+    suitabilityScore: relativePercentage,
     relativePercentage,
     tier,
     reason: reasons.join(' '),

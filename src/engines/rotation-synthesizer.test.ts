@@ -44,7 +44,7 @@ describe('Rotation Synthesizer', () => {
   });
 
   describe('resolveCharacterRotationProfile', () => {
-    it('retrieves curated profile for Nefer', () => {
+    it('retrieves curated profile for Nefer and tags curationSource', () => {
       const neferChar: Character = {
         id: 'Nefer',
         name: 'Nefer',
@@ -59,6 +59,44 @@ describe('Rotation Synthesizer', () => {
       expect(profile.primarySequence[0].type).toBe('skill');
       expect(profile.primarySequence[1].label).toBe('3CA');
       expect(profile.notes).toContain('Shadow Dance');
+      expect(profile.isCurated).toBe(true);
+      expect(profile.curationSource).toBe('database');
+    });
+
+    it('identifies character-level custom profiles with curationSource character', () => {
+      const customChar: Character = {
+        id: 'CustomHero',
+        name: 'Custom Hero',
+        element: 'Anemo',
+        weapon: 'Sword',
+        rarity: 5,
+        roles: ['Buffer/Shred'],
+        tags: [],
+        rotationProfile: {
+          primarySequence: parseActionShorthand('E > Q'),
+          stage: 'buffer-shred',
+          estimatedFieldTime: 2.0,
+          notes: 'Custom authored sequence',
+        },
+      };
+      const profile = resolveCharacterRotationProfile(customChar);
+      expect(profile.isCurated).toBe(true);
+      expect(profile.curationSource).toBe('character');
+    });
+
+    it('tags generic fallback characters with curationSource fallback and isCurated false', () => {
+      const dummyChar: Character = {
+        id: 'totally-unknown-hero',
+        name: 'Totally Unknown Hero',
+        element: 'Geo',
+        weapon: 'Claymore',
+        rarity: 4,
+        roles: ['Sustain'],
+        tags: [],
+      };
+      const profile = resolveCharacterRotationProfile(dummyChar);
+      expect(profile.isCurated).toBe(false);
+      expect(profile.curationSource).toBe('fallback');
     });
 
     it('retrieves curated profile for Furina with alternate sequence', () => {
@@ -193,6 +231,16 @@ describe('Rotation Synthesizer', () => {
       // Verify cycle time calculation includes field times plus swap transitions
       expect(result.totalCycleTime).toBeCloseTo(2.0 + 2.5 + 3.0 + 10.5 + 4 * 0.5, 1);
       expect(result.summaryString).toContain('Nefer');
+      expect(result.isCurated).toBe(true);
+      expect(result.steps.every((s) => s.isCurated)).toBe(true);
+    });
+
+    it('flags uncurated / heuristic fallback teams with isCurated false', () => {
+      const dummy1: Character = { id: 'd1', name: 'D1', element: 'Pyro', weapon: 'Sword', rarity: 4, roles: ['On-Field DPS'], tags: [] };
+      const dummy2: Character = { id: 'd2', name: 'D2', element: 'Hydro', weapon: 'Bow', rarity: 4, roles: ['Off-Field DPS'], tags: [] };
+      const result = synthesizeTeamRotation([dummy1, dummy2]);
+      expect(result.isCurated).toBe(false);
+      expect(result.curationSource).toBe('fallback');
     });
 
     it('honors special synergy: Bennett buff funneling into Xiangling', () => {

@@ -24,8 +24,10 @@ describe('Weapon Synergy Engine & Conflict Solver', () => {
       const result = scoreWeaponForCharacter(huTao, homa);
       expect(result.score).toBeGreaterThanOrEqual(95);
       expect(result.relativePercentage).toBeGreaterThanOrEqual(95);
+      expect(result.suitabilityScore).toBe(result.relativePercentage);
       expect(result.tier).toBe('BiS');
       expect(result.reason).toContain('Staff of Homa');
+      expect(result.reason).toContain('Estimated Weapon Suitability');
     });
 
     it('rejects weapons of the wrong weapon type with score 0 and Suboptimal tier', () => {

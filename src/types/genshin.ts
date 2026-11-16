@@ -81,6 +81,8 @@ export interface CharacterRotationProfile {
   estimatedFieldTime: number; // in seconds
   notes: string;
   tags?: string[];
+  isCurated?: boolean;
+  curationSource?: 'character' | 'database' | 'fallback';
 }
 
 export interface TeamRotationStep {
@@ -94,6 +96,8 @@ export interface TeamRotationStep {
   actions: RotationAction[];
   fieldTime: number;
   tip?: string;
+  isCurated?: boolean;
+  curationSource?: 'character' | 'database' | 'fallback';
 }
 
 export interface SynthesizedTeamRotation {
@@ -101,6 +105,8 @@ export interface SynthesizedTeamRotation {
   totalCycleTime: number;
   summaryString: string;
   warnings?: string[];
+  isCurated?: boolean;
+  curationSource?: 'character' | 'database' | 'fallback';
 }
 
 export interface Character {
@@ -186,6 +192,7 @@ export interface OwnedWeapon extends EquippedWeapon {
 export interface WeaponScoreResult {
   weapon: OwnedWeapon | WeaponData;
   score: number; // 0 - 100+
+  suitabilityScore?: number;
   relativePercentage: number; // 100% = BiS
   tier: 'BiS' | 'Optimal' | 'Great' | 'Usable' | 'Suboptimal';
   reason: string;
@@ -495,6 +502,7 @@ export interface AbyssDualTeamPlan {
   secondHalfTeam: TeamRecommendation;
   chamberCoverage: AbyssChamberCoverage[];
   overallScore: number;
+  mechanicCoverageScore?: number;
   warnings?: string[];
   cycleId?: string;
 }

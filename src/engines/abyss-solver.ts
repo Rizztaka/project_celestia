@@ -355,6 +355,7 @@ export function solveAbyssDualTeams(
       secondHalfTeam: team2,
       chamberCoverage: coverage,
       overallScore: Math.max(0, totalScore),
+      mechanicCoverageScore: Math.max(0, totalScore),
       cycleId: activeCycle.id,
       warnings: [
         `Roster Shortfall: Floor 12 requires at least 8 distinct characters (4 for First Half, 4 for Second Half). Your roster only has ${ownedChars.length} characters. Showing partial draft.`,
@@ -471,6 +472,7 @@ export function solveAbyssDualTeams(
     secondHalfTeam: finalPair.secondHalfTeam,
     chamberCoverage: finalPair.coverage,
     overallScore: Math.max(0, finalPair.score),
+    mechanicCoverageScore: Math.max(0, finalPair.score),
     cycleId: activeCycle.id,
   };
 }
@@ -506,5 +508,6 @@ export function swapAbyssDualHalves(
     secondHalfTeam: swappedSecond,
     chamberCoverage: coverage,
     overallScore: Math.max(0, totalScore),
+    mechanicCoverageScore: Math.max(0, totalScore),
   };
 }

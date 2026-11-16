@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { CHARACTERS } from '../data/characters';
+import { ARTIFACTS_MASTER } from '../data/artifacts-master';
 import type { Character, ArtifactSlot, ArtifactPiece, StatKey } from '../types/genshin';
 import {
   PieChart,
@@ -12,6 +13,10 @@ import {
   CheckCircle2,
   X,
   RefreshCw,
+  BookOpen,
+  Search,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { CharacterPortrait } from './CharacterPortrait';
 import { CharacterDetailModal } from './CharacterDetailModal';
@@ -44,6 +49,66 @@ export const ArtifactStopView: React.FC = () => {
 
   // Character detail modal state
   const [modalCharacter, setModalCharacter] = useState<Character | null>(null);
+
+  // Sub-tab Navigation: Optimizer vs Master Encyclopedia
+  const [mainTab, setMainTab] = useState<'optimizer' | 'encyclopedia'>('optimizer');
+  const [encyclopediaSearch, setEncyclopediaSearch] = useState<string>('');
+  const [rarityFilter, setRarityFilter] = useState<'All' | '5' | '4' | '3' | '1-2'>('All');
+  const [combatFilter, setCombatFilter] = useState<'All' | 'combat' | 'non-combat'>('All');
+  const [expandedSetIds, setExpandedSetIds] = useState<Set<string>>(new Set());
+
+  const toggleExpandSet = (id: string) => {
+    setExpandedSetIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const setRecommenders = useMemo(() => {
+    const map: Record<string, Character[]> = {};
+    for (const c of CHARACTERS) {
+      for (const a of c.build?.artifacts || []) {
+        if (!map[a.name]) map[a.name] = [];
+        if (!map[a.name].some((existing) => existing.id === c.id)) {
+          map[a.name].push(c);
+        }
+      }
+    }
+    return map;
+  }, []);
+
+  const filteredArtifactSets = useMemo(() => {
+    const q = encyclopediaSearch.trim().toLowerCase();
+    return ARTIFACTS_MASTER.filter((set) => {
+      const matchesSearch =
+        !q ||
+        set.name.toLowerCase().includes(q) ||
+        (set.effect2Pc && set.effect2Pc.toLowerCase().includes(q)) ||
+        (set.effect4Pc && set.effect4Pc.toLowerCase().includes(q)) ||
+        Object.values(set.pieces || {}).some(
+          (p) =>
+            p &&
+            (p.name.toLowerCase().includes(q) ||
+              (p.description && p.description.toLowerCase().includes(q)))
+        );
+
+      const matchesRarity =
+        rarityFilter === 'All' ||
+        (rarityFilter === '5' && set.maxRarity === 5) ||
+        (rarityFilter === '4' && set.maxRarity === 4) ||
+        (rarityFilter === '3' && set.maxRarity === 3) ||
+        (rarityFilter === '1-2' && set.maxRarity <= 2);
+
+      const matchesCombat =
+        combatFilter === 'All' ||
+        (combatFilter === 'combat' && set.isCombatSet) ||
+        (combatFilter === 'non-combat' && !set.isCombatSet);
+
+      return matchesSearch && matchesRarity && matchesCombat;
+    });
+  }, [encyclopediaSearch, rarityFilter, combatFilter]);
 
   const char = CHARACTERS.find((c) => c.id === selectedCharId) || CHARACTERS[0];
   const charConfig = getCharacterStatWeights(char.id);
@@ -106,20 +171,48 @@ export const ArtifactStopView: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#141624] via-[#1a1e32] to-[#141624] p-6 rounded-2xl border border-[#262c44] shadow-lg">
-        <div className="flex items-center gap-2 text-[#d4af37] text-xs font-bold tracking-wider uppercase mb-1">
+      {/* Sub-Tab Navigation Header */}
+      <div className="flex items-center gap-2 p-1.5 bg-[#10121d] border border-[#23273c] rounded-2xl max-w-2xl shadow-sm">
+        <button
+          onClick={() => setMainTab('optimizer')}
+          className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+            mainTab === 'optimizer'
+              ? 'bg-[#d4af37] text-black shadow-md'
+              : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#181d2f]'
+          }`}
+        >
           <PieChart className="w-4 h-4" />
-          <span>Resin ROI & Roll Value Diminishing Returns Engine</span>
-        </div>
-        <h1 className="text-2xl font-bold text-zinc-100 font-serif">
-          When Is Artifact Farming No Longer Worth Your Resin?
-        </h1>
-        <p className="text-sm text-zinc-400 mt-1 max-w-3xl">
-          Evaluates your build using true <strong>Roll Value (RV)</strong> tailored to each character's stat scalings.
-          Calculates the exact binomial probability of finding an upgrade across each slot and charts the diminishing returns curve.
-        </p>
+          <span>Resin & Roll Optimizer (37 Combat Sets)</span>
+        </button>
+        <button
+          onClick={() => setMainTab('encyclopedia')}
+          className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+            mainTab === 'encyclopedia'
+              ? 'bg-[#d4af37] text-black shadow-md'
+              : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#181d2f]'
+          }`}
+        >
+          <BookOpen className="w-4 h-4" />
+          <span>Master Artifact Encyclopedia (All 64 Sets)</span>
+        </button>
       </div>
+
+      {mainTab === 'optimizer' && (
+        <div className="space-y-6">
+          {/* Header Banner */}
+          <div className="bg-gradient-to-r from-[#141624] via-[#1a1e32] to-[#141624] p-6 rounded-2xl border border-[#262c44] shadow-lg">
+            <div className="flex items-center gap-2 text-[#d4af37] text-xs font-bold tracking-wider uppercase mb-1">
+              <PieChart className="w-4 h-4" />
+              <span>Resin ROI & Roll Value Diminishing Returns Engine</span>
+            </div>
+            <h1 className="text-2xl font-bold text-zinc-100 font-serif">
+              When Is Artifact Farming No Longer Worth Your Resin?
+            </h1>
+            <p className="text-sm text-zinc-400 mt-1 max-w-3xl">
+              Evaluates your build using true <strong>Roll Value (RV)</strong> tailored to each character's stat scalings.
+              Calculates the exact binomial probability of finding an upgrade across each slot and charts the diminishing returns curve.
+            </p>
+          </div>
 
       {/* Top Controls & Navigation Bar */}
       <div className="bg-[#12141d] border border-[#23273a] p-4 sm:p-5 rounded-2xl shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -470,6 +563,280 @@ export const ArtifactStopView: React.FC = () => {
           </div>
         </div>
       </div>
+    </div>
+  )}
+
+      {/* SUB-TAB 2: MASTER ARTIFACT ENCYCLOPEDIA (ALL 64 SETS) */}
+      {mainTab === 'encyclopedia' && (
+        <div className="space-y-5">
+          {/* Encyclopedia Filter Bar */}
+          <div className="bg-[#10121c] p-4 rounded-2xl border border-[#202538] space-y-3.5 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <div className="relative flex-1 max-w-md">
+                <Search className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search artifact sets, 2pc/4pc effects, or piece lore..."
+                  value={encyclopediaSearch}
+                  onChange={(e) => setEncyclopediaSearch(e.target.value)}
+                  className="w-full bg-[#141624] border border-[#262c44] text-xs text-zinc-200 rounded-xl pl-9 pr-3 py-2 focus:outline-none focus:border-[#d4af37]"
+                />
+              </div>
+
+              <div className="text-xs text-zinc-400 flex items-center justify-between sm:justify-end gap-3">
+                <span>
+                  Showing <strong className="text-zinc-100">{filteredArtifactSets.length}</strong> of{' '}
+                  <strong>{ARTIFACTS_MASTER.length}</strong> Master Sets
+                </span>
+                {(encyclopediaSearch || rarityFilter !== 'All' || combatFilter !== 'All') && (
+                  <button
+                    onClick={() => {
+                      setEncyclopediaSearch('');
+                      setRarityFilter('All');
+                      setCombatFilter('All');
+                    }}
+                    className="text-[11px] font-semibold text-[#d4af37] hover:underline cursor-pointer flex items-center gap-1"
+                  >
+                    <RefreshCw className="w-3 h-3" />
+                    <span>Reset</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 border-t border-[#1d2235]">
+              {/* Rarity Filter */}
+              <div className="space-y-1">
+                <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block">
+                  Rarity Filter:
+                </span>
+                <div className="flex flex-wrap gap-1 bg-[#141624] p-1 rounded-xl border border-[#22273c]">
+                  {[
+                    { id: 'All', label: 'All Rarities' },
+                    { id: '5', label: '5★ Sets' },
+                    { id: '4', label: '4★ Sets' },
+                    { id: '3', label: '3★ Sets' },
+                    { id: '1-2', label: '1★–2★ Sets' },
+                  ].map((r) => (
+                    <button
+                      key={r.id}
+                      onClick={() => setRarityFilter(r.id as any)}
+                      className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                        rarityFilter === r.id
+                          ? 'bg-[#d4af37] text-black font-bold shadow-sm'
+                          : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
+                      }`}
+                    >
+                      {r.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Set Category Filter */}
+              <div className="space-y-1">
+                <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block">
+                  Set Archetype:
+                </span>
+                <div className="flex flex-wrap gap-1 bg-[#141624] p-1 rounded-xl border border-[#22273c]">
+                  {[
+                    { id: 'All', label: 'All 64 Sets' },
+                    { id: 'combat', label: 'Combat Sets (37)' },
+                    { id: 'non-combat', label: 'Leveling / Legacy (27)' },
+                  ].map((c) => (
+                    <button
+                      key={c.id}
+                      onClick={() => setCombatFilter(c.id as any)}
+                      className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                        combatFilter === c.id
+                          ? 'bg-[#d4af37] text-black font-bold shadow-sm'
+                          : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
+                      }`}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Master Artifacts Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {filteredArtifactSets.map((set) => {
+              const isExpanded = expandedSetIds.has(set.id);
+              const recommenders = setRecommenders[set.name] || [];
+              const stars = '★'.repeat(set.maxRarity);
+              const hasPieces = set.pieces && Object.keys(set.pieces).length > 0;
+
+              return (
+                <div
+                  key={set.id}
+                  className="bg-[#121420] border border-[#23283c] hover:border-[#38405e] rounded-2xl p-4.5 space-y-3.5 transition-all shadow-sm flex flex-col justify-between"
+                >
+                  <div className="space-y-3">
+                    {/* Header: Icon, Name, Rarity & Category */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-black/60 border border-[#2d344d] p-1 shrink-0 flex items-center justify-center overflow-hidden">
+                          {set.icon ? (
+                            <img
+                              src={set.icon}
+                              alt={set.name}
+                              className="w-full h-full object-contain"
+                              onError={(e) => {
+                                const parent = (e.target as HTMLElement).parentElement;
+                                if (parent) parent.innerHTML = '<span class="text-zinc-500 text-xs">Artifact</span>';
+                              }}
+                            />
+                          ) : (
+                            <Layers className="w-6 h-6 text-[#d4af37]" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="text-sm font-bold text-zinc-100">{set.name}</h3>
+                            <span className="text-xs text-[#d4af37] font-extrabold">{stars}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <span
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                                set.isCombatSet
+                                  ? 'bg-amber-950/40 text-amber-300 border-amber-500/30'
+                                  : 'bg-zinc-800 text-zinc-400 border-zinc-700'
+                              }`}
+                            >
+                              {set.isCombatSet ? 'Combat Set (37 Baseline)' : 'Leveling / Non-Combat'}
+                            </span>
+                            <span className="text-[10px] text-zinc-500 font-mono">ID: {set.id}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Set Effects Cards */}
+                    <div className="space-y-2">
+                      {set.effect2Pc && (
+                        <div className="bg-[#161928] p-2.5 rounded-xl border border-[#283049] text-xs">
+                          <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/30 mr-2">
+                            2-Piece Set
+                          </span>
+                          <span className="text-zinc-200 leading-relaxed">{set.effect2Pc}</span>
+                        </div>
+                      )}
+
+                      {set.effect4Pc && (
+                        <div className="bg-[#161928] p-2.5 rounded-xl border border-[#283049] text-xs">
+                          <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-emerald-950/50 text-emerald-300 border border-emerald-500/30 mr-2">
+                            4-Piece Set
+                          </span>
+                          <span className="text-zinc-300 leading-relaxed whitespace-pre-line">{set.effect4Pc}</span>
+                        </div>
+                      )}
+
+                      {set.effect1Pc && (
+                        <div className="bg-[#161928] p-2.5 rounded-xl border border-[#283049] text-xs">
+                          <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-sky-950/50 text-sky-300 border border-sky-500/30 mr-2">
+                            1-Piece Set
+                          </span>
+                          <span className="text-zinc-300 leading-relaxed">{set.effect1Pc}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Recommended Characters Section */}
+                    {recommenders.length > 0 && (
+                      <div className="pt-2 border-t border-[#1e2338] space-y-1.5">
+                        <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+                          Recommended For ({recommenders.length} Characters):
+                        </div>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {recommenders.map((charObj) => (
+                            <button
+                              key={charObj.id}
+                              onClick={() => setModalCharacter(charObj)}
+                              className="bg-[#181c2d] hover:bg-[#22273e] border border-[#293048] hover:border-[#d4af37]/50 rounded-lg px-2 py-1 flex items-center gap-1.5 transition-all cursor-pointer group"
+                              title={`View ${charObj.name} build & kit`}
+                            >
+                              <div className="w-4 h-4 rounded-full overflow-hidden shrink-0 border border-white/10">
+                                <img src={charObj.icon} alt={charObj.name} className="w-full h-full object-cover" />
+                              </div>
+                              <span className="text-[11px] font-semibold text-zinc-300 group-hover:text-[#d4af37]">
+                                {charObj.name}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Expandable 5-Piece Lore & Names */}
+                  {hasPieces && (
+                    <div className="pt-2 border-t border-[#1e2338]">
+                      <button
+                        onClick={() => toggleExpandSet(set.id)}
+                        className="w-full flex items-center justify-between text-xs text-zinc-400 hover:text-zinc-200 transition-colors py-1 cursor-pointer"
+                      >
+                        <span className="flex items-center gap-1 font-semibold">
+                          <Layers className="w-3.5 h-3.5 text-[#d4af37]" />
+                          <span>Artifact Pieces & In-Game Lore ({Object.keys(set.pieces || {}).length})</span>
+                        </span>
+                        {isExpanded ? (
+                          <ChevronUp className="w-4 h-4 text-zinc-400" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-zinc-400" />
+                        )}
+                      </button>
+
+                      {isExpanded && (
+                        <div className="mt-2.5 space-y-2 border-t border-[#1f2439] pt-2">
+                          {(['flower', 'plume', 'sands', 'goblet', 'circlet'] as ArtifactSlot[]).map((slotKey) => {
+                            const piece = set.pieces?.[slotKey];
+                            if (!piece) return null;
+                            const slotLabel = SLOT_NAMES[slotKey] || slotKey;
+                            return (
+                              <div
+                                key={slotKey}
+                                className="bg-[#0e1019] p-2.5 rounded-xl border border-[#202538] flex items-start gap-3"
+                              >
+                                {piece.icon && (
+                                  <div className="w-9 h-9 rounded-lg bg-black/60 border border-[#2b3147] p-0.5 shrink-0 overflow-hidden flex items-center justify-center">
+                                    <img
+                                      src={piece.icon}
+                                      alt={piece.name}
+                                      className="w-full h-full object-contain"
+                                      onError={(e) => {
+                                        const parent = (e.target as HTMLElement).parentElement;
+                                        if (parent) parent.style.display = 'none';
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                                <div className="space-y-0.5 flex-1 min-w-0">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <h4 className="text-xs font-bold text-zinc-200 truncate">{piece.name}</h4>
+                                    <span className="text-[10px] font-semibold text-zinc-400 shrink-0">
+                                      {slotLabel}
+                                    </span>
+                                  </div>
+                                  <p className="text-[11px] text-zinc-400 leading-relaxed italic">
+                                    "{piece.description}"
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Edit Piece Modal */}
       {editingSlot && (
@@ -486,6 +853,7 @@ export const ArtifactStopView: React.FC = () => {
       <CharacterDetailModal
         character={modalCharacter}
         onClose={() => setModalCharacter(null)}
+        onSelectCharacter={setModalCharacter}
       />
     </div>
   );

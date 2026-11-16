@@ -12,6 +12,7 @@ import {
   THEATER_DIFFICULTIES,
   THEATER_BOSS_INFO,
   createCustomSeason,
+  DEFAULT_ACTIVE_THEATER_SEASON_ID,
 } from '../data/theater-seasons';
 import { CHARACTERS } from '../data/characters';
 import {
@@ -70,7 +71,9 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
   ownedIds,
   profiles,
 }) => {
-  const [selectedSeasonId, setSelectedSeasonId] = useState<string>(THEATER_SEASONS[0].id);
+  const [selectedSeasonId, setSelectedSeasonId] = useState<string>(
+    DEFAULT_ACTIVE_THEATER_SEASON_ID
+  );
   const [customElements, setCustomElements] = useState<Element[]>(['Pyro', 'Hydro', 'Anemo']);
   const [difficulty, setDifficulty] = useState<TheaterDifficulty>('Visionary');
   const [schedule, setSchedule] = useState<TheaterActPlan[]>([]);
@@ -294,12 +297,21 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
               onChange={(e) => setSelectedSeasonId(e.target.value)}
               className="bg-[#121422] border border-[#2e375c] text-zinc-200 text-xs font-medium rounded-xl px-3 py-1.5 focus:outline-none focus:border-[#d4af37]"
             >
-              {THEATER_SEASONS.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-              <option value="custom">⚙️ Custom Element Cycle...</option>
+              <optgroup label="Active Seasons (Version 7.x)">
+                {THEATER_SEASONS.filter((s) => s.id.startsWith('season-7')).map((s) => (
+                  <option key={s.id} value={s.id} className="text-[#d4af37]">
+                    ⭐ {s.name}
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="Historical Archive (Version 5.x)">
+                {THEATER_SEASONS.filter((s) => !s.id.startsWith('season-7')).map((s) => (
+                  <option key={s.id} value={s.id} className="text-zinc-300">
+                    {s.name}
+                  </option>
+                ))}
+              </optgroup>
+              <option value="custom" className="text-amber-300 font-bold">⚙️ Custom Element Cycle...</option>
             </select>
 
             {/* Elements Display */}
@@ -1002,6 +1014,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
           onClose={() => setSelectedCharacter(null)}
           isOwned={ownedIds.includes(selectedCharacter.id)}
           profile={profiles ? profiles[selectedCharacter.id] : undefined}
+          onSelectCharacter={setSelectedCharacter}
         />
       )}
     </div>

@@ -145,12 +145,21 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                 onChange={(e) => handleSelectCycle(e.target.value)}
                 className="bg-[#181c2e] text-xs font-bold text-[#d4af37] border border-[#353d63] rounded-lg px-2.5 py-1 focus:outline-none focus:border-[#d4af37] cursor-pointer"
               >
-                {ABYSS_CYCLES.map((c) => (
-                  <option key={c.id} value={c.id} className="bg-[#141624] text-zinc-200">
-                    {c.version} · {c.phase}
-                  </option>
-                ))}
-                <option value="custom-sandbox" className="bg-[#141624] text-amber-300">
+                <optgroup label="Active Floor 12 (Version 7.x)">
+                  {ABYSS_CYCLES.filter((c) => c.version.startsWith('7.')).map((c) => (
+                    <option key={c.id} value={c.id} className="bg-[#141624] text-[#d4af37]">
+                      ⭐ [v{c.version}] {c.phase}: {c.name.split(':')[1]?.trim() || c.name}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="Historical Archive (Version 5.x)">
+                  {ABYSS_CYCLES.filter((c) => !c.version.startsWith('7.')).map((c) => (
+                    <option key={c.id} value={c.id} className="bg-[#141624] text-zinc-300">
+                      [v{c.version}] {c.phase}: {c.name.split(':')[1]?.trim() || c.name}
+                    </option>
+                  ))}
+                </optgroup>
+                <option value="custom-sandbox" className="bg-[#141624] text-amber-300 font-bold">
                   ⚡ Custom Sandbox
                 </option>
               </select>
@@ -900,6 +909,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
           onClose={() => setSelectedCharacter(null)}
           isOwned={ownedIds.includes(selectedCharacter.id)}
           profile={profiles ? profiles[selectedCharacter.id] : undefined}
+          onSelectCharacter={setSelectedCharacter}
         />
       )}
     </div>

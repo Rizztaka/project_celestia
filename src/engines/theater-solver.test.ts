@@ -12,7 +12,7 @@ import { THEATER_SEASONS } from '../data/theater-seasons';
 import { CHARACTERS } from '../data/characters';
 
 describe('Imaginarium Theater Engine', () => {
-  const season1 = THEATER_SEASONS[0]; // Pyro, Hydro, Anemo
+  const season1 = THEATER_SEASONS.find((s) => s.id === 'season-natlan-pyro-hydro-anemo') || THEATER_SEASONS[0]; // Pyro, Hydro, Anemo
 
   describe('filterEligibleTheaterRoster', () => {
     it('filters characters belonging to season elements plus special guest cast', () => {

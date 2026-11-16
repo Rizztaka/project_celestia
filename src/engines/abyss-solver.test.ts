@@ -171,7 +171,8 @@ describe('Spiral Abyss Floor 12 Dual-Team Solver', () => {
       resonance: [],
     };
 
-    const { coverage } = evaluateChamberMechanicCoverage(teamA, teamB);
+    const cycle53 = ABYSS_CYCLES.find((c) => c.id === 'cycle-5-3');
+    const { coverage } = evaluateChamberMechanicCoverage(teamA, teamB, cycle53);
     const chamber3 = coverage.find((c) => c.chamber === 3)!;
     // Since Nefer is Nod-Krai (not Natlan/Nightsoul), First Half should NOT be marked satisfied
     expect(chamber3.firstHalfSatisfied).toBe(false);
@@ -319,7 +320,8 @@ describe('Spiral Abyss Floor 12 Dual-Team Solver', () => {
         resonance: [],
       };
 
-      const { coverage } = evaluateChamberMechanicCoverage(hydroCarryTeam, secondTeam);
+      const cycle53 = ABYSS_CYCLES.find((c) => c.id === 'cycle-5-3');
+      const { coverage } = evaluateChamberMechanicCoverage(hydroCarryTeam, secondTeam, cycle53);
       const chamber1 = coverage.find((c) => c.chamber === 1)!;
 
       // Because Neuvillette is the primary carry and is Hydro, and there is no non-Hydro DPS, First Half MUST NOT be satisfied

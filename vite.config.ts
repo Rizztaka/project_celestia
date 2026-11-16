@@ -6,6 +6,21 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
-    chunkSizeWarningLimit: 1500,
+    chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          const normalized = id.replace(/\\/g, '/');
+          if (
+            normalized.includes('src/data/characters.ts') ||
+            normalized.includes('src/data/weapons.ts') ||
+            normalized.includes('src/data/artifacts-master.ts') ||
+            normalized.includes('src/data/character-rotations.ts')
+          ) {
+            return 'genshin-database';
+          }
+        },
+      },
+    },
   },
 });

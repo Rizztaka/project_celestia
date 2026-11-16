@@ -54,8 +54,285 @@ const DEFAULT_RES: Record<Element | 'Physical', number> = {
   Physical: 10,
 };
 
+export const DEFAULT_ACTIVE_ABYSS_CYCLE_ID = 'cycle-7-2';
+
 export const ABYSS_CYCLES: AbyssCycleConfig[] = [
-  // Version 5.3 (Current Official Floor 12)
+  // Version 7.2 (Active Official Floor 12)
+  {
+    id: 'cycle-7-2',
+    version: '7.2',
+    phase: 'Phase 1',
+    name: 'Version 7.2 · Phase 1: Stellar Fracture - Polestar Domain',
+    buffDescription:
+      'Characters with Polestar alignment or triggering Cryo/Hydro/Electro reactions gain +40% Polestar resonance DMG and +30% CRIT DMG. Triggering Hexerei or Lunar reactions unleashes a Stellar Nova shockwave.',
+    chambers: [
+      {
+        chamber: 1,
+        firstHalf: {
+          enemies: [
+            {
+              id: 'consecrated-scorpion',
+              name: 'Consecrated Scorpion',
+              level: 100,
+              hp: 1450000,
+              baseRes: { ...DEFAULT_RES, Electro: 40 },
+              weaknessNote: 'High Electro RES; destroy Phagocytic Energy Block to paralyze',
+            },
+            {
+              id: 'eremite-floral-ring-dancer',
+              name: 'Eremite Floral Ring-Dancer',
+              level: 100,
+              hp: 1150000,
+              baseRes: { ...DEFAULT_RES, Dendro: 50 },
+              weaknessNote: 'High Dendro RES; interrupt spirit summon with sustained heavy hits',
+            },
+          ],
+          mechanics: {
+            recommendedElements: ['Cryo', 'Pyro', 'Hydro'],
+            description: 'Aggressive multi-target beasts requiring strong crowd control and frontloaded bursts.',
+          },
+        },
+        secondHalf: {
+          enemies: [
+            {
+              id: 'abyss-lector-pyro',
+              name: 'Abyss Lector: Fathomless Flames',
+              level: 100,
+              hp: 1350000,
+              baseRes: { ...DEFAULT_RES, Pyro: 50 },
+              shieldType: 'Pyro',
+              shieldUnits: 36,
+              weaknessNote: 'Rapid Hydro shield breaking (Furina, Xingqiu, Yelan)',
+            },
+            {
+              id: 'pyro-abyss-mage',
+              name: 'Pyro Abyss Mage',
+              level: 100,
+              hp: 420000,
+              baseRes: { ...DEFAULT_RES, Pyro: 50 },
+              shieldType: 'Pyro',
+              shieldUnits: 12,
+            },
+          ],
+          mechanics: {
+            shieldType: 'Pyro',
+            shieldUnits: 36,
+            recommendedElements: ['Hydro', 'Electro', 'Cryo'],
+            prohibitedElements: ['Pyro'],
+            description: 'Intense Pyro shields requiring rapid Hydro or elemental shield-shredding.',
+          },
+        },
+      },
+      {
+        chamber: 2,
+        firstHalf: {
+          enemies: [
+            {
+              id: 'maguu-kenki-trio',
+              name: 'Maguu Kenki: Lone Gale & Galloping Frost',
+              level: 100,
+              hp: 2200000,
+              baseRes: { ...DEFAULT_RES, Anemo: 30, Cryo: 30 },
+              weaknessNote: 'High burst AoE damage; keep both targets grouped during sword wave slashes',
+            },
+          ],
+          mechanics: {
+            favorsAoE: true,
+            recommendedElements: ['Pyro', 'Electro', 'Dendro'],
+            description: 'Close-quarters dual automaton burst; heavy sustained survivability and AoE required.',
+          },
+        },
+        secondHalf: {
+          enemies: [
+            {
+              id: 'ruin-drake-skywatch',
+              name: 'Ruin Drake: Skywatch',
+              level: 100,
+              hp: 1750000,
+              baseRes: { ...DEFAULT_RES, Physical: 50 },
+              weaknessNote: 'Requires Bow aimed shot to hit wing turbines and ground unit',
+            },
+          ],
+          mechanics: {
+            requiresBow: true,
+            recommendedElements: ['Hydro', 'Cryo', 'Electro'],
+            description: 'Airborne Ruin Drake demands ranged bow shot on exposed power core to force crash.',
+          },
+        },
+      },
+      {
+        chamber: 3,
+        firstHalf: {
+          enemies: [
+            {
+              id: 'stellar-abyss-sovereign',
+              name: 'Stellar Sovereign: Polestar Core',
+              level: 100,
+              hp: 3100000,
+              baseRes: { ...DEFAULT_RES },
+              weaknessNote: 'High single-target HP pool; Nightsoul and Polestar attacks accelerate shield shatter',
+            },
+          ],
+          mechanics: {
+            favorsNightsoul: true,
+            recommendedElements: ['Pyro', 'Hydro', 'Cryo'],
+            description: 'Single-target massive HP boss with high kinetic shockwaves; rewards focused carry rotation.',
+          },
+        },
+        secondHalf: {
+          enemies: [
+            {
+              id: 'iniquitous-baptist-polestar',
+              name: 'Iniquitous Baptist: Polestar Ward',
+              level: 100,
+              hp: 2700000,
+              baseRes: { ...DEFAULT_RES, Electro: 50 },
+              shieldType: 'Electro',
+              shieldUnits: 32,
+              weaknessNote: 'Electro ward broken swiftly by Cryo, Pyro, and Dendro',
+            },
+          ],
+          mechanics: {
+            shieldType: 'Electro',
+            shieldUnits: 32,
+            recommendedElements: ['Pyro', 'Cryo', 'Dendro'],
+            description: 'Sequential elemental barrier; multi-element reaction team required.',
+          },
+        },
+      },
+    ],
+  },
+  // Version 7.1 (Active Official Floor 12)
+  {
+    id: 'cycle-7-1',
+    version: '7.1',
+    phase: 'Phase 2',
+    name: 'Version 7.1 · Phase 2: Lunar Gleam - Ascendant Radiance',
+    buffDescription:
+      'Triggering Lunar-Bloom, Lunar-Charged, or Lunar-Crystallize reactions increases active character ATK by 30% and Elemental Mastery by 120. When Moonsign reaches Ascendant Gleam, unleash a Moonburst shockwave.',
+    chambers: [
+      {
+        chamber: 1,
+        firstHalf: {
+          enemies: [
+            {
+              id: 'hydro-phantasm-v7',
+              name: 'Hydro Phantasm Sovereign',
+              level: 98,
+              hp: 1550000,
+              baseRes: { ...DEFAULT_RES, Hydro: 100 },
+              weaknessNote: 'Immune to Hydro; weak to Dendro, Cryo, Pyro',
+            },
+            {
+              id: 'consecrated-flying-serpent',
+              name: 'Consecrated Flying Serpent',
+              level: 98,
+              hp: 1200000,
+              baseRes: { ...DEFAULT_RES, Anemo: 40 },
+            },
+          ],
+          mechanics: {
+            prohibitedElements: ['Hydro'],
+            recommendedElements: ['Dendro', 'Cryo', 'Pyro', 'Electro'],
+            description: 'Hydro-immune targets; non-Hydro DPS required with high reaction potential.',
+          },
+        },
+        secondHalf: {
+          enemies: [
+            {
+              id: 'abyss-herald-frostfall',
+              name: 'Abyss Herald: Frostfall',
+              level: 98,
+              hp: 1400000,
+              baseRes: { ...DEFAULT_RES, Cryo: 50 },
+              shieldType: 'Cryo',
+              shieldUnits: 36,
+              weaknessNote: 'Cryo shield rapidly melted by Pyro attacks',
+            },
+          ],
+          mechanics: {
+            shieldType: 'Cryo',
+            shieldUnits: 36,
+            recommendedElements: ['Pyro', 'Electro'],
+            prohibitedElements: ['Cryo'],
+            description: 'Rapid Cryo shield melting required to interrupt frost blades.',
+          },
+        },
+      },
+      {
+        chamber: 2,
+        firstHalf: {
+          enemies: [
+            {
+              id: 'centaur-automaton-v7',
+              name: 'Secret Source Automaton: Configuration Device',
+              level: 98,
+              hp: 2400000,
+              baseRes: { ...DEFAULT_RES },
+            },
+          ],
+          mechanics: {
+            favorsAoE: true,
+            recommendedElements: ['Hydro', 'Electro', 'Dendro'],
+            description: 'Phlogiston pillar shockwaves; heavy sustained DPS.',
+          },
+        },
+        secondHalf: {
+          enemies: [
+            {
+              id: 'ruin-drake-blaster',
+              name: 'Ruin Drake: Skywatch Variant',
+              level: 98,
+              hp: 1800000,
+              baseRes: { ...DEFAULT_RES, Physical: 50 },
+              weaknessNote: 'Requires Bow shot to wing weakpoints',
+            },
+          ],
+          mechanics: {
+            requiresBow: true,
+            recommendedElements: ['Electro', 'Dendro', 'Pyro'],
+            description: 'Flying unit requiring precision bow strikes.',
+          },
+        },
+      },
+      {
+        chamber: 3,
+        firstHalf: {
+          enemies: [
+            {
+              id: 'lunar-bloom-beast',
+              name: 'Kuuvahki Primeval Fiend',
+              level: 98,
+              hp: 2900000,
+              baseRes: { ...DEFAULT_RES },
+            },
+          ],
+          mechanics: {
+            favorsNightsoul: true,
+            recommendedElements: ['Dendro', 'Hydro', 'Electro'],
+            description: 'Massive Moonsign fiend highly vulnerable to Lunar reaction cascades.',
+          },
+        },
+        secondHalf: {
+          enemies: [
+            {
+              id: 'hydro-tulpa-ascendant',
+              name: 'Hydro Tulpa: Ascendant Tide',
+              level: 98,
+              hp: 3100000,
+              baseRes: { ...DEFAULT_RES, Hydro: 100 },
+            },
+          ],
+          mechanics: {
+            prohibitedElements: ['Hydro'],
+            recommendedElements: ['Pyro', 'Dendro', 'Cryo'],
+            description: 'High HP Hydro Sovereign; forward Vaporize and Dendro reaction checks.',
+          },
+        },
+      },
+    ],
+  },
+  // Version 5.3 (Official Floor 12 Baseline Archive)
   {
     id: 'cycle-5-3',
     version: '5.3',
@@ -202,7 +479,7 @@ export const ABYSS_CYCLES: AbyssCycleConfig[] = [
     ],
   },
 
-  // Version 5.2
+  // Version 5.2 (Historical Archive)
   {
     id: 'cycle-5-2',
     version: '5.2',
@@ -460,7 +737,7 @@ export const ABYSS_CYCLES: AbyssCycleConfig[] = [
  * Creates a fresh deep copy of the default Custom Sandbox cycle.
  */
 export function createCustomSandboxCycle(): AbyssCycleConfig {
-  const base = ABYSS_CYCLES[0]; // Clone from 5.3
+  const base = ABYSS_CYCLES[0]; // Clone from latest active Floor 12 cycle (v7.2)
   return {
     id: 'custom-sandbox',
     version: 'Custom',

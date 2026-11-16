@@ -76,7 +76,49 @@ export const THEATER_DIFFICULTIES: Record<
   Visionary: { acts: 10, requiredCharacters: 22, bossActs: [3, 6, 8, 10] },
 };
 
+export const DEFAULT_ACTIVE_THEATER_SEASON_ID = 'season-7-snezhnaya-cryo-hydro-electro';
+
 export const THEATER_SEASONS: TheaterSeasonConfig[] = [
+  {
+    id: 'season-7-snezhnaya-cryo-hydro-electro',
+    name: 'Version 7.2 · Frost & Thunder (Cryo / Hydro / Electro)',
+    elements: ['Cryo', 'Hydro', 'Electro'],
+    openingCastIds: [
+      'Columbina',
+      'Sandrone',
+      'Clorinde',
+      'Skirk',
+      'Tartaglia',
+      'Mitya',
+    ],
+    specialGuestIds: ['Mavuika', 'KaedeharaKazuha', 'Nahida', 'Zhongli'],
+    bosses: {
+      3: 'Maguu Kenki',
+      6: 'Icewind Suite: Coppelia',
+      8: 'Iniquitous Baptist',
+      10: 'Hydro Tulpa',
+    },
+  },
+  {
+    id: 'season-7-nod-krai-anemo-pyro-geo',
+    name: 'Version 7.1 · Astral Zephyr & Wildfire (Anemo / Pyro / Geo)',
+    elements: ['Anemo', 'Pyro', 'Geo'],
+    openingCastIds: [
+      'Mavuika',
+      'Linnea',
+      'Chasca',
+      'Xilonen',
+      'Bennett',
+      'Varka',
+    ],
+    specialGuestIds: ['Furina', 'Nefer', 'Columbina', 'RaidenShogun'],
+    bosses: {
+      3: 'Jadeplume Terrorshroom',
+      6: 'Centaur Automaton',
+      8: 'Algorithm of Semi-Intransient Matrix',
+      10: 'Icewind Suite: Coppelia',
+    },
+  },
   {
     id: 'season-natlan-pyro-hydro-anemo',
     name: 'Season 1 · Blazing Winds (Pyro / Hydro / Anemo)',

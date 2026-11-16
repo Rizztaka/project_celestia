@@ -17,13 +17,67 @@ import {
   Zap,
   Info,
   Sliders,
+  Crown,
+  Loader2,
+  Compass,
 } from 'lucide-react';
+import { CHARACTERS } from '../data/characters';
 import { CharacterPortrait } from './CharacterPortrait';
 import { resolveCharacterRotationProfile } from '../engines/rotation-synthesizer';
 import { RotationBadgeList } from './RotationBadgeList';
 import { rankWeaponsForCharacter } from '../engines/weapon-solver';
 import { getSavedWeapons, saveWeapons } from '../services/storage';
 import { WEAPONS_BY_TYPE, getWeaponByKey } from '../data/weapons';
+import { getTalentScaling, type TalentScalingData } from '../data/talent-scaling';
+
+function formatTalentValue(val: number, format: string): string {
+  switch (format) {
+    case 'F1P':
+      return (val * 100).toFixed(1) + '%';
+    case 'F2P':
+      return (val * 100).toFixed(2) + '%';
+    case 'P': {
+      const pct = val * 100;
+      return (pct % 1 === 0 ? pct.toFixed(0) : pct.toFixed(1)) + '%';
+    }
+    case 'F1':
+      return val.toFixed(1);
+    case 'F2':
+      return val.toFixed(2);
+    case 'I':
+      return Math.round(val).toString();
+    default:
+      return String(val);
+  }
+}
+
+function renderTalentLabel(
+  label: string,
+  parameters: Record<string, number[]>,
+  level: number
+): { name: string; value: string } {
+  const parts = label.split('|');
+  const name = parts[0];
+  const template = parts[1] || '';
+  const levelIdx = Math.max(0, Math.min(14, level - 1));
+
+  const value = template.replace(/\{param(\d+):([A-Z0-9]+)\}/g, (_, num, fmt) => {
+    const key = 'param' + num;
+    const arr = parameters[key];
+    if (!arr || arr[levelIdx] === undefined) return '?';
+    return formatTalentValue(arr[levelIdx], fmt);
+  });
+
+  return { name, value };
+}
+
+const TALENT_MILESTONES = [
+  { level: 1, label: 'Lv. 1', desc: 'Base' },
+  { level: 6, label: 'Lv. 6', desc: 'Mid' },
+  { level: 9, label: 'Lv. 9', desc: 'High' },
+  { level: 10, label: 'Lv. 10', desc: 'Crown', isCrown: true },
+  { level: 13, label: 'Lv. 13', desc: 'C3/C5', isConst: true },
+];
 
 interface CharacterDetailModalProps {
   character: Character | null;
@@ -34,6 +88,7 @@ interface CharacterDetailModalProps {
   onUpdateProfile?: (profile: OwnedCharacterProfile) => void;
   weapons?: OwnedWeapon[];
   onUpdateWeapons?: (weapons: OwnedWeapon[]) => void;
+  onSelectCharacter?: (char: Character) => void;
 }
 
 const ELEMENT_THEMES: Record<
@@ -98,7 +153,7 @@ const ELEMENT_THEMES: Record<
 };
 
 export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
-  character,
+  character: propCharacter,
   onClose,
   isOwned,
   onToggleOwned,
@@ -106,7 +161,15 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   onUpdateProfile,
   weapons,
   onUpdateWeapons,
+  onSelectCharacter,
 }) => {
+  const [internalCharacter, setInternalCharacter] = useState<Character | null>(propCharacter);
+  useEffect(() => {
+    setInternalCharacter(propCharacter);
+  }, [propCharacter]);
+
+  const character = internalCharacter || propCharacter;
+
   const [activeTab, setActiveTab] = useState<'build' | 'talents' | 'constellations'>('build');
   const [showAlternateRotation, setShowAlternateRotation] = useState<boolean>(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -122,6 +185,54 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   const [customWeaponKey, setCustomWeaponKey] = useState<string>('');
   const [customLevel, setCustomLevel] = useState<number>(profile?.weapon?.level ?? 90);
   const [customRefinement, setCustomRefinement] = useState<number>(profile?.weapon?.refinement ?? 1);
+
+  // Dynamic talent scaling state (initialized from saved profile if available)
+  const [talentLevels, setTalentLevels] = useState<{ normal: number; skill: number; burst: number }>({
+    normal: profile?.talents?.auto || 10,
+    skill: profile?.talents?.skill || 10,
+    burst: profile?.talents?.burst || 10,
+  });
+  const [scalingData, setScalingData] = useState<TalentScalingData | null>(null);
+  const [isLoadingScaling, setIsLoadingScaling] = useState(false);
+
+  useEffect(() => {
+    if (!character) {
+      setScalingData(null);
+      return;
+    }
+    let active = true;
+    setIsLoadingScaling(true);
+    const initialNormal = profile?.talents?.auto || 10;
+    const initialSkill = profile?.talents?.skill || 10;
+    const initialBurst = profile?.talents?.burst || 10;
+    setTalentLevels({ normal: initialNormal, skill: initialSkill, burst: initialBurst });
+    const charKey = character.id || character.name;
+    getTalentScaling(charKey)
+      .then((data) => {
+        if (active) {
+          if (!data && character.name) {
+            getTalentScaling(character.name).then((fb) => {
+              if (active) {
+                setScalingData(fb || null);
+                setIsLoadingScaling(false);
+              }
+            });
+          } else {
+            setScalingData(data || null);
+            setIsLoadingScaling(false);
+          }
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setScalingData(null);
+          setIsLoadingScaling(false);
+        }
+      });
+    return () => {
+      active = false;
+    };
+  }, [character?.id, character?.name, profile?.talents?.auto, profile?.talents?.skill, profile?.talents?.burst]);
 
   // Sync customizer defaults with character weapon type
   useEffect(() => {
@@ -342,6 +453,44 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   </span>
                 ))}
               </div>
+
+              {/* Traveler Element Switcher */}
+              {character.name.includes('Traveler') && (
+                <div className="pt-2 flex items-center gap-2 flex-wrap">
+                  <span className="text-[11px] font-semibold text-[#d4af37] flex items-center gap-1">
+                    <Compass className="w-3.5 h-3.5" />
+                    <span>Traveler Element:</span>
+                  </span>
+                  <div className="flex items-center gap-1 bg-[#10121d] p-0.5 rounded-lg border border-[#24293f]">
+                    {(['Anemo', 'Geo', 'Electro', 'Dendro', 'Hydro', 'Pyro'] as Element[]).map((elem) => {
+                      const isCurrent = character.element === elem;
+                      const targetTraveler = CHARACTERS.find(
+                        (c) => c.name.includes('Traveler') && c.element === elem
+                      );
+                      return (
+                        <button
+                          key={elem}
+                          type="button"
+                          onClick={() => {
+                            if (targetTraveler) {
+                              setInternalCharacter(targetTraveler);
+                              onSelectCharacter?.(targetTraveler);
+                            }
+                          }}
+                          className={`px-2 py-0.5 rounded-md text-[11px] font-bold transition-all cursor-pointer border ${
+                            isCurrent
+                              ? 'bg-[#d4af37] text-black border-[#d4af37] shadow-sm'
+                              : 'text-zinc-400 hover:text-zinc-200 border-transparent hover:bg-[#1f243b]'
+                          }`}
+                          title={`Switch to Traveler (${elem})`}
+                        >
+                          {elem}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {/* Interactive Constellation Selector when owned */}
               {isOwned && onUpdateProfile && (
@@ -863,8 +1012,47 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
           {/* TAB 2: TALENTS */}
           {activeTab === 'talents' && (
-            <div className="space-y-3">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-2 flex-wrap bg-[#10121d] p-3 rounded-xl border border-[#22273c]">
+                <span className="text-xs text-zinc-300 font-medium">
+                  Dynamic Level 1–15 Attribute Multipliers
+                </span>
+                {isOwned && onUpdateProfile && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onUpdateProfile({
+                        id: character.id,
+                        level: profile?.level ?? 90,
+                        constellation: profile?.constellation ?? 0,
+                        weapon: profile?.weapon,
+                        talents: {
+                          auto: talentLevels.normal,
+                          skill: talentLevels.skill,
+                          burst: talentLevels.burst,
+                        },
+                      });
+                    }}
+                    className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-[#d4af37]/15 hover:bg-[#d4af37]/30 text-[#d4af37] border border-[#d4af37]/40 flex items-center gap-1.5 transition-colors cursor-pointer"
+                    title="Save current talent levels (Lv 1–15) to owned profile"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                    <span>Save (Lv. {talentLevels.normal} / {talentLevels.skill} / {talentLevels.burst}) to Profile</span>
+                  </button>
+                )}
+              </div>
+              {isLoadingScaling && (
+                <div className="bg-[#131622] border border-[#23273a] p-3 rounded-xl flex items-center justify-center gap-2 text-xs text-zinc-400">
+                  <Loader2 className="w-4 h-4 animate-spin text-[#d4af37]" />
+                  <span>Loading dynamic Level 1–15 talent scaling curves...</span>
+                </div>
+              )}
               {character.talents?.map((talent, idx) => {
+                const isCombatTalent = talent.type === 'normal' || talent.type === 'skill' || talent.type === 'burst';
+                const combatType = isCombatTalent ? (talent.type as 'normal' | 'skill' | 'burst') : null;
+                const currentLevel = combatType ? talentLevels[combatType] : 1;
+                const combatSkill = combatType && scalingData ? scalingData[combatType] : undefined;
+
                 const typeLabel =
                   talent.type === 'normal'
                     ? 'Normal Attack'
@@ -888,38 +1076,138 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                 return (
                   <div
                     key={talent.name + idx}
-                    className="bg-[#131622] border border-[#23273a] p-4 rounded-xl space-y-2 hover:border-[#333a54] transition-colors"
+                    className="bg-[#131622] border border-[#23273a] p-4 rounded-xl space-y-3 hover:border-[#333a54] transition-colors"
                   >
-                    <div className="flex items-center gap-3">
-                      {talent.icon ? (
-                        <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#2d344d] p-1 shrink-0 flex items-center justify-center">
-                          <img
-                            src={talent.icon}
-                            alt={talent.name}
-                            className="w-full h-full object-contain"
-                            onError={(e) => {
-                              const parent = (e.target as HTMLElement).parentElement;
-                              if (parent) parent.style.display = 'none';
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#2d344d] p-1 shrink-0 flex items-center justify-center text-[#d4af37]">
-                          <BookOpen className="w-5 h-5" />
-                        </div>
-                      )}
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-zinc-100">{talent.name}</span>
-                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${badgeColor}`}>
-                            {typeLabel}
-                          </span>
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <div className="flex items-center gap-3">
+                        {talent.icon ? (
+                          <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#2d344d] p-1 shrink-0 flex items-center justify-center">
+                            <img
+                              src={talent.icon}
+                              alt={talent.name}
+                              className="w-full h-full object-contain"
+                              onError={(e) => {
+                                const parent = (e.target as HTMLElement).parentElement;
+                                if (parent) parent.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#2d344d] p-1 shrink-0 flex items-center justify-center text-[#d4af37]">
+                            <BookOpen className="w-5 h-5" />
+                          </div>
+                        )}
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-zinc-100">{talent.name}</span>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${badgeColor}`}>
+                              {typeLabel}
+                            </span>
+                          </div>
                         </div>
                       </div>
+
+                      {/* Level Indicator for combat talents */}
+                      {combatType && (
+                        <div className="flex items-center gap-1.5 bg-[#0c0e17] px-2.5 py-1 rounded-lg border border-[#23273c]">
+                          <span className="text-[11px] text-zinc-400 font-medium">Talent Level:</span>
+                          <span className="text-xs font-extrabold text-[#d4af37]">Lv. {currentLevel}</span>
+                          {currentLevel === 10 && <Crown className="w-3.5 h-3.5 text-[#d4af37]" />}
+                          {currentLevel > 10 && (
+                            <span className="text-[10px] px-1 py-0.2 bg-[#d4af37]/20 text-[#d4af37] rounded font-bold">
+                              C{currentLevel >= 13 ? '3/5' : '+'}
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
+
                     <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-line pl-0.5 break-words">
                       {talent.description}
                     </p>
+
+                    {/* Interactive Level Slider & Parameter Table for Combat Talents */}
+                    {combatType && (
+                      <div className="pt-2 border-t border-[#202538] space-y-3">
+                        <div className="bg-[#0e101a] p-3 rounded-xl border border-[#21263d] space-y-2.5">
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
+                            <span className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5">
+                              <Sliders className="w-3.5 h-3.5 text-[#d4af37]" />
+                              <span>Dynamic Level Slider (1–15):</span>
+                            </span>
+                            <div className="flex items-center gap-1 flex-wrap">
+                              {TALENT_MILESTONES.map((m) => (
+                                <button
+                                  key={m.level}
+                                  onClick={() =>
+                                    setTalentLevels((prev) => ({
+                                      ...prev,
+                                      [combatType]: m.level,
+                                    }))
+                                  }
+                                  className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer border ${
+                                    currentLevel === m.level
+                                      ? 'bg-[#d4af37] text-black border-[#d4af37] shadow-sm'
+                                      : 'bg-[#181d2f] text-zinc-400 hover:text-zinc-200 border-[#2b334d] hover:bg-[#202740]'
+                                  }`}
+                                  title={`Set to ${m.label} (${m.desc})`}
+                                >
+                                  {m.label}
+                                  {m.isCrown ? ' 👑' : m.isConst ? ' ⚡' : ''}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <span className="text-[11px] font-mono text-zinc-500">Lv.1</span>
+                            <input
+                              type="range"
+                              min={1}
+                              max={15}
+                              step={1}
+                              value={currentLevel}
+                              onChange={(e) =>
+                                setTalentLevels((prev) => ({
+                                  ...prev,
+                                  [combatType]: parseInt(e.target.value, 10),
+                                }))
+                              }
+                              className="w-full accent-[#d4af37] cursor-pointer h-1.5 bg-[#1f243b] rounded-lg"
+                            />
+                            <span className="text-[11px] font-mono text-[#d4af37] font-bold">Lv.15</span>
+                          </div>
+                        </div>
+
+                        {/* Scaling Parameters Table */}
+                        {combatSkill && combatSkill.labels && combatSkill.labels.length > 0 ? (
+                          <div className="bg-[#0b0c14] rounded-xl border border-[#22273e] overflow-hidden">
+                            <div className="px-3 py-2 bg-[#141726] border-b border-[#22273e] flex items-center justify-between text-[11px] font-bold text-zinc-400">
+                              <span>Skill Attribute Scaling</span>
+                              <span className="text-[#d4af37]">Level {currentLevel} Multiplier</span>
+                            </div>
+                            <div className="divide-y divide-[#181c2d] max-h-64 overflow-y-auto scrollbar-thin">
+                              {combatSkill.labels.map((lbl, lIdx) => {
+                                const { name, value } = renderTalentLabel(lbl, combatSkill.parameters, currentLevel);
+                                return (
+                                  <div
+                                    key={lIdx}
+                                    className="px-3 py-1.5 flex items-center justify-between text-xs hover:bg-[#131625] transition-colors"
+                                  >
+                                    <span className="text-zinc-300 font-medium pr-2">{name}</span>
+                                    <span className="text-[#d4af37] font-mono font-bold shrink-0">{value}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-[11px] text-zinc-500 italic px-2 py-1">
+                            {isLoadingScaling ? 'Loading attribute scaling curve...' : 'No parameter curve available for this talent level.'}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 );
               })}

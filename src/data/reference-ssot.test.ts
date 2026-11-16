@@ -6,6 +6,8 @@ import { WEAPONS_DATA, WEAPONS_BY_KEY, getWeaponByKey } from './weapons';
 import { ARTIFACTS_MASTER, ARTIFACTS_BY_ID, getArtifactSet } from './artifacts-master';
 import { AVAILABLE_SCALING_KEYS, getTalentScaling } from './talent-scaling';
 import { CHARACTER_ROTATIONS, getCharacterRotation } from './character-rotations';
+import { ABYSS_CYCLES, DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from './abyss-schedules';
+import { THEATER_SEASONS, DEFAULT_ACTIVE_THEATER_SEASON_ID } from './theater-seasons';
 
 describe('Persistent Reference SSOT Verification', () => {
   const rootDir = process.cwd();
@@ -186,6 +188,74 @@ describe('Persistent Reference SSOT Verification', () => {
       expect(rot?.stage).toBeTruthy();
       expect(rot?.estimatedFieldTime).toBeGreaterThan(0);
       expect(rot?.notes).toBeTruthy();
+    }
+  });
+
+  it('registers active Version 7.2 Floor 12 cycles (cycle-7-2 & cycle-7-1) as default active schedules', () => {
+    expect(DEFAULT_ACTIVE_ABYSS_CYCLE_ID).toBe('cycle-7-2');
+    expect(ABYSS_CYCLES[0].id).toBe('cycle-7-2');
+    const cycle72 = ABYSS_CYCLES.find((c) => c.id === 'cycle-7-2');
+    expect(cycle72).toBeDefined();
+    expect(cycle72?.name).toContain('Stellar Fracture');
+    expect(cycle72?.version).toBe('7.2');
+    expect(cycle72?.chambers).toHaveLength(3);
+
+    const cycle71 = ABYSS_CYCLES.find((c) => c.id === 'cycle-7-1');
+    expect(cycle71).toBeDefined();
+    expect(cycle71?.name).toContain('Lunar Gleam');
+    expect(cycle71?.version).toBe('7.1');
+    expect(cycle71?.chambers).toHaveLength(3);
+
+    // Historical archive preserved
+    expect(ABYSS_CYCLES.some((c) => c.id === 'cycle-5-3')).toBe(true);
+    expect(ABYSS_CYCLES.some((c) => c.id === 'cycle-5-2')).toBe(true);
+    expect(ABYSS_CYCLES.some((c) => c.id === 'cycle-5-1')).toBe(true);
+  });
+
+  it('registers active Version 7.2 Imaginarium Theater seasons (season-7-snezhnaya & season-7-nod-krai)', () => {
+    expect(DEFAULT_ACTIVE_THEATER_SEASON_ID).toBe('season-7-snezhnaya-cryo-hydro-electro');
+    expect(THEATER_SEASONS[0].id).toBe('season-7-snezhnaya-cryo-hydro-electro');
+    const snezhnayaSeason = THEATER_SEASONS.find(
+      (s) => s.id === 'season-7-snezhnaya-cryo-hydro-electro'
+    );
+    expect(snezhnayaSeason).toBeDefined();
+    expect(snezhnayaSeason?.elements).toEqual(['Cryo', 'Hydro', 'Electro']);
+    expect(snezhnayaSeason?.openingCastIds).toContain('Columbina');
+    expect(snezhnayaSeason?.openingCastIds).toContain('Skirk');
+
+    const nodKraiSeason = THEATER_SEASONS.find(
+      (s) => s.id === 'season-7-nod-krai-anemo-pyro-geo'
+    );
+    expect(nodKraiSeason).toBeDefined();
+    expect(nodKraiSeason?.elements).toEqual(['Anemo', 'Pyro', 'Geo']);
+    expect(nodKraiSeason?.openingCastIds).toContain('Linnea');
+    expect(nodKraiSeason?.openingCastIds).toContain('Mavuika');
+  });
+
+  it('validates dynamic talent scaling curves and parameters for key modern and canonical characters', async () => {
+    const furina = await getTalentScaling('furina');
+    expect(furina).toBeDefined();
+    expect(furina?.normal?.parameters['param1']?.length).toBe(15);
+    expect(furina?.skill?.labels.some((l) => l.includes('Salon Solitaire') || l.includes('DMG'))).toBe(true);
+    expect(furina?.burst?.parameters['param1']?.length).toBe(15);
+
+    const mavuika = await getTalentScaling('mavuika');
+    expect(mavuika).toBeDefined();
+    expect(mavuika?.skill).toBeDefined();
+
+    const columbina = await getTalentScaling('columbina');
+    expect(columbina).toBeDefined();
+    expect(columbina?.burst).toBeDefined();
+  });
+
+  it('resolves dynamic talent scaling curves across all 128 playable characters', async () => {
+    expect(CHARACTERS.length).toBe(128);
+    for (const char of CHARACTERS) {
+      const scaling = await getTalentScaling(char.id);
+      expect(scaling, `Missing talent scaling for ${char.id} (${char.name})`).toBeDefined();
+      expect(scaling?.normal?.parameters, `Missing normal attack params for ${char.id}`).toBeDefined();
+      expect(scaling?.skill?.parameters, `Missing skill params for ${char.id}`).toBeDefined();
+      expect(scaling?.burst?.parameters, `Missing burst params for ${char.id}`).toBeDefined();
     }
   });
 });

@@ -181,8 +181,8 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
   });
 
   describe('Abyss Cycle & Custom Sandbox Persistence', () => {
-    it('returns default cycle-5-3 when uninitialized', () => {
-      expect(getSavedAbyssCycleId()).toBe('cycle-5-3');
+    it('returns default active cycle-7-2 when uninitialized', () => {
+      expect(getSavedAbyssCycleId()).toBe('cycle-7-2');
     });
 
     it('persists and restores custom cycle selection', () => {
@@ -202,9 +202,9 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
       expect(reloaded.name).toBe('My Custom Test Chamber');
     });
 
-    it('sanitizes invalid or unrecognized abyss cycle IDs to cycle-5-3', () => {
+    it('sanitizes invalid or unrecognized abyss cycle IDs to cycle-7-2', () => {
       localStorage.setItem('celestia_v2_abyss_cycle_id', 'unknown-old-cycle-4-2');
-      expect(getSavedAbyssCycleId()).toBe('cycle-5-3');
+      expect(getSavedAbyssCycleId()).toBe('cycle-7-2');
     });
 
     it('falls back to fresh sandbox if custom abyss in localStorage is corrupted or lacks 3 chambers', () => {

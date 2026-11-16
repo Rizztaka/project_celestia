@@ -1,6 +1,6 @@
 import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../types/genshin';
 import type { AbyssCycleConfig } from '../data/abyss-schedules';
-import { createCustomSandboxCycle } from '../data/abyss-schedules';
+import { createCustomSandboxCycle, DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from '../data/abyss-schedules';
 
 const ROSTER_KEY = 'celestia_v2_owned_roster';
 const PROFILES_KEY = 'celestia_v2_roster_profiles';
@@ -331,12 +331,12 @@ export function savePullBudget(budget: PullBudgetState): void {
 
 export function getSavedAbyssCycleId(): string {
   try {
-    if (typeof localStorage === 'undefined') return 'cycle-5-3';
-    const saved = localStorage.getItem(ABYSS_CYCLE_ID_KEY) || 'cycle-5-3';
-    const validIds = new Set(['cycle-5-3', 'cycle-5-2', 'cycle-5-1', 'custom-sandbox']);
-    return validIds.has(saved) ? saved : 'cycle-5-3';
+    if (typeof localStorage === 'undefined') return DEFAULT_ACTIVE_ABYSS_CYCLE_ID;
+    const saved = localStorage.getItem(ABYSS_CYCLE_ID_KEY);
+    const validIds = new Set(['cycle-7-2', 'cycle-7-1', 'cycle-5-3', 'cycle-5-2', 'cycle-5-1', 'custom-sandbox']);
+    return saved && validIds.has(saved) ? saved : DEFAULT_ACTIVE_ABYSS_CYCLE_ID;
   } catch {
-    return 'cycle-5-3';
+    return DEFAULT_ACTIVE_ABYSS_CYCLE_ID;
   }
 }
 

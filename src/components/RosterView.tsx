@@ -15,8 +15,8 @@ import {
   ChevronRight,
   Globe,
   Compass,
+  Sparkles,
 } from 'lucide-react';
-import { DEFAULT_ROSTER } from '../services/storage';
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { GoodImportExportModal } from './GoodImportExportModal';
@@ -256,6 +256,9 @@ interface RosterViewProps {
   weapons?: OwnedWeapon[];
   onUpdateWeapons?: (weapons: OwnedWeapon[]) => void;
   onOpenArmory?: () => void;
+  isDemoMode?: boolean;
+  onToggleDemoMode?: (enabled: boolean) => void;
+  onResetAccount?: () => void;
 }
 
 const ELEMENTS: ('All' | Element)[] = [
@@ -289,6 +292,9 @@ export const RosterView: React.FC<RosterViewProps> = ({
   weapons,
   onUpdateWeapons,
   onOpenArmory,
+  isDemoMode = false,
+  onToggleDemoMode,
+  onResetAccount,
 }) => {
   const [filterElement, setFilterElement] = useState<'All' | Element>('All');
   const [filterRegion, setFilterRegion] = useState<NationRegion>('All');
@@ -377,22 +383,58 @@ export const RosterView: React.FC<RosterViewProps> = ({
           >
             Select All ({CHARACTERS.length})
           </button>
+          {onToggleDemoMode && (
+            <button
+              onClick={() => onToggleDemoMode(!isDemoMode)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border flex items-center gap-1.5 transition-colors cursor-pointer ${
+                isDemoMode
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30'
+                  : 'bg-[#1e2336] text-zinc-200 border-[#2d344e] hover:bg-[#282f48]'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>{isDemoMode ? 'Demo Mode Active' : 'Load Demo Roster'}</span>
+            </button>
+          )}
+
           <button
-            onClick={() => onSetRoster(DEFAULT_ROSTER)}
-            className="px-3 py-1.5 rounded-xl bg-[#1e2336] text-zinc-200 text-xs font-semibold hover:bg-[#282f48] border border-[#2d344e] flex items-center gap-1.5 transition-colors cursor-pointer"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset Default</span>
-          </button>
-          <button
-            onClick={() => onSetRoster([])}
+            onClick={() => (onResetAccount ? onResetAccount() : onSetRoster([]))}
             className="px-3 py-1.5 rounded-xl bg-rose-950/30 text-rose-300 text-xs font-semibold hover:bg-rose-950/60 border border-rose-500/30 flex items-center gap-1.5 transition-colors cursor-pointer"
+            title="Reset account to empty roster and bag"
           >
             <Trash2 className="w-3.5 h-3.5" />
-            <span>Clear All</span>
+            <span>Reset Account</span>
           </button>
         </div>
       </div>
+
+      {/* Onboarding Empty Roster Banner */}
+      {ownedIds.length === 0 && !isDemoMode && (
+        <div className="bg-gradient-to-r from-amber-950/40 via-[#181a26] to-amber-950/30 p-5 rounded-2xl border border-amber-500/30 shadow-md">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-amber-400 shrink-0" />
+                <h3 className="text-sm font-bold text-amber-200">
+                  Welcome to Project Celestia!
+                </h3>
+              </div>
+              <p className="text-xs text-zinc-300 leading-relaxed max-w-2xl">
+                Your roster is currently empty (0/128 characters). Start exploring immediately by activating <strong>Demo Mode</strong> (11 calibrated characters & armory), syncing your in-game showcase via UID, or clicking characters below to mark ownership.
+              </p>
+            </div>
+            {onToggleDemoMode && (
+              <button
+                onClick={() => onToggleDemoMode(true)}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0d0f17] font-bold text-xs hover:brightness-110 transition-all shadow-md shrink-0 cursor-pointer flex items-center gap-1.5"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Turn on Demo Mode</span>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Filter and Search Controls */}
       <div className="bg-[#10121c] p-4 rounded-2xl border border-[#202538] space-y-3.5 shadow-sm">

@@ -13,6 +13,11 @@ import {
   getSavedWeapons,
   saveWeapons,
   syncArmoryOnProfileUpdate,
+  isDemoModeEnabled,
+  setDemoModeEnabled,
+  getDemoProfiles,
+  DEMO_WEAPONS,
+  resetAccountData,
 } from './services/storage';
 import { fetchShowcaseFromEnka } from './services/enka';
 import type { OwnedCharacterProfile, OwnedWeapon } from './types/genshin';
@@ -24,6 +29,7 @@ export const App: React.FC = () => {
   const [profiles, setProfiles] = useState<Record<string, OwnedCharacterProfile>>(getSavedProfiles);
   const [weapons, setWeapons] = useState<OwnedWeapon[]>(getSavedWeapons);
   const [isArmoryOpen, setIsArmoryOpen] = useState<boolean>(false);
+  const [isDemoMode, setIsDemoMode] = useState<boolean>(isDemoModeEnabled);
   const [uid, setUidState] = useState<string>(getSavedUid);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [notification, setNotification] = useState<{
@@ -47,6 +53,44 @@ export const App: React.FC = () => {
   const handleUpdateWeapons = (newWeapons: OwnedWeapon[]) => {
     setWeapons(newWeapons);
     saveWeapons(newWeapons);
+  };
+
+  const handleToggleDemoMode = (enable: boolean) => {
+    setDemoModeEnabled(enable);
+    setIsDemoMode(enable);
+    if (enable) {
+      const demoProfs = getDemoProfiles();
+      const demoWeps = DEMO_WEAPONS;
+      setProfiles(demoProfs);
+      saveProfiles(demoProfs);
+      setWeapons(demoWeps);
+      saveWeapons(demoWeps);
+      setNotification({
+        type: 'success',
+        message: 'Demo Mode enabled! Loaded 11 calibrated characters & starter armory.',
+      });
+    } else {
+      resetAccountData();
+      setProfiles({});
+      setWeapons([]);
+      setNotification({
+        type: 'success',
+        message: 'Demo Mode disabled. Switched to authentic empty account.',
+      });
+    }
+    setTimeout(() => setNotification(null), 4000);
+  };
+
+  const handleResetAccount = () => {
+    resetAccountData();
+    setIsDemoMode(false);
+    setProfiles({});
+    setWeapons([]);
+    setNotification({
+      type: 'success',
+      message: 'Account data cleared. Account reset to empty state.',
+    });
+    setTimeout(() => setNotification(null), 4000);
   };
 
   const handleSetUid = (newUid: string) => {
@@ -163,6 +207,8 @@ export const App: React.FC = () => {
           ownedCount={ownedIds.length}
           weaponCount={weapons.length}
           onOpenArmory={() => setIsArmoryOpen(true)}
+          isDemoMode={isDemoMode}
+          onToggleDemoMode={handleToggleDemoMode}
         />
 
         {/* Sync Toast Notification */}
@@ -202,6 +248,8 @@ export const App: React.FC = () => {
               weapons={weapons}
               onUpdateWeapons={handleUpdateWeapons}
               onUpdateProfile={handleUpdateProfile}
+              isDemoMode={isDemoMode}
+              onToggleDemoMode={handleToggleDemoMode}
             />
           )}
           {activeTab === 'pulls' && (
@@ -226,6 +274,9 @@ export const App: React.FC = () => {
               weapons={weapons}
               onUpdateWeapons={handleUpdateWeapons}
               onOpenArmory={() => setIsArmoryOpen(true)}
+              isDemoMode={isDemoMode}
+              onToggleDemoMode={handleToggleDemoMode}
+              onResetAccount={handleResetAccount}
             />
           )}
         </main>

@@ -78,6 +78,7 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
     const profiles = getSavedProfiles();
     expect(Object.keys(profiles).length).toBe(11);
     expect(Object.keys(profiles)).toEqual(DEMO_ROSTER);
+    expect(profiles).toEqual(getDemoProfiles());
 
     const weapons = getSavedWeapons();
     expect(weapons.length).toBe(8);

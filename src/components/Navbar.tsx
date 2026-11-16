@@ -11,6 +11,8 @@ interface NavbarProps {
   ownedCount: number;
   weaponCount?: number;
   onOpenArmory?: () => void;
+  isDemoMode?: boolean;
+  onToggleDemoMode?: (enabled: boolean) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -23,6 +25,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   ownedCount,
   weaponCount,
   onOpenArmory,
+  isDemoMode = false,
+  onToggleDemoMode,
 }) => {
   const tabs = [
     { id: 'teams', label: 'Best Teams', icon: Sparkles },
@@ -73,8 +77,34 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* UID Sync Control & Armory Trigger */}
+          {/* UID Sync Control, Demo Mode & Armory Trigger */}
           <div className="flex items-center gap-2">
+            {onToggleDemoMode && (
+              <button
+                onClick={() => onToggleDemoMode(!isDemoMode)}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer border shadow-sm ${
+                  isDemoMode
+                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 hover:bg-amber-500/30'
+                    : 'bg-[#181c2c] hover:bg-[#22273e] text-zinc-400 hover:text-zinc-200 border-[#2a3048]'
+                }`}
+                title={
+                  isDemoMode
+                    ? 'Demo Mode is active. Click to switch to authentic empty account.'
+                    : 'Enable Demo Mode to explore with starter roster & armory.'
+                }
+              >
+                <Sparkles className={`w-3.5 h-3.5 ${isDemoMode ? 'text-amber-400' : 'text-zinc-500'}`} />
+                <span className="hidden sm:inline">Demo Mode</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold font-mono ${
+                    isDemoMode ? 'bg-amber-400/20 text-amber-300' : 'bg-zinc-800 text-zinc-400'
+                  }`}
+                >
+                  {isDemoMode ? 'ON' : 'OFF'}
+                </span>
+              </button>
+            )}
+
             {onOpenArmory && (
               <button
                 onClick={onOpenArmory}

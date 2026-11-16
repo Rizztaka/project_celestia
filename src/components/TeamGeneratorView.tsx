@@ -17,6 +17,8 @@ import {
   ChevronUp,
   Swords,
   X,
+  Users,
+  Compass,
 } from 'lucide-react';
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
@@ -31,6 +33,8 @@ interface TeamGeneratorViewProps {
   weapons?: OwnedWeapon[];
   onUpdateWeapons?: (weapons: OwnedWeapon[]) => void;
   onUpdateProfile?: (profile: OwnedCharacterProfile) => void;
+  isDemoMode?: boolean;
+  onToggleDemoMode?: (enabled: boolean) => void;
 }
 
 const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -49,10 +53,13 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
   weapons,
   onUpdateWeapons,
   onUpdateProfile,
+  isDemoMode: _isDemoMode,
+  onToggleDemoMode,
 }) => {
   const [focusId, setFocusId] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
+  const [showCatalogFallback, setShowCatalogFallback] = useState<boolean>(false);
   const [quickSwapTarget, setQuickSwapTarget] = useState<{
     teamId: string;
     character: Character;
@@ -66,8 +73,8 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
   const weaponBag = useMemo(() => weapons || getSavedWeapons(), [weapons]);
 
   const teams = useMemo(
-    () => generateBestTeams(ownedIds, focusId || undefined, profiles, weaponBag),
-    [ownedIds, focusId, profiles, weaponBag],
+    () => generateBestTeams(ownedIds, focusId || undefined, profiles, weaponBag, showCatalogFallback),
+    [ownedIds, focusId, profiles, weaponBag, showCatalogFallback],
   );
   const featuredCarries = ['Nefer', 'Mavuika', 'HuTao', 'Alhaitham', 'Clorinde', 'Neuvillette', 'Navia'];
 
@@ -126,6 +133,59 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
         </div>
       </div>
 
+      {/* Insufficient Roster Banner */}
+      {ownedIds.length < 4 && !showCatalogFallback && (
+        <div className="bg-gradient-to-r from-amber-950/30 via-[#161824] to-amber-950/20 p-8 rounded-2xl border border-amber-500/30 shadow-lg text-center space-y-4">
+          <div className="w-12 h-12 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <Users className="w-6 h-6" />
+          </div>
+          <div className="space-y-1.5 max-w-lg mx-auto">
+            <h3 className="text-base font-bold text-zinc-100 font-serif">
+              Insufficient Roster ({ownedIds.length}/4 Characters Owned)
+            </h3>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              Celestia enforces strict ownership and requires at least 4 owned characters to generate personalized team compositions.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            {onToggleDemoMode && (
+              <button
+                onClick={() => onToggleDemoMode(true)}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0d0f17] font-bold text-xs hover:brightness-110 transition-all shadow-md cursor-pointer flex items-center gap-2"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Turn on Demo Mode</span>
+              </button>
+            )}
+            <button
+              onClick={() => setShowCatalogFallback(true)}
+              className="px-4 py-2 rounded-xl bg-[#1e2336] hover:bg-[#282f48] text-zinc-200 border border-[#2d344e] text-xs font-semibold transition-all cursor-pointer flex items-center gap-2"
+            >
+              <Compass className="w-4 h-4 text-[#d4af37]" />
+              <span>Show Theoretical Catalog Teams</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Notice when viewing Catalog Fallback */}
+      {ownedIds.length < 4 && showCatalogFallback && (
+        <div className="bg-[#141624] border border-[#2d344e] p-3.5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2 text-zinc-300">
+            <Info className="w-4 h-4 text-[#d4af37] shrink-0" />
+            <span>
+              Viewing <strong>Theoretical Catalog Teams</strong> across all 128 characters. Characters not currently owned by you are marked with an <strong>Unowned</strong> badge.
+            </span>
+          </div>
+          <button
+            onClick={() => setShowCatalogFallback(false)}
+            className="text-xs text-zinc-400 hover:text-white underline cursor-pointer shrink-0"
+          >
+            Hide Catalog Teams
+          </button>
+        </div>
+      )}
+
       {/* Recommended Teams Grid */}
       <div className="grid grid-cols-1 gap-6">
         {teams.map((team, idx) => (
@@ -143,6 +203,11 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                   <span className="text-xs font-semibold px-2 py-0.5 rounded bg-[#1e2336] text-zinc-300">
                     {team.archetype}
                   </span>
+                  {team.isTheoretical && (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-500/40">
+                      Theoretical (Catalog)
+                    </span>
+                  )}
                 </div>
                 <h2 className="text-xl font-bold text-zinc-100 font-serif mt-1">
                   {team.name}
@@ -187,7 +252,13 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                       {/* Element & Weapon */}
                       <div className="flex items-center justify-between text-[11px] mb-2">
                         <span className={`font-bold ${color.text}`}>{member.element}</span>
-                        <span className="text-zinc-400 text-[10px]">{member.weapon}</span>
+                        {member.isOwned === false ? (
+                          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-rose-950/70 text-rose-300 border border-rose-500/40">
+                            Unowned
+                          </span>
+                        ) : (
+                          <span className="text-zinc-400 text-[10px]">{member.weapon}</span>
+                        )}
                       </div>
 
                       {/* Character Portrait & Name */}

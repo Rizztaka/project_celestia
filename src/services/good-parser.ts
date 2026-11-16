@@ -104,7 +104,7 @@ export function mapGOODToCelestiaProfiles(good: GOODData): GOODMapResult {
     const cleanKey = w.key.trim();
     if (!cleanKey) continue;
 
-    const dbWeapon = getWeaponByKey(cleanKey);
+    const dbWeapon = getWeaponByKey(cleanKey) || getWeaponByKey(formatWeaponKeyToName(cleanKey));
     const name = dbWeapon?.name || formatWeaponKeyToName(cleanKey);
     const level = Math.max(1, Math.min(90, Math.floor(Number(w.level) || 1)));
     const refinement = Math.max(1, Math.min(5, Math.floor(Number(w.refinement) || 1)));
@@ -146,7 +146,7 @@ export function mapGOODToCelestiaProfiles(good: GOODData): GOODMapResult {
     const equipped = weaponByLocation.get(key);
     if (equipped && equipped.key) {
       equippedWeaponCount++;
-      const dbWeapon = getWeaponByKey(equipped.key);
+      const dbWeapon = getWeaponByKey(equipped.key) || getWeaponByKey(formatWeaponKeyToName(equipped.key));
       weapon = {
         key: dbWeapon?.key || equipped.key,
         name: dbWeapon?.name || formatWeaponKeyToName(equipped.key),

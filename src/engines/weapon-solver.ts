@@ -20,7 +20,9 @@ export function scoreWeaponForCharacter(
   teamContext?: Character[],
 ): WeaponScoreResult {
   const dbWeapon =
-    getWeaponByKey(weapon.key) || ('weaponType' in weapon ? (weapon as WeaponData) : undefined);
+    getWeaponByKey(weapon.key) ||
+    getWeaponByKey(weapon.name) ||
+    ('weaponType' in weapon ? (weapon as WeaponData) : undefined);
 
   const isOwned = 'id' in weapon;
   const location = isOwned ? (weapon as OwnedWeapon).location : undefined;
@@ -34,8 +36,18 @@ export function scoreWeaponForCharacter(
 
   // 1. Weapon Type Compatibility Check
   if (!dbWeapon || dbWeapon.weaponType !== character.weapon) {
+    const resolvedIncompatible: OwnedWeapon | WeaponData =
+      isOwned && dbWeapon
+        ? {
+            ...weapon,
+            key: dbWeapon.key || weapon.key,
+            name: dbWeapon.name || weapon.name,
+            rarity: dbWeapon.rarity,
+          }
+        : weapon;
+
     return {
-      weapon,
+      weapon: resolvedIncompatible,
       score: 0,
       relativePercentage: 0,
       tier: 'Suboptimal',
@@ -52,12 +64,23 @@ export function scoreWeaponForCharacter(
   let curatedReason = '';
 
   if (character.build?.weapons && character.build.weapons.length > 0) {
-    curatedRank = character.build.weapons.findIndex(
-      (cw) =>
-        cw.name.toLowerCase() === dbWeapon.name.toLowerCase() ||
-        cw.name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() ===
-          dbWeapon.key.replace(/[^a-zA-Z0-9]/g, '').toLowerCase(),
-    );
+    const normalize = (s: string) =>
+      s
+        .trim()
+        .replace(/^["'“”«»]+|["'“”«»]+$/g, '')
+        .replace(/[^a-zA-Z0-9]/g, '')
+        .toLowerCase();
+    const dbKeyNorm = normalize(dbWeapon.key);
+    const dbNameNorm = normalize(dbWeapon.name);
+
+    curatedRank = character.build.weapons.findIndex((cw) => {
+      const cwNorm = normalize(cw.name);
+      return (
+        cwNorm === dbNameNorm ||
+        cwNorm === dbKeyNorm ||
+        cw.name.toLowerCase() === dbWeapon.name.toLowerCase()
+      );
+    });
 
     if (curatedRank === 0) {
       curatedBonus = 50; // Top Signature / BiS
@@ -237,8 +260,18 @@ export function scoreWeaponForCharacter(
     reasons.push(`Current Level: ${level}/90.`);
   }
 
+  const resolvedWeapon: OwnedWeapon | WeaponData =
+    isOwned && dbWeapon
+      ? {
+          ...weapon,
+          key: dbWeapon.key || weapon.key,
+          name: dbWeapon.name || weapon.name,
+          rarity: dbWeapon.rarity,
+        }
+      : weapon;
+
   return {
-    weapon,
+    weapon: resolvedWeapon,
     score,
     relativePercentage,
     tier,
@@ -261,8 +294,11 @@ export function rankWeaponsForCharacter(
 
   // Filter to matching weapon type only
   const compatible = ownedWeapons.filter((w) => {
-    const db = getWeaponByKey(w.key);
-    return db ? db.weaponType === character.weapon : true;
+    const db =
+      getWeaponByKey(w.key) ||
+      getWeaponByKey(w.name) ||
+      ('weaponType' in w ? (w as unknown as WeaponData) : undefined);
+    return db ? db.weaponType === character.weapon : false;
   });
 
   const scored = compatible.map((w) => scoreWeaponForCharacter(character, w, teamContext));
@@ -301,8 +337,11 @@ export function assignOptimalTeamWeapons(
   // Ensure bag has enough distinct weapons for each required weapon type
   for (const [wType, needed] of Object.entries(membersByType)) {
     const existingForType = bag.filter((w) => {
-      const db = getWeaponByKey(w.key);
-      return db ? db.weaponType === wType : true;
+      const db =
+        getWeaponByKey(w.key) ||
+        getWeaponByKey(w.name) ||
+        ('weaponType' in w ? (w as unknown as WeaponData) : undefined);
+      return db ? db.weaponType === wType : false;
     });
 
     const deficit = needed - existingForType.length;
@@ -343,8 +382,11 @@ export function assignOptimalTeamWeapons(
   for (let i = 0; i < teamMembers.length; i++) {
     const member = teamMembers[i];
     const compatible = bag.filter((w) => {
-      const db = getWeaponByKey(w.key);
-      return db ? db.weaponType === member.weapon : true;
+      const db =
+        getWeaponByKey(w.key) ||
+        getWeaponByKey(w.name) ||
+        ('weaponType' in w ? (w as unknown as WeaponData) : undefined);
+      return db ? db.weaponType === member.weapon : false;
     });
 
     // Score all compatible weapons
@@ -434,10 +476,12 @@ export function assignOptimalTeamWeapons(
       borrowedFrom = weapon.location;
     }
 
+    const resolvedWeapon = (scoreRes.weapon as OwnedWeapon) || weapon;
+
     return {
       characterId: member.id,
       characterName: member.name,
-      assignedWeapon: weapon,
+      assignedWeapon: resolvedWeapon,
       scoreResult: scoreRes,
       isBorrowed,
       borrowedFrom,

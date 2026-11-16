@@ -9,6 +9,7 @@ import type {
 import { evaluateComprehensivePullROI } from '../engines/pull-advisor';
 import { BANNER_PHASES } from '../data/banners';
 import { CHARACTERS } from '../data/characters';
+import { getWeaponByKey } from '../data/weapons';
 import { getSavedPullBudget, savePullBudget } from '../services/storage';
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
@@ -38,7 +39,7 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
   weapons,
 }) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
-  const [bannerFilter, setBannerFilter] = useState<string>('banner_5_3_phase_1');
+  const [bannerFilter, setBannerFilter] = useState<string>('banner_7_2_phase_1');
   const [budget, setBudget] = useState<PullBudgetState>(() => getSavedPullBudget());
   const [simulationToast, setSimulationToast] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
@@ -193,6 +194,11 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {displayedRecommendations.map((item, idx) => {
           const char = CHARACTERS.find((c) => c.id === item.characterId);
+          const dbWeapon = item.weaponKey
+            ? getWeaponByKey(item.weaponKey)
+            : item.targetType === 'Signature_Weapon'
+              ? getWeaponByKey(item.name)
+              : undefined;
 
           // Probability styling
           const probPct = (item.odds.cumulativeProbability * 100).toFixed(1);
@@ -213,7 +219,25 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
                 <div className="flex items-center justify-between gap-2 border-b border-[#1f2334] pb-3">
                   <div className="flex items-center gap-3">
                     <div className="relative shrink-0">
-                      {char ? (
+                      {item.targetType === 'Signature_Weapon' && dbWeapon ? (
+                        <>
+                          <div className="relative w-12 h-12 rounded-xl bg-gradient-to-b from-[#5c4424] to-[#1c1710] border-2 border-[#d4af37]/70 p-1 flex items-center justify-center shadow-md overflow-hidden">
+                            <img
+                              src={dbWeapon.icon}
+                              alt={dbWeapon.name}
+                              className="w-10 h-10 object-contain drop-shadow-md"
+                            />
+                          </div>
+                          {char && (
+                            <img
+                              src={char.icon}
+                              alt={char.name}
+                              title={`BiS for ${char.name}`}
+                              className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border border-[#d4af37] bg-black/90 object-cover shadow-sm z-10"
+                            />
+                          )}
+                        </>
+                      ) : char ? (
                         <CharacterPortrait
                           src={char.icon}
                           name={char.name}
@@ -239,7 +263,7 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
                       </div>
                       <div className="text-xs text-zinc-400 mt-0.5">
                         {item.targetType === 'Signature_Weapon'
-                          ? `5★ Weapon · BiS for ${char?.name ?? item.characterId}`
+                          ? `${dbWeapon?.weaponType ? `5★ ${dbWeapon.weaponType}` : '5★ Weapon'} · BiS for ${char?.name ?? item.characterId}`
                           : `${char?.element || ''} · ${char?.weapon || ''} · ${char?.roles?.[0] || ''}`}
                       </div>
                     </div>

@@ -79,7 +79,7 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
       if (tab === 'equipped' && (!w.location || !w.location.trim())) return false;
       if (tab === 'bag' && w.location && w.location.trim()) return false;
 
-      const dbWeapon = getWeaponByKey(w.key);
+      const dbWeapon = getWeaponByKey(w.key) || getWeaponByKey(w.name);
       if (typeFilter !== 'All' && dbWeapon && dbWeapon.weaponType !== typeFilter) {
         return false;
       }
@@ -113,8 +113,12 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
     // 2. Weapon w receives editLevel, editRefinement, targetLocation
     const updated = weapons.map((item) => {
       if (item.id === w.id) {
+        const canonical = getWeaponByKey(item.key) || getWeaponByKey(item.name);
         return {
           ...item,
+          key: canonical?.key || item.key,
+          name: canonical?.name || item.name,
+          rarity: canonical?.rarity || item.rarity,
           level: editLevel,
           refinement: editRefinement,
           location: targetLocation,
@@ -137,25 +141,34 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
 
     // If weapon was moved away from old character, clear old character's weapon profile
     if (oldLocation && oldLocation !== targetLocation && nextProfiles[oldLocation]) {
-      if (nextProfiles[oldLocation].weapon?.key === w.key) {
-        nextProfiles[oldLocation] = {
-          ...nextProfiles[oldLocation],
-          weapon: undefined,
-        };
-        profilesChanged = true;
+      const oldProfWeapon = nextProfiles[oldLocation].weapon;
+      if (oldProfWeapon) {
+        const oldProfKey =
+          (getWeaponByKey(oldProfWeapon.key) || getWeaponByKey(oldProfWeapon.name))?.key ||
+          oldProfWeapon.key;
+        const currentWeaponKey =
+          (getWeaponByKey(w.key) || getWeaponByKey(w.name))?.key || w.key;
+        if (oldProfKey === currentWeaponKey) {
+          nextProfiles[oldLocation] = {
+            ...nextProfiles[oldLocation],
+            weapon: undefined,
+          };
+          profilesChanged = true;
+        }
       }
     }
 
     // If weapon was assigned to a target character, update that character's weapon profile
     if (targetLocation && nextProfiles[targetLocation]) {
+      const dbW = getWeaponByKey(w.key) || getWeaponByKey(w.name);
       nextProfiles[targetLocation] = {
         ...nextProfiles[targetLocation],
         weapon: {
-          key: w.key,
-          name: w.name,
+          key: dbW?.key || w.key,
+          name: dbW?.name || w.name,
           level: editLevel,
           refinement: editRefinement,
-          rarity: w.rarity,
+          rarity: dbW?.rarity || w.rarity || 4,
           ascension: w.ascension,
         },
       };
@@ -174,14 +187,24 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
     const nextWeapons = weapons.filter((w) => w.id !== id);
     onUpdateWeapons(nextWeapons);
 
-    // If deleted weapon was equipped on a profile, unequip it
+    // If deleted weapon was equipped on a profile, unequip it only if canonical key matches
     if (deleted?.location && profiles[deleted.location]) {
-      const nextProfiles = { ...profiles };
-      nextProfiles[deleted.location] = {
-        ...nextProfiles[deleted.location],
-        weapon: undefined,
-      };
-      onUpdateProfiles(nextProfiles);
+      const charProf = profiles[deleted.location];
+      if (charProf?.weapon) {
+        const profKey =
+          (getWeaponByKey(charProf.weapon.key) || getWeaponByKey(charProf.weapon.name))?.key ||
+          charProf.weapon.key;
+        const delKey =
+          (getWeaponByKey(deleted.key) || getWeaponByKey(deleted.name))?.key || deleted.key;
+        if (profKey === delKey) {
+          const nextProfiles = { ...profiles };
+          nextProfiles[deleted.location] = {
+            ...nextProfiles[deleted.location],
+            weapon: undefined,
+          };
+          onUpdateProfiles(nextProfiles);
+        }
+      }
     }
   };
 
@@ -409,7 +432,7 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
                   >
                     {availableForType.map((w) => (
                       <option key={w.key} value={w.key}>
-                        {'★'.repeat(w.rarity)} {w.name}
+                        {'★'.repeat(Math.max(1, Math.min(5, Math.floor(w.rarity))))} {w.name}
                       </option>
                     ))}
                   </select>
@@ -497,7 +520,7 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
                 </div>
               ) : (
                 filteredWeapons.map((w) => {
-                  const dbWeapon = getWeaponByKey(w.key);
+                  const dbWeapon = getWeaponByKey(w.key) || getWeaponByKey(w.name);
                   const isEditing = editingWeaponId === w.id;
                   const isConflict = w.location && (characterEquippedCounts[w.location] || 0) > 1;
 
@@ -608,9 +631,9 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
 
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className="text-sm font-bold text-zinc-100">{w.name}</span>
+                                <span className="text-sm font-bold text-zinc-100">{dbWeapon?.name || w.name}</span>
                                 <span className="text-xs text-[#d4af37] font-semibold">
-                                  {'★'.repeat(w.rarity || dbWeapon?.rarity || 4)}
+                                  {'★'.repeat(Math.max(1, Math.min(5, Math.floor(dbWeapon?.rarity || w.rarity || 4))))}
                                 </span>
                                 <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">
                                   R{w.refinement}

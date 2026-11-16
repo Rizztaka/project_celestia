@@ -1,6 +1,7 @@
 import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../types/genshin';
 import type { AbyssCycleConfig } from '../data/abyss-schedules';
 import { createCustomSandboxCycle, DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from '../data/abyss-schedules';
+import { getWeaponByKey } from '../data/weapons';
 
 const ROSTER_KEY = 'celestia_v2_owned_roster';
 const PROFILES_KEY = 'celestia_v2_roster_profiles';
@@ -64,7 +65,18 @@ export function getSavedProfiles(): Record<string, OwnedCharacterProfile> {
       if (raw !== null) {
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-          return parsed as Record<string, OwnedCharacterProfile>;
+          const profiles = parsed as Record<string, OwnedCharacterProfile>;
+          for (const prof of Object.values(profiles)) {
+            if (prof?.weapon) {
+              const canonical = getWeaponByKey(prof.weapon.key) || getWeaponByKey(prof.weapon.name);
+              if (canonical) {
+                prof.weapon.key = canonical.key;
+                prof.weapon.name = canonical.name;
+                prof.weapon.rarity = canonical.rarity;
+              }
+            }
+          }
+          return profiles;
         }
       }
     }
@@ -150,7 +162,7 @@ export const DEFAULT_WEAPONS: OwnedWeapon[] = [
   {
     id: 'starter_the_catch',
     key: 'TheCatch',
-    name: 'The Catch',
+    name: '"The Catch"',
     level: 90,
     refinement: 5,
     rarity: 4,
@@ -201,7 +213,16 @@ export function getSavedWeapons(): OwnedWeapon[] {
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed as OwnedWeapon[];
+          return (parsed as OwnedWeapon[]).map((w) => {
+            const canonical = getWeaponByKey(w.key) || getWeaponByKey(w.name);
+            if (!canonical) return w;
+            return {
+              ...w,
+              key: canonical.key,
+              name: canonical.name,
+              rarity: canonical.rarity,
+            };
+          });
         }
       }
     }
@@ -216,13 +237,14 @@ export function getSavedWeapons(): OwnedWeapon[] {
   for (const prof of Object.values(profiles)) {
     if (prof.weapon && prof.weapon.key) {
       index++;
+      const canonical = getWeaponByKey(prof.weapon.key) || getWeaponByKey(prof.weapon.name);
       extractedWeapons.push({
         id: `${prof.weapon.key}_${prof.id}_${index}`,
-        key: prof.weapon.key,
-        name: prof.weapon.name,
+        key: canonical?.key || prof.weapon.key,
+        name: canonical?.name || prof.weapon.name,
         level: prof.weapon.level,
         refinement: prof.weapon.refinement,
-        rarity: prof.weapon.rarity,
+        rarity: canonical?.rarity || prof.weapon.rarity,
         ascension: prof.weapon.ascension,
         location: prof.id,
         lock: true,
@@ -377,4 +399,83 @@ export function saveCustomAbyss(cycle: AbyssCycleConfig): void {
     console.error('Failed to save custom abyss to localStorage:', e);
   }
 }
+
+/**
+ * Synchronizes the weapon armory when a character's profile changes.
+ * Guarantees:
+ * - When a character unequips their weapon (profile.weapon is falsy), any weapon with location === updated.id is unequipped into bag.
+ * - Any old weapon on updated.id that is NOT the updated weapon is unequipped into bag.
+ * - Reuses the existing instance if this character ALREADY has this weapon equipped.
+ * - Otherwise, reuses the FIRST unequipped instance in inventory (never touches subsequent unequipped copies).
+ * - Only creates a new weapon instance if no unequipped copy is available in the armory.
+ */
+export function syncArmoryOnProfileUpdate(
+  currentWeapons: OwnedWeapon[],
+  updated: OwnedCharacterProfile,
+): OwnedWeapon[] {
+  if (!updated.weapon) {
+    return currentWeapons.map((w) =>
+      w.location === updated.id ? { ...w, location: undefined } : w,
+    );
+  }
+
+  const updatedWeaponCanonical =
+    getWeaponByKey(updated.weapon.key) || getWeaponByKey(updated.weapon.name);
+  const updatedCanonicalKey = updatedWeaponCanonical?.key || updated.weapon.key;
+
+  // 1. Unequip any weapon currently on updated.id that is not the updated weapon
+  const unequippedOld = currentWeapons.map((w) => {
+    const wCanonicalKey = (getWeaponByKey(w.key) || getWeaponByKey(w.name))?.key || w.key;
+    if (w.location === updated.id && wCanonicalKey !== updatedCanonicalKey) {
+      return { ...w, location: undefined };
+    }
+    return w;
+  });
+
+  // 2. Check if updated.id ALREADY has an instance of this weapon equipped
+  let targetIndex = unequippedOld.findIndex((w) => {
+    const wCanonicalKey = (getWeaponByKey(w.key) || getWeaponByKey(w.name))?.key || w.key;
+    return wCanonicalKey === updatedCanonicalKey && w.location === updated.id;
+  });
+
+  // 3. If not, find the FIRST unequipped instance in bag
+  if (targetIndex === -1) {
+    targetIndex = unequippedOld.findIndex((w) => {
+      const wCanonicalKey = (getWeaponByKey(w.key) || getWeaponByKey(w.name))?.key || w.key;
+      return wCanonicalKey === updatedCanonicalKey && (!w.location || !w.location.trim());
+    });
+  }
+
+  // 4. If matched, update ONLY that single weapon instance
+  if (targetIndex >= 0) {
+    return unequippedOld.map((w, idx) => {
+      if (idx === targetIndex) {
+        return {
+          ...w,
+          key: updatedWeaponCanonical?.key || w.key,
+          name: updatedWeaponCanonical?.name || w.name,
+          rarity: updatedWeaponCanonical?.rarity || w.rarity || 4,
+          location: updated.id,
+          level: updated.weapon!.level ?? w.level,
+          refinement: updated.weapon!.refinement ?? w.refinement,
+        };
+      }
+      return w;
+    });
+  }
+
+  // 5. No existing or unequipped instance available: synthesize new weapon record
+  const newOwned: OwnedWeapon = {
+    id: `${updatedCanonicalKey}_${Date.now()}`,
+    key: updatedCanonicalKey,
+    name: updatedWeaponCanonical?.name || updated.weapon.name,
+    level: updated.weapon.level ?? 90,
+    refinement: updated.weapon.refinement ?? 1,
+    rarity: updatedWeaponCanonical?.rarity || updated.weapon.rarity || 4,
+    location: updated.id,
+    lock: true,
+  };
+  return [newOwned, ...unequippedOld];
+}
+
 

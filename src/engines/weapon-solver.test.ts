@@ -364,5 +364,150 @@ describe('Weapon Synergy Engine & Conflict Solver', () => {
       // Kokomi cannot crit, Prototype Amber with HP% is vastly superior
       expect(amberScore.score).toBeGreaterThan(widsithScore.score);
     });
+
+    it('correctly attributes 5★ canonical rarity and name to PJWS even when OwnedWeapon lacks rarity', () => {
+      const arlecchino = CHARACTERS.find((c) => c.id === 'Arlecchino')!;
+      expect(arlecchino).toBeDefined();
+
+      // Owned weapon missing rarity (common in imports or localStorage)
+      const ownedPjwsNoRarity: OwnedWeapon = {
+        id: 'owned_pjws_custom',
+        key: 'PrimordialJadeWingedSpear',
+        name: 'Primordial Jade Winged-Spear',
+        level: 90,
+        refinement: 1,
+        location: 'Arlecchino',
+      };
+
+      const result = scoreWeaponForCharacter(arlecchino, ownedPjwsNoRarity);
+      expect(result.weapon.rarity).toBe(5);
+      expect(result.weapon.name).toBe('Primordial Jade Winged-Spear');
+      expect(['BiS', 'Optimal']).toContain(result.tier);
+      expect(result.score).toBeGreaterThan(70);
+
+      // Verify rankWeaponsForCharacter also returns 5★ rarity on the weapon
+      const ranked = rankWeaponsForCharacter(arlecchino, [ownedPjwsNoRarity]);
+      expect(ranked.length).toBe(1);
+      expect(ranked[0].weapon.rarity).toBe(5);
+    });
+
+    it('correctly normalizes and matches weapons with quotation marks like The Catch and Ultimate Overlord', () => {
+      const navia = CHARACTERS.find((c) => c.id === 'Navia')!;
+      expect(navia).toBeDefined();
+
+      const ownedOverlord: OwnedWeapon = {
+        id: 'overlord_1',
+        key: 'UltimateOverlordSMegaMagicSword',
+        name: "Ultimate Overlord's Mega Magic Sword", // Without quotes
+        level: 90,
+        refinement: 5,
+        location: '',
+      };
+
+      const naviaScore = scoreWeaponForCharacter(navia, ownedOverlord);
+      expect(naviaScore.weapon.rarity).toBe(4);
+      expect(['Optimal', 'Great', 'BiS']).toContain(naviaScore.tier);
+      expect(naviaScore.reason).toContain('Melusines');
+
+      // The Catch on Xiangling
+      const ownedCatch: OwnedWeapon = {
+        id: 'catch_1',
+        key: 'TheCatch',
+        name: 'The Catch', // Without quotes
+        level: 90,
+        refinement: 5,
+        location: '',
+      };
+
+      const xlScore = scoreWeaponForCharacter(xiangling, ownedCatch);
+      expect(xlScore.weapon.rarity).toBe(4);
+      expect(xlScore.tier).toBe('BiS');
+    });
+
+    it('assignOptimalTeamWeapons returns canonical 5★ rarity and names on assignedWeapon even when owned weapons lack rarity', () => {
+      const arlecchino = CHARACTERS.find((c) => c.id === 'Arlecchino')!;
+      const xiangling = CHARACTERS.find((c) => c.id === 'Xiangling')!;
+
+      const bagWithoutRarity: OwnedWeapon[] = [
+        {
+          id: 'pjws_bag',
+          key: 'pjws', // alias key
+          name: 'Primordial Jade Winged-Spear',
+          level: 90,
+          refinement: 1,
+          location: '',
+        },
+        {
+          id: 'catch_bag',
+          key: 'TheCatch',
+          name: 'The Catch', // unquoted name
+          level: 90,
+          refinement: 5,
+          location: '',
+        },
+      ];
+
+      const assignments = assignOptimalTeamWeapons([arlecchino, xiangling], bagWithoutRarity);
+      expect(assignments.length).toBe(2);
+
+      const arleAssignment = assignments.find((a) => a.characterId === 'Arlecchino')!;
+      expect(arleAssignment).toBeDefined();
+      expect(arleAssignment.assignedWeapon.rarity).toBe(5);
+      expect(arleAssignment.assignedWeapon.name).toBe('Primordial Jade Winged-Spear');
+      expect(arleAssignment.assignedWeapon.key).toBe('PrimordialJadeWingedSpear');
+
+      const xlAssignment = assignments.find((a) => a.characterId === 'Xiangling')!;
+      expect(xlAssignment).toBeDefined();
+      expect(xlAssignment.assignedWeapon.rarity).toBe(4);
+      expect(xlAssignment.assignedWeapon.name).toBe('"The Catch"');
+      expect(xlAssignment.assignedWeapon.key).toBe('TheCatch');
+    });
+
+    it('scoreWeaponForCharacter handles incompatible weapons while resolving canonical metadata', () => {
+      const arlecchino = CHARACTERS.find((c) => c.id === 'Arlecchino')!; // Polearm
+      const ownedClaymoreNoRarity: OwnedWeapon = {
+        id: 'w_incompat',
+        key: 'ultimateoverlordmegamagicsword',
+        name: "Ultimate Overlord's Mega Magic Sword",
+        level: 90,
+        refinement: 5,
+        location: '',
+      };
+
+      const result = scoreWeaponForCharacter(arlecchino, ownedClaymoreNoRarity);
+      expect(result.score).toBe(0);
+      expect(result.tier).toBe('Suboptimal');
+      expect(result.weapon.rarity).toBe(4);
+      expect(result.weapon.key).toBe('UltimateOverlordSMegaMagicSword');
+      expect(result.weapon.name).toBe('"Ultimate Overlord\'s Mega Magic Sword"');
+    });
+
+    it('strictly excludes unresolvable weapons from compatibility across all weapon types', () => {
+      const arlecchino = CHARACTERS.find((c) => c.id === 'Arlecchino')!; // Polearm
+      const furina = CHARACTERS.find((c) => c.id === 'Furina')!; // Sword
+      const unknownWeapon: OwnedWeapon = {
+        id: 'mystery_unknown_123',
+        key: 'NonExistentMysteryWeapon',
+        name: 'Non Existent Mystery Weapon',
+        level: 90,
+        refinement: 5,
+        location: '',
+      };
+
+      // rankWeaponsForCharacter must NOT include unresolvable unknown weapon for either polearm or sword
+      const rankedArle = rankWeaponsForCharacter(arlecchino, [unknownWeapon]);
+      expect(rankedArle.length).toBe(0);
+
+      const rankedFurina = rankWeaponsForCharacter(furina, [unknownWeapon]);
+      expect(rankedFurina.length).toBe(0);
+
+      // assignOptimalTeamWeapons must NOT assign unresolvable unknown weapon to team members
+      const team = [arlecchino, furina];
+      const assignments = assignOptimalTeamWeapons(team, [unknownWeapon]);
+      expect(assignments.length).toBe(2);
+      for (const a of assignments) {
+        expect(a.assignedWeapon.id).not.toBe('mystery_unknown_123');
+      }
+    });
   });
 });

@@ -26,7 +26,7 @@ import { CharacterPortrait } from './CharacterPortrait';
 import { resolveCharacterRotationProfile } from '../engines/rotation-synthesizer';
 import { RotationBadgeList } from './RotationBadgeList';
 import { rankWeaponsForCharacter } from '../engines/weapon-solver';
-import { getSavedWeapons, saveWeapons } from '../services/storage';
+import { getSavedWeapons, saveWeapons, syncArmoryOnProfileUpdate } from '../services/storage';
 import { WEAPONS_BY_TYPE, getWeaponByKey } from '../data/weapons';
 import { getTalentScaling, type TalentScalingData } from '../data/talent-scaling';
 
@@ -246,6 +246,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
   const handleEquipWeapon = (weaponToEquip: OwnedWeapon) => {
     if (!character) return;
+    const canonicalWeapon = getWeaponByKey(weaponToEquip.key) || getWeaponByKey(weaponToEquip.name);
 
     if (onUpdateProfile) {
       onUpdateProfile({
@@ -254,11 +255,11 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
         constellation: profile?.constellation ?? 0,
         talents: profile?.talents,
         weapon: {
-          key: weaponToEquip.key,
-          name: weaponToEquip.name,
+          key: canonicalWeapon?.key || weaponToEquip.key,
+          name: canonicalWeapon?.name || weaponToEquip.name,
           level: weaponToEquip.level,
           refinement: weaponToEquip.refinement,
-          rarity: weaponToEquip.rarity,
+          rarity: canonicalWeapon?.rarity || weaponToEquip.rarity || 4,
           ascension: weaponToEquip.ascension,
         },
       });
@@ -295,55 +296,19 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
       rarity: dbW.rarity,
     };
 
+    const nextProfile: OwnedCharacterProfile = {
+      id: character.id,
+      level: profile?.level ?? 90,
+      constellation: profile?.constellation ?? 0,
+      talents: profile?.talents,
+      weapon: newEquipped,
+    };
+
     if (onUpdateProfile) {
-      onUpdateProfile({
-        id: character.id,
-        level: profile?.level ?? 90,
-        constellation: profile?.constellation ?? 0,
-        talents: profile?.talents,
-        weapon: newEquipped,
-      });
+      onUpdateProfile(nextProfile);
     }
 
-    // 1. Unequip any weapon currently on this character into bag (preserving it in inventory)
-    const baseWeapons = activeWeapons.map((w) => {
-      if (w.location === character.id) {
-        return { ...w, location: undefined };
-      }
-      return w;
-    });
-
-    // 2. Look for an existing unequipped instance of this weapon in bag to reuse
-    const unequippedIndex = baseWeapons.findIndex(
-      (w) => w.key === dbW.key && (!w.location || !w.location.trim()),
-    );
-
-    let updatedWeapons: OwnedWeapon[];
-    if (unequippedIndex >= 0) {
-      updatedWeapons = baseWeapons.map((w, idx) => {
-        if (idx === unequippedIndex) {
-          return {
-            ...w,
-            level: customLevel,
-            refinement: customRefinement,
-            location: character.id,
-          };
-        }
-        return w;
-      });
-    } else {
-      const newOwned: OwnedWeapon = {
-        id: `${dbW.key}_${Date.now()}`,
-        key: dbW.key,
-        name: dbW.name,
-        level: customLevel,
-        refinement: customRefinement,
-        rarity: dbW.rarity,
-        location: character.id,
-        lock: true,
-      };
-      updatedWeapons = [newOwned, ...baseWeapons];
-    }
+    const updatedWeapons = syncArmoryOnProfileUpdate(activeWeapons, nextProfile);
 
     if (onUpdateWeapons) {
       onUpdateWeapons(updatedWeapons);
@@ -523,14 +488,21 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
               )}
 
               {/* Equipped Weapon Preview */}
-              {profile?.weapon && (
-                <div className="pt-1 flex items-center gap-2 text-xs text-zinc-300">
-                  <Swords className="w-3.5 h-3.5 text-[#d4af37]" />
-                  <span>
-                    Equipped: <strong className="text-zinc-100">{profile.weapon.name}</strong> (Lv. {profile.weapon.level}, R{profile.weapon.refinement})
-                  </span>
-                </div>
-              )}
+              {profile?.weapon && (() => {
+                const canonical = getWeaponByKey(profile.weapon.key) || getWeaponByKey(profile.weapon.name);
+                const displayRarity = canonical?.rarity || profile.weapon.rarity || 4;
+                return (
+                  <div className="pt-1 flex items-center gap-2 text-xs text-zinc-300">
+                    <Swords className="w-3.5 h-3.5 text-[#d4af37]" />
+                    <span>
+                      Equipped: <strong className="text-zinc-100">{canonical?.name || profile.weapon.name}</strong> (Lv. {profile.weapon.level}, R{profile.weapon.refinement})
+                    </span>
+                    <span className="text-xs text-[#d4af37] font-semibold">
+                      {'★'.repeat(Math.max(1, Math.min(5, Math.floor(displayRarity))))}
+                    </span>
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Owned status button if handler provided */}
@@ -753,7 +725,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                         >
                           {(WEAPONS_BY_TYPE[character.weapon] || []).map((w) => (
                             <option key={w.key} value={w.key}>
-                              {'★'.repeat(w.rarity)} {w.name}
+                              {'★'.repeat(Math.max(1, Math.min(5, Math.floor(w.rarity))))} {w.name}
                             </option>
                           ))}
                         </select>
@@ -817,9 +789,20 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   <div className="grid grid-cols-1 gap-2">
                     {rankedOwnedWeapons.map((res) => {
                       const w = res.weapon as OwnedWeapon;
+                      const canonicalWeapon = getWeaponByKey(w.key) || getWeaponByKey(w.name);
+                      const displayRarity = canonicalWeapon?.rarity || w.rarity || 4;
+                      const displayName = canonicalWeapon?.name || w.name;
+                      const profileWeapon = profile?.weapon;
+                      const profileWeaponCanonical = profileWeapon
+                        ? getWeaponByKey(profileWeapon.key) || getWeaponByKey(profileWeapon.name)
+                        : undefined;
                       const isEquippedHere =
                         w.location === character.id ||
-                        (profile?.weapon?.key === w.key && profile?.weapon?.level === w.level);
+                        (Boolean(profileWeapon) &&
+                          (canonicalWeapon?.key && profileWeaponCanonical?.key
+                            ? canonicalWeapon.key === profileWeaponCanonical.key
+                            : w.key === profileWeapon?.key) &&
+                          profileWeapon?.level === w.level);
 
                       return (
                         <div
@@ -832,9 +815,9 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                         >
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-sm font-bold text-zinc-100">{w.name}</span>
+                              <span className="text-sm font-bold text-zinc-100">{displayName}</span>
                               <span className="text-xs text-[#d4af37] font-semibold">
-                                {'★'.repeat(w.rarity || 4)}
+                                {'★'.repeat(Math.max(1, Math.min(5, Math.floor(displayRarity))))}
                               </span>
                               <span className="text-[10px] font-mono font-bold text-amber-400">
                                 R{w.refinement}
@@ -899,29 +882,34 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                     <span>Recommended Weapons</span>
                   </h3>
                   <div className="grid grid-cols-1 gap-2">
-                    {character.build.weapons.map((w, idx) => (
-                      <div
-                        key={w.name + idx}
-                        className="bg-[#131622] border border-[#23273a] hover:border-[#38405e] p-3 rounded-xl flex items-start justify-between gap-3 transition-colors"
-                      >
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-bold text-zinc-100">{w.name}</span>
-                            <span className="text-xs text-[#d4af37] font-semibold">
-                              {'★'.repeat(w.rarity)}
-                            </span>
-                            {idx === 0 && (
-                              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/30">
-                                Signature / BiS
+                    {character.build.weapons.map((w, idx) => {
+                      const canonical = getWeaponByKey(w.name);
+                      const displayRarity = canonical?.rarity || w.rarity || 4;
+                      const displayName = canonical?.name || w.name;
+                      return (
+                        <div
+                          key={w.name + idx}
+                          className="bg-[#131622] border border-[#23273a] hover:border-[#38405e] p-3 rounded-xl flex items-start justify-between gap-3 transition-colors"
+                        >
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-bold text-zinc-100">{displayName}</span>
+                              <span className="text-xs text-[#d4af37] font-semibold">
+                                {'★'.repeat(Math.max(1, Math.min(5, Math.floor(displayRarity))))}
                               </span>
+                              {idx === 0 && (
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/30">
+                                  Signature / BiS
+                                </span>
+                              )}
+                            </div>
+                            {w.reason && (
+                              <p className="text-xs text-zinc-400 mt-1 leading-relaxed">{w.reason}</p>
                             )}
                           </div>
-                          {w.reason && (
-                            <p className="text-xs text-zinc-400 mt-1 leading-relaxed">{w.reason}</p>
-                          )}
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}

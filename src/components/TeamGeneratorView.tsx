@@ -212,7 +212,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
 
                     <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between">
                       <span className="text-[10px] text-[#d4af37] font-semibold">
-                        {'★'.repeat(member.rarity)}
+                        {'★'.repeat(Math.max(1, Math.min(5, Math.floor(member.rarity))))}
                       </span>
                       <span className="text-[9px] text-zinc-400 group-hover:text-zinc-200 flex items-center gap-0.5">
                         <Info className="w-2.5 h-2.5" />
@@ -243,7 +243,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                           <div className="flex items-center justify-between gap-1">
                             <span className="font-semibold text-zinc-200 truncate flex items-center gap-1 text-[11px]">
                               <Swords className="w-3 h-3 text-[#d4af37] shrink-0" />
-                              <span className="truncate">{assignment.assignedWeapon.name}</span>
+                              <span className="truncate">{getWeaponByKey(assignment.assignedWeapon.key)?.name || assignment.assignedWeapon.name}</span>
                             </span>
                             <span className="font-mono font-bold text-amber-400 text-[10px] shrink-0">
                               R{assignment.assignedWeapon.refinement}
@@ -448,6 +448,9 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                 const w = scoreRes.weapon as OwnedWeapon;
                 const isCurrent =
                   quickSwapTarget.currentAssignment?.assignedWeapon.id === w.id;
+                const canonicalW = getWeaponByKey(w.key) || getWeaponByKey(w.name);
+                const displayRarity = canonicalW?.rarity || w.rarity || 4;
+                const displayName = canonicalW?.name || w.name;
                 return (
                   <div
                     key={w.id}
@@ -459,8 +462,8 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-zinc-100">{w.name}</span>
-                        <span className="text-xs text-[#d4af37]">{'★'.repeat(w.rarity || 4)}</span>
+                        <span className="text-xs font-bold text-zinc-100">{displayName}</span>
+                        <span className="text-xs text-[#d4af37]">{'★'.repeat(Math.max(1, Math.min(5, Math.floor(displayRarity))))}</span>
                         <span className="text-[10px] font-mono font-bold text-amber-300">
                           R{w.refinement}
                         </span>
@@ -572,14 +575,15 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
 
                         // If equipped permanently, update global profile/weapons
                         if (onUpdateProfile && profiles && profiles[quickSwapTarget.character.id]) {
+                          const canonicalW = getWeaponByKey(w.key) || getWeaponByKey(w.name);
                           onUpdateProfile({
                             ...profiles[quickSwapTarget.character.id],
                             weapon: {
-                              key: w.key,
-                              name: w.name,
+                              key: canonicalW?.key || w.key,
+                              name: canonicalW?.name || w.name,
                               level: w.level,
                               refinement: w.refinement,
-                              rarity: w.rarity,
+                              rarity: canonicalW?.rarity || w.rarity || 4,
                             },
                           });
                         }

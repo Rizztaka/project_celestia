@@ -158,7 +158,7 @@ describe('Rich Character Database Verification', () => {
   it('verifies KQM authoritative builds for key elemental carries and staples', () => {
     // Xiangling
     const xiangling = CHARACTERS.find((c) => c.id === 'Xiangling');
-    expect(xiangling?.build?.weapons.some((w) => w.name === 'The Catch')).toBe(true);
+    expect(xiangling?.build?.weapons.some((w) => w.name === '"The Catch"' || w.name === 'The Catch')).toBe(true);
     expect(xiangling?.build?.artifacts.some((a) => a.name === 'Emblem of Severed Fate')).toBe(true);
     expect(xiangling?.build?.subStats?.some((s) => s.includes('Energy Recharge'))).toBe(true);
 
@@ -199,5 +199,143 @@ describe('Rich Character Database Verification', () => {
       }
     }
     expect(mismatches).toEqual([]);
+  });
+
+  it('guarantees all recommended weapons resolve against WEAPONS_DATA with exact rarity and weaponType match', async () => {
+    const { getWeaponByKey } = await import('./weapons');
+    const errors: string[] = [];
+
+    for (const char of CHARACTERS) {
+      for (const w of char.build?.weapons || []) {
+        const canonical = getWeaponByKey(w.name);
+        if (!canonical) {
+          errors.push(`[${char.name}] Cannot resolve weapon "${w.name}"`);
+          continue;
+        }
+        if (canonical.name !== w.name) {
+          errors.push(`[${char.name}] w.name: "${w.name}" !== canonical.name: "${canonical.name}"`);
+        }
+        if (canonical.rarity !== w.rarity) {
+          errors.push(`[${char.name}] Weapon "${w.name}" rarity mismatch: build has ${w.rarity}★, canonical WEAPONS_DATA has ${canonical.rarity}★`);
+        }
+        if (canonical.weaponType !== char.weapon) {
+          errors.push(`[${char.name}] Weapon "${w.name}" (${canonical.weaponType}) does not match character weapon (${char.weapon})`);
+        }
+      }
+    }
+
+    expect(errors).toEqual([]);
+  });
+
+  it('verifies Arlecchino build recommends Primordial Jade Winged-Spear with 5★ rarity', async () => {
+    const { getWeaponByKey } = await import('./weapons');
+    const arlecchino = CHARACTERS.find((c) => c.id === 'Arlecchino');
+    expect(arlecchino).toBeDefined();
+
+    const pjws = arlecchino?.build?.weapons.find((w) => w.name === 'Primordial Jade Winged-Spear');
+    expect(pjws, 'Arlecchino build must include Primordial Jade Winged-Spear').toBeDefined();
+    expect(pjws?.rarity, 'PJWS in Arlecchino build must be 5★').toBe(5);
+
+    const canonicalPjws = getWeaponByKey('PrimordialJadeWingedSpear');
+    expect(canonicalPjws).toBeDefined();
+    expect(canonicalPjws?.rarity).toBe(5);
+    expect(canonicalPjws?.weaponType).toBe('Polearm');
+  });
+
+  it('resolves weapons with escaped, curved, or stripped quotes via getWeaponByKey and getWeaponByName', async () => {
+    const { getWeaponByKey, getWeaponByName } = await import('./weapons');
+
+    // "The Catch"
+    const catchVariants = [
+      'The Catch',
+      '"The Catch"',
+      '\"The Catch\"',
+      '“The Catch”',
+      'the catch',
+      'TheCatch',
+    ];
+    for (const v of catchVariants) {
+      const w1 = getWeaponByKey(v);
+      const w2 = getWeaponByName(v);
+      expect(w1, `Failed to resolve The Catch variant "${v}" via getWeaponByKey`).toBeDefined();
+      expect(w2, `Failed to resolve The Catch variant "${v}" via getWeaponByName`).toBeDefined();
+      expect(w1?.key).toBe('TheCatch');
+      expect(w1?.rarity).toBe(4);
+      expect(w1?.weaponType).toBe('Polearm');
+    }
+
+    // "Ultimate Overlord's Mega Magic Sword"
+    const overlordVariants = [
+      "Ultimate Overlord's Mega Magic Sword",
+      "\"Ultimate Overlord's Mega Magic Sword\"",
+      '“Ultimate Overlord\'s Mega Magic Sword”',
+      'UltimateOverlordSMegaMagicSword',
+    ];
+    for (const v of overlordVariants) {
+      const w1 = getWeaponByKey(v);
+      const w2 = getWeaponByName(v);
+      expect(w1, `Failed to resolve Overlord variant "${v}" via getWeaponByKey`).toBeDefined();
+      expect(w2, `Failed to resolve Overlord variant "${v}" via getWeaponByName`).toBeDefined();
+      expect(w1?.key).toBe('UltimateOverlordSMegaMagicSword');
+      expect(w1?.rarity).toBe(4);
+      expect(w1?.weaponType).toBe('Claymore');
+    }
+
+    // PJWS alias and key
+    expect(getWeaponByKey('pjws')?.key).toBe('PrimordialJadeWingedSpear');
+    expect(getWeaponByKey('Primordial Jade Winged-Spear')?.rarity).toBe(5);
+  });
+
+  it('guarantees weapon rarity resolver correctly assigns 5★ to PJWS when rarity is undefined or defaulted', async () => {
+    const { getWeaponByKey } = await import('./weapons');
+    const resolveDisplayRarity = (w: { key?: string; name?: string; rarity?: number }) =>
+      (w.key ? getWeaponByKey(w.key)?.rarity : undefined) ||
+      (w.name ? getWeaponByKey(w.name)?.rarity : undefined) ||
+      w.rarity ||
+      4;
+
+    // Case 1: Weapon with key only and no rarity
+    expect(resolveDisplayRarity({ key: 'PrimordialJadeWingedSpear' })).toBe(5);
+
+    // Case 2: Weapon with name only and no rarity
+    expect(resolveDisplayRarity({ name: 'Primordial Jade Winged-Spear' })).toBe(5);
+
+    // Case 3: Weapon with corrupted/defaulted 4★ rarity but canonical 5★
+    expect(resolveDisplayRarity({ key: 'PrimordialJadeWingedSpear', rarity: 4 })).toBe(5);
+
+    // Case 4: Staff of Homa missing rarity
+    expect(resolveDisplayRarity({ key: 'StaffOfHoma' })).toBe(5);
+
+    // Case 5: 4★ weapon correctly stays 4★
+    expect(resolveDisplayRarity({ key: 'TheCatch' })).toBe(4);
+
+    // Case 6: 3★ weapon correctly stays 3★
+    expect(resolveDisplayRarity({ key: 'WhiteTassel' })).toBe(3);
+  });
+
+  it('safely handles non-string and falsy arguments in getWeaponByKey and normalizeWeaponKey', async () => {
+    const { getWeaponByKey, getWeaponByName, normalizeWeaponKey } = await import('./weapons');
+
+    // getWeaponByKey non-string guards
+    expect(getWeaponByKey('' as any)).toBeUndefined();
+    expect(getWeaponByKey(null as any)).toBeUndefined();
+    expect(getWeaponByKey(undefined as any)).toBeUndefined();
+    expect(getWeaponByKey(12345 as any)).toBeUndefined();
+    expect(getWeaponByKey({} as any)).toBeUndefined();
+    expect(getWeaponByKey([] as any)).toBeUndefined();
+    expect(getWeaponByKey(true as any)).toBeUndefined();
+
+    // getWeaponByName non-string guards
+    expect(getWeaponByName(null as any)).toBeUndefined();
+    expect(getWeaponByName(undefined as any)).toBeUndefined();
+    expect(getWeaponByName(42 as any)).toBeUndefined();
+
+    // normalizeWeaponKey non-string guards
+    expect(normalizeWeaponKey('' as any)).toBe('');
+    expect(normalizeWeaponKey(null as any)).toBe('');
+    expect(normalizeWeaponKey(undefined as any)).toBe('');
+    expect(normalizeWeaponKey(999 as any)).toBe('');
+    expect(normalizeWeaponKey({ key: 'test' } as any)).toBe('');
+    expect(normalizeWeaponKey([1, 2] as any)).toBe('');
   });
 });

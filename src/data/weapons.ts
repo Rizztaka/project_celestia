@@ -1,8 +1,12 @@
 import type { WeaponData, WeaponType } from '../types/genshin';
 
 export function normalizeWeaponKey(nameOrKey: string): string {
-  if (!nameOrKey) return '';
-  return nameOrKey.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  if (!nameOrKey || typeof nameOrKey !== 'string') return '';
+  return nameOrKey
+    .trim()
+    .replace(/^["'“”«»]+|["'“”«»]+$/g, '')
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .toLowerCase();
 }
 
 export const WEAPONS_DATA: WeaponData[] = [
@@ -6290,6 +6294,10 @@ export const WEAPONS_BY_TYPE: Record<WeaponType, WeaponData[]> = {
 
 for (const weapon of WEAPONS_DATA) {
   WEAPONS_BY_KEY[weapon.key] = weapon;
+  const strippedName = weapon.name.replace(/^["'“”«»]+|["'“”«»]+$/g, '').trim();
+  if (strippedName !== weapon.name) {
+    CANONICAL_WEAPON_MAP.set(normalizeWeaponKey(strippedName), weapon);
+  }
   CANONICAL_WEAPON_MAP.set(normalizeWeaponKey(weapon.key), weapon);
   CANONICAL_WEAPON_MAP.set(normalizeWeaponKey(weapon.name), weapon);
   if (WEAPONS_BY_TYPE[weapon.weaponType]) {
@@ -6303,6 +6311,25 @@ if (CANONICAL_WEAPON_MAP.has('dialoguesofthedesertsages')) {
 }
 if (WEAPONS_BY_KEY['TheCatch']) {
   CANONICAL_WEAPON_MAP.set('thecatch', WEAPONS_BY_KEY['TheCatch']);
+  CANONICAL_WEAPON_MAP.set('catch', WEAPONS_BY_KEY['TheCatch']);
+}
+if (WEAPONS_BY_KEY['UltimateOverlordSMegaMagicSword']) {
+  CANONICAL_WEAPON_MAP.set('ultimateoverlordsmegamagicsword', WEAPONS_BY_KEY['UltimateOverlordSMegaMagicSword']);
+  CANONICAL_WEAPON_MAP.set('ultimateoverlordmegamagicsword', WEAPONS_BY_KEY['UltimateOverlordSMegaMagicSword']);
+  CANONICAL_WEAPON_MAP.set('megamagicsword', WEAPONS_BY_KEY['UltimateOverlordSMegaMagicSword']);
+}
+if (WEAPONS_BY_KEY['PrimordialJadeWingedSpear']) {
+  CANONICAL_WEAPON_MAP.set('primordialjadewingedspear', WEAPONS_BY_KEY['PrimordialJadeWingedSpear']);
+  CANONICAL_WEAPON_MAP.set('pjws', WEAPONS_BY_KEY['PrimordialJadeWingedSpear']);
+}
+if (WEAPONS_BY_KEY['StaffOfHoma']) {
+  CANONICAL_WEAPON_MAP.set('homa', WEAPONS_BY_KEY['StaffOfHoma']);
+}
+if (WEAPONS_BY_KEY['ThrillingTalesOfDragonSlayers']) {
+  CANONICAL_WEAPON_MAP.set('ttds', WEAPONS_BY_KEY['ThrillingTalesOfDragonSlayers']);
+}
+if (WEAPONS_BY_KEY['TheWidsith']) {
+  CANONICAL_WEAPON_MAP.set('widsith', WEAPONS_BY_KEY['TheWidsith']);
 }
 if (WEAPONS_BY_KEY['PrizedIsshinBlade']) {
   CANONICAL_WEAPON_MAP.set('prizedisshinblade', WEAPONS_BY_KEY['PrizedIsshinBlade']);
@@ -6316,10 +6343,18 @@ if (WEAPONS_BY_KEY['PrizedIsshinBlade2']) {
 }
 
 export function getWeaponByKey(keyOrName: string): WeaponData | undefined {
-  if (!keyOrName) return undefined;
+  if (!keyOrName || typeof keyOrName !== 'string') return undefined;
   if (WEAPONS_BY_KEY[keyOrName]) {
     return WEAPONS_BY_KEY[keyOrName];
   }
+  const stripped = keyOrName.trim().replace(/^[\\"\'“”«»]+|[\\"\'“”«»]+$/g, '').trim();
+  if (WEAPONS_BY_KEY[stripped]) {
+    return WEAPONS_BY_KEY[stripped];
+  }
   const normalized = normalizeWeaponKey(keyOrName);
   return CANONICAL_WEAPON_MAP.get(normalized);
+}
+
+export function getWeaponByName(name: string): WeaponData | undefined {
+  return getWeaponByKey(name);
 }

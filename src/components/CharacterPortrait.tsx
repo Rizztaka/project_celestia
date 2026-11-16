@@ -103,7 +103,7 @@ export const CharacterPortrait: React.FC<CharacterPortraitProps> = ({
         <div
           className={`absolute ${sizeConfig.badge} bg-black/90 rounded font-bold text-[#d4af37] border border-[#d4af37]/40 leading-tight z-10 pointer-events-none`}
         >
-          {'★'.repeat(rarity)}
+          {'★'.repeat(Math.max(1, Math.min(5, Math.floor(rarity))))}
         </div>
       )}
     </div>

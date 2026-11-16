@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { evaluateComprehensivePullROI } from './pull-advisor';
 import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../types/genshin';
+import { getWeaponByKey } from '../data/weapons';
+import { CHARACTERS } from '../data/characters';
 
 describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
   const baseBudget: PullBudgetState = {
@@ -227,6 +229,57 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
     expect(tomeAdvice?.tier).toBe('Skip / Redundant');
     expect(tomeAdvice?.score).toBe(20);
     expect(tomeAdvice?.teamDamageUpliftPct).toBe(0);
+
+    // Also recognizes ownership when weapon key is stored as lowercase alias in bag
+    const weaponsAlias: OwnedWeapon[] = [
+      {
+        id: 'w_tome_alias',
+        key: 'tomeoftheeternalflow',
+        name: 'Tome of the Eternal Flow',
+        level: 90,
+        refinement: 1,
+        location: '',
+      },
+    ];
+    const adviceAlias = evaluateComprehensivePullROI(
+      profiles,
+      weaponsAlias,
+      baseBudget,
+      'banner_5_2_phase_2',
+    );
+    const tomeAdviceAlias = adviceAlias.find(
+      (a) => a.targetType === 'Signature_Weapon' && a.weaponKey === 'TomeOfTheEternalFlow',
+    );
+    expect(tomeAdviceAlias).toBeDefined();
+    expect(tomeAdviceAlias?.tier).toBe('Skip / Redundant');
+    expect(tomeAdviceAlias?.score).toBe(20);
+
+    // Also recognizes ownership when weapon key is in owned character profile as alias
+    const profilesEquippedAlias: Record<string, OwnedCharacterProfile> = {
+      Neuvillette: {
+        id: 'Neuvillette',
+        level: 90,
+        constellation: 0,
+        weapon: {
+          key: 'tomeoftheeternalflow',
+          name: 'Tome of the Eternal Flow',
+          level: 90,
+          refinement: 1,
+          rarity: 5,
+        },
+      },
+    };
+    const adviceEquipped = evaluateComprehensivePullROI(
+      profilesEquippedAlias,
+      [],
+      baseBudget,
+      'banner_5_2_phase_2',
+    );
+    const tomeAdviceEquipped = adviceEquipped.find(
+      (a) => a.targetType === 'Signature_Weapon' && a.weaponKey === 'TomeOfTheEternalFlow',
+    );
+    expect(tomeAdviceEquipped).toBeDefined();
+    expect(tomeAdviceEquipped?.tier).toBe('Skip / Redundant');
   });
 
   it('accurately evaluates all featured weapons across 5.x banner phases (Homa, Uraku, Great Magic)', () => {
@@ -294,5 +347,163 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
     // Must trigger the R4-R5 penalty (uplift 24 - 18 = 6%), NOT the R1 penalty (uplift 24 - 12 = 12%)
     expect(tome?.teamDamageUpliftPct).toBe(6);
     expect(tome?.caution).toContain('R4-R5');
+  });
+
+  it('evaluates Version 7.2 Phase 1 banner with Mitya, Furina, Valeriy, and Starsealed Edict', () => {
+    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_phase_1');
+    const mitya = advice.find((a) => a.characterId === 'Mitya' && a.targetType === 'C0_Character');
+    const furina = advice.find((a) => a.characterId === 'Furina' && a.targetType === 'C0_Character');
+    const valeriy = advice.find((a) => a.characterId === 'Valeriy');
+    const starsealed = advice.find((a) => a.weaponKey === 'StarsealedEdict');
+    const splendor = advice.find((a) => a.weaponKey === 'SplendorOfTranquilWaters');
+
+    expect(mitya).toBeDefined();
+    expect(mitya?.score).toBeGreaterThanOrEqual(90);
+    expect(furina).toBeDefined();
+    expect(valeriy).toBeDefined();
+    expect(starsealed).toBeDefined();
+    expect(starsealed?.characterId).toBe('Mitya');
+    expect(splendor).toBeDefined();
+    expect(splendor?.characterId).toBe('Furina');
+  });
+
+  it('evaluates Version 7.2 Phase 2 banner with Zibai and Linnea without cross-character hijacking', () => {
+    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_phase_2');
+    const zibai = advice.find((a) => a.characterId === 'Zibai' && a.targetType === 'C0_Character');
+    const linnea = advice.find((a) => a.characterId === 'Linnea' && a.targetType === 'C0_Character');
+    const foliar = advice.find((a) => a.weaponKey === 'LightOfFoliarIncision');
+    const aqua = advice.find((a) => a.weaponKey === 'AquaSimulacra');
+
+    expect(zibai).toBeDefined();
+    expect(linnea).toBeDefined();
+
+    // Verify Foliar belongs to Zibai (NOT Alhaitham) on 7.2 Phase 2
+    expect(foliar).toBeDefined();
+    expect(foliar?.characterId).toBe('Zibai');
+
+    // Verify Aqua Simulacra belongs to Linnea (NOT Yelan) on 7.2 Phase 2
+    expect(aqua).toBeDefined();
+    expect(aqua?.characterId).toBe('Linnea');
+  });
+
+  it('evaluates Version 7.2 Natlan Chronicled Wish with Natlan 5★ units and authentic signatures', () => {
+    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_natlan_chronicled');
+    const xilonen = advice.find((a) => a.characterId === 'Xilonen');
+    const chasca = advice.find((a) => a.characterId === 'Chasca');
+    const kinich = advice.find((a) => a.characterId === 'Kinich');
+    const mualani = advice.find((a) => a.characterId === 'Mualani');
+    const varesa = advice.find((a) => a.characterId === 'Varesa');
+
+    const peakPatrol = advice.find((a) => a.weaponKey === 'PeakPatrolSong');
+    const vividNotions = advice.find((a) => a.weaponKey === 'VividNotions');
+
+    expect(xilonen).toBeDefined();
+    expect(chasca).toBeDefined();
+    expect(kinich).toBeDefined();
+    expect(mualani).toBeDefined();
+    expect(varesa).toBeDefined();
+    expect(peakPatrol).toBeDefined();
+    expect(vividNotions).toBeDefined();
+    expect(vividNotions?.characterId).toBe('Varesa');
+  });
+
+  it('evaluates all 122 playable gacha characters in Sandbox mode (excluding story Travelers)', () => {
+    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'sandbox');
+    const charAdvice = advice.filter((a) => a.targetType === 'C0_Character');
+
+    // Exactly 122 playable gacha characters (128 total canonical units minus 6 free story Travelers)
+    const expectedGachaChars = CHARACTERS.filter((c) => !c.id.startsWith('Traveler'));
+    expect(charAdvice.length).toBe(expectedGachaChars.length);
+    expect(charAdvice.length).toBe(122);
+
+    // Free story Travelers must never be recommended as gacha pull targets
+    expect(charAdvice.some((a) => a.characterId.startsWith('Traveler'))).toBe(false);
+
+    // Verify presence of modern 7.x/Nod-Krai/Celestia era characters
+    expect(charAdvice.some((a) => a.characterId === 'Mitya')).toBe(true);
+    expect(charAdvice.some((a) => a.characterId === 'Columbina')).toBe(true);
+    expect(charAdvice.some((a) => a.characterId === 'Sandrone')).toBe(true);
+    expect(charAdvice.some((a) => a.characterId === 'Varka')).toBe(true);
+    expect(charAdvice.some((a) => a.characterId === 'Skirk')).toBe(true);
+  });
+
+  it('verifies that every Signature_Weapon recommendation has a resolvable weaponKey with non-empty icon', () => {
+    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'sandbox');
+    const weaponAdvice = advice.filter((a) => a.targetType === 'Signature_Weapon');
+    expect(weaponAdvice.length).toBeGreaterThan(0);
+
+    for (const item of weaponAdvice) {
+      expect(item.weaponKey).toBeDefined();
+      const dbWeapon = getWeaponByKey(item.weaponKey!);
+      expect(dbWeapon, `Failed to resolve weapon for key: ${item.weaponKey}`).toBeDefined();
+      expect(dbWeapon?.icon).toBeTruthy();
+      expect(dbWeapon?.icon).toMatch(/^https:\/\//);
+    }
+  });
+
+  it('provides dynamic constellation fallback advice for owned characters without hardcoded spikes', () => {
+    // Escoffier has no custom entry in CONSTELLATION_SPIKES
+    const profiles: Record<string, OwnedCharacterProfile> = {
+      Escoffier: { id: 'Escoffier', level: 90, constellation: 0 },
+    };
+    const advice = evaluateComprehensivePullROI(profiles, [], baseBudget, 'sandbox');
+    const escoffierConst = advice.find(
+      (a) => a.characterId === 'Escoffier' && a.targetType === 'Constellation',
+    );
+    expect(escoffierConst).toBeDefined();
+    expect(escoffierConst?.targetLevelText).toContain('C1');
+    expect(escoffierConst?.score).toBeGreaterThan(50);
+  });
+
+  it('correctly matches WolfSGravestone and alias substitutes in signature weapon evaluations', () => {
+    // Navia owns WolfSGravestone (canonical key)
+    const profiles: Record<string, OwnedCharacterProfile> = {
+      Navia: { id: 'Navia', level: 90, constellation: 0 },
+    };
+    const weaponsWithoutSub: OwnedWeapon[] = [];
+    const adviceWithoutSub = evaluateComprehensivePullROI(profiles, weaponsWithoutSub, baseBudget, 'sandbox');
+    const verdictWithout = adviceWithoutSub.find(
+      (a) => a.characterId === 'Navia' && a.targetType === 'Signature_Weapon',
+    );
+    expect(verdictWithout).toBeDefined();
+
+    // With owned WolfSGravestone substitute
+    const weaponsWithSub: OwnedWeapon[] = [
+      {
+        id: 'w_wgs',
+        key: 'WolfSGravestone',
+        name: "Wolf's Gravestone",
+        level: 90,
+        refinement: 1,
+        location: '',
+      },
+    ];
+    const adviceWithSub = evaluateComprehensivePullROI(profiles, weaponsWithSub, baseBudget, 'sandbox');
+    const verdictWith = adviceWithSub.find(
+      (a) => a.characterId === 'Navia' && a.targetType === 'Signature_Weapon',
+    );
+    expect(verdictWith).toBeDefined();
+    // Uplift should be penalized by 8% (from base 20% down to 12%)
+    expect(verdictWith!.teamDamageUpliftPct).toBeLessThan(verdictWithout!.teamDamageUpliftPct);
+    expect(verdictWith!.caution).toContain("Wolf's Gravestone");
+
+    // Also with alias key variation 'wolfsgravestone'
+    const weaponsWithAlias: OwnedWeapon[] = [
+      {
+        id: 'w_alias_wgs',
+        key: 'wolfsgravestone',
+        name: "Wolf's Gravestone",
+        level: 90,
+        refinement: 1,
+        location: '',
+      },
+    ];
+    const adviceWithAlias = evaluateComprehensivePullROI(profiles, weaponsWithAlias, baseBudget, 'sandbox');
+    const verdictWithAlias = adviceWithAlias.find(
+      (a) => a.characterId === 'Navia' && a.targetType === 'Signature_Weapon',
+    );
+    expect(verdictWithAlias).toBeDefined();
+    expect(verdictWithAlias!.teamDamageUpliftPct).toBe(verdictWith!.teamDamageUpliftPct);
+    expect(verdictWithAlias!.caution).toContain("Wolf's Gravestone");
   });
 });

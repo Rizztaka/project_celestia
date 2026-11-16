@@ -8,12 +8,65 @@ export interface BannerPhase {
     characterId: string;
     signatureWeaponKey: string;
   }>;
+  featured4StarIds?: string[];
   weaponBanner: {
     featuredWeapons: string[];
   };
 }
 
 export const BANNER_PHASES: BannerPhase[] = [
+  {
+    id: 'banner_7_2_phase_1',
+    version: '7.2',
+    phaseName: '7.2 P1: Mitya & Furina',
+    startDate: '2026-11-04',
+    endDate: '2026-11-24',
+    characterBanners: [
+      { characterId: 'Mitya', signatureWeaponKey: 'StarsealedEdict' },
+      { characterId: 'Furina', signatureWeaponKey: 'SplendorOfTranquilWaters' },
+    ],
+    featured4StarIds: ['Valeriy'],
+    weaponBanner: {
+      featuredWeapons: ['StarsealedEdict', 'SplendorOfTranquilWaters'],
+    },
+  },
+  {
+    id: 'banner_7_2_phase_2',
+    version: '7.2',
+    phaseName: '7.2 P2: Zibai & Linnea',
+    startDate: '2026-11-24',
+    endDate: '2026-12-15',
+    characterBanners: [
+      { characterId: 'Zibai', signatureWeaponKey: 'LightOfFoliarIncision' },
+      { characterId: 'Linnea', signatureWeaponKey: 'AquaSimulacra' },
+    ],
+    weaponBanner: {
+      featuredWeapons: ['LightOfFoliarIncision', 'AquaSimulacra'],
+    },
+  },
+  {
+    id: 'banner_7_2_natlan_chronicled',
+    version: '7.2',
+    phaseName: '7.2 Natlan Chronicled Wish',
+    startDate: '2026-11-24',
+    endDate: '2026-12-15',
+    characterBanners: [
+      { characterId: 'Xilonen', signatureWeaponKey: 'PeakPatrolSong' },
+      { characterId: 'Chasca', signatureWeaponKey: 'AstralVultureSCrimsonPlumage' },
+      { characterId: 'Kinich', signatureWeaponKey: 'FangOfTheMountainKing' },
+      { characterId: 'Mualani', signatureWeaponKey: 'SurfSUp' },
+      { characterId: 'Varesa', signatureWeaponKey: 'VividNotions' },
+    ],
+    weaponBanner: {
+      featuredWeapons: [
+        'PeakPatrolSong',
+        'AstralVultureSCrimsonPlumage',
+        'FangOfTheMountainKing',
+        'SurfSUp',
+        'VividNotions',
+      ],
+    },
+  },
   {
     id: 'banner_5_3_phase_1',
     version: '5.3',

@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { CHARACTERS } from '../data/characters';
+import { getWeaponByKey } from '../data/weapons';
 import type { Character, Element, WeaponType, OwnedCharacterProfile, OwnedWeapon } from '../types/genshin';
 import {
   Search,
@@ -677,12 +678,16 @@ export const RosterView: React.FC<RosterViewProps> = ({
               {/* Bottom Row: Tags & Info Action */}
               <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-zinc-400 z-10">
                 <span className="truncate max-w-[100px] text-zinc-400 flex items-center gap-1">
-                  {profile?.weapon ? (
-                    <>
-                      <Swords className="w-2.5 h-2.5 text-[#d4af37]" />
-                      <span className="truncate text-zinc-300 font-medium">{profile.weapon.name}</span>
-                    </>
-                  ) : (
+                  {profile?.weapon ? (() => {
+                    const canonical = getWeaponByKey(profile.weapon.key) || getWeaponByKey(profile.weapon.name);
+                    const displayName = canonical?.name || profile.weapon.name;
+                    return (
+                      <>
+                        <Swords className="w-2.5 h-2.5 text-[#d4af37]" />
+                        <span className="truncate text-zinc-300 font-medium" title={displayName}>{displayName}</span>
+                      </>
+                    );
+                  })() : (
                     <span>{char.weapon}</span>
                   )}
                 </span>

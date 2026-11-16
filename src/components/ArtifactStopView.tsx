@@ -666,7 +666,7 @@ export const ArtifactStopView: React.FC = () => {
             {filteredArtifactSets.map((set) => {
               const isExpanded = expandedSetIds.has(set.id);
               const recommenders = setRecommenders[set.name] || [];
-              const stars = '★'.repeat(set.maxRarity);
+              const stars = '★'.repeat(Math.max(1, Math.min(5, Math.floor(set.maxRarity || 5))));
               const hasPieces = set.pieces && Object.keys(set.pieces).length > 0;
 
               return (

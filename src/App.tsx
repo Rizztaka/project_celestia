@@ -12,6 +12,7 @@ import {
   saveUid,
   getSavedWeapons,
   saveWeapons,
+  syncArmoryOnProfileUpdate,
 } from './services/storage';
 import { fetchShowcaseFromEnka } from './services/enka';
 import type { OwnedCharacterProfile, OwnedWeapon } from './types/genshin';
@@ -90,40 +91,7 @@ export const App: React.FC = () => {
       [updated.id]: updated,
     }));
 
-    if (updated.weapon) {
-      setWeapons((prev) => {
-        let matched = false;
-        const next = prev.map((w) => {
-          if (w.key === updated.weapon?.key && (!w.location || w.location === updated.id)) {
-            matched = true;
-            return {
-              ...w,
-              location: updated.id,
-              level: updated.weapon.level,
-              refinement: updated.weapon.refinement,
-            };
-          }
-          if (w.location === updated.id && w.key !== updated.weapon?.key) {
-            return { ...w, location: undefined };
-          }
-          return w;
-        });
-
-        if (!matched && updated.weapon) {
-          next.unshift({
-            id: `${updated.weapon.key}_${Date.now()}`,
-            key: updated.weapon.key,
-            name: updated.weapon.name,
-            level: updated.weapon.level,
-            refinement: updated.weapon.refinement,
-            rarity: updated.weapon.rarity,
-            location: updated.id,
-            lock: true,
-          });
-        }
-        return next;
-      });
-    }
+    setWeapons((prev) => syncArmoryOnProfileUpdate(prev, updated));
   };
 
   const handleImportProfiles = (

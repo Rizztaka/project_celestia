@@ -428,7 +428,7 @@ const SIGNATURE_WEAPONS: Record<string, SignatureWeaponConfig> = {
         penaltyReason: 'Serpent Spine (R4-R5) gives 27.6% CRIT Rate and up to +50% all-DMG bonus.',
       },
       {
-        key: 'WolfsGravestone',
+        key: 'WolfSGravestone',
         minRefinement: 1,
         penaltyPct: 8,
         penaltyReason: "Wolf's Gravestone provides massive ATK% scaling and party buff.",
@@ -501,6 +501,201 @@ const SIGNATURE_WEAPONS: Record<string, SignatureWeaponConfig> = {
         minRefinement: 1,
         penaltyPct: 8,
         penaltyReason: 'Favonius Codex generates neutral energy particles for the entire plunge team.',
+      },
+    ],
+  },
+  Mitya: {
+    weaponKey: 'StarsealedEdict',
+    name: 'Starsealed Edict',
+    baseUpliftPct: 24,
+    substitutes: [
+      {
+        key: 'AThousandFloatingDreams',
+        minRefinement: 1,
+        penaltyPct: 11,
+        penaltyReason: 'A Thousand Floating Dreams provides massive 265 EM to cap reaction scaling.',
+      },
+      {
+        key: 'KagurasVerity',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: "Kagura's Verity provides 66.2% CRIT DMG and skill-damage stacking.",
+      },
+      {
+        key: 'TheWidsith',
+        minRefinement: 4,
+        penaltyPct: 8,
+        penaltyReason: 'The Widsith R4-R5 provides high burst damage and massive random buffs.',
+      },
+      {
+        key: 'LostPrayerToTheSacredWinds',
+        minRefinement: 1,
+        penaltyPct: 8,
+        penaltyReason: 'Lost Prayer to the Sacred Winds provides high base CRIT Rate and movement speed.',
+      },
+    ],
+  },
+  Zibai: {
+    weaponKey: 'LightOfFoliarIncision',
+    name: 'Light of Foliar Incision',
+    baseUpliftPct: 22,
+    substitutes: [
+      {
+        key: 'PrimordialJadeCutter',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'Primordial Jade Cutter provides 44.1% CRIT Rate and universal attack.',
+      },
+      {
+        key: 'MistsplitterReforged',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'Mistsplitter Reforged provides 44.1% CRIT DMG and all-elemental damage bonus.',
+      },
+      {
+        key: 'FavoniusSword',
+        minRefinement: 1,
+        penaltyPct: 8,
+        penaltyReason: 'Favonius Sword ensures reliable burst rotations and team energy generation.',
+      },
+    ],
+  },
+  Linnea: {
+    weaponKey: 'AquaSimulacra',
+    name: 'Aqua Simulacra',
+    baseUpliftPct: 22,
+    substitutes: [
+      {
+        key: 'TheStringless',
+        minRefinement: 4,
+        penaltyPct: 9,
+        penaltyReason: 'The Stringless R4-R5 provides high EM and +48% Skill/Burst DMG for reactions.',
+      },
+      {
+        key: 'FavoniusWarbow',
+        minRefinement: 1,
+        penaltyPct: 8,
+        penaltyReason: 'Favonius Warbow fixes energy requirements and batteries teammates.',
+      },
+    ],
+  },
+  Mualani: {
+    weaponKey: 'SurfSUp',
+    name: "Surf's Up",
+    baseUpliftPct: 24,
+    substitutes: [
+      {
+        key: 'SacrificialJade',
+        minRefinement: 3,
+        penaltyPct: 12,
+        penaltyReason: 'Sacrificial Jade provides CRIT Rate and massive +48% Max HP when off-field.',
+      },
+      {
+        key: 'LostPrayerToTheSacredWinds',
+        minRefinement: 1,
+        penaltyPct: 9,
+        penaltyReason: 'Lost Prayer to the Sacred Winds provides high CRIT Rate and movement speed.',
+      },
+    ],
+  },
+  Varesa: {
+    weaponKey: 'VividNotions',
+    name: 'Vivid Notions',
+    baseUpliftPct: 24,
+    substitutes: [
+      {
+        key: 'TheWidsith',
+        minRefinement: 4,
+        penaltyPct: 9,
+        penaltyReason: 'The Widsith provides 55.1% CRIT DMG and huge burst scaling.',
+      },
+      {
+        key: 'LostPrayerToTheSacredWinds',
+        minRefinement: 1,
+        penaltyPct: 8,
+        penaltyReason: 'Lost Prayer to the Sacred Winds provides high base CRIT Rate and movement speed.',
+      },
+      {
+        key: 'SacrificialJade',
+        minRefinement: 3,
+        penaltyPct: 8,
+        penaltyReason: 'Sacrificial Jade provides CRIT Rate and HP/EM bonuses.',
+      },
+    ],
+  },
+  Columbina: {
+    weaponKey: 'AThousandFloatingDreams',
+    name: 'A Thousand Floating Dreams',
+    baseUpliftPct: 22,
+    substitutes: [
+      {
+        key: 'SacrificialFragments',
+        minRefinement: 3,
+        penaltyPct: 9,
+        penaltyReason: 'Sacrificial Fragments provides high EM and skill cooldown reset.',
+      },
+      {
+        key: 'TheWidsith',
+        minRefinement: 4,
+        penaltyPct: 8,
+        penaltyReason: 'The Widsith provides huge burst spikes with CRIT DMG substat.',
+      },
+    ],
+  },
+  Sandrone: {
+    weaponKey: 'WolfSGravestone',
+    name: "Wolf's Gravestone",
+    baseUpliftPct: 22,
+    substitutes: [
+      {
+        key: 'SerpentSpine',
+        minRefinement: 4,
+        penaltyPct: 10,
+        penaltyReason: 'Serpent Spine (R4-R5) grants massive universal all-damage bonus stacks.',
+      },
+      {
+        key: 'RedhornStonethresher',
+        minRefinement: 1,
+        penaltyPct: 9,
+        penaltyReason: 'Redhorn Stonethresher provides 88.2% CRIT DMG and normal/charged attack boost.',
+      },
+    ],
+  },
+  Varka: {
+    weaponKey: 'WolfSGravestone',
+    name: "Wolf's Gravestone",
+    baseUpliftPct: 24,
+    substitutes: [
+      {
+        key: 'SerpentSpine',
+        minRefinement: 4,
+        penaltyPct: 10,
+        penaltyReason: 'Serpent Spine R4-R5 provides +50% DMG and high CRIT Rate.',
+      },
+      {
+        key: 'RedhornStonethresher',
+        minRefinement: 1,
+        penaltyPct: 9,
+        penaltyReason: 'Redhorn Stonethresher gives 88.2% CRIT DMG.',
+      },
+    ],
+  },
+  Skirk: {
+    weaponKey: 'Absolution',
+    name: 'Absolution',
+    baseUpliftPct: 24,
+    substitutes: [
+      {
+        key: 'MistsplitterReforged',
+        minRefinement: 1,
+        penaltyPct: 11,
+        penaltyReason: 'Mistsplitter Reforged provides 44.1% CRIT DMG and huge elemental damage bonus.',
+      },
+      {
+        key: 'PrimordialJadeCutter',
+        minRefinement: 1,
+        penaltyPct: 10,
+        penaltyReason: 'Primordial Jade Cutter provides 44.1% CRIT Rate and high attack.',
       },
     ],
   },
@@ -918,6 +1113,118 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
       'Accelerates Prop Surplus stack generation.',
     ],
   },
+
+  // Mitya C1 & C2 (7.2 Snezhnaya)
+  {
+    characterId: 'Mitya',
+    name: 'Mitya',
+    targetLevel: 1,
+    targetLevelText: 'C1 The Observer Seeking What Is Missing',
+    baseUpliftPct: 15,
+    baseScore: 86,
+    description: 'Increases maximum Gradient Beacons to 5 and grants additional energy on Polestar Field activation.',
+    benefits: [
+      'Extends Polestar Field uptime and energy battery generation.',
+      'Smooths rotation cycles for Stellar-Conduct reaction teams.',
+    ],
+  },
+  {
+    characterId: 'Mitya',
+    name: 'Mitya',
+    targetLevel: 2,
+    targetLevelText: 'C2 Reagent Overload Detonation',
+    baseUpliftPct: 24,
+    baseScore: 92,
+    description: 'Stellar-Conduct reactions in Polestar Field shred 25% Electro and Cryo RES for all nearby opponents.',
+    benefits: [
+      'Massive dual-element resistance shred for Snezhnaya reaction teams.',
+      '+24% teamwide damage output during burst duration.',
+    ],
+  },
+
+  // Zibai C1 & C2
+  {
+    characterId: 'Zibai',
+    name: 'Zibai',
+    targetLevel: 1,
+    targetLevelText: 'C1 Resonant Jade Petals',
+    baseUpliftPct: 14,
+    baseScore: 84,
+    description: 'Increases skill charge frequency and extends Lunar-Crystallize resonance duration.',
+    benefits: [
+      'Enhances personal Geo damage consistency.',
+      'Accelerates shield generation for comfort.',
+    ],
+  },
+  {
+    characterId: 'Zibai',
+    name: 'Zibai',
+    targetLevel: 2,
+    targetLevelText: 'C2 Harmonious Crystal Array',
+    baseUpliftPct: 22,
+    baseScore: 91,
+    description: 'Resonant shockwaves grant +35% Geo DMG bonus and shred opponent DEF by 15%.',
+    benefits: [
+      'Teamwide DEF shred and colossal Geo damage amplification.',
+      'Elevates Zibai into a premier hybrid carry.',
+    ],
+  },
+
+  // Linnea C1 & C2
+  {
+    characterId: 'Linnea',
+    name: 'Linnea',
+    targetLevel: 1,
+    targetLevelText: 'C1 Provisional Classification',
+    baseUpliftPct: 15,
+    baseScore: 86,
+    description: 'Gains 6 stacks of Field Catalog increasing Lunar-Crystallize Reaction DMG by 75% of Linnea DEF.',
+    benefits: [
+      'Substantial DEF-scaling reaction damage boost.',
+      'Elevates Lumi Ultimate Power Form burst damage.',
+    ],
+  },
+  {
+    characterId: 'Linnea',
+    name: 'Linnea',
+    targetLevel: 2,
+    targetLevelText: 'C2 Tidings of Joy and Sorrow',
+    baseUpliftPct: 24,
+    baseScore: 92,
+    description: 'Grants +40% CRIT DMG to all Hydro and Geo party members after triggering Moondrift Harmony.',
+    benefits: [
+      'Colossal +40% CRIT DMG party buff for Hydro and Geo units.',
+      'Massive +150% CRIT DMG boost to Lumi Million Ton Crush.',
+    ],
+  },
+
+  // Columbina C1 & C2
+  {
+    characterId: 'Columbina',
+    name: 'Columbina',
+    targetLevel: 1,
+    targetLevelText: 'C1 Lunar Benediction',
+    baseUpliftPct: 16,
+    baseScore: 88,
+    description: 'Increases party Moonsign level by 1 upon casting Elemental Skill and reduces cooldown by 20%.',
+    benefits: [
+      'Accelerates Ascendant Gleam state activation.',
+      'Provides permanent Moonsign level scaling for Nod-Krai units.',
+    ],
+  },
+  {
+    characterId: 'Columbina',
+    name: 'Columbina',
+    targetLevel: 2,
+    targetLevelText: 'C2 Welkin Moon Domain Expansion',
+    baseUpliftPct: 28,
+    baseScore: 96,
+    description: 'Lunar Domain elevates all Lunar reaction damage multipliers by +45% and shreds Hydro RES by 30%.',
+    benefits: [
+      'Unrivaled reaction amplifier for Lunar-Bloom, Lunar-Charged, and Lunar-Crystallize.',
+      '+28% total team damage uplift across all rotations.',
+    ],
+  },
 ];
 
 export function evaluatePullRecommendations(ownedIds: string[]): PullAdvice[] {
@@ -1108,17 +1415,23 @@ export function evaluateComprehensivePullROI(
   let candidateWeaponKeys: string[] = [];
 
   if (selectedBanner) {
-    candidateCharIds = selectedBanner.characterBanners.map((cb) => cb.characterId);
+    candidateCharIds = [
+      ...selectedBanner.characterBanners.map((cb) => cb.characterId),
+      ...(selectedBanner.featured4StarIds || []),
+    ];
     candidateWeaponKeys = selectedBanner.weaponBanner.featuredWeapons;
   } else {
-    candidateCharIds = Array.from(
-      new Set([
-        ...PULL_CANDIDATES,
-        ...BANNER_PHASES.flatMap((b) => b.characterBanners.map((cb) => cb.characterId)),
-      ]),
-    );
+    // Universal sandbox mode: evaluates all 122 playable gacha characters (omitting free story Travelers) & 5★ signature weapons
+    candidateCharIds = CHARACTERS.filter((c) => !c.id.startsWith('Traveler')).map((c) => c.id);
     candidateWeaponKeys = Array.from(
-      new Set(Object.values(SIGNATURE_WEAPONS).map((sw) => sw.weaponKey)),
+      new Set([
+        ...Object.values(SIGNATURE_WEAPONS).map((sw) => sw.weaponKey),
+        ...CHARACTERS.flatMap((c) => {
+          const topW = c.build?.weapons?.[0];
+          const dbW = topW ? getWeaponByKey(topW.name) : undefined;
+          return dbW && dbW.rarity === 5 ? [dbW.key] : [];
+        }),
+      ]),
     );
   }
 
@@ -1312,10 +1625,76 @@ export function evaluateComprehensivePullROI(
         uplift = 22;
         unlocked.push('Geo Sub-DPS & Dual Doll Off-Field Damage');
         benefits.push('Zero-effort off-field Geo damage that scales with DEF and ATK.');
-      } else {
-        score = 70;
+      } else if (char.id === 'Mitya') {
+        score = 94;
+        uplift = 30;
+        unlocked.push('Stellar-Conduct Polestar Field & Electro Reaction Core');
+        benefits.push(
+          'Premier Snezhnaya Electro catalyst creating Polestar Fields that elevate Superconduct into Stellar-Conduct with massive EM and energy recharge.',
+        );
+      } else if (char.id === 'Valeriy') {
+        score = 82;
         uplift = 18;
-        benefits.push('High personal DPS and elemental versatility for endgame challenges.');
+        unlocked.push('Snezhnaya Electro Battery & Team Sustain');
+        benefits.push('Smooth Electro burst battery and party sustain with flexible rotation synergy.');
+      } else if (char.id === 'Zibai') {
+        score = 90;
+        uplift = 25;
+        unlocked.push('Lunar-Crystallize Resonant Shockwaves');
+        benefits.push('High-scaling Geo sword carry generating continuous resonant shockwaves with elemental teammates.');
+      } else if (char.id === 'Linnea') {
+        score = 91;
+        uplift = 26;
+        unlocked.push('Moondrift Harmony & DEF-Scaling Support');
+        benefits.push(
+          'Nod-Krai Geo bow adventurer providing partywide DEF-scaled healing, Geo RES shred, and Lunar-Crystallize elevation.',
+        );
+      } else if (char.id === 'Columbina') {
+        score = 97;
+        uplift = 36;
+        unlocked.push('Welkin Moon Lunar Domain');
+        benefits.push(
+          'Welkin Moon maiden elevating Bloom, Electro-Charged, and Crystallize into hyper-dense Lunar variants with HP scaling.',
+        );
+      } else if (char.id === 'Sandrone') {
+        score = 91;
+        uplift = 28;
+        unlocked.push('Automaton Command Heavy Cryo Cleave');
+        benefits.push('Devastating Snezhnaya Cryo claymore carry commanding automaton constructs with high multi-hit scaling.');
+      } else if (char.id === 'Varka') {
+        score = 93;
+        uplift = 30;
+        unlocked.push('Gest of the Mighty Wolf Sweeping Carry');
+        benefits.push('Grand Master of Favonius delivering colossal Anemo physical hybrid cleaves with high-impact poise breaking.');
+      } else if (char.id === 'Skirk') {
+        score = 95;
+        uplift = 34;
+        unlocked.push('Abyssal Void-Severing Carry');
+        benefits.push('Flawless high-speed Cryo sword strikes with self-sustaining Bond of Life and Abyssal reaction supremacy.');
+      } else if (char.id === 'Mualani') {
+        score = 90;
+        uplift = 26;
+        unlocked.push('Nightsoul Shark Surf Vaporize Burst');
+        benefits.push('High mobility shark bite attacks delivering colossal Vaporize burst numbers scaling with Max HP.');
+      } else if (char.id === 'Varesa') {
+        score = 89;
+        uplift = 24;
+        unlocked.push('Nightsoul Electro Artillery');
+        benefits.push('Acrobatic Electro catalyst driver triggering continuous Nightsoul chain detonations.');
+      } else {
+        const isDPS = char.roles.includes('On-Field DPS');
+        const isBuffer = char.roles.includes('Buffer/Shred');
+        const isSustain = char.roles.includes('Sustain');
+        if (char.rarity === 5) {
+          score = isBuffer ? (hasUniversalBuffer ? 85 : 93) : isSustain ? (hasTopSustain ? 80 : 89) : isDPS ? 84 : 80;
+          uplift = isBuffer ? 25 : isDPS ? 24 : 16;
+          unlocked.push(`${char.element} ${char.roles[0] || 'Combat Specialist'}`);
+          benefits.push(`High-impact 5★ ${char.element} ${char.weapon} unit with comprehensive scaling for endgame content.`);
+        } else {
+          score = isBuffer ? 75 : isSustain ? 72 : 68;
+          uplift = 12;
+          benefits.push(`Versatile 4★ ${char.element} support and sub-DPS for roster flexibility.`);
+        }
       }
 
       let tier: EnhancedPullAdvice['tier'] = 'Situational';
@@ -1369,24 +1748,74 @@ export function evaluateComprehensivePullROI(
             caution: nextSpike.description,
             odds: charOdds,
           });
+        } else if (char.constellations && char.constellations.length > currentConst) {
+          const nextConst = char.constellations[currentConst];
+          const isDPS = char.roles.includes('On-Field DPS');
+          const isBuffer = char.roles.includes('Buffer/Shred');
+          const baseScore = char.rarity === 5 ? (isBuffer ? 82 : isDPS ? 78 : 75) : 60;
+          const baseUplift = char.rarity === 5 ? (isBuffer ? 16 : isDPS ? 18 : 12) : 8;
+
+          let tier: EnhancedPullAdvice['tier'] = 'Situational';
+          if (baseScore >= 90) tier = 'Must Pull';
+          else if (baseScore >= 75) tier = 'High Value';
+          else if (baseScore < 50) tier = 'Skip / Redundant';
+
+          adviceList.push({
+            id: `const_${charId}_${nextConst.level}`,
+            name: `${char.name} C${nextConst.level}`,
+            targetType: 'Constellation',
+            characterId: charId,
+            targetLevelText: `C${nextConst.level} ${nextConst.name}`,
+            score: baseScore,
+            tier,
+            teamDamageUpliftPct: baseUplift,
+            unlockedArchetypes: [],
+            accountBenefits: [
+              `Unlocks ${char.name}'s C${nextConst.level}: ${nextConst.name}`,
+              nextConst.description.slice(0, 140) + (nextConst.description.length > 140 ? '...' : ''),
+            ],
+            caution: `Evaluating next constellation step for owned C${currentConst} ${char.name}.`,
+            odds: charOdds,
+          });
         }
       }
     }
   }
 
   // 2. Evaluate Signature Weapons
-  for (const [charId, sigConfig] of Object.entries(SIGNATURE_WEAPONS)) {
-    if (!candidateWeaponKeys.includes(sigConfig.weaponKey)) {
-      continue;
+  const evaluatedWeaponKeys = new Set<string>();
+
+  const evaluateSignature = (charId: string, sigConfig: SignatureWeaponConfig) => {
+    const sigCanonicalKey =
+      (getWeaponByKey(sigConfig.weaponKey) || getWeaponByKey(sigConfig.name))?.key ||
+      sigConfig.weaponKey;
+
+    const isCandidate = candidateWeaponKeys.some(
+      (k) => ((getWeaponByKey(k)?.key || k) === sigCanonicalKey) || k === sigConfig.weaponKey,
+    );
+    if (!isCandidate) {
+      return;
     }
+    if (evaluatedWeaponKeys.has(sigCanonicalKey)) {
+      return;
+    }
+    evaluatedWeaponKeys.add(sigCanonicalKey);
 
     const char = CHARACTERS.find((c) => c.id === charId);
-    const dbWeapon = getWeaponByKey(sigConfig.weaponKey);
+    const dbWeapon = getWeaponByKey(sigConfig.weaponKey) || getWeaponByKey(sigConfig.name);
 
-    // Check if player already owns this signature weapon
+    // Check if player already owns this signature weapon (matching canonical or alias keys)
     const ownsSignature =
-      ownedWeapons.some((w) => w.key === sigConfig.weaponKey) ||
-      Object.values(ownedProfiles).some((p) => p.weapon?.key === sigConfig.weaponKey);
+      ownedWeapons.some((w) => {
+        const wKey = (getWeaponByKey(w.key) || getWeaponByKey(w.name))?.key || w.key;
+        return wKey === sigCanonicalKey;
+      }) ||
+      Object.values(ownedProfiles).some((p) => {
+        if (!p.weapon) return false;
+        const pKey =
+          (getWeaponByKey(p.weapon.key) || getWeaponByKey(p.weapon.name))?.key || p.weapon.key;
+        return pKey === sigCanonicalKey;
+      });
 
     if (ownsSignature) {
       if (selectedBanner) {
@@ -1405,7 +1834,7 @@ export function evaluateComprehensivePullROI(
           odds: weapOdds,
         });
       }
-      continue;
+      return;
     }
 
     let uplift = sigConfig.baseUpliftPct;
@@ -1417,10 +1846,18 @@ export function evaluateComprehensivePullROI(
 
     // Check substitutes across all owned weapons and profiles (using highest refinement owned)
     for (const sub of sigConfig.substitutes) {
-      const ownedMatches = ownedWeapons.filter((w) => w.key === sub.key);
+      const subCanonicalKey = getWeaponByKey(sub.key)?.key || sub.key;
+      const ownedMatches = ownedWeapons.filter((w) => {
+        const wKey = (getWeaponByKey(w.key) || getWeaponByKey(w.name))?.key || w.key;
+        return wKey === subCanonicalKey;
+      });
       const equippedMatches = Object.values(ownedProfiles)
         .map((p) => p.weapon)
-        .filter((w): w is NonNullable<typeof w> => w?.key === sub.key);
+        .filter((w): w is NonNullable<typeof w> => {
+          if (!w) return false;
+          const wKey = (getWeaponByKey(w.key) || getWeaponByKey(w.name))?.key || w.key;
+          return wKey === subCanonicalKey;
+        });
 
       const allMatches = [...ownedMatches, ...equippedMatches];
       if (allMatches.length > 0) {
@@ -1462,6 +1899,54 @@ export function evaluateComprehensivePullROI(
       caution,
       odds: weapOdds,
     });
+  };
+
+  if (selectedBanner) {
+    // When a specific banner is selected, evaluate weapons directly from the banner's character lineup
+    // This prevents cross-character weapon hijacking (e.g. Alhaitham/Yelan on 7.2 P2, or Citlali on Natlan Chronicled)
+    for (const cb of selectedBanner.characterBanners) {
+      const sigConfig = SIGNATURE_WEAPONS[cb.characterId] ?? {
+        weaponKey: cb.signatureWeaponKey,
+        name: getWeaponByKey(cb.signatureWeaponKey)?.name ?? cb.signatureWeaponKey,
+        baseUpliftPct: 22,
+        substitutes: [],
+      };
+      evaluateSignature(cb.characterId, sigConfig);
+    }
+  } else {
+    // In sandbox / all mode:
+    // 1. Evaluate explicit SIGNATURE_WEAPONS entries
+    for (const [charId, sigConfig] of Object.entries(SIGNATURE_WEAPONS)) {
+      evaluateSignature(charId, sigConfig);
+    }
+
+    // 2. Dynamic signature weapon evaluation for remaining candidate characters (restricted to 5★ characters)
+    for (const charId of candidateCharIds) {
+      if (SIGNATURE_WEAPONS[charId]) continue;
+      const char = CHARACTERS.find((c) => c.id === charId);
+      if (!char || char.rarity !== 5) continue;
+
+      const topWeapon = char.build?.weapons?.[0];
+      if (!topWeapon) continue;
+      const dbWeapon = getWeaponByKey(topWeapon.name);
+      if (!dbWeapon || dbWeapon.rarity < 5) continue;
+
+      const dynamicConfig: SignatureWeaponConfig = {
+        weaponKey: dbWeapon.key,
+        name: dbWeapon.name,
+        baseUpliftPct: 20,
+        substitutes: (char.build?.weapons.slice(1) || []).map((subW, i) => {
+          const dbSub = getWeaponByKey(subW.name);
+          return {
+            key: dbSub?.key ?? subW.name,
+            minRefinement: (dbSub?.rarity ?? 4) <= 4 ? 3 : 1,
+            penaltyPct: Math.max(5, 12 - i * 3),
+            penaltyReason: `You already own ${subW.name}, an effective alternative for ${char.name}.`,
+          };
+        }),
+      };
+      evaluateSignature(charId, dynamicConfig);
+    }
   }
 
   // Sort descending by score, tiebreaker on teamDamageUpliftPct

@@ -15,6 +15,8 @@ describe('CharacterPortrait Component', () => {
     expect(html).toContain('img');
     expect(html).toContain('https://enka.network/ui/UI_AvatarIcon_Furina.png');
     expect(html).toContain('alt="Furina"');
+    expect(html).toContain('decoding="async"');
+    expect(html).toContain('aspect-square');
     expect(html).toContain('★★★★★');
   });
 

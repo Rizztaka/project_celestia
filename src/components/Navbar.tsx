@@ -13,6 +13,7 @@ interface NavbarProps {
   onOpenArmory?: () => void;
   isDemoMode?: boolean;
   onToggleDemoMode?: (enabled: boolean) => void;
+  isTabPending?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -27,6 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenArmory,
   isDemoMode = false,
   onToggleDemoMode,
+  isTabPending = false,
 }) => {
   const tabs = [
     { id: 'teams', label: 'Best Teams', icon: Sparkles },
@@ -37,7 +39,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0d0e14]/90 backdrop-blur-md border-b border-[#222638]">
+    <header className="sticky top-0 z-50 bg-[#0d0e14]/90 backdrop-blur-md border-b border-[#222638] relative">
+      {isTabPending && (
+        <div
+          role="progressbar"
+          aria-label="Switching view"
+          className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent animate-pulse z-10"
+        />
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
@@ -144,7 +153,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Mobile Nav */}
-        <div className="md:hidden flex items-center justify-around py-2 border-t border-[#1c2030] overflow-x-auto">
+        <div className="md:hidden flex items-center justify-around py-1 border-t border-[#1c2030] overflow-x-auto touch-pan-x [-webkit-overflow-scrolling:touch]">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -152,7 +161,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex flex-col items-center gap-1 py-1 px-2 text-[10px] font-medium transition-colors ${
+                className={`flex flex-col items-center justify-center gap-1 min-h-[44px] py-1 px-2.5 text-[10px] font-medium transition-colors cursor-pointer shrink-0 ${
                   isActive ? 'text-[#d4af37] font-bold' : 'text-zinc-400'
                 }`}
               >

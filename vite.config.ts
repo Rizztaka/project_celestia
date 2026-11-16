@@ -11,13 +11,23 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           const normalized = id.replace(/\\/g, '/');
+          if (normalized.includes('src/data/characters.ts')) {
+            return 'genshin-characters';
+          }
+          if (normalized.includes('src/data/weapons.ts')) {
+            return 'genshin-weapons';
+          }
           if (
-            normalized.includes('src/data/characters.ts') ||
-            normalized.includes('src/data/weapons.ts') ||
             normalized.includes('src/data/artifacts-master.ts') ||
-            normalized.includes('src/data/character-rotations.ts')
+            normalized.includes('src/data/artifact-weights.ts')
           ) {
-            return 'genshin-database';
+            return 'genshin-artifacts';
+          }
+          if (normalized.includes('src/data/character-rotations.ts')) {
+            return 'genshin-rotations';
+          }
+          if (normalized.includes('node_modules/lucide-react')) {
+            return 'vendor-lucide';
           }
         },
       },

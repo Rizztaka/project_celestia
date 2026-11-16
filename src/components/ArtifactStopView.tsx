@@ -610,7 +610,7 @@ export const ArtifactStopView: React.FC = () => {
                 <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block">
                   Rarity Filter:
                 </span>
-                <div className="flex flex-wrap gap-1 bg-[#141624] p-1 rounded-xl border border-[#22273c]">
+                <div className="flex items-center overflow-x-auto sm:flex-wrap gap-1 bg-[#141624] p-1 rounded-xl border border-[#22273c] touch-pan-x [-webkit-overflow-scrolling:touch]">
                   {[
                     { id: 'All', label: 'All Rarities' },
                     { id: '5', label: '5★ Sets' },
@@ -621,7 +621,7 @@ export const ArtifactStopView: React.FC = () => {
                     <button
                       key={r.id}
                       onClick={() => setRarityFilter(r.id as any)}
-                      className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
                         rarityFilter === r.id
                           ? 'bg-[#d4af37] text-black font-bold shadow-sm'
                           : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
@@ -638,7 +638,7 @@ export const ArtifactStopView: React.FC = () => {
                 <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block">
                   Set Archetype:
                 </span>
-                <div className="flex flex-wrap gap-1 bg-[#141624] p-1 rounded-xl border border-[#22273c]">
+                <div className="flex items-center overflow-x-auto sm:flex-wrap gap-1 bg-[#141624] p-1 rounded-xl border border-[#22273c] touch-pan-x [-webkit-overflow-scrolling:touch]">
                   {[
                     { id: 'All', label: 'All 64 Sets' },
                     { id: 'combat', label: 'Combat Sets (37)' },
@@ -647,7 +647,7 @@ export const ArtifactStopView: React.FC = () => {
                     <button
                       key={c.id}
                       onClick={() => setCombatFilter(c.id as any)}
-                      className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
                         combatFilter === c.id
                           ? 'bg-[#d4af37] text-black font-bold shadow-sm'
                           : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
@@ -672,6 +672,7 @@ export const ArtifactStopView: React.FC = () => {
               return (
                 <div
                   key={set.id}
+                  style={{ contentVisibility: 'auto', containIntrinsicSize: '200px' }}
                   className="bg-[#121420] border border-[#23283c] hover:border-[#38405e] rounded-2xl p-4.5 space-y-3.5 transition-all shadow-sm flex flex-col justify-between"
                 >
                   <div className="space-y-3">

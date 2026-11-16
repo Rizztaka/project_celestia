@@ -15,31 +15,31 @@ const SIZE_MAP = {
   xs: {
     container: 'w-4 h-4 rounded-full',
     text: 'text-[8px]',
-    img: 'w-full h-full object-cover',
+    img: 'w-full h-full object-cover aspect-square',
     badge: 'text-[8px] px-0.5',
   },
   sm: {
     container: 'w-7 h-7 rounded-lg',
     text: 'text-[10px]',
-    img: 'w-full h-full object-cover scale-110',
+    img: 'w-full h-full object-cover scale-110 aspect-square',
     badge: 'text-[8px] px-0.5 -bottom-1 -right-0.5',
   },
   md: {
     container: 'w-11 h-11 rounded-xl',
     text: 'text-xs',
-    img: 'w-full h-full object-cover scale-110',
+    img: 'w-full h-full object-cover scale-110 aspect-square',
     badge: 'text-[9px] px-1 -bottom-1 -right-0.5',
   },
   lg: {
     container: 'w-16 h-16 sm:w-18 sm:h-18 rounded-2xl',
     text: 'text-lg sm:text-xl',
-    img: 'w-full h-full object-cover scale-110',
+    img: 'w-full h-full object-cover scale-110 aspect-square',
     badge: 'text-[9px] px-1 -bottom-1.5 -right-1',
   },
   xl: {
     container: 'w-20 h-20 rounded-2xl',
     text: 'text-2xl',
-    img: 'w-full h-full object-cover scale-110',
+    img: 'w-full h-full object-cover scale-110 aspect-square',
     badge: 'text-[10px] px-1.5 py-0.2 -bottom-2 -right-1',
   },
 };
@@ -82,14 +82,15 @@ export const CharacterPortrait: React.FC<CharacterPortraitProps> = ({
   return (
     <div className="relative inline-flex items-center justify-center shrink-0">
       <div
-        className={`${sizeConfig.container} overflow-hidden bg-[#161a29] border border-[#2b324c] flex items-center justify-center shadow-sm select-none ${className}`}
+        className={`${sizeConfig.container} aspect-square overflow-hidden bg-[#161a29] border border-[#2b324c] flex items-center justify-center shadow-sm select-none shrink-0 ${className}`}
       >
         {src && !hasError ? (
           <img
             src={src}
             alt={name}
-            className={sizeConfig.img}
+            className={`${sizeConfig.img} aspect-square`}
             loading="lazy"
+            decoding="async"
             onError={() => setHasError(true)}
           />
         ) : (

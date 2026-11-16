@@ -261,6 +261,11 @@ describe('Persistent Reference SSOT Verification', () => {
     expect(activeNov.id).toBe('season-7-2-hydro-electro-geo');
     expect(activeNov.elements).toEqual(['Hydro', 'Electro', 'Geo']);
 
+    // Boundary check on 2026-12-01: cleanly transitions to December season
+    const boundaryDec = getActiveTheaterSeason(new Date('2026-12-01'));
+    expect(boundaryDec.id).toBe('season-7-2-dec-pyro-hydro-geo');
+    expect(boundaryDec.elements).toEqual(['Pyro', 'Hydro', 'Geo']);
+
     const activeDec = getActiveTheaterSeason(new Date('2026-12-15'));
     expect(activeDec.id).toBe('season-7-2-dec-pyro-hydro-geo');
     expect(activeDec.elements).toEqual(['Pyro', 'Hydro', 'Geo']);

@@ -180,6 +180,7 @@ export interface OwnedWeapon extends EquippedWeapon {
   id: string; // Unique instance ID
   location?: string; // Character ID if equipped, or empty/undefined if in bag
   lock?: boolean;
+  isCustom?: boolean;
 }
 
 export interface WeaponScoreResult {

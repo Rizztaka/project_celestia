@@ -24,7 +24,7 @@ import { CharacterDetailModal } from './CharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { RotationBadgeList } from './RotationBadgeList';
 import { rankWeaponsForCharacter, scoreWeaponForCharacter } from '../engines/weapon-solver';
-import { getSavedWeapons } from '../services/storage';
+import { getSavedWeapons, getSavedProfiles, equipWeaponToCharacter } from '../services/storage';
 import { getWeaponByKey } from '../data/weapons';
 
 interface TeamGeneratorViewProps {
@@ -33,6 +33,7 @@ interface TeamGeneratorViewProps {
   weapons?: OwnedWeapon[];
   onUpdateWeapons?: (weapons: OwnedWeapon[]) => void;
   onUpdateProfile?: (profile: OwnedCharacterProfile) => void;
+  onUpdateProfiles?: (profiles: Record<string, OwnedCharacterProfile>) => void;
   isDemoMode?: boolean;
   onToggleDemoMode?: (enabled: boolean) => void;
 }
@@ -53,6 +54,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
   weapons,
   onUpdateWeapons,
   onUpdateProfile,
+  onUpdateProfiles,
   isDemoMode: _isDemoMode,
   onToggleDemoMode,
 }) => {
@@ -476,6 +478,28 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
         ))}
       </div>
 
+      {/* Empty State when no teams match */}
+      {teams.length === 0 && (
+        <div className="bg-[#12141d] border border-[#23273a] rounded-2xl p-8 text-center space-y-3 shadow-md">
+          <Users className="w-8 h-8 mx-auto text-zinc-500" />
+          <h3 className="text-base font-bold text-zinc-200">No Matching Teams Found</h3>
+          <p className="text-xs text-zinc-400 max-w-md mx-auto">
+            {focusId && !ownedIds.includes(focusId)
+              ? `You do not currently own ${CHARACTERS.find((c) => c.id === focusId)?.name || focusId}. Enable theoretical catalog teams to explore theoretical compositions.`
+              : 'Could not generate full 4-character compositions with the current filters and roster.'}
+          </p>
+          {focusId && !ownedIds.includes(focusId) && !showCatalogFallback && (
+            <button
+              onClick={() => setShowCatalogFallback(true)}
+              className="px-4 py-2 rounded-xl bg-[#1e2336] hover:bg-[#282f48] text-[#d4af37] border border-[#2d344e] text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-2"
+            >
+              <Compass className="w-4 h-4" />
+              <span>Show Theoretical Catalog Teams for {CHARACTERS.find((c) => c.id === focusId)?.name || focusId}</span>
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Interactive Character Detail Modal */}
       <CharacterDetailModal
         character={selectedCharacter}
@@ -483,6 +507,8 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
         isOwned={selectedCharacter ? ownedIds.includes(selectedCharacter.id) : false}
         profile={selectedCharacter && profiles ? profiles[selectedCharacter.id] : undefined}
         onUpdateProfile={onUpdateProfile}
+        profiles={profiles}
+        onUpdateProfiles={onUpdateProfiles}
         weapons={weapons}
         onUpdateWeapons={onUpdateWeapons}
       />
@@ -644,33 +670,23 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                           [quickSwapTarget.teamId]: updatedTeamCustoms,
                         }));
 
-                        // If equipped permanently, update global profile/weapons
-                        if (onUpdateProfile && profiles && profiles[quickSwapTarget.character.id]) {
-                          const canonicalW = getWeaponByKey(w.key) || getWeaponByKey(w.name);
-                          onUpdateProfile({
-                            ...profiles[quickSwapTarget.character.id],
-                            weapon: {
-                              key: canonicalW?.key || w.key,
-                              name: canonicalW?.name || w.name,
-                              level: w.level,
-                              refinement: w.refinement,
-                              rarity: canonicalW?.rarity || w.rarity || 4,
-                            },
-                          });
+                        // If equipped permanently, update global profile/weapons atomically
+                        const currentProfiles = profiles || getSavedProfiles();
+                        const { updatedWeapons, updatedProfiles } = equipWeaponToCharacter(
+                          w.id,
+                          quickSwapTarget.character.id,
+                          weaponBag,
+                          currentProfiles,
+                        );
+
+                        if (onUpdateProfiles) {
+                          onUpdateProfiles(updatedProfiles);
+                        } else if (onUpdateProfile && updatedProfiles[quickSwapTarget.character.id]) {
+                          onUpdateProfile(updatedProfiles[quickSwapTarget.character.id]);
                         }
 
-                        if (onUpdateWeapons && weapons) {
-                          const nextWeapons = weapons.map((item) => {
-                            if (item.id === w.id) {
-                              return { ...item, location: quickSwapTarget.character.id };
-                            }
-                            // If another weapon had this character as location, unequip
-                            if (item.location === quickSwapTarget.character.id) {
-                              return { ...item, location: undefined };
-                            }
-                            return item;
-                          });
-                          onUpdateWeapons(nextWeapons);
+                        if (onUpdateWeapons) {
+                          onUpdateWeapons(updatedWeapons);
                         }
 
                         setQuickSwapTarget(null);

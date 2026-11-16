@@ -104,6 +104,14 @@ describe('Celestia v2 Core Engines', () => {
       const teamsUnownedFocus = generateBestTeams(owned, 'HuTao');
       expect(teamsUnownedFocus).toEqual([]);
 
+      // 4 owned, focus character unowned, but allowCatalogFallback is true -> returns theoretical teams with HuTao
+      const teamsUnownedWithFallback = generateBestTeams(owned, 'HuTao', undefined, undefined, true);
+      expect(teamsUnownedWithFallback.length).toBeGreaterThan(0);
+      expect(teamsUnownedWithFallback[0].isTheoretical).toBe(true);
+      for (const team of teamsUnownedWithFallback) {
+        expect(team.members.some((m) => m.id === 'HuTao')).toBe(true);
+      }
+
       // 4 owned, focus character IS owned -> every team MUST contain the focus character
       const teamsOwnedFocus = generateBestTeams(owned, 'Neuvillette');
       expect(teamsOwnedFocus.length).toBeGreaterThan(0);

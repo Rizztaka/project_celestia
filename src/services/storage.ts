@@ -2,6 +2,7 @@ import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../typ
 import type { AbyssCycleConfig } from '../data/abyss-schedules';
 import { createCustomSandboxCycle, DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from '../data/abyss-schedules';
 import { getWeaponByKey } from '../data/weapons';
+import { CHARACTERS } from '../data/characters';
 
 const ROSTER_KEY = 'celestia_v2_owned_roster';
 const PROFILES_KEY = 'celestia_v2_roster_profiles';
@@ -324,8 +325,20 @@ export function equipWeaponToCharacter(
   updatedProfiles: Record<string, OwnedCharacterProfile>;
   transferredFrom?: string;
 } {
+  const character = CHARACTERS.find((c) => c.id === characterId);
   const targetWeapon = currentWeapons.find((w) => w.id === weaponId);
   if (!targetWeapon) {
+    return {
+      updatedWeapons: currentWeapons,
+      updatedProfiles: currentProfiles,
+    };
+  }
+
+  const canonical = getWeaponByKey(targetWeapon.key) || getWeaponByKey(targetWeapon.name);
+  if (character && canonical && character.weapon !== canonical.weaponType) {
+    console.warn(
+      `Cannot equip ${canonical.name} (${canonical.weaponType}) to ${character.name} (${character.weapon}): weapon type mismatch.`,
+    );
     return {
       updatedWeapons: currentWeapons,
       updatedProfiles: currentProfiles,
@@ -336,8 +349,6 @@ export function equipWeaponToCharacter(
     targetWeapon.location && targetWeapon.location !== characterId
       ? targetWeapon.location
       : undefined;
-
-  const canonical = getWeaponByKey(targetWeapon.key) || getWeaponByKey(targetWeapon.name);
   const equippedWeaponData = {
     key: canonical?.key || targetWeapon.key,
     name: canonical?.name || targetWeapon.name,
@@ -622,6 +633,7 @@ export function syncArmoryOnProfileUpdate(
     rarity: updatedWeaponCanonical?.rarity || updated.weapon.rarity || 4,
     location: updated.id,
     lock: true,
+    isCustom: true,
   };
   return [newOwned, ...unequippedOld];
 }

@@ -242,6 +242,61 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
     expect(updatedProfiles['RaidenShogun']?.weapon?.key).toBe('TheCatch');
   });
 
+  it('rejects equipping a weapon when weapon category does not match character class', () => {
+    const bowWeapon: OwnedWeapon = {
+      id: 'w_bow',
+      key: 'FavoniusWarbow',
+      name: 'Favonius Warbow',
+      level: 90,
+      refinement: 1,
+      rarity: 4,
+      location: undefined,
+    };
+
+    const initialProfiles: Record<string, OwnedCharacterProfile> = {
+      RaidenShogun: {
+        id: 'RaidenShogun',
+        level: 90,
+        constellation: 0,
+      },
+    };
+
+    // Raiden is a Polearm user; Favonius Warbow is a Bow
+    const { updatedWeapons, updatedProfiles, transferredFrom } = equipWeaponToCharacter(
+      'w_bow',
+      'RaidenShogun',
+      [bowWeapon],
+      initialProfiles,
+    );
+
+    // Mismatched equip must be rejected; collections remain unmodified
+    expect(transferredFrom).toBeUndefined();
+    expect(updatedWeapons[0].location).toBeUndefined();
+    expect(updatedProfiles['RaidenShogun'].weapon).toBeUndefined();
+  });
+
+  it('tags newly synthesized weapons with isCustom: true in syncArmoryOnProfileUpdate', () => {
+    const emptyArmory: OwnedWeapon[] = [];
+    const profileWithCustomWeapon: OwnedCharacterProfile = {
+      id: 'RaidenShogun',
+      level: 90,
+      constellation: 0,
+      weapon: {
+        key: 'EngulfingLightning',
+        name: 'Engulfing Lightning',
+        level: 90,
+        refinement: 1,
+        rarity: 5,
+      },
+    };
+
+    const synced = syncArmoryOnProfileUpdate(emptyArmory, profileWithCustomWeapon);
+    expect(synced.length).toBe(1);
+    expect(synced[0].key).toBe('EngulfingLightning');
+    expect(synced[0].location).toBe('RaidenShogun');
+    expect(synced[0].isCustom).toBe(true);
+  });
+
   it('unequips character weapon into bag cleanly', () => {
     const initialWeapons: OwnedWeapon[] = [
       {

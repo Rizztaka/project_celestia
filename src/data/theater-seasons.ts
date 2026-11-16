@@ -234,7 +234,7 @@ export function getActiveTheaterSeason(date: Date = new Date()): TheaterSeasonCo
   const dateStr = date.toISOString().slice(0, 10);
   const matched = THEATER_SEASONS.find((s) => {
     if (!s.effectiveStartDate || !s.effectiveEndDate) return false;
-    return dateStr >= s.effectiveStartDate && dateStr <= s.effectiveEndDate;
+    return dateStr >= s.effectiveStartDate && dateStr < s.effectiveEndDate;
   });
   return matched ?? THEATER_SEASONS[0];
 }

@@ -212,8 +212,16 @@ export function generateBestTeams(
   const pool = CHARACTERS.filter((c) => ownedSet.has(c.id));
 
   // If focus character is specified and not owned:
-  if (focusCharacterId && !ownedSet.has(focusCharacterId) && !allowCatalogFallback) {
-    return [];
+  if (focusCharacterId && !ownedSet.has(focusCharacterId)) {
+    if (!allowCatalogFallback) {
+      return [];
+    }
+    const catalogPool = CHARACTERS.map((c) => ({
+      ...c,
+      isOwned: ownedSet.has(c.id),
+    }));
+    const teams = generateTeamsFromPool(catalogPool, focusCharacterId, rosterProfiles, ownedWeapons);
+    return teams.map((t) => ({ ...t, isTheoretical: true }));
   }
 
   if (pool.length < 4) {

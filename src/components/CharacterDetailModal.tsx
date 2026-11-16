@@ -32,6 +32,7 @@ import {
   getSavedProfiles,
   saveProfiles,
   equipWeaponToCharacter,
+  unequipWeaponFromCharacter,
   syncArmoryOnProfileUpdate,
 } from '../services/storage';
 import { WEAPONS_BY_TYPE, getWeaponByKey } from '../data/weapons';
@@ -289,6 +290,32 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
     }
   };
 
+  const handleUnequipWeapon = () => {
+    if (!character) return;
+    const currentProfiles = profiles || getSavedProfiles();
+    const { updatedWeapons, updatedProfiles } = unequipWeaponFromCharacter(
+      character.id,
+      activeWeapons,
+      currentProfiles,
+    );
+
+    if (onUpdateProfiles) {
+      onUpdateProfiles(updatedProfiles);
+    } else {
+      saveProfiles(updatedProfiles);
+    }
+
+    if (onUpdateProfile && updatedProfiles[character.id]) {
+      onUpdateProfile(updatedProfiles[character.id]);
+    }
+
+    if (onUpdateWeapons) {
+      onUpdateWeapons(updatedWeapons);
+    } else {
+      saveWeapons(updatedWeapons);
+    }
+  };
+
   const handleSaveCustomWeapon = (e: React.FormEvent) => {
     e.preventDefault();
     if (!character) return;
@@ -310,6 +337,18 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
       talents: profile?.talents,
       weapon: newEquipped,
     };
+
+    const currentProfiles = profiles || getSavedProfiles();
+    const updatedProfiles = {
+      ...currentProfiles,
+      [character.id]: nextProfile,
+    };
+
+    if (onUpdateProfiles) {
+      onUpdateProfiles(updatedProfiles);
+    } else {
+      saveProfiles(updatedProfiles);
+    }
 
     if (onUpdateProfile) {
       onUpdateProfile(nextProfile);
@@ -877,9 +916,19 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
                           <div className="shrink-0">
                             {isEquippedHere ? (
-                              <div className="px-3 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-1">
-                                <Check className="w-3.5 h-3.5" />
-                                <span>Equipped</span>
+                              <div className="flex items-center gap-1.5">
+                                <div className="px-3 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-1">
+                                  <Check className="w-3.5 h-3.5" />
+                                  <span>Equipped</span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={handleUnequipWeapon}
+                                  className="px-2.5 py-1.5 rounded-xl bg-[#1e2336] hover:bg-rose-950/60 text-zinc-400 hover:text-rose-200 border border-[#2d344e] hover:border-rose-500/40 text-xs font-medium transition-all cursor-pointer"
+                                  title="Unequip to inventory bag"
+                                >
+                                  Unequip
+                                </button>
                               </div>
                             ) : (
                               <button

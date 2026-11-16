@@ -248,6 +248,7 @@ interface RosterViewProps {
   onToggleOwned: (id: string) => void;
   onSetRoster: (ids: string[]) => void;
   onUpdateProfile?: (profile: OwnedCharacterProfile) => void;
+  onUpdateProfiles?: (profiles: Record<string, OwnedCharacterProfile>) => void;
   onImportProfiles?: (
     newProfiles: Record<string, OwnedCharacterProfile>,
     message: string,
@@ -288,6 +289,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
   onToggleOwned,
   onSetRoster,
   onUpdateProfile,
+  onUpdateProfiles,
   onImportProfiles,
   weapons,
   onUpdateWeapons,
@@ -398,7 +400,15 @@ export const RosterView: React.FC<RosterViewProps> = ({
           )}
 
           <button
-            onClick={() => (onResetAccount ? onResetAccount() : onSetRoster([]))}
+            onClick={() => {
+              if (
+                typeof window !== 'undefined' &&
+                window.confirm('Are you sure you want to reset all account data (characters, profiles, and weapons)? This cannot be undone.')
+              ) {
+                if (onResetAccount) onResetAccount();
+                else onSetRoster([]);
+              }
+            }}
             className="px-3 py-1.5 rounded-xl bg-rose-950/30 text-rose-300 text-xs font-semibold hover:bg-rose-950/60 border border-rose-500/30 flex items-center gap-1.5 transition-colors cursor-pointer"
             title="Reset account to empty roster and bag"
           >
@@ -751,6 +761,8 @@ export const RosterView: React.FC<RosterViewProps> = ({
         onToggleOwned={onToggleOwned}
         profile={selectedCharacter ? profiles[selectedCharacter.id] : undefined}
         onUpdateProfile={onUpdateProfile}
+        profiles={profiles}
+        onUpdateProfiles={onUpdateProfiles}
         weapons={weapons}
         onUpdateWeapons={onUpdateWeapons}
         onSelectCharacter={setSelectedCharacter}

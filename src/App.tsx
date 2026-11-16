@@ -22,6 +22,7 @@ import {
 import { fetchShowcaseFromEnka } from './services/enka';
 import type { OwnedCharacterProfile, OwnedWeapon } from './types/genshin';
 import { WeaponConflictModal } from './components/WeaponConflictModal';
+import { getWeaponByKey } from './data/weapons';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -130,12 +131,31 @@ export const App: React.FC = () => {
   };
 
   const handleUpdateProfile = (updated: OwnedCharacterProfile) => {
-    setProfiles((prev) => ({
-      ...prev,
-      [updated.id]: updated,
-    }));
+    setProfiles((prev) => {
+      const next = { ...prev, [updated.id]: updated };
+      if (updated.weapon?.key) {
+        const canonicalKey =
+          (getWeaponByKey(updated.weapon.key) || getWeaponByKey(updated.weapon.name))?.key ||
+          updated.weapon.key;
+        for (const [charId, p] of Object.entries(next)) {
+          if (charId !== updated.id && p?.weapon) {
+            const pKey =
+              (getWeaponByKey(p.weapon.key) || getWeaponByKey(p.weapon.name))?.key || p.weapon.key;
+            if (pKey === canonicalKey) {
+              next[charId] = { ...p, weapon: undefined };
+            }
+          }
+        }
+      }
+      return next;
+    });
 
     setWeapons((prev) => syncArmoryOnProfileUpdate(prev, updated));
+  };
+
+  const handleUpdateProfiles = (updatedProfiles: Record<string, OwnedCharacterProfile>) => {
+    setProfiles(updatedProfiles);
+    saveProfiles(updatedProfiles);
   };
 
   const handleImportProfiles = (
@@ -248,6 +268,7 @@ export const App: React.FC = () => {
               weapons={weapons}
               onUpdateWeapons={handleUpdateWeapons}
               onUpdateProfile={handleUpdateProfile}
+              onUpdateProfiles={handleUpdateProfiles}
               isDemoMode={isDemoMode}
               onToggleDemoMode={handleToggleDemoMode}
             />
@@ -270,6 +291,7 @@ export const App: React.FC = () => {
               onToggleOwned={handleToggleOwned}
               onSetRoster={handleSetRoster}
               onUpdateProfile={handleUpdateProfile}
+              onUpdateProfiles={handleUpdateProfiles}
               onImportProfiles={handleImportProfiles}
               weapons={weapons}
               onUpdateWeapons={handleUpdateWeapons}

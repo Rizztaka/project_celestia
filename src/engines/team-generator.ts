@@ -20,6 +20,16 @@ export interface ArchetypeTemplate {
   baseSynergy: number;
 }
 
+/**
+ * Checks if two character entities represent the same individual,
+ * enforcing that multiple elemental configurations of the Traveler cannot co-exist in one party.
+ */
+export function isSameCharacterOrTraveler(a: Character, b: Character): boolean {
+  if (a.id === b.id) return true;
+  if (a.id.startsWith('Traveler') && b.id.startsWith('Traveler')) return true;
+  return false;
+}
+
 const TEMPLATES: ArchetypeTemplate[] = [
   {
     name: 'Lunar-Bloom Dominion',
@@ -160,6 +170,10 @@ export function scoreCandidateForSlot(
     if (candidate.tags.some((t) => sustainTags.includes(t))) {
       roleScore += 5;
     }
+    // Diminishing returns if the team already has a dedicated sustain unit
+    if (currentMembers.some((m) => m.roles.includes('Sustain'))) {
+      roleScore = Math.max(0, roleScore - 15);
+    }
   }
   roleScore = Math.min(30, Math.max(0, roleScore));
 
@@ -172,6 +186,13 @@ export function scoreCandidateForSlot(
   if (sameElementCount === 1) {
     // Adding candidate creates a 2-member resonance
     resonanceScore += 5;
+  } else if (
+    template.archetype.startsWith('Mono-') &&
+    currentMembers.length > 0 &&
+    candidate.element === currentMembers[0].element
+  ) {
+    // Stacking same element in Mono-element archetypes
+    resonanceScore += 10;
   }
   resonanceScore = Math.min(25, Math.max(0, resonanceScore));
 
@@ -472,6 +493,9 @@ function generateTeamsFromPool(
 
     for (const lead of leadCandidates) {
       if (focus && lead.id !== focus.id) {
+        // Disallow pairing different elemental versions of the Traveler together
+        if (isSameCharacterOrTraveler(lead, focus)) continue;
+
         const canFitAsSupport =
           template.supportTags.some((t) => focus.tags.includes(t)) ||
           (template.requiredElements ? template.requiredElements.includes(focus.element) : false) ||
@@ -479,11 +503,15 @@ function generateTeamsFromPool(
         if (!canFitAsSupport) continue;
       }
 
-      // Gather complementary supports: Sub-DPS, Buffer, Sustain
-      const others = pool.filter((c) => c.id !== lead.id);
+      // Gather complementary supports: Sub-DPS, Buffer, Sustain (excluding lead and identical Traveler entities)
+      const others = pool.filter((c) => !isSameCharacterOrTraveler(c, lead));
 
       const chosen: Character[] = [lead];
-      if (focus && focus.id !== lead.id && !chosen.some((m) => m.id === focus.id)) {
+      if (
+        focus &&
+        focus.id !== lead.id &&
+        !chosen.some((m) => isSameCharacterOrTraveler(m, focus))
+      ) {
         chosen.push(focus);
       }
 
@@ -495,7 +523,7 @@ function generateTeamsFromPool(
       for (const missingEl of missingElements) {
         if (chosen.length >= 4) break;
         const matchingCandidates = others
-          .filter((c) => !chosen.some((m) => m.id === c.id) && c.element === missingEl)
+          .filter((c) => !chosen.some((m) => isSameCharacterOrTraveler(m, c)) && c.element === missingEl)
           .map((c) => {
             const sSub = scoreCandidateForSlot(c, 'SubDPS', template, chosen, weaponBag, rosterProfiles);
             const sBuf = scoreCandidateForSlot(c, 'Buffer', template, chosen, weaponBag, rosterProfiles);
@@ -509,21 +537,22 @@ function generateTeamsFromPool(
         }
       }
 
-      // Check missing roles
-      const needsSubDps = !chosen.some((m) => m.roles.includes('Off-Field DPS'));
-      const needsBuffer = !chosen.some(
-        (m) =>
-          m.roles.includes('Buffer/Shred') ||
-          m.tags.includes('VV') ||
-          m.tags.includes('Cinder-City') ||
-          m.tags.includes('Universal-Buffer'),
-      );
-      const needsSustain = !chosen.some((m) => m.roles.includes('Sustain'));
+      // Check missing roles dynamically to adapt as hybrid characters are added
+      const hasSubDps = () => chosen.some((m) => m.roles.includes('Off-Field DPS'));
+      const hasBuffer = () =>
+        chosen.some(
+          (m) =>
+            m.roles.includes('Buffer/Shred') ||
+            m.tags.includes('VV') ||
+            m.tags.includes('Cinder-City') ||
+            m.tags.includes('Universal-Buffer'),
+        );
+      const hasSustain = () => chosen.some((m) => m.roles.includes('Sustain'));
 
       // Slot 1: Best Sub-DPS (Off-Field DPS enabler) if still needed
-      if (needsSubDps && chosen.length < 4) {
+      if (!hasSubDps() && chosen.length < 4) {
         const subDpsCandidates = others
-          .filter((c) => !chosen.some((m) => m.id === c.id))
+          .filter((c) => !chosen.some((m) => isSameCharacterOrTraveler(m, c)))
           .map((c) => ({
             character: c,
             score: scoreCandidateForSlot(c, 'SubDPS', template, chosen, weaponBag, rosterProfiles),
@@ -536,9 +565,9 @@ function generateTeamsFromPool(
       }
 
       // Slot 2: Best Buffer / Shred if still needed
-      if (needsBuffer && chosen.length < 4) {
+      if (!hasBuffer() && chosen.length < 4) {
         const bufferCandidates = others
-          .filter((c) => !chosen.some((m) => m.id === c.id))
+          .filter((c) => !chosen.some((m) => isSameCharacterOrTraveler(m, c)))
           .map((c) => ({
             character: c,
             score: scoreCandidateForSlot(c, 'Buffer', template, chosen, weaponBag, rosterProfiles),
@@ -551,9 +580,9 @@ function generateTeamsFromPool(
       }
 
       // Slot 3: Best Sustain (Healer / Shielder) if still needed
-      if (needsSustain && chosen.length < 4) {
+      if (!hasSustain() && chosen.length < 4) {
         const sustainCandidates = others
-          .filter((c) => !chosen.some((m) => m.id === c.id))
+          .filter((c) => !chosen.some((m) => isSameCharacterOrTraveler(m, c)))
           .map((c) => ({
             character: c,
             score: scoreCandidateForSlot(c, 'Sustain', template, chosen, weaponBag, rosterProfiles),
@@ -568,7 +597,7 @@ function generateTeamsFromPool(
       // Fill remaining slots up to 4 if needed using best general score
       while (chosen.length < 4) {
         const remaining = others
-          .filter((c) => !chosen.some((m) => m.id === c.id))
+          .filter((c) => !chosen.some((m) => isSameCharacterOrTraveler(m, c)))
           .map((c) => {
             const sSub = scoreCandidateForSlot(c, 'SubDPS', template, chosen, weaponBag, rosterProfiles);
             const sBuf = scoreCandidateForSlot(c, 'Buffer', template, chosen, weaponBag, rosterProfiles);
@@ -590,7 +619,7 @@ function generateTeamsFromPool(
       }
 
       if (chosen.length === 4) {
-        const hasSustain = chosen.some((m) => m.roles.includes('Sustain'));
+        const teamSustain = chosen.find((m) => m.roles.includes('Sustain'));
         const stepped = synthesizeTeamRotation(chosen);
         const constMods = applyConstellationModifiers(chosen, template.baseSynergy, rosterProfiles);
         const weaponAssignments = assignOptimalTeamWeapons(chosen, weaponBag, rosterProfiles);
@@ -601,13 +630,13 @@ function generateTeamsFromPool(
           members: chosen,
           synergyScore: constMods.synergyScore,
           compositionCompatibilityScore: constMods.synergyScore,
-          comfortScore: hasSustain ? 92 : 72,
+          comfortScore: teamSustain ? 92 : 72,
           reasons: [
             `${lead.name} acts as the core ${lead.roles[0]} driving ${template.archetype}.`,
             `${chosen[1].name} enables high-frequency elemental chain reactions.`,
             `${chosen[2].name} amplifies team damage through buffs and resistance reduction.`,
-            hasSustain
-              ? `${chosen[3].name} guarantees safe clear windows with survivability.`
+            teamSustain
+              ? `${teamSustain.name} guarantees safe clear windows with survivability.`
               : 'High aggressive offensive output with minimal downtime.',
             ...constMods.extraReasons,
           ],

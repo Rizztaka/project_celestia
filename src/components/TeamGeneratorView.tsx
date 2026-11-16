@@ -599,8 +599,9 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                               ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
                               : 'bg-zinc-800 text-zinc-300 border-zinc-700'
                           }`}
+                          title="Estimated Weapon Suitability"
                         >
-                          {scoreRes.tier} ({scoreRes.relativePercentage}%)
+                          {scoreRes.tier} ({scoreRes.suitabilityScore ?? scoreRes.relativePercentage}% Suitability)
                         </span>
                         {scoreRes.equippedOn && scoreRes.equippedOn !== quickSwapTarget.character.id && (
                           <span className="text-[10px] text-zinc-400">

@@ -7,6 +7,7 @@ export interface InfoTooltipProps {
   className?: string;
   iconClassName?: string;
   size?: 'sm' | 'md';
+  align?: 'center' | 'left' | 'right';
 }
 
 export const InfoTooltip: React.FC<InfoTooltipProps> = ({
@@ -15,6 +16,7 @@ export const InfoTooltip: React.FC<InfoTooltipProps> = ({
   className = '',
   iconClassName = 'text-zinc-400 hover:text-amber-400',
   size = 'sm',
+  align = 'center',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -47,6 +49,20 @@ export const InfoTooltip: React.FC<InfoTooltipProps> = ({
 
   const iconSize = size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4';
 
+  const positionClasses =
+    align === 'right'
+      ? 'right-0 bottom-full mb-2'
+      : align === 'left'
+      ? 'left-0 bottom-full mb-2'
+      : 'left-1/2 -translate-x-1/2 bottom-full mb-2';
+
+  const arrowClasses =
+    align === 'right'
+      ? 'right-3'
+      : align === 'left'
+      ? 'left-3'
+      : 'left-1/2 -translate-x-1/2';
+
   return (
     <div
       ref={containerRef}
@@ -76,7 +92,8 @@ export const InfoTooltip: React.FC<InfoTooltipProps> = ({
       {isOpen && (
         <div
           role="tooltip"
-          className="absolute z-50 left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 sm:w-72 p-2.5 rounded-xl bg-[#161927] border border-[#2a3048] shadow-2xl text-left pointer-events-auto backdrop-blur-md"
+          onClick={(e) => e.stopPropagation()}
+          className={`absolute z-50 ${positionClasses} w-64 sm:w-72 max-w-[calc(100vw-32px)] p-2.5 rounded-xl bg-[#161927] border border-[#2a3048] shadow-2xl text-left pointer-events-auto backdrop-blur-md`}
         >
           {title && (
             <div className="font-semibold text-xs text-amber-300 mb-1 border-b border-[#252c42] pb-1 flex items-center justify-between">
@@ -87,7 +104,7 @@ export const InfoTooltip: React.FC<InfoTooltipProps> = ({
             {content}
           </div>
           {/* Arrow */}
-          <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-[#2a3048]" />
+          <div className={`absolute top-full ${arrowClasses} -mt-1 border-4 border-transparent border-t-[#2a3048]`} />
         </div>
       )}
     </div>

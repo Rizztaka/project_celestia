@@ -47,10 +47,11 @@ describe('PullBudgetCard Component', () => {
     expect(html).toContain('+100');
   });
 
-  it('displays non-guaranteed 50/50 status when characterGuaranteed is false', () => {
+  it('displays non-guaranteed 50/50 status and Capturing Radiance stepper when characterGuaranteed is false', () => {
     const nonGuaranteedBudget: PullBudgetState = {
       ...mockBudget,
       characterGuaranteed: false,
+      consecutiveLossCount: 1,
       weaponFatePoints: 0,
     };
     const html = renderToString(
@@ -58,6 +59,10 @@ describe('PullBudgetCard Component', () => {
     );
 
     expect(html).toContain('50/50');
+    expect(html).toContain('Radiance Streak:');
+    expect(html).toContain('loss');
+    expect(html).toContain('title="Decrease consecutive loss count"');
+    expect(html).toContain('title="Increase consecutive loss count"');
   });
 
   it('renders numeric pity inputs alongside sliders for exact input entry', () => {

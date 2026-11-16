@@ -283,6 +283,7 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
                       <InfoTooltip
                         title="Estimated Account Value"
                         content="Composite score (0-100) quantifying marginal DPS uplift, team archetype unlocks, and gacha pull probability."
+                        align="right"
                       />
                     </span>
                   </div>

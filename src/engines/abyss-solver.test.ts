@@ -328,5 +328,16 @@ describe('Spiral Abyss Floor 12 Dual-Team Solver', () => {
       expect(chamber1.firstHalfSatisfied).toBe(false);
       expect(chamber1.firstHalfStatus).toMatch(/immune|reliance/i);
     });
+
+    it('populates mechanicCoverageScore matching overallScore on full and swapped plans', () => {
+      const plan = solveAbyssDualTeams(comprehensiveRoster);
+      expect(plan.mechanicCoverageScore).toBeDefined();
+      expect(plan.mechanicCoverageScore).toBe(plan.overallScore);
+      expect(plan.mechanicCoverageScore).toBeGreaterThanOrEqual(0);
+
+      const swapped = swapAbyssDualHalves(plan);
+      expect(swapped.mechanicCoverageScore).toBeDefined();
+      expect(swapped.mechanicCoverageScore).toBe(swapped.overallScore);
+    });
   });
 });

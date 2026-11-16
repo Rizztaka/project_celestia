@@ -17,6 +17,7 @@ import {
 import { CharacterPortrait } from './CharacterPortrait';
 import { CharacterDetailModal } from './CharacterDetailModal';
 import { RotationBadgeList } from './RotationBadgeList';
+import { InfoTooltip } from './InfoTooltip';
 import {
   Swords,
   ShieldCheck,
@@ -180,12 +181,21 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
               <span>{isSwapped ? 'Swapped Halves' : 'Swap Halves'}</span>
             </button>
 
-            {/* Match Rating Badge */}
+            {/* Mechanic Coverage Score Badge */}
             <div className="flex items-center gap-2 bg-[#121422] px-3.5 py-1.5 rounded-xl border border-[#2b3353]">
               <Sparkles className="w-4 h-4 text-[#d4af37]" />
-              <div className="text-xs">
-                <span className="text-zinc-400">Match: </span>
-                <span className="font-bold text-[#d4af37]">{plan.overallScore} Pts</span>
+              <div className="text-xs flex items-center gap-1.5">
+                <span className="text-zinc-400 flex items-center gap-1">
+                  <span>Mechanic Coverage:</span>
+                  <InfoTooltip
+                    title="Mechanic Coverage Score"
+                    content="Composite score evaluating elemental shield breaks, enemy mechanics counter-picks, Arkhe alignment, and blessing synergies across both Spiral Abyss halves."
+                    align="right"
+                  />
+                </span>
+                <span className="font-bold text-[#d4af37]">
+                  {plan.mechanicCoverageScore ?? plan.overallScore} Pts
+                </span>
               </div>
             </div>
           </div>

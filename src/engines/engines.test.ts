@@ -71,6 +71,49 @@ describe('Celestia v2 Core Engines', () => {
       expect(scoreKazuha).toBeGreaterThan(50);
     });
 
+    it('never includes multiple element variants of the Traveler on the same team', () => {
+      // Roster containing multiple elemental configurations of the Traveler
+      const rosterWithTravelers = [
+        'TravelerDendro',
+        'TravelerHydro',
+        'TravelerElectro',
+        'Furina',
+        'RaidenShogun',
+        'Bennett',
+        'Xiangling',
+        'Nahida',
+      ];
+      const teams = generateBestTeams(rosterWithTravelers);
+      expect(teams.length).toBeGreaterThan(0);
+
+      for (const team of teams) {
+        const travelerMembers = team.members.filter((m) => m.id.startsWith('Traveler'));
+        expect(
+          travelerMembers.length,
+          `Team ${team.name} illegally contains multiple Traveler variants: ${travelerMembers.map((m) => m.name).join(', ')}`,
+        ).toBeLessThanOrEqual(1);
+      }
+    });
+
+    it('dynamically adapts roles to avoid redundant double sustain when a sustain is already selected', () => {
+      // Kokomi is both Hydro SubDPS and Sustain
+      const roster = [
+        'HuTao',
+        'SangonomiyaKokomi',
+        'KaedeharaKazuha',
+        'Zhongli',
+        'Xingqiu',
+      ];
+      const teams = generateBestTeams(roster, 'HuTao');
+      const vape = teams.find((t) => t.archetype === 'Vaporize');
+      expect(vape).toBeDefined();
+
+      // If Kokomi is picked, the team should prefer Xingqiu/Kazuha over stacking a 2nd pure sustain like Zhongli
+      const memberIds = vape!.members.map((m) => m.id);
+      expect(memberIds).toContain('HuTao');
+      expect(memberIds).toContain('KaedeharaKazuha');
+    });
+
     it('generates a premier Lunar-Bloom team when Nefer is owned', () => {
       const owned = ['Nefer', 'Furina', 'Nahida', 'KukiShinobu', 'Xingqiu'];
       const teams = generateBestTeams(owned, 'Nefer');

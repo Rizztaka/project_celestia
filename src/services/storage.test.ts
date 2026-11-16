@@ -683,12 +683,13 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
       expect(budget).toEqual(DEFAULT_PULL_BUDGET);
     });
 
-    it('saves and restores pull budget correctly', () => {
+    it('saves and restores pull budget correctly including consecutiveLossCount', () => {
       const budget: PullBudgetState = {
         primogems: 16000,
         fates: 25,
         characterPity: 45,
-        characterGuaranteed: true,
+        characterGuaranteed: false,
+        consecutiveLossCount: 2,
         weaponPity: 20,
         weaponFatePoints: 1,
       };
@@ -712,6 +713,7 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
           fates: -10,
           characterPity: 120, // max is 89
           characterGuaranteed: 'yes', // should be boolean
+          consecutiveLossCount: 99, // max is 5
           weaponPity: -5,
           weaponFatePoints: 3, // max is 1
         }),
@@ -722,6 +724,7 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
       expect(sanitized.fates).toBe(0);
       expect(sanitized.characterPity).toBe(89);
       expect(sanitized.characterGuaranteed).toBe(false);
+      expect(sanitized.consecutiveLossCount).toBe(5);
       expect(sanitized.weaponPity).toBe(0);
       expect(sanitized.weaponFatePoints).toBe(1);
     });

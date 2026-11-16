@@ -1,0 +1,42 @@
+name: Quality Gate
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  quality-gate:
+    name: Quality Gate (Lint, Test, Build, SSOT)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check (Strict tsc)
+        run: npx tsc -b
+
+      - name: Run Vitest test suite
+        run: pnpm test
+
+      - name: Production Vite build
+        run: pnpm run build
+
+      - name: Verify SSOT reference synchronization
+        run: node scripts/generate-reference.cjs
+
+      - name: Ensure clean working tree (no untracked diffs or artifacts)
+        run: git diff --exit-code

@@ -3,6 +3,23 @@ import type { AbyssCycleConfig } from '../data/abyss-schedules';
 import { createCustomSandboxCycle, DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from '../data/abyss-schedules';
 import { getWeaponByKey } from '../data/weapons';
 import { CHARACTERS } from '../data/characters';
+import {
+  migrateStorageIfNeeded,
+  getStorageSchemaVersion,
+  createSafetySnapshot,
+  rollbackToBackup,
+  CURRENT_SCHEMA_VERSION,
+  SCHEMA_VERSION_KEY,
+} from './storage-migration';
+
+export {
+  migrateStorageIfNeeded,
+  getStorageSchemaVersion,
+  createSafetySnapshot,
+  rollbackToBackup,
+  CURRENT_SCHEMA_VERSION,
+  SCHEMA_VERSION_KEY,
+};
 
 const ROSTER_KEY = 'celestia_v2_owned_roster';
 const PROFILES_KEY = 'celestia_v2_roster_profiles';
@@ -646,5 +663,9 @@ export function syncArmoryOnProfileUpdate(
   };
   return [newOwned, ...unequippedOld];
 }
+
+// Auto-run non-destructive migration on initialization
+migrateStorageIfNeeded();
+
 
 

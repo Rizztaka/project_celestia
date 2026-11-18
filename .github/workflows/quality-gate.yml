@@ -8,7 +8,7 @@ on:
 
 jobs:
   quality-gate:
-    name: Quality Gate (Lint, Test, Build, SSOT)
+    name: Quality Gate (Lint, Typecheck, Unit, E2E, SSOT)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -16,6 +16,8 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
@@ -26,6 +28,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Run ESLint 9 Flat Config
+        run: pnpm run lint
+
       - name: Type check (Strict tsc)
         run: npx tsc -b
 
@@ -35,6 +40,24 @@ jobs:
       - name: Production Vite build
         run: pnpm run build
 
+      - name: Cache Playwright browser binaries
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright Chromium dependencies
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Install Playwright system dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
+
+      - name: Run Playwright E2E browser tests (Desktop & Mobile)
+        run: pnpm run test:e2e
+
       - name: Verify SSOT reference synchronization
         run: node scripts/generate-reference.cjs
 
@@ -42,3 +65,12 @@ jobs:
         run: |
           git diff --exit-code
           test -z "$(git status --porcelain)"
+
+      - name: Upload Playwright Test Report on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore

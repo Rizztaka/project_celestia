@@ -1,51 +1,37 @@
-# Implementation Plan: M1 — Account Reliability & Data Safety
+# Implementation Plan: M2 — Automated Testing & CI Quality Gate
 
 ## Overview
-Comprehensive account reliability and data safety upgrades for Project Celestia v2 (Version 7.2 baseline). This milestone isolates Demo Mode into a dedicated storage namespace, makes all storage write operations return deterministic boolean status with diagnostic capture, expands account reset to wipe all 8 user keys, guarantees atomic two-phase backup restoration with automatic rollback, and displays last backup metadata with recovery guidance.
+Comprehensive test automation and continuous integration infrastructure for Project Celestia v2 (Version 7.2 baseline). This milestone installs and configures ESLint 9 Flat Config with React Hooks and TypeScript plugins, integrates Playwright E2E browser testing and Axe-Core automated WCAG 2.1 AA accessibility auditing across Desktop and Mobile viewports, upgrades modals and navigation for full accessibility, and enhances the GitHub Actions CI pipeline with tiered caching and failure reporting.
 
 ## Architecture Decisions
-- **Demo Mode Storage Namespace**: Route all reads and writes through `DEMO_*` keys (`celestia_v2_demo_profiles`, `celestia_v2_demo_weapons`, `celestia_v2_demo_roster`) when `isDemoModeEnabled()` is true.
-- **Explicit Storage Mutation Contracts**: `saveProfiles`, `saveWeapons`, `saveArtifacts`, `saveRoster`, `saveUid`, `savePullBudget`, `saveAbyssCycleId`, and `saveCustomAbyss` return `boolean` status flags; diagnostic errors captured in `getLastStorageError()`.
-- **Atomic Two-Phase Restore**: 
-  1. Capture pre-restore safety snapshot in `celestia_backup_pre_restore` (abort restore if snapshot fails).
-  2. Write all keys sequentially and record success status.
-  3. If any write fails, automatically execute `rollbackToBackup('celestia_backup_pre_restore')` and return `{ success: false, rolledBack: true }`.
-- **Complete Account Reset**: `resetAccountData()` wipes all 8 user keys: `roster`, `profiles`, `weapons`, `artifacts`, `active_uid`, `pull_budget`, `abyss_cycle_id`, `custom_abyss`.
-- **Backup Metadata Tracking**: Record `celestia_last_backup_meta` upon export and display in `AccountBackupModal.tsx`.
+- **ESLint 9 Flat Configuration**: Modern `eslint.config.js` with `@eslint/js`, `typescript-eslint`, and `eslint-plugin-react-hooks`.
+- **Playwright Test Runner**: Native Playwright runner with `@playwright/test` and `@axe-core/playwright` targeting production preview on `localhost:4173`.
+- **Dual Device Matrix**: Primary test matrix covers Desktop Chrome (1920x1080) and Mobile Chrome (Pixel 5, 393x851 with touch emulation).
+- **15-Second Chunk Resolution Timeout**: Calibrated Playwright assertion timeout to 15000ms to guarantee lazy-loaded React 19 chunks resolve reliably under parallel multi-worker concurrency.
+- **WAI-ARIA Accessibility**: Added `role="dialog"`, `aria-modal="true"`, and descriptive `aria-label` to all application modals (`WeaponConflictModal`, `CharacterDetailModal`, `GoodImportExportModal`) and navigation controls.
+- **CI Tiered Caching**: Two-tier cache in `.github/workflows/quality-gate.yml` for pnpm package store and Playwright browser binaries (`~/.cache/ms-playwright`).
 
 ## Task List
 
-### Phase 1: Storage Namespace Isolation & Error Diagnostics
-- [x] Task 1.1: Demo Mode Storage Namespace Isolation (`src/services/storage.ts`, `src/App.tsx`, `src/services/storage.test.ts`)
-- [x] Task 1.2: Deterministic Storage Mutation Contracts & Diagnostic Capture (`src/services/storage.ts`, `src/services/storage.test.ts`)
+### Phase 1: Linting & E2E Infrastructure
+- [x] Task 2.1: ESLint 9 Flat Configuration Setup (`eslint.config.js`, `package.json`)
+- [x] Task 2.2: Playwright & Axe-Core Infrastructure Setup (`playwright.config.ts`, `e2e/fixtures/test-helpers.ts`)
 
-### Checkpoint: Storage Hardening
-- [x] Demo mode mutations do not overwrite authentic player data
-- [x] Disabling demo mode restores authentic profiles without data loss
-- [x] QuotaExceededError and SecurityError captured in `getLastStorageError()`
+### Phase 2: User Journey & Accessibility Test Suites
+- [x] Task 2.3: Journey Specs 1 to 5 (First Visit & Demo, Roster Management, Character Calibration, Armory & Weapons, UID Sync)
+- [x] Task 2.4: Journey Specs 6 to 10 (Team Builder, Endgame Solvers, Backup/Restore, Pull Advisor, Mobile Viewport)
+- [x] Task 2.5: Automated WCAG 2.1 AA Accessibility Audit (`e2e/journeys/11-accessibility-wcag.spec.ts`)
 
-### Phase 2: Complete Reset & Atomic Restore
-- [x] Task 1.3: Comprehensive Account Reset across All 8 User Keys (`src/services/storage.ts`, `src/App.tsx`, `src/services/storage.test.ts`)
-- [x] Task 1.4: Two-Phase Transactional Backup Restore with Automatic Rollback (`src/services/backup.ts`, `src/services/backup.test.ts`)
+### Phase 3: Accessibility Enhancements & CI Quality Gate
+- [x] Task 2.6: Modal & Header ARIA Accessibility Hardening (`src/components/WeaponConflictModal.tsx`, `src/components/CharacterDetailModal.tsx`, `src/components/GoodImportExportModal.tsx`, `src/components/Navbar.tsx`)
+- [x] Task 2.7: GitHub Actions CI Quality Gate Upgrade with Tiered Caching (`.github/workflows/quality-gate.yml`, `.gitignore`)
+- [x] Task 2.8: Architecture Decision Record ADR-002 (`docs/decisions/0002-automated-testing-and-ci-pipeline.md`)
 
-### Checkpoint: Restore Integrity
-- [x] Simulated write failures trigger automatic rollback to pre-restore snapshot
-- [x] Incomplete / corrupted imports return `{ success: false, rolledBack: true }`
-- [x] Account reset completely wipes all 8 keys including UID and pull budget
-
-### Phase 3: Metadata Tracking, UI & Documentation
-- [x] Task 1.5: Backup Metadata Tracking & Recovery Guidance UX (`src/services/backup.ts`, `src/components/AccountBackupModal.tsx`)
-- [x] Task 1.6: Architecture Decision Record ADR-001 (`docs/decisions/0001-storage-namespace-and-atomic-restore.md`)
-
-### Checkpoint: Complete
-- [x] All 23 Vitest test suites pass (324 tests)
+## Checkpoints & Verification
+- [x] `pnpm run lint` passes with 0 errors
 - [x] `npx tsc -b` passes with 0 errors
-- [x] `pnpm run build` succeeds
-- [x] Live browser audit confirms demo isolation and modal UX
-
-## Risks and Mitigations
-| Risk | Impact | Mitigation |
-|---|---|---|
-| QuotaExceededError during snapshot creation | High | If pre-restore snapshot fails, restore aborts immediately before modifying storage. |
-| Incomplete rollback leaving partial data | High | Rollback wipes restored keys before reapplying snapshot. |
-| Legacy v1 backup rejection | Medium | Validator normalizes missing optional fields with safe defaults. |
+- [x] `pnpm test` passes all 328 unit/integration tests across 23 test files
+- [x] `pnpm run build` succeeds cleanly
+- [x] `pnpm run test:e2e` passes all 26 browser tests across Desktop Chrome and Mobile Chrome (Pixel 5)
+- [x] `node scripts/generate-reference.cjs` verifies SSOT alignment (128 characters, 256 weapons, 64 artifact sets)
+- [x] Git working tree is clean

@@ -95,6 +95,18 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
     });
   }, [weapons, tab, typeFilter, searchQuery]);
 
+  // Handle keyboard Escape dismissal
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleStartEdit = (w: OwnedWeapon) => {
@@ -264,8 +276,17 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
   const availableForType = WEAPONS_BY_TYPE[newType] || [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="bg-[#0f111a] border border-[#23273e] w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden text-zinc-100">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Armory & Weapon Manager"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#0f111a] border border-[#23273e] w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden text-zinc-100"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="p-5 border-b border-[#202538] flex items-center justify-between bg-gradient-to-r from-[#141624] via-[#1a1e32] to-[#141624]">
           <div className="flex items-center gap-3">
@@ -289,7 +310,8 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-[#1f243b] transition-colors cursor-pointer"
+            aria-label="Close"
+            className="shrink-0 p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-[#1f243b] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>

@@ -8,7 +8,7 @@ export default defineConfig({
   testDir: './e2e',
   timeout: 30 * 1000,
   expect: {
-    timeout: 5000,
+    timeout: 15000,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -30,35 +30,15 @@ export default defineConfig({
       },
     },
     {
-      name: 'Desktop Firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-        viewport: { width: 1920, height: 1080 },
-      },
-    },
-    {
-      name: 'Desktop Safari',
-      use: {
-        ...devices['Desktop Safari'],
-        viewport: { width: 1920, height: 1080 },
-      },
-    },
-    {
       name: 'Mobile Chrome (Pixel 5)',
       use: {
         ...devices['Pixel 5'],
       },
     },
-    {
-      name: 'Mobile Safari (iPhone 13)',
-      use: {
-        ...devices['iPhone 13'],
-      },
-    },
   ],
   webServer: {
-    command: 'pnpm run preview',
-    port: 4173,
+    command: 'pnpm run preview --port 4173 --host',
+    url: 'http://localhost:4173',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },

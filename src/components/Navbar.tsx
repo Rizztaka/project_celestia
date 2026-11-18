@@ -50,21 +50,26 @@ export const Navbar: React.FC<NavbarProps> = ({
         />
       )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-4">
+        <div className="flex items-center justify-between h-16 gap-2 sm:gap-4">
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('teams')}>
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#d4af37] to-[#8c7320] flex items-center justify-center shadow-lg shadow-[#d4af37]/20">
-              <span className="font-bold text-[#0a0b0e] text-lg">✦</span>
+          <button
+            type="button"
+            aria-label="Celestia Home"
+            className="flex items-center gap-2 sm:gap-3 cursor-pointer shrink-0 text-left bg-transparent border-0 p-0"
+            onClick={() => setActiveTab('teams')}
+          >
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-[#d4af37] to-[#8c7320] flex items-center justify-center shadow-lg shadow-[#d4af37]/20 shrink-0">
+              <span className="font-bold text-[#0a0b0e] text-base sm:text-lg">✦</span>
             </div>
             <div>
-              <span className="font-extrabold tracking-wider text-base text-[#f0ede6] block leading-tight font-serif">
+              <span className="font-extrabold tracking-wider text-sm sm:text-base text-[#f0ede6] block leading-tight font-serif">
                 CELESTIA
               </span>
-              <span className="text-[10px] tracking-widest text-[#d4af37] font-semibold block uppercase">
+              <span className="text-[9px] sm:text-[10px] tracking-widest text-[#d4af37] font-semibold block uppercase">
                 Speed · Accuracy
               </span>
             </div>
-          </div>
+          </button>
 
           {/* Navigation Tabs */}
           <nav className="hidden md:flex items-center gap-1 bg-[#141622] p-1 rounded-xl border border-[#232738]">
@@ -76,6 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
+                  aria-label={tab.label}
                   className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer ${
                     isActive
                       ? 'bg-[#d4af37] text-[#0a0b0e] shadow-md font-bold'
@@ -90,11 +96,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* UID Sync Control, Demo Mode & Armory Trigger */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {onToggleDemoMode && (
               <button
                 onClick={() => onToggleDemoMode(!isDemoMode)}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer border shadow-sm ${
+                aria-label={`Demo Mode ${isDemoMode ? 'ON' : 'OFF'}`}
+                className={`px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 sm:gap-1.5 transition-all cursor-pointer border shadow-sm shrink-0 ${
                   isDemoMode
                     ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 hover:bg-amber-500/30'
                     : 'bg-[#181c2c] hover:bg-[#22273e] text-zinc-400 hover:text-zinc-200 border-[#2a3048]'
@@ -108,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <Sparkles className={`w-3.5 h-3.5 ${isDemoMode ? 'text-amber-400' : 'text-zinc-500'}`} />
                 <span className="hidden sm:inline">Demo Mode</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold font-mono ${
+                  className={`text-[10px] px-1 sm:px-1.5 py-0.2 rounded-full font-bold font-mono ${
                     isDemoMode ? 'bg-amber-400/20 text-amber-300' : 'bg-zinc-800 text-zinc-400'
                   }`}
                 >
@@ -120,33 +127,36 @@ export const Navbar: React.FC<NavbarProps> = ({
             {onOpenArmory && (
               <button
                 onClick={onOpenArmory}
-                className="bg-[#181c2c] hover:bg-[#22273e] text-zinc-200 hover:text-[#d4af37] border border-[#2a3048] hover:border-[#d4af37]/40 px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                aria-label="Armory"
+                className="bg-[#181c2c] hover:bg-[#22273e] text-zinc-200 hover:text-[#d4af37] border border-[#2a3048] hover:border-[#d4af37]/40 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 sm:gap-1.5 transition-all cursor-pointer shadow-sm shrink-0"
                 title="Armory & Conflict Resolver"
               >
                 <Swords className="w-3.5 h-3.5 text-[#d4af37]" />
                 <span className="hidden sm:inline">Armory</span>
                 {weaponCount !== undefined && (
-                  <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#272e48] text-amber-300 font-mono">
+                  <span className="text-[10px] px-1 sm:px-1.5 py-0.2 rounded-full bg-[#272e48] text-amber-300 font-mono">
                     {weaponCount}
                   </span>
                 )}
               </button>
             )}
 
-            <div className="relative">
+            <div className="relative shrink-0">
               <input
                 type="text"
+                aria-label="Player UID"
                 placeholder="Enter UID..."
                 value={uid}
                 onChange={(e) => setUid(e.target.value)}
-                className="bg-[#141622] border border-[#262a3b] text-xs text-zinc-200 rounded-lg px-3 py-1.5 w-28 sm:w-36 focus:outline-none focus:border-[#d4af37] transition-colors"
+                className="bg-[#141622] border border-[#262a3b] text-xs text-zinc-200 rounded-lg px-2 sm:px-3 py-1.5 w-24 sm:w-36 focus:outline-none focus:border-[#d4af37] transition-colors"
                 maxLength={10}
               />
             </div>
             <button
               onClick={onSyncShowcase}
               disabled={isSyncing || !uid.trim()}
-              className="bg-[#1c2030] hover:bg-[#252b42] text-[#d4af37] border border-[#d4af37]/40 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              aria-label="Sync Showcase"
+              className="bg-[#1c2030] hover:bg-[#252b42] text-[#d4af37] border border-[#d4af37]/40 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shrink-0"
               title="Sync public showcase from Enka"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
@@ -156,7 +166,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Mobile Nav */}
-        <div className="md:hidden flex items-center justify-around py-1 border-t border-[#1c2030] overflow-x-auto touch-pan-x [-webkit-overflow-scrolling:touch]">
+        <nav
+          aria-label="Mobile Navigation"
+          className="md:hidden flex items-center justify-around py-1 border-t border-[#1c2030] overflow-x-auto touch-pan-x [-webkit-overflow-scrolling:touch]"
+        >
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isTargetPending = isTabPending && pendingTab === tab.id;
@@ -165,6 +178,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
+                aria-label={tab.label}
                 className={`flex flex-col items-center justify-center gap-1 min-h-[44px] py-1 px-2.5 text-[10px] font-medium transition-colors cursor-pointer shrink-0 ${
                   isActive ? 'text-[#d4af37] font-bold' : 'text-zinc-400'
                 } ${isTargetPending ? 'animate-pulse' : ''}`}
@@ -174,7 +188,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             );
           })}
-        </div>
+        </nav>
       </div>
     </header>
   );

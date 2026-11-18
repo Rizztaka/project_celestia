@@ -468,6 +468,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
             <Search className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
+              aria-label="Search by character name"
               placeholder="Search by character name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}

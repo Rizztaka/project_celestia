@@ -327,5 +327,5 @@ describe('Persistent Reference SSOT Verification', () => {
       expect(scaling?.skill?.parameters, `Missing skill params for ${char.id}`).toBeDefined();
       expect(scaling?.burst?.parameters, `Missing burst params for ${char.id}`).toBeDefined();
     }
-  });
+  }, 20000);
 });

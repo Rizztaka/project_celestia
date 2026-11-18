@@ -1,31 +1,41 @@
-# Task List: M1 — Account Reliability & Data Safety
+# Task List: M2 — Automated Testing & CI Quality Gate
 
-- [x] Task 1.1: Demo Mode Storage Namespace Isolation
-  - Acceptance: Demo mode profiles, weapons, and roster are isolated to `celestia_v2_demo_*` keys; real account records are untouched when demo mode is enabled or disabled.
-  - Verify: `pnpm vitest run src/services/storage.test.ts`
-  - Files: `src/services/storage.ts`, `src/App.tsx`, `src/services/storage.test.ts`
+- [x] Task 2.1: Modern Linting System (ESLint 9 Flat Config)
+  - Acceptance: `eslint.config.js` configured with `@eslint/js`, `typescript-eslint`, and `eslint-plugin-react-hooks`; `"lint"` and `"lint:fix"` scripts pass with 0 errors.
+  - Verify: `pnpm run lint`
+  - Files: `eslint.config.js`, `package.json`
 
-- [x] Task 1.2: Deterministic Storage Mutation Contracts & Diagnostic Capture
-  - Acceptance: All `save*` methods return explicit `boolean` values; `QuotaExceededError` and write failures are safely caught and surfaced via `getLastStorageError()`.
-  - Verify: `pnpm vitest run src/services/storage.test.ts`
-  - Files: `src/services/storage.ts`, `src/services/storage.test.ts`
+- [x] Task 2.2: Playwright & Axe-Core Infrastructure Setup
+  - Acceptance: Pinned `@playwright/test` and `@axe-core/playwright`; `playwright.config.ts` configured for production preview (`localhost:4173`); test helper fixtures created.
+  - Verify: `playwright.config.ts`, `e2e/fixtures/test-helpers.ts`
+  - Files: `playwright.config.ts`, `package.json`, `e2e/fixtures/test-helpers.ts`
 
-- [x] Task 1.3: Comprehensive Account Reset across All 8 User Keys
-  - Acceptance: `resetAccountData()` wipes all 8 account keys (`roster`, `profiles`, `weapons`, `artifacts`, `active_uid`, `pull_budget`, `abyss_cycle_id`, `custom_abyss`); `App.tsx` synchronizes React state.
-  - Verify: `pnpm vitest run src/services/storage.test.ts`
-  - Files: `src/services/storage.ts`, `src/App.tsx`, `src/services/storage.test.ts`
+- [x] Task 2.3: Core User Journey Suites (Journeys 1 to 5)
+  - Acceptance: 5 comprehensive journeys testing empty state/demo mode, roster filters, character calibration, armory modals, and UID showcase sync.
+  - Verify: `pnpm run test:e2e`
+  - Files: `e2e/journeys/01-first-visit-demo.spec.ts` through `05-uid-sync.spec.ts`
 
-- [x] Task 1.4: Two-Phase Transactional Backup Restore with Automatic Rollback
-  - Acceptance: Restores capture pre-restore safety snapshot; any failure during sequential writes triggers `rollbackToBackup` and returns `{ success: false, rolledBack: true }`.
-  - Verify: `pnpm vitest run src/services/backup.test.ts`
-  - Files: `src/services/backup.ts`, `src/services/backup.test.ts`
+- [x] Task 2.4: Advanced Features & Viewport Suites (Journeys 6 to 10)
+  - Acceptance: 5 journeys testing team generator synergies, theater/abyss endgame solvers, transactional backup/restore, pull advisor wish math, and mobile viewport responsive layout.
+  - Verify: `pnpm run test:e2e`
+  - Files: `e2e/journeys/06-team-builder.spec.ts` through `10-mobile-viewport.spec.ts`
 
-- [x] Task 1.5: Backup Metadata Tracking & Recovery Guidance UX
-  - Acceptance: Exporting a backup updates `celestia_last_backup_meta`; `AccountBackupModal.tsx` displays timestamp, character/weapon counts, and rollback controls.
-  - Verify: `pnpm vitest run src/services/backup.test.ts`, manual modal inspection
-  - Files: `src/services/backup.ts`, `src/components/AccountBackupModal.tsx`
+- [x] Task 2.5: Automated WCAG 2.1 AA Accessibility Audit
+  - Acceptance: Automated scan with `@axe-core/playwright` verifying 0 critical accessibility violations on landing views and open modal dialogs.
+  - Verify: `pnpm run test:e2e`
+  - Files: `e2e/journeys/11-accessibility-wcag.spec.ts`
 
-- [x] Task 1.6: Architecture Decision Record ADR-001 & Technical Documentation
-  - Acceptance: ADR-001 documented in `docs/decisions/0001-storage-namespace-and-atomic-restore.md`; task tracking synchronized.
-  - Verify: Markdown review and repository consistency
-  - Files: `docs/decisions/0001-storage-namespace-and-atomic-restore.md`, `tasks/plan.md`, `tasks/todo.md`
+- [x] Task 2.6: Modal & Header ARIA Accessibility Hardening
+  - Acceptance: All modal dialogs enhanced with `role="dialog"`, `aria-modal="true"`, and descriptive `aria-label`; header buttons have accessible names on both desktop and mobile viewports.
+  - Verify: Axe-core scan & responsive browser verification
+  - Files: `src/components/WeaponConflictModal.tsx`, `src/components/CharacterDetailModal.tsx`, `src/components/GoodImportExportModal.tsx`, `src/components/Navbar.tsx`
+
+- [x] Task 2.7: GitHub Actions CI Quality Gate Upgrade with Tiered Caching
+  - Acceptance: Upgraded `.github/workflows/quality-gate.yml` with pnpm store caching, Playwright binary caching, lint, typecheck, unit tests, build, E2E tests, SSOT validation, and failure report upload.
+  - Verify: Workflow syntax & git clean working tree
+  - Files: `.github/workflows/quality-gate.yml`, `.gitignore`
+
+- [x] Task 2.8: Architecture Decision Record ADR-002
+  - Acceptance: ADR-002 authored in `docs/decisions/0002-automated-testing-and-ci-pipeline.md` detailing all architectural choices, test design, and CI gates.
+  - Verify: Markdown review
+  - Files: `docs/decisions/0002-automated-testing-and-ci-pipeline.md`, `tasks/plan.md`, `tasks/todo.md`

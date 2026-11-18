@@ -18,3 +18,8 @@ out/
 *.tsbuildinfo
 .DS_Store
 Thumbs.db
+
+# Test outputs
+playwright-report/
+test-results/
+.playwright/

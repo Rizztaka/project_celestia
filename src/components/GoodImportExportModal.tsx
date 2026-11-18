@@ -51,6 +51,18 @@ export const GoodImportExportModal: React.FC<GoodImportExportModalProps> = ({
   const [copied, setCopied] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Handle keyboard Escape dismissal
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleProcessJSON = (jsonString: string, originName = 'Direct Input') => {
@@ -155,8 +167,17 @@ export const GoodImportExportModal: React.FC<GoodImportExportModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div className="bg-[#12141f] border border-[#2b3149] rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="GOOD JSON Import / Export"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#12141f] border border-[#2b3149] rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#202538] bg-[#161926]">
           <div className="flex items-center gap-2.5">

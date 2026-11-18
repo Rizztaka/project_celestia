@@ -405,6 +405,9 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${character.name} Details`}
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
       onClick={onClose}
     >

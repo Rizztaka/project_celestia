@@ -14,6 +14,11 @@ export const KNOWN_STORAGE_KEYS = [
   'celestia_v2_abyss_cycle_id',
   'celestia_v2_custom_abyss',
   'celestia_v2_demo_mode',
+  'celestia_v2_demo_roster',
+  'celestia_v2_demo_profiles',
+  'celestia_v2_demo_weapons',
+  'celestia_v2_demo_artifacts',
+  'celestia_last_backup_meta',
 ] as const;
 
 export function getStorageSchemaVersion(): number {

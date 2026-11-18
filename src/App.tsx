@@ -12,8 +12,6 @@ import {
   syncArmoryOnProfileUpdate,
   isDemoModeEnabled,
   setDemoModeEnabled,
-  getDemoProfiles,
-  DEMO_WEAPONS,
   resetAccountData,
 } from './services/storage';
 import { fetchShowcaseFromEnka } from './services/enka';
@@ -136,23 +134,23 @@ export const App: React.FC = () => {
     setDemoModeEnabled(enable);
     setIsDemoMode(enable);
     if (enable) {
-      const demoProfs = getDemoProfiles();
-      const demoWeps = DEMO_WEAPONS;
+      const demoProfs = getSavedProfiles();
+      const demoWeps = getSavedWeapons();
       setProfiles(demoProfs);
-      saveProfiles(demoProfs);
       setWeapons(demoWeps);
-      saveWeapons(demoWeps);
       setNotification({
         type: 'success',
-        message: 'Demo Mode enabled! Loaded 11 calibrated characters & starter armory.',
+        message: 'Demo Mode enabled! Playing in isolated demo sandbox (real data is preserved).',
       });
     } else {
-      resetAccountData();
-      setProfiles({});
-      setWeapons([]);
+      // Disabling demo mode switches back to authentic account without modifying or wiping real records
+      const realProfs = getSavedProfiles();
+      const realWeps = getSavedWeapons();
+      setProfiles(realProfs);
+      setWeapons(realWeps);
       setNotification({
         type: 'success',
-        message: 'Demo Mode disabled. Switched to authentic empty account.',
+        message: 'Demo Mode disabled. Switched back to your authentic account data.',
       });
     }
     setTimeout(() => setNotification(null), 4000);
@@ -163,9 +161,11 @@ export const App: React.FC = () => {
     setIsDemoMode(false);
     setProfiles({});
     setWeapons([]);
+    setUidState('');
+    handleResetViews();
     setNotification({
       type: 'success',
-      message: 'Account data cleared. Account reset to empty state.',
+      message: 'Account data cleared. All saved profiles, weapons, and UID reset to empty state.',
     });
     setTimeout(() => setNotification(null), 4000);
   };

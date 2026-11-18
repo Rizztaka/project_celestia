@@ -1,46 +1,31 @@
-# Task List: M0 — Technical Audit & Baseline
+# Task List: M1 — Account Reliability & Data Safety
 
-- [x] Task 0.1: Clean Lockfile & Dependency Hygiene
-  - Acceptance: `pnpm install --frozen-lockfile` succeeds with zero changes; production dependencies audited.
-  - Verify: `pnpm install --frozen-lockfile && git status --porcelain`
-  - Files: `package.json`, `pnpm-lock.yaml`
+- [x] Task 1.1: Demo Mode Storage Namespace Isolation
+  - Acceptance: Demo mode profiles, weapons, and roster are isolated to `celestia_v2_demo_*` keys; real account records are untouched when demo mode is enabled or disabled.
+  - Verify: `pnpm vitest run src/services/storage.test.ts`
+  - Files: `src/services/storage.ts`, `src/App.tsx`, `src/services/storage.test.ts`
 
-- [x] Task 0.2: Static Analysis, Tests, and Reference Synchronization
-  - Acceptance: Strict `tsc -b` passes with 0 errors; all 318 Vitest tests pass; reference generation generates accurate SSOT doc.
-  - Verify: `pnpm exec tsc -b && pnpm test && node scripts/generate-reference.cjs`
-  - Files: `src/data/reference-ssot.test.ts`, `docs/knowledge/celestia-reference.md`
+- [x] Task 1.2: Deterministic Storage Mutation Contracts & Diagnostic Capture
+  - Acceptance: All `save*` methods return explicit `boolean` values; `QuotaExceededError` and write failures are safely caught and surfaced via `getLastStorageError()`.
+  - Verify: `pnpm vitest run src/services/storage.test.ts`
+  - Files: `src/services/storage.ts`, `src/services/storage.test.ts`
 
-- [x] Task 0.3: Repository Topology Mapping & Dependency Graph Slicing
-  - Acceptance: Complete inventory of all components, services, engines, and data files; exact chunk weights from `pnpm build` cataloged.
-  - Verify: `pnpm build` chunk inspection
-  - Files: `vite.config.ts`, `src/App.tsx`, `src/data/characters.ts`, `src/data/weapons.ts`
+- [x] Task 1.3: Comprehensive Account Reset across All 8 User Keys
+  - Acceptance: `resetAccountData()` wipes all 8 account keys (`roster`, `profiles`, `weapons`, `artifacts`, `active_uid`, `pull_budget`, `abyss_cycle_id`, `custom_abyss`); `App.tsx` synchronizes React state.
+  - Verify: `pnpm vitest run src/services/storage.test.ts`
+  - Files: `src/services/storage.ts`, `src/App.tsx`, `src/services/storage.test.ts`
 
-- [x] Task 0.4: User Journey Tracing (UI → Engine → Storage)
-  - Acceptance: Step-by-step trace of 8 core user journeys; pinpoint root causes of demo mode data loss, non-atomic restore, and reset leftover keys.
-  - Verify: Trace matrices against `src/services/storage.ts`, `backup.ts`, `enka.ts`
-  - Files: `src/App.tsx`, `src/services/storage.ts`, `src/services/backup.ts`, `src/services/enka.ts`
+- [x] Task 1.4: Two-Phase Transactional Backup Restore with Automatic Rollback
+  - Acceptance: Restores capture pre-restore safety snapshot; any failure during sequential writes triggers `rollbackToBackup` and returns `{ success: false, rolledBack: true }`.
+  - Verify: `pnpm vitest run src/services/backup.test.ts`
+  - Files: `src/services/backup.ts`, `src/services/backup.test.ts`
 
-- [x] Task 0.5: CI/CD Pipeline & Deployment Configuration Audit
-  - Acceptance: Complete gap analysis of `.github/workflows/quality-gate.yml` (missing lint, missing Playwright, missing e2e/ tests) and Vercel build configs.
-  - Verify: Review `.github/workflows/quality-gate.yml` and `playwright.config.ts`
-  - Files: `.github/workflows/quality-gate.yml`, `playwright.config.ts`
+- [x] Task 1.5: Backup Metadata Tracking & Recovery Guidance UX
+  - Acceptance: Exporting a backup updates `celestia_last_backup_meta`; `AccountBackupModal.tsx` displays timestamp, character/weapon counts, and rollback controls.
+  - Verify: `pnpm vitest run src/services/backup.test.ts`, manual modal inspection
+  - Files: `src/services/backup.ts`, `src/components/AccountBackupModal.tsx`
 
-- [x] Task 0.6: Production UI Desktop & Mobile Viewport Audit
-  - Acceptance: Production build run on Vite preview (`http://localhost:4173`); audited across Desktop (1920x1080) and Mobile (390x844/393x851); 0 console errors.
-  - Verify: Browser viewport inspection on `http://localhost:4173`
-  - Files: Production preview build
-
-- [x] Task 0.7: Baseline Performance Profiling (Dual Profile)
-  - Acceptance: Baseline LCP, bundle parse time, and tab transition delays benchmarked under standard desktop and 4G throttled/4x CPU mobile conditions.
-  - Verify: Benchmark timings recorded in ms
-  - Files: `dist/assets/*.js`
-
-- [x] Task 0.8: Ranked Issue & Vulnerability Register (P0–P3)
-  - Acceptance: Comprehensive matrix categorizing all discovered bugs, architectural risks, and performance bottlenecks into P0, P1, P2, and P3 tiers.
-  - Verify: Matrix completeness and actionable remediation targets
-  - Files: `docs/audit/m0-technical-baseline.md`
-
-- [x] Task 0.9: Deliverable Publication & M1 Transition Plan
-  - Acceptance: Permanent SSOT audit report committed to `docs/audit/m0-technical-baseline.md`; clean git working tree; M1 roadmap handover defined.
-  - Verify: `git status --porcelain` and committed document
-  - Files: `docs/audit/m0-technical-baseline.md`
+- [x] Task 1.6: Architecture Decision Record ADR-001 & Technical Documentation
+  - Acceptance: ADR-001 documented in `docs/decisions/0001-storage-namespace-and-atomic-restore.md`; task tracking synchronized.
+  - Verify: Markdown review and repository consistency
+  - Files: `docs/decisions/0001-storage-namespace-and-atomic-restore.md`, `tasks/plan.md`, `tasks/todo.md`

@@ -57,8 +57,38 @@ export interface ValidationResult {
   summary?: ValidationSummary;
 }
 
+export const LAST_BACKUP_META_KEY = 'celestia_last_backup_meta';
+
+export interface LastBackupMetadata {
+  exportedAt: string;
+  characterCount: number;
+  weaponCount: number;
+  artifactCount: number;
+}
+
+export function recordLastBackupMeta(meta: LastBackupMetadata): boolean {
+  try {
+    if (typeof localStorage === 'undefined') return false;
+    localStorage.setItem(LAST_BACKUP_META_KEY, JSON.stringify(meta));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function getLastBackupMeta(): LastBackupMetadata | null {
+  try {
+    if (typeof localStorage === 'undefined') return null;
+    const raw = localStorage.getItem(LAST_BACKUP_META_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 export function exportAccountBackup(): CelestiaBackupData {
-  return {
+  const backup: CelestiaBackupData = {
     format: 'celestia_native',
     version: CURRENT_SCHEMA_VERSION,
     gameVersion: '7.2',
@@ -72,6 +102,15 @@ export function exportAccountBackup(): CelestiaBackupData {
     customAbyssConfig: getSavedCustomAbyss(),
     demoMode: isDemoModeEnabled(),
   };
+
+  recordLastBackupMeta({
+    exportedAt: backup.exportedAt,
+    characterCount: Array.isArray(backup.roster) ? backup.roster.length : 0,
+    weaponCount: Array.isArray(backup.rawWeapons) ? backup.rawWeapons.length : 0,
+    artifactCount: Array.isArray(backup.rawArtifacts) ? backup.rawArtifacts.length : 0,
+  });
+
+  return backup;
 }
 
 export function validateBackupData(data: unknown): ValidationResult {
@@ -121,14 +160,20 @@ export function validateBackupData(data: unknown): ValidationResult {
         break;
       }
       const p = prof as any;
-      if (p.level !== undefined && (!Number.isFinite(p.level) || p.level < 1 || p.level > 90)) {
-        errors.push(`Character "${charId}" level must be between 1 and 90.`);
+      if (
+        p.level !== undefined &&
+        (!Number.isFinite(p.level) || !Number.isInteger(p.level) || p.level < 1 || p.level > 90)
+      ) {
+        errors.push(`Character "${charId}" level must be an integer between 1 and 90.`);
       }
       if (
         p.constellation !== undefined &&
-        (!Number.isFinite(p.constellation) || p.constellation < 0 || p.constellation > 6)
+        (!Number.isFinite(p.constellation) ||
+          !Number.isInteger(p.constellation) ||
+          p.constellation < 0 ||
+          p.constellation > 6)
       ) {
-        errors.push(`Character "${charId}" constellation must be between 0 and 6.`);
+        errors.push(`Character "${charId}" constellation must be an integer between 0 and 6.`);
       }
     }
   }
@@ -193,6 +238,23 @@ export function validateBackupData(data: unknown): ValidationResult {
     }
   }
 
+  if (payload.customAbyssConfig !== undefined && payload.customAbyssConfig !== null) {
+    if (typeof payload.customAbyssConfig !== 'object' || Array.isArray(payload.customAbyssConfig)) {
+      errors.push('Custom Abyss configuration must be an object.');
+    } else {
+      const ca = payload.customAbyssConfig;
+      if (!Array.isArray(ca.chambers) || ca.chambers.length !== 3) {
+        errors.push('Custom Abyss configuration must have exactly 3 chambers.');
+      }
+    }
+  }
+
+  if (payload.abyssCycleId !== undefined && payload.abyssCycleId !== null) {
+    if (typeof payload.abyssCycleId !== 'string' || payload.abyssCycleId.trim() === '') {
+      errors.push('Abyss cycle ID must be a valid non-empty string.');
+    }
+  }
+
   if (errors.length > 0) {
     return { valid: false, errors };
   }
@@ -209,7 +271,11 @@ export function validateBackupData(data: unknown): ValidationResult {
   };
 }
 
-export function importAccountBackup(backup: CelestiaBackupData): { success: boolean; error?: string } {
+export function importAccountBackup(backup: CelestiaBackupData): {
+  success: boolean;
+  error?: string;
+  rolledBack?: boolean;
+} {
   try {
     const validation = validateBackupData(backup);
     if (!validation.valid) {
@@ -217,31 +283,58 @@ export function importAccountBackup(backup: CelestiaBackupData): { success: bool
     }
 
     // Safety: snapshot current state before overwriting
-    createSafetySnapshot('celestia_backup_pre_restore');
+    const snapshotOk = createSafetySnapshot('celestia_backup_pre_restore');
+    if (!snapshotOk) {
+      return {
+        success: false,
+        error: 'Failed to create safety snapshot prior to restore. Storage may be unavailable.',
+      };
+    }
 
-    // Overwrite stored state:
-    // IMPORTANT: saveProfiles internally calls saveRoster(Object.keys(profiles)),
-    // so save profiles FIRST, then explicitly save backup.roster to ensure
-    // characters with default profiles in backup.roster are not wiped out!
-    saveProfiles(backup.profiles || {});
-    saveRoster(backup.roster || Object.keys(backup.profiles || {}));
-    saveWeapons(backup.rawWeapons || []);
-    saveArtifacts(backup.rawArtifacts || []);
-    savePullBudget(backup.pullBudget);
+    // Set target namespace before writing so restored data routes into the correct storage keys
+    setDemoModeEnabled(Boolean(backup.demoMode));
+
+    // Overwrite stored state and track write outcomes
+    const results = [
+      saveProfiles(backup.profiles || {}),
+      saveRoster(backup.roster || Object.keys(backup.profiles || {})),
+      saveWeapons(backup.rawWeapons || []),
+      saveArtifacts(backup.rawArtifacts || []),
+      savePullBudget(backup.pullBudget),
+    ];
 
     if (backup.abyssCycleId) {
-      saveAbyssCycleId(backup.abyssCycleId);
+      results.push(saveAbyssCycleId(backup.abyssCycleId));
     } else {
-      saveAbyssCycleId(DEFAULT_ACTIVE_ABYSS_CYCLE_ID);
+      results.push(saveAbyssCycleId(DEFAULT_ACTIVE_ABYSS_CYCLE_ID));
     }
 
     if (backup.customAbyssConfig) {
-      saveCustomAbyss(backup.customAbyssConfig);
+      results.push(saveCustomAbyss(backup.customAbyssConfig));
     } else if (typeof localStorage !== 'undefined') {
       localStorage.removeItem('celestia_v2_custom_abyss');
     }
 
-    setDemoModeEnabled(Boolean(backup.demoMode));
+    if (results.some((res) => res === false)) {
+      rollbackPreRestoreBackup();
+      return {
+        success: false,
+        error: 'One or more storage writes failed during restore (storage quota exceeded or unavailable). All modifications were automatically rolled back.',
+        rolledBack: true,
+      };
+    }
+
+    // Post-restore verification: confirm records were written accurately
+    const verifiedProfiles = getSavedProfiles();
+    const expectedKeys = Object.keys(backup.profiles || {});
+    if (expectedKeys.length > 0 && !expectedKeys.every((k) => verifiedProfiles[k] !== undefined)) {
+      rollbackPreRestoreBackup();
+      return {
+        success: false,
+        error: 'Post-restore verification failed: profiles did not persist accurately. All modifications were automatically rolled back.',
+        rolledBack: true,
+      };
+    }
 
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('celestia_schema_version', String(CURRENT_SCHEMA_VERSION));
@@ -250,7 +343,12 @@ export function importAccountBackup(backup: CelestiaBackupData): { success: bool
     return { success: true };
   } catch (e: any) {
     console.error('Failed to import account backup:', e);
-    return { success: false, error: e?.message || 'Unknown import error' };
+    rollbackPreRestoreBackup();
+    return {
+      success: false,
+      error: `Restore failed unexpectedly: ${e?.message || 'Unknown error'}. All modifications were automatically rolled back.`,
+      rolledBack: true,
+    };
   }
 }
 

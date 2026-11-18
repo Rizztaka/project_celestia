@@ -15,9 +15,12 @@ import {
   importAccountBackup,
   rollbackPreRestoreBackup,
   downloadBackupFile,
+  getLastBackupMeta,
+  type LastBackupMetadata,
   type CelestiaBackupData,
   type ValidationResult,
 } from '../services/backup';
+import { isDemoModeEnabled } from '../services/storage';
 
 interface AccountBackupModalProps {
   isOpen: boolean;
@@ -37,6 +40,7 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
   const [parseError, setParseError] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [hasRollbackAvailable, setHasRollbackAvailable] = useState<boolean>(false);
+  const [lastBackupMeta, setLastBackupMeta] = useState<LastBackupMetadata | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -49,8 +53,10 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
       try {
         const hasBackup = typeof localStorage !== 'undefined' && localStorage.getItem('celestia_backup_pre_restore') !== null;
         setHasRollbackAvailable(hasBackup);
+        setLastBackupMeta(getLastBackupMeta());
       } catch {
         setHasRollbackAvailable(false);
+        setLastBackupMeta(null);
       }
     }
   }, [isOpen]);
@@ -71,6 +77,7 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
     processFile(file);
+    e.target.value = '';
   };
 
   const processFile = (file: File) => {
@@ -235,9 +242,35 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
                 </ul>
               </div>
 
+              {isDemoModeEnabled() && (
+                <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-800/50 text-xs text-amber-300 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span>
+                    Demo Mode is active. Exporting demo sandbox state. Exit Demo Mode to export authentic account data.
+                  </span>
+                </div>
+              )}
+
+              {lastBackupMeta && (
+                <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-800/40 text-xs text-purple-300 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0" />
+                    <span>
+                      Last exported: {new Date(lastBackupMeta.exportedAt).toLocaleDateString()} at {new Date(lastBackupMeta.exportedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-zinc-400">
+                    {lastBackupMeta.characterCount} chars · {lastBackupMeta.weaponCount} weps
+                  </span>
+                </div>
+              )}
+
               <div className="flex flex-col gap-2 pt-2">
                 <button
-                  onClick={() => downloadBackupFile()}
+                  onClick={() => {
+                    downloadBackupFile();
+                    setLastBackupMeta(getLastBackupMeta());
+                  }}
                   className="w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-purple-950/30 cursor-pointer"
                 >
                   <Download className="w-4 h-4" />

@@ -26,6 +26,10 @@ import {
   getSavedCustomAbyss,
   saveCustomAbyss,
   syncArmoryOnProfileUpdate,
+  getSavedUid,
+  saveUid,
+  isStorageAvailable,
+  getLastStorageError,
 } from './storage';
 import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../types/genshin';
 
@@ -761,6 +765,187 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
       localStorage.setItem('celestia_v2_custom_abyss', JSON.stringify({ chambers: [] }));
       const fallback = getSavedCustomAbyss();
       expect(fallback.chambers).toHaveLength(3);
+    });
+  });
+
+  describe('M1: Account Reliability, Storage Namespace Isolation & Quota Safety', () => {
+    it('guarantees Demo Mode operates in an isolated namespace and NEVER overwrites real account data', () => {
+      // 1. User configures a real account with custom profiles & weapons
+      saveRoster(['Mavuika', 'Furina']);
+      saveProfiles({
+        Mavuika: { id: 'Mavuika', level: 90, constellation: 2 },
+        Furina: { id: 'Furina', level: 90, constellation: 1 },
+      });
+      saveWeapons([
+        {
+          id: 'custom_claymore_1',
+          key: 'AThousandBlazingSuns',
+          name: 'A Thousand Blazing Suns',
+          level: 90,
+          refinement: 1,
+          rarity: 5,
+          location: 'Mavuika',
+          lock: true,
+        },
+      ]);
+      saveUid('800123456');
+
+      // Verify real data is saved
+      expect(getSavedRoster()).toEqual(['Mavuika', 'Furina']);
+      expect(getSavedProfiles().Mavuika.constellation).toBe(2);
+      expect(getSavedWeapons()).toHaveLength(1);
+      expect(getSavedUid()).toBe('800123456');
+
+      // 2. User activates Demo Mode
+      setDemoModeEnabled(true);
+      expect(isDemoModeEnabled()).toBe(true);
+
+      // In Demo Mode, roster and weapons reflect demo starter state
+      const demoRoster = getSavedRoster();
+      expect(demoRoster).toEqual(DEMO_ROSTER);
+      expect(getSavedWeapons()).toEqual(DEMO_WEAPONS);
+
+      // 3. User modifies demo data (e.g., changes a constellation in demo mode)
+      saveProfiles({
+        ...getSavedProfiles(),
+        Bennett: { id: 'Bennett', level: 90, constellation: 6 },
+      });
+
+      // 4. User deactivates Demo Mode
+      setDemoModeEnabled(false);
+      expect(isDemoModeEnabled()).toBe(false);
+
+      // CRITICAL ASSERTION: Real user account data is 100% intact and unchanged!
+      const restoredRoster = getSavedRoster();
+      expect(restoredRoster).toEqual(['Mavuika', 'Furina']);
+      const restoredProfiles = getSavedProfiles();
+      expect(restoredProfiles.Mavuika).toBeDefined();
+      expect(restoredProfiles.Mavuika.constellation).toBe(2);
+      expect(restoredProfiles.Furina).toBeDefined();
+      expect(restoredProfiles.Bennett).toBeUndefined(); // Bennett demo change did NOT leak into real data!
+
+      const restoredWeapons = getSavedWeapons();
+      expect(restoredWeapons).toHaveLength(1);
+      expect(restoredWeapons[0].key).toBe('AThousandBlazingSuns');
+      expect(getSavedUid()).toBe('800123456');
+    });
+
+    it('resetAccountData completely wipes all account-specific keys including UID and pull budget', () => {
+      // Setup dirty account state
+      saveRoster(['Nefer']);
+      saveProfiles({ Nefer: { id: 'Nefer', level: 90, constellation: 0 } });
+      saveWeapons([
+        {
+          id: 'wep_1',
+          key: 'FavoniusSword',
+          name: 'Favonius Sword',
+          level: 90,
+          refinement: 1,
+          rarity: 4,
+          location: '',
+        },
+      ]);
+      saveUid('700987654');
+      savePullBudget({
+        primogems: 14400,
+        fates: 10,
+        characterPity: 50,
+        characterGuaranteed: true,
+        consecutiveLossCount: 1,
+        weaponPity: 20,
+        weaponFatePoints: 1,
+      });
+      saveAbyssCycleId('cycle-7-1');
+
+      // Execute full reset
+      const resetResult = resetAccountData();
+      expect(resetResult).toBe(true);
+
+      // Verify all keys are purged
+      expect(getSavedRoster()).toEqual([]);
+      expect(getSavedProfiles()).toEqual({});
+      expect(getSavedWeapons()).toEqual([]);
+      expect(getSavedUid()).toBe('');
+      expect(getSavedPullBudget()).toEqual(DEFAULT_PULL_BUDGET);
+      expect(getSavedAbyssCycleId()).toBe('cycle-7-2'); // Reset to default active cycle
+      expect(isDemoModeEnabled()).toBe(false);
+
+      // Verify raw storage keys are null
+      expect(localStorage.getItem('celestia_v2_active_uid')).toBeNull();
+      expect(localStorage.getItem('celestia_v2_pull_budget')).toBeNull();
+      expect(localStorage.getItem('celestia_v2_roster_profiles')).toBeNull();
+      expect(localStorage.getItem('celestia_v2_raw_weapons')).toBeNull();
+      expect(localStorage.getItem('celestia_v2_custom_abyss')).toBeNull();
+    });
+
+    it('detects storage availability and handles storage quota exceeded gracefully', () => {
+      expect(isStorageAvailable()).toBe(true);
+
+      // Simulate QuotaExceededError on localStorage.setItem
+      const originalSetItem = localStorage.setItem;
+      localStorage.setItem = vi.fn(() => {
+        const error = new Error('QuotaExceededError');
+        error.name = 'QuotaExceededError';
+        throw error;
+      });
+
+      // Writes should catch quota error and return false without throwing
+      const profileSaveResult = saveProfiles({ Mavuika: { id: 'Mavuika', level: 90, constellation: 0 } });
+      expect(profileSaveResult).toBe(false);
+
+      const weaponSaveResult = saveWeapons([]);
+      expect(weaponSaveResult).toBe(false);
+
+      const budgetSaveResult = savePullBudget(DEFAULT_PULL_BUDGET);
+      expect(budgetSaveResult).toBe(false);
+
+      expect(getLastStorageError()).toContain('QuotaExceededError');
+
+      // Test saveArtifacts error capture
+      const artifactSaveResult = saveArtifacts([{ id: 'art_1' }]);
+      expect(artifactSaveResult).toBe(false);
+      expect(getLastStorageError()).toContain('QuotaExceededError');
+
+      // Restore setItem
+      localStorage.setItem = originalSetItem;
+    });
+
+    it('isolates artifact storage namespace between demo mode and authentic accounts', () => {
+      // 1. Save authentic user artifacts
+      const authenticArtifacts = [{ id: 'real_art_1', setKey: 'GladiatorsFinale', slotKey: 'flower' }];
+      saveArtifacts(authenticArtifacts);
+      expect(getSavedArtifacts()).toEqual(authenticArtifacts);
+
+      // 2. Enable demo mode
+      setDemoModeEnabled(true);
+      expect(getSavedArtifacts()).toEqual([]); // Demo namespace is initially empty
+
+      // 3. Save demo artifacts
+      const demoArtifacts = [{ id: 'demo_art_1', setKey: 'NoblesseOblige', slotKey: 'plume' }];
+      saveArtifacts(demoArtifacts);
+      expect(getSavedArtifacts()).toEqual(demoArtifacts);
+
+      // 4. Disable demo mode: authentic artifacts must be preserved intact
+      setDemoModeEnabled(false);
+      expect(getSavedArtifacts()).toEqual(authenticArtifacts);
+    });
+
+    it('propagates saveRoster failure status from saveProfiles', () => {
+      const originalSetItem = localStorage.setItem;
+      localStorage.setItem = vi.fn((key: string, val: string) => {
+        if (key.includes('roster')) {
+          const err = new Error('Quota exceeded on roster');
+          err.name = 'QuotaExceededError';
+          throw err;
+        }
+        return originalSetItem.call(localStorage, key, val);
+      });
+
+      const result = saveProfiles({ Zhongli: { id: 'Zhongli', level: 90, constellation: 0 } });
+      expect(result).toBe(false);
+      expect(getLastStorageError()).toContain('Quota exceeded');
+
+      localStorage.setItem = originalSetItem;
     });
   });
 });

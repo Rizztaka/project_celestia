@@ -339,5 +339,93 @@ describe('Spiral Abyss Floor 12 Dual-Team Solver', () => {
       expect(swapped.mechanicCoverageScore).toBeDefined();
       expect(swapped.mechanicCoverageScore).toBe(swapped.overallScore);
     });
+
+    it('enforces Traveler Disjointness so multiple Traveler elements cannot co-exist across halves', () => {
+      const travelerRoster = [
+        'TravelerDendro',
+        'TravelerHydro',
+        'Furina',
+        'Yelan',
+        'KaedeharaKazuha',
+        'Bennett',
+        'Xiangling',
+        'Zhongli',
+        'Mavuika',
+        'RaidenShogun',
+      ];
+      const plan = solveAbyssDualTeams(travelerRoster);
+      const firstTraveler = plan.firstHalfTeam.members.find((m) => m.id.startsWith('Traveler'));
+      const secondTraveler = plan.secondHalfTeam.members.find((m) => m.id.startsWith('Traveler'));
+
+      // If one half has a Traveler, the other half must NOT have a Traveler
+      if (firstTraveler) {
+        expect(secondTraveler).toBeUndefined();
+      }
+      if (secondTraveler) {
+        expect(firstTraveler).toBeUndefined();
+      }
+    });
+
+    it('propagates rosterProfiles to secondary team generation', () => {
+      const profiles = {
+        Bennett: { id: 'Bennett', level: 90, constellation: 5 },
+        Xiangling: { id: 'Xiangling', level: 90, constellation: 4 },
+        KaedeharaKazuha: { id: 'KaedeharaKazuha', level: 90, constellation: 2 },
+      };
+      const plan = solveAbyssDualTeams(comprehensiveRoster, profiles);
+      expect(plan.firstHalfTeam).toBeDefined();
+      expect(plan.secondHalfTeam).toBeDefined();
+      expect(plan.secondHalfTeam.members.length).toBe(4);
+    });
+
+    it('generates Top-3 distinct pairings (Primary, Comfort, Alternative) with descending ranking', () => {
+      const plan = solveAbyssDualTeams(comprehensiveRoster);
+      expect(plan.allPairs).toBeDefined();
+      expect(plan.allPairs!.length).toBeGreaterThanOrEqual(2);
+
+      const primary = plan.primaryPair;
+      expect(primary).toBeDefined();
+      expect(primary?.variantType).toBe('primary');
+
+      if (plan.comfortPair) {
+        expect(plan.comfortPair.variantType).toBe('comfort');
+        expect(plan.comfortPair.label).toContain('Comfort');
+      }
+
+      if (plan.alternativePair) {
+        expect(plan.alternativePair.variantType).toBe('alternative');
+        expect(plan.alternativePair.label).toContain('Alternative');
+      }
+
+      // Assert each pair has zero internal and cross-half overlap
+      for (const pair of plan.allPairs!) {
+        const ids1 = new Set(pair.firstHalfTeam.members.map((m) => m.id));
+        const ids2 = new Set(pair.secondHalfTeam.members.map((m) => m.id));
+        for (const id of ids1) {
+          expect(ids2.has(id)).toBe(false);
+        }
+      }
+    });
+
+    it('generates dynamic v7.2 mechanics explanations matching active Floor 12 enemies', () => {
+      const cycle72 = ABYSS_CYCLES.find((c) => c.id === 'cycle-7-2') || ABYSS_CYCLES[0];
+      const plan = solveAbyssDualTeams(comprehensiveRoster, undefined, cycle72);
+
+      const ch1 = plan.chamberCoverage.find((c) => c.chamber === 1);
+      const ch2 = plan.chamberCoverage.find((c) => c.chamber === 2);
+      const ch3 = plan.chamberCoverage.find((c) => c.chamber === 3);
+
+      expect(ch1).toBeDefined();
+      // 12-1-B has Abyss Lector: Fathomless Flames with Pyro shield
+      expect(ch1!.secondHalfStatus).toMatch(/Hydro shield-shredder|Pyro Lector|Abyss Lector/i);
+
+      expect(ch2).toBeDefined();
+      // 12-2-B has Ruin Drake: Skywatch with Bow requirement
+      expect(ch2!.secondHalfStatus).toMatch(/Bow user|Ruin Drake/i);
+
+      expect(ch3).toBeDefined();
+      // 12-3-B has Iniquitous Baptist with Electro shield
+      expect(ch3!.secondHalfStatus).toMatch(/Electro shield-break|shield-shredder|Iniquitous Baptist/i);
+    });
   });
 });

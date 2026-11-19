@@ -3,10 +3,14 @@ import type {
   TeamRecommendation,
   OwnedCharacterProfile,
   OwnedWeapon,
+  Character,
+  TheaterDifficulty,
+  TheaterSeasonConfig,
 } from '../types/genshin';
 import type { AbyssCycleConfig } from '../data/abyss-schedules';
 import { solveAbyssDualTeams } from '../engines/abyss-solver';
 import { generateBestTeams } from '../engines/team-generator';
+import { autoDraftTheaterSchedule, type TheaterScheduleResult } from '../engines/theater-solver';
 
 let workerInstance: Worker | null = null;
 let messageIdSeq = 0;
@@ -106,6 +110,45 @@ export async function dispatchGenerateBestTeams(
         rosterProfiles,
         ownedWeapons,
         allowCatalogFallback,
+      },
+    });
+  });
+}
+
+/**
+ * Offloads Imaginarium Theater auto-drafting to a Web Worker when available,
+ * gracefully falling back to main-thread execution in environments without Web Worker support.
+ */
+export async function dispatchAutoDraftTheater(
+  eligible: Character[],
+  difficulty: TheaterDifficulty,
+  season: TheaterSeasonConfig,
+  userLocks?: Record<number, string[]>,
+  rosterProfiles?: Record<string, OwnedCharacterProfile>,
+): Promise<TheaterScheduleResult> {
+  const worker = getWorker();
+  if (!worker) {
+    return autoDraftTheaterSchedule(
+      eligible,
+      difficulty,
+      season,
+      userLocks,
+      rosterProfiles,
+    );
+  }
+
+  const id = ++messageIdSeq;
+  return new Promise((resolve, reject) => {
+    pendingCallbacks.set(id, { resolve, reject });
+    worker.postMessage({
+      id,
+      type: 'SOLVE_THEATER',
+      payload: {
+        eligible,
+        difficulty,
+        season,
+        userLocks,
+        rosterProfiles,
       },
     });
   });

@@ -22,6 +22,7 @@ import {
   type AbyssChamberHalfConfig,
 } from '../data/abyss-schedules';
 import { getSavedCustomAbyss } from '../services/storage';
+import { isSameCharacterOrTraveler } from './team-rules';
 
 export { NATLAN_NIGHTSOUL_IDS };
 
@@ -33,10 +34,11 @@ function evaluateHalf(
   halfConfig: AbyssChamberHalfConfig,
   chamberNum: number,
   isFirstHalf: boolean,
-  cycleId: string,
+  _cycleId: string,
 ): { satisfied: boolean; status: string; scoreDelta: number; metrics: ChamberHalfMetrics } {
   const primaryEnemy = halfConfig.enemies[0];
   const enemyName = primaryEnemy?.name || 'Enemies';
+  const enemyShort = enemyName.replace(/:.*/, '');
 
   if (!team.members || team.members.length === 0) {
     return {
@@ -73,11 +75,7 @@ function evaluateHalf(
       statusPhrases.push(`Critical: Carry ${carry.name} is immune to ${enemyName}`);
     } else if (hasNonProhibitedDps) {
       scoreDelta += 30;
-      if (cycleId === 'cycle-5-3' && chamberNum === 1 && isFirstHalf) {
-        statusPhrases.push('Counters Hydro Phantasm & Consecrated Beasts with non-Hydro burst');
-      } else {
-        statusPhrases.push(`Effective non-${mechanics.prohibitedElements.join('/')} counters active`);
-      }
+      statusPhrases.push(`Counters ${enemyShort} with non-${mechanics.prohibitedElements.join('/')} burst`);
     } else {
       satisfied = false;
       scoreDelta -= 50;
@@ -90,19 +88,11 @@ function evaluateHalf(
     const hasBow = team.members.some((m) => m.weapon === 'Bow');
     if (hasBow) {
       scoreDelta += 100;
-      if (cycleId === 'cycle-5-3' && chamberNum === 2 && !isFirstHalf) {
-        statusPhrases.push('Bow user equipped to disable flying Aeonblight Drake thrusters');
-      } else {
-        statusPhrases.push('Bow user equipped to target aerial weakpoints');
-      }
+      statusPhrases.push(`Bow user equipped to disable flying ${enemyShort} thrusters`);
     } else {
       satisfied = false;
       scoreDelta -= 300;
-      if (cycleId === 'cycle-5-3' && chamberNum === 2 && !isFirstHalf) {
-        statusPhrases.push('Critical: No Bow user to ground flying Aeonblight Drake');
-      } else {
-        statusPhrases.push(`Critical: No Bow user to counter aerial mechanics of ${enemyName}`);
-      }
+      statusPhrases.push(`Critical: No Bow user to ground flying ${enemyShort}`);
     }
   }
 
@@ -121,23 +111,28 @@ function evaluateHalf(
       shieldBreakBreakdown: shieldResult.breakdown,
     };
 
+    const isPyroLector =
+      enemyName.toLowerCase().includes('pyro lector') ||
+      (enemyName.toLowerCase().includes('lector') && mechanics.shieldType === 'Pyro');
+    const targetLabel = isPyroLector ? 'Pyro Lector' : enemyShort;
+
     if (shieldResult.rating === 'Fast') {
       scoreDelta += 60;
-      if (cycleId === 'cycle-5-3' && chamberNum === 1 && !isFirstHalf) {
-        statusPhrases.push('Rapid Hydro shield-shredder active for Pyro Lector');
+      if (mechanics.shieldType === 'Pyro') {
+        statusPhrases.push(`Rapid Hydro shield-shredder active for ${targetLabel}`);
       } else {
-        statusPhrases.push(`⚡ Fast ${mechanics.shieldType} shield-break (${shieldResult.seconds}s)`);
+        statusPhrases.push(`⚡ Fast ${mechanics.shieldType} shield-break (${shieldResult.seconds}s) for ${targetLabel}`);
       }
     } else if (shieldResult.rating === 'Medium') {
       scoreDelta += 30;
-      statusPhrases.push(`Medium ${mechanics.shieldType} shield-break (${shieldResult.seconds}s)`);
+      statusPhrases.push(`Medium ${mechanics.shieldType} shield-break (${shieldResult.seconds}s) for ${targetLabel}`);
     } else {
       satisfied = false;
       scoreDelta -= 100;
-      if (cycleId === 'cycle-5-3' && chamberNum === 1 && !isFirstHalf) {
-        statusPhrases.push('Warning: Missing Hydro shield-breaker for Pyro Lector');
+      if (mechanics.shieldType === 'Pyro') {
+        statusPhrases.push(`Warning: Missing Hydro shield-breaker for ${targetLabel}`);
       } else {
-        statusPhrases.push(`Warning: Slow / Ineffective ${mechanics.shieldType} shield breaking (${shieldResult.seconds}s)`);
+        statusPhrases.push(`Warning: Slow / Ineffective ${mechanics.shieldType} shield breaking (${shieldResult.seconds}s) for ${targetLabel}`);
       }
     }
   }
@@ -147,18 +142,10 @@ function evaluateHalf(
     const hasNightsoul = team.members.some((m) => isNightsoulCharacter(m));
     if (hasNightsoul) {
       scoreDelta += 40;
-      if (cycleId === 'cycle-5-3' && chamberNum === 3 && isFirstHalf) {
-        statusPhrases.push('Nightsoul blessing: 300% faster Nightspirit shield break');
-      } else {
-        statusPhrases.push('Nightsoul advantage: Rapid Nightspirit gauge depletion');
-      }
+      statusPhrases.push(`Nightsoul blessing: 300% faster Nightspirit shield break for ${enemyShort}`);
     } else {
-      if (cycleId === 'cycle-5-3' && chamberNum === 3 && isFirstHalf) {
-        satisfied = false;
-        statusPhrases.push('Standard shield break (slower without Natlan units)');
-      } else {
-        statusPhrases.push('Standard shield break without Nightsoul advantage');
-      }
+      satisfied = false;
+      statusPhrases.push(`Standard shield break (slower without Natlan units against ${enemyShort})`);
     }
   }
 
@@ -167,18 +154,10 @@ function evaluateHalf(
     const hasSustain = team.members.some((m) => m.roles.includes('Sustain'));
     if (hasSustain || team.synergyScore >= 90) {
       scoreDelta += 20;
-      if (cycleId === 'cycle-5-3' && chamberNum === 2 && isFirstHalf) {
-        statusPhrases.push('High AoE burst & survivability ready for Kenki Trio');
-      } else {
-        statusPhrases.push('Solid AoE and sustain ready for enemy group');
-      }
+      statusPhrases.push(`High AoE burst & survivability ready for ${enemyShort}`);
     } else {
       satisfied = false;
-      if (cycleId === 'cycle-5-3' && chamberNum === 2 && isFirstHalf) {
-        statusPhrases.push('Caution: Risk of burst damage deaths against Kenki Trio');
-      } else {
-        statusPhrases.push('Caution: High burst damage risk against enemy grouping');
-      }
+      statusPhrases.push(`Caution: Risk of burst damage deaths against ${enemyShort}`);
     }
   }
 
@@ -224,6 +203,8 @@ function evaluateHalf(
 
   return { satisfied, status, scoreDelta, metrics };
 }
+
+
 
 /**
  * Evaluates Floor 12 chamber mechanic coverage for a First Half and Second Half team pair.
@@ -293,23 +274,29 @@ function calculateResonance(members: Character[]): string[] {
 function buildFallbackTeam(pool: Character[], teamId: string, teamName: string): TeamRecommendation {
   const chosen: Character[] = [];
 
-  // Try to pick: Carry, Buffer, Sub-DPS, Sustain
+  // Try to pick: Carry, Buffer, Sub-DPS, Sustain without duplicating characters or Travelers
   const carry = pool.find((c) => c.roles.includes('On-Field DPS')) || pool[0];
   if (carry) chosen.push(carry);
 
-  const buffer = pool.find((c) => !chosen.some((x) => x.id === c.id) && c.roles.includes('Buffer/Shred'));
+  const buffer = pool.find(
+    (c) => !chosen.some((x) => isSameCharacterOrTraveler(x, c)) && c.roles.includes('Buffer/Shred'),
+  );
   if (buffer) chosen.push(buffer);
 
-  const subDps = pool.find((c) => !chosen.some((x) => x.id === c.id) && c.roles.includes('Off-Field DPS'));
+  const subDps = pool.find(
+    (c) => !chosen.some((x) => isSameCharacterOrTraveler(x, c)) && c.roles.includes('Off-Field DPS'),
+  );
   if (subDps) chosen.push(subDps);
 
-  const sustain = pool.find((c) => !chosen.some((x) => x.id === c.id) && c.roles.includes('Sustain'));
+  const sustain = pool.find(
+    (c) => !chosen.some((x) => isSameCharacterOrTraveler(x, c)) && c.roles.includes('Sustain'),
+  );
   if (sustain) chosen.push(sustain);
 
   // Fill up to 4
   for (const c of pool) {
     if (chosen.length >= 4) break;
-    if (!chosen.some((x) => x.id === c.id)) chosen.push(c);
+    if (!chosen.some((x) => isSameCharacterOrTraveler(x, c))) chosen.push(c);
   }
 
   const stepped = synthesizeTeamRotation(chosen);
@@ -330,7 +317,8 @@ function buildFallbackTeam(pool: Character[], teamId: string, teamName: string):
 
 /**
  * Solves the unified Spiral Abyss Floor 12 pairing:
- * Finds two completely disjoint teams (TeamA ∩ TeamB = ∅) maximizing chamber shield & mechanic clearance.
+ * Finds two completely disjoint teams (TeamA ∩ TeamB = ∅) prioritizing 100% chamber mechanics clearance,
+ * then returns Top-3 distinct pairings (Primary Best-in-Slot, Comfort/High Sustain, Accessible/Alternative).
  */
 export function solveAbyssDualTeams(
   ownedIds: string[],
@@ -350,17 +338,23 @@ export function solveAbyssDualTeams(
     const team1 = buildFallbackTeam(half1Chars, 'abyss-half-1', 'Abyss First Half');
     const team2 = buildFallbackTeam(half2Chars, 'abyss-half-2', 'Abyss Second Half');
     const { coverage, totalScore } = evaluateChamberMechanicCoverage(team1, team2, activeCycle);
-    return {
+    const partialPlan: AbyssDualTeamPlan = {
       firstHalfTeam: team1,
       secondHalfTeam: team2,
       chamberCoverage: coverage,
       overallScore: Math.max(0, totalScore),
       mechanicCoverageScore: Math.max(0, totalScore),
       cycleId: activeCycle.id,
+      variantType: 'primary',
+      label: 'Primary Best-in-Slot',
+      description: 'Partial draft composition due to limited character roster.',
       warnings: [
         `Roster Shortfall: Floor 12 requires at least 8 distinct characters (4 for First Half, 4 for Second Half). Your roster only has ${ownedChars.length} characters. Showing partial draft.`,
       ],
     };
+    partialPlan.allPairs = [partialPlan];
+    partialPlan.primaryPair = partialPlan;
+    return partialPlan;
   }
 
   // 1. Generate candidate primary teams from full owned roster
@@ -370,10 +364,14 @@ export function solveAbyssDualTeams(
     firstHalfTeam: TeamRecommendation;
     secondHalfTeam: TeamRecommendation;
     coverage: AbyssChamberCoverage[];
-    score: number;
+    totalScore: number;
+    satisfiedCount: number;
+    comfortScore: number;
+    synergyScore: number;
   }
 
-  let bestPair: ScoredPair | null = null;
+  const evaluatedPairs: ScoredPair[] = [];
+  const evaluatedPairKeys = new Set<string>();
 
   // Helper to test a pair in both orientations (A=First, B=Second and B=First, A=Second)
   const considerPair = (teamA: TeamRecommendation, teamB: TeamRecommendation) => {
@@ -385,9 +383,11 @@ export function solveAbyssDualTeams(
       return;
     }
 
-    // Check strict disjointness
-    const teamAIds = new Set(teamA.members.map((m) => m.id));
-    if (teamB.members.some((m) => teamAIds.has(m.id))) {
+    // Check strict disjointness including all Traveler configurations
+    const hasOverlap = teamB.members.some((mB) =>
+      teamA.members.some((mA) => isSameCharacterOrTraveler(mA, mB)),
+    );
+    if (hasOverlap) {
       return;
     }
 
@@ -399,41 +399,48 @@ export function solveAbyssDualTeams(
       teamB.steppedRotation = synthesizeTeamRotation(teamB.members);
     }
 
-    // Orientation 1: A on First Half, B on Second Half
-    const res1 = evaluateChamberMechanicCoverage(teamA, teamB, activeCycle);
-    if (!bestPair || res1.totalScore > bestPair.score) {
-      bestPair = {
-        firstHalfTeam: teamA,
-        secondHalfTeam: teamB,
-        coverage: res1.coverage,
-        score: res1.totalScore,
-      };
-    }
+    const testOrientation = (t1: TeamRecommendation, t2: TeamRecommendation) => {
+      const key = `${t1.members.map((m) => m.id).sort().join(',')}|${t2.members.map((m) => m.id).sort().join(',')}`;
+      if (evaluatedPairKeys.has(key)) return;
+      evaluatedPairKeys.add(key);
 
+      const res = evaluateChamberMechanicCoverage(t1, t2, activeCycle);
+      const satisfiedCount = res.coverage.reduce(
+        (acc, c) => acc + (c.firstHalfSatisfied ? 1 : 0) + (c.secondHalfSatisfied ? 1 : 0),
+        0,
+      );
+
+      evaluatedPairs.push({
+        firstHalfTeam: t1,
+        secondHalfTeam: t2,
+        coverage: res.coverage,
+        totalScore: res.totalScore,
+        satisfiedCount,
+        comfortScore: t1.comfortScore + t2.comfortScore,
+        synergyScore: t1.synergyScore + t2.synergyScore,
+      });
+    };
+
+    // Orientation 1: A on First Half, B on Second Half
+    testOrientation(teamA, teamB);
     // Orientation 2: B on First Half, A on Second Half
-    const res2 = evaluateChamberMechanicCoverage(teamB, teamA, activeCycle);
-    if (res2.totalScore > bestPair.score) {
-      bestPair = {
-        firstHalfTeam: teamB,
-        secondHalfTeam: teamA,
-        coverage: res2.coverage,
-        score: res2.totalScore,
-      };
-    }
+    testOrientation(teamB, teamA);
   };
 
   // 2. Iterate through top candidate teams, and for each, generate secondary candidate teams from remaining roster
   const primaryPool = candidateTeams.slice(0, 8);
   for (const team1 of primaryPool) {
-    const team1Ids = new Set(team1.members.map((m) => m.id));
-    const remainingChars = ownedChars.filter((c) => !team1Ids.has(c.id));
+    const remainingChars = ownedChars.filter(
+      (c) => !team1.members.some((m) => isSameCharacterOrTraveler(m, c)),
+    );
 
     if (remainingChars.length >= 4) {
       const remainingIds = remainingChars.map((c) => c.id);
-      const secondaryTeams = generateBestTeams(remainingIds);
+      // Pass rosterProfiles into secondary team generation
+      const secondaryTeams = generateBestTeams(remainingIds, undefined, rosterProfiles);
 
       if (secondaryTeams.length > 0) {
-        for (const team2 of secondaryTeams) {
+        for (const team2 of secondaryTeams.slice(0, 6)) {
           considerPair(team1, team2);
         }
       } else {
@@ -449,33 +456,119 @@ export function solveAbyssDualTeams(
   }
 
   // 3. Fallback if no pair was discovered (e.g. extremely constrained roster)
-  if (!bestPair) {
+  if (evaluatedPairs.length === 0) {
     const half1 = ownedChars.slice(0, 4);
-    const half2 = ownedChars.slice(4, 8);
+    const remainingForHalf2 = ownedChars
+      .slice(4)
+      .filter((c) => !half1.some((h) => isSameCharacterOrTraveler(h, c)));
     const team1 = buildFallbackTeam(half1, 'abyss-fallback-1', 'First Half Vanguard');
-    const team2 = buildFallbackTeam(half2, 'abyss-fallback-2', 'Second Half Rearguard');
+    const team2 = buildFallbackTeam(remainingForHalf2.slice(0, 4), 'abyss-fallback-2', 'Second Half Rearguard');
     considerPair(team1, team2);
 
-    if (!bestPair) {
-      const { coverage, totalScore } = evaluateChamberMechanicCoverage(team1, team2, activeCycle);
-      bestPair = {
+    if (evaluatedPairs.length === 0) {
+      const res = evaluateChamberMechanicCoverage(team1, team2, activeCycle);
+      evaluatedPairs.push({
         firstHalfTeam: team1,
         secondHalfTeam: team2,
-        coverage,
-        score: totalScore,
-      };
+        coverage: res.coverage,
+        totalScore: res.totalScore,
+        satisfiedCount: 0,
+        comfortScore: team1.comfortScore + team2.comfortScore,
+        synergyScore: team1.synergyScore + team2.synergyScore,
+      });
     }
   }
 
-  const finalPair: ScoredPair = bestPair;
-  return {
-    firstHalfTeam: finalPair.firstHalfTeam,
-    secondHalfTeam: finalPair.secondHalfTeam,
-    chamberCoverage: finalPair.coverage,
-    overallScore: Math.max(0, finalPair.score),
-    mechanicCoverageScore: Math.max(0, finalPair.score),
+  // Rank pairs strictly prioritizing chamber mechanics clearance first (each satisfied half = 1000 base weight)
+  const rankScore = (pair: ScoredPair) => pair.satisfiedCount * 1000 + pair.totalScore;
+  evaluatedPairs.sort((a, b) => rankScore(b) - rankScore(a));
+
+  const toPlan = (
+    sp: ScoredPair,
+    variantType: 'primary' | 'comfort' | 'alternative',
+    label: string,
+    description: string,
+  ): AbyssDualTeamPlan => ({
+    firstHalfTeam: sp.firstHalfTeam,
+    secondHalfTeam: sp.secondHalfTeam,
+    chamberCoverage: sp.coverage,
+    overallScore: Math.max(0, sp.totalScore),
+    mechanicCoverageScore: Math.max(0, sp.totalScore),
     cycleId: activeCycle.id,
+    variantType,
+    label,
+    description,
+  });
+
+  const bestScored = evaluatedPairs[0];
+  const primaryPair = toPlan(
+    bestScored,
+    'primary',
+    'Primary Best-in-Slot',
+    'Optimal pairing maximizing elemental shield shredding, boss counter mechanics, and combat synergy.',
+  );
+
+  const areDifferentPairs = (p1: ScoredPair, p2: ScoredPair) => {
+    const s1A = new Set(p1.firstHalfTeam.members.map((m) => m.id));
+    const s1B = new Set(p1.secondHalfTeam.members.map((m) => m.id));
+    const isSameOrient =
+      p2.firstHalfTeam.members.every((m) => s1A.has(m.id)) &&
+      p2.secondHalfTeam.members.every((m) => s1B.has(m.id));
+    const isSwappedOrient =
+      p2.firstHalfTeam.members.every((m) => s1B.has(m.id)) &&
+      p2.secondHalfTeam.members.every((m) => s1A.has(m.id));
+    return !isSameOrient && !isSwappedOrient;
   };
+
+  // Find Comfort Pair: dedicated sustain on both halves or highest comfort score
+  let comfortScored = evaluatedPairs.slice(1).find((p) => {
+    if (!areDifferentPairs(p, bestScored)) return false;
+    const hasSustainA = p.firstHalfTeam.members.some((m) => m.roles.includes('Sustain'));
+    const hasSustainB = p.secondHalfTeam.members.some((m) => m.roles.includes('Sustain'));
+    return (hasSustainA && hasSustainB) || p.comfortScore >= 160;
+  });
+  if (!comfortScored) {
+    comfortScored = evaluatedPairs
+      .slice(1)
+      .filter((p) => areDifferentPairs(p, bestScored))
+      .sort((a, b) => b.comfortScore - a.comfortScore)[0];
+  }
+
+  const comfortPair = comfortScored
+    ? toPlan(
+        comfortScored,
+        'comfort',
+        'Comfort / High Sustain',
+        'High-safety composition featuring dedicated shielders and healers for maximum error tolerance.',
+      )
+    : undefined;
+
+  // Find Alternative Pair: different carries or alternative composition
+  let alternativeScored = evaluatedPairs.slice(1).find((p) => {
+    if (!areDifferentPairs(p, bestScored)) return false;
+    if (comfortScored && !areDifferentPairs(p, comfortScored)) return false;
+    return true;
+  });
+
+  const alternativePair = alternativeScored
+    ? toPlan(
+        alternativeScored,
+        'alternative',
+        'Accessible / Alternative Core',
+        'Versatile alternative lineup leveraging adaptable core characters and accessible substitutions.',
+      )
+    : undefined;
+
+  const allPairs: AbyssDualTeamPlan[] = [primaryPair];
+  if (comfortPair) allPairs.push(comfortPair);
+  if (alternativePair) allPairs.push(alternativePair);
+
+  primaryPair.allPairs = allPairs;
+  primaryPair.primaryPair = primaryPair;
+  primaryPair.comfortPair = comfortPair;
+  primaryPair.alternativePair = alternativePair;
+
+  return primaryPair;
 }
 
 /**
@@ -486,29 +579,41 @@ export function swapAbyssDualHalves(
   plan: AbyssDualTeamPlan,
   cycle?: AbyssCycleConfig,
 ): AbyssDualTeamPlan {
-  const swappedFirst = { ...plan.secondHalfTeam };
-  const swappedSecond = { ...plan.firstHalfTeam };
-  const activeCycle =
-    cycle ||
-    (plan.cycleId === 'custom-sandbox'
-      ? getSavedCustomAbyss()
-      : plan.cycleId
-      ? ABYSS_CYCLES.find((c) => c.id === plan.cycleId)
-      : undefined) ||
-    ABYSS_CYCLES[0];
+  const swapSingle = (p: AbyssDualTeamPlan): AbyssDualTeamPlan => {
+    const swappedFirst = { ...p.secondHalfTeam };
+    const swappedSecond = { ...p.firstHalfTeam };
+    const activeCycle =
+      cycle ||
+      (p.cycleId === 'custom-sandbox'
+        ? getSavedCustomAbyss()
+        : p.cycleId
+        ? ABYSS_CYCLES.find((c) => c.id === p.cycleId)
+        : undefined) ||
+      ABYSS_CYCLES[0];
 
-  const { coverage, totalScore } = evaluateChamberMechanicCoverage(
-    swappedFirst,
-    swappedSecond,
-    activeCycle,
-  );
+    const { coverage, totalScore } = evaluateChamberMechanicCoverage(
+      swappedFirst,
+      swappedSecond,
+      activeCycle,
+    );
 
-  return {
-    ...plan,
-    firstHalfTeam: swappedFirst,
-    secondHalfTeam: swappedSecond,
-    chamberCoverage: coverage,
-    overallScore: Math.max(0, totalScore),
-    mechanicCoverageScore: Math.max(0, totalScore),
+    return {
+      ...p,
+      firstHalfTeam: swappedFirst,
+      secondHalfTeam: swappedSecond,
+      chamberCoverage: coverage,
+      overallScore: Math.max(0, totalScore),
+      mechanicCoverageScore: Math.max(0, totalScore),
+    };
   };
+
+  const swappedPrimary = swapSingle(plan);
+  if (plan.allPairs && plan.allPairs.length > 0) {
+    const swappedAll = plan.allPairs.map((p) => swapSingle(p));
+    swappedPrimary.allPairs = swappedAll;
+    swappedPrimary.primaryPair = swappedAll[0];
+    swappedPrimary.comfortPair = swappedAll.find((p) => p.variantType === 'comfort');
+    swappedPrimary.alternativePair = swappedAll.find((p) => p.variantType === 'alternative');
+  }
+  return swappedPrimary;
 }

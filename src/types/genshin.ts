@@ -119,6 +119,9 @@ export interface Character {
   // Synergy tags for team archetypes & reaction chains
   tags: string[];
   isOwned?: boolean;
+  isTrial?: boolean;
+  level?: number;
+  constellation?: number;
   icon?: string;
   sideIcon?: string;
   description?: string;
@@ -532,6 +535,20 @@ export interface AbyssDualTeamPlan {
   mechanicCoverageScore?: number;
   warnings?: string[];
   cycleId?: string;
+  variantType?: 'primary' | 'comfort' | 'alternative';
+  label?: string;
+  description?: string;
+  allPairs?: AbyssDualTeamPlan[];
+  primaryPair?: AbyssDualTeamPlan;
+  comfortPair?: AbyssDualTeamPlan;
+  alternativePair?: AbyssDualTeamPlan;
+}
+
+export interface AbyssDualTeamMultiPlan {
+  primaryPair: AbyssDualTeamPlan;
+  comfortPair?: AbyssDualTeamPlan;
+  alternativePair?: AbyssDualTeamPlan;
+  allPairs: AbyssDualTeamPlan[];
 }
 
 export type ProvenanceStatus = 'verified' | 'provisional' | 'stale';

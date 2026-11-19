@@ -1,5 +1,10 @@
 import React, { useState, useMemo, useEffect, useTransition, useRef } from 'react';
-import type { Character, AbyssDualTeamPlan, OwnedCharacterProfile } from '../types/genshin';
+import type {
+  Character,
+  AbyssDualTeamPlan,
+  OwnedCharacterProfile,
+  CharacterSwapAlternative,
+} from '../types/genshin';
 import { solveAbyssDualTeams, swapAbyssDualHalves } from '../engines/abyss-solver';
 import { dispatchSolveAbyss } from '../services/solver-dispatcher';
 import {
@@ -34,11 +39,14 @@ import {
   Sliders,
   RotateCcw,
   Gauge,
+  X,
 } from 'lucide-react';
 
 interface AbyssDualTeamViewProps {
   ownedIds: string[];
   profiles?: Record<string, OwnedCharacterProfile>;
+  selectedCycleId?: string;
+  onSelectCycleId?: (cycleId: string) => void;
 }
 
 const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -54,14 +62,23 @@ const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string 
 export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
   ownedIds,
   profiles,
+  selectedCycleId: propSelectedCycleId,
+  onSelectCycleId,
 }) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [expandedRotationA, setExpandedRotationA] = useState<boolean>(true);
   const [expandedRotationB, setExpandedRotationB] = useState<boolean>(true);
-  const [selectedCycleId, setSelectedCycleId] = useState<string>(() => getSavedAbyssCycleId());
+  const [localSelectedCycleId, setLocalSelectedCycleId] = useState<string>(() => getSavedAbyssCycleId());
+  const selectedCycleId = propSelectedCycleId || localSelectedCycleId;
   const [customCycle, setCustomCycle] = useState<AbyssCycleConfig>(() => getSavedCustomAbyss());
   const [showSandboxEditor, setShowSandboxEditor] = useState<boolean>(false);
   const [isSwapped, setIsSwapped] = useState<boolean>(false);
+  const [selectedPairIndex, setSelectedPairIndex] = useState<number>(0);
+  const [drawerAlternative, setDrawerAlternative] = useState<{
+    originalMember: Character;
+    teamName: string;
+    alternatives: CharacterSwapAlternative[];
+  } | null>(null);
 
   // Active Cycle
   const activeCycle: AbyssCycleConfig = useMemo(() => {
@@ -74,8 +91,13 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
 
   // Handle cycle selection
   const handleSelectCycle = (cycleId: string) => {
-    setSelectedCycleId(cycleId);
+    if (onSelectCycleId) {
+      onSelectCycleId(cycleId);
+    } else {
+      setLocalSelectedCycleId(cycleId);
+    }
     saveAbyssCycleId(cycleId);
+    setSelectedPairIndex(0);
     if (cycleId === 'custom-sandbox') {
       setShowSandboxEditor(true);
     }
@@ -98,6 +120,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
       if (isMounted) {
         startTransition(() => {
           setBasePlan(newPlan);
+          setSelectedPairIndex(0);
         });
       }
     });
@@ -106,11 +129,14 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
     };
   }, [ownedIds, profiles, activeCycle]);
 
-  // Effective plan accounting for 1-click swap
+  // Effective plan accounting for 1-click swap and selected pair index
   const plan: AbyssDualTeamPlan = useMemo(() => {
-    if (!isSwapped) return basePlan;
-    return swapAbyssDualHalves(basePlan, activeCycle);
-  }, [basePlan, isSwapped, activeCycle]);
+    const currentBase = isSwapped ? swapAbyssDualHalves(basePlan, activeCycle) : basePlan;
+    if (currentBase.allPairs && currentBase.allPairs[selectedPairIndex]) {
+      return currentBase.allPairs[selectedPairIndex];
+    }
+    return currentBase;
+  }, [basePlan, isSwapped, selectedPairIndex, activeCycle]);
 
   const teamA = plan.firstHalfTeam;
   const teamB = plan.secondHalfTeam;
@@ -248,6 +274,33 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
             </button>
           )}
         </div>
+
+        {/* Top-3 Pairing Selector Tabs */}
+        {basePlan.allPairs && basePlan.allPairs.length > 1 && (
+          <div className="mt-4 pt-3 border-t border-[#1e2338] flex flex-wrap items-center gap-2">
+            <span className="text-xs text-zinc-400 font-semibold mr-1">Recommended Lineups:</span>
+            {basePlan.allPairs.map((p, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setSelectedPairIndex(idx)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  selectedPairIndex === idx
+                    ? 'bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0d0f17] shadow-lg scale-[1.02]'
+                    : 'bg-[#121422] text-zinc-300 border border-[#28314e] hover:text-[#d4af37] hover:border-[#d4af37]/40'
+                }`}
+              >
+                <span>
+                  {p.variantType === 'primary' ? '⭐' : p.variantType === 'comfort' ? '🛡️' : '🔄'}{' '}
+                  {p.label || `Option ${idx + 1}`}
+                </span>
+                <span className="text-[10px] opacity-80 font-mono">
+                  ({p.mechanicCoverageScore ?? p.overallScore} pts)
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Custom Sandbox Editor (Collapsible) */}
@@ -738,6 +791,23 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                       <div className="text-[10px] text-zinc-400 truncate">
                         {member.weapon} · {member.roles[0]}
                       </div>
+                      {teamA.explanation?.alternatives?.some((alt) => alt.originalCharacterId === member.id) && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDrawerAlternative({
+                              originalMember: member,
+                              teamName: 'First Half Vanguard',
+                              alternatives: teamA.explanation!.alternatives.filter((a) => a.originalCharacterId === member.id),
+                            });
+                          }}
+                          className="mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold text-[#d4af37] bg-[#d4af37]/10 hover:bg-[#d4af37]/25 border border-[#d4af37]/30 transition-colors cursor-pointer"
+                          title="View alternative substitution trade-offs"
+                        >
+                          Swap Alt
+                        </button>
+                      )}
                     </div>
                   );
                 }
@@ -754,6 +824,26 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                 );
               })}
             </div>
+
+            {/* Tactical Workflow & Why this team fits */}
+            {teamA.explanation && (
+              <div className="bg-[#0e1018] rounded-xl border border-[#1b2032] p-3 space-y-1.5 text-xs">
+                <div className="font-bold text-[#d4af37] flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Chamber Suitability & Role Rationale</span>
+                </div>
+                {teamA.explanation.reactionWorkflow && (
+                  <p className="text-zinc-300 text-[11px] leading-relaxed">
+                    {teamA.explanation.reactionWorkflow}
+                  </p>
+                )}
+                {teamA.explanation.energyAssessment?.warnings && teamA.explanation.energyAssessment.warnings.length > 0 && (
+                  <p className="text-zinc-400 text-[10px]">
+                    ⚡ Energy: {teamA.explanation.energyAssessment.warnings.join(' · ')}
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* Stepped Rotation Accordion */}
             {teamA.steppedRotation && teamA.steppedRotation.steps.length > 0 && (
@@ -869,6 +959,23 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                       <div className="text-[10px] text-zinc-400 truncate">
                         {member.weapon} · {member.roles[0]}
                       </div>
+                      {teamB.explanation?.alternatives?.some((alt) => alt.originalCharacterId === member.id) && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDrawerAlternative({
+                              originalMember: member,
+                              teamName: 'Second Half Rearguard',
+                              alternatives: teamB.explanation!.alternatives.filter((a) => a.originalCharacterId === member.id),
+                            });
+                          }}
+                          className="mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold text-[#d4af37] bg-[#d4af37]/10 hover:bg-[#d4af37]/25 border border-[#d4af37]/30 transition-colors cursor-pointer"
+                          title="View alternative substitution trade-offs"
+                        >
+                          Swap Alt
+                        </button>
+                      )}
                     </div>
                   );
                 }
@@ -885,6 +992,26 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                 );
               })}
             </div>
+
+            {/* Tactical Workflow & Why this team fits */}
+            {teamB.explanation && (
+              <div className="bg-[#0e1018] rounded-xl border border-[#1b2032] p-3 space-y-1.5 text-xs">
+                <div className="font-bold text-[#d4af37] flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Chamber Suitability & Role Rationale</span>
+                </div>
+                {teamB.explanation.reactionWorkflow && (
+                  <p className="text-zinc-300 text-[11px] leading-relaxed">
+                    {teamB.explanation.reactionWorkflow}
+                  </p>
+                )}
+                {teamB.explanation.energyAssessment?.warnings && teamB.explanation.energyAssessment.warnings.length > 0 && (
+                  <p className="text-zinc-400 text-[10px]">
+                    ⚡ Energy: {teamB.explanation.energyAssessment.warnings.join(' · ')}
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* Stepped Rotation Accordion */}
             {teamB.steppedRotation && teamB.steppedRotation.steps.length > 0 && (
@@ -951,6 +1078,93 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
           profile={profiles ? profiles[selectedCharacter.id] : undefined}
           onSelectCharacter={setSelectedCharacter}
         />
+      )}
+
+      {/* Alternative Substitutions Modal */}
+      {drawerAlternative && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#121524] border border-[#2b3353] rounded-2xl w-full max-w-lg p-5 space-y-4 shadow-2xl relative">
+            <button
+              type="button"
+              onClick={() => setDrawerAlternative(null)}
+              className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-100 p-1 rounded-lg hover:bg-[#1a1e34] transition-colors cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div className="flex items-center gap-2 border-b border-[#21273e] pb-3">
+              <Sparkles className="w-5 h-5 text-[#d4af37]" />
+              <div>
+                <h3 className="text-sm font-bold text-zinc-100">
+                  Alternative Substitutions for {drawerAlternative.originalMember.name}
+                </h3>
+                <span className="text-[11px] text-zinc-400">
+                  {drawerAlternative.teamName} slot alternatives with tactical trade-offs
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+              {drawerAlternative.alternatives.map((alt, idx) => (
+                <div
+                  key={idx}
+                  className="bg-[#161a2e] border border-[#262d49] rounded-xl p-3 space-y-2"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <CharacterPortrait
+                        src={alt.alternativeCharacter.icon}
+                        name={alt.alternativeCharacter.name}
+                        element={alt.alternativeCharacter.element}
+                        rarity={alt.alternativeCharacter.rarity}
+                        size="xs"
+                      />
+                      <div>
+                        <div className="text-xs font-bold text-zinc-200">
+                          {alt.alternativeCharacter.name}
+                        </div>
+                        <div className="text-[10px] text-zinc-400">
+                          {alt.alternativeCharacter.weapon} · {alt.alternativeCharacter.roles[0]}
+                        </div>
+                      </div>
+                    </div>
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded font-mono ${
+                        alt.compatibilityImpact >= 0
+                          ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-500/40'
+                          : 'bg-amber-950/60 text-amber-300 border border-amber-500/40'
+                      }`}
+                    >
+                      {alt.compatibilityImpact >= 0 ? `+${alt.compatibilityImpact}%` : `${alt.compatibilityImpact}%`} Synergy
+                    </span>
+                  </div>
+
+                  {alt.tradeOffPros.length > 0 && (
+                    <div className="text-[11px] space-y-0.5">
+                      <div className="text-emerald-400 font-semibold text-[10px] uppercase tracking-wider">+ Advantages:</div>
+                      <ul className="list-disc list-inside text-zinc-300 pl-1 space-y-0.5">
+                        {alt.tradeOffPros.map((pro, pIdx) => (
+                          <li key={pIdx}>{pro}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {alt.tradeOffCons.length > 0 && (
+                    <div className="text-[11px] space-y-0.5">
+                      <div className="text-amber-400 font-semibold text-[10px] uppercase tracking-wider">- Trade-offs:</div>
+                      <ul className="list-disc list-inside text-zinc-400 pl-1 space-y-0.5">
+                        {alt.tradeOffCons.map((con, cIdx) => (
+                          <li key={cIdx}>{con}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

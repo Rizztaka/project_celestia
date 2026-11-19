@@ -8,6 +8,7 @@ import {
   evaluateBossActMatchup,
   recommendSupportCastBorrow,
 } from './theater-solver';
+import { dispatchAutoDraftTheater } from '../services/solver-dispatcher';
 import { THEATER_SEASONS } from '../data/theater-seasons';
 import { CHARACTERS } from '../data/characters';
 
@@ -43,6 +44,56 @@ describe('Imaginarium Theater Engine', () => {
 
       expect(result.guestCast.map((c) => c.id)).toContain('Nahida');
       expect(result.guestCast.map((c) => c.id)).toContain('Zhongli');
+    });
+
+    it('Trial Cast Inclusion: grants 6 season Opening Cast members as available Level 80 trial units even if ownedIds is empty', () => {
+      const result = filterEligibleTheaterRoster([], season1);
+      expect(result.openingCast).toHaveLength(6);
+      expect(result.eligible).toHaveLength(6);
+
+      result.openingCast.forEach((c) => {
+        expect(season1.openingCastIds).toContain(c.id);
+        expect(c.isTrial).toBe(true);
+        expect(c.level).toBe(80);
+      });
+    });
+
+    it('Level 70 Gate: excludes owned alternate cast character at Level 60 from Visionary mode', () => {
+      // Season 1 has Pyro, Hydro, Anemo
+      const ownedIds = ['Bennett', 'Xiangling'];
+      const profiles = {
+        Bennett: { id: 'Bennett', level: 90, constellation: 5 },
+        Xiangling: { id: 'Xiangling', level: 60, constellation: 4 }, // Under Lv. 70
+      };
+
+      const result = filterEligibleTheaterRoster(ownedIds, season1, profiles, 'Visionary');
+      const eligibleIds = result.eligible.map((c) => c.id);
+
+      expect(eligibleIds).toContain('Bennett');
+      // Xiangling is Lv 60, so she must be gated out of Visionary mode
+      expect(eligibleIds).not.toContain('Xiangling');
+    });
+
+    it('Traveler Vigor Unification: drafting Traveler in an act deducts vigor from all Traveler elements', () => {
+      const allEligible = ['TravelerAnemo', 'TravelerHydro', 'TravelerGeo', 'Bennett', 'Furina'];
+      const acts: any = [
+        {
+          actNumber: 1,
+          type: 'Normal',
+          team: [
+            { id: 'TravelerAnemo', name: 'Traveler (Anemo)', element: 'Anemo' },
+            { id: 'Bennett', name: 'Bennett', element: 'Pyro' },
+          ],
+        },
+      ];
+
+      const vigor = calculateVigorState(acts, allEligible);
+      // Both TravelerAnemo and TravelerHydro and TravelerGeo should have 1 vigor remaining
+      expect(vigor['TravelerAnemo']).toBe(1);
+      expect(vigor['TravelerHydro']).toBe(1);
+      expect(vigor['TravelerGeo']).toBe(1);
+      expect(vigor['Bennett']).toBe(1);
+      expect(vigor['Furina']).toBe(2);
     });
   });
 
@@ -754,6 +805,19 @@ describe('Imaginarium Theater Engine', () => {
 
       expect(resWithElectro.score).toBeGreaterThan(resNoElectro.score);
       expect(resWithElectro.counterHighlights.some((h) => h.includes('Stealth Breaker'))).toBe(true);
+    });
+
+    it('Worker Offloading: dispatchAutoDraftTheater resolves with a valid 10-act schedule', async () => {
+      const allSeason1Chars = CHARACTERS.filter(
+        (c) =>
+          season1.elements.includes(c.element) ||
+          season1.specialGuestIds.includes(c.id) ||
+          season1.openingCastIds.includes(c.id),
+      );
+      const res = await dispatchAutoDraftTheater(allSeason1Chars, 'Visionary', season1);
+      expect(res.acts).toHaveLength(10);
+      expect(res.validationErrors).toHaveLength(0);
+      expect(Object.keys(res.vigorState).length).toBeGreaterThan(0);
     });
   });
 });

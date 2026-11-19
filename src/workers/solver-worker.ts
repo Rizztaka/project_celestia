@@ -1,5 +1,6 @@
 import { solveAbyssDualTeams } from '../engines/abyss-solver';
 import { generateBestTeams } from '../engines/team-generator';
+import { autoDraftTheaterSchedule } from '../engines/theater-solver';
 
 self.onmessage = (e: MessageEvent) => {
   const { id, type, payload } = e.data || {};
@@ -22,6 +23,16 @@ self.onmessage = (e: MessageEvent) => {
         rosterProfiles,
         ownedWeapons,
         allowCatalogFallback,
+      );
+      self.postMessage({ id, type, result });
+    } else if (type === 'SOLVE_THEATER') {
+      const { eligible, difficulty, season, userLocks, rosterProfiles } = payload || {};
+      const result = autoDraftTheaterSchedule(
+        eligible,
+        difficulty,
+        season,
+        userLocks,
+        rosterProfiles,
       );
       self.postMessage({ id, type, result });
     } else {

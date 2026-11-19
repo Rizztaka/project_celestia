@@ -15,6 +15,8 @@ import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { ImaginariumTheaterView } from './ImaginariumTheaterView';
 import { AbyssDualTeamView } from './AbyssDualTeamView';
+import { ABYSS_CYCLES, type AbyssCycleConfig } from '../data/abyss-schedules';
+import { getSavedAbyssCycleId, saveAbyssCycleId, getSavedCustomAbyss } from '../services/storage';
 
 interface EndgameViewProps {
   ownedIds: string[];
@@ -28,8 +30,25 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
   const [activeSubTab, setActiveSubTab] = useState<'theater' | 'abyss'>('theater');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [showDetailedChamberGuide, setShowDetailedChamberGuide] = useState<boolean>(false);
+  const [selectedCycleId, setSelectedCycleId] = useState<string>(() => getSavedAbyssCycleId());
 
-  const analysis = useMemo(() => analyzeEndgameReadiness(ownedIds), [ownedIds]);
+  const activeCycle: AbyssCycleConfig = useMemo(() => {
+    if (selectedCycleId === 'custom-sandbox') {
+      return getSavedCustomAbyss();
+    }
+    const found = ABYSS_CYCLES.find((c) => c.id === selectedCycleId);
+    return found || ABYSS_CYCLES[0];
+  }, [selectedCycleId]);
+
+  const handleSelectCycleId = (cycleId: string) => {
+    setSelectedCycleId(cycleId);
+    saveAbyssCycleId(cycleId);
+  };
+
+  const analysis = useMemo(
+    () => analyzeEndgameReadiness(ownedIds, activeCycle),
+    [ownedIds, activeCycle],
+  );
 
   return (
     <div className="space-y-6">
@@ -70,7 +89,12 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
       {/* Sub-tab 2: Spiral Abyss Floor 12 */}
       {activeSubTab === 'abyss' && (
         <div className="space-y-6">
-          <AbyssDualTeamView ownedIds={ownedIds} profiles={profiles} />
+          <AbyssDualTeamView
+            ownedIds={ownedIds}
+            profiles={profiles}
+            selectedCycleId={selectedCycleId}
+            onSelectCycleId={handleSelectCycleId}
+          />
 
           {/* Collapsible Chamber & Enemy Deep Dive */}
           <div className="bg-[#12141f] border border-[#22273e] rounded-2xl overflow-hidden">
@@ -82,6 +106,7 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
               <div className="flex items-center gap-2">
                 <Target className="w-4 h-4 text-[#d4af37]" />
                 <span>Enemy Lineup & Chamber Shield Reference Guide</span>
+                <span className="text-[11px] font-normal text-[#d4af37]/80">· {activeCycle.name}</span>
               </div>
               <div className="flex items-center gap-1.5 text-zinc-400">
                 <span>{showDetailedChamberGuide ? 'Hide Reference' : 'View Reference'}</span>

@@ -9,6 +9,7 @@ import type {
 import { CHARACTERS } from '../data/characters';
 import { THEATER_DIFFICULTIES, THEATER_BOSS_INFO } from '../data/theater-seasons';
 import { isNightsoulCharacter } from './combat-mechanics';
+import { isSameCharacterOrTraveler } from './team-rules';
 
 export interface FilteredTheaterRoster {
   eligible: Character[];
@@ -19,37 +20,89 @@ export interface FilteredTheaterRoster {
 
 /**
  * Filters the user's owned roster against the current Theater season elements & guest cast.
+ * Automatically incorporates all 6 Opening Cast members as available Level 80 trial units
+ * (or uses the player's personal profile if owned and higher), enforces Level 70 minimum
+ * for alternate cast in Hard/Visionary mode, and unifies Traveler element configurations.
  */
 export function filterEligibleTheaterRoster(
   ownedIds: string[],
   season: TheaterSeasonConfig,
+  rosterProfiles?: Record<string, OwnedCharacterProfile>,
+  difficulty?: TheaterDifficulty,
 ): FilteredTheaterRoster {
   const ownedSet = new Set(ownedIds);
   const seasonElements = new Set(season.elements);
   const guestSet = new Set(season.specialGuestIds);
   const openingSet = new Set(season.openingCastIds);
 
-  const ownedChars = CHARACTERS.filter((c) => ownedSet.has(c.id));
-
   const openingCast: Character[] = [];
   const guestCast: Character[] = [];
   const alternateCast: Character[] = [];
   const eligible: Character[] = [];
 
+  // 1. Opening Cast (Trial + Owned Hybrid)
+  // All 6 Opening Cast members are unconditionally granted as Level 80 trial units
+  // (using player's personal profile if owned at Lv 80+).
+  for (const openingId of season.openingCastIds) {
+    const baseChar = CHARACTERS.find((c) => c.id === openingId);
+    if (!baseChar) continue;
+
+    const isOwned = ownedSet.has(openingId);
+    const profile = rosterProfiles?.[openingId];
+
+    const useTrial = !isOwned || (profile !== undefined && profile.level < 80);
+    const char: Character = {
+      ...baseChar,
+      isOwned,
+      isTrial: useTrial,
+      level: useTrial ? 80 : (profile?.level ?? 90),
+      constellation: profile?.constellation ?? 0,
+    };
+
+    openingCast.push(char);
+    eligible.push(char);
+  }
+
+  // 2. Alternate Cast & Special Guests from player's owned roster
+  const ownedChars = CHARACTERS.filter((c) => ownedSet.has(c.id));
+  const minLevelRequired = (difficulty === 'Hard' || difficulty === 'Visionary') ? 70 : 0;
+
   for (const char of ownedChars) {
-    const isOpening = openingSet.has(char.id);
+    // Skip characters already included in Opening Cast
+    if (openingSet.has(char.id)) continue;
+
     const isGuest = guestSet.has(char.id);
     const isSeasonElement = seasonElements.has(char.element);
+    if (!isGuest && !isSeasonElement) continue;
 
-    if (isOpening) {
-      openingCast.push(char);
-      eligible.push(char);
-    } else if (isGuest) {
-      guestCast.push(char);
-      eligible.push(char);
+    // Enforce Level 70 qualification gate for Hard / Visionary mode
+    if (minLevelRequired > 0 && rosterProfiles && rosterProfiles[char.id]) {
+      const charLevel = rosterProfiles[char.id].level;
+      if (charLevel < minLevelRequired) {
+        continue;
+      }
+    }
+
+    // Traveler identity unification: only one Traveler configuration permitted in the eligible roster
+    if (eligible.some((e) => isSameCharacterOrTraveler(e, char))) {
+      continue;
+    }
+
+    const profile = rosterProfiles?.[char.id];
+    const qualifiedChar: Character = {
+      ...char,
+      isOwned: true,
+      isTrial: false,
+      level: profile?.level ?? 90,
+      constellation: profile?.constellation ?? 0,
+    };
+
+    if (isGuest) {
+      guestCast.push(qualifiedChar);
+      eligible.push(qualifiedChar);
     } else if (isSeasonElement) {
-      alternateCast.push(char);
-      eligible.push(char);
+      alternateCast.push(qualifiedChar);
+      eligible.push(qualifiedChar);
     }
   }
 
@@ -63,6 +116,7 @@ export function filterEligibleTheaterRoster(
 
 /**
  * Computes remaining vigor (0 to 2) for each character based on usage across acts.
+ * Unifies Traveler configurations so drafting any Traveler element deducts vigor from all Travelers.
  */
 export function calculateVigorState(
   acts: TheaterActPlan[],
@@ -78,7 +132,11 @@ export function calculateVigorState(
       if (vigor[member.id] === undefined) {
         vigor[member.id] = 2;
       }
-      vigor[member.id] = Math.max(0, vigor[member.id] - 1);
+      for (const id of Object.keys(vigor)) {
+        if (isSameCharacterOrTraveler(id, member.id)) {
+          vigor[id] = Math.max(0, vigor[id] - 1);
+        }
+      }
     }
   }
 
@@ -193,9 +251,14 @@ export function autoDraftTheaterSchedule(
       if (act) {
         for (const id of lockedIds) {
           const char = charMap.get(id);
-          if (char && act.team.length < 4 && (vigor[id] ?? 0) > 0 && !act.team.some((m) => m.id === id)) {
+          if (
+            char &&
+            act.team.length < 4 &&
+            (vigor[id] ?? 0) > 0 &&
+            !act.team.some((m) => isSameCharacterOrTraveler(m, char))
+          ) {
             act.team.push(char);
-            vigor[id] = (vigor[id] ?? 0) - 1;
+            deductCharacterVigor(vigor, id);
             act.isLocked = true;
           }
         }
@@ -264,8 +327,8 @@ export function autoDraftTheaterSchedule(
             const targetIdx = replaceIdx !== -1 ? replaceIdx : 3;
             const oldChar = targetAct.team[targetIdx];
             targetAct.team[targetIdx] = replacement;
-            vigor[oldChar.id] = (vigor[oldChar.id] ?? 0) + 1;
-            vigor[replacement.id] = (vigor[replacement.id] ?? 0) - 1;
+            restoreCharacterVigor(vigor, oldChar.id);
+            deductCharacterVigor(vigor, replacement.id);
           }
         }
       }
@@ -384,6 +447,34 @@ function scoreCandidateForAct(
 }
 
 /**
+ * Helper to deduct 1 vigor from a character and any linked Traveler elements.
+ */
+function deductCharacterVigor(vigor: Record<string, number>, charId: string) {
+  if (vigor[charId] === undefined) {
+    vigor[charId] = 2;
+  }
+  for (const vId of Object.keys(vigor)) {
+    if (isSameCharacterOrTraveler(vId, charId)) {
+      vigor[vId] = Math.max(0, (vigor[vId] ?? 2) - 1);
+    }
+  }
+}
+
+/**
+ * Helper to restore 1 vigor to a character and any linked Traveler elements.
+ */
+function restoreCharacterVigor(vigor: Record<string, number>, charId: string) {
+  if (vigor[charId] === undefined) {
+    vigor[charId] = 1;
+  }
+  for (const vId of Object.keys(vigor)) {
+    if (isSameCharacterOrTraveler(vId, charId)) {
+      vigor[vId] = Math.min(2, (vigor[vId] ?? 0) + 1);
+    }
+  }
+}
+
+/**
  * Fills up to 4 members into an Act respecting vigor > 0 and avoiding duplicate characters in the act.
  */
 function fillActTeam(
@@ -409,6 +500,7 @@ function fillActTeam(
 
     for (const c of candidates) {
       if (currentIds.has(c.id)) continue;
+      if (act.team.some((m) => isSameCharacterOrTraveler(m, c))) continue;
       const remVigor = vigor[c.id] ?? 0;
       if (remVigor <= 0) continue;
 
@@ -439,7 +531,7 @@ function fillActTeam(
     if (carry) {
       act.team.push(carry);
       currentIds.add(carry.id);
-      vigor[carry.id] = (vigor[carry.id] ?? 0) - 1;
+      deductCharacterVigor(vigor, carry.id);
       if (isBoss) bossCarriesAssigned.add(carry.id);
     }
   }
@@ -450,7 +542,7 @@ function fillActTeam(
     if (buffer) {
       act.team.push(buffer);
       currentIds.add(buffer.id);
-      vigor[buffer.id] = (vigor[buffer.id] ?? 0) - 1;
+      deductCharacterVigor(vigor, buffer.id);
     }
   }
 
@@ -460,7 +552,7 @@ function fillActTeam(
     if (sustain) {
       act.team.push(sustain);
       currentIds.add(sustain.id);
-      vigor[sustain.id] = (vigor[sustain.id] ?? 0) - 1;
+      deductCharacterVigor(vigor, sustain.id);
     }
   }
 
@@ -470,7 +562,7 @@ function fillActTeam(
     if (!flex) break;
     act.team.push(flex);
     currentIds.add(flex.id);
-    vigor[flex.id] = (vigor[flex.id] ?? 0) - 1;
+    deductCharacterVigor(vigor, flex.id);
   }
 
   // Record pair usages
@@ -501,11 +593,11 @@ export function swapTheaterActMember(
 
   const act = currentActs[actIndex];
 
-  if (act.team.some((m) => m.id === newCharId)) {
+  if (act.team.some((m) => isSameCharacterOrTraveler(m, newCharId))) {
     return {
       acts: currentActs,
       vigorState,
-      error: `Character is already in Act ${actNumber}.`,
+      error: `Character (or Traveler configuration) is already in Act ${actNumber}.`,
     };
   }
 
@@ -542,10 +634,8 @@ export function swapTheaterActMember(
       return { ...a, team: [...a.team, newChar] };
     });
 
-    const updatedVigor = {
-      ...vigorState,
-      [newCharId]: Math.max(0, (vigorState[newCharId] ?? 2) - 1),
-    };
+    const updatedVigor = { ...vigorState };
+    deductCharacterVigor(updatedVigor, newCharId);
 
     return {
       acts: updatedActs,
@@ -570,11 +660,9 @@ export function swapTheaterActMember(
     return { ...a, team: updatedTeam };
   });
 
-  const updatedVigor = {
-    ...vigorState,
-    [oldCharId]: Math.min(2, (vigorState[oldCharId] ?? 1) + 1),
-    [newCharId]: Math.max(0, (vigorState[newCharId] ?? 2) - 1),
-  };
+  const updatedVigor = { ...vigorState };
+  restoreCharacterVigor(updatedVigor, oldCharId);
+  deductCharacterVigor(updatedVigor, newCharId);
 
   return {
     acts: updatedActs,
@@ -614,10 +702,8 @@ export function removeTheaterActMember(
     };
   });
 
-  const updatedVigor = {
-    ...vigorState,
-    [charId]: Math.min(2, (vigorState[charId] ?? 1) + 1),
-  };
+  const updatedVigor = { ...vigorState };
+  restoreCharacterVigor(updatedVigor, charId);
 
   return {
     acts: updatedActs,

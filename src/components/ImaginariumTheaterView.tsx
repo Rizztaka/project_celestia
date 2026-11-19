@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useTransition } from 'react';
 import type {
   Character,
   Element,
@@ -18,12 +18,12 @@ import { CHARACTERS } from '../data/characters';
 import { DataFreshnessBadge } from './DataFreshnessBadge';
 import {
   filterEligibleTheaterRoster,
-  autoDraftTheaterSchedule,
   swapTheaterActMember,
   removeTheaterActMember,
   evaluateBossActMatchup,
   recommendSupportCastBorrow,
 } from '../engines/theater-solver';
+import { dispatchAutoDraftTheater } from '../services/solver-dispatcher';
 import { CharacterPortrait } from './CharacterPortrait';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import {
@@ -85,6 +85,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [modalError, setModalError] = useState<string | null>(null);
   const [borrowedCharId, setBorrowedCharId] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   // Swap / Add modal state
   const [swapTarget, setSwapTarget] = useState<{
@@ -101,10 +102,10 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     return found || THEATER_SEASONS[0];
   }, [selectedSeasonId, customElements]);
 
-  // Filter roster
+  // Filter roster with trial cast integration, profile level, and Level 70 gate for Visionary
   const filteredRoster = useMemo(() => {
-    return filterEligibleTheaterRoster(ownedIds, activeSeason);
-  }, [ownedIds, activeSeason]);
+    return filterEligibleTheaterRoster(ownedIds, activeSeason, profiles, difficulty);
+  }, [ownedIds, activeSeason, profiles, difficulty]);
 
   // Support Cast Borrow recommendations (top 3 unowned characters matching element/guest)
   const recommendedBorrows = useMemo(() => {
@@ -121,7 +122,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     return [borrowedChar, ...filteredRoster.eligible];
   }, [filteredRoster.eligible, borrowedCharId]);
 
-  // Generate initial or updated schedule respecting user-locked acts
+  // Generate initial or updated schedule respecting user-locked acts via Web Worker
   const handleGenerateSchedule = (currentLocked = lockedActNumbers) => {
     const userLocks: Record<number, string[]> = {};
     for (const actNum of currentLocked) {
@@ -131,23 +132,25 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
       }
     }
 
-    const res = autoDraftTheaterSchedule(
+    dispatchAutoDraftTheater(
       effectiveEligible,
       difficulty,
       activeSeason,
       Object.keys(userLocks).length > 0 ? userLocks : undefined,
       profiles,
-    );
+    ).then((res) => {
+      startTransition(() => {
+        const actsWithLocks = res.acts.map((a) => ({
+          ...a,
+          isLocked: currentLocked.has(a.actNumber),
+        }));
 
-    const actsWithLocks = res.acts.map((a) => ({
-      ...a,
-      isLocked: currentLocked.has(a.actNumber),
-    }));
-
-    setSchedule(actsWithLocks);
-    setVigorState(res.vigorState);
-    setValidationErrors(res.validationErrors);
-    setShortfallSuggestions(res.shortfallSuggestions || []);
+        setSchedule(actsWithLocks);
+        setVigorState(res.vigorState);
+        setValidationErrors(res.validationErrors);
+        setShortfallSuggestions(res.shortfallSuggestions || []);
+      });
+    });
   };
 
   // Serialized key of eligible IDs to detect any roster composition shift even with identical count
@@ -611,6 +614,16 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                 }`}
                 title={`${char.name} (${char.element} ${char.weapon})${isBorrowed ? ' - Friend Borrow' : ''} - Click to inspect`}
               >
+                {char.isTrial && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-amber-400 to-[#d4af37] text-black font-extrabold text-[8px] px-1.5 py-0.2 rounded-full shadow z-10 uppercase tracking-tight">
+                    Trial
+                  </span>
+                )}
+                {isBorrowed && (
+                  <span className="absolute -top-1.5 -left-1.5 bg-emerald-600 text-white font-extrabold text-[8px] px-1.5 py-0.2 rounded-full shadow z-10">
+                    Friend
+                  </span>
+                )}
                 <CharacterPortrait
                   src={char.icon}
                   name={char.name}
@@ -622,11 +635,16 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                   {char.name}
                 </span>
                 <div className="flex flex-col items-center gap-0.5">
-                  <span
-                    className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-full border ${vigorBadge}`}
-                  >
-                    {vigor} Vigor
-                  </span>
+                  <div className="flex items-center gap-1">
+                    <span
+                      className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-full border ${vigorBadge}`}
+                    >
+                      {vigor} Vigor
+                    </span>
+                    <span className="text-[9px] text-zinc-400 font-mono">
+                      Lv.{char.level ?? (profiles?.[char.id]?.level ?? 90)}
+                    </span>
+                  </div>
                   {isBorrowed && (
                     <span className="text-[8px] font-bold text-emerald-400">
                       Borrow
@@ -644,8 +662,13 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <Swords className="w-4 h-4 text-[#d4af37]" />
-            <h2 className="text-base font-bold text-zinc-100 font-serif">
-              Act Schedule & Boss Strategy ({schedule.length} Acts)
+            <h2 className="text-base font-bold text-zinc-100 font-serif flex items-center gap-2">
+              <span>Act Schedule & Boss Strategy ({schedule.length} Acts)</span>
+              {isPending && (
+                <span className="text-[11px] font-mono text-amber-400 font-normal animate-pulse">
+                  (drafting schedule...)
+                </span>
+              )}
             </h2>
           </div>
           <span className="text-xs text-zinc-400">
@@ -814,6 +837,11 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                             key={member.id}
                             className={`bg-[#0d0f19] border ${color.border} rounded-xl p-2.5 flex flex-col justify-between gap-2 relative group hover:border-[#d4af37]/60 transition-colors`}
                           >
+                            {member.isTrial && (
+                              <span className="absolute top-1.5 right-1.5 bg-gradient-to-r from-amber-400 to-[#d4af37] text-black font-extrabold text-[8px] px-1.5 py-0.2 rounded-full shadow z-10 uppercase tracking-tight">
+                                Trial
+                              </span>
+                            )}
                             <div
                               onClick={() => setSelectedCharacter(member)}
                               className="cursor-pointer flex flex-col items-center gap-1"

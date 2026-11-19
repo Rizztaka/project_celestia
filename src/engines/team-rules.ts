@@ -31,15 +31,29 @@ export const ARCHETYPE_EXCLUSIVITY_RULES: ArchetypeExclusivityRule[] = [
  * Checks if two character entities represent the same individual,
  * enforcing that multiple elemental configurations of the Traveler cannot co-exist in one party.
  */
-export function isSameCharacterOrTraveler(a: Character, b: Character): boolean {
-  if (a.id === b.id) return true;
-  const isTraveler = (c: Character) =>
-    c.id.startsWith('Traveler') ||
-    c.id === 'Aether' ||
-    c.id === 'Lumine' ||
-    c.id === 'PlayerBoy' ||
-    c.id === 'PlayerGirl' ||
-    (typeof c.name === 'string' && c.name.startsWith('Traveler'));
+export function isSameCharacterOrTraveler(
+  a: Character | string,
+  b: Character | string,
+): boolean {
+  const getId = (x: Character | string) => (typeof x === 'string' ? x : x.id);
+  const getName = (x: Character | string) => (typeof x === 'string' ? x : x.name);
+  const idA = getId(a);
+  const idB = getId(b);
+  if (idA === idB) return true;
+
+  const isTraveler = (x: Character | string) => {
+    const id = getId(x);
+    const name = getName(x);
+    return (
+      id.startsWith('Traveler') ||
+      id === 'Aether' ||
+      id === 'Lumine' ||
+      id === 'PlayerBoy' ||
+      id === 'PlayerGirl' ||
+      (typeof name === 'string' && name.startsWith('Traveler'))
+    );
+  };
+
   if (isTraveler(a) && isTraveler(b)) return true;
   return false;
 }

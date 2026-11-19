@@ -330,10 +330,15 @@ export const RosterView: React.FC<RosterViewProps> = ({
       };
 
       const nextConst = Math.max(0, Math.min(6, currentProfile.constellation + delta));
-      onUpdateProfile({
+      const nextProfile = {
         ...currentProfile,
         constellation: nextConst,
-      });
+      };
+      profilesRef.current = {
+        ...profilesRef.current,
+        [charId]: nextProfile,
+      };
+      onUpdateProfile(nextProfile);
     },
     [onUpdateProfile],
   );

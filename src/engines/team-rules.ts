@@ -32,13 +32,15 @@ export const ARCHETYPE_EXCLUSIVITY_RULES: ArchetypeExclusivityRule[] = [
  * enforcing that multiple elemental configurations of the Traveler cannot co-exist in one party.
  */
 export function isSameCharacterOrTraveler(
-  a: Character | string,
-  b: Character | string,
+  a: Character | string | null | undefined,
+  b: Character | string | null | undefined,
 ): boolean {
+  if (!a || !b) return false;
   const getId = (x: Character | string) => (typeof x === 'string' ? x : x.id);
   const getName = (x: Character | string) => (typeof x === 'string' ? x : x.name);
   const idA = getId(a);
   const idB = getId(b);
+  if (!idA || !idB) return false;
   if (idA === idB) return true;
 
   const isTraveler = (x: Character | string) => {

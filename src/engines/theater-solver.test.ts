@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import type { TheaterActPlan } from '../types/genshin';
 import {
   filterEligibleTheaterRoster,
   autoDraftTheaterSchedule,
@@ -818,6 +819,95 @@ describe('Imaginarium Theater Engine', () => {
       expect(res.acts).toHaveLength(10);
       expect(res.validationErrors).toHaveLength(0);
       expect(Object.keys(res.vigorState).length).toBeGreaterThan(0);
+    });
+
+    it('Roster Shortfall: drafts 6 trial characters exclusively into early playable acts 1-3', () => {
+      // 0 owned matching characters -> exactly 6 opening cast trial units
+      const filtered = filterEligibleTheaterRoster([], season1, undefined, 'Visionary');
+      expect(filtered.eligible).toHaveLength(6);
+
+      const res = autoDraftTheaterSchedule(filtered.eligible, 'Visionary', season1);
+      expect(res.validationErrors.length).toBeGreaterThan(0);
+      expect(res.validationErrors[0]).toContain('Roster Shortfall');
+
+      // Acts 1, 2, and 3 (the playable acts) should have 4 members each
+      const act1 = res.acts.find((a) => a.actNumber === 1);
+      const act2 = res.acts.find((a) => a.actNumber === 2);
+      const act3 = res.acts.find((a) => a.actNumber === 3);
+
+      expect(act1?.team).toHaveLength(4);
+      expect(act2?.team).toHaveLength(4);
+      expect(act3?.team).toHaveLength(4);
+
+      // Act 1 must be drafted strictly from the Opening Cast (the authentic starting hand)
+      act1?.team.forEach((member) => {
+        expect(season1.openingCastIds).toContain(member.id);
+      });
+
+      // Acts 4 to 10 must be empty because vigor was spent on clearing playable acts 1-3
+      for (let actNum = 4; actNum <= 10; actNum++) {
+        const act = res.acts.find((a) => a.actNumber === actNum);
+        expect(act?.team).toHaveLength(0);
+      }
+    });
+
+    it('Full Roster: Act 1 is strictly drafted from Opening Cast members', () => {
+      const allSeason1Chars = CHARACTERS.filter(
+        (c) =>
+          season1.elements.includes(c.element) ||
+          season1.specialGuestIds.includes(c.id) ||
+          season1.openingCastIds.includes(c.id),
+      );
+      const res = autoDraftTheaterSchedule(allSeason1Chars, 'Visionary', season1);
+      const act1 = res.acts.find((a) => a.actNumber === 1);
+      expect(act1?.team).toHaveLength(4);
+      act1?.team.forEach((member) => {
+        expect(season1.openingCastIds).toContain(member.id);
+      });
+    });
+
+    it('swapTheaterActMember: allows swapping Traveler element without triggering duplicate lockout', () => {
+      const acts: TheaterActPlan[] = [
+        {
+          actNumber: 1,
+          type: 'Normal',
+          recommendedArchetypes: [],
+          team: [
+            CHARACTERS.find((c) => c.id === 'TravelerGeo')!,
+            CHARACTERS.find((c) => c.id === 'Bennett')!,
+            CHARACTERS.find((c) => c.id === 'Xiangling')!,
+            CHARACTERS.find((c) => c.id === 'Xingqiu')!,
+          ],
+          isLocked: false,
+        },
+      ];
+      const vigorState = {
+        TravelerGeo: 1,
+        TravelerHydro: 1,
+        Bennett: 1,
+        Xiangling: 1,
+        Xingqiu: 1,
+      };
+
+      // Replace TravelerGeo with TravelerHydro in Act 1
+      const res = swapTheaterActMember(acts, 1, 'TravelerGeo', 'TravelerHydro', vigorState);
+      expect(res.error).toBeUndefined();
+      const updatedAct1 = res.acts[0];
+      expect(updatedAct1.team.map((m) => m.id)).toContain('TravelerHydro');
+      expect(updatedAct1.team.map((m) => m.id)).not.toContain('TravelerGeo');
+    });
+
+    it('filterEligibleTheaterRoster: picks highest-invested Traveler element matching season', () => {
+      const owned = ['TravelerGeo', 'TravelerHydro'];
+      const profiles = {
+        TravelerGeo: { id: 'TravelerGeo', level: 20, constellation: 0 },
+        TravelerHydro: { id: 'TravelerHydro', level: 90, constellation: 6 },
+      };
+      const res = filterEligibleTheaterRoster(owned, season1, profiles, 'Normal');
+      const travelers = res.eligible.filter((c) => c.id.startsWith('Traveler'));
+      expect(travelers).toHaveLength(1);
+      expect(travelers[0].id).toBe('TravelerHydro');
+      expect(travelers[0].level).toBe(90);
     });
   });
 });

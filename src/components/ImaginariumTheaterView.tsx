@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useTransition } from 'react';
+import React, { useState, useMemo, useEffect, useTransition, useRef } from 'react';
 import type {
   Character,
   Element,
@@ -23,6 +23,7 @@ import {
   evaluateBossActMatchup,
   recommendSupportCastBorrow,
 } from '../engines/theater-solver';
+import { isSameCharacterOrTraveler } from '../engines/team-rules';
 import { dispatchAutoDraftTheater } from '../services/solver-dispatcher';
 import { CharacterPortrait } from './CharacterPortrait';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
@@ -159,6 +160,8 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     [effectiveEligible],
   );
 
+  const isInitialMount = useRef(true);
+
   // Clear borrowed character when season changes
   useEffect(() => {
     setBorrowedCharId(null);
@@ -166,12 +169,18 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
 
   // Re-generate schedule when season or difficulty fundamentally shifts
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      handleGenerateSchedule(new Set());
+      return;
+    }
     setLockedActNumbers(new Set());
     handleGenerateSchedule(new Set());
   }, [activeSeason.id, difficulty]);
 
   // Re-generate schedule while preserving user locks when roster or borrowed character shifts
   useEffect(() => {
+    if (isInitialMount.current) return;
     handleGenerateSchedule(lockedActNumbers);
   }, [eligibleKey]);
 
@@ -957,9 +966,13 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
               {effectiveEligible
                 .filter((c) => {
                   const act = schedule.find((a) => a.actNumber === swapTarget.actNumber);
-                  const isAlreadyInAct = act?.team.some((m) => m.id === c.id);
-                  const vigor = vigorState[c.id] ?? 2;
-                  return !isAlreadyInAct && vigor > 0;
+                  const otherMembers = swapTarget.oldChar
+                    ? (act?.team.filter((m) => m.id !== swapTarget.oldChar?.id) || [])
+                    : (act?.team || []);
+                  const hasConflict = otherMembers.some((m) => isSameCharacterOrTraveler(m, c));
+                  const isReplacingSameCharacter = isSameCharacterOrTraveler(swapTarget.oldChar?.id, c.id);
+                  const vigor = isReplacingSameCharacter ? 1 : (vigorState[c.id] ?? 2);
+                  return !hasConflict && vigor > 0;
                 })
                 .sort((a, b) => {
                   const vigorA = vigorState[a.id] ?? 2;
@@ -1026,9 +1039,13 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
 
               {effectiveEligible.filter((c) => {
                 const act = schedule.find((a) => a.actNumber === swapTarget.actNumber);
-                const isAlreadyInAct = act?.team.some((m) => m.id === c.id);
-                const vigor = vigorState[c.id] ?? 2;
-                return !isAlreadyInAct && vigor > 0;
+                const otherMembers = swapTarget.oldChar
+                  ? (act?.team.filter((m) => m.id !== swapTarget.oldChar?.id) || [])
+                  : (act?.team || []);
+                const hasConflict = otherMembers.some((m) => isSameCharacterOrTraveler(m, c));
+                const isReplacingSameCharacter = isSameCharacterOrTraveler(swapTarget.oldChar?.id, c.id);
+                const vigor = isReplacingSameCharacter ? 1 : (vigorState[c.id] ?? 2);
+                return !hasConflict && vigor > 0;
               }).length === 0 && (
                 <div className="text-center py-6 text-xs text-zinc-500">
                   No other eligible characters with remaining vigor available to swap.

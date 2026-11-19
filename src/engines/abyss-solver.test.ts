@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { solveAbyssDualTeams, evaluateChamberMechanicCoverage, swapAbyssDualHalves } from './abyss-solver';
+import { isSameCharacterOrTraveler } from './team-rules';
 import { CHARACTERS } from '../data/characters';
 import { ABYSS_CYCLES } from '../data/abyss-schedules';
 
@@ -426,6 +427,42 @@ describe('Spiral Abyss Floor 12 Dual-Team Solver', () => {
       expect(ch3).toBeDefined();
       // 12-3-B has Iniquitous Baptist with Electro shield
       expect(ch3!.secondHalfStatus).toMatch(/Electro shield-break|shield-shredder|Iniquitous Baptist/i);
+    });
+
+    it('Roster Shortfall: detects multi-Traveler identity and flags shortfall when distinct count < 8', () => {
+      // 6 normal characters + 2 Travelers = 8 entries, but only 7 distinct characters
+      const sevenDistinct = [
+        'HuTao',
+        'Xingqiu',
+        'Yelan',
+        'Zhongli',
+        'Bennett',
+        'Xiangling',
+        'TravelerAnemo',
+        'TravelerGeo',
+      ];
+      const plan = solveAbyssDualTeams(sevenDistinct);
+      expect(plan.warnings).toBeDefined();
+      expect(plan.warnings![0]).toContain('Roster Shortfall');
+
+      // Verify zero overlap across halves even in partial draft
+      const team1Ids = new Set(plan.firstHalfTeam.members.map((m) => m.id));
+      const team2Ids = new Set(plan.secondHalfTeam.members.map((m) => m.id));
+      for (const id of team1Ids) {
+        expect(team2Ids.has(id)).toBe(false);
+      }
+      const firstTraveler = plan.firstHalfTeam.members.find((m) => m.id.startsWith('Traveler'));
+      const secondTraveler = plan.secondHalfTeam.members.find((m) => m.id.startsWith('Traveler'));
+      if (firstTraveler) {
+        expect(secondTraveler).toBeUndefined();
+      }
+    });
+
+    it('isSameCharacterOrTraveler: safely handles null and undefined inputs without throwing', () => {
+      expect(isSameCharacterOrTraveler(null, 'TravelerAnemo')).toBe(false);
+      expect(isSameCharacterOrTraveler('TravelerAnemo', undefined)).toBe(false);
+      expect(isSameCharacterOrTraveler(null, null)).toBe(false);
+      expect(isSameCharacterOrTraveler(undefined, undefined)).toBe(false);
     });
   });
 });

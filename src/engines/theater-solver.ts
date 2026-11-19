@@ -56,7 +56,7 @@ export function filterEligibleTheaterRoster(
       isOwned,
       isTrial: useTrial,
       level: useTrial ? 80 : (profile?.level ?? 90),
-      constellation: profile?.constellation ?? 0,
+      constellation: useTrial ? 0 : (profile?.constellation ?? 0),
     };
 
     openingCast.push(char);
@@ -67,6 +67,21 @@ export function filterEligibleTheaterRoster(
   const ownedChars = CHARACTERS.filter((c) => ownedSet.has(c.id));
   const minLevelRequired = (difficulty === 'Hard' || difficulty === 'Visionary') ? 70 : 0;
 
+  // Identify highest-invested Traveler element matching season/guest
+  const travelerCandidates = ownedChars.filter((c) => {
+    if (!isSameCharacterOrTraveler(c, 'TravelerAnemo')) return false;
+    const isGuest = guestSet.has(c.id);
+    const isSeasonElement = seasonElements.has(c.element);
+    return isGuest || isSeasonElement;
+  });
+  const bestTravelerId = travelerCandidates.sort((a, b) => {
+    const profA = rosterProfiles?.[a.id];
+    const profB = rosterProfiles?.[b.id];
+    const scoreA = ((profA?.level ?? a.level ?? 90) * 10) + (profA?.constellation ?? a.constellation ?? 0);
+    const scoreB = ((profB?.level ?? b.level ?? 90) * 10) + (profB?.constellation ?? b.constellation ?? 0);
+    return scoreB - scoreA;
+  })[0]?.id;
+
   for (const char of ownedChars) {
     // Skip characters already included in Opening Cast
     if (openingSet.has(char.id)) continue;
@@ -76,15 +91,17 @@ export function filterEligibleTheaterRoster(
     if (!isGuest && !isSeasonElement) continue;
 
     // Enforce Level 70 qualification gate for Hard / Visionary mode
-    if (minLevelRequired > 0 && rosterProfiles && rosterProfiles[char.id]) {
-      const charLevel = rosterProfiles[char.id].level;
-      if (charLevel < minLevelRequired) {
-        continue;
-      }
+    const charLevel = rosterProfiles?.[char.id]?.level ?? char.level;
+    if (minLevelRequired > 0 && charLevel !== undefined && charLevel < minLevelRequired) {
+      continue;
     }
 
-    // Traveler identity unification: only one Traveler configuration permitted in the eligible roster
-    if (eligible.some((e) => isSameCharacterOrTraveler(e, char))) {
+    // Traveler identity unification: only best matching Traveler configuration permitted
+    if (isSameCharacterOrTraveler(char, 'TravelerAnemo')) {
+      if (char.id !== bestTravelerId || eligible.some((e) => isSameCharacterOrTraveler(e, char))) {
+        continue;
+      }
+    } else if (eligible.some((e) => isSameCharacterOrTraveler(e, char))) {
       continue;
     }
 
@@ -93,8 +110,8 @@ export function filterEligibleTheaterRoster(
       ...char,
       isOwned: true,
       isTrial: false,
-      level: profile?.level ?? 90,
-      constellation: profile?.constellation ?? 0,
+      level: profile?.level ?? char.level ?? 90,
+      constellation: profile?.constellation ?? char.constellation ?? 0,
     };
 
     if (isGuest) {
@@ -282,22 +299,65 @@ export function autoDraftTheaterSchedule(
 
   const usedPairCounts = new Map<string, number>();
   const bossCarriesAssigned = new Set<string>();
+  const openingSet = new Set(season.openingCastIds);
 
-  // 2. Draft Boss Acts in descending order (e.g. Acts 10, 8, 6, 3) with specialized counter picks
-  const bossActsToSchedule = acts
-    .filter((a) => a.type === 'Boss')
-    .sort((a, b) => b.actNumber - a.actNumber);
+  const maxPlayableActs = Math.min(totalActs, Math.floor((eligible.length * 2) / 4));
+  const playableActs = acts.filter((a) => a.actNumber <= maxPlayableActs);
 
-  for (const act of bossActsToSchedule) {
-    fillActTeam(act, candidates, vigor, true, usedPairCounts, bossCarriesAssigned, rosterProfiles);
-  }
+  if (eligible.length < requiredCount) {
+    // For shortfall rosters, draft playable acts starting from Act 1 upwards
+    // 1. Act 1 from Opening Cast (the authentic starting hand)
+    const act1 = playableActs.find((a) => a.actNumber === 1);
+    if (act1 && !act1.isLocked && act1.team.length < 4) {
+      const openingCandidates = candidates.filter((c) => openingSet.has(c.id));
+      fillActTeam(act1, openingCandidates.length >= 4 ? openingCandidates : candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+      if (act1.team.length < 4) {
+        fillActTeam(act1, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+      }
+    }
 
-  // 3. Draft Regular Acts descending (e.g. Acts 9, 7, 5, 4, 2, 1) to prioritize harder later stages
-  const regularActsToSchedule = acts
-    .filter((a) => a.type !== 'Boss')
-    .sort((a, b) => b.actNumber - a.actNumber);
-  for (const act of regularActsToSchedule) {
-    fillActTeam(act, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+    // 2. Boss acts within playable acts descending (e.g. Act 3)
+    const bossActsToSchedule = playableActs
+      .filter((a) => a.type === 'Boss' && a.actNumber !== 1)
+      .sort((a, b) => b.actNumber - a.actNumber);
+    for (const act of bossActsToSchedule) {
+      fillActTeam(act, candidates, vigor, true, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+    }
+
+    // 3. Regular acts within playable acts descending (e.g. Act 2)
+    const regularActsToSchedule = playableActs
+      .filter((a) => a.type !== 'Boss' && a.actNumber !== 1)
+      .sort((a, b) => b.actNumber - a.actNumber);
+    for (const act of regularActsToSchedule) {
+      fillActTeam(act, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+    }
+  } else {
+    // For full roster accounts:
+    // 1. Draft Boss Acts in descending order (e.g. Acts 10, 8, 6, 3) to reserve carries for climax encounters
+    const bossActsToSchedule = acts
+      .filter((a) => a.type === 'Boss')
+      .sort((a, b) => b.actNumber - a.actNumber);
+    for (const act of bossActsToSchedule) {
+      fillActTeam(act, candidates, vigor, true, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+    }
+
+    // 2. Draft Act 1 from Opening Cast (the authentic starting hand)
+    const act1 = acts.find((a) => a.actNumber === 1);
+    if (act1 && !act1.isLocked && act1.team.length < 4) {
+      const openingCandidates = candidates.filter((c) => openingSet.has(c.id));
+      fillActTeam(act1, openingCandidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+      if (act1.team.length < 4) {
+        fillActTeam(act1, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+      }
+    }
+
+    // 3. Draft Regular Acts descending (e.g. Acts 9, 7, 5, 4, 2) to prioritize harder stages
+    const regularActsToSchedule = acts
+      .filter((a) => a.type !== 'Boss' && a.actNumber !== 1)
+      .sort((a, b) => b.actNumber - a.actNumber);
+    for (const act of regularActsToSchedule) {
+      fillActTeam(act, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+    }
   }
 
   // 4. Anti-cloning safeguard:
@@ -593,7 +653,11 @@ export function swapTheaterActMember(
 
   const act = currentActs[actIndex];
 
-  if (act.team.some((m) => isSameCharacterOrTraveler(m, newCharId))) {
+  const otherMembers = oldCharId
+    ? act.team.filter((m) => m.id !== oldCharId)
+    : act.team;
+
+  if (otherMembers.some((m) => isSameCharacterOrTraveler(m, newCharId))) {
     return {
       acts: currentActs,
       vigorState,
@@ -601,7 +665,11 @@ export function swapTheaterActMember(
     };
   }
 
-  const availableVigor = vigorState[newCharId] ?? 2;
+  const isReplacingSameCharacter = isSameCharacterOrTraveler(oldCharId, newCharId);
+  const availableVigor = isReplacingSameCharacter
+    ? 1
+    : (vigorState[newCharId] ?? 2);
+
   if (availableVigor <= 0) {
     return {
       acts: currentActs,

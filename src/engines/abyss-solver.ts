@@ -327,16 +327,36 @@ export function solveAbyssDualTeams(
 ): AbyssDualTeamPlan {
   const activeCycle = cycle || ABYSS_CYCLES[0];
   const ownedSet = new Set(ownedIds);
-  const ownedChars = CHARACTERS.filter((c) => ownedSet.has(c.id));
-  const uniqueOwnedIds = Array.from(ownedSet);
+  const rawOwnedChars = CHARACTERS.filter((c) => ownedSet.has(c.id));
 
-  // If player has fewer than 8 characters, gracefully create best-effort teams
+  // Deduplicate characters by identity, picking the highest-invested variant for multi-element Traveler
+  const travelerChars = rawOwnedChars.filter((c) => isSameCharacterOrTraveler(c, 'TravelerAnemo'));
+  let chosenTraveler: Character | undefined;
+  if (travelerChars.length > 0) {
+    chosenTraveler = travelerChars.sort((a, b) => {
+      const pA = rosterProfiles?.[a.id];
+      const pB = rosterProfiles?.[b.id];
+      const scoreA = ((pA?.level ?? a.level ?? 90) * 10) + (pA?.constellation ?? a.constellation ?? 0);
+      const scoreB = ((pB?.level ?? b.level ?? 90) * 10) + (pB?.constellation ?? b.constellation ?? 0);
+      return scoreB - scoreA;
+    })[0];
+  }
+
+  const ownedChars = rawOwnedChars.filter((c) => {
+    if (isSameCharacterOrTraveler(c, 'TravelerAnemo')) {
+      return c.id === chosenTraveler?.id;
+    }
+    return true;
+  });
+  const uniqueOwnedIds = ownedChars.map((c) => c.id);
+
+  // If player has fewer than 8 distinct characters, gracefully create best-effort teams
   if (ownedChars.length < 8) {
-    const half1Chars = ownedChars.slice(0, 4);
-    const half2Chars = ownedChars.slice(4, 8);
-
-    const team1 = buildFallbackTeam(half1Chars, 'abyss-half-1', 'Abyss First Half');
-    const team2 = buildFallbackTeam(half2Chars, 'abyss-half-2', 'Abyss Second Half');
+    const team1 = buildFallbackTeam(ownedChars, 'abyss-half-1', 'Abyss First Half');
+    const remainingForTeam2 = ownedChars.filter(
+      (c) => !team1.members.some((m) => isSameCharacterOrTraveler(m, c)),
+    );
+    const team2 = buildFallbackTeam(remainingForTeam2, 'abyss-half-2', 'Abyss Second Half');
     const { coverage, totalScore } = evaluateChamberMechanicCoverage(team1, team2, activeCycle);
     const partialPlan: AbyssDualTeamPlan = {
       firstHalfTeam: team1,
@@ -349,7 +369,7 @@ export function solveAbyssDualTeams(
       label: 'Primary Best-in-Slot',
       description: 'Partial draft composition due to limited character roster.',
       warnings: [
-        `Roster Shortfall: Floor 12 requires at least 8 distinct characters (4 for First Half, 4 for Second Half). Your roster only has ${ownedChars.length} characters. Showing partial draft.`,
+        `Roster Shortfall: Floor 12 requires at least 8 distinct characters (4 for First Half, 4 for Second Half). Your roster only has ${ownedChars.length} distinct characters. Showing partial draft.`,
       ],
     };
     partialPlan.allPairs = [partialPlan];
@@ -457,12 +477,11 @@ export function solveAbyssDualTeams(
 
   // 3. Fallback if no pair was discovered (e.g. extremely constrained roster)
   if (evaluatedPairs.length === 0) {
-    const half1 = ownedChars.slice(0, 4);
-    const remainingForHalf2 = ownedChars
-      .slice(4)
-      .filter((c) => !half1.some((h) => isSameCharacterOrTraveler(h, c)));
-    const team1 = buildFallbackTeam(half1, 'abyss-fallback-1', 'First Half Vanguard');
-    const team2 = buildFallbackTeam(remainingForHalf2.slice(0, 4), 'abyss-fallback-2', 'Second Half Rearguard');
+    const team1 = buildFallbackTeam(ownedChars, 'abyss-fallback-1', 'First Half Vanguard');
+    const remainingForHalf2 = ownedChars.filter(
+      (c) => !team1.members.some((h) => isSameCharacterOrTraveler(h, c)),
+    );
+    const team2 = buildFallbackTeam(remainingForHalf2, 'abyss-fallback-2', 'Second Half Rearguard');
     considerPair(team1, team2);
 
     if (evaluatedPairs.length === 0) {
@@ -488,17 +507,24 @@ export function solveAbyssDualTeams(
     variantType: 'primary' | 'comfort' | 'alternative',
     label: string,
     description: string,
-  ): AbyssDualTeamPlan => ({
-    firstHalfTeam: sp.firstHalfTeam,
-    secondHalfTeam: sp.secondHalfTeam,
-    chamberCoverage: sp.coverage,
-    overallScore: Math.max(0, sp.totalScore),
-    mechanicCoverageScore: Math.max(0, sp.totalScore),
-    cycleId: activeCycle.id,
-    variantType,
-    label,
-    description,
-  });
+  ): AbyssDualTeamPlan => {
+    const warnings: string[] = [];
+    if (sp.firstHalfTeam.members.length < 4 || sp.secondHalfTeam.members.length < 4) {
+      warnings.push('Incomplete Composition: One or both halves have fewer than 4 characters.');
+    }
+    return {
+      firstHalfTeam: sp.firstHalfTeam,
+      secondHalfTeam: sp.secondHalfTeam,
+      chamberCoverage: sp.coverage,
+      overallScore: Math.max(0, sp.totalScore),
+      mechanicCoverageScore: Math.max(0, sp.totalScore),
+      cycleId: activeCycle.id,
+      variantType,
+      label,
+      description,
+      ...(warnings.length > 0 ? { warnings } : {}),
+    };
+  };
 
   const bestScored = evaluatedPairs[0];
   const primaryPair = toPlan(
@@ -512,9 +538,13 @@ export function solveAbyssDualTeams(
     const s1A = new Set(p1.firstHalfTeam.members.map((m) => m.id));
     const s1B = new Set(p1.secondHalfTeam.members.map((m) => m.id));
     const isSameOrient =
+      s1A.size === p2.firstHalfTeam.members.length &&
+      s1B.size === p2.secondHalfTeam.members.length &&
       p2.firstHalfTeam.members.every((m) => s1A.has(m.id)) &&
       p2.secondHalfTeam.members.every((m) => s1B.has(m.id));
     const isSwappedOrient =
+      s1B.size === p2.firstHalfTeam.members.length &&
+      s1A.size === p2.secondHalfTeam.members.length &&
       p2.firstHalfTeam.members.every((m) => s1B.has(m.id)) &&
       p2.secondHalfTeam.members.every((m) => s1A.has(m.id));
     return !isSameOrient && !isSwappedOrient;
@@ -544,11 +574,27 @@ export function solveAbyssDualTeams(
     : undefined;
 
   // Find Alternative Pair: different carries or alternative composition
+  const getCarryIds = (p: ScoredPair) => {
+    const cA = p.firstHalfTeam.members.find((m) => m.roles.includes('On-Field DPS'))?.id;
+    const cB = p.secondHalfTeam.members.find((m) => m.roles.includes('On-Field DPS'))?.id;
+    return new Set([cA, cB].filter(Boolean));
+  };
+  const primaryCarries = getCarryIds(bestScored);
+
   let alternativeScored = evaluatedPairs.slice(1).find((p) => {
     if (!areDifferentPairs(p, bestScored)) return false;
     if (comfortScored && !areDifferentPairs(p, comfortScored)) return false;
-    return true;
+    const pCarries = getCarryIds(p);
+    return Array.from(pCarries).some((cId) => !primaryCarries.has(cId));
   });
+
+  if (!alternativeScored) {
+    alternativeScored = evaluatedPairs.slice(1).find((p) => {
+      if (!areDifferentPairs(p, bestScored)) return false;
+      if (comfortScored && !areDifferentPairs(p, comfortScored)) return false;
+      return true;
+    });
+  }
 
   const alternativePair = alternativeScored
     ? toPlan(

@@ -420,6 +420,8 @@ const SANDS_STAT_MAP: Record<string, StatKey> = {
   'ATK%': 'atk_',
 };
 
+const STAT_WEIGHTS_CACHE = new Map<string, CharacterStatWeightConfig>();
+
 /**
  * Returns character-specific stat weights if present, or synthesizes an authoritative config
  * from character SSOT data (roles, element, build sands/goblet/subStats).
@@ -447,6 +449,9 @@ export function getCharacterStatWeights(characterIdOrName: string): CharacterSta
     };
   }
 
+  const cached = STAT_WEIGHTS_CACHE.get(characterIdOrName);
+  if (cached) return cached;
+
   const normalized = characterIdOrName.replace(/[\s\-_]/g, '').toLowerCase();
   const resolvedAlias = CHARACTER_ALIASES[normalized]?.toLowerCase() || normalized;
 
@@ -459,6 +464,7 @@ export function getCharacterStatWeights(characterIdOrName: string): CharacterSta
       normKey === resolvedAlias ||
       normName === resolvedAlias
     ) {
+      STAT_WEIGHTS_CACHE.set(characterIdOrName, config);
       return config;
     }
   }
@@ -577,7 +583,7 @@ export function getCharacterStatWeights(characterIdOrName: string): CharacterSta
     const targetSets = char.build?.artifacts?.map((a) => a.name) || [];
     const erRequirement = hasEr ? 160 : 130;
 
-    return {
+    const synthesized: CharacterStatWeightConfig = {
       characterId: char.id,
       characterName: char.name,
       preferredMainStats: {
@@ -589,13 +595,15 @@ export function getCharacterStatWeights(characterIdOrName: string): CharacterSta
       erRequirement,
       targetSets,
     };
+    STAT_WEIGHTS_CACHE.set(characterIdOrName, synthesized);
+    return synthesized;
   }
 
   const isFallbackKokomi =
     normalized.includes('kokomi') || resolvedAlias.includes('kokomi');
 
   // Generic fallback if character is completely unknown
-  return {
+  const fallback: CharacterStatWeightConfig = {
     characterId: characterIdOrName,
     characterName: characterIdOrName,
     preferredMainStats: {
@@ -625,4 +633,6 @@ export function getCharacterStatWeights(characterIdOrName: string): CharacterSta
     erRequirement: 130,
     targetSets: [],
   };
+  STAT_WEIGHTS_CACHE.set(characterIdOrName, fallback);
+  return fallback;
 }

@@ -11,7 +11,7 @@ import {
   ChevronUp,
   Target,
 } from 'lucide-react';
-import { CharacterDetailModal } from './CharacterDetailModal';
+import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { ImaginariumTheaterView } from './ImaginariumTheaterView';
 import { AbyssDualTeamView } from './AbyssDualTeamView';
@@ -193,7 +193,7 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
 
       {/* Character Details Modal */}
       {selectedCharacter && (
-        <CharacterDetailModal
+        <LazyCharacterDetailModal
           character={selectedCharacter}
           onClose={() => setSelectedCharacter(null)}
           isOwned={ownedIds.includes(selectedCharacter.id)}

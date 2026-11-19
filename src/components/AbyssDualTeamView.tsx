@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useTransition } from 'react';
 import type { Character, AbyssDualTeamPlan, OwnedCharacterProfile } from '../types/genshin';
 import { solveAbyssDualTeams, swapAbyssDualHalves } from '../engines/abyss-solver';
+import { dispatchSolveAbyss } from '../services/solver-dispatcher';
 import {
   ABYSS_CYCLES,
   type AbyssCycleConfig,
@@ -15,7 +16,7 @@ import {
   saveCustomAbyss,
 } from '../services/storage';
 import { CharacterPortrait } from './CharacterPortrait';
-import { CharacterDetailModal } from './CharacterDetailModal';
+import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { RotationBadgeList } from './RotationBadgeList';
 import { InfoTooltip } from './InfoTooltip';
 import {
@@ -79,9 +80,24 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
     }
   };
 
-  // Base plan before swap
-  const basePlan: AbyssDualTeamPlan = useMemo(() => {
-    return solveAbyssDualTeams(ownedIds, profiles, activeCycle);
+  // Base plan before swap with Web Worker offloading & useTransition
+  const [basePlan, setBasePlan] = useState<AbyssDualTeamPlan>(() =>
+    solveAbyssDualTeams(ownedIds, profiles, activeCycle),
+  );
+  const [, startTransition] = useTransition();
+
+  useEffect(() => {
+    let isMounted = true;
+    dispatchSolveAbyss(ownedIds, profiles, activeCycle).then((newPlan) => {
+      if (isMounted) {
+        startTransition(() => {
+          setBasePlan(newPlan);
+        });
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
   }, [ownedIds, profiles, activeCycle]);
 
   // Effective plan accounting for 1-click swap
@@ -914,7 +930,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
 
       {/* Character Detail Modal */}
       {selectedCharacter && (
-        <CharacterDetailModal
+        <LazyCharacterDetailModal
           character={selectedCharacter}
           onClose={() => setSelectedCharacter(null)}
           isOwned={ownedIds.includes(selectedCharacter.id)}

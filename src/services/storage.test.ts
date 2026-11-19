@@ -16,8 +16,6 @@ import {
   setDemoModeEnabled,
   getDemoProfiles,
   resetAccountData,
-  equipWeaponToCharacter,
-  unequipWeaponFromCharacter,
   getSavedPullBudget,
   savePullBudget,
   DEFAULT_PULL_BUDGET,
@@ -25,12 +23,16 @@ import {
   saveAbyssCycleId,
   getSavedCustomAbyss,
   saveCustomAbyss,
-  syncArmoryOnProfileUpdate,
   getSavedUid,
   saveUid,
   isStorageAvailable,
   getLastStorageError,
 } from './storage';
+import {
+  equipWeaponToCharacter,
+  unequipWeaponFromCharacter,
+  syncArmoryOnProfileUpdate,
+} from './armory-operations';
 import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../types/genshin';
 
 describe('Storage Service - Persistence and Reset Semantics', () => {

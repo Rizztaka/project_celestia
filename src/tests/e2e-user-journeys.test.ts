@@ -14,12 +14,12 @@ import {
   isDemoModeEnabled,
   setDemoModeEnabled,
   resetAccountData,
-  equipWeaponToCharacter,
   DEMO_ROSTER,
   DEMO_WEAPONS,
   DEFAULT_ROSTER,
   DEFAULT_WEAPONS,
 } from '../services/storage';
+import { equipWeaponToCharacter } from '../services/armory-operations';
 import {
   exportAccountBackup,
   importAccountBackup,

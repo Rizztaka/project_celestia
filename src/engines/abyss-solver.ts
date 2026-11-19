@@ -422,8 +422,9 @@ export function solveAbyssDualTeams(
     }
   };
 
-  // 2. Iterate through candidate teams, and for each, generate secondary candidate teams from remaining roster
-  for (const team1 of candidateTeams) {
+  // 2. Iterate through top candidate teams, and for each, generate secondary candidate teams from remaining roster
+  const primaryPool = candidateTeams.slice(0, 8);
+  for (const team1 of primaryPool) {
     const team1Ids = new Set(team1.members.map((m) => m.id));
     const remainingChars = ownedChars.filter((c) => !team1Ids.has(c.id));
 

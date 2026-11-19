@@ -114,6 +114,35 @@ const TEMPLATES: ArchetypeTemplate[] = [
   },
 ];
 
+// Cache for weapon bag summaries to eliminate redundant O(N) scans during team scoring
+const WEAPON_BAG_CACHE = new WeakMap<
+  OwnedWeapon[],
+  { has5Star: Record<string, boolean>; has4Star: Record<string, boolean> }
+>();
+
+function getWeaponBagSummary(weaponBag: OwnedWeapon[]): {
+  has5Star: Record<string, boolean>;
+  has4Star: Record<string, boolean>;
+} {
+  const cached = WEAPON_BAG_CACHE.get(weaponBag);
+  if (cached) return cached;
+
+  const has5Star: Record<string, boolean> = {};
+  const has4Star: Record<string, boolean> = {};
+
+  for (const w of weaponBag) {
+    const db = getWeaponByKey(w.key) || getWeaponByKey(w.name);
+    if (db) {
+      if (db.rarity === 5) has5Star[db.weaponType] = true;
+      if (db.rarity === 4) has4Star[db.weaponType] = true;
+    }
+  }
+
+  const summary = { has5Star, has4Star };
+  WEAPON_BAG_CACHE.set(weaponBag, summary);
+  return summary;
+}
+
 /**
  * Evaluates candidate character suitability for a team slot across 4 dimensions:
  * 1. Role match (up to 30 pts)
@@ -133,7 +162,7 @@ export function scoreCandidateForSlot(
   let roleScore = 0;
   let resonanceScore = 0;
   let tagScore = 0;
-  let weaponScore = 0;
+  let weaponScore = 8; // Baseline class availability
 
   // 1. Role match (up to 30 pts)
   if (role === 'Buffer') {
@@ -216,28 +245,12 @@ export function scoreCandidateForSlot(
   tagScore = Math.min(25, Math.max(0, tagScore));
 
   // 4. Weapon availability & investment in armory (up to 20 pts)
-  weaponScore = 8; // Baseline class availability
   if (weaponBag && weaponBag.length > 0) {
-    const matchingWeapons = weaponBag.filter((w) => {
-      const db = getWeaponByKey(w.key) || getWeaponByKey(w.name);
-      return db && db.weaponType === candidate.weapon;
-    });
-
-    if (matchingWeapons.length > 0) {
-      const has5Star = matchingWeapons.some((w) => {
-        const db = getWeaponByKey(w.key) || getWeaponByKey(w.name);
-        return db && db.rarity === 5;
-      });
-      const has4Star = matchingWeapons.some((w) => {
-        const db = getWeaponByKey(w.key) || getWeaponByKey(w.name);
-        return db && db.rarity === 4;
-      });
-
-      if (has5Star) {
-        weaponScore = 14;
-      } else if (has4Star) {
-        weaponScore = 10;
-      }
+    const summary = getWeaponBagSummary(weaponBag);
+    if (summary.has5Star[candidate.weapon]) {
+      weaponScore = 14;
+    } else if (summary.has4Star[candidate.weapon]) {
+      weaponScore = 10;
     }
   }
 

@@ -9,22 +9,19 @@ import {
   saveUid,
   getSavedWeapons,
   saveWeapons,
-  syncArmoryOnProfileUpdate,
   isDemoModeEnabled,
   setDemoModeEnabled,
   resetAccountData,
 } from './services/storage';
 import { fetchShowcaseFromEnka } from './services/enka';
 import type { OwnedCharacterProfile, OwnedWeapon } from './types/genshin';
-import { getWeaponByKey } from './data/weapons';
 import { AlertCircle, CheckCircle2, Database } from 'lucide-react';
-import { AccountBackupModal } from './components/AccountBackupModal';
 
 function createRetryableLazy<T extends React.ComponentType<any>>(
   loader: () => Promise<{ default: T }>,
   maxRetries = 2
 ) {
-  let loadWithRetries = () =>
+  const loadWithRetries = () =>
     new Promise<{ default: T }>((resolve, reject) => {
       let attempts = 0;
       const attempt = () => {
@@ -69,6 +66,9 @@ const RosterView = createRetryableLazy(() =>
 );
 const WeaponConflictModal = React.lazy(() =>
   import('./components/WeaponConflictModal').then((m) => ({ default: m.WeaponConflictModal }))
+);
+const AccountBackupModal = React.lazy(() =>
+  import('./components/AccountBackupModal').then((m) => ({ default: m.AccountBackupModal }))
 );
 
 export const App: React.FC = () => {
@@ -210,13 +210,10 @@ export const App: React.FC = () => {
     setProfiles((prev) => {
       const next = { ...prev, [updated.id]: updated };
       if (updated.weapon?.key) {
-        const canonicalKey =
-          (getWeaponByKey(updated.weapon.key) || getWeaponByKey(updated.weapon.name))?.key ||
-          updated.weapon.key;
+        const canonicalKey = updated.weapon.key;
         for (const [charId, p] of Object.entries(next)) {
           if (charId !== updated.id && p?.weapon) {
-            const pKey =
-              (getWeaponByKey(p.weapon.key) || getWeaponByKey(p.weapon.name))?.key || p.weapon.key;
+            const pKey = p.weapon.key;
             if (pKey === canonicalKey) {
               next[charId] = { ...p, weapon: undefined };
             }
@@ -226,7 +223,9 @@ export const App: React.FC = () => {
       return next;
     });
 
-    setWeapons((prev) => syncArmoryOnProfileUpdate(prev, updated));
+    import('./services/armory-operations').then(({ syncArmoryOnProfileUpdate }) => {
+      setWeapons((prev) => syncArmoryOnProfileUpdate(prev, updated));
+    });
   };
 
   const handleUpdateProfiles = (updatedProfiles: Record<string, OwnedCharacterProfile>) => {

@@ -54,7 +54,7 @@ const ELEMENT_TEXT_COLORS: Record<Element, string> = {
   Geo: 'text-amber-400',
 };
 
-export const CharacterPortrait: React.FC<CharacterPortraitProps> = ({
+const CharacterPortraitBase: React.FC<CharacterPortraitProps> = ({
   src,
   name,
   element,
@@ -113,3 +113,15 @@ export const CharacterPortrait: React.FC<CharacterPortraitProps> = ({
     </div>
   );
 };
+
+export const CharacterPortrait = React.memo<CharacterPortraitProps>(
+  CharacterPortraitBase,
+  (prev, next) =>
+    prev.src === next.src &&
+    prev.name === next.name &&
+    prev.element === next.element &&
+    prev.rarity === next.rarity &&
+    prev.size === next.size &&
+    prev.showRarity === next.showRarity &&
+    prev.className === next.className
+);

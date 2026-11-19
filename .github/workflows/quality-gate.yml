@@ -40,6 +40,9 @@ jobs:
       - name: Production Vite build
         run: pnpm run build
 
+      - name: Verify Bundle Size & Performance Budget
+        run: pnpm run check:budget
+
       - name: Cache Playwright browser binaries
         uses: actions/cache@v4
         id: playwright-cache

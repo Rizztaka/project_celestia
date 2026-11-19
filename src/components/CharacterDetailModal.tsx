@@ -32,10 +32,12 @@ import {
   saveWeapons,
   getSavedProfiles,
   saveProfiles,
+} from '../services/storage';
+import {
   equipWeaponToCharacter,
   unequipWeaponFromCharacter,
   syncArmoryOnProfileUpdate,
-} from '../services/storage';
+} from '../services/armory-operations';
 import { WEAPONS_BY_TYPE, getWeaponByKey } from '../data/weapons';
 import { getTalentScaling, type TalentScalingData } from '../data/talent-scaling';
 

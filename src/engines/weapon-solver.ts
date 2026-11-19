@@ -214,7 +214,7 @@ export function scoreWeaponForCharacter(
   const levelFactor = Math.max(0.4, level / 90);
 
   // Combine raw score
-  let rawScore = (curatedBonus + rarityBonus + statPoints + refinementBonus + contextBonus) * levelFactor;
+  const rawScore = (curatedBonus + rarityBonus + statPoints + refinementBonus + contextBonus) * levelFactor;
 
   // Cap at 100+ for exceptional signature synergy
   let score = Math.round(rawScore);
@@ -337,16 +337,22 @@ export function assignOptimalTeamWeapons(
     membersByType[m.weapon] = (membersByType[m.weapon] || 0) + 1;
   }
 
+  // Pre-index weapons by weapon type to avoid repeated full-array scans and key resolutions
+  const bagByType: Record<string, OwnedWeapon[]> = {};
+  for (const w of bag) {
+    const db =
+      getWeaponByKey(w.key) ||
+      getWeaponByKey(w.name) ||
+      ('weaponType' in w ? (w as unknown as WeaponData) : undefined);
+    if (db) {
+      if (!bagByType[db.weaponType]) bagByType[db.weaponType] = [];
+      bagByType[db.weaponType].push(w);
+    }
+  }
+
   // Ensure bag has enough distinct weapons for each required weapon type
   for (const [wType, needed] of Object.entries(membersByType)) {
-    const existingForType = bag.filter((w) => {
-      const db =
-        getWeaponByKey(w.key) ||
-        getWeaponByKey(w.name) ||
-        ('weaponType' in w ? (w as unknown as WeaponData) : undefined);
-      return db ? db.weaponType === wType : false;
-    });
-
+    const existingForType = bagByType[wType] || [];
     const deficit = needed - existingForType.length;
     if (deficit > 0) {
       const typeDefaults: WeaponData[] = WEAPONS_BY_TYPE[wType as WeaponType] || [];
@@ -363,7 +369,7 @@ export function assignOptimalTeamWeapons(
       for (let d = 0; d < deficit; d++) {
         const fallbackDb = fallbackOptions[d % fallbackOptions.length];
         const virtualId = `fallback_${wType.toLowerCase()}_${d + 1}_${Date.now()}`;
-        bag.push({
+        const newW: OwnedWeapon = {
           id: virtualId,
           key: fallbackDb ? fallbackDb.key : `Favonius${wType}`,
           name: fallbackDb ? fallbackDb.name : `Favonius ${wType}`,
@@ -371,7 +377,10 @@ export function assignOptimalTeamWeapons(
           refinement: 1,
           rarity: fallbackDb ? fallbackDb.rarity : 4,
           location: '',
-        });
+        };
+        bag.push(newW);
+        if (!bagByType[wType]) bagByType[wType] = [];
+        bagByType[wType].push(newW);
       }
     }
   }
@@ -384,13 +393,7 @@ export function assignOptimalTeamWeapons(
 
   for (let i = 0; i < teamMembers.length; i++) {
     const member = teamMembers[i];
-    const compatible = bag.filter((w) => {
-      const db =
-        getWeaponByKey(w.key) ||
-        getWeaponByKey(w.name) ||
-        ('weaponType' in w ? (w as unknown as WeaponData) : undefined);
-      return db ? db.weaponType === member.weapon : false;
-    });
+    const compatible = bagByType[member.weapon] || [];
 
     // Score all compatible weapons
     const scored = compatible.map((w) => ({

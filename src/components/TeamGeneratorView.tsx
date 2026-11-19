@@ -20,12 +20,13 @@ import {
   Users,
   Compass,
 } from 'lucide-react';
-import { CharacterDetailModal } from './CharacterDetailModal';
+import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { RotationBadgeList } from './RotationBadgeList';
 import { InfoTooltip } from './InfoTooltip';
 import { rankWeaponsForCharacter, scoreWeaponForCharacter } from '../engines/weapon-solver';
-import { getSavedWeapons, getSavedProfiles, equipWeaponToCharacter } from '../services/storage';
+import { getSavedWeapons, getSavedProfiles } from '../services/storage';
+import { equipWeaponToCharacter } from '../services/armory-operations';
 import { getWeaponByKey } from '../data/weapons';
 
 interface TeamGeneratorViewProps {
@@ -523,7 +524,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
       )}
 
       {/* Interactive Character Detail Modal */}
-      <CharacterDetailModal
+      <LazyCharacterDetailModal
         character={selectedCharacter}
         onClose={() => setSelectedCharacter(null)}
         isOwned={selectedCharacter ? ownedIds.includes(selectedCharacter.id) : false}

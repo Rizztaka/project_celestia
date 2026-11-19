@@ -19,7 +19,7 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import { CharacterPortrait } from './CharacterPortrait';
-import { CharacterDetailModal } from './CharacterDetailModal';
+import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { ArtifactDiminishingReturnsCurve } from './ArtifactDiminishingReturnsCurve';
 import { ArtifactSlotCard } from './ArtifactSlotCard';
 import { InfoTooltip } from './InfoTooltip';
@@ -856,10 +856,11 @@ export const ArtifactStopView: React.FC = () => {
       )}
 
       {/* Character Details Modal */}
-      <CharacterDetailModal
+      <LazyCharacterDetailModal
         character={modalCharacter}
         onClose={() => setModalCharacter(null)}
         onSelectCharacter={setModalCharacter}
+        isOwned={false}
       />
     </div>
   );

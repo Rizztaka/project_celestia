@@ -1,7 +1,7 @@
 import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../types/genshin';
 import type { AbyssCycleConfig } from '../data/abyss-schedules';
 import { DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from '../data/abyss-schedules';
-import { CHARACTERS } from '../data/characters';
+import { CANONICAL_CHARACTER_IDS } from '../data/character-ids';
 import {
   getSavedRoster,
   getSavedProfiles,
@@ -24,10 +24,6 @@ import {
   CURRENT_SCHEMA_VERSION,
 } from './storage';
 
-const CANONICAL_CHARACTER_IDS = new Set<string>([
-  ...CHARACTERS.map((c) => c.id),
-  'Traveler',
-]);
 
 export interface CelestiaBackupData {
   format: 'celestia_native';

@@ -1,5 +1,5 @@
-import { getWeaponByKey } from '../data/weapons';
 import type { PullBudgetState } from '../types/genshin';
+import { resolveWeaponAlias } from '../data/weapon-aliases';
 
 export const SCHEMA_VERSION_KEY = 'celestia_schema_version';
 export const CURRENT_SCHEMA_VERSION = 2;
@@ -135,7 +135,7 @@ export function migrateStorageIfNeeded(): MigrationResult {
         if (Array.isArray(parsedWeapons)) {
           const normalizedWeapons = parsedWeapons.map((w: any) => {
             if (!w || typeof w !== 'object') return w;
-            const canonical = getWeaponByKey(w.key) || getWeaponByKey(w.name);
+            const canonical = resolveWeaponAlias(w.key) || resolveWeaponAlias(w.name);
             return {
               ...w,
               key: canonical?.key || w.key,
@@ -158,7 +158,7 @@ export function migrateStorageIfNeeded(): MigrationResult {
         if (parsedProfiles && typeof parsedProfiles === 'object' && !Array.isArray(parsedProfiles)) {
           for (const prof of Object.values(parsedProfiles) as any[]) {
             if (prof?.weapon) {
-              const canonical = getWeaponByKey(prof.weapon.key) || getWeaponByKey(prof.weapon.name);
+              const canonical = resolveWeaponAlias(prof.weapon.key) || resolveWeaponAlias(prof.weapon.name);
               if (canonical) {
                 prof.weapon.key = canonical.key;
                 prof.weapon.name = canonical.name;

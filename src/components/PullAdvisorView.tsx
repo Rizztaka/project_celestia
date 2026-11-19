@@ -11,7 +11,7 @@ import { BANNER_PHASES } from '../data/banners';
 import { CHARACTERS } from '../data/characters';
 import { getWeaponByKey } from '../data/weapons';
 import { getSavedPullBudget, savePullBudget } from '../services/storage';
-import { CharacterDetailModal } from './CharacterDetailModal';
+import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { PullBudgetCard } from './PullBudgetCard';
 import { InfoTooltip } from './InfoTooltip';
@@ -415,7 +415,7 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
       )}
 
       {/* Character Details Modal */}
-      <CharacterDetailModal
+      <LazyCharacterDetailModal
         character={selectedCharacter}
         onClose={() => setSelectedCharacter(null)}
         isOwned={selectedCharacter ? Boolean(effectiveProfiles[selectedCharacter.id]) : false}

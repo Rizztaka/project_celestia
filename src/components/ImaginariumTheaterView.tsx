@@ -24,7 +24,7 @@ import {
   recommendSupportCastBorrow,
 } from '../engines/theater-solver';
 import { CharacterPortrait } from './CharacterPortrait';
-import { CharacterDetailModal } from './CharacterDetailModal';
+import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import {
   Sparkles,
   Swords,
@@ -1009,7 +1009,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
 
       {/* Character Detail Modal */}
       {selectedCharacter && (
-        <CharacterDetailModal
+        <LazyCharacterDetailModal
           character={selectedCharacter}
           onClose={() => setSelectedCharacter(null)}
           isOwned={ownedIds.includes(selectedCharacter.id)}

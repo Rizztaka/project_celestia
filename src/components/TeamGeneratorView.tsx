@@ -1,11 +1,13 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useTransition, useRef } from 'react';
 import { CHARACTERS } from '../data/characters';
 import { generateBestTeams } from '../engines/team-generator';
+import { dispatchGenerateBestTeams } from '../services/solver-dispatcher';
 import type {
   Character,
   OwnedCharacterProfile,
   OwnedWeapon,
   TeamWeaponAssignment,
+  TeamRecommendation,
 } from '../types/genshin';
 import {
   Sparkles,
@@ -76,10 +78,37 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
 
   const weaponBag = useMemo(() => weapons || getSavedWeapons(), [weapons]);
 
-  const teams = useMemo(
-    () => generateBestTeams(ownedIds, focusId || undefined, profiles, weaponBag, showCatalogFallback),
-    [ownedIds, focusId, profiles, weaponBag, showCatalogFallback],
+  const [teams, setTeams] = useState<TeamRecommendation[]>(() =>
+    ownedIds.length < 4 && !showCatalogFallback
+      ? []
+      : generateBestTeams(ownedIds, focusId || undefined, profiles, weaponBag, showCatalogFallback),
   );
+  const [isPending, startTransition] = useTransition();
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    let isMounted = true;
+    dispatchGenerateBestTeams(
+      ownedIds,
+      focusId || undefined,
+      profiles,
+      weaponBag,
+      showCatalogFallback,
+    ).then((newTeams) => {
+      if (isMounted) {
+        startTransition(() => {
+          setTeams(newTeams);
+        });
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [ownedIds, focusId, profiles, weaponBag, showCatalogFallback]);
   const featuredCarries = ['Nefer', 'Mavuika', 'HuTao', 'Alhaitham', 'Clorinde', 'Neuvillette', 'Navia'];
 
   return (
@@ -91,6 +120,11 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
             <div className="flex items-center gap-2 text-[#d4af37] text-xs font-bold tracking-wider uppercase mb-1">
               <Sparkles className="w-4 h-4" />
               <span>Instant Archetype Synergy Engine</span>
+              {isPending && (
+                <span className="text-[10px] text-amber-400 animate-pulse font-normal lowercase tracking-normal">
+                  (updating...)
+                </span>
+              )}
             </div>
             <h1 className="text-2xl font-bold text-zinc-100 font-serif">
               Best Team Recommendations

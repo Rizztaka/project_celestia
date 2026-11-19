@@ -254,4 +254,22 @@ describe('Data-Source Integrity Verification', () => {
       }
     });
   });
+
+  describe('Canonical Character IDs SSOT Alignment', () => {
+    it('guarantees CANONICAL_CHARACTER_IDS strictly contains all 128 playable characters from SSOT', async () => {
+      const { CANONICAL_CHARACTER_IDS } = await import('./character-ids');
+      expect(CHARACTERS.length).toBe(128);
+
+      for (const char of CHARACTERS) {
+        expect(
+          CANONICAL_CHARACTER_IDS.has(char.id),
+          `CANONICAL_CHARACTER_IDS missing SSOT character "${char.id}"`,
+        ).toBe(true);
+      }
+
+      // Plus generic 'Traveler' alias for backward compatibility
+      expect(CANONICAL_CHARACTER_IDS.has('Traveler')).toBe(true);
+      expect(CANONICAL_CHARACTER_IDS.size).toBe(129);
+    });
+  });
 });

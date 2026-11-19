@@ -24,7 +24,7 @@ describe('Engine Solvers Performance & Mobile Throttle Profiling', () => {
     location: '',
   }));
 
-  it('profiles generateBestTeams execution time under simulated 4x CPU slowdown', () => {
+  it('profiles generateBestTeams execution time under simulated 4x CPU slowdown', async () => {
     // Warm-up
     generateBestTeams(allIds.slice(0, 16), 'Nefer', profiles, weaponsBag.slice(0, 20));
 
@@ -45,6 +45,12 @@ describe('Engine Solvers Performance & Mobile Throttle Profiling', () => {
     // Verify valid team generation output
     expect(teams.length).toBeGreaterThan(0);
     expect(teams[0].members).toHaveLength(4);
+
+    // Verify Web Worker dispatcher offloading produces identical team generation results
+    const { dispatchGenerateBestTeams } = await import('../services/solver-dispatcher');
+    const asyncTeams = await dispatchGenerateBestTeams(allIds, 'Nefer', profiles, weaponsBag);
+    expect(asyncTeams.length).toBeGreaterThan(0);
+    expect(asyncTeams[0].members).toHaveLength(4);
   });
 
   it('profiles solveAbyssDualTeams execution time and benchmarks offloading threshold', async () => {

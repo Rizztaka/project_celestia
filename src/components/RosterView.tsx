@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, useRef } from 'react';
 import { CHARACTERS } from '../data/characters';
 import type { Character, Element, WeaponType, OwnedCharacterProfile, OwnedWeapon } from '../types/genshin';
 import {
@@ -313,26 +313,30 @@ export const RosterView: React.FC<RosterViewProps> = ({
     });
   }, [filterElement, filterWeapon, filterRegion, filterTravelerElement, search]);
 
-  const handleStepConstellation = (
-    e: React.MouseEvent,
-    charId: string,
-    delta: number,
-  ) => {
-    e.stopPropagation();
-    if (!onUpdateProfile) return;
+  const profilesRef = useRef(profiles);
+  useEffect(() => {
+    profilesRef.current = profiles;
+  }, [profiles]);
 
-    const currentProfile = profiles[charId] || {
-      id: charId,
-      level: 90,
-      constellation: 0,
-    };
+  const handleStepConstellation = useCallback(
+    (e: React.MouseEvent, charId: string, delta: number) => {
+      e.stopPropagation();
+      if (!onUpdateProfile) return;
 
-    const nextConst = Math.max(0, Math.min(6, currentProfile.constellation + delta));
-    onUpdateProfile({
-      ...currentProfile,
-      constellation: nextConst,
-    });
-  };
+      const currentProfile = profilesRef.current[charId] || {
+        id: charId,
+        level: 90,
+        constellation: 0,
+      };
+
+      const nextConst = Math.max(0, Math.min(6, currentProfile.constellation + delta));
+      onUpdateProfile({
+        ...currentProfile,
+        constellation: nextConst,
+      });
+    },
+    [onUpdateProfile],
+  );
 
   return (
     <div className="space-y-6">

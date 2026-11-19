@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useTransition } from 'react';
+import React, { useState, useMemo, useEffect, useTransition, useRef } from 'react';
 import type { Character, AbyssDualTeamPlan, OwnedCharacterProfile } from '../types/genshin';
 import { solveAbyssDualTeams, swapAbyssDualHalves } from '../engines/abyss-solver';
 import { dispatchSolveAbyss } from '../services/solver-dispatcher';
@@ -84,9 +84,14 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
   const [basePlan, setBasePlan] = useState<AbyssDualTeamPlan>(() =>
     solveAbyssDualTeams(ownedIds, profiles, activeCycle),
   );
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     let isMounted = true;
     dispatchSolveAbyss(ownedIds, profiles, activeCycle).then((newPlan) => {
       if (isMounted) {
@@ -144,6 +149,11 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
             <div className="flex items-center gap-2 text-[#d4af37] text-xs font-bold tracking-wider uppercase mb-1">
               <Swords className="w-4 h-4" />
               <span>Endgame Guidance 2.0 · 0-Overlap Dual Half Matcher</span>
+              {isPending && (
+                <span className="text-[10px] text-amber-400 animate-pulse font-normal lowercase tracking-normal">
+                  (solving...)
+                </span>
+              )}
             </div>
             <h1 className="text-2xl font-bold text-zinc-100 font-serif">
               Spiral Abyss Floor 12 Deployment

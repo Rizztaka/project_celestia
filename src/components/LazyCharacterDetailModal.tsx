@@ -19,9 +19,14 @@ let modalLoaderPromise: Promise<{ default: React.ComponentType<CharacterDetailMo
 
 export function preloadCharacterDetailModal() {
   if (!modalLoaderPromise) {
-    modalLoaderPromise = import('./CharacterDetailModal').then((m) => ({
-      default: m.CharacterDetailModal,
-    }));
+    modalLoaderPromise = import('./CharacterDetailModal')
+      .then((m) => ({
+        default: m.CharacterDetailModal,
+      }))
+      .catch((err) => {
+        modalLoaderPromise = null;
+        throw err;
+      });
   }
   return modalLoaderPromise;
 }

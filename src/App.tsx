@@ -15,6 +15,7 @@ import {
 } from './services/storage';
 import { fetchShowcaseFromEnka } from './services/enka';
 import type { OwnedCharacterProfile, OwnedWeapon } from './types/genshin';
+import { resolveWeaponAlias, normalizeWeaponKey } from './data/weapon-aliases';
 import { AlertCircle, CheckCircle2, Database } from 'lucide-react';
 
 function createRetryableLazy<T extends React.ComponentType<any>>(
@@ -210,10 +211,14 @@ export const App: React.FC = () => {
     setProfiles((prev) => {
       const next = { ...prev, [updated.id]: updated };
       if (updated.weapon?.key) {
-        const canonicalKey = updated.weapon.key;
+        const canonicalKey =
+          resolveWeaponAlias(updated.weapon.key)?.key ||
+          normalizeWeaponKey(updated.weapon.key);
         for (const [charId, p] of Object.entries(next)) {
           if (charId !== updated.id && p?.weapon) {
-            const pKey = p.weapon.key;
+            const pKey =
+              resolveWeaponAlias(p.weapon.key)?.key ||
+              normalizeWeaponKey(p.weapon.key);
             if (pKey === canonicalKey) {
               next[charId] = { ...p, weapon: undefined };
             }

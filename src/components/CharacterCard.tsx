@@ -2,7 +2,7 @@ import React from 'react';
 import type { Character, OwnedCharacterProfile, Element } from '../types/genshin';
 import { CharacterPortrait } from './CharacterPortrait';
 import { ChevronLeft, ChevronRight, Check, Plus, Swords, Info } from 'lucide-react';
-import { getWeaponByKey } from '../data/weapons';
+import { resolveWeaponAlias } from '../data/weapon-aliases';
 
 const TRAVELER_ELEMENTS: Element[] = [
   'Anemo',
@@ -37,8 +37,10 @@ const CharacterCardBase: React.FC<CharacterCardProps> = ({
   onPrefetch,
 }) => {
   const equippedWeaponName = profile?.weapon
-    ? (getWeaponByKey(profile.weapon.key) || getWeaponByKey(profile.weapon.name))?.name ||
-      profile.weapon.name
+    ? profile.weapon.name ||
+      resolveWeaponAlias(profile.weapon.key)?.name ||
+      resolveWeaponAlias(profile.weapon.name)?.name ||
+      profile.weapon.key
     : undefined;
 
   return (
@@ -211,6 +213,7 @@ export const CharacterCard = React.memo<CharacterCardProps>(
     prev.isOwned === next.isOwned &&
     prev.constellation === next.constellation &&
     prev.profile?.weapon?.key === next.profile?.weapon?.key &&
+    prev.profile?.weapon?.name === next.profile?.weapon?.name &&
     prev.profile?.weapon?.refinement === next.profile?.weapon?.refinement &&
     prev.profile?.weapon?.level === next.profile?.weapon?.level &&
     prev.profile?.level === next.profile?.level

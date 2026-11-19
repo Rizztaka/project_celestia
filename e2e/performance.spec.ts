@@ -92,6 +92,10 @@ test.describe('M3 Performance & Responsiveness synthetic gates', () => {
     // Verify page is still responsive and navigable
     await expect(page.locator('body')).toBeVisible();
 
+    // Verify no persistent long task freezing occurred during tab switching
+    const longTaskCount = await page.evaluate(() => (window as any).__longTaskCount ?? 0);
+    expect(longTaskCount).toBeLessThanOrEqual(2);
+
     // Verify JS Heap Size stays bounded
     const heapSize = await page.evaluate(() => {
       const mem = (performance as any).memory;

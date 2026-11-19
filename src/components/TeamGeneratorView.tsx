@@ -21,6 +21,9 @@ import {
   X,
   Users,
   Compass,
+  AlertTriangle,
+  ArrowRightLeft,
+  Layers,
 } from 'lucide-react';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
@@ -65,6 +68,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
   const [focusId, setFocusId] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
+  const [expandedDrawerTeamId, setExpandedDrawerTeamId] = useState<string | null>(null);
   const [showCatalogFallback, setShowCatalogFallback] = useState<boolean>(false);
   const [quickSwapTarget, setQuickSwapTarget] = useState<{
     teamId: string;
@@ -252,24 +256,73 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                 </h2>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2.5">
+                {/* 1. Compatibility Score */}
                 <div className="flex items-center gap-1.5 bg-[#181b28] px-3 py-1.5 rounded-xl border border-[#252a3f]">
                   <Zap className="w-4 h-4 text-amber-400" />
                   <div>
                     <div className="text-[10px] text-zinc-400 uppercase font-semibold flex items-center gap-1">
                       <span>Compatibility</span>
                       <InfoTooltip
-                        title="Composition Compatibility Score"
-                        content="Multi-factor evaluation (0-100%) synthesizing role suitability, elemental resonance matching, archetype reaction synergy tags, and armory weapon readiness."
+                        title="Mechanical Compatibility Score"
+                        content="Pure mechanical synergy (0-100%) synthesizing reaction chain validity, elemental resonance matching, role distribution, and energy battery flow minus anti-synergy penalties."
                       />
                     </div>
                     <div className="text-sm font-bold text-amber-300">
-                      {team.compositionCompatibilityScore ?? team.synergyScore}/100
+                      {team.scores?.compatibilityScore ?? team.compositionCompatibilityScore ?? team.synergyScore}%
                     </div>
                   </div>
                 </div>
 
+                {/* 2. Account Investment Score */}
                 <div className="flex items-center gap-1.5 bg-[#181b28] px-3 py-1.5 rounded-xl border border-[#252a3f]">
+                  <Layers className="w-4 h-4 text-indigo-400" />
+                  <div>
+                    <div className="text-[10px] text-zinc-400 uppercase font-semibold flex items-center gap-1">
+                      <span>Investment</span>
+                      <InfoTooltip
+                        title="Account Investment Readiness Score"
+                        content="Account-specific readiness (0-100) based on owned character ascension levels, constellation power milestones, and equipped armory weapon matches."
+                      />
+                    </div>
+                    <div className="text-sm font-bold text-indigo-300">
+                      {team.scores?.investmentScore ?? 85}/100
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Theorycrafting Benchmark Tier */}
+                {(() => {
+                  const tier = team.scores?.benchmarkTier ?? 'S';
+                  const tierBadgeStyles: Record<string, string> = {
+                    'S+': 'bg-gradient-to-r from-amber-500/25 to-rose-500/25 text-amber-300 border-amber-500/50 shadow-[0_0_12px_rgba(251,191,36,0.2)]',
+                    'S': 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+                    'A': 'bg-sky-500/20 text-sky-300 border-sky-500/40',
+                    'B': 'bg-zinc-800 text-zinc-300 border-zinc-700',
+                  };
+                  return (
+                    <div className="flex items-center gap-1.5 bg-[#181b28] px-3 py-1.5 rounded-xl border border-[#252a3f]">
+                      <Sparkles className="w-4 h-4 text-[#d4af37]" />
+                      <div>
+                        <div className="text-[10px] text-zinc-400 uppercase font-semibold flex items-center gap-1">
+                          <span>Benchmark</span>
+                          <InfoTooltip
+                            title="Theorycrafting Benchmark Tier"
+                            content="Community meta standard rating (S+, S, A, B) evaluating reaction multipliers, clear efficiency, and rotation viability."
+                          />
+                        </div>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <span className={`text-[10px] font-bold px-2 py-0.2 rounded border ${tierBadgeStyles[tier] || tierBadgeStyles['S']}`}>
+                            Tier {tier}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* 4. Comfort Score */}
+                <div className="hidden sm:flex items-center gap-1.5 bg-[#181b28] px-3 py-1.5 rounded-xl border border-[#252a3f]">
                   <Shield className="w-4 h-4 text-emerald-400" />
                   <div>
                     <div className="text-[10px] text-zinc-400 uppercase font-semibold">Comfort</div>
@@ -530,6 +583,195 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Expandable Mechanics & Swap Alternatives Drawer */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => setExpandedDrawerTeamId(expandedDrawerTeamId === team.id ? null : team.id)}
+                className="w-full py-2.5 px-3.5 rounded-xl bg-[#0e1017] hover:bg-[#151824] border border-[#1e2235] hover:border-[#d4af37]/40 text-xs font-bold text-zinc-200 flex items-center justify-between transition-all cursor-pointer shadow-xs group"
+              >
+                <span className="flex items-center gap-2 text-zinc-200 group-hover:text-[#d4af37] transition-colors">
+                  <Compass className="w-4 h-4 text-[#d4af37]" />
+                  <span>Team Mechanics, Energy Diagnosis & Swap Alternatives</span>
+                  {team.explanation?.antiSynergyWarnings && team.explanation.antiSynergyWarnings.length > 0 && (
+                    <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
+                      <AlertTriangle className="w-3 h-3 text-amber-400" />
+                      <span>{team.explanation.antiSynergyWarnings.length} Alert{team.explanation.antiSynergyWarnings.length > 1 ? 's' : ''}</span>
+                    </span>
+                  )}
+                </span>
+                <span className="flex items-center gap-1 text-[11px] text-zinc-400 group-hover:text-zinc-200">
+                  <span>{expandedDrawerTeamId === team.id ? 'Collapse' : 'Explore Mechanics'}</span>
+                  {expandedDrawerTeamId === team.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </span>
+              </button>
+
+              {expandedDrawerTeamId === team.id && team.explanation && (
+                <div className="mt-3 p-4 bg-[#0a0c13] rounded-xl border border-[#21263a] space-y-4 text-xs">
+                  {/* 1. Reaction Execution Workflow */}
+                  <div className="bg-[#101320] p-3 rounded-lg border border-[#1b2034]">
+                    <div className="text-[11px] font-bold text-[#d4af37] uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                      <Zap className="w-3.5 h-3.5" />
+                      <span>Reaction Execution Chain</span>
+                    </div>
+                    <p className="text-zinc-200 font-mono text-[11px] leading-relaxed">
+                      {team.explanation.reactionWorkflow}
+                    </p>
+                  </div>
+
+                  {/* 2. Energy & Battery Status */}
+                  <div className="bg-[#101320] p-3 rounded-lg border border-[#1b2034] space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+                        <span>Energy & Battery Status</span>
+                      </span>
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                          team.explanation.energyAssessment.status === 'optimal'
+                            ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
+                            : team.explanation.energyAssessment.status === 'adequate'
+                            ? 'bg-amber-950/60 text-amber-300 border-amber-500/40'
+                            : 'bg-rose-950/60 text-rose-300 border-rose-500/40'
+                        }`}
+                      >
+                        {team.explanation.energyAssessment.status === 'optimal'
+                          ? '✓ Optimal Energy Battery Flow'
+                          : team.explanation.energyAssessment.status === 'adequate'
+                          ? '⚠ Adequate Battery (Minor ER Focus)'
+                          : '✕ Energy Deficit (High Burst Starvation)'}
+                      </span>
+                    </div>
+                    {team.explanation.energyAssessment.warnings.length > 0 && (
+                      <div className="space-y-1 pt-1 text-[11px]">
+                        {team.explanation.energyAssessment.warnings.map((warn, wIdx) => (
+                          <div key={wIdx} className="text-amber-300/90 flex items-start gap-1.5">
+                            <span className="text-amber-400 font-bold shrink-0">!</span>
+                            <span>{warn}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 3. Anti-Synergy Warnings */}
+                  {team.explanation.antiSynergyWarnings && team.explanation.antiSynergyWarnings.length > 0 && (
+                    <div className="bg-amber-950/20 border border-amber-500/40 p-3 rounded-lg space-y-1 text-amber-200 text-[11px]">
+                      <div className="font-bold flex items-center gap-1.5 text-amber-300">
+                        <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+                        <span>Synergy & Infusion Considerations</span>
+                      </div>
+                      <div className="space-y-1 pl-4">
+                        {team.explanation.antiSynergyWarnings.map((warn, aIdx) => (
+                          <div key={aIdx} className="list-disc list-item text-zinc-300">
+                            {warn}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 4. Slot Role Rationales */}
+                  <div className="space-y-2">
+                    <div className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider">
+                      Slot Role Rationales
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {team.members.map((member) => (
+                        <div
+                          key={member.id}
+                          className="bg-[#101320] p-2.5 rounded-lg border border-[#1b2034] flex items-start gap-2.5"
+                        >
+                          <CharacterPortrait
+                            src={member.icon}
+                            name={member.name}
+                            element={member.element}
+                            size="sm"
+                          />
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-zinc-100 flex items-center gap-1.5">
+                              <span>{member.name}</span>
+                              <span className="text-[10px] text-zinc-400 font-normal">({member.roles[0]})</span>
+                            </div>
+                            <div className="text-[10px] text-zinc-300 mt-0.5 leading-snug">
+                              {team.explanation?.roleRationale[member.id] || 'Key party member.'}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 5. Accessible Swap Alternatives */}
+                  {team.explanation.alternatives && team.explanation.alternatives.length > 0 && (
+                    <div className="space-y-2 pt-2 border-t border-[#1b2034]">
+                      <div className="flex items-center justify-between">
+                        <div className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
+                          <ArrowRightLeft className="w-3.5 h-3.5 text-[#d4af37]" />
+                          <span>Accessible Swap Alternatives & Trade-Offs</span>
+                        </div>
+                        <span className="text-[10px] text-zinc-400">
+                          Strict exclusivity verified
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                        {team.explanation.alternatives.map((alt, altIdx) => {
+                          const origChar = team.members.find((m) => m.id === alt.originalCharacterId);
+                          return (
+                            <div
+                              key={altIdx}
+                              className="bg-[#101320] p-2.5 rounded-lg border border-[#1e2338] hover:border-[#2d3450] flex flex-col justify-between gap-2"
+                            >
+                              <div className="flex items-center justify-between gap-1.5 border-b border-white/5 pb-1.5">
+                                <div className="flex items-center gap-2">
+                                  <CharacterPortrait
+                                    src={alt.alternativeCharacter.icon}
+                                    name={alt.alternativeCharacter.name}
+                                    element={alt.alternativeCharacter.element}
+                                    size="sm"
+                                  />
+                                  <div className="min-w-0">
+                                    <div className="text-xs font-bold text-zinc-100 truncate">
+                                      {alt.alternativeCharacter.name}
+                                    </div>
+                                    <div className="text-[9px] text-zinc-400 truncate">
+                                      Sub for {origChar?.name || alt.originalCharacterId}
+                                    </div>
+                                  </div>
+                                </div>
+                                <span
+                                  className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border shrink-0 ${
+                                    alt.compatibilityImpact >= 0
+                                      ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
+                                      : 'bg-zinc-800 text-zinc-400 border-zinc-700'
+                                  }`}
+                                >
+                                  {alt.compatibilityImpact >= 0 ? `+${alt.compatibilityImpact}%` : `${alt.compatibilityImpact}%`}
+                                </span>
+                              </div>
+
+                              <div className="space-y-1 text-[10px]">
+                                {alt.tradeOffPros.map((pro, pIdx) => (
+                                  <div key={pIdx} className="text-emerald-300/90 leading-tight">
+                                    {pro}
+                                  </div>
+                                ))}
+                                {alt.tradeOffCons.map((con, cIdx) => (
+                                  <div key={cIdx} className="text-amber-300/80 leading-tight">
+                                    {con}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         ))}

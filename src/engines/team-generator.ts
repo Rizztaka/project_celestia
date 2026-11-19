@@ -1,44 +1,61 @@
 import type {
   Character,
+  Element,
   TeamRecommendation,
   OwnedCharacterProfile,
   OwnedWeapon,
+  TeamScoreBreakdown,
 } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import { getWeaponByKey } from '../data/weapons';
 import { synthesizeTeamRotation } from './rotation-synthesizer';
 import { assignOptimalTeamWeapons } from './weapon-solver';
 import { getSavedWeapons } from '../services/storage';
+import {
+  isSameCharacterOrTraveler,
+  isAllowedTeammate,
+  detectBennettC6Conflict,
+  detectDualCarryContention,
+  evaluateEnergyBattery,
+} from './team-rules';
+import { generateTeamExplanation } from './team-explain';
+
+// Re-export for SSOT contract & backward compatibility
+export { isSameCharacterOrTraveler };
 
 export interface ArchetypeTemplate {
   name: string;
   archetype: string;
   leadTags: string[];
-  requiredElements?: string[];
+  requiredElements?: (Element | string)[];
+  exclusiveElements?: (Element | string)[];
   supportTags: string[];
   rotation: string;
   baseSynergy: number;
 }
 
-/**
- * Checks if two character entities represent the same individual,
- * enforcing that multiple elemental configurations of the Traveler cannot co-exist in one party.
- */
-export function isSameCharacterOrTraveler(a: Character, b: Character): boolean {
-  if (a.id === b.id) return true;
-  if (a.id.startsWith('Traveler') && b.id.startsWith('Traveler')) return true;
-  return false;
-}
-
-const TEMPLATES: ArchetypeTemplate[] = [
+export const TEMPLATES: ArchetypeTemplate[] = [
   {
     name: 'Lunar-Bloom Dominion',
     archetype: 'Lunar-Bloom',
     leadTags: ['Lunar-Bloom'],
     requiredElements: ['Dendro', 'Hydro'],
+    exclusiveElements: ['Hydro', 'Dendro'],
     supportTags: ['Nod-Krai', 'Hydro-App', 'Dendro-Core', 'EM-Buffer', 'Healer'],
-    rotation: 'Support Skill/Burst → Hydro Enabler Burst/Skill → Nefer E (Shadow Dance) → Enhanced Charged Attacks absorbing Seeds of Deceit',
+    rotation:
+      'Support Skill/Burst → Hydro Enabler Burst/Skill → Nefer E (Shadow Dance) → Enhanced Charged Attacks absorbing Seeds of Deceit',
     baseSynergy: 96,
+  },
+  {
+    name: 'Bountiful Bloom Symphony',
+    archetype: 'Bountiful-Bloom',
+    leadTags: ['Hydro', 'Sword'],
+    requiredElements: ['Hydro', 'Dendro'],
+    exclusiveElements: ['Hydro', 'Dendro'],
+    supportTags: ['Dendro-Core', 'EM-Buffer', 'Healer', 'Team-Healer'],
+    rotation:
+      'Nilou EEE (Golden Chalice) → Nahida E Q → Hydro/Dendro Support → Instant Bountiful Core detonation',
+    baseSynergy: 94,
   },
   {
     name: 'Vaporize Ascendance',
@@ -46,7 +63,18 @@ const TEMPLATES: ArchetypeTemplate[] = [
     leadTags: ['Vaporize'],
     requiredElements: ['Pyro', 'Hydro'],
     supportTags: ['Hydro-App', 'VV', 'Cinder-City', 'Huge-ATK-Buff', 'Universal-Buffer'],
-    rotation: 'Hydro Enabler Burst/Skill → Buffer Skill/Burst (VV / Cinder City) → Bennett Q → Pyro Carry Skill & Combo',
+    rotation:
+      'Hydro Enabler Burst/Skill → Buffer Skill/Burst (VV / Cinder City) → Bennett Q → Pyro Carry Skill & Combo',
+    baseSynergy: 94,
+  },
+  {
+    name: 'National Accord',
+    archetype: 'National',
+    leadTags: ['Off-Field', 'Pyro', 'Vaporize'],
+    requiredElements: ['Pyro', 'Hydro'],
+    supportTags: ['Hydro-App', 'Huge-ATK-Buff', 'ATK-Buffer', 'VV', 'Vaporize'],
+    rotation:
+      'Xingqiu/Yelan Q E → Bennett Q E → Xiangling Q E (Snapshot ATK Buff) → Driver normal attacks',
     baseSynergy: 94,
   },
   {
@@ -55,25 +83,39 @@ const TEMPLATES: ArchetypeTemplate[] = [
     leadTags: ['Hyperbloom-Trigger', 'Hyperbloom'],
     requiredElements: ['Dendro', 'Hydro', 'Electro'],
     supportTags: ['Dendro-Core', 'Hydro-App', 'Full-EM'],
-    rotation: 'Nahida E Q → Hydro Enabler (Furina/Yelan/Xingqiu) Q E → Kuki E → Driver normal attacks to spawn and detonate cores',
+    rotation:
+      'Nahida E Q → Hydro Enabler (Furina/Yelan/Xingqiu) Q E → Kuki E → Driver normal attacks to spawn and detonate cores',
     baseSynergy: 95,
+  },
+  {
+    name: 'Burgeon Detonation',
+    archetype: 'Burgeon',
+    leadTags: ['Burgeon', 'Dendro-Core'],
+    requiredElements: ['Pyro', 'Hydro', 'Dendro'],
+    supportTags: ['Dendro-Core', 'Hydro-App', 'EM-Buffer', 'Shield'],
+    rotation:
+      'Dendro Applier E Q → Hydro Enabler Q E → Thoma Q E → Active carry normal attacks triggering Burgeon blasts',
+    baseSynergy: 91,
   },
   {
     name: 'Quicken Aggravate / Spread',
     archetype: 'Quicken',
-    leadTags: ['Aggravate', 'Spread'],
+    leadTags: ['Aggravate', 'Spread', 'Quicken'],
     requiredElements: ['Dendro', 'Electro'],
     supportTags: ['EM-Buffer', 'VV', 'Cinder-City', 'Electro-Battery'],
-    rotation: 'Dendro Applier E Q → Anemo/Geo Swirl/Crystallize shred → Electro Sub-DPS E → On-field Carry Quicken DPS window',
+    rotation:
+      'Dendro Applier E Q → Anemo/Geo Swirl/Crystallize shred → Electro Sub-DPS E → On-field Carry Quicken DPS window',
     baseSynergy: 92,
   },
   {
-    name: 'Nightsoul Overload Assault',
+    name: 'Chevreuse Overload Protocol',
     archetype: 'Overload',
     leadTags: ['Overload-Only', 'Overload'],
     requiredElements: ['Pyro', 'Electro'],
+    exclusiveElements: ['Pyro', 'Electro'],
     supportTags: ['Nightsoul', 'RES-Shred', 'ATK-Buffer', 'Fighting-Spirit'],
-    rotation: 'Electro Sub-DPS E → Chevreuse Hold E (trigger Overload & shred) → Bennett Q / Mavuika Q → Electro/Pyro Carry DPS',
+    rotation:
+      'Electro Sub-DPS E → Chevreuse Hold E (trigger Overload & shred) → Bennett Q / Mavuika Q → Electro/Pyro Carry DPS',
     baseSynergy: 91,
   },
   {
@@ -82,7 +124,8 @@ const TEMPLATES: ArchetypeTemplate[] = [
     leadTags: ['Freeze', 'Melt'],
     requiredElements: ['Cryo'],
     supportTags: ['Hydro-App', 'VV', 'Cryo-Buff', 'Nightsoul'],
-    rotation: 'Cryo support E Q → Anemo VV Shred / Hydro Freeze → Enabler Burst → Cryo carry frontloaded burst/punches',
+    rotation:
+      'Cryo support E Q → Anemo VV Shred / Hydro Freeze → Enabler Burst → Cryo carry frontloaded burst/punches',
     baseSynergy: 89,
   },
   {
@@ -91,8 +134,19 @@ const TEMPLATES: ArchetypeTemplate[] = [
     leadTags: ['Gunbrella', 'Cinder-City'],
     requiredElements: ['Geo'],
     supportTags: ['Universal-Buffer', 'Hydro-App', 'Huge-ATK-Buff'],
-    rotation: 'Zhongli/Xilonen E Q → Hydro/Pyro Off-field Q E → Navia Q E (Gunbrella blasts upon collecting 3-6 shards)',
+    rotation:
+      'Zhongli/Xilonen E Q → Hydro/Pyro Off-field Q E → Navia Q E (Gunbrella blasts upon collecting 3-6 shards)',
     baseSynergy: 90,
+  },
+  {
+    name: 'Mono Geo Cataclysm',
+    archetype: 'Mono-Geo',
+    leadTags: ['Geo', 'Claymore'],
+    requiredElements: ['Geo'],
+    supportTags: ['DEF-Buffer', 'Geo-Buff', 'Shield', 'Off-Field'],
+    rotation:
+      'Zhongli Hold E → Gorou E Q → Albedo/Chiori E → Itto Q & Arataki Kesagiri slashes',
+    baseSynergy: 91,
   },
   {
     name: 'Plunge Liberation',
@@ -100,7 +154,8 @@ const TEMPLATES: ArchetypeTemplate[] = [
     leadTags: ['Plunge-Buffer', 'Plunge-Nuke', 'Plunge-AoE'],
     requiredElements: ['Anemo'],
     supportTags: ['Team-Healer', 'Hydro-App', 'Universal-Buffer', 'Huge-ATK-Buff'],
-    rotation: 'Sub-DPS E Q → Xianyun E Q (Jump buff + healing) → Bennett Q → Carry continuous high-jump plunge attacks',
+    rotation:
+      'Sub-DPS E Q → Xianyun E Q (Jump buff + healing) → Bennett Q → Carry continuous high-jump plunge attacks',
     baseSynergy: 92,
   },
   {
@@ -109,8 +164,59 @@ const TEMPLATES: ArchetypeTemplate[] = [
     leadTags: ['Hydro', 'Catalyst', 'On-Field DPS'],
     requiredElements: ['Hydro'],
     supportTags: ['Universal-Buffer', 'VV', 'Team-Healer', 'Hydro-App'],
-    rotation: 'Support Skill/Burst → Buffer VV Shred / Shield → Hydro enabler → Hydro Carry continuous attacks',
+    rotation:
+      'Support Skill/Burst → Buffer VV Shred / Shield → Hydro enabler → Hydro Carry continuous attacks',
     baseSynergy: 94,
+  },
+  {
+    name: 'Thunderous Hypercarry',
+    archetype: 'Electro Hypercarry',
+    leadTags: ['Electro', 'Polearm', 'On-Field DPS'],
+    requiredElements: ['Electro'],
+    supportTags: ['Electro-Battery', 'ATK-Buffer', 'VV', 'Huge-ATK-Buff'],
+    rotation:
+      'Raiden E → Kazuha E Q → Bennett Q → Sara E Q → Raiden Q & Musou Isshin slashes',
+    baseSynergy: 92,
+  },
+  {
+    name: 'Gale Hypercarry',
+    archetype: 'Anemo Hypercarry',
+    leadTags: ['Anemo', 'Catalyst', 'Polearm', 'On-Field DPS'],
+    requiredElements: ['Anemo'],
+    supportTags: ['Anemo-Buff', 'Huge-ATK-Buff', 'Shield', 'Team-Healer'],
+    rotation:
+      'Faruzan Q E → Shield/Buffer E Q → Bennett Q → Wanderer/Xiao On-field DPS window',
+    baseSynergy: 91,
+  },
+  {
+    name: 'Superconduct Physical Onslaught',
+    archetype: 'Physical',
+    leadTags: ['Physical', 'Claymore'],
+    requiredElements: ['Cryo', 'Electro'],
+    supportTags: ['Superconduct', 'Physical-Buff', 'Shield', 'Healer'],
+    rotation:
+      'Raiden/Fischl E → Cryo Battery E Q → Mika/Zhongli Hold E Q → Eula Q combo',
+    baseSynergy: 88,
+  },
+  {
+    name: 'Mono Pyro Inferno',
+    archetype: 'Mono-Pyro',
+    leadTags: ['Pyro', 'Bow', 'On-Field DPS'],
+    requiredElements: ['Pyro'],
+    supportTags: ['Huge-ATK-Buff', 'VV', 'Shield', 'Pyro-App'],
+    rotation:
+      'Bennett Q E → Kazuha E Q → Xiangling Q E → Lyney/Klee Charged Attack barrage',
+    baseSynergy: 90,
+  },
+  {
+    name: 'Mono Hydro Cascade',
+    archetype: 'Mono-Hydro',
+    leadTags: ['Hydro', 'Sword', 'On-Field DPS'],
+    requiredElements: ['Hydro'],
+    supportTags: ['Hydro-App', 'VV', 'Team-Healer', 'Universal-Buffer'],
+    rotation:
+      'Furina E Q → Yelan/Xingqiu Q E → Kazuha/Jean E Q → Ayato/Neuvillette Hydro onslaught',
+    baseSynergy: 91,
   },
 ];
 
@@ -159,6 +265,11 @@ export function scoreCandidateForSlot(
   weaponBag: OwnedWeapon[],
   profiles?: Record<string, OwnedCharacterProfile>,
 ): number {
+  // Reject candidate if exclusivity or Traveler rules are violated
+  if (!isAllowedTeammate(template.archetype, candidate, currentMembers, template.exclusiveElements)) {
+    return 0;
+  }
+
   let roleScore = 0;
   let resonanceScore = 0;
   let tagScore = 0;
@@ -178,7 +289,7 @@ export function scoreCandidateForSlot(
       'RES-Shred',
       'Huge-ATK-Buff',
     ];
-    if (candidate.tags.some((t) => bufferTags.includes(t))) {
+    if (candidate.tags.some((t) => bufferTags.includes(t)) || candidate.id === 'Bennett') {
       roleScore += 10;
     }
   } else if (role === 'SubDPS') {
@@ -196,7 +307,7 @@ export function scoreCandidateForSlot(
       roleScore += 25;
     }
     const sustainTags = ['Healer', 'Shield', 'Team-Healer'];
-    if (candidate.tags.some((t) => sustainTags.includes(t))) {
+    if (candidate.tags.some((t) => sustainTags.includes(t)) || candidate.id === 'Bennett') {
       roleScore += 5;
     }
     // Diminishing returns if the team already has a dedicated sustain unit
@@ -215,6 +326,13 @@ export function scoreCandidateForSlot(
   if (sameElementCount === 1) {
     // Adding candidate creates a 2-member resonance
     resonanceScore += 5;
+    // Energy battery synergy for high-cost bursts (e.g. Bennett for Xiangling)
+    if (
+      currentMembers.some((m) => m.id === 'Xiangling') &&
+      candidate.id === 'Bennett'
+    ) {
+      resonanceScore += 10;
+    }
   } else if (
     template.archetype.startsWith('Mono-') &&
     currentMembers.length > 0 &&
@@ -241,6 +359,9 @@ export function scoreCandidateForSlot(
     candidate.tags.includes('Universal-Buffer')
   ) {
     tagScore += 6;
+  }
+  if (template.archetype === 'National' && (candidate.id === 'Xingqiu' || candidate.id === 'Bennett')) {
+    tagScore += 8;
   }
   tagScore = Math.min(25, Math.max(0, tagScore));
 
@@ -305,7 +426,7 @@ export function applyConstellationModifiers(
     }
     if (member.id === 'Bennett' && c >= 6) {
       const hasPhysicalOrConflict = team.some((m) =>
-        ['Eula', 'Razor', 'Keqing', 'Ayaka'].includes(m.id),
+        ['Eula', 'Razor', 'Keqing', 'KamisatoAyaka', 'Ayaka'].includes(m.id),
       );
       if (hasPhysicalOrConflict) {
         extraReasons.push(
@@ -362,6 +483,159 @@ export function applyConstellationModifiers(
   return { synergyScore: Math.min(100, synergyScore), extraReasons };
 }
 
+/**
+ * Calculates pure mechanical compatibility score (0-100%).
+ * Synthesizes archetype synergy, role distribution, resonance, energy battery,
+ * and penalizes anti-synergies (Bennett C6 conflict, dual-carry contention).
+ */
+export function calculateCompatibilityScore(
+  team: Character[],
+  template: ArchetypeTemplate,
+  profiles?: Record<string, OwnedCharacterProfile>,
+  weaponAssignments?: any[],
+): number {
+  let score = template.baseSynergy;
+
+  // 1. Constellation synergy bonuses
+  const constMods = applyConstellationModifiers(team, score, profiles);
+  score = constMods.synergyScore;
+
+  // 2. Role distribution bonus
+  const hasCarry = team.some((m) => m.roles.includes('On-Field DPS'));
+  const hasSubDps = team.some((m) => m.roles.includes('Off-Field DPS'));
+  const hasBuffer = team.some(
+    (m) =>
+      m.roles.includes('Buffer/Shred') ||
+      m.tags.includes('VV') ||
+      m.tags.includes('Cinder-City') ||
+      m.tags.includes('Universal-Buffer'),
+  );
+  const hasSustain = team.some((m) => m.roles.includes('Sustain'));
+
+  if (hasCarry && hasSubDps && (hasBuffer || hasSustain)) {
+    score += 2;
+  }
+
+  // 3. Energy battery presence
+  const energy = evaluateEnergyBattery(team, weaponAssignments);
+  if (energy.status === 'optimal') {
+    score += 1;
+  } else if (energy.status === 'deficit') {
+    score -= 6;
+  }
+
+  // 4. Anti-synergies
+  const bennettConflict = detectBennettC6Conflict(team, profiles);
+  if (bennettConflict.hasConflict) {
+    score -= bennettConflict.penalty;
+  }
+
+  const dualCarry = detectDualCarryContention(team);
+  if (dualCarry.hasContention) {
+    score -= dualCarry.penalty;
+  }
+
+  return Math.min(100, Math.max(0, Math.round(score)));
+}
+
+/**
+ * Calculates practical investment readiness score (0-100) based on owned levels,
+ * constellations, and weapon armory match.
+ */
+export function calculateInvestmentScore(
+  team: Character[],
+  profiles?: Record<string, OwnedCharacterProfile>,
+  weaponAssignments?: any[],
+): number {
+  let totalScore = 0;
+
+  // 1. Character Level & Progression (up to 35 pts)
+  let levelPts = 0;
+  for (const m of team) {
+    const prof = profiles?.[m.id];
+    const lvl = prof?.level ?? 90; // Default to 90 if profile not provided
+    if (lvl >= 90) levelPts += 35 / 4;
+    else if (lvl >= 80) levelPts += 28 / 4;
+    else if (lvl >= 70) levelPts += 20 / 4;
+    else if (lvl >= 60) levelPts += 12 / 4;
+    else levelPts += 5 / 4;
+  }
+  totalScore += levelPts;
+
+  // 2. Constellation Milestones (up to 25 pts)
+  let constPts = 10; // Baseline C0 investment
+  for (const m of team) {
+    const prof = profiles?.[m.id];
+    const c = prof?.constellation ?? 0;
+    if (c >= 6) constPts += 3.75;
+    else if (c >= 2) constPts += 2.5;
+    else if (c >= 1) constPts += 1.25;
+  }
+  totalScore += Math.min(25, constPts);
+
+  // 3. Weapon assignments & tier match (up to 40 pts)
+  let weaponPts: number;
+  if (weaponAssignments && weaponAssignments.length > 0) {
+    let assignedPts = 0;
+    for (const wa of weaponAssignments) {
+      const tier = wa.scoreResult?.tier;
+      if (tier === 'BiS') assignedPts += 10;
+      else if (tier === 'Optimal') assignedPts += 8;
+      else if (tier === 'Great') assignedPts += 6;
+      else if (tier === 'Usable') assignedPts += 4;
+      else assignedPts += 2;
+    }
+    weaponPts = assignedPts;
+  } else {
+    weaponPts = 32;
+  }
+  totalScore += Math.min(40, weaponPts);
+
+  return Math.min(100, Math.max(0, Math.round(totalScore)));
+}
+
+/**
+ * Maps community theorycrafting power rating into benchmark tiers ('S+' | 'S' | 'A' | 'B').
+ */
+export function determineBenchmarkTier(
+  archetype: string,
+  compatibilityScore: number,
+  team: Character[],
+): 'S+' | 'S' | 'A' | 'B' {
+  const S_PLUS_ARCHETYPES = [
+    'Lunar-Bloom',
+    'Vaporize',
+    'Hyperbloom',
+    'Hydro Hypercarry',
+    'Bountiful-Bloom',
+    'Overload',
+  ];
+
+  const S_PLUS_ANCHORS = [
+    'Nefer',
+    'Mavuika',
+    'Neuvillette',
+    'Furina',
+    'Alhaitham',
+    'Arlecchino',
+    'Clorinde',
+    'Navia',
+  ];
+
+  const hasAnchor = team.some((m) => S_PLUS_ANCHORS.includes(m.id));
+
+  if (compatibilityScore >= 90 && S_PLUS_ARCHETYPES.includes(archetype) && hasAnchor) {
+    return 'S+';
+  }
+  if (compatibilityScore >= 82) {
+    return 'S';
+  }
+  if (compatibilityScore >= 70) {
+    return 'A';
+  }
+  return 'B';
+}
+
 export function generateBestTeams(
   availableIds: string[],
   focusCharacterId?: string,
@@ -416,127 +690,74 @@ function generateTeamsFromPool(
   const focus = focusId ? pool.find((c) => c.id === focusId) : undefined;
   const weaponBag = ownedWeapons || getSavedWeapons();
 
-  // 1. Check for Nefer first if present or focused
-  const nefer = pool.find((c) => c.id === 'Nefer');
-  if ((!focus || focus.id === 'Nefer') && nefer) {
-    const hydroPartners = pool.filter((c) => c.element === 'Hydro' && c.id !== 'Nefer');
-    const dendroOrBuffers = pool.filter(
-      (c) =>
-        c.id !== 'Nefer' &&
-        (c.element === 'Dendro' ||
-          c.roles.includes('Buffer/Shred') ||
-          c.roles.includes('Sustain')),
-    );
-
-    if (hydroPartners.length >= 1 && dendroOrBuffers.length >= 2) {
-      const bestHydro =
-        hydroPartners.find((c) => c.id === 'Lauma') ||
-        hydroPartners.find((c) => c.id === 'Furina') ||
-        hydroPartners.find((c) => c.id === 'Yelan') ||
-        hydroPartners.find((c) => c.id === 'Xingqiu') ||
-        hydroPartners[0];
-
-      const remainingBuffers = dendroOrBuffers.filter((c) => c.id !== bestHydro.id);
-      const secondSlot =
-        remainingBuffers.find((c) => c.id === 'Nahida') ||
-        remainingBuffers.find((c) => c.id === 'Baizhu') ||
-        remainingBuffers[0];
-      const thirdSlot =
-        remainingBuffers.find(
-          (c) => c.id !== secondSlot.id && (c.roles.includes('Sustain') || c.id === 'KukiShinobu'),
-        ) ||
-        remainingBuffers.find((c) => c.id !== secondSlot.id) ||
-        pool.find((c) => ![nefer.id, bestHydro.id, secondSlot.id].includes(c.id))!;
-
-      if (thirdSlot) {
-        const members = [nefer, bestHydro, secondSlot, thirdSlot];
-        const stepped = synthesizeTeamRotation(members);
-        const neferMods = applyConstellationModifiers(members, 98, rosterProfiles);
-        const weaponAssignments = assignOptimalTeamWeapons(members, weaponBag, rosterProfiles);
-        results.push({
-          id: 'team-nefer-lunar',
-          name: 'Nefer · Lunar-Bloom Symphony',
-          archetype: 'Lunar-Bloom',
-          members,
-          synergyScore: neferMods.synergyScore,
-          compositionCompatibilityScore: neferMods.synergyScore,
-          comfortScore: members.some((m) => m.roles.includes('Sustain')) ? 95 : 75,
-          reasons: [
-            'Nefer converts all blooms into high-velocity Seeds of Deceit.',
-            `${bestHydro.name} provides sustained off-field Hydro application to trigger Lunar-Bloom.`,
-            `${secondSlot.name} supplies EM boosting or Dendro resonance.`,
-            'Special Charged Attacks deal massive non-split Dendro reaction damage.',
-            ...neferMods.extraReasons,
-          ],
-          rotation:
-            stepped.summaryString ||
-            'Support Skill/Burst → Hydro Enabler Q/E → Nefer E (Shadow Dance) → Special Charged Attack chain',
-          steppedRotation: stepped,
-          resonance: calculateResonance(members),
-          weaponAssignments,
-        });
-      }
-    }
-  }
-
-  // 2. Evaluate all archetype templates
+  // Evaluate all declarative archetype templates
   for (const template of TEMPLATES) {
     if (results.some((r) => r.archetype === template.archetype)) continue;
 
-    // Find candidates matching lead tags or focus
+    // Determine lead candidates matching leadTags or focus
     const focusCanLead =
       focus &&
       (template.leadTags.some((tag) => focus.tags.includes(tag)) ||
         (focus.roles.includes('On-Field DPS') &&
-          (!template.requiredElements || template.requiredElements.includes(focus.element))));
+          (!template.requiredElements || template.requiredElements.includes(focus.element)))) &&
+      (!template.exclusiveElements || template.exclusiveElements.includes(focus.element));
 
     const leadCandidates = pool.filter((c) => {
       if (focusCanLead) {
-        return c.id === focus.id;
+        return c.id === focus!.id;
       }
       if (focus && c.id === focus.id) {
-        return template.leadTags.some((tag) => c.tags.includes(tag));
+        return (
+          template.leadTags.some((tag) => c.tags.includes(tag)) &&
+          (!template.exclusiveElements || template.exclusiveElements.includes(c.element))
+        );
       }
+      // General lead match: must have offensive role (On-Field or Off-Field DPS)
+      const elementOk = !template.exclusiveElements || template.exclusiveElements.includes(c.element);
+      const isDps = c.roles.includes('On-Field DPS') || c.roles.includes('Off-Field DPS');
       return (
-        template.leadTags.some((tag) => c.tags.includes(tag)) ||
-        (c.roles.includes('On-Field DPS') &&
-          (!template.requiredElements || template.requiredElements.includes(c.element)))
+        elementOk &&
+        isDps &&
+        (template.leadTags.some((tag) => c.tags.includes(tag)) ||
+          (c.roles.includes('On-Field DPS') &&
+            (!template.requiredElements || template.requiredElements.includes(c.element))))
       );
     });
 
     for (const lead of leadCandidates) {
       if (focus && lead.id !== focus.id) {
-        // Disallow pairing different elemental versions of the Traveler together
         if (isSameCharacterOrTraveler(lead, focus)) continue;
 
         const canFitAsSupport =
-          template.supportTags.some((t) => focus.tags.includes(t)) ||
-          (template.requiredElements ? template.requiredElements.includes(focus.element) : false) ||
-          focus.roles.some((r) => ['Off-Field DPS', 'Buffer/Shred', 'Sustain'].includes(r));
+          isAllowedTeammate(template.archetype, focus, [lead], template.exclusiveElements) &&
+          (template.supportTags.some((t) => focus.tags.includes(t)) ||
+            (template.requiredElements ? template.requiredElements.includes(focus.element) : false) ||
+            focus.roles.some((r) => ['Off-Field DPS', 'Buffer/Shred', 'Sustain'].includes(r)));
         if (!canFitAsSupport) continue;
       }
-
-      // Gather complementary supports: Sub-DPS, Buffer, Sustain (excluding lead and identical Traveler entities)
-      const others = pool.filter((c) => !isSameCharacterOrTraveler(c, lead));
 
       const chosen: Character[] = [lead];
       if (
         focus &&
         focus.id !== lead.id &&
-        !chosen.some((m) => isSameCharacterOrTraveler(m, focus))
+        isAllowedTeammate(template.archetype, focus, chosen, template.exclusiveElements)
       ) {
         chosen.push(focus);
       }
 
-      // If template has requiredElements not yet in chosen, prioritize fulfilling them first
+      // 1. Prioritize fulfilling missing requiredElements
       const missingElements = (template.requiredElements || []).filter(
         (el) => !chosen.some((m) => m.element === el),
       );
 
       for (const missingEl of missingElements) {
         if (chosen.length >= 4) break;
-        const matchingCandidates = others
-          .filter((c) => !chosen.some((m) => isSameCharacterOrTraveler(m, c)) && c.element === missingEl)
+        const matchingCandidates = pool
+          .filter(
+            (c) =>
+              c.element === missingEl &&
+              isAllowedTeammate(template.archetype, c, chosen, template.exclusiveElements),
+          )
           .map((c) => {
             const sSub = scoreCandidateForSlot(c, 'SubDPS', template, chosen, weaponBag, rosterProfiles);
             const sBuf = scoreCandidateForSlot(c, 'Buffer', template, chosen, weaponBag, rosterProfiles);
@@ -550,7 +771,7 @@ function generateTeamsFromPool(
         }
       }
 
-      // Check missing roles dynamically to adapt as hybrid characters are added
+      // 2. Check missing roles dynamically
       const hasSubDps = () => chosen.some((m) => m.roles.includes('Off-Field DPS'));
       const hasBuffer = () =>
         chosen.some(
@@ -562,10 +783,10 @@ function generateTeamsFromPool(
         );
       const hasSustain = () => chosen.some((m) => m.roles.includes('Sustain'));
 
-      // Slot 1: Best Sub-DPS (Off-Field DPS enabler) if still needed
+      // Slot 1: Sub-DPS if still needed
       if (!hasSubDps() && chosen.length < 4) {
-        const subDpsCandidates = others
-          .filter((c) => !chosen.some((m) => isSameCharacterOrTraveler(m, c)))
+        const subDpsCandidates = pool
+          .filter((c) => isAllowedTeammate(template.archetype, c, chosen, template.exclusiveElements))
           .map((c) => ({
             character: c,
             score: scoreCandidateForSlot(c, 'SubDPS', template, chosen, weaponBag, rosterProfiles),
@@ -577,10 +798,10 @@ function generateTeamsFromPool(
         }
       }
 
-      // Slot 2: Best Buffer / Shred if still needed
+      // Slot 2: Buffer if still needed
       if (!hasBuffer() && chosen.length < 4) {
-        const bufferCandidates = others
-          .filter((c) => !chosen.some((m) => isSameCharacterOrTraveler(m, c)))
+        const bufferCandidates = pool
+          .filter((c) => isAllowedTeammate(template.archetype, c, chosen, template.exclusiveElements))
           .map((c) => ({
             character: c,
             score: scoreCandidateForSlot(c, 'Buffer', template, chosen, weaponBag, rosterProfiles),
@@ -592,10 +813,10 @@ function generateTeamsFromPool(
         }
       }
 
-      // Slot 3: Best Sustain (Healer / Shielder) if still needed
+      // Slot 3: Sustain if still needed
       if (!hasSustain() && chosen.length < 4) {
-        const sustainCandidates = others
-          .filter((c) => !chosen.some((m) => isSameCharacterOrTraveler(m, c)))
+        const sustainCandidates = pool
+          .filter((c) => isAllowedTeammate(template.archetype, c, chosen, template.exclusiveElements))
           .map((c) => ({
             character: c,
             score: scoreCandidateForSlot(c, 'Sustain', template, chosen, weaponBag, rosterProfiles),
@@ -607,10 +828,10 @@ function generateTeamsFromPool(
         }
       }
 
-      // Fill remaining slots up to 4 if needed using best general score
+      // Fill remaining slots up to 4 using highest suitability
       while (chosen.length < 4) {
-        const remaining = others
-          .filter((c) => !chosen.some((m) => isSameCharacterOrTraveler(m, c)))
+        const remaining = pool
+          .filter((c) => isAllowedTeammate(template.archetype, c, chosen, template.exclusiveElements))
           .map((c) => {
             const sSub = scoreCandidateForSlot(c, 'SubDPS', template, chosen, weaponBag, rosterProfiles);
             const sBuf = scoreCandidateForSlot(c, 'Buffer', template, chosen, weaponBag, rosterProfiles);
@@ -623,7 +844,7 @@ function generateTeamsFromPool(
         chosen.push(remaining[0].character);
       }
 
-      // Ensure all required elements are present
+      // Verify all required elements are present
       if (
         template.requiredElements &&
         !template.requiredElements.every((el) => chosen.some((m) => m.element === el))
@@ -636,13 +857,43 @@ function generateTeamsFromPool(
         const stepped = synthesizeTeamRotation(chosen);
         const constMods = applyConstellationModifiers(chosen, template.baseSynergy, rosterProfiles);
         const weaponAssignments = assignOptimalTeamWeapons(chosen, weaponBag, rosterProfiles);
+
+        // Three-Tier Scoring
+        const compatibilityScore = calculateCompatibilityScore(
+          chosen,
+          template,
+          rosterProfiles,
+          weaponAssignments,
+        );
+        const investmentScore = calculateInvestmentScore(chosen, rosterProfiles, weaponAssignments);
+        const benchmarkTier = determineBenchmarkTier(
+          template.archetype,
+          compatibilityScore,
+          chosen,
+        );
+
+        const scores: TeamScoreBreakdown = {
+          compatibilityScore,
+          investmentScore,
+          benchmarkTier,
+        };
+
+        // Natural-Language Explainability
+        const explanation = generateTeamExplanation(
+          chosen,
+          template,
+          pool,
+          rosterProfiles,
+          weaponAssignments,
+        );
+
         results.push({
           id: `team-${template.archetype}-${lead.id}`.toLowerCase(),
           name: `${lead.name} · ${template.name}`,
           archetype: template.archetype,
           members: chosen,
-          synergyScore: constMods.synergyScore,
-          compositionCompatibilityScore: constMods.synergyScore,
+          synergyScore: compatibilityScore,
+          compositionCompatibilityScore: compatibilityScore,
           comfortScore: teamSustain ? 92 : 72,
           reasons: [
             `${lead.name} acts as the core ${lead.roles[0]} driving ${template.archetype}.`,
@@ -652,11 +903,14 @@ function generateTeamsFromPool(
               ? `${teamSustain.name} guarantees safe clear windows with survivability.`
               : 'High aggressive offensive output with minimal downtime.',
             ...constMods.extraReasons,
+            ...(explanation.antiSynergyWarnings || []),
           ],
           rotation: stepped.summaryString || template.rotation,
           steppedRotation: stepped,
           resonance: calculateResonance(chosen),
           weaponAssignments,
+          scores,
+          explanation,
         });
         break; // One strong variant per archetype
       }

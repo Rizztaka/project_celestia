@@ -261,6 +261,31 @@ export interface OwnedCharacter {
   weapon?: EquippedWeapon;
 }
 
+export interface TeamScoreBreakdown {
+  compatibilityScore: number; // 0-100% mechanical synergy (reactions, resonance, roles, energy)
+  investmentScore: number; // 0-100 account equipment (weapon tier, level, constellations)
+  benchmarkTier: 'S+' | 'S' | 'A' | 'B'; // Theorycrafting power tier
+}
+
+export interface CharacterSwapAlternative {
+  originalCharacterId: string;
+  alternativeCharacter: Character;
+  tradeOffPros: string[];
+  tradeOffCons: string[];
+  compatibilityImpact: number;
+}
+
+export interface TeamExplanation {
+  roleRationale: Record<string, string>;
+  reactionWorkflow: string;
+  energyAssessment: {
+    status: 'optimal' | 'adequate' | 'deficit';
+    warnings: string[];
+  };
+  alternatives: CharacterSwapAlternative[];
+  antiSynergyWarnings?: string[];
+}
+
 export interface TeamRecommendation {
   id: string;
   name: string;
@@ -275,6 +300,8 @@ export interface TeamRecommendation {
   resonance: string[];
   weaponAssignments?: TeamWeaponAssignment[];
   isTheoretical?: boolean;
+  scores?: TeamScoreBreakdown;
+  explanation?: TeamExplanation;
 }
 
 export interface PullAdvice {

@@ -15,6 +15,7 @@ import {
   DEFAULT_ACTIVE_THEATER_SEASON_ID,
 } from '../data/theater-seasons';
 import { CHARACTERS } from '../data/characters';
+import { DataFreshnessBadge } from './DataFreshnessBadge';
 import {
   filterEligibleTheaterRoster,
   autoDraftTheaterSchedule,
@@ -328,6 +329,9 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                 );
               })}
             </div>
+
+            {/* Freshness Badge */}
+            <DataFreshnessBadge datasetId={activeSeason.id} className="ml-1" />
           </div>
 
           {/* Difficulty Toggle Pills */}

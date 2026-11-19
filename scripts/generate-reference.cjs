@@ -1,6 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
+// 0. Read canonical game version SSOT from src/data/game-version.ts
+const versionText = fs.readFileSync('src/data/game-version.ts', 'utf8');
+const versionMatch = versionText.match(/CURRENT_GAME_VERSION\s*=\s*['"]([^'"]+)['"]/);
+const GAME_VERSION = versionMatch ? versionMatch[1] : '7.2';
+
 // 1. Read and parse characters from src/data/characters.ts
 const charText = fs.readFileSync('src/data/characters.ts', 'utf8');
 const charLines = charText.split('\n');
@@ -222,9 +227,9 @@ for (const row of [...baselineIncidents, ...existingLedgerRows]) {
 }
 
 // 5. Construct Markdown
-let md = `# Project Celestia — Authoritative Reference & Knowledge Base (v7.2 Baseline)
+let md = `# Project Celestia — Authoritative Reference & Knowledge Base (v${GAME_VERSION} Baseline)
 
-> **Persistent Memory Notice**: This document is the primary authoritative reference for Project Celestia. All models, agents, and subagents must treat this document and the underlying data files as the undisputed Single Source of Truth (SSOT). Under NO circumstances should an agent default to legacy 5.x or prior versions. The active baseline is **Version 7.2** (encompassing Nod-Krai, Snezhnaya, Natlan, Fontaine, and Celestia eras).
+> **Persistent Memory Notice**: This document is the primary authoritative reference for Project Celestia. All models, agents, and subagents must treat this document and the underlying data files as the undisputed Single Source of Truth (SSOT). Under NO circumstances should an agent default to legacy 5.x or prior versions. The active baseline is **Version ${GAME_VERSION}** (encompassing Nod-Krai, Snezhnaya, Natlan, Fontaine, and Celestia eras).
 
 ---
 
@@ -234,7 +239,7 @@ let md = `# Project Celestia — Authoritative Reference & Knowledge Base (v7.2 
 3. [Master Character Directory (128 Characters)](#3-master-character-directory-128-characters)
    - [Characters by Element](#characters-by-element)
    - [Characters by Region](#characters-by-region)
-   - [Version 7.2 & Modern Era Highlights](#version-72--modern-era-highlights)
+   - [Version ${GAME_VERSION} & Modern Era Highlights](#version-${GAME_VERSION.replace('.', '')}--modern-era-highlights)
 4. [Master Artifact Sets Directory (64 Sets / 37 Combat Sets)](#4-master-artifact-sets-directory-64-sets--37-combat-sets)
    - [Artifact Sets by Release Era & Archetype](#artifact-sets-by-release-era--archetype)
    - [Complete 37-Set Combat Roster](#complete-37-set-combat-roster)
@@ -261,8 +266,8 @@ let md = `# Project Celestia — Authoritative Reference & Knowledge Base (v7.2 
 
 ### Self-Correction Protocol (Mandatory for All Agents)
 1. **Never Assume Outdated Baselines**:
-   - The current baseline is **Version 7.2**.
-   - If you catch yourself thinking Genshin is on version 5.0, 5.2, or 5.x, **STOP IMMEDIATELY**. Correct your assumption to 7.2.
+   - The current baseline is **Version ${GAME_VERSION}**.
+   - If you catch yourself thinking Genshin is on version 5.0, 5.2, or 5.x, **STOP IMMEDIATELY**. Correct your assumption to ${GAME_VERSION}.
 2. **Local Inspection First**:
    - Before answering queries about kits, passives, scaling, or builds, verify directly against the SSOT files listed above.
 3. **Web Cross-Check**:
@@ -274,7 +279,7 @@ let md = `# Project Celestia — Authoritative Reference & Knowledge Base (v7.2 
 
 ## 2. Active Baseline & Version Architecture
 
-Project Celestia models the full state of Genshin Impact up through **Version 7.2**.
+Project Celestia models the full state of Genshin Impact up through **Version ${GAME_VERSION}**.
 Key regional progression:
 - **Mondstadt & Liyue**: v1.0+
 - **Inazuma**: v2.0+
@@ -282,7 +287,7 @@ Key regional progression:
 - **Fontaine**: v4.0+ (Arkhe system, Bond of Life, HP fluctuation mechanics)
 - **Natlan**: v5.0+ (Nightsoul Blessing, Phlogiston, Nightsoul Burst)
 - **Nod-Krai**: v6.0+ (Moonsign system, Ascendant Gleam, Lunar reactions)
-- **Snezhnaya & Celestia**: v7.0 - v7.2 (Polestar Fields, Stellar reactions, Hexerei rites, Abyss mastery)
+- **Snezhnaya & Celestia**: v7.0 - v${GAME_VERSION} (Polestar Fields, Stellar reactions, Hexerei rites, Abyss mastery)
 
 ---
 
@@ -343,7 +348,7 @@ for (const reg of regions) {
 }
 
 // Modern Era Highlights
-md += `### Version 7.2 & Modern Era Highlights
+md += `### Version ${GAME_VERSION} & Modern Era Highlights
 
 | Character | Element / Weapon | Rarity | Region | Key Mechanical Features & Kit Archetype |
 | :--- | :--- | :---: | :--- | :--- |

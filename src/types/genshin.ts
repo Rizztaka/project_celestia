@@ -507,4 +507,16 @@ export interface AbyssDualTeamPlan {
   cycleId?: string;
 }
 
+export type ProvenanceStatus = 'verified' | 'provisional' | 'stale';
+
+export interface DataProvenance {
+  datasetId: string;
+  version: string;
+  verifiedAt: string; // ISO date YYYY-MM-DD
+  sourceUrl: string;
+  evidence: string; // Specific patch note notice or in-game verification note
+  status: ProvenanceStatus;
+}
+
+
 

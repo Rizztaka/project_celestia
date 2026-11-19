@@ -43,6 +43,9 @@ jobs:
       - name: Verify Bundle Size & Performance Budget
         run: pnpm run check:budget
 
+      - name: 5-Axis Game Data Integrity Audit
+        run: pnpm run audit:data
+
       - name: Cache Playwright browser binaries
         uses: actions/cache@v4
         id: playwright-cache

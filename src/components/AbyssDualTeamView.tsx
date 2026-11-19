@@ -19,6 +19,7 @@ import { CharacterPortrait } from './CharacterPortrait';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { RotationBadgeList } from './RotationBadgeList';
 import { InfoTooltip } from './InfoTooltip';
+import { DataFreshnessBadge } from './DataFreshnessBadge';
 import {
   Swords,
   ShieldCheck,
@@ -191,6 +192,9 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                 </option>
               </select>
             </div>
+
+            {/* Data Freshness Indicator */}
+            <DataFreshnessBadge datasetId={activeCycle.id} />
 
             {/* 1-Click Swap Halves Toggle */}
             <button

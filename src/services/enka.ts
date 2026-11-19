@@ -2,11 +2,14 @@ export interface EnkaFetchResult {
   success: boolean;
   nickname?: string;
   avatarIds: string[];
+  unrecognizedIds?: number[];
   error?: string;
 }
 
-// Complete Enka gameId mapping for all 122 characters
-const ENKA_ID_MAP: Record<number, string> = {
+// Complete Enka gameId mapping for all playable characters (including Aether & Lumine)
+export const ENKA_ID_MAP: Record<number, string> = {
+  10000005: 'Traveler', // Aether
+  10000007: 'Traveler', // Lumine
   10000121: 'Aino',
   10000038: 'Albedo',
   10000078: 'Alhaitham',
@@ -131,28 +134,35 @@ const ENKA_ID_MAP: Record<number, string> = {
   10000126: 'Zibai',
 };
 
+/**
+ * Parses raw JSON payload returned by Enka.Network API.
+ */
+export function parseEnkaPayload(data: any): EnkaFetchResult {
+  const avatarList: number[] = data?.playerInfo?.showAvatarInfoList?.map((a: { avatarId: number }) => a.avatarId) || [];
+  const matchedKeys: string[] = [];
+  const unrecognizedIds: number[] = [];
+
+  for (const id of avatarList) {
+    if (ENKA_ID_MAP[id]) {
+      matchedKeys.push(ENKA_ID_MAP[id]);
+    } else {
+      unrecognizedIds.push(id);
+    }
+  }
+
+  return {
+    success: true,
+    nickname: data?.playerInfo?.nickname || 'Traveler',
+    avatarIds: matchedKeys,
+    unrecognizedIds,
+  };
+}
+
 export async function fetchShowcaseFromEnka(uid: string): Promise<EnkaFetchResult> {
   const cleanUid = uid.trim();
   if (!/^\d{9,10}$/.test(cleanUid)) {
-    return { success: false, avatarIds: [], error: 'Invalid UID. Genshin UIDs are 9 or 10 digits.' };
+    return { success: false, avatarIds: [], unrecognizedIds: [], error: 'Invalid UID. Genshin UIDs are 9 or 10 digits.' };
   }
-
-  const parseEnkaData = (data: any): EnkaFetchResult => {
-    const avatarList: number[] = data?.playerInfo?.showAvatarInfoList?.map((a: { avatarId: number }) => a.avatarId) || [];
-    const matchedKeys: string[] = [];
-
-    for (const id of avatarList) {
-      if (ENKA_ID_MAP[id]) {
-        matchedKeys.push(ENKA_ID_MAP[id]);
-      }
-    }
-
-    return {
-      success: true,
-      nickname: data?.playerInfo?.nickname || 'Traveler',
-      avatarIds: matchedKeys,
-    };
-  };
 
   try {
     const controller = new AbortController();
@@ -174,7 +184,7 @@ export async function fetchShowcaseFromEnka(uid: string): Promise<EnkaFetchResul
     }
 
     const data = await res.json();
-    return parseEnkaData(data);
+    return parseEnkaPayload(data);
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : String(err);
 
@@ -190,7 +200,7 @@ export async function fetchShowcaseFromEnka(uid: string): Promise<EnkaFetchResul
       );
       if (proxyRes.ok) {
         const data = await proxyRes.json();
-        return parseEnkaData(data);
+        return parseEnkaPayload(data);
       }
     } catch {
       // Ignore proxy error and fall through to friendly error message

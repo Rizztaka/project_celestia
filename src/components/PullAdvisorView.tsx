@@ -15,6 +15,7 @@ import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { PullBudgetCard } from './PullBudgetCard';
 import { InfoTooltip } from './InfoTooltip';
+import { DataFreshnessBadge } from './DataFreshnessBadge';
 import {
   Compass,
   CheckCircle2,
@@ -162,6 +163,9 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
         <div className="flex items-center gap-2 text-xs font-semibold text-zinc-300">
           <Calendar className="w-4 h-4 text-[#d4af37]" />
           <span>Banner Phase Filter:</span>
+          {bannerFilter !== 'sandbox' && bannerFilter !== 'all' && (
+            <DataFreshnessBadge datasetId={bannerFilter} className="ml-2" />
+          )}
         </div>
 
         <div className="flex flex-wrap items-center gap-2">

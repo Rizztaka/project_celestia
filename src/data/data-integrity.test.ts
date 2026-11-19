@@ -5,6 +5,20 @@ import { ABYSS_CYCLES, DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from './abyss-schedules';
 import { CHARACTERS } from './characters';
 import { WEAPONS_DATA, getWeaponByKey } from './weapons';
 import { AVAILABLE_SCALING_KEYS } from './talent-scaling';
+import {
+  CURRENT_GAME_VERSION,
+  PATCH_CYCLE_DAYS,
+  CURRENT_VERSION_INFO,
+  compareGameVersions,
+  isVersionAtLeast,
+  parseGameVersion,
+  formatGameVersion,
+} from './game-version';
+import {
+  DATA_PROVENANCE_REGISTRY,
+  getProvenance,
+  getAllProvenances,
+} from './provenance-registry';
 import type { Element } from '../types/genshin';
 
 const VALID_ELEMENTS: Element[] = [
@@ -235,7 +249,7 @@ describe('Data-Source Integrity Verification', () => {
     it('verifies active cycle 7.2 covers November 2026', () => {
       const activeCycle = ABYSS_CYCLES.find((c) => c.id === DEFAULT_ACTIVE_ABYSS_CYCLE_ID);
       expect(activeCycle).toBeDefined();
-      expect(activeCycle?.version).toBe('7.2');
+      expect(activeCycle?.version).toBe(CURRENT_GAME_VERSION);
       expect(activeCycle?.effectiveStartDate).toBe('2026-11-16');
       expect(activeCycle?.effectiveEndDate).toBe('2026-12-16');
     });
@@ -270,6 +284,87 @@ describe('Data-Source Integrity Verification', () => {
       // Plus generic 'Traveler' alias for backward compatibility
       expect(CANONICAL_CHARACTER_IDS.has('Traveler')).toBe(true);
       expect(CANONICAL_CHARACTER_IDS.size).toBe(129);
+    });
+  });
+
+  describe('Game Version SSOT Integrity', () => {
+    it('declares CURRENT_GAME_VERSION as 7.2 baseline and standard 42-day patch cycle', () => {
+      expect(CURRENT_GAME_VERSION).toBe('7.2');
+      expect(PATCH_CYCLE_DAYS).toBe(42);
+      expect(CURRENT_VERSION_INFO.version).toBe(CURRENT_GAME_VERSION);
+      expect(CURRENT_VERSION_INFO.releaseDate).toBe('2026-11-04');
+    });
+
+    it('guarantees active schedule datasets match CURRENT_GAME_VERSION', () => {
+      // Abyss active schedule
+      const activeCycle = ABYSS_CYCLES.find((c) => c.id === DEFAULT_ACTIVE_ABYSS_CYCLE_ID);
+      expect(activeCycle?.version).toBe(CURRENT_GAME_VERSION);
+
+      // Theater active schedule (November 2026)
+      const activeTheater = THEATER_SEASONS.find((s) => s.id === 'season-7-2-hydro-electro-geo');
+      expect(activeTheater?.version).toBe(CURRENT_GAME_VERSION);
+
+      // Current banner phases
+      const p1Banner = BANNER_PHASES.find((p) => p.id === 'banner_7_2_phase_1');
+      expect(p1Banner?.version).toBe(CURRENT_GAME_VERSION);
+    });
+
+    it('verifies game version comparison utilities and formatting', () => {
+      expect(compareGameVersions('7.2', '7.1')).toBeGreaterThan(0);
+      expect(compareGameVersions('7.2', '7.2')).toBe(0);
+      expect(compareGameVersions('5.4', '7.2')).toBeLessThan(0);
+      expect(compareGameVersions('7.2.1', '7.2')).toBeGreaterThan(0);
+
+      expect(isVersionAtLeast('7.2')).toBe(true);
+      expect(isVersionAtLeast('7.3')).toBe(true);
+      expect(isVersionAtLeast('7.1')).toBe(false);
+      expect(isVersionAtLeast('5.4')).toBe(false);
+
+      expect(parseGameVersion('7.2')).toEqual({ major: 7, minor: 2, patch: undefined });
+      expect(parseGameVersion('v7.2.1')).toEqual({ major: 7, minor: 2, patch: 1 });
+
+      expect(formatGameVersion('7.2')).toBe('v7.2');
+      expect(formatGameVersion('v7.2')).toBe('v7.2');
+    });
+  });
+
+  describe('Data Provenance Registry Integrity', () => {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+    it('contains verified provenance records for all active schedules and modern additions', () => {
+      const requiredActiveDatasets = [
+        'banner_7_2_phase_1',
+        'banner_7_2_phase_2',
+        'banner_7_2_natlan_chronicled',
+        'cycle-7-2',
+        'abyss_floor_12_v7_2',
+        'season-7-2-hydro-electro-geo',
+        'season-7-2-dec-pyro-hydro-geo',
+        'characters_v7_2_batch7',
+        'weapons_v7_2_signatures',
+        'artifacts_v7_2_master',
+      ];
+
+      for (const id of requiredActiveDatasets) {
+        const prov = getProvenance(id);
+        expect(prov, `Missing provenance record for active dataset "${id}"`).toBeDefined();
+        expect(prov?.datasetId).toBe(id);
+        expect(prov?.version).toBe(CURRENT_GAME_VERSION);
+      }
+    });
+
+    it('guarantees all provenance records possess authentic HTTPS sources and evidence notes', () => {
+      expect(Object.keys(DATA_PROVENANCE_REGISTRY).length).toBeGreaterThanOrEqual(10);
+      const allProvenances = getAllProvenances();
+      expect(allProvenances.length).toBeGreaterThanOrEqual(10);
+
+      for (const prov of allProvenances) {
+        expect(prov.datasetId.length).toBeGreaterThan(0);
+        expect(prov.sourceUrl.startsWith('https://'), `sourceUrl for "${prov.datasetId}" must be HTTPS`).toBe(true);
+        expect(dateRegex.test(prov.verifiedAt), `verifiedAt for "${prov.datasetId}" must be YYYY-MM-DD`).toBe(true);
+        expect(prov.evidence.length, `evidence for "${prov.datasetId}" must be substantive`).toBeGreaterThanOrEqual(15);
+        expect(['verified', 'provisional', 'stale']).toContain(prov.status);
+      }
     });
   });
 });

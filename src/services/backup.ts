@@ -2,6 +2,7 @@ import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../typ
 import type { AbyssCycleConfig } from '../data/abyss-schedules';
 import { DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from '../data/abyss-schedules';
 import { CANONICAL_CHARACTER_IDS } from '../data/character-ids';
+import { CURRENT_GAME_VERSION } from '../data/game-version';
 import {
   getSavedRoster,
   getSavedProfiles,
@@ -87,7 +88,7 @@ export function exportAccountBackup(): CelestiaBackupData {
   const backup: CelestiaBackupData = {
     format: 'celestia_native',
     version: CURRENT_SCHEMA_VERSION,
-    gameVersion: '7.2',
+    gameVersion: CURRENT_GAME_VERSION,
     exportedAt: new Date().toISOString(),
     roster: getSavedRoster(),
     profiles: getSavedProfiles(),

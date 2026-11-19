@@ -21,6 +21,7 @@ import {
   type ValidationResult,
 } from '../services/backup';
 import { isDemoModeEnabled } from '../services/storage';
+import { formatGameVersion, CURRENT_GAME_VERSION } from '../data/game-version';
 
 interface AccountBackupModalProps {
   isOpen: boolean;
@@ -238,7 +239,7 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
                   <li>Equipped and unequipped weapons armory with refinements</li>
                   <li>Pull budget configuration, current pity counts, and Capturing Radiance state</li>
                   <li>Spiral Abyss cycles & custom sandbox floor configurations</li>
-                  <li>Schema version tag (Version 2) and game baseline metadata (v7.2)</li>
+                  <li>Schema version tag (Version 2) and game baseline metadata ({formatGameVersion(CURRENT_GAME_VERSION)})</li>
                 </ul>
               </div>
 

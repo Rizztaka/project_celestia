@@ -1,5 +1,6 @@
 import type { Element } from '../types/genshin';
 import type { ShieldType } from '../engines/combat-mechanics';
+import { CURRENT_GAME_VERSION } from './game-version';
 
 export interface AbyssEnemy {
   id: string;
@@ -64,7 +65,7 @@ export const ABYSS_CYCLES: AbyssCycleConfig[] = [
   // Version 7.2 (Active Official Floor 12)
   {
     id: 'cycle-7-2',
-    version: '7.2',
+    version: CURRENT_GAME_VERSION,
     phase: 'Phase 1',
     effectiveStartDate: '2026-11-16',
     effectiveEndDate: '2026-12-16',

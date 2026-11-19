@@ -1,4 +1,5 @@
 import type { Element, TheaterDifficulty, TheaterSeasonConfig } from '../types/genshin';
+import { CURRENT_GAME_VERSION } from './game-version';
 
 export interface BossEncounterInfo {
   name: string;
@@ -82,7 +83,7 @@ export const THEATER_SEASONS: TheaterSeasonConfig[] = [
   {
     id: 'season-7-2-hydro-electro-geo',
     name: 'Version 7.2 · November 2026 (Hydro / Electro / Geo)',
-    version: '7.2',
+    version: CURRENT_GAME_VERSION,
     effectiveStartDate: '2026-11-01',
     effectiveEndDate: '2026-12-01',
     sourceUrl: 'https://genshin.hoyoverse.com/en/news',
@@ -107,7 +108,7 @@ export const THEATER_SEASONS: TheaterSeasonConfig[] = [
   {
     id: 'season-7-2-dec-pyro-hydro-geo',
     name: 'Version 7.2 · December 2026 (Pyro / Hydro / Geo)',
-    version: '7.2',
+    version: CURRENT_GAME_VERSION,
     effectiveStartDate: '2026-12-01',
     effectiveEndDate: '2027-01-01',
     sourceUrl: 'https://genshin.hoyoverse.com/en/news',

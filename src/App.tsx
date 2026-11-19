@@ -266,23 +266,45 @@ export const App: React.FC = () => {
     if (result.success && result.avatarIds.length > 0) {
       setProfiles((prev) => {
         const next = { ...prev };
+        // Check if user already owns any Traveler variant profile
+        const hasAnyTraveler = Object.keys(prev).some((k) => k.startsWith('Traveler'));
+
         for (const id of result.avatarIds) {
-          if (!next[id]) {
+          if (id === 'Traveler') {
+            // Default to active 7.2 Traveler element if no variant exists yet
+            if (!hasAnyTraveler && !next['TravelerPyro']) {
+              next['TravelerPyro'] = { id: 'TravelerPyro', level: 90, constellation: 6 };
+            }
+          } else if (!next[id]) {
+            // Add newly seen characters with baseline Level 90 / C0 defaults
             next[id] = { id, level: 90, constellation: 0 };
           }
+          // Existing profiles are preserved without overwrite
         }
         return next;
       });
 
+      const unknownNotice =
+        result.unrecognizedIds && result.unrecognizedIds.length > 0
+          ? ` (${result.unrecognizedIds.length} unknown character ID[s] skipped)`
+          : '';
+
       setNotification({
         type: 'success',
-        message: `Synced ${result.avatarIds.length} characters from ${result.nickname ?? 'Traveler'}'s showcase!`,
+        message: `Synced ${result.avatarIds.length} characters from ${result.nickname ?? 'Traveler'}'s showcase! Existing builds preserved.${unknownNotice}`,
       });
     } else if (result.success && result.avatarIds.length === 0) {
-      setNotification({
-        type: 'error',
-        message: 'No characters found in public showcase. Make sure "Show Character Details" is ON in Genshin.',
-      });
+      if (result.unrecognizedIds && result.unrecognizedIds.length > 0) {
+        setNotification({
+          type: 'error',
+          message: `Showcase returned ${result.unrecognizedIds.length} character(s) with unrecognized IDs (${result.unrecognizedIds.join(', ')}). Please check for Celestia updates.`,
+        });
+      } else {
+        setNotification({
+          type: 'error',
+          message: 'No characters found in public showcase. Make sure "Show Character Details" is ON in Genshin.',
+        });
+      }
     } else {
       setNotification({
         type: 'error',

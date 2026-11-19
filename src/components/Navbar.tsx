@@ -157,7 +157,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               disabled={isSyncing || !uid.trim()}
               aria-label="Sync Showcase"
               className="bg-[#1c2030] hover:bg-[#252b42] text-[#d4af37] border border-[#d4af37]/40 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shrink-0"
-              title="Sync public showcase from Enka"
+              title="Sync public showcase from Enka (adds newly seen characters without overwriting your customized builds)"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
               <span className="hidden sm:inline">{isSyncing ? 'Syncing...' : 'Sync'}</span>

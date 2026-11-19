@@ -1,3 +1,5 @@
+import { CURRENT_GAME_VERSION } from './game-version';
+
 export interface BannerPhase {
   id: string;
   version: string;
@@ -19,7 +21,7 @@ export interface BannerPhase {
 export const BANNER_PHASES: BannerPhase[] = [
   {
     id: 'banner_7_2_phase_1',
-    version: '7.2',
+    version: CURRENT_GAME_VERSION,
     phaseName: '7.2 P1: Mitya & Furina',
     startDate: '2026-11-04',
     endDate: '2026-11-24',
@@ -36,7 +38,7 @@ export const BANNER_PHASES: BannerPhase[] = [
   },
   {
     id: 'banner_7_2_phase_2',
-    version: '7.2',
+    version: CURRENT_GAME_VERSION,
     phaseName: '7.2 P2: Zibai & Linnea',
     startDate: '2026-11-24',
     endDate: '2026-12-15',
@@ -52,7 +54,7 @@ export const BANNER_PHASES: BannerPhase[] = [
   },
   {
     id: 'banner_7_2_natlan_chronicled',
-    version: '7.2',
+    version: CURRENT_GAME_VERSION,
     phaseName: '7.2 Natlan Chronicled Wish',
     startDate: '2026-11-24',
     endDate: '2026-12-15',

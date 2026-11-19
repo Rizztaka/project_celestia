@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { CHARACTERS } from '../data/characters';
 import type { Character, Element, WeaponType, OwnedCharacterProfile, OwnedWeapon } from '../types/genshin';
 import {

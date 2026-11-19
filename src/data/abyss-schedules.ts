@@ -216,6 +216,10 @@ export const ABYSS_CYCLES: AbyssCycleConfig[] = [
     id: 'cycle-7-1',
     version: '7.1',
     phase: 'Phase 2',
+    effectiveStartDate: '2026-10-16',
+    effectiveEndDate: '2026-11-16',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2026-10-16',
     name: 'Version 7.1 · Phase 2: Lunar Gleam - Ascendant Radiance',
     buffDescription:
       'Triggering Lunar-Bloom, Lunar-Charged, or Lunar-Crystallize reactions increases active character ATK by 30% and Elemental Mastery by 120. When Moonsign reaches Ascendant Gleam, unleash a Moonburst shockwave.',
@@ -346,6 +350,10 @@ export const ABYSS_CYCLES: AbyssCycleConfig[] = [
     id: 'cycle-5-3',
     version: '5.3',
     phase: 'Phase 1',
+    effectiveStartDate: '2025-01-01',
+    effectiveEndDate: '2025-02-01',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2025-01-01',
     name: 'Version 5.3 · Phase 1: Blazing Nightspirit',
     buffDescription:
       'Characters in Nightsoul Blessing or triggering Pyro reactions gain +25% ATK and +30% Elemental DMG for 12s.',
@@ -493,6 +501,10 @@ export const ABYSS_CYCLES: AbyssCycleConfig[] = [
     id: 'cycle-5-2',
     version: '5.2',
     phase: 'Phase 2',
+    effectiveStartDate: '2024-11-20',
+    effectiveEndDate: '2024-12-20',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2024-11-20',
     name: 'Version 5.2 · Phase 2: Soaring Gales',
     buffDescription:
       'Swirl reactions increase active character CRIT Rate by 15% and CRIT DMG by 30% for 8s; plunging attacks generate a vortex.',
@@ -619,6 +631,10 @@ export const ABYSS_CYCLES: AbyssCycleConfig[] = [
     id: 'cycle-5-1',
     version: '5.1',
     phase: 'Phase 1',
+    effectiveStartDate: '2024-10-09',
+    effectiveEndDate: '2024-11-09',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    verifiedAt: '2024-10-09',
     name: 'Version 5.1 · Phase 1: Resonant Crystals',
     buffDescription:
       'Crystallize reactions trigger a resonant shockwave dealing True AoE damage; Geo DMG +40%.',

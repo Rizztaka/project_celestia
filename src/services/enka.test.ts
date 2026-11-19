@@ -88,6 +88,50 @@ describe('Enka Showcase Integration Service', () => {
       expect(result.avatarIds).toEqual([]);
       expect(result.unrecognizedIds).toEqual([]);
     });
+
+    it('deduplicates avatar IDs and unrecognized IDs cleanly', () => {
+      const mockPayload = {
+        playerInfo: {
+          nickname: 'DupeTester',
+          showAvatarInfoList: [
+            { avatarId: 10000089 }, // Furina
+            { avatarId: 10000089 }, // Duplicate Furina
+            { avatarId: 10000005 }, // Aether (Traveler)
+            { avatarId: 10000007 }, // Lumine (Traveler)
+            { avatarId: 99999999 }, // Unknown
+            { avatarId: 99999999 }, // Duplicate unknown
+          ],
+        },
+      };
+
+      const result = parseEnkaPayload(mockPayload);
+      expect(result.success).toBe(true);
+      expect(result.avatarIds).toEqual(['Furina', 'Traveler']);
+      expect(result.unrecognizedIds).toEqual([99999999]);
+    });
+
+    it('falls back to avatarInfoList when showAvatarInfoList is empty or missing', () => {
+      const detailedPayload = {
+        playerInfo: {
+          nickname: 'DetailedPlayer',
+          showAvatarInfoList: [],
+        },
+        avatarInfoList: [
+          { avatarId: 10000104 }, // Chasca
+          { avatarId: 10000106 }, // Mavuika
+        ],
+      };
+
+      const result = parseEnkaPayload(detailedPayload);
+      expect(result.success).toBe(true);
+      expect(result.avatarIds).toEqual(['Chasca', 'Mavuika']);
+    });
+
+    it('handles null, undefined, and non-object inputs safely without throwing', () => {
+      expect(parseEnkaPayload(null).avatarIds).toEqual([]);
+      expect(parseEnkaPayload(undefined).avatarIds).toEqual([]);
+      expect(parseEnkaPayload('invalid json string').avatarIds).toEqual([]);
+    });
   });
 
   describe('fetchShowcaseFromEnka UID validation & HTTP handling', () => {

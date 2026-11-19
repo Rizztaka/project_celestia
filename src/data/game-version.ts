@@ -36,7 +36,10 @@ export interface ParsedVersion {
  * Parses a semver-like version string into numeric major, minor, and patch components.
  * e.g. "7.2" -> { major: 7, minor: 2 }, "7.2.1" -> { major: 7, minor: 2, patch: 1 }
  */
-export function parseGameVersion(versionStr: string): ParsedVersion {
+export function parseGameVersion(versionStr?: string | null): ParsedVersion {
+  if (typeof versionStr !== 'string' || !versionStr.trim()) {
+    return { major: 0, minor: 0, patch: undefined };
+  }
   const clean = versionStr.trim().replace(/^v/i, '');
   const parts = clean.split('.').map((p) => parseInt(p, 10));
   return {
@@ -79,6 +82,9 @@ export function isVersionAtLeast(version: string, targetVersion: string = CURREN
  * Formats a version string cleanly with 'v' prefix, e.g. "v7.2".
  */
 export function formatGameVersion(version: string = CURRENT_GAME_VERSION): string {
+  if (typeof version !== 'string' || !version.trim()) {
+    return `v${CURRENT_GAME_VERSION}`;
+  }
   const clean = version.trim().replace(/^v/i, '');
   return `v${clean}`;
 }

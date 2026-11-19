@@ -14,6 +14,10 @@
 import fs from 'fs';
 import path from 'path';
 
+function readFileNormalized(filePath) {
+  return fs.readFileSync(filePath, 'utf8').replace(/\r\n/g, '\n');
+}
+
 const errors = [];
 const warnings = [];
 
@@ -35,7 +39,7 @@ console.log('═'.repeat(72));
 console.log('\n[Axis 1] Auditing Entity Counts & ID Uniqueness...');
 
 // 1. Characters
-const charText = fs.readFileSync('src/data/characters.ts', 'utf8');
+const charText = readFileNormalized('src/data/characters.ts');
 const characters = [];
 const seenCharIds = new Set();
 const duplicateCharIds = [];
@@ -67,7 +71,7 @@ if (characters.length !== 128) {
 }
 
 // 2. Weapons
-const weaponText = fs.readFileSync('src/data/weapons.ts', 'utf8');
+const weaponText = readFileNormalized('src/data/weapons.ts');
 const wDecl = 'export const WEAPONS_DATA: WeaponData[] = [';
 const wStart = weaponText.indexOf(wDecl);
 const wEnd = weaponText.indexOf('];\n\nexport const WEAPONS_BY_KEY');
@@ -104,7 +108,7 @@ if (weapons.length !== 256) {
 }
 
 // 3. Artifact Sets
-const artText = fs.readFileSync('src/data/artifacts-master.ts', 'utf8');
+const artText = readFileNormalized('src/data/artifacts-master.ts');
 const aDecl = 'export const ARTIFACTS_MASTER: ArtifactSetMaster[] = [';
 const aStart = artText.indexOf(aDecl);
 const aEnd = artText.indexOf('];\n\nexport const ARTIFACTS_BY_NAME');
@@ -208,7 +212,7 @@ if (brokenWeaponRefs === 0 && brokenArtifactRefs === 0) {
 }
 
 // 2. Banner Character & Weapon References
-const bannerText = fs.readFileSync('src/data/banners.ts', 'utf8');
+const bannerText = readFileNormalized('src/data/banners.ts');
 const bannerCharMatches = [...bannerText.matchAll(/characterId:\s*['"]([^'"]+)['"]/g)].map((m) => m[1]);
 const bannerWeaponMatches = [...bannerText.matchAll(/(?:signatureWeaponKey|featuredWeapons):\s*(?:['"]([^'"]+)['"]|\[([^\]]+)\])/g)];
 
@@ -234,7 +238,7 @@ for (const f4m of featured4Matches) {
 console.log('  ✓ 100% Banner phase referential integrity (characters, 4★ pools, signatures)');
 
 // 3. Theater Opening Cast & Special Guests
-const theaterText = fs.readFileSync('src/data/theater-seasons.ts', 'utf8');
+const theaterText = readFileNormalized('src/data/theater-seasons.ts');
 const openingCastMatches = [...theaterText.matchAll(/openingCastIds:\s*\[([^\]]+)\]/g)];
 const guestMatches = [...theaterText.matchAll(/specialGuestIds:\s*\[([^\]]+)\]/g)];
 
@@ -276,7 +280,7 @@ for (const bdm of bannerDateMatches) {
 }
 
 // Check Abyss Cycle Dates
-const abyssText = fs.readFileSync('src/data/abyss-schedules.ts', 'utf8');
+const abyssText = readFileNormalized('src/data/abyss-schedules.ts');
 const abyssDateMatches = [
   ...abyssText.matchAll(/effectiveStartDate:\s*['"]([^'"]+)['"],\s*effectiveEndDate:\s*['"]([^'"]+)['"]/g),
 ];
@@ -323,7 +327,7 @@ console.log('  ✓ 100% Active schedules possess chronologically valid start and
 // ─────────────────────────────────────────────────────────────────────────────
 console.log('\n[Axis 4] Auditing Enka Avatar Showcase Mapping Completeness...');
 
-const enkaText = fs.readFileSync('src/services/enka.ts', 'utf8');
+const enkaText = readFileNormalized('src/services/enka.ts');
 const enkaEntryMatches = [...enkaText.matchAll(/(\d{8}):\s*['"]([^'"]+)['"]/g)];
 
 const enkaIdMap = new Map();
@@ -374,7 +378,7 @@ if (unmappedCharacters.length > 0) {
 console.log('\n[Axis 5] Auditing Dataset Provenance & Freshness Evidence...');
 
 // Game Version SSOT
-const versionText = fs.readFileSync('src/data/game-version.ts', 'utf8');
+const versionText = readFileNormalized('src/data/game-version.ts');
 const versionMatch = versionText.match(/CURRENT_GAME_VERSION\s*=\s*['"]([^'"]+)['"]/);
 const currentGameVersion = versionMatch ? versionMatch[1] : null;
 
@@ -385,7 +389,7 @@ if (!currentGameVersion || currentGameVersion !== '7.2') {
 }
 
 // Provenance Registry
-const provText = fs.readFileSync('src/data/provenance-registry.ts', 'utf8');
+const provText = readFileNormalized('src/data/provenance-registry.ts');
 const provEntryMatches = [
   ...provText.matchAll(
     /datasetId:\s*['"]([^'"]+)['"],\s*version:\s*(?:CURRENT_GAME_VERSION|['"]([^'"]+)['"]),\s*verifiedAt:\s*['"]([^'"]+)['"],\s*sourceUrl:\s*['"]([^'"]+)['"],\s*evidence:\s*['"]([^'"]+)['"],\s*status:\s*['"]([^'"]+)['"]/g,

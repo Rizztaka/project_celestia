@@ -8,7 +8,7 @@ import { CURRENT_GAME_VERSION } from './game-version';
  * for all active datasets without bloating character or weapon runtime bundles.
  */
 export const DATA_PROVENANCE_REGISTRY: Record<string, DataProvenance> = {
-  // Banner Phases
+  // Banner Phases (Active & Historical)
   banner_7_2_phase_1: {
     datasetId: 'banner_7_2_phase_1',
     version: CURRENT_GAME_VERSION,
@@ -33,8 +33,64 @@ export const DATA_PROVENANCE_REGISTRY: Record<string, DataProvenance> = {
     evidence: 'HoyoLAB Version 7.2 Natlan Chronicled Wish Announcement: Xilonen, Chasca, Kinich, Mualani, Varesa',
     status: 'verified',
   },
+  banner_5_4_phase_1: {
+    datasetId: 'banner_5_4_phase_1',
+    version: '5.4',
+    verifiedAt: '2025-02-12',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'HoyoLAB Version 5.4 Phase 1 Event Wish Announcement: Yumemizuki Mizuki & Sigewinne',
+    status: 'stale',
+  },
+  banner_5_3_phase_1: {
+    datasetId: 'banner_5_3_phase_1',
+    version: '5.3',
+    verifiedAt: '2025-01-01',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'HoyoLAB Version 5.3 Phase 1 Event Wish Announcement: Mavuika & Citlali',
+    status: 'stale',
+  },
+  banner_5_3_phase_2: {
+    datasetId: 'banner_5_3_phase_2',
+    version: '5.3',
+    verifiedAt: '2025-01-21',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'HoyoLAB Version 5.3 Phase 2 Event Wish Announcement: Arlecchino & Clorinde',
+    status: 'stale',
+  },
+  banner_5_2_phase_1: {
+    datasetId: 'banner_5_2_phase_1',
+    version: '5.2',
+    verifiedAt: '2024-11-20',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'HoyoLAB Version 5.2 Phase 1 Event Wish Announcement: Chasca & Lyney',
+    status: 'stale',
+  },
+  banner_5_2_phase_2: {
+    datasetId: 'banner_5_2_phase_2',
+    version: '5.2',
+    verifiedAt: '2024-12-10',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'HoyoLAB Version 5.2 Phase 2 Event Wish Announcement: Zhongli & Neuvillette',
+    status: 'stale',
+  },
+  banner_5_1_phase_1: {
+    datasetId: 'banner_5_1_phase_1',
+    version: '5.1',
+    verifiedAt: '2024-10-09',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'HoyoLAB Version 5.1 Phase 1 Event Wish Announcement: Xilonen & Chiori',
+    status: 'stale',
+  },
+  banner_5_1_phase_2: {
+    datasetId: 'banner_5_1_phase_2',
+    version: '5.1',
+    verifiedAt: '2024-10-29',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'HoyoLAB Version 5.1 Phase 2 Event Wish Announcement: Nahida & Hu Tao',
+    status: 'stale',
+  },
 
-  // Spiral Abyss
+  // Spiral Abyss (Active & Historical)
   'cycle-7-2': {
     datasetId: 'cycle-7-2',
     version: CURRENT_GAME_VERSION,
@@ -51,8 +107,48 @@ export const DATA_PROVENANCE_REGISTRY: Record<string, DataProvenance> = {
     evidence: 'Version 7.2 Spiral Abyss Floor 12 Chamber 1-3 Enemy Lineup, HP, and Elemental Resistance Calibration',
     status: 'verified',
   },
+  'cycle-7-1': {
+    datasetId: 'cycle-7-1',
+    version: '7.1',
+    verifiedAt: '2026-10-16',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'Version 7.1 Spiral Abyss Phase 2 In-Game Lineup Archive (Lunar Gleam - Ascendant Radiance)',
+    status: 'stale',
+  },
+  'cycle-5-3': {
+    datasetId: 'cycle-5-3',
+    version: '5.3',
+    verifiedAt: '2025-01-01',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'Version 5.3 Spiral Abyss Floor 12 Lineup Archive (Blazing Nightspirit)',
+    status: 'stale',
+  },
+  'cycle-5-2': {
+    datasetId: 'cycle-5-2',
+    version: '5.2',
+    verifiedAt: '2024-11-20',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'Version 5.2 Spiral Abyss Floor 12 Lineup Archive (Emperor of Fire and Iron)',
+    status: 'stale',
+  },
+  'cycle-5-1': {
+    datasetId: 'cycle-5-1',
+    version: '5.1',
+    verifiedAt: '2024-10-09',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'Version 5.1 Spiral Abyss Floor 12 Lineup Archive (Setekh Wenut & Mountain Matus)',
+    status: 'stale',
+  },
+  'custom-sandbox': {
+    datasetId: 'custom-sandbox',
+    version: CURRENT_GAME_VERSION,
+    verifiedAt: '2026-11-16',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'User-customized sandbox simulation. Real-time dynamic lineup testing environment.',
+    status: 'provisional',
+  },
 
-  // Imaginarium Theater
+  // Imaginarium Theater (Active & Historical)
   'season-7-2-hydro-electro-geo': {
     datasetId: 'season-7-2-hydro-electro-geo',
     version: CURRENT_GAME_VERSION,
@@ -84,6 +180,38 @@ export const DATA_PROVENANCE_REGISTRY: Record<string, DataProvenance> = {
     sourceUrl: 'https://genshin.hoyoverse.com/en/news',
     evidence: 'Version 7.2 Imaginarium Theater December 2026 Opening Cast & Special Guests Verification',
     status: 'verified',
+  },
+  'season-7-snezhnaya-cryo-hydro-electro': {
+    datasetId: 'season-7-snezhnaya-cryo-hydro-electro',
+    version: CURRENT_GAME_VERSION,
+    verifiedAt: '2026-11-16',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'Version 7.2 Snezhnaya Season Speculative Opening Cast & Special Guest Lineup Verification',
+    status: 'provisional',
+  },
+  'season-7-nod-krai-anemo-pyro-geo': {
+    datasetId: 'season-7-nod-krai-anemo-pyro-geo',
+    version: '7.1',
+    verifiedAt: '2026-10-01',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'Version 7.1 Imaginarium Theater October Season Schedule Archive (Anemo / Pyro / Geo)',
+    status: 'stale',
+  },
+  'season-natlan-pyro-hydro-anemo': {
+    datasetId: 'season-natlan-pyro-hydro-anemo',
+    version: '5.2',
+    verifiedAt: '2024-11-01',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'Version 5.2 Imaginarium Theater Season 1 Lineup Archive (Pyro / Hydro / Anemo)',
+    status: 'stale',
+  },
+  'season-bloom-hydro-electro-dendro': {
+    datasetId: 'season-bloom-hydro-electro-dendro',
+    version: '5.0',
+    verifiedAt: '2024-09-01',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+    evidence: 'Version 5.0 Imaginarium Theater Season 2 Lineup Archive (Hydro / Electro / Dendro)',
+    status: 'stale',
   },
 
   // Characters & Core Data

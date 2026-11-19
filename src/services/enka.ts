@@ -138,21 +138,52 @@ export const ENKA_ID_MAP: Record<number, string> = {
  * Parses raw JSON payload returned by Enka.Network API.
  */
 export function parseEnkaPayload(data: any): EnkaFetchResult {
-  const avatarList: number[] = data?.playerInfo?.showAvatarInfoList?.map((a: { avatarId: number }) => a.avatarId) || [];
-  const matchedKeys: string[] = [];
-  const unrecognizedIds: number[] = [];
+  if (!data || typeof data !== 'object') {
+    return {
+      success: true,
+      nickname: 'Traveler',
+      avatarIds: [],
+      unrecognizedIds: [],
+    };
+  }
 
-  for (const id of avatarList) {
-    if (ENKA_ID_MAP[id]) {
-      matchedKeys.push(ENKA_ID_MAP[id]);
+  // Extract avatar IDs from showAvatarInfoList or avatarInfoList (fallback when detailed showcase is returned)
+  const rawList: unknown[] =
+    Array.isArray(data?.playerInfo?.showAvatarInfoList) && data.playerInfo.showAvatarInfoList.length > 0
+      ? data.playerInfo.showAvatarInfoList.map((a: any) => a?.avatarId)
+      : Array.isArray(data?.avatarInfoList) && data.avatarInfoList.length > 0
+        ? data.avatarInfoList.map((a: any) => a?.avatarId)
+        : [];
+
+  const matchedKeys: string[] = [];
+  const seenKeys = new Set<string>();
+  const unrecognizedIds: number[] = [];
+  const seenUnrecognized = new Set<number>();
+
+  for (const item of rawList) {
+    const id = typeof item === 'number' ? item : parseInt(String(item), 10);
+    if (Number.isNaN(id)) continue;
+
+    const key = ENKA_ID_MAP[id];
+    if (key) {
+      if (!seenKeys.has(key)) {
+        seenKeys.add(key);
+        matchedKeys.push(key);
+      }
     } else {
-      unrecognizedIds.push(id);
+      if (!seenUnrecognized.has(id)) {
+        seenUnrecognized.add(id);
+        unrecognizedIds.push(id);
+      }
     }
   }
 
   return {
     success: true,
-    nickname: data?.playerInfo?.nickname || 'Traveler',
+    nickname:
+      typeof data?.playerInfo?.nickname === 'string' && data.playerInfo.nickname.trim()
+        ? data.playerInfo.nickname.trim()
+        : 'Traveler',
     avatarIds: matchedKeys,
     unrecognizedIds,
   };

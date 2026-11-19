@@ -322,9 +322,13 @@ describe('Data-Source Integrity Verification', () => {
 
       expect(parseGameVersion('7.2')).toEqual({ major: 7, minor: 2, patch: undefined });
       expect(parseGameVersion('v7.2.1')).toEqual({ major: 7, minor: 2, patch: 1 });
+      expect(parseGameVersion('')).toEqual({ major: 0, minor: 0, patch: undefined });
+      expect(parseGameVersion(null as any)).toEqual({ major: 0, minor: 0, patch: undefined });
 
       expect(formatGameVersion('7.2')).toBe('v7.2');
       expect(formatGameVersion('v7.2')).toBe('v7.2');
+      expect(formatGameVersion('')).toBe(`v${CURRENT_GAME_VERSION}`);
+      expect(formatGameVersion(null as any)).toBe(`v${CURRENT_GAME_VERSION}`);
     });
   });
 

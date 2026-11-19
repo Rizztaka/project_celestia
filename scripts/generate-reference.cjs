@@ -1,13 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 
+function readFileNormalized(filePath) {
+  return fs.readFileSync(filePath, 'utf8').replace(/\r\n/g, '\n');
+}
+
 // 0. Read canonical game version SSOT from src/data/game-version.ts
-const versionText = fs.readFileSync('src/data/game-version.ts', 'utf8');
+const versionText = readFileNormalized('src/data/game-version.ts');
 const versionMatch = versionText.match(/CURRENT_GAME_VERSION\s*=\s*['"]([^'"]+)['"]/);
 const GAME_VERSION = versionMatch ? versionMatch[1] : '7.2';
 
 // 1. Read and parse characters from src/data/characters.ts
-const charText = fs.readFileSync('src/data/characters.ts', 'utf8');
+const charText = readFileNormalized('src/data/characters.ts');
 const charLines = charText.split('\n');
 const characters = [];
 const charArtifactSets = new Set();
@@ -142,7 +146,7 @@ for (const c of characters) {
 }
 
 // 3. Read weapons from src/data/weapons.ts
-const weaponText = fs.readFileSync('src/data/weapons.ts', 'utf8');
+const weaponText = readFileNormalized('src/data/weapons.ts');
 const arrayDeclaration = 'export const WEAPONS_DATA: WeaponData[] = [';
 const startIndex = weaponText.indexOf(arrayDeclaration);
 const arrayStart = startIndex + arrayDeclaration.length - 1;
@@ -173,7 +177,7 @@ const totalLowStar = weapons.filter(w => w.rarity <= 2).length;
 // Read master artifacts
 let masterArtifacts = [];
 if (fs.existsSync('src/data/artifacts-master.ts')) {
-  const artText = fs.readFileSync('src/data/artifacts-master.ts', 'utf8');
+  const artText = readFileNormalized('src/data/artifacts-master.ts');
   const decl = 'export const ARTIFACTS_MASTER: ArtifactSetMaster[] = [';
   const aStart = artText.indexOf(decl);
   if (aStart !== -1) {

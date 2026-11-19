@@ -133,6 +133,7 @@ export const THEATER_SEASONS: TheaterSeasonConfig[] = [
   {
     id: 'season-7-snezhnaya-cryo-hydro-electro',
     name: 'Version 7.2 · Frost & Thunder (Cryo / Hydro / Electro)',
+    version: CURRENT_GAME_VERSION,
     elements: ['Cryo', 'Hydro', 'Electro'],
     openingCastIds: [
       'Columbina',
@@ -153,6 +154,7 @@ export const THEATER_SEASONS: TheaterSeasonConfig[] = [
   {
     id: 'season-7-nod-krai-anemo-pyro-geo',
     name: 'Version 7.1 · Astral Zephyr & Wildfire (Anemo / Pyro / Geo)',
+    version: '7.1',
     elements: ['Anemo', 'Pyro', 'Geo'],
     openingCastIds: [
       'Mavuika',
@@ -173,6 +175,7 @@ export const THEATER_SEASONS: TheaterSeasonConfig[] = [
   {
     id: 'season-natlan-pyro-hydro-anemo',
     name: 'Season 1 · Blazing Winds (Pyro / Hydro / Anemo)',
+    version: '5.2',
     elements: ['Pyro', 'Hydro', 'Anemo'],
     openingCastIds: [
       'Mavuika',
@@ -193,6 +196,7 @@ export const THEATER_SEASONS: TheaterSeasonConfig[] = [
   {
     id: 'season-bloom-hydro-electro-dendro',
     name: 'Season 2 · Lunar Bloom & Tempest (Hydro / Electro / Dendro)',
+    version: '5.0',
     elements: ['Hydro', 'Electro', 'Dendro'],
     openingCastIds: [
       'Nefer',

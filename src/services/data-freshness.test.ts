@@ -74,6 +74,25 @@ describe('Data Freshness Service', () => {
       expect(isDatasetStale(oldVersion, PATCH_CYCLE_DAYS, baseDate)).toBe(true);
     });
 
+    it('handles leap year dates and exact day boundaries accurately', () => {
+      const leapYearProv: DataProvenance = {
+        datasetId: 'test_leap_year',
+        version: CURRENT_GAME_VERSION,
+        verifiedAt: '2024-02-29',
+        sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+        evidence: 'Leap year check',
+        status: 'verified',
+      };
+
+      // 42 days after 2024-02-29 is 2024-04-11
+      const on42Days = new Date('2024-04-11T00:00:00Z');
+      expect(isDatasetStale(leapYearProv, PATCH_CYCLE_DAYS, on42Days)).toBe(false);
+
+      // 43 days after 2024-02-29 is 2024-04-12
+      const on43Days = new Date('2024-04-12T00:00:00Z');
+      expect(isDatasetStale(leapYearProv, PATCH_CYCLE_DAYS, on43Days)).toBe(true);
+    });
+
     it('returns true if verifiedAt is an invalid date string', () => {
       const invalidDate: DataProvenance = {
         datasetId: 'test_invalid_date',
@@ -151,6 +170,41 @@ describe('Data Freshness Service', () => {
       expect(info.isStale).toBe(false);
       expect(info.status).toBe('provisional');
       expect(info.badgeLabel).toBe(`Provisional v${CURRENT_GAME_VERSION}`);
+    });
+
+    it('correctly labels historical registered schedules (cycle-5-3, cycle-7-1, banner_5_3_phase_1) as stale', () => {
+      const abyss53 = getFreshnessInfo('cycle-5-3', baseDate);
+      expect(abyss53.isStale).toBe(true);
+      expect(abyss53.status).toBe('stale');
+      expect(abyss53.version).toBe('5.3');
+      expect(abyss53.badgeLabel).toBe('Stale v5.3');
+
+      const abyss71 = getFreshnessInfo('cycle-7-1', baseDate);
+      expect(abyss71.isStale).toBe(true);
+      expect(abyss71.status).toBe('stale');
+      expect(abyss71.version).toBe('7.1');
+      expect(abyss71.badgeLabel).toBe('Stale v7.1');
+
+      const banner53 = getFreshnessInfo('banner_5_3_phase_1', baseDate);
+      expect(banner53.isStale).toBe(true);
+      expect(banner53.status).toBe('stale');
+      expect(banner53.version).toBe('5.3');
+      expect(banner53.badgeLabel).toBe('Stale v5.3');
+    });
+
+    it('formats sandbox datasets cleanly with Sandbox Simulation label', () => {
+      const sandboxInfo = getFreshnessInfo('custom-sandbox', baseDate);
+      expect(sandboxInfo.isStale).toBe(false);
+      expect(sandboxInfo.status).toBe('provisional');
+      expect(sandboxInfo.badgeLabel).toBe('Sandbox Simulation');
+    });
+
+    it('infers version and marks stale for unregistered historical dataset IDs', () => {
+      const unregStale = getFreshnessInfo('banner_5_0_phase_1', baseDate);
+      expect(unregStale.isStale).toBe(true);
+      expect(unregStale.status).toBe('stale');
+      expect(unregStale.version).toBe('5.0');
+      expect(unregStale.badgeLabel).toBe('Stale v5.0');
     });
   });
 });

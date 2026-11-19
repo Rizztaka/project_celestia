@@ -76,6 +76,21 @@ describe('DataFreshnessBadge Component', () => {
     expect(html).toContain(`Verified v${CURRENT_GAME_VERSION}`);
   });
 
+  it('renders historical datasetId as stale with amber warning', () => {
+    const html = renderToString(<DataFreshnessBadge datasetId="cycle-5-3" />);
+
+    expect(html).toContain('Stale v5.3');
+    expect(html).toContain('bg-amber-950/60');
+    expect(html).toContain('text-amber-300');
+  });
+
+  it('renders sandbox dataset with provisional styling and Sandbox Simulation label', () => {
+    const html = renderToString(<DataFreshnessBadge datasetId="custom-sandbox" />);
+
+    expect(html).toContain('Sandbox Simulation');
+    expect(html).toContain('bg-sky-950/60');
+  });
+
   it('applies custom className cleanly', () => {
     const html = renderToString(
       <DataFreshnessBadge datasetId="cycle-7-2" className="custom-test-class" />,

@@ -540,7 +540,7 @@ export function calculateCompatibilityScore(
 
 /**
  * Calculates practical investment readiness score (0-100) based on owned levels,
- * constellations, and weapon armory match.
+ * constellations, talent milestones, and weapon armory match.
  */
 export function calculateInvestmentScore(
   team: Character[],
@@ -549,18 +549,30 @@ export function calculateInvestmentScore(
 ): number {
   let totalScore = 0;
 
-  // 1. Character Level & Progression (up to 35 pts)
+  // 1. Character Level & Talent Progression (up to 35 pts)
   let levelPts = 0;
   for (const m of team) {
     const prof = profiles?.[m.id];
     const lvl = prof?.level ?? 90; // Default to 90 if profile not provided
-    if (lvl >= 90) levelPts += 35 / 4;
-    else if (lvl >= 80) levelPts += 28 / 4;
-    else if (lvl >= 70) levelPts += 20 / 4;
-    else if (lvl >= 60) levelPts += 12 / 4;
-    else levelPts += 5 / 4;
+    let charLevelPts: number;
+    if (lvl >= 90) charLevelPts = 6.25;
+    else if (lvl >= 80) charLevelPts = 5.0;
+    else if (lvl >= 70) charLevelPts = 3.5;
+    else if (lvl >= 60) charLevelPts = 2.0;
+    else charLevelPts = 1.0;
+
+    // Talent milestones (auto, skill, burst)
+    let charTalentPts = 2.5; // Default standard talent readiness (e.g. 8/8/8)
+    if (prof?.talents) {
+      const avgTalent = (prof.talents.auto + prof.talents.skill + prof.talents.burst) / 3;
+      if (avgTalent >= 9) charTalentPts = 2.5;
+      else if (avgTalent >= 8) charTalentPts = 2.0;
+      else if (avgTalent >= 6) charTalentPts = 1.5;
+      else charTalentPts = 0.5;
+    }
+    levelPts += charLevelPts + charTalentPts;
   }
-  totalScore += levelPts;
+  totalScore += Math.min(35, levelPts);
 
   // 2. Constellation Milestones (up to 25 pts)
   let constPts = 10; // Baseline C0 investment
@@ -885,6 +897,7 @@ function generateTeamsFromPool(
           pool,
           rosterProfiles,
           weaponAssignments,
+          (t) => calculateCompatibilityScore(t, template, rosterProfiles, weaponAssignments),
         );
 
         results.push({
@@ -895,16 +908,18 @@ function generateTeamsFromPool(
           synergyScore: compatibilityScore,
           compositionCompatibilityScore: compatibilityScore,
           comfortScore: teamSustain ? 92 : 72,
-          reasons: [
-            `${lead.name} acts as the core ${lead.roles[0]} driving ${template.archetype}.`,
-            `${chosen[1].name} enables high-frequency elemental chain reactions.`,
-            `${chosen[2].name} amplifies team damage through buffs and resistance reduction.`,
-            teamSustain
-              ? `${teamSustain.name} guarantees safe clear windows with survivability.`
-              : 'High aggressive offensive output with minimal downtime.',
-            ...constMods.extraReasons,
-            ...(explanation.antiSynergyWarnings || []),
-          ],
+          reasons: Array.from(
+            new Set([
+              `${lead.name} acts as the core ${lead.roles[0]} driving ${template.archetype}.`,
+              `${chosen[1].name} enables high-frequency elemental chain reactions.`,
+              `${chosen[2].name} amplifies team damage through buffs and resistance reduction.`,
+              teamSustain
+                ? `${teamSustain.name} guarantees safe clear windows with survivability.`
+                : 'High aggressive offensive output with minimal downtime.',
+              ...constMods.extraReasons,
+              ...(explanation.antiSynergyWarnings || []),
+            ]),
+          ),
           rotation: stepped.summaryString || template.rotation,
           steppedRotation: stepped,
           resonance: calculateResonance(chosen),

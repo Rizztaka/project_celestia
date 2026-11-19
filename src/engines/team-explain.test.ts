@@ -168,4 +168,31 @@ describe('Team Explanation & Swap Advisor Engine', () => {
     expect(explanation.antiSynergyWarnings).toBeDefined();
     expect(explanation.antiSynergyWarnings?.some((w) => w.includes('Bennett C6'))).toBe(true);
   });
+
+  it('calculates dynamic compatibility impact delta when scoreTeamFn is provided', () => {
+    const team = [huTao, xingqiu, zhongli, kazuha];
+    const pool = [huTao, xingqiu, zhongli, kazuha, sucrose];
+
+    // Score function that gives 95 to team with Kazuha and 91 to team with Sucrose
+    const mockScoreFn = (members: Character[]) => {
+      if (members.some((m) => m.id === 'KaedeharaKazuha')) return 95;
+      if (members.some((m) => m.id === 'Sucrose')) return 91;
+      return 85;
+    };
+
+    const explanation = generateTeamExplanation(
+      team,
+      vapeTemplate,
+      pool,
+      undefined,
+      undefined,
+      mockScoreFn,
+    );
+
+    const kazuhaAlt = explanation.alternatives.find(
+      (a) => a.originalCharacterId === 'KaedeharaKazuha' && a.alternativeCharacter.id === 'Sucrose',
+    );
+    expect(kazuhaAlt).toBeDefined();
+    expect(kazuhaAlt?.compatibilityImpact).toBe(-4);
+  });
 });

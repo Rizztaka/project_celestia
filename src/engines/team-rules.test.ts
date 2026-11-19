@@ -88,6 +88,19 @@ describe('Team Rules Engine (Archetype Exclusivity & Anti-Synergies)', () => {
       const validBloomTeam = [nahida, kokomi];
       expect(isAllowedTeammate('Bountiful-Bloom', nilou, validBloomTeam)).toBe(true);
     });
+
+    it('archetype exclusivity: rejects off-element candidates for Bountiful-Bloom even when Nilou is not yet in the team', () => {
+      // Current team has Nahida (Dendro), Nilou is not yet in the team
+      expect(isAllowedTeammate('Bountiful-Bloom', kazuha, [nahida])).toBe(false);
+      expect(isAllowedTeammate('Bountiful-Bloom', zhongli, [nahida])).toBe(false);
+      expect(isAllowedTeammate('Bountiful-Bloom', bennett, [nahida])).toBe(false);
+    });
+
+    it('archetype exclusivity: rejects off-element candidates for Overload even when Chevreuse is not yet in the team', () => {
+      expect(isAllowedTeammate('Overload', furina, [xiangling])).toBe(false);
+      expect(isAllowedTeammate('Overload', nahida, [xiangling])).toBe(false);
+      expect(isAllowedTeammate('Overload', zhongli, [xiangling])).toBe(false);
+    });
   });
 
   describe('Traveler Single-Identity Protection & Duplicate Prevention', () => {
@@ -99,6 +112,14 @@ describe('Team Rules Engine (Archetype Exclusivity & Anti-Synergies)', () => {
     it('disallows combining different elemental configurations of the Traveler', () => {
       expect(isSameCharacterOrTraveler(travelerDendro, travelerHydro)).toBe(true);
       expect(isAllowedTeammate('Hyperbloom', travelerHydro, [travelerDendro])).toBe(false);
+    });
+
+    it('enforces Traveler identity protection across element-named configurations and aliases', () => {
+      const aether = { ...travelerDendro, id: 'Aether', name: 'Traveler' };
+      const lumine = { ...travelerHydro, id: 'Lumine', name: 'Traveler' };
+      expect(isSameCharacterOrTraveler(aether, travelerHydro)).toBe(true);
+      expect(isSameCharacterOrTraveler(lumine, travelerDendro)).toBe(true);
+      expect(isSameCharacterOrTraveler(aether, lumine)).toBe(true);
     });
   });
 
@@ -227,6 +248,14 @@ describe('Team Rules Engine (Archetype Exclusivity & Anti-Synergies)', () => {
 
     it('reports optimal status when universal battery (Raiden Shogun) is present', () => {
       const team = [xiangling, raiden, furina, kazuha];
+      const res = evaluateEnergyBattery(team);
+      expect(res.status).toBe('optimal');
+      expect(res.warnings).toHaveLength(0);
+    });
+
+    it('reports optimal status when Kaedehara Kazuha batteries high-cost Anemo carry (Xiao)', () => {
+      const xiao = getChar('Xiao');
+      const team = [xiao, kazuha, furina, zhongli];
       const res = evaluateEnergyBattery(team);
       expect(res.status).toBe('optimal');
       expect(res.warnings).toHaveLength(0);

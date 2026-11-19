@@ -191,6 +191,7 @@ export function generateTeamExplanation(
   availablePool: Character[],
   profiles?: Record<string, OwnedCharacterProfile>,
   weaponAssignments?: TeamWeaponAssignment[],
+  scoreTeamFn?: (members: Character[]) => number,
 ): TeamExplanation {
   // 1. Role rationale per slot
   const roleRationale: Record<string, string> = {};
@@ -223,22 +224,25 @@ export function generateTeamExplanation(
     warnings: energyResult.warnings,
   };
 
-  // 4. Anti-synergy warnings collection
-  const antiSynergyWarnings: string[] = [];
+  // 4. Anti-synergy warnings collection (deduplicated)
+  const antiSynergyWarningsList: string[] = [];
   const bennettConflict = detectBennettC6Conflict(team, profiles);
   if (bennettConflict.hasConflict && bennettConflict.warning) {
-    antiSynergyWarnings.push(bennettConflict.warning);
+    antiSynergyWarningsList.push(bennettConflict.warning);
   }
   const dualCarryConflict = detectDualCarryContention(team);
   if (dualCarryConflict.hasContention && dualCarryConflict.warning) {
-    antiSynergyWarnings.push(dualCarryConflict.warning);
+    antiSynergyWarningsList.push(dualCarryConflict.warning);
   }
   if (energyResult.warnings.length > 0) {
-    antiSynergyWarnings.push(...energyResult.warnings);
+    antiSynergyWarningsList.push(...energyResult.warnings);
   }
+  const antiSynergyWarnings =
+    antiSynergyWarningsList.length > 0 ? Array.from(new Set(antiSynergyWarningsList)) : undefined;
 
   // 5. Accessible Swap Alternatives (1-2 alternatives per slot)
   const alternatives: CharacterSwapAlternative[] = [];
+  const baseTeamScore = scoreTeamFn ? scoreTeamFn(team) : 0;
 
   for (const member of team) {
     const currentOthers = team.filter((m) => m.id !== member.id);
@@ -273,7 +277,14 @@ export function generateTeamExplanation(
     // Pick top 1 or 2 candidates
     for (const item of scoredCandidates.slice(0, 2)) {
       const tradeOffs = evaluateSwapTradeOffs(member, item.candidate);
-      const impact = item.candidate.element === member.element ? 0 : -3;
+      let impact: number;
+      if (scoreTeamFn) {
+        const candidateTeam = [...currentOthers, item.candidate];
+        const candidateScore = scoreTeamFn(candidateTeam);
+        impact = candidateScore - baseTeamScore;
+      } else {
+        impact = item.candidate.element === member.element ? 0 : -3;
+      }
 
       alternatives.push({
         originalCharacterId: member.id,
@@ -290,6 +301,6 @@ export function generateTeamExplanation(
     reactionWorkflow,
     energyAssessment,
     alternatives,
-    antiSynergyWarnings: antiSynergyWarnings.length > 0 ? antiSynergyWarnings : undefined,
+    antiSynergyWarnings,
   };
 }

@@ -163,6 +163,75 @@ describe('Team Generator Engine & Three-Tier Scoring', () => {
     expect(maxInvestment).toBeGreaterThanOrEqual(90);
   });
 
+  it('factors talent milestones into investment score', () => {
+    const charHuTao = CHARACTERS.find((c) => c.id === 'HuTao')!;
+    const charXingqiu = CHARACTERS.find((c) => c.id === 'Xingqiu')!;
+    const charYelan = CHARACTERS.find((c) => c.id === 'Yelan')!;
+    const charZhongli = CHARACTERS.find((c) => c.id === 'Zhongli')!;
+    const team = [charHuTao, charXingqiu, charYelan, charZhongli];
+
+    const lowTalentProfiles: Record<string, OwnedCharacterProfile> = {
+      HuTao: { id: 'HuTao', level: 90, constellation: 0, talents: { auto: 1, skill: 1, burst: 1 } },
+      Xingqiu: { id: 'Xingqiu', level: 90, constellation: 0, talents: { auto: 1, skill: 1, burst: 1 } },
+      Yelan: { id: 'Yelan', level: 90, constellation: 0, talents: { auto: 1, skill: 1, burst: 1 } },
+      Zhongli: { id: 'Zhongli', level: 90, constellation: 0, talents: { auto: 1, skill: 1, burst: 1 } },
+    };
+
+    const maxTalentProfiles: Record<string, OwnedCharacterProfile> = {
+      HuTao: { id: 'HuTao', level: 90, constellation: 0, talents: { auto: 10, skill: 10, burst: 10 } },
+      Xingqiu: { id: 'Xingqiu', level: 90, constellation: 0, talents: { auto: 10, skill: 10, burst: 10 } },
+      Yelan: { id: 'Yelan', level: 90, constellation: 0, talents: { auto: 10, skill: 10, burst: 10 } },
+      Zhongli: { id: 'Zhongli', level: 90, constellation: 0, talents: { auto: 10, skill: 10, burst: 10 } },
+    };
+
+    const scoreLowTalent = calculateInvestmentScore(team, lowTalentProfiles);
+    const scoreMaxTalent = calculateInvestmentScore(team, maxTalentProfiles);
+
+    expect(scoreMaxTalent).toBeGreaterThan(scoreLowTalent);
+  });
+
+  it('never duplicates caution warnings in reasons when Bennett C6 has conflicts', () => {
+    const owned = ['Eula', 'Bennett', 'RaidenShogun', 'Zhongli', 'Fischl', 'Mika'];
+    const c6Profiles: Record<string, OwnedCharacterProfile> = {
+      Bennett: { id: 'Bennett', level: 90, constellation: 6 },
+    };
+    const teams = generateBestTeams(owned, 'Eula', c6Profiles);
+    expect(teams.length).toBeGreaterThan(0);
+
+    for (const team of teams) {
+      const cautionCount = team.reasons.filter((r) =>
+        r.includes('Bennett C6 Pyro Infusion overrides'),
+      ).length;
+      expect(cautionCount).toBeLessThanOrEqual(1);
+
+      // Verify overall reasons array has zero duplicate strings
+      const uniqueReasons = new Set(team.reasons);
+      expect(uniqueReasons.size).toBe(team.reasons.length);
+    }
+  });
+
+  it('safely handles account owning multiple Traveler elements without duplicate party members', () => {
+    const owned = [
+      'TravelerAnemo',
+      'TravelerGeo',
+      'TravelerElectro',
+      'TravelerDendro',
+      'TravelerHydro',
+      'TravelerPyro',
+      'Xiangling',
+      'Bennett',
+      'Xingqiu',
+      'Fischl',
+    ];
+    const teams = generateBestTeams(owned);
+    expect(teams.length).toBeGreaterThan(0);
+
+    for (const team of teams) {
+      const travelers = team.members.filter((m) => m.id.startsWith('Traveler'));
+      expect(travelers.length).toBeLessThanOrEqual(1);
+    }
+  });
+
   it('determines benchmark tier accurately based on synergy ceiling and anchor carries', () => {
     const charNefer = CHARACTERS.find((c) => c.id === 'Nefer')!;
     const charLauma = CHARACTERS.find((c) => c.id === 'Lauma')!;

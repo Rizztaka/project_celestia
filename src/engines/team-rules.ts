@@ -33,7 +33,14 @@ export const ARCHETYPE_EXCLUSIVITY_RULES: ArchetypeExclusivityRule[] = [
  */
 export function isSameCharacterOrTraveler(a: Character, b: Character): boolean {
   if (a.id === b.id) return true;
-  if (a.id.startsWith('Traveler') && b.id.startsWith('Traveler')) return true;
+  const isTraveler = (c: Character) =>
+    c.id.startsWith('Traveler') ||
+    c.id === 'Aether' ||
+    c.id === 'Lumine' ||
+    c.id === 'PlayerBoy' ||
+    c.id === 'PlayerGirl' ||
+    (typeof c.name === 'string' && c.name.startsWith('Traveler'));
+  if (isTraveler(a) && isTraveler(b)) return true;
   return false;
 }
 
@@ -42,7 +49,7 @@ export function isSameCharacterOrTraveler(a: Character, b: Character): boolean {
  * under strict archetype exclusivity rules, Traveler identity uniqueness, and no duplicates.
  */
 export function isAllowedTeammate(
-  _archetype: string,
+  archetype: string,
   candidate: Character,
   currentMembers: Character[],
   exclusiveElements?: (Element | string)[],
@@ -52,37 +59,30 @@ export function isAllowedTeammate(
     return false;
   }
 
-  // 2. Chevreuse Overload rule:
-  // If Chevreuse is on the team or candidate is Chevreuse:
-  const chevreuseInTeam = currentMembers.some((m) => m.id === 'Chevreuse');
-  const candidateIsChevreuse = candidate.id === 'Chevreuse';
-
-  if (chevreuseInTeam || candidateIsChevreuse) {
-    if (candidate.element !== 'Pyro' && candidate.element !== 'Electro') {
+  // 2. Consult declarative archetype exclusivity rules by archetype name
+  const archetypeRule = ARCHETYPE_EXCLUSIVITY_RULES.find((r) => r.archetype === archetype);
+  if (archetypeRule) {
+    if (!archetypeRule.allowedElements.includes(candidate.element)) {
       return false;
-    }
-    if (candidateIsChevreuse) {
-      const hasOffElement = currentMembers.some(
-        (m) => m.element !== 'Pyro' && m.element !== 'Electro',
-      );
-      if (hasOffElement) return false;
     }
   }
 
-  // 3. Nilou Bountiful Bloom rule:
-  // If Nilou is on the team or candidate is Nilou:
-  const nilouInTeam = currentMembers.some((m) => m.id === 'Nilou');
-  const candidateIsNilou = candidate.id === 'Nilou';
+  // 3. Consult trigger character exclusivity (e.g. Chevreuse Overload, Nilou Bountiful Bloom)
+  for (const rule of ARCHETYPE_EXCLUSIVITY_RULES) {
+    if (!rule.triggerCharacterId) continue;
+    const triggerInTeam = currentMembers.some((m) => m.id === rule.triggerCharacterId);
+    const candidateIsTrigger = candidate.id === rule.triggerCharacterId;
 
-  if (nilouInTeam || candidateIsNilou) {
-    if (candidate.element !== 'Hydro' && candidate.element !== 'Dendro') {
-      return false;
-    }
-    if (candidateIsNilou) {
-      const hasOffElement = currentMembers.some(
-        (m) => m.element !== 'Hydro' && m.element !== 'Dendro',
-      );
-      if (hasOffElement) return false;
+    if (triggerInTeam || candidateIsTrigger) {
+      if (!rule.allowedElements.includes(candidate.element)) {
+        return false;
+      }
+      if (candidateIsTrigger) {
+        const hasOffElement = currentMembers.some(
+          (m) => !rule.allowedElements.includes(m.element),
+        );
+        if (hasOffElement) return false;
+      }
     }
   }
 
@@ -203,13 +203,13 @@ const HIGH_BURST_COST: Record<string, number> = {
 
 // Known battery providers per element capable of particle funneling
 const ELEMENT_BATTERIES: Record<string, string[]> = {
-  Pyro: ['Bennett', 'Chevreuse'],
-  Hydro: ['Xingqiu', 'Yelan', 'Furina', 'SangonomiyaKokomi'],
-  Electro: ['Fischl', 'RaidenShogun', 'Dori', 'KukiShinobu', 'YaeMiko', 'TravelerElectro'],
+  Pyro: ['Bennett', 'Chevreuse', 'Mavuika'],
+  Hydro: ['Xingqiu', 'Yelan', 'Furina', 'SangonomiyaKokomi', 'Mona', 'Neuvillette'],
+  Electro: ['Fischl', 'RaidenShogun', 'Dori', 'KukiShinobu', 'YaeMiko', 'TravelerElectro', 'Iansan', 'Ororon'],
   Cryo: ['Diona', 'Rosaria', 'Shenhe', 'Kaeya', 'Layla', 'Charlotte'],
-  Anemo: ['Sucrose', 'Faruzan', 'Venti', 'Xianyun', 'Lynette'],
-  Geo: ['Albedo', 'Chiori', 'Gorou', 'Ningguang'],
-  Dendro: ['Nahida', 'Baizhu', 'Collei', 'TravelerDendro'],
+  Anemo: ['Sucrose', 'Faruzan', 'Venti', 'Xianyun', 'Lynette', 'KaedeharaKazuha', 'Jean', 'ShikanoinHeizou', 'Sayu'],
+  Geo: ['Albedo', 'Chiori', 'Gorou', 'Ningguang', 'Zhongli', 'Xilonen', 'Kachina'],
+  Dendro: ['Nahida', 'Baizhu', 'Collei', 'TravelerDendro', 'Yaoyao', 'Kirara'],
 };
 
 /**

@@ -1,6 +1,14 @@
 import React, { useState, useMemo, useEffect, useTransition, useRef } from 'react';
 import { CHARACTERS } from '../data/characters';
-import { generateBestTeams } from '../engines/team-generator';
+import {
+  generateBestTeams,
+  TEMPLATES,
+  calculateCompatibilityScore,
+  calculateInvestmentScore,
+  determineBenchmarkTier,
+} from '../engines/team-generator';
+import { generateTeamExplanation } from '../engines/team-explain';
+import { synthesizeTeamRotation } from '../engines/rotation-synthesizer';
 import { dispatchGenerateBestTeams } from '../services/solver-dispatcher';
 import type {
   Character,
@@ -29,7 +37,11 @@ import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { RotationBadgeList } from './RotationBadgeList';
 import { InfoTooltip } from './InfoTooltip';
-import { rankWeaponsForCharacter, scoreWeaponForCharacter } from '../engines/weapon-solver';
+import {
+  rankWeaponsForCharacter,
+  scoreWeaponForCharacter,
+  assignOptimalTeamWeapons,
+} from '../engines/weapon-solver';
 import { getSavedWeapons, getSavedProfiles } from '../services/storage';
 import { equipWeaponToCharacter } from '../services/armory-operations';
 import { getWeaponByKey } from '../data/weapons';
@@ -113,6 +125,68 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
       isMounted = false;
     };
   }, [ownedIds, focusId, profiles, weaponBag, showCatalogFallback]);
+  const handleSwapMember = (
+    teamId: string,
+    originalId: string,
+    newMember: Character,
+  ) => {
+    setTeams((prevTeams) =>
+      prevTeams.map((t) => {
+        if (t.id !== teamId) return t;
+        const newMembers = t.members.map((m) => (m.id === originalId ? newMember : m));
+        const template = TEMPLATES.find((tpl) => tpl.archetype === t.archetype) || {
+          name: t.archetype,
+          archetype: t.archetype,
+          leadTags: [],
+          supportTags: [],
+          rotation: t.rotation,
+          baseSynergy: 90,
+        };
+        const updatedWeaponAssignments = assignOptimalTeamWeapons(newMembers, weaponBag, profiles);
+        const compatibilityScore = calculateCompatibilityScore(
+          newMembers,
+          template,
+          profiles,
+          updatedWeaponAssignments,
+        );
+        const investmentScore = calculateInvestmentScore(newMembers, profiles, updatedWeaponAssignments);
+        const benchmarkTier = determineBenchmarkTier(
+          template.archetype,
+          compatibilityScore,
+          newMembers,
+        );
+        const pool = CHARACTERS.filter((c) => ownedIds.includes(c.id));
+        const explanation = generateTeamExplanation(
+          newMembers,
+          template,
+          pool,
+          profiles,
+          updatedWeaponAssignments,
+          (mList) => calculateCompatibilityScore(mList, template, profiles, updatedWeaponAssignments),
+        );
+        const teamSustain = newMembers.find((m) => m.roles.includes('Sustain'));
+        const stepped = synthesizeTeamRotation(newMembers);
+
+        return {
+          ...t,
+          members: newMembers,
+          synergyScore: compatibilityScore,
+          compositionCompatibilityScore: compatibilityScore,
+          comfortScore: teamSustain ? 92 : 72,
+          rotation: stepped.summaryString || t.rotation,
+          steppedRotation: stepped,
+          weaponAssignments: updatedWeaponAssignments,
+          scores: {
+            compatibilityScore,
+            investmentScore,
+            benchmarkTier,
+          },
+          explanation,
+        };
+      }),
+    );
+  };
+
   const featuredCarries = ['Nefer', 'Mavuika', 'HuTao', 'Alhaitham', 'Clorinde', 'Neuvillette', 'Navia'];
 
   return (
@@ -286,7 +360,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                       />
                     </div>
                     <div className="text-sm font-bold text-indigo-300">
-                      {team.scores?.investmentScore ?? 85}/100
+                      {team.scores?.investmentScore ?? 0}/100
                     </div>
                   </div>
                 </div>
@@ -764,6 +838,19 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                                   </div>
                                 ))}
                               </div>
+
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSwapMember(team.id, alt.originalCharacterId, alt.alternativeCharacter);
+                                }}
+                                className="w-full py-1 px-2 rounded-md bg-[#161a28] hover:bg-[#d4af37]/20 border border-[#23293d] hover:border-[#d4af37]/50 text-[10px] font-semibold text-zinc-300 hover:text-[#d4af37] flex items-center justify-center gap-1 transition-all cursor-pointer mt-1"
+                                title={`Replace ${origChar?.name || alt.originalCharacterId} with ${alt.alternativeCharacter.name} in this recommendation`}
+                              >
+                                <ArrowRightLeft className="w-3 h-3 text-[#d4af37]" />
+                                <span>Swap Into Team</span>
+                              </button>
                             </div>
                           );
                         })}

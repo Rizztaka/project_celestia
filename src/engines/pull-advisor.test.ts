@@ -506,4 +506,108 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
     expect(verdictWithAlias!.teamDamageUpliftPct).toBe(verdictWith!.teamDamageUpliftPct);
     expect(verdictWithAlias!.caution).toContain("Wolf's Gravestone");
   });
+
+  describe('Milestone M8 Enhancements', () => {
+    it('applies multi-copy convolution to C0 -> C2 spike targets with step breakdown', () => {
+      const profiles: Record<string, OwnedCharacterProfile> = {
+        Furina: { id: 'Furina', level: 90, constellation: 0 },
+      };
+      const advice = evaluateComprehensivePullROI(profiles, [], {
+        ...baseBudget,
+        characterPity: 0,
+        characterGuaranteed: false,
+      });
+
+      const furinaConst = advice.find(
+        (a) => a.characterId === 'Furina' && a.targetType === 'Constellation',
+      );
+      expect(furinaConst).toBeDefined();
+      if (furinaConst?.targetLevelText.includes('C2')) {
+        // C0 -> C2 requires 2 copies (180 + 180 = 360 pulls ceiling)
+        expect(furinaConst.odds.guaranteedPulls).toBe(360);
+        expect(furinaConst.odds.copiesBreakdown).toBeDefined();
+        expect(furinaConst.odds.copiesBreakdown?.length).toBe(2);
+      }
+    });
+
+    it('models featured 4-star characters via gacha-4star engine as uncapped', () => {
+      const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_phase_1');
+      // Valeriy is a 4-star featured on 7.2 Phase 1
+      const valeriy = advice.find((a) => a.characterId === 'Valeriy');
+      expect(valeriy).toBeDefined();
+      expect(valeriy?.odds.isUncapped).toBe(true);
+      expect(valeriy?.odds.guaranteedPulls).toBe(0);
+      expect(valeriy?.targetLevelText).toContain('4★');
+    });
+
+    it('incorporates weaponGuaranteed (75/25 off-banner carryover) into weapon pull advice', () => {
+      const budgetNoGuar: PullBudgetState = {
+        ...baseBudget,
+        weaponPity: 0,
+        weaponFatePoints: 0,
+        weaponGuaranteed: false,
+      };
+      const budgetGuar: PullBudgetState = {
+        ...baseBudget,
+        weaponPity: 0,
+        weaponFatePoints: 0,
+        weaponGuaranteed: true,
+      };
+
+      const adviceNoGuar = evaluateComprehensivePullROI({}, [], budgetNoGuar, 'banner_7_2_phase_1');
+      const adviceGuar = evaluateComprehensivePullROI({}, [], budgetGuar, 'banner_7_2_phase_1');
+
+      const weapNoGuar = adviceNoGuar.find((a) => a.targetType === 'Signature_Weapon');
+      const weapGuar = adviceGuar.find((a) => a.targetType === 'Signature_Weapon');
+
+      expect(weapGuar!.odds.cumulativeProbability).toBeGreaterThan(weapNoGuar!.odds.cumulativeProbability);
+      expect(weapGuar!.odds.expectedPulls).toBeLessThan(weapNoGuar!.odds.expectedPulls);
+    });
+
+    it('factors in ~8% Starglitter Cashback projection when enabled in budget', () => {
+      const standardBudget: PullBudgetState = {
+        primogems: 16000, // 100 pulls
+        fates: 0,
+        characterPity: 0,
+        characterGuaranteed: false,
+        weaponPity: 0,
+        weaponFatePoints: 0,
+        includeCashback: false,
+      };
+
+      const cashbackBudget: PullBudgetState = {
+        ...standardBudget,
+        includeCashback: true,
+      };
+
+      const adviceStd = evaluateComprehensivePullROI({}, [], standardBudget, 'banner_7_2_phase_1');
+      const adviceCashback = evaluateComprehensivePullROI({}, [], cashbackBudget, 'banner_7_2_phase_1');
+
+      // 100 pulls * 1.08 = 108 pulls
+      expect(adviceStd[0].odds.pullsAvailable).toBe(100);
+      expect(adviceCashback[0].odds.pullsAvailable).toBe(108);
+      expect(adviceCashback[0].odds.cumulativeProbability).toBeGreaterThanOrEqual(
+        adviceStd[0].odds.cumulativeProbability,
+      );
+    });
+
+    it('correctly routes Chronicled Wish banners to Chronicled Wish odds', () => {
+      const chronicledBudget: PullBudgetState = {
+        ...baseBudget,
+        chronicledPity: 40,
+        chronicledFatePoints: 1,
+      };
+
+      const advice = evaluateComprehensivePullROI(
+        {},
+        [],
+        chronicledBudget,
+        'banner_7_2_natlan_chronicled',
+      );
+      expect(advice.length).toBeGreaterThan(0);
+      // With 1 Fate Point on Chronicled Wish, hard ceiling is 90 - 40 = 50 pulls
+      expect(advice[0].odds.guaranteedPulls).toBe(50);
+      expect(advice[0].odds.cumulativeProbability).toBe(1.0); // 120 pulls covers 50
+    });
+  });
 });

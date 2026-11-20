@@ -7,6 +7,7 @@ import type {
   PullBudgetState,
 } from '../types/genshin';
 import { evaluateComprehensivePullROI } from '../engines/pull-advisor';
+import { calculateTotalPulls } from '../engines/gacha-math';
 import { BANNER_PHASES } from '../data/banners';
 import { CHARACTERS } from '../data/characters';
 import { getWeaponByKey } from '../data/weapons';
@@ -16,6 +17,8 @@ import { CharacterPortrait } from './CharacterPortrait';
 import { PullBudgetCard } from './PullBudgetCard';
 import { InfoTooltip } from './InfoTooltip';
 import { DataFreshnessBadge } from './DataFreshnessBadge';
+import { PullDistributionModal } from './PullDistributionModal';
+import { GachaAssumptionsModal } from './GachaAssumptionsModal';
 import {
   Compass,
   CheckCircle2,
@@ -27,6 +30,10 @@ import {
   Zap,
   Calendar,
   Target,
+  TrendingUp,
+  ChevronDown,
+  ChevronUp,
+  BookOpen,
 } from 'lucide-react';
 
 interface PullAdvisorViewProps {
@@ -41,6 +48,9 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
   weapons,
 }) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [selectedDistributionItem, setSelectedDistributionItem] = useState<EnhancedPullAdvice | null>(null);
+  const [isAssumptionsOpen, setIsAssumptionsOpen] = useState(false);
+  const [expandedBreakdowns, setExpandedBreakdowns] = useState<Record<string, boolean>>({});
   const [bannerFilter, setBannerFilter] = useState<string>('banner_7_2_phase_1');
   const [budget, setBudget] = useState<PullBudgetState>(() => getSavedPullBudget());
   const [simulationToast, setSimulationToast] = useState<string | null>(null);
@@ -51,6 +61,10 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
   const handleBudgetChange = (newBudget: PullBudgetState) => {
     setBudget(newBudget);
     savePullBudget(newBudget);
+  };
+
+  const toggleBreakdown = (id: string) => {
+    setExpandedBreakdowns((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   const effectiveProfiles = useMemo(() => {
@@ -86,6 +100,13 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
   };
 
   const targetTypeBadge = (item: EnhancedPullAdvice) => {
+    if (item.odds.isUncapped) {
+      return (
+        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
+          <span>4★ Featured Target (No Hard Guarantee)</span>
+        </span>
+      );
+    }
     if (item.targetType === 'C0_Character') {
       return (
         <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
@@ -132,15 +153,27 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
 
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-[#141624] via-[#1a1e32] to-[#141624] p-6 rounded-2xl border border-[#262c44] shadow-lg">
-        <div className="flex items-center gap-2 text-[#d4af37] text-xs font-bold tracking-wider uppercase mb-1">
-          <Compass className="w-4 h-4" />
-          <span>Account-Aware Pull Advisor v2</span>
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
+          <div className="flex items-center gap-2 text-[#d4af37] text-xs font-bold tracking-wider uppercase">
+            <Compass className="w-4 h-4" />
+            <span>Account-Aware Pull Advisor v2 (Version 7.2 Baseline)</span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsAssumptionsOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#181c2b] hover:bg-[#22273d] text-amber-300 border border-amber-500/30 text-xs font-medium cursor-pointer transition-colors shadow-sm"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>Assumptions & Methodology</span>
+          </button>
         </div>
+
         <h1 className="text-2xl font-bold text-zinc-100 font-serif">
           Who Should You Pull Next?
         </h1>
         <p className="text-sm text-zinc-400 mt-1 max-w-3xl">
-          Calculates marginal team DPS uplift and archetype unlocking ROI for C0 new unlocks, high-impact constellations, and signature weapons. Powered by exact 5.x gacha math with Capturing Radiance (~55% win rate) and 5.0 1 Fate Point guarantee rules.
+          Calculates marginal team DPS uplift and archetype unlocking ROI for C0 new unlocks, high-impact constellations, and signature weapons. Powered by exact gacha math with 4-state Capturing Radiance (55.000% consolidated win rate), Weapon 75/25 off-banner carryover, and Chronicled Wish.
         </p>
 
         <div className="mt-4 flex flex-wrap items-center gap-3 text-xs">
@@ -150,13 +183,21 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
           </div>
           <div className="flex items-center gap-2 bg-[#10121b] text-purple-400 px-3 py-1.5 rounded-xl border border-purple-500/20">
             <Target className="w-4 h-4 shrink-0" />
-            <span>Spikes evaluated for owned characters (C1–C6 ceiling)</span>
+            <span>Multi-Copy discrete convolution evaluated up to C6</span>
+          </div>
+          <div className="flex items-center gap-2 bg-[#10121b] text-amber-400 px-3 py-1.5 rounded-xl border border-amber-500/20">
+            <Shield className="w-4 h-4 shrink-0" />
+            <span>Weapon 75/25 carryover & 1 Fate Point ceiling</span>
           </div>
         </div>
       </div>
 
       {/* Interactive Budget Tracker Card */}
-      <PullBudgetCard budget={budget} onChangeBudget={handleBudgetChange} />
+      <PullBudgetCard
+        budget={budget}
+        onChangeBudget={handleBudgetChange}
+        onOpenAssumptions={() => setIsAssumptionsOpen(true)}
+      />
 
       {/* Banner Phase Selector & Mode Switcher */}
       <div className="bg-[#12141d] border border-[#23273a] rounded-2xl p-4 shadow-md flex flex-wrap items-center justify-between gap-4">
@@ -213,6 +254,9 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
           } else if (item.odds.cumulativeProbability >= 0.45) {
             probColor = 'bg-amber-950/40 text-amber-300 border-amber-500/40';
           }
+
+          const hasBreakdown = Boolean(item.odds.copiesBreakdown && item.odds.copiesBreakdown.length > 1);
+          const isExpanded = Boolean(expandedBreakdowns[item.id]);
 
           return (
             <div
@@ -311,35 +355,109 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
                   </span>
                 </div>
 
-                {/* Pull Economics Bar */}
-                <div className="mt-3 bg-[#0d0f15] border border-[#1d2130] rounded-xl p-2.5 flex items-center justify-between text-xs text-zinc-400">
+                {/* 3-Column Economics Bar */}
+                <div className="mt-3 bg-[#0d0f15] border border-[#1d2130] rounded-xl p-3 grid grid-cols-3 gap-2 text-xs">
                   <div className="space-y-0.5">
-                    <span className="text-[11px] text-zinc-500 block">Expected Cost:</span>
-                    <span className="font-mono text-zinc-200 font-semibold">
-                      ~{item.odds.expectedPulls} pulls
+                    <span className="text-[10px] text-zinc-500 block uppercase font-medium">
+                      Median Cost (50%)
+                    </span>
+                    <span className="font-mono text-[#d4af37] font-semibold text-sm">
+                      ~{item.odds.medianPulls} <span className="text-[10px] font-normal text-zinc-400">pulls</span>
                     </span>
                   </div>
 
                   <div className="space-y-0.5 text-center">
-                    <span className="text-[11px] text-zinc-500 block">Hard Guarantee:</span>
-                    <span className="font-mono text-zinc-200 font-semibold">
-                      {item.odds.guaranteedPulls} pulls
+                    <span className="text-[10px] text-zinc-500 block uppercase font-medium">
+                      Expected Mean
+                    </span>
+                    <span className="font-mono text-zinc-300 font-semibold text-sm">
+                      ~{item.odds.expectedPulls} <span className="text-[10px] font-normal text-zinc-400">pulls</span>
                     </span>
                   </div>
 
                   <div className="space-y-0.5 text-right">
-                    <span className="text-[11px] text-zinc-500 block">Guarantee Deficit:</span>
-                    {item.odds.primogemsNeeded === 0 ? (
-                      <span className="text-emerald-400 font-bold flex items-center gap-1 justify-end">
-                        <Check className="w-3.5 h-3.5" /> Covered!
+                    <span className="text-[10px] text-zinc-500 block uppercase font-medium">
+                      Hard Ceiling (100%)
+                    </span>
+                    {item.odds.isUncapped ? (
+                      <span className="font-mono text-amber-400/90 font-medium text-xs block pt-0.5">
+                        Uncapped
                       </span>
                     ) : (
-                      <span className="font-mono text-amber-400 font-semibold">
-                        +{item.odds.primogemsNeeded.toLocaleString()} Primos
+                      <span className="font-mono text-emerald-400 font-semibold text-sm">
+                        {item.odds.guaranteedPulls} <span className="text-[10px] font-normal text-zinc-400">pulls</span>
                       </span>
                     )}
                   </div>
                 </div>
+
+                {/* Deficit Clarity Row */}
+                <div className="mt-1.5 px-1 flex flex-wrap items-center justify-between gap-1 text-[11px] text-zinc-400">
+                  <div>
+                    {item.odds.pullsAvailable >= item.odds.medianPulls ? (
+                      <span className="text-emerald-400 font-medium flex items-center gap-1">
+                        <Check className="w-3 h-3" /> Covers 50% Median
+                      </span>
+                    ) : (
+                      <span>
+                        Needs <strong className="text-amber-300 font-mono">{item.odds.medianPulls - item.odds.pullsAvailable}</strong> more pulls for 50% median
+                      </span>
+                    )}
+                  </div>
+
+                  <div>
+                    {item.odds.isUncapped ? (
+                      <span className="text-zinc-500 italic">No guarantee ceiling</span>
+                    ) : item.odds.primogemsNeeded === 0 ? (
+                      <span className="text-emerald-400 font-bold flex items-center gap-1">
+                        <Check className="w-3.5 h-3.5" /> 100% Guaranteed!
+                      </span>
+                    ) : (
+                      <span className="font-mono text-amber-400 font-medium">
+                        +{item.odds.primogemsNeeded.toLocaleString()} Primos to 100%
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Multi-Copy Expandable Breakdown (if applicable) */}
+                {hasBreakdown && (
+                  <div className="mt-2.5 pt-2 border-t border-[#1a1e2f]">
+                    <button
+                      type="button"
+                      onClick={() => toggleBreakdown(item.id)}
+                      className="text-[11px] text-sky-400 hover:text-sky-300 font-medium flex items-center gap-1 cursor-pointer transition-colors"
+                    >
+                      {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                      <span>
+                        {isExpanded ? 'Hide' : 'View'} Step-by-Step Breakdown ({item.odds.copiesBreakdown?.length} copies)
+                      </span>
+                    </button>
+
+                    {isExpanded && (
+                      <div className="mt-2 bg-[#0a0c12] rounded-lg p-2.5 border border-[#1b2030] text-[11px] space-y-1.5 font-mono">
+                        <div className="grid grid-cols-4 text-zinc-500 text-[10px] uppercase pb-1 border-b border-white/5">
+                          <span>Target</span>
+                          <span className="text-center">Median</span>
+                          <span className="text-center">Hard Pity</span>
+                          <span className="text-right">Chance</span>
+                        </div>
+                        {item.odds.copiesBreakdown?.map((step) => (
+                          <div key={step.copyNumber} className="grid grid-cols-4 text-zinc-300">
+                            <span className="font-sans font-medium text-zinc-200">{step.label}</span>
+                            <span className="text-center text-[#d4af37]">~{step.medianPulls}p</span>
+                            <span className="text-center text-emerald-400">
+                              {item.odds.isUncapped ? 'Uncapped' : `${step.guaranteedPulls}p`}
+                            </span>
+                            <span className="text-right text-sky-400 font-bold">
+                              {(step.cumulativeProbability * 100).toFixed(1)}%
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Unlocked Archetypes */}
                 {item.unlockedArchetypes.length > 0 && (
@@ -375,16 +493,26 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
-                {char && (
+              <div className="pt-2 border-t border-white/5 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-3">
+                  {char && (
+                    <button
+                      onClick={() => setSelectedCharacter(char)}
+                      className="flex items-center gap-1 text-[#d4af37] hover:underline font-semibold cursor-pointer"
+                    >
+                      <Info className="w-3.5 h-3.5" />
+                      <span>Kit & Build</span>
+                    </button>
+                  )}
+
                   <button
-                    onClick={() => setSelectedCharacter(char)}
-                    className="flex items-center gap-1 text-[#d4af37] hover:underline font-semibold cursor-pointer"
+                    onClick={() => setSelectedDistributionItem(item)}
+                    className="flex items-center gap-1 text-sky-400 hover:underline font-semibold cursor-pointer"
                   >
-                    <Info className="w-3.5 h-3.5" />
-                    <span>View Talents & Kit</span>
+                    <TrendingUp className="w-3.5 h-3.5" />
+                    <span>View Curve</span>
                   </button>
-                )}
+                </div>
 
                 <button
                   onClick={() => handleSimulatePull(item)}
@@ -423,6 +551,19 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
         character={selectedCharacter}
         onClose={() => setSelectedCharacter(null)}
         isOwned={selectedCharacter ? Boolean(effectiveProfiles[selectedCharacter.id]) : false}
+      />
+
+      {/* Probability Distribution Modal */}
+      <PullDistributionModal
+        item={selectedDistributionItem}
+        onClose={() => setSelectedDistributionItem(null)}
+        pullsAvailable={calculateTotalPulls(budget.primogems, budget.fates)}
+      />
+
+      {/* Gacha Assumptions & Methodology Modal */}
+      <GachaAssumptionsModal
+        isOpen={isAssumptionsOpen}
+        onClose={() => setIsAssumptionsOpen(false)}
       />
     </div>
   );

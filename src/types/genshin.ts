@@ -327,7 +327,11 @@ export interface PullBudgetState {
   characterGuaranteed: boolean;
   consecutiveLossCount?: number;
   weaponPity: number;
+  weaponGuaranteed?: boolean; // 75/25 off-banner carryover guarantee
   weaponFatePoints: number; // 0 or 1
+  chronicledPity?: number;
+  chronicledFatePoints?: number; // 0 or 1
+  includeCashback?: boolean; // ~8% Starglitter cashback projection
 }
 
 export interface EnhancedPullAdvice {

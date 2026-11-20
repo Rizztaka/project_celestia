@@ -63,7 +63,11 @@ export const DEFAULT_PULL_BUDGET: PullBudgetState = {
   characterGuaranteed: false,
   consecutiveLossCount: 0,
   weaponPity: 0,
+  weaponGuaranteed: false,
   weaponFatePoints: 0,
+  chronicledPity: 0,
+  chronicledFatePoints: 0,
+  includeCashback: false,
 };
 
 // Calibrated demo starter roster for testing and exploration
@@ -492,6 +496,26 @@ export function getSavedPullBudget(): PullBudgetState {
         ? Math.max(0, Math.min(5, Math.floor(parsed.consecutiveLossCount)))
         : DEFAULT_PULL_BUDGET.consecutiveLossCount ?? 0;
 
+    const weaponGuaranteed =
+      typeof parsed.weaponGuaranteed === 'boolean'
+        ? parsed.weaponGuaranteed
+        : (DEFAULT_PULL_BUDGET.weaponGuaranteed ?? false);
+
+    const chronicledPity =
+      typeof parsed.chronicledPity === 'number' && !isNaN(parsed.chronicledPity)
+        ? Math.max(0, Math.min(89, Math.floor(parsed.chronicledPity)))
+        : (DEFAULT_PULL_BUDGET.chronicledPity ?? 0);
+
+    const chronicledFatePoints =
+      typeof parsed.chronicledFatePoints === 'number' && !isNaN(parsed.chronicledFatePoints)
+        ? Math.max(0, Math.min(1, Math.floor(parsed.chronicledFatePoints)))
+        : (DEFAULT_PULL_BUDGET.chronicledFatePoints ?? 0);
+
+    const includeCashback =
+      typeof parsed.includeCashback === 'boolean'
+        ? parsed.includeCashback
+        : (DEFAULT_PULL_BUDGET.includeCashback ?? false);
+
     const result: PullBudgetState = {
       primogems,
       fates,
@@ -499,7 +523,11 @@ export function getSavedPullBudget(): PullBudgetState {
       characterGuaranteed,
       consecutiveLossCount,
       weaponPity,
+      weaponGuaranteed,
       weaponFatePoints,
+      chronicledPity,
+      chronicledFatePoints,
+      includeCashback,
     };
 
     return result;

@@ -214,10 +214,10 @@ describe('Celestia v2 — End-to-End User Journeys (Audit Simulation)', () => {
     savePullBudget(budget);
     expect(getSavedPullBudget().primogems).toBe(16000);
 
-    // 3. Capturing Radiance step-up verification: 0 losses -> 55%, 1 loss -> ~77.5%, 2+ losses -> 100%
-    expect(calculateRadianceWinRate(0)).toBeCloseTo(0.55, 3);
-    expect(calculateRadianceWinRate(1)).toBeCloseTo(0.775, 3);
-    expect(calculateRadianceWinRate(2)).toBe(1.0);
+    // 3. Capturing Radiance 4-state step-up verification (v7.2 baseline): 0 losses -> 50%, 1 loss -> 50%, 2 losses -> 8/11 (~72.7%), 3+ losses -> 100%
+    expect(calculateRadianceWinRate(0)).toBe(0.50);
+    expect(calculateRadianceWinRate(1)).toBe(0.50);
+    expect(calculateRadianceWinRate(2)).toBeCloseTo(8 / 11, 3);
     expect(calculateRadianceWinRate(3)).toBe(1.0);
   });
 

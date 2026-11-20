@@ -33,6 +33,31 @@ export const DATA_PROVENANCE_REGISTRY: Record<string, DataProvenance> = {
     evidence: 'HoyoLAB Version 7.2 Natlan Chronicled Wish Announcement: Xilonen, Chasca, Kinich, Mualani, Varesa',
     status: 'verified',
   },
+  // Gacha System & Mathematical Engine Rules (Version 7.2 Baseline)
+  gacha_rules_character_7_2: {
+    datasetId: 'gacha_rules_character_7_2',
+    version: CURRENT_GAME_VERSION,
+    verifiedAt: '2026-11-20',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news/detail/125274',
+    evidence: 'HoYoverse Version 5.0+ / 7.2 Event Wish Notice: 0.600% base rate, 74 soft pity, 90 hard pity, and 4-state Capturing Radiance Markov model ([0.50, 0.50, 8/11, 1.00]) converging to 55.000% consolidated 50/50 win rate',
+    status: 'verified',
+  },
+  gacha_rules_weapon_7_2: {
+    datasetId: 'gacha_rules_weapon_7_2',
+    version: CURRENT_GAME_VERSION,
+    verifiedAt: '2026-11-20',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news/detail/125274',
+    evidence: 'HoYoverse Version 5.0+ / 7.2 Weapon Wish Notice: 0.700% base rate, 63 soft pity, 80 hard pity, 1 Fate Point ceiling, and 75/25 off-banner guarantee carryover (50% target win rate on next 5★)',
+    status: 'verified',
+  },
+  gacha_rules_chronicled_7_2: {
+    datasetId: 'gacha_rules_chronicled_7_2',
+    version: CURRENT_GAME_VERSION,
+    verifiedAt: '2026-11-20',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news/detail/120786',
+    evidence: 'HoYoverse Version 4.5+ / 7.2 Chronicled Wish Notice: 0.600% base rate, 74 soft pity, 90 hard pity, 50% target rate, 1 Fate Point ceiling with non-carrying Fate Points and carrying pity',
+    status: 'verified',
+  },
   banner_5_4_phase_1: {
     datasetId: 'banner_5_4_phase_1',
     version: '5.4',

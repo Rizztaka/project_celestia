@@ -689,7 +689,7 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
       expect(budget).toEqual(DEFAULT_PULL_BUDGET);
     });
 
-    it('saves and restores pull budget correctly including consecutiveLossCount', () => {
+    it('saves and restores pull budget correctly including consecutiveLossCount and M8 fields', () => {
       const budget: PullBudgetState = {
         primogems: 16000,
         fates: 25,
@@ -697,7 +697,11 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
         characterGuaranteed: false,
         consecutiveLossCount: 2,
         weaponPity: 20,
+        weaponGuaranteed: true,
         weaponFatePoints: 1,
+        chronicledPity: 30,
+        chronicledFatePoints: 1,
+        includeCashback: true,
       };
 
       savePullBudget(budget);
@@ -705,6 +709,37 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
 
       const restored = getSavedPullBudget();
       expect(restored).toEqual(budget);
+    });
+
+    it('non-destructively hydrates legacy pull budget without M8 fields to safe defaults', () => {
+      // Legacy budget save without weaponGuaranteed, chronicledPity, chronicledFatePoints, includeCashback
+      localStorage.setItem(
+        'celestia_v2_pull_budget',
+        JSON.stringify({
+          primogems: 8000,
+          fates: 10,
+          characterPity: 20,
+          characterGuaranteed: true,
+          consecutiveLossCount: 1,
+          weaponPity: 15,
+          weaponFatePoints: 0,
+        }),
+      );
+
+      const restored = getSavedPullBudget();
+      expect(restored).toEqual({
+        primogems: 8000,
+        fates: 10,
+        characterPity: 20,
+        characterGuaranteed: true,
+        consecutiveLossCount: 1,
+        weaponPity: 15,
+        weaponGuaranteed: false,
+        weaponFatePoints: 0,
+        chronicledPity: 0,
+        chronicledFatePoints: 0,
+        includeCashback: false,
+      });
     });
 
     it('gracefully handles malformed or out-of-range storage data', () => {

@@ -11,8 +11,12 @@ import { getWeaponByKey } from '../data/weapons';
 import {
   calculateCharacterBannerOdds,
   calculateWeaponBannerOdds,
+  calculateChronicledWishOdds,
+  calculateMultiCopyOdds,
   calculateTotalPulls,
 } from './gacha-math';
+import { calculate4StarTargetOdds } from './gacha-4star';
+import { STARGLITTER_CASHBACK_RATE } from '../data/banner-rules';
 
 // Notable 5-star target pool for accounts
 const PULL_CANDIDATES = [
@@ -1368,18 +1372,48 @@ export function evaluateComprehensivePullROI(
   budget: PullBudgetState,
   bannerFilter?: string,
 ): EnhancedPullAdvice[] {
-  const totalPulls = calculateTotalPulls(budget.primogems, budget.fates);
-  const charOdds = calculateCharacterBannerOdds(
-    totalPulls,
-    budget.characterPity,
-    budget.characterGuaranteed,
-    budget.consecutiveLossCount ?? 0,
+  const rawPulls = calculateTotalPulls(budget.primogems, budget.fates);
+  const totalPulls = budget.includeCashback
+    ? Math.floor(rawPulls * (1 + STARGLITTER_CASHBACK_RATE))
+    : rawPulls;
+
+  // Determine candidate scope
+  const selectedBanner =
+    bannerFilter && bannerFilter !== 'all' && bannerFilter !== 'sandbox'
+      ? BANNER_PHASES.find((b) => b.id === bannerFilter)
+      : undefined;
+
+  const isChronicledBanner = Boolean(
+    selectedBanner &&
+      (selectedBanner.id.toLowerCase().includes('chronicled') ||
+        selectedBanner.phaseName.toLowerCase().includes('chronicled')),
   );
-  const weapOdds = calculateWeaponBannerOdds(
-    totalPulls,
-    budget.weaponPity,
-    budget.weaponFatePoints,
-  );
+
+  const charOdds = isChronicledBanner
+    ? calculateChronicledWishOdds(
+        totalPulls,
+        budget.chronicledPity ?? 0,
+        budget.chronicledFatePoints ?? 0,
+      )
+    : calculateCharacterBannerOdds(
+        totalPulls,
+        budget.characterPity,
+        budget.characterGuaranteed,
+        budget.consecutiveLossCount ?? 0,
+      );
+
+  const weapOdds = isChronicledBanner
+    ? calculateChronicledWishOdds(
+        totalPulls,
+        budget.chronicledPity ?? 0,
+        budget.chronicledFatePoints ?? 0,
+      )
+    : calculateWeaponBannerOdds(
+        totalPulls,
+        budget.weaponPity,
+        budget.weaponFatePoints,
+        budget.weaponGuaranteed ?? false,
+      );
 
   const ownedIds = Object.keys(ownedProfiles);
   const ownedSet = new Set(ownedIds);
@@ -1405,12 +1439,6 @@ export function evaluateComprehensivePullROI(
     (c) => c.element === 'Dendro' && (c.id === 'Nahida' || c.id === 'Baizhu'),
   );
   const hasNefer = ownedSet.has('Nefer');
-
-  // Determine candidate scope
-  const selectedBanner =
-    bannerFilter && bannerFilter !== 'all' && bannerFilter !== 'sandbox'
-      ? BANNER_PHASES.find((b) => b.id === bannerFilter)
-      : undefined;
 
   let candidateCharIds: string[] = [];
   let candidateWeaponKeys: string[] = [];
@@ -1703,19 +1731,24 @@ export function evaluateComprehensivePullROI(
       else if (score >= 75) tier = 'High Value';
       else if (score < 50) tier = 'Skip / Redundant';
 
+      const is4Star = char.rarity === 4;
+      const c0Odds = is4Star
+        ? calculate4StarTargetOdds(totalPulls, 0, false, 1, 'character')
+        : charOdds;
+
       adviceList.push({
         id: `char_c0_${char.id}`,
         name: char.name,
         targetType: 'C0_Character',
         characterId: char.id,
-        targetLevelText: 'C0 New Unlock',
+        targetLevelText: is4Star ? '4★ Featured Target' : 'C0 New Unlock',
         score,
         tier,
         teamDamageUpliftPct: uplift,
         unlockedArchetypes: unlocked,
         accountBenefits: benefits,
         caution,
-        odds: charOdds,
+        odds: c0Odds,
       });
     } else {
       // Character is OWNED -> Evaluate Constellations (up to C6)
@@ -1735,6 +1768,28 @@ export function evaluateComprehensivePullROI(
           else if (nextSpike.baseScore >= 75) tier = 'High Value';
           else if (nextSpike.baseScore < 50) tier = 'Skip / Redundant';
 
+          const targetCopies = Math.max(1, nextSpike.targetLevel - currentConst);
+          const spikeOdds =
+            char.rarity === 4
+              ? calculate4StarTargetOdds(totalPulls, 0, false, targetCopies, 'character')
+              : isChronicledBanner
+                ? calculateMultiCopyOdds(
+                    'chronicled',
+                    targetCopies,
+                    totalPulls,
+                    budget.chronicledPity ?? 0,
+                    false,
+                    budget.chronicledFatePoints ?? 0,
+                  )
+                : calculateMultiCopyOdds(
+                    'character',
+                    targetCopies,
+                    totalPulls,
+                    budget.characterPity,
+                    budget.characterGuaranteed,
+                    budget.consecutiveLossCount ?? 0,
+                  );
+
           adviceList.push({
             id: `const_${charId}_${nextSpike.targetLevel}`,
             name: `${char.name} ${nextSpike.targetLevelText.split(' ')[0]}`,
@@ -1747,7 +1802,7 @@ export function evaluateComprehensivePullROI(
             unlockedArchetypes: [],
             accountBenefits: nextSpike.benefits,
             caution: nextSpike.description,
-            odds: charOdds,
+            odds: spikeOdds,
           });
         } else if (char.constellations && char.constellations.length > currentConst) {
           const nextConst = char.constellations[currentConst];
@@ -1760,6 +1815,28 @@ export function evaluateComprehensivePullROI(
           if (baseScore >= 90) tier = 'Must Pull';
           else if (baseScore >= 75) tier = 'High Value';
           else if (baseScore < 50) tier = 'Skip / Redundant';
+
+          const targetCopies = Math.max(1, nextConst.level - currentConst);
+          const constOdds =
+            char.rarity === 4
+              ? calculate4StarTargetOdds(totalPulls, 0, false, targetCopies, 'character')
+              : isChronicledBanner
+                ? calculateMultiCopyOdds(
+                    'chronicled',
+                    targetCopies,
+                    totalPulls,
+                    budget.chronicledPity ?? 0,
+                    false,
+                    budget.chronicledFatePoints ?? 0,
+                  )
+                : calculateMultiCopyOdds(
+                    'character',
+                    targetCopies,
+                    totalPulls,
+                    budget.characterPity,
+                    budget.characterGuaranteed,
+                    budget.consecutiveLossCount ?? 0,
+                  );
 
           adviceList.push({
             id: `const_${charId}_${nextConst.level}`,
@@ -1776,7 +1853,7 @@ export function evaluateComprehensivePullROI(
               nextConst.description.slice(0, 140) + (nextConst.description.length > 140 ? '...' : ''),
             ],
             caution: `Evaluating next constellation step for owned C${currentConst} ${char.name}.`,
-            odds: charOdds,
+            odds: constOdds,
           });
         }
       }

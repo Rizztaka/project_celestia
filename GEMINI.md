@@ -29,6 +29,11 @@ All agents must adhere to the local repository data files as the definitive auth
 - **Talent Scaling**: Modular parameter curves across Level 1–15 in `src/data/talent-scaling/` for all 128 characters.
 - **Ledger Preservation**: `scripts/generate-reference.cjs` parses and preserves the Verified Corrections Ledger when synchronizing markdown documentation with data files.
 - **Build & Stat Weight Calibration**: Synchronized builds and descriptions for all 10 Batch 7 characters (Alyosha, Flins, Ifa, Linnea, Lohen, Odette, Sandrone, Varesa, Vesna, Zibai); implemented dynamic stat weight synthesis with comprehensive character alias resolution (`Kokomi`, `Ayaka`, `Itto`, `Childe`, `Yae`, etc.) in `getCharacterStatWeights`; guaranteed 0 crit weight for Sangonomiya Kokomi in both stat weights and weapon solver; corrected targetSets typos for Scroll of the Hero of Cinder City, Shimenawa's Reminiscence, and Vourukasha's Glow.
+- **Gacha Mathematics & Wish Engine Invariants (M8 Baseline)**:
+  - **Capturing Radiance**: 4-state Markov renewal model `[0.50, 0.50, 8/11, 1.00]`. Streak 3 yields 100% guarantee (4th attempt). Long-term win rate on 50/50s strictly equals 55.000%.
+  - **Weapon Banner 75/25 Guarantee Carryover**: Losing a 5★ to an off-banner standard weapon guarantees the next 5★ is a featured rate-up weapon (50% target win rate). This guarantee carries over across banner phases even though Fate Points reset to 0.
+  - **4-Star Math Separation**: 4-star character acquisition has no hard guarantee ceiling and must be modeled via an absorbing Markov chain (median ~35 pulls, 90th percentile ~105 pulls), strictly segregated from 5★ pity.
+  - **Chronicled Wish Rules**: 0.600% base rate, 74 soft pity, 90 hard pity, 50% base rate-up, 1 Fate Point ceiling (resets between banners).
 
 ## 5. Project Stack & Environment
 - **Runtime / Framework**: React 19 + Vite + TypeScript (see `package.json`)

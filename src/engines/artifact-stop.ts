@@ -1,10 +1,12 @@
 import type { ArtifactStopRecommendation } from '../types/genshin';
+import { estimateBuildFromSliders } from './artifact-probability';
 
 export * from './artifact-probability';
 
 /**
- * Legacy & quick-estimate stop point calculator for backwards compatibility.
- * Delegates to the new probability engine for consistent Roll Value (RV) math.
+ * Universal quick-estimate stop point calculator.
+ * Delegates to the exact discrete PMF convolution engine in artifact-probability.ts
+ * so supports, EM/HP/DEF scalers, and v7.2 Lunar/Stellar carries are evaluated accurately.
  */
 export function calculateArtifactStopPoint(
   characterName: string,
@@ -12,23 +14,25 @@ export function calculateArtifactStopPoint(
   critDmg: number,
   isEmOrDefScaler: boolean = false,
 ): ArtifactStopRecommendation {
-  const cv = Math.round(critRate * 2 + critDmg);
+  const safeCr = Number.isFinite(critRate) ? Math.max(0, critRate) : 0;
+  const safeCd = Number.isFinite(critDmg) ? Math.max(0, critDmg) : 0;
+  const cv = Math.round(safeCr * 2 + safeCd);
 
-  if (isEmOrDefScaler) {
-    // For characters like Nefer, Nilou, Kokomi, or Kuki where CV is secondary to EM/HP/DEF
-    if (cv >= 140) {
-      return {
-        characterName,
-        currentCv: cv,
-        currentRolls: 24,
-        status: 'Ready / Stop Farming',
-        estimatedDaysForUpgrade: 45,
-        resinEfficiency: 15,
-        advice: `${characterName} scales heavily with EM/Reaction damage rather than pure Crit. At ${cv} CV with target EM stats, further artifact farming yields less than 1.5% damage gain. STOP farming and level talents/supports.`,
-      };
-    }
+  // If character scales with EM/DEF/HP and CV is already high (>=140),
+  // they have reached their stop point since Crit is secondary to their reaction/kit stat.
+  if (isEmOrDefScaler && cv >= 140) {
+    return {
+      characterName,
+      currentCv: cv,
+      currentRolls: 24,
+      status: 'Ready / Stop Farming',
+      estimatedDaysForUpgrade: 45,
+      resinEfficiency: 15,
+      advice: `${characterName} scales heavily with EM/Reaction damage rather than pure Crit. At ${cv} CV with target EM stats, further artifact farming yields diminishing returns. STOP farming and level talents/supports.`,
+    };
   }
 
+  // Early build below 170 CV has high ROI for artifact farming
   if (cv < 170) {
     return {
       characterName,
@@ -39,35 +43,42 @@ export function calculateArtifactStopPoint(
       resinEfficiency: 95,
       advice: `Your ${characterName} is at ${cv} CV (early build). Upgrades are very likely within 5–7 days of farming (~1,000 resin). Keep farming your main 4pc set.`,
     };
-  } else if (cv < 210) {
-    return {
-      characterName,
-      currentCv: cv,
-      currentRolls: Math.round(cv / 6.6),
-      status: 'High ROI',
-      estimatedDaysForUpgrade: 14,
-      resinEfficiency: 65,
-      advice: `Solid baseline at ${cv} CV. You can comfortably clear Spiral Abyss Floor 12 with this build. Farming further will take ~2 weeks of resin for a ~4% damage improvement.`,
-    };
-  } else if (cv < 235) {
-    return {
-      characterName,
-      currentCv: cv,
-      currentRolls: Math.round(cv / 6.6),
-      status: 'Diminishing Returns',
-      estimatedDaysForUpgrade: 38,
-      resinEfficiency: 20,
-      advice: `High-tier investment (${cv} CV). Upgrading any single piece now requires nearly 40 days of daily resin (~6,800 resin) for a marginal ~2.1% damage increase. It is STRONGLY recommended to STOP and spend resin leveling teammates, weapons, and guaranteed talents.`,
-    };
-  } else {
-    return {
-      characterName,
-      currentCv: cv,
-      currentRolls: Math.round(cv / 6.6),
-      status: 'Ready / Stop Farming',
-      estimatedDaysForUpgrade: 90,
-      resinEfficiency: 5,
-      advice: `Elite Top 1% build (${cv} CV). Finding an upgrade has a probability of less than 0.2% per domain run. STOP farming and do not spend resin here—your artifacts are complete.`,
-    };
   }
+
+  const analysis = estimateBuildFromSliders(
+    characterName,
+    safeCr,
+    safeCd,
+    isEmOrDefScaler ? 220 : 100,
+    isEmOrDefScaler,
+  );
+
+  const roi1k = analysis.universalStop?.roiPer1kResinPct ?? 0;
+  const threshold = analysis.universalStop?.thresholdPct ?? 0.6;
+  // Convert marginal ROI into a smooth 0..100 resin efficiency score
+  let resinEfficiency = Math.max(
+    5,
+    Math.min(100, Math.round((roi1k / (threshold * 3)) * 100)),
+  );
+
+  let status = analysis.overallStatus;
+  let advice = analysis.advice;
+
+  if (cv >= 220) {
+    status = 'Ready / Stop Farming';
+    resinEfficiency = Math.min(20, resinEfficiency);
+    if (!advice.includes('STOP')) {
+      advice = `STOP FARMING (${cv} CV). ${advice}`;
+    }
+  }
+
+  return {
+    characterName: analysis.characterName || characterName,
+    currentCv: cv,
+    currentRolls: Math.round(analysis.totalUsefulRolls),
+    status,
+    estimatedDaysForUpgrade: Math.max(1, Math.round(analysis.daysToNextUpgrade)),
+    resinEfficiency,
+    advice,
+  };
 }

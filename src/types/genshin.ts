@@ -460,8 +460,15 @@ export interface TeamContext {
   hasKazuhaOrVV?: boolean;
   hasAmplifyingReaction?: boolean;
   hasQuickenReaction?: boolean;
+  hasLunarReaction?: boolean;
+  hasStellarReaction?: boolean;
   customFlatAtkBuff?: number;
   customDmgBonus?: number;
+  customCritRateBuff?: number; // e.g., Cryo Res, Rosaria, Moonsign, weapon passives
+  customEmBuff?: number; // e.g., Nahida, Sucrose, Lauma, Ineffa, Instructor
+  baseCritRate?: number; // Character + weapon + ascension CR% (default 5)
+  baseCritDmg?: number; // Character + weapon + ascension CD% (default 50)
+  statCaps?: Partial<Record<'hp' | 'atk' | 'def' | 'eleMas', number>>;
 }
 
 export interface WholeBuildErEvaluation {
@@ -516,6 +523,63 @@ export interface DomainRouteRecommendation {
   guidance: string;
 }
 
+export type InvestmentGoal = 'casual' | 'endgame' | 'hyper';
+
+export type ReshapePityTier = 'standard' | 'advanced' | 'decreed';
+
+export type UniversalStopAction =
+  | 'FARM_DOMAIN'
+  | 'STRONGBOX_ONLY'
+  | 'USE_ELIXIR'
+  | 'USE_DUST'
+  | 'STOP';
+
+export interface UniversalStopOptions {
+  goal?: InvestmentGoal;
+  setMode?: '4pc' | '2pc2pc';
+  /** True during the 10-day Stygian Onslaught Disturbance Outbreak (+1 bonus 5★ per 120 Resin). */
+  stygianOutbreakActive?: boolean;
+  /** Include 3:1 recursive Strongbox recycling when target set is Strongbox-eligible. Default: true. */
+  includeStrongboxRecycling?: boolean;
+  /** Current Hallowed Exegesis pity tier for Dust of Enlightenment reshaping. */
+  reshapePityTier?: ReshapePityTier;
+  /** Override domain companion efficiency multiplier (1.0 = useless partner, 2.0 = both equally needed). */
+  domainEfficiencyOverride?: number;
+  /** Daily natural Resin spent (defaults to DOMAIN_CONSTANTS.DAILY_RESIN = 180). */
+  dailyResin?: number;
+}
+
+export interface UniversalSlotMetrics {
+  slotKey: ArtifactSlot;
+  isOffPieceCandidate: boolean;
+  hasValidMainStat: boolean;
+  currentURV: number; // Equivalent max rolls (0..9)
+  realisticCeilingURV: number; // Build-specific realistic endgame ceiling in rolls
+  completionPct: number; // 0..100 normalized to THIS character's stat weights
+  expectedURVGainPerDrop: number;
+  expectedGainPctPer1kResin: number;
+  reshapeExpectedURVGain: number;
+  elixirExpectedURVGain: number;
+  elixirCost: number;
+  dustCost: number;
+}
+
+export interface UniversalStopSummary {
+  action: UniversalStopAction;
+  shouldStop: boolean;
+  stopScore: number; // 0..100 normalized universal build completion
+  roiPer1kResinPct: number; // Expected % build gain per 1,000 Resin
+  thresholdPct: number; // Opportunity-cost threshold for chosen goal
+  goal: InvestmentGoal;
+  recommendedOffPieceSlot: ArtifactSlot;
+  prioritySlot: ArtifactSlot;
+  hardGatesFailed: string[];
+  effectiveCritRatePct: number;
+  conditionalCritRateFromSet: number;
+  slotMetrics: Record<ArtifactSlot, UniversalSlotMetrics>;
+  reasons: string[];
+}
+
 export interface ArtifactStopAnalysisResult {
   characterId: string;
   characterName: string;
@@ -538,6 +602,7 @@ export interface ArtifactStopAnalysisResult {
     active4pc: string[];
     totalEsr: number;
   };
+  universalStop?: UniversalStopSummary;
 }
 
 // ---------------------------------------------------------

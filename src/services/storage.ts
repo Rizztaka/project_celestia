@@ -2,6 +2,7 @@ import type { OwnedCharacterProfile, OwnedWeapon, PullBudgetState } from '../typ
 import type { AbyssCycleConfig } from '../data/abyss-schedules';
 import { createCustomSandboxCycle, DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from '../data/abyss-schedules';
 import { resolveWeaponAlias } from '../data/weapon-aliases';
+import { DEFAULT_DEMO_ARTIFACTS } from '../data/demo-artifacts';
 import {
   migrateStorageIfNeeded,
   getStorageSchemaVersion,
@@ -18,6 +19,7 @@ export {
   rollbackToBackup,
   CURRENT_SCHEMA_VERSION,
   SCHEMA_VERSION_KEY,
+  DEFAULT_DEMO_ARTIFACTS,
 };
 
 const ROSTER_KEY = 'celestia_v2_owned_roster';
@@ -241,6 +243,16 @@ export function getSavedArtifacts(): any[] {
     return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
+  }
+}
+
+export function seedDemoArtifacts(): boolean {
+  if (typeof localStorage === 'undefined') return false;
+  try {
+    localStorage.setItem(DEMO_ARTIFACTS_KEY, JSON.stringify(DEFAULT_DEMO_ARTIFACTS));
+    return true;
+  } catch {
+    return false;
   }
 }
 

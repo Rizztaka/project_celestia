@@ -1,7 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { CHARACTERS } from '../data/characters';
 import { ARTIFACTS_MASTER } from '../data/artifacts-master';
-import type { Character, ArtifactSlot, ArtifactPiece, StatKey } from '../types/genshin';
+import type {
+  Character,
+  ArtifactSlot,
+  ArtifactPiece,
+  StatKey,
+  TeamPresetKey,
+  TeamContext,
+} from '../types/genshin';
 import {
   PieChart,
   Clock,
@@ -17,6 +24,9 @@ import {
   Search,
   ChevronDown,
   ChevronUp,
+  Zap,
+  TrendingUp,
+  AlertTriangle,
 } from 'lucide-react';
 import { CharacterPortrait } from './CharacterPortrait';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
@@ -29,14 +39,32 @@ import {
   extractEquippedArtifactsForCharacter,
   SLOT_NAMES,
 } from '../engines/artifact-probability';
-import { getSavedArtifacts } from '../services/storage';
-import { getCharacterStatWeights } from '../data/artifact-weights';
+import {
+  getSavedArtifacts,
+  isDemoModeEnabled,
+  DEFAULT_DEMO_ARTIFACTS,
+} from '../services/storage';
+import {
+  getCharacterStatWeights,
+  MAIN_STAT_ELIGIBILITY_TABLE,
+} from '../data/artifact-weights';
+import { COMBAT_SET_NAMES } from '../data/artifact-set-effects';
+import { validateArtifactPiece } from '../engines/artifact-validator';
 
 const ALL_SLOTS: ArtifactSlot[] = ['flower', 'plume', 'sands', 'goblet', 'circlet'];
+
+const TEAM_PRESETS: Array<{ id: TeamPresetKey; label: string; desc: string }> = [
+  { id: 'unbuffed', label: 'Solo (Unbuffed)', desc: 'Pure standalone scaling' },
+  { id: 'hypercarry_bennett_furina', label: 'Bennett + Furina', desc: '+1.2k ATK & +75% DMG' },
+  { id: 'vape_melt', label: 'Vaporize / Melt', desc: '1.5x / 2.0x Amplifying' },
+  { id: 'quicken_spread', label: 'Quicken / Spread', desc: 'Catalyze Flat Scaling' },
+  { id: 'hyperbloom', label: 'Hyperbloom', desc: 'Transformative Reaction' },
+];
 
 export const ArtifactStopView: React.FC = () => {
   const [selectedCharId, setSelectedCharId] = useState<string>('Nefer');
   const [viewMode, setViewMode] = useState<'equipped' | 'builder' | 'slider'>('equipped');
+  const [selectedTeamPreset, setSelectedTeamPreset] = useState<TeamPresetKey>('unbuffed');
 
   // Slider State (Quick Estimator)
   const [critRate, setCritRate] = useState<number>(65);
@@ -57,6 +85,28 @@ export const ArtifactStopView: React.FC = () => {
   const [rarityFilter, setRarityFilter] = useState<'All' | '5' | '4' | '3' | '1-2'>('All');
   const [combatFilter, setCombatFilter] = useState<'All' | 'combat' | 'non-combat'>('All');
   const [expandedSetIds, setExpandedSetIds] = useState<Set<string>>(new Set());
+
+  const teamContext = useMemo<TeamContext>(() => {
+    switch (selectedTeamPreset) {
+      case 'hypercarry_bennett_furina':
+        return {
+          preset: 'hypercarry_bennett_furina',
+          hasBennett: true,
+          hasFurina: true,
+          customFlatAtkBuff: 1200,
+          customDmgBonus: 75,
+        };
+      case 'vape_melt':
+        return { preset: 'vape_melt', hasAmplifyingReaction: true };
+      case 'quicken_spread':
+        return { preset: 'quicken_spread', hasQuickenReaction: true };
+      case 'hyperbloom':
+        return { preset: 'hyperbloom' };
+      case 'unbuffed':
+      default:
+        return { preset: 'unbuffed' };
+    }
+  }, [selectedTeamPreset]);
 
   const toggleExpandSet = (id: string) => {
     setExpandedSetIds((prev) => {
@@ -114,8 +164,15 @@ export const ArtifactStopView: React.FC = () => {
   const char = CHARACTERS.find((c) => c.id === selectedCharId) || CHARACTERS[0];
   const charConfig = getCharacterStatWeights(char.id);
 
-  // Retrieve raw artifacts stored from GOOD JSON / Enka
-  const savedRawArtifacts = useMemo(() => getSavedArtifacts(), []);
+  // Retrieve raw artifacts stored from GOOD JSON / Enka or demo preset
+  const savedRawArtifacts = useMemo(() => {
+    const saved = getSavedArtifacts();
+    if (saved && saved.length > 0) return saved;
+    if (isDemoModeEnabled()) {
+      return DEFAULT_DEMO_ARTIFACTS;
+    }
+    return [];
+  }, []);
 
   // Extract equipped pieces for selected character
   const equippedFromRoster = useMemo(() => {
@@ -146,10 +203,11 @@ export const ArtifactStopView: React.FC = () => {
         critDmg,
         secondaryStat,
         isReactionScaler,
+        teamContext,
       );
     }
-    return analyzeArtifactBuild(char.id, activeSlots || {});
-  }, [viewMode, char.id, char.name, activeSlots, critRate, critDmg, secondaryStat, isReactionScaler]);
+    return analyzeArtifactBuild(char.id, activeSlots || {}, teamContext);
+  }, [viewMode, char.id, char.name, activeSlots, critRate, critDmg, secondaryStat, isReactionScaler, teamContext]);
 
   const statusColors = {
     'High ROI': 'bg-emerald-950/60 text-emerald-400 border-emerald-500/40',
@@ -304,6 +362,46 @@ export const ArtifactStopView: React.FC = () => {
         </div>
       </div>
 
+      {/* Team Context Selector Bar */}
+      <div className="bg-[#12141d] border border-[#23273a] p-3.5 sm:p-4 rounded-2xl shadow-md space-y-2.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Zap className="w-4 h-4 text-[#d4af37]" />
+            <span className="text-xs font-bold text-zinc-200 uppercase tracking-wider">
+              Team Buff & Reaction Context
+            </span>
+            <InfoTooltip
+              title="Buff Dilution & Reaction Scaling"
+              content="Models external flat ATK (Bennett, Noblesse), massive DMG% buffs (Furina Fanfare), and amplifying/transformative reaction scaling to recalibrate stat roll values and diminishing return curves."
+            />
+          </div>
+          <span className="text-[11px] text-zinc-400 font-mono">
+            Active: <strong className="text-[#d4af37]">{TEAM_PRESETS.find(p => p.id === selectedTeamPreset)?.label}</strong>
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+          {TEAM_PRESETS.map((preset) => (
+            <button
+              key={preset.id}
+              onClick={() => setSelectedTeamPreset(preset.id)}
+              className={`px-3 py-2 rounded-xl text-left border transition-all cursor-pointer ${
+                selectedTeamPreset === preset.id
+                  ? 'bg-[#1e2335] border-[#d4af37] text-zinc-100 shadow-md shadow-[#d4af37]/10'
+                  : 'bg-[#161824] border-[#252a3d] text-zinc-400 hover:text-zinc-200 hover:border-[#353c57]'
+              }`}
+            >
+              <div className="text-xs font-bold leading-tight truncate">
+                {preset.label}
+              </div>
+              <div className="text-[10px] text-zinc-400 truncate mt-0.5">
+                {preset.desc}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Main Results Dashboard */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Summary Metrics & Weakest Link Banner */}
@@ -379,6 +477,113 @@ export const ArtifactStopView: React.FC = () => {
             </div>
           </div>
 
+          {/* Whole-Build ER Indicator Card */}
+          {analysis.erEvaluation && (
+            <div className="bg-[#12141d] border border-[#23273a] p-4.5 rounded-2xl shadow-md space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-sky-400" />
+                  <span className="text-xs font-bold text-zinc-200 uppercase tracking-wider">
+                    Whole-Build ER Requirement
+                  </span>
+                </div>
+                <span
+                  className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
+                    analysis.erEvaluation.status === 'Target'
+                      ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
+                      : analysis.erEvaluation.status === 'Deficit'
+                      ? 'bg-rose-950/60 text-rose-300 border-rose-500/40 animate-pulse'
+                      : 'bg-amber-950/60 text-amber-300 border-amber-500/40'
+                  }`}
+                >
+                  {analysis.erEvaluation.status === 'Target'
+                    ? 'Target Window'
+                    : analysis.erEvaluation.status === 'Deficit'
+                    ? 'Deficit (<0.7x Penalty)'
+                    : 'Surplus / Overcap'}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 bg-[#181b28] p-3 rounded-xl border border-[#262c40] text-center">
+                <div>
+                  <span className="text-[10px] text-zinc-400 uppercase font-semibold block">Total Build ER</span>
+                  <span className="text-base font-extrabold text-sky-400 font-mono mt-0.5 block">
+                    {analysis.erEvaluation.totalEr.toFixed(1)}%
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-zinc-400 uppercase font-semibold block">Target ER</span>
+                  <span className="text-base font-extrabold text-zinc-200 font-mono mt-0.5 block">
+                    ~{analysis.erEvaluation.targetEr}%
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-zinc-400 uppercase font-semibold block">Scaling Factor</span>
+                  <span className={`text-base font-extrabold font-mono mt-0.5 block ${analysis.erEvaluation.penaltyFactor < 1 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                    {analysis.erEvaluation.penaltyFactor.toFixed(2)}x
+                  </span>
+                </div>
+              </div>
+
+              {analysis.erEvaluation.message && (
+                <div className={`p-2.5 rounded-xl text-xs flex items-start gap-2 border ${
+                  analysis.erEvaluation.status === 'Deficit'
+                    ? 'bg-rose-950/30 border-rose-500/30 text-rose-300'
+                    : 'bg-zinc-800/50 border-zinc-700/50 text-zinc-300'
+                }`}>
+                  <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
+                  <span className="leading-relaxed text-[11px]">{analysis.erEvaluation.message}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Set Bonus ESR Comparison Card */}
+          {analysis.setComparison && (
+            <div className="bg-[#12141d] border border-[#23273a] p-4.5 rounded-2xl shadow-md space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#d4af37]" />
+                  <span className="text-xs font-bold text-zinc-200 uppercase tracking-wider">
+                    Set Bonus Equivalent Substats (ESR)
+                  </span>
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/30">
+                  4pc vs 2pc/2pc
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-center">
+                <div className="bg-[#181b28] p-2.5 rounded-xl border border-[#262c40]">
+                  <span className="text-[10px] text-zinc-400 font-semibold block truncate">
+                    BiS: {analysis.setComparison.options[0]?.name || '4pc BiS'}
+                  </span>
+                  <span className="text-base font-extrabold text-[#d4af37] font-mono mt-0.5 block">
+                    ~{analysis.setComparison.options[0]?.esr ?? analysis.setComparison.currentSetEsr} rolls
+                  </span>
+                </div>
+                <div className="bg-[#181b28] p-2.5 rounded-xl border border-[#262c40]">
+                  <span className="text-[10px] text-zinc-400 font-semibold block truncate">
+                    {analysis.setComparison.options[1]?.name || '2pc + 2pc'}
+                  </span>
+                  <span className="text-base font-extrabold text-sky-400 font-mono mt-0.5 block">
+                    ~{analysis.setComparison.options[1]?.esr ?? 0} rolls
+                  </span>
+                </div>
+              </div>
+
+              <div className="bg-[#161926] p-3 rounded-xl border border-[#272e44] text-xs space-y-1">
+                <div className="flex items-center gap-1.5 font-bold text-zinc-200">
+                  <span className="text-[#d4af37]">Break-even Delta:</span>
+                  <span>+{analysis.setComparison.breakEvenRollDelta} substat rolls</span>
+                </div>
+                <p className="text-[11px] text-zinc-400 leading-relaxed">
+                  {analysis.setComparison.verdict}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Weakest Link Alert Banner */}
           {analysis.weakestSlot && (
             <div className="bg-gradient-to-r from-[#181b28] to-[#12141e] border border-[#d4af37]/40 p-4 rounded-2xl shadow-md space-y-2">
@@ -392,30 +597,112 @@ export const ArtifactStopView: React.FC = () => {
             </div>
           )}
 
-          {/* Guaranteed Alternative Resin Path */}
-          <div className="bg-[#12141d] border border-[#23273a] p-4 rounded-2xl shadow-md space-y-3">
-            <div className="flex items-center gap-2 text-zinc-300 text-xs font-bold uppercase tracking-wider">
-              <Award className="w-4 h-4 text-emerald-400" />
-              <span>Zero-RNG Guaranteed Upgrade Alternative</span>
-            </div>
-            <div className="bg-[#181b28] p-3.5 rounded-xl border border-[#262c40] space-y-1">
+          {/* Actionable Stop-Farming ROI & Guaranteed Upgrade Card */}
+          {analysis.roiComparison ? (
+            <div className="bg-[#12141d] border border-[#23273a] p-4.5 rounded-2xl shadow-md space-y-3.5">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-zinc-100 font-serif">
-                  {analysis.guaranteedAlternative.title}
-                </h4>
-                <span className="text-xs font-extrabold text-emerald-400">
-                  {analysis.guaranteedAlternative.guaranteedGain}
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-[#d4af37]" />
+                  <span className="text-xs font-bold text-zinc-200 uppercase tracking-wider">
+                    Resin ROI vs Guaranteed Gains
+                  </span>
+                </div>
+                <span
+                  className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
+                    analysis.roiComparison.decision === 'Stop Farming'
+                      ? 'bg-purple-950/60 text-purple-300 border-purple-500/40'
+                      : 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
+                  }`}
+                >
+                  {analysis.roiComparison.decision}
                 </span>
               </div>
-              <p className="text-[11px] text-zinc-400 leading-relaxed">
-                {analysis.guaranteedAlternative.description}
-              </p>
-              <div className="pt-2 flex items-center justify-between text-[10px] text-zinc-500 font-mono">
-                <span>Cost: {analysis.guaranteedAlternative.costResin} Resin</span>
-                <span>~{analysis.guaranteedAlternative.daysResin} Days Farming</span>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-[#181b28] p-3 rounded-xl border border-[#262c40]">
+                  <span className="text-[10px] text-zinc-400 font-semibold block">Marginal Gain / Roll</span>
+                  <span className="text-base font-extrabold text-[#d4af37] font-mono mt-0.5 block">
+                    +{analysis.roiComparison.artifactMarginalDpsGainPerRoll}% DPS
+                  </span>
+                </div>
+                <div className="bg-[#181b28] p-3 rounded-xl border border-[#262c40]">
+                  <span className="text-[10px] text-zinc-400 font-semibold block">Resin / 1% DPS</span>
+                  <span className="text-base font-extrabold text-sky-400 font-mono mt-0.5 block">
+                    ~{analysis.roiComparison.resinPerOnePctArtifactDps} Resin
+                  </span>
+                </div>
+              </div>
+
+              {/* Guaranteed Alternatives Benchmarks */}
+              <div className="space-y-1.5 pt-1">
+                <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">
+                  Guaranteed Benchmarks (Zero RNG):
+                </span>
+                <div className="space-y-1">
+                  {analysis.roiComparison.milestones.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between text-xs bg-[#161824] px-3 py-1.5 rounded-lg border border-[#22273a]"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Award className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span className="text-zinc-200 font-medium">{item.name}</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-right font-mono">
+                        <span className="text-emerald-400 font-bold">+{item.expectedDpsGainPct}%</span>
+                        <span className="text-[11px] text-zinc-400">~{item.resinPerOnePctDps} res/%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Domain & Strongbox Routing Recommendation */}
+              {analysis.domainRoute && (
+                <div className="bg-[#161926] p-3 rounded-xl border border-[#272e44] space-y-1.5 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-[#d4af37] flex items-center gap-1.5">
+                      <Layers className="w-3.5 h-3.5" />
+                      <span>Recommended Route: {analysis.domainRoute.recommendedAction}</span>
+                    </span>
+                    {analysis.domainRoute.companionValue && (
+                      <span className="text-[10px] font-semibold text-zinc-400">
+                        Companion Value: {analysis.domainRoute.companionValue}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-zinc-300 leading-relaxed text-[11px]">
+                    {analysis.domainRoute.guidance}
+                  </p>
+                </div>
+              )}
+            </div>
+          ) : (
+            /* Fallback Guaranteed Alternative Path */
+            <div className="bg-[#12141d] border border-[#23273a] p-4 rounded-2xl shadow-md space-y-3">
+              <div className="flex items-center gap-2 text-zinc-300 text-xs font-bold uppercase tracking-wider">
+                <Award className="w-4 h-4 text-emerald-400" />
+                <span>Zero-RNG Guaranteed Upgrade Alternative</span>
+              </div>
+              <div className="bg-[#181b28] p-3.5 rounded-xl border border-[#262c40] space-y-1">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold text-zinc-100 font-serif">
+                    {analysis.guaranteedAlternative.title}
+                  </h4>
+                  <span className="text-xs font-extrabold text-emerald-400">
+                    {analysis.guaranteedAlternative.guaranteedGain}
+                  </span>
+                </div>
+                <p className="text-[11px] text-zinc-400 leading-relaxed">
+                  {analysis.guaranteedAlternative.description}
+                </p>
+                <div className="pt-2 flex items-center justify-between text-[10px] text-zinc-500 font-mono">
+                  <span>Cost: {analysis.guaranteedAlternative.costResin} Resin</span>
+                  <span>~{analysis.guaranteedAlternative.daysResin} Days Farming</span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Slider Controls (Only visible in Quick Estimator Mode) */}
           {viewMode === 'slider' && (
@@ -561,6 +848,7 @@ export const ArtifactStopView: React.FC = () => {
                     analysis={slotAnalysis}
                     isWeakest={isWeakest}
                     onEdit={() => setEditingSlot(slot)}
+                    activeSets={analysis.setComparison?.activeSets}
                   />
                 );
               })}
@@ -881,39 +1169,86 @@ const EditSlotModal: React.FC<EditSlotModalProps> = ({
   onSave,
   onClose,
 }) => {
-  const defaultMainStat: StatKey =
-    slot === 'flower'
-      ? 'hp'
-      : slot === 'plume'
-      ? 'atk'
-      : slot === 'sands'
-      ? 'atk_'
-      : slot === 'goblet'
-      ? 'pyro_dmg_'
-      : 'critRate_';
+  const allowedMainStats = MAIN_STAT_ELIGIBILITY_TABLE[slot] || ['hp'];
+  const defaultMainStat: StatKey = allowedMainStats[0];
 
-  const [mainStatKey, setMainStatKey] = useState<StatKey>(
-    initialPiece?.mainStatKey || defaultMainStat,
+  const [setKey, setSetKey] = useState<string>(
+    initialPiece?.setKey || 'Emblem of Severed Fate',
   );
-  const [substats, setSubstats] = useState<Array<{ key: StatKey; value: number }>>([
-    { key: initialPiece?.substats[0]?.key || 'critRate_', value: initialPiece?.substats[0]?.value ?? 3.9 },
-    { key: initialPiece?.substats[1]?.key || 'critDMG_', value: initialPiece?.substats[1]?.value ?? 14.8 },
-    { key: initialPiece?.substats[2]?.key || 'enerRech_', value: initialPiece?.substats[2]?.value ?? 5.8 },
-    { key: initialPiece?.substats[3]?.key || 'atk_', value: initialPiece?.substats[3]?.value ?? 5.3 },
-  ]);
+  const [mainStatKey, setMainStatKey] = useState<StatKey>(
+    initialPiece && allowedMainStats.includes(initialPiece.mainStatKey)
+      ? initialPiece.mainStatKey
+      : defaultMainStat,
+  );
 
-  const statOptions: Array<{ key: StatKey; label: string }> = [
-    { key: 'critRate_', label: 'Crit Rate (%)' },
-    { key: 'critDMG_', label: 'Crit DMG (%)' },
-    { key: 'atk_', label: 'ATK (%)' },
-    { key: 'atk', label: 'Flat ATK' },
-    { key: 'hp_', label: 'HP (%)' },
-    { key: 'hp', label: 'Flat HP' },
-    { key: 'def_', label: 'DEF (%)' },
-    { key: 'def', label: 'Flat DEF' },
-    { key: 'eleMas', label: 'Elemental Mastery' },
-    { key: 'enerRech_', label: 'Energy Recharge (%)' },
+  const ALL_SUBSTAT_KEYS: StatKey[] = [
+    'critRate_',
+    'critDMG_',
+    'atk_',
+    'atk',
+    'hp_',
+    'hp',
+    'def_',
+    'def',
+    'eleMas',
+    'enerRech_',
   ];
+
+  const getInitialSubstats = () => {
+    if (initialPiece?.substats && initialPiece.substats.length === 4) {
+      return initialPiece.substats.map((s) => ({ key: s.key, value: s.value }));
+    }
+    const chosen: Array<{ key: StatKey; value: number }> = [];
+    for (const key of ALL_SUBSTAT_KEYS) {
+      if (key !== mainStatKey && chosen.length < 4) {
+        const val =
+          key === 'critRate_' ? 3.9 : key === 'critDMG_' ? 7.8 : key === 'enerRech_' ? 5.8 : 5.3;
+        chosen.push({ key, value: val });
+      }
+    }
+    return chosen;
+  };
+
+  const [substats, setSubstats] = useState<Array<{ key: StatKey; value: number }>>(getInitialSubstats);
+
+  const STAT_LABELS: Record<string, string> = {
+    hp: 'Flat HP (+299)',
+    atk: 'Flat ATK (+19)',
+    def: 'Flat DEF (+23)',
+    hp_: 'HP (+5.8%)',
+    atk_: 'ATK (+5.8%)',
+    def_: 'DEF (+7.3%)',
+    eleMas: 'Elemental Mastery (+23)',
+    enerRech_: 'Energy Recharge (+6.5%)',
+    critRate_: 'Crit Rate (+3.9%)',
+    critDMG_: 'Crit DMG (+7.8%)',
+    heal_: 'Healing Bonus (+35.9%)',
+    physical_dmg_: 'Physical DMG (+58.3%)',
+    pyro_dmg_: 'Pyro DMG (+46.6%)',
+    hydro_dmg_: 'Hydro DMG (+46.6%)',
+    dendro_dmg_: 'Dendro DMG (+46.6%)',
+    electro_dmg_: 'Electro DMG (+46.6%)',
+    anemo_dmg_: 'Anemo DMG (+46.6%)',
+    cryo_dmg_: 'Cryo DMG (+46.6%)',
+    geo_dmg_: 'Geo DMG (+46.6%)',
+  };
+
+  const handleMainStatChange = (newMain: StatKey) => {
+    setMainStatKey(newMain);
+    setSubstats((prev) => {
+      const usedKeys = new Set<StatKey>([newMain]);
+      return prev.map((s) => {
+        if (s.key === newMain || usedKeys.has(s.key)) {
+          const replacement =
+            ALL_SUBSTAT_KEYS.find((k) => k !== newMain && !usedKeys.has(k)) || 'critDMG_';
+          usedKeys.add(replacement);
+          return { key: replacement, value: s.value };
+        }
+        usedKeys.add(s.key);
+        return s;
+      });
+    });
+  };
 
   const handleUpdateSubstat = (index: number, key: StatKey, value: number) => {
     setSubstats((prev) => {
@@ -923,19 +1258,24 @@ const EditSlotModal: React.FC<EditSlotModalProps> = ({
     });
   };
 
+  const currentPiecePreview: ArtifactPiece = {
+    slotKey: slot,
+    setKey,
+    rarity: 5,
+    level: 20,
+    mainStatKey,
+    substats,
+  };
+
+  const validation = validateArtifactPiece(currentPiecePreview);
+
   const handleSave = () => {
-    onSave({
-      slotKey: slot,
-      rarity: 5,
-      level: 20,
-      mainStatKey,
-      substats,
-    });
+    onSave(currentPiecePreview);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-[#141724] border border-[#2b3248] rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl relative text-zinc-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-[#141724] border border-[#2b3248] rounded-2xl w-full max-w-lg p-6 space-y-4 shadow-2xl relative text-zinc-100 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-zinc-400 hover:text-white p-1 rounded-lg cursor-pointer"
@@ -943,64 +1283,103 @@ const EditSlotModal: React.FC<EditSlotModalProps> = ({
           <X className="w-4 h-4" />
         </button>
 
-        <h3 className="text-base font-bold text-zinc-100 font-serif">
-          Edit {SLOT_NAMES[slot]} ({characterName})
-        </h3>
-        <p className="text-xs text-zinc-400">
-          Adjust the main stat and substat values to preview exact Roll Value (RV) and upgrade odds.
-        </p>
+        <div>
+          <h3 className="text-base font-bold text-zinc-100 font-serif">
+            Edit {SLOT_NAMES[slot]} ({characterName})
+          </h3>
+          <p className="text-xs text-zinc-400 mt-0.5">
+            Preserves set identity, filters authentic slot main stats, and validates discrete roll tiers.
+          </p>
+        </div>
+
+        {/* Set Selector */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-zinc-300">Artifact Set (37 Combat Sets):</label>
+          <select
+            value={setKey}
+            onChange={(e) => setSetKey(e.target.value)}
+            className="w-full bg-[#1a1e2d] text-zinc-100 text-xs px-3 py-2 rounded-xl border border-[#2a3045] focus:outline-none cursor-pointer"
+          >
+            {COMBAT_SET_NAMES.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {/* Main Stat Selector */}
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-zinc-300">Main Stat:</label>
           <select
             value={mainStatKey}
-            onChange={(e) => setMainStatKey(e.target.value as StatKey)}
+            onChange={(e) => handleMainStatChange(e.target.value as StatKey)}
             disabled={slot === 'flower' || slot === 'plume'}
             className="w-full bg-[#1a1e2d] text-zinc-100 text-xs px-3 py-2 rounded-xl border border-[#2a3045] focus:outline-none cursor-pointer"
           >
-            {slot === 'flower' && <option value="hp">HP (Flat)</option>}
-            {slot === 'plume' && <option value="atk">ATK (Flat)</option>}
-            {slot !== 'flower' &&
-              slot !== 'plume' &&
-              statOptions.map((opt) => (
-                <option key={opt.key} value={opt.key}>
-                  {opt.label}
-                </option>
-              ))}
+            {allowedMainStats.map((k) => (
+              <option key={k} value={k}>
+                {STAT_LABELS[k] || k}
+              </option>
+            ))}
           </select>
         </div>
 
         {/* 4 Substat Rows */}
-        <div className="space-y-2 pt-2">
-          <label className="text-xs font-semibold text-zinc-300">Substats (4 Lines):</label>
-          {substats.map((sub, idx) => (
-            <div key={idx} className="flex items-center gap-2">
-              <select
-                value={sub.key}
-                onChange={(e) =>
-                  handleUpdateSubstat(idx, e.target.value as StatKey, sub.value)
-                }
-                className="flex-1 bg-[#1a1e2d] text-zinc-100 text-xs px-2.5 py-1.5 rounded-xl border border-[#2a3045] focus:outline-none cursor-pointer"
-              >
-                {statOptions.map((opt) => (
-                  <option key={opt.key} value={opt.key}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="number"
-                step="0.1"
-                value={sub.value}
-                onChange={(e) =>
-                  handleUpdateSubstat(idx, sub.key, Number(e.target.value) || 0)
-                }
-                className="w-24 bg-[#1a1e2d] text-zinc-100 text-xs px-2.5 py-1.5 rounded-xl border border-[#2a3045] focus:outline-none font-mono text-right"
-              />
-            </div>
-          ))}
+        <div className="space-y-2 pt-1">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-semibold text-zinc-300">Substats (4 Discrete Lines):</label>
+            <span className="text-[10px] text-zinc-400">Total Rolls: {validation.totalRolls} (8–9 for +20 5★)</span>
+          </div>
+          {substats.map((sub, idx) => {
+            const otherKeys = substats.filter((_, i) => i !== idx).map((s) => s.key);
+            const availableSubstats = ALL_SUBSTAT_KEYS.filter(
+              (k) => k === sub.key || (k !== mainStatKey && !otherKeys.includes(k)),
+            );
+
+            return (
+              <div key={idx} className="flex items-center gap-2">
+                <select
+                  value={sub.key}
+                  onChange={(e) =>
+                    handleUpdateSubstat(idx, e.target.value as StatKey, sub.value)
+                  }
+                  className="flex-1 bg-[#1a1e2d] text-zinc-100 text-xs px-2.5 py-1.5 rounded-xl border border-[#2a3045] focus:outline-none cursor-pointer"
+                >
+                  {availableSubstats.map((optKey) => (
+                    <option key={optKey} value={optKey}>
+                      {STAT_LABELS[optKey] || optKey}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={sub.value}
+                  onChange={(e) =>
+                    handleUpdateSubstat(idx, sub.key, Number(e.target.value) || 0)
+                  }
+                  className="w-24 bg-[#1a1e2d] text-zinc-100 text-xs px-2.5 py-1.5 rounded-xl border border-[#2a3045] focus:outline-none font-mono text-right"
+                />
+              </div>
+            );
+          })}
         </div>
+
+        {/* Validation Notice Banner */}
+        {!validation.isValid && (
+          <div className="bg-rose-950/40 border border-rose-500/40 p-2.5 rounded-xl text-xs text-rose-300 space-y-1">
+            <div className="font-bold flex items-center gap-1.5">
+              <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
+              <span>Artifact Roll Validation Notice:</span>
+            </div>
+            <ul className="list-disc list-inside text-[11px] space-y-0.5 text-rose-300/90">
+              {validation.errors.map((err, errIdx) => (
+                <li key={errIdx}>{err}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#23283c]">
           <button

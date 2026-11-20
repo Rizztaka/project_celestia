@@ -442,6 +442,76 @@ export interface GuaranteedAlternative {
   description: string;
 }
 
+export type TeamPresetKey =
+  | 'hypercarry_bennett_furina'
+  | 'vape_melt'
+  | 'quicken_spread'
+  | 'hyperbloom'
+  | 'unbuffed';
+
+export interface TeamContext {
+  preset?: TeamPresetKey;
+  hasBennett?: boolean;
+  hasFurina?: boolean;
+  hasKazuhaOrVV?: boolean;
+  hasAmplifyingReaction?: boolean;
+  hasQuickenReaction?: boolean;
+  customFlatAtkBuff?: number;
+  customDmgBonus?: number;
+}
+
+export interface WholeBuildErEvaluation {
+  totalEr: number;
+  targetEr: number;
+  status: 'Deficit' | 'Target' | 'Overcap';
+  penaltyFactor: number;
+  erDifference: number;
+  message: string;
+}
+
+export interface SetOptionComparison {
+  name: string;
+  type: '4pc' | '2pc+2pc' | 'Rainbow';
+  esr: number;
+  breakEvenRollDelta: number;
+  description: string;
+}
+
+export interface SetComparisonResult {
+  currentSetEsr: number;
+  activeSets: string[];
+  options: SetOptionComparison[];
+  breakEvenRollDelta: number;
+  verdict: string;
+}
+
+export interface RoiMilestoneComparison {
+  name: string;
+  costResin: number;
+  expectedDpsGainPct: number;
+  resinPerOnePctDps: number;
+  isGuaranteed: boolean;
+  efficiencyRatioVsArtifacts: number;
+}
+
+export interface RoiComparison {
+  resinPerOnePctArtifactDps: number;
+  artifactMarginalDpsGainPerRoll: number;
+  decision: 'Stop Farming' | 'Continue Farming' | 'Switch to Guaranteed Upgrades';
+  milestones: RoiMilestoneComparison[];
+  summaryBanner: string;
+}
+
+export interface DomainRouteRecommendation {
+  targetSet: string;
+  isStrongboxEligible: boolean;
+  domainName?: string;
+  companionSet?: string;
+  companionValue: 'High' | 'Low' | 'Moderate';
+  recommendedAction: 'Farm Domain' | 'Use Strongbox / Farm Marechaussee or Deepwood' | 'Neutral';
+  guidance: string;
+}
+
 export interface ArtifactStopAnalysisResult {
   characterId: string;
   characterName: string;
@@ -455,6 +525,15 @@ export interface ArtifactStopAnalysisResult {
   curve: DiminishingReturnsPoint[];
   guaranteedAlternative: GuaranteedAlternative;
   advice: string;
+  erEvaluation?: WholeBuildErEvaluation;
+  setComparison?: SetComparisonResult;
+  roiComparison?: RoiComparison;
+  domainRoute?: DomainRouteRecommendation;
+  activeSetsSummary?: {
+    active2pc: string[];
+    active4pc: string[];
+    totalEsr: number;
+  };
 }
 
 // ---------------------------------------------------------

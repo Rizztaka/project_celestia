@@ -6,6 +6,10 @@ import {
   MAX_SUBSTAT_VALUES,
 } from '../data/artifact-weights';
 import {
+  decomposeSubstatRolls,
+  validateArtifactPiece,
+} from '../engines/artifact-validator';
+import {
   Flower,
   Feather,
   Clock,
@@ -21,14 +25,25 @@ interface ArtifactSlotCardProps {
   analysis: SlotUpgradeProbability;
   isWeakest: boolean;
   onEdit?: () => void;
+  activeSets?: string[];
 }
 
 export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
   analysis,
   isWeakest,
   onEdit,
+  activeSets,
 }) => {
   const { slotKey, slotName, currentPiece, currentRollValue, currentUsefulRolls, status, expectedDaysForUpgrade, expectedRunsForUpgrade } = analysis;
+
+  const validation = currentPiece ? validateArtifactPiece(currentPiece) : null;
+  const isInvalid = Boolean(validation && !validation.isValid);
+  const isOffPiece = Boolean(
+    activeSets &&
+      activeSets.length > 0 &&
+      currentPiece?.setKey &&
+      !activeSets.includes(currentPiece.setKey),
+  );
 
   const renderSlotIcon = () => {
     switch (slotKey) {
@@ -135,7 +150,23 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
               {renderSlotIcon()}
             </div>
             <div>
-              <h4 className="text-xs font-bold text-zinc-100">{slotName}</h4>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <h4 className="text-xs font-bold text-zinc-100">{slotName}</h4>
+                {isOffPiece && (
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                    Off-Piece
+                  </span>
+                )}
+                {isInvalid && (
+                  <span
+                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold bg-rose-950/70 text-rose-300 border border-rose-500/40"
+                    title={validation?.errors.join('; ')}
+                  >
+                    <AlertTriangle className="w-2.5 h-2.5" />
+                    Invalid ({validation?.errors.length})
+                  </span>
+                )}
+              </div>
               <p className="text-[10px] text-zinc-400 capitalize">
                 {currentPiece?.setKey || 'Standard 5★ Artifact'}
               </p>
@@ -160,6 +191,7 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
               const rv =
                 sub.rollValue ??
                 (maxVal > 0 ? Math.round((sub.value / maxVal) * 100) : 0);
+              const decomp = decomposeSubstatRolls(sub.key as StatKey, sub.value);
               return (
                 <div
                   key={idx}
@@ -168,9 +200,23 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
                   <span className="text-zinc-300 font-mono">
                     {formatStatLabel(sub.key, sub.value)}
                   </span>
-                  <span className="text-[10px] text-zinc-500 font-mono">
-                    {rv > 0 ? `${rv}% RV` : ''}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {decomp.isValid && decomp.rolls > 0 && (
+                      <span
+                        className="text-[9px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono border border-zinc-700/60"
+                        title={
+                          decomp.tierBreakdown && decomp.tierBreakdown.length > 0
+                            ? `Roll tiers: ${decomp.tierBreakdown.join(', ')}`
+                            : undefined
+                        }
+                      >
+                        {decomp.rolls} roll{decomp.rolls > 1 ? 's' : ''} ({Math.round(decomp.averageEfficiency)}%)
+                      </span>
+                    )}
+                    <span className="text-[10px] text-zinc-500 font-mono">
+                      {rv > 0 ? `${rv}% RV` : ''}
+                    </span>
+                  </div>
                 </div>
               );
             })

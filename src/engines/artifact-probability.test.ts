@@ -8,8 +8,9 @@ import {
   estimateBuildFromSliders,
   extractEquippedArtifactsForCharacter,
   getSubstatUpgradeProbability,
+  analyzeArtifactBuild,
 } from './artifact-probability';
-import type { ArtifactPiece } from '../types/genshin';
+import type { ArtifactPiece, ArtifactSlot } from '../types/genshin';
 import { getCharacterStatWeights } from '../data/artifact-weights';
 
 describe('Artifact Probability & Roll Value Engine', () => {
@@ -262,6 +263,229 @@ describe('Artifact Probability & Roll Value Engine', () => {
         expect(isNaN(pt.probability)).toBe(false);
         expect(pt.probability).toBeGreaterThanOrEqual(0);
       }
+    });
+  });
+
+  describe('Archetype 1: ATK Scaler (Kamisato Ayaka / Navia)', () => {
+    it('accurately benchmarks endgame Ayaka build to Stop Farming with high Talent ROI', () => {
+      // 32-roll Ayaka build with 4pc Blizzard Strayer
+      const endgameBuild = estimateBuildFromSliders('Kamisato Ayaka', 45, 230, 140, false);
+      expect(endgameBuild.roiComparison).toBeDefined();
+      expect(endgameBuild.roiComparison?.decision).toBe('Stop Farming');
+      expect(endgameBuild.roiComparison?.resinPerOnePctArtifactDps).toBeGreaterThan(800);
+
+      // Talent Level 8 -> 9/10 milestone efficiency
+      const talentMilestone = endgameBuild.roiComparison?.milestones.find((m) =>
+        m.name.includes('Talent'),
+      );
+      expect(talentMilestone).toBeDefined();
+      expect(talentMilestone?.efficiencyRatioVsArtifacts).toBeGreaterThan(15);
+
+      // 4pc Blizzard Strayer set comparison
+      expect(endgameBuild.setComparison?.options.find((o) => o.type === '4pc')).toBeDefined();
+    });
+
+    it('recommends Continue Farming for early ATK-scaler builds', () => {
+      const earlyBuild = estimateBuildFromSliders('Kamisato Ayaka', 20, 60, 40, false);
+      expect(earlyBuild.overallStatus).toBe('High ROI');
+      expect(earlyBuild.roiComparison?.decision).toBe('Continue Farming');
+    });
+  });
+
+  describe('Archetype 2: HP Scaler (Neuvillette / Hu Tao)', () => {
+    it('assigns 0 weight to ATK stats on Neuvillette', () => {
+      const weights = getCharacterStatWeights('Neuvillette');
+      expect(weights.statWeights.atk_).toBeUndefined();
+
+      const pieceWithAtk: ArtifactPiece = {
+        slotKey: 'flower',
+        rarity: 5,
+        level: 20,
+        mainStatKey: 'hp',
+        substats: [
+          { key: 'atk_', value: 20 },
+          { key: 'atk', value: 40 },
+          { key: 'def', value: 20 },
+        ],
+      };
+
+      const rv = calculatePieceRollValue(pieceWithAtk, weights);
+      expect(rv.weightedRollValue).toBe(0);
+      expect(rv.usefulRolls).toBe(0);
+    });
+
+    it('evaluates Furina team buff context and adjusts goblet viability', () => {
+      const analysis = estimateBuildFromSliders('Neuvillette', 50, 220, 120, false, {
+        preset: 'hypercarry_bennett_furina',
+        hasFurina: true,
+      });
+
+      expect(analysis.setComparison).toBeDefined();
+      expect(analysis.erEvaluation).toBeDefined();
+    });
+  });
+
+  describe('Archetype 3: DEF Scaler (Arataki Itto / Gorou / Chiori)', () => {
+    it('properly prioritizes DEF and ER for Gorou over pure Crit DMG', () => {
+      const gorouWeights = getCharacterStatWeights('Gorou');
+      expect(gorouWeights.statWeights.def_).toBeGreaterThan(0.5);
+      expect(gorouWeights.statWeights.enerRech_).toBeGreaterThan(0.7);
+
+      const defPiece: ArtifactPiece = {
+        slotKey: 'sands',
+        rarity: 5,
+        level: 20,
+        mainStatKey: 'def_',
+        substats: [
+          { key: 'enerRech_', value: 18.0 },
+          { key: 'def', value: 40 },
+          { key: 'critRate_', value: 7.0 },
+        ],
+      };
+
+      const rv = calculatePieceRollValue(defPiece, gorouWeights);
+      expect(rv.usefulRolls).toBeGreaterThan(3.0);
+    });
+
+    it('evaluates 4pc Husk of Opulent Dreams set bonus on Itto', () => {
+      const ittoBuild = estimateBuildFromSliders('Arataki Itto', 70, 150, 120, true);
+      expect(ittoBuild.setComparison?.options[0].name).toContain('Husk of Opulent Dreams');
+      expect(ittoBuild.setComparison?.options[0].esr).toBeGreaterThan(8);
+    });
+  });
+
+  describe('Archetype 4: EM-Dependent Transformative Reaction (Nilou / Kuki Shinobu)', () => {
+    it('heavily prioritizes Character Level 80->90 over artifact domain farming', () => {
+      const kukiBuild = estimateBuildFromSliders('Kuki Shinobu', 20, 60, 600, true, {
+        preset: 'hyperbloom',
+      });
+
+      expect(kukiBuild.roiComparison).toBeDefined();
+      const lvl90Milestone = kukiBuild.roiComparison?.milestones.find((m) =>
+        m.name.includes('Character Level 80 → 90'),
+      );
+      expect(lvl90Milestone).toBeDefined();
+      // Character level 90 for transformative reactions costs only ~21 resin per 1% DPS!
+      expect(lvl90Milestone?.resinPerOnePctDps).toBe(21);
+      expect(lvl90Milestone?.efficiencyRatioVsArtifacts).toBeGreaterThan(10);
+    });
+  });
+
+  describe('Archetype 5: Energy-Hungry Support (Faruzan / Bennett)', () => {
+    it('penalizes Faruzan build heavily when total ER suffers severe deficit', () => {
+      // Build with only ~130% ER (Faruzan needs ~240% ER)
+      const mockSlotsLowEr: Partial<Record<ArtifactSlot, ArtifactPiece>> = {
+        flower: {
+          slotKey: 'flower',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'hp',
+          substats: [{ key: 'critRate_', value: 10 }],
+        },
+        plume: {
+          slotKey: 'plume',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'atk',
+          substats: [{ key: 'critDMG_', value: 20 }],
+        },
+        sands: {
+          slotKey: 'sands',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'atk_', // Missing ER sands!
+          substats: [{ key: 'enerRech_', value: 10 }],
+        },
+        goblet: {
+          slotKey: 'goblet',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'anemo_dmg_',
+          substats: [{ key: 'enerRech_', value: 10 }],
+        },
+        circlet: {
+          slotKey: 'circlet',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'critRate_',
+          substats: [{ key: 'enerRech_', value: 10 }],
+        },
+      };
+
+      const result = analyzeArtifactBuild('Faruzan', mockSlotsLowEr);
+      expect(result.erEvaluation?.status).toBe('Deficit');
+      expect(result.erEvaluation?.penaltyFactor).toBeLessThan(0.7);
+      expect(result.advice).toContain('⚠️ ER DEFICIT WARNING');
+    });
+
+    it('clears ER deficit warning when Faruzan reaches required ER target', () => {
+      const mockSlotsHighEr: Partial<Record<ArtifactSlot, ArtifactPiece>> = {
+        flower: {
+          slotKey: 'flower',
+          setKey: 'The Exile',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'hp',
+          substats: [{ key: 'enerRech_', value: 18 }],
+        },
+        plume: {
+          slotKey: 'plume',
+          setKey: 'The Exile',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'atk',
+          substats: [{ key: 'enerRech_', value: 18 }],
+        },
+        sands: {
+          slotKey: 'sands',
+          setKey: 'Emblem of Severed Fate',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'enerRech_', // 51.8 ER
+          substats: [{ key: 'critRate_', value: 7 }],
+        },
+        goblet: {
+          slotKey: 'goblet',
+          setKey: 'Viridescent Venerer', // Off-piece so 2pc Emblem is not active
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'anemo_dmg_',
+          substats: [{ key: 'enerRech_', value: 18 }],
+        },
+        circlet: {
+          slotKey: 'circlet',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'critRate_',
+          substats: [{ key: 'enerRech_', value: 18 }],
+        },
+      };
+
+      const result = analyzeArtifactBuild('Faruzan', mockSlotsHighEr);
+      // Base (100) + Sands (51.8) + 2pc Exile (20) + Substats (72) = 243.8% ER
+      expect(result.erEvaluation?.totalEr).toBeGreaterThanOrEqual(240);
+      expect(result.erEvaluation?.status).toBe('Target');
+      expect(result.erEvaluation?.penaltyFactor).toBe(1.0);
+    });
+  });
+
+  describe('Smart Strongbox & Domain Pairing Routing', () => {
+    it('advises Strongbox for Crimson Witch of Flames due to Lavawalker resin trap', () => {
+      const build = estimateBuildFromSliders('Hu Tao', 70, 160, 100, false);
+      expect(build.domainRoute).toBeDefined();
+      expect(build.domainRoute?.isStrongboxEligible).toBe(true);
+      expect(build.domainRoute?.companionValue).toBe('Low');
+      expect(build.domainRoute?.recommendedAction).toBe(
+        'Use Strongbox / Farm Marechaussee or Deepwood',
+      );
+      expect(build.domainRoute?.guidance).toContain('Mystic Offering');
+    });
+
+    it('recommends direct domain farming for high-efficiency domain pairs (Marechaussee / Golden Troupe)', () => {
+      const build = estimateBuildFromSliders('Neuvillette', 50, 220, 120, false);
+      expect(build.domainRoute?.companionValue).toBe('High');
+      expect(build.domainRoute?.recommendedAction).toBe('Farm Domain');
+      expect(build.domainRoute?.guidance).toContain('100% resin efficiency');
     });
   });
 });

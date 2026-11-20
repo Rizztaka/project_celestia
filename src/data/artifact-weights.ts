@@ -67,6 +67,133 @@ export const MAX_SUBSTAT_VALUES: Record<StatKey, number> = {
 };
 
 /**
+ * 4 Discrete 5-star Substat Roll Tiers (70%, 80%, 90%, 100%).
+ * Every initial roll and subsequent level-up roll selects from one of these 4 values.
+ */
+export const SUBSTAT_ROLL_TIERS: Record<StatKey, number[]> = {
+  critRate_: [2.72, 3.11, 3.50, 3.89],
+  critDMG_: [5.44, 6.22, 6.99, 7.77],
+  atk_: [4.08, 4.66, 5.25, 5.83],
+  hp_: [4.08, 4.66, 5.25, 5.83],
+  def_: [5.10, 5.83, 6.56, 7.29],
+  eleMas: [16.32, 18.65, 20.98, 23.31],
+  enerRech_: [4.53, 5.18, 5.83, 6.48],
+  atk: [13.62, 15.56, 17.51, 19.45],
+  hp: [209.13, 239.00, 268.88, 298.75],
+  def: [16.20, 18.52, 20.84, 23.15],
+  heal_: [],
+  physical_dmg_: [],
+  pyro_dmg_: [],
+  hydro_dmg_: [],
+  dendro_dmg_: [],
+  electro_dmg_: [],
+  anemo_dmg_: [],
+  cryo_dmg_: [],
+  geo_dmg_: [],
+};
+
+/**
+ * Canonical Genshin Impact main stat eligibility by artifact slot.
+ */
+export const MAIN_STAT_ELIGIBILITY_TABLE: Record<ArtifactSlot, StatKey[]> = {
+  flower: ['hp'],
+  plume: ['atk'],
+  sands: ['hp_', 'atk_', 'def_', 'enerRech_', 'eleMas'],
+  goblet: [
+    'hp_',
+    'atk_',
+    'def_',
+    'eleMas',
+    'pyro_dmg_',
+    'hydro_dmg_',
+    'cryo_dmg_',
+    'electro_dmg_',
+    'anemo_dmg_',
+    'geo_dmg_',
+    'dendro_dmg_',
+    'physical_dmg_',
+  ],
+  circlet: [
+    'hp_',
+    'atk_',
+    'def_',
+    'eleMas',
+    'critRate_',
+    'critDMG_',
+    'heal_',
+  ],
+};
+
+export interface DomainPair {
+  domainName: string;
+  region: string;
+  sets: [string, string];
+}
+
+/**
+ * Mapping of all artifact farming domains to their dual 5-star set drops.
+ */
+export const DOMAIN_PAIRS_REGISTRY: DomainPair[] = [
+  { domainName: 'Midsummer Courtyard', region: 'Mondstadt', sets: ['Thundering Fury', 'Thundersoother'] },
+  { domainName: 'Valley of Remembrance', region: 'Mondstadt', sets: ['Viridescent Venerer', 'Maiden Beloved'] },
+  { domainName: 'Domain of Guyun', region: 'Liyue', sets: ['Archaic Petra', 'Retracing Bolide'] },
+  { domainName: 'Clear Pool and Mountain Cavern', region: 'Liyue', sets: ['Bloodstained Chivalry', 'Noblesse Oblige'] },
+  { domainName: 'Hidden Palace of Zhou Formula', region: 'Liyue', sets: ['Crimson Witch of Flames', 'Lavawalker'] },
+  { domainName: 'Peak of Vindagnyr', region: 'Dragonspine', sets: ['Blizzard Strayer', 'Heart of Depth'] },
+  { domainName: 'Ridge Watch', region: 'Liyue', sets: ['Tenacity of the Millelith', 'Pale Flame'] },
+  { domainName: 'Momiji-Dyed Court', region: 'Inazuma', sets: ['Emblem of Severed Fate', "Shimenawa's Reminiscence"] },
+  { domainName: 'Slumbering Court', region: 'Inazuma', sets: ['Husk of Opulent Dreams', 'Ocean-Hued Clam'] },
+  { domainName: 'The Lost Valley', region: 'The Chasm', sets: ['Vermillion Hereafter', 'Echoes of an Offering'] },
+  { domainName: 'Spire of Solitary Enlightenment', region: 'Sumeru', sets: ['Deepwood Memories', 'Gilded Dreams'] },
+  { domainName: 'City of Gold', region: 'Sumeru', sets: ['Desert Pavilion Chronicle', 'Flower of Paradise Lost'] },
+  { domainName: 'Molten Iron Fortress', region: 'Sumeru', sets: ["Nymph's Dream", "Vourukasha's Glow"] },
+  { domainName: 'Denouement of Sin', region: 'Fontaine', sets: ['Marechaussee Hunter', 'Golden Troupe'] },
+  { domainName: 'Waterfall Wen', region: 'Fontaine', sets: ['Song of Days Past', 'Nighttime Whispers in the Echoing Woods'] },
+  { domainName: 'Faded Theater', region: 'Fontaine', sets: ['Fragment of Harmonic Whimsy', 'Unfinished Reverie'] },
+  { domainName: 'Sanctum of Rainbow Spirits', region: 'Natlan', sets: ['Scroll of the Hero of Cinder City', 'Obsidian Codex'] },
+  { domainName: 'Blazing Ruins of Dawn', region: 'Natlan', sets: ['A Day Carved From Rising Winds', 'Disenchantment in Deep Shadow'] },
+  { domainName: 'Frost-Veiled Sanctuary', region: 'Nod-Krai', sets: ["Silken Moon's Serenade", 'Finale of the Deep Galleries'] },
+];
+
+/**
+ * Complete set of artifact set names eligible for Mystic Offering (Artifact Strongbox).
+ */
+export const STRONGBOX_SETS_SET = new Set<string>([
+  "Gladiator's Finale",
+  "Wanderer's Troupe",
+  'Noblesse Oblige',
+  'Bloodstained Chivalry',
+  'Maiden Beloved',
+  'Viridescent Venerer',
+  'Archaic Petra',
+  'Retracing Bolide',
+  'Thundersoother',
+  'Thundering Fury',
+  'Lavawalker',
+  'Crimson Witch of Flames',
+  'Blizzard Strayer',
+  'Heart of Depth',
+  'Tenacity of the Millelith',
+  'Pale Flame',
+  "Shimenawa's Reminiscence",
+  'Emblem of Severed Fate',
+  'Husk of Opulent Dreams',
+  'Ocean-Hued Clam',
+  'Vermillion Hereafter',
+  'Echoes of an Offering',
+  'Deepwood Memories',
+  'Gilded Dreams',
+  'Desert Pavilion Chronicle',
+  'Flower of Paradise Lost',
+  "Nymph's Dream",
+  "Vourukasha's Glow",
+  'Marechaussee Hunter',
+  'Golden Troupe',
+  'Song of Days Past',
+  'Nighttime Whispers in the Echoing Woods',
+]);
+
+/**
  * Realistic Genshin domain farming constants.
  */
 export const DOMAIN_CONSTANTS = {
@@ -379,6 +506,96 @@ export const CHARACTER_STAT_WEIGHTS: Record<string, CharacterStatWeightConfig> =
     erRequirement: 160,
     targetSets: ['Ocean-Hued Clam', 'Tenacity of the Millelith'],
   },
+  Neuvillette: {
+    characterId: 'Neuvillette',
+    characterName: 'Neuvillette',
+    preferredMainStats: {
+      sands: ['hp_'],
+      goblet: ['hydro_dmg_', 'hp_'],
+      circlet: ['critRate_', 'critDMG_', 'hp_'],
+    },
+    statWeights: {
+      hp_: 1.0,
+      critRate_: 1.0,
+      critDMG_: 1.0,
+      enerRech_: 0.7,
+      hp: 0.35,
+    },
+    erRequirement: 120,
+    targetSets: ['Marechaussee Hunter'],
+  },
+  Gorou: {
+    characterId: 'Gorou',
+    characterName: 'Gorou',
+    preferredMainStats: {
+      sands: ['def_', 'enerRech_'],
+      goblet: ['def_', 'geo_dmg_'],
+      circlet: ['def_', 'critRate_'],
+    },
+    statWeights: {
+      def_: 1.0,
+      enerRech_: 1.0,
+      def: 0.4,
+      critRate_: 0.6,
+      critDMG_: 0,
+    },
+    erRequirement: 220,
+    targetSets: ['Husk of Opulent Dreams', 'The Exile', 'Noblesse Oblige'],
+  },
+  Faruzan: {
+    characterId: 'Faruzan',
+    characterName: 'Faruzan',
+    preferredMainStats: {
+      sands: ['enerRech_'],
+      goblet: ['anemo_dmg_'],
+      circlet: ['critRate_'],
+    },
+    statWeights: {
+      enerRech_: 1.0,
+      critRate_: 0.8,
+      critDMG_: 0.7,
+      atk_: 0.4,
+    },
+    erRequirement: 240,
+    targetSets: ['The Exile', 'Tenacity of the Millelith', 'Emblem of Severed Fate', 'Viridescent Venerer'],
+  },
+  KamisatoAyaka: {
+    characterId: 'KamisatoAyaka',
+    characterName: 'Kamisato Ayaka',
+    preferredMainStats: {
+      sands: ['atk_'],
+      goblet: ['cryo_dmg_'],
+      circlet: ['critDMG_', 'atk_'],
+    },
+    statWeights: {
+      critDMG_: 1.0,
+      atk_: 0.85,
+      critRate_: 0.7,
+      enerRech_: 0.75,
+      atk: 0.25,
+    },
+    erRequirement: 140,
+    targetSets: ['Blizzard Strayer'],
+  },
+  AratakiItto: {
+    characterId: 'AratakiItto',
+    characterName: 'Arataki Itto',
+    preferredMainStats: {
+      sands: ['def_'],
+      goblet: ['geo_dmg_'],
+      circlet: ['critRate_', 'critDMG_'],
+    },
+    statWeights: {
+      def_: 1.0,
+      critRate_: 1.0,
+      critDMG_: 1.0,
+      enerRech_: 0.75,
+      atk_: 0.3,
+      def: 0.35,
+    },
+    erRequirement: 130,
+    targetSets: ['Husk of Opulent Dreams'],
+  },
 };
 
 export const CHARACTER_ALIASES: Record<string, string> = {
@@ -395,6 +612,9 @@ export const CHARACTER_ALIASES: Record<string, string> = {
   childe: 'Tartaglia',
   yae: 'YaeMiko',
   baizhu: 'Baizhu',
+  neuvillette: 'Neuvillette',
+  gorou: 'Gorou',
+  faruzan: 'Faruzan',
 };
 
 const GOBLET_STAT_MAP: Record<string, StatKey> = {

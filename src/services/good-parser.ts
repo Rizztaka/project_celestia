@@ -7,6 +7,7 @@ import type {
   OwnedWeapon,
 } from '../types/genshin';
 import { getWeaponByKey } from '../data/weapons';
+import { validateGoodArtifact } from '../engines/artifact-validator';
 
 // Common prepositions and conjunctions to keep lowercase in Genshin weapon names
 const LOWERCASE_WORDS = new Set(['of', 'the', 'in', 'for', 'and', 'to']);
@@ -93,7 +94,18 @@ export function mapGOODToCelestiaProfiles(good: GOODData): GOODMapResult {
   const profiles: Record<string, OwnedCharacterProfile> = {};
   const characters = good.characters || [];
   const weapons = good.weapons || [];
-  const rawArtifacts = Array.isArray(good.artifacts) ? good.artifacts : [];
+  const rawArtifacts: any[] = [];
+  if (Array.isArray(good.artifacts)) {
+    for (const art of good.artifacts) {
+      if (!art || typeof art !== 'object') continue;
+      const res = validateGoodArtifact(art);
+      if (res.sanitizedPiece) {
+        rawArtifacts.push(res.sanitizedPiece);
+      } else {
+        rawArtifacts.push(art);
+      }
+    }
+  }
   const rawWeapons: OwnedWeapon[] = [];
 
   // Index weapons by location (character key)

@@ -324,5 +324,47 @@ describe('Gacha Math Engine (Version 7.2 Baseline)', () => {
       const ratePostSoft = weaponDist[64].probability - weaponDist[63].probability;
       expect(ratePostSoft).toBeGreaterThan(ratePreSoft);
     });
+
+    it('generates multi-copy distribution accurately matching cumulative guarantee and monotonicity', () => {
+      // 2 copies on character banner, starting with 70 pity and guaranteed
+      const multiDist = generateProbabilityDistribution('character', 70, true, 0, false, 2);
+      expect(multiDist[0]).toEqual({ pulls: 0, probability: 0 });
+      // Copy 1 needs 90 - 70 = 20 pulls; Copy 2 needs 180 pulls -> Total guarantee = 200 pulls
+      expect(multiDist[multiDist.length - 1].pulls).toBe(200);
+      expect(multiDist[multiDist.length - 1].probability).toBe(1.0);
+
+      for (let i = 1; i < multiDist.length; i++) {
+        expect(multiDist[i].probability).toBeGreaterThanOrEqual(multiDist[i - 1].probability);
+      }
+    });
+
+    it('handles extreme multi-copy C0 -> C6 with 89 starting pity and 3 consecutive losses without error or numerical instability', () => {
+      // 6 copies (C6 goal), 89 starting pity, 3 losses (100% guarantee on copy 1)
+      const res6 = calculateMultiCopyOdds('character', 6, 250, 89, false, 3);
+      // Copy 1 guarantee = 90 - 89 = 1 pull.
+      // Copies 2..6 fresh guarantee = 5 * 180 = 900 pulls.
+      // Total guarantee = 901 pulls.
+      expect(res6.guaranteedPulls).toBe(901);
+      expect(res6.copiesBreakdown).toHaveLength(6);
+      expect(res6.copiesBreakdown![0].guaranteedPulls).toBe(1);
+      expect(res6.copiesBreakdown![5].guaranteedPulls).toBe(901);
+      expect(res6.medianPulls).toBeGreaterThan(400);
+      expect(res6.medianPulls).toBeLessThan(550);
+
+      // Verify distribution generation
+      const dist6 = generateProbabilityDistribution('character', 89, false, 3, false, 6);
+      expect(dist6[dist6.length - 1].pulls).toBe(901);
+      expect(dist6[dist6.length - 1].probability).toBe(1.0);
+    });
+
+    it('handles weapon banner R1 -> R5 multi-copy with 79 pity and weaponGuaranteed carryover', () => {
+      // 5 copies (R5 goal), 79 starting pity, weaponGuaranteed = true
+      const r5 = calculateMultiCopyOdds('weapon', 5, 200, 79, false, 0, true);
+      // Copy 1: 80 - 79 + 80 = 81 pulls
+      // Copies 2..5: 4 * 160 = 640 pulls
+      // Total: 81 + 640 = 721 pulls
+      expect(r5.guaranteedPulls).toBe(721);
+      expect(r5.copiesBreakdown).toHaveLength(5);
+    });
   });
 });

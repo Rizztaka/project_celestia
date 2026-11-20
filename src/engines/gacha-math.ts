@@ -506,23 +506,15 @@ export function generateProbabilityDistribution(
   let pmf: number[];
   let guaranteedPulls: number;
 
-  if (copiesNeeded > 1) {
-    const multi = calculateMultiCopyOdds(
-      bannerType,
-      copiesNeeded,
-      0,
-      currentPity,
-      isGuaranteed,
-      auxiliaryState,
-      weaponGuaranteed,
-    );
-    guaranteedPulls = multi.guaranteedPulls;
-    // Extract pmf from convolution
+  const n = Math.max(1, Math.floor(Number(copiesNeeded) || 1));
+  if (n > 1) {
     const copy1 = computeTargetPmf(bannerType, currentPity, isGuaranteed, auxiliaryState, weaponGuaranteed);
     const fresh = computeTargetPmf(bannerType, 0, false, 0, false);
     pmf = copy1.pmf;
-    for (let c = 2; c <= copiesNeeded; c++) {
+    guaranteedPulls = copy1.guaranteedPulls;
+    for (let c = 2; c <= n; c++) {
       pmf = convolvePmfs(pmf, fresh.pmf);
+      guaranteedPulls += fresh.guaranteedPulls;
     }
   } else {
     const target = computeTargetPmf(bannerType, currentPity, isGuaranteed, auxiliaryState, weaponGuaranteed);

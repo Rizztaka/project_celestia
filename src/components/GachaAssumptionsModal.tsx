@@ -38,7 +38,7 @@ export const GachaAssumptionsModal: React.FC<GachaAssumptionsModalProps> = ({
             </div>
             <p className="text-xs text-zinc-400">
               Complete mathematical specifications, Markov transition models, and primary source disclosures pegged to{' '}
-              <strong className="text-[#d4af37]">Version {GACHA_RULES_VERSION} Baseline</strong>.
+              <strong className="text-[#d4af37]">{`Version ${GACHA_RULES_VERSION} Baseline`}</strong>.
             </p>
           </div>
           <button

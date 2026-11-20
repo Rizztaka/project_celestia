@@ -73,15 +73,19 @@ function computeSingleCopy4StarPmf(
   const freshCyclePmf = compute4StarCyclePmf(0, bannerType);
 
   // Markov chain states:
-  // State 0: 50/50 rate-up
+  // State 0: 50/50 rate-up (character) or 75/25 rate-up (weapon)
   // State 1: Guaranteed rate-up
   // Terminal: Target acquired
-  const P_win_0 = FOUR_STAR_RULES.targetOddsNonGuaranteed; // 1/6
-  const P_other_0 = (FOUR_STAR_RULES.baseRateUpChance * (FOUR_STAR_RULES.featuredPoolCount - 1)) / FOUR_STAR_RULES.featuredPoolCount; // 1/3 -> State 0
-  const P_off_0 = 1.0 - FOUR_STAR_RULES.baseRateUpChance; // 1/2 -> State 1
+  const isWeapon = bannerType === 'weapon';
+  const poolCount = isWeapon ? 5 : FOUR_STAR_RULES.featuredPoolCount;
+  const baseRateUp = isWeapon ? 0.75 : FOUR_STAR_RULES.baseRateUpChance;
 
-  const P_win_1 = FOUR_STAR_RULES.targetOddsGuaranteed; // 1/3
-  const P_other_1 = ((1.0) * (FOUR_STAR_RULES.featuredPoolCount - 1)) / FOUR_STAR_RULES.featuredPoolCount; // 2/3 -> State 0
+  const P_win_0 = baseRateUp / poolCount;
+  const P_other_0 = (baseRateUp * (poolCount - 1)) / poolCount;
+  const P_off_0 = 1.0 - baseRateUp;
+
+  const P_win_1 = 1.0 / poolCount;
+  const P_other_1 = (1.0 * (poolCount - 1)) / poolCount;
 
   // Calculate E(m): prob target acquired on exactly the m-th 4-star drop
   const E: number[] = new Array(maxDrops + 1).fill(0);

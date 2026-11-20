@@ -73,6 +73,17 @@ describe('Gacha 4-Star Target Engine (Absorbing Markov Model)', () => {
     expect(twoCopies.cumulativeProbability).toBeLessThan(singleCopy.cumulativeProbability);
   });
 
+  it('supports weapon banner 4-star targets with 75% rate-up pool across 5 featured weapons', () => {
+    const charBanner4Star = calculate4StarTargetOdds(30, 0, false, 1, 'character');
+    const weaponBanner4Star = calculate4StarTargetOdds(30, 0, false, 1, 'weapon');
+
+    expect(charBanner4Star.pullsAvailable).toBe(30);
+    expect(weaponBanner4Star.isUncapped).toBe(true);
+    expect(weaponBanner4Star.pullsAvailable).toBe(30);
+    expect(weaponBanner4Star.medianPulls).toBeGreaterThan(20);
+    expect(weaponBanner4Star.medianPulls).toBeLessThan(45);
+  });
+
   it('defensively handles boundary conditions and malformed inputs', () => {
     const zeroPulls = calculate4StarTargetOdds(0, 0, false);
     expect(zeroPulls.cumulativeProbability).toBe(0);

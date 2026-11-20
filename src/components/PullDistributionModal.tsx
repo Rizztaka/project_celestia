@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { EnhancedPullAdvice } from '../types/genshin';
+import type { EnhancedPullAdvice, PullBudgetState } from '../types/genshin';
 import { generateProbabilityDistribution } from '../engines/gacha-math';
 import { generate4StarProbabilityDistribution } from '../engines/gacha-4star';
 import { X, TrendingUp, Info, CheckCircle2 } from 'lucide-react';
@@ -8,12 +8,16 @@ interface PullDistributionModalProps {
   item: EnhancedPullAdvice | null;
   onClose: () => void;
   pullsAvailable?: number;
+  budget?: PullBudgetState;
+  bannerFilter?: string;
 }
 
 export const PullDistributionModal: React.FC<PullDistributionModalProps> = ({
   item,
   onClose,
-  pullsAvailable = 0,
+  pullsAvailable,
+  budget,
+  bannerFilter,
 }) => {
   const [hoveredPull, setHoveredPull] = useState<number | null>(null);
 
@@ -21,23 +25,63 @@ export const PullDistributionModal: React.FC<PullDistributionModalProps> = ({
 
   const is4Star = Boolean(item.odds.isUncapped);
   const isWeapon = item.targetType === 'Signature_Weapon';
+  const isChronicled = Boolean(
+    bannerFilter &&
+      (bannerFilter.toLowerCase().includes('chronicled'))
+  );
+
+  const bannerType: 'character' | 'weapon' | 'chronicled' = isChronicled
+    ? 'chronicled'
+    : isWeapon
+      ? 'weapon'
+      : 'character';
+
+  const currentPity = isChronicled
+    ? (budget?.chronicledPity ?? 0)
+    : isWeapon
+      ? (budget?.weaponPity ?? 0)
+      : (budget?.characterPity ?? 0);
+
+  const isGuaranteed = isChronicled
+    ? false
+    : isWeapon
+      ? false
+      : (budget?.characterGuaranteed ?? false);
+
+  const auxiliaryState = isChronicled
+    ? (budget?.chronicledFatePoints ?? 0)
+    : isWeapon
+      ? (budget?.weaponFatePoints ?? 0)
+      : (budget?.consecutiveLossCount ?? 0);
+
+  const weaponGuaranteed = isWeapon ? (budget?.weaponGuaranteed ?? false) : false;
+  const copiesCount = item.odds.copiesBreakdown?.length || 1;
 
   // Generate CDF data points
   const points = is4Star
-    ? generate4StarProbabilityDistribution(0, false, 'character', item.odds.copiesBreakdown?.length || 1)
+    ? generate4StarProbabilityDistribution(0, false, 'character', copiesCount)
     : generateProbabilityDistribution(
-        isWeapon ? 'weapon' : 'character',
-        0,
-        false,
-        0,
-        false,
-        item.odds.copiesBreakdown?.length || 1,
+        bannerType,
+        currentPity,
+        isGuaranteed,
+        auxiliaryState,
+        weaponGuaranteed,
+        copiesCount,
       );
 
-  const maxPulls = points[points.length - 1]?.pulls || (is4Star ? 120 : 180);
-  const activePull = hoveredPull !== null ? hoveredPull : Math.min(pullsAvailable, maxPulls);
-  const activeProbPoint = points.find((p) => p.pulls === activePull) || points[points.length - 1];
+  const effectiveAvailable = pullsAvailable !== undefined ? pullsAvailable : item.odds.pullsAvailable;
+  const maxPulls = Math.max(1, points[points.length - 1]?.pulls || (is4Star ? 120 : 180));
+  const activePull = hoveredPull !== null ? hoveredPull : Math.min(effectiveAvailable, maxPulls);
+  const activeProbPoint =
+    points[activePull] ?? points.find((p) => p.pulls === activePull) ?? points[points.length - 1];
   const activeProbPct = ((activeProbPoint?.probability || 0) * 100).toFixed(1);
+
+  const handlePointerInteraction = (clientX: number, currentTarget: SVGSVGElement) => {
+    const rect = currentTarget.getBoundingClientRect();
+    const mouseX = clientX - rect.left;
+    const ratio = Math.max(0, Math.min(1, (mouseX - padding.left) / chartWidth));
+    setHoveredPull(Math.round(ratio * maxPulls));
+  };
 
   // SVG dimensions
   const svgWidth = 600;
@@ -144,21 +188,30 @@ export const PullDistributionModal: React.FC<PullDistributionModalProps> = ({
             <span>Cumulative Probability Curve:</span>
             <span className="font-mono text-zinc-200">
               At <strong className="text-[#d4af37]">{activePull}</strong> pulls:{' '}
-              <strong className="text-emerald-400">{activeProbPct}%</strong>
+              <strong className="text-emerald-400">{`${activeProbPct}%`}</strong>
             </span>
           </div>
 
           <div className="w-full overflow-hidden">
             <svg
               viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-              className="w-full h-auto select-none"
-              onMouseMove={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const mouseX = e.clientX - rect.left;
-                const ratio = Math.max(0, Math.min(1, (mouseX - padding.left) / chartWidth));
-                setHoveredPull(Math.round(ratio * maxPulls));
-              }}
+              className="w-full h-auto select-none touch-none"
+              onMouseMove={(e) => handlePointerInteraction(e.clientX, e.currentTarget)}
               onMouseLeave={() => setHoveredPull(null)}
+              onPointerMove={(e) => handlePointerInteraction(e.clientX, e.currentTarget)}
+              onPointerDown={(e) => handlePointerInteraction(e.clientX, e.currentTarget)}
+              onPointerLeave={() => setHoveredPull(null)}
+              onTouchMove={(e) => {
+                if (e.touches && e.touches[0]) {
+                  handlePointerInteraction(e.touches[0].clientX, e.currentTarget);
+                }
+              }}
+              onTouchStart={(e) => {
+                if (e.touches && e.touches[0]) {
+                  handlePointerInteraction(e.touches[0].clientX, e.currentTarget);
+                }
+              }}
+              onTouchEnd={() => setHoveredPull(null)}
             >
               {/* Gridlines */}
               {[0.25, 0.5, 0.75, 1.0].map((prob) => {
@@ -220,7 +273,7 @@ export const PullDistributionModal: React.FC<PullDistributionModalProps> = ({
               <path d={pathData} fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
 
               {/* Active Marker Line */}
-              {activePull > 0 && (
+              {(activePull > 0 || hoveredPull !== null) && (
                 <g>
                   <line
                     x1={padding.left + (activePull / maxPulls) * chartWidth}

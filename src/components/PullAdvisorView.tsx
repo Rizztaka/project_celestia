@@ -7,7 +7,6 @@ import type {
   PullBudgetState,
 } from '../types/genshin';
 import { evaluateComprehensivePullROI } from '../engines/pull-advisor';
-import { calculateTotalPulls } from '../engines/gacha-math';
 import { BANNER_PHASES } from '../data/banners';
 import { CHARACTERS } from '../data/characters';
 import { getWeaponByKey } from '../data/weapons';
@@ -557,7 +556,9 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
       <PullDistributionModal
         item={selectedDistributionItem}
         onClose={() => setSelectedDistributionItem(null)}
-        pullsAvailable={calculateTotalPulls(budget.primogems, budget.fates)}
+        pullsAvailable={selectedDistributionItem?.odds.pullsAvailable}
+        budget={budget}
+        bannerFilter={bannerFilter}
       />
 
       {/* Gacha Assumptions & Methodology Modal */}

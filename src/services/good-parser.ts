@@ -99,11 +99,10 @@ export function mapGOODToCelestiaProfiles(good: GOODData): GOODMapResult {
     for (const art of good.artifacts) {
       if (!art || typeof art !== 'object') continue;
       const res = validateGoodArtifact(art);
-      if (res.sanitizedPiece) {
+      if (res.isValid && res.sanitizedPiece) {
         rawArtifacts.push(res.sanitizedPiece);
-      } else {
-        rawArtifacts.push(art);
       }
+      // Corrupted / impossible artifacts failing game invariants are filtered out
     }
   }
   const rawWeapons: OwnedWeapon[] = [];

@@ -165,7 +165,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
       { key: 'critRate_', value: 7.0 },
       { key: 'critDMG_', value: 21.0 },
       { key: 'hp_', value: 9.9 },
-      { key: 'enerRech_', value: 16.8 },
+      { key: 'enerRech_', value: 11.0 },
     ],
     location: 'Furina',
   },
@@ -180,7 +180,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
       { key: 'critRate_', value: 6.2 },
       { key: 'critDMG_', value: 20.2 },
       { key: 'hp_', value: 10.5 },
-      { key: 'enerRech_', value: 15.5 },
+      { key: 'enerRech_', value: 11.0 },
     ],
     location: 'Furina',
   },
@@ -194,7 +194,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
     substats: [
       { key: 'critRate_', value: 7.0 },
       { key: 'critDMG_', value: 21.0 },
-      { key: 'enerRech_', value: 16.8 },
+      { key: 'enerRech_', value: 11.0 },
       { key: 'hp', value: 500 },
     ],
     location: 'Furina',
@@ -224,7 +224,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
     substats: [
       { key: 'critDMG_', value: 21.0 },
       { key: 'hp_', value: 9.9 },
-      { key: 'enerRech_', value: 16.8 },
+      { key: 'enerRech_', value: 11.0 },
       { key: 'hp', value: 500 },
     ],
     location: 'Furina',
@@ -318,7 +318,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
     substats: [
       { key: 'enerRech_', value: 16.8 },
       { key: 'hp_', value: 9.9 },
-      { key: 'hp', value: 500 },
+      { key: 'def', value: 40 },
       { key: 'critRate_', value: 6.2 },
     ],
     location: 'Bennett',
@@ -395,7 +395,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
     substats: [
       { key: 'critRate_', value: 7.0 },
       { key: 'critDMG_', value: 20.2 },
-      { key: 'enerRech_', value: 16.8 },
+      { key: 'enerRech_', value: 11.0 },
       { key: 'atk_', value: 9.9 },
     ],
     location: 'Xiangling',
@@ -410,7 +410,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
     substats: [
       { key: 'critRate_', value: 6.2 },
       { key: 'critDMG_', value: 21.0 },
-      { key: 'enerRech_', value: 16.8 },
+      { key: 'enerRech_', value: 11.0 },
       { key: 'eleMas', value: 42 },
     ],
     location: 'Xiangling',
@@ -454,7 +454,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
     mainStatKey: 'critRate_',
     substats: [
       { key: 'critDMG_', value: 21.0 },
-      { key: 'enerRech_', value: 16.8 },
+      { key: 'enerRech_', value: 11.0 },
       { key: 'atk_', value: 9.9 },
       { key: 'eleMas', value: 42 },
     ],
@@ -472,7 +472,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
     substats: [
       { key: 'critRate_', value: 7.0 },
       { key: 'critDMG_', value: 20.2 },
-      { key: 'enerRech_', value: 16.8 },
+      { key: 'enerRech_', value: 11.0 },
       { key: 'atk_', value: 9.9 },
     ],
     location: 'Xingqiu',
@@ -487,7 +487,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
     substats: [
       { key: 'critRate_', value: 6.2 },
       { key: 'critDMG_', value: 21.0 },
-      { key: 'enerRech_', value: 16.8 },
+      { key: 'enerRech_', value: 11.0 },
       { key: 'atk_', value: 9.9 },
     ],
     location: 'Xingqiu',
@@ -502,7 +502,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
     substats: [
       { key: 'critRate_', value: 7.0 },
       { key: 'critDMG_', value: 20.2 },
-      { key: 'enerRech_', value: 16.8 },
+      { key: 'enerRech_', value: 11.0 },
       { key: 'atk', value: 35 },
     ],
     location: 'Xingqiu',
@@ -531,7 +531,7 @@ export const DEFAULT_DEMO_ARTIFACTS = [
     mainStatKey: 'critRate_',
     substats: [
       { key: 'critDMG_', value: 21.0 },
-      { key: 'enerRech_', value: 16.8 },
+      { key: 'enerRech_', value: 11.0 },
       { key: 'atk_', value: 9.9 },
       { key: 'atk', value: 35 },
     ],

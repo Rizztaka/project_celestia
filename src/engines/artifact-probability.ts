@@ -20,6 +20,7 @@ import {
   DOMAIN_PAIRS_REGISTRY,
   MAX_SUBSTAT_VALUES,
   STRONGBOX_SETS_SET,
+  SUBSTAT_ROLL_TIERS,
   getCharacterStatWeights,
 } from '../data/artifact-weights';
 import {
@@ -514,7 +515,13 @@ export function evaluateRoiAgainstGuaranteedUpgrades(
   isReactionOrHpDefScaler: boolean = false,
 ): RoiComparison {
   const marginalDpsPerRoll = Number(
-    Math.max(1.8, Math.min(3.8, 80 / (currentUsefulRolls + 12))).toFixed(2),
+    Math.max(
+      isReactionOrHpDefScaler ? 0.7 : 1.8,
+      Math.min(
+        isReactionOrHpDefScaler ? 1.6 : 3.8,
+        (isReactionOrHpDefScaler ? 32 : 80) / (currentUsefulRolls + 12),
+      ),
+    ).toFixed(2),
   );
 
   const expectedResinToUpgrade = Math.max(20, weakestSlotExpectedRuns * 20);
@@ -734,6 +741,32 @@ export function analyzeArtifactBuild(
   const config = adjustWeightsForTeamContext(baseConfig, teamContext);
   const slotKeys: ArtifactSlot[] = ['flower', 'plume', 'sands', 'goblet', 'circlet'];
 
+  // 1. Set bonuses and active sets
+  const pieceSetKeys = Object.values(slots)
+    .filter((p): p is ArtifactPiece => !!p && !!p.setKey)
+    .map((p) => p.setKey!);
+  const activeSets = parseActiveSetBonuses(pieceSetKeys);
+
+  // 2. Whole-Build ER evaluation
+  const erEvaluation = evaluateWholeBuildEr(
+    slots,
+    config.erRequirement || 130,
+    activeSets.active2pc,
+  );
+
+  // 3. Three-Zone ER Surplus decay: if ER is over target window and not running 4pc Emblem,
+  // decay energy recharge weight to 0.1x (diminishing return on overcapped ER)
+  const is4pcEmblem = activeSets.active4pc.includes('Emblem of Severed Fate');
+  if (erEvaluation.status === 'Overcap' && !is4pcEmblem) {
+    if (config.statWeights.enerRech_ !== undefined) {
+      config.statWeights = {
+        ...config.statWeights,
+        enerRech_: Number(((config.statWeights.enerRech_ || 0.6) * 0.1).toFixed(2)),
+      };
+    }
+  }
+
+  // 4. Calculate per-slot upgrade probabilities using calibrated stat weights
   const slotBreakdown: Record<ArtifactSlot, SlotUpgradeProbability> = {} as any;
   let totalRV = 0;
   let totalUsefulRolls = 0;
@@ -756,19 +789,6 @@ export function analyzeArtifactBuild(
   }
   const overallUpgradePPerRun = Math.max(0.0001, 1 - pNoUpgrade);
   const curve = generateDiminishingReturnsCurve(overallUpgradePPerRun, 60);
-
-  // Set bonuses and active sets
-  const pieceSetKeys = Object.values(slots)
-    .filter((p): p is ArtifactPiece => !!p && !!p.setKey)
-    .map((p) => p.setKey!);
-  const activeSets = parseActiveSetBonuses(pieceSetKeys);
-
-  // Whole-Build ER evaluation
-  const erEvaluation = evaluateWholeBuildEr(
-    slots,
-    config.erRequirement || 130,
-    activeSets.active2pc,
-  );
 
   // Apply ER deficit penalty if rotations fail
   if (erEvaluation.status === 'Deficit') {
@@ -883,39 +903,16 @@ export function estimateBuildFromSliders(
     (config.statWeights.critRate_ ?? 0) > 0.3 &&
     (config.statWeights.critDMG_ ?? 0) > 0.3;
 
-  let crRollsPerPiece = 0;
-  let cdRollsPerPiece = 0;
-  let secRollsPerPiece = 0;
-
-  if (isCritRelevant) {
-    crRollsPerPiece = Math.min(3.0, avgRollsPerPiece * 0.4);
-    cdRollsPerPiece = Math.min(3.5, avgRollsPerPiece * 0.5);
-    secRollsPerPiece = Math.max(
-      0,
-      Math.min(3.0, avgRollsPerPiece - (crRollsPerPiece + cdRollsPerPiece)),
-    );
-  } else {
-    // Pure stat / reaction scalers (Kuki, Nilou, Kokomi, Gorou support)
-    crRollsPerPiece = 0;
-    cdRollsPerPiece = 0;
-    secRollsPerPiece = Math.min(6.0, avgRollsPerPiece);
-  }
-
   // Determine secondary stat key based on character kit
   let secKey: StatKey = 'atk_';
-  let secBase = 5.83;
   if (config.statWeights.hp_ === 1.0) {
     secKey = 'hp_';
-    secBase = 5.83;
   } else if (config.statWeights.def_ === 1.0) {
     secKey = 'def_';
-    secBase = 7.29;
   } else if (config.statWeights.eleMas === 1.0) {
     secKey = 'eleMas';
-    secBase = 23.31;
   } else if ((config.statWeights.enerRech_ || 0) >= 0.7) {
     secKey = 'enerRech_';
-    secBase = 6.48;
   }
 
   // Fallback alternative useful stat when main stat conflicts with secKey
@@ -928,125 +925,91 @@ export function estimateBuildFromSliders(
           ? 'atk_'
           : 'def_';
 
-  const secValue = Number((secRollsPerPiece * secBase).toFixed(1));
+  function buildMockPiece(
+    slotKey: ArtifactSlot,
+    mainStatKey: StatKey,
+    setKey: string,
+  ): ArtifactPiece {
+    const substatKeys: StatKey[] = [];
+    const usedKeys = new Set<StatKey>([mainStatKey]);
+
+    // 1. Primary useful substats
+    if (isCritRelevant) {
+      if (!usedKeys.has('critRate_')) {
+        substatKeys.push('critRate_');
+        usedKeys.add('critRate_');
+      }
+      if (!usedKeys.has('critDMG_')) {
+        substatKeys.push('critDMG_');
+        usedKeys.add('critDMG_');
+      }
+    }
+
+    // 2. Secondary kit-scaling stat
+    const chosenSec = !usedKeys.has(secKey) ? secKey : !usedKeys.has(altKey) ? altKey : 'enerRech_';
+    if (!usedKeys.has(chosenSec)) {
+      substatKeys.push(chosenSec);
+      usedKeys.add(chosenSec);
+    }
+
+    // 3. Filler stats to guarantee exactly 4 unique substat keys
+    const candidateFillers: StatKey[] = ['atk', 'def', 'hp', 'atk_', 'def_', 'hp_', 'eleMas', 'enerRech_'];
+    for (const f of candidateFillers) {
+      if (substatKeys.length >= 4) break;
+      if (!usedKeys.has(f)) {
+        substatKeys.push(f);
+        usedKeys.add(f);
+      }
+    }
+
+    // 4. Distribute exact roll counts summing to exactly 9 rolls (standard +20 4-liner)
+    // Base 1 roll per substat = 4 rolls. Remaining 5 bonus upgrades to distribute.
+    const desiredBonus = Math.max(0, Math.min(5, Math.round(avgRollsPerPiece - 1)));
+    const bonus0 = Math.min(desiredBonus, 3);
+    const remBonus = desiredBonus - bonus0;
+    const bonus1 = Math.min(remBonus, 2);
+    const fillerBonus = 5 - (bonus0 + bonus1);
+    const bonus2 = Math.min(fillerBonus, 3);
+    const bonus3 = fillerBonus - bonus2;
+
+    const rollCounts = [1 + bonus0, 1 + bonus1, 1 + bonus2, 1 + bonus3];
+
+    // 5. Generate authentic substat values from tier 2 (90% tier)
+    const substats = substatKeys.map((key, idx) => {
+      const rolls = rollCounts[idx];
+      const tiers = SUBSTAT_ROLL_TIERS[key] || [5.0];
+      const tierVal = tiers[2] ?? tiers[0] ?? 5.0;
+      const rawSum = tierVal * rolls;
+      const displayVal = ['hp', 'atk', 'def', 'eleMas'].includes(key)
+        ? Math.round(rawSum)
+        : Number(rawSum.toFixed(1));
+
+      return {
+        key,
+        value: displayVal,
+      };
+    });
+
+    return {
+      slotKey,
+      setKey,
+      rarity: 5,
+      level: 20,
+      mainStatKey,
+      substats,
+    };
+  }
+
+  const sandsMain = config.preferredMainStats.sands[0] || 'atk_';
+  const gobletMain = config.preferredMainStats.goblet[0] || 'pyro_dmg_';
+  const circletMain = config.preferredMainStats.circlet[0] || 'critRate_';
 
   const mockSlots: Partial<Record<ArtifactSlot, ArtifactPiece>> = {
-    flower: {
-      slotKey: 'flower',
-      setKey: targetSetName,
-      rarity: 5,
-      level: 20,
-      mainStatKey: 'hp',
-      substats: [
-        {
-          key: 'critRate_',
-          value: Number((crRollsPerPiece * 3.89).toFixed(1)),
-        },
-        {
-          key: 'critDMG_',
-          value: Number((cdRollsPerPiece * 7.77).toFixed(1)),
-        },
-        { key: secValue > 0 ? secKey : 'def', value: secValue > 0 ? secValue : 21 },
-        { key: 'hp', value: 298 },
-      ],
-    },
-    plume: {
-      slotKey: 'plume',
-      setKey: targetSetName,
-      rarity: 5,
-      level: 20,
-      mainStatKey: 'atk',
-      substats: [
-        {
-          key: 'critRate_',
-          value: Number((crRollsPerPiece * 3.89).toFixed(1)),
-        },
-        {
-          key: 'critDMG_',
-          value: Number((cdRollsPerPiece * 7.77).toFixed(1)),
-        },
-        { key: secValue > 0 ? secKey : 'def', value: secValue > 0 ? secValue : 21 },
-        { key: 'hp', value: 298 },
-      ],
-    },
-    sands: {
-      slotKey: 'sands',
-      setKey: targetSetName,
-      rarity: 5,
-      level: 20,
-      mainStatKey: config.preferredMainStats.sands[0] || 'atk_',
-      substats: [
-        {
-          key: 'critRate_',
-          value: Number((crRollsPerPiece * 3.89).toFixed(1)),
-        },
-        {
-          key: 'critDMG_',
-          value: Number((cdRollsPerPiece * 7.77).toFixed(1)),
-        },
-        {
-          key:
-            secValue > 0
-              ? config.preferredMainStats.sands[0] === secKey
-                ? altKey
-                : secKey
-              : 'def',
-          value: secValue > 0 ? secValue : 21,
-        },
-        { key: 'hp', value: 298 },
-      ],
-    },
-    goblet: {
-      slotKey: 'goblet',
-      setKey: targetSetName,
-      rarity: 5,
-      level: 20,
-      mainStatKey: config.preferredMainStats.goblet[0] || 'pyro_dmg_',
-      substats: [
-        {
-          key: 'critRate_',
-          value: Number((crRollsPerPiece * 3.89).toFixed(1)),
-        },
-        {
-          key: 'critDMG_',
-          value: Number((cdRollsPerPiece * 7.77).toFixed(1)),
-        },
-        {
-          key:
-            secValue > 0
-              ? config.preferredMainStats.goblet[0] === secKey
-                ? altKey
-                : secKey
-              : 'def',
-          value: secValue > 0 ? secValue : 21,
-        },
-        { key: 'hp', value: 298 },
-      ],
-    },
-    circlet: {
-      slotKey: 'circlet',
-      setKey: "Gladiator's Finale", // Standard 4pc + 1 off-piece
-      rarity: 5,
-      level: 20,
-      mainStatKey: config.preferredMainStats.circlet[0] || 'critRate_',
-      substats: [
-        {
-          key: 'critDMG_',
-          value: Number((cdRollsPerPiece * 7.77).toFixed(1)),
-        },
-        {
-          key:
-            secValue > 0
-              ? config.preferredMainStats.circlet[0] === secKey
-                ? altKey
-                : secKey
-              : 'def',
-          value: secValue > 0 ? secValue : 21,
-        },
-        { key: 'hp', value: 298 },
-        { key: 'atk', value: 18 },
-      ],
-    },
+    flower: buildMockPiece('flower', 'hp', targetSetName),
+    plume: buildMockPiece('plume', 'atk', targetSetName),
+    sands: buildMockPiece('sands', sandsMain, targetSetName),
+    goblet: buildMockPiece('goblet', gobletMain, targetSetName),
+    circlet: buildMockPiece('circlet', circletMain, "Gladiator's Finale"),
   };
 
   return analyzeArtifactBuild(characterName, mockSlots, teamContext);

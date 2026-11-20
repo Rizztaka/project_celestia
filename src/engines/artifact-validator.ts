@@ -123,10 +123,13 @@ export function decomposeSubstatRolls(
     };
   }
 
-  // Tolerance definition
+  // Tolerance definition: strict epsilon = +-0.05 (+0.01 float arithmetic window) for percentage stats,
+  // 0.6 for elemental mastery (game integer rounding), 2.5 for flat stats (hp, atk, def)
   const tolerance = isFlatStat
-    ? Math.max(2.5, value * 0.05)
-    : Math.max(0.18, value * 0.035);
+    ? Math.max(2.5, value * 0.02)
+    : statKey === 'eleMas'
+      ? 0.6
+      : 0.06;
 
   const maxVal = MAX_SUBSTAT_VALUES[statKey] || 1;
   let bestMatch: { rolls: number; diff: number; combo: number[]; score: number } | null = null;
@@ -211,7 +214,7 @@ export function validateArtifactPiece(
     return { isValid: false, errors, totalRolls: 0, substatDecompositions };
   }
 
-  if (level >= 20 && substats.length !== 4) {
+  if (level >= 20 && substats.length > 0 && substats.length !== 4) {
     errors.push(
       `Level 20 5★ artifacts must have exactly 4 substats, found ${substats.length}`,
     );
@@ -254,8 +257,8 @@ export function validateArtifactPiece(
     }
   }
 
-  // 3. Total rolls check for Level 20 5★ piece
-  if (level >= 20 && rarity === 5) {
+  // 3. Total rolls check for Level 20 5★ piece with substats
+  if (level >= 20 && rarity === 5 && substats.length > 0) {
     // 5★ pieces start with 3 or 4 substats, plus 5 upgrades (+4, +8, +12, +16, +20)
     // => Total rolls must be 8 (from 3-liner) or 9 (from 4-liner)
     if (totalRolls < 8 || totalRolls > 9) {
@@ -301,7 +304,12 @@ export function validateGoodArtifact(raw: any): GoodArtifactValidationResult {
   }
 
   const rarity = Number(raw.rarity) || 5;
-  const level = Number(raw.level) ?? 20;
+  const level =
+    typeof raw.level === 'number' && !isNaN(raw.level)
+      ? raw.level
+      : raw.level !== undefined && !isNaN(Number(raw.level))
+        ? Number(raw.level)
+        : 20;
 
   const rawSubstats = Array.isArray(raw.substats) ? raw.substats : [];
   const sanitizedSubstats = rawSubstats

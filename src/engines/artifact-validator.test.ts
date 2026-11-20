@@ -6,6 +6,7 @@ import {
   validateGoodArtifact,
 } from './artifact-validator';
 import type { ArtifactPiece } from '../types/genshin';
+import { DEFAULT_DEMO_ARTIFACTS } from '../data/demo-artifacts';
 
 describe('Artifact Validator Engine', () => {
   describe('isValidMainStatForSlot', () => {
@@ -140,6 +141,20 @@ describe('Artifact Validator Engine', () => {
       expect(decomposeSubstatRolls('critRate_', 30.0).isValid).toBe(false);
       // Invalid stat key with no tiers (e.g. heal_)
       expect(decomposeSubstatRolls('heal_', 10.0).isValid).toBe(false);
+    });
+    it('rejects impossible intermediate substat values outside tolerance', () => {
+      // Minimum 2 rolls of CD is 5.44 + 5.44 = 10.88% (displays 10.9%). 10.6% is impossible!
+      const impossibleCd = decomposeSubstatRolls('critDMG_', 10.6);
+      expect(impossibleCd.isValid).toBe(false);
+
+      // 4.5% CR is impossible (max 1 roll is 3.89, min 2 rolls is 5.44)
+      const impossibleCr = decomposeSubstatRolls('critRate_', 4.5);
+      expect(impossibleCr.isValid).toBe(false);
+
+      // Authentic 10.9% CD is valid
+      const authenticCd = decomposeSubstatRolls('critDMG_', 10.9);
+      expect(authenticCd.isValid).toBe(true);
+      expect(authenticCd.rolls).toBe(2);
     });
   });
 
@@ -313,6 +328,20 @@ describe('Artifact Validator Engine', () => {
           mainStatKey: 'hp',
         }).isValid,
       ).toBe(false);
+    });
+
+    it('guarantees 100% validity of all pre-seeded showcase demo artifacts', () => {
+      expect(DEFAULT_DEMO_ARTIFACTS.length).toBe(40);
+      for (const piece of DEFAULT_DEMO_ARTIFACTS) {
+        const result = validateArtifactPiece(piece as any);
+        expect(
+          result.isValid,
+          `Demo artifact "${piece.id}" (${piece.location}) must be 100% valid, but got errors: ${result.errors.join(', ')}`,
+        ).toBe(true);
+        expect(result.errors).toHaveLength(0);
+        expect(result.totalRolls).toBeGreaterThanOrEqual(8);
+        expect(result.totalRolls).toBeLessThanOrEqual(9);
+      }
     });
   });
 });

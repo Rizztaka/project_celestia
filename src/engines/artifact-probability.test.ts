@@ -12,6 +12,7 @@ import {
 } from './artifact-probability';
 import type { ArtifactPiece, ArtifactSlot } from '../types/genshin';
 import { getCharacterStatWeights } from '../data/artifact-weights';
+import { validateArtifactPiece } from './artifact-validator';
 
 describe('Artifact Probability & Roll Value Engine', () => {
   describe('calculatePieceRollValue', () => {
@@ -210,6 +211,26 @@ describe('Artifact Probability & Roll Value Engine', () => {
       expect(result.slotBreakdown.circlet).toBeDefined();
       expect(result.curve.length).toBe(60);
       expect(result.overallStatus).toBeDefined();
+    });
+
+    it('guarantees all synthesized mock pieces adhere strictly to 5★ +20 game rules', () => {
+      // Test characters with varying preferred main stats (e.g. CD circlet, EM sands, HP goblet)
+      const testCases = ['Kamisato Ayaka', 'Neuvillette', 'Kuki Shinobu', 'Hu Tao'];
+      for (const charName of testCases) {
+        const build = estimateBuildFromSliders(charName, 60, 140, 150, false);
+        for (const slotKey of ['flower', 'plume', 'sands', 'goblet', 'circlet'] as ArtifactSlot[]) {
+          const piece = build.slotBreakdown[slotKey].currentPiece;
+          expect(piece).toBeDefined();
+          const validation = validateArtifactPiece(piece!);
+          expect(
+            validation.isValid,
+            `Mock ${slotKey} on ${charName} must be valid, but got: ${validation.errors.join(', ')}`,
+          ).toBe(true);
+          expect(validation.errors).toHaveLength(0);
+          expect(validation.totalRolls).toBeGreaterThanOrEqual(8);
+          expect(validation.totalRolls).toBeLessThanOrEqual(9);
+        }
+      }
     });
   });
 
@@ -466,6 +487,74 @@ describe('Artifact Probability & Roll Value Engine', () => {
       expect(result.erEvaluation?.totalEr).toBeGreaterThanOrEqual(240);
       expect(result.erEvaluation?.status).toBe('Target');
       expect(result.erEvaluation?.penaltyFactor).toBe(1.0);
+    });
+
+    it('decays ER stat weight to 0.1x during surplus unless running 4pc Emblem', () => {
+      // Build with ~232% ER on Xiangling (target is 200% ER, window up to 220% => surplus)
+      const surplusSlotsNonEmblem: Partial<Record<ArtifactSlot, ArtifactPiece>> = {
+        flower: {
+          slotKey: 'flower',
+          setKey: 'Crimson Witch of Flames',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'hp',
+          substats: [{ key: 'enerRech_', value: 20 }],
+        },
+        plume: {
+          slotKey: 'plume',
+          setKey: 'Crimson Witch of Flames',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'atk',
+          substats: [{ key: 'enerRech_', value: 20 }],
+        },
+        sands: {
+          slotKey: 'sands',
+          setKey: 'Crimson Witch of Flames',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'enerRech_', // 51.8% ER
+          substats: [{ key: 'hp_', value: 10 }],
+        },
+        goblet: {
+          slotKey: 'goblet',
+          setKey: 'Crimson Witch of Flames',
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'pyro_dmg_',
+          substats: [{ key: 'enerRech_', value: 20 }],
+        },
+        circlet: {
+          slotKey: 'circlet',
+          setKey: "Gladiator's Finale",
+          rarity: 5,
+          level: 20,
+          mainStatKey: 'critRate_',
+          substats: [{ key: 'enerRech_', value: 20 }],
+        },
+      };
+
+      const nonEmblemResult = analyzeArtifactBuild('Xiangling', surplusSlotsNonEmblem);
+      expect(nonEmblemResult.erEvaluation?.status).toBe('Overcap');
+      // For Crimson Witch 4pc, overcapped ER should contribute very little useful rolls (0.1x weight)
+      const flowerAnalysis = nonEmblemResult.slotBreakdown.flower;
+      // 20 ER = ~3 rolls. At 0.1x of 1.0 base weight = 0.1 weight => usefulRolls < 0.5
+      expect(flowerAnalysis.currentUsefulRolls).toBeLessThan(0.5);
+
+      // Now test with 4pc Emblem of Severed Fate on same surplus ER
+      const surplusSlotsEmblem: Partial<Record<ArtifactSlot, ArtifactPiece>> = {
+        ...surplusSlotsNonEmblem,
+        flower: { ...surplusSlotsNonEmblem.flower!, setKey: 'Emblem of Severed Fate' },
+        plume: { ...surplusSlotsNonEmblem.plume!, setKey: 'Emblem of Severed Fate' },
+        sands: { ...surplusSlotsNonEmblem.sands!, setKey: 'Emblem of Severed Fate' },
+        goblet: { ...surplusSlotsNonEmblem.goblet!, setKey: 'Emblem of Severed Fate' },
+      };
+
+      const emblemResult = analyzeArtifactBuild('Xiangling', surplusSlotsEmblem);
+      expect(emblemResult.erEvaluation?.status).toBe('Overcap');
+      // On 4pc Emblem, ER is NOT decayed because it converts directly into Burst DMG
+      const emblemFlowerAnalysis = emblemResult.slotBreakdown.flower;
+      expect(emblemFlowerAnalysis.currentUsefulRolls).toBeGreaterThan(1.0);
     });
   });
 

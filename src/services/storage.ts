@@ -234,11 +234,15 @@ export function saveProfiles(profiles: Record<string, OwnedCharacterProfile>): b
 
 export function getSavedArtifacts(): any[] {
   try {
-    if (typeof localStorage === 'undefined') return [];
+    if (typeof localStorage === 'undefined') {
+      return [];
+    }
     const isDemo = isDemoModeEnabled();
     const key = isDemo ? DEMO_ARTIFACTS_KEY : ARTIFACTS_KEY;
     const raw = localStorage.getItem(key);
-    if (!raw) return [];
+    if (!raw) {
+      return [];
+    }
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
   } catch {

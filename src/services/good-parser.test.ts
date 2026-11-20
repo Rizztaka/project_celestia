@@ -169,6 +169,92 @@ describe('GOOD Parser Service', () => {
       expect(mapped.profiles['Mavuika'].level).toBe(1);
       expect(mapped.profiles['Mavuika'].constellation).toBe(0);
     });
+
+    it('sanitizes imported artifacts, rejecting corrupted pieces and retaining valid ones', () => {
+      const dataWithArtifacts: GOODData = {
+        format: 'GOOD',
+        version: 2,
+        source: 'SanitizationTest',
+        characters: [{ key: 'HuTao', level: 90, constellation: 0 }],
+        artifacts: [
+          // 1. Valid +20 5★ piece with 9 rolls
+          {
+            slotKey: 'flower',
+            setKey: 'CrimsonWitchOfFlames',
+            rarity: 5,
+            level: 20,
+            mainStatKey: 'hp',
+            substats: [
+              { key: 'critRate_', value: 7.0 },
+              { key: 'critDMG_', value: 14.0 },
+              { key: 'atk_', value: 9.9 },
+              { key: 'enerRech_', value: 11.0 },
+            ],
+            location: 'HuTao',
+          },
+          // 2. Corrupted: impossible main stat on sands (critRate_)
+          {
+            slotKey: 'sands',
+            setKey: 'CrimsonWitchOfFlames',
+            rarity: 5,
+            level: 20,
+            mainStatKey: 'critRate_',
+            substats: [
+              { key: 'critDMG_', value: 14.0 },
+              { key: 'atk_', value: 9.9 },
+              { key: 'enerRech_', value: 11.0 },
+              { key: 'hp_', value: 5.8 },
+            ],
+            location: 'HuTao',
+          },
+          // 3. Corrupted: duplicate substat (two critRate_)
+          {
+            slotKey: 'goblet',
+            setKey: 'CrimsonWitchOfFlames',
+            rarity: 5,
+            level: 20,
+            mainStatKey: 'pyro_dmg_',
+            substats: [
+              { key: 'critRate_', value: 3.5 },
+              { key: 'critRate_', value: 3.9 },
+              { key: 'atk_', value: 9.9 },
+              { key: 'enerRech_', value: 11.0 },
+            ],
+            location: 'HuTao',
+          },
+          // 4. Corrupted: substat matches main stat (atk_ on atk_ sands)
+          {
+            slotKey: 'sands',
+            setKey: 'CrimsonWitchOfFlames',
+            rarity: 5,
+            level: 20,
+            mainStatKey: 'atk_',
+            substats: [
+              { key: 'atk_', value: 5.8 },
+              { key: 'critDMG_', value: 14.0 },
+              { key: 'critRate_', value: 3.9 },
+              { key: 'enerRech_', value: 11.0 },
+            ],
+            location: 'HuTao',
+          },
+          // 5. Corrupted: invalid slotKey ('boots')
+          {
+            slotKey: 'boots',
+            setKey: 'CrimsonWitchOfFlames',
+            rarity: 5,
+            level: 20,
+            mainStatKey: 'hp',
+            location: 'HuTao',
+          },
+        ],
+      };
+
+      const mapped = mapGOODToCelestiaProfiles(dataWithArtifacts);
+      // Exactly 1 valid artifact preserved; all 4 corrupted pieces filtered out
+      expect(mapped.rawArtifacts).toHaveLength(1);
+      expect(mapped.rawArtifacts[0].slotKey).toBe('flower');
+      expect(mapped.summary.importedArtifacts).toBe(1);
+    });
   });
 
   describe('mergeRosterProfiles', () => {

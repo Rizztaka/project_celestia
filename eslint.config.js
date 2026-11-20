@@ -10,6 +10,7 @@ export default tseslint.config(
       'coverage/**',
       'graphify-out/**',
       'scripts/**',
+      'scratch/**',
       'test-results/**',
       'playwright-report/**',
     ],

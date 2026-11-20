@@ -99,7 +99,7 @@ describe('Monte Carlo Empirical Gacha Validation (500k trials per banner)', () =
       let pulls = 0;
       let pity = 0;
       let fate = 0;
-      let weaponGuar = false;
+      const weaponGuar = false;
 
       while (true) {
         pulls++;

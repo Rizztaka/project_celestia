@@ -30,9 +30,9 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.14.0",
+    "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^10.0.1",
-    "@playwright/test": "1.65.1",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/vite": "^4.0.9",
     "@types/node": "^26.6.6",
     "@types/react": "^19.0.10",

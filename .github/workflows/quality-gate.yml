@@ -80,11 +80,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project:
-          - 'Desktop Chromium'
-          - 'Desktop Firefox'
-          - 'Mobile Chromium (Pixel 5)'
-          - 'Mobile WebKit (iPhone 13)'
+        include:
+          - project: 'Desktop Chromium'
+            browser: 'chromium'
+          - project: 'Desktop Firefox'
+            browser: 'firefox'
+          - project: 'Mobile Chromium (Pixel 5)'
+            browser: 'chromium'
+          - project: 'Mobile WebKit (iPhone 13)'
+            browser: 'webkit'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -126,15 +130,10 @@ jobs:
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-playwright-${{ matrix.browser }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - name: Install Playwright Browsers & Dependencies
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --with-deps
-
-      - name: Install Playwright OS Dependencies
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: pnpm exec playwright install-deps
+      - name: Install Playwright Browser & OS Dependencies
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run Playwright E2E Tests (${{ matrix.project }})
         run: pnpm exec playwright test --project="${{ matrix.project }}"

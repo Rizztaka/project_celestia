@@ -153,6 +153,10 @@ export const DOMAIN_PAIRS_REGISTRY: DomainPair[] = [
   { domainName: 'Sanctum of Rainbow Spirits', region: 'Natlan', sets: ['Scroll of the Hero of Cinder City', 'Obsidian Codex'] },
   { domainName: 'Blazing Ruins of Dawn', region: 'Natlan', sets: ['A Day Carved From Rising Winds', 'Disenchantment in Deep Shadow'] },
   { domainName: 'Frost-Veiled Sanctuary', region: 'Nod-Krai', sets: ["Silken Moon's Serenade", 'Finale of the Deep Galleries'] },
+  { domainName: 'Derelict Masonry Dock', region: 'Natlan', sets: ["Long Night's Oath", 'Finale of the Deep Galleries'] },
+  { domainName: 'Spire of Moonlit Tides', region: 'Nod-Krai', sets: ["Night of the Sky's Unveiling", "Silken Moon's Serenade"] },
+  { domainName: 'Ashen Crucible', region: 'Nod-Krai', sets: ['Aubade of Morningstar and Moon', 'Heart of the Furnace'] },
+  { domainName: 'Crimson Bastion', region: 'Snezhnaya', sets: ['Scarlet Proof', 'Disenchantment in Deep Shadow'] },
 ];
 
 /**
@@ -191,6 +195,10 @@ export const STRONGBOX_SETS_SET = new Set<string>([
   'Golden Troupe',
   'Song of Days Past',
   'Nighttime Whispers in the Echoing Woods',
+  'Fragment of Harmonic Whimsy',
+  'Unfinished Reverie',
+  'Scroll of the Hero of Cinder City',
+  'Obsidian Codex',
 ]);
 
 /**
@@ -596,6 +604,117 @@ export const CHARACTER_STAT_WEIGHTS: Record<string, CharacterStatWeightConfig> =
     erRequirement: 130,
     targetSets: ['Husk of Opulent Dreams'],
   },
+  Skirk: {
+    characterId: 'Skirk',
+    characterName: 'Skirk',
+    preferredMainStats: {
+      sands: ['atk_'],
+      goblet: ['cryo_dmg_', 'atk_'],
+      circlet: ['critRate_', 'critDMG_'],
+    },
+    statWeights: {
+      critRate_: 1.0,
+      critDMG_: 1.0,
+      atk_: 0.85,
+      atk: 0.25,
+    },
+    erRequirement: 100, // 0-energy kit
+    targetSets: ['Finale of the Deep Galleries', 'Marechaussee Hunter'],
+  },
+  Varesa: {
+    characterId: 'Varesa',
+    characterName: 'Varesa',
+    preferredMainStats: {
+      sands: ['atk_'],
+      goblet: ['electro_dmg_', 'atk_'],
+      circlet: ['critRate_', 'critDMG_'],
+    },
+    statWeights: {
+      critRate_: 1.0,
+      critDMG_: 1.0,
+      atk_: 0.85,
+      enerRech_: 0.65,
+      eleMas: 0.4,
+      atk: 0.25,
+    },
+    erRequirement: 130,
+    targetSets: ["Long Night's Oath", 'Obsidian Codex'],
+  },
+  Mualani: {
+    characterId: 'Mualani',
+    characterName: 'Mualani',
+    preferredMainStats: {
+      sands: ['hp_', 'eleMas'],
+      goblet: ['hydro_dmg_', 'hp_'],
+      circlet: ['critDMG_', 'hp_', 'critRate_'],
+    },
+    statWeights: {
+      hp_: 1.0,
+      critDMG_: 1.0,
+      critRate_: 0.85, // Obsidian Codex gives +40% CR
+      eleMas: 0.85,
+      hp: 0.35,
+    },
+    erRequirement: 110,
+    targetSets: ['Obsidian Codex'],
+  },
+  Clorinde: {
+    characterId: 'Clorinde',
+    characterName: 'Clorinde',
+    preferredMainStats: {
+      sands: ['atk_'],
+      goblet: ['electro_dmg_'],
+      circlet: ['critDMG_', 'critRate_'],
+    },
+    statWeights: {
+      critDMG_: 1.0,
+      critRate_: 0.9, // +20% CR passive
+      atk_: 0.85,
+      eleMas: 0.6,
+      enerRech_: 0.45,
+      atk: 0.25,
+    },
+    erRequirement: 115,
+    targetSets: ['Fragment of Harmonic Whimsy', 'Thundering Fury'],
+  },
+  Chiori: {
+    characterId: 'Chiori',
+    characterName: 'Chiori',
+    preferredMainStats: {
+      sands: ['def_'],
+      goblet: ['geo_dmg_', 'def_'],
+      circlet: ['critRate_', 'critDMG_'],
+    },
+    statWeights: {
+      def_: 1.0,
+      critRate_: 1.0,
+      critDMG_: 1.0,
+      atk_: 0.45,
+      def: 0.35,
+      enerRech_: 0.3,
+    },
+    erRequirement: 115,
+    targetSets: ['Golden Troupe', 'Husk of Opulent Dreams'],
+  },
+  Alhaitham: {
+    characterId: 'Alhaitham',
+    characterName: 'Alhaitham',
+    preferredMainStats: {
+      sands: ['eleMas'],
+      goblet: ['dendro_dmg_'],
+      circlet: ['critRate_', 'critDMG_'],
+    },
+    statWeights: {
+      eleMas: 1.0,
+      critRate_: 1.0,
+      critDMG_: 1.0,
+      enerRech_: 0.75,
+      atk_: 0.55,
+      atk: 0.15,
+    },
+    erRequirement: 135,
+    targetSets: ['Gilded Dreams', 'Deepwood Memories'],
+  },
 };
 
 export const CHARACTER_ALIASES: Record<string, string> = {
@@ -752,10 +871,28 @@ export function getCharacterStatWeights(characterIdOrName: string): CharacterSta
       }
     }
 
-    // Infer circlet
-    const preferredCirclet: StatKey[] = isKokomi
-      ? ['heal_', 'hp_']
-      : ['critRate_', 'critDMG_'];
+    // Infer circlet from SSOT build data when available
+    const CIRCLET_STAT_MAP: Record<string, StatKey> = {
+      'CRIT Rate': 'critRate_',
+      'Crit Rate': 'critRate_',
+      'CRIT DMG': 'critDMG_',
+      'Crit DMG': 'critDMG_',
+      'Healing Bonus': 'heal_',
+      'HP%': 'hp_',
+      'DEF%': 'def_',
+      'ATK%': 'atk_',
+      'Elemental Mastery': 'eleMas',
+    };
+    const mappedCirclets = (char.build?.mainStats?.circlet || [])
+      .map((c) => CIRCLET_STAT_MAP[c])
+      .filter((c): c is StatKey => !!c);
+
+    const preferredCirclet: StatKey[] =
+      mappedCirclets.length > 0
+        ? Array.from(new Set(mappedCirclets))
+        : isKokomi
+          ? ['heal_', 'hp_']
+          : ['critRate_', 'critDMG_'];
     if (preferredSands.includes('hp_') && !preferredCirclet.includes('hp_'))
       preferredCirclet.push('hp_');
     if (preferredSands.includes('def_') && !preferredCirclet.includes('def_'))
@@ -814,7 +951,27 @@ export function getCharacterStatWeights(characterIdOrName: string): CharacterSta
     }
 
     const targetSets = char.build?.artifacts?.map((a) => a.name) || [];
-    const erRequirement = hasEr ? 160 : 130;
+    const burstTalent = char.talents?.find((t) => t.type === 'burst');
+    const burstCost = burstTalent?.energyCost ?? 60;
+    const isOffFieldOrSupport =
+      char.roles.includes('Off-Field DPS') ||
+      char.roles.includes('Buffer/Shred') ||
+      char.roles.includes('Sustain');
+
+    const erRequirement =
+      burstCost === 0
+        ? 100
+        : hasEr
+          ? burstCost >= 80
+            ? 200
+            : 170
+          : burstCost >= 80
+            ? isOffFieldOrSupport
+              ? 180
+              : 145
+            : burstCost <= 40
+              ? 110
+              : 130;
 
     const synthesized: CharacterStatWeightConfig = {
       characterId: char.id,
@@ -867,5 +1024,5 @@ export function getCharacterStatWeights(characterIdOrName: string): CharacterSta
     targetSets: [],
   };
   STAT_WEIGHTS_CACHE.set(characterIdOrName, fallback);
-  return fallback;
+  return cloneStatWeightConfig(fallback);
 }

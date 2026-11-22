@@ -4,6 +4,7 @@ import {
   decomposeSubstatRolls,
   validateArtifactPiece,
   validateGoodArtifact,
+  validateArtifactSetBonuses,
 } from './artifact-validator';
 import type { ArtifactPiece } from '../types/genshin';
 import { DEFAULT_DEMO_ARTIFACTS } from '../data/demo-artifacts';
@@ -342,6 +343,48 @@ describe('Artifact Validator Engine', () => {
         expect(result.totalRolls).toBeGreaterThanOrEqual(8);
         expect(result.totalRolls).toBeLessThanOrEqual(9);
       }
+    });
+  });
+
+  describe('M7 Rarity/Level Bounds & Set Bonus Validation', () => {
+    it('rejects impossible level or roll counts on partially leveled 5★ pieces', () => {
+      const badLevel: ArtifactPiece = {
+        slotKey: 'flower',
+        rarity: 5,
+        level: 25,
+        mainStatKey: 'hp',
+        substats: [{ key: 'critRate_', value: 3.5 }],
+      };
+      expect(validateArtifactPiece(badLevel).isValid).toBe(false);
+
+      const impossibleLvl0: ArtifactPiece = {
+        slotKey: 'flower',
+        rarity: 5,
+        level: 0,
+        mainStatKey: 'hp',
+        substats: [
+          { key: 'critRate_', value: 14.0 }, // 4 rolls on a +0 piece!
+          { key: 'critDMG_', value: 14.0 },
+          { key: 'atk_', value: 5.8 },
+          { key: 'enerRech_', value: 6.5 },
+        ],
+      };
+      expect(validateArtifactPiece(impossibleLvl0).isValid).toBe(false);
+    });
+
+    it('flags unknown sets, wasted 3pc configurations, and element-mismatched 2pc bonuses', () => {
+      const slots: Partial<Record<'flower' | 'plume' | 'sands' | 'goblet' | 'circlet', ArtifactPiece>> = {
+        flower: { slotKey: 'flower', setKey: 'Crimson Witch of Flames', rarity: 5, level: 20, mainStatKey: 'hp', substats: [] },
+        plume: { slotKey: 'plume', setKey: 'Crimson Witch of Flames', rarity: 5, level: 20, mainStatKey: 'atk', substats: [] },
+        sands: { slotKey: 'sands', setKey: 'Crimson Witch of Flames', rarity: 5, level: 20, mainStatKey: 'hp_', substats: [] },
+        goblet: { slotKey: 'goblet', setKey: 'FakeNonExistentSet', rarity: 5, level: 20, mainStatKey: 'hydro_dmg_', substats: [] },
+      };
+
+      const res = validateArtifactSetBonuses(slots, 'Neuvillette');
+      expect(res.isValid).toBe(false);
+      expect(res.unknownSets).toContain('FakeNonExistentSet');
+      expect(res.issues.some((i) => i.code === 'WASTED_3PC')).toBe(true);
+      expect(res.issues.some((i) => i.code === 'ELEMENT_MISMATCH_2PC')).toBe(true);
     });
   });
 });

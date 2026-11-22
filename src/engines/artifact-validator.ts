@@ -1,15 +1,26 @@
-import type { ArtifactPiece, ArtifactSlot, StatKey } from '../types/genshin';
+import type {
+  ArtifactPiece,
+  ArtifactSlot,
+  SetBonusValidationIssue,
+  SetBonusValidationResult,
+  StatKey,
+} from '../types/genshin';
 import {
   MAIN_STAT_ELIGIBILITY_TABLE,
   SUBSTAT_ROLL_TIERS,
   MAX_SUBSTAT_VALUES,
 } from '../data/artifact-weights';
+import {
+  getSetEffectDefinition,
+  parseActiveSetBonuses,
+} from '../data/artifact-set-effects';
+import { CHARACTERS } from '../data/characters';
 
 export interface SubstatDecompositionResult {
   isValid: boolean;
   rolls: number;
   tierBreakdown: number[];
-  averageEfficiency: number; // e.g. 90.0%
+  averageEfficiency: number;
   error?: string;
 }
 
@@ -29,12 +40,14 @@ export interface GoodArtifactValidationResult {
 /**
  * Checks if a given main stat is legal for the specified artifact slot.
  */
-export function isValidMainStatForSlot(slot: ArtifactSlot, statKey: StatKey): boolean {
+export function isValidMainStatForSlot(
+  slot: ArtifactSlot,
+  statKey: StatKey,
+): boolean {
   const eligible = MAIN_STAT_ELIGIBILITY_TABLE[slot];
   return eligible ? eligible.includes(statKey) : false;
 }
 
-// Generate all combinations of k items from tiers with replacement
 function getCombinations(tiers: number[], k: number): number[][] {
   const results: number[][] = [];
   function backtrack(startIdx: number, current: number[]) {
@@ -52,7 +65,6 @@ function getCombinations(tiers: number[], k: number): number[][] {
   return results;
 }
 
-// Cache combinations per statKey and roll count k in [1..6]
 const COMBINATIONS_CACHE = new Map<string, { sum: number; combo: number[] }[]>();
 
 function getPrecomputedTierSums(
@@ -77,8 +89,7 @@ function getPrecomputedTierSums(
 }
 
 /**
- * Decomposes a substat value into its constituent rolls and tiers.
- * Supports floating point tolerance (for rounded displays in UI/GOOD format).
+ * Decomposes a substat value into its constituent 5★ rolls and tiers.
  */
 export function decomposeSubstatRolls(
   statKey: StatKey,
@@ -108,7 +119,6 @@ export function decomposeSubstatRolls(
   const minSingle = tiers[0];
   const maxSingle = tiers[tiers.length - 1];
 
-  // Hard sanity boundary checks
   const isFlatStat = statKey === 'hp' || statKey === 'atk' || statKey === 'def';
   const minBoundary = minSingle * 0.9;
   const maxBoundary = maxSingle * 6 * 1.1;
@@ -123,8 +133,6 @@ export function decomposeSubstatRolls(
     };
   }
 
-  // Tolerance definition: strict epsilon = +-0.05 (+0.01 float arithmetic window) for percentage stats,
-  // 0.6 for elemental mastery (game integer rounding), 2.5 for flat stats (hp, atk, def)
   const tolerance = isFlatStat
     ? Math.max(2.5, value * 0.02)
     : statKey === 'eleMas'
@@ -132,20 +140,23 @@ export function decomposeSubstatRolls(
       : 0.06;
 
   const maxVal = MAX_SUBSTAT_VALUES[statKey] || 1;
-  let bestMatch: { rolls: number; diff: number; combo: number[]; score: number } | null = null;
+  let bestMatch: {
+    rolls: number;
+    diff: number;
+    combo: number[];
+    score: number;
+  } | null = null;
 
   for (let k = 1; k <= 6; k++) {
     const candidateSums = getPrecomputedTierSums(statKey, k);
     for (const cand of candidateSums) {
       const diff = Math.abs(cand.sum - value);
       if (diff <= tolerance) {
-        // Average tier efficiency of this combination
         const comboEfficiency =
           (cand.combo.reduce((acc, t) => acc + t / maxVal, 0) / k) * 100;
-        // Natural distribution penalty: median 5★ roll efficiency is ~85%.
-        // Extreme 6-roll pieces into a single stat are 1-in-1024 rarities; slight tiebreaker bias towards plausible lower k
         const rarityTiebreaker = k === 6 ? 0.08 : 0;
-        const score = diff + Math.abs(comboEfficiency - 85) * 0.005 + rarityTiebreaker;
+        const score =
+          diff + Math.abs(comboEfficiency - 85) * 0.005 + rarityTiebreaker;
 
         if (!bestMatch || score < bestMatch.score) {
           bestMatch = { rolls: k, diff, combo: cand.combo, score };
@@ -164,7 +175,6 @@ export function decomposeSubstatRolls(
     };
   }
 
-  // Calculate efficiency from matched combo tiers
   const efficiency = Number(
     (
       (bestMatch.combo.reduce((acc, t) => acc + t / maxVal, 0) /
@@ -182,7 +192,7 @@ export function decomposeSubstatRolls(
 }
 
 /**
- * Validates a single artifact piece against canonical 5★ +20 Genshin Impact rules.
+ * Validates a single artifact piece against canonical Genshin Impact rules.
  */
 export function validateArtifactPiece(
   piece: ArtifactPiece,
@@ -201,22 +211,38 @@ export function validateArtifactPiece(
 
   const { slotKey, mainStatKey, substats, level = 20, rarity = 5 } = piece;
 
-  // 1. Slot and Main Stat check
-  if (!isValidMainStatForSlot(slotKey, mainStatKey)) {
+  // 1. Rarity & Level bounds
+  if (!Number.isInteger(rarity) || rarity < 1 || rarity > 5) {
+    errors.push(`Invalid artifact rarity '${rarity}' (expected 1–5)`);
+  }
+  const maxAllowedLevel =
+    rarity === 5 ? 20 : rarity === 4 ? 16 : rarity === 3 ? 12 : 4;
+  if (!Number.isFinite(level) || level < 0 || level > maxAllowedLevel) {
     errors.push(
-      `Invalid main stat '${mainStatKey}' for slot '${slotKey}'`,
+      `Invalid artifact level ${level} for ${rarity}★ piece (expected 0–${maxAllowedLevel})`,
     );
   }
 
-  // 2. Substats array validation
+  // 2. Slot and Main Stat check
+  if (!isValidMainStatForSlot(slotKey, mainStatKey)) {
+    errors.push(`Invalid main stat '${mainStatKey}' for slot '${slotKey}'`);
+  }
+
+  // 3. Substats array validation
   if (!Array.isArray(substats)) {
     errors.push('Artifact substats must be an array');
     return { isValid: false, errors, totalRolls: 0, substatDecompositions };
   }
 
-  if (level >= 20 && substats.length > 0 && substats.length !== 4) {
+  if (substats.length > 4) {
     errors.push(
-      `Level 20 5★ artifacts must have exactly 4 substats, found ${substats.length}`,
+      `Artifacts cannot have more than 4 substats, found ${substats.length}`,
+    );
+  }
+
+  if (rarity === 5 && level >= 4 && substats.length > 0 && substats.length !== 4) {
+    errors.push(
+      `Level ${level} 5★ artifacts must have exactly 4 substats, found ${substats.length}`,
     );
   }
 
@@ -226,44 +252,45 @@ export function validateArtifactPiece(
   for (const sub of substats) {
     if (!sub || !sub.key) continue;
 
-    // Duplicate check
     if (seenSubstats.has(sub.key)) {
       errors.push(`Duplicate substat '${sub.key}' found on artifact`);
     }
     seenSubstats.add(sub.key);
 
-    // Substat matches main stat check
     if (sub.key === mainStatKey) {
       errors.push(
         `Substat '${sub.key}' matches main stat '${mainStatKey}', which is impossible in game`,
       );
     }
 
-    // Roll decomposition
-    const decomp = decomposeSubstatRolls(sub.key, sub.value);
-    substatDecompositions[sub.key] = decomp;
+    if (rarity === 5) {
+      const decomp = decomposeSubstatRolls(sub.key, sub.value);
+      substatDecompositions[sub.key] = decomp;
 
-    if (!decomp.isValid) {
-      errors.push(
-        `Invalid substat roll on '${sub.key}' (value: ${sub.value}): ${decomp.error}`,
-      );
-    } else {
-      if (decomp.rolls > 6) {
+      if (!decomp.isValid) {
         errors.push(
-          `Substat '${sub.key}' has ${decomp.rolls} rolls, exceeding maximum 6 rolls`,
+          `Invalid substat roll on '${sub.key}' (value: ${sub.value}): ${decomp.error}`,
         );
+      } else {
+        if (decomp.rolls > 6) {
+          errors.push(
+            `Substat '${sub.key}' has ${decomp.rolls} rolls, exceeding maximum 6 rolls`,
+          );
+        }
+        totalRolls += decomp.rolls;
       }
-      totalRolls += decomp.rolls;
     }
   }
 
-  // 3. Total rolls check for Level 20 5★ piece with substats
-  if (level >= 20 && rarity === 5 && substats.length > 0) {
-    // 5★ pieces start with 3 or 4 substats, plus 5 upgrades (+4, +8, +12, +16, +20)
-    // => Total rolls must be 8 (from 3-liner) or 9 (from 4-liner)
-    if (totalRolls < 8 || totalRolls > 9) {
+  // 4. Level-consistent total roll bounds for 5★ pieces
+  if (rarity === 5 && substats.length > 0) {
+    const upgradesEarned = Math.floor(Math.max(0, Math.min(20, level)) / 4);
+    const minPossibleRolls = 3 + upgradesEarned;
+    const maxPossibleRolls = 4 + upgradesEarned;
+
+    if (totalRolls < minPossibleRolls || totalRolls > maxPossibleRolls) {
       errors.push(
-        `Total rolls for +20 5★ piece must be 8 or 9, but calculated ${totalRolls}`,
+        `Total rolls for +${level} 5★ piece must be ${minPossibleRolls} or ${maxPossibleRolls}, but calculated ${totalRolls}`,
       );
     }
   }
@@ -273,6 +300,110 @@ export function validateArtifactPiece(
     errors,
     totalRolls,
     substatDecompositions,
+  };
+}
+
+/**
+ * Validates equipped set keys across 5 slots: checks set registration,
+ * detects wasted 3pc configurations, and flags element-mismatched 2pc bonuses.
+ */
+export function validateArtifactSetBonuses(
+  slots: Partial<Record<ArtifactSlot, ArtifactPiece | null>>,
+  characterIdOrName?: string,
+): SetBonusValidationResult {
+  const issues: SetBonusValidationIssue[] = [];
+  const recognizedSets = new Set<string>();
+  const unknownSets = new Set<string>();
+  const pieceCounts: Record<string, number> = {};
+  const rawSetKeys: string[] = [];
+
+  for (const piece of Object.values(slots)) {
+    if (!piece?.setKey) continue;
+    rawSetKeys.push(piece.setKey);
+    const def = getSetEffectDefinition(piece.setKey);
+    if (!def) {
+      unknownSets.add(piece.setKey);
+      issues.push({
+        severity: 'error',
+        code: 'UNKNOWN_SET',
+        affectedSet: piece.setKey,
+        message: `Unrecognized artifact set '${piece.setKey}' — set bonus ESR cannot be verified.`,
+      });
+    } else {
+      recognizedSets.add(def.name);
+      pieceCounts[def.name] = (pieceCounts[def.name] || 0) + 1;
+    }
+  }
+
+  const { active2pc, active4pc } = parseActiveSetBonuses(rawSetKeys);
+
+  // Detect 3-piece dead zone (paying for 3 pieces without unlocking 4pc)
+  for (const [setName, count] of Object.entries(pieceCounts)) {
+    if (count === 3) {
+      issues.push({
+        severity: 'warning',
+        code: 'WASTED_3PC',
+        affectedSet: setName,
+        message: `Equipped 3 pieces of ${setName}: the 3rd piece grants no set bonus. Either finish 4pc ${setName} or swap the weakest piece to a second 2pc bonus / stronger off-piece.`,
+      });
+    }
+  }
+
+  // Detect rainbow build with 4+ equipped pieces
+  const equippedPiecesCount = Object.values(slots).filter(Boolean).length;
+  if (
+    equippedPiecesCount >= 4 &&
+    active2pc.length === 0 &&
+    active4pc.length === 0 &&
+    unknownSets.size === 0
+  ) {
+    issues.push({
+      severity: 'warning',
+      code: 'NO_ACTIVE_SET',
+      message:
+        'No active 2pc or 4pc set bonus detected (Rainbow build). Equipping a matching 2pc+2pc or 4pc set typically adds 6–12 equivalent substat rolls.',
+    });
+  }
+
+  // Detect element-mismatched 2pc elemental DMG bonus
+  if (characterIdOrName) {
+    const norm = characterIdOrName.replace(/[\s\-_]/g, '').toLowerCase();
+    const char = CHARACTERS.find(
+      (c) =>
+        c.id.toLowerCase() === norm ||
+        c.name.replace(/[\s\-_]/g, '').toLowerCase() === norm,
+    );
+    if (char) {
+      const expectedDmgKey = `${char.element.toLowerCase()}_dmg_` as StatKey;
+      for (const setName of active2pc) {
+        const def = getSetEffectDefinition(setName);
+        const p2Stats = def?.piece2.stats;
+        if (!p2Stats) continue;
+        for (const statKey of Object.keys(p2Stats) as StatKey[]) {
+          if (
+            statKey.endsWith('_dmg_') &&
+            statKey !== 'physical_dmg_' &&
+            statKey !== expectedDmgKey
+          ) {
+            issues.push({
+              severity: 'warning',
+              code: 'ELEMENT_MISMATCH_2PC',
+              affectedSet: setName,
+              message: `2pc ${setName} grants ${statKey.replace('_dmg_', '').toUpperCase()} DMG%, which does not benefit ${char.name} (${char.element}).`,
+            });
+          }
+        }
+      }
+    }
+  }
+
+  return {
+    isValid: !issues.some((i) => i.severity === 'error'),
+    recognizedSets: Array.from(recognizedSets),
+    unknownSets: Array.from(unknownSets),
+    active2pc,
+    active4pc,
+    issues,
   };
 }
 

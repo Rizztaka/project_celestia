@@ -1,5 +1,9 @@
 import React from 'react';
-import type { SlotUpgradeProbability, StatKey } from '../types/genshin';
+import type {
+  SlotUpgradeProbability,
+  StatKey,
+  UniversalSlotMetrics,
+} from '../types/genshin';
 import { InfoTooltip } from './InfoTooltip';
 import {
   MAIN_STAT_MAX_VALUES,
@@ -26,6 +30,7 @@ interface ArtifactSlotCardProps {
   isWeakest: boolean;
   onEdit?: () => void;
   activeSets?: string[];
+  universalMetrics?: UniversalSlotMetrics;
 }
 
 export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
@@ -33,8 +38,18 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
   isWeakest,
   onEdit,
   activeSets,
+  universalMetrics,
 }) => {
-  const { slotKey, slotName, currentPiece, currentRollValue, currentUsefulRolls, status, expectedDaysForUpgrade, expectedRunsForUpgrade } = analysis;
+  const {
+    slotKey,
+    slotName,
+    currentPiece,
+    currentRollValue,
+    currentUsefulRolls,
+    status,
+    expectedDaysForUpgrade,
+    expectedRunsForUpgrade,
+  } = analysis;
 
   const validation = currentPiece ? validateArtifactPiece(currentPiece) : null;
   const isInvalid = Boolean(validation && !validation.isValid);
@@ -134,6 +149,8 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
     }
   };
 
+  const completionPct = universalMetrics?.completionPct;
+
   return (
     <div
       className={`rounded-2xl border p-4 flex flex-col justify-between transition-colors relative ${
@@ -151,10 +168,12 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-1.5 flex-wrap">
-                <h4 className="text-xs font-bold text-zinc-100 font-serif">{slotName}</h4>
-                {isOffPiece && (
+                <h4 className="text-xs font-bold text-zinc-100 font-serif">
+                  {slotName}
+                </h4>
+                {(isOffPiece || universalMetrics?.isOffPieceCandidate) && (
                   <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-amber-500/20 text-amber-200 border border-amber-400/40">
-                    Off-Piece
+                    {isOffPiece ? 'Off-Piece' : 'Best Flex Slot'}
                   </span>
                 )}
                 {isInvalid && (
@@ -176,10 +195,27 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
         </div>
 
         {/* Main Stat Pill */}
-        <div className="bg-[#181b28] px-3 py-1.5 rounded-xl border border-[#262c40] mb-3 flex items-center justify-between">
-          <span className="text-[11px] text-zinc-300 font-medium">Main Stat</span>
-          <span className="text-xs font-bold text-[#f3cf58]">
+        <div
+          className={`px-3 py-1.5 rounded-xl border mb-3 flex items-center justify-between ${
+            universalMetrics && !universalMetrics.hasValidMainStat
+              ? 'bg-rose-950/40 border-rose-400/45'
+              : 'bg-[#181b28] border-[#262c40]'
+          }`}
+        >
+          <span className="text-[11px] text-zinc-300 font-medium">
+            Main Stat
+          </span>
+          <span
+            className={`text-xs font-bold ${
+              universalMetrics && !universalMetrics.hasValidMainStat
+                ? 'text-rose-200'
+                : 'text-[#f3cf58]'
+            }`}
+          >
             {getMainStatDisplay()}
+            {universalMetrics && !universalMetrics.hasValidMainStat
+              ? ' (Off-Meta)'
+              : ''}
           </span>
         </div>
 
@@ -191,7 +227,10 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
               const rv =
                 sub.rollValue ??
                 (maxVal > 0 ? Math.round((sub.value / maxVal) * 100) : 0);
-              const decomp = decomposeSubstatRolls(sub.key as StatKey, sub.value);
+              const decomp = decomposeSubstatRolls(
+                sub.key as StatKey,
+                sub.value,
+              );
               return (
                 <div
                   key={idx}
@@ -205,12 +244,14 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
                       <span
                         className="text-[9px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-200 font-mono border border-zinc-700/60"
                         title={
-                          decomp.tierBreakdown && decomp.tierBreakdown.length > 0
+                          decomp.tierBreakdown &&
+                          decomp.tierBreakdown.length > 0
                             ? `Roll tiers: ${decomp.tierBreakdown.join(', ')}`
                             : undefined
                         }
                       >
-                        {decomp.rolls} roll{decomp.rolls > 1 ? 's' : ''} ({Math.round(decomp.averageEfficiency)}%)
+                        {decomp.rolls} roll{decomp.rolls > 1 ? 's' : ''} (
+                        {Math.round(decomp.averageEfficiency)}%)
                       </span>
                     )}
                     <span className="text-[10px] text-zinc-300 font-mono">
@@ -228,26 +269,62 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
         </div>
       </div>
 
-      {/* Card Footer: RV% and Upgrade Odds */}
+      {/* Card Footer: Completion, RV%, Marginal ROI & Upgrade Odds */}
       <div className="border-t border-[#1f2436] pt-3 mt-1 space-y-2">
+        {completionPct !== undefined && (
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-[11px]">
+              <span className="text-zinc-300">Build Ceiling Progress</span>
+              <span className="font-mono font-bold text-zinc-100">
+                {Math.round(completionPct)}%
+              </span>
+            </div>
+            <div className="h-1.5 w-full rounded-full bg-[#1a1f33] overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all ${
+                  completionPct >= 88
+                    ? 'bg-purple-400'
+                    : completionPct >= 65
+                      ? 'bg-amber-400'
+                      : 'bg-emerald-400'
+                }`}
+                style={{ width: `${Math.min(100, Math.max(0, completionPct))}%` }}
+              />
+            </div>
+          </div>
+        )}
+
         <div className="flex items-center justify-between text-xs">
           <span className="text-zinc-300 font-medium">Weighted RV:</span>
           <span className="font-bold text-zinc-100 font-mono">
-            {currentRollValue}% <span className="text-[10px] text-zinc-300">({currentUsefulRolls} rolls)</span>
+            {currentRollValue}%{' '}
+            <span className="text-[10px] text-zinc-300">
+              ({currentUsefulRolls} rolls)
+            </span>
           </span>
         </div>
 
         <div className="space-y-1.5 pt-1">
+          {universalMetrics && (
+            <div className="flex items-center justify-between text-[11px]">
+              <span className="text-zinc-300">Expected Gain / 1k Resin:</span>
+              <span className="font-semibold text-[#f3cf58] font-mono">
+                +{universalMetrics.expectedGainPctPer1kResin.toFixed(2)}%
+              </span>
+            </div>
+          )}
+
           <div className="flex items-center justify-between text-[11px]">
             <span className="text-zinc-300 flex items-center gap-1">
               <span>50% Milestone:</span>
               <InfoTooltip
                 title="Median Runs (50% Milestone)"
-                content="Discrete number of runs needed to reach >= 50% cumulative probability of obtaining an upgrade."
+                content="Exact discrete PMF runs needed to reach >= 50% cumulative probability of beating this piece."
               />
             </span>
             <span className="font-semibold text-emerald-300 font-mono">
-              ~{analysis.medianRunsForUpgrade ?? expectedRunsForUpgrade} runs <span className="text-zinc-300">({expectedDaysForUpgrade}d)</span>
+              ~{analysis.medianRunsForUpgrade ?? expectedRunsForUpgrade} runs{' '}
+              <span className="text-zinc-300">({expectedDaysForUpgrade}d)</span>
             </span>
           </div>
 
@@ -256,13 +333,35 @@ export const ArtifactSlotCard: React.FC<ArtifactSlotCardProps> = ({
               <span>Average Expected (1/p):</span>
               <InfoTooltip
                 title="Mean Expected Runs (1/p)"
-                content="Mathematical expectation E[X] = 1/p. Because the geometric distribution is right-skewed, the average expected runs is strictly higher than the median 50% milestone."
+                content="Mathematical expectation E[X] = 1/p. Because geometric trials are right-skewed, mean runs exceed the 50% median."
               />
             </span>
             <span className="font-semibold text-sky-300 font-mono">
-              ~{analysis.meanExpectedRuns ?? Math.ceil(1 / Math.max(0.00001, analysis.upgradeProbabilityPerRun))} runs
+              ~
+              {analysis.meanExpectedRuns ??
+                Math.ceil(1 / Math.max(0.00001, analysis.upgradeProbabilityPerRun))}{' '}
+              runs
             </span>
           </div>
+
+          {universalMetrics &&
+            (universalMetrics.elixirExpectedURVGain >= 1.4 ||
+              universalMetrics.reshapeExpectedURVGain >= 0.85) && (
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {universalMetrics.elixirExpectedURVGain >= 1.4 && (
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-sky-950/60 text-sky-200 border border-sky-400/35 font-mono">
+                    Elixir ({universalMetrics.elixirCost}): +
+                    {universalMetrics.elixirExpectedURVGain} rolls EV
+                  </span>
+                )}
+                {universalMetrics.reshapeExpectedURVGain >= 0.85 && (
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-purple-950/60 text-purple-200 border border-purple-400/35 font-mono">
+                    Dust ({universalMetrics.dustCost}): +
+                    {universalMetrics.reshapeExpectedURVGain} rolls EV
+                  </span>
+                )}
+              </div>
+            )}
         </div>
 
         {onEdit && (

@@ -125,4 +125,50 @@ describe('Artifact Set Effects & Equivalent Substat Rolls (ESR)', () => {
       expect(esr.active4pc).toHaveLength(0);
     });
   });
+
+  describe('M7 Set Bonus Accuracy & Context Dilution', () => {
+    it('computes realistic Elemental DMG% ESR (15% = 3 rolls, not 7.5+)', () => {
+      const esr = calculateSetEquivalentSubstatRolls(
+        [{ setKey: 'Crimson Witch of Flames', pieces: 2 }],
+        'Hu Tao',
+        110,
+      );
+      expect(esr.breakdown['pyro_dmg_']).toBeCloseTo(3.0, 1);
+      expect(esr.totalEsr).toBeCloseTo(3.0, 1);
+    });
+
+    it('awards 0 ESR for element-mismatched 2pc elemental DMG bonuses', () => {
+      const esr = calculateSetEquivalentSubstatRolls(
+        [{ setKey: 'Crimson Witch of Flames', pieces: 2 }],
+        'Neuvillette',
+        120,
+      );
+      expect(esr.totalEsr).toBe(0);
+    });
+
+    it('reduces ATK% and DMG% set ESR under Bennett + Furina buff saturation', () => {
+      const unbuffed = calculateSetEquivalentSubstatRolls(
+        [{ setKey: 'Fragment of Harmonic Whimsy', pieces: 4 }],
+        'Arlecchino',
+        120,
+      );
+      const buffed = calculateSetEquivalentSubstatRolls(
+        [{ setKey: 'Fragment of Harmonic Whimsy', pieces: 4 }],
+        'Arlecchino',
+        120,
+        { preset: 'hypercarry_bennett_furina', hasBennett: true, hasFurina: true },
+      );
+      expect(buffed.totalEsr).toBeLessThan(unbuffed.totalEsr);
+    });
+
+    it('supports Natlan and Nod-Krai combat sets (Finale of the Deep Galleries, Long Nights Oath, Night of the Skys Unveiling)', () => {
+      const skirkEsr = calculateSetEquivalentSubstatRolls(
+        [{ setKey: 'Finale of the Deep Galleries', pieces: 4 }],
+        'Skirk',
+        100,
+      );
+      expect(skirkEsr.totalEsr).toBeGreaterThan(10);
+      expect(skirkEsr.active4pc).toContain('Finale of the Deep Galleries');
+    });
+  });
 });

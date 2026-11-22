@@ -12,6 +12,7 @@ import type {
   RoiMilestoneComparison,
   SetComparisonResult,
   SetOptionComparison,
+  SlotUpgradePriorityItem,
   SlotUpgradeProbability,
   StatKey,
   TeamContext,
@@ -33,6 +34,7 @@ import {
   calculateSetEquivalentSubstatRolls,
   parseActiveSetBonuses,
 } from '../data/artifact-set-effects';
+import { validateArtifactSetBonuses } from './artifact-validator';
 
 export const SLOT_NAMES: Record<ArtifactSlot, string> = {
   flower: 'Flower of Life',
@@ -1001,7 +1003,9 @@ export function adjustWeightsForTeamContext(
   const statWeights: Partial<Record<StatKey, number>> = {
     ...config.statWeights,
   };
+  const preferredSands = [...(config.preferredMainStats?.sands ?? [])];
   const preferredGoblet = [...(config.preferredMainStats?.goblet ?? [])];
+  const preferredCirclet = [...(config.preferredMainStats?.circlet ?? [])];
 
   const isBennettActive =
     context.preset === 'hypercarry_bennett_furina' ||
@@ -1013,25 +1017,50 @@ export function adjustWeightsForTeamContext(
     context.hasFurina ||
     (context.customDmgBonus !== undefined && context.customDmgBonus >= 50);
 
+  const isDmgSaturated = isFurinaActive || Boolean(context.hasKazuhaOrVV);
+
   const isAmplifyingActive =
     context.preset === 'vape_melt' || context.hasAmplifyingReaction;
 
   const isQuickenActive =
     context.preset === 'quicken_spread' || context.hasQuickenReaction;
 
+  const isHyperbloomActive = context.preset === 'hyperbloom';
+
   const isLunarOrStellar = Boolean(
     context.hasLunarReaction || context.hasStellarReaction,
   );
 
-  // 1. Flat ATK Dilution (Bennett / Sara / Iansan massive flat ATK buffs)
-  if (isBennettActive && statWeights.atk_ !== undefined) {
-    statWeights.atk_ = Number(
-      Math.max(0.15, statWeights.atk_ * 0.65).toFixed(2),
-    );
+  // 1. Flat ATK Dilution (Bennett / Sara / Iansan)
+  if (isBennettActive) {
+    if (statWeights.atk_ !== undefined) {
+      statWeights.atk_ = Number(
+        Math.max(0.15, statWeights.atk_ * 0.65).toFixed(2),
+      );
+    }
+    if (statWeights.atk !== undefined) {
+      statWeights.atk = Number(
+        Math.max(0.05, statWeights.atk * 0.5).toFixed(2),
+      );
+    }
   }
 
-  // 2. Reaction EM Boost (Amplifying, Quicken, Lunar, Stellar Glimmer)
-  if (isAmplifyingActive && statWeights.eleMas !== undefined) {
+  // 2. Reaction Scaling (Hyperbloom, Amplifying, Quicken, Lunar/Stellar)
+  if (isHyperbloomActive) {
+    statWeights.eleMas = 1.0;
+    if (statWeights.critRate_ !== undefined) {
+      statWeights.critRate_ = Number((statWeights.critRate_ * 0.25).toFixed(2));
+    }
+    if (statWeights.critDMG_ !== undefined) {
+      statWeights.critDMG_ = Number((statWeights.critDMG_ * 0.25).toFixed(2));
+    }
+    if (statWeights.atk_ !== undefined) {
+      statWeights.atk_ = Number((statWeights.atk_ * 0.3).toFixed(2));
+    }
+    if (!preferredSands.includes('eleMas')) preferredSands.unshift('eleMas');
+    if (!preferredGoblet.includes('eleMas')) preferredGoblet.unshift('eleMas');
+    if (!preferredCirclet.includes('eleMas')) preferredCirclet.unshift('eleMas');
+  } else if (isAmplifyingActive && statWeights.eleMas !== undefined) {
     statWeights.eleMas = Number(
       Math.min(1.0, Math.max(0.85, statWeights.eleMas * 1.35)).toFixed(2),
     );
@@ -1040,17 +1069,15 @@ export function adjustWeightsForTeamContext(
       Math.min(1.0, Math.max(0.75, statWeights.eleMas * 1.25)).toFixed(2),
     );
   } else if (isLunarOrStellar) {
-    // Lunar & Stellar reactions scale with CRIT and hyperbolic EM (6*EM/(EM+2000)),
-    // ignoring generic Elemental DMG% on reaction procs.
     const externalEm = safeNonNeg(context.customEmBuff, 0);
-    const emSaturationFactor = externalEm >= 350 ? 0.55 : externalEm >= 200 ? 0.75 : 0.9;
+    const emSaturationFactor =
+      externalEm >= 350 ? 0.55 : externalEm >= 200 ? 0.75 : 0.9;
     statWeights.eleMas = Number(
       clamp(Math.max(statWeights.eleMas ?? 0.6, emSaturationFactor), 0.35, 1.0).toFixed(2),
     );
     statWeights.critRate_ = Math.max(statWeights.critRate_ ?? 0, 1.0);
     statWeights.critDMG_ = Math.max(statWeights.critDMG_ ?? 0, 1.0);
 
-    // Non-Elemental Goblets (EM / ATK% / HP%) compete with DMG% Goblets on Lunar/Stellar carries
     if (!preferredGoblet.includes('eleMas')) preferredGoblet.push('eleMas');
     if ((statWeights.atk_ ?? 0) >= 0.5 && !preferredGoblet.includes('atk_')) {
       preferredGoblet.push('atk_');
@@ -1060,36 +1087,77 @@ export function adjustWeightsForTeamContext(
     }
   }
 
-  // 3. Furina Fanfare DMG% Dilution: elevates HP% and ATK% goblet viability
-  if (isFurinaActive) {
-    if (config.statWeights.hp_ && !preferredGoblet.includes('hp_')) {
+  // 3. Furina / Kazuha DMG% Saturation: elevates HP%, ATK%, DEF% goblet viability
+  if (isDmgSaturated) {
+    if ((config.statWeights.hp_ ?? 0) >= 0.7 && !preferredGoblet.includes('hp_')) {
       preferredGoblet.push('hp_');
     }
-    if (config.statWeights.atk_ && !preferredGoblet.includes('atk_')) {
+    if ((config.statWeights.atk_ ?? 0) >= 0.7 && !preferredGoblet.includes('atk_')) {
       preferredGoblet.push('atk_');
+    }
+    if ((config.statWeights.def_ ?? 0) >= 0.7 && !preferredGoblet.includes('def_')) {
+      preferredGoblet.push('def_');
     }
   }
 
   return {
     ...config,
     preferredMainStats: {
-      ...config.preferredMainStats,
+      sands: preferredSands,
       goblet: preferredGoblet,
+      circlet: preferredCirclet,
     },
     statWeights,
   };
 }
 
-/**
- * Compares currently equipped artifact sets against theoretical 4pc BiS, 2pc/2pc, and Rainbow sets.
- */
+function pickRelevantSecond2pcSet(
+  primarySet: string,
+  config: CharacterStatWeightConfig,
+): string {
+  const altFromConfig = config.targetSets?.find((s) => s !== primarySet);
+  if (altFromConfig) return altFromConfig;
+
+  const w = config.statWeights;
+  if ((w.hp_ ?? 0) >= 0.85) {
+    return primarySet === 'Tenacity of the Millelith'
+      ? "Vourukasha's Glow"
+      : 'Tenacity of the Millelith';
+  }
+  if ((w.def_ ?? 0) >= 0.85) {
+    return primarySet === 'Husk of Opulent Dreams'
+      ? 'Emblem of Severed Fate'
+      : 'Husk of Opulent Dreams';
+  }
+  if ((w.eleMas ?? 0) >= 0.85) {
+    return primarySet === 'Gilded Dreams'
+      ? "Wanderer's Troupe"
+      : 'Gilded Dreams';
+  }
+  if ((w.heal_ ?? 0) >= 0.85) {
+    return primarySet === 'Ocean-Hued Clam'
+      ? 'Maiden Beloved'
+      : 'Ocean-Hued Clam';
+  }
+  if ((w.enerRech_ ?? 0) >= 0.9) {
+    return primarySet === 'Emblem of Severed Fate'
+      ? "Silken Moon's Serenade"
+      : 'Emblem of Severed Fate';
+  }
+  return primarySet === "Gladiator's Finale"
+    ? "Shimenawa's Reminiscence"
+    : "Gladiator's Finale";
+}
+
 export function compareSetConfigurations(
   slots: Partial<Record<ArtifactSlot, ArtifactPiece | null>>,
   characterIdOrName: string,
-  _context?: TeamContext,
+  context?: TeamContext,
   totalEr: number = 100,
+  equippedUsefulRolls?: number,
 ): SetComparisonResult {
-  const config = getCharacterStatWeights(characterIdOrName);
+  const baseConfig = getCharacterStatWeights(characterIdOrName);
+  const config = adjustWeightsForTeamContext(baseConfig, context);
   const targetSetName = config.targetSets?.[0] || 'Emblem of Severed Fate';
 
   const pieceSetKeys = Object.values(slots)
@@ -1108,15 +1176,17 @@ export function compareSetConfigurations(
     currentActiveSets,
     config.characterId,
     totalEr,
+    context,
   );
 
   const theoretical4pc = calculateSetEquivalentSubstatRolls(
     [{ setKey: targetSetName, pieces: 4 }],
     config.characterId,
     totalEr,
+    context,
   );
 
-  const secondSet = config.targetSets?.[1] || "Gladiator's Finale";
+  const secondSet = pickRelevantSecond2pcSet(targetSetName, config);
   const theoretical2pc2pc = calculateSetEquivalentSubstatRolls(
     [
       { setKey: targetSetName, pieces: 2 },
@@ -1124,6 +1194,7 @@ export function compareSetConfigurations(
     ],
     config.characterId,
     totalEr,
+    context,
   );
 
   const deltaToBiS = Number(
@@ -1132,6 +1203,23 @@ export function compareSetConfigurations(
   const breakEven2pc = Number(
     (theoretical4pc.totalEsr - theoretical2pc2pc.totalEsr).toFixed(1),
   );
+
+  const currentTotalEffectiveRolls =
+    typeof equippedUsefulRolls === 'number'
+      ? Number((equippedUsefulRolls + currentEsr.totalEsr).toFixed(1))
+      : undefined;
+  const target4pcRequiredSubstatRolls =
+    currentTotalEffectiveRolls !== undefined
+      ? Number(
+          Math.max(0, currentTotalEffectiveRolls - theoretical4pc.totalEsr).toFixed(1),
+        )
+      : undefined;
+  const hybrid2pcRequiredSubstatRolls =
+    currentTotalEffectiveRolls !== undefined
+      ? Number(
+          Math.max(0, currentTotalEffectiveRolls - theoretical2pc2pc.totalEsr).toFixed(1),
+        )
+      : undefined;
 
   const options: SetOptionComparison[] = [
     {
@@ -1146,26 +1234,29 @@ export function compareSetConfigurations(
       type: '2pc+2pc',
       esr: theoretical2pc2pc.totalEsr,
       breakEvenRollDelta: Math.max(0, breakEven2pc),
-      description: `A 2pc/2pc hybrid needs +${breakEven2pc} additional useful substat rolls to equal the 4pc set.`,
+      description:
+        breakEven2pc > 0
+          ? `Needs +${breakEven2pc} extra useful substat rolls to match 4pc ${targetSetName}.`
+          : `Competitive with 4pc ${targetSetName} under current stats and team buffs.`,
     },
     {
       name: 'Rainbow / Off-Piece Broken Set',
       type: 'Rainbow',
       esr: 0,
       breakEvenRollDelta: theoretical4pc.totalEsr,
-      description: `Rainbow pieces have 0 set bonus ESR and require +${theoretical4pc.totalEsr} extra substat rolls to compete with 4pc BiS.`,
+      description: `0 set bonus ESR; requires +${theoretical4pc.totalEsr} extra useful substat rolls to beat 4pc BiS.`,
     },
   ];
 
   let verdict = '';
   if (active.active4pc.includes(targetSetName)) {
-    verdict = `4pc ${targetSetName} BiS active (+${theoretical4pc.totalEsr} ESR). Focus on optimizing individual piece roll quality.`;
+    verdict = `4pc ${targetSetName} BiS active (+${theoretical4pc.totalEsr} ESR). Focus on upgrading your weakest piece rather than switching sets.`;
   } else if (active.active4pc.length > 0) {
-    verdict = `Equipped with 4pc ${active.active4pc[0]} (+${currentEsr.totalEsr} ESR). Target BiS is 4pc ${targetSetName} (+${deltaToBiS} roll advantage).`;
+    verdict = `Equipped with 4pc ${active.active4pc[0]} (+${currentEsr.totalEsr} ESR). 4pc ${targetSetName} offers ${deltaToBiS >= 0 ? `+${deltaToBiS}` : deltaToBiS} ESR${target4pcRequiredSubstatRolls !== undefined ? ` (beat your current build at ≥${target4pcRequiredSubstatRolls} useful rolls on 4pc BiS)` : ''}.`;
   } else if (active.active2pc.length >= 2) {
-    verdict = `2pc/2pc hybrid active (+${currentEsr.totalEsr} ESR). You need +${deltaToBiS} higher substat rolls on this build to match 4pc ${targetSetName}.`;
+    verdict = `2pc/2pc active (+${currentEsr.totalEsr} ESR). ${deltaToBiS > 0 ? `Switching to 4pc ${targetSetName} beats this build once it reaches ≥${target4pcRequiredSubstatRolls ?? Math.max(0, deltaToBiS)} useful rolls (+${deltaToBiS} ESR gap).` : `Your 2pc/2pc already matches or exceeds 4pc ${targetSetName} ESR under this context.`}`;
   } else {
-    verdict = `Rainbow build (+${currentEsr.totalEsr} ESR). Equipping 4pc ${targetSetName} would immediately gain +${deltaToBiS} equivalent substat rolls!`;
+    verdict = `Rainbow build (+${currentEsr.totalEsr} ESR). Completing 4pc ${targetSetName} immediately adds +${deltaToBiS} equivalent substat rolls!`;
   }
 
   return {
@@ -1174,6 +1265,10 @@ export function compareSetConfigurations(
     options,
     breakEvenRollDelta: Math.max(0, deltaToBiS),
     verdict,
+    currentTotalEffectiveRolls,
+    target4pcRequiredSubstatRolls,
+    hybrid2pcRequiredSubstatRolls,
+    recommended2pcPair: [targetSetName, secondSet],
   };
 }
 
@@ -1490,6 +1585,10 @@ function estimateEffectiveCritRate(
   };
 }
 
+function calibratedCharKey(c: CharacterStatWeightConfig) {
+  return c.characterId || c.characterName;
+}
+
 /**
  * Performs complete universal stop-point & build intelligence analysis across all 5 slots
  * for any Genshin Impact character, set, or archetype up to v7.2.
@@ -1516,12 +1615,40 @@ export function analyzeArtifactBuild(
   const targetSetName = config.targetSets?.[0] || 'Emblem of Severed Fate';
   const domainRoute = evaluateDomainRoute(targetSetName);
 
-  // 2. Whole-Build ER evaluation
+  // 2. Whole-Build ER evaluation (incorporating optional weapon / ascension ER & custom target)
   const erEvaluation = evaluateWholeBuildEr(
     slots,
-    config.erRequirement || 130,
+    teamContext?.customErTarget ?? config.erRequirement ?? 130,
     activeSets.active2pc,
+    100,
+    teamContext?.weaponEr ?? 0,
+    teamContext?.ascensionEr ?? 0,
   );
+
+  // Validate equipped set bonuses (unknown sets, wasted 3pc, element-mismatched 2pc)
+  const setBonusValidation = validateArtifactSetBonuses(slots, calibratedCharKey(config));
+
+  // Track transparent weight adjustment explanations for the UI
+  const weightAdjustmentNotes: string[] = [];
+  if (teamContext?.preset === 'hypercarry_bennett_furina' || teamContext?.hasBennett) {
+    weightAdjustmentNotes.push('Bennett/Flat ATK buff: ATK% weight ×0.65, Flat ATK ×0.50');
+  }
+  if (
+    teamContext?.preset === 'hypercarry_bennett_furina' ||
+    teamContext?.hasFurina ||
+    teamContext?.hasKazuhaOrVV
+  ) {
+    weightAdjustmentNotes.push('Furina/VV DMG% saturation: HP%/ATK%/DEF% Goblets elevated');
+  }
+  if (teamContext?.preset === 'vape_melt' || teamContext?.hasAmplifyingReaction) {
+    weightAdjustmentNotes.push('Vaporize/Melt active: EM weight boosted ×1.35');
+  }
+  if (teamContext?.preset === 'quicken_spread' || teamContext?.hasQuickenReaction) {
+    weightAdjustmentNotes.push('Quicken/Spread active: EM weight boosted ×1.25');
+  }
+  if (teamContext?.preset === 'hyperbloom') {
+    weightAdjustmentNotes.push('Hyperbloom active: EM locked to 1.0, Crit/ATK% downweighted');
+  }
 
   // 3. Dynamic Three-Zone ER & 100% CR Overcap weight calibration
   const calibratedWeights: Partial<Record<StatKey, number>> = {
@@ -1546,6 +1673,16 @@ export function analyzeArtifactBuild(
     }
   }
 
+  if (erEvaluation.status === 'Deficit') {
+    weightAdjustmentNotes.push(
+      `ER Deficit (${erEvaluation.totalEr}% / ${erEvaluation.targetEr}%): ER weight elevated to primary priority`,
+    );
+  } else if (erEvaluation.status === 'Overcap' && !is4pcEmblem) {
+    weightAdjustmentNotes.push(
+      `ER Surplus (+${erEvaluation.erDifference}%): ER substat weight decayed to 0.1×`,
+    );
+  }
+
   const { effectiveCr, conditionalSetCr } = estimateEffectiveCritRate(
     slots,
     activeSets.active4pc,
@@ -1557,6 +1694,16 @@ export function analyzeArtifactBuild(
     const headroomFactor = clamp((100 - effectiveCr) / 8, 0.15, 1);
     calibratedWeights.critRate_ = Number(
       ((calibratedWeights.critRate_ ?? 1) * headroomFactor).toFixed(2),
+    );
+  }
+
+  if (effectiveCr >= 100 && (config.statWeights.critRate_ ?? 0) > 0) {
+    weightAdjustmentNotes.push(
+      `CR Overcap (${effectiveCr}% incl. +${conditionalSetCr}% set): CRIT Rate weight set to 0`,
+    );
+  } else if (effectiveCr >= 92 && (config.statWeights.critRate_ ?? 0) > 0) {
+    weightAdjustmentNotes.push(
+      `Near CR Cap (${effectiveCr}%): CRIT Rate weight tapered for headroom`,
     );
   }
 
@@ -1780,6 +1927,7 @@ export function analyzeArtifactBuild(
     characterIdOrName,
     teamContext,
     erEvaluation.totalEr,
+    rawTotalUsefulRolls,
   );
   const roiComparison = evaluateRoiAgainstGuaranteedUpgrades(
     calibratedConfig.characterName,
@@ -1909,6 +2057,40 @@ export function analyzeArtifactBuild(
     overallStatus,
   );
 
+  const slotUpgradeRanking: SlotUpgradePriorityItem[] = [...ALL_SLOTS]
+    .map((slot) => {
+      const m = slotMetrics[slot];
+      const br = slotBreakdown[slot];
+      let priority: SlotUpgradePriorityItem['priority'] = 'Moderate';
+      let reason = '';
+
+      if (!m.hasValidMainStat || !slots[slot]) {
+        priority = 'Immediate';
+        reason = !slots[slot]
+          ? 'Empty slot — any matching 5★ piece is an immediate gain.'
+          : `Wrong main stat (${slots[slot]?.mainStatKey}) — replace immediately.`;
+      } else if (m.expectedGainPctPer1kResin >= thresholdPct * 0.65 && m.completionPct < 75) {
+        priority = 'High';
+        reason = `+${m.expectedGainPctPer1kResin.toFixed(2)}% expected gain / 1k Resin (~${br.expectedDaysForUpgrade}d for 50% upgrade).`;
+      } else if (m.completionPct >= 88 || m.expectedGainPctPer1kResin < thresholdPct * 0.2) {
+        priority = 'Skip';
+        reason = `Near ceiling (${m.completionPct}% completion, ~${br.expectedDaysForUpgrade}d ETA). Stop rolling this slot.`;
+      } else {
+        priority = 'Moderate';
+        reason = `${m.completionPct}% completion (+${m.expectedGainPctPer1kResin.toFixed(2)}% / 1k Resin).${m.reshapeExpectedURVGain >= 0.85 ? ` Good Dust Reshape candidate (+${m.reshapeExpectedURVGain} rolls).` : ''}`;
+      }
+
+      return {
+        slotKey: slot,
+        slotName: SLOT_NAMES[slot],
+        priority,
+        expectedGainPctPer1kResin: m.expectedGainPctPer1kResin,
+        completionPct: m.completionPct,
+        reason,
+      };
+    })
+    .sort((a, b) => b.expectedGainPctPer1kResin - a.expectedGainPctPer1kResin);
+
   return {
     characterId: calibratedConfig.characterId,
     characterName: calibratedConfig.characterName,
@@ -1932,6 +2114,10 @@ export function analyzeArtifactBuild(
       totalEsr: setComparison.currentSetEsr,
     },
     universalStop,
+    calibratedWeights,
+    weightAdjustmentNotes,
+    setBonusValidation,
+    slotUpgradeRanking,
   };
 }
 

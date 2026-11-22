@@ -8,6 +8,8 @@ import type {
   TeamPresetKey,
   TeamContext,
   ArtifactSetMaster,
+  InvestmentGoal,
+  UniversalStopAction,
 } from '../types/genshin';
 import {
   PieChart,
@@ -67,6 +69,34 @@ export const ArtifactStopView: React.FC = () => {
   const [selectedCharId, setSelectedCharId] = useState<string>('Nefer');
   const [viewMode, setViewMode] = useState<'equipped' | 'builder' | 'slider'>('equipped');
   const [selectedTeamPreset, setSelectedTeamPreset] = useState<TeamPresetKey>('unbuffed');
+  const [investmentGoal, setInvestmentGoal] = useState<InvestmentGoal>('endgame');
+  const [bonusWeaponEr, setBonusWeaponEr] = useState<number>(0);
+
+  const ACTION_META: Record<
+    UniversalStopAction,
+    { label: string; badgeClass: string }
+  > = {
+    STOP: {
+      label: 'STOP FARMING — Spend Resin Elsewhere',
+      badgeClass: 'bg-purple-950/75 text-purple-200 border-purple-400/50',
+    },
+    FARM_DOMAIN: {
+      label: 'KEEP FARMING DOMAIN',
+      badgeClass: 'bg-emerald-950/75 text-emerald-200 border-emerald-400/50',
+    },
+    STRONGBOX_ONLY: {
+      label: 'STRONGBOX ONLY (Skip Domain)',
+      badgeClass: 'bg-amber-950/75 text-amber-200 border-amber-400/50',
+    },
+    USE_ELIXIR: {
+      label: 'CRAFT WITH SANCTIFYING ELIXIR',
+      badgeClass: 'bg-sky-950/75 text-sky-200 border-sky-400/50',
+    },
+    USE_DUST: {
+      label: 'RESHAPE WITH DUST OF ENLIGHTENMENT',
+      badgeClass: 'bg-indigo-950/75 text-indigo-200 border-indigo-400/50',
+    },
+  };
 
   // Slider State (Quick Estimator)
   const [critRate, setCritRate] = useState<number>(65);
@@ -111,6 +141,7 @@ export const ArtifactStopView: React.FC = () => {
   const [expandedSetIds, setExpandedSetIds] = useState<Set<string>>(new Set());
 
   const teamContext = useMemo<TeamContext>(() => {
+    const baseEr = bonusWeaponEr > 0 ? { weaponEr: bonusWeaponEr } : {};
     switch (selectedTeamPreset) {
       case 'hypercarry_bennett_furina':
         return {
@@ -119,18 +150,19 @@ export const ArtifactStopView: React.FC = () => {
           hasFurina: true,
           customFlatAtkBuff: 1200,
           customDmgBonus: 75,
+          ...baseEr,
         };
       case 'vape_melt':
-        return { preset: 'vape_melt', hasAmplifyingReaction: true };
+        return { preset: 'vape_melt', hasAmplifyingReaction: true, ...baseEr };
       case 'quicken_spread':
-        return { preset: 'quicken_spread', hasQuickenReaction: true };
+        return { preset: 'quicken_spread', hasQuickenReaction: true, ...baseEr };
       case 'hyperbloom':
-        return { preset: 'hyperbloom' };
+        return { preset: 'hyperbloom', ...baseEr };
       case 'unbuffed':
       default:
-        return { preset: 'unbuffed' };
+        return { preset: 'unbuffed', ...baseEr };
     }
-  }, [selectedTeamPreset]);
+  }, [selectedTeamPreset, bonusWeaponEr]);
 
   const toggleExpandSet = (id: string) => {
     setExpandedSetIds((prev) => {
@@ -217,6 +249,7 @@ export const ArtifactStopView: React.FC = () => {
   }, [viewMode, equippedCount, equippedFromRoster, customSlots]);
 
   const analysis = useMemo(() => {
+    const stopOpts = { goal: investmentGoal };
     if (viewMode === 'slider' || (!activeSlots && viewMode !== 'builder')) {
       return estimateBuildFromSliders(
         char.name,
@@ -224,10 +257,11 @@ export const ArtifactStopView: React.FC = () => {
         critDmg,
         secondaryStat,
         isReactionScaler,
-        teamContext
+        teamContext,
+        stopOpts,
       );
     }
-    return analyzeArtifactBuild(char.id, activeSlots || {}, teamContext);
+    return analyzeArtifactBuild(char.id, activeSlots || {}, teamContext, stopOpts);
   }, [
     viewMode,
     char.id,
@@ -238,6 +272,7 @@ export const ArtifactStopView: React.FC = () => {
     secondaryStat,
     isReactionScaler,
     teamContext,
+    investmentGoal,
   ]);
 
   const statusColors = {
@@ -286,7 +321,7 @@ export const ArtifactStopView: React.FC = () => {
           }`}
         >
           <PieChart className="w-4 h-4 shrink-0" aria-hidden="true" />
-          <span className="truncate">Resin &amp; Roll Optimizer (37 Combat Sets)</span>
+          <span className="truncate">Resin &amp; Roll Optimizer ({COMBAT_SET_NAMES.length} Combat Sets)</span>
         </button>
         <button
           id="artifact-tab-encyclopedia"
@@ -475,6 +510,80 @@ export const ArtifactStopView: React.FC = () => {
                 </button>
               ))}
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2.5 border-t border-[#202538]">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider">
+                  Investment Goal:
+                </span>
+                <div
+                  role="group"
+                  aria-label="Artifact investment goal"
+                  className="flex items-center gap-1 bg-[#0e1019] p-1 rounded-xl border border-[#24293d]"
+                >
+                  {(
+                    [
+                      { id: 'casual', label: 'Casual (1.5%/1k)' },
+                      { id: 'endgame', label: 'Endgame (0.6%/1k)' },
+                      { id: 'hyper', label: 'Hyper (0.2%/1k)' },
+                    ] as const
+                  ).map((g) => (
+                    <button
+                      key={g.id}
+                      type="button"
+                      aria-pressed={investmentGoal === g.id}
+                      onClick={() => setInvestmentGoal(g.id)}
+                      className={`px-2.5 py-1 min-h-[32px] rounded-lg text-[11px] font-semibold cursor-pointer transition-colors ${
+                        investmentGoal === g.id
+                          ? 'bg-[#d4af37] text-[#0a0b0e] font-bold'
+                          : 'text-zinc-300 hover:text-white'
+                      }`}
+                    >
+                      {g.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between md:justify-end gap-2">
+                <label
+                  htmlFor="bonus-weapon-er"
+                  className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider"
+                >
+                  Weapon / Ascension ER%:
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    id="bonus-weapon-er"
+                    type="number"
+                    min={0}
+                    max={120}
+                    step={0.1}
+                    value={bonusWeaponEr}
+                    onChange={(e) =>
+                      setBonusWeaponEr(Math.max(0, Math.min(120, Number(e.target.value) || 0)))
+                    }
+                    className="w-20 min-h-[34px] bg-[#161928] text-zinc-100 text-xs font-mono text-right px-2.5 py-1 rounded-lg border border-[#323954] focus:border-[#d4af37]"
+                  />
+                  <span className="text-[11px] text-zinc-400">
+                    (e.g. Favonius 61.3, Catch 45.9)
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {analysis.weightAdjustmentNotes && analysis.weightAdjustmentNotes.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                {analysis.weightAdjustmentNotes.map((note, idx) => (
+                  <span
+                    key={idx}
+                    className="text-[11px] px-2.5 py-0.5 rounded-lg bg-[#161a29] border border-[#2c334d] text-zinc-200"
+                  >
+                    {note}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Main Results Dashboard */}
@@ -531,8 +640,8 @@ export const ArtifactStopView: React.FC = () => {
                     <span className="text-[11px] text-zinc-300 font-semibold uppercase flex items-center justify-center gap-1">
                       <span>Upgrade ETA</span>
                       <InfoTooltip
-                        title="Approximate Upgrade Probability"
-                        content="Continuous logistic model evaluating substat roll distributions. Days to upgrade represent the 50% milestone at 180 resin/day."
+                        title="Exact Discrete PMF Upgrade Model"
+                        content="Convolves exact 5★ substat drop weights and 4-tier roll distributions across 3-liner (80%) and 4-liner (20%) drops. Days represent the 50% median milestone at 180 resin/day."
                       />
                     </span>
                     <span className="text-xl font-extrabold text-emerald-300 mt-0.5 font-mono flex items-center justify-center gap-1 tabular-nums">
@@ -542,6 +651,68 @@ export const ArtifactStopView: React.FC = () => {
                     <span className="text-[11px] text-zinc-300">at 180 resin/day</span>
                   </div>
                 </div>
+
+                {analysis.universalStop && (
+                  <div className="bg-[#161a29] p-3.5 rounded-xl border border-[#2c334d] space-y-2.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span
+                        className={`text-[11px] font-extrabold px-2.5 py-1 rounded-lg border ${
+                          ACTION_META[analysis.universalStop.action].badgeClass
+                        }`}
+                      >
+                        {ACTION_META[analysis.universalStop.action].label}
+                      </span>
+                      <span className="text-xs font-mono font-bold text-[#f3cf58]">
+                        Build Score: {analysis.universalStop.stopScore}/100
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                      <div className="bg-[#0e1019] px-2.5 py-1.5 rounded-lg border border-[#202538]">
+                        <span className="text-zinc-400 block">Marginal Gain / 1k Resin</span>
+                        <span className="text-emerald-300 font-bold">
+                          +{analysis.universalStop.roiPer1kResinPct.toFixed(2)}%
+                        </span>
+                        <span className="text-zinc-400">
+                          {' '}
+                          (cutoff {analysis.universalStop.thresholdPct}%)
+                        </span>
+                      </div>
+                      <div className="bg-[#0e1019] px-2.5 py-1.5 rounded-lg border border-[#202538]">
+                        <span className="text-zinc-400 block">Priority / Flex Off-Piece</span>
+                        <span className="text-sky-300 font-bold capitalize">
+                          {analysis.universalStop.prioritySlot}
+                        </span>
+                        <span className="text-zinc-400">
+                          {' '}
+                          / flex {analysis.universalStop.recommendedOffPieceSlot}
+                        </span>
+                      </div>
+                    </div>
+
+                    {analysis.universalStop.hardGatesFailed.length > 0 && (
+                      <div className="text-[11px] text-rose-200 bg-rose-950/35 border border-rose-400/35 rounded-lg px-2.5 py-1.5">
+                        <strong>Unmet Gates:</strong>{' '}
+                        {analysis.universalStop.hardGatesFailed.join(' · ')}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {analysis.setBonusValidation &&
+                  analysis.setBonusValidation.issues.length > 0 && (
+                    <div className="bg-amber-950/35 border border-amber-400/40 p-3 rounded-xl space-y-1 text-xs text-amber-100">
+                      <div className="font-bold flex items-center gap-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5 text-amber-300" aria-hidden="true" />
+                        <span>Set Bonus Audit</span>
+                      </div>
+                      <ul className="list-disc list-inside text-[11px] space-y-0.5 text-amber-100/90">
+                        {analysis.setBonusValidation.issues.map((issue, i) => (
+                          <li key={i}>{issue.message}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
                 {/* Expert Advice Text */}
                 <div className="bg-[#0e1019] p-3.5 rounded-xl border border-[#202538] space-y-1.5">
@@ -934,6 +1105,40 @@ export const ArtifactStopView: React.FC = () => {
                   </span>
                 </div>
 
+                {analysis.slotUpgradeRanking && (
+                  <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                    {analysis.slotUpgradeRanking.map((item, rank) => (
+                      <div
+                        key={item.slotKey}
+                        className="bg-[#121420] border border-[#24293d] rounded-xl px-2.5 py-2 text-[11px] space-y-0.5"
+                        title={item.reason}
+                      >
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="font-bold text-zinc-100 capitalize">
+                            #{rank + 1} {item.slotKey}
+                          </span>
+                          <span
+                            className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                              item.priority === 'Immediate'
+                                ? 'bg-rose-950/70 text-rose-200'
+                                : item.priority === 'High'
+                                  ? 'bg-emerald-950/70 text-emerald-200'
+                                  : item.priority === 'Skip'
+                                    ? 'bg-purple-950/70 text-purple-200'
+                                    : 'bg-amber-950/70 text-amber-200'
+                            }`}
+                          >
+                            {item.priority}
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-zinc-300 font-mono">
+                          +{item.expectedGainPctPer1kResin.toFixed(2)}%/1k · {Math.round(item.completionPct)}%
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3.5">
                   {ALL_SLOTS.map((slot) => {
                     const slotAnalysis = analysis.slotBreakdown[slot];
@@ -945,6 +1150,7 @@ export const ArtifactStopView: React.FC = () => {
                         isWeakest={isWeakest}
                         onEdit={() => setEditingSlot(slot)}
                         activeSets={analysis.setComparison?.activeSets}
+                        universalMetrics={analysis.universalStop?.slotMetrics[slot]}
                       />
                     );
                   })}
@@ -1505,7 +1711,7 @@ const EditSlotModal: React.FC<EditSlotModalProps> = ({
         {/* Set Selector */}
         <div className="space-y-1.5">
           <label htmlFor="edit-artifact-set" className="text-xs font-semibold text-zinc-200 block">
-            Artifact Set (37 Combat Sets):
+            Artifact Set ({COMBAT_SET_NAMES.length} Combat Sets):
           </label>
           <select
             id="edit-artifact-set"

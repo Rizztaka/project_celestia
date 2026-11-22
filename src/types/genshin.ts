@@ -473,6 +473,35 @@ export type TeamPresetKey =
   | 'hyperbloom'
   | 'unbuffed';
 
+export interface SetBonusValidationIssue {
+  severity: 'error' | 'warning';
+  code:
+    | 'UNKNOWN_SET'
+    | 'WASTED_3PC'
+    | 'ELEMENT_MISMATCH_2PC'
+    | 'NO_ACTIVE_SET';
+  message: string;
+  affectedSet?: string;
+}
+
+export interface SetBonusValidationResult {
+  isValid: boolean;
+  recognizedSets: string[];
+  unknownSets: string[];
+  active2pc: string[];
+  active4pc: string[];
+  issues: SetBonusValidationIssue[];
+}
+
+export interface SlotUpgradePriorityItem {
+  slotKey: ArtifactSlot;
+  slotName: string;
+  priority: 'Immediate' | 'High' | 'Moderate' | 'Skip';
+  expectedGainPctPer1kResin: number;
+  completionPct: number;
+  reason: string;
+}
+
 export interface TeamContext {
   preset?: TeamPresetKey;
   hasBennett?: boolean;
@@ -484,10 +513,13 @@ export interface TeamContext {
   hasStellarReaction?: boolean;
   customFlatAtkBuff?: number;
   customDmgBonus?: number;
-  customCritRateBuff?: number; // e.g., Cryo Res, Rosaria, Moonsign, weapon passives
-  customEmBuff?: number; // e.g., Nahida, Sucrose, Lauma, Ineffa, Instructor
-  baseCritRate?: number; // Character + weapon + ascension CR% (default 5)
-  baseCritDmg?: number; // Character + weapon + ascension CD% (default 50)
+  customCritRateBuff?: number;
+  customEmBuff?: number;
+  baseCritRate?: number;
+  baseCritDmg?: number;
+  weaponEr?: number; // Weapon secondary ER% (e.g. Favonius 61.3, The Catch 45.9)
+  ascensionEr?: number; // Character ascension ER% (e.g. Raiden 32, Bennett 26.7)
+  customErTarget?: number; // Override rotation ER requirement
   statCaps?: Partial<Record<'hp' | 'atk' | 'def' | 'eleMas', number>>;
 }
 
@@ -514,6 +546,10 @@ export interface SetComparisonResult {
   options: SetOptionComparison[];
   breakEvenRollDelta: number;
   verdict: string;
+  currentTotalEffectiveRolls?: number;
+  target4pcRequiredSubstatRolls?: number;
+  hybrid2pcRequiredSubstatRolls?: number;
+  recommended2pcPair?: [string, string];
 }
 
 export interface RoiMilestoneComparison {
@@ -607,7 +643,7 @@ export interface ArtifactStopAnalysisResult {
   totalUsefulRolls: number;
   averageSlotRollValue: number;
   overallStatus: 'Ready / Stop Farming' | 'High ROI' | 'Diminishing Returns';
-  daysToNextUpgrade: number; // 50% confidence days for weakest link
+  daysToNextUpgrade: number;
   weakestSlot: SlotUpgradeProbability | null;
   slotBreakdown: Record<ArtifactSlot, SlotUpgradeProbability>;
   curve: DiminishingReturnsPoint[];
@@ -623,6 +659,10 @@ export interface ArtifactStopAnalysisResult {
     totalEsr: number;
   };
   universalStop?: UniversalStopSummary;
+  calibratedWeights?: Partial<Record<StatKey, number>>;
+  weightAdjustmentNotes?: string[];
+  setBonusValidation?: SetBonusValidationResult;
+  slotUpgradeRanking?: SlotUpgradePriorityItem[];
 }
 
 // ---------------------------------------------------------

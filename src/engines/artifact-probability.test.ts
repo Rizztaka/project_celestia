@@ -577,4 +577,55 @@ describe('Artifact Probability & Roll Value Engine', () => {
       expect(build.domainRoute?.guidance).toContain('100% resin efficiency');
     });
   });
+
+  describe('M7 Build Intelligence: Context Calibration, 2pc+2pc Pairing & Stop Verdicts', () => {
+    it('recalibrates Hyperbloom context to prioritize EM over Crit/ATK%', () => {
+      const base = getCharacterStatWeights('Raiden');
+      const unbuffed = analyzeArtifactBuild('Raiden', {}, { preset: 'unbuffed' });
+      const hyperbloom = analyzeArtifactBuild('Raiden', {}, { preset: 'hyperbloom' });
+
+      expect(hyperbloom.calibratedWeights?.eleMas).toBe(1.0);
+      expect(hyperbloom.calibratedWeights?.critRate_).toBeLessThan(base.statWeights.critRate_!);
+      expect(hyperbloom.weightAdjustmentNotes?.some((n) => n.includes('Hyperbloom'))).toBe(true);
+      expect(unbuffed.calibratedWeights?.critRate_).toBe(1.0);
+    });
+
+    it('accounts for weapon ER in whole-build ER evaluation to clear false deficits', () => {
+      const slots: Partial<Record<ArtifactSlot, ArtifactPiece>> = {
+        flower: { slotKey: 'flower', setKey: 'Noblesse Oblige', rarity: 5, level: 20, mainStatKey: 'hp', substats: [{ key: 'enerRech_', value: 11.7 }] },
+        plume: { slotKey: 'plume', setKey: 'Noblesse Oblige', rarity: 5, level: 20, mainStatKey: 'atk', substats: [{ key: 'enerRech_', value: 11.7 }] },
+        sands: { slotKey: 'sands', setKey: 'Noblesse Oblige', rarity: 5, level: 20, mainStatKey: 'enerRech_', substats: [{ key: 'hp_', value: 10.5 }] },
+        goblet: { slotKey: 'goblet', setKey: 'Noblesse Oblige', rarity: 5, level: 20, mainStatKey: 'hp_', substats: [{ key: 'hp', value: 450 }] },
+        circlet: { slotKey: 'circlet', setKey: 'Emblem of Severed Fate', rarity: 5, level: 20, mainStatKey: 'heal_', substats: [{ key: 'hp_', value: 10.5 }] },
+      };
+
+      const withoutWeaponEr = analyzeArtifactBuild('Bennett', slots);
+      expect(withoutWeaponEr.erEvaluation?.status).toBe('Deficit');
+
+      // Adding Favonius Sword (+61.3% ER) clears Bennett's 220% ER requirement
+      const withFavonius = analyzeArtifactBuild('Bennett', slots, { weaponEr: 61.3 });
+      expect(withFavonius.erEvaluation?.status).toBe('Target');
+      expect(withFavonius.erEvaluation?.totalEr).toBeGreaterThanOrEqual(220);
+    });
+
+    it('selects stat-relevant 2pc+2pc alternatives for HP and DEF scalers instead of Gladiator', () => {
+      const neuv = estimateBuildFromSliders('Neuvillette', 55, 210, 120, false);
+      expect(neuv.setComparison?.recommended2pcPair?.[1]).toBe('Tenacity of the Millelith');
+      expect(neuv.setComparison?.currentTotalEffectiveRolls).toBeGreaterThan(0);
+
+      const itto = estimateBuildFromSliders('Arataki Itto', 70, 160, 120, true);
+      expect(itto.setComparison?.recommended2pcPair?.[1]).not.toBe("Gladiator's Finale");
+    });
+
+    it('produces ranked slot upgrade priorities and differentiates Casual vs Hyper stop thresholds', () => {
+      const casual = estimateBuildFromSliders('Hu Tao', 72, 185, 180, false, undefined, { goal: 'casual' });
+      const hyper = estimateBuildFromSliders('Hu Tao', 72, 185, 180, false, undefined, { goal: 'hyper' });
+
+      expect(casual.slotUpgradeRanking).toHaveLength(5);
+      expect(casual.universalStop?.thresholdPct).toBeGreaterThan(hyper.universalStop!.thresholdPct);
+      expect(casual.slotUpgradeRanking![0].expectedGainPctPer1kResin).toBeGreaterThanOrEqual(
+        casual.slotUpgradeRanking![4].expectedGainPctPer1kResin,
+      );
+    });
+  });
 });

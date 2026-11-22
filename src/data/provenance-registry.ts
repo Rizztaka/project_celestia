@@ -80,6 +80,36 @@ export const DATA_PROVENANCE_REGISTRY: Record<string, DataProvenance> = {
       'HoYoverse Chronicled Wish disclosure (#120786): 0.600% base rate, pull 74 soft pity, pull 90 hard pity, 50% featured rate, 1 Fate Point ceiling (resets per period; pity carries over).',
     status: 'verified',
   },
+  gacha_rules_4star_7_2: {
+    datasetId: 'gacha_rules_4star_7_2',
+    version: CURRENT_GAME_VERSION,
+    verifiedAt: '2026-11-20',
+    sourceUrl: 'https://genshin.hoyoverse.com/en/news/detail/125274',
+    verificationMethod: 'official_notice',
+    verifiedFields: [
+      'characterBaseRate',
+      'weaponBaseRate',
+      'softPityStart',
+      'weaponSoftPityStart',
+      'hardPity',
+      'featuredPoolCount',
+      'weaponFeaturedPoolCount',
+    ],
+    evidence:
+      'HoYoverse Event Wish 4★ disclosure: Character Wish 5.100% base (pull 9 soft 56.1%, pull 10 hard 100%, 50% rate-up across 3 featured); Weapon Wish 6.000% base (pull 8 soft 66%, pull 9 96%, pull 10 hard 100%, 75% rate-up across 5 featured); no Fate Point ceiling.',
+    status: 'verified',
+  },
+  gacha_rules_starglitter_7_2: {
+    datasetId: 'gacha_rules_starglitter_7_2',
+    version: CURRENT_GAME_VERSION,
+    verifiedAt: '2026-11-20',
+    sourceUrl: 'https://keqingmains.com/',
+    verificationMethod: 'theorycraft_consensus',
+    verifiedFields: ['cashbackRate', 'starglitterPerFate'],
+    evidence:
+      'Masterless Starglitter exchange rate (5 Starglitter = 1 Intertwined Fate) yields ~8.0% effective pull refund across mature rosters from duplicate 4★ (+2/+5) and 5★ (+10/+25) drops.',
+    status: 'verified',
+  },
 
   // ── Historical Banner Archive (Explicitly Stale) ────────────────────────────
   banner_5_4_phase_1: {

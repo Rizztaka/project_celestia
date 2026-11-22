@@ -2,15 +2,17 @@
  * Version 7.2 Featured 4-Star Absorbing Markov Chain Gacha Engine
  *
  * Featured 4-star targets do NOT have a hard ceiling or Fate Point guarantee.
- * This engine uses an absorbing Markov chain combined with 10-pull soft/hard pity cycles
- * to model the true continuous probability distribution of featured 4-star acquisition.
+ * This engine uses an absorbing Markov chain combined with exact 10-pull soft/hard
+ * pity cycles (segregated by Character vs Weapon banner 4★ rules) to model the
+ * true uncapped probability distribution of featured 4-star acquisition.
  *
- * Mechanics:
- * - 4★ Base Rate: 5.100% (Character/Chronicled) or 6.000% (Weapon)
- * - 4★ Pity: Soft pity starts at pull 9 (+51%), hard pity at pull 10
- * - Rate-Up: 50% rate-up pool (split across 3 featured 4★ = ~16.67% target chance)
- * - Guaranteed Rate-Up: 100% pool (split across 3 featured 4★ = ~33.33% target chance)
- * - Expected Median: ~35 pulls; 90th percentile: ~105 pulls
+ * Mechanics (from src/data/banner-rules.ts):
+ * - Character/Chronicled 4★: 5.100% base, pull 9 soft (56.1%), pull 10 hard (100%);
+ *   50% rate-up across 3 featured units (16.67% non-guaranteed, 33.33% guaranteed).
+ *   Closed-form expected drops: 4.50 (~34.6 pulls mean, ~26 pulls median, ~77 pulls p90).
+ * - Weapon 4★: 6.000% base, pull 8 soft (66.0%), pull 9 (96.0%), pull 10 hard (100%);
+ *   75% rate-up across 5 featured weapons (15.00% non-guaranteed, 20.00% guaranteed).
+ *   Closed-form expected drops: 6.25 (~44.1 pulls mean, ~34 pulls median, ~99 pulls p90).
  */
 
 import { FOUR_STAR_RULES } from '../data/banner-rules';
@@ -18,37 +20,50 @@ import type { GachaOddsResult, MultiCopyStepBreakdown } from './gacha-math';
 import { convolvePmfs } from './gacha-math';
 
 /**
- * Computes single 10-pull 4★ cycle PMF (probability of 4★ appearing on pull k in 1..10-pity)
+ * Conditional probability of receiving a 4★ (or higher) on 4★ pity pull n (1..10).
+ */
+export function get4StarPullRate(
+  n: number,
+  bannerType: 'character' | 'weapon' = 'character',
+): number {
+  if (n <= 0) return 0;
+  if (n >= FOUR_STAR_RULES.hardPity) return 1.0;
+
+  if (bannerType === 'weapon') {
+    if (n === FOUR_STAR_RULES.weaponSoftPityStart) return FOUR_STAR_RULES.weaponPull8Rate;
+    if (n === FOUR_STAR_RULES.weaponSoftPityStart + 1) return FOUR_STAR_RULES.weaponPull9Rate;
+    return FOUR_STAR_RULES.weaponBaseRate;
+  }
+
+  if (n >= FOUR_STAR_RULES.softPityStart) {
+    return Math.min(1.0, FOUR_STAR_RULES.characterBaseRate + FOUR_STAR_RULES.softIncrement);
+  }
+  return FOUR_STAR_RULES.characterBaseRate;
+}
+
+/**
+ * Computes single 10-pull 4★ cycle PMF (probability of 4★ appearing on additional pull k in 1..10-pity).
  */
 function compute4StarCyclePmf(
   currentPity: number = 0,
   bannerType: 'character' | 'weapon' = 'character',
 ): number[] {
-  const safePity = Math.max(0, Math.min(FOUR_STAR_RULES.hardPity - 1, Math.floor(Number(currentPity) || 0)));
+  const rawPity = Number(currentPity);
+  const safePity = Number.isFinite(rawPity)
+    ? Math.max(0, Math.min(FOUR_STAR_RULES.hardPity - 1, Math.floor(rawPity)))
+    : 0;
   const maxAdditional = FOUR_STAR_RULES.hardPity - safePity;
   const pmf: number[] = new Array(maxAdditional + 1).fill(0);
-
-  const baseRate =
-    bannerType === 'weapon'
-      ? FOUR_STAR_RULES.weaponBaseRate
-      : FOUR_STAR_RULES.characterBaseRate;
 
   let survival = 1.0;
   for (let k = 1; k <= maxAdditional; k++) {
     const pullNumber = safePity + k;
-    let rate: number = baseRate;
-    if (pullNumber >= FOUR_STAR_RULES.hardPity) {
-      rate = 1.0;
-    } else if (pullNumber >= FOUR_STAR_RULES.softPityStart) {
-      rate = Math.min(1.0, baseRate + FOUR_STAR_RULES.softIncrement);
-    }
-
+    const rate = get4StarPullRate(pullNumber, bannerType);
     const prob = survival * rate;
     pmf[k] = prob;
     survival *= 1.0 - rate;
   }
 
-  // Normalize
   const sum = pmf.reduce((a, b) => a + b, 0);
   if (sum > 0) {
     for (let k = 1; k <= maxAdditional; k++) {
@@ -61,63 +76,64 @@ function compute4StarCyclePmf(
 
 /**
  * Computes the PMF of pulls needed to acquire 1 target 4-star copy
- * via absorbing Markov renewal method.
+ * via absorbing Markov renewal method with adaptive tail convergence (< 1e-9 residual mass).
  */
 function computeSingleCopy4StarPmf(
   currentPity: number = 0,
   isGuaranteed: boolean = false,
   bannerType: 'character' | 'weapon' = 'character',
-  maxDrops: number = 45,
+  maxDropsCap: number = 120,
 ): number[] {
   const initCyclePmf = compute4StarCyclePmf(currentPity, bannerType);
   const freshCyclePmf = compute4StarCyclePmf(0, bannerType);
 
-  // Markov chain states:
-  // State 0: 50/50 rate-up (character) or 75/25 rate-up (weapon)
-  // State 1: Guaranteed rate-up
-  // Terminal: Target acquired
   const isWeapon = bannerType === 'weapon';
-  const poolCount = isWeapon ? 5 : FOUR_STAR_RULES.featuredPoolCount;
-  const baseRateUp = isWeapon ? 0.75 : FOUR_STAR_RULES.baseRateUpChance;
+  const poolCount = isWeapon
+    ? FOUR_STAR_RULES.weaponFeaturedPoolCount
+    : FOUR_STAR_RULES.featuredPoolCount;
+  const baseRateUp = isWeapon
+    ? FOUR_STAR_RULES.weaponBaseRateUpChance
+    : FOUR_STAR_RULES.baseRateUpChance;
 
-  const P_win_0 = baseRateUp / poolCount;
-  const P_other_0 = (baseRateUp * (poolCount - 1)) / poolCount;
-  const P_off_0 = 1.0 - baseRateUp;
+  const pWin0 = baseRateUp / poolCount;
+  const pOther0 = (baseRateUp * (poolCount - 1)) / poolCount;
+  const pOff0 = 1.0 - baseRateUp;
 
-  const P_win_1 = 1.0 / poolCount;
-  const P_other_1 = (1.0 * (poolCount - 1)) / poolCount;
+  const pWin1 = FOUR_STAR_RULES.guaranteedRateUpChance / poolCount;
+  const pOther1 = (FOUR_STAR_RULES.guaranteedRateUpChance * (poolCount - 1)) / poolCount;
 
-  // Calculate E(m): prob target acquired on exactly the m-th 4-star drop
-  const E: number[] = new Array(maxDrops + 1).fill(0);
+  // Compute E[m]: exact probability target is acquired on the m-th 4★ drop
+  const E: number[] = [0];
   let p0 = isGuaranteed ? 0 : 1.0;
   let p1 = isGuaranteed ? 1.0 : 0;
 
-  for (let m = 1; m <= maxDrops; m++) {
-    const winFrom0 = p0 * P_win_0;
-    const winFrom1 = p1 * P_win_1;
-    E[m] = winFrom0 + winFrom1;
+  for (let m = 1; m <= maxDropsCap; m++) {
+    const winProb = p0 * pWin0 + p1 * pWin1;
+    E.push(winProb);
 
-    const nextP0 = p0 * P_other_0 + p1 * P_other_1;
-    const nextP1 = p0 * P_off_0;
-
+    const nextP0 = p0 * pOther0 + p1 * pOther1;
+    const nextP1 = p0 * pOff0;
     p0 = nextP0;
     p1 = nextP1;
+
+    if (p0 + p1 < 1e-9) {
+      break;
+    }
   }
 
-  // Normalize E(m) to ensure total probability equals 1.0
+  // Normalize E(m) for negligible remaining tail (< 1e-9)
   const eSum = E.reduce((acc, v) => acc + v, 0);
   if (eSum > 0) {
-    for (let m = 1; m <= maxDrops; m++) {
+    for (let m = 1; m < E.length; m++) {
       E[m] /= eSum;
     }
   }
 
   // Convolve pull timing for each drop count m
-  // Cm is the pull timing of m-th drop
   let totalPmf: number[] = [0];
   let currentDropPmf = initCyclePmf;
 
-  for (let m = 1; m <= maxDrops; m++) {
+  for (let m = 1; m < E.length; m++) {
     const em = E[m];
     if (em > 0) {
       if (currentDropPmf.length > totalPmf.length) {
@@ -129,10 +145,11 @@ function computeSingleCopy4StarPmf(
         totalPmf[k] += em * currentDropPmf[k];
       }
     }
-    currentDropPmf = convolvePmfs(currentDropPmf, freshCyclePmf);
+    if (m + 1 < E.length) {
+      currentDropPmf = convolvePmfs(currentDropPmf, freshCyclePmf);
+    }
   }
 
-  // Normalize final PMF
   const sum = totalPmf.reduce((acc, v) => acc + v, 0);
   if (sum > 0) {
     for (let k = 0; k < totalPmf.length; k++) {
@@ -143,6 +160,44 @@ function computeSingleCopy4StarPmf(
   return totalPmf;
 }
 
+function extractPercentiles(pmf: number[]): {
+  expectedPulls: number;
+  p25: number;
+  p50: number;
+  p75: number;
+  p90: number;
+  p99: number;
+} {
+  let expectedPulls = 0;
+  let p25: number | null = null;
+  let p50: number | null = null;
+  let p75: number | null = null;
+  let p90: number | null = null;
+  let p99: number | null = null;
+  let cum = 0;
+
+  for (let k = 1; k < pmf.length; k++) {
+    const pk = pmf[k];
+    expectedPulls += k * pk;
+    cum += pk;
+    if (p25 === null && cum >= 0.25) p25 = k;
+    if (p50 === null && cum >= 0.50) p50 = k;
+    if (p75 === null && cum >= 0.75) p75 = k;
+    if (p90 === null && cum >= 0.90) p90 = k;
+    if (p99 === null && cum >= 0.99) p99 = k;
+  }
+
+  const tail = Math.max(1, pmf.length - 1);
+  return {
+    expectedPulls,
+    p25: p25 ?? tail,
+    p50: p50 ?? tail,
+    p75: p75 ?? tail,
+    p90: p90 ?? tail,
+    p99: p99 ?? tail,
+  };
+}
+
 export function calculate4StarTargetOdds(
   pullsAvailable: number,
   currentPity: number = 0,
@@ -150,25 +205,16 @@ export function calculate4StarTargetOdds(
   targetCopies: number = 1,
   bannerType: 'character' | 'weapon' = 'character',
 ): GachaOddsResult {
-  const safePulls = Math.max(0, Math.floor(Number(pullsAvailable) || 0));
-  const copies = Math.max(1, Math.floor(Number(targetCopies) || 1));
+  const rawPulls = Number(pullsAvailable);
+  const safePulls = Number.isFinite(rawPulls) ? Math.max(0, Math.floor(rawPulls)) : 0;
+  const rawCopies = Number(targetCopies);
+  const copies = Number.isFinite(rawCopies) ? Math.max(1, Math.floor(rawCopies)) : 1;
 
   let pmf = computeSingleCopy4StarPmf(currentPity, isGuaranteed, bannerType);
   const breakdowns: MultiCopyStepBreakdown[] = [];
 
-  // Helper to analyze partial PMF
-  const analyzeSinglePmf = (p: number[], copyNum: number) => {
-    let cum = 0;
-    let expected = 0;
-    let median = 0;
-    for (let k = 1; k < p.length; k++) {
-      expected += k * p[k];
-      cum += p[k];
-      if (median === 0 && cum >= 0.50) {
-        median = k;
-      }
-    }
-
+  const analyzeSinglePmf = (p: number[], copyNum: number): MultiCopyStepBreakdown => {
+    const stats = extractPercentiles(p);
     let cumAtPulls = 0;
     for (let k = 1; k <= safePulls && k < p.length; k++) {
       cumAtPulls += p[k];
@@ -177,16 +223,17 @@ export function calculate4StarTargetOdds(
     return {
       copyNumber: copyNum,
       label: `Copy ${copyNum}`,
-      expectedPulls: Number(expected.toFixed(1)),
-      medianPulls: median || 35 * copyNum,
+      expectedPulls: Number(stats.expectedPulls.toFixed(1)),
+      medianPulls: stats.p50,
       guaranteedPulls: 0,
-      cumulativeProbability: Number(Math.min(1.0, cumAtPulls).toFixed(4)),
+      cumulativeProbability: Number(Math.min(1.0, Math.max(0.0, cumAtPulls)).toFixed(4)),
     };
   };
 
   breakdowns.push(analyzeSinglePmf(pmf, 1));
 
   if (copies > 1) {
+    // After winning a featured 4★, 4★ guarantee is always consumed (false) and 4★ pity resets to 0
     const freshPmf = computeSingleCopy4StarPmf(0, false, bannerType);
     for (let c = 2; c <= copies; c++) {
       pmf = convolvePmfs(pmf, freshPmf);
@@ -194,30 +241,7 @@ export function calculate4StarTargetOdds(
     }
   }
 
-  // Compute final percentiles
-  let expectedPulls = 0;
-  for (let k = 1; k < pmf.length; k++) {
-    expectedPulls += k * pmf[k];
-  }
-
-  let p25 = 0;
-  let p50 = 0;
-  let p75 = 0;
-  let p90 = 0;
-  let p99 = 0;
-  let cum = 0;
-
-  for (let k = 1; k < pmf.length; k++) {
-    cum += pmf[k];
-    if (p25 === 0 && cum >= 0.25) p25 = k;
-    if (p50 === 0 && cum >= 0.50) p50 = k;
-    if (p75 === 0 && cum >= 0.75) p75 = k;
-    if (p90 === 0 && cum >= 0.90) p90 = k;
-    if (p99 === 0 && cum >= 0.99) {
-      p99 = k;
-      break;
-    }
-  }
+  const finalStats = extractPercentiles(pmf);
 
   let cumulativeProbability = 0;
   for (let k = 1; k <= safePulls && k < pmf.length; k++) {
@@ -228,15 +252,15 @@ export function calculate4StarTargetOdds(
   return {
     pullsAvailable: safePulls,
     cumulativeProbability: Number(cumulativeProbability.toFixed(4)),
-    expectedPulls: Number(expectedPulls.toFixed(1)),
-    medianPulls: p50 || 35 * copies,
+    expectedPulls: Number(finalStats.expectedPulls.toFixed(1)),
+    medianPulls: finalStats.p50,
     guaranteedPulls: 0,
     primogemsNeeded: 0,
-    p25: p25 || 20 * copies,
-    p50: p50 || 35 * copies,
-    p75: p75 || 65 * copies,
-    p90: p90 || 105 * copies,
-    p99: p99 || 180 * copies,
+    p25: finalStats.p25,
+    p50: finalStats.p50,
+    p75: finalStats.p75,
+    p90: finalStats.p90,
+    p99: finalStats.p99,
     isUncapped: true,
     copiesBreakdown: copies > 1 ? breakdowns : undefined,
   };
@@ -248,10 +272,13 @@ export function generate4StarProbabilityDistribution(
   bannerType: 'character' | 'weapon' = 'character',
   targetCopies: number = 1,
 ): Array<{ pulls: number; probability: number }> {
+  const rawCopies = Number(targetCopies);
+  const copies = Number.isFinite(rawCopies) ? Math.max(1, Math.floor(rawCopies)) : 1;
+
   let pmf = computeSingleCopy4StarPmf(currentPity, isGuaranteed, bannerType);
-  if (targetCopies > 1) {
+  if (copies > 1) {
     const fresh = computeSingleCopy4StarPmf(0, false, bannerType);
-    for (let c = 2; c <= targetCopies; c++) {
+    for (let c = 2; c <= copies; c++) {
       pmf = convolvePmfs(pmf, fresh);
     }
   }
@@ -260,16 +287,15 @@ export function generate4StarProbabilityDistribution(
   distribution.push({ pulls: 0, probability: 0 });
 
   let cumulative = 0;
-  // Truncate at p99.9 or 250 pulls
-  const limit = Math.min(pmf.length - 1, 260 * targetCopies);
+  const maxVisualPulls = Math.min(pmf.length - 1, (bannerType === 'weapon' ? 320 : 260) * copies);
 
-  for (let k = 1; k <= limit; k++) {
+  for (let k = 1; k <= maxVisualPulls; k++) {
     cumulative += pmf[k] || 0;
     distribution.push({
       pulls: k,
       probability: Number(Math.min(1.0, cumulative).toFixed(4)),
     });
-    if (cumulative >= 0.9995 && k >= 150 * targetCopies) {
+    if (cumulative >= 0.9995 && k >= 150 * copies) {
       break;
     }
   }

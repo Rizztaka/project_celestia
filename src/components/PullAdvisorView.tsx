@@ -7,6 +7,13 @@ import type {
   PullBudgetState,
 } from '../types/genshin';
 import { evaluateComprehensivePullROI } from '../engines/pull-advisor';
+import { calculateRadianceWinRate } from '../engines/gacha-math';
+import {
+  GACHA_RULES_VERSION,
+  CHARACTER_BANNER_RULES,
+  WEAPON_BANNER_RULES,
+  STARGLITTER_CASHBACK_RATE,
+} from '../data/banner-rules';
 import { BANNER_PHASES } from '../data/banners';
 import { CHARACTERS } from '../data/characters';
 import { CURRENT_GAME_VERSION } from '../data/game-version';
@@ -240,6 +247,46 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
         onChangeBudget={handleBudgetChange}
         onOpenAssumptions={() => setIsAssumptionsOpen(true)}
       />
+
+      {/* Active Wish Model Assumptions Summary Strip */}
+      <div className="bg-[#0e1019] border border-[#22273c] rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-300">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="font-semibold text-zinc-100">Active Wish Model:</span>
+          <span className="px-2 py-0.5 rounded bg-[#161a29] border border-[#282f48] font-mono text-[#f3cf58]">
+            v{GACHA_RULES_VERSION} Rules
+          </span>
+          <span className="px-2 py-0.5 rounded bg-[#161a29] border border-[#282f48] font-mono text-purple-200">
+            Char:{' '}
+            {budget.characterGuaranteed
+              ? '100% Guaranteed'
+              : `Radiance ${(calculateRadianceWinRate(budget.consecutiveLossCount ?? 0) * 100).toFixed(1)}% (Streak ${budget.consecutiveLossCount ?? 0})`}
+          </span>
+          <span className="px-2 py-0.5 rounded bg-[#161a29] border border-[#282f48] font-mono text-amber-200">
+            Weapon:{' '}
+            {budget.weaponFatePoints >= WEAPON_BANNER_RULES.fatePointCeiling
+              ? '1/1 Fate (100%)'
+              : budget.weaponGuaranteed
+                ? '75/25 Carryover ON (50%)'
+                : `Standard (${(WEAPON_BANNER_RULES.baseTargetRate * 100).toFixed(1)}%)`}
+          </span>
+          <span className="px-2 py-0.5 rounded bg-[#161a29] border border-[#282f48] font-mono text-zinc-200">
+            Soft/Hard: {CHARACTER_BANNER_RULES.softPityStart}/{CHARACTER_BANNER_RULES.hardPity} (Char) ·{' '}
+            {WEAPON_BANNER_RULES.softPityStart}/{WEAPON_BANNER_RULES.hardPity} (Weap)
+          </span>
+          {budget.includeCashback && (
+            <span className="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-400/40 font-mono text-emerald-200">
+              +{(STARGLITTER_CASHBACK_RATE * 100).toFixed(0)}% Cashback Active
+            </span>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsAssumptionsOpen(true)}
+          className="text-sky-300 hover:text-sky-200 underline font-semibold cursor-pointer"
+        >
+          Verify Rules &amp; Sources
+        </button>
+      </div>
 
       {/* Banner Phase Selector & Mode Switcher */}
       <div className="bg-[#121420] border border-[#24293d] rounded-2xl p-4 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-3">

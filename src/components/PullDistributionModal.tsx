@@ -1,9 +1,13 @@
 import React, { useState, useRef } from 'react';
 import type { EnhancedPullAdvice, PullBudgetState } from '../types/genshin';
-import { generateProbabilityDistribution } from '../engines/gacha-math';
+import {
+  generateProbabilityDistribution,
+  calculateRadianceWinRate,
+} from '../engines/gacha-math';
 import { generate4StarProbabilityDistribution } from '../engines/gacha-4star';
+import { GACHA_RULES_VERSION } from '../data/banner-rules';
 import { useModalAccessibility } from '../hooks/useModalAccessibility';
-import { X, TrendingUp, Info } from 'lucide-react';
+import { X, TrendingUp, Info, ShieldCheck } from 'lucide-react';
 
 interface PullDistributionModalProps {
   item: EnhancedPullAdvice | null;
@@ -66,10 +70,11 @@ export const PullDistributionModal: React.FC<PullDistributionModalProps> = ({
   const weaponGuaranteed = isWeapon ? (budget?.weaponGuaranteed ?? false) : false;
   const copiesCount = item.odds.copiesBreakdown?.length || 1;
 
+  // Strictly segregate 4★ targets from 5★ pity & 5★ guarantee state
   const points = is4Star
     ? generate4StarProbabilityDistribution(
-        currentPity,
-        isGuaranteed,
+        0,
+        false,
         bannerType === 'weapon' ? 'weapon' : 'character',
         copiesCount
       )
@@ -84,6 +89,42 @@ export const PullDistributionModal: React.FC<PullDistributionModalProps> = ({
 
   const maxPulls = points[points.length - 1]?.pulls || 180;
   const userPulls = pullsAvailable ?? item.odds.pullsAvailable ?? 0;
+
+  // Build transparent assumptions summary for this exact curve
+  const assumptionsSummary = (() => {
+    const parts: string[] = [`v${GACHA_RULES_VERSION} Rules`];
+    if (is4Star) {
+      parts.push('4★ Absorbing Markov (0/10 4★ pity, segregated from 5★ pity)');
+      parts.push('Uncapped (No Fate Points)');
+    } else if (isChronicled) {
+      parts.push(`Chronicled Wish (${currentPity}/90 pity)`);
+      parts.push(auxiliaryState >= 1 ? '1/1 Fate Point (Guaranteed)' : '0/1 Fate Point (50/50)');
+    } else if (isWeapon) {
+      parts.push(`Weapon Wish (${currentPity}/80 pity)`);
+      parts.push(
+        auxiliaryState >= 1
+          ? '1/1 Fate Point (Guaranteed)'
+          : weaponGuaranteed
+            ? '0/1 Fate · 75/25 Carryover ON (50%)'
+            : '0/1 Fate · Standard (37.5%)'
+      );
+    } else {
+      parts.push(`Character Wish (${currentPity}/90 pity)`);
+      if (isGuaranteed) {
+        parts.push('Guaranteed Featured');
+      } else {
+        const winPct = (calculateRadianceWinRate(auxiliaryState) * 100).toFixed(1);
+        parts.push(`50/50 · Radiance Streak ${auxiliaryState} (${winPct}% win)`);
+      }
+    }
+    if (copiesCount > 1) {
+      parts.push(`${copiesCount} Copies`);
+    }
+    if (budget?.includeCashback) {
+      parts.push('+8% Cashback Applied');
+    }
+    return parts;
+  })();
 
   // SVG Chart Geometry
   const width = 600;
@@ -173,13 +214,27 @@ export const PullDistributionModal: React.FC<PullDistributionModalProps> = ({
           </button>
         </div>
 
-        {/* Milestone Statistics Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {/* Active Calculation Assumptions Strip */}
+        <div className="bg-[#0e1019] px-3.5 py-2.5 rounded-xl border border-[#22273c] flex flex-wrap items-center gap-2 text-[11px] text-zinc-300">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#d4af37] shrink-0" aria-hidden="true" />
+          <span className="font-semibold text-zinc-200">Assumptions:</span>
+          {assumptionsSummary.map((part, idx) => (
+            <span
+              key={idx}
+              className="px-2 py-0.5 rounded bg-[#161a29] border border-[#282f48] text-zinc-200 font-mono"
+            >
+              {part}
+            </span>
+          ))}
+        </div>
+
+        {/* Milestone Statistics Cards (Expected, Median, P25, P90, Worst-Case) */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
           <div className="bg-[#0e1019] p-3 rounded-xl border border-[#22273c] text-center">
             <div className="text-[11px] text-zinc-300 uppercase tracking-wider font-semibold">
               25th Percentile
             </div>
-            <div className="text-base font-bold text-sky-300 font-mono mt-0.5 tabular-nums">
+            <div className="text-sm sm:text-base font-bold text-sky-300 font-mono mt-0.5 tabular-nums">
               {item.odds.p25 !== undefined ? `${item.odds.p25} pulls` : '~ pulls'}
             </div>
             <div className="text-[11px] text-zinc-300">Lucky outcome</div>
@@ -189,31 +244,43 @@ export const PullDistributionModal: React.FC<PullDistributionModalProps> = ({
             <div className="text-[11px] text-zinc-300 uppercase tracking-wider font-semibold">
               Median (50%)
             </div>
-            <div className="text-base font-bold text-[#f3cf58] font-mono mt-0.5 tabular-nums">
+            <div className="text-sm sm:text-base font-bold text-[#f3cf58] font-mono mt-0.5 tabular-nums">
               {`${item.odds.medianPulls} pulls`}
             </div>
-            <div className="text-[11px] text-zinc-300">Typical player cost</div>
+            <div className="text-[11px] text-zinc-300">Coin-flip cost</div>
+          </div>
+
+          <div className="bg-[#0e1019] p-3 rounded-xl border border-[#22273c] text-center">
+            <div className="text-[11px] text-zinc-300 uppercase tracking-wider font-semibold">
+              Expected Mean
+            </div>
+            <div className="text-sm sm:text-base font-bold text-zinc-100 font-mono mt-0.5 tabular-nums">
+              {`${item.odds.expectedPulls} pulls`}
+            </div>
+            <div className="text-[11px] text-zinc-300">Long-run average</div>
           </div>
 
           <div className="bg-[#0e1019] p-3 rounded-xl border border-[#22273c] text-center">
             <div className="text-[11px] text-zinc-300 uppercase tracking-wider font-semibold">
               90th Percentile
             </div>
-            <div className="text-base font-bold text-amber-300 font-mono mt-0.5 tabular-nums">
+            <div className="text-sm sm:text-base font-bold text-amber-300 font-mono mt-0.5 tabular-nums">
               {item.odds.p90 !== undefined ? `${item.odds.p90} pulls` : '~ pulls'}
             </div>
             <div className="text-[11px] text-zinc-300">Unlucky budget</div>
           </div>
 
-          <div className="bg-[#0e1019] p-3 rounded-xl border border-[#22273c] text-center">
+          <div className="bg-[#0e1019] p-3 rounded-xl border border-[#22273c] text-center col-span-2 sm:col-span-1">
             <div className="text-[11px] text-zinc-300 uppercase tracking-wider font-semibold">
               {is4Star ? '99th Percentile' : 'Hard Ceiling (100%)'}
             </div>
-            <div className="text-base font-bold text-emerald-300 font-mono mt-0.5 tabular-nums">
+            <div className="text-sm sm:text-base font-bold text-emerald-300 font-mono mt-0.5 tabular-nums">
               {is4Star ? 'Uncapped' : `${item.odds.guaranteedPulls} pulls`}
             </div>
             <div className="text-[11px] text-zinc-300">
-              {is4Star ? 'No hard guarantee' : 'Absolute certainty'}
+              {is4Star
+                ? `No hard guarantee (p99: ~${item.odds.p99 ?? '?'} pulls)`
+                : 'Worst-case certainty'}
             </div>
           </div>
         </div>
@@ -245,7 +312,7 @@ export const PullDistributionModal: React.FC<PullDistributionModalProps> = ({
           <div className="relative overflow-hidden flex justify-center">
             <svg
               role="img"
-              aria-label={`Cumulative probability curve for ${item.name}. Median is ${item.odds.medianPulls} pulls, 90th percentile is ${item.odds.p90 ?? 'unknown'} pulls.`}
+              aria-label={`Cumulative probability curve for ${item.name}. Expected mean is ${item.odds.expectedPulls} pulls, median is ${item.odds.medianPulls} pulls, 90th percentile is ${item.odds.p90 ?? 'unknown'} pulls.`}
               viewBox={`0 0 ${width} ${height}`}
               className="w-full h-auto select-none touch-none"
               onPointerMove={(e) => updatePointerPull(e.clientX, e.currentTarget)}
@@ -396,8 +463,11 @@ export const PullDistributionModal: React.FC<PullDistributionModalProps> = ({
                   <span className="text-[#f3cf58] font-bold font-mono">
                     {`~${copy.medianPulls}p median`}
                   </span>
-                  <span className="text-[11px] text-zinc-300 block">
-                    {copy.guaranteedPulls ? `${copy.guaranteedPulls}p hard` : 'Uncapped'}
+                  <span className="text-[11px] text-zinc-200 block font-mono">
+                    {`~${copy.expectedPulls}p mean`}
+                  </span>
+                  <span className="text-[11px] text-emerald-300 block">
+                    {copy.guaranteedPulls ? `${copy.guaranteedPulls}p worst-case` : 'Uncapped'}
                   </span>
                 </div>
               ))}
@@ -412,11 +482,11 @@ export const PullDistributionModal: React.FC<PullDistributionModalProps> = ({
             <strong className="text-zinc-100">Probability vs Certainty:</strong>{' '}
             {is4Star ? (
               <span>
-                Featured 4-star targets have <strong>no hard pity or Fate Point guarantee</strong>. While the median is ~35 pulls, severe streaks can occasionally exceed 100+ pulls without acquiring the specific rate-up.
+                Featured 4-star targets have <strong>no hard pity or Fate Point guarantee</strong>. While the median is {item.odds.medianPulls} pulls (mean {item.odds.expectedPulls}), severe streaks can exceed {item.odds.p90 ?? 80}–{item.odds.p99 ?? 150}+ pulls without acquiring the specific rate-up.
               </span>
             ) : (
               <span>
-                Reaching the 50% median only gives a coin-flip chance of success. For risk-averse planning before a banner ends, target the <strong>90th percentile</strong> ({item.odds.p90} pulls) or the absolute guarantee ({item.odds.guaranteedPulls} pulls).
+                Reaching the 50% median ({item.odds.medianPulls} pulls) or mean ({item.odds.expectedPulls} pulls) is still uncertain. For risk-averse planning before a banner ends, budget for the <strong>90th percentile</strong> ({item.odds.p90} pulls) or the <strong>worst-case guarantee</strong> ({item.odds.guaranteedPulls} pulls).
               </span>
             )}
           </div>

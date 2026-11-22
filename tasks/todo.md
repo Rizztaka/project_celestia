@@ -38,3 +38,35 @@
 - [x] Task 6.8: Full CI Quality Gate & Playwright E2E Verification
   - Acceptance: `node scripts/audit-game-data.mjs` (100%), `pnpm test` (594/594 passing), `pnpm run typecheck` (0 errors), `pnpm run lint` (0 errors), `pnpm run build` (passed), `pnpm run check:budget` (all chunks within budget), `pnpm exec playwright test e2e/journeys/07-endgame-solvers.spec.ts` (4/4 passed).
   - Verify: All automated commands pass cleanly.
+
+# Task List: M8 — Pull Advisor & Wish Mathematics Verification
+
+- [x] Task 8.1: Exact 4-State Capturing Radiance Multi-Copy State Propagation
+  - Acceptance: Multi-copy C1–C6 targets track joint distribution across Capturing Radiance streak states (`s ∈ {0, 1, 2, 3}`), guaranteeing 100% featured win at streak 3, preserving streaks on 50/50 guarantees, and reflecting true worst-case ceilings (990 pulls for fresh C6; 811 pulls from 89 pity + streak 3).
+  - Verify: `pnpm test src/engines/gacha-math.test.ts`
+  - Files: `src/engines/gacha-math.ts`, `src/engines/gacha-math.test.ts`
+
+- [x] Task 8.2: 4-Star Segregation, Weapon 4★ Pity Ramp, and Uncapped Adaptive Convergence
+  - Acceptance: `PullDistributionModal` strictly passes (0, false) for 4★ targets; `gacha-4star.ts` integrates separate Weapon 4★ soft-pity curve (pull 8 at 66%, pull 9 at 96%, 75% rate-up across 5 featured) with adaptive convergence (< 1e-9 remaining tail).
+  - Verify: `pnpm test src/engines/gacha-4star.test.ts`, `src/components/PullDistributionModal.test.tsx`
+  - Files: `src/engines/gacha-4star.ts`, `src/components/PullDistributionModal.tsx`
+
+- [x] Task 8.3: Rule Invariant Validator & Provenance Registry Expansion
+  - Acceptance: `provenance-registry.ts` enriched with `gacha_rules_4star_7_2` and `gacha_rules_starglitter_7_2`; `banner-rules.ts` implements `validateBannerRules()`; `GachaAssumptionsModal` wires live provenance statuses and source citations.
+  - Verify: `pnpm test src/engines/gacha-verification.test.ts`, `src/components/GachaAssumptionsModal.test.tsx`
+  - Files: `src/data/banner-rules.ts`, `src/data/provenance-registry.ts`, `src/components/GachaAssumptionsModal.tsx`
+
+- [x] Task 8.4: Independent Verification Suite & Seeded Monte Carlo CI Integration
+  - Acceptance: Replaced unseeded scratch script with `src/engines/gacha-verification.test.ts` implementing a first-principles pull-by-pull DP state machine, closed-form 4★ absorbing Markov proofs, deterministic Mulberry32 PRNG (100k trials), and boundary pity state audits.
+  - Verify: `pnpm test src/engines/gacha-verification.test.ts`
+  - Files: `src/engines/gacha-verification.test.ts`
+
+- [x] Task 8.5: UI Transparency & Probability vs. Certainty Experience
+  - Acceptance: Active Wish Model Assumptions summary strip added to `PullAdvisorView.tsx`; milestone cards in `PullDistributionModal.tsx` display Expected Mean alongside Median, P25, P90, and Hard Ceiling / Uncapped; `GachaAssumptionsModal.tsx` features an explicit Probability vs. Certainty guide.
+  - Verify: `pnpm test src/components/PullAdvisorView.test.tsx`, `pnpm run build`
+  - Files: `src/components/PullAdvisorView.tsx`, `src/components/PullDistributionModal.tsx`, `src/components/GachaAssumptionsModal.tsx`
+
+- [x] Task 8.6: Architecture Decision Record ADR-008
+  - Acceptance: Authored `docs/decisions/0008-pull-advisor-and-wish-mathematics.md`.
+  - Verify: Markdown review
+  - Files: `docs/decisions/0008-pull-advisor-and-wish-mathematics.md`

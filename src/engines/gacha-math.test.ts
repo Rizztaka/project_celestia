@@ -282,14 +282,17 @@ describe('Gacha Math Engine (Version 7.2 Baseline)', () => {
       expect(result2.copiesBreakdown![1].guaranteedPulls).toBe(360);
     });
 
-    it('calculates high constellation multi-copy (C6 = 6 copies) quickly without lag', () => {
+    it('calculates high constellation multi-copy (C6 = 6 copies) quickly with exact Capturing Radiance ceiling', () => {
       const t0 = performance.now();
       const result6 = calculateMultiCopyOdds('character', 6, 600, 0, false, 0);
       const elapsed = performance.now() - t0;
 
-      // 6 copies: guaranteed is 6 * 180 = 1080 pulls
-      expect(result6.guaranteedPulls).toBe(1080);
+      // 6 copies from streak 0: Copies 1-3 max 180 each (streak 0->1->2->3),
+      // Copy 4 is 100% guaranteed by Capturing Radiance (max 90, streak -> 0),
+      // Copies 5-6 max 180 each => 180*5 + 90 = 990 pulls exact ceiling.
+      expect(result6.guaranteedPulls).toBe(990);
       expect(result6.copiesBreakdown?.length).toBe(6);
+      expect(result6.copiesBreakdown![3].guaranteedPulls).toBe(630); // 180+180+180+90
       expect(result6.medianPulls).toBeGreaterThan(450);
       expect(result6.medianPulls).toBeLessThan(650);
       // Execution must complete in under 50ms
@@ -339,22 +342,34 @@ describe('Gacha Math Engine (Version 7.2 Baseline)', () => {
     });
 
     it('handles extreme multi-copy C0 -> C6 with 89 starting pity and 3 consecutive losses without error or numerical instability', () => {
-      // 6 copies (C6 goal), 89 starting pity, 3 losses (100% guarantee on copy 1)
+      // 6 copies (C6 goal), 89 starting pity, 3 losses (100% Radiance guarantee on copy 1)
       const res6 = calculateMultiCopyOdds('character', 6, 250, 89, false, 3);
-      // Copy 1 guarantee = 90 - 89 = 1 pull.
-      // Copies 2..6 fresh guarantee = 5 * 180 = 900 pulls.
-      // Total guarantee = 901 pulls.
-      expect(res6.guaranteedPulls).toBe(901);
+      // Copy 1 (s=3 -> 0): 90 - 89 = 1 pull
+      // Copy 2 (s=0 -> 1): 180; Copy 3 (s=1 -> 2): 180; Copy 4 (s=2 -> 3): 180
+      // Copy 5 (s=3 -> 0): 90 (Capturing Radiance guaranteed!)
+      // Copy 6 (s=0 -> 1): 180
+      // Total exact ceiling = 1 + 180 + 180 + 180 + 90 + 180 = 811 pulls
+      expect(res6.guaranteedPulls).toBe(811);
       expect(res6.copiesBreakdown).toHaveLength(6);
       expect(res6.copiesBreakdown![0].guaranteedPulls).toBe(1);
-      expect(res6.copiesBreakdown![5].guaranteedPulls).toBe(901);
+      expect(res6.copiesBreakdown![5].guaranteedPulls).toBe(811);
       expect(res6.medianPulls).toBeGreaterThan(400);
       expect(res6.medianPulls).toBeLessThan(550);
 
       // Verify distribution generation
       const dist6 = generateProbabilityDistribution('character', 89, false, 3, false, 6);
-      expect(dist6[dist6.length - 1].pulls).toBe(901);
+      expect(dist6[dist6.length - 1].pulls).toBe(811);
       expect(dist6[dist6.length - 1].probability).toBe(1.0);
+    });
+
+    it('preserves Capturing Radiance streak when Copy 1 uses a 50/50 guarantee', () => {
+      // Starting guaranteed=true with streak=3: Copy 1 consumes guarantee (max 90, streak stays 3),
+      // Copy 2 triggers 100% Capturing Radiance (max 90, streak -> 0) => exact 180 ceiling.
+      const res = calculateMultiCopyOdds('character', 2, 180, 0, true, 3);
+      expect(res.guaranteedPulls).toBe(180);
+      expect(res.cumulativeProbability).toBe(1.0);
+      expect(res.copiesBreakdown![0].guaranteedPulls).toBe(90);
+      expect(res.copiesBreakdown![1].guaranteedPulls).toBe(180);
     });
 
     it('handles weapon banner R1 -> R5 multi-copy with 79 pity and weaponGuaranteed carryover', () => {

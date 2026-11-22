@@ -27,6 +27,7 @@ import { isSameCharacterOrTraveler } from '../engines/team-rules';
 import { dispatchAutoDraftTheater } from '../services/solver-dispatcher';
 import { CharacterPortrait } from './CharacterPortrait';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
+import { useModalAccessibility } from '../hooks/useModalAccessibility';
 import {
   Sparkles,
   Swords,
@@ -60,13 +61,13 @@ const ALL_ELEMENTS: Element[] = [
 ];
 
 const ELEMENT_BADGES: Record<Element, { bg: string; text: string; border: string }> = {
-  Pyro: { bg: 'bg-rose-500/10', text: 'text-rose-400', border: 'border-rose-500/30' },
-  Hydro: { bg: 'bg-sky-500/10', text: 'text-sky-400', border: 'border-sky-500/30' },
-  Anemo: { bg: 'bg-teal-500/10', text: 'text-teal-400', border: 'border-teal-500/30' },
-  Electro: { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/30' },
-  Dendro: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30' },
-  Cryo: { bg: 'bg-cyan-500/10', text: 'text-cyan-300', border: 'border-cyan-500/30' },
-  Geo: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/30' },
+  Pyro: { bg: 'bg-rose-500/15', text: 'text-rose-200', border: 'border-rose-400/40' },
+  Hydro: { bg: 'bg-sky-500/15', text: 'text-sky-200', border: 'border-sky-400/40' },
+  Anemo: { bg: 'bg-teal-500/15', text: 'text-teal-200', border: 'border-teal-400/40' },
+  Electro: { bg: 'bg-purple-500/15', text: 'text-purple-200', border: 'border-purple-400/40' },
+  Dendro: { bg: 'bg-emerald-500/15', text: 'text-emerald-200', border: 'border-emerald-400/40' },
+  Cryo: { bg: 'bg-cyan-500/15', text: 'text-cyan-100', border: 'border-cyan-400/40' },
+  Geo: { bg: 'bg-amber-500/15', text: 'text-amber-200', border: 'border-amber-400/40' },
 };
 
 export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
@@ -88,13 +89,26 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
   const [borrowedCharId, setBorrowedCharId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  // Swap / Add modal state
   const [swapTarget, setSwapTarget] = useState<{
     actNumber: number;
     oldChar: Character | null;
   } | null>(null);
 
-  // Active Season Config
+  const swapDialogRef = useRef<HTMLDivElement>(null);
+  const swapCloseBtnRef = useRef<HTMLButtonElement>(null);
+
+  const closeSwapModal = () => {
+    setSwapTarget(null);
+    setModalError(null);
+  };
+
+  useModalAccessibility({
+    isOpen: Boolean(swapTarget),
+    onClose: closeSwapModal,
+    containerRef: swapDialogRef,
+    initialFocusRef: swapCloseBtnRef,
+  });
+
   const activeSeason: TheaterSeasonConfig = useMemo(() => {
     if (selectedSeasonId === 'custom') {
       return createCustomSeason(customElements);
@@ -103,17 +117,14 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     return found || THEATER_SEASONS[0];
   }, [selectedSeasonId, customElements]);
 
-  // Filter roster with trial cast integration, profile level, and Level 70 gate for Visionary
   const filteredRoster = useMemo(() => {
     return filterEligibleTheaterRoster(ownedIds, activeSeason, profiles, difficulty);
   }, [ownedIds, activeSeason, profiles, difficulty]);
 
-  // Support Cast Borrow recommendations (top 3 unowned characters matching element/guest)
   const recommendedBorrows = useMemo(() => {
     return recommendSupportCastBorrow(filteredRoster.eligible, activeSeason, ownedIds);
   }, [filteredRoster.eligible, activeSeason, ownedIds]);
 
-  // Effective eligible cast including borrowed friend character
   const effectiveEligible = useMemo(() => {
     if (!borrowedCharId) return filteredRoster.eligible;
     const borrowedChar = CHARACTERS.find((c) => c.id === borrowedCharId);
@@ -123,7 +134,29 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     return [borrowedChar, ...filteredRoster.eligible];
   }, [filteredRoster.eligible, borrowedCharId]);
 
-  // Generate initial or updated schedule respecting user-locked acts via Web Worker
+  const swapCandidates = useMemo(() => {
+    if (!swapTarget) return [];
+    const act = schedule.find((a) => a.actNumber === swapTarget.actNumber);
+    const otherMembers = swapTarget.oldChar
+      ? act?.team.filter((m) => m.id !== swapTarget.oldChar?.id) || []
+      : act?.team || [];
+
+    return effectiveEligible
+      .filter((c) => {
+        const hasConflict = otherMembers.some((m) => isSameCharacterOrTraveler(m, c));
+        const isReplacingSameCharacter = isSameCharacterOrTraveler(swapTarget.oldChar?.id, c.id);
+        const vigor = isReplacingSameCharacter ? 1 : (vigorState[c.id] ?? 2);
+        return !hasConflict && vigor > 0;
+      })
+      .sort((a, b) => {
+        const vigorA = vigorState[a.id] ?? 2;
+        const vigorB = vigorState[b.id] ?? 2;
+        if (vigorB !== vigorA) return vigorB - vigorA;
+        if (b.rarity !== a.rarity) return b.rarity - a.rarity;
+        return a.name.localeCompare(b.name);
+      });
+  }, [swapTarget, schedule, effectiveEligible, vigorState]);
+
   const handleGenerateSchedule = (currentLocked = lockedActNumbers) => {
     const userLocks: Record<number, string[]> = {};
     for (const actNum of currentLocked) {
@@ -138,7 +171,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
       difficulty,
       activeSeason,
       Object.keys(userLocks).length > 0 ? userLocks : undefined,
-      profiles,
+      profiles
     ).then((res) => {
       startTransition(() => {
         const actsWithLocks = res.acts.map((a) => ({
@@ -154,20 +187,17 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     });
   };
 
-  // Serialized key of eligible IDs to detect any roster composition shift even with identical count
   const eligibleKey = useMemo(
     () => effectiveEligible.map((c) => c.id).sort().join(','),
-    [effectiveEligible],
+    [effectiveEligible]
   );
 
   const isInitialMount = useRef(true);
 
-  // Clear borrowed character when season changes
   useEffect(() => {
     setBorrowedCharId(null);
   }, [activeSeason.id]);
 
-  // Re-generate schedule when season or difficulty fundamentally shifts
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
@@ -178,7 +208,6 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     handleGenerateSchedule(new Set());
   }, [activeSeason.id, difficulty]);
 
-  // Re-generate schedule while preserving user locks when roster or borrowed character shifts
   useEffect(() => {
     if (isInitialMount.current) return;
     handleGenerateSchedule(lockedActNumbers);
@@ -188,7 +217,6 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
   const requiredChars = diffConfig.requiredCharacters;
   const isShortfall = filteredRoster.eligible.length < requiredChars;
 
-  // Toggle lock on an act
   const handleToggleLock = (actNumber: number) => {
     setLockedActNumbers((prev) => {
       const next = new Set(prev);
@@ -198,28 +226,24 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
         next.add(actNumber);
       }
       setSchedule((curr) =>
-        curr.map((a) => (a.actNumber === actNumber ? { ...a, isLocked: next.has(actNumber) } : a)),
+        curr.map((a) => (a.actNumber === actNumber ? { ...a, isLocked: next.has(actNumber) } : a))
       );
       return next;
     });
   };
 
-  // Toggle custom element selection (max 3)
   const handleToggleCustomElement = (elem: Element) => {
     if (customElements.includes(elem)) {
       if (customElements.length > 1) {
         setCustomElements(customElements.filter((e) => e !== elem));
       }
+    } else if (customElements.length < 3) {
+      setCustomElements([...customElements, elem]);
     } else {
-      if (customElements.length < 3) {
-        setCustomElements([...customElements, elem]);
-      } else {
-        setCustomElements([...customElements.slice(1), elem]);
-      }
+      setCustomElements([...customElements.slice(1), elem]);
     }
   };
 
-  // Handle character swap or addition from modal
   const handlePerformSwap = (newCharId: string) => {
     if (!swapTarget) return;
     setModalError(null);
@@ -229,7 +253,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
       swapTarget.actNumber,
       swapTarget.oldChar ? swapTarget.oldChar.id : '',
       newCharId,
-      vigorState,
+      vigorState
     );
 
     if (res.error) {
@@ -251,7 +275,6 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     setSwapTarget(null);
   };
 
-  // Handle removing a member from an act
   const handleRemoveMember = (actNumber: number, charId: string) => {
     const res = removeTheaterActMember(schedule, actNumber, charId, vigorState);
     if (!res.error) {
@@ -272,69 +295,78 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#171a2b] via-[#1f243d] to-[#171a2b] p-6 rounded-2xl border border-[#2b3355] shadow-xl relative overflow-hidden">
-        <div className="absolute right-0 top-0 w-80 h-full opacity-5 pointer-events-none bg-[radial-gradient(circle_at_center,#d4af37,transparent_70%)]" />
+      <div className="bg-gradient-to-r from-[#121420] via-[#191d30] to-[#121420] p-5 sm:p-6 rounded-2xl border border-[#24293d] shadow-xl relative overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="absolute right-0 top-0 w-80 h-full opacity-5 pointer-events-none bg-[radial-gradient(circle_at_center,#d4af37,transparent_70%)]"
+        />
 
         <div className="flex flex-wrap items-center justify-between gap-4 relative z-10">
           <div>
-            <div className="flex items-center gap-2 text-[#d4af37] text-xs font-bold tracking-wider uppercase mb-1">
-              <Crown className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase mb-1">
+              <Crown className="w-4 h-4" aria-hidden="true" />
               <span>Visionary Mode Solver · 2-Vigor Act Planner</span>
             </div>
             <h1 className="text-2xl font-bold text-zinc-100 font-serif">
               Imaginarium Theater
             </h1>
-            <p className="text-sm text-zinc-400 mt-1 max-w-2xl leading-relaxed">
+            <p className="text-sm text-zinc-300 mt-1 max-w-2xl leading-relaxed">
               Curate multi-act combat paths with strict 2-Vigor endurance tracking, boss reservation heuristics, act pin/lock controls, and slot swap management.
             </p>
           </div>
 
           <button
+            type="button"
             onClick={() => handleGenerateSchedule()}
-            className="flex items-center gap-2 bg-gradient-to-r from-[#d4af37] to-[#b38f2a] hover:from-[#e5be3c] hover:to-[#c49e31] text-[#0f111a] font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg transition-all duration-150 active:scale-95 cursor-pointer"
+            className="min-h-[44px] flex items-center gap-2 bg-[#d4af37] hover:bg-[#e5c14d] text-[#0a0b0e] font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg transition-colors cursor-pointer"
           >
-            <RefreshCw className="w-4 h-4" />
-            <span>Auto-Draft & Schedule</span>
+            <RefreshCw className="w-4 h-4" aria-hidden="true" />
+            <span>Auto-Draft &amp; Schedule</span>
           </button>
         </div>
 
         {/* Season & Difficulty Control Bar */}
-        <div className="mt-6 pt-5 border-t border-[#2a314f] flex flex-wrap items-center justify-between gap-4">
+        <div className="mt-5 pt-4 border-t border-[#24293d] flex flex-wrap items-center justify-between gap-4">
           {/* Season Selector */}
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-zinc-400 font-semibold uppercase tracking-wider">
+            <label
+              htmlFor="theater-season-select"
+              className="text-xs text-zinc-300 font-semibold uppercase tracking-wider"
+            >
               Cycle:
-            </span>
+            </label>
             <select
+              id="theater-season-select"
               value={selectedSeasonId}
               onChange={(e) => setSelectedSeasonId(e.target.value)}
-              className="bg-[#121422] border border-[#2e375c] text-zinc-200 text-xs font-medium rounded-xl px-3 py-1.5 focus:outline-none focus:border-[#d4af37]"
+              className="min-h-[38px] bg-[#161928] border border-[#323954] text-zinc-100 text-xs font-medium rounded-xl px-3 py-1.5 focus:border-[#d4af37]"
             >
               <optgroup label="Active Seasons (Version 7.x)">
                 {THEATER_SEASONS.filter((s) => s.id.startsWith('season-7')).map((s) => (
-                  <option key={s.id} value={s.id} className="text-[#d4af37]">
+                  <option key={s.id} value={s.id} className="text-[#f3cf58] bg-[#121420]">
                     ⭐ {s.name}
                   </option>
                 ))}
               </optgroup>
               <optgroup label="Historical Archive (Version 5.x)">
                 {THEATER_SEASONS.filter((s) => !s.id.startsWith('season-7')).map((s) => (
-                  <option key={s.id} value={s.id} className="text-zinc-300">
+                  <option key={s.id} value={s.id} className="text-zinc-200 bg-[#121420]">
                     {s.name}
                   </option>
                 ))}
               </optgroup>
-              <option value="custom" className="text-amber-300 font-bold">⚙️ Custom Element Cycle...</option>
+              <option value="custom" className="text-amber-300 font-bold bg-[#121420]">
+                ⚙️ Custom Element Cycle…
+              </option>
             </select>
 
-            {/* Elements Display */}
-            <div className="flex items-center gap-1.5 ml-1">
+            <div className="flex items-center gap-1.5">
               {activeSeason.elements.map((elem) => {
                 const style = ELEMENT_BADGES[elem];
                 return (
                   <span
                     key={elem}
-                    className={`text-[11px] font-bold px-2 py-0.5 rounded-lg border ${style.bg} ${style.text} ${style.border}`}
+                    className={`text-xs font-bold px-2 py-0.5 rounded-lg border ${style.bg} ${style.text} ${style.border}`}
                   >
                     {elem}
                   </span>
@@ -342,12 +374,15 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
               })}
             </div>
 
-            {/* Freshness Badge */}
-            <DataFreshnessBadge datasetId={activeSeason.id} className="ml-1" />
+            <DataFreshnessBadge datasetId={activeSeason.id} />
           </div>
 
           {/* Difficulty Toggle Pills */}
-          <div className="flex items-center gap-1.5 bg-[#121422] p-1 rounded-xl border border-[#2b3353]">
+          <div
+            role="group"
+            aria-label="Theater Difficulty"
+            className="flex flex-wrap items-center gap-1 bg-[#161928] p-1 rounded-xl border border-[#2c334d]"
+          >
             {(['Normal', 'Hard', 'Visionary'] as TheaterDifficulty[]).map((mode) => {
               const acts = THEATER_DIFFICULTIES[mode].acts;
               const chars = THEATER_DIFFICULTIES[mode].requiredCharacters;
@@ -356,15 +391,17 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
               return (
                 <button
                   key={mode}
+                  type="button"
+                  aria-pressed={isActive}
                   onClick={() => setDifficulty(mode)}
-                  className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 ${
+                  className={`min-h-[38px] sm:min-h-[34px] text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 ${
                     isActive
-                      ? 'bg-[#d4af37] text-zinc-950 shadow-md font-bold'
-                      : 'text-zinc-400 hover:text-zinc-200'
+                      ? 'bg-[#d4af37] text-[#0a0b0e] shadow-md font-bold'
+                      : 'text-zinc-200 hover:text-white hover:bg-[#1f243b]'
                   }`}
                 >
                   <span>{mode}</span>
-                  <span className={`text-[10px] ${isActive ? 'text-zinc-900' : 'text-zinc-500'}`}>
+                  <span className={`text-[11px] ${isActive ? 'text-[#0a0b0e]/85' : 'text-zinc-300'}`}>
                     ({acts} Acts · {chars} Chars)
                   </span>
                 </button>
@@ -375,21 +412,25 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
 
         {/* Custom Element Selector Drawer */}
         {selectedSeasonId === 'custom' && (
-          <div className="mt-4 p-3 bg-[#111320] border border-[#2c3355] rounded-xl flex flex-wrap items-center gap-2">
-            <span className="text-xs text-zinc-400 font-semibold">
-              Select 3 Season Elements:
-            </span>
+          <div
+            role="group"
+            aria-label="Select 3 custom season elements"
+            className="mt-4 p-3 bg-[#0e1019] border border-[#2c334d] rounded-xl flex flex-wrap items-center gap-2"
+          >
+            <span className="text-xs text-zinc-200 font-semibold">Select 3 Season Elements:</span>
             {ALL_ELEMENTS.map((elem) => {
               const isSelected = customElements.includes(elem);
               const style = ELEMENT_BADGES[elem];
               return (
                 <button
                   key={elem}
+                  type="button"
+                  aria-pressed={isSelected}
                   onClick={() => handleToggleCustomElement(elem)}
-                  className={`text-xs font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
+                  className={`min-h-[38px] sm:min-h-[32px] text-xs font-bold px-3 py-1 rounded-lg border transition-colors cursor-pointer ${
                     isSelected
                       ? `${style.bg} ${style.text} ${style.border} ring-1 ring-[#d4af37]`
-                      : 'bg-[#181b2a] text-zinc-400 border-[#262c44] hover:text-zinc-200'
+                      : 'bg-[#161928] text-zinc-300 border-[#2c334d] hover:text-white'
                   }`}
                 >
                   {elem}
@@ -402,28 +443,30 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
 
       {/* Shortfall or Error Alert Banner */}
       {(isShortfall || validationErrors.length > 0) && (
-        <div className="bg-amber-950/30 border border-amber-500/40 p-4 rounded-xl space-y-3">
+        <div
+          role="status"
+          className="bg-amber-950/35 border border-amber-400/45 p-4 rounded-xl space-y-3"
+        >
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
             <div className="text-xs space-y-1">
-              <div className="font-bold text-amber-300">
+              <div className="font-bold text-amber-200">
                 Roster Shortfall for {difficulty} Mode ({filteredRoster.eligible.length} / {requiredChars} Characters)
               </div>
               {validationErrors.map((err, idx) => (
-                <div key={idx} className="text-zinc-300">
+                <div key={idx} className="text-zinc-200">
                   {err}
                 </div>
               ))}
-              <div className="text-zinc-400">
+              <div className="text-zinc-300">
                 The auto-draft below provides best-effort assignments with your currently available roster.
               </div>
             </div>
           </div>
 
-          {/* Shortfall Recommendations */}
           {shortfallSuggestions.length > 0 && (
-            <div className="pt-2 border-t border-amber-500/20">
-              <div className="text-[11px] font-bold text-[#d4af37] uppercase tracking-wider mb-2">
+            <div className="pt-2.5 border-t border-amber-400/25">
+              <div className="text-[11px] font-bold text-[#f3cf58] uppercase tracking-wider mb-2">
                 Recommended Characters to Unlock / Level for this Season:
               </div>
               <div className="flex flex-wrap gap-2">
@@ -432,8 +475,9 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                   return (
                     <button
                       key={sug.id}
+                      type="button"
                       onClick={() => setSelectedCharacter(sug)}
-                      className="flex items-center gap-1.5 bg-[#141726] hover:bg-[#1f243b] border border-[#2b3353] hover:border-[#d4af37]/60 p-1.5 rounded-xl transition-colors cursor-pointer"
+                      className="min-h-[40px] flex items-center gap-2 bg-[#141726] hover:bg-[#1f243b] border border-[#323954] hover:border-[#d4af37]/60 px-2.5 py-1.5 rounded-xl transition-colors cursor-pointer"
                     >
                       <CharacterPortrait
                         src={sug.icon}
@@ -443,10 +487,10 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                         size="xs"
                       />
                       <div className="text-left pr-1">
-                        <div className="text-xs font-bold text-zinc-200 leading-none">
+                        <div className="text-xs font-bold text-zinc-100 leading-none">
                           {sug.name}
                         </div>
-                        <div className={`text-[10px] ${style.text} font-medium mt-0.5`}>
+                        <div className={`text-[11px] ${style.text} font-medium mt-0.5`}>
                           {sug.roles[0]}
                         </div>
                       </div>
@@ -460,64 +504,66 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
       )}
 
       {/* Support Cast Borrow Recommendation Banner */}
-      <div className="bg-gradient-to-r from-[#151726] via-[#1a1d30] to-[#151726] border border-[#2b3352] rounded-2xl p-5 space-y-3 shadow-lg">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#222842] pb-3">
+      <section className="bg-gradient-to-r from-[#121420] via-[#191d30] to-[#121420] border border-[#24293d] rounded-2xl p-5 space-y-3 shadow-lg">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#202538] pb-3">
           <div className="flex items-center gap-2.5">
-            <Users className="w-5 h-5 text-[#d4af37]" />
+            <Users className="w-5 h-5 text-[#d4af37] shrink-0" aria-hidden="true" />
             <div>
-              <h2 className="text-sm font-bold text-zinc-100 flex items-center gap-2 uppercase tracking-wider">
+              <h2 className="text-sm font-bold text-zinc-100 flex flex-wrap items-center gap-2 uppercase tracking-wider">
                 <span>Support Cast Borrow Advisor</span>
-                <span className="text-[10px] font-mono text-[#d4af37] bg-[#161a2b] border border-[#d4af37]/30 px-2 py-0.5 rounded-full lowercase">
+                <span className="text-[11px] font-mono text-[#f3cf58] bg-[#161a2b] border border-[#d4af37]/35 px-2 py-0.5 rounded-full lowercase">
                   1 Friend Slot Available
                 </span>
               </h2>
-              <p className="text-xs text-zinc-400 mt-0.5">
-                Borrow a high-impact carry or support character from friends to conquer this season's apex boss mechanics.
+              <p className="text-xs text-zinc-300 mt-0.5">
+                Borrow a high-impact carry or support character from friends to conquer this season&apos;s apex boss mechanics.
               </p>
             </div>
           </div>
 
           {borrowedCharId && (
-            <div className="flex items-center gap-2 bg-emerald-950/60 border border-emerald-500/40 px-3 py-1.5 rounded-xl text-xs">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span className="text-emerald-300 font-semibold">
+            <div className="flex items-center gap-2 bg-emerald-950/65 border border-emerald-400/45 px-3 py-1.5 rounded-xl text-xs">
+              <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" aria-hidden="true" />
+              <span className="text-emerald-200 font-semibold">
                 Active Borrow: {CHARACTERS.find((c) => c.id === borrowedCharId)?.name}
               </span>
               <button
                 type="button"
+                aria-label="Return borrowed character"
                 onClick={() => setBorrowedCharId(null)}
-                className="text-zinc-400 hover:text-rose-300 ml-1 cursor-pointer"
+                className="min-w-[28px] min-h-[28px] rounded-md flex items-center justify-center text-zinc-200 hover:text-rose-200 hover:bg-rose-500/20 cursor-pointer"
                 title="Return borrowed character"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
             </div>
           )}
         </div>
 
-        {/* Top 3 Borrow Recommendations */}
         {recommendedBorrows.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
             {recommendedBorrows.map((char) => {
               const isBorrowed = borrowedCharId === char.id;
               const color = ELEMENT_BADGES[char.element] || {
-                bg: 'bg-zinc-800',
+                bg: 'bg-[#181c2b]',
                 text: 'text-zinc-200',
-                border: 'border-zinc-700',
+                border: 'border-[#323954]',
               };
 
               return (
                 <div
                   key={char.id}
-                  className={`bg-[#111320] border rounded-xl p-3 flex flex-col justify-between gap-2.5 transition-all ${
+                  className={`bg-[#0e1019] border rounded-xl p-3 flex flex-col justify-between gap-2.5 transition-colors ${
                     isBorrowed
-                      ? 'border-emerald-500/60 bg-emerald-950/20 shadow-md ring-1 ring-emerald-500/40'
-                      : 'border-[#232942] hover:border-[#d4af37]/50'
+                      ? 'border-emerald-400/60 bg-emerald-950/25 shadow-md'
+                      : 'border-[#24293d] hover:border-[#d4af37]/50'
                   }`}
                 >
-                  <div
+                  <button
+                    type="button"
                     onClick={() => setSelectedCharacter(char)}
-                    className="flex items-center gap-3 cursor-pointer"
+                    aria-label={`Inspect ${char.name} details`}
+                    className="flex items-center gap-3 cursor-pointer text-left bg-transparent border-0 p-0 w-full"
                   >
                     <CharacterPortrait
                       src={char.icon}
@@ -526,36 +572,35 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                       rarity={char.rarity}
                       size="sm"
                     />
-                    <div className="truncate">
-                      <div className="text-xs font-bold text-zinc-100 truncate">
-                        {char.name}
-                      </div>
-                      <div className={`text-[10px] ${color.text} font-medium`}>
+                    <div className="min-w-0">
+                      <div className="text-xs font-bold text-zinc-100 truncate">{char.name}</div>
+                      <div className={`text-[11px] ${color.text} font-medium`}>
                         {char.element} · {char.roles[0]}
                       </div>
-                      <div className="text-[10px] text-zinc-400 mt-0.5 truncate">
+                      <div className="text-[11px] text-zinc-300 mt-0.5 truncate">
                         {char.roles.slice(1).join(', ') || char.weapon}
                       </div>
                     </div>
-                  </div>
+                  </button>
 
                   <button
                     type="button"
+                    aria-pressed={isBorrowed}
                     onClick={() => setBorrowedCharId(isBorrowed ? null : char.id)}
-                    className={`w-full py-1.5 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                    className={`w-full min-h-[38px] py-1.5 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
                       isBorrowed
-                        ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                        : 'bg-[#1b2034] hover:bg-[#272e4b] text-[#d4af37] border border-[#d4af37]/30'
+                        ? 'bg-emerald-700 hover:bg-emerald-800 text-white'
+                        : 'bg-[#1a1e2e] hover:bg-[#252b42] text-[#f3cf58] border border-[#d4af37]/40'
                     }`}
                   >
                     {isBorrowed ? (
                       <>
-                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <CheckCircle2 className="w-3.5 h-3.5" aria-hidden="true" />
                         <span>Borrowed (Active)</span>
                       </>
                     ) : (
                       <>
-                        <UserPlus className="w-3.5 h-3.5" />
+                        <UserPlus className="w-3.5 h-3.5" aria-hidden="true" />
                         <span>Borrow Character</span>
                       </>
                     )}
@@ -565,71 +610,72 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
             })}
           </div>
         ) : (
-          <div className="text-xs text-zinc-400 italic py-1">
+          <div className="text-xs text-zinc-300 italic py-1">
             Your roster already possesses all premier characters eligible for this season.
           </div>
         )}
-      </div>
+      </section>
 
       {/* Eligible Roster & Vigor Strip */}
-      <div className="bg-[#12141e] border border-[#21263c] rounded-2xl p-4 space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1d2236] pb-2.5">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#d4af37]" />
-            <h2 className="text-sm font-bold text-zinc-200 uppercase tracking-wider">
-              Eligible Theater Cast & Vigor Gauge
+      <section className="bg-[#121420] border border-[#24293d] rounded-2xl p-4 space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#202538] pb-2.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <Sparkles className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
+            <h2 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">
+              Eligible Theater Cast &amp; Vigor Gauge
             </h2>
-            <span className="text-xs bg-[#1a1e30] text-zinc-400 font-mono px-2 py-0.5 rounded-full border border-[#272e48]">
+            <span className="text-xs bg-[#1a1e2e] text-zinc-200 font-mono px-2.5 py-0.5 rounded-full border border-[#323954]">
               {effectiveEligible.length} Available
             </span>
           </div>
 
-          <div className="flex items-center gap-3 text-[11px] text-zinc-400">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-300">
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block" aria-hidden="true" />
               <span>2 Vigor</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block" aria-hidden="true" />
               <span>1 Vigor</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block" aria-hidden="true" />
               <span>Exhausted (0)</span>
             </span>
           </div>
         </div>
 
-        {/* Scrollable Cast Strip */}
-        <div className="flex gap-2 overflow-x-auto pb-2 pt-1 scrollbar-thin">
+        {/* Scrollable Cast Strip (semantic buttons) */}
+        <div className="flex gap-2 overflow-x-auto pb-2 pt-1 touch-pan-x">
           {effectiveEligible.map((char) => {
             const vigor = vigorState[char.id] ?? 2;
             const isBorrowed = char.id === borrowedCharId;
             const vigorBadge =
               vigor === 2
-                ? 'bg-emerald-950/70 text-emerald-300 border-emerald-500/40'
+                ? 'bg-emerald-950/75 text-emerald-200 border-emerald-400/45'
                 : vigor === 1
-                ? 'bg-amber-950/70 text-amber-300 border-amber-500/40'
-                : 'bg-rose-950/70 text-rose-300 border-rose-500/40';
+                  ? 'bg-amber-950/75 text-amber-200 border-amber-400/45'
+                  : 'bg-rose-950/75 text-rose-200 border-rose-400/45';
 
             return (
-              <div
+              <button
                 key={char.id}
+                type="button"
                 onClick={() => setSelectedCharacter(char)}
-                className={`group shrink-0 rounded-xl p-2 w-20 flex flex-col items-center gap-1.5 cursor-pointer transition-colors relative border ${
+                aria-label={`${char.name}, ${vigor} vigor remaining, inspect details`}
+                className={`group shrink-0 rounded-xl p-2 w-22 flex flex-col items-center gap-1.5 cursor-pointer transition-colors relative border ${
                   isBorrowed
-                    ? 'bg-emerald-950/30 border-emerald-500/60 hover:bg-emerald-950/50'
-                    : 'bg-[#161928] hover:bg-[#1e2338] border-[#252c46] hover:border-[#d4af37]/50'
+                    ? 'bg-emerald-950/30 border-emerald-400/60 hover:bg-emerald-950/50'
+                    : 'bg-[#161928] hover:bg-[#1e2338] border-[#282f48] hover:border-[#d4af37]/60'
                 }`}
-                title={`${char.name} (${char.element} ${char.weapon})${isBorrowed ? ' - Friend Borrow' : ''} - Click to inspect`}
               >
                 {char.isTrial && (
-                  <span className="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-amber-400 to-[#d4af37] text-black font-extrabold text-[8px] px-1.5 py-0.2 rounded-full shadow z-10 uppercase tracking-tight">
+                  <span className="absolute -top-1.5 -right-1.5 bg-[#d4af37] text-[#0a0b0e] font-extrabold text-[9px] px-1.5 py-0.5 rounded-full shadow z-10 uppercase tracking-tight">
                     Trial
                   </span>
                 )}
                 {isBorrowed && (
-                  <span className="absolute -top-1.5 -left-1.5 bg-emerald-600 text-white font-extrabold text-[8px] px-1.5 py-0.2 rounded-full shadow z-10">
+                  <span className="absolute -top-1.5 -left-1.5 bg-emerald-700 text-white font-extrabold text-[9px] px-1.5 py-0.5 rounded-full shadow z-10">
                     Friend
                   </span>
                 )}
@@ -640,48 +686,47 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                   rarity={char.rarity}
                   size="sm"
                 />
-                <span className="text-[10px] font-semibold text-zinc-200 truncate w-full text-center">
+                <span className="text-[11px] font-semibold text-zinc-100 truncate w-full text-center">
                   {char.name}
                 </span>
                 <div className="flex flex-col items-center gap-0.5">
                   <div className="flex items-center gap-1">
                     <span
-                      className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-full border ${vigorBadge}`}
+                      className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full border ${vigorBadge}`}
                     >
-                      {vigor} Vigor
+                      {vigor}V
                     </span>
-                    <span className="text-[9px] text-zinc-400 font-mono">
+                    <span className="text-[10px] text-zinc-300 font-mono">
                       Lv.{char.level ?? (profiles?.[char.id]?.level ?? 90)}
                     </span>
                   </div>
-                  {isBorrowed && (
-                    <span className="text-[8px] font-bold text-emerald-400">
-                      Borrow
-                    </span>
-                  )}
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
-      </div>
+      </section>
 
       {/* Act Roadmap Grid */}
-      <div className="space-y-4">
+      <section className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Swords className="w-4 h-4 text-[#d4af37]" />
+            <Swords className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
             <h2 className="text-base font-bold text-zinc-100 font-serif flex items-center gap-2">
-              <span>Act Schedule & Boss Strategy ({schedule.length} Acts)</span>
+              <span>Act Schedule &amp; Boss Strategy ({schedule.length} Acts)</span>
               {isPending && (
-                <span className="text-[11px] font-mono text-amber-400 font-normal animate-pulse">
-                  (drafting schedule...)
+                <span
+                  role="status"
+                  className="text-xs font-mono text-amber-300 font-normal animate-pulse motion-reduce:animate-none"
+                >
+                  (drafting schedule…)
                 </span>
               )}
             </h2>
           </div>
-          <span className="text-xs text-zinc-400">
-            Pin/lock acts to preserve customizations. Click <strong className="text-zinc-200">Replace</strong> or <strong className="text-zinc-200">+ Add</strong> to alter members.
+          <span className="text-xs text-zinc-300">
+            Pin acts to preserve customizations. Use <strong className="text-zinc-100">Swap</strong> or{' '}
+            <strong className="text-zinc-100">+ Add</strong> to edit slots.
           </span>
         </div>
 
@@ -690,28 +735,30 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
             const isBoss = act.type === 'Boss';
             const isLocked = lockedActNumbers.has(act.actNumber);
             const bossInfo = act.bossName ? THEATER_BOSS_INFO[act.bossName] : undefined;
-            const bossMatchup = act.bossMatchup || (act.bossName ? evaluateBossActMatchup(act.team, act.bossName) : undefined);
+            const bossMatchup =
+              act.bossMatchup ||
+              (act.bossName ? evaluateBossActMatchup(act.team, act.bossName) : undefined);
 
             return (
-              <div
+              <article
                 key={act.actNumber}
-                className={`rounded-2xl p-5 border transition-all duration-150 flex flex-col justify-between gap-4 ${
+                className={`rounded-2xl p-5 border transition-colors flex flex-col justify-between gap-4 ${
                   isLocked
                     ? 'bg-gradient-to-br from-[#1d1b28] via-[#161522] to-[#12111d] border-[#d4af37] shadow-xl'
                     : isBoss
-                    ? 'bg-gradient-to-br from-[#1a1828] via-[#161424] to-[#12111d] border-amber-500/40 shadow-lg'
-                    : 'bg-[#12141e] border-[#22273c]'
+                      ? 'bg-gradient-to-br from-[#1a1828] via-[#161424] to-[#12111d] border-amber-400/45 shadow-lg'
+                      : 'bg-[#121420] border-[#24293d]'
                 }`}
               >
                 <div>
                   {/* Act Header */}
-                  <div className="flex items-center justify-between border-b border-[#22273e] pb-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#24293d] pb-3">
                     <div className="flex items-center gap-2.5">
                       <span
                         className={`text-xs font-bold px-2.5 py-1 rounded-lg border ${
                           isBoss
-                            ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                            : 'bg-[#1a1e30] text-zinc-300 border-[#2b3350]'
+                            ? 'bg-amber-500/20 text-amber-200 border-amber-400/45'
+                            : 'bg-[#1a1e2e] text-zinc-200 border-[#323954]'
                         }`}
                       >
                         Act {act.actNumber}
@@ -720,32 +767,30 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                         <h3 className="text-sm font-bold text-zinc-100 flex items-center gap-1.5">
                           {isBoss ? (
                             <>
-                              <Crown className="w-4 h-4 text-[#d4af37]" />
+                              <Crown className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
                               <span>{act.bossName || 'Boss Encounter'}</span>
                             </>
                           ) : (
-                            <span>{act.type === 'Defense' ? 'Monolith Defense' : 'Standard Encounter'}</span>
+                            <span>
+                              {act.type === 'Defense' ? 'Monolith Defense' : 'Standard Encounter'}
+                            </span>
                           )}
                         </h3>
-                        {bossInfo && (
-                          <div className="text-[11px] text-zinc-400">
-                            {bossInfo.title}
-                          </div>
-                        )}
+                        {bossInfo && <div className="text-xs text-zinc-300">{bossInfo.title}</div>}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-1.5">
                       {isBoss && bossMatchup && (
                         <span
-                          className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded-full border ${
+                          className={`text-[11px] font-bold font-mono px-2 py-0.5 rounded-full border ${
                             bossMatchup.rating === 'S'
-                              ? 'bg-emerald-950/70 text-emerald-300 border-emerald-500/50'
+                              ? 'bg-emerald-950/75 text-emerald-200 border-emerald-400/50'
                               : bossMatchup.rating === 'A'
-                              ? 'bg-sky-950/70 text-sky-300 border-sky-500/50'
-                              : bossMatchup.rating === 'B'
-                              ? 'bg-amber-950/70 text-amber-300 border-amber-500/50'
-                              : 'bg-rose-950/70 text-rose-300 border-rose-500/50'
+                                ? 'bg-sky-950/75 text-sky-200 border-sky-400/50'
+                                : bossMatchup.rating === 'B'
+                                  ? 'bg-amber-950/75 text-amber-200 border-amber-400/50'
+                                  : 'bg-rose-950/75 text-rose-200 border-rose-400/50'
                           }`}
                           title={bossMatchup.reason}
                         >
@@ -754,106 +799,132 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                       )}
 
                       {isBoss && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-950/40 border border-amber-500/30 px-2 py-0.5 rounded-full">
-                          Apex Boss Act
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-amber-200 bg-amber-950/55 border border-amber-400/40 px-2 py-0.5 rounded-full">
+                          Apex Boss
                         </span>
                       )}
 
-                      {/* Lock Toggle Button */}
                       <button
                         type="button"
+                        aria-pressed={isLocked}
+                        aria-label={
+                          isLocked ? `Unpin Act ${act.actNumber}` : `Pin Act ${act.actNumber}`
+                        }
                         onClick={() => handleToggleLock(act.actNumber)}
-                        className={`p-1.5 rounded-lg border text-xs flex items-center gap-1 font-semibold transition-colors cursor-pointer ${
+                        className={`min-h-[34px] px-2.5 py-1 rounded-lg border text-xs flex items-center gap-1 font-semibold transition-colors cursor-pointer ${
                           isLocked
-                            ? 'bg-[#d4af37] text-zinc-950 border-[#d4af37] shadow-sm'
-                            : 'bg-[#161928] text-zinc-400 border-[#262c46] hover:text-zinc-200'
+                            ? 'bg-[#d4af37] text-[#0a0b0e] border-[#d4af37] shadow-sm'
+                            : 'bg-[#161928] text-zinc-200 border-[#323954] hover:text-white hover:bg-[#1f243b]'
                         }`}
-                        title={isLocked ? 'Act Locked (preserved across Auto-Draft)' : 'Click to Lock / Pin this act'}
+                        title={
+                          isLocked
+                            ? 'Act Locked (preserved across Auto-Draft)'
+                            : 'Pin this act so Auto-Draft preserves it'
+                        }
                       >
-                        {isLocked ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
-                        <span className="text-[10px]">{isLocked ? 'Locked' : 'Pin'}</span>
+                        {isLocked ? (
+                          <Lock className="w-3.5 h-3.5" aria-hidden="true" />
+                        ) : (
+                          <Unlock className="w-3.5 h-3.5" aria-hidden="true" />
+                        )}
+                        <span>{isLocked ? 'Locked' : 'Pin'}</span>
                       </button>
                     </div>
                   </div>
 
                   {/* Boss Hazard & Recommended Archetype Callout */}
                   {bossInfo && (
-                    <div className="mt-3 p-3 bg-[#0d0e17] rounded-xl border border-[#1e2338] space-y-1.5 text-xs">
-                      <div className="text-rose-400 font-semibold flex items-center gap-1.5">
-                        <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                    <div className="mt-3 p-3.5 bg-[#0e1019] rounded-xl border border-[#202538] space-y-2 text-xs">
+                      <div className="text-rose-200 font-semibold flex items-center gap-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5 text-rose-300 shrink-0" aria-hidden="true" />
                         <span>Hazard: {bossInfo.hazard}</span>
                       </div>
-                      <div className="text-zinc-300 leading-relaxed">
-                        💡 {bossInfo.weakness}
-                      </div>
-                      <div className="flex flex-wrap items-center gap-1 pt-1">
-                        <span className="text-[10px] text-zinc-400 font-semibold uppercase">Archetypes:</span>
+                      <div className="text-zinc-200 leading-relaxed">💡 {bossInfo.weakness}</div>
+                      <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                        <span className="text-[11px] text-zinc-300 font-semibold uppercase">
+                          Archetypes:
+                        </span>
                         {bossInfo.recommendedArchetypes.map((arch) => (
                           <span
                             key={arch}
-                            className="text-[10px] bg-[#1a1d2f] text-[#d4af37] px-2 py-0.5 rounded border border-[#d4af37]/20 font-medium"
+                            className="text-[11px] bg-[#1a1e2e] text-[#f3cf58] px-2 py-0.5 rounded border border-[#d4af37]/30 font-medium"
                           >
                             {arch}
                           </span>
                         ))}
                       </div>
 
-                      {/* Boss Matchup Score & Counter Highlights */}
                       {bossMatchup && (
-                        <div className="mt-2 pt-2 border-t border-[#1e2338] space-y-1">
-                          <div className="flex items-center justify-between text-[11px]">
-                            <span className="font-semibold text-zinc-300">
-                              Clear Rating: <strong className={bossMatchup.rating === 'S' ? 'text-emerald-300' : bossMatchup.rating === 'A' ? 'text-sky-300' : bossMatchup.rating === 'B' ? 'text-amber-300' : 'text-rose-400'}>{bossMatchup.rating} Tier</strong>
+                        <div className="mt-2 pt-2 border-t border-[#202538] space-y-1.5">
+                          <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                            <span className="font-semibold text-zinc-200">
+                              Clear Rating:{' '}
+                              <strong
+                                className={
+                                  bossMatchup.rating === 'S'
+                                    ? 'text-emerald-300'
+                                    : bossMatchup.rating === 'A'
+                                      ? 'text-sky-300'
+                                      : bossMatchup.rating === 'B'
+                                        ? 'text-amber-300'
+                                        : 'text-rose-300'
+                                }
+                              >
+                                {bossMatchup.rating} Tier
+                              </strong>
                             </span>
-                            <span className="text-[10px] text-zinc-400 font-mono">
+                            <span className="text-xs text-zinc-300 font-mono">
                               Counter Score: {bossMatchup.score}/100
                             </span>
                           </div>
-                          <div className="text-[11px] text-zinc-300 leading-snug">
+                          <div className="text-xs text-zinc-200 leading-snug">
                             {bossMatchup.reason}
                           </div>
-                          {bossMatchup.counterHighlights && bossMatchup.counterHighlights.length > 0 && (
-                            <div className="flex flex-wrap gap-1 pt-0.5">
-                              {bossMatchup.counterHighlights.map((hl) => (
-                                <span
-                                  key={hl}
-                                  className="text-[9px] bg-emerald-950/50 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.2 rounded"
-                                >
-                                  ✓ {hl}
-                                </span>
-                              ))}
-                            </div>
-                          )}
+                          {bossMatchup.counterHighlights &&
+                            bossMatchup.counterHighlights.length > 0 && (
+                              <div className="flex flex-wrap gap-1.5 pt-0.5">
+                                {bossMatchup.counterHighlights.map((hl) => (
+                                  <span
+                                    key={hl}
+                                    className="text-[11px] bg-emerald-950/60 text-emerald-200 border border-emerald-400/40 px-2 py-0.5 rounded"
+                                  >
+                                    ✓ {hl}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
                         </div>
                       )}
                     </div>
                   )}
 
                   {/* 4 Team Member Slots */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4">
                     {[0, 1, 2, 3].map((slotIdx) => {
                       const member = act.team[slotIdx];
 
                       if (member) {
                         const color = ELEMENT_BADGES[member.element] || {
-                          bg: 'bg-zinc-800',
+                          bg: 'bg-[#181c2b]',
                           text: 'text-zinc-200',
-                          border: 'border-zinc-700',
+                          border: 'border-[#323954]',
                         };
 
                         return (
                           <div
                             key={member.id}
-                            className={`bg-[#0d0f19] border ${color.border} rounded-xl p-2.5 flex flex-col justify-between gap-2 relative group hover:border-[#d4af37]/60 transition-colors`}
+                            className={`bg-[#0e1019] border ${color.border} rounded-xl p-2.5 flex flex-col justify-between gap-2 relative hover:border-[#d4af37]/65 transition-colors`}
                           >
                             {member.isTrial && (
-                              <span className="absolute top-1.5 right-1.5 bg-gradient-to-r from-amber-400 to-[#d4af37] text-black font-extrabold text-[8px] px-1.5 py-0.2 rounded-full shadow z-10 uppercase tracking-tight">
+                              <span className="absolute top-1.5 right-1.5 bg-[#d4af37] text-[#0a0b0e] font-extrabold text-[9px] px-1.5 py-0.5 rounded-full shadow z-10 uppercase tracking-tight">
                                 Trial
                               </span>
                             )}
-                            <div
+                            <button
+                              type="button"
                               onClick={() => setSelectedCharacter(member)}
-                              className="cursor-pointer flex flex-col items-center gap-1"
+                              aria-label={`View ${member.name} build and details`}
+                              className="w-full cursor-pointer flex flex-col items-center gap-1 bg-transparent border-0 p-0 text-center"
                             >
                               <CharacterPortrait
                                 src={member.icon}
@@ -862,58 +933,60 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                                 rarity={member.rarity}
                                 size="sm"
                               />
-                              <div className="text-xs font-bold text-zinc-100 truncate w-full text-center">
+                              <div className="text-xs font-bold text-zinc-100 truncate w-full">
                                 {member.name}
                               </div>
-                              <div className={`text-[10px] font-semibold ${color.text} truncate`}>
+                              <div className={`text-[11px] font-semibold ${color.text} truncate w-full`}>
                                 {member.roles[0] || member.element}
                               </div>
-                            </div>
+                            </button>
 
                             <div className="flex items-center gap-1 mt-1">
                               <button
                                 type="button"
+                                aria-label={`Swap ${member.name} in Act ${act.actNumber}`}
                                 onClick={() =>
                                   setSwapTarget({ actNumber: act.actNumber, oldChar: member })
                                 }
-                                className="flex-1 flex items-center justify-center gap-1 text-[10px] font-semibold bg-[#181c2d] hover:bg-[#252c46] text-zinc-300 hover:text-[#d4af37] py-1 rounded-lg border border-[#262d47] transition-colors cursor-pointer"
+                                className="flex-1 min-h-[34px] flex items-center justify-center gap-1 text-[11px] font-semibold bg-[#181c2d] hover:bg-[#252c46] text-zinc-200 hover:text-[#f3cf58] px-1.5 py-1 rounded-lg border border-[#323954] transition-colors cursor-pointer"
                                 title="Replace this character"
                               >
-                                <ArrowLeftRight className="w-3 h-3" />
+                                <ArrowLeftRight className="w-3 h-3" aria-hidden="true" />
                                 <span>Swap</span>
                               </button>
 
                               <button
                                 type="button"
+                                aria-label={`Remove ${member.name} from Act ${act.actNumber}`}
                                 onClick={() => handleRemoveMember(act.actNumber, member.id)}
-                                className="p-1 text-zinc-400 hover:text-rose-400 bg-[#181c2d] hover:bg-rose-950/40 border border-[#262d47] rounded-lg transition-colors cursor-pointer"
+                                className="min-w-[34px] min-h-[34px] flex items-center justify-center text-zinc-300 hover:text-rose-200 bg-[#181c2d] hover:bg-rose-950/60 border border-[#323954] rounded-lg transition-colors cursor-pointer shrink-0"
                                 title="Remove from act"
                               >
-                                <Trash2 className="w-3 h-3" />
+                                <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
                               </button>
                             </div>
                           </div>
                         );
                       }
 
-                      // Empty Slot Placeholder
                       return (
                         <div
                           key={`empty-${slotIdx}`}
-                          className="bg-[#0b0c15] border border-dashed border-[#272e48] rounded-xl p-2.5 flex flex-col items-center justify-center gap-2 min-h-[140px] text-center"
+                          className="bg-[#0b0d15] border border-dashed border-[#2c334d] rounded-xl p-2.5 flex flex-col items-center justify-center gap-2 min-h-[144px] text-center"
                         >
-                          <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
+                          <span className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider">
                             Slot {slotIdx + 1}
                           </span>
-                          <span className="text-[11px] text-zinc-400">Empty</span>
+                          <span className="text-xs text-zinc-400">Empty</span>
                           <button
                             type="button"
+                            aria-label={`Add character to Act ${act.actNumber} Slot ${slotIdx + 1}`}
                             onClick={() =>
                               setSwapTarget({ actNumber: act.actNumber, oldChar: null })
                             }
-                            className="mt-1 flex items-center justify-center gap-1 text-[10px] font-bold bg-[#171b2d] hover:bg-[#d4af37] text-zinc-300 hover:text-zinc-950 px-2.5 py-1 rounded-lg border border-[#262e4c] hover:border-[#d4af37] transition-all cursor-pointer"
+                            className="min-h-[36px] mt-1 flex items-center justify-center gap-1 text-xs font-bold bg-[#1a1e2e] hover:bg-[#d4af37] text-zinc-100 hover:text-[#0a0b0e] px-3 py-1 rounded-lg border border-[#323954] hover:border-[#d4af37] transition-colors cursor-pointer"
                           >
-                            <Plus className="w-3 h-3" />
+                            <Plus className="w-3.5 h-3.5" aria-hidden="true" />
                             <span>Add</span>
                           </button>
                         </div>
@@ -921,134 +994,122 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                     })}
                   </div>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
-      </div>
+      </section>
 
-      {/* Manual Swap / Add Modal */}
+      {/* Manual Swap / Add Modal (accessible dialog with focus trap & Escape) */}
       {swapTarget && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#121422] border border-[#2b3356] rounded-2xl max-w-lg w-full p-5 space-y-4 shadow-2xl animate-in fade-in duration-150">
-            <div className="flex items-center justify-between border-b border-[#212742] pb-3">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="theater-swap-title"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
+          onClick={closeSwapModal}
+        >
+          <div
+            ref={swapDialogRef}
+            tabIndex={-1}
+            className="bg-[#121420] border border-[#2c334d] rounded-2xl max-w-lg w-full max-h-[88vh] p-5 flex flex-col gap-4 shadow-2xl focus:outline-none"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-2 border-b border-[#24293d] pb-3">
               <div className="flex items-center gap-2">
-                <ArrowLeftRight className="w-4 h-4 text-[#d4af37]" />
-                <h3 className="text-sm font-bold text-zinc-100">
+                <ArrowLeftRight className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
+                <h2 id="theater-swap-title" className="text-sm font-bold text-zinc-100 font-serif">
                   {swapTarget.oldChar
                     ? `Swap ${swapTarget.oldChar.name} (Act ${swapTarget.actNumber})`
                     : `Add Character to Act ${swapTarget.actNumber}`}
-                </h3>
+                </h2>
               </div>
               <button
-                onClick={() => {
-                  setSwapTarget(null);
-                  setModalError(null);
-                }}
-                className="text-zinc-400 hover:text-zinc-200 cursor-pointer"
+                ref={swapCloseBtnRef}
+                type="button"
+                aria-label="Close character swap modal"
+                onClick={closeSwapModal}
+                className="min-w-[38px] min-h-[38px] rounded-xl flex items-center justify-center text-zinc-300 hover:text-white hover:bg-[#1f243b] cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
 
             {modalError && (
-              <div className="p-2.5 rounded-lg bg-rose-950/70 border border-rose-500/50 text-xs text-rose-300">
+              <div
+                role="alert"
+                className="p-3 rounded-xl bg-rose-950/60 border border-rose-400/50 text-xs text-rose-100"
+              >
                 {modalError}
               </div>
             )}
 
-            <p className="text-xs text-zinc-400">
-              Select an available character from your eligible roster who has at least 1 remaining Vigor point and is not already deployed in Act {swapTarget.actNumber}:
+            <p className="text-xs text-zinc-300 leading-relaxed">
+              Select an available character from your eligible roster with at least 1 remaining Vigor point who is not already deployed in Act {swapTarget.actNumber}:
             </p>
 
             {/* Candidate List */}
-            <div className="max-h-72 overflow-y-auto space-y-1.5 pr-1 scrollbar-thin">
-              {effectiveEligible
-                .filter((c) => {
-                  const act = schedule.find((a) => a.actNumber === swapTarget.actNumber);
-                  const otherMembers = swapTarget.oldChar
-                    ? (act?.team.filter((m) => m.id !== swapTarget.oldChar?.id) || [])
-                    : (act?.team || []);
-                  const hasConflict = otherMembers.some((m) => isSameCharacterOrTraveler(m, c));
-                  const isReplacingSameCharacter = isSameCharacterOrTraveler(swapTarget.oldChar?.id, c.id);
-                  const vigor = isReplacingSameCharacter ? 1 : (vigorState[c.id] ?? 2);
-                  return !hasConflict && vigor > 0;
-                })
-                .sort((a, b) => {
-                  const vigorA = vigorState[a.id] ?? 2;
-                  const vigorB = vigorState[b.id] ?? 2;
-                  if (vigorB !== vigorA) return vigorB - vigorA;
-                  if (b.rarity !== a.rarity) return b.rarity - a.rarity;
-                  return a.name.localeCompare(b.name);
-                })
-                .map((candidate) => {
-                  const vigor = vigorState[candidate.id] ?? 2;
-                  const color = ELEMENT_BADGES[candidate.element];
-                  const isBorrowed = candidate.id === borrowedCharId;
+            <div className="overflow-y-auto flex-1 min-h-0 space-y-2 pr-1">
+              {swapCandidates.map((candidate) => {
+                const vigor = vigorState[candidate.id] ?? 2;
+                const color = ELEMENT_BADGES[candidate.element];
+                const isBorrowed = candidate.id === borrowedCharId;
 
-                  return (
-                    <div
-                      key={candidate.id}
-                      className={`flex items-center justify-between border p-2.5 rounded-xl transition-colors ${
-                        isBorrowed
-                          ? 'bg-emerald-950/20 border-emerald-500/50 hover:bg-emerald-950/30'
-                          : 'bg-[#181c2e] hover:bg-[#20263e] border-[#27304e]'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <CharacterPortrait
-                          src={candidate.icon}
-                          name={candidate.name}
-                          element={candidate.element}
-                          rarity={candidate.rarity}
-                          size="sm"
-                        />
-                        <div>
-                          <div className="text-xs font-bold text-zinc-100 flex items-center gap-1.5">
-                            <span>{candidate.name}</span>
-                            {isBorrowed && (
-                              <span className="text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.2 rounded">
-                                Friend Borrow
-                              </span>
-                            )}
-                          </div>
-                          <div className="text-[10px] text-zinc-400 flex items-center gap-1.5">
-                            <span className={color.text}>{candidate.element}</span>
-                            <span>•</span>
-                            <span>{candidate.weapon}</span>
-                            <span>•</span>
-                            <span>{candidate.roles[0]}</span>
-                          </div>
+                return (
+                  <div
+                    key={candidate.id}
+                    className={`flex items-center justify-between gap-2 border p-2.5 rounded-xl transition-colors ${
+                      isBorrowed
+                        ? 'bg-emerald-950/25 border-emerald-400/50'
+                        : 'bg-[#161a29] border-[#282f48] hover:border-[#3c4566]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <CharacterPortrait
+                        src={candidate.icon}
+                        name={candidate.name}
+                        element={candidate.element}
+                        rarity={candidate.rarity}
+                        size="sm"
+                      />
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold text-zinc-100 flex flex-wrap items-center gap-1.5">
+                          <span className="truncate">{candidate.name}</span>
+                          {isBorrowed && (
+                            <span className="text-[10px] font-bold bg-amber-500/20 text-amber-200 border border-amber-400/45 px-1.5 py-0.5 rounded">
+                              Friend Borrow
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-[11px] text-zinc-300 flex flex-wrap items-center gap-1.5">
+                          <span className={color.text}>{candidate.element}</span>
+                          <span>•</span>
+                          <span>{candidate.weapon}</span>
+                          <span>•</span>
+                          <span>{candidate.roles[0]}</span>
                         </div>
                       </div>
-
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono font-bold bg-emerald-950/70 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full">
-                          {vigor} Vigor
-                        </span>
-                        <button
-                          onClick={() => handlePerformSwap(candidate.id)}
-                          className="text-xs font-bold bg-[#d4af37] hover:bg-[#e6bf3d] text-zinc-950 px-3 py-1 rounded-lg transition-colors cursor-pointer"
-                        >
-                          Select
-                        </button>
-                      </div>
                     </div>
-                  );
-                })}
 
-              {effectiveEligible.filter((c) => {
-                const act = schedule.find((a) => a.actNumber === swapTarget.actNumber);
-                const otherMembers = swapTarget.oldChar
-                  ? (act?.team.filter((m) => m.id !== swapTarget.oldChar?.id) || [])
-                  : (act?.team || []);
-                const hasConflict = otherMembers.some((m) => isSameCharacterOrTraveler(m, c));
-                const isReplacingSameCharacter = isSameCharacterOrTraveler(swapTarget.oldChar?.id, c.id);
-                const vigor = isReplacingSameCharacter ? 1 : (vigorState[c.id] ?? 2);
-                return !hasConflict && vigor > 0;
-              }).length === 0 && (
-                <div className="text-center py-6 text-xs text-zinc-500">
-                  No other eligible characters with remaining vigor available to swap.
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-[11px] font-mono font-bold bg-emerald-950/75 text-emerald-200 border border-emerald-400/40 px-2 py-0.5 rounded-full">
+                        {vigor} Vigor
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handlePerformSwap(candidate.id)}
+                        className="min-h-[38px] text-xs font-bold bg-[#d4af37] hover:bg-[#e5c14d] text-[#0a0b0e] px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer"
+                      >
+                        Select
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {swapCandidates.length === 0 && (
+                <div role="status" className="text-center py-6 text-xs text-zinc-300">
+                  No other eligible characters with remaining vigor are available to swap into this act.
                 </div>
               )}
             </div>

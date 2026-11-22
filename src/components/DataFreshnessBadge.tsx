@@ -81,7 +81,7 @@ export const DataFreshnessBadge: React.FC<DataFreshnessBadgeProps> = ({
               {styles.icon}
               {info.status} Dataset (v{info.version})
             </span>
-            <span className="text-[10px] text-zinc-400">
+            <span className="text-[10px] text-zinc-300">
               {info.verifiedAt !== 'Unregistered' ? `Verified: ${info.verifiedAt}` : 'Active Default'}
             </span>
           </div>

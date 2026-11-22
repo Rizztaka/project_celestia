@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useId } from 'react';
 import { HelpCircle } from 'lucide-react';
 
 export interface InfoTooltipProps {
@@ -14,36 +14,39 @@ export const InfoTooltip: React.FC<InfoTooltipProps> = ({
   content,
   title,
   className = '',
-  iconClassName = 'text-zinc-400 hover:text-amber-400',
+  iconClassName = 'text-zinc-300 hover:text-[#f3cf58]',
   size = 'sm',
   align = 'center',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const tooltipId = useId();
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
 
+    // Capture phase ensures Escape closes the tooltip before bubbling to any parent modal
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        event.stopPropagation();
         setIsOpen(false);
       }
     };
 
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('touchstart', handleClickOutside);
-      document.addEventListener('keydown', handleKeyDown);
-    }
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown, true);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown, true);
     };
   }, [isOpen]);
 
@@ -53,15 +56,15 @@ export const InfoTooltip: React.FC<InfoTooltipProps> = ({
     align === 'right'
       ? 'right-0 bottom-full mb-2'
       : align === 'left'
-      ? 'left-0 bottom-full mb-2'
-      : 'left-1/2 -translate-x-1/2 bottom-full mb-2';
+        ? 'left-0 bottom-full mb-2'
+        : 'left-1/2 -translate-x-1/2 bottom-full mb-2';
 
   const arrowClasses =
     align === 'right'
       ? 'right-3'
       : align === 'left'
-      ? 'left-3'
-      : 'left-1/2 -translate-x-1/2';
+        ? 'left-3'
+        : 'left-1/2 -translate-x-1/2';
 
   return (
     <div
@@ -74,6 +77,7 @@ export const InfoTooltip: React.FC<InfoTooltipProps> = ({
         type="button"
         aria-label={title || 'Information'}
         aria-expanded={isOpen}
+        aria-describedby={isOpen ? tooltipId : undefined}
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen((prev) => !prev);
@@ -84,27 +88,30 @@ export const InfoTooltip: React.FC<InfoTooltipProps> = ({
             setIsOpen(false);
           }
         }}
-        className="inline-flex items-center justify-center p-0.5 rounded-full transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-amber-400"
+        className="inline-flex items-center justify-center p-1.5 -m-1 rounded-full transition-colors cursor-pointer"
       >
-        <HelpCircle className={`${iconSize} ${iconClassName} transition-colors`} />
+        <HelpCircle className={`${iconSize} ${iconClassName} transition-colors`} aria-hidden="true" />
       </button>
 
       {isOpen && (
         <div
+          id={tooltipId}
           role="tooltip"
           onClick={(e) => e.stopPropagation()}
-          className={`absolute z-50 ${positionClasses} w-64 sm:w-72 max-w-[calc(100vw-32px)] p-2.5 rounded-xl bg-[#161927] border border-[#2a3048] shadow-2xl text-left pointer-events-auto backdrop-blur-md`}
+          className={`absolute z-50 ${positionClasses} w-64 sm:w-72 max-w-[calc(100vw-32px)] p-3 rounded-xl bg-[#161927] border border-[#323954] shadow-2xl text-left pointer-events-auto backdrop-blur-md`}
         >
           {title && (
-            <div className="font-semibold text-xs text-amber-300 mb-1 border-b border-[#252c42] pb-1 flex items-center justify-between">
-              <span>{title}</span>
+            <div className="font-semibold text-xs text-[#f3cf58] mb-1.5 border-b border-[#262c44] pb-1">
+              {title}
             </div>
           )}
-          <div className="text-[11px] leading-relaxed text-zinc-300 font-normal">
+          <div className="text-xs leading-relaxed text-zinc-200 font-normal">
             {content}
           </div>
-          {/* Arrow */}
-          <div className={`absolute top-full ${arrowClasses} -mt-1 border-4 border-transparent border-t-[#2a3048]`} />
+          <div
+            aria-hidden="true"
+            className={`absolute top-full ${arrowClasses} -mt-1 border-4 border-transparent border-t-[#323954]`}
+          />
         </div>
       )}
     </div>

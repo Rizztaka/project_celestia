@@ -57,21 +57,21 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
       : p50 || curve[Math.floor(curve.length / 2)];
 
   return (
-    <div className="bg-[#12141d] border border-[#23273a] p-5 rounded-2xl shadow-lg space-y-4">
+    <div className="bg-[#121420] border border-[#24293d] p-5 rounded-2xl shadow-lg space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#202538] pb-3">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-[#d4af37]" />
-          <h3 className="text-sm font-bold text-zinc-100">
+          <TrendingUp className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
+          <h3 className="text-sm font-bold text-zinc-100 font-serif">
             Resin Investment vs. Upgrade Probability
           </h3>
-          <span className="text-xs text-zinc-400">({characterName} · {totalRollValue}% Total RV)</span>
+          <span className="text-xs text-zinc-300">({characterName} · {totalRollValue}% Total RV)</span>
         </div>
 
         {/* Dynamic Metric Badge */}
         {activePoint && (
-          <div className="flex items-center gap-2 bg-[#181b28] px-3 py-1.5 rounded-lg border border-[#2d344d] text-xs">
-            <span className="text-zinc-400">Day {activePoint.days} ({activePoint.resin.toLocaleString()} Resin):</span>
-            <span className="text-[#d4af37] font-bold">{(activePoint.probability * 100).toFixed(1)}% Chance</span>
+          <div className="flex items-center gap-2 bg-[#161928] px-3 py-1.5 rounded-lg border border-[#2c334d] text-xs">
+            <span className="text-zinc-300">Day {activePoint.days} ({activePoint.resin.toLocaleString()} Resin):</span>
+            <span className="text-[#f3cf58] font-bold">{(activePoint.probability * 100).toFixed(1)}% Chance</span>
           </div>
         )}
       </div>
@@ -79,6 +79,8 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
       {/* SVG Canvas */}
       <div className="relative w-full overflow-hidden">
         <svg
+          role="img"
+          aria-label={`Resin investment diminishing returns curve for ${characterName}. Total RV is ${totalRollValue}%.`}
           viewBox={`0 0 ${width} ${height}`}
           className="w-full h-auto select-none"
           onMouseLeave={() => setHoverIndex(null)}
@@ -108,7 +110,7 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
                 <text
                   x={padding.left - 8}
                   y={y + 4}
-                  fill="#64748b"
+                  fill="#c4c9d6"
                   fontSize="10"
                   textAnchor="end"
                   className="font-mono"
@@ -135,7 +137,7 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
                 <text
                   x={x}
                   y={height - padding.bottom + 18}
-                  fill="#64748b"
+                  fill="#c4c9d6"
                   fontSize="10"
                   textAnchor="middle"
                   className="font-mono"
@@ -150,7 +152,7 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
           <text
             x={padding.left + innerWidth / 2}
             y={height - 6}
-            fill="#94a3b8"
+            fill="#d4d4d8"
             fontSize="10"
             textAnchor="middle"
             className="font-semibold"
@@ -292,8 +294,8 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
       </div>
 
       {/* Footer Legend */}
-      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-400 pt-1">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-300 pt-1">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" />
             <span>50% Target (Median Expectation)</span>
@@ -307,7 +309,7 @@ export const ArtifactDiminishingReturnsCurve: React.FC<ArtifactDiminishingReturn
             <span>90% Target (Near Ceiling)</span>
           </div>
         </div>
-        <div className="flex items-center gap-1 text-zinc-500">
+        <div className="flex items-center gap-1 text-zinc-300">
           <HelpCircle className="w-3 h-3" />
           <span>Formula: P(t) = 1 - (1 - p)^(9 × Days)</span>
         </div>

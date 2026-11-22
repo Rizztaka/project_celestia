@@ -45,6 +45,7 @@ import {
 import { getSavedWeapons, getSavedProfiles } from '../services/storage';
 import { equipWeaponToCharacter } from '../services/armory-operations';
 import { getWeaponByKey } from '../data/weapons';
+import { useModalAccessibility } from '../hooks/useModalAccessibility';
 
 interface TeamGeneratorViewProps {
   ownedIds: string[];
@@ -58,14 +59,22 @@ interface TeamGeneratorViewProps {
 }
 
 const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  Pyro: { bg: 'bg-rose-950/40', text: 'text-rose-400', border: 'border-rose-500/30' },
-  Hydro: { bg: 'bg-sky-950/40', text: 'text-sky-400', border: 'border-sky-500/30' },
-  Dendro: { bg: 'bg-emerald-950/40', text: 'text-emerald-400', border: 'border-emerald-500/30' },
-  Electro: { bg: 'bg-purple-950/40', text: 'text-purple-400', border: 'border-purple-500/30' },
-  Anemo: { bg: 'bg-teal-950/40', text: 'text-teal-400', border: 'border-teal-500/30' },
-  Cryo: { bg: 'bg-cyan-950/40', text: 'text-cyan-300', border: 'border-cyan-500/30' },
-  Geo: { bg: 'bg-amber-950/40', text: 'text-amber-400', border: 'border-amber-500/30' },
+  Pyro: { bg: 'bg-rose-950/35', text: 'text-rose-300', border: 'border-rose-400/35' },
+  Hydro: { bg: 'bg-sky-950/35', text: 'text-sky-300', border: 'border-sky-400/35' },
+  Dendro: { bg: 'bg-emerald-950/35', text: 'text-emerald-300', border: 'border-emerald-400/35' },
+  Electro: { bg: 'bg-purple-950/35', text: 'text-purple-300', border: 'border-purple-400/35' },
+  Anemo: { bg: 'bg-teal-950/35', text: 'text-teal-300', border: 'border-teal-400/35' },
+  Cryo: { bg: 'bg-cyan-950/35', text: 'text-cyan-200', border: 'border-cyan-400/35' },
+  Geo: { bg: 'bg-amber-950/35', text: 'text-amber-300', border: 'border-amber-400/35' },
 };
+
+const CHARACTER_NAME_BY_ID = new Map<string, string>(
+  CHARACTERS.map((c) => [c.id, c.name])
+);
+
+function getCharacterName(id: string): string {
+  return CHARACTER_NAME_BY_ID.get(id) ?? id;
+}
 
 export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
   ownedIds,
@@ -91,6 +100,16 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
   const [customAssignments, setCustomAssignments] = useState<
     Record<string, Record<string, TeamWeaponAssignment>>
   >({});
+
+  const swapModalRef = useRef<HTMLDivElement>(null);
+  const swapCloseBtnRef = useRef<HTMLButtonElement>(null);
+
+  useModalAccessibility({
+    isOpen: Boolean(quickSwapTarget),
+    onClose: () => setQuickSwapTarget(null),
+    containerRef: swapModalRef,
+    initialFocusRef: swapCloseBtnRef,
+  });
 
   const weaponBag = useMemo(() => weapons || getSavedWeapons(), [weapons]);
 
@@ -125,6 +144,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
       isMounted = false;
     };
   }, [ownedIds, focusId, profiles, weaponBag, showCatalogFallback]);
+
   const handleSwapMember = (
     teamId: string,
     originalId: string,
@@ -188,40 +208,50 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
   };
 
   const featuredCarries = ['Nefer', 'Mavuika', 'HuTao', 'Alhaitham', 'Clorinde', 'Neuvillette', 'Navia'];
+  const isInsufficientRoster = ownedIds.length < 4 && !showCatalogFallback;
 
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#141624] via-[#1a1e32] to-[#141624] p-6 rounded-2xl border border-[#262c44] shadow-lg">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-[#121420] via-[#191d30] to-[#121420] p-5 sm:p-6 rounded-2xl border border-[#24293d] shadow-lg">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-[#d4af37] text-xs font-bold tracking-wider uppercase mb-1">
-              <Sparkles className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase mb-1">
+              <Sparkles className="w-4 h-4" aria-hidden="true" />
               <span>Instant Archetype Synergy Engine</span>
               {isPending && (
-                <span className="text-[10px] text-amber-400 animate-pulse font-normal lowercase tracking-normal">
-                  (updating...)
+                <span
+                  role="status"
+                  className="text-xs text-amber-300 animate-pulse motion-reduce:animate-none font-normal lowercase tracking-normal"
+                >
+                  (updating…)
                 </span>
               )}
             </div>
             <h1 className="text-2xl font-bold text-zinc-100 font-serif">
               Best Team Recommendations
             </h1>
-            <p className="text-sm text-zinc-400 mt-1 max-w-2xl">
-              Calculates optimal 4-slot compositions from your owned roster ({ownedIds.length} characters) balancing elemental resonance, reaction chains, buffer multipliers, and survivability. Click any character to view build and talents.
+            <p className="text-sm text-zinc-300 mt-1 max-w-2xl leading-relaxed">
+              Calculates optimal 4-slot compositions from your owned roster ({ownedIds.length} characters) balancing elemental resonance, reaction chains, buffer multipliers, and survivability. Select any character to inspect builds and talents.
             </p>
           </div>
 
           {/* Quick Focus Selector */}
-          <div className="flex flex-col gap-1.5">
-            <span className="text-xs font-semibold text-zinc-300">Focus on Main Carry:</span>
-            <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-col gap-1.5 min-w-0">
+            <span className="text-xs font-semibold text-zinc-200">Focus on Main Carry:</span>
+            <div
+              role="group"
+              aria-label="Focus on main carry"
+              className="flex items-center overflow-x-auto sm:flex-wrap gap-1.5 pb-1 sm:pb-0 touch-pan-x"
+            >
               <button
+                type="button"
+                aria-pressed={focusId === ''}
                 onClick={() => setFocusId('')}
-                className={`px-3 py-1 text-xs rounded-lg font-medium transition-colors cursor-pointer ${
+                className={`min-h-[38px] sm:min-h-[32px] px-3 py-1.5 text-xs rounded-lg font-semibold transition-colors cursor-pointer shrink-0 ${
                   focusId === ''
-                    ? 'bg-[#d4af37] text-black font-bold'
-                    : 'bg-[#1e2336] text-zinc-300 hover:bg-[#282f48]'
+                    ? 'bg-[#d4af37] text-[#0a0b0e] font-bold shadow-sm'
+                    : 'bg-[#1a1e2e] text-zinc-200 border border-[#2c334d] hover:bg-[#252b42]'
                 }`}
               >
                 All Teams
@@ -233,11 +263,13 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                 return (
                   <button
                     key={id}
+                    type="button"
+                    aria-pressed={isSelected}
                     onClick={() => setFocusId(id)}
-                    className={`px-3 py-1 text-xs rounded-lg font-medium transition-colors cursor-pointer ${
+                    className={`min-h-[38px] sm:min-h-[32px] px-3 py-1.5 text-xs rounded-lg font-semibold transition-colors cursor-pointer shrink-0 ${
                       isSelected
-                        ? 'bg-[#d4af37] text-black font-bold'
-                        : 'bg-[#1e2336] text-zinc-300 hover:bg-[#282f48]'
+                        ? 'bg-[#d4af37] text-[#0a0b0e] font-bold shadow-sm'
+                        : 'bg-[#1a1e2e] text-zinc-200 border border-[#2c334d] hover:bg-[#252b42]'
                     }`}
                   >
                     {char.name}
@@ -250,52 +282,61 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
       </div>
 
       {/* Insufficient Roster Banner */}
-      {ownedIds.length < 4 && !showCatalogFallback && (
-        <div className="bg-gradient-to-r from-amber-950/30 via-[#161824] to-amber-950/20 p-8 rounded-2xl border border-amber-500/30 shadow-lg text-center space-y-4">
-          <div className="w-12 h-12 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-            <Users className="w-6 h-6" />
+      {isInsufficientRoster && (
+        <section
+          aria-label="Insufficient Roster Notice"
+          className="bg-gradient-to-r from-amber-950/35 via-[#151826] to-amber-950/25 p-6 sm:p-8 rounded-2xl border border-amber-400/35 shadow-lg text-center space-y-4"
+        >
+          <div className="w-12 h-12 mx-auto rounded-2xl bg-amber-500/15 border border-amber-400/35 flex items-center justify-center text-amber-300">
+            <Users className="w-6 h-6" aria-hidden="true" />
           </div>
           <div className="space-y-1.5 max-w-lg mx-auto">
-            <h3 className="text-base font-bold text-zinc-100 font-serif">
+            <h2 className="text-base font-bold text-zinc-100 font-serif">
               Insufficient Roster ({ownedIds.length}/4 Characters Owned)
-            </h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">
+            </h2>
+            <p className="text-xs text-zinc-300 leading-relaxed">
               Celestia enforces strict ownership and requires at least 4 owned characters to generate personalized team compositions.
             </p>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
             {onToggleDemoMode && (
               <button
+                type="button"
                 onClick={() => onToggleDemoMode(true)}
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0d0f17] font-bold text-xs hover:brightness-110 transition-all shadow-md cursor-pointer flex items-center gap-2"
+                className="min-h-[44px] sm:min-h-[38px] px-4 py-2 rounded-xl bg-[#d4af37] hover:bg-[#e5c14d] text-[#0a0b0e] font-bold text-xs transition-colors shadow-md cursor-pointer inline-flex items-center gap-2"
               >
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-4 h-4" aria-hidden="true" />
                 <span>Turn on Demo Mode</span>
               </button>
             )}
             <button
+              type="button"
               onClick={() => setShowCatalogFallback(true)}
-              className="px-4 py-2 rounded-xl bg-[#1e2336] hover:bg-[#282f48] text-zinc-200 border border-[#2d344e] text-xs font-semibold transition-all cursor-pointer flex items-center gap-2"
+              className="min-h-[44px] sm:min-h-[38px] px-4 py-2 rounded-xl bg-[#1a1e2e] hover:bg-[#252b42] text-zinc-100 border border-[#323954] text-xs font-semibold transition-colors cursor-pointer inline-flex items-center gap-2"
             >
-              <Compass className="w-4 h-4 text-[#d4af37]" />
+              <Compass className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
               <span>Show Theoretical Catalog Teams</span>
             </button>
           </div>
-        </div>
+        </section>
       )}
 
       {/* Notice when viewing Catalog Fallback */}
       {ownedIds.length < 4 && showCatalogFallback && (
-        <div className="bg-[#141624] border border-[#2d344e] p-3.5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2 text-zinc-300">
-            <Info className="w-4 h-4 text-[#d4af37] shrink-0" />
+        <div
+          role="status"
+          className="bg-[#141624] border border-[#323954] p-3.5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs"
+        >
+          <div className="flex items-start sm:items-center gap-2 text-zinc-200">
+            <Info className="w-4 h-4 text-[#d4af37] shrink-0 mt-0.5 sm:mt-0" aria-hidden="true" />
             <span>
-              Viewing <strong>Theoretical Catalog Teams</strong> across all 128 characters. Characters not currently owned by you are marked with an <strong>Unowned</strong> badge.
+              Viewing <strong className="text-white">Theoretical Catalog Teams</strong> across all 128 characters. Characters not currently owned by you are marked with an <strong className="text-rose-200">Unowned</strong> badge.
             </span>
           </div>
           <button
+            type="button"
             onClick={() => setShowCatalogFallback(false)}
-            className="text-xs text-zinc-400 hover:text-white underline cursor-pointer shrink-0"
+            className="min-h-[36px] px-2.5 rounded-lg text-xs text-[#f3cf58] hover:bg-[#d4af37]/10 font-semibold cursor-pointer shrink-0"
           >
             Hide Catalog Teams
           </button>
@@ -304,286 +345,308 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
 
       {/* Recommended Teams Grid */}
       <div className="grid grid-cols-1 gap-6">
-        {teams.map((team, idx) => (
-          <div
-            key={team.id}
-            className="bg-[#12141d] border border-[#23273a] hover:border-[#d4af37]/50 rounded-2xl p-5 sm:p-6 transition-all duration-200 shadow-md space-y-4"
-          >
-            {/* Team Title & Score Badges */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1f2334] pb-3">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/30">
-                    Rank #{idx + 1}
-                  </span>
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-[#1e2336] text-zinc-300">
-                    {team.archetype}
-                  </span>
-                  {team.isTheoretical && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-500/40">
-                      Theoretical (Catalog)
+        {teams.map((team, idx) => {
+          const isTipsExpanded = expandedTeamId === team.id;
+          const isDrawerExpanded = expandedDrawerTeamId === team.id;
+          const tipsPanelId = `team-tips-${team.id}`;
+          const drawerPanelId = `team-drawer-${team.id}`;
+
+          return (
+            <article
+              key={team.id}
+              className="bg-[#121420] border border-[#24293d] hover:border-[#d4af37]/50 rounded-2xl p-4 sm:p-6 transition-colors shadow-md space-y-4"
+            >
+              {/* Team Title & Score Badges */}
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-[#202538] pb-3.5">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-[#d4af37]/20 text-[#f3cf58] border border-[#d4af37]/40">
+                      Rank #{idx + 1}
                     </span>
-                  )}
-                </div>
-                <h2 className="text-xl font-bold text-zinc-100 font-serif mt-1">
-                  {team.name}
-                </h2>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                {/* 1. Compatibility Score */}
-                <div className="flex items-center gap-1.5 bg-[#181b28] px-3 py-1.5 rounded-xl border border-[#252a3f]">
-                  <Zap className="w-4 h-4 text-amber-400" />
-                  <div>
-                    <div className="text-[10px] text-zinc-400 uppercase font-semibold flex items-center gap-1">
-                      <span>Compatibility</span>
-                      <InfoTooltip
-                        title="Mechanical Compatibility Score"
-                        content="Pure mechanical synergy (0-100%) synthesizing reaction chain validity, elemental resonance matching, role distribution, and energy battery flow minus anti-synergy penalties."
-                      />
-                    </div>
-                    <div className="text-sm font-bold text-amber-300">
-                      {team.scores?.compatibilityScore ?? team.compositionCompatibilityScore ?? team.synergyScore}%
-                    </div>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded bg-[#1a1e2e] text-zinc-200 border border-[#2c334d]">
+                      {team.archetype}
+                    </span>
+                    {team.isTheoretical && (
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-950/70 text-amber-200 border border-amber-400/45">
+                        Theoretical (Catalog)
+                      </span>
+                    )}
                   </div>
+                  <h2 className="text-xl font-bold text-zinc-100 font-serif mt-1.5">
+                    {team.name}
+                  </h2>
                 </div>
 
-                {/* 2. Account Investment Score */}
-                <div className="flex items-center gap-1.5 bg-[#181b28] px-3 py-1.5 rounded-xl border border-[#252a3f]">
-                  <Layers className="w-4 h-4 text-indigo-400" />
-                  <div>
-                    <div className="text-[10px] text-zinc-400 uppercase font-semibold flex items-center gap-1">
-                      <span>Investment</span>
-                      <InfoTooltip
-                        title="Account Investment Readiness Score"
-                        content="Account-specific readiness (0-100) based on owned character ascension levels, constellation power milestones, and equipped armory weapon matches."
-                      />
-                    </div>
-                    <div className="text-sm font-bold text-indigo-300">
-                      {team.scores?.investmentScore ?? 0}/100
-                    </div>
-                  </div>
-                </div>
-
-                {/* 3. Theorycrafting Benchmark Tier */}
-                {(() => {
-                  const tier = team.scores?.benchmarkTier ?? 'S';
-                  const tierBadgeStyles: Record<string, string> = {
-                    'S+': 'bg-gradient-to-r from-amber-500/25 to-rose-500/25 text-amber-300 border-amber-500/50 shadow-[0_0_12px_rgba(251,191,36,0.2)]',
-                    'S': 'bg-amber-500/20 text-amber-300 border-amber-500/40',
-                    'A': 'bg-sky-500/20 text-sky-300 border-sky-500/40',
-                    'B': 'bg-zinc-800 text-zinc-300 border-zinc-700',
-                  };
-                  return (
-                    <div className="flex items-center gap-1.5 bg-[#181b28] px-3 py-1.5 rounded-xl border border-[#252a3f]">
-                      <Sparkles className="w-4 h-4 text-[#d4af37]" />
-                      <div>
-                        <div className="text-[10px] text-zinc-400 uppercase font-semibold flex items-center gap-1">
-                          <span>Benchmark</span>
-                          <InfoTooltip
-                            title="Theorycrafting Benchmark Tier"
-                            content="Community meta standard rating (S+, S, A, B) evaluating reaction multipliers, clear efficiency, and rotation viability."
-                          />
-                        </div>
-                        <div className="flex items-center gap-1 mt-0.5">
-                          <span className={`text-[10px] font-bold px-2 py-0.2 rounded border ${tierBadgeStyles[tier] || tierBadgeStyles['S']}`}>
-                            Tier {tier}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })()}
-
-                {/* 4. Comfort Score */}
-                <div className="hidden sm:flex items-center gap-1.5 bg-[#181b28] px-3 py-1.5 rounded-xl border border-[#252a3f]">
-                  <Shield className="w-4 h-4 text-emerald-400" />
-                  <div>
-                    <div className="text-[10px] text-zinc-400 uppercase font-semibold">Comfort</div>
-                    <div className="text-sm font-bold text-emerald-300">{team.comfortScore}/100</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 4 Characters Row with Portraits */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {team.members.map((member, mIdx) => {
-                const color = ELEMENT_COLORS[member.element] || {
-                  bg: 'bg-zinc-800',
-                  text: 'text-zinc-200',
-                  border: 'border-zinc-700',
-                };
-                return (
-                  <div
-                    key={member.id + mIdx}
-                    onClick={() => setSelectedCharacter(member)}
-                    className={`group rounded-xl p-3 border ${color.border} ${color.bg} hover:border-[#d4af37] hover:scale-[1.02] transition-all duration-150 cursor-pointer flex flex-col justify-between shadow-sm`}
-                    title="Click to view full build and talents"
-                  >
-                    <div>
-                      {/* Element & Weapon */}
-                      <div className="flex items-center justify-between text-[11px] mb-2">
-                        <span className={`font-bold ${color.text}`}>{member.element}</span>
-                        {member.isOwned === false ? (
-                          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-rose-950/70 text-rose-300 border border-rose-500/40">
-                            Unowned
-                          </span>
-                        ) : (
-                          <span className="text-zinc-400 text-[10px]">{member.weapon}</span>
-                        )}
-                      </div>
-
-                      {/* Character Portrait & Name */}
-                      <div className="flex items-center gap-2.5">
-                        <CharacterPortrait
-                          src={member.icon}
-                          name={member.name}
-                          element={member.element}
-                          size="md"
-                          className="group-hover:border-[#d4af37]/60"
+                {/* 4-Metric Score Strip (all metrics visible across desktop & mobile) */}
+                <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2">
+                  {/* 1. Compatibility Score */}
+                  <div className="flex items-center gap-2 bg-[#161a29] px-3 py-2 rounded-xl border border-[#282f48]">
+                    <Zap className="w-4 h-4 text-amber-300 shrink-0" aria-hidden="true" />
+                    <div className="min-w-0">
+                      <div className="text-[11px] text-zinc-300 uppercase font-semibold flex items-center gap-1">
+                        <span>Compatibility</span>
+                        <InfoTooltip
+                          title="Mechanical Compatibility Score"
+                          content="Pure mechanical synergy (0-100%) synthesizing reaction chain validity, elemental resonance matching, role distribution, and energy battery flow minus anti-synergy penalties."
                         />
+                      </div>
+                      <div className="text-sm font-bold text-amber-200 tabular-nums">
+                        {team.scores?.compatibilityScore ?? team.compositionCompatibilityScore ?? team.synergyScore}%
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 2. Account Investment Score */}
+                  <div className="flex items-center gap-2 bg-[#161a29] px-3 py-2 rounded-xl border border-[#282f48]">
+                    <Layers className="w-4 h-4 text-indigo-300 shrink-0" aria-hidden="true" />
+                    <div className="min-w-0">
+                      <div className="text-[11px] text-zinc-300 uppercase font-semibold flex items-center gap-1">
+                        <span>Investment</span>
+                        <InfoTooltip
+                          title="Account Investment Readiness Score"
+                          content="Account-specific readiness (0-100) based on owned character ascension levels, constellation power milestones, and equipped armory weapon matches."
+                        />
+                      </div>
+                      <div className="text-sm font-bold text-indigo-200 tabular-nums">
+                        {team.scores?.investmentScore ?? 0}/100
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 3. Theorycrafting Benchmark Tier */}
+                  {(() => {
+                    const tier = team.scores?.benchmarkTier ?? 'S';
+                    const tierBadgeStyles: Record<string, string> = {
+                      'S+': 'bg-gradient-to-r from-amber-500/25 to-rose-500/25 text-amber-200 border-amber-400/50',
+                      S: 'bg-amber-500/20 text-amber-200 border-amber-400/45',
+                      A: 'bg-sky-500/20 text-sky-200 border-sky-400/45',
+                      B: 'bg-[#1f2438] text-zinc-200 border-[#323954]',
+                    };
+                    return (
+                      <div className="flex items-center gap-2 bg-[#161a29] px-3 py-2 rounded-xl border border-[#282f48]">
+                        <Sparkles className="w-4 h-4 text-[#d4af37] shrink-0" aria-hidden="true" />
                         <div className="min-w-0">
-                          <div className="text-sm font-bold text-zinc-100 group-hover:text-[#d4af37] transition-colors leading-tight truncate">
-                            {member.name}
+                          <div className="text-[11px] text-zinc-300 uppercase font-semibold flex items-center gap-1">
+                            <span>Benchmark</span>
+                            <InfoTooltip
+                              title="Theorycrafting Benchmark Tier"
+                              content="Community meta standard rating (S+, S, A, B) evaluating reaction multipliers, clear efficiency, and rotation viability."
+                            />
                           </div>
-                          <div className="text-[10px] text-zinc-400 truncate mt-0.5">
-                            {member.roles[0]}
+                          <div className="mt-0.5">
+                            <span
+                              className={`text-[11px] font-bold px-2 py-0.5 rounded border ${
+                                tierBadgeStyles[tier] || tierBadgeStyles.S
+                              }`}
+                            >
+                              Tier {tier}
+                            </span>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    );
+                  })()}
 
-                    <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between">
-                      <span className="text-[10px] text-[#d4af37] font-semibold">
-                        {'★'.repeat(Math.max(1, Math.min(5, Math.floor(member.rarity))))}
-                      </span>
-                      <span className="text-[9px] text-zinc-400 group-hover:text-zinc-200 flex items-center gap-0.5">
-                        <Info className="w-2.5 h-2.5" />
-                        <span>Build</span>
-                      </span>
+                  {/* 4. Comfort Score */}
+                  <div className="flex items-center gap-2 bg-[#161a29] px-3 py-2 rounded-xl border border-[#282f48]">
+                    <Shield className="w-4 h-4 text-emerald-300 shrink-0" aria-hidden="true" />
+                    <div className="min-w-0">
+                      <div className="text-[11px] text-zinc-300 uppercase font-semibold">Comfort</div>
+                      <div className="text-sm font-bold text-emerald-200 tabular-nums">
+                        {team.comfortScore}/100
+                      </div>
                     </div>
+                  </div>
+                </div>
+              </div>
 
-                    {/* Weapon Badge & Quick Swap */}
-                    {(() => {
-                      const assignment =
-                        customAssignments[team.id]?.[member.id] ||
-                        team.weaponAssignments?.find((wa) => wa.characterId === member.id);
-                      if (!assignment) return null;
-                      return (
-                        <div
-                          onClick={(e) => {
-                            e.stopPropagation();
+              {/* 4 Characters Row (separate keyboard buttons for build details vs weapon swap) */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                {team.members.map((member, mIdx) => {
+                  const color = ELEMENT_COLORS[member.element] || {
+                    bg: 'bg-[#181c2b]',
+                    text: 'text-zinc-200',
+                    border: 'border-[#323954]',
+                  };
+                  const assignment =
+                    customAssignments[team.id]?.[member.id] ||
+                    team.weaponAssignments?.find((wa) => wa.characterId === member.id);
+
+                  return (
+                    <div
+                      key={member.id + mIdx}
+                      className={`group rounded-xl p-3 border ${color.border} ${color.bg} hover:border-[#d4af37]/75 transition-colors flex flex-col justify-between shadow-sm`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setSelectedCharacter(member)}
+                        aria-label={`View ${member.name} build and talents`}
+                        className="w-full text-left bg-transparent border-0 p-0 cursor-pointer flex flex-col justify-between flex-1"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between text-[11px] mb-2 gap-1">
+                            <span className={`font-bold ${color.text}`}>{member.element}</span>
+                            {member.isOwned === false ? (
+                              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-950/80 text-rose-200 border border-rose-400/45">
+                                Unowned
+                              </span>
+                            ) : (
+                              <span className="text-zinc-300 text-[11px]">{member.weapon}</span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-2.5">
+                            <CharacterPortrait
+                              src={member.icon}
+                              name={member.name}
+                              element={member.element}
+                              size="md"
+                              className="group-hover:border-[#d4af37]/60 shrink-0"
+                            />
+                            <div className="min-w-0">
+                              <div className="text-sm font-bold text-zinc-100 group-hover:text-[#f3cf58] transition-colors leading-tight truncate">
+                                {member.name}
+                              </div>
+                              <div className="text-[11px] text-zinc-300 truncate mt-0.5">
+                                {member.roles[0]}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between">
+                          <span className="text-xs text-[#f3cf58] font-semibold">
+                            {'★'.repeat(Math.max(1, Math.min(5, Math.floor(member.rarity))))}
+                          </span>
+                          <span className="text-[11px] text-zinc-200 group-hover:text-[#f3cf58] flex items-center gap-1 font-medium">
+                            <Info className="w-3 h-3" aria-hidden="true" />
+                            <span>Build</span>
+                          </span>
+                        </div>
+                      </button>
+
+                      {/* Sibling Quick Swap Weapon Button */}
+                      {assignment && (
+                        <button
+                          type="button"
+                          onClick={() =>
                             setQuickSwapTarget({
                               teamId: team.id,
                               character: member,
                               teamMembers: team.members,
                               currentAssignment: assignment,
-                            });
-                          }}
-                          className="mt-2 pt-2 border-t border-white/10 flex flex-col gap-1 text-[11px] hover:bg-black/25 -mx-1 px-1.5 py-1 rounded-lg transition-colors cursor-pointer"
-                          title="Click to view owned weapon options & quick-swap"
+                            })
+                          }
+                          aria-label={`Swap weapon for ${member.name}: currently ${
+                            getWeaponByKey(assignment.assignedWeapon.key)?.name ||
+                            assignment.assignedWeapon.name
+                          }`}
+                          className="mt-2 pt-2 border-t border-white/10 flex flex-col gap-1 text-left text-xs hover:bg-black/30 -mx-1 px-1.5 py-1.5 rounded-lg transition-colors cursor-pointer w-[calc(100%+0.5rem)]"
+                          title="View owned weapon options & quick-swap"
                         >
-                          <div className="flex items-center justify-between gap-1">
-                            <span className="font-semibold text-zinc-200 truncate flex items-center gap-1 text-[11px]">
-                              <Swords className="w-3 h-3 text-[#d4af37] shrink-0" />
-                              <span className="truncate">{getWeaponByKey(assignment.assignedWeapon.key)?.name || assignment.assignedWeapon.name}</span>
+                          <div className="flex items-center justify-between gap-1 w-full">
+                            <span className="font-semibold text-zinc-100 truncate flex items-center gap-1 text-[11px]">
+                              <Swords className="w-3 h-3 text-[#d4af37] shrink-0" aria-hidden="true" />
+                              <span className="truncate">
+                                {getWeaponByKey(assignment.assignedWeapon.key)?.name ||
+                                  assignment.assignedWeapon.name}
+                              </span>
                             </span>
-                            <span className="font-mono font-bold text-amber-400 text-[10px] shrink-0">
+                            <span className="font-mono font-bold text-amber-300 text-[11px] shrink-0">
                               R{assignment.assignedWeapon.refinement}
                             </span>
                           </div>
 
-                          <div className="flex items-center justify-between text-[10px]">
-                            <span className="text-zinc-400 font-mono text-[10px]">
+                          <div className="flex items-center justify-between gap-1 text-[11px] w-full">
+                            <span className="text-zinc-300 font-mono">
                               Lv. {assignment.assignedWeapon.level}
                             </span>
                             <div className="flex items-center gap-1">
                               {assignment.isBorrowed && (
                                 <span
-                                  className="px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[9px] font-bold"
-                                  title={`Borrowed from ${CHARACTERS.find((c) => c.id === assignment.borrowedFrom)?.name || assignment.borrowedFrom}`}
+                                  className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-200 border border-amber-400/40 text-[10px] font-bold"
+                                  title={`Borrowed from ${
+                                    assignment.borrowedFrom
+                                      ? getCharacterName(assignment.borrowedFrom)
+                                      : 'another character'
+                                  }`}
                                 >
                                   Borrowed
                                 </span>
                               )}
                               <span
-                                className={`px-1.5 py-0.2 rounded text-[9px] font-bold border ${
+                                className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${
                                   assignment.scoreResult.tier === 'BiS'
-                                    ? 'bg-[#d4af37]/20 text-[#d4af37] border-[#d4af37]/30'
+                                    ? 'bg-[#d4af37]/20 text-[#f3cf58] border-[#d4af37]/40'
                                     : assignment.scoreResult.tier === 'Optimal'
-                                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
-                                    : assignment.scoreResult.tier === 'Great'
-                                    ? 'bg-sky-500/20 text-sky-300 border-sky-500/30'
-                                    : 'bg-zinc-800 text-zinc-300 border-zinc-700'
+                                      ? 'bg-emerald-500/20 text-emerald-200 border-emerald-400/40'
+                                      : assignment.scoreResult.tier === 'Great'
+                                        ? 'bg-sky-500/20 text-sky-200 border-sky-400/40'
+                                        : 'bg-[#1f2438] text-zinc-200 border-[#323954]'
                                 }`}
                               >
                                 {assignment.scoreResult.tier}
                               </span>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })()}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Resonances */}
-            {team.resonance.length > 0 && (
-              <div className="flex flex-wrap gap-2 pt-1">
-                {team.resonance.map((res, rIdx) => (
-                  <span
-                    key={rIdx}
-                    className="text-xs bg-[#191d2d] text-[#d4af37] px-2.5 py-1 rounded-lg border border-[#d4af37]/20 font-medium"
-                  >
-                    ⚡ {res}
-                  </span>
-                ))}
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            )}
 
-            {/* Stepped Rotation Breakdown & Strategy */}
-            <div className="bg-[#0e1017] p-3.5 rounded-xl border border-[#1b1f2e] text-xs space-y-3">
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1b1f2e] pb-2">
-                <span className="text-zinc-300 font-bold uppercase tracking-wider text-[11px] flex items-center gap-2">
-                  <span className="flex items-center gap-1.5">
-                    <Zap className="w-3.5 h-3.5 text-[#d4af37]" />
-                    <span>Strategic Execution Rotation</span>
+              {/* Resonances */}
+              {team.resonance.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-0.5">
+                  {team.resonance.map((res, rIdx) => (
+                    <span
+                      key={rIdx}
+                      className="text-xs bg-[#191d2d] text-[#f3cf58] px-2.5 py-1 rounded-lg border border-[#d4af37]/30 font-medium"
+                    >
+                      ⚡ {res}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Stepped Rotation Breakdown & Strategy */}
+              <div className="bg-[#0e1019] p-4 rounded-xl border border-[#202538] text-xs space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#202538] pb-2.5">
+                  <span className="text-zinc-200 font-bold uppercase tracking-wider text-xs flex flex-wrap items-center gap-2">
+                    <span className="flex items-center gap-1.5">
+                      <Zap className="w-3.5 h-3.5 text-[#d4af37]" aria-hidden="true" />
+                      <span>Strategic Execution Rotation</span>
+                    </span>
+                    {team.steppedRotation &&
+                      (team.steppedRotation.isCurated ? (
+                        <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-950/65 text-emerald-200 border border-emerald-400/45 inline-flex items-center gap-1">
+                          ✦ Curated Rotation
+                        </span>
+                      ) : (
+                        <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-[#1c2032] text-zinc-200 border border-[#323954] inline-flex items-center gap-1">
+                          ⚡ Role Fallback Rotation
+                        </span>
+                      ))}
                   </span>
                   {team.steppedRotation && (
-                    team.steppedRotation.isCurated ? (
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 shadow-xs">
-                        ✦ Curated Rotation
-                      </span>
-                    ) : (
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-400 border border-zinc-700/50 flex items-center gap-1">
-                        ⚡ Role Fallback Rotation
-                      </span>
-                    )
+                    <span className="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded bg-[#181c2c] text-[#f3cf58] border border-[#d4af37]/35 inline-flex items-center gap-1">
+                      <Clock className="w-3 h-3" aria-hidden="true" />
+                      <span>~{team.steppedRotation.totalCycleTime}s Cycle</span>
+                    </span>
                   )}
-                </span>
-                {team.steppedRotation && (
-                  <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-[#181c2c] text-[#d4af37] border border-[#d4af37]/30 flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    <span>~{team.steppedRotation.totalCycleTime}s Cycle</span>
-                  </span>
-                )}
-              </div>
+                </div>
 
-              {team.steppedRotation && team.steppedRotation.steps.length > 0 ? (
-                <div className="space-y-2">
-                  {/* Step Cards Flow */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-                    {team.steppedRotation.steps.map((step) => {
-                      return (
+                {team.steppedRotation && team.steppedRotation.steps.length > 0 ? (
+                  <div className="space-y-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                      {team.steppedRotation.steps.map((step) => (
                         <div
                           key={step.stepNumber}
-                          className="bg-[#121522] border border-[#202538] hover:border-[#2f3652] p-2.5 rounded-lg flex flex-col justify-between gap-2 transition-colors relative group"
+                          className="bg-[#131624] border border-[#24293d] p-2.5 rounded-lg flex flex-col justify-between gap-2"
                         >
                           <div className="flex items-center justify-between gap-1.5">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 min-w-0">
                               <CharacterPortrait
                                 src={step.icon}
                                 name={step.characterName}
@@ -594,295 +657,335 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                                 <div className="text-xs font-bold text-zinc-100 truncate">
                                   {step.characterName}
                                 </div>
-                                <div className="text-[9px] text-zinc-400 font-semibold uppercase truncate">
+                                <div className="text-[11px] text-zinc-300 font-semibold uppercase">
                                   Step {step.stepNumber}
                                 </div>
                               </div>
                             </div>
-                            <span className="text-[9px] font-mono text-zinc-400 bg-[#191d2d] px-1.5 py-0.5 rounded border border-[#272e48] shrink-0">
+                            <span className="text-[11px] font-mono text-zinc-200 bg-[#1a1e2e] px-1.5 py-0.5 rounded border border-[#2c334d] shrink-0">
                               ~{step.fieldTime}s
                             </span>
                           </div>
 
-                          <div className="bg-[#0b0d16] p-1.5 rounded border border-[#1a1e30]">
+                          <div className="bg-[#0b0d16] p-1.5 rounded border border-[#1d2236]">
                             <RotationBadgeList actions={step.actions} size="sm" />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Collapsible Strategy Tips */}
-                  <div className="pt-1">
-                    <button
-                      type="button"
-                      onClick={() => setExpandedTeamId(expandedTeamId === team.id ? null : team.id)}
-                      className="text-[11px] font-semibold text-zinc-400 hover:text-zinc-200 flex items-center gap-1 transition-colors cursor-pointer"
-                    >
-                      <span>{expandedTeamId === team.id ? 'Hide Strategy Tips' : 'Show Tactical Strategy & Tips'}</span>
-                      {expandedTeamId === team.id ? (
-                        <ChevronUp className="w-3.5 h-3.5" />
-                      ) : (
-                        <ChevronDown className="w-3.5 h-3.5" />
-                      )}
-                    </button>
-
-                    {expandedTeamId === team.id && (
-                      <div className="mt-2 space-y-1.5 bg-[#121522] p-2.5 rounded-lg border border-[#202538] text-[11px]">
-                        {team.steppedRotation.steps.map((step) => (
-                          <div key={step.stepNumber} className="flex items-start gap-2 text-zinc-300">
-                            <span className="text-[#d4af37] font-bold shrink-0 font-mono">
-                              [Step {step.stepNumber} · {step.characterName}]:
-                            </span>
-                            <span className="leading-relaxed">
-                              {step.tip || 'Execute standard action sequence.'}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <p className="text-zinc-200 font-mono text-[11px] leading-relaxed bg-[#141724] p-2 rounded border border-[#22273d]">
-                  {team.rotation}
-                </p>
-              )}
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-zinc-300 pt-1 border-t border-[#1b1f2e]/60">
-                {team.reasons.map((reason, rIdx) => (
-                  <div key={rIdx} className="flex items-start gap-1.5">
-                    <span className="text-[#d4af37]">✓</span>
-                    <span>{reason}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Expandable Mechanics & Swap Alternatives Drawer */}
-            <div className="pt-1">
-              <button
-                type="button"
-                onClick={() => setExpandedDrawerTeamId(expandedDrawerTeamId === team.id ? null : team.id)}
-                className="w-full py-2.5 px-3.5 rounded-xl bg-[#0e1017] hover:bg-[#151824] border border-[#1e2235] hover:border-[#d4af37]/40 text-xs font-bold text-zinc-200 flex items-center justify-between transition-all cursor-pointer shadow-xs group"
-              >
-                <span className="flex items-center gap-2 text-zinc-200 group-hover:text-[#d4af37] transition-colors">
-                  <Compass className="w-4 h-4 text-[#d4af37]" />
-                  <span>Team Mechanics, Energy Diagnosis & Swap Alternatives</span>
-                  {team.explanation?.antiSynergyWarnings && team.explanation.antiSynergyWarnings.length > 0 && (
-                    <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
-                      <AlertTriangle className="w-3 h-3 text-amber-400" />
-                      <span>{team.explanation.antiSynergyWarnings.length} Alert{team.explanation.antiSynergyWarnings.length > 1 ? 's' : ''}</span>
-                    </span>
-                  )}
-                </span>
-                <span className="flex items-center gap-1 text-[11px] text-zinc-400 group-hover:text-zinc-200">
-                  <span>{expandedDrawerTeamId === team.id ? 'Collapse' : 'Explore Mechanics'}</span>
-                  {expandedDrawerTeamId === team.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </span>
-              </button>
-
-              {expandedDrawerTeamId === team.id && team.explanation && (
-                <div className="mt-3 p-4 bg-[#0a0c13] rounded-xl border border-[#21263a] space-y-4 text-xs">
-                  {/* 1. Reaction Execution Workflow */}
-                  <div className="bg-[#101320] p-3 rounded-lg border border-[#1b2034]">
-                    <div className="text-[11px] font-bold text-[#d4af37] uppercase tracking-wider flex items-center gap-1.5 mb-1">
-                      <Zap className="w-3.5 h-3.5" />
-                      <span>Reaction Execution Chain</span>
-                    </div>
-                    <p className="text-zinc-200 font-mono text-[11px] leading-relaxed">
-                      {team.explanation.reactionWorkflow}
-                    </p>
-                  </div>
-
-                  {/* 2. Energy & Battery Status */}
-                  <div className="bg-[#101320] p-3 rounded-lg border border-[#1b2034] space-y-2">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-                        <span>Energy & Battery Status</span>
-                      </span>
-                      <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
-                          team.explanation.energyAssessment.status === 'optimal'
-                            ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
-                            : team.explanation.energyAssessment.status === 'adequate'
-                            ? 'bg-amber-950/60 text-amber-300 border-amber-500/40'
-                            : 'bg-rose-950/60 text-rose-300 border-rose-500/40'
-                        }`}
-                      >
-                        {team.explanation.energyAssessment.status === 'optimal'
-                          ? '✓ Optimal Energy Battery Flow'
-                          : team.explanation.energyAssessment.status === 'adequate'
-                          ? '⚠ Adequate Battery (Minor ER Focus)'
-                          : '✕ Energy Deficit (High Burst Starvation)'}
-                      </span>
-                    </div>
-                    {team.explanation.energyAssessment.warnings.length > 0 && (
-                      <div className="space-y-1 pt-1 text-[11px]">
-                        {team.explanation.energyAssessment.warnings.map((warn, wIdx) => (
-                          <div key={wIdx} className="text-amber-300/90 flex items-start gap-1.5">
-                            <span className="text-amber-400 font-bold shrink-0">!</span>
-                            <span>{warn}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 3. Anti-Synergy Warnings */}
-                  {team.explanation.antiSynergyWarnings && team.explanation.antiSynergyWarnings.length > 0 && (
-                    <div className="bg-amber-950/20 border border-amber-500/40 p-3 rounded-lg space-y-1 text-amber-200 text-[11px]">
-                      <div className="font-bold flex items-center gap-1.5 text-amber-300">
-                        <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-                        <span>Synergy & Infusion Considerations</span>
-                      </div>
-                      <div className="space-y-1 pl-4">
-                        {team.explanation.antiSynergyWarnings.map((warn, aIdx) => (
-                          <div key={aIdx} className="list-disc list-item text-zinc-300">
-                            {warn}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* 4. Slot Role Rationales */}
-                  <div className="space-y-2">
-                    <div className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider">
-                      Slot Role Rationales
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {team.members.map((member) => (
-                        <div
-                          key={member.id}
-                          className="bg-[#101320] p-2.5 rounded-lg border border-[#1b2034] flex items-start gap-2.5"
-                        >
-                          <CharacterPortrait
-                            src={member.icon}
-                            name={member.name}
-                            element={member.element}
-                            size="sm"
-                          />
-                          <div className="min-w-0">
-                            <div className="text-xs font-bold text-zinc-100 flex items-center gap-1.5">
-                              <span>{member.name}</span>
-                              <span className="text-[10px] text-zinc-400 font-normal">({member.roles[0]})</span>
-                            </div>
-                            <div className="text-[10px] text-zinc-300 mt-0.5 leading-snug">
-                              {team.explanation?.roleRationale[member.id] || 'Key party member.'}
-                            </div>
                           </div>
                         </div>
                       ))}
                     </div>
-                  </div>
 
-                  {/* 5. Accessible Swap Alternatives */}
-                  {team.explanation.alternatives && team.explanation.alternatives.length > 0 && (
-                    <div className="space-y-2 pt-2 border-t border-[#1b2034]">
-                      <div className="flex items-center justify-between">
-                        <div className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
-                          <ArrowRightLeft className="w-3.5 h-3.5 text-[#d4af37]" />
-                          <span>Accessible Swap Alternatives & Trade-Offs</span>
+                    {/* Collapsible Strategy Tips */}
+                    <div className="pt-0.5">
+                      <button
+                        type="button"
+                        aria-expanded={isTipsExpanded}
+                        aria-controls={tipsPanelId}
+                        onClick={() => setExpandedTeamId(isTipsExpanded ? null : team.id)}
+                        className="min-h-[36px] px-2 -ml-2 rounded-lg text-xs font-semibold text-zinc-200 hover:text-[#f3cf58] hover:bg-[#181c2c] inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <span>
+                          {isTipsExpanded ? 'Hide Strategy Tips' : 'Show Tactical Strategy & Tips'}
+                        </span>
+                        {isTipsExpanded ? (
+                          <ChevronUp className="w-4 h-4" aria-hidden="true" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" aria-hidden="true" />
+                        )}
+                      </button>
+
+                      {isTipsExpanded && (
+                        <div
+                          id={tipsPanelId}
+                          className="mt-2 space-y-2 bg-[#131624] p-3 rounded-lg border border-[#24293d] text-xs"
+                        >
+                          {team.steppedRotation.steps.map((step) => (
+                            <div key={step.stepNumber} className="flex items-start gap-2 text-zinc-200">
+                              <span className="text-[#f3cf58] font-bold shrink-0 font-mono">
+                                [Step {step.stepNumber} · {step.characterName}]:
+                              </span>
+                              <span className="leading-relaxed">
+                                {step.tip || 'Execute standard action sequence.'}
+                              </span>
+                            </div>
+                          ))}
                         </div>
-                        <span className="text-[10px] text-zinc-400">
-                          Strict exclusivity verified
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-zinc-100 font-mono text-xs leading-relaxed bg-[#141724] p-2.5 rounded border border-[#24293d]">
+                    {team.rotation}
+                  </p>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-zinc-200 pt-2 border-t border-[#202538]">
+                  {team.reasons.map((reason, rIdx) => (
+                    <div key={rIdx} className="flex items-start gap-1.5">
+                      <span className="text-[#f3cf58] font-bold" aria-hidden="true">
+                        ✓
+                      </span>
+                      <span>{reason}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Expandable Mechanics & Swap Alternatives Drawer */}
+              <div className="pt-0.5">
+                <button
+                  type="button"
+                  aria-expanded={isDrawerExpanded}
+                  aria-controls={drawerPanelId}
+                  onClick={() => setExpandedDrawerTeamId(isDrawerExpanded ? null : team.id)}
+                  className="w-full min-h-[44px] py-2.5 px-3.5 rounded-xl bg-[#0e1019] hover:bg-[#161a29] border border-[#24293d] hover:border-[#d4af37]/50 text-xs font-bold text-zinc-100 flex flex-wrap items-center justify-between gap-2 transition-colors cursor-pointer group"
+                >
+                  <span className="flex flex-wrap items-center gap-2 text-zinc-100 group-hover:text-[#f3cf58] transition-colors">
+                    <Compass className="w-4 h-4 text-[#d4af37] shrink-0" aria-hidden="true" />
+                    <span>Team Mechanics, Energy Diagnosis &amp; Swap Alternatives</span>
+                    {team.explanation?.antiSynergyWarnings &&
+                      team.explanation.antiSynergyWarnings.length > 0 && (
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 border border-amber-400/45 inline-flex items-center gap-1">
+                          <AlertTriangle className="w-3 h-3 text-amber-300" aria-hidden="true" />
+                          <span>
+                            {team.explanation.antiSynergyWarnings.length} Alert
+                            {team.explanation.antiSynergyWarnings.length > 1 ? 's' : ''}
+                          </span>
+                        </span>
+                      )}
+                  </span>
+                  <span className="flex items-center gap-1 text-xs text-zinc-300 group-hover:text-white ml-auto">
+                    <span>{isDrawerExpanded ? 'Collapse' : 'Explore Mechanics'}</span>
+                    {isDrawerExpanded ? (
+                      <ChevronUp className="w-4 h-4" aria-hidden="true" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4" aria-hidden="true" />
+                    )}
+                  </span>
+                </button>
+
+                {isDrawerExpanded && team.explanation && (
+                  <div
+                    id={drawerPanelId}
+                    className="mt-3 p-4 bg-[#0b0d15] rounded-xl border border-[#24293d] space-y-4 text-xs"
+                  >
+                    {/* 1. Reaction Execution Workflow */}
+                    <div className="bg-[#121524] p-3.5 rounded-lg border border-[#202538]">
+                      <div className="text-[11px] font-bold text-[#f3cf58] uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
+                        <Zap className="w-3.5 h-3.5" aria-hidden="true" />
+                        <span>Reaction Execution Chain</span>
+                      </div>
+                      <p className="text-zinc-100 font-mono text-xs leading-relaxed">
+                        {team.explanation.reactionWorkflow}
+                      </p>
+                    </div>
+
+                    {/* 2. Energy & Battery Status */}
+                    <div className="bg-[#121524] p-3.5 rounded-lg border border-[#202538] space-y-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="text-[11px] font-bold text-zinc-200 uppercase tracking-wider flex items-center gap-1.5">
+                          <Sparkles className="w-3.5 h-3.5 text-sky-300" aria-hidden="true" />
+                          <span>Energy &amp; Battery Status</span>
+                        </span>
+                        <span
+                          className={`text-[11px] font-bold px-2 py-0.5 rounded border ${
+                            team.explanation.energyAssessment.status === 'optimal'
+                              ? 'bg-emerald-950/65 text-emerald-200 border-emerald-400/45'
+                              : team.explanation.energyAssessment.status === 'adequate'
+                                ? 'bg-amber-950/65 text-amber-200 border-amber-400/45'
+                                : 'bg-rose-950/65 text-rose-200 border-rose-400/45'
+                          }`}
+                        >
+                          {team.explanation.energyAssessment.status === 'optimal'
+                            ? '✓ Optimal Energy Battery Flow'
+                            : team.explanation.energyAssessment.status === 'adequate'
+                              ? '⚠ Adequate Battery (Minor ER Focus)'
+                              : '✕ Energy Deficit (High Burst Starvation)'}
                         </span>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                        {team.explanation.alternatives.map((alt, altIdx) => {
-                          const origChar = team.members.find((m) => m.id === alt.originalCharacterId);
-                          return (
-                            <div
-                              key={altIdx}
-                              className="bg-[#101320] p-2.5 rounded-lg border border-[#1e2338] hover:border-[#2d3450] flex flex-col justify-between gap-2"
-                            >
-                              <div className="flex items-center justify-between gap-1.5 border-b border-white/5 pb-1.5">
-                                <div className="flex items-center gap-2">
-                                  <CharacterPortrait
-                                    src={alt.alternativeCharacter.icon}
-                                    name={alt.alternativeCharacter.name}
-                                    element={alt.alternativeCharacter.element}
-                                    size="sm"
-                                  />
-                                  <div className="min-w-0">
-                                    <div className="text-xs font-bold text-zinc-100 truncate">
-                                      {alt.alternativeCharacter.name}
-                                    </div>
-                                    <div className="text-[9px] text-zinc-400 truncate">
-                                      Sub for {origChar?.name || alt.originalCharacterId}
-                                    </div>
-                                  </div>
-                                </div>
-                                <span
-                                  className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border shrink-0 ${
-                                    alt.compatibilityImpact >= 0
-                                      ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
-                                      : 'bg-zinc-800 text-zinc-400 border-zinc-700'
-                                  }`}
-                                >
-                                  {alt.compatibilityImpact >= 0 ? `+${alt.compatibilityImpact}%` : `${alt.compatibilityImpact}%`}
+                      {team.explanation.energyAssessment.warnings.length > 0 && (
+                        <div className="space-y-1 pt-1 text-xs">
+                          {team.explanation.energyAssessment.warnings.map((warn, wIdx) => (
+                            <div key={wIdx} className="text-amber-200 flex items-start gap-1.5">
+                              <span className="text-amber-300 font-bold shrink-0">!</span>
+                              <span>{warn}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 3. Anti-Synergy Warnings */}
+                    {team.explanation.antiSynergyWarnings &&
+                      team.explanation.antiSynergyWarnings.length > 0 && (
+                        <div className="bg-amber-950/30 border border-amber-400/45 p-3.5 rounded-lg space-y-1.5 text-amber-100 text-xs">
+                          <div className="font-bold flex items-center gap-1.5 text-amber-200">
+                            <AlertTriangle className="w-4 h-4 text-amber-300" aria-hidden="true" />
+                            <span>Synergy &amp; Infusion Considerations</span>
+                          </div>
+                          <ul className="space-y-1 pl-5 list-disc text-zinc-200">
+                            {team.explanation.antiSynergyWarnings.map((warn, aIdx) => (
+                              <li key={aIdx}>{warn}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                    {/* 4. Slot Role Rationales */}
+                    <div className="space-y-2">
+                      <div className="text-[11px] font-bold text-zinc-200 uppercase tracking-wider">
+                        Slot Role Rationales
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {team.members.map((member) => (
+                          <div
+                            key={member.id}
+                            className="bg-[#121524] p-3 rounded-lg border border-[#202538] flex items-start gap-2.5"
+                          >
+                            <CharacterPortrait
+                              src={member.icon}
+                              name={member.name}
+                              element={member.element}
+                              size="sm"
+                            />
+                            <div className="min-w-0">
+                              <div className="text-xs font-bold text-zinc-100 flex flex-wrap items-center gap-1.5">
+                                <span>{member.name}</span>
+                                <span className="text-[11px] text-zinc-300 font-normal">
+                                  ({member.roles[0]})
                                 </span>
                               </div>
-
-                              <div className="space-y-1 text-[10px]">
-                                {alt.tradeOffPros.map((pro, pIdx) => (
-                                  <div key={pIdx} className="text-emerald-300/90 leading-tight">
-                                    {pro}
-                                  </div>
-                                ))}
-                                {alt.tradeOffCons.map((con, cIdx) => (
-                                  <div key={cIdx} className="text-amber-300/80 leading-tight">
-                                    {con}
-                                  </div>
-                                ))}
+                              <div className="text-xs text-zinc-200 mt-0.5 leading-snug">
+                                {team.explanation?.roleRationale[member.id] || 'Key party member.'}
                               </div>
-
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleSwapMember(team.id, alt.originalCharacterId, alt.alternativeCharacter);
-                                }}
-                                className="w-full py-1 px-2 rounded-md bg-[#161a28] hover:bg-[#d4af37]/20 border border-[#23293d] hover:border-[#d4af37]/50 text-[10px] font-semibold text-zinc-300 hover:text-[#d4af37] flex items-center justify-center gap-1 transition-all cursor-pointer mt-1"
-                                title={`Replace ${origChar?.name || alt.originalCharacterId} with ${alt.alternativeCharacter.name} in this recommendation`}
-                              >
-                                <ArrowRightLeft className="w-3 h-3 text-[#d4af37]" />
-                                <span>Swap Into Team</span>
-                              </button>
                             </div>
-                          );
-                        })}
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
+
+                    {/* 5. Accessible Swap Alternatives */}
+                    {team.explanation.alternatives && team.explanation.alternatives.length > 0 && (
+                      <div className="space-y-2.5 pt-2.5 border-t border-[#202538]">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div className="text-[11px] font-bold text-zinc-200 uppercase tracking-wider flex items-center gap-1.5">
+                            <ArrowRightLeft className="w-3.5 h-3.5 text-[#d4af37]" aria-hidden="true" />
+                            <span>Accessible Swap Alternatives &amp; Trade-Offs</span>
+                          </div>
+                          <span className="text-[11px] text-zinc-300">
+                            Strict exclusivity verified
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                          {team.explanation.alternatives.map((alt, altIdx) => {
+                            const origChar = team.members.find((m) => m.id === alt.originalCharacterId);
+                            const origName = origChar?.name || getCharacterName(alt.originalCharacterId);
+                            return (
+                              <div
+                                key={altIdx}
+                                className="bg-[#121524] p-3 rounded-lg border border-[#24293d] hover:border-[#323954] flex flex-col justify-between gap-2.5"
+                              >
+                                <div className="flex items-center justify-between gap-1.5 border-b border-white/10 pb-2">
+                                  <div className="flex items-center gap-2 min-w-0">
+                                    <CharacterPortrait
+                                      src={alt.alternativeCharacter.icon}
+                                      name={alt.alternativeCharacter.name}
+                                      element={alt.alternativeCharacter.element}
+                                      size="sm"
+                                    />
+                                    <div className="min-w-0">
+                                      <div className="text-xs font-bold text-zinc-100 truncate">
+                                        {alt.alternativeCharacter.name}
+                                      </div>
+                                      <div className="text-[11px] text-zinc-300 truncate">
+                                        Sub for {origName}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <span
+                                    className={`text-[11px] font-mono font-bold px-1.5 py-0.5 rounded border shrink-0 ${
+                                      alt.compatibilityImpact >= 0
+                                        ? 'bg-emerald-950/65 text-emerald-200 border-emerald-400/45'
+                                        : 'bg-[#1c2032] text-zinc-200 border-[#323954]'
+                                    }`}
+                                  >
+                                    {alt.compatibilityImpact >= 0
+                                      ? `+${alt.compatibilityImpact}%`
+                                      : `${alt.compatibilityImpact}%`}
+                                  </span>
+                                </div>
+
+                                <div className="space-y-1 text-[11px]">
+                                  {alt.tradeOffPros.map((pro, pIdx) => (
+                                    <div key={pIdx} className="text-emerald-200 leading-snug">
+                                      {pro}
+                                    </div>
+                                  ))}
+                                  {alt.tradeOffCons.map((con, cIdx) => (
+                                    <div key={cIdx} className="text-amber-200 leading-snug">
+                                      {con}
+                                    </div>
+                                  ))}
+                                </div>
+
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleSwapMember(team.id, alt.originalCharacterId, alt.alternativeCharacter)
+                                  }
+                                  className="w-full min-h-[38px] py-1.5 px-2.5 rounded-lg bg-[#1a1e2e] hover:bg-[#d4af37]/20 border border-[#323954] hover:border-[#d4af37]/60 text-xs font-semibold text-zinc-100 hover:text-[#f3cf58] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                                  title={`Replace ${origName} with ${alt.alternativeCharacter.name} in this recommendation`}
+                                >
+                                  <ArrowRightLeft className="w-3.5 h-3.5 text-[#d4af37]" aria-hidden="true" />
+                                  <span>Swap Into Team</span>
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </article>
+          );
+        })}
       </div>
 
-      {/* Empty State when no teams match */}
-      {teams.length === 0 && (
-        <div className="bg-[#12141d] border border-[#23273a] rounded-2xl p-8 text-center space-y-3 shadow-md">
-          <Users className="w-8 h-8 mx-auto text-zinc-500" />
-          <h3 className="text-base font-bold text-zinc-200">No Matching Teams Found</h3>
-          <p className="text-xs text-zinc-400 max-w-md mx-auto">
+      {/* Empty State when no teams match (suppressed when Insufficient Roster banner is already shown) */}
+      {teams.length === 0 && !isInsufficientRoster && (
+        <div
+          role="status"
+          className="bg-[#121420] border border-[#24293d] rounded-2xl p-8 text-center space-y-3 shadow-md"
+        >
+          <Users className="w-8 h-8 mx-auto text-zinc-400" aria-hidden="true" />
+          <h2 className="text-base font-bold text-zinc-100 font-serif">No Matching Teams Found</h2>
+          <p className="text-xs text-zinc-300 max-w-md mx-auto leading-relaxed">
             {focusId && !ownedIds.includes(focusId)
-              ? `You do not currently own ${CHARACTERS.find((c) => c.id === focusId)?.name || focusId}. Enable theoretical catalog teams to explore theoretical compositions.`
+              ? `You do not currently own ${getCharacterName(focusId)}. Enable theoretical catalog teams to explore compositions with them.`
               : 'Could not generate full 4-character compositions with the current filters and roster.'}
           </p>
-          {focusId && !ownedIds.includes(focusId) && !showCatalogFallback && (
-            <button
-              onClick={() => setShowCatalogFallback(true)}
-              className="px-4 py-2 rounded-xl bg-[#1e2336] hover:bg-[#282f48] text-[#d4af37] border border-[#2d344e] text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-2"
-            >
-              <Compass className="w-4 h-4" />
-              <span>Show Theoretical Catalog Teams for {CHARACTERS.find((c) => c.id === focusId)?.name || focusId}</span>
-            </button>
-          )}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+            {focusId && (
+              <button
+                type="button"
+                onClick={() => setFocusId('')}
+                className="min-h-[40px] px-4 py-2 rounded-xl bg-[#1a1e2e] hover:bg-[#252b42] text-zinc-100 border border-[#323954] text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Show All Teams
+              </button>
+            )}
+            {focusId && !ownedIds.includes(focusId) && !showCatalogFallback && (
+              <button
+                type="button"
+                onClick={() => setShowCatalogFallback(true)}
+                className="min-h-[40px] px-4 py-2 rounded-xl bg-[#d4af37] hover:bg-[#e5c14d] text-[#0a0b0e] text-xs font-bold transition-colors cursor-pointer inline-flex items-center gap-2"
+              >
+                <Compass className="w-4 h-4" aria-hidden="true" />
+                <span>Show Theoretical Catalog Teams for {getCharacterName(focusId)}</span>
+              </button>
+            )}
+          </div>
         </div>
       )}
 
@@ -899,83 +1002,98 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
         onUpdateWeapons={onUpdateWeapons}
       />
 
-      {/* Quick Swap Weapon Popover/Modal */}
+      {/* Quick Swap Weapon Modal (accessible dialog with focus trap & Escape support) */}
       {quickSwapTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-[#12141e] border border-[#262c44] w-full max-w-lg rounded-2xl p-5 shadow-2xl space-y-4 text-zinc-100">
-            <div className="flex items-center justify-between border-b border-[#202538] pb-3">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="quick-swap-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm"
+          onClick={() => setQuickSwapTarget(null)}
+        >
+          <div
+            ref={swapModalRef}
+            tabIndex={-1}
+            className="bg-[#121420] border border-[#2c334d] w-full max-w-lg max-h-[88vh] rounded-2xl p-5 shadow-2xl flex flex-col gap-4 text-zinc-100 focus:outline-none"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-[#24293d] pb-3 gap-2">
               <div className="flex items-center gap-2">
-                <Swords className="w-4 h-4 text-[#d4af37]" />
-                <h3 className="text-sm font-bold text-zinc-100">
+                <Swords className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
+                <h2 id="quick-swap-title" className="text-sm font-bold text-zinc-100 font-serif">
                   Swap Weapon: {quickSwapTarget.character.name}
-                </h3>
+                </h2>
               </div>
               <button
+                ref={swapCloseBtnRef}
+                type="button"
+                aria-label="Close weapon swap modal"
                 onClick={() => setQuickSwapTarget(null)}
-                className="text-zinc-400 hover:text-white cursor-pointer"
+                className="min-w-[38px] min-h-[38px] rounded-xl flex items-center justify-center text-zinc-300 hover:text-white hover:bg-[#22283d] cursor-pointer"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
 
-            <p className="text-xs text-zinc-400">
-              Select an owned {quickSwapTarget.character.weapon} from your armory to assign to {quickSwapTarget.character.name} for this team composition.
+            <p className="text-xs text-zinc-300">
+              Select an owned {quickSwapTarget.character.weapon} from your armory to assign to{' '}
+              <strong className="text-white">{quickSwapTarget.character.name}</strong> for this team composition.
             </p>
 
-            <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
+            <div className="overflow-y-auto flex-1 min-h-0 space-y-2 pr-1">
               {rankWeaponsForCharacter(
                 quickSwapTarget.character,
                 weaponBag,
                 quickSwapTarget.teamMembers,
               ).map((scoreRes) => {
                 const w = scoreRes.weapon as OwnedWeapon;
-                const isCurrent =
-                  quickSwapTarget.currentAssignment?.assignedWeapon.id === w.id;
+                const isCurrent = quickSwapTarget.currentAssignment?.assignedWeapon.id === w.id;
                 const canonicalW = getWeaponByKey(w.key) || getWeaponByKey(w.name);
                 const displayRarity = canonicalW?.rarity || w.rarity || 4;
                 const displayName = canonicalW?.name || w.name;
                 return (
                   <div
                     key={w.id}
-                    className={`p-3 rounded-xl border flex items-center justify-between gap-3 ${
+                    className={`p-3 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                       isCurrent
-                        ? 'bg-[#d4af37]/10 border-[#d4af37]/40'
-                        : 'bg-[#181b28] border-[#252a3f] hover:border-[#384060]'
+                        ? 'bg-[#d4af37]/12 border-[#d4af37]/50'
+                        : 'bg-[#161a29] border-[#282f48] hover:border-[#3c4566]'
                     }`}
                   >
-                    <div>
-                      <div className="flex items-center gap-2">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="text-xs font-bold text-zinc-100">{displayName}</span>
-                        <span className="text-xs text-[#d4af37]">{'★'.repeat(Math.max(1, Math.min(5, Math.floor(displayRarity))))}</span>
-                        <span className="text-[10px] font-mono font-bold text-amber-300">
+                        <span className="text-xs text-[#f3cf58]">
+                          {'★'.repeat(Math.max(1, Math.min(5, Math.floor(displayRarity))))}
+                        </span>
+                        <span className="text-[11px] font-mono font-bold text-amber-200">
                           R{w.refinement}
                         </span>
-                        <span className="text-[10px] font-mono text-zinc-400">
-                          Lv. {w.level}
-                        </span>
+                        <span className="text-[11px] font-mono text-zinc-300">Lv. {w.level}</span>
                       </div>
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="flex flex-wrap items-center gap-2 mt-1">
                         <span
-                          className={`text-[9px] px-1.5 py-0.2 rounded font-bold border ${
+                          className={`text-[11px] px-1.5 py-0.5 rounded font-bold border ${
                             scoreRes.tier === 'BiS'
-                              ? 'bg-[#d4af37]/20 text-[#d4af37] border-[#d4af37]/30'
+                              ? 'bg-[#d4af37]/20 text-[#f3cf58] border-[#d4af37]/40'
                               : scoreRes.tier === 'Optimal'
-                              ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
-                              : 'bg-zinc-800 text-zinc-300 border-zinc-700'
+                                ? 'bg-emerald-500/20 text-emerald-200 border-emerald-400/40'
+                                : 'bg-[#1f2438] text-zinc-200 border-[#323954]'
                           }`}
                           title="Estimated Weapon Suitability"
                         >
                           {scoreRes.tier} ({scoreRes.suitabilityScore ?? scoreRes.relativePercentage}% Suitability)
                         </span>
                         {scoreRes.equippedOn && scoreRes.equippedOn !== quickSwapTarget.character.id && (
-                          <span className="text-[10px] text-zinc-400">
-                            Equipped on {scoreRes.equippedOn}
+                          <span className="text-[11px] text-amber-200">
+                            Equipped on {getCharacterName(scoreRes.equippedOn)}
                           </span>
                         )}
                       </div>
                     </div>
 
                     <button
+                      type="button"
                       onClick={() => {
                         const newAssignment: TeamWeaponAssignment = {
                           characterId: quickSwapTarget.character.id,
@@ -1006,7 +1124,6 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                           [quickSwapTarget.character.id]: newAssignment,
                         };
 
-                        // If another member on this team already used this weapon instance, resolve the conflict
                         if (otherMemberUsingW) {
                           const dbPrev = prevWeapon ? getWeaponByKey(prevWeapon.key) : undefined;
                           if (dbPrev && dbPrev.weaponType === otherMemberUsingW.weapon && prevWeapon) {
@@ -1057,7 +1174,6 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                           [quickSwapTarget.teamId]: updatedTeamCustoms,
                         }));
 
-                        // If equipped permanently, update global profile/weapons atomically
                         const currentProfiles = profiles || getSavedProfiles();
                         const { updatedWeapons, updatedProfiles } = equipWeaponToCharacter(
                           w.id,
@@ -1078,10 +1194,10 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
 
                         setQuickSwapTarget(null);
                       }}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                      className={`min-h-[40px] sm:min-h-[36px] px-4 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer shrink-0 ${
                         isCurrent
-                          ? 'bg-[#d4af37] text-black'
-                          : 'bg-[#22273c] text-zinc-200 hover:bg-[#2e3552]'
+                          ? 'bg-[#d4af37] text-[#0a0b0e]'
+                          : 'bg-[#22283d] text-zinc-100 hover:bg-[#2f3754] border border-[#323954]'
                       }`}
                     >
                       {isCurrent ? 'Current' : 'Select'}

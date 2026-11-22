@@ -53,42 +53,65 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Endgame Navigation Switcher */}
-      <div className="flex items-center justify-between bg-[#121422] p-1.5 rounded-2xl border border-[#232943] shadow-md">
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <button
-            onClick={() => setActiveSubTab('theater')}
-            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer ${
-              activeSubTab === 'theater'
-                ? 'bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0d0f17] shadow-lg scale-[1.02]'
-                : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#181c2e]'
-            }`}
-          >
-            <Crown className="w-4 h-4" />
-            <span>Imaginarium Theater (Visionary)</span>
-          </button>
+      <div
+        role="tablist"
+        aria-label="Endgame Modes"
+        className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-[#121420] p-1.5 rounded-2xl border border-[#24293d] shadow-md"
+      >
+        <button
+          id="endgame-tab-theater"
+          type="button"
+          role="tab"
+          aria-selected={activeSubTab === 'theater'}
+          aria-controls="endgame-panel-theater"
+          onClick={() => setActiveSubTab('theater')}
+          className={`min-h-[44px] flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+            activeSubTab === 'theater'
+              ? 'bg-[#d4af37] text-[#0a0b0e] shadow-md'
+              : 'text-zinc-300 hover:text-white hover:bg-[#1a1e2e]'
+          }`}
+        >
+          <Crown className="w-4 h-4 shrink-0" aria-hidden="true" />
+          <span>Imaginarium Theater (Visionary)</span>
+        </button>
 
-          <button
-            onClick={() => setActiveSubTab('abyss')}
-            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer ${
-              activeSubTab === 'abyss'
-                ? 'bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0d0f17] shadow-lg scale-[1.02]'
-                : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#181c2e]'
-            }`}
-          >
-            <Swords className="w-4 h-4" />
-            <span>Spiral Abyss Floor 12 (Dual Half)</span>
-          </button>
-        </div>
+        <button
+          id="endgame-tab-abyss"
+          type="button"
+          role="tab"
+          aria-selected={activeSubTab === 'abyss'}
+          aria-controls="endgame-panel-abyss"
+          onClick={() => setActiveSubTab('abyss')}
+          className={`min-h-[44px] flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+            activeSubTab === 'abyss'
+              ? 'bg-[#d4af37] text-[#0a0b0e] shadow-md'
+              : 'text-zinc-300 hover:text-white hover:bg-[#1a1e2e]'
+          }`}
+        >
+          <Swords className="w-4 h-4 shrink-0" aria-hidden="true" />
+          <span>Spiral Abyss Floor 12 (Dual Half)</span>
+        </button>
       </div>
 
       {/* Sub-tab 1: Imaginarium Theater */}
       {activeSubTab === 'theater' && (
-        <ImaginariumTheaterView ownedIds={ownedIds} profiles={profiles} />
+        <div
+          id="endgame-panel-theater"
+          role="tabpanel"
+          aria-labelledby="endgame-tab-theater"
+        >
+          <ImaginariumTheaterView ownedIds={ownedIds} profiles={profiles} />
+        </div>
       )}
 
       {/* Sub-tab 2: Spiral Abyss Floor 12 */}
       {activeSubTab === 'abyss' && (
-        <div className="space-y-6">
+        <div
+          id="endgame-panel-abyss"
+          role="tabpanel"
+          aria-labelledby="endgame-tab-abyss"
+          className="space-y-6"
+        >
           <AbyssDualTeamView
             ownedIds={ownedIds}
             profiles={profiles}
@@ -97,81 +120,87 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
           />
 
           {/* Collapsible Chamber & Enemy Deep Dive */}
-          <div className="bg-[#12141f] border border-[#22273e] rounded-2xl overflow-hidden">
+          <div className="bg-[#121420] border border-[#24293d] rounded-2xl overflow-hidden">
             <button
               type="button"
+              aria-expanded={showDetailedChamberGuide}
+              aria-controls="abyss-chamber-reference"
               onClick={() => setShowDetailedChamberGuide(!showDetailedChamberGuide)}
-              className="w-full p-4 flex items-center justify-between text-xs font-bold text-zinc-300 hover:text-zinc-100 transition-colors cursor-pointer bg-[#151828]"
+              className="w-full min-h-[48px] p-4 flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-zinc-100 hover:bg-[#1a1e2e] transition-colors cursor-pointer bg-[#151826]"
             >
-              <div className="flex items-center gap-2">
-                <Target className="w-4 h-4 text-[#d4af37]" />
-                <span>Enemy Lineup & Chamber Shield Reference Guide</span>
-                <span className="text-[11px] font-normal text-[#d4af37]/80">· {activeCycle.name}</span>
+              <div className="flex flex-wrap items-center gap-2 text-left">
+                <Target className="w-4 h-4 text-[#d4af37] shrink-0" aria-hidden="true" />
+                <span>Enemy Lineup &amp; Chamber Shield Reference Guide</span>
+                <span className="text-xs font-normal text-[#f3cf58]">· {activeCycle.name}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-zinc-400">
+              <div className="flex items-center gap-1.5 text-zinc-300 ml-auto">
                 <span>{showDetailedChamberGuide ? 'Hide Reference' : 'View Reference'}</span>
-                {showDetailedChamberGuide ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                {showDetailedChamberGuide ? (
+                  <ChevronUp className="w-4 h-4" aria-hidden="true" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" aria-hidden="true" />
+                )}
               </div>
             </button>
 
             {showDetailedChamberGuide && (
-              <div className="p-5 border-t border-[#1f243a]">
+              <div id="abyss-chamber-reference" className="p-4 sm:p-5 border-t border-[#24293d]">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {analysis.map((item, idx) => {
                     const isReady = item.verdict === 'Ready to Clear';
                     return (
                       <div
                         key={idx}
-                        className="bg-[#0e1018] border border-[#20253a] rounded-xl p-4 space-y-3 flex flex-col justify-between"
+                        className="bg-[#0e1019] border border-[#24293d] rounded-xl p-4 space-y-3 flex flex-col justify-between"
                       >
                         <div>
-                          <div className="flex items-center justify-between border-b border-[#1b1f32] pb-2.5">
+                          <div className="flex flex-wrap items-start justify-between gap-2 border-b border-[#202538] pb-2.5">
                             <div>
-                              <span className="text-xs font-bold text-[#d4af37]">
+                              <span className="text-xs font-bold text-[#f3cf58]">
                                 12-{item.chamber.chamber} · {item.chamber.half}
                               </span>
-                              <h4 className="text-sm font-bold text-zinc-100 mt-0.5">
+                              <h3 className="text-sm font-bold text-zinc-100 mt-0.5">
                                 {item.chamber.enemies.join(' & ')}
-                              </h4>
+                              </h3>
                             </div>
 
                             <span
-                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1 ${
+                              className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border inline-flex items-center gap-1 shrink-0 ${
                                 isReady
-                                  ? 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30'
-                                  : 'bg-rose-950/40 text-rose-400 border-rose-500/30'
+                                  ? 'bg-emerald-950/60 text-emerald-200 border-emerald-400/45'
+                                  : 'bg-rose-950/60 text-rose-200 border-rose-400/45'
                               }`}
                             >
                               {isReady ? (
-                                <ShieldCheck className="w-3 h-3" />
+                                <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
                               ) : (
-                                <ShieldAlert className="w-3 h-3" />
+                                <ShieldAlert className="w-3.5 h-3.5" aria-hidden="true" />
                               )}
                               <span>{item.verdict}</span>
                             </span>
                           </div>
 
                           <div className="mt-2.5 flex flex-wrap gap-2 text-xs">
-                            <div className="bg-[#141724] px-2 py-0.5 rounded border border-[#22273c]">
-                              <span className="text-zinc-400 text-[11px]">Shield: </span>
-                              <span className="text-rose-400 font-semibold text-[11px]">
+                            <div className="bg-[#151826] px-2.5 py-1 rounded-lg border border-[#24293d]">
+                              <span className="text-zinc-300">Shield: </span>
+                              <span className="text-rose-200 font-semibold">
                                 {item.chamber.shieldTypes.join(', ')}
                               </span>
                             </div>
-                            <div className="bg-[#141724] px-2 py-0.5 rounded border border-[#22273c]">
-                              <span className="text-zinc-400 text-[11px]">Required: </span>
-                              <span className="text-[#d4af37] font-semibold text-[11px]">
+                            <div className="bg-[#151826] px-2.5 py-1 rounded-lg border border-[#24293d]">
+                              <span className="text-zinc-300">Required: </span>
+                              <span className="text-[#f3cf58] font-semibold">
                                 {item.chamber.recommendedElements.join(', ')}
                               </span>
                             </div>
                           </div>
 
-                          <p className="mt-2.5 text-xs text-zinc-300 bg-[#0a0c13] p-2.5 rounded-lg border border-[#171a28] leading-relaxed">
+                          <p className="mt-2.5 text-xs text-zinc-200 bg-[#0b0d14] p-3 rounded-lg border border-[#1d2236] leading-relaxed">
                             💡 {item.chamber.tips}
                           </p>
 
-                          <div className="mt-2.5">
-                            <span className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider block mb-1">
+                          <div className="mt-3">
+                            <span className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block mb-1.5">
                               Your Usable Counter Characters:
                             </span>
                             <div className="flex flex-wrap gap-1.5">
@@ -179,8 +208,9 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
                                 item.usableCounters.map((c) => (
                                   <button
                                     key={c.id}
+                                    type="button"
                                     onClick={() => setSelectedCharacter(c)}
-                                    className="flex items-center gap-1 text-[11px] bg-[#161928] hover:bg-[#20253a] text-zinc-200 px-2 py-0.5 rounded-lg border border-[#242b42] hover:border-[#d4af37]/50 font-medium transition-colors cursor-pointer"
+                                    className="min-h-[34px] flex items-center gap-1.5 text-xs bg-[#161a29] hover:bg-[#22283f] text-zinc-100 px-2.5 py-1 rounded-lg border border-[#2c334d] hover:border-[#d4af37]/60 font-medium transition-colors cursor-pointer"
                                   >
                                     <CharacterPortrait
                                       src={c.icon}
@@ -192,8 +222,8 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
                                   </button>
                                 ))
                               ) : (
-                                <span className="text-xs text-rose-400 italic">
-                                  No optimal counter found in your active roster!
+                                <span className="text-xs text-rose-200 italic">
+                                  No optimal counter found in your active roster.
                                 </span>
                               )}
                             </div>
@@ -201,8 +231,8 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
                         </div>
 
                         {item.missingElements.length > 0 && (
-                          <div className="flex items-center gap-1.5 text-xs text-rose-400 bg-rose-950/20 border border-rose-500/20 p-2 rounded-lg mt-2">
-                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                          <div className="flex items-center gap-1.5 text-xs text-rose-200 bg-rose-950/35 border border-rose-400/35 p-2.5 rounded-lg mt-2">
+                            <AlertCircle className="w-4 h-4 shrink-0 text-rose-300" aria-hidden="true" />
                             <span>Missing elements: {item.missingElements.join(', ')}</span>
                           </div>
                         )}

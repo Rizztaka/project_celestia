@@ -112,7 +112,11 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   private handleReload = () => {
     try {
-      if (typeof window !== 'undefined' && window.location && typeof window.location.reload === 'function') {
+      if (
+        typeof window !== 'undefined' &&
+        window.location &&
+        typeof window.location.reload === 'function'
+      ) {
         window.location.reload();
       }
     } catch (err) {
@@ -120,47 +124,75 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     }
   };
 
+  private isNetworkOrChunkError(): boolean {
+    const msg = (this.state.error?.message || '').toLowerCase();
+    return (
+      msg.includes('dynamically imported module') ||
+      msg.includes('chunk') ||
+      msg.includes('network') ||
+      msg.includes('failed to fetch')
+    );
+  }
+
   public render() {
     if (this.state.hasError) {
+      const isNetworkError = this.isNetworkOrChunkError();
+      const errorMessage = this.state.error?.message;
+
       return (
         <div
           role="alert"
           className="bg-[#121420] border border-rose-500/40 rounded-2xl p-6 sm:p-8 text-center space-y-4 shadow-xl max-w-lg mx-auto my-8"
         >
-          <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center mx-auto text-rose-400">
-            <AlertTriangle className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-full bg-rose-500/15 border border-rose-400/35 flex items-center justify-center mx-auto text-rose-300">
+            <AlertTriangle className="w-6 h-6" aria-hidden="true" />
           </div>
 
           <div className="space-y-1.5">
-            <h3 className="text-base font-bold text-zinc-100">
+            <h2 className="text-base font-bold text-zinc-100">
               {this.props.fallbackTitle || 'Unable to Load View'}
-            </h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              A network interruption or temporary resource fetch error occurred while loading this view.
-              Please check your connection and retry.
+            </h2>
+            <p className="text-xs text-zinc-300 leading-relaxed">
+              {isNetworkError
+                ? 'A network interruption or temporary resource fetch error occurred while loading this view. Check your connection and retry.'
+                : 'An unexpected display error occurred in this view. Your saved account data in local storage is safe.'}
             </p>
           </div>
 
+          {errorMessage && (
+            <details className="text-left bg-[#0c0e17] border border-[#24293d] rounded-xl px-3.5 py-2.5 text-xs">
+              <summary className="cursor-pointer font-semibold text-zinc-300 hover:text-white select-none">
+                Technical details
+              </summary>
+              <p className="mt-2 font-mono text-[11px] text-rose-300 break-words leading-relaxed">
+                {errorMessage}
+              </p>
+            </details>
+          )}
+
           <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
             <button
+              type="button"
               onClick={this.handleRetry}
-              className="px-3.5 py-2 rounded-xl bg-[#1c2032] hover:bg-[#252b44] text-zinc-200 text-xs font-semibold border border-[#2b3350] transition-colors cursor-pointer flex items-center gap-1.5"
+              className="min-h-[44px] sm:min-h-[38px] px-4 py-2 rounded-xl bg-[#1c2032] hover:bg-[#252b44] text-zinc-100 text-xs font-semibold border border-[#323a5a] transition-colors cursor-pointer inline-flex items-center gap-1.5"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
+              <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Try Again</span>
             </button>
             <button
+              type="button"
               onClick={this.handleReload}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0a0b0e] text-xs font-bold hover:brightness-110 transition-all cursor-pointer shadow-sm"
+              className="min-h-[44px] sm:min-h-[38px] px-4 py-2 rounded-xl bg-[#d4af37] hover:bg-[#e5c14d] text-[#0a0b0e] text-xs font-bold transition-colors cursor-pointer shadow-sm"
             >
               Reload Page
             </button>
             <button
+              type="button"
               onClick={this.handleDownloadReport}
-              className="px-3.5 py-2 rounded-xl bg-purple-950/40 hover:bg-purple-900/60 text-purple-300 text-xs font-semibold border border-purple-500/30 transition-colors cursor-pointer flex items-center gap-1.5"
+              className="min-h-[44px] sm:min-h-[38px] px-4 py-2 rounded-xl bg-purple-950/50 hover:bg-purple-900/60 text-purple-200 text-xs font-semibold border border-purple-400/40 transition-colors cursor-pointer inline-flex items-center gap-1.5"
               title="Download sanitized diagnostic error report"
             >
-              <Download className="w-3.5 h-3.5" />
+              <Download className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Download Error Report</span>
             </button>
           </div>

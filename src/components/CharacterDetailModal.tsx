@@ -20,6 +20,7 @@ import {
   Crown,
   Loader2,
   Compass,
+  Clock,
 } from 'lucide-react';
 import { CHARACTERS } from '../data/characters';
 import { CharacterPortrait } from './CharacterPortrait';
@@ -40,6 +41,7 @@ import {
 } from '../services/armory-operations';
 import { WEAPONS_BY_TYPE, getWeaponByKey } from '../data/weapons';
 import { getTalentScaling, type TalentScalingData } from '../data/talent-scaling';
+import { useModalAccessibility } from '../hooks/useModalAccessibility';
 
 function formatTalentValue(val: number, format: string): string {
   switch (format) {
@@ -90,6 +92,16 @@ const TALENT_MILESTONES = [
   { level: 13, label: 'Lv. 13', desc: 'C3/C5', isConst: true },
 ];
 
+const CHARACTER_LEVEL_PRESETS = [20, 50, 70, 80, 90];
+
+const CHARACTER_NAME_BY_ID = new Map<string, string>(
+  CHARACTERS.map((c) => [c.id, c.name])
+);
+
+function getDisplayCharacterName(id: string): string {
+  return CHARACTER_NAME_BY_ID.get(id) ?? id;
+}
+
 interface CharacterDetailModalProps {
   character: Character | null;
   onClose: () => void;
@@ -115,52 +127,52 @@ const ELEMENT_THEMES: Record<
   }
 > = {
   Pyro: {
-    bg: 'from-rose-950/40 to-[#12141d]',
-    border: 'border-rose-500/40',
-    text: 'text-rose-400',
-    badgeBg: 'bg-rose-950/60 text-rose-300 border-rose-500/30',
+    bg: 'from-rose-950/40 to-[#121420]',
+    border: 'border-rose-500/45',
+    text: 'text-rose-300',
+    badgeBg: 'bg-rose-950/70 text-rose-200 border-rose-400/40',
     glow: 'shadow-rose-900/20',
   },
   Hydro: {
-    bg: 'from-sky-950/40 to-[#12141d]',
-    border: 'border-sky-500/40',
-    text: 'text-sky-400',
-    badgeBg: 'bg-sky-950/60 text-sky-300 border-sky-500/30',
+    bg: 'from-sky-950/40 to-[#121420]',
+    border: 'border-sky-500/45',
+    text: 'text-sky-300',
+    badgeBg: 'bg-sky-950/70 text-sky-200 border-sky-400/40',
     glow: 'shadow-sky-900/20',
   },
   Dendro: {
-    bg: 'from-emerald-950/40 to-[#12141d]',
-    border: 'border-emerald-500/40',
-    text: 'text-emerald-400',
-    badgeBg: 'bg-emerald-950/60 text-emerald-300 border-emerald-500/30',
+    bg: 'from-emerald-950/40 to-[#121420]',
+    border: 'border-emerald-500/45',
+    text: 'text-emerald-300',
+    badgeBg: 'bg-emerald-950/70 text-emerald-200 border-emerald-400/40',
     glow: 'shadow-emerald-900/20',
   },
   Electro: {
-    bg: 'from-purple-950/40 to-[#12141d]',
-    border: 'border-purple-500/40',
-    text: 'text-purple-400',
-    badgeBg: 'bg-purple-950/60 text-purple-300 border-purple-500/30',
+    bg: 'from-purple-950/40 to-[#121420]',
+    border: 'border-purple-500/45',
+    text: 'text-purple-300',
+    badgeBg: 'bg-purple-950/70 text-purple-200 border-purple-400/40',
     glow: 'shadow-purple-900/20',
   },
   Anemo: {
-    bg: 'from-teal-950/40 to-[#12141d]',
-    border: 'border-teal-500/40',
-    text: 'text-teal-400',
-    badgeBg: 'bg-teal-950/60 text-teal-300 border-teal-500/30',
+    bg: 'from-teal-950/40 to-[#121420]',
+    border: 'border-teal-500/45',
+    text: 'text-teal-300',
+    badgeBg: 'bg-teal-950/70 text-teal-200 border-teal-400/40',
     glow: 'shadow-teal-900/20',
   },
   Cryo: {
-    bg: 'from-cyan-950/40 to-[#12141d]',
-    border: 'border-cyan-500/40',
-    text: 'text-cyan-300',
-    badgeBg: 'bg-cyan-950/60 text-cyan-200 border-cyan-500/30',
+    bg: 'from-cyan-950/40 to-[#121420]',
+    border: 'border-cyan-500/45',
+    text: 'text-cyan-200',
+    badgeBg: 'bg-cyan-950/70 text-cyan-100 border-cyan-400/40',
     glow: 'shadow-cyan-900/20',
   },
   Geo: {
-    bg: 'from-amber-950/40 to-[#12141d]',
-    border: 'border-amber-500/40',
-    text: 'text-amber-400',
-    badgeBg: 'bg-amber-950/60 text-amber-300 border-amber-500/30',
+    bg: 'from-amber-950/40 to-[#121420]',
+    border: 'border-amber-500/45',
+    text: 'text-amber-300',
+    badgeBg: 'bg-amber-950/70 text-amber-200 border-amber-400/40',
     glow: 'shadow-amber-900/20',
   },
 };
@@ -188,7 +200,27 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   const [activeTab, setActiveTab] = useState<'build' | 'talents' | 'constellations'>('build');
   const [showAlternateRotation, setShowAlternateRotation] = useState<boolean>(false);
   const [transferToast, setTransferToast] = useState<string | null>(null);
+  const [talentsSaved, setTalentsSaved] = useState<boolean>(false);
+
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const transferTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const talentsSavedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useModalAccessibility({
+    isOpen: Boolean(character),
+    onClose,
+    containerRef: dialogRef,
+    initialFocusRef: closeBtnRef,
+  });
+
+  useEffect(() => {
+    return () => {
+      if (transferTimerRef.current) clearTimeout(transferTimerRef.current);
+      if (talentsSavedTimerRef.current) clearTimeout(talentsSavedTimerRef.current);
+    };
+  }, []);
 
   const activeWeapons = useMemo(() => weapons || getSavedWeapons(), [weapons]);
 
@@ -218,6 +250,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
     }
     let active = true;
     setIsLoadingScaling(true);
+    setTalentsSaved(false);
     const initialNormal = profile?.talents?.auto || 10;
     const initialSkill = profile?.talents?.skill || 10;
     const initialBurst = profile?.talents?.burst || 10;
@@ -258,7 +291,16 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
       setCustomLevel(profile?.weapon?.level ?? 90);
       setCustomRefinement(profile?.weapon?.refinement ?? 1);
     }
-  }, [character?.id, profile?.weapon?.key]);
+  }, [character?.id, character?.weapon, profile?.weapon?.key, profile?.weapon?.level, profile?.weapon?.refinement]);
+
+  const showTransferFeedback = (msg: string) => {
+    setTransferToast(msg);
+    if (transferTimerRef.current) clearTimeout(transferTimerRef.current);
+    transferTimerRef.current = setTimeout(() => {
+      setTransferToast(null);
+      transferTimerRef.current = null;
+    }, 4500);
+  };
 
   const handleEquipWeapon = (weaponToEquip: OwnedWeapon) => {
     if (!character) return;
@@ -272,8 +314,9 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
     );
 
     if (transferredFrom) {
-      setTransferToast(`Transferred ${weaponToEquip.name} from ${transferredFrom}`);
-      setTimeout(() => setTransferToast(null), 4000);
+      showTransferFeedback(
+        `Transferred ${weaponToEquip.name} from ${getDisplayCharacterName(transferredFrom)}`
+      );
     }
 
     if (onUpdateProfiles) {
@@ -325,10 +368,11 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
     const dbW = getWeaponByKey(customWeaponKey);
     if (!dbW) return;
 
+    const clampedLevel = Math.max(1, Math.min(90, Math.round(customLevel) || 90));
     const newEquipped = {
       key: dbW.key,
       name: dbW.name,
-      level: customLevel,
+      level: clampedLevel,
       refinement: customRefinement,
       rarity: dbW.rarity,
     };
@@ -366,6 +410,28 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
     }
 
     setShowManualCustomizer(false);
+    showTransferFeedback(`Equipped ${dbW.name} (Lv. ${clampedLevel}, R${customRefinement})`);
+  };
+
+  const handleSaveTalents = () => {
+    if (!character || !onUpdateProfile) return;
+    onUpdateProfile({
+      id: character.id,
+      level: profile?.level ?? 90,
+      constellation: profile?.constellation ?? 0,
+      weapon: profile?.weapon,
+      talents: {
+        auto: talentLevels.normal,
+        skill: talentLevels.skill,
+        burst: talentLevels.burst,
+      },
+    });
+    setTalentsSaved(true);
+    if (talentsSavedTimerRef.current) clearTimeout(talentsSavedTimerRef.current);
+    talentsSavedTimerRef.current = setTimeout(() => {
+      setTalentsSaved(false);
+      talentsSavedTimerRef.current = null;
+    }, 2500);
   };
 
   // Reset alternate rotation view on character switch
@@ -375,26 +441,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
   const rotationProfile = character ? resolveCharacterRotationProfile(character) : null;
 
-  // Lock body scroll while modal is active
-  useEffect(() => {
-    if (!character) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [character]);
-
-  // Close on Escape key
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
-
-  // Reset scroll position and tab when character changes
+  // Reset scroll position when character or tab changes
   useEffect(() => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = 0;
@@ -404,30 +451,35 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   if (!character) return null;
 
   const theme = ELEMENT_THEMES[character.element] || ELEMENT_THEMES.Pyro;
+  const currentCharLevel = profile?.level ?? 90;
 
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-label={`${character.name} Details`}
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/80 backdrop-blur-md"
       onClick={onClose}
     >
       <div
-        className={`bg-[#0e1017] border ${theme.border} w-full max-w-3xl max-h-[92vh] rounded-2xl shadow-2xl ${theme.glow} flex flex-col overflow-hidden text-zinc-200`}
+        ref={dialogRef}
+        tabIndex={-1}
+        className={`bg-[#121420] border ${theme.border} w-full max-w-3xl max-h-[92vh] rounded-2xl shadow-2xl ${theme.glow} flex flex-col overflow-hidden text-zinc-100 focus:outline-none`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Banner */}
-        <div className={`bg-gradient-to-r ${theme.bg} p-5 border-b border-[#24293d] relative`}>
+        <div className={`bg-gradient-to-r ${theme.bg} p-4 sm:p-5 border-b border-[#24293d] relative shrink-0`}>
           <button
+            ref={closeBtnRef}
+            type="button"
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-zinc-400 hover:text-zinc-100 transition-colors cursor-pointer z-10"
+            className="absolute top-3.5 right-3.5 min-w-[40px] min-h-[40px] rounded-xl bg-black/45 hover:bg-black/75 text-zinc-200 hover:text-white flex items-center justify-center transition-colors cursor-pointer z-10"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pr-10">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pr-11">
             {/* Avatar thumbnail */}
             <CharacterPortrait
               src={character.icon}
@@ -436,35 +488,35 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
               rarity={character.rarity}
               size="xl"
               showRarity={true}
-              className={`border-2 ${theme.border}`}
+              className={`border-2 ${theme.border} shrink-0`}
             />
 
             {/* Information */}
-            <div className="space-y-1">
+            <div className="space-y-1.5 min-w-0 flex-1">
               {character.title && (
-                <div className="text-xs font-serif italic text-zinc-400">{character.title}</div>
+                <div className="text-xs font-serif italic text-zinc-300">{character.title}</div>
               )}
-              <h2 className="text-2xl font-bold font-serif text-zinc-100 leading-tight">
+              <h2 className="text-xl sm:text-2xl font-bold font-serif text-zinc-100 leading-tight">
                 {character.name}
               </h2>
               {character.constellationName && (
-                <div className="text-[11px] text-zinc-400 font-mono">
+                <div className="text-xs text-zinc-300 font-mono">
                   Constellation: {character.constellationName}
                 </div>
               )}
 
               {/* Badges */}
-              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+              <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                 <span className={`px-2.5 py-0.5 rounded-lg text-xs font-bold border ${theme.badgeBg}`}>
                   {character.element}
                 </span>
-                <span className="px-2.5 py-0.5 rounded-lg text-xs font-medium bg-[#1e2336] text-zinc-300 border border-[#2d344e]">
+                <span className="px-2.5 py-0.5 rounded-lg text-xs font-medium bg-[#1a1e2e] text-zinc-200 border border-[#323954]">
                   {character.weapon}
                 </span>
                 {character.roles.map((role) => (
                   <span
                     key={role}
-                    className="px-2 py-0.5 rounded-lg text-xs font-medium bg-black/40 text-zinc-400 border border-white/5"
+                    className="px-2 py-0.5 rounded-lg text-xs font-medium bg-black/45 text-zinc-200 border border-white/10"
                   >
                     {role}
                   </span>
@@ -473,12 +525,16 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
               {/* Traveler Element Switcher */}
               {character.name.includes('Traveler') && (
-                <div className="pt-2 flex items-center gap-2 flex-wrap">
-                  <span className="text-[11px] font-semibold text-[#d4af37] flex items-center gap-1">
-                    <Compass className="w-3.5 h-3.5" />
+                <div className="pt-1.5 flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-semibold text-[#f3cf58] flex items-center gap-1">
+                    <Compass className="w-3.5 h-3.5" aria-hidden="true" />
                     <span>Traveler Element:</span>
                   </span>
-                  <div className="flex items-center gap-1 bg-[#10121d] p-0.5 rounded-lg border border-[#24293f]">
+                  <div
+                    role="group"
+                    aria-label="Traveler Element"
+                    className="flex flex-wrap items-center gap-1 bg-[#0e101a] p-1 rounded-lg border border-[#24293d]"
+                  >
                     {(['Anemo', 'Geo', 'Electro', 'Dendro', 'Hydro', 'Pyro'] as Element[]).map((elem) => {
                       const isCurrent = character.element === elem;
                       const targetTraveler = CHARACTERS.find(
@@ -488,16 +544,17 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                         <button
                           key={elem}
                           type="button"
+                          aria-pressed={isCurrent}
                           onClick={() => {
                             if (targetTraveler) {
                               setInternalCharacter(targetTraveler);
                               onSelectCharacter?.(targetTraveler);
                             }
                           }}
-                          className={`px-2 py-0.5 rounded-md text-[11px] font-bold transition-all cursor-pointer border ${
+                          className={`min-h-[32px] px-2.5 py-1 rounded-md text-xs font-bold transition-colors cursor-pointer border ${
                             isCurrent
-                              ? 'bg-[#d4af37] text-black border-[#d4af37] shadow-sm'
-                              : 'text-zinc-400 hover:text-zinc-200 border-transparent hover:bg-[#1f243b]'
+                              ? 'bg-[#d4af37] text-[#0a0b0e] border-[#d4af37] shadow-sm'
+                              : 'text-zinc-300 hover:text-white border-transparent hover:bg-[#1f243b]'
                           }`}
                           title={`Switch to Traveler (${elem})`}
                         >
@@ -509,32 +566,95 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                 </div>
               )}
 
-              {/* Interactive Constellation Selector when owned */}
+              {/* Interactive Character Level & Constellation Selectors when owned */}
               {isOwned && onUpdateProfile && (
-                <div className="pt-2 flex flex-wrap items-center gap-2">
-                  <span className="text-[11px] font-semibold text-zinc-400">Constellation:</span>
-                  <div className="flex items-center gap-1 bg-[#10121d] p-0.5 rounded-lg border border-[#24293f]">
-                    {[0, 1, 2, 3, 4, 5, 6].map((lvl) => (
-                      <button
-                        key={lvl}
-                        onClick={() =>
+                <div className="pt-1.5 flex flex-col gap-2">
+                  {/* Character Level */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-semibold text-zinc-300">Level:</span>
+                    <div
+                      role="group"
+                      aria-label="Character level presets"
+                      className="flex flex-wrap items-center gap-1 bg-[#0e101a] p-0.5 rounded-lg border border-[#24293d]"
+                    >
+                      {CHARACTER_LEVEL_PRESETS.map((lvl) => (
+                        <button
+                          key={lvl}
+                          type="button"
+                          aria-pressed={currentCharLevel === lvl}
+                          onClick={() =>
+                            onUpdateProfile({
+                              id: character.id,
+                              level: lvl,
+                              constellation: profile?.constellation ?? 0,
+                              weapon: profile?.weapon,
+                              talents: profile?.talents,
+                            })
+                          }
+                          className={`min-w-[36px] min-h-[32px] sm:min-h-[28px] px-2 rounded-md text-xs font-bold transition-colors cursor-pointer tabular-nums ${
+                            currentCharLevel === lvl
+                              ? 'bg-[#d4af37] text-[#0a0b0e] font-extrabold shadow-sm'
+                              : 'text-zinc-300 hover:text-white hover:bg-[#1f243b]'
+                          }`}
+                        >
+                          {lvl}
+                        </button>
+                      ))}
+                      <input
+                        type="number"
+                        min={1}
+                        max={90}
+                        aria-label="Exact character level"
+                        value={currentCharLevel}
+                        onChange={(e) => {
+                          const raw = parseInt(e.target.value, 10);
+                          if (Number.isNaN(raw)) return;
+                          const clamped = Math.max(1, Math.min(90, raw));
                           onUpdateProfile({
                             id: character.id,
-                            level: profile?.level ?? 90,
-                            constellation: lvl,
+                            level: clamped,
+                            constellation: profile?.constellation ?? 0,
                             weapon: profile?.weapon,
                             talents: profile?.talents,
-                          })
-                        }
-                        className={`w-6 h-6 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
-                          (profile?.constellation ?? 0) === lvl
-                            ? 'bg-[#d4af37] text-black font-extrabold shadow-sm'
-                            : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#1f243b]'
-                        }`}
-                      >
-                        C{lvl}
-                      </button>
-                    ))}
+                          });
+                        }}
+                        className="w-14 min-h-[32px] sm:min-h-[28px] bg-[#161928] border border-[#323954] rounded-md px-1.5 text-center text-xs font-mono font-bold text-[#f3cf58] tabular-nums"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Constellation */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-semibold text-zinc-300">Constellation:</span>
+                    <div
+                      role="group"
+                      aria-label="Character constellation"
+                      className="flex flex-wrap items-center gap-1 bg-[#0e101a] p-0.5 rounded-lg border border-[#24293d]"
+                    >
+                      {[0, 1, 2, 3, 4, 5, 6].map((lvl) => (
+                        <button
+                          key={lvl}
+                          type="button"
+                          aria-pressed={(profile?.constellation ?? 0) === lvl}
+                          onClick={() =>
+                            onUpdateProfile({
+                              id: character.id,
+                              level: profile?.level ?? 90,
+                              constellation: lvl,
+                              weapon: profile?.weapon,
+                              talents: profile?.talents,
+                            })
+                          }
+                          className={`min-w-[34px] min-h-[34px] sm:min-w-[30px] sm:min-h-[28px] rounded-md text-xs font-bold transition-colors cursor-pointer ${
+                            (profile?.constellation ?? 0) === lvl
+                              ? 'bg-[#d4af37] text-[#0a0b0e] font-extrabold shadow-sm'
+                              : 'text-zinc-300 hover:text-white hover:bg-[#1f243b]'
+                          }`}
+                        >
+                          C{lvl}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -544,12 +664,12 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                 const canonical = getWeaponByKey(profile.weapon.key) || getWeaponByKey(profile.weapon.name);
                 const displayRarity = canonical?.rarity || profile.weapon.rarity || 4;
                 return (
-                  <div className="pt-1 flex items-center gap-2 text-xs text-zinc-300">
-                    <Swords className="w-3.5 h-3.5 text-[#d4af37]" />
+                  <div className="pt-1 flex flex-wrap items-center gap-2 text-xs text-zinc-200">
+                    <Swords className="w-3.5 h-3.5 text-[#d4af37] shrink-0" aria-hidden="true" />
                     <span>
-                      Equipped: <strong className="text-zinc-100">{canonical?.name || profile.weapon.name}</strong> (Lv. {profile.weapon.level}, R{profile.weapon.refinement})
+                      Equipped: <strong className="text-white">{canonical?.name || profile.weapon.name}</strong> (Lv. {profile.weapon.level}, R{profile.weapon.refinement})
                     </span>
-                    <span className="text-xs text-[#d4af37] font-semibold">
+                    <span className="text-xs text-[#f3cf58] font-semibold" aria-label={`${displayRarity} star weapon`}>
                       {'★'.repeat(Math.max(1, Math.min(5, Math.floor(displayRarity))))}
                     </span>
                   </div>
@@ -559,23 +679,25 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
             {/* Owned status button if handler provided */}
             {onToggleOwned && (
-              <div className="sm:ml-auto shrink-0 mt-2 sm:mt-0">
+              <div className="sm:ml-auto shrink-0 mt-1 sm:mt-0">
                 <button
+                  type="button"
+                  aria-pressed={Boolean(isOwned)}
                   onClick={() => onToggleOwned(character.id)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer border ${
+                  className={`min-h-[42px] sm:min-h-[36px] px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer border ${
                     isOwned
-                      ? 'bg-[#d4af37] border-[#d4af37] text-black hover:bg-[#e5c158]'
-                      : 'bg-[#181d2e] border-[#2c334d] text-zinc-400 hover:text-zinc-200 hover:bg-[#20273d]'
+                      ? 'bg-[#d4af37] border-[#d4af37] text-[#0a0b0e] hover:bg-[#e5c14d]'
+                      : 'bg-[#1a1e2e] border-[#323954] text-zinc-200 hover:text-white hover:bg-[#242a40]'
                   }`}
                 >
                   {isOwned ? (
                     <>
-                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                      <Check className="w-3.5 h-3.5 stroke-[3]" aria-hidden="true" />
                       <span>In Roster</span>
                     </>
                   ) : (
                     <>
-                      <Plus className="w-3.5 h-3.5" />
+                      <Plus className="w-3.5 h-3.5" aria-hidden="true" />
                       <span>Add to Roster</span>
                     </>
                   )}
@@ -586,84 +708,108 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
         </div>
 
         {/* Tab Navigation with horizontal scrolling for mobile */}
-        <div className="flex items-center gap-1 px-5 pt-3 border-b border-[#202538] bg-[#0c0d14] overflow-x-auto scrollbar-none whitespace-nowrap">
+        <div
+          role="tablist"
+          aria-label="Character sections"
+          className="flex items-center gap-1 px-4 sm:px-5 border-b border-[#24293d] bg-[#0e1019] overflow-x-auto touch-pan-x whitespace-nowrap shrink-0"
+        >
           <button
+            id="char-tab-build"
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'build'}
+            aria-controls="char-panel-build"
             onClick={() => setActiveTab('build')}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 ${
+            className={`min-h-[44px] flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 ${
               activeTab === 'build'
-                ? 'border-[#d4af37] text-[#d4af37]'
-                : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                ? 'border-[#d4af37] text-[#f3cf58]'
+                : 'border-transparent text-zinc-300 hover:text-white'
             }`}
           >
-            <Swords className="w-3.5 h-3.5" />
-            <span>Build & Stats</span>
+            <Swords className="w-3.5 h-3.5" aria-hidden="true" />
+            <span>Build &amp; Stats</span>
           </button>
           <button
+            id="char-tab-talents"
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'talents'}
+            aria-controls="char-panel-talents"
             onClick={() => setActiveTab('talents')}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 ${
+            className={`min-h-[44px] flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 ${
               activeTab === 'talents'
-                ? 'border-[#d4af37] text-[#d4af37]'
-                : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                ? 'border-[#d4af37] text-[#f3cf58]'
+                : 'border-transparent text-zinc-300 hover:text-white'
             }`}
           >
-            <BookOpen className="w-3.5 h-3.5" />
+            <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Talents ({character.talents?.length ?? 0})</span>
           </button>
           <button
+            id="char-tab-constellations"
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'constellations'}
+            aria-controls="char-panel-constellations"
             onClick={() => setActiveTab('constellations')}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 ${
+            className={`min-h-[44px] flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 ${
               activeTab === 'constellations'
-                ? 'border-[#d4af37] text-[#d4af37]'
-                : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                ? 'border-[#d4af37] text-[#f3cf58]'
+                : 'border-transparent text-zinc-300 hover:text-white'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Constellations ({character.constellations?.length ?? 0})</span>
           </button>
         </div>
 
-        {/* Tab Body */}
+        {/* Scrollable Tab Body (flex-1 min-h-0 guarantees reliable scrolling on all viewports) */}
         <div
           ref={scrollContainerRef}
-          className="p-5 overflow-y-auto space-y-6 max-h-[calc(92vh-180px)]"
+          className="p-4 sm:p-5 overflow-y-auto flex-1 min-h-0 space-y-6"
         >
           {/* TAB 1: BUILD & STATS */}
           {activeTab === 'build' && (
-            <div className="space-y-5">
+            <div
+              id="char-panel-build"
+              role="tabpanel"
+              aria-labelledby="char-tab-build"
+              className="space-y-5"
+            >
               {/* Character Base Stats Card (Lv. 90) */}
               {character.stats && (
-                <div className="bg-[#131622] border border-[#23273b] p-4 rounded-xl space-y-2">
-                  <div className="flex items-center justify-between text-xs font-bold text-zinc-400">
-                    <span className="flex items-center gap-1.5 text-[#d4af37]">
-                      <Award className="w-3.5 h-3.5" />
+                <div className="bg-[#151826] border border-[#24293d] p-4 rounded-xl space-y-2.5">
+                  <div className="flex items-center justify-between gap-2 text-xs font-bold">
+                    <span className="flex items-center gap-1.5 text-[#f3cf58]">
+                      <Award className="w-3.5 h-3.5" aria-hidden="true" />
                       <span>Base Attributes (Level 90 / Ascension 6)</span>
                     </span>
-                    <span className="text-[11px] text-zinc-500">Unbuffed</span>
+                    <span className="text-xs text-zinc-400 font-medium">Unbuffed</span>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-                    <div className="bg-[#1a1e30] p-2.5 rounded-lg border border-[#29304a]">
-                      <div className="text-[10px] text-zinc-400 font-semibold uppercase">Base HP</div>
-                      <div className="text-base font-extrabold text-zinc-100">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div className="bg-[#1a1e2e] p-2.5 rounded-lg border border-[#2c334d]">
+                      <div className="text-[11px] text-zinc-300 font-semibold uppercase">Base HP</div>
+                      <div className="text-base font-extrabold text-zinc-100 tabular-nums">
                         {character.stats.hp.toLocaleString()}
                       </div>
                     </div>
-                    <div className="bg-[#1a1e30] p-2.5 rounded-lg border border-[#29304a]">
-                      <div className="text-[10px] text-zinc-400 font-semibold uppercase">Base ATK</div>
-                      <div className="text-base font-extrabold text-zinc-100">
+                    <div className="bg-[#1a1e2e] p-2.5 rounded-lg border border-[#2c334d]">
+                      <div className="text-[11px] text-zinc-300 font-semibold uppercase">Base ATK</div>
+                      <div className="text-base font-extrabold text-zinc-100 tabular-nums">
                         {character.stats.attack.toLocaleString()}
                       </div>
                     </div>
-                    <div className="bg-[#1a1e30] p-2.5 rounded-lg border border-[#29304a]">
-                      <div className="text-[10px] text-zinc-400 font-semibold uppercase">Base DEF</div>
-                      <div className="text-base font-extrabold text-zinc-100">
+                    <div className="bg-[#1a1e2e] p-2.5 rounded-lg border border-[#2c334d]">
+                      <div className="text-[11px] text-zinc-300 font-semibold uppercase">Base DEF</div>
+                      <div className="text-base font-extrabold text-zinc-100 tabular-nums">
                         {character.stats.defense.toLocaleString()}
                       </div>
                     </div>
-                    <div className="bg-[#1a1e30] p-2.5 rounded-lg border border-[#29304a]">
-                      <div className="text-[10px] text-[#d4af37] font-semibold uppercase">
+                    <div className="bg-[#1a1e2e] p-2.5 rounded-lg border border-[#2c334d]">
+                      <div className="text-[11px] text-[#f3cf58] font-semibold uppercase">
                         {character.stats.specializedStat}
                       </div>
-                      <div className="text-base font-extrabold text-[#d4af37]">
+                      <div className="text-base font-extrabold text-[#f3cf58] tabular-nums">
                         {character.stats.specializedValue}
                       </div>
                     </div>
@@ -673,44 +819,45 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
               {/* Recommended Combo & Rotation */}
               {rotationProfile && (
-                <div className="bg-[#131622] border border-[#23273b] p-4 rounded-xl space-y-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#202538] pb-2.5">
-                    <div className="flex items-center gap-2">
-                      <span className="flex items-center gap-1.5 text-xs font-bold text-[#d4af37]">
-                        <Zap className="w-3.5 h-3.5" />
-                        <span>Recommended Combo & Execution</span>
+                <div className="bg-[#151826] border border-[#24293d] p-4 rounded-xl space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#24293d] pb-2.5">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="flex items-center gap-1.5 text-xs font-bold text-[#f3cf58]">
+                        <Zap className="w-3.5 h-3.5" aria-hidden="true" />
+                        <span>Recommended Combo &amp; Execution</span>
                       </span>
                       <span
-                        className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
+                        className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border ${
                           rotationProfile.stage === 'on-field-carry'
-                            ? 'bg-purple-500/15 text-purple-300 border-purple-500/30'
+                            ? 'bg-purple-500/20 text-purple-200 border-purple-400/40'
                             : rotationProfile.stage === 'buffer-shred'
-                            ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
-                            : rotationProfile.stage === 'sustain-setup'
-                            ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                            : 'bg-sky-500/15 text-sky-300 border-sky-500/30'
+                              ? 'bg-amber-500/20 text-amber-200 border-amber-400/40'
+                              : rotationProfile.stage === 'sustain-setup'
+                                ? 'bg-emerald-500/20 text-emerald-200 border-emerald-400/40'
+                                : 'bg-sky-500/20 text-sky-200 border-sky-400/40'
                         }`}
                       >
                         {rotationProfile.stage === 'on-field-carry'
                           ? 'On-Field Carry'
                           : rotationProfile.stage === 'buffer-shred'
-                          ? 'Buffer & Shred'
-                          : rotationProfile.stage === 'sustain-setup'
-                          ? 'Sustain & Setup'
-                          : 'Sub-DPS Deployer'}
+                            ? 'Buffer & Shred'
+                            : rotationProfile.stage === 'sustain-setup'
+                              ? 'Sustain & Setup'
+                              : 'Sub-DPS Deployer'}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono text-zinc-300 flex items-center gap-1 bg-[#1a1e30] px-2 py-0.5 rounded border border-[#29304a]">
-                        <span>⏱️</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-xs font-mono text-zinc-200 inline-flex items-center gap-1.5 bg-[#1a1e2e] px-2.5 py-1 rounded-lg border border-[#2c334d]">
+                        <Clock className="w-3.5 h-3.5 text-[#d4af37]" aria-hidden="true" />
                         <span>~{rotationProfile.estimatedFieldTime}s Field Time</span>
                       </span>
                       {rotationProfile.alternateSequence && (
                         <button
                           type="button"
+                          aria-pressed={showAlternateRotation}
                           onClick={() => setShowAlternateRotation(!showAlternateRotation)}
-                          className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#1e2337] hover:bg-[#282e49] text-zinc-300 hover:text-zinc-100 border border-[#2e3552] transition-colors cursor-pointer"
+                          className="min-h-[32px] text-xs font-semibold px-2.5 py-1 rounded-lg bg-[#1e2337] hover:bg-[#282e49] text-zinc-200 hover:text-white border border-[#323954] transition-colors cursor-pointer"
                         >
                           {showAlternateRotation ? 'Standard Combo' : 'Variant / Battery'}
                         </button>
@@ -719,7 +866,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   </div>
 
                   {/* Badges */}
-                  <div className="bg-[#0b0c14] p-3 rounded-lg border border-[#1d2133]">
+                  <div className="bg-[#0c0e17] p-3 rounded-lg border border-[#202538]">
                     <RotationBadgeList
                       actions={
                         showAlternateRotation && rotationProfile.alternateSequence
@@ -732,8 +879,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
                   {/* Strategy Notes */}
                   {rotationProfile.notes && (
-                    <div className="text-[11px] text-zinc-300 leading-relaxed bg-[#171a2b]/70 p-2.5 rounded border border-[#262c45] flex items-start gap-2">
-                      <Info className="w-3.5 h-3.5 text-[#d4af37] shrink-0 mt-0.5" />
+                    <div className="text-xs text-zinc-200 leading-relaxed bg-[#181c2c] p-3 rounded-lg border border-[#282f48] flex items-start gap-2">
+                      <Info className="w-4 h-4 text-[#d4af37] shrink-0 mt-0.5" aria-hidden="true" />
                       <span>{rotationProfile.notes}</span>
                     </div>
                   )}
@@ -741,10 +888,10 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
               )}
 
               {/* Best Owned Weapons Section */}
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-zinc-200 flex items-center gap-1.5">
-                    <Swords className="w-4 h-4 text-[#d4af37]" />
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="text-sm font-bold text-zinc-100 flex items-center gap-1.5">
+                    <Swords className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
                     <span>Estimated Weapon Suitability ({rankedOwnedWeapons.length})</span>
                     <InfoTooltip
                       title="Estimated Weapon Suitability"
@@ -753,10 +900,11 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   </h3>
                   <button
                     type="button"
+                    aria-expanded={showManualCustomizer}
                     onClick={() => setShowManualCustomizer(!showManualCustomizer)}
-                    className="text-xs text-[#d4af37] hover:underline flex items-center gap-1 cursor-pointer font-semibold"
+                    className="min-h-[36px] px-2.5 rounded-lg text-xs text-[#f3cf58] hover:bg-[#d4af37]/10 flex items-center gap-1.5 cursor-pointer font-semibold transition-colors"
                   >
-                    <Sliders className="w-3.5 h-3.5" />
+                    <Sliders className="w-3.5 h-3.5" aria-hidden="true" />
                     <span>{showManualCustomizer ? 'Close Editor' : 'Customise Weapon'}</span>
                   </button>
                 </div>
@@ -765,19 +913,25 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                 {showManualCustomizer && (
                   <form
                     onSubmit={handleSaveCustomWeapon}
-                    className="bg-[#10121d] border border-[#2b3149] p-4 rounded-xl space-y-3"
+                    className="bg-[#10121e] border border-[#323954] p-4 rounded-xl space-y-3.5"
                   >
-                    <div className="text-xs font-bold text-[#d4af37]">
+                    <div className="text-xs font-bold text-[#f3cf58]">
                       Equip Custom {character.weapon}
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div className="space-y-1">
-                        <label className="text-[11px] text-zinc-400 font-semibold">Weapon Model</label>
+                      <div className="space-y-1.5">
+                        <label
+                          htmlFor="custom-weapon-model"
+                          className="block text-xs text-zinc-300 font-semibold"
+                        >
+                          Weapon Model
+                        </label>
                         <select
+                          id="custom-weapon-model"
                           value={customWeaponKey}
                           onChange={(e) => setCustomWeaponKey(e.target.value)}
-                          className="w-full bg-[#181c2c] border border-[#282f48] text-xs text-zinc-100 rounded-lg p-1.5 focus:outline-none focus:border-[#d4af37]"
+                          className="w-full min-h-[40px] sm:min-h-[36px] bg-[#181c2c] border border-[#323954] text-xs text-zinc-100 rounded-lg px-2.5 py-1.5 focus:border-[#d4af37]"
                         >
                           {(WEAPONS_BY_TYPE[character.weapon] || []).map((w) => (
                             <option key={w.key} value={w.key}>
@@ -787,27 +941,37 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                         </select>
                       </div>
 
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="text-zinc-400 font-semibold">Level</span>
-                          <span className="text-[#d4af37] font-bold">Lv. {customLevel}</span>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between text-xs">
+                          <label htmlFor="custom-weapon-level" className="text-zinc-300 font-semibold">
+                            Level
+                          </label>
+                          <span className="text-[#f3cf58] font-bold font-mono">Lv. {customLevel}</span>
                         </div>
                         <input
+                          id="custom-weapon-level"
                           type="range"
                           min="1"
                           max="90"
+                          aria-valuetext={`Level ${customLevel}`}
                           value={customLevel}
                           onChange={(e) => setCustomLevel(Number(e.target.value))}
-                          className="w-full accent-[#d4af37] cursor-pointer"
+                          className="w-full accent-[#d4af37] cursor-pointer h-2"
                         />
                       </div>
 
-                      <div className="space-y-1">
-                        <label className="text-[11px] text-zinc-400 font-semibold">Refinement</label>
+                      <div className="space-y-1.5">
+                        <label
+                          htmlFor="custom-weapon-refinement"
+                          className="block text-xs text-zinc-300 font-semibold"
+                        >
+                          Refinement
+                        </label>
                         <select
+                          id="custom-weapon-refinement"
                           value={customRefinement}
                           onChange={(e) => setCustomRefinement(Number(e.target.value))}
-                          className="w-full bg-[#181c2c] border border-[#282f48] text-xs text-zinc-100 rounded-lg p-1.5 focus:outline-none focus:border-[#d4af37]"
+                          className="w-full min-h-[40px] sm:min-h-[36px] bg-[#181c2c] border border-[#323954] text-xs text-zinc-100 rounded-lg px-2.5 py-1.5 focus:border-[#d4af37]"
                         >
                           {[1, 2, 3, 4, 5].map((r) => (
                             <option key={r} value={r}>
@@ -818,17 +982,17 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       </div>
                     </div>
 
-                    <div className="flex justify-end gap-2 pt-1 border-t border-[#1e2336]">
+                    <div className="flex justify-end gap-2 pt-2 border-t border-[#24293d]">
                       <button
                         type="button"
                         onClick={() => setShowManualCustomizer(false)}
-                        className="px-3 py-1 rounded-lg text-xs text-zinc-400 hover:text-zinc-200"
+                        className="min-h-[38px] px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-300 hover:text-white hover:bg-[#1a1e2e] cursor-pointer"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
-                        className="px-3 py-1 rounded-lg text-xs font-bold bg-[#d4af37] text-black hover:bg-[#e5c158]"
+                        className="min-h-[38px] px-4 py-1.5 rounded-lg text-xs font-bold bg-[#d4af37] text-[#0a0b0e] hover:bg-[#e5c14d] cursor-pointer"
                       >
                         Equip This Weapon
                       </button>
@@ -838,28 +1002,34 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
                 {/* Transfer Notification Toast */}
                 {transferToast && (
-                  <div className="bg-amber-950/70 border border-amber-500/50 text-amber-200 px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between shadow-md">
-                    <span className="flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <div
+                    role="status"
+                    aria-live="polite"
+                    className="bg-amber-950/60 border border-amber-400/50 text-amber-100 px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between gap-2 shadow-md"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-amber-300 shrink-0" aria-hidden="true" />
                       <span>{transferToast}</span>
                     </span>
                     <button
                       type="button"
                       onClick={() => setTransferToast(null)}
-                      className="text-amber-400 hover:text-white text-xs ml-2 cursor-pointer font-bold"
+                      aria-label="Dismiss weapon update"
+                      className="min-w-[32px] min-h-[32px] rounded-lg flex items-center justify-center text-amber-200 hover:text-white hover:bg-amber-500/20 cursor-pointer shrink-0"
                     >
-                      ✕
+                      <X className="w-3.5 h-3.5" aria-hidden="true" />
                     </button>
                   </div>
                 )}
 
                 {/* Ranked Owned Weapons Cards */}
                 {rankedOwnedWeapons.length === 0 ? (
-                  <div className="bg-[#131622] border border-[#23273a] p-3.5 rounded-xl text-center text-xs text-zinc-400">
-                    No owned {character.weapon} found in armory. Use the Weapon Customizer above to add one!
+                  <div className="bg-[#151826] border border-[#24293d] p-4 rounded-xl text-center text-xs text-zinc-300">
+                    No owned {character.weapon} found in your armory. Use{' '}
+                    <strong className="text-[#f3cf58]">Customise Weapon</strong> above to equip one.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-2">
+                  <div className="grid grid-cols-1 gap-2.5">
                     {rankedOwnedWeapons.map((res) => {
                       const w = res.weapon as OwnedWeapon;
                       const canonicalWeapon = getWeaponByKey(w.key) || getWeaponByKey(w.name);
@@ -880,33 +1050,33 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       return (
                         <div
                           key={w.id}
-                          className={`p-3 rounded-xl border flex items-center justify-between gap-3 transition-colors ${
+                          className={`p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors ${
                             isEquippedHere
-                              ? 'bg-emerald-950/20 border-emerald-500/40'
-                              : 'bg-[#131622] border-[#23273a] hover:border-[#38405e]'
+                              ? 'bg-emerald-950/25 border-emerald-400/50'
+                              : 'bg-[#151826] border-[#24293d] hover:border-[#38405e]'
                           }`}
                         >
-                          <div>
-                            <div className="flex items-center gap-2">
+                          <div className="min-w-0">
+                            <div className="flex flex-wrap items-center gap-2">
                               <span className="text-sm font-bold text-zinc-100">{displayName}</span>
-                              <span className="text-xs text-[#d4af37] font-semibold">
+                              <span className="text-xs text-[#f3cf58] font-semibold">
                                 {'★'.repeat(Math.max(1, Math.min(5, Math.floor(displayRarity))))}
                               </span>
-                              <span className="text-[10px] font-mono font-bold text-amber-400">
+                              <span className="text-[11px] font-mono font-bold text-amber-300">
                                 R{w.refinement}
                               </span>
-                              <span className="text-[10px] font-mono text-zinc-400">
+                              <span className="text-[11px] font-mono text-zinc-300">
                                 Lv. {w.level}
                               </span>
                               <span
-                                className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${
+                                className={`text-[11px] font-bold px-2 py-0.5 rounded border ${
                                   res.tier === 'BiS'
-                                    ? 'bg-[#d4af37]/20 text-[#d4af37] border-[#d4af37]/30'
+                                    ? 'bg-[#d4af37]/20 text-[#f3cf58] border-[#d4af37]/40'
                                     : res.tier === 'Optimal'
-                                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
-                                    : res.tier === 'Great'
-                                    ? 'bg-sky-500/20 text-sky-300 border-sky-500/30'
-                                    : 'bg-zinc-800 text-zinc-300 border-zinc-700'
+                                      ? 'bg-emerald-500/20 text-emerald-200 border-emerald-400/40'
+                                      : res.tier === 'Great'
+                                        ? 'bg-sky-500/20 text-sky-200 border-sky-400/40'
+                                        : 'bg-[#1f2438] text-zinc-200 border-[#323954]'
                                 }`}
                                 title="Estimated Weapon Suitability"
                               >
@@ -914,38 +1084,41 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                               </span>
                             </div>
 
-                            <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                            <p className="text-xs text-zinc-300 mt-1.5 leading-relaxed">
                               {res.reason}
                             </p>
 
                             {res.equippedOn && res.equippedOn !== character.id && (
-                              <span className="inline-block mt-1 text-[11px] text-amber-300/80">
-                                Currently equipped on <strong>{res.equippedOn}</strong>
+                              <span className="inline-block mt-1 text-xs text-amber-200">
+                                Currently equipped on{' '}
+                                <strong className="font-semibold">
+                                  {getDisplayCharacterName(res.equippedOn)}
+                                </strong>
                               </span>
                             )}
                           </div>
 
-                          <div className="shrink-0">
+                          <div className="shrink-0 flex items-center justify-end gap-2">
                             {isEquippedHere ? (
-                              <div className="flex items-center gap-1.5">
-                                <div className="px-3 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-1">
-                                  <Check className="w-3.5 h-3.5" />
+                              <>
+                                <div className="min-h-[38px] px-3 py-1.5 rounded-xl bg-emerald-950/50 border border-emerald-400/50 text-emerald-200 text-xs font-bold flex items-center gap-1.5">
+                                  <Check className="w-3.5 h-3.5" aria-hidden="true" />
                                   <span>Equipped</span>
                                 </div>
                                 <button
                                   type="button"
                                   onClick={handleUnequipWeapon}
-                                  className="px-2.5 py-1.5 rounded-xl bg-[#1e2336] hover:bg-rose-950/60 text-zinc-400 hover:text-rose-200 border border-[#2d344e] hover:border-rose-500/40 text-xs font-medium transition-all cursor-pointer"
+                                  className="min-h-[38px] px-3 py-1.5 rounded-xl bg-[#1a1e2e] hover:bg-rose-950/70 text-zinc-200 hover:text-rose-100 border border-[#323954] hover:border-rose-400/50 text-xs font-semibold transition-colors cursor-pointer"
                                   title="Unequip to inventory bag"
                                 >
                                   Unequip
                                 </button>
-                              </div>
+                              </>
                             ) : (
                               <button
                                 type="button"
                                 onClick={() => handleEquipWeapon(w)}
-                                className="px-3 py-1.5 rounded-xl bg-[#1e2336] hover:bg-[#d4af37] text-zinc-200 hover:text-black border border-[#2d344e] text-xs font-bold transition-all cursor-pointer"
+                                className="min-h-[40px] sm:min-h-[36px] px-4 py-1.5 rounded-xl bg-[#1e2336] hover:bg-[#d4af37] text-zinc-100 hover:text-[#0a0b0e] border border-[#323954] hover:border-[#d4af37] text-xs font-bold transition-colors cursor-pointer"
                               >
                                 Equip
                               </button>
@@ -961,8 +1134,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
               {/* Recommended Weapons */}
               {character.build?.weapons && (
                 <div className="space-y-2.5">
-                  <h3 className="text-sm font-bold text-zinc-200 flex items-center gap-1.5">
-                    <Swords className="w-4 h-4 text-[#d4af37]" />
+                  <h3 className="text-sm font-bold text-zinc-100 flex items-center gap-1.5">
+                    <Swords className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
                     <span>Recommended Weapons</span>
                   </h3>
                   <div className="grid grid-cols-1 gap-2">
@@ -973,22 +1146,22 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       return (
                         <div
                           key={w.name + idx}
-                          className="bg-[#131622] border border-[#23273a] hover:border-[#38405e] p-3 rounded-xl flex items-start justify-between gap-3 transition-colors"
+                          className="bg-[#151826] border border-[#24293d] hover:border-[#38405e] p-3.5 rounded-xl flex items-start justify-between gap-3 transition-colors"
                         >
                           <div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
                               <span className="text-sm font-bold text-zinc-100">{displayName}</span>
-                              <span className="text-xs text-[#d4af37] font-semibold">
+                              <span className="text-xs text-[#f3cf58] font-semibold">
                                 {'★'.repeat(Math.max(1, Math.min(5, Math.floor(displayRarity))))}
                               </span>
                               {idx === 0 && (
-                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/30">
+                                <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-[#d4af37]/20 text-[#f3cf58] border border-[#d4af37]/40">
                                   Signature / BiS
                                 </span>
                               )}
                             </div>
                             {w.reason && (
-                              <p className="text-xs text-zinc-400 mt-1 leading-relaxed">{w.reason}</p>
+                              <p className="text-xs text-zinc-300 mt-1 leading-relaxed">{w.reason}</p>
                             )}
                           </div>
                         </div>
@@ -1001,30 +1174,30 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
               {/* Recommended Artifact Sets */}
               {character.build?.artifacts && (
                 <div className="space-y-2.5">
-                  <h3 className="text-sm font-bold text-zinc-200 flex items-center gap-1.5">
-                    <Layers className="w-4 h-4 text-[#d4af37]" />
+                  <h3 className="text-sm font-bold text-zinc-100 flex items-center gap-1.5">
+                    <Layers className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
                     <span>Recommended Artifact Sets</span>
                   </h3>
                   <div className="grid grid-cols-1 gap-2">
                     {character.build.artifacts.map((a, idx) => (
                       <div
                         key={a.name + idx}
-                        className="bg-[#131622] border border-[#23273a] p-3 rounded-xl flex items-start justify-between gap-3"
+                        className="bg-[#151826] border border-[#24293d] p-3.5 rounded-xl flex items-start justify-between gap-3"
                       >
                         <div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex flex-wrap items-center gap-2">
                             <span className="text-sm font-bold text-zinc-100">{a.name}</span>
-                            <span className="text-xs font-semibold px-2 py-0.5 rounded bg-[#1e2336] text-[#d4af37] border border-[#2d344e]">
+                            <span className="text-xs font-semibold px-2 py-0.5 rounded bg-[#1e2336] text-[#f3cf58] border border-[#323954]">
                               {a.pieces}pc Set
                             </span>
                             {idx === 0 && (
-                              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-500/30">
+                              <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-200 border border-emerald-400/40">
                                 Optimal
                               </span>
                             )}
                           </div>
                           {a.reason && (
-                            <p className="text-xs text-zinc-400 mt-1 leading-relaxed">{a.reason}</p>
+                            <p className="text-xs text-zinc-300 mt-1 leading-relaxed">{a.reason}</p>
                           )}
                         </div>
                       </div>
@@ -1035,25 +1208,25 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
               {/* Recommended Main Stats & Substats */}
               {character.build?.mainStats && (
-                <div className="bg-[#131622] border border-[#23273b] p-4 rounded-xl space-y-3">
-                  <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+                <div className="bg-[#151826] border border-[#24293d] p-4 rounded-xl space-y-3">
+                  <h3 className="text-xs font-bold text-zinc-300 uppercase tracking-wider">
                     Artifact Main Stat Priorities
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                    <div className="bg-[#181c2c] p-2.5 rounded-lg border border-[#262c44]">
-                      <div className="text-[10px] text-zinc-400 font-semibold uppercase">Sands</div>
+                    <div className="bg-[#1a1e2e] p-3 rounded-lg border border-[#2c334d]">
+                      <div className="text-[11px] text-zinc-300 font-semibold uppercase">Sands</div>
                       <div className="text-xs font-bold text-zinc-100 mt-0.5">
                         {character.build.mainStats.sands.join(' / ')}
                       </div>
                     </div>
-                    <div className="bg-[#181c2c] p-2.5 rounded-lg border border-[#262c44]">
-                      <div className="text-[10px] text-zinc-400 font-semibold uppercase">Goblet</div>
+                    <div className="bg-[#1a1e2e] p-3 rounded-lg border border-[#2c334d]">
+                      <div className="text-[11px] text-zinc-300 font-semibold uppercase">Goblet</div>
                       <div className="text-xs font-bold text-zinc-100 mt-0.5">
                         {character.build.mainStats.goblet.join(' / ')}
                       </div>
                     </div>
-                    <div className="bg-[#181c2c] p-2.5 rounded-lg border border-[#262c44]">
-                      <div className="text-[10px] text-zinc-400 font-semibold uppercase">Circlet</div>
+                    <div className="bg-[#1a1e2e] p-3 rounded-lg border border-[#2c334d]">
+                      <div className="text-[11px] text-zinc-300 font-semibold uppercase">Circlet</div>
                       <div className="text-xs font-bold text-zinc-100 mt-0.5">
                         {character.build.mainStats.circlet.join(' / ')}
                       </div>
@@ -1061,15 +1234,15 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   </div>
 
                   {character.build.subStats && (
-                    <div className="pt-2 border-t border-[#202538]">
-                      <div className="text-[10px] text-zinc-400 font-semibold uppercase mb-1.5">
+                    <div className="pt-2.5 border-t border-[#24293d]">
+                      <div className="text-[11px] text-zinc-300 font-semibold uppercase mb-1.5">
                         Substat Priority:
                       </div>
                       <div className="flex flex-wrap items-center gap-1.5">
                         {character.build.subStats.map((sub, idx) => (
                           <span
                             key={sub + idx}
-                            className="px-2 py-0.5 rounded bg-[#1e2336] text-[11px] font-semibold text-zinc-200 border border-[#2e354f]"
+                            className="px-2.5 py-1 rounded-lg bg-[#1e2336] text-xs font-semibold text-zinc-100 border border-[#323954]"
                           >
                             {idx + 1}. {sub}
                           </span>
@@ -1084,44 +1257,56 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
           {/* TAB 2: TALENTS */}
           {activeTab === 'talents' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between gap-2 flex-wrap bg-[#10121d] p-3 rounded-xl border border-[#22273c]">
-                <span className="text-xs text-zinc-300 font-medium">
+            <div
+              id="char-panel-talents"
+              role="tabpanel"
+              aria-labelledby="char-tab-talents"
+              className="space-y-4"
+            >
+              <div className="flex items-center justify-between gap-3 flex-wrap bg-[#151826] p-3.5 rounded-xl border border-[#24293d]">
+                <span className="text-xs text-zinc-200 font-medium">
                   Dynamic Level 1–15 Attribute Multipliers
                 </span>
                 {isOwned && onUpdateProfile && (
                   <button
                     type="button"
-                    onClick={() => {
-                      onUpdateProfile({
-                        id: character.id,
-                        level: profile?.level ?? 90,
-                        constellation: profile?.constellation ?? 0,
-                        weapon: profile?.weapon,
-                        talents: {
-                          auto: talentLevels.normal,
-                          skill: talentLevels.skill,
-                          burst: talentLevels.burst,
-                        },
-                      });
-                    }}
-                    className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-[#d4af37]/15 hover:bg-[#d4af37]/30 text-[#d4af37] border border-[#d4af37]/40 flex items-center gap-1.5 transition-colors cursor-pointer"
+                    onClick={handleSaveTalents}
+                    className={`min-h-[38px] text-xs font-bold px-3 py-1.5 rounded-lg border flex items-center gap-1.5 transition-colors cursor-pointer ${
+                      talentsSaved
+                        ? 'bg-emerald-600/25 border-emerald-400/60 text-emerald-200'
+                        : 'bg-[#d4af37]/15 hover:bg-[#d4af37]/30 text-[#f3cf58] border-[#d4af37]/45'
+                    }`}
                     title="Save current talent levels (Lv 1–15) to owned profile"
                   >
-                    <Check className="w-3.5 h-3.5" />
-                    <span>Save (Lv. {talentLevels.normal} / {talentLevels.skill} / {talentLevels.burst}) to Profile</span>
+                    <Check className="w-3.5 h-3.5" aria-hidden="true" />
+                    <span>
+                      {talentsSaved
+                        ? `Saved Lv. ${talentLevels.normal} / ${talentLevels.skill} / ${talentLevels.burst}`
+                        : `Save (Lv. ${talentLevels.normal} / ${talentLevels.skill} / ${talentLevels.burst}) to Profile`}
+                    </span>
                   </button>
                 )}
               </div>
+
               {isLoadingScaling && (
-                <div className="bg-[#131622] border border-[#23273a] p-3 rounded-xl flex items-center justify-center gap-2 text-xs text-zinc-400">
-                  <Loader2 className="w-4 h-4 animate-spin text-[#d4af37]" />
-                  <span>Loading dynamic Level 1–15 talent scaling curves...</span>
+                <div
+                  role="status"
+                  className="bg-[#151826] border border-[#24293d] p-3.5 rounded-xl flex items-center justify-center gap-2 text-xs text-zinc-300"
+                >
+                  <Loader2
+                    className="w-4 h-4 animate-spin motion-reduce:animate-none text-[#d4af37]"
+                    aria-hidden="true"
+                  />
+                  <span>Loading dynamic Level 1–15 talent scaling curves…</span>
                 </div>
               )}
+
               {character.talents?.map((talent, idx) => {
-                const isCombatTalent = talent.type === 'normal' || talent.type === 'skill' || talent.type === 'burst';
-                const combatType = isCombatTalent ? (talent.type as 'normal' | 'skill' | 'burst') : null;
+                const isCombatTalent =
+                  talent.type === 'normal' || talent.type === 'skill' || talent.type === 'burst';
+                const combatType = isCombatTalent
+                  ? (talent.type as 'normal' | 'skill' | 'burst')
+                  : null;
                 const currentLevel = combatType ? talentLevels[combatType] : 1;
                 const combatSkill = combatType && scalingData ? scalingData[combatType] : undefined;
 
@@ -1138,25 +1323,25 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
                 const badgeColor =
                   talent.type === 'burst'
-                    ? 'bg-rose-950/50 text-rose-300 border-rose-500/30'
+                    ? 'bg-rose-950/60 text-rose-200 border-rose-400/40'
                     : talent.type === 'skill'
-                      ? 'bg-sky-950/50 text-sky-300 border-sky-500/30'
+                      ? 'bg-sky-950/60 text-sky-200 border-sky-400/40'
                       : talent.type === 'normal'
-                        ? 'bg-amber-950/50 text-amber-300 border-amber-500/30'
-                        : 'bg-zinc-800 text-zinc-300 border-zinc-700';
+                        ? 'bg-amber-950/60 text-amber-200 border-amber-400/40'
+                        : 'bg-[#1e2336] text-zinc-200 border-[#323954]';
 
                 return (
                   <div
                     key={talent.name + idx}
-                    className="bg-[#131622] border border-[#23273a] p-4 rounded-xl space-y-3 hover:border-[#333a54] transition-colors"
+                    className="bg-[#151826] border border-[#24293d] p-4 rounded-xl space-y-3 hover:border-[#323954] transition-colors"
                   >
                     <div className="flex items-center justify-between gap-3 flex-wrap">
                       <div className="flex items-center gap-3">
                         {talent.icon ? (
-                          <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#2d344d] p-1 shrink-0 flex items-center justify-center">
+                          <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#323954] p-1 shrink-0 flex items-center justify-center">
                             <img
                               src={talent.icon}
-                              alt={talent.name}
+                              alt=""
                               className="w-full h-full object-contain"
                               onError={(e) => {
                                 const parent = (e.target as HTMLElement).parentElement;
@@ -1165,28 +1350,30 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                             />
                           </div>
                         ) : (
-                          <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#2d344d] p-1 shrink-0 flex items-center justify-center text-[#d4af37]">
-                            <BookOpen className="w-5 h-5" />
+                          <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#323954] p-1 shrink-0 flex items-center justify-center text-[#d4af37]">
+                            <BookOpen className="w-5 h-5" aria-hidden="true" />
                           </div>
                         )}
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-bold text-zinc-100">{talent.name}</span>
-                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${badgeColor}`}>
-                              {typeLabel}
-                            </span>
-                          </div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-bold text-zinc-100">{talent.name}</span>
+                          <span className={`text-[11px] font-bold px-2 py-0.5 rounded border ${badgeColor}`}>
+                            {typeLabel}
+                          </span>
                         </div>
                       </div>
 
                       {/* Level Indicator for combat talents */}
                       {combatType && (
-                        <div className="flex items-center gap-1.5 bg-[#0c0e17] px-2.5 py-1 rounded-lg border border-[#23273c]">
-                          <span className="text-[11px] text-zinc-400 font-medium">Talent Level:</span>
-                          <span className="text-xs font-extrabold text-[#d4af37]">Lv. {currentLevel}</span>
-                          {currentLevel === 10 && <Crown className="w-3.5 h-3.5 text-[#d4af37]" />}
+                        <div className="flex items-center gap-1.5 bg-[#0c0e17] px-2.5 py-1 rounded-lg border border-[#282f48]">
+                          <span className="text-xs text-zinc-300 font-medium">Talent Level:</span>
+                          <span className="text-xs font-extrabold text-[#f3cf58] tabular-nums">
+                            Lv. {currentLevel}
+                          </span>
+                          {currentLevel === 10 && (
+                            <Crown className="w-3.5 h-3.5 text-[#f3cf58]" aria-label="Crowned" />
+                          )}
                           {currentLevel > 10 && (
-                            <span className="text-[10px] px-1 py-0.2 bg-[#d4af37]/20 text-[#d4af37] rounded font-bold">
+                            <span className="text-[11px] px-1.5 py-0.5 bg-[#d4af37]/20 text-[#f3cf58] rounded font-bold">
                               C{currentLevel >= 13 ? '3/5' : '+'}
                             </span>
                           )}
@@ -1194,33 +1381,36 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       )}
                     </div>
 
-                    <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-line pl-0.5 break-words">
+                    <p className="text-xs text-zinc-200 leading-relaxed whitespace-pre-line pl-0.5 break-words">
                       {talent.description}
                     </p>
 
                     {/* Interactive Level Slider & Parameter Table for Combat Talents */}
                     {combatType && (
-                      <div className="pt-2 border-t border-[#202538] space-y-3">
-                        <div className="bg-[#0e101a] p-3 rounded-xl border border-[#21263d] space-y-2.5">
+                      <div className="pt-2.5 border-t border-[#24293d] space-y-3">
+                        <div className="bg-[#0e101a] p-3.5 rounded-xl border border-[#24293d] space-y-3">
                           <div className="flex items-center justify-between gap-2 flex-wrap">
-                            <span className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5">
-                              <Sliders className="w-3.5 h-3.5 text-[#d4af37]" />
+                            <span className="text-xs font-semibold text-zinc-200 flex items-center gap-1.5">
+                              <Sliders className="w-3.5 h-3.5 text-[#d4af37]" aria-hidden="true" />
                               <span>Dynamic Level Slider (1–15):</span>
                             </span>
                             <div className="flex items-center gap-1 flex-wrap">
                               {TALENT_MILESTONES.map((m) => (
                                 <button
                                   key={m.level}
-                                  onClick={() =>
+                                  type="button"
+                                  aria-pressed={currentLevel === m.level}
+                                  onClick={() => {
+                                    setTalentsSaved(false);
                                     setTalentLevels((prev) => ({
                                       ...prev,
                                       [combatType]: m.level,
-                                    }))
-                                  }
-                                  className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer border ${
+                                    }));
+                                  }}
+                                  className={`min-h-[32px] px-2.5 py-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer border ${
                                     currentLevel === m.level
-                                      ? 'bg-[#d4af37] text-black border-[#d4af37] shadow-sm'
-                                      : 'bg-[#181d2f] text-zinc-400 hover:text-zinc-200 border-[#2b334d] hover:bg-[#202740]'
+                                      ? 'bg-[#d4af37] text-[#0a0b0e] border-[#d4af37] shadow-sm'
+                                      : 'bg-[#181d2f] text-zinc-200 hover:text-white border-[#323954] hover:bg-[#222942]'
                                   }`}
                                   title={`Set to ${m.label} (${m.desc})`}
                                 >
@@ -1232,50 +1422,63 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                           </div>
 
                           <div className="flex items-center gap-3">
-                            <span className="text-[11px] font-mono text-zinc-500">Lv.1</span>
+                            <span className="text-xs font-mono text-zinc-300 shrink-0">Lv.1</span>
                             <input
                               type="range"
                               min={1}
                               max={15}
                               step={1}
+                              aria-label={`${talent.name} level`}
+                              aria-valuetext={`Level ${currentLevel}`}
                               value={currentLevel}
-                              onChange={(e) =>
+                              onChange={(e) => {
+                                setTalentsSaved(false);
                                 setTalentLevels((prev) => ({
                                   ...prev,
                                   [combatType]: parseInt(e.target.value, 10),
-                                }))
-                              }
-                              className="w-full accent-[#d4af37] cursor-pointer h-1.5 bg-[#1f243b] rounded-lg"
+                                }));
+                              }}
+                              className="w-full accent-[#d4af37] cursor-pointer h-2 bg-[#1f243b] rounded-lg"
                             />
-                            <span className="text-[11px] font-mono text-[#d4af37] font-bold">Lv.15</span>
+                            <span className="text-xs font-mono text-[#f3cf58] font-bold shrink-0">
+                              Lv.15
+                            </span>
                           </div>
                         </div>
 
                         {/* Scaling Parameters Table */}
                         {combatSkill && combatSkill.labels && combatSkill.labels.length > 0 ? (
-                          <div className="bg-[#0b0c14] rounded-xl border border-[#22273e] overflow-hidden">
-                            <div className="px-3 py-2 bg-[#141726] border-b border-[#22273e] flex items-center justify-between text-[11px] font-bold text-zinc-400">
+                          <div className="bg-[#0b0d15] rounded-xl border border-[#24293d] overflow-hidden">
+                            <div className="px-3.5 py-2 bg-[#141726] border-b border-[#24293d] flex items-center justify-between text-xs font-bold text-zinc-300">
                               <span>Skill Attribute Scaling</span>
-                              <span className="text-[#d4af37]">Level {currentLevel} Multiplier</span>
+                              <span className="text-[#f3cf58]">Level {currentLevel} Multiplier</span>
                             </div>
-                            <div className="divide-y divide-[#181c2d] max-h-64 overflow-y-auto scrollbar-thin">
+                            <div className="divide-y divide-[#1a1f33] max-h-64 overflow-y-auto">
                               {combatSkill.labels.map((lbl, lIdx) => {
-                                const { name, value } = renderTalentLabel(lbl, combatSkill.parameters, currentLevel);
+                                const { name, value } = renderTalentLabel(
+                                  lbl,
+                                  combatSkill.parameters,
+                                  currentLevel
+                                );
                                 return (
                                   <div
                                     key={lIdx}
-                                    className="px-3 py-1.5 flex items-center justify-between text-xs hover:bg-[#131625] transition-colors"
+                                    className="px-3.5 py-2 flex items-center justify-between gap-3 text-xs hover:bg-[#131625] transition-colors"
                                   >
-                                    <span className="text-zinc-300 font-medium pr-2">{name}</span>
-                                    <span className="text-[#d4af37] font-mono font-bold shrink-0">{value}</span>
+                                    <span className="text-zinc-200 font-medium">{name}</span>
+                                    <span className="text-[#f3cf58] font-mono font-bold shrink-0 tabular-nums">
+                                      {value}
+                                    </span>
                                   </div>
                                 );
                               })}
                             </div>
                           </div>
                         ) : (
-                          <div className="text-[11px] text-zinc-500 italic px-2 py-1">
-                            {isLoadingScaling ? 'Loading attribute scaling curve...' : 'No parameter curve available for this talent level.'}
+                          <div className="text-xs text-zinc-400 italic px-2 py-1">
+                            {isLoadingScaling
+                              ? 'Loading attribute scaling curve…'
+                              : 'No parameter curve available for this talent level.'}
                           </div>
                         )}
                       </div>
@@ -1288,29 +1491,34 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
           {/* TAB 3: CONSTELLATIONS */}
           {activeTab === 'constellations' && (
-            <div className="space-y-3">
+            <div
+              id="char-panel-constellations"
+              role="tabpanel"
+              aria-labelledby="char-tab-constellations"
+              className="space-y-3"
+            >
               {character.constellations?.map((c) => {
                 const isUnlocked = isOwned && (profile?.constellation ?? 0) >= c.level;
                 return (
                   <div
                     key={c.level}
-                    className={`border p-4 rounded-xl space-y-2 transition-colors ${
+                    className={`border p-4 rounded-xl space-y-2.5 transition-colors ${
                       isUnlocked
-                        ? 'bg-[#151928] border-[#d4af37]/60 shadow-sm shadow-[#d4af37]/5'
-                        : 'bg-[#131622] border-[#23273a] opacity-80'
+                        ? 'bg-[#171b2b] border-[#d4af37]/65 shadow-sm shadow-[#d4af37]/5'
+                        : 'bg-[#131622] border-[#24293d]'
                     }`}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
                       <div className="flex items-center gap-3">
                         {c.icon ? (
                           <div
                             className={`w-10 h-10 rounded-xl bg-black/60 border p-1 shrink-0 flex items-center justify-center ${
-                              isUnlocked ? 'border-[#d4af37]/50' : 'border-[#2d344d]'
+                              isUnlocked ? 'border-[#d4af37]/60' : 'border-[#323954]'
                             }`}
                           >
                             <img
                               src={c.icon}
-                              alt={c.name}
+                              alt=""
                               className="w-full h-full object-contain"
                               onError={(e) => {
                                 const parent = (e.target as HTMLElement).parentElement;
@@ -1319,32 +1527,30 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                             />
                           </div>
                         ) : (
-                          <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#2d344d] p-1 shrink-0 flex items-center justify-center text-[#d4af37]">
-                            <Sparkles className="w-5 h-5" />
+                          <div className="w-10 h-10 rounded-xl bg-black/60 border border-[#323954] p-1 shrink-0 flex items-center justify-center text-[#d4af37]">
+                            <Sparkles className="w-5 h-5" aria-hidden="true" />
                           </div>
                         )}
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span
-                              className={`text-xs font-extrabold px-2 py-0.5 rounded border ${
-                                isUnlocked
-                                  ? 'bg-[#d4af37] text-black border-[#d4af37]'
-                                  : 'bg-[#d4af37]/15 text-[#d4af37] border-[#d4af37]/40'
-                              }`}
-                            >
-                              C{c.level}
-                            </span>
-                            <span className="text-sm font-bold text-zinc-100">{c.name}</span>
-                          </div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span
+                            className={`text-xs font-extrabold px-2 py-0.5 rounded border ${
+                              isUnlocked
+                                ? 'bg-[#d4af37] text-[#0a0b0e] border-[#d4af37]'
+                                : 'bg-[#d4af37]/15 text-[#f3cf58] border-[#d4af37]/40'
+                            }`}
+                          >
+                            C{c.level}
+                          </span>
+                          <span className="text-sm font-bold text-zinc-100">{c.name}</span>
                         </div>
                       </div>
                       {isUnlocked && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-500/40">
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-200 border border-emerald-400/45">
                           ACTIVE
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-line pl-0.5 break-words">
+                    <p className="text-xs text-zinc-200 leading-relaxed whitespace-pre-line pl-0.5 break-words">
                       {c.description}
                     </p>
                   </div>

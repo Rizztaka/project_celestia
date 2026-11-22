@@ -26,6 +26,7 @@ import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { RotationBadgeList } from './RotationBadgeList';
 import { InfoTooltip } from './InfoTooltip';
 import { DataFreshnessBadge } from './DataFreshnessBadge';
+import { useModalAccessibility } from '../hooks/useModalAccessibility';
 import {
   Swords,
   ShieldCheck,
@@ -51,13 +52,13 @@ interface AbyssDualTeamViewProps {
 }
 
 const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  Pyro: { bg: 'bg-rose-500/10', text: 'text-rose-400', border: 'border-rose-500/30' },
-  Hydro: { bg: 'bg-sky-500/10', text: 'text-sky-400', border: 'border-sky-500/30' },
-  Anemo: { bg: 'bg-teal-500/10', text: 'text-teal-400', border: 'border-teal-500/30' },
-  Electro: { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/30' },
-  Dendro: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30' },
-  Cryo: { bg: 'bg-cyan-500/10', text: 'text-cyan-300', border: 'border-cyan-500/30' },
-  Geo: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/30' },
+  Pyro: { bg: 'bg-rose-500/10', text: 'text-rose-300', border: 'border-rose-400/35' },
+  Hydro: { bg: 'bg-sky-500/10', text: 'text-sky-300', border: 'border-sky-400/35' },
+  Anemo: { bg: 'bg-teal-500/10', text: 'text-teal-300', border: 'border-teal-400/35' },
+  Electro: { bg: 'bg-purple-500/10', text: 'text-purple-300', border: 'border-purple-400/35' },
+  Dendro: { bg: 'bg-emerald-500/10', text: 'text-emerald-300', border: 'border-emerald-400/35' },
+  Cryo: { bg: 'bg-cyan-500/10', text: 'text-cyan-200', border: 'border-cyan-400/35' },
+  Geo: { bg: 'bg-amber-500/10', text: 'text-amber-300', border: 'border-amber-400/35' },
 };
 
 export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
@@ -69,7 +70,9 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [expandedRotationA, setExpandedRotationA] = useState<boolean>(true);
   const [expandedRotationB, setExpandedRotationB] = useState<boolean>(true);
-  const [localSelectedCycleId, setLocalSelectedCycleId] = useState<string>(() => getSavedAbyssCycleId());
+  const [localSelectedCycleId, setLocalSelectedCycleId] = useState<string>(() =>
+    getSavedAbyssCycleId()
+  );
   const selectedCycleId = propSelectedCycleId || localSelectedCycleId;
   const [customCycle, setCustomCycle] = useState<AbyssCycleConfig>(() => getSavedCustomAbyss());
   const [showSandboxEditor, setShowSandboxEditor] = useState<boolean>(false);
@@ -83,6 +86,16 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
     oppositeTeamName: string;
   } | null>(null);
 
+  const altDialogRef = useRef<HTMLDivElement>(null);
+  const altCloseBtnRef = useRef<HTMLButtonElement>(null);
+
+  useModalAccessibility({
+    isOpen: Boolean(drawerAlternative),
+    onClose: () => setDrawerAlternative(null),
+    containerRef: altDialogRef,
+    initialFocusRef: altCloseBtnRef,
+  });
+
   // Active Cycle
   const activeCycle: AbyssCycleConfig = useMemo(() => {
     if (selectedCycleId === 'custom-sandbox') {
@@ -92,7 +105,6 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
     return found || ABYSS_CYCLES[0];
   }, [selectedCycleId, customCycle]);
 
-  // Handle cycle selection
   const handleSelectCycle = (cycleId: string) => {
     if (onSelectCycleId) {
       onSelectCycleId(cycleId);
@@ -107,9 +119,8 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
     }
   };
 
-  // Base plan before swap with Web Worker offloading & useTransition
   const [basePlan, setBasePlan] = useState<AbyssDualTeamPlan>(() =>
-    solveAbyssDualTeams(ownedIds, profiles, activeCycle),
+    solveAbyssDualTeams(ownedIds, profiles, activeCycle)
   );
   const [isPending, startTransition] = useTransition();
   const isInitialMount = useRef(true);
@@ -134,12 +145,10 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
     };
   }, [ownedIds, profiles, activeCycle]);
 
-  // Current base plan accounting for 1-click swap
   const currentBase = useMemo(() => {
     return isSwapped ? swapAbyssDualHalves(basePlan, activeCycle) : basePlan;
   }, [basePlan, isSwapped, activeCycle]);
 
-  // Effective plan accounting for selected pair index
   const plan: AbyssDualTeamPlan = useMemo(() => {
     if (currentBase.allPairs && currentBase.allPairs[selectedPairIndex]) {
       return currentBase.allPairs[selectedPairIndex];
@@ -152,11 +161,10 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
   const teamA = plan.firstHalfTeam;
   const teamB = plan.secondHalfTeam;
 
-  // Custom sandbox editing handlers
   const handleUpdateSandboxHalf = (
     chamberNum: number,
     half: 'firstHalf' | 'secondHalf',
-    updater: (prev: AbyssChamberConfig[typeof half]) => AbyssChamberConfig[typeof half],
+    updater: (prev: AbyssChamberConfig[typeof half]) => AbyssChamberConfig[typeof half]
   ) => {
     setCustomCycle((prev) => {
       const updatedChambers = prev.chambers.map((ch) => {
@@ -178,48 +186,278 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
     saveCustomAbyss(fresh);
   };
 
+  const renderHalfTeamCard = (
+    halfKey: 'first' | 'second',
+    team: AbyssDualTeamPlan['firstHalfTeam'],
+    oppositeTeam: AbyssDualTeamPlan['firstHalfTeam'],
+    isExpandedRotation: boolean,
+    onToggleRotation: () => void
+  ) => {
+    const isFirst = halfKey === 'first';
+    const halfLabel = isFirst
+      ? 'First Half Vanguard (12-1-A · 12-2-A · 12-3-A)'
+      : 'Second Half Rearguard (12-1-B · 12-2-B · 12-3-B)';
+    const teamDisplayTitle = isFirst ? 'First Half Vanguard' : 'Second Half Rearguard';
+    const oppositeDisplayTitle = isFirst ? 'Second Half Rearguard' : 'First Half Vanguard';
+    const accentText = isFirst ? 'text-sky-300' : 'text-amber-300';
+    const rotationPanelId = `abyss-rotation-${halfKey}`;
+
+    return (
+      <article className="bg-[#121420] border border-[#24293d] rounded-2xl p-5 space-y-4 shadow-md flex flex-col justify-between">
+        <div className="space-y-4">
+          {/* Header */}
+          <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#202538] pb-3">
+            <div>
+              <span className={`text-xs font-bold ${accentText} uppercase tracking-wider block`}>
+                {halfLabel}
+              </span>
+              <h3 className="text-base font-bold text-zinc-100 font-serif mt-0.5">{team.name}</h3>
+              <span className="text-xs bg-[#191d2d] text-[#f3cf58] px-2 py-0.5 rounded-md border border-[#d4af37]/30 font-medium inline-block mt-1">
+                {team.archetype}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <div className="bg-[#161a29] px-2.5 py-1.5 rounded-xl border border-[#2c334d] text-center">
+                <div className="text-[11px] text-zinc-300 font-semibold uppercase">Synergy</div>
+                <div className="text-xs font-bold text-amber-200 tabular-nums">
+                  {team.synergyScore}/100
+                </div>
+              </div>
+              <div className="bg-[#161a29] px-2.5 py-1.5 rounded-xl border border-[#2c334d] text-center">
+                <div className="text-[11px] text-zinc-300 font-semibold uppercase">Comfort</div>
+                <div className="text-xs font-bold text-emerald-200 tabular-nums">
+                  {team.comfortScore}/100
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 4 Character Slots (sibling buttons — no nested interactive controls) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            {[0, 1, 2, 3].map((slotIdx) => {
+              const member = team.members[slotIdx];
+              if (member) {
+                const color = ELEMENT_COLORS[member.element] || {
+                  bg: 'bg-[#181c2b]',
+                  text: 'text-zinc-200',
+                  border: 'border-[#323954]',
+                };
+                const memberAlts =
+                  team.explanation?.alternatives?.filter(
+                    (alt) => alt.originalCharacterId === member.id
+                  ) ?? [];
+
+                return (
+                  <div
+                    key={member.id}
+                    className={`bg-[#161928] border ${color.border} hover:border-[#d4af37]/75 rounded-xl p-2.5 flex flex-col justify-between items-center gap-1.5 transition-colors`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCharacter(member)}
+                      aria-label={`View ${member.name} build and details`}
+                      className="w-full flex flex-col items-center gap-1.5 bg-transparent border-0 p-0 cursor-pointer text-center"
+                    >
+                      <CharacterPortrait
+                        src={member.icon}
+                        name={member.name}
+                        element={member.element}
+                        rarity={member.rarity}
+                        size="sm"
+                      />
+                      <div className="text-xs font-bold text-zinc-100 truncate w-full">
+                        {member.name}
+                      </div>
+                      <div className="text-[11px] text-zinc-300 truncate w-full">
+                        {member.weapon} · {member.roles[0]}
+                      </div>
+                    </button>
+
+                    {memberAlts.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setDrawerAlternative({
+                            originalMember: member,
+                            teamName: teamDisplayTitle,
+                            alternatives: memberAlts,
+                            oppositeTeamMembers: oppositeTeam.members,
+                            oppositeTeamName: oppositeDisplayTitle,
+                          })
+                        }
+                        className="w-full min-h-[30px] mt-1 px-2 py-1 rounded-lg text-[11px] font-bold text-[#f3cf58] bg-[#d4af37]/15 hover:bg-[#d4af37]/25 border border-[#d4af37]/40 transition-colors cursor-pointer"
+                        title="View alternative substitution trade-offs"
+                      >
+                        Swap Alt
+                      </button>
+                    )}
+                  </div>
+                );
+              }
+              return (
+                <div
+                  key={`empty-${halfKey}-${slotIdx}`}
+                  className="bg-[#0e1019] border border-dashed border-[#2c334d] rounded-xl p-2.5 flex flex-col items-center justify-center gap-1.5 text-center min-h-[116px]"
+                >
+                  <span className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider">
+                    Slot {slotIdx + 1}
+                  </span>
+                  <span className="text-xs text-zinc-400 font-medium">Unassigned</span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Tactical Workflow & Why this team fits */}
+          {team.explanation && (
+            <div className="bg-[#0e1019] rounded-xl border border-[#202538] p-3.5 space-y-2 text-xs">
+              <div className="font-bold text-[#f3cf58] flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Chamber Suitability &amp; Role Rationale</span>
+              </div>
+              {team.explanation.reactionWorkflow && (
+                <p className="text-zinc-200 text-xs leading-relaxed">
+                  {team.explanation.reactionWorkflow}
+                </p>
+              )}
+              {plan.chamberCoverage && plan.chamberCoverage.length > 0 && (
+                <div className="pt-2 border-t border-[#202538] space-y-1.5">
+                  <span className={`text-[11px] font-bold ${accentText} uppercase tracking-wider block`}>
+                    {isFirst ? 'First Half Chamber Clearance:' : 'Second Half Chamber Clearance:'}
+                  </span>
+                  {plan.chamberCoverage.map((cov) => (
+                    <div key={cov.chamber} className="text-xs text-zinc-200 flex items-start gap-1.5">
+                      <span className="font-mono text-[#f3cf58] text-[11px] shrink-0 font-bold">
+                        12-{cov.chamber}:
+                      </span>
+                      <span className="leading-snug">
+                        {isFirst ? cov.firstHalfStatus : cov.secondHalfStatus}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {team.explanation.energyAssessment?.warnings &&
+                team.explanation.energyAssessment.warnings.length > 0 && (
+                  <p className="text-amber-200 text-xs pt-1">
+                    ⚡ Energy: {team.explanation.energyAssessment.warnings.join(' · ')}
+                  </p>
+                )}
+            </div>
+          )}
+
+          {/* Stepped Rotation Accordion */}
+          {team.steppedRotation && team.steppedRotation.steps.length > 0 && (
+            <div className="bg-[#0e1019] rounded-xl border border-[#202538] overflow-hidden">
+              <button
+                type="button"
+                aria-expanded={isExpandedRotation}
+                aria-controls={rotationPanelId}
+                onClick={onToggleRotation}
+                className="w-full min-h-[44px] px-3.5 py-2.5 flex items-center justify-between gap-2 text-xs font-bold text-zinc-200 hover:text-white hover:bg-[#151826] transition-colors cursor-pointer"
+              >
+                <div className="flex flex-wrap items-center gap-2">
+                  <Zap className="w-3.5 h-3.5 text-[#d4af37]" aria-hidden="true" />
+                  <span>Stepped Combat Rotation</span>
+                  <span className="text-[11px] font-mono text-[#f3cf58] bg-[#16192b] px-2 py-0.5 rounded border border-[#d4af37]/30">
+                    ~{team.steppedRotation.totalCycleTime}s Cycle
+                  </span>
+                </div>
+                {isExpandedRotation ? (
+                  <ChevronUp className="w-4 h-4 shrink-0" aria-hidden="true" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 shrink-0" aria-hidden="true" />
+                )}
+              </button>
+
+              {isExpandedRotation && (
+                <div id={rotationPanelId} className="p-3 border-t border-[#202538] space-y-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {team.steppedRotation.steps.map((step) => (
+                      <div
+                        key={step.stepNumber}
+                        className="bg-[#141726] border border-[#24293d] p-2.5 rounded-lg flex flex-col justify-between gap-1.5"
+                      >
+                        <div className="flex items-center justify-between gap-1.5">
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <CharacterPortrait
+                              src={step.icon}
+                              name={step.characterName}
+                              element={step.element}
+                              size="xs"
+                            />
+                            <span className="text-xs font-bold text-zinc-100 truncate">
+                              {step.characterName}
+                            </span>
+                          </div>
+                          <span className="text-[11px] font-mono text-zinc-200 bg-[#1a1e2e] px-1.5 py-0.5 rounded shrink-0">
+                            ~{step.fieldTime}s
+                          </span>
+                        </div>
+                        <div className="bg-[#0a0c14] p-1.5 rounded border border-[#1d2236]">
+                          <RotationBadgeList actions={step.actions} size="sm" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </article>
+    );
+  };
+
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#141624] via-[#1a1e32] to-[#141624] p-6 rounded-2xl border border-[#262c44] shadow-xl">
+      <div className="bg-gradient-to-r from-[#121420] via-[#191d30] to-[#121420] p-5 sm:p-6 rounded-2xl border border-[#24293d] shadow-xl">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-[#d4af37] text-xs font-bold tracking-wider uppercase mb-1">
-              <Swords className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase mb-1">
+              <Swords className="w-4 h-4" aria-hidden="true" />
               <span>Endgame Guidance 2.0 · 0-Overlap Dual Half Matcher</span>
               {isPending && (
-                <span className="text-[10px] text-amber-400 animate-pulse font-normal lowercase tracking-normal">
-                  (solving...)
+                <span
+                  role="status"
+                  className="text-xs text-amber-300 animate-pulse motion-reduce:animate-none font-normal lowercase tracking-normal"
+                >
+                  (solving…)
                 </span>
               )}
             </div>
             <h1 className="text-2xl font-bold text-zinc-100 font-serif">
               Spiral Abyss Floor 12 Deployment
             </h1>
-            <p className="text-sm text-zinc-400 mt-1 max-w-2xl leading-relaxed">
+            <p className="text-sm text-zinc-300 mt-1 max-w-2xl leading-relaxed">
               Unified solver with exact KeqingMains Piecewise Resistance shred calculations, live Elemental Gauge Unit (GU) shield-break estimators, and 1-click half swapping.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             {/* Cycle Selector Dropdown */}
-            <div className="flex items-center gap-2 bg-[#121422] px-3 py-1.5 rounded-xl border border-[#2b3353]">
-              <span className="text-xs text-zinc-400 font-semibold">Abyss Cycle:</span>
+            <div className="flex items-center gap-2 bg-[#121422] px-3 py-1.5 rounded-xl border border-[#2c334d]">
+              <label htmlFor="abyss-cycle-select" className="text-xs text-zinc-300 font-semibold shrink-0">
+                Abyss Cycle:
+              </label>
               <select
+                id="abyss-cycle-select"
                 value={selectedCycleId}
                 onChange={(e) => handleSelectCycle(e.target.value)}
-                className="bg-[#181c2e] text-xs font-bold text-[#d4af37] border border-[#353d63] rounded-lg px-2.5 py-1 focus:outline-none focus:border-[#d4af37] cursor-pointer"
+                className="bg-[#181c2e] text-xs font-bold text-[#f3cf58] border border-[#353d63] rounded-lg px-2.5 py-1.5 min-h-[36px] focus:border-[#d4af37] cursor-pointer max-w-[240px] sm:max-w-xs"
               >
                 <optgroup label="Active Floor 12 (Version 7.x)">
                   {ABYSS_CYCLES.filter((c) => c.version.startsWith('7.')).map((c) => (
-                    <option key={c.id} value={c.id} className="bg-[#141624] text-[#d4af37]">
+                    <option key={c.id} value={c.id} className="bg-[#141624] text-[#f3cf58]">
                       ⭐ [v{c.version}] {c.phase}: {c.name.split(':')[1]?.trim() || c.name}
                     </option>
                   ))}
                 </optgroup>
                 <optgroup label="Historical Archive (Version 5.x)">
                   {ABYSS_CYCLES.filter((c) => !c.version.startsWith('7.')).map((c) => (
-                    <option key={c.id} value={c.id} className="bg-[#141624] text-zinc-300">
+                    <option key={c.id} value={c.id} className="bg-[#141624] text-zinc-200">
                       [v{c.version}] {c.phase}: {c.name.split(':')[1]?.trim() || c.name}
                     </option>
                   ))}
@@ -236,23 +474,24 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
             {/* 1-Click Swap Halves Toggle */}
             <button
               type="button"
+              aria-pressed={isSwapped}
               onClick={() => setIsSwapped((prev) => !prev)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+              className={`min-h-[40px] sm:min-h-[36px] flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
                 isSwapped
-                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-md'
-                  : 'bg-[#121422] text-zinc-300 border-[#2b3353] hover:text-[#d4af37] hover:border-[#d4af37]/50'
+                  ? 'bg-amber-500/20 text-amber-200 border-amber-400/55 shadow-md'
+                  : 'bg-[#161a29] text-zinc-200 border-[#2c334d] hover:text-[#f3cf58] hover:border-[#d4af37]/50'
               }`}
-              title="Instantly swap Team 1 and Team 2 positions with zero character duplicates"
+              title="Swap Team 1 and Team 2 positions with zero character duplicates"
             >
-              <ArrowLeftRight className="w-3.5 h-3.5" />
+              <ArrowLeftRight className="w-3.5 h-3.5" aria-hidden="true" />
               <span>{isSwapped ? 'Swapped Halves' : 'Swap Halves'}</span>
             </button>
 
             {/* Mechanic Coverage Score Badge */}
-            <div className="flex items-center gap-2 bg-[#121422] px-3.5 py-1.5 rounded-xl border border-[#2b3353]">
-              <Sparkles className="w-4 h-4 text-[#d4af37]" />
+            <div className="flex items-center gap-2 bg-[#161a29] px-3.5 py-2 rounded-xl border border-[#2c334d]">
+              <Sparkles className="w-4 h-4 text-[#d4af37] shrink-0" aria-hidden="true" />
               <div className="text-xs flex items-center gap-1.5">
-                <span className="text-zinc-400 flex items-center gap-1">
+                <span className="text-zinc-300 flex items-center gap-1">
                   <span>Mechanic Coverage:</span>
                   <InfoTooltip
                     title="Mechanic Coverage Score"
@@ -260,7 +499,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                     align="right"
                   />
                 </span>
-                <span className="font-bold text-[#d4af37]">
+                <span className="font-bold text-[#f3cf58] tabular-nums">
                   {plan.mechanicCoverageScore ?? plan.overallScore} Pts
                 </span>
               </div>
@@ -269,18 +508,21 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
         </div>
 
         {/* Active Cycle Blessing Banner */}
-        <div className="mt-4 pt-3 border-t border-[#1e2338] flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-2 text-zinc-300">
-            <span className="font-bold text-amber-400 uppercase tracking-wider text-[11px]">Blessing of the Abyssal Moon:</span>
+        <div className="mt-4 pt-3 border-t border-[#202538] flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex flex-wrap items-center gap-2 text-zinc-200">
+            <span className="font-bold text-amber-300 uppercase tracking-wider text-[11px]">
+              Blessing of the Abyssal Moon:
+            </span>
             <span>{activeCycle.buffDescription}</span>
           </div>
           {selectedCycleId === 'custom-sandbox' && (
             <button
               type="button"
+              aria-expanded={showSandboxEditor}
               onClick={() => setShowSandboxEditor(!showSandboxEditor)}
-              className="flex items-center gap-1.5 bg-[#1a1e32] hover:bg-[#252c48] text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              className="min-h-[38px] flex items-center gap-1.5 bg-[#1a1e32] hover:bg-[#252c48] text-amber-200 border border-amber-400/40 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
             >
-              <Sliders className="w-3.5 h-3.5" />
+              <Sliders className="w-3.5 h-3.5" aria-hidden="true" />
               <span>{showSandboxEditor ? 'Hide Sandbox Editor' : 'Configure Sandbox Chambers'}</span>
             </button>
           )}
@@ -288,24 +530,29 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
 
         {/* Top-3 Pairing Selector Tabs */}
         {displayedPairs.length > 1 && (
-          <div className="mt-4 pt-3 border-t border-[#1e2338] flex flex-wrap items-center gap-2">
-            <span className="text-xs text-zinc-400 font-semibold mr-1">Recommended Lineups:</span>
+          <div
+            role="group"
+            aria-label="Recommended Abyss Lineups"
+            className="mt-4 pt-3 border-t border-[#202538] flex flex-wrap items-center gap-2"
+          >
+            <span className="text-xs text-zinc-300 font-semibold mr-1">Recommended Lineups:</span>
             {displayedPairs.map((p, idx) => (
               <button
                 key={idx}
                 type="button"
+                aria-pressed={selectedPairIndex === idx}
                 onClick={() => setSelectedPairIndex(idx)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`min-h-[40px] sm:min-h-[34px] px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5 ${
                   selectedPairIndex === idx
-                    ? 'bg-gradient-to-r from-[#d4af37] to-[#b38f2a] text-[#0d0f17] shadow-lg scale-[1.02]'
-                    : 'bg-[#121422] text-zinc-300 border border-[#28314e] hover:text-[#d4af37] hover:border-[#d4af37]/40'
+                    ? 'bg-[#d4af37] text-[#0a0b0e] shadow-md'
+                    : 'bg-[#161a29] text-zinc-200 border border-[#2c334d] hover:text-[#f3cf58] hover:border-[#d4af37]/50'
                 }`}
               >
                 <span>
                   {p.variantType === 'primary' ? '⭐' : p.variantType === 'comfort' ? '🛡️' : '🔄'}{' '}
                   {p.label || `Option ${idx + 1}`}
                 </span>
-                <span className="text-[10px] opacity-80 font-mono">
+                <span className="text-[11px] font-mono">
                   ({p.mechanicCoverageScore ?? p.overallScore} pts)
                 </span>
               </button>
@@ -316,10 +563,13 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
 
       {/* Custom Sandbox Editor (Collapsible) */}
       {selectedCycleId === 'custom-sandbox' && showSandboxEditor && (
-        <div className="bg-[#10121d] border border-amber-500/30 rounded-2xl p-5 space-y-4 shadow-xl">
-          <div className="flex items-center justify-between border-b border-[#21273e] pb-3">
+        <section
+          aria-label="Interactive Sandbox Chamber Configurator"
+          className="bg-[#121420] border border-amber-400/40 rounded-2xl p-5 space-y-4 shadow-xl"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#24293d] pb-3">
             <div className="flex items-center gap-2">
-              <Sliders className="w-4 h-4 text-amber-400" />
+              <Sliders className="w-4 h-4 text-amber-300" aria-hidden="true" />
               <h2 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">
                 Interactive Sandbox Chamber Configurator
               </h2>
@@ -327,25 +577,29 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
             <button
               type="button"
               onClick={handleResetSandbox}
-              className="flex items-center gap-1 text-xs text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer"
+              className="min-h-[36px] px-2.5 rounded-lg flex items-center gap-1.5 text-xs text-zinc-200 hover:text-amber-200 hover:bg-[#1a1e2e] transition-colors cursor-pointer"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reset to 5.3 Baseline</span>
+              <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Reset to Baseline</span>
             </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {customCycle.chambers.map((ch) => (
-              <div key={ch.chamber} className="bg-[#151827] border border-[#232a44] p-3.5 rounded-xl space-y-3">
-                <div className="text-xs font-bold text-[#d4af37] border-b border-[#1d2238] pb-1.5">
+              <div
+                key={ch.chamber}
+                className="bg-[#161928] border border-[#282f48] p-3.5 rounded-xl space-y-3"
+              >
+                <div className="text-xs font-bold text-[#f3cf58] border-b border-[#24293d] pb-1.5">
                   Chamber 12-{ch.chamber}
                 </div>
 
                 {/* First Half Editor */}
-                <div className="space-y-1.5 text-xs">
-                  <div className="font-semibold text-sky-400">First Half:</div>
+                <div className="space-y-2 text-xs">
+                  <div className="font-semibold text-sky-300">First Half:</div>
                   <input
                     type="text"
+                    aria-label={`Chamber 12-${ch.chamber} first half enemy name`}
                     value={ch.firstHalf.enemies[0]?.name || ''}
                     onChange={(e) =>
                       handleUpdateSandboxHalf(ch.chamber, 'firstHalf', (prev) => {
@@ -354,7 +608,16 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                           name: '',
                           level: 95,
                           hp: 1500000,
-                          baseRes: { Pyro: 10, Hydro: 10, Anemo: 10, Electro: 10, Dendro: 10, Cryo: 10, Geo: 10, Physical: 10 },
+                          baseRes: {
+                            Pyro: 10,
+                            Hydro: 10,
+                            Anemo: 10,
+                            Electro: 10,
+                            Dendro: 10,
+                            Cryo: 10,
+                            Geo: 10,
+                            Physical: 10,
+                          },
                         };
                         return {
                           ...prev,
@@ -363,10 +626,11 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                       })
                     }
                     placeholder="Enemy Name"
-                    className="w-full bg-[#0d0f1a] border border-[#2b3353] rounded px-2 py-1 text-zinc-200 text-xs"
+                    className="w-full min-h-[36px] bg-[#0e1019] border border-[#323954] rounded-lg px-2.5 py-1.5 text-zinc-100 placeholder:text-zinc-400 text-xs"
                   />
                   <div className="flex gap-2">
                     <select
+                      aria-label={`Chamber 12-${ch.chamber} first half shield type`}
                       value={ch.firstHalf.mechanics.shieldType || ''}
                       onChange={(e) =>
                         handleUpdateSandboxHalf(ch.chamber, 'firstHalf', (prev) => ({
@@ -378,7 +642,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                           },
                         }))
                       }
-                      className="bg-[#0d0f1a] border border-[#2b3353] rounded px-2 py-1 text-zinc-300 text-[11px] flex-1"
+                      className="bg-[#0e1019] border border-[#323954] rounded-lg px-2 py-1.5 min-h-[36px] text-zinc-100 text-xs flex-1"
                     >
                       <option value="">No Shield</option>
                       <option value="Pyro">Pyro Shield</option>
@@ -394,6 +658,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                         type="number"
                         min={0}
                         max={100}
+                        aria-label={`Chamber 12-${ch.chamber} first half shield gauge units`}
                         value={ch.firstHalf.mechanics.shieldUnits ?? 36}
                         onChange={(e) =>
                           handleUpdateSandboxHalf(ch.chamber, 'firstHalf', (prev) => ({
@@ -404,15 +669,16 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                             },
                           }))
                         }
-                        className="w-14 bg-[#0d0f1a] border border-[#2b3353] rounded px-1.5 py-1 text-zinc-200 text-xs font-mono"
+                        className="w-16 min-h-[36px] bg-[#0e1019] border border-[#323954] rounded-lg px-2 py-1.5 text-zinc-100 text-xs font-mono"
                         title="Gauge Units (GU)"
                       />
                     )}
                   </div>
-                  <div className="flex flex-wrap gap-2 pt-1 text-[11px] text-zinc-400">
-                    <label className="flex items-center gap-1 cursor-pointer">
+                  <div className="flex flex-wrap gap-3 pt-1 text-xs text-zinc-300">
+                    <label className="flex items-center gap-1.5 cursor-pointer min-h-[32px]">
                       <input
                         type="checkbox"
+                        className="w-4 h-4 accent-[#d4af37]"
                         checked={!!ch.firstHalf.mechanics.favorsNightsoul}
                         onChange={(e) =>
                           handleUpdateSandboxHalf(ch.chamber, 'firstHalf', (prev) => ({
@@ -423,9 +689,10 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                       />
                       <span>Nightsoul</span>
                     </label>
-                    <label className="flex items-center gap-1 cursor-pointer">
+                    <label className="flex items-center gap-1.5 cursor-pointer min-h-[32px]">
                       <input
                         type="checkbox"
+                        className="w-4 h-4 accent-[#d4af37]"
                         checked={!!ch.firstHalf.mechanics.favorsAoE}
                         onChange={(e) =>
                           handleUpdateSandboxHalf(ch.chamber, 'firstHalf', (prev) => ({
@@ -440,10 +707,11 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                 </div>
 
                 {/* Second Half Editor */}
-                <div className="space-y-1.5 text-xs pt-2 border-t border-[#1d2238]">
-                  <div className="font-semibold text-amber-400">Second Half:</div>
+                <div className="space-y-2 text-xs pt-2.5 border-t border-[#24293d]">
+                  <div className="font-semibold text-amber-300">Second Half:</div>
                   <input
                     type="text"
+                    aria-label={`Chamber 12-${ch.chamber} second half enemy name`}
                     value={ch.secondHalf.enemies[0]?.name || ''}
                     onChange={(e) =>
                       handleUpdateSandboxHalf(ch.chamber, 'secondHalf', (prev) => {
@@ -452,7 +720,16 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                           name: '',
                           level: 95,
                           hp: 1500000,
-                          baseRes: { Pyro: 10, Hydro: 10, Anemo: 10, Electro: 10, Dendro: 10, Cryo: 10, Geo: 10, Physical: 10 },
+                          baseRes: {
+                            Pyro: 10,
+                            Hydro: 10,
+                            Anemo: 10,
+                            Electro: 10,
+                            Dendro: 10,
+                            Cryo: 10,
+                            Geo: 10,
+                            Physical: 10,
+                          },
                         };
                         return {
                           ...prev,
@@ -461,10 +738,11 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                       })
                     }
                     placeholder="Enemy Name"
-                    className="w-full bg-[#0d0f1a] border border-[#2b3353] rounded px-2 py-1 text-zinc-200 text-xs"
+                    className="w-full min-h-[36px] bg-[#0e1019] border border-[#323954] rounded-lg px-2.5 py-1.5 text-zinc-100 placeholder:text-zinc-400 text-xs"
                   />
                   <div className="flex gap-2">
                     <select
+                      aria-label={`Chamber 12-${ch.chamber} second half shield type`}
                       value={ch.secondHalf.mechanics.shieldType || ''}
                       onChange={(e) =>
                         handleUpdateSandboxHalf(ch.chamber, 'secondHalf', (prev) => ({
@@ -476,7 +754,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                           },
                         }))
                       }
-                      className="bg-[#0d0f1a] border border-[#2b3353] rounded px-2 py-1 text-zinc-300 text-[11px] flex-1"
+                      className="bg-[#0e1019] border border-[#323954] rounded-lg px-2 py-1.5 min-h-[36px] text-zinc-100 text-xs flex-1"
                     >
                       <option value="">No Shield</option>
                       <option value="Pyro">Pyro Shield</option>
@@ -492,6 +770,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                         type="number"
                         min={0}
                         max={100}
+                        aria-label={`Chamber 12-${ch.chamber} second half shield gauge units`}
                         value={ch.secondHalf.mechanics.shieldUnits ?? 36}
                         onChange={(e) =>
                           handleUpdateSandboxHalf(ch.chamber, 'secondHalf', (prev) => ({
@@ -502,15 +781,16 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                             },
                           }))
                         }
-                        className="w-14 bg-[#0d0f1a] border border-[#2b3353] rounded px-1.5 py-1 text-zinc-200 text-xs font-mono"
+                        className="w-16 min-h-[36px] bg-[#0e1019] border border-[#323954] rounded-lg px-2 py-1.5 text-zinc-100 text-xs font-mono"
                         title="Gauge Units (GU)"
                       />
                     )}
                   </div>
-                  <div className="flex flex-wrap gap-2 pt-1 text-[11px] text-zinc-400">
-                    <label className="flex items-center gap-1 cursor-pointer">
+                  <div className="flex flex-wrap gap-3 pt-1 text-xs text-zinc-300">
+                    <label className="flex items-center gap-1.5 cursor-pointer min-h-[32px]">
                       <input
                         type="checkbox"
+                        className="w-4 h-4 accent-[#d4af37]"
                         checked={!!ch.secondHalf.mechanics.requiresBow}
                         onChange={(e) =>
                           handleUpdateSandboxHalf(ch.chamber, 'secondHalf', (prev) => ({
@@ -521,9 +801,10 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                       />
                       <span>Bow Required</span>
                     </label>
-                    <label className="flex items-center gap-1 cursor-pointer">
+                    <label className="flex items-center gap-1.5 cursor-pointer min-h-[32px]">
                       <input
                         type="checkbox"
+                        className="w-4 h-4 accent-[#d4af37]"
                         checked={!!ch.secondHalf.mechanics.favorsNightsoul}
                         onChange={(e) =>
                           handleUpdateSandboxHalf(ch.chamber, 'secondHalf', (prev) => ({
@@ -539,17 +820,20 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* Shortfall or Notice Banner */}
       {plan.warnings && plan.warnings.length > 0 && (
-        <div className="bg-amber-950/30 border border-amber-500/40 p-4 rounded-xl flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+        <div
+          role="status"
+          className="bg-amber-950/40 border border-amber-400/45 p-4 rounded-xl flex items-start gap-3"
+        >
+          <AlertTriangle className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
           <div className="text-xs space-y-1">
-            <div className="font-bold text-amber-300">Floor 12 Deployment Notice</div>
+            <div className="font-bold text-amber-200">Floor 12 Deployment Notice</div>
             {plan.warnings.map((w, idx) => (
-              <div key={idx} className="text-zinc-300">
+              <div key={idx} className="text-zinc-200">
                 {w}
               </div>
             ))}
@@ -558,17 +842,15 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
       )}
 
       {/* Chamber Clearance & Shield Breakdown Matrix */}
-      <div className="bg-[#12141e] border border-[#22273d] rounded-2xl p-5 space-y-4">
-        <div className="flex items-center justify-between border-b border-[#1c2134] pb-2.5">
+      <section className="bg-[#121420] border border-[#24293d] rounded-2xl p-5 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#202538] pb-2.5">
           <div className="flex items-center gap-2">
-            <Target className="w-4 h-4 text-[#d4af37]" />
-            <h2 className="text-sm font-bold text-zinc-200 uppercase tracking-wider">
-              Floor 12 Chamber Clearance & Elemental Gauge Breakdown
+            <Target className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
+            <h2 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">
+              Floor 12 Chamber Clearance &amp; Elemental Gauge Breakdown
             </h2>
           </div>
-          <span className="text-[11px] text-zinc-400">
-            {activeCycle.name}
-          </span>
+          <span className="text-xs text-zinc-300">{activeCycle.name}</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
@@ -580,18 +862,17 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
             return (
               <div
                 key={cov.chamber}
-                className="bg-[#161928] border border-[#252c46] rounded-xl p-4 space-y-3"
+                className="bg-[#161928] border border-[#282f48] rounded-xl p-4 space-y-3"
               >
-                {/* Header */}
-                <div className="flex items-center justify-between border-b border-[#21273e] pb-2">
-                  <span className="text-xs font-bold text-[#d4af37]">
+                <div className="flex items-center justify-between border-b border-[#24293d] pb-2">
+                  <span className="text-xs font-bold text-[#f3cf58]">
                     Chamber 12-{cov.chamber}
                   </span>
                   <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                    className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${
                       cov.firstHalfSatisfied && cov.secondHalfSatisfied
-                        ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
-                        : 'bg-amber-950/60 text-amber-300 border-amber-500/40'
+                        ? 'bg-emerald-950/65 text-emerald-200 border-emerald-400/45'
+                        : 'bg-amber-950/65 text-amber-200 border-amber-400/45'
                     }`}
                   >
                     {cov.firstHalfSatisfied && cov.secondHalfSatisfied
@@ -602,136 +883,136 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
 
                 {/* First Half Breakdown */}
                 <div className="text-xs space-y-2">
-                  <div className="flex items-center justify-between text-[11px] font-semibold text-zinc-300">
+                  <div className="flex items-center justify-between gap-1 text-xs font-semibold text-zinc-200">
                     <div className="flex items-center gap-1.5">
                       {cov.firstHalfSatisfied ? (
-                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-300 shrink-0" aria-hidden="true" />
                       ) : (
-                        <ShieldAlert className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <ShieldAlert className="w-3.5 h-3.5 text-amber-300 shrink-0" aria-hidden="true" />
                       )}
                       <span className="text-sky-300">First Half:</span>
                     </div>
                     {firstEnemy && (
-                      <span className="text-[10px] text-zinc-400 truncate max-w-[150px]">
+                      <span className="text-[11px] text-zinc-300 truncate max-w-[160px]">
                         {firstEnemy.name} (Lv.{firstEnemy.level})
                       </span>
                     )}
                   </div>
 
-                  <p className="text-[11px] text-zinc-300 pl-4 leading-snug">
-                    {cov.firstHalfStatus}
-                  </p>
+                  <p className="text-xs text-zinc-200 pl-4 leading-snug">{cov.firstHalfStatus}</p>
 
-                  {/* Shield Gauge Bar & RES Shred Metrics for First Half */}
                   {cov.firstHalfMetrics && (
                     <div className="pl-4 space-y-1.5 pt-1">
                       {cov.firstHalfMetrics.shieldBreakTime !== undefined && (
-                        <div className="bg-[#0f111c] p-2 rounded-lg border border-[#1f263d] space-y-1">
-                          <div className="flex items-center justify-between text-[10px]">
-                            <span className="text-zinc-400 flex items-center gap-1 font-semibold">
-                              <Gauge className="w-3 h-3 text-sky-400" />
+                        <div className="bg-[#0e1019] p-2.5 rounded-lg border border-[#202538] space-y-1">
+                          <div className="flex flex-wrap items-center justify-between gap-1 text-[11px]">
+                            <span className="text-zinc-300 flex items-center gap-1 font-semibold">
+                              <Gauge className="w-3 h-3 text-sky-300" aria-hidden="true" />
                               <span>Shield Break Time:</span>
                             </span>
                             <span
-                              className={`font-bold font-mono px-1.5 py-0.2 rounded ${
+                              className={`font-bold font-mono px-1.5 py-0.5 rounded ${
                                 cov.firstHalfMetrics.shieldBreakRating === 'Fast'
-                                  ? 'text-emerald-300 bg-emerald-950/60'
+                                  ? 'text-emerald-200 bg-emerald-950/70'
                                   : cov.firstHalfMetrics.shieldBreakRating === 'Medium'
-                                  ? 'text-sky-300 bg-sky-950/60'
-                                  : cov.firstHalfMetrics.shieldBreakRating === 'Slow'
-                                  ? 'text-amber-300 bg-amber-950/60'
-                                  : 'text-rose-300 bg-rose-950/60'
+                                    ? 'text-sky-200 bg-sky-950/70'
+                                    : cov.firstHalfMetrics.shieldBreakRating === 'Slow'
+                                      ? 'text-amber-200 bg-amber-950/70'
+                                      : 'text-rose-200 bg-rose-950/70'
                               }`}
                             >
-                              ⚡ {cov.firstHalfMetrics.shieldBreakRating === 'Ineffective'
+                              ⚡{' '}
+                              {cov.firstHalfMetrics.shieldBreakRating === 'Ineffective'
                                 ? '∞ (Ineffective)'
                                 : `${cov.firstHalfMetrics.shieldBreakTime}s (${cov.firstHalfMetrics.shieldBreakRating})`}
                             </span>
                           </div>
                           {cov.firstHalfMetrics.shieldBreakBreakdown && (
-                            <div className="text-[9px] text-zinc-400 truncate">
+                            <div className="text-[11px] text-zinc-300 truncate">
                               {cov.firstHalfMetrics.shieldBreakBreakdown}
                             </div>
                           )}
                         </div>
                       )}
 
-                      {cov.firstHalfMetrics.effectiveResShred !== undefined && cov.firstHalfMetrics.effectiveResShred > 0 && (
-                        <div className="flex items-center justify-between text-[10px] text-zinc-400">
-                          <span>Team RES Shred:</span>
-                          <span className="text-emerald-400 font-bold font-mono">
-                            -{cov.firstHalfMetrics.effectiveResShred}% ({cov.firstHalfMetrics.effectiveDmgMultiplier}x DMG)
-                          </span>
-                        </div>
-                      )}
+                      {cov.firstHalfMetrics.effectiveResShred !== undefined &&
+                        cov.firstHalfMetrics.effectiveResShred > 0 && (
+                          <div className="flex items-center justify-between text-[11px] text-zinc-300">
+                            <span>Team RES Shred:</span>
+                            <span className="text-emerald-300 font-bold font-mono">
+                              -{cov.firstHalfMetrics.effectiveResShred}% (
+                              {cov.firstHalfMetrics.effectiveDmgMultiplier}x DMG)
+                            </span>
+                          </div>
+                        )}
                     </div>
                   )}
                 </div>
 
                 {/* Second Half Breakdown */}
-                <div className="text-xs space-y-2 pt-2 border-t border-[#1d2236]">
-                  <div className="flex items-center justify-between text-[11px] font-semibold text-zinc-300">
+                <div className="text-xs space-y-2 pt-2.5 border-t border-[#24293d]">
+                  <div className="flex items-center justify-between gap-1 text-xs font-semibold text-zinc-200">
                     <div className="flex items-center gap-1.5">
                       {cov.secondHalfSatisfied ? (
-                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-300 shrink-0" aria-hidden="true" />
                       ) : (
-                        <ShieldAlert className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                        <ShieldAlert className="w-3.5 h-3.5 text-rose-300 shrink-0" aria-hidden="true" />
                       )}
                       <span className="text-amber-300">Second Half:</span>
                     </div>
                     {secondEnemy && (
-                      <span className="text-[10px] text-zinc-400 truncate max-w-[150px]">
+                      <span className="text-[11px] text-zinc-300 truncate max-w-[160px]">
                         {secondEnemy.name} (Lv.{secondEnemy.level})
                       </span>
                     )}
                   </div>
 
-                  <p className="text-[11px] text-zinc-300 pl-4 leading-snug">
-                    {cov.secondHalfStatus}
-                  </p>
+                  <p className="text-xs text-zinc-200 pl-4 leading-snug">{cov.secondHalfStatus}</p>
 
-                  {/* Shield Gauge Bar & RES Shred Metrics for Second Half */}
                   {cov.secondHalfMetrics && (
                     <div className="pl-4 space-y-1.5 pt-1">
                       {cov.secondHalfMetrics.shieldBreakTime !== undefined && (
-                        <div className="bg-[#0f111c] p-2 rounded-lg border border-[#1f263d] space-y-1">
-                          <div className="flex items-center justify-between text-[10px]">
-                            <span className="text-zinc-400 flex items-center gap-1 font-semibold">
-                              <Gauge className="w-3 h-3 text-amber-400" />
+                        <div className="bg-[#0e1019] p-2.5 rounded-lg border border-[#202538] space-y-1">
+                          <div className="flex flex-wrap items-center justify-between gap-1 text-[11px]">
+                            <span className="text-zinc-300 flex items-center gap-1 font-semibold">
+                              <Gauge className="w-3 h-3 text-amber-300" aria-hidden="true" />
                               <span>Shield Break Time:</span>
                             </span>
                             <span
-                              className={`font-bold font-mono px-1.5 py-0.2 rounded ${
+                              className={`font-bold font-mono px-1.5 py-0.5 rounded ${
                                 cov.secondHalfMetrics.shieldBreakRating === 'Fast'
-                                  ? 'text-emerald-300 bg-emerald-950/60'
+                                  ? 'text-emerald-200 bg-emerald-950/70'
                                   : cov.secondHalfMetrics.shieldBreakRating === 'Medium'
-                                  ? 'text-sky-300 bg-sky-950/60'
-                                  : cov.secondHalfMetrics.shieldBreakRating === 'Slow'
-                                  ? 'text-amber-300 bg-amber-950/60'
-                                  : 'text-rose-300 bg-rose-950/60'
+                                    ? 'text-sky-200 bg-sky-950/70'
+                                    : cov.secondHalfMetrics.shieldBreakRating === 'Slow'
+                                      ? 'text-amber-200 bg-amber-950/70'
+                                      : 'text-rose-200 bg-rose-950/70'
                               }`}
                             >
-                              ⚡ {cov.secondHalfMetrics.shieldBreakRating === 'Ineffective'
+                              ⚡{' '}
+                              {cov.secondHalfMetrics.shieldBreakRating === 'Ineffective'
                                 ? '∞ (Ineffective)'
                                 : `${cov.secondHalfMetrics.shieldBreakTime}s (${cov.secondHalfMetrics.shieldBreakRating})`}
                             </span>
                           </div>
                           {cov.secondHalfMetrics.shieldBreakBreakdown && (
-                            <div className="text-[9px] text-zinc-400 truncate">
+                            <div className="text-[11px] text-zinc-300 truncate">
                               {cov.secondHalfMetrics.shieldBreakBreakdown}
                             </div>
                           )}
                         </div>
                       )}
 
-                      {cov.secondHalfMetrics.effectiveResShred !== undefined && cov.secondHalfMetrics.effectiveResShred > 0 && (
-                        <div className="flex items-center justify-between text-[10px] text-zinc-400">
-                          <span>Team RES Shred:</span>
-                          <span className="text-emerald-400 font-bold font-mono">
-                            -{cov.secondHalfMetrics.effectiveResShred}% ({cov.secondHalfMetrics.effectiveDmgMultiplier}x DMG)
-                          </span>
-                        </div>
-                      )}
+                      {cov.secondHalfMetrics.effectiveResShred !== undefined &&
+                        cov.secondHalfMetrics.effectiveResShred > 0 && (
+                          <div className="flex items-center justify-between text-[11px] text-zinc-300">
+                            <span>Team RES Shred:</span>
+                            <span className="text-emerald-300 font-bold font-mono">
+                              -{cov.secondHalfMetrics.effectiveResShred}% (
+                              {cov.secondHalfMetrics.effectiveDmgMultiplier}x DMG)
+                            </span>
+                          </div>
+                        )}
                     </div>
                   )}
                 </div>
@@ -739,377 +1020,16 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
             );
           })}
         </div>
-      </div>
+      </section>
 
       {/* Dual Side-by-Side Team Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Team 1: First Half */}
-        <div className="bg-[#12141f] border border-[#232942] rounded-2xl p-5 space-y-4 shadow-md flex flex-col justify-between">
-          <div className="space-y-4">
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-[#21273e] pb-3">
-              <div>
-                <span className="text-xs font-bold text-sky-400 uppercase tracking-wider block">
-                  First Half Vanguard (12-1-A · 12-2-A · 12-3-A)
-                </span>
-                <h3 className="text-base font-bold text-zinc-100 font-serif mt-0.5">
-                  {teamA.name}
-                </h3>
-                <span className="text-xs bg-[#191d2d] text-[#d4af37] px-2 py-0.5 rounded-md border border-[#d4af37]/20 font-medium inline-block mt-1">
-                  {teamA.archetype}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <div className="bg-[#181c2c] px-2.5 py-1.5 rounded-xl border border-[#28314e] text-center">
-                  <div className="text-[9px] text-zinc-400 font-semibold uppercase">Synergy</div>
-                  <div className="text-xs font-bold text-amber-300">{teamA.synergyScore}/100</div>
-                </div>
-                <div className="bg-[#181c2c] px-2.5 py-1.5 rounded-xl border border-[#28314e] text-center">
-                  <div className="text-[9px] text-zinc-400 font-semibold uppercase">Comfort</div>
-                  <div className="text-xs font-bold text-emerald-300">{teamA.comfortScore}/100</div>
-                </div>
-              </div>
-            </div>
-
-            {/* 4 Character Slots */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              {[0, 1, 2, 3].map((slotIdx) => {
-                const member = teamA.members[slotIdx];
-                if (member) {
-                  const color = ELEMENT_COLORS[member.element] || {
-                    bg: 'bg-zinc-800',
-                    text: 'text-zinc-200',
-                    border: 'border-zinc-700',
-                  };
-                  return (
-                    <div
-                      key={member.id}
-                      onClick={() => setSelectedCharacter(member)}
-                      className={`bg-[#161928] border ${color.border} hover:border-[#d4af37] rounded-xl p-2.5 flex flex-col items-center gap-1.5 cursor-pointer transition-all duration-150 group`}
-                      title="Click to view details"
-                    >
-                      <CharacterPortrait
-                        src={member.icon}
-                        name={member.name}
-                        element={member.element}
-                        rarity={member.rarity}
-                        size="sm"
-                      />
-                      <div className="text-xs font-bold text-zinc-100 truncate w-full text-center">
-                        {member.name}
-                      </div>
-                      <div className="text-[10px] text-zinc-400 truncate">
-                        {member.weapon} · {member.roles[0]}
-                      </div>
-                      {teamA.explanation?.alternatives?.some((alt) => alt.originalCharacterId === member.id) && (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setDrawerAlternative({
-                              originalMember: member,
-                              teamName: 'First Half Vanguard',
-                              alternatives: teamA.explanation!.alternatives.filter((a) => a.originalCharacterId === member.id),
-                              oppositeTeamMembers: teamB.members,
-                              oppositeTeamName: 'Second Half Rearguard',
-                            });
-                          }}
-                          className="mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold text-[#d4af37] bg-[#d4af37]/10 hover:bg-[#d4af37]/25 border border-[#d4af37]/30 transition-colors cursor-pointer"
-                          title="View alternative substitution trade-offs"
-                        >
-                          Swap Alt
-                        </button>
-                      )}
-                    </div>
-                  );
-                }
-                return (
-                  <div
-                    key={`empty-a-${slotIdx}`}
-                    className="bg-[#0f111c] border border-dashed border-[#232943] rounded-xl p-2.5 flex flex-col items-center justify-center gap-1.5 text-center min-h-[110px]"
-                  >
-                    <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
-                      Slot {slotIdx + 1}
-                    </span>
-                    <span className="text-xs text-zinc-500 font-medium">Unassigned</span>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Tactical Workflow & Why this team fits */}
-            {teamA.explanation && (
-              <div className="bg-[#0e1018] rounded-xl border border-[#1b2032] p-3 space-y-2 text-xs">
-                <div className="font-bold text-[#d4af37] flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Chamber Suitability & Role Rationale</span>
-                </div>
-                {teamA.explanation.reactionWorkflow && (
-                  <p className="text-zinc-300 text-[11px] leading-relaxed">
-                    {teamA.explanation.reactionWorkflow}
-                  </p>
-                )}
-                {/* Half-specific clearance breakdown */}
-                {plan.chamberCoverage && plan.chamberCoverage.length > 0 && (
-                  <div className="pt-2 border-t border-[#1b2032] space-y-1">
-                    <span className="text-[10px] font-bold text-sky-400 uppercase tracking-wider block">
-                      First Half Chamber Clearance:
-                    </span>
-                    {plan.chamberCoverage.map((cov) => (
-                      <div key={cov.chamber} className="text-[11px] text-zinc-300 flex items-start gap-1.5">
-                        <span className="font-mono text-[#d4af37] text-[10px] shrink-0 font-bold">12-{cov.chamber}:</span>
-                        <span className="text-zinc-300 text-[11px] leading-snug">{cov.firstHalfStatus}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {teamA.explanation.energyAssessment?.warnings && teamA.explanation.energyAssessment.warnings.length > 0 && (
-                  <p className="text-zinc-400 text-[10px] pt-1">
-                    ⚡ Energy: {teamA.explanation.energyAssessment.warnings.join(' · ')}
-                  </p>
-                )}
-              </div>
-            )}
-
-            {/* Stepped Rotation Accordion */}
-            {teamA.steppedRotation && teamA.steppedRotation.steps.length > 0 && (
-              <div className="bg-[#0e1018] rounded-xl border border-[#1b2032] overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() => setExpandedRotationA(!expandedRotationA)}
-                  className="w-full px-3.5 py-2.5 flex items-center justify-between text-xs font-bold text-zinc-300 hover:text-zinc-100 transition-colors cursor-pointer"
-                >
-                  <div className="flex items-center gap-2">
-                    <Zap className="w-3.5 h-3.5 text-[#d4af37]" />
-                    <span>Stepped Combat Rotation</span>
-                    <span className="text-[10px] font-mono text-[#d4af37] bg-[#16192b] px-2 py-0.5 rounded border border-[#d4af37]/20">
-                      ~{teamA.steppedRotation.totalCycleTime}s Cycle
-                    </span>
-                  </div>
-                  {expandedRotationA ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </button>
-
-                {expandedRotationA && (
-                  <div className="p-3 border-t border-[#1b2032] space-y-2">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {teamA.steppedRotation.steps.map((step) => (
-                        <div
-                          key={step.stepNumber}
-                          className="bg-[#131624] border border-[#22283e] p-2 rounded-lg flex flex-col justify-between gap-1.5"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1.5">
-                              <CharacterPortrait
-                                src={step.icon}
-                                name={step.characterName}
-                                element={step.element}
-                                size="xs"
-                              />
-                              <span className="text-xs font-bold text-zinc-200 truncate">
-                                {step.characterName}
-                              </span>
-                            </div>
-                            <span className="text-[9px] font-mono text-zinc-400 bg-[#191d2d] px-1 py-0.5 rounded">
-                              ~{step.fieldTime}s
-                            </span>
-                          </div>
-                          <div className="bg-[#0a0c14] p-1 rounded border border-[#171a2b]">
-                            <RotationBadgeList actions={step.actions} size="sm" />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Team 2: Second Half */}
-        <div className="bg-[#12141f] border border-[#232942] rounded-2xl p-5 space-y-4 shadow-md flex flex-col justify-between">
-          <div className="space-y-4">
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-[#21273e] pb-3">
-              <div>
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
-                  Second Half Rearguard (12-1-B · 12-2-B · 12-3-B)
-                </span>
-                <h3 className="text-base font-bold text-zinc-100 font-serif mt-0.5">
-                  {teamB.name}
-                </h3>
-                <span className="text-xs bg-[#191d2d] text-[#d4af37] px-2 py-0.5 rounded-md border border-[#d4af37]/20 font-medium inline-block mt-1">
-                  {teamB.archetype}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <div className="bg-[#181c2c] px-2.5 py-1.5 rounded-xl border border-[#28314e] text-center">
-                  <div className="text-[9px] text-zinc-400 font-semibold uppercase">Synergy</div>
-                  <div className="text-xs font-bold text-amber-300">{teamB.synergyScore}/100</div>
-                </div>
-                <div className="bg-[#181c2c] px-2.5 py-1.5 rounded-xl border border-[#28314e] text-center">
-                  <div className="text-[9px] text-zinc-400 font-semibold uppercase">Comfort</div>
-                  <div className="text-xs font-bold text-emerald-300">{teamB.comfortScore}/100</div>
-                </div>
-              </div>
-            </div>
-
-            {/* 4 Character Slots */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              {[0, 1, 2, 3].map((slotIdx) => {
-                const member = teamB.members[slotIdx];
-                if (member) {
-                  const color = ELEMENT_COLORS[member.element] || {
-                    bg: 'bg-zinc-800',
-                    text: 'text-zinc-200',
-                    border: 'border-zinc-700',
-                  };
-                  return (
-                    <div
-                      key={member.id}
-                      onClick={() => setSelectedCharacter(member)}
-                      className={`bg-[#161928] border ${color.border} hover:border-[#d4af37] rounded-xl p-2.5 flex flex-col items-center gap-1.5 cursor-pointer transition-all duration-150 group`}
-                      title="Click to view details"
-                    >
-                      <CharacterPortrait
-                        src={member.icon}
-                        name={member.name}
-                        element={member.element}
-                        rarity={member.rarity}
-                        size="sm"
-                      />
-                      <div className="text-xs font-bold text-zinc-100 truncate w-full text-center">
-                        {member.name}
-                      </div>
-                      <div className="text-[10px] text-zinc-400 truncate">
-                        {member.weapon} · {member.roles[0]}
-                      </div>
-                      {teamB.explanation?.alternatives?.some((alt) => alt.originalCharacterId === member.id) && (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setDrawerAlternative({
-                              originalMember: member,
-                              teamName: 'Second Half Rearguard',
-                              alternatives: teamB.explanation!.alternatives.filter((a) => a.originalCharacterId === member.id),
-                              oppositeTeamMembers: teamA.members,
-                              oppositeTeamName: 'First Half Vanguard',
-                            });
-                          }}
-                          className="mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold text-[#d4af37] bg-[#d4af37]/10 hover:bg-[#d4af37]/25 border border-[#d4af37]/30 transition-colors cursor-pointer"
-                          title="View alternative substitution trade-offs"
-                        >
-                          Swap Alt
-                        </button>
-                      )}
-                    </div>
-                  );
-                }
-                return (
-                  <div
-                    key={`empty-b-${slotIdx}`}
-                    className="bg-[#0f111c] border border-dashed border-[#232943] rounded-xl p-2.5 flex flex-col items-center justify-center gap-1.5 text-center min-h-[110px]"
-                  >
-                    <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
-                      Slot {slotIdx + 1}
-                    </span>
-                    <span className="text-xs text-zinc-500 font-medium">Unassigned</span>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Tactical Workflow & Why this team fits */}
-            {teamB.explanation && (
-              <div className="bg-[#0e1018] rounded-xl border border-[#1b2032] p-3 space-y-2 text-xs">
-                <div className="font-bold text-[#d4af37] flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Chamber Suitability & Role Rationale</span>
-                </div>
-                {teamB.explanation.reactionWorkflow && (
-                  <p className="text-zinc-300 text-[11px] leading-relaxed">
-                    {teamB.explanation.reactionWorkflow}
-                  </p>
-                )}
-                {/* Half-specific clearance breakdown */}
-                {plan.chamberCoverage && plan.chamberCoverage.length > 0 && (
-                  <div className="pt-2 border-t border-[#1b2032] space-y-1">
-                    <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">
-                      Second Half Chamber Clearance:
-                    </span>
-                    {plan.chamberCoverage.map((cov) => (
-                      <div key={cov.chamber} className="text-[11px] text-zinc-300 flex items-start gap-1.5">
-                        <span className="font-mono text-[#d4af37] text-[10px] shrink-0 font-bold">12-{cov.chamber}:</span>
-                        <span className="text-zinc-300 text-[11px] leading-snug">{cov.secondHalfStatus}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {teamB.explanation.energyAssessment?.warnings && teamB.explanation.energyAssessment.warnings.length > 0 && (
-                  <p className="text-zinc-400 text-[10px] pt-1">
-                    ⚡ Energy: {teamB.explanation.energyAssessment.warnings.join(' · ')}
-                  </p>
-                )}
-              </div>
-            )}
-
-            {/* Stepped Rotation Accordion */}
-            {teamB.steppedRotation && teamB.steppedRotation.steps.length > 0 && (
-              <div className="bg-[#0e1018] rounded-xl border border-[#1b2032] overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() => setExpandedRotationB(!expandedRotationB)}
-                  className="w-full px-3.5 py-2.5 flex items-center justify-between text-xs font-bold text-zinc-300 hover:text-zinc-100 transition-colors cursor-pointer"
-                >
-                  <div className="flex items-center gap-2">
-                    <Zap className="w-3.5 h-3.5 text-[#d4af37]" />
-                    <span>Stepped Combat Rotation</span>
-                    <span className="text-[10px] font-mono text-[#d4af37] bg-[#16192b] px-2 py-0.5 rounded border border-[#d4af37]/20">
-                      ~{teamB.steppedRotation.totalCycleTime}s Cycle
-                    </span>
-                  </div>
-                  {expandedRotationB ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </button>
-
-                {expandedRotationB && (
-                  <div className="p-3 border-t border-[#1b2032] space-y-2">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {teamB.steppedRotation.steps.map((step) => (
-                        <div
-                          key={step.stepNumber}
-                          className="bg-[#131624] border border-[#22283e] p-2 rounded-lg flex flex-col justify-between gap-1.5"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1.5">
-                              <CharacterPortrait
-                                src={step.icon}
-                                name={step.characterName}
-                                element={step.element}
-                                size="xs"
-                              />
-                              <span className="text-xs font-bold text-zinc-200 truncate">
-                                {step.characterName}
-                              </span>
-                            </div>
-                            <span className="text-[9px] font-mono text-zinc-400 bg-[#191d2d] px-1 py-0.5 rounded">
-                              ~{step.fieldTime}s
-                            </span>
-                          </div>
-                          <div className="bg-[#0a0c14] p-1 rounded border border-[#171a2b]">
-                            <RotationBadgeList actions={step.actions} size="sm" />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
+        {renderHalfTeamCard('first', teamA, teamB, expandedRotationA, () =>
+          setExpandedRotationA((prev) => !prev)
+        )}
+        {renderHalfTeamCard('second', teamB, teamA, expandedRotationB, () =>
+          setExpandedRotationB((prev) => !prev)
+        )}
       </div>
 
       {/* Character Detail Modal */}
@@ -1123,57 +1043,71 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
         />
       )}
 
-      {/* Alternative Substitutions Modal */}
+      {/* Alternative Substitutions Modal (accessible dialog with focus trap & Escape) */}
       {drawerAlternative && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
-          <div className="bg-[#121524] border border-[#2b3353] rounded-2xl w-full max-w-lg p-5 space-y-4 shadow-2xl relative">
-            <button
-              type="button"
-              onClick={() => setDrawerAlternative(null)}
-              className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-100 p-1 rounded-lg hover:bg-[#1a1e34] transition-colors cursor-pointer"
-            >
-              <X className="w-4 h-4" />
-            </button>
-
-            <div className="flex items-center gap-2 border-b border-[#21273e] pb-3">
-              <Sparkles className="w-5 h-5 text-[#d4af37]" />
-              <div>
-                <h3 className="text-sm font-bold text-zinc-100">
-                  Alternative Substitutions for {drawerAlternative.originalMember.name}
-                </h3>
-                <span className="text-[11px] text-zinc-400">
-                  {drawerAlternative.teamName} slot alternatives with tactical trade-offs
-                </span>
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="abyss-alt-modal-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm"
+          onClick={() => setDrawerAlternative(null)}
+        >
+          <div
+            ref={altDialogRef}
+            tabIndex={-1}
+            className="bg-[#121420] border border-[#2c334d] rounded-2xl w-full max-w-lg max-h-[88vh] p-5 flex flex-col gap-4 shadow-2xl relative focus:outline-none"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-2 border-b border-[#24293d] pb-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <Sparkles className="w-5 h-5 text-[#d4af37] shrink-0" aria-hidden="true" />
+                <div className="min-w-0">
+                  <h2 id="abyss-alt-modal-title" className="text-sm font-bold text-zinc-100 font-serif">
+                    Alternative Substitutions for {drawerAlternative.originalMember.name}
+                  </h2>
+                  <span className="text-xs text-zinc-300">
+                    {drawerAlternative.teamName} slot alternatives with tactical trade-offs
+                  </span>
+                </div>
               </div>
+              <button
+                ref={altCloseBtnRef}
+                type="button"
+                aria-label="Close alternative substitutions modal"
+                onClick={() => setDrawerAlternative(null)}
+                className="min-w-[38px] min-h-[38px] text-zinc-300 hover:text-white rounded-xl hover:bg-[#1f243b] flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              >
+                <X className="w-4 h-4" aria-hidden="true" />
+              </button>
             </div>
 
-            <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+            <div className="space-y-3 overflow-y-auto flex-1 min-h-0 pr-1">
               {[...drawerAlternative.alternatives]
                 .sort((a, b) => {
                   const aDeployed = drawerAlternative.oppositeTeamMembers.some((m) =>
-                    isSameCharacterOrTraveler(m, a.alternativeCharacter),
+                    isSameCharacterOrTraveler(m, a.alternativeCharacter)
                   );
                   const bDeployed = drawerAlternative.oppositeTeamMembers.some((m) =>
-                    isSameCharacterOrTraveler(m, b.alternativeCharacter),
+                    isSameCharacterOrTraveler(m, b.alternativeCharacter)
                   );
                   if (aDeployed !== bDeployed) return aDeployed ? 1 : -1;
                   return b.compatibilityImpact - a.compatibilityImpact;
                 })
                 .map((alt, idx) => {
                   const isDeployedInOpposite = drawerAlternative.oppositeTeamMembers.some((m) =>
-                    isSameCharacterOrTraveler(m, alt.alternativeCharacter),
+                    isSameCharacterOrTraveler(m, alt.alternativeCharacter)
                   );
                   return (
                     <div
                       key={idx}
-                      className={`border rounded-xl p-3 space-y-2 ${
+                      className={`border rounded-xl p-3.5 space-y-2 ${
                         isDeployedInOpposite
-                          ? 'bg-[#151726]/60 border-rose-500/30'
-                          : 'bg-[#161a2e] border-[#262d49]'
+                          ? 'bg-[#161826] border-rose-400/40'
+                          : 'bg-[#161a29] border-[#282f48]'
                       }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 min-w-0">
                           <CharacterPortrait
                             src={alt.alternativeCharacter.icon}
                             name={alt.alternativeCharacter.name}
@@ -1181,55 +1115,62 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
                             rarity={alt.alternativeCharacter.rarity}
                             size="xs"
                           />
-                          <div>
-                            <div className="text-xs font-bold text-zinc-200 flex items-center gap-1.5">
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-zinc-100 flex flex-wrap items-center gap-1.5">
                               <span>{alt.alternativeCharacter.name}</span>
                               {isDeployedInOpposite && (
-                                <span className="text-[9px] font-bold text-rose-300 bg-rose-950/70 border border-rose-500/40 px-1.5 py-0.2 rounded">
+                                <span className="text-[11px] font-bold text-rose-200 bg-rose-950/75 border border-rose-400/45 px-1.5 py-0.5 rounded">
                                   Deployed in {drawerAlternative.oppositeTeamName}
                                 </span>
                               )}
                             </div>
-                            <div className="text-[10px] text-zinc-400">
+                            <div className="text-[11px] text-zinc-300">
                               {alt.alternativeCharacter.weapon} · {alt.alternativeCharacter.roles[0]}
                             </div>
                           </div>
                         </div>
                         <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded font-mono ${
+                          className={`text-[11px] font-bold px-2 py-0.5 rounded font-mono ${
                             alt.compatibilityImpact >= 0
-                              ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-500/40'
-                              : 'bg-amber-950/60 text-amber-300 border border-amber-500/40'
+                              ? 'bg-emerald-950/65 text-emerald-200 border border-emerald-400/45'
+                              : 'bg-amber-950/65 text-amber-200 border border-amber-400/45'
                           }`}
                         >
-                          {alt.compatibilityImpact >= 0 ? `+${alt.compatibilityImpact}%` : `${alt.compatibilityImpact}%`} Synergy
+                          {alt.compatibilityImpact >= 0
+                            ? `+${alt.compatibilityImpact}%`
+                            : `${alt.compatibilityImpact}%`}{' '}
+                          Synergy
                         </span>
                       </div>
 
-                  {alt.tradeOffPros.length > 0 && (
-                    <div className="text-[11px] space-y-0.5">
-                      <div className="text-emerald-400 font-semibold text-[10px] uppercase tracking-wider">+ Advantages:</div>
-                      <ul className="list-disc list-inside text-zinc-300 pl-1 space-y-0.5">
-                        {alt.tradeOffPros.map((pro, pIdx) => (
-                          <li key={pIdx}>{pro}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                      {alt.tradeOffPros.length > 0 && (
+                        <div className="text-xs space-y-1">
+                          <div className="text-emerald-300 font-semibold text-[11px] uppercase tracking-wider">
+                            + Advantages:
+                          </div>
+                          <ul className="list-disc list-inside text-zinc-200 pl-1 space-y-0.5">
+                            {alt.tradeOffPros.map((pro, pIdx) => (
+                              <li key={pIdx}>{pro}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
 
-                  {alt.tradeOffCons.length > 0 && (
-                    <div className="text-[11px] space-y-0.5">
-                      <div className="text-amber-400 font-semibold text-[10px] uppercase tracking-wider">- Trade-offs:</div>
-                      <ul className="list-disc list-inside text-zinc-400 pl-1 space-y-0.5">
-                        {alt.tradeOffCons.map((con, cIdx) => (
-                          <li key={cIdx}>{con}</li>
-                        ))}
-                      </ul>
+                      {alt.tradeOffCons.length > 0 && (
+                        <div className="text-xs space-y-1">
+                          <div className="text-amber-300 font-semibold text-[11px] uppercase tracking-wider">
+                            − Trade-offs:
+                          </div>
+                          <ul className="list-disc list-inside text-zinc-300 pl-1 space-y-0.5">
+                            {alt.tradeOffCons.map((con, cIdx) => (
+                              <li key={cIdx}>{con}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                  );
+                })}
             </div>
           </div>
         </div>

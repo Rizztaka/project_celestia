@@ -85,7 +85,7 @@ export const RotationBadgeList: React.FC<RotationBadgeListProps> = memo(({
               <ChevronRight
                 className={`${
                   isSmall ? 'w-2.5 h-2.5' : 'w-3.5 h-3.5'
-                } text-zinc-500 shrink-0`}
+                } text-zinc-400 shrink-0`}
               />
             )}
           </React.Fragment>

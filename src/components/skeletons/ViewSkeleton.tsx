@@ -6,14 +6,15 @@ export const TeamsSkeleton: React.FC = () => (
     aria-busy="true"
     aria-label="Loading Best Teams View"
     data-skeleton="teams"
-    className="space-y-6 animate-pulse"
+    className="space-y-6 animate-pulse motion-reduce:animate-none"
   >
+    <span className="sr-only">Loading Best Teams…</span>
     {/* Header / Generator Controls Card */}
     <div className="bg-[#10121c] border border-[#202538] rounded-2xl p-5 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-2">
           <div className="h-6 w-48 bg-[#1f253b] rounded-lg" />
-          <div className="h-4 w-72 bg-[#171b2c] rounded-md" />
+          <div className="h-4 w-72 max-w-full bg-[#171b2c] rounded-md" />
         </div>
         <div className="flex items-center gap-2">
           <div className="h-9 w-28 bg-[#1f253b] rounded-xl" />
@@ -75,14 +76,15 @@ export const PullsSkeleton: React.FC = () => (
     aria-busy="true"
     aria-label="Loading Pull Advisor View"
     data-skeleton="pulls"
-    className="space-y-6 animate-pulse"
+    className="space-y-6 animate-pulse motion-reduce:animate-none"
   >
+    <span className="sr-only">Loading Pull Advisor…</span>
     {/* Active Banners Header Placeholder */}
     <div className="bg-[#10121c] border border-[#202538] rounded-2xl p-5 space-y-4">
       <div className="flex items-center justify-between">
         <div className="space-y-2">
           <div className="h-6 w-44 bg-[#1f253b] rounded-lg" />
-          <div className="h-4 w-64 bg-[#171b2c] rounded-md" />
+          <div className="h-4 w-64 max-w-full bg-[#171b2c] rounded-md" />
         </div>
         <div className="h-8 w-36 bg-[#1f253b] rounded-xl" />
       </div>
@@ -130,8 +132,9 @@ export const EndgameSkeleton: React.FC = () => (
     aria-busy="true"
     aria-label="Loading Endgame Helper View"
     data-skeleton="endgame"
-    className="space-y-6 animate-pulse"
+    className="space-y-6 animate-pulse motion-reduce:animate-none"
   >
+    <span className="sr-only">Loading Endgame Helper…</span>
     {/* Mode Selector Header Bar */}
     <div className="bg-[#10121c] border border-[#202538] rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div className="flex gap-2">
@@ -172,8 +175,9 @@ export const ArtifactsSkeleton: React.FC = () => (
     aria-busy="true"
     aria-label="Loading Artifact Stop View"
     data-skeleton="artifacts"
-    className="space-y-6 animate-pulse"
+    className="space-y-6 animate-pulse motion-reduce:animate-none"
   >
+    <span className="sr-only">Loading Artifact Stop…</span>
     {/* Artifact Sub-Navigation / Filter Pill Bar */}
     <div className="bg-[#10121c] border border-[#202538] rounded-2xl p-4 space-y-3">
       <div className="flex gap-2">
@@ -221,14 +225,15 @@ export const RosterSkeleton: React.FC = () => (
     aria-busy="true"
     aria-label="Loading Roster View"
     data-skeleton="roster"
-    className="space-y-5 animate-pulse"
+    className="space-y-5 animate-pulse motion-reduce:animate-none"
   >
+    <span className="sr-only">Loading Roster…</span>
     {/* Roster Header Banner */}
     <div className="bg-[#10121c] border border-[#202538] rounded-2xl p-5 space-y-3">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="space-y-1.5">
           <div className="h-6 w-44 bg-[#1f253b] rounded-lg" />
-          <div className="h-3.5 w-60 bg-[#171b2c] rounded-md" />
+          <div className="h-3.5 w-60 max-w-full bg-[#171b2c] rounded-md" />
         </div>
         <div className="flex items-center gap-2">
           <div className="h-8 w-24 bg-[#1f253b] rounded-xl" />
@@ -277,8 +282,9 @@ export const GenericSkeleton: React.FC = () => (
     aria-busy="true"
     aria-label="Loading view content"
     data-skeleton="generic"
-    className="space-y-5 animate-pulse"
+    className="space-y-5 animate-pulse motion-reduce:animate-none"
   >
+    <span className="sr-only">Loading view content…</span>
     <div className="h-24 bg-[#10121c] border border-[#202538] rounded-2xl" />
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {[1, 2, 3, 4, 5, 6].map((i) => (

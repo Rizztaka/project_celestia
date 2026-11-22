@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useTransition, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, useTransition, useRef, useCallback, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import { ViewSkeleton } from './components/skeletons/ViewSkeleton';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -16,7 +16,7 @@ import {
 import { fetchShowcaseFromEnka } from './services/enka';
 import type { OwnedCharacterProfile, OwnedWeapon } from './types/genshin';
 import { resolveWeaponAlias, normalizeWeaponKey } from './data/weapon-aliases';
-import { AlertCircle, CheckCircle2, Database } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Database, Loader2, Sparkles, X } from 'lucide-react';
 
 function createRetryableLazy<T extends React.ComponentType<any>>(
   loader: () => Promise<{ default: T }>,
@@ -72,27 +72,33 @@ const AccountBackupModal = React.lazy(() =>
   import('./components/AccountBackupModal').then((m) => ({ default: m.AccountBackupModal }))
 );
 
+const TAB_TITLES: Record<string, string> = {
+  teams: 'Best Teams',
+  pulls: 'Pull Advisor',
+  endgame: 'Endgame Helper',
+  artifacts: 'Artifact Stop',
+  roster: 'My Roster',
+};
+
+const ModalLoadingFallback: React.FC<{ label: string }> = ({ label }) => (
+  <div
+    role="status"
+    aria-live="polite"
+    aria-label={label}
+    className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+  >
+    <div className="bg-[#121420] border border-[#24293d] rounded-2xl px-6 py-4 flex items-center gap-3 shadow-2xl">
+      <Loader2 className="w-5 h-5 text-[#d4af37] animate-spin motion-reduce:animate-none" aria-hidden="true" />
+      <span className="text-sm font-medium text-zinc-200">{label}</span>
+    </div>
+  </div>
+);
+
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('teams');
   const [pendingTab, setPendingTab] = useState<string | null>(null);
   const [isTabPending, startTransition] = useTransition();
 
-  const handleSelectTab = (tab: string) => {
-    if (tab === activeTab) return;
-    setPendingTab(tab);
-    startTransition(() => {
-      setActiveTab(tab);
-      setPendingTab(null);
-    });
-  };
-
-  const handleResetViews = () => {
-    TeamGeneratorView.reset();
-    PullAdvisorView.reset();
-    EndgameView.reset();
-    ArtifactStopView.reset();
-    RosterView.reset();
-  };
   const [profiles, setProfiles] = useState<Record<string, OwnedCharacterProfile>>(getSavedProfiles);
   const [weapons, setWeapons] = useState<OwnedWeapon[]>(getSavedWeapons);
   const [isArmoryOpen, setIsArmoryOpen] = useState<boolean>(false);
@@ -104,6 +110,64 @@ export const App: React.FC = () => {
     type: 'success' | 'error';
     message: string;
   } | null>(null);
+
+  const notificationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const dismissNotification = useCallback(() => {
+    if (notificationTimerRef.current) {
+      clearTimeout(notificationTimerRef.current);
+      notificationTimerRef.current = null;
+    }
+    setNotification(null);
+  }, []);
+
+  const showNotification = useCallback(
+    (type: 'success' | 'error', message: string, durationMs = 4500) => {
+      if (notificationTimerRef.current) {
+        clearTimeout(notificationTimerRef.current);
+      }
+      setNotification({ type, message });
+      notificationTimerRef.current = setTimeout(() => {
+        setNotification(null);
+        notificationTimerRef.current = null;
+      }, durationMs);
+    },
+    []
+  );
+
+  useEffect(() => {
+    return () => {
+      if (notificationTimerRef.current) {
+        clearTimeout(notificationTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Keep page title aligned with current view for accessibility & browser tabs
+  useEffect(() => {
+    const viewName = TAB_TITLES[activeTab] ?? 'Genshin Companion';
+    document.title = `${viewName} · Celestia`;
+  }, [activeTab]);
+
+  const handleSelectTab = (tab: string) => {
+    if (tab === activeTab) return;
+    setPendingTab(tab);
+    startTransition(() => {
+      setActiveTab(tab);
+      setPendingTab(null);
+    });
+    if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+      window.scrollTo(0, 0);
+    }
+  };
+
+  const handleResetViews = () => {
+    TeamGeneratorView.reset();
+    PullAdvisorView.reset();
+    EndgameView.reset();
+    ArtifactStopView.reset();
+    RosterView.reset();
+  };
 
   const handleRestoreAccount = () => {
     setProfiles(getSavedProfiles());
@@ -139,22 +203,21 @@ export const App: React.FC = () => {
       const demoWeps = getSavedWeapons();
       setProfiles(demoProfs);
       setWeapons(demoWeps);
-      setNotification({
-        type: 'success',
-        message: 'Demo Mode enabled! Playing in isolated demo sandbox (real data is preserved).',
-      });
+      showNotification(
+        'success',
+        'Demo Mode enabled. You are exploring an isolated sandbox — your real account data is preserved.'
+      );
     } else {
       // Disabling demo mode switches back to authentic account without modifying or wiping real records
       const realProfs = getSavedProfiles();
       const realWeps = getSavedWeapons();
       setProfiles(realProfs);
       setWeapons(realWeps);
-      setNotification({
-        type: 'success',
-        message: 'Demo Mode disabled. Switched back to your authentic account data.',
-      });
+      showNotification(
+        'success',
+        'Demo Mode disabled. Switched back to your authentic account data.'
+      );
     }
-    setTimeout(() => setNotification(null), 4000);
   };
 
   const handleResetAccount = () => {
@@ -164,11 +227,10 @@ export const App: React.FC = () => {
     setWeapons([]);
     setUidState('');
     handleResetViews();
-    setNotification({
-      type: 'success',
-      message: 'Account data cleared. All saved profiles, weapons, and UID reset to empty state.',
-    });
-    setTimeout(() => setNotification(null), 4000);
+    showNotification(
+      'success',
+      'Account data cleared. All saved profiles, weapons, and UID reset to empty state.'
+    );
   };
 
   const handleSetUid = (newUid: string) => {
@@ -183,7 +245,7 @@ export const App: React.FC = () => {
         delete next[id];
         // Unequip weapon into bag if character is removed
         setWeapons((wPrev) =>
-          wPrev.map((w) => (w.location === id ? { ...w, location: undefined } : w)),
+          wPrev.map((w) => (w.location === id ? { ...w, location: undefined } : w))
         );
       } else {
         next[id] = { id, level: 90, constellation: 0 };
@@ -202,8 +264,8 @@ export const App: React.FC = () => {
     });
     setWeapons((wPrev) =>
       wPrev.map((w) =>
-        w.location && !ids.includes(w.location) ? { ...w, location: undefined } : w,
-      ),
+        w.location && !ids.includes(w.location) ? { ...w, location: undefined } : w
+      )
     );
   };
 
@@ -241,24 +303,20 @@ export const App: React.FC = () => {
   const handleImportProfiles = (
     newProfiles: Record<string, OwnedCharacterProfile>,
     message: string,
-    importedWeapons?: OwnedWeapon[],
+    importedWeapons?: OwnedWeapon[]
   ) => {
     setProfiles(newProfiles);
     if (importedWeapons && importedWeapons.length > 0) {
       setWeapons(importedWeapons);
       saveWeapons(importedWeapons);
     }
-    setNotification({
-      type: 'success',
-      message,
-    });
-    setTimeout(() => setNotification(null), 5000);
+    showNotification('success', message, 5000);
   };
 
   const handleSyncShowcase = async () => {
     if (!uid.trim()) return;
     setIsSyncing(true);
-    setNotification(null);
+    dismissNotification();
 
     const result = await fetchShowcaseFromEnka(uid);
     setIsSyncing(false);
@@ -266,20 +324,16 @@ export const App: React.FC = () => {
     if (result.success && result.avatarIds.length > 0) {
       setProfiles((prev) => {
         const next = { ...prev };
-        // Check if user already owns any Traveler variant profile
         const hasAnyTraveler = Object.keys(prev).some((k) => k.startsWith('Traveler'));
 
         for (const id of result.avatarIds) {
           if (id === 'Traveler') {
-            // Default to active 7.2 Traveler element if no variant exists yet
             if (!hasAnyTraveler && !next['TravelerPyro']) {
               next['TravelerPyro'] = { id: 'TravelerPyro', level: 90, constellation: 6 };
             }
           } else if (!next[id]) {
-            // Add newly seen characters with baseline Level 90 / C0 defaults
             next[id] = { id, level: 90, constellation: 0 };
           }
-          // Existing profiles are preserved without overwrite
         }
         return next;
       });
@@ -289,35 +343,37 @@ export const App: React.FC = () => {
           ? ` (${result.unrecognizedIds.length} unknown character ID[s] skipped)`
           : '';
 
-      setNotification({
-        type: 'success',
-        message: `Synced ${result.avatarIds.length} characters from ${result.nickname ?? 'Traveler'}'s showcase! Existing builds preserved.${unknownNotice}`,
-      });
+      showNotification(
+        'success',
+        `Synced ${result.avatarIds.length} characters from ${result.nickname ?? 'Traveler'}'s showcase. Existing builds preserved.${unknownNotice}`,
+        5500
+      );
     } else if (result.success && result.avatarIds.length === 0) {
       if (result.unrecognizedIds && result.unrecognizedIds.length > 0) {
-        setNotification({
-          type: 'error',
-          message: `Showcase returned ${result.unrecognizedIds.length} character(s) with unrecognized IDs (${result.unrecognizedIds.join(', ')}). Please check for Celestia updates.`,
-        });
+        showNotification(
+          'error',
+          `Showcase returned ${result.unrecognizedIds.length} character(s) with unrecognized IDs (${result.unrecognizedIds.join(', ')}). Please check for Celestia updates.`,
+          6000
+        );
       } else {
-        setNotification({
-          type: 'error',
-          message: 'No characters found in public showcase. Make sure "Show Character Details" is ON in Genshin.',
-        });
+        showNotification(
+          'error',
+          'No characters found in public showcase. Enable "Show Character Details" in Genshin Impact.',
+          6000
+        );
       }
     } else {
-      setNotification({
-        type: 'error',
-        message: result.error ?? 'Failed to sync with Enka showcase.',
-      });
+      showNotification('error', result.error ?? 'Failed to sync with Enka showcase.', 6000);
     }
-
-    // Auto dismiss notification after 5s
-    setTimeout(() => setNotification(null), 5000);
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0b0e] text-[#f0ede6] flex flex-col justify-between selection:bg-[#d4af37]/30 selection:text-[#d4af37]">
+    <div className="min-h-screen bg-[#0a0b0e] text-[#f0ede6] flex flex-col justify-between selection:bg-[#d4af37]/30 selection:text-[#f3cf58]">
+      {/* Skip-to-content link for keyboard & screen-reader users */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
       <div>
         <Navbar
           activeTab={activeTab}
@@ -335,36 +391,37 @@ export const App: React.FC = () => {
           onToggleDemoMode={handleToggleDemoMode}
         />
 
-        {/* Sync Toast Notification */}
-        {notification && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-            <div
-              className={`p-3.5 rounded-xl border flex items-center justify-between text-xs font-medium shadow-lg transition-all ${
-                notification.type === 'success'
-                  ? 'bg-emerald-950/70 border-emerald-500/40 text-emerald-300'
-                  : 'bg-rose-950/70 border-rose-500/40 text-rose-300'
-              }`}
-            >
+        {/* Persistent Demo Mode Sandbox Ribbon */}
+        {isDemoMode && (
+          <div
+            role="region"
+            aria-label="Demo Mode Status"
+            className="bg-amber-950/70 border-b border-amber-500/35 text-amber-100"
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
               <div className="flex items-center gap-2">
-                {notification.type === 'success' ? (
-                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
-                ) : (
-                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
-                )}
-                <span>{notification.message}</span>
+                <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" aria-hidden="true" />
+                <span>
+                  <strong className="font-semibold text-amber-200">Demo Sandbox Active</strong> — Changes here stay isolated and never overwrite your real account.
+                </span>
               </div>
               <button
-                onClick={() => setNotification(null)}
-                className="text-zinc-400 hover:text-white ml-2 text-xs cursor-pointer"
+                type="button"
+                onClick={() => handleToggleDemoMode(false)}
+                className="px-3 py-1.5 min-h-[36px] sm:min-h-0 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/40 text-amber-100 font-semibold transition-colors cursor-pointer shrink-0"
               >
-                ✕
+                Return to My Account
               </button>
             </div>
           </div>
         )}
 
         {/* Main Content Area */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8 focus:outline-none"
+        >
           <ErrorBoundary onRetry={handleResetViews}>
             <Suspense fallback={<ViewSkeleton type={pendingTab || activeTab} />}>
               {isTabPending && pendingTab ? (
@@ -419,45 +476,99 @@ export const App: React.FC = () => {
         </main>
       </div>
 
+      {/* Floating Accessible Toast Notification (always visible regardless of scroll position) */}
+      <div
+        aria-live={notification?.type === 'error' ? 'assertive' : 'polite'}
+        aria-atomic="true"
+        className="fixed bottom-[76px] md:bottom-5 right-4 left-4 sm:left-auto sm:w-full sm:max-w-md z-[60] pointer-events-none"
+      >
+        {notification && (
+          <div
+            role={notification.type === 'error' ? 'alert' : 'status'}
+            className={`pointer-events-auto p-3.5 rounded-xl border flex items-start justify-between gap-3 text-xs font-medium shadow-2xl backdrop-blur-md ${
+              notification.type === 'success'
+                ? 'bg-[#0c241b]/95 border-emerald-400/50 text-emerald-100'
+                : 'bg-[#2a0f18]/95 border-rose-400/50 text-rose-100'
+            }`}
+          >
+            <div className="flex items-start gap-2.5 min-w-0 pt-0.5">
+              {notification.type === 'success' ? (
+                <CheckCircle2
+                  className="w-4 h-4 shrink-0 text-emerald-300 mt-0.5"
+                  aria-hidden="true"
+                />
+              ) : (
+                <AlertCircle
+                  className="w-4 h-4 shrink-0 text-rose-300 mt-0.5"
+                  aria-hidden="true"
+                />
+              )}
+              <span className="leading-relaxed break-words">{notification.message}</span>
+            </div>
+            <button
+              type="button"
+              onClick={dismissNotification}
+              aria-label="Dismiss notification"
+              className="min-w-[36px] min-h-[36px] -my-1.5 -mr-1.5 rounded-lg flex items-center justify-center text-zinc-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer shrink-0"
+            >
+              <X className="w-4 h-4" aria-hidden="true" />
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Global Weapon Armory & Conflict Resolver Modal */}
       {isArmoryOpen && (
-        <Suspense fallback={null}>
-          <WeaponConflictModal
-            isOpen={isArmoryOpen}
-            onClose={() => setIsArmoryOpen(false)}
-            weapons={weapons}
-            onUpdateWeapons={handleUpdateWeapons}
-            profiles={profiles}
-            onUpdateProfiles={setProfiles}
-          />
-        </Suspense>
+        <ErrorBoundary
+          fallbackTitle="Unable to Open Armory"
+          onRetry={() => setIsArmoryOpen(false)}
+        >
+          <Suspense fallback={<ModalLoadingFallback label="Loading Armory…" />}>
+            <WeaponConflictModal
+              isOpen={isArmoryOpen}
+              onClose={() => setIsArmoryOpen(false)}
+              weapons={weapons}
+              onUpdateWeapons={handleUpdateWeapons}
+              profiles={profiles}
+              onUpdateProfiles={setProfiles}
+            />
+          </Suspense>
+        </ErrorBoundary>
       )}
 
       {/* Global Account Backup & Restore Modal */}
       {isBackupModalOpen && (
-        <AccountBackupModal
-          isOpen={isBackupModalOpen}
-          onClose={() => setIsBackupModalOpen(false)}
-          onRestoreSuccess={handleRestoreAccount}
-        />
+        <ErrorBoundary
+          fallbackTitle="Unable to Open Backup & Restore"
+          onRetry={() => setIsBackupModalOpen(false)}
+        >
+          <Suspense fallback={<ModalLoadingFallback label="Loading Backup & Restore…" />}>
+            <AccountBackupModal
+              isOpen={isBackupModalOpen}
+              onClose={() => setIsBackupModalOpen(false)}
+              onRestoreSuccess={handleRestoreAccount}
+            />
+          </Suspense>
+        </ErrorBoundary>
       )}
 
-      {/* Footer */}
-      <footer className="border-t border-[#1c2030] bg-[#0c0d13] py-6 mt-12 text-center text-xs text-zinc-500">
-        <div className="max-w-7xl mx-auto px-4 space-y-2">
+      {/* Footer (extra bottom clearance on mobile for fixed bottom navigation bar) */}
+      <footer className="border-t border-[#1e2234] bg-[#0c0d13] pt-6 pb-24 md:pb-6 mt-12 text-center text-xs text-zinc-400">
+        <div className="max-w-7xl mx-auto px-4 space-y-2.5">
           <div className="flex items-center justify-center gap-4">
             <button
+              type="button"
               onClick={() => setIsBackupModalOpen(true)}
-              className="text-xs text-purple-400 hover:text-purple-300 transition-colors cursor-pointer flex items-center gap-1.5"
+              className="min-h-[44px] md:min-h-[36px] px-3.5 py-2 rounded-lg text-xs font-semibold text-purple-300 hover:text-purple-200 hover:bg-purple-500/10 transition-colors cursor-pointer inline-flex items-center gap-2"
             >
-              <Database className="w-3.5 h-3.5" />
-              <span>Backup & Restore Account</span>
+              <Database className="w-4 h-4" aria-hidden="true" />
+              <span>Backup &amp; Restore Account</span>
             </button>
           </div>
-          <p className="text-zinc-400 font-medium">
-            Celestia v2 · Built for Speed & Accuracy. 100% Client-Side. Zero Backend Delays.
+          <p className="text-zinc-300 font-medium">
+            Celestia v2 · Built for Speed &amp; Accuracy. 100% Client-Side. Zero Backend Delays.
           </p>
-          <p className="text-[11px] text-zinc-600">
+          <p className="text-xs text-zinc-400">
             Genshin Impact is a registered trademark of HoYoverse. This project is not affiliated with HoYoverse.
           </p>
         </div>

@@ -7,8 +7,8 @@ on:
     branches: [master, main]
 
 jobs:
-  quality-gate:
-    name: Quality Gate (Lint, Typecheck, Unit, E2E, SSOT)
+  static-unit-build:
+    name: Static Analysis, Unit Tests & Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -44,7 +44,7 @@ jobs:
         run: pnpm run lint
 
       - name: Type check (Strict tsc)
-        run: npx tsc -b
+        run: pnpm run typecheck
 
       - name: Run Vitest test suite
         run: pnpm test
@@ -58,6 +58,69 @@ jobs:
       - name: 5-Axis Game Data Integrity Audit
         run: pnpm run audit:data
 
+      - name: Verify SSOT reference synchronization
+        run: pnpm run verify:ssot
+
+      - name: Ensure clean working tree (no untracked diffs or artifacts)
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+
+      - name: Upload compiled build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-build
+          path: dist/
+          retention-days: 1
+
+  browser-e2e:
+    name: E2E (${{ matrix.project }})
+    needs: static-unit-build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - 'Desktop Chromium'
+          - 'Desktop Firefox'
+          - 'Mobile Chromium (Pixel 5)'
+          - 'Mobile WebKit (iPhone 13)'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable Corepack & Setup pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.15.4 --activate
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download compiled build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-build
+          path: dist/
+
       - name: Cache Playwright browser binaries
         uses: actions/cache@v4
         id: playwright-cache
@@ -65,30 +128,22 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - name: Install Playwright Chromium dependencies
+      - name: Install Playwright Browsers & Dependencies
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install chromium --with-deps
+        run: pnpm exec playwright install --with-deps
 
-      - name: Install Playwright system dependencies
+      - name: Install Playwright OS Dependencies
         if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: pnpm exec playwright install-deps chromium
+        run: pnpm exec playwright install-deps
 
-      - name: Run Playwright E2E browser tests (Desktop & Mobile)
-        run: pnpm run test:e2e
-
-      - name: Verify SSOT reference synchronization
-        run: node scripts/generate-reference.cjs
-
-      - name: Ensure clean working tree (no untracked diffs or artifacts)
-        run: |
-          git diff --exit-code
-          test -z "$(git status --porcelain)"
+      - name: Run Playwright E2E Tests (${{ matrix.project }})
+        run: pnpm exec playwright test --project="${{ matrix.project }}"
 
       - name: Upload Playwright Test Report on Failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.project }}
           path: playwright-report/
           retention-days: 7
           if-no-files-found: ignore

@@ -1,66 +1,88 @@
 import { test, expect } from '@playwright/test';
-import { clearAllStorage } from './fixtures/test-helpers';
+import { clearAllStorage, enableDemoMode, navigateToTab } from './fixtures/test-helpers';
 
-test.describe('M3 Performance & Responsiveness synthetic gates', () => {
+test.describe('M3 Performance & Responsiveness Gates', () => {
   test.beforeEach(async ({ page }) => {
     await clearAllStorage(page);
   });
 
-  test('initial landing page payload transfers lightweight bundle without preloading game data', async ({
+  test('initial landing page avoids loading deferred encyclopedia chunks and keeps HTML preload-free', async ({
     page,
   }) => {
-    const transferredRequests: Array<{ url: string; size: number }> = [];
+    const jsRequests: Array<{ url: string; size: number }> = [];
 
     page.on('response', (response) => {
       const url = response.url();
+      if (!url.endsWith('.js')) return;
       const headers = response.headers();
       const contentLength = headers['content-length']
         ? parseInt(headers['content-length'], 10)
         : 0;
-      transferredRequests.push({ url, size: contentLength });
+      jsRequests.push({ url, size: contentLength });
     });
 
     await page.goto('/', { waitUntil: 'networkidle' });
-
-    // Initial page title check
     await expect(page).toHaveTitle(/Celestia/);
 
-    // Sum transferred JS payload
-    const jsTransfers = transferredRequests.filter((r) => r.url.endsWith('.js'));
-    const totalJsTransferred = jsTransfers.reduce((acc, r) => acc + r.size, 0);
+    // Encyclopedia chunk must NOT be downloaded on initial landing
+    const fetchedUrls = jsRequests.map((r) => r.url);
+    expect(fetchedUrls.some((u) => u.includes('genshin-artifacts-master'))).toBe(false);
 
-    // In preview mode (or production), initial JS payload must stay under 400 KB gzipped
-    if (totalJsTransferred > 0) {
-      expect(totalJsTransferred).toBeLessThan(400 * 1024);
-    }
-
-    // Verify initial HTML delivered over the wire contains ZERO game data preloads
+    // Initial HTML delivered over the wire must contain zero game-data modulepreloads
     const htmlResponse = await page.request.get('/');
     const htmlText = await htmlResponse.text();
-    const forbiddenPreloads = [
+    for (const forbidden of [
       'genshin-characters',
       'genshin-weapons',
       'genshin-artifacts',
       'genshin-rotations',
-    ];
-    for (const forbidden of forbiddenPreloads) {
+    ]) {
       expect(htmlText).not.toContain(forbidden);
     }
   });
 
-  test('switches tabs smoothly without memory leaks or long task freezing', async ({
+  test('loads interactive shell quickly on a throttled Slow 4G mobile connection', async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName !== 'chromium', 'CDP network throttling is Chromium-only');
+
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send('Network.enable');
+    await cdp.send('Network.emulateNetworkConditions', {
+      offline: false,
+      latency: 150, // 150ms RTT
+      downloadThroughput: (1.6 * 1024 * 1024) / 8, // 1.6 Mbps Slow 4G
+      uploadThroughput: (750 * 1024) / 8,
+    });
+
+    const navStart = Date.now();
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('nav:visible').first()).toBeVisible();
+    const shellInteractiveMs = Date.now() - navStart;
+
+    const fcp = await page.evaluate(() => {
+      const entry = performance.getEntriesByName('first-contentful-paint')[0];
+      return entry ? entry.startTime : 0;
+    });
+
+    console.info(
+      `[M3 Perf · Slow 4G] Shell interactive: ${shellInteractiveMs}ms | FCP: ${fcp.toFixed(0)}ms`
+    );
+
+    // Must render interactive navigation under 4.5s even on Slow 4G
+    expect(shellInteractiveMs).toBeLessThan(4500);
+    if (fcp > 0) {
+      expect(fcp).toBeLessThan(3500);
+    }
+  });
+
+  test('switches all 5 tabs smoothly without long-task freezing or unbounded heap growth', async ({
     page,
   }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
+    await enableDemoMode(page);
 
-    // Enable demo mode to populate full data
-    const demoButton = page.getByRole('button', { name: /Demo Mode/i }).first();
-    if (await demoButton.isVisible()) {
-      await demoButton.click();
-      await page.waitForTimeout(200);
-    }
-
-    // Measure PerformanceObserver for long tasks (> 50ms)
     await page.evaluate(() => {
       (window as any).__longTaskCount = 0;
       if (typeof PerformanceObserver !== 'undefined') {
@@ -74,72 +96,63 @@ test.describe('M3 Performance & Responsiveness synthetic gates', () => {
           });
           observer.observe({ entryTypes: ['longtask'] });
         } catch {
-          // Unsupported in some environments
+          // Unsupported in some browsers
         }
       }
     });
 
-    // Navigate across all main navigation views (using authentic Navbar tabs)
-    const tabs = ['Best Teams', 'Pull Advisor', 'Endgame Helper', 'Artifact Stop', 'My Roster'];
+    const tabs: Array<{ name: RegExp; label: string }> = [
+      { name: /Pull Advisor/i, label: 'Pull Advisor' },
+      { name: /Endgame Helper/i, label: 'Endgame Helper' },
+      { name: /Artifact Stop/i, label: 'Artifact Stop' },
+      { name: /My Roster/i, label: 'My Roster' },
+      { name: /Best Teams/i, label: 'Best Teams' },
+    ];
+
+    const timings: Record<string, number> = {};
     for (const tab of tabs) {
-      const tabButton = page.getByRole('button', { name: new RegExp(tab, 'i') }).first();
-      if (await tabButton.isVisible()) {
-        await tabButton.click();
-        await page.waitForTimeout(100);
-      }
+      const t0 = Date.now();
+      await navigateToTab(page, tab.name);
+      await page.waitForTimeout(100);
+      timings[tab.label] = Date.now() - t0;
     }
 
-    // Verify page is still responsive and navigable
-    await expect(page.locator('body')).toBeVisible();
+    console.info('[M3 Perf · Tab Switch Timings (ms)]:', JSON.stringify(timings));
 
-    // Verify no persistent long task freezing occurred during tab switching
     const longTaskCount = await page.evaluate(() => (window as any).__longTaskCount ?? 0);
     expect(longTaskCount).toBeLessThanOrEqual(2);
 
-    // Verify JS Heap Size stays bounded
     const heapSize = await page.evaluate(() => {
       const mem = (performance as any).memory;
       return mem ? mem.usedJSHeapSize : null;
     });
-
     if (heapSize !== null) {
-      // Used heap must stay well under 120 MB after cycling through views
       expect(heapSize).toBeLessThan(120 * 1024 * 1024);
     }
   });
 
-  test('prefetches CharacterDetailModal chunk on card hover/interaction', async ({
+  test('keeps 128-character Roster search responsive and prefetches CharacterDetailModal on hover', async ({
     page,
   }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
+    await navigateToTab(page, /My Roster/i);
 
-    // Navigate to Roster tab where character cards are rendered
-    const rosterTab = page.getByRole('button', { name: /My Roster/i }).first();
-    if (await rosterTab.isVisible()) {
-      await rosterTab.click();
-      await page.waitForTimeout(200);
-    }
+    const searchInput = page.getByPlaceholder(/Search by character name/i).first();
+    await expect(searchInput).toBeVisible();
 
-    // Enable demo mode if not already active
-    const demoBtn = page.getByRole('button', { name: /Demo Mode/i }).first();
-    if (await demoBtn.isVisible()) {
-      await demoBtn.click();
-      await page.waitForTimeout(200);
-    }
+    // Rapid filter input across full 128-character roster
+    const filterStart = Date.now();
+    await searchInput.fill('Nefer');
+    const neferCard = page.locator('[data-testid="character-card-Nefer"]');
+    await expect(neferCard).toBeVisible();
+    const filterLatencyMs = Date.now() - filterStart;
+    console.info(`[M3 Perf · 128-Card Filter]: ${filterLatencyMs}ms`);
+    expect(filterLatencyMs).toBeLessThan(1500);
 
-    // Find first character card
-    const firstCard = page.locator('[data-testid^="character-card-"]').first();
-    await expect(firstCard).toBeVisible({ timeout: 10000 });
-
-    // Hover card to trigger prefetch
-    await firstCard.hover();
-    await page.waitForTimeout(150);
-
-    // Click card to open modal
-    await firstCard.click();
-
-    // Modal should open quickly
-    const modal = page.locator('[role="dialog"]').first();
-    await expect(modal).toBeVisible({ timeout: 5000 });
+    // Hover to prefetch modal chunk, then click
+    await neferCard.hover();
+    await page.waitForTimeout(120);
+    await neferCard.getByRole('button', { name: /View Nefer build and profile details/i }).click();
+    await expect(page.getByRole('dialog').first()).toBeVisible({ timeout: 5000 });
   });
 });

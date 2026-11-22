@@ -206,5 +206,29 @@ describe('Data Freshness Service', () => {
       expect(unregStale.version).toBe('5.0');
       expect(unregStale.badgeLabel).toBe('Stale v5.0');
     });
+
+    it('marks time-boxed schedules as stale/expired once effectiveEndDate has passed', () => {
+      const expiringBanner: DataProvenance = {
+        datasetId: 'banner_7_2_phase_1',
+        version: CURRENT_GAME_VERSION,
+        verifiedAt: '2026-11-16',
+        effectiveEndDate: '2026-11-24',
+        sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+        verificationMethod: 'official_notice',
+        verifiedFields: ['characterBanners'],
+        evidence: 'Version 7.2 Phase 1 Event Wish notice (ends 2026-11-24)',
+        status: 'verified',
+      };
+
+      // Active on final day
+      expect(isDatasetStale(expiringBanner, PATCH_CYCLE_DAYS, new Date('2026-11-24T12:00:00Z'))).toBe(false);
+
+      // Expired the day after effectiveEndDate
+      const afterEnd = getFreshnessInfo(expiringBanner, new Date('2026-11-25T12:00:00Z'));
+      expect(afterEnd.isStale).toBe(true);
+      expect(afterEnd.isExpired).toBe(true);
+      expect(afterEnd.staleReason).toBe('expired_schedule');
+      expect(afterEnd.badgeDescription).toContain('2026-11-24');
+    });
   });
 });

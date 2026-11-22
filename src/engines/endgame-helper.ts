@@ -1,4 +1,9 @@
-import type { Character } from '../types/genshin';
+import type {
+  Character,
+  Element,
+  EncounterTargetProfile,
+  EnemyMovementTrait,
+} from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import {
   getActiveAbyssCycle,
@@ -13,7 +18,40 @@ export interface AbyssChamberGuide {
   enemies: string[];
   shieldTypes: string[];
   recommendedElements: string[];
+  prohibitedElements?: Element[];
+  highResWarnings?: string[];
+  targetProfile?: EncounterTargetProfile;
+  waveCount?: number;
+  movementTraits?: EnemyMovementTrait[];
+  positioningTip?: string;
+  chamberBuff?: string;
   tips: string;
+}
+
+function deriveHighResWarnings(half: AbyssChamberHalfConfig): string[] {
+  const warnings = new Set<string>();
+  const elements: Array<Element | 'Physical'> = [
+    'Pyro',
+    'Hydro',
+    'Anemo',
+    'Electro',
+    'Dendro',
+    'Cryo',
+    'Geo',
+    'Physical',
+  ];
+
+  for (const enemy of half.enemies) {
+    for (const el of elements) {
+      const res = enemy.baseRes[el] ?? 10;
+      if (res >= 100) {
+        warnings.add(`${enemy.name}: ${el} Immune`);
+      } else if (res >= 40) {
+        warnings.add(`${enemy.name}: ${res}% ${el} RES`);
+      }
+    }
+  }
+  return Array.from(warnings);
 }
 
 function halfConfigToGuide(
@@ -24,6 +62,9 @@ function halfConfigToGuide(
   const shieldSet = new Set<string>();
   if (half.mechanics.shieldType) {
     shieldSet.add(`${half.mechanics.shieldType} Shield`);
+  }
+  for (const rShield of half.mechanics.rotatingShields ?? []) {
+    shieldSet.add(`${rShield} Shield`);
   }
   for (const enemy of half.enemies) {
     if (enemy.shieldType) {
@@ -42,6 +83,20 @@ function halfConfigToGuide(
     .join('. ');
 
   const tips = half.mechanics.description + (weaknessNotes ? ` ${weaknessNotes}` : '');
+  const targetProfile: EncounterTargetProfile =
+    half.mechanics.targetProfile ??
+    (half.mechanics.favorsAoE || half.enemies.length > 1 ? 'AoE' : 'Single-Target');
+
+  const movementTraits = Array.from(
+    new Set([
+      ...(half.mechanics.movementTraits ?? []),
+      ...half.enemies.flatMap((e) => e.movementTraits ?? []),
+    ]),
+  );
+
+  const waveCount =
+    half.mechanics.waveCount ??
+    Math.max(1, ...half.enemies.map((e) => e.wave ?? 1));
 
   return {
     floor: 12,
@@ -50,11 +105,20 @@ function halfConfigToGuide(
     enemies: half.enemies.map((e) => e.name),
     shieldTypes: Array.from(shieldSet),
     recommendedElements: recElements,
+    prohibitedElements: half.mechanics.prohibitedElements,
+    highResWarnings: deriveHighResWarnings(half),
+    targetProfile,
+    waveCount,
+    movementTraits,
+    positioningTip: half.mechanics.positioningTip,
+    chamberBuff: half.mechanics.chamberBuff?.description,
     tips,
   };
 }
 
-export function deriveAbyssChamberGuides(cycle: AbyssCycleConfig = getActiveAbyssCycle()): AbyssChamberGuide[] {
+export function deriveAbyssChamberGuides(
+  cycle: AbyssCycleConfig = getActiveAbyssCycle(),
+): AbyssChamberGuide[] {
   const guides: AbyssChamberGuide[] = [];
   for (const c of cycle.chambers) {
     guides.push(halfConfigToGuide(c.chamber, 'First Half', c.firstHalf));
@@ -81,17 +145,21 @@ export function analyzeEndgameReadiness(
   const chamberGuides = deriveAbyssChamberGuides(cycle);
 
   return chamberGuides.map((chamber) => {
-    const usable = owned.filter((c) =>
-      chamber.recommendedElements.some(
-        (elem) => c.element === elem || (elem === 'Bow User Required' && c.weapon === 'Bow'),
-      ),
-    );
+    const prohibitedSet = new Set(chamber.prohibitedElements ?? []);
+    const usable = owned.filter((c) => {
+      if (prohibitedSet.has(c.element)) return false;
+      return chamber.recommendedElements.some(
+        (elem) =>
+          c.element === elem || (elem === 'Bow User Required' && c.weapon === 'Bow'),
+      );
+    });
 
-    const missing = chamber.recommendedElements.filter(
-      (elem) =>
-        elem !== 'Bow User Required' &&
-        !owned.some((c) => c.element === elem),
-    );
+    const missing = chamber.recommendedElements.filter((elem) => {
+      if (elem === 'Bow User Required') {
+        return !owned.some((c) => c.weapon === 'Bow');
+      }
+      return !owned.some((c) => c.element === elem);
+    });
 
     return {
       chamber,

@@ -1,12 +1,20 @@
 import React, { useState, useMemo, useEffect, useTransition, useRef } from 'react';
 import { CHARACTERS } from '../data/characters';
 import {
-  generateBestTeams,
   TEMPLATES,
   calculateCompatibilityScore,
   calculateInvestmentScore,
   determineBenchmarkTier,
+  calculatePracticalPerformanceScore,
+  calculateDamageOutputInfo,
 } from '../engines/team-generator';
+import {
+  calculateComfortScore,
+  evaluateEnergyBattery,
+  detectBennettC6Conflict,
+  detectDualCarryContention,
+  detectFurinaHealerDeficit,
+} from '../engines/team-rules';
 import { generateTeamExplanation } from '../engines/team-explain';
 import { synthesizeTeamRotation } from '../engines/rotation-synthesizer';
 import { dispatchGenerateBestTeams } from '../services/solver-dispatcher';
@@ -32,11 +40,13 @@ import {
   AlertTriangle,
   ArrowRightLeft,
   Layers,
+  Activity,
 } from 'lucide-react';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { RotationBadgeList } from './RotationBadgeList';
 import { InfoTooltip } from './InfoTooltip';
+import { DataFreshnessBadge } from './DataFreshnessBadge';
 import {
   rankWeaponsForCharacter,
   scoreWeaponForCharacter,
@@ -113,20 +123,21 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
 
   const weaponBag = useMemo(() => weapons || getSavedWeapons(), [weapons]);
 
-  const [teams, setTeams] = useState<TeamRecommendation[]>(() =>
-    ownedIds.length < 4 && !showCatalogFallback
-      ? []
-      : generateBestTeams(ownedIds, focusId || undefined, profiles, weaponBag, showCatalogFallback),
+  const [teams, setTeams] = useState<TeamRecommendation[]>([]);
+  const [isSolving, setIsSolving] = useState<boolean>(
+    () => ownedIds.length >= 4 || showCatalogFallback
   );
   const [isPending, startTransition] = useTransition();
-  const isInitialMount = useRef(true);
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
+    if (ownedIds.length < 4 && !showCatalogFallback) {
+      setTeams([]);
+      setIsSolving(false);
       return;
     }
+
     let isMounted = true;
+    setIsSolving(true);
     dispatchGenerateBestTeams(
       ownedIds,
       focusId || undefined,
@@ -137,6 +148,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
       if (isMounted) {
         startTransition(() => {
           setTeams(newTeams);
+          setIsSolving(false);
         });
       }
     });
@@ -184,7 +196,31 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
           updatedWeaponAssignments,
           (mList) => calculateCompatibilityScore(mList, template, profiles, updatedWeaponAssignments),
         );
-        const teamSustain = newMembers.find((m) => m.roles.includes('Sustain'));
+        const comfortScore = calculateComfortScore(newMembers, profiles);
+        const energyBattery = evaluateEnergyBattery(newMembers, updatedWeaponAssignments);
+        const bennettConflict = detectBennettC6Conflict(newMembers, profiles);
+        const dualCarry = detectDualCarryContention(newMembers);
+        const furinaDeficit = detectFurinaHealerDeficit(newMembers);
+        const hasCriticalConflict =
+          bennettConflict.hasConflict ||
+          dualCarry.hasContention ||
+          furinaDeficit.severity === 'severe';
+
+        const practicalPerformanceScore = calculatePracticalPerformanceScore(
+          compatibilityScore,
+          comfortScore,
+          investmentScore,
+          energyBattery.status,
+          hasCriticalConflict,
+        );
+
+        const damageOutput = calculateDamageOutputInfo(
+          template.archetype,
+          benchmarkTier,
+          compatibilityScore,
+          investmentScore,
+        );
+
         const stepped = synthesizeTeamRotation(newMembers);
 
         return {
@@ -192,7 +228,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
           members: newMembers,
           synergyScore: compatibilityScore,
           compositionCompatibilityScore: compatibilityScore,
-          comfortScore: teamSustain ? 92 : 72,
+          comfortScore,
           rotation: stepped.summaryString || t.rotation,
           steppedRotation: stepped,
           weaponAssignments: updatedWeaponAssignments,
@@ -200,6 +236,8 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
             compatibilityScore,
             investmentScore,
             benchmarkTier,
+            practicalPerformanceScore,
+            damageOutput,
           },
           explanation,
         };
@@ -216,10 +254,11 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
       <div className="bg-gradient-to-r from-[#121420] via-[#191d30] to-[#121420] p-5 sm:p-6 rounded-2xl border border-[#24293d] shadow-lg">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase mb-1">
+            <div className="flex flex-wrap items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase mb-1">
               <Sparkles className="w-4 h-4" aria-hidden="true" />
               <span>Instant Archetype Synergy Engine</span>
-              {isPending && (
+              <DataFreshnessBadge datasetId="team_archetypes_v7_2" />
+              {(isPending || isSolving) && (
                 <span
                   role="status"
                   className="text-xs text-amber-300 animate-pulse motion-reduce:animate-none font-normal lowercase tracking-normal"
@@ -377,9 +416,26 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                   </h2>
                 </div>
 
-                {/* 4-Metric Score Strip (all metrics visible across desktop & mobile) */}
+                {/* 5-Metric Score Strip (all metrics visible across desktop & mobile) */}
                 <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2">
-                  {/* 1. Compatibility Score */}
+                  {/* 1. Practical Performance Score */}
+                  <div className="flex items-center gap-2 bg-[#161a29] px-3 py-2 rounded-xl border border-[#282f48]">
+                    <Activity className="w-4 h-4 text-emerald-300 shrink-0" aria-hidden="true" />
+                    <div className="min-w-0">
+                      <div className="text-[11px] text-zinc-300 uppercase font-semibold flex items-center gap-1">
+                        <span>Performance</span>
+                        <InfoTooltip
+                          title="Practical Performance Score"
+                          content="Composite score (0-100%) synthesizing mechanical compatibility (55%), defensive comfort (25%), and account investment (20%) while factoring in particle battery flow and rotation hazards."
+                        />
+                      </div>
+                      <div className="text-sm font-bold text-emerald-200 tabular-nums">
+                        {team.scores?.practicalPerformanceScore ?? team.synergyScore}%
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 2. Compatibility Score */}
                   <div className="flex items-center gap-2 bg-[#161a29] px-3 py-2 rounded-xl border border-[#282f48]">
                     <Zap className="w-4 h-4 text-amber-300 shrink-0" aria-hidden="true" />
                     <div className="min-w-0">
@@ -396,7 +452,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                     </div>
                   </div>
 
-                  {/* 2. Account Investment Score */}
+                  {/* 3. Account Investment Score */}
                   <div className="flex items-center gap-2 bg-[#161a29] px-3 py-2 rounded-xl border border-[#282f48]">
                     <Layers className="w-4 h-4 text-indigo-300 shrink-0" aria-hidden="true" />
                     <div className="min-w-0">
@@ -413,7 +469,24 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                     </div>
                   </div>
 
-                  {/* 3. Theorycrafting Benchmark Tier */}
+                  {/* 4. Comfort Score */}
+                  <div className="flex items-center gap-2 bg-[#161a29] px-3 py-2 rounded-xl border border-[#282f48]">
+                    <Shield className="w-4 h-4 text-sky-300 shrink-0" aria-hidden="true" />
+                    <div className="min-w-0">
+                      <div className="text-[11px] text-zinc-300 uppercase font-semibold flex items-center gap-1">
+                        <span>Comfort</span>
+                        <InfoTooltip
+                          title="Defensive Comfort Score"
+                          content="Defensive reliability (0-100) evaluating shield thickness, team-wide vs single-target healing, stagger resistance, and penalty for unmitigated HP drain."
+                        />
+                      </div>
+                      <div className="text-sm font-bold text-sky-200 tabular-nums">
+                        {team.comfortScore}/100
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 5. Theorycrafting Benchmark & Unsimulated DPS */}
                   {(() => {
                     const tier = team.scores?.benchmarkTier ?? 'S';
                     const tierBadgeStyles: Record<string, string> = {
@@ -429,11 +502,14 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                           <div className="text-[11px] text-zinc-300 uppercase font-semibold flex items-center gap-1">
                             <span>Benchmark</span>
                             <InfoTooltip
-                              title="Theorycrafting Benchmark Tier"
-                              content="Community meta standard rating (S+, S, A, B) evaluating reaction multipliers, clear efficiency, and rotation viability."
+                              title="Meta Benchmark Tier (Unsimulated DPS)"
+                              content={
+                                team.scores?.damageOutput?.disclaimer ||
+                                "Theoretical combat damage is not simulated with a frame-by-frame engine. Rating and percentile are derived from archetype theorycrafting ceilings and account investment."
+                              }
                             />
                           </div>
-                          <div className="mt-0.5">
+                          <div className="mt-0.5 flex items-center gap-1.5">
                             <span
                               className={`text-[11px] font-bold px-2 py-0.5 rounded border ${
                                 tierBadgeStyles[tier] || tierBadgeStyles.S
@@ -441,22 +517,14 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                             >
                               Tier {tier}
                             </span>
+                            <span className="text-[10px] text-zinc-400 font-mono" title="Combat engine status">
+                              Unsimulated
+                            </span>
                           </div>
                         </div>
                       </div>
                     );
                   })()}
-
-                  {/* 4. Comfort Score */}
-                  <div className="flex items-center gap-2 bg-[#161a29] px-3 py-2 rounded-xl border border-[#282f48]">
-                    <Shield className="w-4 h-4 text-emerald-300 shrink-0" aria-hidden="true" />
-                    <div className="min-w-0">
-                      <div className="text-[11px] text-zinc-300 uppercase font-semibold">Comfort</div>
-                      <div className="text-sm font-bold text-emerald-200 tabular-nums">
-                        {team.comfortScore}/100
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -925,6 +993,14 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                                       {con}
                                     </div>
                                   ))}
+                                  {alt.whyLowerScore && (
+                                    <div className="text-[11px] text-zinc-300 italic pt-1 border-t border-white/10 leading-snug">
+                                      <span className="text-[#f3cf58] font-semibold not-italic">
+                                        Why alternative scores lower:{' '}
+                                      </span>
+                                      {alt.whyLowerScore}
+                                    </div>
+                                  )}
                                 </div>
 
                                 <button
@@ -944,6 +1020,55 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                         </div>
                       </div>
                     )}
+
+                    {/* 6. Ideal Missing Supports (Wish / Roster Targets) */}
+                    {team.explanation.idealMissingSupports &&
+                      team.explanation.idealMissingSupports.length > 0 && (
+                        <div className="space-y-2.5 pt-3 border-t border-[#202538]">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="text-[11px] font-bold text-amber-200 uppercase tracking-wider flex items-center gap-1.5">
+                              <Sparkles className="w-3.5 h-3.5 text-[#d4af37]" aria-hidden="true" />
+                              <span>Roster Targets: Premier Missing Supports</span>
+                            </div>
+                            <span className="text-[11px] text-zinc-400">
+                              High-priority pull targets for {team.archetype}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                            {team.explanation.idealMissingSupports.map((gap, gIdx) => (
+                              <div
+                                key={gIdx}
+                                className="bg-gradient-to-br from-[#121628] to-[#0f1220] p-3 rounded-lg border border-amber-400/30 flex flex-col justify-between gap-2 shadow-sm"
+                              >
+                                <div className="flex items-center justify-between gap-1.5 border-b border-white/10 pb-2">
+                                  <div className="flex items-center gap-2 min-w-0">
+                                    <CharacterPortrait
+                                      src={CHARACTERS.find((c) => c.id === gap.characterId)?.icon}
+                                      name={gap.characterName}
+                                      element={gap.element}
+                                      size="sm"
+                                    />
+                                    <div className="min-w-0">
+                                      <div className="text-xs font-bold text-amber-100 truncate">
+                                        {gap.characterName}
+                                      </div>
+                                      <div className="text-[11px] text-zinc-400 truncate">
+                                        Ideal upgrade for {gap.replacementForRole}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-200 border border-amber-400/40 shrink-0">
+                                    Target
+                                  </span>
+                                </div>
+                                <p className="text-[11px] text-zinc-300 leading-relaxed">
+                                  {gap.impactSummary}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                   </div>
                 )}
               </div>
@@ -958,34 +1083,40 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
           role="status"
           className="bg-[#121420] border border-[#24293d] rounded-2xl p-8 text-center space-y-3 shadow-md"
         >
-          <Users className="w-8 h-8 mx-auto text-zinc-400" aria-hidden="true" />
-          <h2 className="text-base font-bold text-zinc-100 font-serif">No Matching Teams Found</h2>
-          <p className="text-xs text-zinc-300 max-w-md mx-auto leading-relaxed">
-            {focusId && !ownedIds.includes(focusId)
-              ? `You do not currently own ${getCharacterName(focusId)}. Enable theoretical catalog teams to explore compositions with them.`
-              : 'Could not generate full 4-character compositions with the current filters and roster.'}
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-            {focusId && (
-              <button
-                type="button"
-                onClick={() => setFocusId('')}
-                className="min-h-[40px] px-4 py-2 rounded-xl bg-[#1a1e2e] hover:bg-[#252b42] text-zinc-100 border border-[#323954] text-xs font-semibold transition-colors cursor-pointer"
-              >
-                Show All Teams
-              </button>
-            )}
-            {focusId && !ownedIds.includes(focusId) && !showCatalogFallback && (
-              <button
-                type="button"
-                onClick={() => setShowCatalogFallback(true)}
-                className="min-h-[40px] px-4 py-2 rounded-xl bg-[#d4af37] hover:bg-[#e5c14d] text-[#0a0b0e] text-xs font-bold transition-colors cursor-pointer inline-flex items-center gap-2"
-              >
-                <Compass className="w-4 h-4" aria-hidden="true" />
-                <span>Show Theoretical Catalog Teams for {getCharacterName(focusId)}</span>
-              </button>
-            )}
-          </div>
+          {isSolving ? (
+            <p className="text-xs text-zinc-300">Calculating optimal team recommendations…</p>
+          ) : (
+            <>
+              <Users className="w-8 h-8 mx-auto text-zinc-400" aria-hidden="true" />
+              <h2 className="text-base font-bold text-zinc-100 font-serif">No Matching Teams Found</h2>
+              <p className="text-xs text-zinc-300 max-w-md mx-auto leading-relaxed">
+                {focusId && !ownedIds.includes(focusId)
+                  ? `You do not currently own ${getCharacterName(focusId)}. Enable theoretical catalog teams to explore compositions with them.`
+                  : 'Could not generate full 4-character compositions with the current filters and roster.'}
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                {focusId && (
+                  <button
+                    type="button"
+                    onClick={() => setFocusId('')}
+                    className="min-h-[40px] px-4 py-2 rounded-xl bg-[#1a1e2e] hover:bg-[#252b42] text-zinc-100 border border-[#323954] text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    Show All Teams
+                  </button>
+                )}
+                {focusId && !ownedIds.includes(focusId) && !showCatalogFallback && (
+                  <button
+                    type="button"
+                    onClick={() => setShowCatalogFallback(true)}
+                    className="min-h-[40px] px-4 py-2 rounded-xl bg-[#d4af37] hover:bg-[#e5c14d] text-[#0a0b0e] text-xs font-bold transition-colors cursor-pointer inline-flex items-center gap-2"
+                  >
+                    <Compass className="w-4 h-4" aria-hidden="true" />
+                    <span>Show Theoretical Catalog Teams for {getCharacterName(focusId)}</span>
+                  </button>
+                )}
+              </div>
+            </>
+          )}
         </div>
       )}
 

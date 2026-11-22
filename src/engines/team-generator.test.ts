@@ -251,4 +251,31 @@ describe('Team Generator Engine & Three-Tier Scoring', () => {
     const tierB = determineBenchmarkTier('Vaporize', 60, lunarTeam);
     expect(tierB).toBe('B');
   });
+
+  it('populates practicalPerformanceScore and unsimulated damageOutput metadata in scores', () => {
+    const owned = ['HuTao', 'Xingqiu', 'Yelan', 'Zhongli', 'Bennett', 'Xiangling'];
+    const teams = generateBestTeams(owned, 'HuTao');
+    const team = teams[0];
+
+    expect(team.scores?.practicalPerformanceScore).toBeDefined();
+    expect(team.scores?.practicalPerformanceScore).toBeGreaterThanOrEqual(0);
+    expect(team.scores?.practicalPerformanceScore).toBeLessThanOrEqual(100);
+
+    expect(team.scores?.damageOutput).toBeDefined();
+    expect(team.scores?.damageOutput?.status).toBe('heuristic_only');
+    expect(team.scores?.damageOutput?.relativeOutputPercentile).toBeGreaterThanOrEqual(30);
+    expect(team.scores?.damageOutput?.disclaimer).toContain('Theoretical combat damage is not simulated');
+  });
+
+  it('ranks lead candidates by anchor status and investment rather than alphabetical order', () => {
+    // Diluc (D) comes alphabetically before Hu Tao (H) and Mavuika (M)
+    // But Mavuika and Hu Tao are S+ anchors with higher scaling
+    const owned = ['Diluc', 'HuTao', 'Mavuika', 'Xingqiu', 'Yelan', 'Bennett', 'Zhongli'];
+    const teams = generateBestTeams(owned);
+
+    const vapeTeam = teams.find((t) => t.archetype === 'Vaporize');
+    expect(vapeTeam).toBeDefined();
+    // Lead should NOT be Diluc simply because 'D' < 'H' / 'M'
+    expect(['HuTao', 'Mavuika']).toContain(vapeTeam!.members[0].id);
+  });
 });

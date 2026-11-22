@@ -195,4 +195,52 @@ describe('Team Explanation & Swap Advisor Engine', () => {
     expect(kazuhaAlt).toBeDefined();
     expect(kazuhaAlt?.compatibilityImpact).toBe(-4);
   });
+
+  it('populates whyLowerScore for swap alternatives explaining trade-offs', () => {
+    const team = [huTao, xingqiu, zhongli, kazuha];
+    const pool = [huTao, xingqiu, zhongli, kazuha, sucrose, yelan];
+
+    const explanation = generateTeamExplanation(team, vapeTemplate, pool);
+    for (const alt of explanation.alternatives) {
+      expect(alt.whyLowerScore).toBeDefined();
+      expect(alt.whyLowerScore!.length).toBeGreaterThan(10);
+    }
+  });
+
+  it('identifies unowned ideal missing supports with role replacement and impact summary', () => {
+    // Template with idealSupports
+    const templateWithIdeals: ArchetypeTemplate = {
+      ...vapeTemplate,
+      idealSupports: ['Furina', 'Xilonen', 'KaedeharaKazuha', 'Bennett'],
+    };
+
+    // User only owns Hu Tao, Xingqiu, Xiangling, Barbara
+    const xiangling = getChar('Xiangling');
+    const barbara = getChar('Barbara');
+    const team = [huTao, xingqiu, xiangling, barbara];
+    const pool = [huTao, xingqiu, xiangling, barbara];
+
+    const explanation = generateTeamExplanation(team, templateWithIdeals, pool);
+
+    expect(explanation.idealMissingSupports).toBeDefined();
+    expect(explanation.idealMissingSupports!.length).toBeGreaterThan(0);
+
+    const furinaGap = explanation.idealMissingSupports?.find((g) => g.characterId === 'Furina');
+    expect(furinaGap).toBeDefined();
+    expect(furinaGap?.characterName).toBe('Furina');
+    expect(furinaGap?.element).toBe('Hydro');
+    expect(furinaGap?.impactSummary).toContain('Fanfare');
+  });
+
+  it('surfaces modern 7.x/5.x character rationales for Mavuika, Xilonen, and Skirk', () => {
+    const mavuika = getChar('Mavuika');
+    const xilonen = getChar('Xilonen');
+    const skirk = getChar('Skirk');
+    const team = [mavuika, xilonen, skirk, huTao];
+
+    const explanation = generateTeamExplanation(team, vapeTemplate, team);
+    expect(explanation.roleRationale['Mavuika']).toContain('Nightsoul');
+    expect(explanation.roleRationale['Xilonen']).toContain('RES shred');
+    expect(explanation.roleRationale['Skirk']).toContain('Void');
+  });
 });

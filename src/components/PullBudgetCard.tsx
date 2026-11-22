@@ -2,6 +2,7 @@ import React, { useId } from 'react';
 import type { PullBudgetState } from '../types/genshin';
 import { calculateTotalPulls } from '../engines/gacha-math';
 import { STARGLITTER_CASHBACK_RATE } from '../data/banner-rules';
+import { CURRENT_GAME_VERSION } from '../data/game-version';
 import { Sparkles, Shield, Target, RotateCcw, Coins, Compass } from 'lucide-react';
 import { InfoTooltip } from './InfoTooltip';
 
@@ -309,7 +310,7 @@ export const PullBudgetCard: React.FC<PullBudgetCardProps> = ({
                     {budget.consecutiveLossCount === 1 ? 'loss' : 'losses'}
                   </span>
                   <InfoTooltip
-                    title="Capturing Radiance (v7.2 Baseline)"
+                    title={`Capturing Radiance (v${CURRENT_GAME_VERSION} Baseline)`}
                     content="Official 4-state Markov renewal model: 0 losses: 50% win; 1 loss: 50% win; 2 losses: 8/11 (~72.7%) win; 3 losses: 100% guarantee on 4th attempt. Converges to exactly 55.000% consolidated win rate."
                     align="left"
                   />

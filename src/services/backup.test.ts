@@ -6,6 +6,8 @@ import {
   rollbackPreRestoreBackup,
   getLastBackupMeta,
   recordLastBackupMeta,
+  detectAccountConflict,
+  normalizeBackupPayload,
   type CelestiaBackupData,
 } from './backup';
 import {
@@ -13,9 +15,12 @@ import {
   saveProfiles,
   saveWeapons,
   savePullBudget,
+  saveUid,
   getSavedRoster,
   getSavedProfiles,
+  getSavedWeapons,
   getSavedPullBudget,
+  getSavedUid,
   isDemoModeEnabled,
   setDemoModeEnabled,
 } from './storage';
@@ -61,6 +66,7 @@ describe('Account Backup & Restore Service', () => {
         location: 'Mavuika',
       },
     ]);
+    saveUid('800123456');
     savePullBudget({
       primogems: 12800,
       fates: 20,
@@ -76,6 +82,7 @@ describe('Account Backup & Restore Service', () => {
     expect(backup.format).toBe('celestia_native');
     expect(backup.version).toBe(2);
     expect(backup.gameVersion).toBe('7.2');
+    expect(backup.uid).toBe('800123456');
     expect(backup.roster).toEqual(['Mavuika', 'Furina']);
     expect(backup.profiles.Mavuika.constellation).toBe(2);
     expect(backup.rawWeapons.length).toBe(1);
@@ -530,6 +537,187 @@ describe('Account Backup & Restore Service', () => {
       const v3 = validateBackupData(base);
       expect(v3.valid).toBe(false);
       expect(v3.errors.some((e) => e.includes('Abyss cycle ID'))).toBe(true);
+    });
+
+    it('detects account conflicts when incoming backup UID mismatches active account UID', () => {
+      saveUid('800111222');
+      saveRoster(['Mavuika']);
+      saveProfiles({ Mavuika: { id: 'Mavuika', level: 90, constellation: 2 } });
+
+      const incomingMismatched: CelestiaBackupData = {
+        format: 'celestia_native',
+        version: 2,
+        gameVersion: '7.2',
+        exportedAt: new Date().toISOString(),
+        uid: '700999888',
+        roster: ['Furina'],
+        profiles: { Furina: { id: 'Furina', level: 90, constellation: 0 } },
+        rawWeapons: [],
+        rawArtifacts: [],
+        pullBudget: {
+          primogems: 0,
+          fates: 0,
+          characterPity: 0,
+          characterGuaranteed: false,
+          consecutiveLossCount: 0,
+          weaponPity: 0,
+          weaponFatePoints: 0,
+        },
+        demoMode: false,
+      };
+
+      const conflictResult = detectAccountConflict(incomingMismatched);
+      expect(conflictResult.hasConflict).toBe(true);
+      expect(conflictResult.reason).toBe('uid_mismatch');
+      expect(conflictResult.currentUid).toBe('800111222');
+      expect(conflictResult.incomingUid).toBe('700999888');
+
+      // Attempting to restore without forceOverwrite returns conflict and makes NO changes
+      const restoreAttempt = importAccountBackup(incomingMismatched);
+      expect(restoreAttempt.success).toBe(false);
+      expect(restoreAttempt.conflict).toBe(true);
+      expect(restoreAttempt.error).toContain('Account identity mismatch');
+      expect(getSavedUid()).toBe('800111222');
+      expect(getSavedRoster()).toEqual(['Mavuika']);
+
+      // Restoring with forceOverwrite: true proceeds and replaces account
+      const forceRestore = importAccountBackup(incomingMismatched, { forceOverwrite: true });
+      expect(forceRestore.success).toBe(true);
+      expect(getSavedUid()).toBe('700999888');
+      expect(getSavedRoster()).toEqual(['Furina']);
+    });
+
+    it('upgrades legacy v1 backups via normalizeBackupPayload during restore', () => {
+      const v1Backup: any = {
+        format: 'celestia_native',
+        version: 1,
+        gameVersion: '7.2',
+        exportedAt: new Date().toISOString(),
+        roster: ['Xiao'],
+        profiles: {
+          Xiao: {
+            id: 'Xiao',
+            level: 90,
+            constellation: 0,
+            weapon: { key: 'pjws', name: 'Primordial Jade Winged-Spear', level: 90, refinement: 1 },
+          },
+        },
+        rawWeapons: [
+          { id: 'w_pjws', key: 'pjws', name: 'Primordial Jade Winged-Spear', level: 90, refinement: 1, location: 'Xiao' },
+        ],
+        rawArtifacts: [],
+        pullBudget: {
+          primogems: 1600,
+          fates: 10,
+          characterPity: 20,
+          characterGuaranteed: false,
+          weaponPity: 10,
+          weaponFatePoints: 0,
+        },
+        demoMode: false,
+      };
+
+      const normalized = normalizeBackupPayload(v1Backup);
+      expect(normalized.version).toBe(2);
+      expect(normalized.profiles.Xiao.weapon?.key).toBe('PrimordialJadeWingedSpear');
+      expect(normalized.profiles.Xiao.weapon?.rarity).toBe(5);
+      expect(normalized.rawWeapons[0].key).toBe('PrimordialJadeWingedSpear');
+      expect(normalized.rawWeapons[0].rarity).toBe(5);
+      expect(normalized.pullBudget.consecutiveLossCount).toBe(0);
+      expect(normalized.pullBudget.weaponGuaranteed).toBe(false);
+
+      const restoreResult = importAccountBackup(v1Backup, { forceOverwrite: true });
+      expect(restoreResult.success).toBe(true);
+      const restoredWeapons = getSavedWeapons();
+      expect(restoredWeapons[0].key).toBe('PrimordialJadeWingedSpear');
+    });
+
+    it('rejects invalid talent levels, weapon levels/refinements, and UID formatting', () => {
+      const payload: any = {
+        format: 'celestia_native',
+        version: 2,
+        gameVersion: '7.2',
+        exportedAt: new Date().toISOString(),
+        uid: 'not-a-valid-uid', // Invalid: letters
+        roster: ['Furina'],
+        profiles: {
+          Furina: {
+            id: 'Furina',
+            level: 90,
+            constellation: 0,
+            talents: { auto: 16, skill: 10, burst: 10 }, // Invalid: auto > 15
+          },
+        },
+        rawWeapons: [
+          { id: 'w1', key: 'SplendorOfTranquilWaters', name: 'Splendor', level: 95, refinement: 6, rarity: 5 }, // Invalid: level 95, ref 6
+        ],
+        rawArtifacts: [],
+        pullBudget: {
+          primogems: 0,
+          fates: 0,
+          characterPity: 0,
+          characterGuaranteed: false,
+          weaponPity: 0,
+          weaponFatePoints: 0,
+        },
+        demoMode: false,
+      };
+
+      const val = validateBackupData(payload);
+      expect(val.valid).toBe(false);
+      expect(val.errors.some((e) => e.includes('UID format'))).toBe(true);
+      expect(val.errors.some((e) => e.includes('talent auto'))).toBe(true);
+      expect(val.errors.some((e) => e.includes('level must be an integer between 1 and 90'))).toBe(true);
+    });
+
+    it('rolls back automatically if weapons armory count fails post-restore verification', () => {
+      saveRoster(['Nefer']);
+      saveProfiles({ Nefer: { id: 'Nefer', level: 90, constellation: 0 } });
+      saveWeapons([]);
+
+      const incoming: CelestiaBackupData = {
+        format: 'celestia_native',
+        version: 2,
+        gameVersion: '7.2',
+        exportedAt: new Date().toISOString(),
+        roster: ['Xilonen'],
+        profiles: { Xilonen: { id: 'Xilonen', level: 90, constellation: 0 } },
+        rawWeapons: [
+          { id: 'w1', key: 'PeakPatrolSong', name: 'Peak Patrol Song', level: 90, refinement: 1, rarity: 5, location: 'Xilonen' },
+        ],
+        rawArtifacts: [],
+        pullBudget: {
+          primogems: 0,
+          fates: 0,
+          characterPity: 0,
+          characterGuaranteed: false,
+          consecutiveLossCount: 0,
+          weaponPity: 0,
+          weaponFatePoints: 0,
+        },
+        demoMode: false,
+      };
+
+      // Mock saveWeapons to simulate a silent drop / corrupt readback
+      const originalSetItem = localStorage.setItem;
+      localStorage.setItem = vi.fn((key: string, val: string) => {
+        // If writing weapons, write empty array instead to simulate storage truncation/corruption
+        if (key === 'celestia_v2_raw_weapons') {
+          return originalSetItem.call(localStorage, key, JSON.stringify([]));
+        }
+        return originalSetItem.call(localStorage, key, val);
+      });
+
+      const res = importAccountBackup(incoming, { forceOverwrite: true });
+      expect(res.success).toBe(false);
+      expect(res.rolledBack).toBe(true);
+      expect(res.error).toContain('weapons armory count mismatch');
+
+      localStorage.setItem = originalSetItem;
+
+      // Original data must be restored
+      expect(getSavedRoster()).toEqual(['Nefer']);
+      expect(getSavedProfiles().Nefer).toBeDefined();
     });
   });
 });

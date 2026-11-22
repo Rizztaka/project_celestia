@@ -5,7 +5,7 @@ import type {
   OwnedCharacterProfile,
   CharacterSwapAlternative,
 } from '../types/genshin';
-import { solveAbyssDualTeams, swapAbyssDualHalves } from '../engines/abyss-solver';
+import { swapAbyssDualHalves } from '../engines/abyss-solver';
 import { isSameCharacterOrTraveler } from '../engines/team-rules';
 import { dispatchSolveAbyss } from '../services/solver-dispatcher';
 import {
@@ -23,9 +23,10 @@ import {
 } from '../services/storage';
 import { CharacterPortrait } from './CharacterPortrait';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
+import { CHARACTERS } from '../data/characters';
 import { RotationBadgeList } from './RotationBadgeList';
 import { InfoTooltip } from './InfoTooltip';
-import { DataFreshnessBadge } from './DataFreshnessBadge';
+import { DataFreshnessBadge, StaleDataWarningBanner } from './DataFreshnessBadge';
 import { useModalAccessibility } from '../hooks/useModalAccessibility';
 import {
   Swords,
@@ -42,6 +43,8 @@ import {
   RotateCcw,
   Gauge,
   X,
+  Compass,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface AbyssDualTeamViewProps {
@@ -119,17 +122,10 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
     }
   };
 
-  const [basePlan, setBasePlan] = useState<AbyssDualTeamPlan>(() =>
-    solveAbyssDualTeams(ownedIds, profiles, activeCycle)
-  );
+  const [basePlan, setBasePlan] = useState<AbyssDualTeamPlan | null>(null);
   const [isPending, startTransition] = useTransition();
-  const isInitialMount = useRef(true);
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
-    }
     let isMounted = true;
     dispatchSolveAbyss(ownedIds, profiles, activeCycle).then((newPlan) => {
       if (isMounted) {
@@ -146,17 +142,31 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
   }, [ownedIds, profiles, activeCycle]);
 
   const currentBase = useMemo(() => {
+    if (!basePlan) return null;
     return isSwapped ? swapAbyssDualHalves(basePlan, activeCycle) : basePlan;
   }, [basePlan, isSwapped, activeCycle]);
 
-  const plan: AbyssDualTeamPlan = useMemo(() => {
+  const plan: AbyssDualTeamPlan | null = useMemo(() => {
+    if (!currentBase) return null;
     if (currentBase.allPairs && currentBase.allPairs[selectedPairIndex]) {
       return currentBase.allPairs[selectedPairIndex];
     }
     return currentBase;
   }, [currentBase, selectedPairIndex]);
 
-  const displayedPairs = currentBase.allPairs || basePlan.allPairs || [];
+  const displayedPairs = currentBase?.allPairs || basePlan?.allPairs || [];
+
+  if (!plan) {
+    return (
+      <div
+        role="status"
+        aria-live="polite"
+        className="bg-[#121420] border border-[#24293d] rounded-2xl p-8 text-center text-xs text-zinc-300"
+      >
+        Calculating optimal Spiral Abyss Floor 12 dual-half teams…
+      </div>
+    );
+  }
 
   const teamA = plan.firstHalfTeam;
   const teamB = plan.secondHalfTeam;
@@ -201,6 +211,7 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
     const oppositeDisplayTitle = isFirst ? 'Second Half Rearguard' : 'First Half Vanguard';
     const accentText = isFirst ? 'text-sky-300' : 'text-amber-300';
     const rotationPanelId = `abyss-rotation-${halfKey}`;
+    const halfExplanation = isFirst ? plan.firstHalfExplanation : plan.secondHalfExplanation;
 
     return (
       <article className="bg-[#121420] border border-[#24293d] rounded-2xl p-5 space-y-4 shadow-md flex flex-col justify-between">
@@ -309,36 +320,84 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
             })}
           </div>
 
-          {/* Tactical Workflow & Why this team fits */}
-          {team.explanation && (
-            <div className="bg-[#0e1019] rounded-xl border border-[#202538] p-3.5 space-y-2 text-xs">
-              <div className="font-bold text-[#f3cf58] flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Chamber Suitability &amp; Role Rationale</span>
+          {/* Why This Team Suits Its Assigned Half */}
+          {(halfExplanation || team.explanation) && (
+            <div className="bg-[#0e1019] rounded-xl border border-[#202538] p-3.5 space-y-2.5 text-xs">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="font-bold text-[#f3cf58] flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+                  <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>Why This Team Suits {isFirst ? 'First Half' : 'Second Half'}</span>
+                </div>
+                {halfExplanation && (
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                      halfExplanation.targetProfileFit === 'Optimal'
+                        ? 'bg-emerald-950/65 text-emerald-200 border-emerald-400/45'
+                        : halfExplanation.targetProfileFit === 'Good'
+                          ? 'bg-sky-950/65 text-sky-200 border-sky-400/45'
+                          : 'bg-amber-950/65 text-amber-200 border-amber-400/45'
+                    }`}
+                  >
+                    Target Fit: {halfExplanation.targetProfileFit}
+                  </span>
+                )}
               </div>
-              {team.explanation.reactionWorkflow && (
-                <p className="text-zinc-200 text-xs leading-relaxed">
-                  {team.explanation.reactionWorkflow}
+
+              {halfExplanation?.summary && (
+                <p className="text-zinc-100 text-xs font-medium leading-relaxed">
+                  {halfExplanation.summary}
                 </p>
               )}
-              {plan.chamberCoverage && plan.chamberCoverage.length > 0 && (
-                <div className="pt-2 border-t border-[#202538] space-y-1.5">
-                  <span className={`text-[11px] font-bold ${accentText} uppercase tracking-wider block`}>
-                    {isFirst ? 'First Half Chamber Clearance:' : 'Second Half Chamber Clearance:'}
-                  </span>
-                  {plan.chamberCoverage.map((cov) => (
-                    <div key={cov.chamber} className="text-xs text-zinc-200 flex items-start gap-1.5">
-                      <span className="font-mono text-[#f3cf58] text-[11px] shrink-0 font-bold">
-                        12-{cov.chamber}:
-                      </span>
-                      <span className="leading-snug">
-                        {isFirst ? cov.firstHalfStatus : cov.secondHalfStatus}
-                      </span>
+
+              {halfExplanation?.buffSynergy && (
+                <div className="text-[11px] text-amber-200 bg-amber-950/25 border border-amber-400/30 px-2.5 py-1.5 rounded-lg">
+                  ✨ Ley Line / Chamber Buff Match: {halfExplanation.buffSynergy}
+                </div>
+              )}
+
+              {halfExplanation && halfExplanation.strengths.length > 0 && (
+                <ul className="space-y-1">
+                  {halfExplanation.strengths.map((str, sIdx) => (
+                    <li key={sIdx} className="text-xs text-emerald-200 flex items-start gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300 shrink-0 mt-0.5" aria-hidden="true" />
+                      <span className="leading-snug">{str}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {halfExplanation && halfExplanation.risks.length > 0 && (
+                <ul className="space-y-1">
+                  {halfExplanation.risks.map((risk, rIdx) => (
+                    <li key={rIdx} className="text-xs text-amber-200 flex items-start gap-1.5">
+                      <AlertTriangle className="w-3.5 h-3.5 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
+                      <span className="leading-snug">{risk}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {halfExplanation && halfExplanation.movementNotes.length > 0 && (
+                <div className="pt-2 border-t border-[#202538] space-y-1">
+                  <div className="text-[11px] font-bold text-sky-300 flex items-center gap-1 uppercase tracking-wider">
+                    <Compass className="w-3 h-3" aria-hidden="true" />
+                    <span>Positioning &amp; Targeting Notes</span>
+                  </div>
+                  {halfExplanation.movementNotes.map((note, nIdx) => (
+                    <div key={nIdx} className="text-[11px] text-zinc-300 leading-snug">
+                      {note}
                     </div>
                   ))}
                 </div>
               )}
-              {team.explanation.energyAssessment?.warnings &&
+
+              {team.explanation?.reactionWorkflow && (
+                <p className="text-zinc-300 text-xs leading-relaxed pt-2 border-t border-[#202538]">
+                  {team.explanation.reactionWorkflow}
+                </p>
+              )}
+
+              {team.explanation?.energyAssessment?.warnings &&
                 team.explanation.energyAssessment.warnings.length > 0 && (
                   <p className="text-amber-200 text-xs pt-1">
                     ⚡ Energy: {team.explanation.energyAssessment.warnings.join(' · ')}
@@ -506,6 +565,9 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Stale Data Warning Banner */}
+        <StaleDataWarningBanner datasetId={activeCycle.id} contextLabel="Spiral Abyss" className="mt-4" />
 
         {/* Active Cycle Blessing Banner */}
         <div className="mt-4 pt-3 border-t border-[#202538] flex flex-wrap items-center justify-between gap-2 text-xs">
@@ -901,6 +963,25 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
 
                   <p className="text-xs text-zinc-200 pl-4 leading-snug">{cov.firstHalfStatus}</p>
 
+                  {cov.firstHalfMetrics && (cov.firstHalfMetrics.targetProfile || (cov.firstHalfMetrics.movementTraits?.length ?? 0) > 0) && (
+                    <div className="pl-4 flex flex-wrap gap-1.5">
+                      {cov.firstHalfMetrics.targetProfile && (
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#1a1e2e] text-sky-200 border border-sky-400/30">
+                          {cov.firstHalfMetrics.targetProfile}
+                          {(cov.firstHalfMetrics.waveCount ?? 1) > 1 ? ` · ${cov.firstHalfMetrics.waveCount}W` : ''}
+                        </span>
+                      )}
+                      {cov.firstHalfMetrics.movementTraits?.slice(0, 2).map((trait) => (
+                        <span
+                          key={trait}
+                          className="text-[10px] px-1.5 py-0.5 rounded bg-purple-950/50 text-purple-200 border border-purple-400/30"
+                        >
+                          {trait}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
                   {cov.firstHalfMetrics && (
                     <div className="pl-4 space-y-1.5 pt-1">
                       {cov.firstHalfMetrics.shieldBreakTime !== undefined && (
@@ -969,6 +1050,25 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
 
                   <p className="text-xs text-zinc-200 pl-4 leading-snug">{cov.secondHalfStatus}</p>
 
+                  {cov.secondHalfMetrics && (cov.secondHalfMetrics.targetProfile || (cov.secondHalfMetrics.movementTraits?.length ?? 0) > 0) && (
+                    <div className="pl-4 flex flex-wrap gap-1.5">
+                      {cov.secondHalfMetrics.targetProfile && (
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#1a1e2e] text-amber-200 border border-amber-400/30">
+                          {cov.secondHalfMetrics.targetProfile}
+                          {(cov.secondHalfMetrics.waveCount ?? 1) > 1 ? ` · ${cov.secondHalfMetrics.waveCount}W` : ''}
+                        </span>
+                      )}
+                      {cov.secondHalfMetrics.movementTraits?.slice(0, 2).map((trait) => (
+                        <span
+                          key={trait}
+                          className="text-[10px] px-1.5 py-0.5 rounded bg-purple-950/50 text-purple-200 border border-purple-400/30"
+                        >
+                          {trait}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
                   {cov.secondHalfMetrics && (
                     <div className="pl-4 space-y-1.5 pt-1">
                       {cov.secondHalfMetrics.shieldBreakTime !== undefined && (
@@ -1021,6 +1121,69 @@ export const AbyssDualTeamView: React.FC<AbyssDualTeamViewProps> = ({
           })}
         </div>
       </section>
+
+      {/* Missing Counter Fallbacks & Owned Bench Substitutes */}
+      {!isSwapped && plan.missingCounterFallbacks && plan.missingCounterFallbacks.length > 0 && (
+        <section
+          aria-label="Missing Counter Fallbacks and Substitutions"
+          className="bg-[#121420] border border-amber-400/40 rounded-2xl p-5 space-y-3 shadow-md"
+        >
+          <div className="flex items-center gap-2 border-b border-[#24293d] pb-2.5">
+            <AlertTriangle className="w-4 h-4 text-amber-300 shrink-0" aria-hidden="true" />
+            <h2 className="text-sm font-bold text-amber-200 uppercase tracking-wider">
+              Counter Gaps &amp; Owned Bench Substitutes
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {plan.missingCounterFallbacks.map((fb, idx) => (
+              <div
+                key={`${fb.half}-${fb.chamber}-${idx}`}
+                className="bg-[#0e1019] border border-[#282f48] rounded-xl p-3.5 space-y-2 text-xs"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-bold text-[#f3cf58]">
+                    12-{fb.chamber} · {fb.half}
+                  </span>
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-rose-950/60 text-rose-200 border border-rose-400/40">
+                    Needs: {fb.missingRequirement}
+                  </span>
+                </div>
+                <p className="text-zinc-200 leading-relaxed">{fb.strategyTip}</p>
+                {fb.ownedSubstitutes.length > 0 ? (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {fb.ownedSubstitutes.map((sub) => {
+                      const charObj = CHARACTERS.find((c) => c.id === sub.characterId);
+                      return (
+                        <button
+                          key={sub.characterId}
+                          type="button"
+                          onClick={() => charObj && setSelectedCharacter(charObj)}
+                          className="min-h-[34px] flex items-center gap-1.5 bg-[#161a29] hover:bg-[#22283f] border border-[#323954] hover:border-[#d4af37]/60 px-2.5 py-1 rounded-lg text-zinc-100 font-medium transition-colors cursor-pointer"
+                          title={sub.reason}
+                        >
+                          {charObj && (
+                            <CharacterPortrait
+                              src={charObj.icon}
+                              name={charObj.name}
+                              element={charObj.element}
+                              size="xs"
+                            />
+                          )}
+                          <span>{sub.characterName}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-[11px] text-zinc-400 italic">
+                    No unused bench substitute in your roster matches this requirement—consider swapping halves or selecting an Alternative pairing above.
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Dual Side-by-Side Team Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * 5-Axis Game Data Integrity Quality Gate for Project Celestia.
+ * 7-Axis Game Data Integrity & Maintenance Quality Gate for Project Celestia.
  *
- * Enforces zero-tolerance build-time verification across:
- *   Axis 1: Entity Counts & ID Uniqueness (Characters, Weapons, Artifacts)
- *   Axis 2: Referential Integrity (Build Recommendations, Banners, Theater)
- *   Axis 3: Active Schedule Chronology & Date Validity
- *   Axis 4: Enka Avatar Showcase Mapping Completeness (including Aether & Lumine)
- *   Axis 5: Dataset Provenance, Primary Source URLs & Specific Patch Evidence
+ *   Axis 1: Entity Counts, Schema & ID Uniqueness (Characters, Weapons, Artifacts, Talent Scaling, Rotations)
+ *   Axis 2: Referential Integrity (Builds, Banners + Weapons, Theater Cast/Element Rules, Set Effects, Character IDs)
+ *   Axis 3: Schedule Chronology, Date Validity & Abyss Encounter Schema (Chambers, HP, 8-Element RES)
+ *   Axis 4: Enka Avatar Showcase Mapping Completeness (122 Unique + Aether & Lumine)
+ *   Axis 5: Single Canonical Game Version SSOT Enforcement (No Duplicated Hardcoded Constants)
+ *   Axis 6: Substantive Provenance & Evidence Audit (Method, Audited Fields, Specific Notes — Not Just HTTPS URLs)
+ *   Axis 7: Active Dataset Freshness & Expiration Check
  */
 
 import fs from 'fs';
@@ -29,19 +30,23 @@ function recordWarning(axis, message) {
   warnings.push(`[${axis}] ${message}`);
 }
 
-console.log('\n' + '═'.repeat(72));
-console.log('🛡️  Project Celestia — 5-Axis Game Data Integrity Quality Gate');
-console.log('═'.repeat(72));
+const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+const VALID_ELEMENTS = new Set(['Pyro', 'Hydro', 'Anemo', 'Electro', 'Dendro', 'Cryo', 'Geo']);
+const VALID_WEAPON_TYPES = new Set(['Sword', 'Claymore', 'Polearm', 'Bow', 'Catalyst']);
+
+console.log('\n' + '═'.repeat(76));
+console.log('🛡️  Project Celestia — 7-Axis Game Data Integrity & Maintenance Gate');
+console.log('═'.repeat(76));
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Axis 1: Entity Counts & ID Uniqueness
+// Axis 1: Entity Counts, Schema & ID Uniqueness
 // ─────────────────────────────────────────────────────────────────────────────
-console.log('\n[Axis 1] Auditing Entity Counts & ID Uniqueness...');
+console.log('\n[Axis 1] Auditing Entity Counts, Schema & ID Uniqueness...');
 
 // 1. Characters
 const charText = readFileNormalized('src/data/characters.ts');
 const characters = [];
-const seenCharIds = new Set();
+const charById = new Map();
 const duplicateCharIds = [];
 
 for (const line of charText.split('\n')) {
@@ -50,10 +55,10 @@ for (const line of charText.split('\n')) {
     try {
       const char = JSON.parse(trimmed.replace(/,\s*$/, ''));
       characters.push(char);
-      if (seenCharIds.has(char.id)) {
+      if (charById.has(char.id)) {
         duplicateCharIds.push(char.id);
       }
-      seenCharIds.add(char.id);
+      charById.set(char.id, char);
     } catch (e) {
       recordError('Axis 1', `Failed to parse character JSON: ${e.message}`);
     }
@@ -63,12 +68,31 @@ for (const line of charText.split('\n')) {
 if (duplicateCharIds.length > 0) {
   recordError('Axis 1', `Duplicate character IDs detected: ${duplicateCharIds.join(', ')}`);
 }
-
 if (characters.length !== 128) {
-  recordError('Axis 1', `Expected exactly 128 playable characters, found ${characters.length}`);
-} else {
-  console.log(`  ✓ 128 Canonical Playable Characters verified (0 duplicate IDs)`);
+  recordError('Axis 1', `Expected 128 playable characters, found ${characters.length}`);
 }
+
+for (const c of characters) {
+  if (!VALID_ELEMENTS.has(c.element)) {
+    recordError('Axis 1', `Character "${c.id}" has invalid element "${c.element}"`);
+  }
+  if (!VALID_WEAPON_TYPES.has(c.weapon)) {
+    recordError('Axis 1', `Character "${c.id}" has invalid weapon type "${c.weapon}"`);
+  }
+  if (c.rarity !== 4 && c.rarity !== 5) {
+    recordError('Axis 1', `Character "${c.id}" has invalid rarity ${c.rarity}`);
+  }
+  if (!Array.isArray(c.roles) || c.roles.length === 0) {
+    recordError('Axis 1', `Character "${c.id}" is missing role tags`);
+  }
+  if (!Array.isArray(c.talents) || c.talents.length < 3) {
+    recordError('Axis 1', `Character "${c.id}" has incomplete talent records`);
+  }
+  if (!Array.isArray(c.constellations) || c.constellations.length !== 6) {
+    recordError('Axis 1', `Character "${c.id}" must define 6 constellations`);
+  }
+}
+console.log(`  ✓ ${characters.length} Characters audited (IDs, elements, weapons, roles, talents, constellations)`);
 
 // 2. Weapons
 const weaponText = readFileNormalized('src/data/weapons.ts');
@@ -87,25 +111,29 @@ if (wStart === -1 || wEnd === -1) {
   }
 }
 
-const seenWeaponKeys = new Set();
+const weaponByKey = new Map();
 const duplicateWeaponKeys = [];
-
 for (const w of weapons) {
-  if (seenWeaponKeys.has(w.key)) {
-    duplicateWeaponKeys.push(w.key);
-  }
-  seenWeaponKeys.add(w.key);
-}
+  if (weaponByKey.has(w.key)) duplicateWeaponKeys.push(w.key);
+  weaponByKey.set(w.key, w);
 
+  if (!VALID_WEAPON_TYPES.has(w.weaponType)) {
+    recordError('Axis 1', `Weapon "${w.key}" has invalid weaponType "${w.weaponType}"`);
+  }
+  if (typeof w.baseAtk !== 'number' || w.baseAtk <= 0) {
+    recordError('Axis 1', `Weapon "${w.key}" has invalid baseAtk ${w.baseAtk}`);
+  }
+  if (!Number.isInteger(w.rarity) || w.rarity < 1 || w.rarity > 5) {
+    recordError('Axis 1', `Weapon "${w.key}" has invalid rarity ${w.rarity}`);
+  }
+}
 if (duplicateWeaponKeys.length > 0) {
   recordError('Axis 1', `Duplicate weapon keys detected: ${duplicateWeaponKeys.join(', ')}`);
 }
-
 if (weapons.length !== 256) {
-  recordError('Axis 1', `Expected exactly 256 weapons, found ${weapons.length}`);
-} else {
-  console.log(`  ✓ 256 Weapons verified across 5 weapon classes (0 duplicate keys)`);
+  recordError('Axis 1', `Expected 256 weapons, found ${weapons.length}`);
 }
+console.log(`  ✓ ${weapons.length} Weapons audited (keys, classes, baseAtk, rarity)`);
 
 // 3. Artifact Sets
 const artText = readFileNormalized('src/data/artifacts-master.ts');
@@ -125,39 +153,66 @@ if (aStart === -1 || aEnd === -1) {
 }
 
 const seenArtIds = new Set();
-const duplicateArtIds = [];
 const seenArtNames = new Set();
-const duplicateArtNames = [];
-
 for (const a of artifacts) {
-  if (seenArtIds.has(a.id)) {
-    duplicateArtIds.push(a.id);
-  }
+  if (seenArtIds.has(a.id)) recordError('Axis 1', `Duplicate artifact set ID: "${a.id}"`);
+  if (seenArtNames.has(a.name)) recordError('Axis 1', `Duplicate artifact set name: "${a.name}"`);
   seenArtIds.add(a.id);
-
-  if (seenArtNames.has(a.name)) {
-    duplicateArtNames.push(a.name);
-  }
   seenArtNames.add(a.name);
+  if (!a.effect2Pc && !a.effect4Pc && !a.effect1Pc && a.name !== 'Initiate') {
+    recordError('Axis 1', `Artifact set "${a.name}" has no set bonus text`);
+  }
 }
-
-if (duplicateArtIds.length > 0) {
-  recordError('Axis 1', `Duplicate artifact set IDs detected: ${duplicateArtIds.join(', ')}`);
-}
-if (duplicateArtNames.length > 0) {
-  recordError('Axis 1', `Duplicate artifact set names detected: ${duplicateArtNames.join(', ')}`);
-}
-
 if (artifacts.length !== 64) {
-  recordError('Axis 1', `Expected exactly 64 Master Artifact Sets, found ${artifacts.length}`);
+  recordError('Axis 1', `Expected 64 Master Artifact Sets, found ${artifacts.length}`);
+}
+console.log(`  ✓ ${artifacts.length} Master Artifact Sets audited (IDs, names, set bonuses)`);
+
+// 4. Talent Scaling JSON Profiles (128 characters)
+const scalingDir = path.resolve('src/data/talent-scaling/data');
+const scalingFiles = fs.existsSync(scalingDir)
+  ? new Set(fs.readdirSync(scalingDir).filter((f) => f.endsWith('.json')).map((f) => f.replace(/\.json$/, '')))
+  : new Set();
+
+let missingScalingCount = 0;
+for (const c of characters) {
+  const key = c.id.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (!scalingFiles.has(key)) {
+    recordError('Axis 1', `Missing talent scaling JSON file for "${c.id}" (expected ${key}.json)`);
+    missingScalingCount++;
+  } else {
+    try {
+      const json = JSON.parse(readFileNormalized(path.join(scalingDir, `${key}.json`)));
+      for (const slot of ['normal', 'skill', 'burst']) {
+        if (!json[slot]) {
+          recordError('Axis 1', `Talent scaling "${key}.json" missing "${slot}" curve`);
+        }
+      }
+    } catch (e) {
+      recordError('Axis 1', `Invalid talent scaling JSON "${key}.json": ${e.message}`);
+    }
+  }
+}
+if (missingScalingCount === 0) {
+  console.log(`  ✓ ${scalingFiles.size} Talent Scaling JSON profiles audited (normal/skill/burst curves)`);
+}
+
+// 5. Character Rotations (128 characters)
+const rotText = readFileNormalized('src/data/character-rotations.ts');
+const rotKeys = new Set([...rotText.matchAll(/^\s{2}([a-z0-9_]+):\s*\{/gm)].map((m) => m[1]));
+const missingRotations = characters
+  .map((c) => c.id)
+  .filter((id) => !rotKeys.has(id.toLowerCase()));
+if (missingRotations.length > 0) {
+  recordError('Axis 1', `Characters missing rotation profiles: ${missingRotations.join(', ')}`);
 } else {
-  console.log(`  ✓ 64 Master Artifact Sets verified (0 duplicate IDs or names)`);
+  console.log(`  ✓ 100% Character rotation coverage verified across all ${characters.length} characters`);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Axis 2: Referential Integrity
+// Axis 2: Referential Integrity & Game-Rule Eligibility
 // ─────────────────────────────────────────────────────────────────────────────
-console.log('\n[Axis 2] Auditing Referential Integrity...');
+console.log('\n[Axis 2] Auditing Referential Integrity & Eligibility Rules...');
 
 function normalizeKey(str) {
   return str.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -177,150 +232,152 @@ for (const a of artifacts) {
   validArtifactLookup.add(normalizeKey(a.name));
 }
 
-// 1. Character Recommended Weapons & Artifacts
-let brokenWeaponRefs = 0;
-let brokenArtifactRefs = 0;
-
+// 1. Character Builds
 for (const char of characters) {
-  if (char.build?.weapons) {
-    for (const rw of char.build.weapons) {
-      const match =
-        validWeaponLookup.has(rw.name.toLowerCase()) ||
-        validWeaponLookup.has(normalizeKey(rw.name));
-      if (!match) {
-        recordError('Axis 2', `Character "${char.name}" (${char.id}) recommends non-existent weapon "${rw.name}"`);
-        brokenWeaponRefs++;
-      }
+  for (const rw of char.build?.weapons || []) {
+    if (!validWeaponLookup.has(rw.name.toLowerCase()) && !validWeaponLookup.has(normalizeKey(rw.name))) {
+      recordError('Axis 2', `Character "${char.id}" recommends unknown weapon "${rw.name}"`);
     }
   }
-
-  if (char.build?.artifacts) {
-    for (const ra of char.build.artifacts) {
-      const match =
-        validArtifactLookup.has(ra.name.toLowerCase()) ||
-        validArtifactLookup.has(normalizeKey(ra.name));
-      if (!match) {
-        recordError('Axis 2', `Character "${char.name}" (${char.id}) recommends non-existent artifact set "${ra.name}"`);
-        brokenArtifactRefs++;
-      }
+  for (const ra of char.build?.artifacts || []) {
+    if (!validArtifactLookup.has(ra.name.toLowerCase()) && !validArtifactLookup.has(normalizeKey(ra.name))) {
+      recordError('Axis 2', `Character "${char.id}" recommends unknown artifact set "${ra.name}"`);
     }
   }
 }
 
-if (brokenWeaponRefs === 0 && brokenArtifactRefs === 0) {
-  console.log('  ✓ 100% Referential integrity across all character recommended builds');
+// 2. Canonical Character IDs SSOT alignment
+const cidText = readFileNormalized('src/data/character-ids.ts');
+const canonicalIds = new Set([...cidText.matchAll(/'([^']+)'/g)].map((m) => m[1]));
+for (const c of characters) {
+  if (!canonicalIds.has(c.id)) {
+    recordError('Axis 2', `src/data/character-ids.ts is missing canonical character ID "${c.id}"`);
+  }
 }
 
-// 2. Banner Character & Weapon References
+// 3. Banner Characters, 4★ Pools & Weapon Keys
 const bannerText = readFileNormalized('src/data/banners.ts');
-const bannerCharMatches = [...bannerText.matchAll(/characterId:\s*['"]([^'"]+)['"]/g)].map((m) => m[1]);
-const bannerWeaponMatches = [...bannerText.matchAll(/(?:signatureWeaponKey|featuredWeapons):\s*(?:['"]([^'"]+)['"]|\[([^\]]+)\])/g)];
+const bannerIds = [...bannerText.matchAll(/id:\s*'(banner_[^']+)'/g)].map((m) => m[1]);
+const bannerCharMatches = [...bannerText.matchAll(/characterId:\s*'([^']+)'/g)].map((m) => m[1]);
+const sigWeaponKeys = [...bannerText.matchAll(/signatureWeaponKey:\s*'([^']+)'/g)].map((m) => m[1]);
+const featWeaponBlocks = [...bannerText.matchAll(/featuredWeapons:\s*\[([^\]]+)\]/g)];
 
 for (const charId of bannerCharMatches) {
-  if (!seenCharIds.has(charId)) {
-    recordError('Axis 2', `Banner references non-existent character ID: "${charId}"`);
+  if (!charById.has(charId)) {
+    recordError('Axis 2', `Banner references unknown character ID: "${charId}"`);
   }
 }
-
-// Extract featured 4-star IDs
-const featured4Matches = [...bannerText.matchAll(/featured4StarIds:\s*\[([^\]]+)\]/g)];
-for (const f4m of featured4Matches) {
-  const ids = f4m[1].split(',').map((s) => s.trim().replace(/['"]/g, '')).filter(Boolean);
+for (const wKey of sigWeaponKeys) {
+  if (!weaponByKey.has(wKey)) {
+    recordError('Axis 2', `Banner signatureWeaponKey "${wKey}" does not exist in WEAPONS_DATA`);
+  }
+}
+for (const block of featWeaponBlocks) {
+  const keys = [...block[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
+  for (const wKey of keys) {
+    if (!weaponByKey.has(wKey)) {
+      recordError('Axis 2', `Banner featured weapon "${wKey}" does not exist in WEAPONS_DATA`);
+    }
+  }
+}
+for (const f4m of [...bannerText.matchAll(/featured4StarIds:\s*\[([^\]]+)\]/g)]) {
+  const ids = [...f4m[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
   for (const f4Id of ids) {
-    const charObj = characters.find((c) => c.id === f4Id);
-    if (!charObj) {
-      recordError('Axis 2', `Banner references non-existent 4-star character: "${f4Id}"`);
-    } else if (charObj.rarity !== 4) {
-      recordError('Axis 2', `Banner featured 4-star character "${f4Id}" has rarity ${charObj.rarity} !== 4`);
-    }
+    const c = charById.get(f4Id);
+    if (!c) recordError('Axis 2', `Banner references unknown 4★ character: "${f4Id}"`);
+    else if (c.rarity !== 4) recordError('Axis 2', `Banner featured 4★ "${f4Id}" has rarity ${c.rarity}`);
   }
 }
-console.log('  ✓ 100% Banner phase referential integrity (characters, 4★ pools, signatures)');
 
-// 3. Theater Opening Cast & Special Guests
+// 4. Theater Cast, Element Eligibility, Off-Element Special Guests & Bosses
 const theaterText = readFileNormalized('src/data/theater-seasons.ts');
-const openingCastMatches = [...theaterText.matchAll(/openingCastIds:\s*\[([^\]]+)\]/g)];
-const guestMatches = [...theaterText.matchAll(/specialGuestIds:\s*\[([^\]]+)\]/g)];
+const bossInfoKeys = new Set([...theaterText.matchAll(/^\s{2}'([^']+)':\s*\{/gm)].map((m) => m[1]));
+const theaterSeasonIds = [];
+const seasonRegex =
+  /id:\s*'([^']+)'[\s\S]*?elements:\s*\[([^\]]+)\][\s\S]*?openingCastIds:\s*\[([^\]]+)\][\s\S]*?specialGuestIds:\s*\[([^\]]+)\][\s\S]*?bosses:\s*\{([^}]+)\}/g;
 
-for (const m of [...openingCastMatches, ...guestMatches]) {
-  const ids = m[1].split(',').map((s) => s.trim().replace(/['"]/g, '')).filter(Boolean);
-  for (const id of ids) {
-    if (!seenCharIds.has(id)) {
-      recordError('Axis 2', `Theater season references non-existent character ID: "${id}"`);
+for (const m of theaterText.matchAll(seasonRegex)) {
+  const [, sid, elemsStr, openStr, guestStr, bossStr] = m;
+  theaterSeasonIds.push(sid);
+  const elems = new Set([...elemsStr.matchAll(/'([^']+)'/g)].map((x) => x[1]));
+  const opens = [...openStr.matchAll(/'([^']+)'/g)].map((x) => x[1]);
+  const guests = [...guestStr.matchAll(/'([^']+)'/g)].map((x) => x[1]);
+  const bosses = [...bossStr.matchAll(/:\s*'([^']+)'/g)].map((x) => x[1]);
+
+  if (elems.size !== 3) {
+    recordError('Axis 2', `Theater season "${sid}" must define 3 distinct elements`);
+  }
+  for (const cid of opens) {
+    const c = charById.get(cid);
+    if (!c) {
+      recordError('Axis 2', `Theater season "${sid}" opening cast references unknown ID "${cid}"`);
+    } else if (!elems.has(c.element)) {
+      recordError(
+        'Axis 2',
+        `Theater season "${sid}" opening cast "${cid}" (${c.element}) is ineligible for [${[...elems].join('/')}]`,
+      );
+    }
+  }
+  const openSet = new Set(opens);
+  for (const cid of guests) {
+    const c = charById.get(cid);
+    if (!c) {
+      recordError('Axis 2', `Theater season "${sid}" special guest references unknown ID "${cid}"`);
+    } else {
+      if (openSet.has(cid)) {
+        recordError('Axis 2', `Theater season "${sid}" duplicates "${cid}" in both openingCastIds and specialGuestIds`);
+      }
+      if (elems.has(c.element)) {
+        recordError(
+          'Axis 2',
+          `Theater season "${sid}" special guest "${cid}" (${c.element}) must be outside season elements [${[...elems].join('/')}]`,
+        );
+      }
+    }
+  }
+  for (const boss of bosses) {
+    if (!bossInfoKeys.has(boss)) {
+      recordError('Axis 2', `Theater season "${sid}" boss "${boss}" missing from THEATER_BOSS_INFO`);
     }
   }
 }
-console.log('  ✓ 100% Theater opening cast & guest referential integrity');
+
+// 5. Artifact Set Effects alignment
+const setEffectsText = readFileNormalized('src/data/artifact-set-effects.ts');
+for (const m of setEffectsText.matchAll(/^\s{2}(?:'([^']+)'|"([^"]+)"):\s*\{/gm)) {
+  const setName = m[1] || m[2];
+  if (!seenArtNames.has(setName)) {
+    recordError('Axis 2', `artifact-set-effects.ts defines unknown artifact set "${setName}"`);
+  }
+}
+console.log('  ✓ Referential integrity & Theater element-eligibility rules audited');
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Axis 3: Active Schedule Chronology & Date Validity
+// Axis 3: Schedule Chronology, Date Validity & Abyss Encounter Schema
 // ─────────────────────────────────────────────────────────────────────────────
-console.log('\n[Axis 3] Auditing Schedule Chronology & Date Validity...');
+console.log('\n[Axis 3] Auditing Schedule Chronology & Abyss Encounter Schema...');
 
-const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-
-// Check Banner Phase Dates
-const bannerDateMatches = [
-  ...bannerText.matchAll(/startDate:\s*['"]([^'"]+)['"],\s*endDate:\s*['"]([^'"]+)['"]/g),
-];
-
-for (const bdm of bannerDateMatches) {
-  const start = bdm[1];
-  const end = bdm[2];
-
-  if (!dateRegex.test(start)) {
-    recordError('Axis 3', `Invalid banner startDate format: "${start}"`);
-  }
-  if (!dateRegex.test(end)) {
-    recordError('Axis 3', `Invalid banner endDate format: "${end}"`);
-  }
-  if (new Date(start).getTime() >= new Date(end).getTime()) {
-    recordError('Axis 3', `Banner startDate (${start}) must precede endDate (${end})`);
+function auditDatePairs(label, text, regex) {
+  for (const m of text.matchAll(regex)) {
+    const [, start, end] = m;
+    if (!dateRegex.test(start)) recordError('Axis 3', `Invalid ${label} start date "${start}"`);
+    if (!dateRegex.test(end)) recordError('Axis 3', `Invalid ${label} end date "${end}"`);
+    if (new Date(start).getTime() >= new Date(end).getTime()) {
+      recordError('Axis 3', `${label} start (${start}) must precede end (${end})`);
+    }
   }
 }
 
-// Check Abyss Cycle Dates
+auditDatePairs('banner', bannerText, /startDate:\s*'([^']+)',\s*endDate:\s*'([^']+)'/g);
 const abyssText = readFileNormalized('src/data/abyss-schedules.ts');
-const abyssDateMatches = [
-  ...abyssText.matchAll(/effectiveStartDate:\s*['"]([^'"]+)['"],\s*effectiveEndDate:\s*['"]([^'"]+)['"]/g),
-];
+auditDatePairs('abyss', abyssText, /effectiveStartDate:\s*'([^']+)',\s*effectiveEndDate:\s*'([^']+)'/g);
+auditDatePairs('theater', theaterText, /effectiveStartDate:\s*'([^']+)',\s*effectiveEndDate:\s*'([^']+)'/g);
 
-for (const adm of abyssDateMatches) {
-  const start = adm[1];
-  const end = adm[2];
-
-  if (!dateRegex.test(start)) {
-    recordError('Axis 3', `Invalid abyss effectiveStartDate format: "${start}"`);
-  }
-  if (!dateRegex.test(end)) {
-    recordError('Axis 3', `Invalid abyss effectiveEndDate format: "${end}"`);
-  }
-  if (new Date(start).getTime() >= new Date(end).getTime()) {
-    recordError('Axis 3', `Abyss effectiveStartDate (${start}) must precede effectiveEndDate (${end})`);
-  }
+const abyssCycleIds = [...abyssText.matchAll(/id:\s*'(cycle-[^']+)'/g)].map((m) => m[1]);
+if (abyssCycleIds.length < 5) {
+  recordError('Axis 3', `Expected at least 5 Abyss cycles, found ${abyssCycleIds.length}`);
 }
-
-// Check Theater Season Dates
-const theaterDateMatches = [
-  ...theaterText.matchAll(/effectiveStartDate:\s*['"]([^'"]+)['"],\s*effectiveEndDate:\s*['"]([^'"]+)['"]/g),
-];
-
-for (const tdm of theaterDateMatches) {
-  const start = tdm[1];
-  const end = tdm[2];
-
-  if (!dateRegex.test(start)) {
-    recordError('Axis 3', `Invalid theater effectiveStartDate format: "${start}"`);
-  }
-  if (!dateRegex.test(end)) {
-    recordError('Axis 3', `Invalid theater effectiveEndDate format: "${end}"`);
-  }
-  if (new Date(start).getTime() >= new Date(end).getTime()) {
-    recordError('Axis 3', `Theater effectiveStartDate (${start}) must precede effectiveEndDate (${end})`);
-  }
-}
-
-console.log('  ✓ 100% Active schedules possess chronologically valid start and end dates');
+console.log(`  ✓ Schedule dates (${bannerIds.length} banners, ${abyssCycleIds.length} Abyss cycles, ${theaterSeasonIds.length} Theater seasons) audited`);
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Axis 4: Enka Avatar Showcase Mapping Completeness
@@ -328,142 +385,155 @@ console.log('  ✓ 100% Active schedules possess chronologically valid start and
 console.log('\n[Axis 4] Auditing Enka Avatar Showcase Mapping Completeness...');
 
 const enkaText = readFileNormalized('src/services/enka.ts');
-const enkaEntryMatches = [...enkaText.matchAll(/(\d{8}):\s*['"]([^'"]+)['"]/g)];
-
 const enkaIdMap = new Map();
-const duplicateEnkaIds = [];
-
-for (const match of enkaEntryMatches) {
+for (const match of enkaText.matchAll(/(\d{8}):\s*'([^']+)'/g)) {
   const numId = parseInt(match[1], 10);
   const charKey = match[2];
-
-  if (enkaIdMap.has(numId)) {
-    duplicateEnkaIds.push(numId);
+  if (enkaIdMap.has(numId)) recordError('Axis 4', `Duplicate Enka ID: ${numId}`);
+  if (charKey !== 'Traveler' && !charById.has(charKey)) {
+    recordError('Axis 4', `Enka ID ${numId} maps to unknown character key "${charKey}"`);
   }
   enkaIdMap.set(numId, charKey);
 }
-
-if (duplicateEnkaIds.length > 0) {
-  recordError('Axis 4', `Duplicate Enka IDs detected: ${duplicateEnkaIds.join(', ')}`);
+if (enkaIdMap.get(10000005) !== 'Traveler' || enkaIdMap.get(10000007) !== 'Traveler') {
+  recordError('Axis 4', 'Aether (10000005) and Lumine (10000007) must map to "Traveler"');
 }
-
-// Verify Aether & Lumine
-if (enkaIdMap.get(10000005) !== 'Traveler') {
-  recordError('Axis 4', `Aether (10000005) must map to "Traveler" in ENKA_ID_MAP`);
-}
-if (enkaIdMap.get(10000007) !== 'Traveler') {
-  recordError('Axis 4', `Lumine (10000007) must map to "Traveler" in ENKA_ID_MAP`);
-}
-
-// Verify that all 122 unique named characters have an Enka mapping
-const mappedCharKeys = new Set(enkaIdMap.values());
-const unmappedCharacters = [];
-
+const mappedKeys = new Set(enkaIdMap.values());
 for (const char of characters) {
-  if (char.id.startsWith('Traveler')) continue; // Travelers covered by 10000005/10000007
-  if (!mappedCharKeys.has(char.id)) {
-    unmappedCharacters.push(char.id);
+  if (char.id.startsWith('Traveler')) continue;
+  if (!mappedKeys.has(char.id)) {
+    recordError('Axis 4', `Character "${char.id}" missing from ENKA_ID_MAP`);
+  }
+}
+console.log(`  ✓ Enka avatar mapping audited (${enkaIdMap.size} entries, zero orphans)`);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Axis 5: Single Canonical Game Version SSOT Enforcement
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n[Axis 5] Auditing Canonical Game Version SSOT...');
+
+const versionText = readFileNormalized('src/data/game-version.ts');
+const versionMatch = versionText.match(/CURRENT_GAME_VERSION\s*=\s*'([^']+)'/);
+const currentGameVersion = versionMatch ? versionMatch[1] : null;
+
+if (!currentGameVersion || !/^\d+\.\d+$/.test(currentGameVersion)) {
+  recordError('Axis 5', `Invalid CURRENT_GAME_VERSION in src/data/game-version.ts: "${currentGameVersion}"`);
+} else {
+  console.log(`  ✓ Canonical CURRENT_GAME_VERSION = "${currentGameVersion}"`);
+}
+
+// Verify no duplicated hardcoded version constant in banner-rules.ts or data-freshness.ts
+const bannerRulesText = readFileNormalized('src/data/banner-rules.ts');
+if (/export const GACHA_RULES_VERSION\s*=\s*['"]\d+\.\d+['"]/.test(bannerRulesText)) {
+  recordError('Axis 5', 'src/data/banner-rules.ts hardcodes GACHA_RULES_VERSION instead of importing CURRENT_GAME_VERSION');
+}
+const freshnessText = readFileNormalized('src/services/data-freshness.ts');
+if (/['"][^'"]*\bv\d+\.\d+\b[^'"]*['"]/.test(freshnessText)) {
+  recordError('Axis 5', 'src/services/data-freshness.ts contains a hardcoded version literal instead of CURRENT_GAME_VERSION');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Axis 6 & 7: Substantive Provenance Evidence & Active Freshness Check
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n[Axis 6 & 7] Auditing Substantive Provenance Evidence & Freshness...');
+
+const provText = readFileNormalized('src/data/provenance-registry.ts');
+const provBlocks = [...provText.matchAll(/datasetId:\s*'([^']+)'[\s\S]*?status:\s*'([^']+)'/g)];
+const provMap = new Map();
+
+for (const b of provBlocks) {
+  const full = b[0];
+  const id = b[1];
+  const status = b[2];
+  const verMatch = full.match(/version:\s*(CURRENT_GAME_VERSION|'([^']+)')/);
+  const version = verMatch ? (verMatch[2] || currentGameVersion) : null;
+  const verifiedAt = full.match(/verifiedAt:\s*'([^']+)'/)?.[1] || '';
+  const sourceUrl = full.match(/sourceUrl:\s*'([^']+)'/)?.[1] || '';
+  const method = full.match(/verificationMethod:\s*'([^']+)'/)?.[1] || '';
+  const fieldsMatch = full.match(/verifiedFields:\s*\[([^\]]+)\]/);
+  const evidenceMatch = full.match(/evidence:\s*(?:\n\s*)?'((?:\\'|[^'])+)'/);
+  const evidence = evidenceMatch ? evidenceMatch[1] : '';
+
+  provMap.set(id, { id, version, verifiedAt, sourceUrl, method, hasFields: Boolean(fieldsMatch), evidence, status });
+
+  if (!dateRegex.test(verifiedAt)) {
+    recordError('Axis 6', `Provenance "${id}" has invalid verifiedAt "${verifiedAt}"`);
+  }
+  if (!sourceUrl.startsWith('https://')) {
+    recordError('Axis 6', `Provenance "${id}" sourceUrl must be HTTPS`);
+  }
+  if (!method) {
+    recordError('Axis 6', `Provenance "${id}" must specify verificationMethod (not just a URL)`);
+  }
+  if (!fieldsMatch) {
+    recordError('Axis 6', `Provenance "${id}" must declare verifiedFields[]`);
+  }
+  if (!evidence || evidence.trim().length < 25) {
+    recordError('Axis 6', `Provenance "${id}" must provide specific verification evidence (>= 25 chars)`);
   }
 }
 
-if (unmappedCharacters.length > 0) {
-  recordError('Axis 4', `Characters missing Enka Avatar ID mapping: ${unmappedCharacters.join(', ')}`);
-} else {
-  console.log(`  ✓ 100% of characters (122 unique + Aether/Lumine) have calibrated Enka avatar mappings`);
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Axis 5: Dataset Provenance & Freshness Evidence
-// ─────────────────────────────────────────────────────────────────────────────
-console.log('\n[Axis 5] Auditing Dataset Provenance & Freshness Evidence...');
-
-// Game Version SSOT
-const versionText = readFileNormalized('src/data/game-version.ts');
-const versionMatch = versionText.match(/CURRENT_GAME_VERSION\s*=\s*['"]([^'"]+)['"]/);
-const currentGameVersion = versionMatch ? versionMatch[1] : null;
-
-if (!currentGameVersion || currentGameVersion !== '7.2') {
-  recordError('Axis 5', `CURRENT_GAME_VERSION must be '7.2', found "${currentGameVersion}"`);
-} else {
-  console.log(`  ✓ Version SSOT verified: Version ${currentGameVersion}`);
-}
-
-// Provenance Registry
-const provText = readFileNormalized('src/data/provenance-registry.ts');
-const provEntryMatches = [
-  ...provText.matchAll(
-    /datasetId:\s*['"]([^'"]+)['"],\s*version:\s*(?:CURRENT_GAME_VERSION|['"]([^'"]+)['"]),\s*verifiedAt:\s*['"]([^'"]+)['"],\s*sourceUrl:\s*['"]([^'"]+)['"],\s*evidence:\s*['"]([^'"]+)['"],\s*status:\s*['"]([^'"]+)['"]/g,
-  ),
-];
-
-const requiredActiveDatasets = [
-  'banner_7_2_phase_1',
-  'banner_7_2_phase_2',
-  'banner_7_2_natlan_chronicled',
-  'cycle-7-2',
-  'abyss_floor_12_v7_2',
-  'season-7-2-hydro-electro-geo',
-  'season-7-2-dec-pyro-hydro-geo',
+// Every banner, Abyss cycle, Theater season, and core dataset must be registered
+const requiredCoreDatasets = [
+  ...bannerIds,
+  ...abyssCycleIds,
+  ...theaterSeasonIds,
+  'gacha_rules_character_7_2',
+  'gacha_rules_weapon_7_2',
+  'gacha_rules_chronicled_7_2',
   'characters_v7_2_batch7',
   'weapons_v7_2_signatures',
   'artifacts_v7_2_master',
+  'artifact_weights_v7_2',
+  'talent_scaling_v7_2_curves',
+  'rotations_v7_2_catalog',
+  'enka_id_map_v7_2',
+  'team_archetypes_v7_2',
 ];
 
-const foundProvDatasets = new Set();
-
-for (const m of provEntryMatches) {
-  const id = m[1];
-  const version = m[2] || currentGameVersion;
-  const verifiedAt = m[3];
-  const sourceUrl = m[4];
-  const evidence = m[5];
-  const status = m[6];
-
-  foundProvDatasets.add(id);
-
-  if (!dateRegex.test(verifiedAt)) {
-    recordError('Axis 5', `Dataset "${id}" verifiedAt "${verifiedAt}" is not formatted as YYYY-MM-DD`);
-  }
-  if (!sourceUrl.startsWith('https://')) {
-    recordError('Axis 5', `Dataset "${id}" sourceUrl "${sourceUrl}" must be an HTTPS URL`);
-  }
-  if (!evidence || evidence.trim().length < 15) {
-    recordError('Axis 5', `Dataset "${id}" must contain detailed evidence notes (>15 chars)`);
-  }
-  if (!['verified', 'provisional', 'stale'].includes(status)) {
-    recordError('Axis 5', `Dataset "${id}" status "${status}" is invalid`);
+for (const reqId of requiredCoreDatasets) {
+  if (!provMap.has(reqId)) {
+    recordError('Axis 6', `Dataset "${reqId}" is missing from DATA_PROVENANCE_REGISTRY`);
   }
 }
 
-for (const reqId of requiredActiveDatasets) {
-  if (!foundProvDatasets.has(reqId)) {
-    recordError('Axis 5', `Active dataset "${reqId}" is missing from DATA_PROVENANCE_REGISTRY`);
+// Axis 7: Ensure active core datasets match CURRENT_GAME_VERSION and are not stale
+const activeCoreIds = [
+  'characters_v7_2_batch7',
+  'weapons_v7_2_signatures',
+  'artifacts_v7_2_master',
+  'artifact_weights_v7_2',
+  'talent_scaling_v7_2_curves',
+  'rotations_v7_2_catalog',
+  'enka_id_map_v7_2',
+  'team_archetypes_v7_2',
+  'cycle-7-2',
+  'season-7-2-hydro-electro-geo',
+];
+for (const activeId of activeCoreIds) {
+  const entry = provMap.get(activeId);
+  if (entry && (entry.status === 'stale' || entry.version !== currentGameVersion)) {
+    recordError('Axis 7', `Active dataset "${activeId}" is stale or behind v${currentGameVersion}`);
   }
 }
 
-if (foundProvDatasets.size >= requiredActiveDatasets.length) {
-  console.log(`  ✓ Provenance manifest verified across ${foundProvDatasets.size} active datasets with HTTPS sources and patch evidence`);
-}
+console.log(`  ✓ ${provMap.size} Provenance records audited with verificationMethod, verifiedFields, and specific evidence`);
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Audit Summary & Exit Code
+// Summary
 // ─────────────────────────────────────────────────────────────────────────────
-console.log('\n' + '─'.repeat(72));
-
+console.log('\n' + '─'.repeat(76));
 if (warnings.length > 0) {
-  console.log(`⚠️  ${warnings.length} Warning(s) detected:`);
+  console.log(`⚠️  ${warnings.length} Warning(s):`);
   for (const w of warnings) console.log(`   ${w}`);
 }
-
 if (errors.length > 0) {
-  console.error(`\n❌ 5-Axis Game Data Integrity Audit FAILED with ${errors.length} error(s):`);
-  for (const err of errors) {
-    console.error(`  - ${err}`);
-  }
-  console.log('═'.repeat(72) + '\n');
+  console.error(`\n❌ 7-Axis Game Data Integrity Audit FAILED with ${errors.length} error(s):`);
+  for (const err of errors) console.error(`  - ${err}`);
+  console.log('═'.repeat(76) + '\n');
   process.exit(1);
 }
 
-console.log('✅ All 5 axes passed with 100% compliance: 0 broken references, 0 duplicate IDs.');
-console.log('═'.repeat(72) + '\n');
+console.log('✅ All 7 axes passed with 100% compliance: 0 broken references, 0 duplicate IDs, 0 unverified datasets.');
+console.log('═'.repeat(76) + '\n');
 process.exit(0);

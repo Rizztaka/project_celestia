@@ -3,34 +3,39 @@ import type { AbyssCycleConfig } from '../data/abyss-schedules';
 import { DEFAULT_ACTIVE_ABYSS_CYCLE_ID } from '../data/abyss-schedules';
 import { CANONICAL_CHARACTER_IDS } from '../data/character-ids';
 import { CURRENT_GAME_VERSION } from '../data/game-version';
+import { resolveWeaponAlias } from '../data/weapon-aliases';
 import {
   getSavedRoster,
   getSavedProfiles,
   getSavedWeapons,
   getSavedArtifacts,
   getSavedPullBudget,
+  getSavedUid,
   getSavedAbyssCycleId,
   getSavedCustomAbyss,
+  getAuthenticAccountSummary,
   isDemoModeEnabled,
   saveRoster,
   saveProfiles,
   saveWeapons,
   saveArtifacts,
   savePullBudget,
+  saveUid,
   saveAbyssCycleId,
   saveCustomAbyss,
   setDemoModeEnabled,
   createSafetySnapshot,
   rollbackToBackup,
+  sanitizePullBudget,
   CURRENT_SCHEMA_VERSION,
 } from './storage';
-
 
 export interface CelestiaBackupData {
   format: 'celestia_native';
   version: number;
   gameVersion: string;
   exportedAt: string;
+  uid?: string;
   roster: string[];
   profiles: Record<string, OwnedCharacterProfile>;
   rawWeapons: OwnedWeapon[];
@@ -46,6 +51,7 @@ export interface ValidationSummary {
   weaponCount: number;
   artifactCount: number;
   exportedAt: string;
+  uid?: string;
 }
 
 export interface ValidationResult {
@@ -61,6 +67,15 @@ export interface LastBackupMetadata {
   characterCount: number;
   weaponCount: number;
   artifactCount: number;
+}
+
+export interface AccountConflictResult {
+  hasConflict: boolean;
+  reason?: 'uid_mismatch' | 'existing_account_overwrite';
+  currentUid: string;
+  incomingUid: string;
+  currentCharacterCount: number;
+  incomingCharacterCount: number;
 }
 
 export function recordLastBackupMeta(meta: LastBackupMetadata): boolean {
@@ -90,6 +105,7 @@ export function exportAccountBackup(): CelestiaBackupData {
     version: CURRENT_SCHEMA_VERSION,
     gameVersion: CURRENT_GAME_VERSION,
     exportedAt: new Date().toISOString(),
+    uid: getSavedUid(),
     roster: getSavedRoster(),
     profiles: getSavedProfiles(),
     rawWeapons: getSavedWeapons(),
@@ -108,6 +124,100 @@ export function exportAccountBackup(): CelestiaBackupData {
   });
 
   return backup;
+}
+
+/**
+ * Detects if restoring this backup would overwrite an existing, different account.
+ */
+export function detectAccountConflict(incoming: CelestiaBackupData): AccountConflictResult {
+  const authentic = getAuthenticAccountSummary();
+  const currentUid = authentic.uid;
+  const incomingUid = (incoming.uid || '').trim();
+  const currentCharacterCount = authentic.characterCount;
+  const incomingCharacterCount = Array.isArray(incoming.roster)
+    ? incoming.roster.length
+    : Object.keys(incoming.profiles || {}).length;
+
+  // Conflict 1: Explicit UID mismatch between active account and backup
+  if (currentUid && incomingUid && currentUid !== incomingUid) {
+    return {
+      hasConflict: true,
+      reason: 'uid_mismatch',
+      currentUid,
+      incomingUid,
+      currentCharacterCount,
+      incomingCharacterCount,
+    };
+  }
+
+  // Conflict 2: Active account has existing populated data (chars > 0 or UID set)
+  // and incoming backup has a different or newly introduced UID
+  if (currentCharacterCount > 0 && incomingUid && !currentUid) {
+    return {
+      hasConflict: true,
+      reason: 'existing_account_overwrite',
+      currentUid: '(unassigned)',
+      incomingUid,
+      currentCharacterCount,
+      incomingCharacterCount,
+    };
+  }
+
+  return {
+    hasConflict: false,
+    currentUid,
+    incomingUid,
+    currentCharacterCount,
+    incomingCharacterCount,
+  };
+}
+
+/**
+ * Normalizes legacy v1 backup structures, aliased weapon keys, and legacy pull budgets to v2 standards.
+ */
+export function normalizeBackupPayload(backup: CelestiaBackupData): CelestiaBackupData {
+  const normalizedProfiles: Record<string, OwnedCharacterProfile> = {};
+  if (backup.profiles && typeof backup.profiles === 'object' && !Array.isArray(backup.profiles)) {
+    for (const [charId, prof] of Object.entries(backup.profiles)) {
+      if (charId === '__proto__' || charId === 'constructor' || charId === 'prototype') continue;
+      const copy: OwnedCharacterProfile = { ...prof };
+      if (copy.weapon) {
+        const rawKey = copy.weapon.key || (copy.weapon as any).weaponKey;
+        const alias = resolveWeaponAlias(rawKey) || resolveWeaponAlias(copy.weapon.name);
+        if (alias) {
+          copy.weapon = {
+            ...copy.weapon,
+            key: alias.key,
+            name: alias.name,
+            rarity: alias.rarity,
+          };
+        }
+      }
+      normalizedProfiles[charId] = copy;
+    }
+  }
+
+  const normalizedWeapons: OwnedWeapon[] = Array.isArray(backup.rawWeapons)
+    ? backup.rawWeapons.map((w: any) => {
+        if (!w || typeof w !== 'object') return w;
+        const rawKey = w.key || w.weaponKey;
+        const alias = resolveWeaponAlias(rawKey) || resolveWeaponAlias(w.name);
+        return {
+          ...w,
+          key: alias?.key || rawKey,
+          name: alias?.name || w.name,
+          rarity: alias?.rarity || w.rarity || 4,
+        };
+      })
+    : [];
+
+  return {
+    ...backup,
+    version: CURRENT_SCHEMA_VERSION,
+    profiles: normalizedProfiles,
+    rawWeapons: normalizedWeapons,
+    pullBudget: sanitizePullBudget(backup.pullBudget),
+  };
 }
 
 export function validateBackupData(data: unknown): ValidationResult {
@@ -130,6 +240,13 @@ export function validateBackupData(data: unknown): ValidationResult {
     payload.version > CURRENT_SCHEMA_VERSION
   ) {
     errors.push(`Unsupported schema version: ${payload.version}. Max supported version is ${CURRENT_SCHEMA_VERSION}.`);
+  }
+
+  // Validate UID if present
+  if (payload.uid !== undefined && payload.uid !== null && payload.uid !== '') {
+    if (typeof payload.uid !== 'string' || !/^\d{9,10}$/.test(payload.uid.trim())) {
+      errors.push(`Invalid account UID format in backup: "${payload.uid}". Expected 9 or 10 digits.`);
+    }
   }
 
   if (!Array.isArray(payload.roster)) {
@@ -172,6 +289,52 @@ export function validateBackupData(data: unknown): ValidationResult {
       ) {
         errors.push(`Character "${charId}" constellation must be an integer between 0 and 6.`);
       }
+      if (
+        p.ascension !== undefined &&
+        (!Number.isFinite(p.ascension) ||
+          !Number.isInteger(p.ascension) ||
+          p.ascension < 0 ||
+          p.ascension > 6)
+      ) {
+        errors.push(`Character "${charId}" ascension must be an integer between 0 and 6.`);
+      }
+      if (p.talents !== undefined && p.talents !== null) {
+        if (typeof p.talents !== 'object' || Array.isArray(p.talents)) {
+          errors.push(`Character "${charId}" talents must be an object.`);
+        } else {
+          for (const talentKey of ['auto', 'skill', 'burst'] as const) {
+            const tVal = p.talents[talentKey];
+            if (
+              tVal !== undefined &&
+              (!Number.isFinite(tVal) || !Number.isInteger(tVal) || tVal < 1 || tVal > 15)
+            ) {
+              errors.push(`Character "${charId}" talent ${talentKey} must be an integer between 1 and 15.`);
+            }
+          }
+        }
+      }
+      if (p.weapon !== undefined && p.weapon !== null) {
+        if (typeof p.weapon !== 'object' || Array.isArray(p.weapon)) {
+          errors.push(`Character "${charId}" weapon must be a valid weapon object.`);
+        } else {
+          const wKey = p.weapon.key || p.weapon.weaponKey;
+          if (typeof wKey !== 'string' || !wKey.trim()) {
+            errors.push(`Character "${charId}" weapon must have a valid key string.`);
+          }
+          if (
+            p.weapon.level !== undefined &&
+            (!Number.isFinite(p.weapon.level) || !Number.isInteger(p.weapon.level) || p.weapon.level < 1 || p.weapon.level > 90)
+          ) {
+            errors.push(`Character "${charId}" weapon level must be an integer between 1 and 90.`);
+          }
+          if (
+            p.weapon.refinement !== undefined &&
+            (!Number.isFinite(p.weapon.refinement) || !Number.isInteger(p.weapon.refinement) || p.weapon.refinement < 1 || p.weapon.refinement > 5)
+          ) {
+            errors.push(`Character "${charId}" weapon refinement must be an integer between 1 and 5.`);
+          }
+        }
+      }
     }
   }
 
@@ -183,11 +346,43 @@ export function validateBackupData(data: unknown): ValidationResult {
         errors.push('Each weapon in weapons armory must be a valid object.');
         break;
       }
+      const wKey = w.key || w.weaponKey;
+      if (typeof wKey !== 'string' || !wKey.trim()) {
+        errors.push('Each weapon must have a valid key string.');
+        break;
+      }
+      if (
+        w.level !== undefined &&
+        (!Number.isFinite(w.level) || !Number.isInteger(w.level) || w.level < 1 || w.level > 90)
+      ) {
+        errors.push(`Weapon "${w.name || wKey}" level must be an integer between 1 and 90.`);
+        break;
+      }
+      if (
+        w.refinement !== undefined &&
+        (!Number.isFinite(w.refinement) || !Number.isInteger(w.refinement) || w.refinement < 1 || w.refinement > 5)
+      ) {
+        errors.push(`Weapon "${w.name || wKey}" refinement must be an integer between 1 and 5.`);
+        break;
+      }
+      if (w.location && typeof w.location === 'string' && w.location.trim().length > 0) {
+        if (!CANONICAL_CHARACTER_IDS.has(w.location)) {
+          errors.push(`Weapon equipped location references invalid character: "${w.location}".`);
+          break;
+        }
+      }
     }
   }
 
   if (!Array.isArray(payload.rawArtifacts)) {
     errors.push('Artifacts must be an array.');
+  } else {
+    for (const art of payload.rawArtifacts) {
+      if (!art || typeof art !== 'object' || Array.isArray(art)) {
+        errors.push('Each artifact in rawArtifacts must be a valid object.');
+        break;
+      }
+    }
   }
 
   if (!payload.pullBudget || typeof payload.pullBudget !== 'object' || Array.isArray(payload.pullBudget)) {
@@ -230,7 +425,26 @@ export function validateBackupData(data: unknown): ValidationResult {
         pb.consecutiveLossCount < 0 ||
         pb.consecutiveLossCount > 5
       ) {
-        errors.push(`Consecutive loss count must be between 0 and 5.`);
+        errors.push('Consecutive loss count must be between 0 and 5.');
+      }
+    }
+    if (pb.chronicledPity !== undefined) {
+      if (
+        typeof pb.chronicledPity !== 'number' ||
+        !Number.isFinite(pb.chronicledPity) ||
+        pb.chronicledPity < 0 ||
+        pb.chronicledPity > 89
+      ) {
+        errors.push(`Chronicled pity must be between 0 and 89 (received ${pb.chronicledPity}).`);
+      }
+    }
+    if (pb.chronicledFatePoints !== undefined) {
+      if (
+        typeof pb.chronicledFatePoints !== 'number' ||
+        !Number.isFinite(pb.chronicledFatePoints) ||
+        (pb.chronicledFatePoints !== 0 && pb.chronicledFatePoints !== 1)
+      ) {
+        errors.push(`Chronicled Fate Points must be 0 or 1 (received ${pb.chronicledFatePoints}).`);
       }
     }
   }
@@ -242,6 +456,14 @@ export function validateBackupData(data: unknown): ValidationResult {
       const ca = payload.customAbyssConfig;
       if (!Array.isArray(ca.chambers) || ca.chambers.length !== 3) {
         errors.push('Custom Abyss configuration must have exactly 3 chambers.');
+      } else {
+        for (let idx = 0; idx < 3; idx++) {
+          const ch = ca.chambers[idx];
+          if (!ch || typeof ch !== 'object' || !ch.firstHalf || !ch.secondHalf) {
+            errors.push(`Custom Abyss chamber ${idx + 1} must configure both firstHalf and secondHalf.`);
+            break;
+          }
+        }
       }
     }
   }
@@ -264,14 +486,19 @@ export function validateBackupData(data: unknown): ValidationResult {
       weaponCount: Array.isArray(payload.rawWeapons) ? payload.rawWeapons.length : 0,
       artifactCount: Array.isArray(payload.rawArtifacts) ? payload.rawArtifacts.length : 0,
       exportedAt: typeof payload.exportedAt === 'string' ? payload.exportedAt : new Date().toISOString(),
+      uid: typeof payload.uid === 'string' ? payload.uid.trim() : undefined,
     },
   };
 }
 
-export function importAccountBackup(backup: CelestiaBackupData): {
+export function importAccountBackup(
+  backup: CelestiaBackupData,
+  options?: { forceOverwrite?: boolean },
+): {
   success: boolean;
   error?: string;
   rolledBack?: boolean;
+  conflict?: boolean;
 } {
   try {
     const validation = validateBackupData(backup);
@@ -279,37 +506,65 @@ export function importAccountBackup(backup: CelestiaBackupData): {
       return { success: false, error: validation.errors.join('; ') };
     }
 
+    // Safety: check cross-account conflict unless forceOverwrite is confirmed
+    if (!options?.forceOverwrite) {
+      const conflict = detectAccountConflict(backup);
+      if (conflict.hasConflict) {
+        const errorMsg =
+          conflict.reason === 'uid_mismatch'
+            ? `Account identity mismatch: Active account is UID ${conflict.currentUid} (${conflict.currentCharacterCount} characters), but backup is for UID ${conflict.incomingUid} (${conflict.incomingCharacterCount} characters). Check overwrite confirmation to proceed.`
+            : `Active account has ${conflict.currentCharacterCount} saved characters. Restoring this backup will replace existing data. Check overwrite confirmation to proceed.`;
+        return {
+          success: false,
+          conflict: true,
+          error: errorMsg,
+        };
+      }
+    }
+
     // Safety: snapshot current state before overwriting
     const snapshotOk = createSafetySnapshot('celestia_backup_pre_restore');
     if (!snapshotOk) {
       return {
         success: false,
-        error: 'Failed to create safety snapshot prior to restore. Storage may be unavailable.',
+        error: 'Failed to create safety snapshot prior to restore. Storage may be unavailable or quota exceeded.',
       };
     }
 
-    // Set target namespace before writing so restored data routes into the correct storage keys
-    setDemoModeEnabled(Boolean(backup.demoMode));
+    const normalized = normalizeBackupPayload(backup);
 
-    // Overwrite stored state and track write outcomes
+    // Set target namespace before writing so restored data routes into the correct storage keys
+    const demoOk = setDemoModeEnabled(Boolean(normalized.demoMode));
+    if (!demoOk) {
+      rollbackPreRestoreBackup();
+      return {
+        success: false,
+        error: 'Failed to configure target storage namespace.',
+        rolledBack: true,
+      };
+    }
+
+    // Overwrite stored state and track write outcomes across all domains
     const results = [
-      saveProfiles(backup.profiles || {}),
-      saveRoster(backup.roster || Object.keys(backup.profiles || {})),
-      saveWeapons(backup.rawWeapons || []),
-      saveArtifacts(backup.rawArtifacts || []),
-      savePullBudget(backup.pullBudget),
+      saveProfiles(normalized.profiles || {}),
+      saveRoster(normalized.roster || Object.keys(normalized.profiles || {})),
+      saveWeapons(normalized.rawWeapons || []),
+      saveArtifacts(normalized.rawArtifacts || []),
+      savePullBudget(normalized.pullBudget),
+      saveUid(normalized.uid || ''),
     ];
 
-    if (backup.abyssCycleId) {
-      results.push(saveAbyssCycleId(backup.abyssCycleId));
+    if (normalized.abyssCycleId) {
+      results.push(saveAbyssCycleId(normalized.abyssCycleId));
     } else {
       results.push(saveAbyssCycleId(DEFAULT_ACTIVE_ABYSS_CYCLE_ID));
     }
 
-    if (backup.customAbyssConfig) {
-      results.push(saveCustomAbyss(backup.customAbyssConfig));
+    if (normalized.customAbyssConfig) {
+      results.push(saveCustomAbyss(normalized.customAbyssConfig));
     } else if (typeof localStorage !== 'undefined') {
-      localStorage.removeItem('celestia_v2_custom_abyss');
+      const abyssKey = isDemoModeEnabled() ? 'celestia_v2_demo_custom_abyss' : 'celestia_v2_custom_abyss';
+      localStorage.removeItem(abyssKey);
     }
 
     if (results.some((res) => res === false)) {
@@ -323,12 +578,42 @@ export function importAccountBackup(backup: CelestiaBackupData): {
 
     // Post-restore verification: confirm records were written accurately
     const verifiedProfiles = getSavedProfiles();
-    const expectedKeys = Object.keys(backup.profiles || {});
-    if (expectedKeys.length > 0 && !expectedKeys.every((k) => verifiedProfiles[k] !== undefined)) {
+    const expectedProfileKeys = Object.keys(normalized.profiles || {});
+    if (expectedProfileKeys.length > 0 && !expectedProfileKeys.every((k) => verifiedProfiles[k] !== undefined)) {
       rollbackPreRestoreBackup();
       return {
         success: false,
         error: 'Post-restore verification failed: profiles did not persist accurately. All modifications were automatically rolled back.',
+        rolledBack: true,
+      };
+    }
+
+    const verifiedWeapons = getSavedWeapons();
+    const expectedWeaponCount = (normalized.rawWeapons || []).length;
+    if (expectedWeaponCount > 0 && verifiedWeapons.length !== expectedWeaponCount) {
+      rollbackPreRestoreBackup();
+      return {
+        success: false,
+        error: 'Post-restore verification failed: weapons armory count mismatch. All modifications were automatically rolled back.',
+        rolledBack: true,
+      };
+    }
+
+    const verifiedBudget = getSavedPullBudget();
+    if (verifiedBudget.primogems !== normalized.pullBudget.primogems || verifiedBudget.fates !== normalized.pullBudget.fates) {
+      rollbackPreRestoreBackup();
+      return {
+        success: false,
+        error: 'Post-restore verification failed: pull budget did not persist accurately. All modifications were automatically rolled back.',
+        rolledBack: true,
+      };
+    }
+
+    if (normalized.uid && getSavedUid() !== normalized.uid) {
+      rollbackPreRestoreBackup();
+      return {
+        success: false,
+        error: 'Post-restore verification failed: UID did not persist accurately. All modifications were automatically rolled back.',
         rolledBack: true,
       };
     }

@@ -18,6 +18,12 @@ export default defineConfig({
           if (normalized.includes('src/data/weapons.ts')) {
             return 'genshin-weapons';
           }
+          if (normalized.includes('src/data/character-rotations.ts')) {
+            return 'genshin-rotations';
+          }
+          if (normalized.includes('src/data/artifact-weights.ts')) {
+            return 'genshin-artifact-weights';
+          }
         },
       },
     },
@@ -39,23 +45,26 @@ export default defineConfig({
           ) {
             return 'vendor-react';
           }
+          if (normalized.includes('node_modules/lucide-react')) {
+            return 'vendor-lucide';
+          }
           if (normalized.includes('src/data/characters.ts')) {
             return 'genshin-characters';
           }
           if (normalized.includes('src/data/weapons.ts')) {
             return 'genshin-weapons';
           }
-          if (
-            normalized.includes('src/data/artifacts-master.ts') ||
-            normalized.includes('src/data/artifact-weights.ts')
-          ) {
-            return 'genshin-artifacts';
+          if (normalized.includes('src/data/artifacts-master.ts')) {
+            return 'genshin-artifacts-master';
+          }
+          if (normalized.includes('src/data/artifact-weights.ts')) {
+            return 'genshin-artifact-weights';
           }
           if (normalized.includes('src/data/character-rotations.ts')) {
             return 'genshin-rotations';
           }
-          if (normalized.includes('node_modules/lucide-react')) {
-            return 'vendor-lucide';
+          if (normalized.includes('src/services/solver-dispatcher.ts')) {
+            return 'solver-dispatcher';
           }
         },
       },

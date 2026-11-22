@@ -12,6 +12,8 @@ import {
   isDemoModeEnabled,
   setDemoModeEnabled,
   resetAccountData,
+  isStorageAvailable,
+  getLastStorageErrorInfo,
 } from './services/storage';
 import { fetchShowcaseFromEnka } from './services/enka';
 import type { OwnedCharacterProfile, OwnedWeapon } from './types/genshin';
@@ -104,6 +106,7 @@ export const App: React.FC = () => {
   const [isArmoryOpen, setIsArmoryOpen] = useState<boolean>(false);
   const [isBackupModalOpen, setIsBackupModalOpen] = useState<boolean>(false);
   const [isDemoMode, setIsDemoMode] = useState<boolean>(isDemoModeEnabled);
+  const [namespaceVersion, setNamespaceVersion] = useState<number>(0);
   const [uid, setUidState] = useState<string>(getSavedUid);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [notification, setNotification] = useState<{
@@ -112,6 +115,7 @@ export const App: React.FC = () => {
   } | null>(null);
 
   const notificationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const skipNextPersistRef = useRef<boolean>(false);
 
   const dismissNotification = useCallback(() => {
     if (notificationTimerRef.current) {
@@ -143,6 +147,17 @@ export const App: React.FC = () => {
     };
   }, []);
 
+  // Probe storage availability on initialization and warn if blocked
+  useEffect(() => {
+    if (!isStorageAvailable()) {
+      showNotification(
+        'error',
+        'Browser storage is unavailable or restricted. Account changes will not persist across browser restarts.',
+        7500
+      );
+    }
+  }, [showNotification]);
+
   // Keep page title aligned with current view for accessibility & browser tabs
   useEffect(() => {
     const viewName = TAB_TITLES[activeTab] ?? 'Genshin Companion';
@@ -170,39 +185,78 @@ export const App: React.FC = () => {
   };
 
   const handleRestoreAccount = () => {
+    skipNextPersistRef.current = true;
     setProfiles(getSavedProfiles());
     setWeapons(getSavedWeapons());
     setIsDemoMode(isDemoModeEnabled());
     setUidState(getSavedUid());
+    setNamespaceVersion((v) => v + 1);
     handleResetViews();
   };
 
   // Derived owned character IDs list
   const ownedIds = useMemo(() => Object.keys(profiles), [profiles]);
 
-  // Sync roster profiles & legacy list to localStorage
+  // Sync roster profiles & legacy list to localStorage with error handling
   useEffect(() => {
-    saveProfiles(profiles);
-  }, [profiles]);
+    if (skipNextPersistRef.current) return;
+    if (!isStorageAvailable()) return;
+    const ok = saveProfiles(profiles);
+    if (!ok) {
+      const err = getLastStorageErrorInfo();
+      showNotification(
+        'error',
+        err?.code === 'QUOTA_EXCEEDED'
+          ? 'Storage quota exceeded: character profiles could not be saved to your browser.'
+          : 'Storage write failed: character profiles could not be saved.',
+        6000
+      );
+    }
+  }, [profiles, showNotification]);
 
-  // Sync weapons bag to localStorage
+  // Sync weapons bag to localStorage with error handling
   useEffect(() => {
-    saveWeapons(weapons);
-  }, [weapons]);
+    if (skipNextPersistRef.current) {
+      skipNextPersistRef.current = false;
+      return;
+    }
+    if (!isStorageAvailable()) return;
+    const ok = saveWeapons(weapons);
+    if (!ok) {
+      const err = getLastStorageErrorInfo();
+      showNotification(
+        'error',
+        err?.code === 'QUOTA_EXCEEDED'
+          ? 'Storage quota exceeded: weapons armory could not be saved to your browser.'
+          : 'Storage write failed: weapons armory could not be saved.',
+        6000
+      );
+    }
+  }, [weapons, showNotification]);
 
   const handleUpdateWeapons = (newWeapons: OwnedWeapon[]) => {
     setWeapons(newWeapons);
-    saveWeapons(newWeapons);
+    const ok = saveWeapons(newWeapons);
+    if (!ok) {
+      showNotification('error', 'Failed to save updated weapons to storage.');
+    }
   };
 
   const handleToggleDemoMode = (enable: boolean) => {
-    setDemoModeEnabled(enable);
+    skipNextPersistRef.current = true;
+    const ok = setDemoModeEnabled(enable);
+    if (!ok) {
+      showNotification('error', 'Unable to toggle Demo Mode due to storage restrictions.');
+      return;
+    }
     setIsDemoMode(enable);
+    setNamespaceVersion((v) => v + 1);
     if (enable) {
       const demoProfs = getSavedProfiles();
       const demoWeps = getSavedWeapons();
       setProfiles(demoProfs);
       setWeapons(demoWeps);
+      setUidState(getSavedUid());
       showNotification(
         'success',
         'Demo Mode enabled. You are exploring an isolated sandbox — your real account data is preserved.'
@@ -213,6 +267,7 @@ export const App: React.FC = () => {
       const realWeps = getSavedWeapons();
       setProfiles(realProfs);
       setWeapons(realWeps);
+      setUidState(getSavedUid());
       showNotification(
         'success',
         'Demo Mode disabled. Switched back to your authentic account data.'
@@ -221,21 +276,26 @@ export const App: React.FC = () => {
   };
 
   const handleResetAccount = () => {
+    skipNextPersistRef.current = true;
     resetAccountData();
     setIsDemoMode(false);
     setProfiles({});
     setWeapons([]);
     setUidState('');
+    setNamespaceVersion((v) => v + 1);
     handleResetViews();
     showNotification(
       'success',
-      'Account data cleared. All saved profiles, weapons, and UID reset to empty state.'
+      'Account data cleared. All saved profiles, weapons, UID, pull planner, and Abyss settings reset to empty state.'
     );
   };
 
   const handleSetUid = (newUid: string) => {
     setUidState(newUid);
-    saveUid(newUid);
+    const ok = saveUid(newUid);
+    if (!ok) {
+      showNotification('error', 'Failed to save UID to browser storage.');
+    }
   };
 
   const handleToggleOwned = (id: string) => {
@@ -442,13 +502,18 @@ export const App: React.FC = () => {
                   )}
                   {activeTab === 'pulls' && (
                     <PullAdvisorView
+                      key={`pulls-${namespaceVersion}-${isDemoMode}`}
                       ownedIds={ownedIds}
                       profiles={profiles}
                       weapons={weapons}
                     />
                   )}
                   {activeTab === 'endgame' && (
-                    <EndgameView ownedIds={ownedIds} profiles={profiles} />
+                    <EndgameView
+                      key={`endgame-${namespaceVersion}-${isDemoMode}`}
+                      ownedIds={ownedIds}
+                      profiles={profiles}
+                    />
                   )}
                   {activeTab === 'artifacts' && <ArtifactStopView />}
                   {activeTab === 'roster' && (

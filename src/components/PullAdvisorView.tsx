@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useDeferredValue, Suspense } from 'react';
 import type {
   Character,
   EnhancedPullAdvice,
@@ -9,15 +9,21 @@ import type {
 import { evaluateComprehensivePullROI } from '../engines/pull-advisor';
 import { BANNER_PHASES } from '../data/banners';
 import { CHARACTERS } from '../data/characters';
+import { CURRENT_GAME_VERSION } from '../data/game-version';
 import { getWeaponByKey } from '../data/weapons';
 import { getSavedPullBudget, savePullBudget } from '../services/storage';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { PullBudgetCard } from './PullBudgetCard';
 import { InfoTooltip } from './InfoTooltip';
-import { DataFreshnessBadge } from './DataFreshnessBadge';
-import { PullDistributionModal } from './PullDistributionModal';
-import { GachaAssumptionsModal } from './GachaAssumptionsModal';
+import { DataFreshnessBadge, StaleDataWarningBanner } from './DataFreshnessBadge';
+
+const LazyPullDistributionModal = React.lazy(() =>
+  import('./PullDistributionModal').then((m) => ({ default: m.PullDistributionModal }))
+);
+const LazyGachaAssumptionsModal = React.lazy(() =>
+  import('./GachaAssumptionsModal').then((m) => ({ default: m.GachaAssumptionsModal }))
+);
 import {
   Compass,
   CheckCircle2,
@@ -54,6 +60,7 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
   const [expandedBreakdowns, setExpandedBreakdowns] = useState<Record<string, boolean>>({});
   const [bannerFilter, setBannerFilter] = useState<string>('banner_7_2_phase_1');
   const [budget, setBudget] = useState<PullBudgetState>(() => getSavedPullBudget());
+  const deferredBudget = useDeferredValue(budget);
   const [simulationToast, setSimulationToast] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -91,10 +98,10 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
     return evaluateComprehensivePullROI(
       effectiveProfiles,
       effectiveWeapons,
-      budget,
+      deferredBudget,
       bannerFilter,
     );
-  }, [effectiveProfiles, effectiveWeapons, budget, bannerFilter]);
+  }, [effectiveProfiles, effectiveWeapons, deferredBudget, bannerFilter]);
 
   const displayedRecommendations = showAll
     ? recommendations
@@ -191,7 +198,7 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-3 mb-1.5">
           <div className="flex items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase">
             <Compass className="w-4 h-4" aria-hidden="true" />
-            <span>Account-Aware Pull Advisor v2 (Version 7.2 Baseline)</span>
+            <span>Account-Aware Pull Advisor v2 (Version {CURRENT_GAME_VERSION} Baseline)</span>
           </div>
 
           <button
@@ -278,6 +285,10 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
           </button>
         </div>
       </div>
+
+      {bannerFilter !== 'sandbox' && bannerFilter !== 'all' && (
+        <StaleDataWarningBanner datasetId={bannerFilter} contextLabel="Banner Schedule" />
+      )}
 
       {/* Target Recommendations Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -632,19 +643,27 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
       />
 
       {/* Probability Distribution Modal */}
-      <PullDistributionModal
-        item={selectedDistributionItem}
-        onClose={() => setSelectedDistributionItem(null)}
-        pullsAvailable={selectedDistributionItem?.odds.pullsAvailable}
-        budget={budget}
-        bannerFilter={bannerFilter}
-      />
+      {selectedDistributionItem && (
+        <Suspense fallback={null}>
+          <LazyPullDistributionModal
+            item={selectedDistributionItem}
+            onClose={() => setSelectedDistributionItem(null)}
+            pullsAvailable={selectedDistributionItem?.odds.pullsAvailable}
+            budget={budget}
+            bannerFilter={bannerFilter}
+          />
+        </Suspense>
+      )}
 
       {/* Gacha Assumptions & Methodology Modal */}
-      <GachaAssumptionsModal
-        isOpen={isAssumptionsOpen}
-        onClose={() => setIsAssumptionsOpen(false)}
-      />
+      {isAssumptionsOpen && (
+        <Suspense fallback={null}>
+          <LazyGachaAssumptionsModal
+            isOpen={isAssumptionsOpen}
+            onClose={() => setIsAssumptionsOpen(false)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };

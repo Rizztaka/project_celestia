@@ -8,19 +8,25 @@ import type {
   TheaterSeasonConfig,
 } from '../types/genshin';
 import type { AbyssCycleConfig } from '../data/abyss-schedules';
-import { solveAbyssDualTeams } from '../engines/abyss-solver';
-import { generateBestTeams } from '../engines/team-generator';
-import { autoDraftTheaterSchedule, type TheaterScheduleResult } from '../engines/theater-solver';
+import type { TheaterScheduleResult } from '../engines/theater-solver';
 
 let workerInstance: Worker | null = null;
+let workerFailed = false;
 let messageIdSeq = 0;
 const pendingCallbacks = new Map<
   number,
   { resolve: (val: any) => void; reject: (err: any) => void }
 >();
 
+function rejectAllPending(reason: Error) {
+  for (const [id, cb] of pendingCallbacks.entries()) {
+    pendingCallbacks.delete(id);
+    cb.reject(reason);
+  }
+}
+
 function getWorker(): Worker | null {
-  if (typeof window === 'undefined' || typeof Worker === 'undefined') {
+  if (workerFailed || typeof window === 'undefined' || typeof Worker === 'undefined') {
     return null;
   }
   if (!workerInstance) {
@@ -42,43 +48,62 @@ function getWorker(): Worker | null {
         }
       };
       workerInstance.onerror = (err) => {
-        console.error('[SolverWorker] Worker error:', err);
+        console.error('[SolverWorker] Worker error, falling back to main thread:', err);
+        workerFailed = true;
+        workerInstance?.terminate();
+        workerInstance = null;
+        rejectAllPending(new Error('Solver worker crashed'));
       };
     } catch {
+      workerFailed = true;
       workerInstance = null;
     }
   }
   return workerInstance;
 }
 
+function runWorkerTask<T>(type: string, payload: Record<string, unknown>): Promise<T> {
+  const worker = getWorker();
+  if (!worker) {
+    return Promise.reject(new Error('Worker unavailable'));
+  }
+
+  const id = ++messageIdSeq;
+  return new Promise<T>((resolve, reject) => {
+    pendingCallbacks.set(id, { resolve, reject });
+    try {
+      worker.postMessage({ id, type, payload });
+    } catch (err) {
+      pendingCallbacks.delete(id);
+      reject(err);
+    }
+  });
+}
+
 /**
- * Offloads dual Abyss floor 12 solving to a Web Worker when available,
- * gracefully falling back to main-thread execution in environments without Web Worker support.
+ * Offloads dual Abyss Floor 12 solving to a Web Worker when available,
+ * dynamically importing the solver on the main thread only if workers are unavailable.
  */
 export async function dispatchSolveAbyss(
   ownedIds: string[],
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
   cycle?: AbyssCycleConfig,
 ): Promise<AbyssDualTeamPlan> {
-  const worker = getWorker();
-  if (!worker) {
+  try {
+    return await runWorkerTask<AbyssDualTeamPlan>('SOLVE_ABYSS', {
+      ownedIds,
+      rosterProfiles,
+      cycle,
+    });
+  } catch {
+    const { solveAbyssDualTeams } = await import('../engines/abyss-solver');
     return solveAbyssDualTeams(ownedIds, rosterProfiles, cycle);
   }
-
-  const id = ++messageIdSeq;
-  return new Promise((resolve, reject) => {
-    pendingCallbacks.set(id, { resolve, reject });
-    worker.postMessage({
-      id,
-      type: 'SOLVE_ABYSS',
-      payload: { ownedIds, rosterProfiles, cycle },
-    });
-  });
 }
 
 /**
- * Offloads team recommendations generation to a Web Worker when available,
- * gracefully falling back to main-thread execution in environments without Web Worker support.
+ * Offloads team recommendation generation to a Web Worker when available,
+ * dynamically importing the generator on the main thread only if workers are unavailable.
  */
 export async function dispatchGenerateBestTeams(
   availableIds: string[],
@@ -87,8 +112,16 @@ export async function dispatchGenerateBestTeams(
   ownedWeapons?: OwnedWeapon[],
   allowCatalogFallback?: boolean,
 ): Promise<TeamRecommendation[]> {
-  const worker = getWorker();
-  if (!worker) {
+  try {
+    return await runWorkerTask<TeamRecommendation[]>('GENERATE_TEAMS', {
+      availableIds,
+      focusCharacterId,
+      rosterProfiles,
+      ownedWeapons,
+      allowCatalogFallback,
+    });
+  } catch {
+    const { generateBestTeams } = await import('../engines/team-generator');
     return generateBestTeams(
       availableIds,
       focusCharacterId,
@@ -97,27 +130,11 @@ export async function dispatchGenerateBestTeams(
       allowCatalogFallback,
     );
   }
-
-  const id = ++messageIdSeq;
-  return new Promise((resolve, reject) => {
-    pendingCallbacks.set(id, { resolve, reject });
-    worker.postMessage({
-      id,
-      type: 'GENERATE_TEAMS',
-      payload: {
-        availableIds,
-        focusCharacterId,
-        rosterProfiles,
-        ownedWeapons,
-        allowCatalogFallback,
-      },
-    });
-  });
 }
 
 /**
  * Offloads Imaginarium Theater auto-drafting to a Web Worker when available,
- * gracefully falling back to main-thread execution in environments without Web Worker support.
+ * dynamically importing the solver on the main thread only if workers are unavailable.
  */
 export async function dispatchAutoDraftTheater(
   eligible: Character[],
@@ -126,8 +143,16 @@ export async function dispatchAutoDraftTheater(
   userLocks?: Record<number, string[]>,
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
 ): Promise<TheaterScheduleResult> {
-  const worker = getWorker();
-  if (!worker) {
+  try {
+    return await runWorkerTask<TheaterScheduleResult>('SOLVE_THEATER', {
+      eligible,
+      difficulty,
+      season,
+      userLocks,
+      rosterProfiles,
+    });
+  } catch {
+    const { autoDraftTheaterSchedule } = await import('../engines/theater-solver');
     return autoDraftTheaterSchedule(
       eligible,
       difficulty,
@@ -136,20 +161,4 @@ export async function dispatchAutoDraftTheater(
       rosterProfiles,
     );
   }
-
-  const id = ++messageIdSeq;
-  return new Promise((resolve, reject) => {
-    pendingCallbacks.set(id, { resolve, reject });
-    worker.postMessage({
-      id,
-      type: 'SOLVE_THEATER',
-      payload: {
-        eligible,
-        difficulty,
-        season,
-        userLocks,
-        rosterProfiles,
-      },
-    });
-  });
 }

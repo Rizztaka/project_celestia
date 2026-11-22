@@ -264,10 +264,19 @@ export interface OwnedCharacter {
   weapon?: EquippedWeapon;
 }
 
+export interface TeamDamageOutputInfo {
+  status: 'heuristic_only' | 'unsimulated' | 'calibrated';
+  archetypeTier?: string;
+  relativeOutputPercentile?: number;
+  disclaimer: string;
+}
+
 export interface TeamScoreBreakdown {
   compatibilityScore: number; // 0-100% mechanical synergy (reactions, resonance, roles, energy)
   investmentScore: number; // 0-100 account equipment (weapon tier, level, constellations)
   benchmarkTier: 'S+' | 'S' | 'A' | 'B'; // Theorycrafting power tier
+  practicalPerformanceScore?: number; // 0-100% composite of compatibility, comfort, energy & mechanics
+  damageOutput?: TeamDamageOutputInfo;
 }
 
 export interface CharacterSwapAlternative {
@@ -276,6 +285,16 @@ export interface CharacterSwapAlternative {
   tradeOffPros: string[];
   tradeOffCons: string[];
   compatibilityImpact: number;
+  whyLowerScore?: string;
+}
+
+export interface IdealSupportGap {
+  characterId: string;
+  characterName: string;
+  role: string;
+  element: Element;
+  replacementForRole: string;
+  impactSummary: string;
 }
 
 export interface TeamExplanation {
@@ -287,6 +306,7 @@ export interface TeamExplanation {
   };
   alternatives: CharacterSwapAlternative[];
   antiSynergyWarnings?: string[];
+  idealMissingSupports?: IdealSupportGap[];
 }
 
 export interface TeamRecommendation {
@@ -609,6 +629,17 @@ export interface ArtifactStopAnalysisResult {
 // Imaginarium Theater & Abyss Dual-Team Types
 // ---------------------------------------------------------
 
+export type EncounterTargetProfile = 'Single-Target' | 'AoE' | 'Mixed';
+
+export type EnemyMovementTrait =
+  | 'Stationary'
+  | 'Aggressive'
+  | 'Teleporting'
+  | 'Airborne'
+  | 'Burrowing'
+  | 'Multi-Wave'
+  | 'Shield-Punishing';
+
 export type TheaterDifficulty = 'Normal' | 'Hard' | 'Visionary';
 export type TheaterActType = 'Normal' | 'Defense' | 'Boss';
 
@@ -640,6 +671,42 @@ export interface TheaterActPlan {
   team: Character[];
   isLocked?: boolean;
   bossMatchup?: BossMatchupRating;
+  strategyNote?: string;
+  preservedCarriesUsed?: string[];
+}
+
+export interface TheaterPreservationEntry {
+  characterId: string;
+  characterName: string;
+  element: Element;
+  reservedForActs: number[];
+  reason: string;
+  priority: 'Critical' | 'High' | 'Flexible';
+}
+
+export interface TheaterDraftStep {
+  phase:
+    | 'Opening'
+    | 'Early Acts (1–3)'
+    | 'Mid Acts (4–6)'
+    | 'Late Acts (7–8)'
+    | 'Climax (9–10)';
+  targetActs: number[];
+  guidance: string;
+  recommendedRecruits: string[];
+  preserveCharacterIds: string[];
+}
+
+export interface TheaterSeasonAnalysis {
+  seasonId: string;
+  apexBossName?: string;
+  apexBossAct?: number;
+  apexBossReadiness: 'Ready' | 'Needs Preparation' | 'At Risk';
+  apexBossSummary: string;
+  recommendedArchetypes: string[];
+  rosterWeaknesses: string[];
+  preservationPlan: TheaterPreservationEntry[];
+  draftPlan: TheaterDraftStep[];
 }
 
 export interface TheaterSeasonConfig {
@@ -654,6 +721,8 @@ export interface TheaterSeasonConfig {
   effectiveEndDate?: string;
   sourceUrl?: string;
   verifiedAt?: string;
+  seasonNumber?: number;
+  blessingSummary?: string;
 }
 
 export interface ChamberHalfMetrics {
@@ -663,6 +732,12 @@ export interface ChamberHalfMetrics {
   effectiveResShred?: number;
   resShredSources?: string[];
   effectiveDmgMultiplier?: number;
+  targetProfile?: EncounterTargetProfile;
+  targetProfileFit?: 'Optimal' | 'Good' | 'Suboptimal';
+  movementTraits?: EnemyMovementTrait[];
+  waveCount?: number;
+  buffAlignmentScore?: number;
+  buffAlignmentNote?: string;
 }
 
 export interface AbyssChamberCoverage {
@@ -673,6 +748,29 @@ export interface AbyssChamberCoverage {
   secondHalfSatisfied: boolean;
   firstHalfMetrics?: ChamberHalfMetrics;
   secondHalfMetrics?: ChamberHalfMetrics;
+}
+
+export interface AbyssHalfExplanation {
+  half: 'First Half' | 'Second Half';
+  summary: string;
+  strengths: string[];
+  risks: string[];
+  buffSynergy?: string;
+  targetProfileFit: 'Optimal' | 'Good' | 'Suboptimal';
+  movementNotes: string[];
+}
+
+export interface AbyssMissingCounterFallback {
+  half: 'First Half' | 'Second Half';
+  chamber: number;
+  missingRequirement: string;
+  ownedSubstitutes: {
+    characterId: string;
+    characterName: string;
+    element: Element;
+    reason: string;
+  }[];
+  strategyTip: string;
 }
 
 export interface AbyssDualTeamPlan {
@@ -690,6 +788,9 @@ export interface AbyssDualTeamPlan {
   primaryPair?: AbyssDualTeamPlan;
   comfortPair?: AbyssDualTeamPlan;
   alternativePair?: AbyssDualTeamPlan;
+  firstHalfExplanation?: AbyssHalfExplanation;
+  secondHalfExplanation?: AbyssHalfExplanation;
+  missingCounterFallbacks?: AbyssMissingCounterFallback[];
 }
 
 export interface AbyssDualTeamMultiPlan {
@@ -699,15 +800,25 @@ export interface AbyssDualTeamMultiPlan {
   allPairs: AbyssDualTeamPlan[];
 }
 
+
 export type ProvenanceStatus = 'verified' | 'provisional' | 'stale';
+
+export type VerificationMethod =
+  | 'official_notice'
+  | 'in_game_verification'
+  | 'theorycraft_consensus'
+  | 'sandbox_simulation';
 
 export interface DataProvenance {
   datasetId: string;
   version: string;
   verifiedAt: string; // ISO date YYYY-MM-DD
   sourceUrl: string;
-  evidence: string; // Specific patch note notice or in-game verification note
+  evidence: string; // Specific patch notice, mechanic, or in-game verification note
   status: ProvenanceStatus;
+  verificationMethod?: VerificationMethod;
+  verifiedFields?: string[]; // Exact fields verified (e.g. ['featuredCharacters', 'weaponBanner', 'dates'])
+  effectiveEndDate?: string; // Optional ISO expiry date (YYYY-MM-DD) for time-boxed schedules
 }
 
 

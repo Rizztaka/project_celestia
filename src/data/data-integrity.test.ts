@@ -371,4 +371,68 @@ describe('Data-Source Integrity Verification', () => {
       }
     });
   });
+
+  describe('M4 Deep Maintenance & Provenance Guarantees', () => {
+    it('enforces Imaginarium Theater opening cast element eligibility and off-element special guests', () => {
+      const charMap = new Map(CHARACTERS.map((c) => [c.id, c]));
+
+      for (const season of THEATER_SEASONS) {
+        const allowed = new Set(season.elements);
+        const openingSet = new Set(season.openingCastIds);
+
+        for (const opId of season.openingCastIds) {
+          const c = charMap.get(opId);
+          expect(c, `Missing opening cast ${opId}`).toBeDefined();
+          expect(
+            allowed.has(c!.element),
+            `Opening cast "${opId}" (${c!.element}) in "${season.id}" must match [${season.elements.join('/')}]`,
+          ).toBe(true);
+        }
+
+        for (const guestId of season.specialGuestIds) {
+          const c = charMap.get(guestId);
+          expect(c, `Missing special guest ${guestId}`).toBeDefined();
+          expect(openingSet.has(guestId)).toBe(false);
+          expect(
+            allowed.has(c!.element),
+            `Special guest "${guestId}" (${c!.element}) in "${season.id}" must be outside [${season.elements.join('/')}]`,
+          ).toBe(false);
+        }
+      }
+    });
+
+    it('guarantees every banner phase, Abyss cycle, and Theater season has a substantive provenance entry', () => {
+      const allScheduleIds = [
+        ...BANNER_PHASES.map((b) => b.id),
+        ...ABYSS_CYCLES.map((a) => a.id),
+        ...THEATER_SEASONS.map((s) => s.id),
+        'rotations_v7_2_catalog',
+        'talent_scaling_v7_2_curves',
+        'enka_id_map_v7_2',
+        'artifact_weights_v7_2',
+        'team_archetypes_v7_2',
+      ];
+
+      for (const id of allScheduleIds) {
+        const prov = getProvenance(id);
+        expect(prov, `Missing provenance for "${id}"`).toBeDefined();
+        expect(prov?.verificationMethod, `Missing verificationMethod for "${id}"`).toBeDefined();
+        expect(prov?.verifiedFields?.length, `Missing verifiedFields for "${id}"`).toBeGreaterThan(0);
+        expect(prov?.evidence.length, `Evidence too short for "${id}"`).toBeGreaterThanOrEqual(25);
+      }
+    });
+
+    it('binds GACHA_RULES_VERSION directly to canonical CURRENT_GAME_VERSION', async () => {
+      const { GACHA_RULES_VERSION } = await import('./banner-rules');
+      expect(GACHA_RULES_VERSION).toBe(CURRENT_GAME_VERSION);
+    });
+
+    it('verifies 100% character rotation coverage across all 128 characters', async () => {
+      const { CHARACTER_ROTATIONS } = await import('./character-rotations');
+      for (const char of CHARACTERS) {
+        const rot = CHARACTER_ROTATIONS[char.id.toLowerCase()];
+        expect(rot, `Missing rotation profile for "${char.id}"`).toBeDefined();
+      }
+    });
+  });
 });

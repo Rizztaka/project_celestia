@@ -4,19 +4,43 @@ import type {
   TeamWeaponAssignment,
   TeamExplanation,
   CharacterSwapAlternative,
+  IdealSupportGap,
 } from '../types/genshin';
+import { CHARACTERS } from '../data/characters';
 import {
   isAllowedTeammate,
   detectBennettC6Conflict,
   detectDualCarryContention,
+  detectFurinaHealerDeficit,
+  detectArlecchinoHealingConflict,
+  detectMavuikaNightsoulDeficit,
+  detectFreezeAuraDisruption,
   evaluateEnergyBattery,
 } from './team-rules';
 import type { ArchetypeTemplate } from './team-generator';
 
-// Specific high-fidelity character rationales
+// Specific high-fidelity character rationales across 7.x/5.x meta units
 const SPECIFIC_RATIONALES: Record<string, string> = {
+  Mavuika: 'Channels immense Nightsoul transmission burst, granting high-multiplier off-field Pyro damage and team ATK buffs.',
+  Citlali: 'Deploys sturdy Cryo shield, shreds elemental resistance via Cinder City, and applies constant Cryo off-field.',
+  Chasca: 'Fires multi-elemental shadow-piercing bullets in Nightsoul Flight, exploiting diverse team element compositions.',
+  Xilonen: 'Applies universal 36% all-element RES shred via Source Samples and activates Scroll of the Hero of Cinder City.',
+  Kinich: 'Loops Grappling Hook swing shots in Nightsoul\'s Blessing to fire devastating Scalespiker cannon blasts.',
+  Emilie: 'Deploys Lumidouce Case that levels up through Burning reactions to deliver continuous off-field Dendro nukes.',
+  Clorinde: 'Fires piercing Wild Hunt pistol shots and Lunging thrusts in Night Vigil, triggering high-frequency reactions.',
+  Arlecchino: 'Commands Masquerade of the Red Death via Bond of Life for non-overrideable Pyro normal attack hypercarries.',
+  Sigewinne: 'Bounces restorative Rebound Hydro bubbles, delivering party-wide burst healing and skill DMG buffs.',
+  Xianyun: 'Enables limitless high-jump plunging attacks for teammates while providing party-wide burst and continuous healing.',
+  Navia: 'Fires high-caliber Rosula Shrapnel Gunbrella blasts powered by collected Crystallize shards.',
+  Furina: 'Grants continuous off-field Hydro Salon Solitaire attacks and team-wide Fanfare damage amplification.',
+  Neuvillette: 'Channels devastating Equitable Judgment Hydro beam scaling directly with Max HP and self-restoring health.',
+  Wriothesley: 'Executes rapid-fire Cryo boxing combos enhanced by Chilling Penalty for Freeze and Melt.',
+  Lyney: 'Fires Prop Arrow fireworks and summons Grin-Malkin Hat for explosive Mono-Pyro burst nukes.',
+  Skirk: 'Manipulates abyssal space with Void-Severing strikes, accelerating freeze shatter cycles.',
+  Escoffier: 'Serves culinary Cryo infusions with full-party healing and sub-zero Cryo damage buffs.',
+  Varesa: 'Drives scorching Pyro assaults with explosive kinetic impacts and vaporize synergy.',
+  Columbina: 'Channels celestial Moonsign resonance, amplifying all elemental reactions and off-field cryo presence.',
   Nefer: 'Drives primary on-field Dendro DMG with Phantasm Performance, absorbing Seeds of Deceit.',
-  Furina: 'Provides sustained off-field Hydro aura and team-wide Fanfare damage amplification.',
   Bennett: 'Provides massive flat ATK buff via Fantastic Voyage and rapid Pyro particle generation.',
   Xiangling: 'Delivers high-multiplier off-field Pyro AoE damage with Pyronado without ICD.',
   KaedeharaKazuha: 'Gathers enemies with Chihayaburu, applying 40% elemental RES shred via 4pc VV.',
@@ -27,16 +51,9 @@ const SPECIFIC_RATIONALES: Record<string, string> = {
   Zhongli: 'Deploys an unbreakable Jade Shield with universal 20% all-element and physical RES shred.',
   Chevreuse: 'Triggers 40% Pyro/Electro RES shred and up to 40% ATK boost via Overloaded reactions.',
   Nilou: 'Transforms Dendro Cores into instantaneous Bountiful Cores with increased AoE.',
-  Xilonen: 'Applies elemental RES shred via Samplers and holds Scroll of the Hero of Cinder City.',
-  Mavuika: 'Nightsoul transmission burst provides immense off-field Pyro and active carry buffs.',
-  Xianyun: 'Enables high-jump plunging attacks for party members and delivers continuous healing.',
   Alhaitham: 'Projects Chisel-Light Mirrors for dense off-field and on-field Dendro damage.',
   HuTao: 'Guide to Afterlife converts HP into massive ATK for vaporizing charged attacks.',
-  Neuvillette: 'Channels devastating Equitable Judgment Hydro beam scaling directly with Max HP.',
-  Clorinde: 'Rapid Night Vigil piercing gun-and-thrust combo driving high-frequency Overload/Aggravate.',
-  Navia: 'Fires Rosula Shrapnel Gunbrella blasts powered by collected Crystallize elemental shards.',
   Gaming: "Performs Suanni's Gilded Dance plunging nuke attacks with self-contained HP fluctuation.",
-  Wriothesley: 'Fast-paced Cryo boxing combos enhanced by Chilling Penalty for Freeze and Melt.',
   KamisatoAyaka: 'Frostflake Seki no To delivers frontloaded 20-hit Cryo burst slashes.',
   Keqing: 'Stellar Restoration blinks and delivers high-frequency Aggravate Electro slashes.',
   Eula: 'Glacial Illumination builds Lightfall Sword stacks for immense Physical nuke detonation.',
@@ -46,6 +63,11 @@ const SPECIFIC_RATIONALES: Record<string, string> = {
   SangonomiyaKokomi: 'High-volume Bake-Kurage healing and steady wide-area Hydro application.',
   Faruzan: 'Massive Anemo DMG bonus, Anemo RES shred, and Anemo CRIT DMG buff for Anemo carries.',
   Sucrose: 'Shares party-wide Elemental Mastery while providing crowd control and 4pc VV shred.',
+  Charlotte: 'Delivers instant full-party Cryo burst healing and rapid continuous off-field Cryo application.',
+  Layla: 'Deploys high-uptime Cryo shield with Shooting Stars off-field Cryo particle generation.',
+  Thoma: 'Stacks Crimson Ooyoroi fiery collapses for continuous shielding and Burgeon detonation.',
+  Mika: 'Provides party-wide burst healing alongside Physical DMG and ATK SPD acceleration.',
+  Gorou: 'Buffs active Geo carries with DEF, Geo DMG Bonus, and Geo CRIT DMG through General\'s Banner.',
 };
 
 // Curated reaction workflows per archetype
@@ -68,6 +90,8 @@ const REACTION_WORKFLOWS: Record<string, string> = {
     'Electro Aura → Pyro Trigger (Overloaded) → Chevreuse 40% Dual RES Shred → Carry Burst DPS Window',
   Freeze:
     'Hydro Application → Cryo Aura (Freeze CC) → Blizzard Strayer +40% CRIT Rate Burst Execution',
+  'Freeze / Melt':
+    'Cryo/Hydro Aura Setup → Buffer Shred → High-multiplier Reverse/Forward Melt or Freeze Execution',
   Melt:
     'Cryo/Pyro Aura Setup → Buffer Shred → High-multiplier Reverse/Forward Melt Nuke',
   Crystallize:
@@ -88,22 +112,26 @@ const REACTION_WORKFLOWS: Record<string, string> = {
     'Pyro Resonance (+25% ATK) → Anemo VV Shred (+40% Shred) → Bennett Q → On-Field Pyro Carry Continuous DMG',
   'Mono-Hydro':
     'Hydro Resonance (+25% Max HP) → Anemo VV Shred → Furina Fanfare → Continuous Hydro Slashes',
+  'Skirk-Freeze':
+    'Cryo & Hydro Application → Escoffier / Furina Buffs → Skirk Void Domain & Sub-Zero Shatter Execution',
 };
 
 /**
- * Computes trade-off pros and cons when substituting original with candidate.
+ * Computes trade-off pros, cons, and explicit reason why the alternative has a lower score.
  */
 function evaluateSwapTradeOffs(
   original: Character,
   candidate: Character,
-): { pros: string[]; cons: string[] } {
+): { pros: string[]; cons: string[]; whyLowerScore: string } {
   const pros: string[] = [];
   const cons: string[] = [];
+  let whyLowerScore = '';
 
   // Element comparison
   if (candidate.element !== original.element) {
     pros.push(`+Introduces ${candidate.element} elemental interactions`);
     cons.push(`-Alters party elemental resonance and energy battery dynamics`);
+    whyLowerScore = `Alters party ${original.element} elemental resonance and particle battery generation.`;
   }
 
   // Specific high-frequency unit comparisons
@@ -117,42 +145,49 @@ function evaluateSwapTradeOffs(
         '-Lacks Kazuha\'s direct 40% Elemental DMG Bonus',
         '-Less convenient grouping suction than Chihayaburu',
       ],
+      whyLowerScore: "Lacks Kazuha's 40% direct Elemental DMG Bonus and suction crowd control, offering flat EM instead.",
     };
   }
   if (original.id === 'KaedeharaKazuha' && candidate.id === 'Lynette') {
     return {
       pros: ['+Accessible F2P 4★ Anemo VV shredder', '+Ousia Arkhe alignment support'],
       cons: ['-Lacks grouping crowd control', '-No party elemental damage buff'],
+      whyLowerScore: "Provides no party elemental damage buff and lacks crowd control grouping.",
     };
   }
   if (original.id === 'Xingqiu' && candidate.id === 'Yelan') {
     return {
       pros: ['+Higher personal off-field damage', '+Ramping +1% to +50% active damage bonus'],
       cons: ['-Lacks damage reduction, stagger resistance, and micro-healing'],
+      whyLowerScore: "Trades Xingqiu's defensive damage reduction, stagger resistance, and micro-healing for personal damage.",
     };
   }
   if (original.id === 'Yelan' && candidate.id === 'Xingqiu') {
     return {
       pros: ['+Provides orbital sword defensive damage reduction', '+Generates high energy particles with Sacrificial'],
       cons: ['-Lower personal damage ceiling than Yelan', '-Lacks Yelan\'s ramping damage buff'],
+      whyLowerScore: "Lower personal damage ceiling than Yelan and lacks her ramping active damage amplification.",
     };
   }
   if (original.id === 'Zhongli' && (candidate.id === 'Diona' || candidate.id === 'Layla')) {
     return {
       pros: ['+Provides Cryo resonance or reaction application', '+Faster skill cooldowns'],
       cons: ['-Shield duration and strength are lower than Jade Shield', '-Lacks universal 20% all-element RES shred'],
+      whyLowerScore: "Lacks Zhongli's universal 20% all-element RES shred and near-impenetrable Jade Shield durability.",
     };
   }
   if (original.id === 'Bennett' && candidate.id === 'Chevreuse') {
     return {
       pros: ['+40% dual Pyro & Electro RES shred for Overload teams', '+Mobile healing without circle restriction'],
       cons: ['-Restricted strictly to Pyro/Electro compositions', '-Lower flat ATK buff than Bennett'],
+      whyLowerScore: "Restricts party composition strictly to Pyro and Electro, locking out other elemental supports.",
     };
   }
   if (original.id === 'Furina' && candidate.id === 'SangonomiyaKokomi') {
     return {
       pros: ['+Dedicated team healing with zero party HP drain', '+Hold Thrilling Tales for ATK buff'],
       cons: ['-Lacks Furina\'s massive party-wide Fanfare damage boost', '-Sub-DPS damage is lower'],
+      whyLowerScore: "Lacks Furina's massive party-wide Fanfare damage amplification, trading aggressive team scaling for safety.",
     };
   }
 
@@ -162,6 +197,7 @@ function evaluateSwapTradeOffs(
   }
   if (!candidate.roles.includes('Sustain') && original.roles.includes('Sustain')) {
     cons.push('-Removes dedicated sustain unit; requires high defensive execution');
+    whyLowerScore = 'Removes dedicated sustain protection, leaving the party vulnerable to incoming lethal damage.';
   }
   if (candidate.roles.includes('Buffer/Shred') && !original.roles.includes('Buffer/Shred')) {
     pros.push('+Provides party amplification or resistance shred');
@@ -173,17 +209,37 @@ function evaluateSwapTradeOffs(
     pros.push('+Higher base stats and premium scaling');
   } else if (candidate.rarity < original.rarity) {
     pros.push('+More accessible 4★ constellation progression');
+    if (!whyLowerScore) {
+      whyLowerScore = 'Lower baseline stats and personal damage scaling than 5★ default.';
+    }
   }
 
   if (pros.length === 0) pros.push(`+Fulfills ${candidate.roles[0]} slot requirements`);
   if (cons.length === 0) cons.push(`-Slightly lower mechanical synergy than default recommendation`);
+  if (!whyLowerScore) {
+    whyLowerScore = `Provides lower offensive amplification and synergy tag alignment than ${original.name}.`;
+  }
 
-  return { pros: pros.slice(0, 2), cons: cons.slice(0, 2) };
+  return { pros: pros.slice(0, 2), cons: cons.slice(0, 2), whyLowerScore };
+}
+
+function getSupportAdvantage(char: Character, _template: ArchetypeTemplate): string {
+  if (char.id === 'Furina') return 'massive team-wide Fanfare damage amplification and off-field Hydro application';
+  if (char.id === 'Xilonen') return 'universal 36% all-element RES shred and Cinder City 40% elemental DMG buff';
+  if (char.id === 'KaedeharaKazuha') return '40% elemental damage bonus and Viridescent Venerer resistance shred';
+  if (char.id === 'Bennett') return 'unmatched flat ATK buff scaling from base weapon ATK and rapid battery generation';
+  if (char.id === 'Nahida') return 'unrivaled 1.5U Tri-Karma Dendro application and 250 party Elemental Mastery sharing';
+  if (char.id === 'Zhongli') return 'unbreakable Jade Shield protection and universal 20% all-element resistance shred';
+  if (char.id === 'Mavuika') return 'Nightsoul burst amplification and high-damage off-field Pyro support';
+  if (char.id === 'Baizhu') return 'continuous shields, team-wide burst healing, and reaction bonus amplification';
+  if (char.id === 'Chevreuse') return 'dual 40% Pyro & Electro resistance shred and ATK buffs for Overload';
+  if (char.id === 'Escoffier') return 'full-party Cryo infusion healing and specialized freeze combat scaling';
+  return `${char.roles.join('/')} utility and elemental synergy`;
 }
 
 /**
  * Generates natural-language rationales, reaction flow, energy diagnosis,
- * and accessible swap alternatives with trade-offs.
+ * accessible swap alternatives with trade-offs, and ideal missing support gaps.
  */
 export function generateTeamExplanation(
   team: Character[],
@@ -234,6 +290,22 @@ export function generateTeamExplanation(
   if (dualCarryConflict.hasContention && dualCarryConflict.warning) {
     antiSynergyWarningsList.push(dualCarryConflict.warning);
   }
+  const furinaDeficit = detectFurinaHealerDeficit(team);
+  if (furinaDeficit.hasDeficit && furinaDeficit.warning) {
+    antiSynergyWarningsList.push(furinaDeficit.warning);
+  }
+  const arlecchinoConflict = detectArlecchinoHealingConflict(team);
+  if (arlecchinoConflict.hasConflict && arlecchinoConflict.warning) {
+    antiSynergyWarningsList.push(arlecchinoConflict.warning);
+  }
+  const mavuikaDeficit = detectMavuikaNightsoulDeficit(team);
+  if (mavuikaDeficit.hasDeficit && mavuikaDeficit.warning) {
+    antiSynergyWarningsList.push(mavuikaDeficit.warning);
+  }
+  const freezeDisruption = detectFreezeAuraDisruption(team, template.archetype);
+  if (freezeDisruption.hasDisruption && freezeDisruption.warning) {
+    antiSynergyWarningsList.push(freezeDisruption.warning);
+  }
   if (energyResult.warnings.length > 0) {
     antiSynergyWarningsList.push(...energyResult.warnings);
   }
@@ -248,9 +320,7 @@ export function generateTeamExplanation(
     const currentOthers = team.filter((m) => m.id !== member.id);
 
     const validCandidates = availablePool.filter((c) => {
-      // Must not already be in the team
       if (team.some((m) => m.id === c.id)) return false;
-      // Must be allowed by archetype exclusivity rules
       return isAllowedTeammate(
         template.archetype,
         c,
@@ -259,22 +329,17 @@ export function generateTeamExplanation(
       );
     });
 
-    // Score candidates based on matching member's roles and element
     const scoredCandidates = validCandidates
       .map((c) => {
         let score = 50;
-        // Role match
         if (c.roles.some((r) => member.roles.includes(r))) score += 25;
-        // Same element bonus
         if (c.element === member.element) score += 15;
-        // High rarity / investment
         if (c.rarity === 5) score += 5;
         if (profiles?.[c.id]?.level && profiles[c.id].level >= 80) score += 5;
         return { candidate: c, score };
       })
       .sort((a, b) => b.score - a.score);
 
-    // Pick top 1 or 2 candidates
     for (const item of scoredCandidates.slice(0, 2)) {
       const tradeOffs = evaluateSwapTradeOffs(member, item.candidate);
       let impact: number;
@@ -292,7 +357,41 @@ export function generateTeamExplanation(
         tradeOffPros: tradeOffs.pros,
         tradeOffCons: tradeOffs.cons,
         compatibilityImpact: impact,
+        whyLowerScore: tradeOffs.whyLowerScore,
       });
+    }
+  }
+
+  // 6. Ideal Missing Supports Identification
+  const idealMissingSupports: IdealSupportGap[] = [];
+  if (template.idealSupports && template.idealSupports.length > 0) {
+    const ownedOrTeamIds = new Set([
+      ...availablePool.map((c) => c.id),
+      ...team.map((c) => c.id),
+    ]);
+
+    for (const idealId of template.idealSupports) {
+      if (ownedOrTeamIds.has(idealId)) continue;
+      const idealChar = CHARACTERS.find((c) => c.id === idealId);
+      if (!idealChar) continue;
+
+      // Identify who they would upgrade/replace in the current team
+      const currentTeammate =
+        team.find((m) => m.roles.some((r) => idealChar.roles.includes(r))) ||
+        team.find((m) => m.element === idealChar.element) ||
+        team[2] ||
+        team[1];
+
+      idealMissingSupports.push({
+        characterId: idealChar.id,
+        characterName: idealChar.name,
+        role: idealChar.roles[0],
+        element: idealChar.element,
+        replacementForRole: currentTeammate ? currentTeammate.name : 'Support Slot',
+        impactSummary: `Unlocking ${idealChar.name} would significantly upgrade this team via ${getSupportAdvantage(idealChar, template)}.`,
+      });
+
+      if (idealMissingSupports.length >= 3) break;
     }
   }
 
@@ -302,5 +401,6 @@ export function generateTeamExplanation(
     energyAssessment,
     alternatives,
     antiSynergyWarnings,
+    idealMissingSupports: idealMissingSupports.length > 0 ? idealMissingSupports : undefined,
   };
 }

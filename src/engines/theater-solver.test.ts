@@ -8,9 +8,10 @@ import {
   calculateVigorState,
   evaluateBossActMatchup,
   recommendSupportCastBorrow,
+  analyzeTheaterSeasonPlan,
 } from './theater-solver';
 import { dispatchAutoDraftTheater } from '../services/solver-dispatcher';
-import { THEATER_SEASONS } from '../data/theater-seasons';
+import { THEATER_SEASONS, validateTheaterSeasonConfig } from '../data/theater-seasons';
 import { CHARACTERS } from '../data/characters';
 
 describe('Imaginarium Theater Engine', () => {
@@ -61,18 +62,18 @@ describe('Imaginarium Theater Engine', () => {
 
     it('Level 70 Gate: excludes owned alternate cast character at Level 60 from Visionary mode', () => {
       // Season 1 has Pyro, Hydro, Anemo
-      const ownedIds = ['Bennett', 'Xiangling'];
+      const ownedIds = ['Bennett', 'Diluc'];
       const profiles = {
         Bennett: { id: 'Bennett', level: 90, constellation: 5 },
-        Xiangling: { id: 'Xiangling', level: 60, constellation: 4 }, // Under Lv. 70
+        Diluc: { id: 'Diluc', level: 60, constellation: 0 }, // Under Lv. 70
       };
 
       const result = filterEligibleTheaterRoster(ownedIds, season1, profiles, 'Visionary');
       const eligibleIds = result.eligible.map((c) => c.id);
 
       expect(eligibleIds).toContain('Bennett');
-      // Xiangling is Lv 60, so she must be gated out of Visionary mode
-      expect(eligibleIds).not.toContain('Xiangling');
+      // Diluc is Lv 60, so he must be gated out of Visionary mode
+      expect(eligibleIds).not.toContain('Diluc');
     });
 
     it('Traveler Vigor Unification: drafting Traveler in an act deducts vigor from all Traveler elements', () => {
@@ -140,10 +141,18 @@ describe('Imaginarium Theater Engine', () => {
         });
       });
 
+      const totalTravelerCount = Object.entries(usageCounts)
+        .filter(([id]) => id.startsWith('Traveler'))
+        .reduce((sum, [, count]) => sum + count, 0);
+
       // No character should be used more than 2 times
       Object.entries(usageCounts).forEach(([charId, count]) => {
         expect(count).toBeLessThanOrEqual(2);
-        expect(vigorState[charId]).toBe(2 - count);
+        if (charId.startsWith('Traveler')) {
+          expect(vigorState[charId]).toBe(2 - totalTravelerCount);
+        } else {
+          expect(vigorState[charId]).toBe(2 - count);
+        }
         expect(vigorState[charId]).toBeGreaterThanOrEqual(0);
       });
     });
@@ -908,6 +917,119 @@ describe('Imaginarium Theater Engine', () => {
       expect(travelers).toHaveLength(1);
       expect(travelers[0].id).toBe('TravelerHydro');
       expect(travelers[0].level).toBe(90);
+    });
+  });
+
+  describe('M6 — Endgame Intelligence Regression Suite', () => {
+    it('validateTheaterSeasonConfig passes cleanly for all built-in seasons', () => {
+      const validIds = new Set(CHARACTERS.map((c) => c.id));
+      for (const season of THEATER_SEASONS) {
+        expect(
+          validateTheaterSeasonConfig(season, validIds),
+          `Season ${season.id} failed validation`,
+        ).toEqual([]);
+      }
+    });
+
+    it('validateTheaterSeasonConfig catches duplicate elements, overlapping guests, and unknown bosses', () => {
+      const broken = {
+        ...THEATER_SEASONS[0],
+        elements: ['Hydro', 'Hydro', 'Geo'] as ('Hydro' | 'Geo')[],
+        specialGuestIds: [THEATER_SEASONS[0].openingCastIds[0]],
+        bosses: { 3: 'Maguu Kenki', 6: 'Unknown Boss', 8: 'Iniquitous Baptist', 10: 'Hydro Tulpa' },
+      };
+      const errors = validateTheaterSeasonConfig(broken, new Set(CHARACTERS.map((c) => c.id)));
+      expect(errors.some((e) => e.includes('3 distinct elements'))).toBe(true);
+      expect(errors.some((e) => e.includes('both openingCastIds and specialGuestIds'))).toBe(true);
+      expect(errors.some((e) => e.includes('no THEATER_BOSS_INFO entry'))).toBe(true);
+    });
+
+    it('surfaces excludedUnderleveled characters when owned alternate cast is below Level 70 in Visionary mode', () => {
+      const ownedIds = ['Bennett', 'Diluc'];
+      const profiles = {
+        Bennett: { id: 'Bennett', level: 90, constellation: 5 },
+        Diluc: { id: 'Diluc', level: 50, constellation: 0 },
+      };
+      const res = filterEligibleTheaterRoster(ownedIds, season1, profiles, 'Visionary');
+      expect(res.excludedUnderleveled?.map((c) => c.id)).toContain('Diluc');
+      expect(res.eligible.map((c) => c.id)).not.toContain('Diluc');
+    });
+
+    it('recommendSupportCastBorrow excludes free Opening Cast trial units and avoids Hydro carries for apex Hydro Tulpa', () => {
+      const activeSeason = THEATER_SEASONS[0]; // Hydro / Electro / Geo with Act 10 Hydro Tulpa
+      const owned = ['Bennett', 'Xiangling'];
+      const filtered = filterEligibleTheaterRoster(owned, activeSeason);
+      const borrows = recommendSupportCastBorrow(filtered.eligible, activeSeason, owned);
+
+      expect(borrows).toHaveLength(3);
+      for (const b of borrows) {
+        expect(activeSeason.openingCastIds).not.toContain(b.id);
+        expect(owned).not.toContain(b.id);
+      }
+      // Top borrow against Hydro Tulpa should not be a Hydro-immune carry
+      expect(borrows[0].element).not.toBe('Hydro');
+    });
+
+    it('attaches seasonAnalysis with preservation plan, apex boss readiness, weaknesses, archetypes, and phased draft plan', () => {
+      const allSeason1Chars = CHARACTERS.filter(
+        (c) =>
+          season1.elements.includes(c.element) ||
+          season1.specialGuestIds.includes(c.id) ||
+          season1.openingCastIds.includes(c.id),
+      );
+      const res = autoDraftTheaterSchedule(allSeason1Chars, 'Visionary', season1);
+
+      expect(res.seasonAnalysis).toBeDefined();
+      const analysis = res.seasonAnalysis!;
+      expect(analysis.apexBossAct).toBe(10);
+      expect(analysis.apexBossName).toBe(season1.bosses[10]);
+      expect(['Ready', 'Needs Preparation', 'At Risk']).toContain(analysis.apexBossReadiness);
+      expect(analysis.recommendedArchetypes.length).toBeGreaterThan(0);
+      expect(analysis.preservationPlan.length).toBeGreaterThan(0);
+      expect(analysis.preservationPlan.some((p) => p.reservedForActs.includes(10))).toBe(true);
+      expect(analysis.draftPlan.map((d) => d.phase)).toEqual([
+        'Opening',
+        'Early Acts (1–3)',
+        'Mid Acts (4–6)',
+        'Late Acts (7–8)',
+        'Climax (9–10)',
+      ]);
+    });
+
+    it('flags roster weaknesses when eligible pool lacks sustain or non-immune apex carries', () => {
+      const tulpaSeason = THEATER_SEASONS[0]; // Act 10 Hydro Tulpa
+      const hydroOnlyPool = CHARACTERS.filter((c) => c.element === 'Hydro').slice(0, 8);
+      const draft = autoDraftTheaterSchedule(hydroOnlyPool, 'Visionary', tulpaSeason);
+      const analysis = analyzeTheaterSeasonPlan(draft.acts, hydroOnlyPool, 'Visionary', tulpaSeason);
+
+      expect(analysis.rosterWeaknesses.some((w) => w.includes('Hydro Tulpa'))).toBe(true);
+      expect(analysis.apexBossReadiness).toBe('At Risk');
+    });
+
+    it('recalculates bossMatchup immediately on swapTheaterActMember and removeTheaterActMember', () => {
+      const allSeason1Chars = CHARACTERS.filter(
+        (c) =>
+          season1.elements.includes(c.element) ||
+          season1.specialGuestIds.includes(c.id) ||
+          season1.openingCastIds.includes(c.id),
+      );
+      const { acts, vigorState } = autoDraftTheaterSchedule(allSeason1Chars, 'Normal', season1);
+      const act3 = acts.find((a) => a.actNumber === 3)!;
+      expect(act3.bossName).toBeDefined();
+
+      const removed = removeTheaterActMember(acts, 3, act3.team[0].id, vigorState);
+      const updatedAct3 = removed.acts.find((a) => a.actNumber === 3)!;
+      expect(updatedAct3.bossMatchup).toBeDefined();
+
+      const readded = swapTheaterActMember(
+        removed.acts,
+        3,
+        '',
+        act3.team[0].id,
+        removed.vigorState,
+      );
+      expect(readded.error).toBeUndefined();
+      expect(readded.acts.find((a) => a.actNumber === 3)!.bossMatchup).toBeDefined();
     });
   });
 });

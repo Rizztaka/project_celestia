@@ -27,6 +27,10 @@ import {
   saveUid,
   isStorageAvailable,
   getLastStorageError,
+  getLastStorageErrorInfo,
+  clearLastStorageError,
+  classifyStorageError,
+  getAuthenticAccountSummary,
 } from './storage';
 import {
   equipWeaponToCharacter,
@@ -983,6 +987,101 @@ describe('Storage Service - Persistence and Reset Semantics', () => {
       expect(getLastStorageError()).toContain('Quota exceeded');
 
       localStorage.setItem = originalSetItem;
+    });
+
+    it('isolates UID, Pull Budget, and Abyss settings completely in Demo namespace', () => {
+      // 1. Establish authentic settings
+      saveUid('800111222');
+      savePullBudget({
+        primogems: 25000,
+        fates: 30,
+        characterPity: 65,
+        characterGuaranteed: true,
+        consecutiveLossCount: 2,
+        weaponPity: 30,
+        weaponFatePoints: 1,
+      });
+      saveAbyssCycleId('cycle-7-1');
+
+      // 2. Turn on Demo Mode
+      setDemoModeEnabled(true);
+      expect(isDemoModeEnabled()).toBe(true);
+
+      // In Demo Mode, uninitialized UID is empty and budget is default
+      expect(getSavedUid()).toBe('');
+      expect(getSavedPullBudget()).toEqual(DEFAULT_PULL_BUDGET);
+      expect(getSavedAbyssCycleId()).toBe('cycle-7-2');
+
+      // 3. Mutate Demo Mode settings
+      saveUid('900999888');
+      savePullBudget({
+        primogems: 99999,
+        fates: 50,
+        characterPity: 10,
+        characterGuaranteed: false,
+        consecutiveLossCount: 0,
+        weaponPity: 0,
+        weaponFatePoints: 0,
+      });
+      saveAbyssCycleId('cycle-5-3');
+
+      expect(getSavedUid()).toBe('900999888');
+      expect(getSavedPullBudget().primogems).toBe(99999);
+      expect(getSavedAbyssCycleId()).toBe('cycle-5-3');
+
+      // 4. Return to authentic account
+      setDemoModeEnabled(false);
+      expect(isDemoModeEnabled()).toBe(false);
+
+      // Authentic settings must be 100% preserved with zero leaks from demo mode!
+      expect(getSavedUid()).toBe('800111222');
+      expect(getSavedPullBudget().primogems).toBe(25000);
+      expect(getSavedPullBudget().characterPity).toBe(65);
+      expect(getSavedPullBudget().characterGuaranteed).toBe(true);
+      expect(getSavedAbyssCycleId()).toBe('cycle-7-1');
+    });
+
+    it('getAuthenticAccountSummary returns authentic account profile even when Demo Mode is active', () => {
+      saveUid('700333444');
+      saveRoster(['Furina', 'Nefer']);
+      saveProfiles({
+        Furina: { id: 'Furina', level: 90, constellation: 2 },
+        Nefer: { id: 'Nefer', level: 90, constellation: 0 },
+      });
+
+      // Switch to Demo Mode
+      setDemoModeEnabled(true);
+
+      // Summary must reflect authentic user data
+      const summary = getAuthenticAccountSummary();
+      expect(summary.uid).toBe('700333444');
+      expect(summary.characterCount).toBe(2);
+      expect(summary.rosterIds).toContain('Furina');
+      expect(summary.rosterIds).toContain('Nefer');
+
+      setDemoModeEnabled(false);
+    });
+
+    it('classifies storage errors and manages error diagnostics accurately', () => {
+      expect(classifyStorageError(new Error('QuotaExceededError'))).toBe('QUOTA_EXCEEDED');
+      expect(classifyStorageError({ name: 'QuotaExceededError' })).toBe('QUOTA_EXCEEDED');
+      expect(classifyStorageError({ name: 'NS_ERROR_DOM_QUOTA_REACHED' })).toBe('QUOTA_EXCEEDED');
+      expect(classifyStorageError({ name: 'SecurityError' })).toBe('STORAGE_UNAVAILABLE');
+      expect(classifyStorageError({ name: 'SyntaxError' })).toBe('MALFORMED_JSON');
+      expect(classifyStorageError(new Error('something else'))).toBe('UNKNOWN');
+
+      // Malformed JSON storage read records error info
+      localStorage.setItem('celestia_v2_roster_profiles', '{invalid-json-content}');
+      const profiles = getSavedProfiles();
+      expect(profiles).toEqual({});
+      const errInfo = getLastStorageErrorInfo();
+      expect(errInfo).not.toBeNull();
+      expect(errInfo?.code).toBe('MALFORMED_JSON');
+      expect(errInfo?.operation).toBe('read');
+
+      clearLastStorageError();
+      expect(getLastStorageError()).toBeNull();
+      expect(getLastStorageErrorInfo()).toBeNull();
     });
   });
 });

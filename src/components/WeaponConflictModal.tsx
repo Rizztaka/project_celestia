@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useDeferredValue } from 'react';
 import type { OwnedWeapon, OwnedCharacterProfile, WeaponType } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import { WEAPONS_BY_TYPE, getWeaponByKey } from '../data/weapons';
@@ -31,6 +31,8 @@ const CHARACTER_NAME_BY_ID = new Map<string, string>(
   CHARACTERS.map((c) => [c.id, c.name])
 );
 
+const CHARACTER_BY_ID = new Map(CHARACTERS.map((c) => [c.id, c]));
+
 function getCharacterName(id: string): string {
   return CHARACTER_NAME_BY_ID.get(id) ?? id;
 }
@@ -54,6 +56,7 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
 }) => {
   const [tab, setTab] = useState<'all' | 'equipped' | 'bag' | 'add'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   const [typeFilter, setTypeFilter] = useState<string>('All');
   const [editingWeaponId, setEditingWeaponId] = useState<string | null>(null);
   const [deletedSnapshot, setDeletedSnapshot] = useState<DeletedWeaponSnapshot | null>(null);
@@ -108,7 +111,7 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
   const characterList = useMemo(() => {
     return Object.keys(profiles)
       .map((id) => {
-        const char = CHARACTERS.find((c) => c.id === id);
+        const char = CHARACTER_BY_ID.get(id);
         return {
           id,
           name: char ? char.name : id,
@@ -150,8 +153,8 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
         return false;
       }
 
-      if (searchQuery.trim()) {
-        const query = searchQuery.toLowerCase();
+      if (deferredSearchQuery.trim()) {
+        const query = deferredSearchQuery.toLowerCase();
         const matchesName = (dbWeapon?.name || w.name).toLowerCase().includes(query);
         const locName = w.location ? getCharacterName(w.location).toLowerCase() : '';
         const matchesLocation =
@@ -161,7 +164,7 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
 
       return true;
     });
-  }, [weapons, tab, typeFilter, searchQuery]);
+  }, [weapons, tab, typeFilter, deferredSearchQuery]);
 
   if (!isOpen) return null;
 
@@ -802,6 +805,7 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
                   return (
                     <div
                       key={w.id}
+                      style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 76px' }}
                       className={`p-3.5 rounded-xl border transition-colors ${
                         isConflict
                           ? 'bg-amber-950/25 border-amber-400/50'
@@ -913,6 +917,9 @@ export const WeaponConflictModal: React.FC<WeaponConflictModalProps> = ({
                               <img
                                 src={dbWeapon.icon}
                                 alt=""
+                                loading="lazy"
+                                decoding="async"
+                                referrerPolicy="no-referrer"
                                 className="w-10 h-10 rounded-lg bg-[#1a1e2e] object-contain p-0.5 border border-[#2c334d] shrink-0"
                               />
                             ) : (

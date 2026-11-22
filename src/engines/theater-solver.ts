@@ -3,6 +3,9 @@ import type {
   TheaterActPlan,
   TheaterDifficulty,
   TheaterSeasonConfig,
+  TheaterSeasonAnalysis,
+  TheaterPreservationEntry,
+  TheaterDraftStep,
   OwnedCharacterProfile,
   BossMatchupRating,
 } from '../types/genshin';
@@ -16,13 +19,14 @@ export interface FilteredTheaterRoster {
   openingCast: Character[];
   guestCast: Character[];
   alternateCast: Character[];
+  excludedUnderleveled?: Character[];
 }
 
 /**
  * Filters the user's owned roster against the current Theater season elements & guest cast.
- * Automatically incorporates all 6 Opening Cast members as available Level 80 trial units
- * (or uses the player's personal profile if owned and higher), enforces Level 70 minimum
- * for alternate cast in Hard/Visionary mode, and unifies Traveler element configurations.
+ * Incorporates all 6 Opening Cast members as Level 80 trial units (or uses player's profile
+ * if owned at Lv 80+), enforces Level 70 minimum for alternate cast in Hard/Visionary mode,
+ * reports excluded underleveled characters, and unifies Traveler configurations.
  */
 export function filterEligibleTheaterRoster(
   ownedIds: string[],
@@ -39,10 +43,9 @@ export function filterEligibleTheaterRoster(
   const guestCast: Character[] = [];
   const alternateCast: Character[] = [];
   const eligible: Character[] = [];
+  const excludedUnderleveled: Character[] = [];
 
   // 1. Opening Cast (Trial + Owned Hybrid)
-  // All 6 Opening Cast members are unconditionally granted as Level 80 trial units
-  // (using player's personal profile if owned at Lv 80+).
   for (const openingId of season.openingCastIds) {
     const baseChar = CHARACTERS.find((c) => c.id === openingId);
     if (!baseChar) continue;
@@ -65,38 +68,33 @@ export function filterEligibleTheaterRoster(
 
   // 2. Alternate Cast & Special Guests from player's owned roster
   const ownedChars = CHARACTERS.filter((c) => ownedSet.has(c.id));
-  const minLevelRequired = (difficulty === 'Hard' || difficulty === 'Visionary') ? 70 : 0;
+  const minLevelRequired = difficulty === 'Hard' || difficulty === 'Visionary' ? 70 : 0;
 
-  // Identify highest-invested Traveler element matching season/guest
   const travelerCandidates = ownedChars.filter((c) => {
     if (!isSameCharacterOrTraveler(c, 'TravelerAnemo')) return false;
-    const isGuest = guestSet.has(c.id);
-    const isSeasonElement = seasonElements.has(c.element);
-    return isGuest || isSeasonElement;
+    return guestSet.has(c.id) || seasonElements.has(c.element);
   });
   const bestTravelerId = travelerCandidates.sort((a, b) => {
     const profA = rosterProfiles?.[a.id];
     const profB = rosterProfiles?.[b.id];
-    const scoreA = ((profA?.level ?? a.level ?? 90) * 10) + (profA?.constellation ?? a.constellation ?? 0);
-    const scoreB = ((profB?.level ?? b.level ?? 90) * 10) + (profB?.constellation ?? b.constellation ?? 0);
+    const scoreA = (profA?.level ?? a.level ?? 90) * 10 + (profA?.constellation ?? a.constellation ?? 0);
+    const scoreB = (profB?.level ?? b.level ?? 90) * 10 + (profB?.constellation ?? b.constellation ?? 0);
     return scoreB - scoreA;
   })[0]?.id;
 
   for (const char of ownedChars) {
-    // Skip characters already included in Opening Cast
     if (openingSet.has(char.id)) continue;
 
     const isGuest = guestSet.has(char.id);
     const isSeasonElement = seasonElements.has(char.element);
     if (!isGuest && !isSeasonElement) continue;
 
-    // Enforce Level 70 qualification gate for Hard / Visionary mode
     const charLevel = rosterProfiles?.[char.id]?.level ?? char.level;
     if (minLevelRequired > 0 && charLevel !== undefined && charLevel < minLevelRequired) {
+      excludedUnderleveled.push({ ...char, level: charLevel });
       continue;
     }
 
-    // Traveler identity unification: only best matching Traveler configuration permitted
     if (isSameCharacterOrTraveler(char, 'TravelerAnemo')) {
       if (char.id !== bestTravelerId || eligible.some((e) => isSameCharacterOrTraveler(e, char))) {
         continue;
@@ -128,6 +126,7 @@ export function filterEligibleTheaterRoster(
     openingCast,
     guestCast,
     alternateCast,
+    excludedUnderleveled,
   };
 }
 
@@ -165,6 +164,225 @@ export interface TheaterScheduleResult {
   vigorState: Record<string, number>;
   validationErrors: string[];
   shortfallSuggestions?: Character[];
+  seasonAnalysis?: TheaterSeasonAnalysis;
+}
+
+/**
+ * Builds an actionable preservation plan, apex boss readiness audit, roster weakness list,
+ * recommended archetypes, and phased draft plan for the current Theater schedule.
+ */
+export function analyzeTheaterSeasonPlan(
+  acts: TheaterActPlan[],
+  eligible: Character[],
+  difficulty: TheaterDifficulty,
+  season: TheaterSeasonConfig,
+): TheaterSeasonAnalysis {
+  const diffConfig = THEATER_DIFFICULTIES[difficulty];
+  const bossActs = [...diffConfig.bossActs].sort((a, b) => a - b);
+  const apexBossAct = bossActs[bossActs.length - 1];
+  const apexActPlan = acts.find((a) => a.actNumber === apexBossAct);
+  const apexBossName = apexActPlan?.bossName ?? (apexBossAct ? season.bosses[apexBossAct] : undefined);
+  const apexBossInfo = apexBossName ? THEATER_BOSS_INFO[apexBossName] : undefined;
+
+  const apexRating = apexActPlan?.bossMatchup?.rating;
+  const apexBossReadiness: 'Ready' | 'Needs Preparation' | 'At Risk' =
+    !apexActPlan || apexActPlan.team.length < 4 || apexRating === 'C'
+      ? 'At Risk'
+      : apexRating === 'S' || apexRating === 'A'
+        ? 'Ready'
+        : 'Needs Preparation';
+
+  const apexBossSummary = apexBossName
+    ? apexBossReadiness === 'Ready'
+      ? `Act ${apexBossAct} (${apexBossName}) is covered (${apexRating}-Rank): ${apexActPlan?.bossMatchup?.counterHighlights.slice(0, 3).join(', ') || 'balanced carry core'}.`
+      : `Act ${apexBossAct} (${apexBossName}) needs attention: ${apexBossInfo?.preservationNote ?? apexBossInfo?.weakness ?? 'Reserve your top carry and sustain.'}`
+    : 'No apex boss configured for this season.';
+
+  // 1. Recommended archetypes derived from boss requirements + season elements
+  const archetypeSet = new Set<string>();
+  for (const bAct of bossActs) {
+    const bName = season.bosses[bAct];
+    const bInfo = bName ? THEATER_BOSS_INFO[bName] : undefined;
+    for (const arch of bInfo?.recommendedArchetypes ?? []) {
+      archetypeSet.add(arch);
+    }
+  }
+  const elSet = new Set(season.elements);
+  if (elSet.has('Hydro') && elSet.has('Electro')) archetypeSet.add('Electro-Charged / Lunar-Charged');
+  if (elSet.has('Hydro') && elSet.has('Pyro')) archetypeSet.add('Vaporize');
+  if (elSet.has('Hydro') && elSet.has('Dendro')) archetypeSet.add('Bloom / Hyperbloom');
+  if (elSet.has('Electro') && elSet.has('Dendro')) archetypeSet.add('Quicken / Aggravate');
+  if (elSet.has('Geo')) archetypeSet.add('Crystallize / Lunar-Crystallize');
+
+  // 2. Roster weakness audit
+  const rosterWeaknesses: string[] = [];
+  const carries = eligible.filter((c) => c.roles.includes('On-Field DPS'));
+  const sustains = eligible.filter((c) => c.roles.includes('Sustain'));
+  const buffers = eligible.filter((c) => c.roles.includes('Buffer/Shred'));
+
+  if (carries.length < bossActs.length) {
+    rosterWeaknesses.push(
+      `Low Carry Depth: Only ${carries.length} On-Field DPS for ${bossActs.length} boss acts (risk of vigor exhaustion).`,
+    );
+  }
+  const minSustains = difficulty === 'Visionary' ? 3 : 2;
+  if (sustains.length < minSustains) {
+    rosterWeaknesses.push(
+      `Thin Sustain Pool: Only ${sustains.length} Sustain unit(s) available; defensive chambers and climax bosses may be punishing.`,
+    );
+  }
+  if (buffers.length < 2) {
+    rosterWeaknesses.push('Limited Buff/Shred Support: Consider borrowing a premier buffer from Support Cast.');
+  }
+
+  for (const bAct of bossActs) {
+    const bName = season.bosses[bAct];
+    const bInfo = bName ? THEATER_BOSS_INFO[bName] : undefined;
+    if (!bInfo) continue;
+
+    if (bInfo.immuneElements && bInfo.immuneElements.length > 0) {
+      const nonImmuneCarries = carries.filter((c) => !bInfo.immuneElements!.includes(c.element));
+      if (nonImmuneCarries.length === 0) {
+        rosterWeaknesses.push(
+          `Act ${bAct} (${bName}): No non-${bInfo.immuneElements.join('/')} On-Field DPS in eligible pool.`,
+        );
+      }
+    }
+    if (bInfo.requiresNightsoul && !eligible.some((c) => isNightsoulCharacter(c))) {
+      rosterWeaknesses.push(
+        `Act ${bAct} (${bName}): No Natlan Nightsoul unit in pool; pillar phase will clear slower.`,
+      );
+    }
+    if (bInfo.counterElements && bInfo.counterElements.length > 0) {
+      const hasCounter = eligible.some((c) => bInfo.counterElements!.includes(c.element));
+      if (!hasCounter) {
+        rosterWeaknesses.push(
+          `Act ${bAct} (${bName}): Missing ${bInfo.counterElements.join('/')} counter element.`,
+        );
+      }
+    }
+  }
+
+  // 3. Preservation plan: map characters drafted into mid/late boss acts (Act 6+)
+  const preservationMap = new Map<string, TheaterPreservationEntry>();
+  const lateBossActs = acts.filter((a) => a.type === 'Boss' && a.actNumber >= 6);
+
+  for (const act of lateBossActs) {
+    const bInfo = act.bossName ? THEATER_BOSS_INFO[act.bossName] : undefined;
+    for (const member of act.team) {
+      const isApex = act.actNumber === apexBossAct;
+      const isKeyRole =
+        member.roles.includes('On-Field DPS') ||
+        member.roles.includes('Buffer/Shred') ||
+        (bInfo?.counterElements?.includes(member.element) ?? false) ||
+        (Boolean(bInfo?.requiresNightsoul) && isNightsoulCharacter(member));
+
+      if (!isKeyRole && !isApex) continue;
+
+      const existing = preservationMap.get(member.id);
+      if (existing) {
+        if (!existing.reservedForActs.includes(act.actNumber)) {
+          existing.reservedForActs.push(act.actNumber);
+        }
+        if (isApex) existing.priority = 'Critical';
+      } else {
+        const priority: 'Critical' | 'High' | 'Flexible' = isApex
+          ? 'Critical'
+          : member.roles.includes('On-Field DPS')
+            ? 'High'
+            : 'Flexible';
+        const roleTag = member.roles[0] ?? 'Flex';
+        preservationMap.set(member.id, {
+          characterId: member.id,
+          characterName: member.name,
+          element: member.element,
+          reservedForActs: [act.actNumber],
+          reason: `Reserve ${roleTag} vigor for Act ${act.actNumber}${act.bossName ? ` (${act.bossName})` : ''}${bInfo?.preservationNote ? ` — ${bInfo.preservationNote}` : ''}`,
+          priority,
+        });
+      }
+    }
+  }
+
+  const priorityRank = { Critical: 0, High: 1, Flexible: 2 };
+  const preservationPlan = Array.from(preservationMap.values())
+    .sort((a, b) => priorityRank[a.priority] - priorityRank[b.priority])
+    .slice(0, 8);
+
+  // 4. Phased practical draft plan
+  const draftPlan: TheaterDraftStep[] = [];
+  const openingNames = season.openingCastIds.slice(0, 6);
+
+  draftPlan.push({
+    phase: 'Opening',
+    targetActs: [1],
+    guidance:
+      'Start with your 6 Opening Cast units. Spend Fantasia Flowers on Character Companion invites before Act 3 so you expand your roster without burning late-boss vigor.',
+    recommendedRecruits: openingNames,
+    preserveCharacterIds: preservationPlan
+      .filter((p) => p.priority === 'Critical')
+      .map((p) => p.characterId),
+  });
+
+  const act3 = acts.find((a) => a.actNumber === 3);
+  draftPlan.push({
+    phase: 'Early Acts (1–3)',
+    targetActs: [1, 2, 3],
+    guidance: `Use Opening Cast + lower-investment flex units on Acts 1–2. Deploy ${act3?.team.map((m) => m.name).join(', ') || 'your Act 3 squad'} against ${act3?.bossName ?? 'Act 3 Boss'}.`,
+    recommendedRecruits: (act3?.team ?? []).map((m) => m.name),
+    preserveCharacterIds: preservationPlan
+      .filter((p) => p.reservedForActs.some((n) => n >= 6))
+      .map((p) => p.characterId),
+  });
+
+  const act6 = acts.find((a) => a.actNumber === 6);
+  if (diffConfig.acts >= 6) {
+    draftPlan.push({
+      phase: 'Mid Acts (4–6)',
+      targetActs: [4, 5, 6],
+      guidance: `Prioritize recruiting counters for ${act6?.bossName ?? 'Act 6 Boss'} and pick up Tier 1–2 Brilliant Blessings matching ${season.elements.join('/')} reactions.`,
+      recommendedRecruits: (act6?.team ?? []).map((m) => m.name),
+      preserveCharacterIds: preservationPlan
+        .filter((p) => p.reservedForActs.some((n) => n >= 8))
+        .map((p) => p.characterId),
+    });
+  }
+
+  const act8 = acts.find((a) => a.actNumber === 8);
+  if (diffConfig.acts >= 8) {
+    draftPlan.push({
+      phase: 'Late Acts (7–8)',
+      targetActs: [7, 8],
+      guidance: `Clear Act 7 with remaining flex supports and deploy ${act8?.team.map((m) => m.name).join(', ') || 'your Act 8 boss counter squad'} for ${act8?.bossName ?? 'Act 8 Boss'} while keeping Act 10 vigor intact.`,
+      recommendedRecruits: (act8?.team ?? []).map((m) => m.name),
+      preserveCharacterIds: preservationPlan
+        .filter((p) => p.reservedForActs.includes(10))
+        .map((p) => p.characterId),
+    });
+  }
+
+  const act10 = acts.find((a) => a.actNumber === 10);
+  if (diffConfig.acts >= 10) {
+    draftPlan.push({
+      phase: 'Climax (9–10)',
+      targetActs: [9, 10],
+      guidance: `Spend leftover vigor on Act 9, then unleash your preserved climax team (${act10?.team.map((m) => m.name).join(', ') || 'apex squad'}) with max reaction blessings against ${act10?.bossName ?? 'Act 10 Boss'}.`,
+      recommendedRecruits: (act10?.team ?? []).map((m) => m.name),
+      preserveCharacterIds: [],
+    });
+  }
+
+  return {
+    seasonId: season.id,
+    apexBossName,
+    apexBossAct,
+    apexBossReadiness,
+    apexBossSummary,
+    recommendedArchetypes: Array.from(archetypeSet).slice(0, 6),
+    rosterWeaknesses,
+    preservationPlan,
+    draftPlan,
+  };
 }
 
 /**
@@ -173,6 +391,7 @@ export interface TheaterScheduleResult {
  * 2. Boss Act allocation: Acts 3, 6, 8, 10 prioritize premier carries & buffers tailored to boss mechanics.
  * 3. Shortfall detection with specific character unlock recommendations when roster is deficient.
  * 4. Diversity heuristics preventing identical 4-character team clones across acts.
+ * 5. Season analysis including preservation plan, apex boss readiness, weaknesses, and phased draft plan.
  */
 export function autoDraftTheaterSchedule(
   eligible: Character[],
@@ -219,13 +438,11 @@ export function autoDraftTheaterSchedule(
     shortfallSuggestions = unownedSeasonChars.slice(0, 6);
   }
 
-  // Character lookup map
   const charMap = new Map<string, Character>();
   for (const c of eligible) {
     charMap.set(c.id, c);
   }
 
-  // Also include any locked characters that might be outside the passed eligible slice
   if (userLocks) {
     for (const ids of Object.values(userLocks)) {
       for (const id of ids) {
@@ -237,13 +454,11 @@ export function autoDraftTheaterSchedule(
     }
   }
 
-  // Initialize vigor tracking
   const vigor: Record<string, number> = {};
   for (const id of charMap.keys()) {
     vigor[id] = 2;
   }
 
-  // Prepare acts array
   const acts: TheaterActPlan[] = [];
   for (let actNum = 1; actNum <= totalActs; actNum++) {
     const isBoss = bossActSet.has(actNum);
@@ -257,10 +472,11 @@ export function autoDraftTheaterSchedule(
       recommendedArchetypes: bossInfo ? bossInfo.recommendedArchetypes : [],
       team: [],
       isLocked: false,
+      strategyNote: bossInfo?.preservationNote,
     });
   }
 
-  // 1. Process user locks
+  // 1. Process user locks (flag vigor overflow explicitly)
   if (userLocks) {
     for (const [actStr, lockedIds] of Object.entries(userLocks)) {
       const actNum = parseInt(actStr, 10);
@@ -268,10 +484,15 @@ export function autoDraftTheaterSchedule(
       if (act) {
         for (const id of lockedIds) {
           const char = charMap.get(id);
+          if (!char) continue;
+          if ((vigor[id] ?? 0) <= 0) {
+            validationErrors.push(
+              `Lock Conflict: ${char.name} has 0 vigor left and could not be locked into Act ${actNum}.`,
+            );
+            continue;
+          }
           if (
-            char &&
             act.team.length < 4 &&
-            (vigor[id] ?? 0) > 0 &&
             !act.team.some((m) => isSameCharacterOrTraveler(m, char))
           ) {
             act.team.push(char);
@@ -283,7 +504,6 @@ export function autoDraftTheaterSchedule(
     }
   }
 
-  // Sort candidates by initial power level
   const scoreBase = (c: Character): number => {
     let score = c.rarity === 5 ? 100 : 50;
     if (c.roles.includes('On-Field DPS')) score += 30;
@@ -292,11 +512,7 @@ export function autoDraftTheaterSchedule(
     return score;
   };
 
-  // Candidates for auto-drafting are strictly the eligible roster for this season
-  const candidates = [...eligible].sort(
-    (a, b) => scoreBase(b) - scoreBase(a),
-  );
-
+  const candidates = [...eligible].sort((a, b) => scoreBase(b) - scoreBase(a));
   const usedPairCounts = new Map<string, number>();
   const bossCarriesAssigned = new Set<string>();
   const openingSet = new Set(season.openingCastIds);
@@ -305,63 +521,90 @@ export function autoDraftTheaterSchedule(
   const playableActs = acts.filter((a) => a.actNumber <= maxPlayableActs);
 
   if (eligible.length < requiredCount) {
-    // For shortfall rosters, draft playable acts starting from Act 1 upwards
-    // 1. Act 1 from Opening Cast (the authentic starting hand)
     const act1 = playableActs.find((a) => a.actNumber === 1);
     if (act1 && !act1.isLocked && act1.team.length < 4) {
       const openingCandidates = candidates.filter((c) => openingSet.has(c.id));
-      fillActTeam(act1, openingCandidates.length >= 4 ? openingCandidates : candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+      const remActs = playableActs.filter((a) => a.team.length < 4).length;
+      fillActTeam(
+        act1,
+        openingCandidates.length >= 4 ? openingCandidates : candidates,
+        vigor,
+        false,
+        usedPairCounts,
+        bossCarriesAssigned,
+        rosterProfiles,
+        remActs,
+      );
       if (act1.team.length < 4) {
-        fillActTeam(act1, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+        fillActTeam(
+          act1,
+          candidates,
+          vigor,
+          false,
+          usedPairCounts,
+          bossCarriesAssigned,
+          rosterProfiles,
+          playableActs.filter((a) => a.team.length < 4).length,
+        );
       }
     }
 
-    // 2. Boss acts within playable acts descending (e.g. Act 3)
     const bossActsToSchedule = playableActs
       .filter((a) => a.type === 'Boss' && a.actNumber !== 1)
       .sort((a, b) => b.actNumber - a.actNumber);
     for (const act of bossActsToSchedule) {
-      fillActTeam(act, candidates, vigor, true, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+      const remActs = playableActs.filter((a) => a.team.length < 4).length;
+      fillActTeam(act, candidates, vigor, true, usedPairCounts, bossCarriesAssigned, rosterProfiles, remActs);
     }
 
-    // 3. Regular acts within playable acts descending (e.g. Act 2)
     const regularActsToSchedule = playableActs
       .filter((a) => a.type !== 'Boss' && a.actNumber !== 1)
       .sort((a, b) => b.actNumber - a.actNumber);
     for (const act of regularActsToSchedule) {
-      fillActTeam(act, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+      const remActs = playableActs.filter((a) => a.team.length < 4).length;
+      fillActTeam(act, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles, remActs);
     }
   } else {
-    // For full roster accounts:
-    // 1. Draft Boss Acts in descending order (e.g. Acts 10, 8, 6, 3) to reserve carries for climax encounters
+    // 1. Draft Boss Acts descending (Acts 10 -> 8 -> 6 -> 3) to preserve apex boss counters
     const bossActsToSchedule = acts
       .filter((a) => a.type === 'Boss')
       .sort((a, b) => b.actNumber - a.actNumber);
     for (const act of bossActsToSchedule) {
-      fillActTeam(act, candidates, vigor, true, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+      const remActs = acts.filter((a) => a.team.length < 4).length;
+      fillActTeam(act, candidates, vigor, true, usedPairCounts, bossCarriesAssigned, rosterProfiles, remActs);
     }
 
-    // 2. Draft Act 1 from Opening Cast (the authentic starting hand)
+    // 2. Draft Act 1 from Opening Cast
     const act1 = acts.find((a) => a.actNumber === 1);
     if (act1 && !act1.isLocked && act1.team.length < 4) {
       const openingCandidates = candidates.filter((c) => openingSet.has(c.id));
-      fillActTeam(act1, openingCandidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+      const remActs = acts.filter((a) => a.team.length < 4).length;
+      fillActTeam(act1, openingCandidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles, remActs);
       if (act1.team.length < 4) {
-        fillActTeam(act1, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+        fillActTeam(
+          act1,
+          candidates,
+          vigor,
+          false,
+          usedPairCounts,
+          bossCarriesAssigned,
+          rosterProfiles,
+          acts.filter((a) => a.team.length < 4).length,
+        );
       }
     }
 
-    // 3. Draft Regular Acts descending (e.g. Acts 9, 7, 5, 4, 2) to prioritize harder stages
+    // 3. Draft Regular Acts descending
     const regularActsToSchedule = acts
       .filter((a) => a.type !== 'Boss' && a.actNumber !== 1)
       .sort((a, b) => b.actNumber - a.actNumber);
     for (const act of regularActsToSchedule) {
-      fillActTeam(act, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles);
+      const remActs = acts.filter((a) => a.team.length < 4).length;
+      fillActTeam(act, candidates, vigor, false, usedPairCounts, bossCarriesAssigned, rosterProfiles, remActs);
     }
   }
 
-  // 4. Anti-cloning safeguard:
-  // If sufficient roster exists, verify no two acts have the identical 4-character team.
+  // 4. Anti-cloning safeguard
   if (eligible.length >= 8) {
     for (let i = 0; i < acts.length; i++) {
       if (acts[i].team.length < 4) continue;
@@ -370,10 +613,8 @@ export function autoDraftTheaterSchedule(
         const setJ = new Set(acts[j].team.map((m) => m.id));
         const isClone = acts[i].team.every((m) => setJ.has(m.id));
         if (isClone) {
-          // If both acts are locked by the user, respect user locks and do not mutate
           if (acts[i].isLocked && acts[j].isLocked) continue;
 
-          // Target the act that is not locked by the user
           const targetAct = !acts[i].isLocked ? acts[i] : acts[j];
           const targetSet = new Set(targetAct.team.map((m) => m.id));
 
@@ -395,18 +636,26 @@ export function autoDraftTheaterSchedule(
     }
   }
 
-  // Attach boss matchup rating for boss acts
+  // Attach boss matchup rating and preserved-carry markers
   for (const act of acts) {
     if (act.bossName) {
       act.bossMatchup = evaluateBossActMatchup(act.team, act.bossName);
+      if (act.actNumber >= 6) {
+        act.preservedCarriesUsed = act.team
+          .filter((m) => m.roles.includes('On-Field DPS') || m.roles.includes('Buffer/Shred'))
+          .map((m) => m.id);
+      }
     }
   }
+
+  const seasonAnalysis = analyzeTheaterSeasonPlan(acts, eligible, difficulty, season);
 
   return {
     acts,
     vigorState: vigor,
     validationErrors,
     shortfallSuggestions,
+    seasonAnalysis,
   };
 }
 
@@ -423,10 +672,18 @@ function scoreCandidateForAct(
   bossCarriesAssigned: Set<string>,
   currentVigor: number,
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
+  remainingUnfilledActs?: number,
 ): number {
   let score = c.rarity === 5 ? 80 : 40;
 
-  // Investment bonuses from roster profiles
+  if (
+    remainingUnfilledActs !== undefined &&
+    remainingUnfilledActs > 0 &&
+    currentVigor >= remainingUnfilledActs
+  ) {
+    score += 5000 * (currentVigor - remainingUnfilledActs + 1);
+  }
+
   if (rosterProfiles && rosterProfiles[c.id]) {
     const prof = rosterProfiles[c.id];
     score += Math.round((prof.level / 90) * 15);
@@ -435,7 +692,6 @@ function scoreCandidateForAct(
       score += Math.round((prof.weapon.level / 90) * 10);
       score += prof.weapon.refinement * 2;
     }
-    // High-investment characters are prioritized for Climax Acts (7+) and Boss acts
     if (isBoss || act.actNumber >= 7) {
       if (prof.constellation >= 2 || prof.level >= 85) {
         score += 25;
@@ -443,58 +699,81 @@ function scoreCandidateForAct(
     }
   }
 
-  // Role fit
   if (roleSlot === 'Carry') {
     if (c.roles.includes('On-Field DPS')) score += 55;
     else score -= 40;
-    // Prefer distinct carries across boss acts so they don't get cloned
     if (isBoss && bossCarriesAssigned.has(c.id)) {
       score -= 65;
     }
   } else if (roleSlot === 'Buffer') {
     if (c.roles.includes('Buffer/Shred')) score += 45;
-    else if (c.tags.includes('VV') || c.tags.includes('Cinder-City') || c.tags.includes('Universal-Buffer')) score += 35;
-    else if (c.roles.includes('Off-Field DPS')) score += 20;
+    else if (
+      c.tags.includes('VV') ||
+      c.tags.includes('Cinder-City') ||
+      c.tags.includes('Universal-Buffer')
+    ) {
+      score += 35;
+    } else if (c.roles.includes('Off-Field DPS')) {
+      score += 20;
+    }
   } else if (roleSlot === 'Sustain') {
     if (c.roles.includes('Sustain')) score += 50;
     else score -= 15;
   } else {
-    // Flex slot
     if (c.roles.includes('Off-Field DPS')) score += 30;
     if (c.roles.includes('Buffer/Shred')) score += 20;
     if (c.roles.includes('Sustain')) score += 15;
   }
 
-  // Boss specific mechanic synergies & weakness targeting
+  // Boss-specific structured mechanic scoring
   if (isBoss && act.bossName) {
     const bossInfo = THEATER_BOSS_INFO[act.bossName];
     if (bossInfo) {
       for (const arch of bossInfo.recommendedArchetypes) {
-        if (c.tags.some((t) => t.toLowerCase() === arch.toLowerCase() || arch.toLowerCase().includes(t.toLowerCase()))) {
+        if (
+          c.tags.some(
+            (t) =>
+              t.toLowerCase() === arch.toLowerCase() ||
+              arch.toLowerCase().includes(t.toLowerCase()),
+          )
+        ) {
           score += 35;
         }
       }
-      const weaknessLower = bossInfo.weakness.toLowerCase();
-      const hazardLower = bossInfo.hazard.toLowerCase();
 
-      if (weaknessLower.includes(c.element.toLowerCase())) {
+      if (bossInfo.immuneElements?.includes(c.element)) {
+        score -= roleSlot === 'Carry' ? 140 : 75;
+      } else if (bossInfo.resistedElements?.includes(c.element)) {
+        score -= roleSlot === 'Carry' ? 75 : 40;
+      }
+
+      if (bossInfo.counterElements?.includes(c.element)) {
+        score += 35;
+      }
+
+      if (bossInfo.requiresNightsoul && isNightsoulCharacter(c)) {
+        score += 55;
+      }
+
+      if (bossInfo.requiresMultiElement) {
+        const existingElements = new Set(alreadyInAct.map((m) => m.element));
+        if (!existingElements.has(c.element)) {
+          score += 30;
+        } else if (existingElements.size < 3) {
+          score -= 20;
+        }
+      }
+
+      if (bossInfo.requiresSustain && roleSlot === 'Sustain' && c.roles.includes('Sustain')) {
         score += 25;
-      }
-      if (weaknessLower.includes('nightsoul') && c.tags.includes('Nightsoul')) {
-        score += 45;
-      }
-      if (hazardLower.includes(`${c.element.toLowerCase()} res`) || hazardLower.includes(`${c.element.toLowerCase()} immunity`)) {
-        score -= 60;
       }
     }
   }
 
-  // In regular acts, prioritize characters with 2 remaining vigor to utilize full roster
   if (!isBoss && currentVigor === 2) {
     score += 25;
   }
 
-  // Diversity penalty: penalize pairing characters who were already grouped in prior acts
   for (const member of alreadyInAct) {
     const pairKey = [member.id, c.id].sort().join(':');
     const priorShared = usedPairCounts.get(pairKey) || 0;
@@ -506,9 +785,6 @@ function scoreCandidateForAct(
   return score;
 }
 
-/**
- * Helper to deduct 1 vigor from a character and any linked Traveler elements.
- */
 function deductCharacterVigor(vigor: Record<string, number>, charId: string) {
   if (vigor[charId] === undefined) {
     vigor[charId] = 2;
@@ -520,9 +796,6 @@ function deductCharacterVigor(vigor: Record<string, number>, charId: string) {
   }
 }
 
-/**
- * Helper to restore 1 vigor to a character and any linked Traveler elements.
- */
 function restoreCharacterVigor(vigor: Record<string, number>, charId: string) {
   if (vigor[charId] === undefined) {
     vigor[charId] = 1;
@@ -534,9 +807,6 @@ function restoreCharacterVigor(vigor: Record<string, number>, charId: string) {
   }
 }
 
-/**
- * Fills up to 4 members into an Act respecting vigor > 0 and avoiding duplicate characters in the act.
- */
 function fillActTeam(
   act: TheaterActPlan,
   candidates: Character[],
@@ -545,11 +815,11 @@ function fillActTeam(
   usedPairCounts: Map<string, number>,
   bossCarriesAssigned: Set<string>,
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
+  remainingUnfilledActs?: number,
 ) {
   if (act.team.length >= 4) return;
 
   const currentIds = new Set(act.team.map((m) => m.id));
-
   const needsCarry = !act.team.some((m) => m.roles.includes('On-Field DPS'));
   const needsBuffer = !act.team.some((m) => m.roles.includes('Buffer/Shred'));
   const needsSustain = !act.team.some((m) => m.roles.includes('Sustain'));
@@ -574,6 +844,7 @@ function fillActTeam(
         bossCarriesAssigned,
         remVigor,
         rosterProfiles,
+        remainingUnfilledActs,
       );
 
       if (score > bestScore) {
@@ -585,7 +856,6 @@ function fillActTeam(
     return bestChar;
   };
 
-  // 1. Fill Carry
   if (needsCarry && act.team.length < 4) {
     const carry = pickBest('Carry') || pickBest('Flex');
     if (carry) {
@@ -596,7 +866,6 @@ function fillActTeam(
     }
   }
 
-  // 2. Fill Buffer
   if (needsBuffer && act.team.length < 4) {
     const buffer = pickBest('Buffer') || pickBest('Flex');
     if (buffer) {
@@ -606,7 +875,6 @@ function fillActTeam(
     }
   }
 
-  // 3. Fill Sustain
   if (needsSustain && act.team.length < 4) {
     const sustain = pickBest('Sustain') || pickBest('Flex');
     if (sustain) {
@@ -616,7 +884,6 @@ function fillActTeam(
     }
   }
 
-  // 4. Fill remaining slots with highest scoring flex
   while (act.team.length < 4) {
     const flex = pickBest('Flex');
     if (!flex) break;
@@ -625,7 +892,6 @@ function fillActTeam(
     deductCharacterVigor(vigor, flex.id);
   }
 
-  // Record pair usages
   for (let i = 0; i < act.team.length; i++) {
     for (let j = i + 1; j < act.team.length; j++) {
       const pairKey = [act.team[i].id, act.team[j].id].sort().join(':');
@@ -635,9 +901,7 @@ function fillActTeam(
 }
 
 /**
- * Manually swaps or adds a character in an act.
- * If oldCharId is empty string, adds the new character into an available slot (up to 4 members).
- * Validates vigor availability and ensures no duplicate characters in the act.
+ * Manually swaps or adds a character in an act and refreshes boss matchup rating.
  */
 export function swapTheaterActMember(
   currentActs: TheaterActPlan[],
@@ -652,10 +916,7 @@ export function swapTheaterActMember(
   }
 
   const act = currentActs[actIndex];
-
-  const otherMembers = oldCharId
-    ? act.team.filter((m) => m.id !== oldCharId)
-    : act.team;
+  const otherMembers = oldCharId ? act.team.filter((m) => m.id !== oldCharId) : act.team;
 
   if (otherMembers.some((m) => isSameCharacterOrTraveler(m, newCharId))) {
     return {
@@ -666,9 +927,7 @@ export function swapTheaterActMember(
   }
 
   const isReplacingSameCharacter = isSameCharacterOrTraveler(oldCharId, newCharId);
-  const availableVigor = isReplacingSameCharacter
-    ? 1
-    : (vigorState[newCharId] ?? 2);
+  const availableVigor = isReplacingSameCharacter ? 1 : (vigorState[newCharId] ?? 2);
 
   if (availableVigor <= 0) {
     return {
@@ -687,7 +946,6 @@ export function swapTheaterActMember(
     };
   }
 
-  // Adding into an incomplete slot (oldCharId is empty)
   if (!oldCharId) {
     if (act.team.length >= 4) {
       return {
@@ -699,7 +957,12 @@ export function swapTheaterActMember(
 
     const updatedActs = currentActs.map((a, idx) => {
       if (idx !== actIndex) return a;
-      return { ...a, team: [...a.team, newChar] };
+      const updatedTeam = [...a.team, newChar];
+      return {
+        ...a,
+        team: updatedTeam,
+        bossMatchup: a.bossName ? evaluateBossActMatchup(updatedTeam, a.bossName) : a.bossMatchup,
+      };
     });
 
     const updatedVigor = { ...vigorState };
@@ -711,7 +974,6 @@ export function swapTheaterActMember(
     };
   }
 
-  // Replacing an existing member
   const oldMemberIndex = act.team.findIndex((m) => m.id === oldCharId);
   if (oldMemberIndex === -1) {
     return {
@@ -725,7 +987,11 @@ export function swapTheaterActMember(
     if (idx !== actIndex) return a;
     const updatedTeam = [...a.team];
     updatedTeam[oldMemberIndex] = newChar;
-    return { ...a, team: updatedTeam };
+    return {
+      ...a,
+      team: updatedTeam,
+      bossMatchup: a.bossName ? evaluateBossActMatchup(updatedTeam, a.bossName) : a.bossMatchup,
+    };
   });
 
   const updatedVigor = { ...vigorState };
@@ -739,7 +1005,7 @@ export function swapTheaterActMember(
 }
 
 /**
- * Removes a character from an act and restores 1 point of vigor.
+ * Removes a character from an act, restores 1 vigor, and refreshes boss matchup rating.
  */
 export function removeTheaterActMember(
   currentActs: TheaterActPlan[],
@@ -764,9 +1030,11 @@ export function removeTheaterActMember(
 
   const updatedActs = currentActs.map((a, idx) => {
     if (idx !== actIndex) return a;
+    const updatedTeam = a.team.filter((m) => m.id !== charId);
     return {
       ...a,
-      team: a.team.filter((m) => m.id !== charId),
+      team: updatedTeam,
+      bossMatchup: a.bossName ? evaluateBossActMatchup(updatedTeam, a.bossName) : a.bossMatchup,
     };
   });
 
@@ -796,14 +1064,13 @@ export function evaluateBossActMatchup(
   }
 
   const bossInfo = THEATER_BOSS_INFO[bossName];
-  let score = 30; // Base baseline
+  let score = 30;
   const highlights: string[] = [];
 
   const roles = new Set(team.flatMap((m) => m.roles));
   const elements = new Set(team.map((m) => m.element));
   const memberTags = new Set(team.flatMap((m) => m.tags));
 
-  // Role balance
   if (roles.has('On-Field DPS')) {
     score += 20;
     highlights.push('Dedicated Carry');
@@ -821,7 +1088,6 @@ export function evaluateBossActMatchup(
     highlights.push('Sustain Support');
   }
 
-  // Archetype matching
   if (bossInfo) {
     for (const arch of bossInfo.recommendedArchetypes) {
       if (memberTags.has(arch)) {
@@ -831,7 +1097,6 @@ export function evaluateBossActMatchup(
     }
   }
 
-  // Boss-specific mechanics
   if (bossName === 'Centaur Automaton') {
     const hasNightsoul = team.some((m) => isNightsoulCharacter(m));
     if (hasNightsoul) {
@@ -889,7 +1154,7 @@ export function evaluateBossActMatchup(
       score -= 40;
     }
   } else if (bossName === 'Algorithm of Semi-Intransient Matrix') {
-    const hasQuickenOrElectro = elements.has('Electro') || (elements.has('Dendro') && elements.has('Electro'));
+    const hasQuickenOrElectro = elements.has('Electro');
     if (hasQuickenOrElectro) {
       score += 30;
       highlights.push('Catalyze/Electro Stealth Breaker');
@@ -913,7 +1178,7 @@ export function evaluateBossActMatchup(
 
     if (hasReaction) {
       score += 25;
-      highlights.push('Forward Reaction Trigger (Vape/Bloom)');
+      highlights.push('Forward Reaction Trigger (Vape/Bloom/EC)');
     }
     if (isCarryHydro && !hasNonHydroDps) {
       score -= 50;
@@ -953,8 +1218,7 @@ export function evaluateBossActMatchup(
 
 /**
  * Recommends top 3 support cast characters to borrow from friends.
- * Feasibility Rule: Suggests ONLY characters the player does NOT currently own,
- * who strictly match the active season's element or guest cast.
+ * Excludes owned units AND Opening Cast units (already granted free as Lv. 80 trials).
  */
 export function recommendSupportCastBorrow(
   eligible: Character[],
@@ -966,31 +1230,36 @@ export function recommendSupportCastBorrow(
   const guestSet = new Set(season.specialGuestIds);
   const openingSet = new Set(season.openingCastIds);
 
-  // Candidates: characters NOT owned, but eligible by element, guest status, or opening cast
-  const candidates = CHARACTERS.filter((c) => {
+  let candidates = CHARACTERS.filter((c) => {
     if (ownedSet.has(c.id)) return false;
-    return seasonElements.has(c.element) || guestSet.has(c.id) || openingSet.has(c.id);
+    if (openingSet.has(c.id)) return false;
+    return seasonElements.has(c.element) || guestSet.has(c.id);
   });
+
+  if (candidates.length === 0) {
+    candidates = CHARACTERS.filter((c) => {
+      if (ownedSet.has(c.id)) return false;
+      return seasonElements.has(c.element) || guestSet.has(c.id) || openingSet.has(c.id);
+    });
+  }
 
   if (candidates.length === 0) return [];
 
-  // Identify apex boss for the season (Act 10 or highest act boss)
-  const bossActs = Object.keys(season.bosses).map(Number).sort((a, b) => b - a);
+  const bossActs = Object.keys(season.bosses)
+    .map(Number)
+    .sort((a, b) => b - a);
   const apexBossAct = bossActs[0];
   const apexBossName = apexBossAct ? season.bosses[apexBossAct] : undefined;
+  const apexBossInfo = apexBossName ? THEATER_BOSS_INFO[apexBossName] : undefined;
 
   const scoredCandidates = candidates.map((char) => {
     let value = 0;
 
-    // 5-star priority
     if (char.rarity === 5) value += 30;
-
-    // Key roles
     if (char.roles.includes('On-Field DPS')) value += 30;
     if (char.roles.includes('Buffer/Shred')) value += 35;
     if (char.roles.includes('Sustain')) value += 20;
 
-    // Premier meta supports & carries
     const premierIds = new Set([
       'Furina',
       'Mavuika',
@@ -1009,18 +1278,20 @@ export function recommendSupportCastBorrow(
     ]);
     if (premierIds.has(char.id)) value += 40;
 
-    // Nightsoul bonus for Natlan bosses (e.g. Centaur Automaton)
-    if (apexBossName === 'Centaur Automaton' && isNightsoulCharacter(char)) {
-      value += 40;
-    }
-
-    // Boss weakness matching
-    if (apexBossName) {
-      const bossInfo = THEATER_BOSS_INFO[apexBossName];
-      if (bossInfo) {
-        for (const arch of bossInfo.recommendedArchetypes) {
-          if (char.tags.includes(arch)) value += 15;
-        }
+    if (apexBossInfo) {
+      if (apexBossInfo.immuneElements?.includes(char.element)) {
+        value -= 80;
+      } else if (apexBossInfo.resistedElements?.includes(char.element)) {
+        value -= 35;
+      }
+      if (apexBossInfo.counterElements?.includes(char.element)) {
+        value += 30;
+      }
+      if (apexBossInfo.requiresNightsoul && isNightsoulCharacter(char)) {
+        value += 45;
+      }
+      for (const arch of apexBossInfo.recommendedArchetypes) {
+        if (char.tags.includes(arch)) value += 15;
       }
     }
 

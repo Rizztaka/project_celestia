@@ -1,6 +1,5 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useDeferredValue } from 'react';
 import { CHARACTERS } from '../data/characters';
-import { ARTIFACTS_MASTER } from '../data/artifacts-master';
 import type {
   Character,
   ArtifactSlot,
@@ -8,6 +7,7 @@ import type {
   StatKey,
   TeamPresetKey,
   TeamContext,
+  ArtifactSetMaster,
 } from '../types/genshin';
 import {
   PieChart,
@@ -33,6 +33,7 @@ import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { ArtifactDiminishingReturnsCurve } from './ArtifactDiminishingReturnsCurve';
 import { ArtifactSlotCard } from './ArtifactSlotCard';
 import { InfoTooltip } from './InfoTooltip';
+import { DataFreshnessBadge } from './DataFreshnessBadge';
 import { useModalAccessibility } from '../hooks/useModalAccessibility';
 import {
   analyzeArtifactBuild,
@@ -83,6 +84,28 @@ export const ArtifactStopView: React.FC = () => {
   // Sub-tab Navigation: Optimizer vs Master Encyclopedia
   const [mainTab, setMainTab] = useState<'optimizer' | 'encyclopedia'>('optimizer');
   const [encyclopediaSearch, setEncyclopediaSearch] = useState<string>('');
+  const deferredEncyclopediaSearch = useDeferredValue(encyclopediaSearch);
+  const [artifactsMaster, setArtifactsMaster] = useState<ArtifactSetMaster[]>([]);
+  const [isLoadingEncyclopedia, setIsLoadingEncyclopedia] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (mainTab !== 'encyclopedia' || artifactsMaster.length > 0) return;
+    let active = true;
+    setIsLoadingEncyclopedia(true);
+    import('../data/artifacts-master')
+      .then((mod) => {
+        if (active) {
+          setArtifactsMaster(mod.ARTIFACTS_MASTER);
+        }
+      })
+      .finally(() => {
+        if (active) setIsLoadingEncyclopedia(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [mainTab, artifactsMaster.length]);
+
   const [rarityFilter, setRarityFilter] = useState<'All' | '5' | '4' | '3' | '1-2'>('All');
   const [combatFilter, setCombatFilter] = useState<'All' | 'combat' | 'non-combat'>('All');
   const [expandedSetIds, setExpandedSetIds] = useState<Set<string>>(new Set());
@@ -132,17 +155,18 @@ export const ArtifactStopView: React.FC = () => {
   }, []);
 
   const filteredArtifactSets = useMemo(() => {
-    const q = encyclopediaSearch.trim().toLowerCase();
-    return ARTIFACTS_MASTER.filter((set) => {
+    if (mainTab !== 'encyclopedia' || artifactsMaster.length === 0) return [];
+    const q = deferredEncyclopediaSearch.trim().toLowerCase();
+    return artifactsMaster.filter((set) => {
       const matchesSearch =
         !q ||
         set.name.toLowerCase().includes(q) ||
         (set.effect2Pc && set.effect2Pc.toLowerCase().includes(q)) ||
         (set.effect4Pc && set.effect4Pc.toLowerCase().includes(q)) ||
         Object.values(set.pieces || {}).some(
-          (p) =>
+          (p: any) =>
             p &&
-            (p.name.toLowerCase().includes(q) ||
+            (p.name?.toLowerCase().includes(q) ||
               (p.description && p.description.toLowerCase().includes(q)))
         );
 
@@ -160,7 +184,7 @@ export const ArtifactStopView: React.FC = () => {
 
       return matchesSearch && matchesRarity && matchesCombat;
     });
-  }, [encyclopediaSearch, rarityFilter, combatFilter]);
+  }, [mainTab, artifactsMaster, deferredEncyclopediaSearch, rarityFilter, combatFilter]);
 
   const char = CHARACTERS.find((c) => c.id === selectedCharId) || CHARACTERS[0];
   const charConfig = getCharacterStatWeights(char.id);
@@ -291,9 +315,10 @@ export const ArtifactStopView: React.FC = () => {
         >
           {/* Header Banner */}
           <div className="bg-gradient-to-r from-[#121420] via-[#191d30] to-[#121420] p-5 sm:p-6 rounded-2xl border border-[#24293d] shadow-lg">
-            <div className="flex items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase mb-1">
+            <div className="flex flex-wrap items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase mb-1">
               <PieChart className="w-4 h-4" aria-hidden="true" />
               <span>Resin ROI &amp; Roll Value Diminishing Returns Engine</span>
+              <DataFreshnessBadge datasetId="artifact_weights_v7_2" />
             </div>
             <h1 className="text-2xl font-bold text-zinc-100 font-serif">
               When Is Artifact Farming No Longer Worth Your Resin?
@@ -972,7 +997,7 @@ export const ArtifactStopView: React.FC = () => {
               >
                 <span>
                   Showing <strong className="text-zinc-100">{filteredArtifactSets.length}</strong> of{' '}
-                  <strong className="text-zinc-100">{ARTIFACTS_MASTER.length}</strong> Master Sets
+                  <strong className="text-zinc-100">{artifactsMaster.length || 64}</strong> Master Sets
                 </span>
                 {(encyclopediaSearch || rarityFilter !== 'All' || combatFilter !== 'All') && (
                   <button
@@ -1060,8 +1085,15 @@ export const ArtifactStopView: React.FC = () => {
             </div>
           </div>
 
-          {/* Empty Encyclopedia State */}
-          {filteredArtifactSets.length === 0 ? (
+          {/* Loading / Empty Encyclopedia State */}
+          {isLoadingEncyclopedia ? (
+            <div
+              role="status"
+              className="bg-[#121420] border border-[#24293d] rounded-2xl p-8 text-center text-xs text-zinc-300"
+            >
+              Loading artifact encyclopedia…
+            </div>
+          ) : filteredArtifactSets.length === 0 ? (
             <div
               role="status"
               className="bg-[#121420] border border-[#24293d] rounded-2xl p-8 text-center space-y-3"

@@ -6,6 +6,10 @@ import {
   detectBennettC6Conflict,
   detectDualCarryContention,
   evaluateEnergyBattery,
+  detectFurinaHealerDeficit,
+  detectArlecchinoHealingConflict,
+  detectMavuikaNightsoulDeficit,
+  calculateComfortScore,
 } from './team-rules';
 import type { Character, OwnedCharacterProfile, TeamWeaponAssignment } from '../types/genshin';
 
@@ -35,6 +39,8 @@ describe('Team Rules Engine (Archetype Exclusivity & Anti-Synergies)', () => {
   const raiden = getChar('RaidenShogun');
   const travelerDendro = getChar('TravelerDendro');
   const travelerHydro = getChar('TravelerHydro');
+  const yelan = getChar('Yelan');
+  const xingqiu = getChar('Xingqiu');
 
   describe('Strict Archetype Exclusivity', () => {
     it('Chevreuse: strictly allows only Pyro and Electro teammates', () => {
@@ -259,6 +265,119 @@ describe('Team Rules Engine (Archetype Exclusivity & Anti-Synergies)', () => {
       const res = evaluateEnergyBattery(team);
       expect(res.status).toBe('optimal');
       expect(res.warnings).toHaveLength(0);
+    });
+  });
+
+  describe('Modern Anti-Synergy Detectors (M5)', () => {
+    it('detects severe deficit when Furina is in a party with zero healers', () => {
+      const teamNoHealer = [furina, huTao, xingqiu, zhongli];
+      const res = detectFurinaHealerDeficit(teamNoHealer);
+      expect(res.hasDeficit).toBe(true);
+      expect(res.severity).toBe('severe');
+      expect(res.penalty).toBe(14);
+      expect(res.warning).toContain('Furina requires team healing to stack Fanfare');
+    });
+
+    it('detects moderate deficit when Furina only has single-target healing', () => {
+      const teamSingleHealer = [furina, huTao, xingqiu, bennett];
+      const res = detectFurinaHealerDeficit(teamSingleHealer);
+      expect(res.hasDeficit).toBe(true);
+      expect(res.severity).toBe('moderate');
+      expect(res.penalty).toBe(6);
+    });
+
+    it('reports no deficit when a team-wide burst healer is present for Furina', () => {
+      const teamWithBaizhu = [furina, getChar('Baizhu'), getChar('Nefer'), nahida];
+      const resBaizhu = detectFurinaHealerDeficit(teamWithBaizhu);
+      expect(resBaizhu.hasDeficit).toBe(false);
+
+      const teamWithJean = [furina, getChar('Jean'), huTao, yelan];
+      const resJean = detectFurinaHealerDeficit(teamWithJean);
+      expect(resJean.hasDeficit).toBe(false);
+    });
+
+    it('reports no deficit when Neuvillette is paired with Furina (self HP fluctuations)', () => {
+      const teamNeuv = [neuvillette, furina, kazuha, zhongli];
+      // Neuvillette self-sustains with HP fluctuation
+      const resNeuv = detectFurinaHealerDeficit(teamNeuv);
+      expect(resNeuv.hasDeficit).toBe(false);
+    });
+
+    it('detects Arlecchino healing conflict when paired only with pure healers and no shielder or damage reduction', () => {
+      const arlecchino = getChar('Arlecchino');
+      const teamVulnerable = [arlecchino, bennett, getChar('Chevreuse'), fischl];
+      const res = detectArlecchinoHealingConflict(teamVulnerable);
+      expect(res.hasConflict).toBe(true);
+      expect(res.penalty).toBe(8);
+      expect(res.warning).toContain('Arlecchino cannot receive incoming combat heals');
+    });
+
+    it('clears Arlecchino conflict when protected by shielder or damage reduction (Zhongli / Xingqiu / Beidou)', () => {
+      const arlecchino = getChar('Arlecchino');
+      const teamWithShield = [arlecchino, bennett, zhongli, fischl];
+      expect(detectArlecchinoHealingConflict(teamWithShield).hasConflict).toBe(false);
+
+      const teamWithXingqiu = [arlecchino, bennett, getChar('Xingqiu'), kazuha];
+      expect(detectArlecchinoHealingConflict(teamWithXingqiu).hasConflict).toBe(false);
+    });
+
+    it('detects Mavuika Nightsoul deficit when no other Natlan teammate is present', () => {
+      const mavuika = getChar('Mavuika');
+      const teamSoloMav = [mavuika, furina, kazuha, bennett];
+      const res = detectMavuikaNightsoulDeficit(teamSoloMav);
+      expect(res.hasDeficit).toBe(true);
+      expect(res.penalty).toBe(5);
+    });
+
+    it('clears Mavuika Nightsoul deficit when another Natlan unit is present', () => {
+      const mavuika = getChar('Mavuika');
+      const xilonen = getChar('Xilonen');
+      const teamWithXilonen = [mavuika, xilonen, furina, bennett];
+      expect(detectMavuikaNightsoulDeficit(teamWithXilonen).hasDeficit).toBe(false);
+    });
+  });
+
+  describe('Dynamic Comfort Score Calculation', () => {
+    it('rates fortress team with Zhongli + Healer close to 100', () => {
+      const team = [huTao, xingqiu, zhongli, bennett];
+      const comfort = calculateComfortScore(team);
+      expect(comfort).toBeGreaterThanOrEqual(95);
+      expect(comfort).toBeLessThanOrEqual(100);
+    });
+
+    it('penalizes glass cannon comp with zero sustain', () => {
+      const teamGlass = [huTao, xingqiu, yelan, kazuha];
+      const comfort = calculateComfortScore(teamGlass);
+      expect(comfort).toBeLessThanOrEqual(40);
+    });
+
+    it('penalizes Furina team without healers in comfort', () => {
+      const teamFurinaNoHeal = [neuvillette, furina, kazuha, fischl];
+      const comfort = calculateComfortScore(teamFurinaNoHeal);
+      expect(comfort).toBeLessThan(70);
+    });
+  });
+
+  describe('Skirk and Escoffier Hydro+Cryo Archetype Exclusivity', () => {
+    const skirk = getChar('Skirk');
+    const escoffier = getChar('Escoffier');
+
+    it('Skirk-Freeze strictly permits only Hydro and Cryo teammates', () => {
+      const currentTeam = [skirk, escoffier];
+      expect(isAllowedTeammate('Skirk-Freeze', furina, currentTeam)).toBe(true);
+      expect(isAllowedTeammate('Skirk-Freeze', ayaka, currentTeam)).toBe(true);
+
+      // Strictly rejected
+      expect(isAllowedTeammate('Skirk-Freeze', bennett, currentTeam)).toBe(false);
+      expect(isAllowedTeammate('Skirk-Freeze', kazuha, currentTeam)).toBe(false);
+      expect(isAllowedTeammate('Skirk-Freeze', zhongli, currentTeam)).toBe(false);
+    });
+
+    it('Escoffier-Freeze strictly permits only Hydro and Cryo teammates', () => {
+      const currentTeam = [escoffier];
+      expect(isAllowedTeammate('Escoffier-Freeze', furina, currentTeam)).toBe(true);
+      expect(isAllowedTeammate('Escoffier-Freeze', nahida, currentTeam)).toBe(false);
+      expect(isAllowedTeammate('Escoffier-Freeze', fischl, currentTeam)).toBe(false);
     });
   });
 });

@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { solveAbyssDualTeams, evaluateChamberMechanicCoverage, swapAbyssDualHalves } from './abyss-solver';
 import { isSameCharacterOrTraveler } from './team-rules';
 import { CHARACTERS } from '../data/characters';
-import { ABYSS_CYCLES } from '../data/abyss-schedules';
+import { ABYSS_CYCLES, validateAbyssCycleConfig } from '../data/abyss-schedules';
+import { analyzeEndgameReadiness } from './endgame-helper';
 
 describe('Spiral Abyss Floor 12 Dual-Team Solver', () => {
   // A comprehensive owned roster with various archetypes:
@@ -463,6 +464,276 @@ describe('Spiral Abyss Floor 12 Dual-Team Solver', () => {
       expect(isSameCharacterOrTraveler('TravelerAnemo', undefined)).toBe(false);
       expect(isSameCharacterOrTraveler(null, null)).toBe(false);
       expect(isSameCharacterOrTraveler(undefined, undefined)).toBe(false);
+    });
+
+    describe('M6 Dual-Team Explanations, Target Profiles & Fallback Advisor', () => {
+      const fullMetaRoster = [
+        'Mavuika',
+        'Xilonen',
+        'Bennett',
+        'Xiangling',
+        'Neuvillette',
+        'Furina',
+        'KaedeharaKazuha',
+        'Zhongli',
+        'Yelan',
+        'RaidenShogun',
+      ];
+
+      it('attaches structured firstHalfExplanation and secondHalfExplanation to dual-team plan', () => {
+        const plan = solveAbyssDualTeams(fullMetaRoster);
+        expect(plan.firstHalfExplanation).toBeDefined();
+        expect(plan.secondHalfExplanation).toBeDefined();
+
+        expect(plan.firstHalfExplanation?.summary).toBeTruthy();
+        expect(Array.isArray(plan.firstHalfExplanation?.strengths)).toBe(true);
+        expect(Array.isArray(plan.firstHalfExplanation?.risks)).toBe(true);
+        expect(['Optimal', 'Good', 'Suboptimal']).toContain(plan.firstHalfExplanation?.targetProfileFit);
+
+        expect(plan.secondHalfExplanation?.summary).toBeTruthy();
+        expect(Array.isArray(plan.secondHalfExplanation?.strengths)).toBe(true);
+        expect(['Optimal', 'Good', 'Suboptimal']).toContain(plan.secondHalfExplanation?.targetProfileFit);
+      });
+
+      it('re-evaluates structured explanations for swapped halves in swapAbyssDualHalves', () => {
+        const plan = solveAbyssDualTeams(fullMetaRoster);
+        expect(plan.firstHalfExplanation).toBeDefined();
+        expect(plan.secondHalfExplanation).toBeDefined();
+
+        const swapped = swapAbyssDualHalves(plan);
+        expect(swapped.firstHalfExplanation?.half).toBe('First Half');
+        expect(swapped.secondHalfExplanation?.half).toBe('Second Half');
+        expect(swapped.firstHalfExplanation?.summary).toContain(swapped.firstHalfTeam.name);
+        expect(swapped.secondHalfExplanation?.summary).toContain(swapped.secondHalfTeam.name);
+      });
+
+      it('populates targetProfile, movementTraits, and effectiveDmgMultiplier in chamber half metrics', () => {
+        const plan = solveAbyssDualTeams(fullMetaRoster);
+        const firstChamber = plan.chamberCoverage[0];
+        expect(firstChamber).toBeDefined();
+
+        const m1 = firstChamber.firstHalfMetrics;
+        expect(m1).toBeDefined();
+        expect(['Single-Target', 'AoE', 'Mixed']).toContain(m1?.targetProfile);
+        expect(m1?.effectiveDmgMultiplier).toBeGreaterThan(0);
+        expect(Array.isArray(m1?.movementTraits)).toBe(true);
+
+        const m2 = firstChamber.secondHalfMetrics;
+        expect(m2).toBeDefined();
+        expect(['Single-Target', 'AoE', 'Mixed']).toContain(m2?.targetProfile);
+        expect(m2?.effectiveDmgMultiplier).toBeGreaterThan(0);
+      });
+
+      it('generates actionable missingCounterFallbacks with owned bench substitutes when mechanic is unsatisfied', () => {
+        // A roster without a Bow user on the active half, but with Amber on the bench
+        const rosterNoActiveBow = [
+          'Neuvillette',
+          'Furina',
+          'KaedeharaKazuha',
+          'Zhongli',
+          'HuTao',
+          'Xingqiu',
+          'Xiangling',
+          'Bennett',
+          'Amber', // Bow user on the bench
+        ];
+        const plan = solveAbyssDualTeams(rosterNoActiveBow);
+        expect(plan).toBeDefined();
+        if (plan.missingCounterFallbacks && plan.missingCounterFallbacks.length > 0) {
+          const fallback = plan.missingCounterFallbacks[0];
+          expect(fallback.chamber).toBeGreaterThanOrEqual(1);
+          expect(['First Half', 'Second Half']).toContain(fallback.half);
+          expect(fallback.strategyTip).toBeTruthy();
+          expect(Array.isArray(fallback.ownedSubstitutes)).toBe(true);
+        }
+      });
+    });
+  });
+
+  describe('M6 — Endgame Intelligence Regression Suite', () => {
+    it('validateAbyssCycleConfig passes cleanly for every built-in official cycle', () => {
+      for (const cycle of ABYSS_CYCLES) {
+        expect(validateAbyssCycleConfig(cycle), `Validation failed for ${cycle.id}`).toEqual([]);
+      }
+    });
+
+    it('validateAbyssCycleConfig catches immune element omission, invalid shieldUnits, and inverted dates', () => {
+      const broken = JSON.parse(JSON.stringify(ABYSS_CYCLES[0]));
+      broken.effectiveStartDate = '2026-12-30';
+      broken.effectiveEndDate = '2026-11-01';
+      broken.chambers[0].firstHalf.enemies[0].baseRes.Cryo = 100;
+      broken.chambers[0].firstHalf.mechanics.prohibitedElements = [];
+      broken.chambers[0].secondHalf.mechanics.shieldUnits = 0;
+
+      const errors = validateAbyssCycleConfig(broken);
+      expect(errors.some((e) => e.includes('effectiveStartDate'))).toBe(true);
+      expect(errors.some((e) => e.includes('immune to Cryo'))).toBe(true);
+      expect(errors.some((e) => e.includes('shieldUnits > 0'))).toBe(true);
+    });
+
+    it('penalizes unshredded high enemy RES and rewards RES shred against high-RES targets', () => {
+      const cycle52 = ABYSS_CYCLES.find((c) => c.id === 'cycle-5-2')!;
+      // C3-A has Jadeplume Terrorshroom (80% Dendro RES); test a non-immune high-RES target like C2-A Ruin Grader (70% Physical) or C1-A Scorpion (40% Electro RES in v7.2)
+      const cycle72 = ABYSS_CYCLES.find((c) => c.id === 'cycle-7-2')!;
+
+      const electroNoShred = {
+        id: 'electro-no-shred',
+        name: 'Electro Raw',
+        archetype: 'Electro',
+        members: [
+          CHARACTERS.find((c) => c.id === 'RaidenShogun')!,
+          CHARACTERS.find((c) => c.id === 'Fischl')!,
+          CHARACTERS.find((c) => c.id === 'Bennett')!,
+          CHARACTERS.find((c) => c.id === 'Xingqiu')!,
+        ],
+        synergyScore: 85,
+        comfortScore: 80,
+        reasons: [],
+        rotation: '',
+        resonance: [],
+      };
+
+      const electroWithShred = {
+        ...electroNoShred,
+        id: 'electro-shred',
+        members: [
+          CHARACTERS.find((c) => c.id === 'RaidenShogun')!,
+          CHARACTERS.find((c) => c.id === 'KaedeharaKazuha')!,
+          CHARACTERS.find((c) => c.id === 'Xilonen')!,
+          CHARACTERS.find((c) => c.id === 'Bennett')!,
+        ],
+      };
+
+      const dummySecond = {
+        id: 'dummy-second',
+        name: 'Dummy Second',
+        archetype: 'Vape',
+        members: [
+          CHARACTERS.find((c) => c.id === 'Mavuika')!,
+          CHARACTERS.find((c) => c.id === 'Yelan')!,
+          CHARACTERS.find((c) => c.id === 'Citlali')!,
+          CHARACTERS.find((c) => c.id === 'Zhongli')!,
+        ],
+        synergyScore: 85,
+        comfortScore: 85,
+        reasons: [],
+        rotation: '',
+        resonance: [],
+      };
+
+      const resNoShred = evaluateChamberMechanicCoverage(electroNoShred, dummySecond, cycle72);
+      const resWithShred = evaluateChamberMechanicCoverage(electroWithShred, dummySecond, cycle72);
+
+      const c1NoShred = resNoShred.coverage.find((c) => c.chamber === 1)!.firstHalfMetrics!;
+      const c1WithShred = resWithShred.coverage.find((c) => c.chamber === 1)!.firstHalfMetrics!;
+
+      expect(c1WithShred.effectiveDmgMultiplier!).toBeGreaterThan(c1NoShred.effectiveDmgMultiplier!);
+      expect(resWithShred.totalScore).toBeGreaterThan(resNoShred.totalScore);
+      expect(cycle52).toBeDefined();
+    });
+
+    it('uses explicit rotatingShields metadata instead of falsely flagging non-rotating C3-B bosses like Hydro Tulpa', () => {
+      const cycle71 = ABYSS_CYCLES.find((c) => c.id === 'cycle-7-1')!;
+      // Mono Pyro + Geo (only 2 elements) against v7.1 C3-B Hydro Tulpa (no rotating shields)
+      const teamFirst = {
+        id: 'first',
+        name: 'First',
+        archetype: 'Quicken',
+        members: [
+          CHARACTERS.find((c) => c.id === 'Nahida')!,
+          CHARACTERS.find((c) => c.id === 'RaidenShogun')!,
+          CHARACTERS.find((c) => c.id === 'Fischl')!,
+          CHARACTERS.find((c) => c.id === 'Zhongli')!,
+        ],
+        synergyScore: 88,
+        comfortScore: 85,
+        reasons: [],
+        rotation: '',
+        resonance: [],
+      };
+      const twoElementPyro = {
+        id: 'second',
+        name: 'Pyro Geo',
+        archetype: 'Mono Pyro',
+        members: [
+          CHARACTERS.find((c) => c.id === 'Arlecchino')!,
+          CHARACTERS.find((c) => c.id === 'Bennett')!,
+          CHARACTERS.find((c) => c.id === 'Xiangling')!,
+          CHARACTERS.find((c) => c.id === 'Xilonen')!,
+        ],
+        synergyScore: 88,
+        comfortScore: 85,
+        reasons: [],
+        rotation: '',
+        resonance: [],
+      };
+
+      const { coverage } = evaluateChamberMechanicCoverage(teamFirst, twoElementPyro, cycle71);
+      const c3 = coverage.find((c) => c.chamber === 3)!;
+      expect(c3.secondHalfSatisfied).toBe(true);
+      expect(c3.secondHalfStatus).not.toMatch(/rotating shields/i);
+    });
+
+    it('attaches structured half explanations, target profiles, movement traits, and positioning notes', () => {
+      const plan = solveAbyssDualTeams(comprehensiveRoster);
+
+      expect(plan.firstHalfExplanation).toBeDefined();
+      expect(plan.secondHalfExplanation).toBeDefined();
+      expect(plan.firstHalfExplanation!.summary.length).toBeGreaterThan(10);
+      expect(plan.firstHalfExplanation!.movementNotes.length).toBeGreaterThan(0);
+      expect(['Optimal', 'Good', 'Suboptimal']).toContain(plan.firstHalfExplanation!.targetProfileFit);
+
+      const c2 = plan.chamberCoverage.find((c) => c.chamber === 2)!;
+      expect(c2.firstHalfMetrics?.targetProfile).toBe('AoE');
+      expect(c2.secondHalfMetrics?.targetProfile).toBe('Single-Target');
+      expect(c2.secondHalfMetrics?.movementTraits).toContain('Airborne');
+    });
+
+    it('injects an owned Bow counter tech slot when top raw-synergy teams lack a Bow user', () => {
+      // 9-character roster with Amber as the sole Bow user
+      const singleBowRoster = [
+        'Arlecchino',
+        'Bennett',
+        'Xiangling',
+        'KaedeharaKazuha',
+        'Neuvillette',
+        'Furina',
+        'Zhongli',
+        'Xilonen',
+        'Amber',
+      ];
+      const plan = solveAbyssDualTeams(singleBowRoster);
+      const secondHalfHasBow = plan.secondHalfTeam.members.some((m) => m.weapon === 'Bow');
+      expect(secondHalfHasBow).toBe(true);
+    });
+
+    it('reports missingCounterFallbacks when roster lacks a required counter', () => {
+      const noBowRoster = [
+        'Nefer',
+        'Furina',
+        'Bennett',
+        'Xiangling',
+        'Arlecchino',
+        'Zhongli',
+        'KaedeharaKazuha',
+        'KukiShinobu',
+      ];
+      const plan = solveAbyssDualTeams(noBowRoster);
+      expect(plan.missingCounterFallbacks).toBeDefined();
+      expect(plan.missingCounterFallbacks!.some((f) => f.missingRequirement === 'Bow User')).toBe(true);
+    });
+
+    it('analyzeEndgameReadiness flags missing Bow User Required and excludes prohibited elements from usableCounters', () => {
+      const noBowOnlyPyro = ['Arlecchino', 'Bennett', 'Xiangling'];
+      const readiness = analyzeEndgameReadiness(noBowOnlyPyro, ABYSS_CYCLES[0]);
+
+      const c2Second = readiness.find((r) => r.chamber.chamber === 2 && r.chamber.half === 'Second Half')!;
+      expect(c2Second.missingElements).toContain('Bow User Required');
+      expect(c2Second.verdict).toBe('Caution: Missing Elements');
+
+      const c1Second = readiness.find((r) => r.chamber.chamber === 1 && r.chamber.half === 'Second Half')!;
+      // Pyro is prohibited on 12-1-B (Pyro Lector) so no Pyro character should appear in usableCounters
+      expect(c1Second.usableCounters.some((c) => c.element === 'Pyro')).toBe(false);
     });
   });
 });

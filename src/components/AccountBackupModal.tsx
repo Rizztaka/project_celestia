@@ -9,6 +9,8 @@ import {
   Undo2,
   RefreshCw,
   FileCheck,
+  ShieldAlert,
+  Info,
 } from 'lucide-react';
 import {
   validateBackupData,
@@ -16,11 +18,13 @@ import {
   rollbackPreRestoreBackup,
   downloadBackupFile,
   getLastBackupMeta,
+  detectAccountConflict,
   type LastBackupMetadata,
   type CelestiaBackupData,
   type ValidationResult,
+  type AccountConflictResult,
 } from '../services/backup';
-import { isDemoModeEnabled } from '../services/storage';
+import { isDemoModeEnabled, isStorageAvailable, getLastStorageErrorInfo } from '../services/storage';
 import { formatGameVersion, CURRENT_GAME_VERSION } from '../data/game-version';
 import { useModalAccessibility } from '../hooks/useModalAccessibility';
 
@@ -39,11 +43,14 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [parsedData, setParsedData] = useState<CelestiaBackupData | null>(null);
   const [validation, setValidation] = useState<ValidationResult | null>(null);
+  const [conflict, setConflict] = useState<AccountConflictResult | null>(null);
+  const [confirmOverwrite, setConfirmOverwrite] = useState<boolean>(false);
   const [parseError, setParseError] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [hasRollbackAvailable, setHasRollbackAvailable] = useState<boolean>(false);
   const [lastBackupMeta, setLastBackupMeta] = useState<LastBackupMetadata | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [storageHealthy, setStorageHealthy] = useState<boolean>(true);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -61,9 +68,15 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
       setStatusMessage(null);
       setParsedData(null);
       setValidation(null);
+      setConflict(null);
+      setConfirmOverwrite(false);
       setParseError(null);
       setSelectedFile(null);
       setIsDragging(false);
+
+      const healthy = isStorageAvailable();
+      setStorageHealthy(healthy);
+
       try {
         const hasBackup =
           typeof localStorage !== 'undefined' &&
@@ -85,6 +98,8 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
     setParseError(null);
     setValidation(null);
     setParsedData(null);
+    setConflict(null);
+    setConfirmOverwrite(false);
 
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -94,7 +109,10 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
         const valResult = validateBackupData(json);
         setValidation(valResult);
         if (valResult.valid) {
-          setParsedData(json as CelestiaBackupData);
+          const typedData = json as CelestiaBackupData;
+          setParsedData(typedData);
+          const detectedConflict = detectAccountConflict(typedData);
+          setConflict(detectedConflict.hasConflict ? detectedConflict : null);
         }
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Invalid JSON syntax';
@@ -128,7 +146,7 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
       setLastBackupMeta(getLastBackupMeta());
       setStatusMessage({
         type: 'success',
-        text: 'Backup file downloaded. Keep it somewhere safe if you ever clear browser storage or switch devices.',
+        text: 'Backup file downloaded. Keep it safe in case you clear browser storage or switch devices.',
       });
     } catch {
       setStatusMessage({
@@ -140,7 +158,15 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
 
   const handleExecuteRestore = () => {
     if (!parsedData) return;
-    const res = importAccountBackup(parsedData);
+    if (conflict?.hasConflict && !confirmOverwrite) {
+      setStatusMessage({
+        type: 'error',
+        text: 'Please confirm account overwrite before restoring a backup from a different UID.',
+      });
+      return;
+    }
+
+    const res = importAccountBackup(parsedData, { forceOverwrite: confirmOverwrite });
     if (res.success) {
       setStatusMessage({
         type: 'success',
@@ -261,6 +287,26 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
 
         {/* Content Body */}
         <div className="p-5 sm:p-6 overflow-y-auto space-y-5 text-sm flex-1">
+          {!storageHealthy && (
+            <div
+              role="alert"
+              className="p-3.5 rounded-xl bg-amber-950/60 border border-amber-500/60 text-amber-200 text-xs flex items-start gap-2.5"
+            >
+              <AlertTriangle className="w-4 h-4 text-amber-300 mt-0.5 shrink-0" aria-hidden="true" />
+              <div>
+                <strong className="font-semibold block">Browser Storage Restricted:</strong>
+                <span>
+                  localStorage is unavailable or blocked in this window. Any modifications or restored accounts may not persist across browser restarts.
+                </span>
+                {getLastStorageErrorInfo()?.message && (
+                  <p className="mt-1 font-mono text-[11px] text-amber-300/80">
+                    Diagnostic: {getLastStorageErrorInfo()?.message}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
           {statusMessage && (
             <div
               role={statusMessage.type === 'error' ? 'alert' : 'status'}
@@ -292,8 +338,9 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
                   <span>What is included in Celestia native backup:</span>
                 </h3>
                 <ul className="text-xs text-zinc-300 space-y-1.5 list-disc list-inside leading-relaxed">
-                  <li>Owned roster &amp; custom character profiles (levels, constellations, talents)</li>
-                  <li>Equipped and unequipped weapons armory with refinements</li>
+                  <li>Active Account UID (for profile identification &amp; sync matching)</li>
+                  <li>Owned roster &amp; custom character profiles (levels, constellations, talents, weapons)</li>
+                  <li>Equipped and unequipped weapons armory with refinements and levels</li>
                   <li>Pull budget configuration, current pity counts, and Capturing Radiance state</li>
                   <li>Spiral Abyss cycles &amp; custom sandbox floor configurations</li>
                   <li>
@@ -315,7 +362,7 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
                 </div>
               )}
 
-              {lastBackupMeta && (
+              {lastBackupMeta ? (
                 <div className="p-3.5 rounded-xl bg-purple-950/30 border border-purple-400/35 text-xs text-purple-100 flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-purple-300 shrink-0" aria-hidden="true" />
@@ -328,10 +375,30 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
                     </span>
                   </div>
                   <span className="text-xs font-mono text-zinc-200">
-                    {lastBackupMeta.characterCount} chars · {lastBackupMeta.weaponCount} weps
+                    {lastBackupMeta.characterCount} chars · {lastBackupMeta.weaponCount} weps · {lastBackupMeta.artifactCount} arts
                   </span>
                 </div>
+              ) : (
+                <div className="p-3.5 rounded-xl bg-[#1c1828] border border-amber-500/40 text-xs text-amber-200 flex items-start gap-2.5">
+                  <Info className="w-4 h-4 text-amber-300 mt-0.5 shrink-0" aria-hidden="true" />
+                  <div className="space-y-1">
+                    <strong className="font-semibold text-amber-100 block">No Backup Created Yet</strong>
+                    <p className="text-zinc-300 leading-relaxed">
+                      Your character calibrations and armory exist only in your browser&apos;s local storage. Download a backup now to ensure you can recover your progress anytime.
+                    </p>
+                  </div>
+                </div>
               )}
+
+              {/* 3-Step Recovery Guidance */}
+              <div className="p-4 rounded-xl bg-[#141624] border border-[#23283e] space-y-2">
+                <h4 className="text-xs font-semibold text-zinc-200">How Account Recovery Works:</h4>
+                <ol className="text-xs text-zinc-400 space-y-1 list-decimal list-inside leading-relaxed">
+                  <li><strong className="text-zinc-300">Download:</strong> Save the validated JSON file to your device or cloud drive.</li>
+                  <li><strong className="text-zinc-300">Safety:</strong> Keep a copy before clearing browser site data or switching computers.</li>
+                  <li><strong className="text-zinc-300">Restore:</strong> Drag &amp; drop the file into the Restore tab on any device to resume immediately.</li>
+                </ol>
+              </div>
 
               <div className="flex flex-col gap-2 pt-1">
                 <button
@@ -342,7 +409,7 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
                   <Download className="w-4 h-4" aria-hidden="true" />
                   <span>Download Celestia Backup (.json)</span>
                 </button>
-                <p className="text-xs text-zinc-300 text-center">
+                <p className="text-xs text-zinc-400 text-center">
                   Saves a timestamped, validated JSON file to your local device.
                 </p>
               </div>
@@ -452,6 +519,44 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
                     </div>
                   </div>
 
+                  {validation.summary.uid && (
+                    <div className="text-xs text-zinc-300 bg-[#121420] px-3 py-1.5 rounded-lg border border-[#24293d] flex items-center justify-between">
+                      <span>Backup Account UID:</span>
+                      <span className="font-mono font-semibold text-purple-300">{validation.summary.uid}</span>
+                    </div>
+                  )}
+
+                  {/* Conflict detection alert */}
+                  {conflict && (
+                    <div
+                      role="alert"
+                      className="p-3.5 rounded-xl bg-amber-950/60 border border-amber-500/60 text-amber-100 text-xs space-y-2.5"
+                    >
+                      <div className="flex items-start gap-2">
+                        <ShieldAlert className="w-4 h-4 text-amber-300 mt-0.5 shrink-0" aria-hidden="true" />
+                        <div>
+                          <strong className="font-bold block text-amber-200">Cross-Account Identity Warning:</strong>
+                          <p className="mt-0.5 leading-relaxed text-amber-100/90">
+                            {conflict.reason === 'uid_mismatch'
+                              ? `Active account (UID: ${conflict.currentUid}) differs from this backup (UID: ${conflict.incomingUid}).`
+                              : `Your active account has ${conflict.currentCharacterCount} characters. Restoring this backup will replace them.`}
+                          </p>
+                        </div>
+                      </div>
+                      <label className="flex items-center gap-2 cursor-pointer pt-1 border-t border-amber-500/30">
+                        <input
+                          type="checkbox"
+                          checked={confirmOverwrite}
+                          onChange={(e) => setConfirmOverwrite(e.target.checked)}
+                          className="w-4 h-4 rounded text-purple-600 focus:ring-purple-500 border-zinc-600"
+                        />
+                        <span className="font-semibold text-white">
+                          I confirm I want to overwrite my active account data with this backup
+                        </span>
+                      </label>
+                    </div>
+                  )}
+
                   <div className="p-3 rounded-lg bg-purple-950/30 border border-purple-400/25 text-xs text-zinc-200 space-y-1">
                     <p className="text-purple-200 font-semibold">Automatic Rollback Guard:</p>
                     <p className="leading-relaxed">
@@ -463,7 +568,12 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
                   <button
                     type="button"
                     onClick={handleExecuteRestore}
-                    className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                    disabled={Boolean(conflict && !confirmOverwrite)}
+                    className={`w-full min-h-[44px] py-2.5 px-4 rounded-xl font-bold text-xs transition-colors flex items-center justify-center gap-2 shadow-md ${
+                      conflict && !confirmOverwrite
+                        ? 'bg-zinc-700 text-zinc-400 cursor-not-allowed'
+                        : 'bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer'
+                    }`}
                   >
                     <RefreshCw className="w-4 h-4" aria-hidden="true" />
                     <span>Confirm &amp; Restore Account</span>
@@ -503,3 +613,5 @@ export const AccountBackupModal: React.FC<AccountBackupModalProps> = ({
     </div>
   );
 };
+
+export default AccountBackupModal;

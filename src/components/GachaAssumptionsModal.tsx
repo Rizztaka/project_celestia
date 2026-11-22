@@ -256,7 +256,7 @@ export const GachaAssumptionsModal: React.FC<GachaAssumptionsModalProps> = ({
         <div className="pt-3 border-t border-[#24293d] flex flex-wrap items-center justify-between gap-3 text-xs text-zinc-300">
           <span className="flex items-center gap-1.5">
             <BookOpen className="w-3.5 h-3.5 text-[#d4af37]" aria-hidden="true" />
-            <span>Authoritative Sources: HoYoverse Disclosures (Version 5.0 &amp; 7.2)</span>
+            <span>Authoritative Sources: HoYoverse Disclosures (Version 5.0 &amp; {GACHA_RULES_VERSION})</span>
           </span>
           <a
             href="https://genshin.hoyoverse.com/en/news/detail/125274"

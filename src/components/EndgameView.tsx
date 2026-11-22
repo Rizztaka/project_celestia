@@ -10,6 +10,8 @@ import {
   ChevronDown,
   ChevronUp,
   Target,
+  Compass,
+  Sparkles,
 } from 'lucide-react';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
@@ -130,7 +132,7 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
             >
               <div className="flex flex-wrap items-center gap-2 text-left">
                 <Target className="w-4 h-4 text-[#d4af37] shrink-0" aria-hidden="true" />
-                <span>Enemy Lineup &amp; Chamber Shield Reference Guide</span>
+                <span>Enemy Lineup, Resistances &amp; Positioning Reference Guide</span>
                 <span className="text-xs font-normal text-[#f3cf58]">· {activeCycle.name}</span>
               </div>
               <div className="flex items-center gap-1.5 text-zinc-300 ml-auto">
@@ -156,10 +158,22 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
                         <div>
                           <div className="flex flex-wrap items-start justify-between gap-2 border-b border-[#202538] pb-2.5">
                             <div>
-                              <span className="text-xs font-bold text-[#f3cf58]">
-                                12-{item.chamber.chamber} · {item.chamber.half}
-                              </span>
-                              <h3 className="text-sm font-bold text-zinc-100 mt-0.5">
+                              <div className="flex flex-wrap items-center gap-1.5">
+                                <span className="text-xs font-bold text-[#f3cf58]">
+                                  12-{item.chamber.chamber} · {item.chamber.half}
+                                </span>
+                                {item.chamber.targetProfile && (
+                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#1a1e2e] text-sky-200 border border-sky-400/30">
+                                    {item.chamber.targetProfile}
+                                  </span>
+                                )}
+                                {(item.chamber.waveCount ?? 1) > 1 && (
+                                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#1a1e2e] text-zinc-200 border border-[#323954]">
+                                    {item.chamber.waveCount} Waves
+                                  </span>
+                                )}
+                              </div>
+                              <h3 className="text-sm font-bold text-zinc-100 mt-1">
                                 {item.chamber.enemies.join(' & ')}
                               </h3>
                             </div>
@@ -184,20 +198,61 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
                             <div className="bg-[#151826] px-2.5 py-1 rounded-lg border border-[#24293d]">
                               <span className="text-zinc-300">Shield: </span>
                               <span className="text-rose-200 font-semibold">
-                                {item.chamber.shieldTypes.join(', ')}
+                                {item.chamber.shieldTypes.length > 0
+                                  ? item.chamber.shieldTypes.join(', ')
+                                  : 'None'}
                               </span>
                             </div>
                             <div className="bg-[#151826] px-2.5 py-1 rounded-lg border border-[#24293d]">
-                              <span className="text-zinc-300">Required: </span>
+                              <span className="text-zinc-300">Recommended: </span>
                               <span className="text-[#f3cf58] font-semibold">
-                                {item.chamber.recommendedElements.join(', ')}
+                                {item.chamber.recommendedElements.length > 0
+                                  ? item.chamber.recommendedElements.join(', ')
+                                  : 'Flexible'}
                               </span>
                             </div>
                           </div>
 
+                          {/* Movement Traits & High RES Warnings */}
+                          {((item.chamber.movementTraits && item.chamber.movementTraits.length > 0) ||
+                            (item.chamber.highResWarnings && item.chamber.highResWarnings.length > 0)) && (
+                            <div className="mt-2 flex flex-wrap gap-1.5">
+                              {item.chamber.movementTraits?.map((trait) => (
+                                <span
+                                  key={trait}
+                                  className="text-[11px] px-2 py-0.5 rounded bg-purple-950/50 text-purple-200 border border-purple-400/35 font-medium"
+                                >
+                                  {trait}
+                                </span>
+                              ))}
+                              {item.chamber.highResWarnings?.map((warn) => (
+                                <span
+                                  key={warn}
+                                  className="text-[11px] px-2 py-0.5 rounded bg-rose-950/50 text-rose-200 border border-rose-400/35 font-medium"
+                                >
+                                  {warn}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
                           <p className="mt-2.5 text-xs text-zinc-200 bg-[#0b0d14] p-3 rounded-lg border border-[#1d2236] leading-relaxed">
                             💡 {item.chamber.tips}
                           </p>
+
+                          {item.chamber.positioningTip && (
+                            <div className="mt-2 flex items-start gap-1.5 text-xs text-sky-200 bg-sky-950/25 border border-sky-400/30 p-2.5 rounded-lg">
+                              <Compass className="w-3.5 h-3.5 shrink-0 mt-0.5 text-sky-300" aria-hidden="true" />
+                              <span>{item.chamber.positioningTip}</span>
+                            </div>
+                          )}
+
+                          {item.chamber.chamberBuff && (
+                            <div className="mt-2 flex items-start gap-1.5 text-xs text-amber-200 bg-amber-950/25 border border-amber-400/30 p-2.5 rounded-lg">
+                              <Sparkles className="w-3.5 h-3.5 shrink-0 mt-0.5 text-amber-300" aria-hidden="true" />
+                              <span>{item.chamber.chamberBuff}</span>
+                            </div>
+                          )}
 
                           <div className="mt-3">
                             <span className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block mb-1.5">
@@ -233,7 +288,7 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
                         {item.missingElements.length > 0 && (
                           <div className="flex items-center gap-1.5 text-xs text-rose-200 bg-rose-950/35 border border-rose-400/35 p-2.5 rounded-lg mt-2">
                             <AlertCircle className="w-4 h-4 shrink-0 text-rose-300" aria-hidden="true" />
-                            <span>Missing elements: {item.missingElements.join(', ')}</span>
+                            <span>Missing counters: {item.missingElements.join(', ')}</span>
                           </div>
                         )}
                       </div>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useRef, useEffect, useDeferredValue, Suspense } from 'react';
 import { CHARACTERS } from '../data/characters';
 import type { Character, Element, WeaponType, OwnedCharacterProfile, OwnedWeapon } from '../types/genshin';
 import {
@@ -17,9 +17,14 @@ import {
 } from 'lucide-react';
 import { LazyCharacterDetailModal, preloadCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterCard } from './CharacterCard';
-import { GoodImportExportModal } from './GoodImportExportModal';
-import { AccountBackupModal } from './AccountBackupModal';
 import { useModalAccessibility } from '../hooks/useModalAccessibility';
+
+const LazyGoodImportExportModal = React.lazy(() =>
+  import('./GoodImportExportModal').then((m) => ({ default: m.GoodImportExportModal }))
+);
+const LazyAccountBackupModal = React.lazy(() =>
+  import('./AccountBackupModal').then((m) => ({ default: m.AccountBackupModal }))
+);
 
 export type NationRegion =
   | 'All'
@@ -384,6 +389,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
   const [filterWeapon, setFilterWeapon] = useState<'All' | WeaponType>('All');
   const [filterTravelerElement, setFilterTravelerElement] = useState<'All' | Element>('All');
   const [search, setSearch] = useState<string>('');
+  const deferredSearch = useDeferredValue(search);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [isGoodModalOpen, setIsGoodModalOpen] = useState<boolean>(false);
   const [isBackupModalOpen, setIsBackupModalOpen] = useState<boolean>(false);
@@ -409,7 +415,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
   }, []);
 
   const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
+    const q = deferredSearch.trim().toLowerCase();
     return CHARACTERS.filter((c) => {
       const isOwned = ownedSet.has(c.id);
       if (filterOwnership === 'owned' && !isOwned) return false;
@@ -433,7 +439,7 @@ export const RosterView: React.FC<RosterViewProps> = ({
     filterWeapon,
     filterRegion,
     filterTravelerElement,
-    search,
+    deferredSearch,
   ]);
 
   const profilesRef = useRef(profiles);
@@ -880,38 +886,46 @@ export const RosterView: React.FC<RosterViewProps> = ({
       />
 
       {/* Universal GOOD Format Import/Export Modal */}
-      <GoodImportExportModal
-        isOpen={isGoodModalOpen}
-        onClose={() => setIsGoodModalOpen(false)}
-        profiles={profiles}
-        weapons={weapons}
-        onImportSuccess={(newProfiles, msg, importedWeapons) => {
-          if (onImportProfiles) {
-            onImportProfiles(newProfiles, msg, importedWeapons);
-          }
-        }}
-      />
+      {isGoodModalOpen && (
+        <Suspense fallback={null}>
+          <LazyGoodImportExportModal
+            isOpen={isGoodModalOpen}
+            onClose={() => setIsGoodModalOpen(false)}
+            profiles={profiles}
+            weapons={weapons}
+            onImportSuccess={(newProfiles, msg, importedWeapons) => {
+              if (onImportProfiles) {
+                onImportProfiles(newProfiles, msg, importedWeapons);
+              }
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Celestia Native Account Backup & Restore Modal */}
-      <AccountBackupModal
-        isOpen={isBackupModalOpen}
-        onClose={() => setIsBackupModalOpen(false)}
-        onRestoreSuccess={() => {
-          if (onRestoreAccount) {
-            onRestoreAccount();
-          } else if (
-            typeof window !== 'undefined' &&
-            window.location &&
-            typeof window.location.reload === 'function'
-          ) {
-            try {
-              window.location.reload();
-            } catch {
-              // Ignore in environments where reload is unavailable
-            }
-          }
-        }}
-      />
+      {isBackupModalOpen && (
+        <Suspense fallback={null}>
+          <LazyAccountBackupModal
+            isOpen={isBackupModalOpen}
+            onClose={() => setIsBackupModalOpen(false)}
+            onRestoreSuccess={() => {
+              if (onRestoreAccount) {
+                onRestoreAccount();
+              } else if (
+                typeof window !== 'undefined' &&
+                window.location &&
+                typeof window.location.reload === 'function'
+              ) {
+                try {
+                  window.location.reload();
+                } catch {
+                  // Ignore in environments where reload is unavailable
+                }
+              }
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Accessible Account Reset Confirmation Dialog */}
       <ResetConfirmModal

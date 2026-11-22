@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { clearAllStorage } from '../fixtures/test-helpers';
+import { clearAllStorage, navigateToTab } from '../fixtures/test-helpers';
 
 test.describe('Journey 11: Automated WCAG 2.1 AA Accessibility', () => {
   test.beforeEach(async ({ page }) => {
@@ -31,91 +31,23 @@ test.describe('Journey 11: Automated WCAG 2.1 AA Accessibility', () => {
     expect(parseFloat(animationDuration)).toBeLessThanOrEqual(0.01);
   });
 
-  test('scans initial view for critical accessibility violations', async ({ page }) => {
+  test('scans Best Teams (initial view) for critical accessibility violations', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const accessibilityScanResults = await new AxeBuilder({ page })
+    const scan = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa'])
       .analyze();
 
-    const criticalViolations = accessibilityScanResults.violations.filter(
+    const criticalViolations = scan.violations.filter(
       (v) => v.impact === 'critical' || v.impact === 'serious'
     );
-
-    expect(criticalViolations).toEqual([]);
-  });
-
-  test('scans Account Backup Modal for accessibility compliance', async ({ page }) => {
-    const backupButton = page.locator('button:has(svg.lucide-database)').first();
-    await backupButton.scrollIntoViewIfNeeded();
-    await backupButton.click();
-
-    const modal = page.getByRole('dialog');
-    await expect(modal).toBeVisible();
-
-    const scanResults = await new AxeBuilder({ page })
-      .include('[role="dialog"]')
-      .withTags(['wcag2a', 'wcag2aa'])
-      .analyze();
-
-    const criticalViolations = scanResults.violations.filter(
-      (v) => v.impact === 'critical' || v.impact === 'serious'
-    );
-
-    expect(criticalViolations).toEqual([]);
-  });
-
-  test('scans Weapon Armory Modal for accessibility compliance', async ({ page }) => {
-    const armoryButton = page.getByRole('button', { name: /Armory/i }).first();
-    await armoryButton.scrollIntoViewIfNeeded();
-    await armoryButton.click();
-
-    const modal = page.getByRole('dialog');
-    await expect(modal).toBeVisible();
-
-    const scanResults = await new AxeBuilder({ page })
-      .include('[role="dialog"]')
-      .withTags(['wcag2a', 'wcag2aa'])
-      .analyze();
-
-    const criticalViolations = scanResults.violations.filter(
-      (v) => v.impact === 'critical' || v.impact === 'serious'
-    );
-
-    expect(criticalViolations).toEqual([]);
-  });
-
-  test('scans Character Detail Modal in Demo Mode for accessibility compliance', async ({ page }) => {
-    const demoToggle = page.getByRole('button', { name: /Demo Mode/i }).first();
-    await demoToggle.click();
-    await expect(page.locator('text=Demo Mode enabled')).toBeVisible();
-
-    await page.getByRole('button', { name: /My Roster/i }).first().click();
-
-    const charCard = page.locator('text=Nefer').first();
-    await expect(charCard).toBeVisible();
-    await charCard.click();
-
-    const modal = page.getByRole('dialog').first();
-    await expect(modal).toBeVisible();
-
-    const scanResults = await new AxeBuilder({ page })
-      .include('[role="dialog"]')
-      .withTags(['wcag2a', 'wcag2aa'])
-      .analyze();
-
-    const criticalViolations = scanResults.violations.filter(
-      (v) => v.impact === 'critical' || v.impact === 'serious'
-    );
-
     expect(criticalViolations).toEqual([]);
   });
 
   test('scans Pull Advisor and Gacha Assumptions Modal for accessibility compliance', async ({ page }) => {
-    await page.getByRole('button', { name: /Pull Advisor/i }).first().click();
+    await navigateToTab(page, /Pull Advisor/i);
     await expect(page.locator('text=Who Should You Pull Next?').first()).toBeVisible();
 
-    // Scan Pull Advisor view
     const advisorScan = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa'])
       .analyze();
@@ -141,5 +73,109 @@ test.describe('Journey 11: Automated WCAG 2.1 AA Accessibility', () => {
       (v) => v.impact === 'critical' || v.impact === 'serious'
     );
     expect(modalViolations).toEqual([]);
+  });
+
+  test('scans Endgame Helper view for accessibility compliance', async ({ page }) => {
+    await navigateToTab(page, /Endgame Helper/i);
+    await expect(page.locator('text=Imaginarium Theater').first()).toBeVisible();
+
+    const scan = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa'])
+      .analyze();
+
+    const criticalViolations = scan.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious'
+    );
+    expect(criticalViolations).toEqual([]);
+  });
+
+  test('scans Artifact Stop view for accessibility compliance', async ({ page }) => {
+    await navigateToTab(page, /Artifact Stop/i);
+
+    const scan = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa'])
+      .analyze();
+
+    const criticalViolations = scan.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious'
+    );
+    expect(criticalViolations).toEqual([]);
+  });
+
+  test('scans My Roster view for accessibility compliance', async ({ page }) => {
+    await navigateToTab(page, /Roster/i);
+    await expect(page.getByPlaceholder(/Search by character name/i).first()).toBeVisible();
+
+    const scan = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa'])
+      .analyze();
+
+    const criticalViolations = scan.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious'
+    );
+    expect(criticalViolations).toEqual([]);
+  });
+
+  test('scans Account Backup Modal for accessibility compliance', async ({ page }) => {
+    const backupButton = page.locator('button:has(svg.lucide-database)').first();
+    await backupButton.scrollIntoViewIfNeeded();
+    await backupButton.click();
+
+    const modal = page.getByRole('dialog');
+    await expect(modal).toBeVisible();
+
+    const scanResults = await new AxeBuilder({ page })
+      .include('[role="dialog"]')
+      .withTags(['wcag2a', 'wcag2aa'])
+      .analyze();
+
+    const criticalViolations = scanResults.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious'
+    );
+    expect(criticalViolations).toEqual([]);
+  });
+
+  test('scans Weapon Armory Modal for accessibility compliance', async ({ page }) => {
+    const armoryButton = page.getByRole('button', { name: /Armory/i }).first();
+    await armoryButton.scrollIntoViewIfNeeded();
+    await armoryButton.click();
+
+    const modal = page.getByRole('dialog');
+    await expect(modal).toBeVisible();
+
+    const scanResults = await new AxeBuilder({ page })
+      .include('[role="dialog"]')
+      .withTags(['wcag2a', 'wcag2aa'])
+      .analyze();
+
+    const criticalViolations = scanResults.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious'
+    );
+    expect(criticalViolations).toEqual([]);
+  });
+
+  test('scans Character Detail Modal in Demo Mode for accessibility compliance', async ({ page }) => {
+    const demoToggle = page.getByRole('button', { name: /Demo Mode/i }).first();
+    await demoToggle.click();
+    await expect(page.locator('text=Demo Mode enabled')).toBeVisible();
+
+    await navigateToTab(page, /Roster/i);
+
+    const charCard = page.locator('text=Nefer').first();
+    await expect(charCard).toBeVisible();
+    await charCard.click();
+
+    const modal = page.getByRole('dialog').first();
+    await expect(modal).toBeVisible();
+
+    const scanResults = await new AxeBuilder({ page })
+      .include('[role="dialog"]')
+      .withTags(['wcag2a', 'wcag2aa'])
+      .analyze();
+
+    const criticalViolations = scanResults.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious'
+    );
+    expect(criticalViolations).toEqual([]);
   });
 });

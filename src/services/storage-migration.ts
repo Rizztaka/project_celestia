@@ -18,8 +18,68 @@ export const KNOWN_STORAGE_KEYS = [
   'celestia_v2_demo_profiles',
   'celestia_v2_demo_weapons',
   'celestia_v2_demo_artifacts',
+  'celestia_v2_demo_uid',
+  'celestia_v2_demo_pull_budget',
+  'celestia_v2_demo_abyss_cycle_id',
+  'celestia_v2_demo_custom_abyss',
   'celestia_last_backup_meta',
 ] as const;
+
+export const DEFAULT_PULL_BUDGET_VALUES: PullBudgetState = {
+  primogems: 0,
+  fates: 0,
+  characterPity: 0,
+  characterGuaranteed: false,
+  consecutiveLossCount: 0,
+  weaponPity: 0,
+  weaponGuaranteed: false,
+  weaponFatePoints: 0,
+  chronicledPity: 0,
+  chronicledFatePoints: 0,
+  includeCashback: false,
+};
+
+/**
+ * Sanitizes and clamps any raw pull budget object (v1 or v2) without dropping M8 fields.
+ */
+export function sanitizePullBudget(raw: unknown): PullBudgetState {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    return { ...DEFAULT_PULL_BUDGET_VALUES };
+  }
+  const parsed = raw as Record<string, unknown>;
+
+  const clampInt = (val: unknown, min: number, max: number, fallback: number): number =>
+    typeof val === 'number' && Number.isFinite(val)
+      ? Math.max(min, Math.min(max, Math.floor(val)))
+      : fallback;
+
+  const toBool = (val: unknown, fallback: boolean): boolean =>
+    typeof val === 'boolean' ? val : fallback;
+
+  return {
+    primogems: clampInt(parsed.primogems, 0, Number.MAX_SAFE_INTEGER, DEFAULT_PULL_BUDGET_VALUES.primogems),
+    fates: clampInt(parsed.fates, 0, Number.MAX_SAFE_INTEGER, DEFAULT_PULL_BUDGET_VALUES.fates),
+    characterPity: clampInt(parsed.characterPity, 0, 89, DEFAULT_PULL_BUDGET_VALUES.characterPity),
+    characterGuaranteed: toBool(parsed.characterGuaranteed, DEFAULT_PULL_BUDGET_VALUES.characterGuaranteed),
+    consecutiveLossCount: clampInt(
+      parsed.consecutiveLossCount,
+      0,
+      5,
+      DEFAULT_PULL_BUDGET_VALUES.consecutiveLossCount ?? 0,
+    ),
+    weaponPity: clampInt(parsed.weaponPity, 0, 79, DEFAULT_PULL_BUDGET_VALUES.weaponPity),
+    weaponGuaranteed: toBool(parsed.weaponGuaranteed, DEFAULT_PULL_BUDGET_VALUES.weaponGuaranteed ?? false),
+    weaponFatePoints: clampInt(parsed.weaponFatePoints, 0, 1, DEFAULT_PULL_BUDGET_VALUES.weaponFatePoints),
+    chronicledPity: clampInt(parsed.chronicledPity, 0, 89, DEFAULT_PULL_BUDGET_VALUES.chronicledPity ?? 0),
+    chronicledFatePoints: clampInt(
+      parsed.chronicledFatePoints,
+      0,
+      1,
+      DEFAULT_PULL_BUDGET_VALUES.chronicledFatePoints ?? 0,
+    ),
+    includeCashback: toBool(parsed.includeCashback, DEFAULT_PULL_BUDGET_VALUES.includeCashback ?? false),
+  };
+}
 
 export function getStorageSchemaVersion(): number {
   try {
@@ -27,7 +87,7 @@ export function getStorageSchemaVersion(): number {
     const raw = localStorage.getItem(SCHEMA_VERSION_KEY);
     if (!raw) return 0;
     const parsed = parseInt(raw, 10);
-    return isNaN(parsed) ? 0 : parsed;
+    return Number.isNaN(parsed) ? 0 : parsed;
   } catch {
     return 0;
   }
@@ -39,9 +99,15 @@ export function createSafetySnapshot(snapshotKey: string): boolean {
     const snapshot: Record<string, string> = {};
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && (key.startsWith('celestia_') || KNOWN_STORAGE_KEYS.includes(key as any))) {
+      if (key && (key.startsWith('celestia_') || (KNOWN_STORAGE_KEYS as readonly string[]).includes(key))) {
         // Do not nest snapshots inside snapshots or allow prototype pollution keys
-        if (key === snapshotKey || key.startsWith('celestia_backup_') || key === '__proto__' || key === 'constructor' || key === 'prototype') {
+        if (
+          key === snapshotKey ||
+          key.startsWith('celestia_backup_') ||
+          key === '__proto__' ||
+          key === 'constructor' ||
+          key === 'prototype'
+        ) {
           continue;
         }
         const val = localStorage.getItem(key);
@@ -70,7 +136,7 @@ export function rollbackToBackup(backupKey: string): boolean {
     const currentKeys: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && (key.startsWith('celestia_') || KNOWN_STORAGE_KEYS.includes(key as any))) {
+      if (key && (key.startsWith('celestia_') || (KNOWN_STORAGE_KEYS as readonly string[]).includes(key))) {
         if (!key.startsWith('celestia_backup_')) {
           currentKeys.push(key);
         }
@@ -102,6 +168,7 @@ export interface MigrationResult {
   migrated: boolean;
   fromVersion: number;
   toVersion: number;
+  error?: string;
 }
 
 export function migrateStorageIfNeeded(): MigrationResult {
@@ -124,8 +191,17 @@ export function migrateStorageIfNeeded(): MigrationResult {
       return { migrated: true, fromVersion: 0, toVersion: CURRENT_SCHEMA_VERSION };
     }
 
-    // Step 1: Create immutable safety snapshot before migrating v1 data
-    createSafetySnapshot('celestia_backup_v1');
+    // Step 1: Create immutable safety snapshot before migrating v1 data.
+    // Abort without mutating existing records if snapshot cannot be persisted.
+    const snapshotOk = createSafetySnapshot('celestia_backup_v1');
+    if (!snapshotOk) {
+      return {
+        migrated: false,
+        fromVersion: currentVersion === 0 ? 1 : currentVersion,
+        toVersion: CURRENT_SCHEMA_VERSION,
+        error: 'Unable to create pre-migration safety snapshot. Migration aborted safely without modifying data.',
+      };
+    }
 
     // Step 2: Normalize raw weapons in celestia_v2_raw_weapons
     const rawWeaponsJson = localStorage.getItem('celestia_v2_raw_weapons');
@@ -135,10 +211,11 @@ export function migrateStorageIfNeeded(): MigrationResult {
         if (Array.isArray(parsedWeapons)) {
           const normalizedWeapons = parsedWeapons.map((w: any) => {
             if (!w || typeof w !== 'object') return w;
-            const canonical = resolveWeaponAlias(w.key) || resolveWeaponAlias(w.name);
+            const rawKey = w.key || w.weaponKey;
+            const canonical = resolveWeaponAlias(rawKey) || resolveWeaponAlias(w.name);
             return {
               ...w,
-              key: canonical?.key || w.key,
+              key: canonical?.key || rawKey,
               name: canonical?.name || w.name,
               rarity: canonical?.rarity || w.rarity || 4,
             };
@@ -156,9 +233,11 @@ export function migrateStorageIfNeeded(): MigrationResult {
       try {
         const parsedProfiles = JSON.parse(rawProfilesJson);
         if (parsedProfiles && typeof parsedProfiles === 'object' && !Array.isArray(parsedProfiles)) {
-          for (const prof of Object.values(parsedProfiles) as any[]) {
+          for (const [charId, prof] of Object.entries(parsedProfiles) as [string, any][]) {
+            if (charId === '__proto__' || charId === 'constructor' || charId === 'prototype') continue;
             if (prof?.weapon) {
-              const canonical = resolveWeaponAlias(prof.weapon.key) || resolveWeaponAlias(prof.weapon.name);
+              const rawKey = prof.weapon.key || prof.weapon.weaponKey;
+              const canonical = resolveWeaponAlias(rawKey) || resolveWeaponAlias(prof.weapon.name);
               if (canonical) {
                 prof.weapon.key = canonical.key;
                 prof.weapon.name = canonical.name;
@@ -173,43 +252,13 @@ export function migrateStorageIfNeeded(): MigrationResult {
       }
     }
 
-    // Step 4: Sanitize and clamp pull budget in celestia_v2_pull_budget
+    // Step 4: Sanitize and clamp pull budget in celestia_v2_pull_budget (preserving all M8 fields)
     const rawBudgetJson = localStorage.getItem('celestia_v2_pull_budget');
     if (rawBudgetJson) {
       try {
         const parsed = JSON.parse(rawBudgetJson);
         if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-          const primogems = typeof parsed.primogems === 'number' && !isNaN(parsed.primogems)
-            ? Math.max(0, Math.floor(parsed.primogems))
-            : 0;
-          const fates = typeof parsed.fates === 'number' && !isNaN(parsed.fates)
-            ? Math.max(0, Math.floor(parsed.fates))
-            : 0;
-          const characterPity = typeof parsed.characterPity === 'number' && !isNaN(parsed.characterPity)
-            ? Math.max(0, Math.min(89, Math.floor(parsed.characterPity)))
-            : 0;
-          const characterGuaranteed = typeof parsed.characterGuaranteed === 'boolean'
-            ? parsed.characterGuaranteed
-            : false;
-          const consecutiveLossCount = typeof parsed.consecutiveLossCount === 'number' && !isNaN(parsed.consecutiveLossCount)
-            ? Math.max(0, Math.min(5, Math.floor(parsed.consecutiveLossCount)))
-            : 0;
-          const weaponPity = typeof parsed.weaponPity === 'number' && !isNaN(parsed.weaponPity)
-            ? Math.max(0, Math.min(79, Math.floor(parsed.weaponPity)))
-            : 0;
-          const weaponFatePoints = typeof parsed.weaponFatePoints === 'number' && !isNaN(parsed.weaponFatePoints)
-            ? Math.max(0, Math.min(1, Math.floor(parsed.weaponFatePoints)))
-            : 0;
-
-          const sanitizedBudget: PullBudgetState = {
-            primogems,
-            fates,
-            characterPity,
-            characterGuaranteed,
-            consecutiveLossCount,
-            weaponPity,
-            weaponFatePoints,
-          };
+          const sanitizedBudget = sanitizePullBudget(parsed);
           localStorage.setItem('celestia_v2_pull_budget', JSON.stringify(sanitizedBudget));
         }
       } catch (err) {
@@ -226,14 +275,14 @@ export function migrateStorageIfNeeded(): MigrationResult {
       fromVersion,
       toVersion: CURRENT_SCHEMA_VERSION,
     };
-  } catch (e) {
+  } catch (e: any) {
     console.error('Storage migration failed:', e);
-    // Safely attempt rollback if snapshot exists
     rollbackToBackup('celestia_backup_v1');
     return {
       migrated: false,
       fromVersion: 0,
       toVersion: CURRENT_SCHEMA_VERSION,
+      error: e?.message || 'Storage migration failed and was rolled back.',
     };
   }
 }

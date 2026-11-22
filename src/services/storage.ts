@@ -8,6 +8,8 @@ import {
   getStorageSchemaVersion,
   createSafetySnapshot,
   rollbackToBackup,
+  sanitizePullBudget,
+  DEFAULT_PULL_BUDGET_VALUES,
   CURRENT_SCHEMA_VERSION,
   SCHEMA_VERSION_KEY,
 } from './storage-migration';
@@ -17,6 +19,7 @@ export {
   getStorageSchemaVersion,
   createSafetySnapshot,
   rollbackToBackup,
+  sanitizePullBudget,
   CURRENT_SCHEMA_VERSION,
   SCHEMA_VERSION_KEY,
   DEFAULT_DEMO_ARTIFACTS,
@@ -32,43 +35,121 @@ const ABYSS_CYCLE_ID_KEY = 'celestia_v2_abyss_cycle_id';
 const CUSTOM_ABYSS_KEY = 'celestia_v2_custom_abyss';
 const DEMO_MODE_KEY = 'celestia_v2_demo_mode';
 
-// Dedicated namespace keys for Demo Mode (prevents overwriting real user account data)
+// Dedicated namespace keys for Demo Mode (complete isolation across all 8 account domains)
 const DEMO_ROSTER_KEY = 'celestia_v2_demo_roster';
 const DEMO_PROFILES_KEY = 'celestia_v2_demo_profiles';
 const DEMO_WEAPONS_KEY = 'celestia_v2_demo_weapons';
 const DEMO_ARTIFACTS_KEY = 'celestia_v2_demo_artifacts';
+const DEMO_UID_KEY = 'celestia_v2_demo_uid';
+const DEMO_PULL_BUDGET_KEY = 'celestia_v2_demo_pull_budget';
+const DEMO_ABYSS_CYCLE_ID_KEY = 'celestia_v2_demo_abyss_cycle_id';
+const DEMO_CUSTOM_ABYSS_KEY = 'celestia_v2_demo_custom_abyss';
+
+export type StorageErrorCode =
+  | 'STORAGE_UNAVAILABLE'
+  | 'QUOTA_EXCEEDED'
+  | 'MALFORMED_JSON'
+  | 'UNKNOWN';
+
+export interface StorageErrorInfo {
+  code: StorageErrorCode;
+  operation: 'read' | 'write' | 'remove' | 'probe';
+  key?: string;
+  message: string;
+  timestamp: string;
+}
+
+export interface StorageWriteResult {
+  ok: boolean;
+  error?: StorageErrorInfo;
+}
 
 let lastStorageError: string | null = null;
+let lastStorageErrorInfo: StorageErrorInfo | null = null;
+
+export function classifyStorageError(err: unknown): StorageErrorCode {
+  if (!err || typeof err !== 'object') return 'UNKNOWN';
+  const e = err as { name?: string; code?: number; message?: string };
+  const name = e.name || '';
+  const msg = (e.message || '').toLowerCase();
+
+  if (
+    name === 'QuotaExceededError' ||
+    name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+    e.code === 22 ||
+    e.code === 1014 ||
+    msg.includes('quota')
+  ) {
+    return 'QUOTA_EXCEEDED';
+  }
+  if (name === 'SecurityError' || msg.includes('security') || msg.includes('denied') || msg.includes('unavailable')) {
+    return 'STORAGE_UNAVAILABLE';
+  }
+  if (name === 'SyntaxError' || msg.includes('json') || msg.includes('syntax')) {
+    return 'MALFORMED_JSON';
+  }
+  return 'UNKNOWN';
+}
+
+export function recordStorageError(
+  operation: StorageErrorInfo['operation'],
+  key: string | undefined,
+  err: unknown,
+  fallbackMessage: string,
+  overrideCode?: StorageErrorCode,
+): StorageErrorInfo {
+  const code = overrideCode ?? classifyStorageError(err);
+  const rawMessage =
+    err instanceof Error && err.message
+      ? err.message
+      : fallbackMessage;
+  const info: StorageErrorInfo = {
+    code,
+    operation,
+    key,
+    message: rawMessage,
+    timestamp: new Date().toISOString(),
+  };
+  lastStorageError = rawMessage;
+  lastStorageErrorInfo = info;
+  return info;
+}
+
+export function clearLastStorageError(): void {
+  lastStorageError = null;
+  lastStorageErrorInfo = null;
+}
 
 export function getLastStorageError(): string | null {
   return lastStorageError;
 }
 
+export function getLastStorageErrorInfo(): StorageErrorInfo | null {
+  return lastStorageErrorInfo;
+}
+
 export function isStorageAvailable(): boolean {
   try {
-    if (typeof localStorage === 'undefined') return false;
+    if (typeof localStorage === 'undefined') {
+      recordStorageError('probe', undefined, null, 'Browser localStorage is unavailable', 'STORAGE_UNAVAILABLE');
+      return false;
+    }
     const testKey = '__celestia_probe__';
     localStorage.setItem(testKey, '1');
+    const readBack = localStorage.getItem(testKey);
     localStorage.removeItem(testKey);
-    return true;
-  } catch {
+    return readBack === '1';
+  } catch (e) {
+    recordStorageError('probe', '__celestia_probe__', e, 'Browser storage is unavailable or blocked');
     return false;
   }
 }
 
-export const DEFAULT_PULL_BUDGET: PullBudgetState = {
-  primogems: 0,
-  fates: 0,
-  characterPity: 0,
-  characterGuaranteed: false,
-  consecutiveLossCount: 0,
-  weaponPity: 0,
-  weaponGuaranteed: false,
-  weaponFatePoints: 0,
-  chronicledPity: 0,
-  chronicledFatePoints: 0,
-  includeCashback: false,
-};
+function activeKey(realKey: string, demoKey: string): string {
+  return isDemoModeEnabled() ? demoKey : realKey;
+}
+
+export const DEFAULT_PULL_BUDGET: PullBudgetState = { ...DEFAULT_PULL_BUDGET_VALUES };
 
 // Calibrated demo starter roster for testing and exploration
 export const DEMO_ROSTER = [
@@ -92,18 +173,23 @@ export function isDemoModeEnabled(): boolean {
   try {
     if (typeof localStorage === 'undefined') return false;
     return localStorage.getItem(DEMO_MODE_KEY) === 'true';
-  } catch {
+  } catch (e) {
+    recordStorageError('read', DEMO_MODE_KEY, e, 'Failed to read demo mode state');
     return false;
   }
 }
 
 export function setDemoModeEnabled(enabled: boolean): boolean {
   try {
-    if (typeof localStorage === 'undefined') return false;
+    if (typeof localStorage === 'undefined') {
+      recordStorageError('write', DEMO_MODE_KEY, null, 'localStorage is unavailable', 'STORAGE_UNAVAILABLE');
+      return false;
+    }
     localStorage.setItem(DEMO_MODE_KEY, enabled ? 'true' : 'false');
+    clearLastStorageError();
     return true;
   } catch (e: any) {
-    lastStorageError = e?.message || 'Failed to save demo mode state';
+    recordStorageError('write', DEMO_MODE_KEY, e, 'Failed to save demo mode state');
     console.error('Failed to save demo mode state:', e);
     return false;
   }
@@ -121,6 +207,62 @@ export function getDemoProfiles(): Record<string, OwnedCharacterProfile> {
   return baseline;
 }
 
+/**
+ * Reads authentic (non-demo) account identity metadata regardless of whether Demo Mode is currently active.
+ * Used by backup conflict detection to prevent one user's backup from overwriting another's local profile.
+ */
+export function getAuthenticAccountSummary(): {
+  uid: string;
+  rosterIds: string[];
+  characterCount: number;
+} {
+  try {
+    if (typeof localStorage === 'undefined') {
+      return { uid: '', rosterIds: [], characterCount: 0 };
+    }
+    const uid = (localStorage.getItem(UID_KEY) || '').trim();
+    const rosterRaw = localStorage.getItem(ROSTER_KEY);
+    const profilesRaw = localStorage.getItem(PROFILES_KEY);
+
+    const idSet = new Set<string>();
+    if (rosterRaw) {
+      try {
+        const parsedRoster = JSON.parse(rosterRaw);
+        if (Array.isArray(parsedRoster)) {
+          for (const id of parsedRoster) {
+            if (typeof id === 'string' && id.trim()) idSet.add(id);
+          }
+        }
+      } catch {
+        // ignore parse error in summary
+      }
+    }
+    if (profilesRaw) {
+      try {
+        const parsedProfiles = JSON.parse(profilesRaw);
+        if (parsedProfiles && typeof parsedProfiles === 'object' && !Array.isArray(parsedProfiles)) {
+          for (const id of Object.keys(parsedProfiles)) {
+            if (id !== '__proto__' && id !== 'constructor' && id !== 'prototype') {
+              idSet.add(id);
+            }
+          }
+        }
+      } catch {
+        // ignore parse error in summary
+      }
+    }
+
+    const rosterIds = Array.from(idSet);
+    return {
+      uid,
+      rosterIds,
+      characterCount: rosterIds.length,
+    };
+  } catch {
+    return { uid: '', rosterIds: [], characterCount: 0 };
+  }
+}
+
 export function resetAccountData(): boolean {
   try {
     if (typeof localStorage === 'undefined') return false;
@@ -135,14 +277,19 @@ export function resetAccountData(): boolean {
     localStorage.removeItem(CUSTOM_ABYSS_KEY);
     localStorage.setItem(DEMO_MODE_KEY, 'false');
 
-    // Also clean up demo namespace caches if present
+    // Also clean up all demo namespace records if present
     localStorage.removeItem(DEMO_ROSTER_KEY);
     localStorage.removeItem(DEMO_PROFILES_KEY);
     localStorage.removeItem(DEMO_WEAPONS_KEY);
     localStorage.removeItem(DEMO_ARTIFACTS_KEY);
+    localStorage.removeItem(DEMO_UID_KEY);
+    localStorage.removeItem(DEMO_PULL_BUDGET_KEY);
+    localStorage.removeItem(DEMO_ABYSS_CYCLE_ID_KEY);
+    localStorage.removeItem(DEMO_CUSTOM_ABYSS_KEY);
+    clearLastStorageError();
     return true;
   } catch (e: any) {
-    lastStorageError = e?.message || 'Failed to reset account data';
+    recordStorageError('remove', undefined, e, 'Failed to reset account data');
     console.error('Failed to reset account data:', e);
     return false;
   }
@@ -164,7 +311,8 @@ export function getSavedRoster(): string[] {
       return isDemo ? DEMO_ROSTER : DEFAULT_ROSTER;
     }
     return parsed.filter((id): id is string => typeof id === 'string' && id.trim().length > 0);
-  } catch {
+  } catch (e) {
+    recordStorageError('read', isDemoModeEnabled() ? DEMO_ROSTER_KEY : ROSTER_KEY, e, 'Malformed roster JSON in localStorage', 'MALFORMED_JSON');
     return isDemoModeEnabled() ? DEMO_ROSTER : DEFAULT_ROSTER;
   }
 }
@@ -174,9 +322,10 @@ export function saveRoster(ids: string[]): boolean {
     if (typeof localStorage === 'undefined') return false;
     const key = isDemoModeEnabled() ? DEMO_ROSTER_KEY : ROSTER_KEY;
     localStorage.setItem(key, JSON.stringify(ids));
+    clearLastStorageError();
     return true;
   } catch (e: any) {
-    lastStorageError = e?.message || 'Failed to save roster';
+    recordStorageError('write', isDemoModeEnabled() ? DEMO_ROSTER_KEY : ROSTER_KEY, e, 'Failed to save roster');
     console.error('Failed to save roster to localStorage:', e);
     return false;
   }
@@ -192,9 +341,11 @@ export function getSavedProfiles(): Record<string, OwnedCharacterProfile> {
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
           const profiles = parsed as Record<string, OwnedCharacterProfile>;
-          for (const prof of Object.values(profiles)) {
+          for (const [charId, prof] of Object.entries(profiles)) {
+            if (charId === '__proto__' || charId === 'constructor' || charId === 'prototype') continue;
             if (prof?.weapon) {
-              const alias = resolveWeaponAlias(prof.weapon.key) || resolveWeaponAlias(prof.weapon.name);
+              const rawKey = prof.weapon.key || (prof.weapon as any).weaponKey;
+              const alias = resolveWeaponAlias(rawKey) || resolveWeaponAlias(prof.weapon.name);
               if (alias) {
                 prof.weapon.key = alias.key;
                 prof.weapon.name = alias.name;
@@ -210,6 +361,7 @@ export function getSavedProfiles(): Record<string, OwnedCharacterProfile> {
       }
     }
   } catch (e) {
+    recordStorageError('read', isDemoModeEnabled() ? DEMO_PROFILES_KEY : PROFILES_KEY, e, 'Malformed character profiles JSON in localStorage', 'MALFORMED_JSON');
     console.error('Failed to read profiles from localStorage:', e);
   }
 
@@ -228,9 +380,12 @@ export function saveProfiles(profiles: Record<string, OwnedCharacterProfile>): b
     localStorage.setItem(key, JSON.stringify(profiles));
     // Keep owned roster in sync within the corresponding namespace
     const rosterSaved = saveRoster(Object.keys(profiles));
+    if (rosterSaved) {
+      clearLastStorageError();
+    }
     return rosterSaved;
   } catch (e: any) {
-    lastStorageError = e?.message || 'Failed to save profiles to localStorage';
+    recordStorageError('write', isDemoModeEnabled() ? DEMO_PROFILES_KEY : PROFILES_KEY, e, 'Failed to save profiles to localStorage');
     console.error('Failed to save profiles to localStorage:', e);
     return false;
   }
@@ -249,7 +404,8 @@ export function getSavedArtifacts(): any[] {
     }
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
-  } catch {
+  } catch (e) {
+    recordStorageError('read', isDemoModeEnabled() ? DEMO_ARTIFACTS_KEY : ARTIFACTS_KEY, e, 'Malformed artifacts JSON in localStorage', 'MALFORMED_JSON');
     return [];
   }
 }
@@ -258,8 +414,10 @@ export function seedDemoArtifacts(): boolean {
   if (typeof localStorage === 'undefined') return false;
   try {
     localStorage.setItem(DEMO_ARTIFACTS_KEY, JSON.stringify(DEFAULT_DEMO_ARTIFACTS));
+    clearLastStorageError();
     return true;
-  } catch {
+  } catch (e) {
+    recordStorageError('write', DEMO_ARTIFACTS_KEY, e, 'Failed to seed demo artifacts');
     return false;
   }
 }
@@ -270,9 +428,10 @@ export function saveArtifacts(artifacts: any[]): boolean {
     const isDemo = isDemoModeEnabled();
     const key = isDemo ? DEMO_ARTIFACTS_KEY : ARTIFACTS_KEY;
     localStorage.setItem(key, JSON.stringify(artifacts));
+    clearLastStorageError();
     return true;
   } catch (e: any) {
-    lastStorageError = e?.message || 'Failed to save artifacts (quota exceeded)';
+    recordStorageError('write', isDemoModeEnabled() ? DEMO_ARTIFACTS_KEY : ARTIFACTS_KEY, e, 'Failed to save artifacts (quota exceeded)');
     console.warn('Failed to save artifacts to localStorage (quota exceeded):', e);
     return false;
   }
@@ -365,7 +524,8 @@ export function getSavedWeapons(): OwnedWeapon[] {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) {
           return (parsed as OwnedWeapon[]).map((w) => {
-            const alias = resolveWeaponAlias(w.key) || resolveWeaponAlias(w.name);
+            const rawKey = w.key || (w as any).weaponKey;
+            const alias = resolveWeaponAlias(rawKey) || resolveWeaponAlias(w.name);
             if (!alias) return w;
             return {
               ...w,
@@ -378,6 +538,7 @@ export function getSavedWeapons(): OwnedWeapon[] {
       }
     }
   } catch (e) {
+    recordStorageError('read', isDemoModeEnabled() ? DEMO_WEAPONS_KEY : WEAPONS_KEY, e, 'Malformed weapons JSON in localStorage', 'MALFORMED_JSON');
     console.warn('Failed to read weapons from localStorage:', e);
   }
 
@@ -415,16 +576,16 @@ export function getSavedWeapons(): OwnedWeapon[] {
   return DEFAULT_WEAPONS;
 }
 
-
 export function saveWeapons(weapons: OwnedWeapon[]): boolean {
   try {
     if (typeof localStorage === 'undefined') return false;
     const isDemo = isDemoModeEnabled();
     const key = isDemo ? DEMO_WEAPONS_KEY : WEAPONS_KEY;
     localStorage.setItem(key, JSON.stringify(weapons));
+    clearLastStorageError();
     return true;
   } catch (e: any) {
-    lastStorageError = e?.message || 'Failed to save weapons (quota exceeded)';
+    recordStorageError('write', isDemoModeEnabled() ? DEMO_WEAPONS_KEY : WEAPONS_KEY, e, 'Failed to save weapons (quota exceeded)');
     console.warn('Failed to save weapons to localStorage:', e);
     return false;
   }
@@ -433,8 +594,10 @@ export function saveWeapons(weapons: OwnedWeapon[]): boolean {
 export function getSavedUid(): string {
   try {
     if (typeof localStorage === 'undefined') return '';
-    return localStorage.getItem(UID_KEY) || '';
-  } catch {
+    const key = activeKey(UID_KEY, DEMO_UID_KEY);
+    return localStorage.getItem(key) || '';
+  } catch (e) {
+    recordStorageError('read', activeKey(UID_KEY, DEMO_UID_KEY), e, 'Failed to read UID from storage');
     return '';
   }
 }
@@ -442,10 +605,12 @@ export function getSavedUid(): string {
 export function saveUid(uid: string): boolean {
   try {
     if (typeof localStorage === 'undefined') return false;
-    localStorage.setItem(UID_KEY, uid);
+    const key = activeKey(UID_KEY, DEMO_UID_KEY);
+    localStorage.setItem(key, uid);
+    clearLastStorageError();
     return true;
   } catch (e: any) {
-    lastStorageError = e?.message || 'Failed to save UID';
+    recordStorageError('write', activeKey(UID_KEY, DEMO_UID_KEY), e, 'Failed to save UID');
     console.error('Failed to save uid to localStorage:', e);
     return false;
   }
@@ -454,84 +619,13 @@ export function saveUid(uid: string): boolean {
 export function getSavedPullBudget(): PullBudgetState {
   try {
     if (typeof localStorage === 'undefined') return { ...DEFAULT_PULL_BUDGET };
-    const raw = localStorage.getItem(PULL_BUDGET_KEY);
+    const key = activeKey(PULL_BUDGET_KEY, DEMO_PULL_BUDGET_KEY);
+    const raw = localStorage.getItem(key);
     if (!raw) return { ...DEFAULT_PULL_BUDGET };
     const parsed = JSON.parse(raw);
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-      return { ...DEFAULT_PULL_BUDGET };
-    }
-
-    const primogems =
-      typeof parsed.primogems === 'number' && !isNaN(parsed.primogems)
-        ? Math.max(0, Math.floor(parsed.primogems))
-        : DEFAULT_PULL_BUDGET.primogems;
-
-    const fates =
-      typeof parsed.fates === 'number' && !isNaN(parsed.fates)
-        ? Math.max(0, Math.floor(parsed.fates))
-        : DEFAULT_PULL_BUDGET.fates;
-
-    const characterPity =
-      typeof parsed.characterPity === 'number' && !isNaN(parsed.characterPity)
-        ? Math.max(0, Math.min(89, Math.floor(parsed.characterPity)))
-        : DEFAULT_PULL_BUDGET.characterPity;
-
-    const characterGuaranteed =
-      typeof parsed.characterGuaranteed === 'boolean'
-        ? parsed.characterGuaranteed
-        : DEFAULT_PULL_BUDGET.characterGuaranteed;
-
-    const weaponPity =
-      typeof parsed.weaponPity === 'number' && !isNaN(parsed.weaponPity)
-        ? Math.max(0, Math.min(79, Math.floor(parsed.weaponPity)))
-        : DEFAULT_PULL_BUDGET.weaponPity;
-
-    const weaponFatePoints =
-      typeof parsed.weaponFatePoints === 'number' && !isNaN(parsed.weaponFatePoints)
-        ? Math.max(0, Math.min(1, Math.floor(parsed.weaponFatePoints)))
-        : DEFAULT_PULL_BUDGET.weaponFatePoints;
-
-    const consecutiveLossCount =
-      typeof parsed.consecutiveLossCount === 'number' && !isNaN(parsed.consecutiveLossCount)
-        ? Math.max(0, Math.min(5, Math.floor(parsed.consecutiveLossCount)))
-        : DEFAULT_PULL_BUDGET.consecutiveLossCount ?? 0;
-
-    const weaponGuaranteed =
-      typeof parsed.weaponGuaranteed === 'boolean'
-        ? parsed.weaponGuaranteed
-        : (DEFAULT_PULL_BUDGET.weaponGuaranteed ?? false);
-
-    const chronicledPity =
-      typeof parsed.chronicledPity === 'number' && !isNaN(parsed.chronicledPity)
-        ? Math.max(0, Math.min(89, Math.floor(parsed.chronicledPity)))
-        : (DEFAULT_PULL_BUDGET.chronicledPity ?? 0);
-
-    const chronicledFatePoints =
-      typeof parsed.chronicledFatePoints === 'number' && !isNaN(parsed.chronicledFatePoints)
-        ? Math.max(0, Math.min(1, Math.floor(parsed.chronicledFatePoints)))
-        : (DEFAULT_PULL_BUDGET.chronicledFatePoints ?? 0);
-
-    const includeCashback =
-      typeof parsed.includeCashback === 'boolean'
-        ? parsed.includeCashback
-        : (DEFAULT_PULL_BUDGET.includeCashback ?? false);
-
-    const result: PullBudgetState = {
-      primogems,
-      fates,
-      characterPity,
-      characterGuaranteed,
-      consecutiveLossCount,
-      weaponPity,
-      weaponGuaranteed,
-      weaponFatePoints,
-      chronicledPity,
-      chronicledFatePoints,
-      includeCashback,
-    };
-
-    return result;
-  } catch {
+    return sanitizePullBudget(parsed);
+  } catch (e) {
+    recordStorageError('read', activeKey(PULL_BUDGET_KEY, DEMO_PULL_BUDGET_KEY), e, 'Malformed pull budget JSON in localStorage', 'MALFORMED_JSON');
     return { ...DEFAULT_PULL_BUDGET };
   }
 }
@@ -539,10 +633,13 @@ export function getSavedPullBudget(): PullBudgetState {
 export function savePullBudget(budget: PullBudgetState): boolean {
   try {
     if (typeof localStorage === 'undefined') return false;
-    localStorage.setItem(PULL_BUDGET_KEY, JSON.stringify(budget));
+    const key = activeKey(PULL_BUDGET_KEY, DEMO_PULL_BUDGET_KEY);
+    const sanitized = sanitizePullBudget(budget);
+    localStorage.setItem(key, JSON.stringify(sanitized));
+    clearLastStorageError();
     return true;
   } catch (e: any) {
-    lastStorageError = e?.message || 'Failed to save pull budget';
+    recordStorageError('write', activeKey(PULL_BUDGET_KEY, DEMO_PULL_BUDGET_KEY), e, 'Failed to save pull budget');
     console.error('Failed to save pull budget to localStorage:', e);
     return false;
   }
@@ -551,10 +648,12 @@ export function savePullBudget(budget: PullBudgetState): boolean {
 export function getSavedAbyssCycleId(): string {
   try {
     if (typeof localStorage === 'undefined') return DEFAULT_ACTIVE_ABYSS_CYCLE_ID;
-    const saved = localStorage.getItem(ABYSS_CYCLE_ID_KEY);
+    const key = activeKey(ABYSS_CYCLE_ID_KEY, DEMO_ABYSS_CYCLE_ID_KEY);
+    const saved = localStorage.getItem(key);
     const validIds = new Set(['cycle-7-2', 'cycle-7-1', 'cycle-5-3', 'cycle-5-2', 'cycle-5-1', 'custom-sandbox']);
     return saved && validIds.has(saved) ? saved : DEFAULT_ACTIVE_ABYSS_CYCLE_ID;
-  } catch {
+  } catch (e) {
+    recordStorageError('read', activeKey(ABYSS_CYCLE_ID_KEY, DEMO_ABYSS_CYCLE_ID_KEY), e, 'Failed to read abyss cycle id');
     return DEFAULT_ACTIVE_ABYSS_CYCLE_ID;
   }
 }
@@ -562,10 +661,12 @@ export function getSavedAbyssCycleId(): string {
 export function saveAbyssCycleId(id: string): boolean {
   try {
     if (typeof localStorage === 'undefined') return false;
-    localStorage.setItem(ABYSS_CYCLE_ID_KEY, id);
+    const key = activeKey(ABYSS_CYCLE_ID_KEY, DEMO_ABYSS_CYCLE_ID_KEY);
+    localStorage.setItem(key, id);
+    clearLastStorageError();
     return true;
   } catch (e: any) {
-    lastStorageError = e?.message || 'Failed to save abyss cycle id';
+    recordStorageError('write', activeKey(ABYSS_CYCLE_ID_KEY, DEMO_ABYSS_CYCLE_ID_KEY), e, 'Failed to save abyss cycle id');
     console.error('Failed to save abyss cycle id to localStorage:', e);
     return false;
   }
@@ -574,7 +675,8 @@ export function saveAbyssCycleId(id: string): boolean {
 export function getSavedCustomAbyss(): AbyssCycleConfig {
   try {
     if (typeof localStorage === 'undefined') return createCustomSandboxCycle();
-    const raw = localStorage.getItem(CUSTOM_ABYSS_KEY);
+    const key = activeKey(CUSTOM_ABYSS_KEY, DEMO_CUSTOM_ABYSS_KEY);
+    const raw = localStorage.getItem(key);
     if (!raw) return createCustomSandboxCycle();
     const parsed = JSON.parse(raw);
     if (
@@ -586,7 +688,8 @@ export function getSavedCustomAbyss(): AbyssCycleConfig {
       return createCustomSandboxCycle();
     }
     return parsed as AbyssCycleConfig;
-  } catch {
+  } catch (e) {
+    recordStorageError('read', activeKey(CUSTOM_ABYSS_KEY, DEMO_CUSTOM_ABYSS_KEY), e, 'Malformed custom abyss JSON in localStorage', 'MALFORMED_JSON');
     return createCustomSandboxCycle();
   }
 }
@@ -594,10 +697,12 @@ export function getSavedCustomAbyss(): AbyssCycleConfig {
 export function saveCustomAbyss(cycle: AbyssCycleConfig): boolean {
   try {
     if (typeof localStorage === 'undefined') return false;
-    localStorage.setItem(CUSTOM_ABYSS_KEY, JSON.stringify(cycle));
+    const key = activeKey(CUSTOM_ABYSS_KEY, DEMO_CUSTOM_ABYSS_KEY);
+    localStorage.setItem(key, JSON.stringify(cycle));
+    clearLastStorageError();
     return true;
   } catch (e: any) {
-    lastStorageError = e?.message || 'Failed to save custom abyss';
+    recordStorageError('write', activeKey(CUSTOM_ABYSS_KEY, DEMO_CUSTOM_ABYSS_KEY), e, 'Failed to save custom abyss');
     console.error('Failed to save custom abyss to localStorage:', e);
     return false;
   }
@@ -605,6 +710,3 @@ export function saveCustomAbyss(cycle: AbyssCycleConfig): boolean {
 
 // Auto-run non-destructive migration on initialization
 migrateStorageIfNeeded();
-
-
-

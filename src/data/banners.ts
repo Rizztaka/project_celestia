@@ -91,7 +91,7 @@ export const BANNER_PHASES: BannerPhase[] = [
       featuredWeapons: ['AThousandBlazingSuns', 'StarcallerSWatch'],
     },
     sourceUrl: 'https://genshin.hoyoverse.com/en/news',
-    verifiedAt: '2026-11-16',
+    verifiedAt: '2025-01-01',
   },
   {
     id: 'banner_5_3_phase_2',
@@ -107,7 +107,7 @@ export const BANNER_PHASES: BannerPhase[] = [
       featuredWeapons: ['CrimsonMoonSSemblance', 'Absolution'],
     },
     sourceUrl: 'https://genshin.hoyoverse.com/en/news',
-    verifiedAt: '2026-11-16',
+    verifiedAt: '2025-01-21',
   },
   {
     id: 'banner_5_4_phase_1',
@@ -123,7 +123,7 @@ export const BANNER_PHASES: BannerPhase[] = [
       featuredWeapons: ['ReliquaryOfTruth', 'SplendorOfTranquilWaters'],
     },
     sourceUrl: 'https://genshin.hoyoverse.com/en/news',
-    verifiedAt: '2026-11-16',
+    verifiedAt: '2025-02-12',
   },
   {
     id: 'banner_5_2_phase_2',
@@ -139,7 +139,7 @@ export const BANNER_PHASES: BannerPhase[] = [
       featuredWeapons: ['TomeOfTheEternalFlow', 'VortexVanquisher'],
     },
     sourceUrl: 'https://genshin.hoyoverse.com/en/news',
-    verifiedAt: '2026-11-16',
+    verifiedAt: '2024-12-10',
   },
   {
     id: 'banner_5_2_phase_1',
@@ -155,7 +155,7 @@ export const BANNER_PHASES: BannerPhase[] = [
       featuredWeapons: ['AstralVultureSCrimsonPlumage', 'TheFirstGreatMagic'],
     },
     sourceUrl: 'https://genshin.hoyoverse.com/en/news',
-    verifiedAt: '2026-11-16',
+    verifiedAt: '2024-11-20',
   },
   {
     id: 'banner_5_1_phase_2',
@@ -171,7 +171,7 @@ export const BANNER_PHASES: BannerPhase[] = [
       featuredWeapons: ['AThousandFloatingDreams', 'StaffOfHoma'],
     },
     sourceUrl: 'https://genshin.hoyoverse.com/en/news',
-    verifiedAt: '2026-11-16',
+    verifiedAt: '2024-10-29',
   },
   {
     id: 'banner_5_1_phase_1',
@@ -187,7 +187,7 @@ export const BANNER_PHASES: BannerPhase[] = [
       featuredWeapons: ['PeakPatrolSong', 'UrakuMisugiri'],
     },
     sourceUrl: 'https://genshin.hoyoverse.com/en/news',
-    verifiedAt: '2026-11-16',
+    verifiedAt: '2024-10-09',
   },
 ];
 

@@ -8,35 +8,41 @@ interface CharacterPortraitProps {
   rarity?: number;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   showRarity?: boolean;
+  priority?: boolean;
   className?: string;
 }
 
 const SIZE_MAP = {
   xs: {
+    px: 16,
     container: 'w-4 h-4 rounded-full',
     text: 'text-[8px]',
     img: 'w-full h-full object-cover aspect-square',
     badge: 'text-[8px] px-0.5',
   },
   sm: {
+    px: 28,
     container: 'w-7 h-7 rounded-lg',
     text: 'text-[10px]',
     img: 'w-full h-full object-cover scale-110 aspect-square',
     badge: 'text-[8px] px-0.5 -bottom-1 -right-0.5',
   },
   md: {
+    px: 44,
     container: 'w-11 h-11 rounded-xl',
     text: 'text-xs',
     img: 'w-full h-full object-cover scale-110 aspect-square',
     badge: 'text-[9px] px-1 -bottom-1 -right-0.5',
   },
   lg: {
+    px: 72,
     container: 'w-16 h-16 sm:w-18 sm:h-18 rounded-2xl',
     text: 'text-lg sm:text-xl',
     img: 'w-full h-full object-cover scale-110 aspect-square',
     badge: 'text-[9px] px-1 -bottom-1.5 -right-1',
   },
   xl: {
+    px: 80,
     container: 'w-20 h-20 rounded-2xl',
     text: 'text-2xl',
     img: 'w-full h-full object-cover scale-110 aspect-square',
@@ -61,11 +67,11 @@ const CharacterPortraitBase: React.FC<CharacterPortraitProps> = ({
   rarity,
   size = 'md',
   showRarity = false,
+  priority = false,
   className = '',
 }) => {
   const [hasError, setHasError] = useState(false);
 
-  // Reset error if image URL changes
   useEffect(() => {
     setHasError(false);
   }, [src]);
@@ -91,9 +97,12 @@ const CharacterPortraitBase: React.FC<CharacterPortraitProps> = ({
           <img
             src={src}
             alt={name || 'Character'}
+            width={sizeConfig.px}
+            height={sizeConfig.px}
             className={`${sizeConfig.img} aspect-square`}
-            loading="lazy"
+            loading={priority ? 'eager' : 'lazy'}
             decoding="async"
+            referrerPolicy="no-referrer"
             onError={() => setHasError(true)}
           />
         ) : (
@@ -123,5 +132,6 @@ export const CharacterPortrait = React.memo<CharacterPortraitProps>(
     prev.rarity === next.rarity &&
     prev.size === next.size &&
     prev.showRarity === next.showRarity &&
+    prev.priority === next.priority &&
     prev.className === next.className
 );

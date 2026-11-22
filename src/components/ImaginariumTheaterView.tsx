@@ -15,13 +15,14 @@ import {
   DEFAULT_ACTIVE_THEATER_SEASON_ID,
 } from '../data/theater-seasons';
 import { CHARACTERS } from '../data/characters';
-import { DataFreshnessBadge } from './DataFreshnessBadge';
+import { DataFreshnessBadge, StaleDataWarningBanner } from './DataFreshnessBadge';
 import {
   filterEligibleTheaterRoster,
   swapTheaterActMember,
   removeTheaterActMember,
   evaluateBossActMatchup,
   recommendSupportCastBorrow,
+  analyzeTheaterSeasonPlan,
 } from '../engines/theater-solver';
 import { isSameCharacterOrTraveler } from '../engines/team-rules';
 import { dispatchAutoDraftTheater } from '../services/solver-dispatcher';
@@ -43,6 +44,9 @@ import {
   Users,
   CheckCircle2,
   UserPlus,
+  Compass,
+  ListChecks,
+  Shield,
 } from 'lucide-react';
 
 interface ImaginariumTheaterViewProps {
@@ -133,6 +137,19 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     }
     return [borrowedChar, ...filteredRoster.eligible];
   }, [filteredRoster.eligible, borrowedCharId]);
+
+  const seasonAnalysis = useMemo(() => {
+    if (schedule.length === 0) return null;
+    return analyzeTheaterSeasonPlan(schedule, effectiveEligible, difficulty, activeSeason);
+  }, [schedule, effectiveEligible, difficulty, activeSeason]);
+
+  const preservedActsByCharId = useMemo(() => {
+    const map = new Map<string, number[]>();
+    for (const entry of seasonAnalysis?.preservationPlan ?? []) {
+      map.set(entry.characterId, entry.reservedForActs);
+    }
+    return map;
+  }, [seasonAnalysis]);
 
   const swapCandidates = useMemo(() => {
     if (!swapTarget) return [];
@@ -410,6 +427,9 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
           </div>
         </div>
 
+        {/* Stale Data Warning Banner */}
+        <StaleDataWarningBanner datasetId={activeSeason.id} contextLabel="Imaginarium Theater" className="mt-4" />
+
         {/* Custom Element Selector Drawer */}
         {selectedSeasonId === 'custom' && (
           <div
@@ -650,6 +670,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
           {effectiveEligible.map((char) => {
             const vigor = vigorState[char.id] ?? 2;
             const isBorrowed = char.id === borrowedCharId;
+            const reservedActs = preservedActsByCharId.get(char.id);
             const vigorBadge =
               vigor === 2
                 ? 'bg-emerald-950/75 text-emerald-200 border-emerald-400/45'
@@ -690,6 +711,11 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                   {char.name}
                 </span>
                 <div className="flex flex-col items-center gap-0.5">
+                  {reservedActs && reservedActs.length > 0 && (
+                    <span className="text-[9px] font-bold text-[#f3cf58] bg-[#d4af37]/15 border border-[#d4af37]/35 px-1.5 py-0.5 rounded">
+                      Save A{reservedActs[reservedActs.length - 1]}
+                    </span>
+                  )}
                   <div className="flex items-center gap-1">
                     <span
                       className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full border ${vigorBadge}`}
@@ -705,7 +731,178 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
             );
           })}
         </div>
+
+        {filteredRoster.excludedUnderleveled && filteredRoster.excludedUnderleveled.length > 0 && (
+          <div className="pt-2.5 border-t border-[#202538] flex flex-wrap items-center gap-2 text-xs text-amber-200">
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-300 shrink-0" aria-hidden="true" />
+            <span className="font-semibold">
+              Below Lv. 70 Gate ({difficulty}):
+            </span>
+            <span className="text-zinc-300">
+              {filteredRoster.excludedUnderleveled
+                .slice(0, 6)
+                .map((c) => `${c.name} (Lv.${c.level ?? '?'})`)
+                .join(', ')}
+              {filteredRoster.excludedUnderleveled.length > 6
+                ? ` +${filteredRoster.excludedUnderleveled.length - 6} more`
+                : ''}
+            </span>
+          </div>
+        )}
       </section>
+
+      {/* Season Strategy, Preservation & Phased Draft Plan */}
+      {seasonAnalysis && (
+        <section
+          aria-label="Imaginarium Theater Strategy and Draft Plan"
+          className="bg-[#121420] border border-[#24293d] rounded-2xl p-5 space-y-5 shadow-lg"
+        >
+          {/* Apex Boss Readiness & Season Blessing */}
+          <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#202538] pb-3.5">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Compass className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
+                <h2 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">
+                  Season Intelligence · Preservation &amp; Draft Plan
+                </h2>
+              </div>
+              <p className="text-xs text-zinc-200 leading-relaxed">
+                {seasonAnalysis.apexBossSummary}
+              </p>
+              {activeSeason.blessingSummary && (
+                <p className="text-xs text-amber-200/90">
+                  ✨ {activeSeason.blessingSummary}
+                </p>
+              )}
+            </div>
+
+            <span
+              className={`text-xs font-bold px-3 py-1 rounded-full border shrink-0 ${
+                seasonAnalysis.apexBossReadiness === 'Ready'
+                  ? 'bg-emerald-950/65 text-emerald-200 border-emerald-400/45'
+                  : seasonAnalysis.apexBossReadiness === 'Needs Preparation'
+                    ? 'bg-amber-950/65 text-amber-200 border-amber-400/45'
+                    : 'bg-rose-950/65 text-rose-200 border-rose-400/45'
+              }`}
+            >
+              Apex Boss: {seasonAnalysis.apexBossReadiness}
+            </span>
+          </div>
+
+          {/* Archetypes & Roster Weaknesses */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-[#0e1019] border border-[#202538] rounded-xl p-3.5 space-y-2">
+              <div className="text-[11px] font-bold text-[#f3cf58] uppercase tracking-wider">
+                High-Value Season Archetypes
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {seasonAnalysis.recommendedArchetypes.map((arch) => (
+                  <span
+                    key={arch}
+                    className="text-xs bg-[#181c2e] text-zinc-100 border border-[#323954] px-2.5 py-1 rounded-lg font-medium"
+                  >
+                    {arch}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-[#0e1019] border border-[#202538] rounded-xl p-3.5 space-y-2">
+              <div className="text-[11px] font-bold text-rose-300 uppercase tracking-wider flex items-center gap-1.5">
+                <Shield className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Roster Weaknesses &amp; Risk Checks</span>
+              </div>
+              {seasonAnalysis.rosterWeaknesses.length > 0 ? (
+                <ul className="space-y-1 text-xs text-zinc-200 list-disc list-inside">
+                  {seasonAnalysis.rosterWeaknesses.map((weakness, idx) => (
+                    <li key={idx} className="leading-snug">
+                      {weakness}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="text-xs text-emerald-200 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" aria-hidden="true" />
+                  <span>Balanced carry, sustain, buffer, and boss counter coverage across all acts.</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Preservation Priority Strip */}
+          {seasonAnalysis.preservationPlan.length > 0 && (
+            <div className="space-y-2.5">
+              <div className="text-[11px] font-bold text-[#f3cf58] uppercase tracking-wider">
+                Preserve Vigor for Late Boss Acts
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                {seasonAnalysis.preservationPlan.map((entry) => {
+                  const charObj = effectiveEligible.find((c) => c.id === entry.characterId);
+                  return (
+                    <button
+                      key={entry.characterId}
+                      type="button"
+                      onClick={() => charObj && setSelectedCharacter(charObj)}
+                      className="text-left bg-[#0e1019] hover:bg-[#161a29] border border-[#282f48] hover:border-[#d4af37]/50 rounded-xl p-3 space-y-1.5 transition-colors cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 min-w-0">
+                          {charObj && (
+                            <CharacterPortrait
+                              src={charObj.icon}
+                              name={charObj.name}
+                              element={charObj.element}
+                              size="xs"
+                            />
+                          )}
+                          <span className="text-xs font-bold text-zinc-100 truncate">
+                            {entry.characterName}
+                          </span>
+                        </div>
+                        <span
+                          className={`text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                            entry.priority === 'Critical'
+                              ? 'bg-rose-950/75 text-rose-200 border border-rose-400/45'
+                              : entry.priority === 'High'
+                                ? 'bg-amber-950/75 text-amber-200 border border-amber-400/45'
+                                : 'bg-sky-950/75 text-sky-200 border border-sky-400/45'
+                          }`}
+                        >
+                          Act {entry.reservedForActs.join(', ')}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-zinc-300 leading-snug line-clamp-2">
+                        {entry.reason}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Phased Practical Draft Plan */}
+          {seasonAnalysis.draftPlan.length > 0 && (
+            <div className="space-y-2.5">
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-sky-300 uppercase tracking-wider">
+                <ListChecks className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Practical Run Draft Roadmap</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {seasonAnalysis.draftPlan.map((step) => (
+                  <div
+                    key={step.phase}
+                    className="bg-[#0e1019] border border-[#202538] rounded-xl p-3 space-y-1.5 text-xs"
+                  >
+                    <div className="font-bold text-[#f3cf58]">{step.phase}</div>
+                    <p className="text-zinc-200 text-[11px] leading-relaxed">{step.guidance}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
 
       {/* Act Roadmap Grid */}
       <section className="space-y-4">

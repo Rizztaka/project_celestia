@@ -5,7 +5,9 @@
  * Capturing Radiance 4-state Markov renewal parameters, Fate Point rules, and guarantee carryover.
  */
 
-export const GACHA_RULES_VERSION = '7.2';
+import { CURRENT_GAME_VERSION } from './game-version';
+
+export const GACHA_RULES_VERSION = CURRENT_GAME_VERSION;
 
 export interface BannerRuleConfig {
   baseRate: number;

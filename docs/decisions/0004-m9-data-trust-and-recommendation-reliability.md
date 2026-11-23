@@ -1,4 +1,6 @@
-# ADR-0004 / M9: Data Trust & Recommendation Reliability Architecture
+# ADR-009: Data Trust & Recommendation Reliability Architecture (Milestone M9 Phase 1)
+
+> **Continuity Note**: This Architecture Decision Record documents Milestone M9 Phase 1 (ADR-009). The file path `docs/decisions/0004-m9-data-trust-and-recommendation-reliability.md` preserves direct succession and evolution from [ADR-004: 7-Axis Game Data Integrity, Version SSOT & Substantive Provenance Architecture](0004-data-accuracy-and-provenance-gate.md).
 
 - **Status:** Accepted
 - **Date:** 2026-11-23
@@ -13,7 +15,7 @@ Project Celestia features five analytical recommendation engines:
 4. **Artifact & Build Intelligence**: Evaluates substat efficiency, diminishing returns, and farming stop thresholds across 37 combat sets.
 5. **Pull Advisor**: Delivers mathematical ROI recommendations, Primogem budgets, and exact pull distributions across active and upcoming banners.
 
-Prior to Milestone M9 Phase 1, data provenance and recommendation confidence exhibited several architectural limitations:
+Following the initial data provenance foundation established in ADR-004, data provenance and recommendation confidence exhibited several architectural limitations:
 1. **Coupled Verification and Lifecycle Semantics**: The legacy `ProvenanceStatus` type (`'verified' | 'provisional' | 'stale'`) overloaded data verification state with temporal schedule status. A dataset that was thoroughly verified in-game or via official notices would be classified as `'stale'` simply because its schedule expired, confounding dataset authenticity with time relevance.
 2. **Missing Provenance Representation**: When a dataset or entity lacked a registered provenance entry, the system lacked a formal representation for unregistered data, risking runtime errors or ad-hoc fallback values.
 3. **Fabricated Provenance Metadata**: The user-customizable sandbox dataset (`custom-sandbox`) contained a fabricated HTTPS notice URL (`https://genshin.hoyoverse.com/en/news`) and an invalid verification method (`sandbox_simulation`), misrepresenting client-side hypothetical scenarios as externally verified game records.

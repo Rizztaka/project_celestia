@@ -70,3 +70,31 @@
   - Acceptance: Authored `docs/decisions/0008-pull-advisor-and-wish-mathematics.md`.
   - Verify: Markdown review
   - Files: `docs/decisions/0008-pull-advisor-and-wish-mathematics.md`
+
+# Task List: M9 — Data Trust & Recommendation Reliability (Phase 1)
+
+- [x] Task 9.1: Core Reliability Contracts & Exact Unions
+  - Acceptance: Define decoupled contracts in `src/types/genshin.ts` (`VerificationState`, `TemporalState`, `RecommendationMode`, `ReliabilityStatus`, `RecommendationReliability`); define `ProvenanceStatus` as `Exclude<VerificationState, 'unregistered'>`; make `DataProvenance.sourceUrl?: string` optional with HTTPS guardrails; mark `effectiveEndDate?: string` as `@deprecated` legacy-only; document `isActionable` live-game semantics.
+  - Verify: `pnpm run typecheck`, `pnpm test src/data/data-integrity.test.ts`
+  - Files: `src/types/genshin.ts`, `src/data/data-integrity.test.ts`
+
+- [x] Task 9.2: Provenance Registry Consolidation & Truthful Metadata
+  - Acceptance: Prune 3 redundant schedule records (`abyss_floor_12_v7_2`, `theater_season_7_2_nov`, `theater_season_7_2_dec`) leaving canonical counterparts (`cycle-7-2`, `season-7-2-hydro-electro-geo`, `season-7-2-dec-pyro-hydro-geo`) authoritative (consolidated to 35 records); remove fabricated URL and invalid `verificationMethod: 'sandbox_simulation'` from `custom-sandbox`.
+  - Verify: `node scripts/audit-game-data.mjs` (35 records audited)
+  - Files: `src/data/provenance-registry.ts`, `scripts/audit-game-data.mjs`
+
+- [x] Task 9.3: Compile & Runtime Compatibility Alignment
+  - Acceptance: Update `src/services/data-freshness.ts` (`sourceUrl` null coalescing, remove `sandbox_simulation`) and `src/components/DataFreshnessBadge.tsx` for clean compile; assert legacy 17 `effectiveEndDate` boundary in `data-integrity.test.ts`.
+  - Verify: `pnpm test`, `pnpm run build`
+  - Files: `src/services/data-freshness.ts`, `src/components/DataFreshnessBadge.tsx`, `src/data/data-integrity.test.ts`
+
+- [x] Task 9.4: Architecture Decision Record ADR-009 / M9
+  - Acceptance: Author `docs/decisions/0004-m9-data-trust-and-recommendation-reliability.md` (ADR-009) covering Status, Context, Decision Drivers, Considered Options, Decision, Contract Specification, Consequences, and Phase 2 Roadmap.
+  - Verify: Markdown review
+  - Files: `docs/decisions/0004-m9-data-trust-and-recommendation-reliability.md`
+
+- [x] Task 9.5: Reference Knowledge Base & Ledger Synchronization
+  - Acceptance: Update `scripts/generate-reference.cjs` and `docs/knowledge/celestia-reference.md` with 35 canonical datasets, M9 contracts, and 2026-11-23 Verified Corrections Ledger entry; update `GEMINI.md` Section 2 and Section 4.
+  - Verify: `pnpm run verify:ssot`, `pnpm test src/data/reference-ssot.test.ts`
+  - Files: `scripts/generate-reference.cjs`, `docs/knowledge/celestia-reference.md`, `GEMINI.md`
+

@@ -1,10 +1,10 @@
-# ADR-009: Data Trust & Recommendation Reliability Architecture (Milestone M9 Phase 1)
+# ADR-009: Data Trust & Recommendation Reliability Architecture (Milestone M9 Phase 2)
 
-> **Continuity Note**: This Architecture Decision Record documents Milestone M9 Phase 1 (ADR-009). The file path `docs/decisions/0004-m9-data-trust-and-recommendation-reliability.md` preserves direct succession and evolution from [ADR-004: 7-Axis Game Data Integrity, Version SSOT & Substantive Provenance Architecture](0004-data-accuracy-and-provenance-gate.md).
+> **Continuity Note**: This Architecture Decision Record documents Milestone M9 Phase 2 (ADR-009). The file path `docs/decisions/0004-m9-data-trust-and-recommendation-reliability.md` preserves direct succession and evolution from [ADR-004: 7-Axis Game Data Integrity, Version SSOT & Substantive Provenance Architecture](0004-data-accuracy-and-provenance-gate.md) and incorporates the foundation established in M9 Phase 1.
 
-- **Status:** Accepted
+- **Status:** Accepted (Phase 2 Implemented)
 - **Date:** 2026-11-23
-- **Milestone:** M9 Phase 1 — Data Trust & Recommendation Reliability
+- **Milestone:** M9 Phase 2 — Central Recommendation Reliability Evaluator & Single-Policy Freshness Architecture
 
 ## Context
 
@@ -15,70 +15,162 @@ Project Celestia features five analytical recommendation engines:
 4. **Artifact & Build Intelligence**: Evaluates substat efficiency, diminishing returns, and farming stop thresholds across 37 combat sets.
 5. **Pull Advisor**: Delivers mathematical ROI recommendations, Primogem budgets, and exact pull distributions across active and upcoming banners.
 
-Following the initial data provenance foundation established in ADR-004, data provenance and recommendation confidence exhibited several architectural limitations:
-1. **Coupled Verification and Lifecycle Semantics**: The legacy `ProvenanceStatus` type (`'verified' | 'provisional' | 'stale'`) overloaded data verification state with temporal schedule status. A dataset that was thoroughly verified in-game or via official notices would be classified as `'stale'` simply because its schedule expired, confounding dataset authenticity with time relevance.
-2. **Missing Provenance Representation**: When a dataset or entity lacked a registered provenance entry, the system lacked a formal representation for unregistered data, risking runtime errors or ad-hoc fallback values.
-3. **Fabricated Provenance Metadata**: The user-customizable sandbox dataset (`custom-sandbox`) contained a fabricated HTTPS notice URL (`https://genshin.hoyoverse.com/en/news`) and an invalid verification method (`sandbox_simulation`), misrepresenting client-side hypothetical scenarios as externally verified game records.
-4. **Duplicated Schedule Entities and Redundant Registry Entries**: Three duplicate registry entries (`abyss_floor_12_v7_2`, `theater_season_7_2_nov`, `theater_season_7_2_dec`) coexisted alongside their canonical counterparts (`cycle-7-2`, `season-7-2-hydro-electro-geo`, `season-7-2-dec-pyro-hydro-geo`), inflating the registry from 35 canonical datasets to 38 and risking reference divergence.
-5. **Schedule Expiry Duplication (SSOT Violation)**: Schedule expiration dates were duplicated into `DataProvenance.effectiveEndDate` rather than resolving directly from canonical schedule entities (`BannerPhase`, `AbyssCycleConfig`, `TheaterSeasonConfig`), creating redundant state that required manual synchronization.
-6. **Absence of Unified Recommendation Reliability Contracts**: Downstream engines produced recommendations with varying levels of qualification, lacking a standardized contract to communicate recommendation reliability, execution mode, live-game actionability, temporal freshness, and user-facing warnings to the UI.
+Following the initial data provenance foundation in ADR-004 and the contract decoupling completed in M9 Phase 1, recommendation trust and dataset freshness faced remaining architectural challenges:
+1. **Disparate Expiration and Staleness Paths**: Expiration checks for time-boxed schedules were performed in multiple disparate locations (`isScheduleExpired` in `src/services/data-freshness.ts`, schedule filters in solvers, and inline date checks), risking divergent freshness assessments across components.
+2. **Lingering Deprecated Metadata (`DataProvenance.effectiveEndDate`)**: While Phase 1 marked `effectiveEndDate` as `@deprecated` and froze it to 17 canonical entries, the field continued to duplicate canonical schedule entities (`BANNER_PHASES`, `ABYSS_CYCLES`, `THEATER_SEASONS`), maintaining redundant state in `src/data/provenance-registry.ts`.
+3. **Unclassified Freshness Policies**: Different data categories require distinct freshness semantics: time-boxed schedules expire at schedule boundaries, version-anchored catalogs update per game patch, meta heuristics undergo review cycles, and user sandboxes should never age out. Without formal policy classifications, generic 42-day cadence thresholds were applied inappropriately to static SSOT catalogs or schedules.
+4. **Future-Version Provenance Ambiguity**: Provenance records specifying future game versions (beyond `CURRENT_GAME_VERSION = "7.2"`) risked being treated as currently active or actionable in live recommendations, or improperly classified as historical archives in simulation modes.
+5. **Lack of Central Evaluator SSOT**: Analytical engines lacked a centralized, unified evaluator that could consume arbitrary execution contexts, evaluate multiple data dependencies with differing risk tiers, resolve temporal states, guard against compromised archive data, and synthesize a single deterministic `RecommendationReliability` contract.
 
 ## Decision Drivers
 
-- **Separation of Concerns**: Decouple data verification authenticity from schedule temporal lifecycles and solver execution modes.
-- **Truthful Metadata (Zero Fabrication)**: Provenance records must reflect authentic verification. Datasets verified via direct in-game observation or local sandbox simulations must not require fabricated URLs.
-- **Single Source of Truth (SSOT)**: Schedule dates must reside strictly in canonical domain entities (`BANNER_PHASES`, `ABYSS_CYCLES`, `THEATER_SEASONS`).
-- **Standardized Reliability Contract**: Provide a strongly-typed, JSON-serializable reliability contract (`RecommendationReliability`) that all recommendation engines can implement.
-- **Explicit Actionability Semantics**: Unambiguously define whether a recommendation can be acted upon in the live game right now (`isActionable`).
-- **Phased Evolution**: Ensure 100% backward compatibility for existing view components during Phase 1 while establishing strict compile-time boundaries and an automated migration path for Phase 2.
+- **Central Evaluator Single Source of Truth (SSOT)**: Establish a single canonical evaluation engine (`src/services/recommendation-reliability.ts`) for all freshness and reliability decisions across Project Celestia.
+- **Single-Policy Freshness Architecture**: Unify all dataset freshness logic so `src/services/data-freshness.ts` delegates directly to the central evaluator, ensuring zero divergence between UI freshness badges and solver reliability ratings.
+- **Complete Elimination of Redundant State**: Permanently delete `DataProvenance.effectiveEndDate` and purge all legacy entries from `src/data/provenance-registry.ts`, leaving canonical schedule entities as the exclusive source of truth for dates.
+- **Deterministic Multi-Dependency Evaluation**: Evaluate compound solver inputs across high-risk and low-risk dependencies, ordering dependencies and warnings deterministically by Unicode code-unit sorting (`compareCodeUnit`).
+- **Conservative Future-Version Provenance Handling**: Strict quarantine of future-version provenance records, blocking them from live-game actionability in `current` mode and from historical categorization in `archive_simulation` mode, while permitting non-actionable preview in `planning_preview` mode.
+- **Canonical Temporal Resolution Alignment**: Honor canonical domain entity boundary semantics (inclusive `[start, end]` for banners and Abyss; half-open `[start, end)` for Theater monthly resets).
+- **Zero Runtime or Type Regressions**: Maintain 100% test pass rate across the full 661-test repository suite and strict compliance with the 7-Axis Data Integrity Audit.
 
 ## Considered Options
 
-### Option 1: Ad-hoc Reliability Flags per View Component
-- **Approach**: Leave `DataProvenance` as-is and allow each solver or view (`AbyssDualTeamView`, `ImaginariumTheaterView`, `PullAdvisorView`, `TeamGeneratorView`) to compute custom freshness and reliability badges ad-hoc.
-- **Rejected**: Results in fragmented UI behavior, divergent reliability definitions, duplicate expiration calculations, and zero type safety across engine boundaries.
+### Option 1: Ad-hoc Reliability Implementation per Engine
+- **Approach**: Allow each solver (`team-generator`, `abyss-solver`, `theater-solver`, `artifact-probability`, `pull-advisor`) to implement its own reliability matrix and date checks locally.
+- **Rejected**: Guarantees divergent reliability behavior, code duplication, uncoordinated future-version handling, inconsistent warning formatting, and testing nightmares.
 
-### Option 2: Overload `DataProvenance` with Schedule and Execution State
-- **Approach**: Add fields like `startDate`, `endDate`, `simulationMode`, and `isActionable` directly to `DataProvenance`.
-- **Rejected**: Violates SSOT principles by conflating static data provenance with dynamic runtime engine execution modes. Provenance describes *where data originated*, not *how an engine evaluated a recommendation*.
+### Option 2: Keep `effectiveEndDate` in Provenance and Add Sync Scripts
+- **Approach**: Retain `effectiveEndDate` in `DataProvenance` and add automated audit scripts to ensure it synchronizes with `BANNER_PHASES`, `ABYSS_CYCLES`, and `THEATER_SEASONS`.
+- **Rejected**: Violates SSOT fundamentals. Caching schedule dates on provenance records creates a redundant secondary source of truth that requires ongoing validation and invites drift.
 
-### Option 3 (Chosen): Decoupled 5-Axis Reliability Architecture with Phased Deprecation
+### Option 3 (Chosen): Central Evaluator SSOT with Single-Policy Freshness & Purged Legacy Fields
 - **Approach**:
-  - Define formal, disjoint reliability contracts in `src/types/genshin.ts`: `VerificationState`, `TemporalState`, `RecommendationMode`, `ReliabilityStatus`, and `RecommendationReliability`.
-  - Re-align `ProvenanceStatus` as a strict subset of `VerificationState` (`Exclude<VerificationState, 'unregistered'>`).
-  - Purge redundant registry records and eliminate fabricated metadata.
-  - Make `DataProvenance.sourceUrl` optional with strict HTTPS enforcement when present.
-  - Freeze `DataProvenance.effectiveEndDate` as `@deprecated` legacy-only in Phase 1, backed by compile-time and runtime guardrails, scheduled for removal in Phase 2.
+  - Implement `src/services/recommendation-reliability.ts` as the central evaluator SSOT.
+  - Implement 4 formal freshness policies (`schedule_window`, `version_bound`, `patch_cadence`, `sandbox`).
+  - Refactor `src/services/data-freshness.ts` into a lightweight facade delegating exclusively to `evaluateDatasetFreshness()`.
+  - Delete `DataProvenance.effectiveEndDate` completely from `src/types/genshin.ts` and purge all 17 legacy entries from `src/data/provenance-registry.ts`.
+  - Enforce compile-time type-level assertions and Axis 6 audit checks forbidding schedule date fields on provenance records.
+  - Implement conservative future-version provenance policies and deterministic code-unit sorted dependency reporting.
 
 ## Decision
 
-### 1. Core Reliability Contracts (`src/types/genshin.ts`)
-Introduced five decoupled types establishing an unambiguous vocabulary for data trust and recommendation evaluation:
+### 1. Central Recommendation Reliability Evaluator (`src/services/recommendation-reliability.ts`)
+
+A centralized evaluation service was implemented, exposing three authoritative functions:
+1. `evaluateRecommendationReliability(context: ReliabilityEvaluationContext, options?: ReliabilityEvaluationOptions): RecommendationReliability`:
+   Synthesizes multidimensional evaluation context (`mode`, `datasetIds`, `requiredDatasetIds`, `schedule`, `evaluatedAt`) into a strongly-typed `RecommendationReliability` payload.
+2. `evaluateDatasetFreshness(record: DataProvenance, evaluatedDate: ParsedUtcDate | null, thresholdDaysOverride?: number): DatasetFreshnessResult`:
+   Authoritative freshness evaluation mapping a provenance record and evaluated date to staleness, expiry, temporal state, policy classification, and specific stale reasons.
+3. `resolveScheduleTemporalState(window: CanonicalScheduleWindow | undefined, evaluatedDateStr: string): TemporalState`:
+   Evaluates schedule boundary applicability against UTC date strings (`YYYY-MM-DD`).
+
+### 2. Single-Policy Freshness Architecture (`src/services/data-freshness.ts`)
+
+`src/services/data-freshness.ts` was refactored into a single-policy facade where:
+- `isScheduleExpired(provenance, referenceDate)` delegates directly to `evaluateDatasetFreshness(provenance, refUtc).isExpired`.
+- `isDatasetStale(provenance, thresholdDays, referenceDate)` delegates directly to `evaluateDatasetFreshness(provenance, refUtc, thresholdDays).isStale`.
+- `getFreshnessInfo(provenanceOrId, referenceDate, thresholdDays)` calls `evaluateDatasetFreshness()` and populates UI badge labels (`FreshnessInfo`) from the exact same evaluation result used by solvers.
+
+This guarantees that UI badges (`DataFreshnessBadge.tsx`) and recommendation solvers can never disagree on dataset staleness, expiration, or temporal state.
+
+### 3. The 4 Freshness Policies & Risk Tiers
+
+Every registered dataset is classified into one of four deterministic freshness policies:
+
+| Policy Kind | Scope / Dataset Prefixes | Risk Tier | Expiration / Staleness Criterion | Actionability When Stale / Provisional |
+| :--- | :--- | :--- | :--- | :--- |
+| `schedule_window` | `banner_*`, `cycle-*`, `season-*` | High | Governed strictly by canonical schedule start/end dates and game version. Never expires via 42-day cadence. | Non-actionable (`false`) |
+| `version_bound` | `gacha_rules_*`, `characters_*`, `weapons_*`, `artifacts_*`, `talent_scaling_*`, `enka_id_map_*` | High | Governed strictly by active `version === CURRENT_GAME_VERSION`. Never expires via 42-day cadence. | Non-actionable (`false`) |
+| `patch_cadence` | `artifact_weights_*`, `rotations_*`, `team_archetypes_*` | Low | Reviewed on 42-day patch cadence (`PATCH_CYCLE_DAYS`). Stale if `ageDays > 42` or prior version. | Actionable with warning (`true` in `current` mode) |
+| `sandbox` | `custom-sandbox`, `custom-*`, `*sandbox*` | Low | User-defined scenario. Always provisional, never ages out. | Never live-actionable (`false`) |
+
+Unclassified dataset IDs default safely to conservative high-risk `patch_cadence` requiring strict verification.
+
+### 4. Canonical Schedule Temporal Resolution
+
+Schedule boundaries resolve directly from canonical domain entities without intermediate caching:
+- **Banner Phases (`BANNER_PHASES`)**: Inclusive calendar dates `[startDate, endDate]`.
+- **Spiral Abyss Cycles (`ABYSS_CYCLES`)**: Inclusive calendar dates `[effectiveStartDate, effectiveEndDate]`.
+- **Imaginarium Theater Seasons (`THEATER_SEASONS`)**: Half-open interval `[effectiveStartDate, effectiveEndDate)` matching `getActiveTheaterSeason()` so monthly resets on day 1 transition cleanly to the new season at 00:00 UTC without overlap.
+
+### 5. Complete Removal of `DataProvenance.effectiveEndDate`
+
+1. **Type Definition**: Permanently removed `effectiveEndDate?: string` from `DataProvenance` in `src/types/genshin.ts`.
+2. **Registry Purge**: Purged all 17 legacy `effectiveEndDate` entries from `src/data/provenance-registry.ts`.
+3. **Compile-Time Assertions**: Enforced type-level exactness via `AssertEqual`:
+   ```typescript
+   const hasEffectiveEndDate: AssertEqual<
+     'effectiveEndDate' extends keyof DataProvenance ? true : false,
+     false
+   > = true;
+   ```
+4. **Runtime Assertions**: `src/data/data-integrity.test.ts` iterates over all 35 records in `getAllProvenances()`, asserting that `effectiveEndDate`, `effectiveStartDate`, `startDate`, and `endDate` do not exist.
+5. **Axis 6 Audit Guardrail**: `scripts/audit-game-data.mjs` (Axis 6) executes regex check `/^\s*(?:effectiveEndDate|effectiveStartDate|startDate|endDate)\s*:/m` against every provenance block in `src/data/provenance-registry.ts`.
+
+### 6. Conservative Future-Version Provenance Policy
+
+To protect recommendation integrity against premature or unverified future game updates:
+- When `compareGameVersions(record.version, CURRENT_GAME_VERSION) > 0`, `evaluateDatasetFreshness()` flags `isFutureVersion: true`.
+- Verification state for future-version records is clamped to `provisional` with reason `'future_version'`.
+- **In `current` mode**: Live actionability is blocked (`isActionable: false`), status is downgraded to `qualified`, and an explicit warning is attached:
+  `"Dataset <id> targets future version <ver> (active: <CURRENT_GAME_VERSION>). Recommendations cannot be marked actionable in live game."`
+- **In `archive_simulation` mode**: Future versions cannot be classified as historical data. They are rejected from valid archive admission, returning `status: 'unsupported'` and `isActionable: false`.
+- **In `planning_preview` mode**: Future-version data is permitted as `qualified` and `isActionable: false`, enabling forward-looking simulation while preventing false live-actionability claims.
+
+### 7. Archive Compromise Guard & Historical Simulation
+
+In `archive_simulation` mode, historical records must be authentic archives, not compromised or broken data:
+- Prior-version canonical schedules and substantive historical datasets are admissible (`status: 'historical'`).
+- Datasets with evidence indicating invalidation or compromise (matching `\b(compromised|corrupted|invalidated|unverified|retracted|do not use|broken)\b` or lacking substantive verification metadata) are rejected with `status: 'unsupported'`, `verification: 'stale'`, and `isActionable: false`.
+
+### 8. Deterministic Code-Unit Ordering
+
+To guarantee deterministic, replayable outputs across environments and test runs:
+- `provenanceIds` and `dependencies` arrays are sorted strictly by Unicode code-unit comparison (`compareCodeUnit`).
+- Dependency details are structured as plain data objects (`ReliabilityDependencyDetail`) including `datasetId`, `required`, `verification`, `policy`, `riskTier`, and optional version/reason.
+- Warnings are deduplicated and ordered consistently.
+
+### 9. Actionability Semantics (`isActionable`)
+
+The semantics of `RecommendationReliability.isActionable` remain strictly locked to live-game execution:
+- **`true`**: Only when `mode === 'current'`, `status === 'reliable'` or (`status === 'qualified'` with low-risk advisory data), schedule is `active` (or `not_applicable`), no required dataset is unverified/stale/future, and no high-risk dependency is stale.
+- **`false`**: All `planning_preview` runs, all `archive_simulation` runs, all `sandbox_simulation` runs, all `unsupported` results, any recommendation backed by an `upcoming` or `expired` schedule, and any recommendation containing future-version or missing dependencies.
+
+## Contract Specification
 
 ```typescript
-export type VerificationState =
-  | 'verified'
-  | 'provisional'
-  | 'stale'
-  | 'unregistered';
+// Core Multi-Axis Unions
+export type VerificationState = 'verified' | 'provisional' | 'stale' | 'unregistered';
+export type TemporalState = 'upcoming' | 'active' | 'expired' | 'not_applicable';
+export type RecommendationMode = 'current' | 'planning_preview' | 'archive_simulation' | 'sandbox_simulation';
+export type ReliabilityStatus = 'reliable' | 'qualified' | 'historical' | 'unsupported';
+export type ReliabilityScheduleType = 'banner' | 'abyss' | 'theater';
+export type FreshnessPolicyKind = 'schedule_window' | 'version_bound' | 'patch_cadence' | 'sandbox';
+export type DependencyRiskTier = 'high' | 'low';
 
-export type TemporalState =
-  | 'upcoming'
-  | 'active'
-  | 'expired'
-  | 'not_applicable';
+// Compound Contracts
+export interface ReliabilityScheduleRef {
+  type: ReliabilityScheduleType;
+  entityId: string;
+}
 
-export type RecommendationMode =
-  | 'current'
-  | 'planning_preview'
-  | 'archive_simulation'
-  | 'sandbox_simulation';
+export interface ReliabilityEvaluationContext {
+  mode: RecommendationMode;
+  datasetIds: string[];
+  requiredDatasetIds: string[];
+  schedule?: ReliabilityScheduleRef;
+  evaluatedAt: string; // ISO-8601 calendar date YYYY-MM-DD or timestamp
+}
 
-export type ReliabilityStatus =
-  | 'reliable'
-  | 'qualified'
-  | 'historical'
-  | 'unsupported';
+export interface ReliabilityDependencyDetail {
+  datasetId: string;
+  required: boolean;
+  verification: VerificationState;
+  policy: FreshnessPolicyKind;
+  riskTier: DependencyRiskTier;
+  version?: string;
+  verifiedAt?: string;
+  reason?: string;
+}
 
 export interface RecommendationReliability {
   status: ReliabilityStatus;
@@ -88,77 +180,61 @@ export interface RecommendationReliability {
   temporalState: TemporalState;
   provenanceIds: string[];
   warnings: string[];
+  dependencies?: ReliabilityDependencyDetail[];
+  evaluatedAt?: string;
+}
+
+export interface DataProvenance {
+  datasetId: string;
+  version: string;
+  verifiedAt: string; // YYYY-MM-DD
+  sourceUrl?: string; // HTTPS when present; omitted for in_game_verification & custom-sandbox
+  evidence: string;
+  status: ProvenanceStatus; // Exclude<VerificationState, 'unregistered'>
+  verificationMethod?: VerificationMethod;
+  verifiedFields?: string[];
 }
 ```
-
-### 2. Actionability Semantics (`isActionable`)
-Documented and locked the semantics of `RecommendationReliability.isActionable`:
-- **Definition**: Represents whether the recommendation is actionable in the live game *right now*.
-- **`true`**: Strictly applies to currently actionable (`current`) advice backed by supported, non-upcoming, non-expired data (e.g. optimizing teams for the active Abyss cycle or active character banners).
-- **`false`**: Applies to forward-looking previews (`planning_preview` / upcoming banners or schedules), historical archives (`archive_simulation`), sandbox configurations (`sandbox_simulation`), and unsupported results (`unsupported`).
-
-### 3. Provenance Status Alignment & Verification Methods
-- Aligned `ProvenanceStatus` as `Exclude<VerificationState, 'unregistered'>`, guaranteeing that registered datasets represent authentic states (`'verified'`, `'provisional'`, or `'stale'`), while missing datasets resolve to `'unregistered'` without fabricating dummy registry entries.
-- Refined `VerificationMethod` to `'official_notice' | 'in_game_verification' | 'theorycraft_consensus'`. Removed `'sandbox_simulation'` as simulation is an execution mode, not a verification method.
-
-### 4. Optional `sourceUrl` with HTTPS Guardrails
-- Made `DataProvenance.sourceUrl?: string` optional in `src/types/genshin.ts`.
-- In `scripts/audit-game-data.mjs` (Axis 6) and `src/data/data-integrity.test.ts`:
-  - When `sourceUrl` is present, it **must** begin with `https://`.
-  - When `sourceUrl` is omitted, it is permitted **only** for `custom-sandbox` or entries with `verificationMethod: 'in_game_verification'`.
-  - Removed fabricated `sourceUrl` and invalid `verificationMethod` from `custom-sandbox` in `src/data/provenance-registry.ts`.
-
-### 5. Registry Consolidation (35 Canonical Datasets)
-Pruned three redundant records from `src/data/provenance-registry.ts`:
-- Removed `abyss_floor_12_v7_2` (canonical: `cycle-7-2`).
-- Removed `theater_season_7_2_nov` (canonical: `season-7-2-hydro-electro-geo`).
-- Removed `theater_season_7_2_dec` (canonical: `season-7-2-dec-pyro-hydro-geo`).
-The registry is now consolidated at exactly **35 canonical datasets**, eliminating duplication.
-
-### 6. Legacy Expiry Compatibility Boundary (`effectiveEndDate`)
-- Marked `DataProvenance.effectiveEndDate?: string` as `@deprecated` legacy-only in `src/types/genshin.ts`.
-- Frozen at exactly 17 entries mirroring canonical schedule entities (`BANNER_PHASES`, `ABYSS_CYCLES`, `THEATER_SEASONS`).
-- Prohibited addition of new date fields (`startDate`, `endDate`, `effectiveStartDate`) to `DataProvenance`.
-- Verified at compile time (via TypeScript utility types) and at runtime (via Vitest assertions) that no non-schedule dataset declares `effectiveEndDate`.
-
-## Contract Specification
-
-| Contract | Type | Domain Values | Description |
-| :--- | :--- | :--- | :--- |
-| `VerificationState` | Union | `'verified'`, `'provisional'`, `'stale'`, `'unregistered'` | Authenticity and audit state of the underlying game data. |
-| `TemporalState` | Union | `'upcoming'`, `'active'`, `'expired'`, `'not_applicable'` | Schedule lifecycle state relative to the current real-world timestamp. |
-| `RecommendationMode` | Union | `'current'`, `'planning_preview'`, `'archive_simulation'`, `'sandbox_simulation'` | Context in which the user invoked the solver. |
-| `ReliabilityStatus` | Union | `'reliable'`, `'qualified'`, `'historical'`, `'unsupported'` | Consolidated confidence rating synthesized across verification, temporal, and mode dimensions. |
-| `RecommendationReliability` | Interface | `{ status, mode, isActionable, verification, temporalState, provenanceIds, warnings }` | Standardized serializable payload emitted by analytical solvers. |
-| `ProvenanceStatus` | Union | `'verified'`, `'provisional'`, `'stale'` | Restricted subset for registered entries (`Exclude<VerificationState, 'unregistered'>`). |
-| `VerificationMethod` | Union | `'official_notice'`, `'in_game_verification'`, `'theorycraft_consensus'` | Rigor level of the data verification source. |
 
 ## Consequences
 
 ### Positive
-- **Architectural Clarity**: Verification status, schedule temporal state, and engine execution modes are completely decoupled.
-- **Zero Fabrication**: No fake URLs or invalid verification methods in the codebase; in-game and sandbox datasets are truthfully represented.
-- **Exact Single Source of Truth**: Removed duplicate registry records, reducing total datasets to 35 canonical entries.
-- **Type Safety & Regression Resistance**: Type-level exact-union assertions (`AssertEqual`) guarantee that enum unions cannot drift or widen unnoticed.
-- **Seamless Phase 1 Compatibility**: All 623 existing Vitest tests and all 7 audit gate axes pass without disrupting running view components.
+- **Single Source of Truth**: All staleness and reliability decisions originate from `recommendation-reliability.ts`.
+- **Zero Redundant State**: `effectiveEndDate` is eliminated from `DataProvenance`, removing 17 duplicate fields.
+- **Unified Freshness Behavior**: `src/services/data-freshness.ts` delegates directly to the central evaluator, eliminating cross-component divergence.
+- **Strict Future-Version Isolation**: Future game updates are safely quarantined from live actionability while remaining accessible for planning previews.
+- **Full Determinism**: Code-unit sorting guarantees identical test and runtime output across all platforms.
+- **Robust Multi-Risk Model**: Differentiates between critical game data (high-risk) and advisory meta heuristics (low-risk 42-day review cadence).
+- **Comprehensive Test Verification**: 92 focused tests and 661 repository-wide tests pass with 100% compliance.
 
-### Negative & Technical Debt
-- **Temporary Legacy Field**: `DataProvenance.effectiveEndDate` remains in Phase 1 to maintain backward compatibility with `src/services/data-freshness.ts`.
-- **Solver Adoption Deferred**: Full integration of `RecommendationReliability` into solver return types and UI badges is deferred to Phase 2.
+### Deferred to Phase 3
+- **Solver Return Type Integration**: Analytical solvers (`team-generator`, `abyss-solver`, `theater-solver`, `artifact-probability`, `pull-advisor`) currently calculate recommendations without embedding `RecommendationReliability` in their primary return interfaces.
+- **UI Surface Expansion**: While `DataFreshnessBadge.tsx` consumes unified freshness data, primary solver views do not yet render full multi-dependency reliability panels or actionability headers.
 
-## Phase 2 Migration Roadmap
+## Verification & Test Matrix
 
-Phase 2 will complete the reliability architecture across the following sequential milestones:
+The Phase 2 architecture is verified by automated test suites across unit, contract, and end-to-end layers:
 
-1. **Migrate Expiry Resolution to Canonical Entities**:
-   - Refactor `src/services/data-freshness.ts` (`isScheduleExpired`, `getFreshnessInfo`) to resolve start/end dates directly from `BANNER_PHASES`, `ABYSS_CYCLES`, and `THEATER_SEASONS` rather than `DataProvenance.effectiveEndDate`.
-2. **Purge Deprecated `effectiveEndDate`**:
-   - Delete `effectiveEndDate?: string` from `DataProvenance` in `src/types/genshin.ts`.
-   - Remove the 17 legacy `effectiveEndDate` entries from `src/data/provenance-registry.ts`.
-   - Update Axis 6 in `scripts/audit-game-data.mjs` and remove the legacy-boundary test from `src/data/data-integrity.test.ts`.
-3. **Implement Universal Reliability Evaluator**:
-   - Create `src/services/recommendation-reliability.ts` exposing `evaluateRecommendationReliability()`.
-   - Implement deterministic matrix mapping `(VerificationState, TemporalState, RecommendationMode) -> (ReliabilityStatus, isActionable, warnings)`.
-4. **Solver & UI Integration**:
-   - Update `team-generator.ts`, `abyss-solver.ts`, `theater-solver.ts`, `artifact-probability.ts`, and `pull-advisor.ts` to return `reliability: RecommendationReliability`.
-   - Upgrade `DataFreshnessBadge.tsx` and view components to surface reliability statuses (`reliable`, `qualified`, `historical`, `unsupported`) and actionable badges.
+1. **Central Evaluator Test Suite (`src/services/recommendation-reliability.test.ts`)**:
+   - 33 tests covering all 4 freshness policies, schedule temporal boundary evaluation (inclusive vs half-open), future-version quarantine, archive compromise detection, deterministic code-unit sorting, and multi-dependency matrix resolution.
+2. **Single-Policy Freshness Test Suite (`src/services/data-freshness.test.ts`)**:
+   - 21 tests verifying that `isScheduleExpired()`, `isDatasetStale()`, and `getFreshnessInfo()` delegate correctly and mirror central evaluator results without divergence.
+3. **Data Integrity & Audit Suite (`src/data/data-integrity.test.ts` & `scripts/audit-game-data.mjs`)**:
+   - 30 tests in `data-integrity.test.ts` asserting exact-union types, compile-time absence of `effectiveEndDate` on `DataProvenance`, runtime validation across all 35 records, and 100% pass across all 7 axes of `audit-game-data.mjs`.
+4. **UI Freshness Component Suite (`src/components/DataFreshnessBadge.test.tsx`)**:
+   - 8 tests verifying accurate badge labels, status tooltips, and expiration warnings.
+5. **Full Repository Test Suite**:
+   - Exactly **661 tests passing across 40 test files** with 0 failures, 0 broken references, and 0 TypeScript diagnostic errors (`pnpm exec tsc --noEmit`).
+
+## Phase 3 Implementation Roadmap
+
+Milestone M9 Phase 3 will complete full downstream adoption of the reliability architecture:
+
+1. **Solver Interface & Return Payload Wiring**:
+   - Update return types of `generateBestTeams()`, `solveAbyssDualTeams()`, `solveImaginariumTheater()`, `calculateArtifactUpgradeProbabilities()`, and `evaluatePullPlan()` to include `reliability: RecommendationReliability`.
+   - Wire `evaluateRecommendationReliability()` into solver execution paths, passing solver mode (`current`, `planning_preview`, `archive_simulation`, `sandbox_simulation`), target schedule refs, and constituent dataset IDs.
+2. **UI Actionability Headers & Reliability Modals**:
+   - Expand `DataFreshnessBadge.tsx` and view headers across `AbyssDualTeamView.tsx`, `ImaginariumTheaterView.tsx`, `PullAdvisorView.tsx`, and `TeamGeneratorView.tsx` to surface reliability ratings (`reliable`, `qualified`, `historical`, `unsupported`) and actionable badges.
+   - Introduce a multi-dependency breakdown modal allowing users to inspect individual dependency risk tiers, freshness policies, and warnings.
+3. **Playwright E2E Reliability Journeys**:
+   - Add end-to-end user journeys verifying reliability badge transitions across active Abyss, upcoming banners, historical archive simulations, and custom sandbox configurations.

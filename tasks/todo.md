@@ -100,17 +100,50 @@
 
 - [x] Task 9.6: Central Recommendation Reliability Evaluator (Phase 2)
   - Acceptance: Author `src/services/recommendation-reliability.ts` implementing `evaluateRecommendationReliability()`, `evaluateDatasetFreshness()`, `resolveScheduleTemporalState()`, 4 freshness policies (`schedule_window`, `version_bound`, `patch_cadence`, `sandbox`), dependency linkage enforcement, archive compromise guards, and deterministic sorting.
-  - Verify: `pnpm vitest run src/services/recommendation-reliability.test.ts` (31 tests passing)
+  - Verify: `pnpm vitest run src/services/recommendation-reliability.test.ts` (33 tests passing)
   - Files: `src/services/recommendation-reliability.ts`, `src/services/recommendation-reliability.test.ts`
 
 - [x] Task 9.7: Single-Policy Freshness Delegation (Phase 2)
   - Acceptance: Refactor `src/services/data-freshness.ts` to delegate directly to `evaluateDatasetFreshness()` and `isSandboxDatasetId()`; ensure legacy parity, unregistered custom sandbox alignment, and zero divergence.
-  - Verify: `pnpm vitest run src/services/data-freshness.test.ts` (20 tests passing)
+  - Verify: `pnpm vitest run src/services/data-freshness.test.ts` (21 tests passing)
   - Files: `src/services/data-freshness.ts`, `src/services/data-freshness.test.ts`
 
 - [x] Task 9.8: Removal of Legacy `effectiveEndDate` & Schedule Date Guards (Phase 2)
   - Acceptance: Remove `effectiveEndDate?: string` from `DataProvenance` in `src/types/genshin.ts`; purge all 17 legacy `effectiveEndDate` fields from `src/data/provenance-registry.ts`; add Axis 6 schedule-date duplicate guard to `scripts/audit-game-data.mjs`; update compile-time and runtime assertions in `src/data/data-integrity.test.ts`.
-  - Verify: `node scripts/audit-game-data.mjs`, `pnpm vitest run src/data/data-integrity.test.ts`
+  - Verify: `node scripts/audit-game-data.mjs`, `pnpm vitest run src/data/data-integrity.test.ts` (30 tests passing)
   - Files: `src/types/genshin.ts`, `src/data/provenance-registry.ts`, `scripts/audit-game-data.mjs`, `src/data/data-integrity.test.ts`
+
+- [x] Task 9.9: Conservative Future-Version Provenance Policy & Boundary Testing (Phase 2)
+  - Acceptance: Enforce `isFutureVersion: true` when `compareGameVersions(record.version, CURRENT_GAME_VERSION) > 0`, downgraded to `provisional` (`future_version`), blocked from live actionability in `current` mode and from historical classification in `archive_simulation` mode, permitted only in `planning_preview` mode as qualified and non-actionable with warnings.
+  - Verify: `pnpm vitest run src/services/recommendation-reliability.test.ts src/services/data-freshness.test.ts`
+  - Files: `src/services/recommendation-reliability.ts`, `src/services/data-freshness.ts`
+
+- [x] Task 9.10: Full Test Suite Verification & Quality Gates (Phase 2)
+  - Acceptance: 92/92 focused tests across `recommendation-reliability.test.ts` (33), `data-freshness.test.ts` (21), `data-integrity.test.ts` (30), and `DataFreshnessBadge.test.tsx` (8); exactly 661/661 tests passing repository-wide across 40 test suites; 100% compliance on 7-Axis Data Integrity Audit.
+  - Verify: `pnpm vitest run`, `node scripts/audit-game-data.mjs`, `pnpm exec tsc --noEmit`
+  - Files: `src/services/recommendation-reliability.test.ts`, `src/services/data-freshness.test.ts`, `src/data/data-integrity.test.ts`, `src/components/DataFreshnessBadge.test.tsx`
+
+- [x] Task 9.11: Authoritative Documentation & ADR-009 Phase 2 Transition
+  - Acceptance: Transition `docs/decisions/0004-m9-data-trust-and-recommendation-reliability.md` (ADR-009) to Accepted (Phase 2 Implemented); synchronize `docs/knowledge/celestia-reference.md` via `pnpm run verify:ssot`; record M9 Phase 2 invariants in `GEMINI.md` Section 4; generate walkthrough artifact `Project_Celestia_M9_Phase2_Documentation_Walkthrough.md`.
+  - Verify: `pnpm run verify:ssot`, `pnpm test src/data/reference-ssot.test.ts`
+  - Files: `docs/decisions/0004-m9-data-trust-and-recommendation-reliability.md`, `scripts/generate-reference.cjs`, `docs/knowledge/celestia-reference.md`, `GEMINI.md`
+
+# Task List: M9 — Data Trust & Recommendation Reliability (Phase 3 Roadmap)
+
+- [ ] Task 9.12: Analytical Engine Return Type Integration (Phase 3)
+  - Scope: Update return types of `generateBestTeams()`, `solveAbyssDualTeams()`, `solveImaginariumTheater()`, `calculateArtifactUpgradeProbabilities()`, and `evaluatePullPlan()` to return `reliability: RecommendationReliability`.
+  - Verify: Solver unit tests, engine integration tests.
+  - Files: `src/engines/team-generator.ts`, `src/engines/abyss-solver.ts`, `src/engines/theater-solver.ts`, `src/engines/artifact-probability.ts`, `src/engines/pull-advisor.ts`
+
+- [ ] Task 9.13: UI Badging & Actionability Header Integration (Phase 3)
+  - Scope: Upgrade `DataFreshnessBadge.tsx` and view headers (`AbyssDualTeamView.tsx`, `ImaginariumTheaterView.tsx`, `PullAdvisorView.tsx`, `TeamGeneratorView.tsx`) to surface reliability status ratings, actionability pills, and multi-dependency breakdown modals.
+  - Verify: Component tests, browser verification.
+  - Files: `src/components/DataFreshnessBadge.tsx`, `src/components/AbyssDualTeamView.tsx`, `src/components/ImaginariumTheaterView.tsx`, `src/components/PullAdvisorView.tsx`, `src/components/TeamGeneratorView.tsx`
+
+- [ ] Task 9.14: Playwright E2E Reliability Journeys (Phase 3)
+  - Scope: Create comprehensive Playwright journeys verifying live actionability indicators across active schedules, planning preview badges for upcoming banners, and historical warnings in archive modes.
+  - Verify: `pnpm exec playwright test e2e/journeys/09-data-reliability.spec.ts`
+  - Files: `e2e/journeys/09-data-reliability.spec.ts`
+
 
 

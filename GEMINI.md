@@ -46,6 +46,7 @@ All agents must adhere to the local repository data files as the definitive auth
   - **Single-Policy Freshness Architecture**: `src/services/data-freshness.ts` delegates directly to `evaluateDatasetFreshness()` and `isSandboxDatasetId()`, eliminating disparate staleness/expiry logic.
   - **Complete Removal of `effectiveEndDate`**: `DataProvenance.effectiveEndDate` permanently deleted; all 17 legacy entries purged from `src/data/provenance-registry.ts`.
   - **Axis 6 Audit & Contract Guardrails**: Axis 6 in `scripts/audit-game-data.mjs` and compile-time/runtime assertions in `src/data/data-integrity.test.ts` forbid duplicating schedule-date fields on `DataProvenance` and registry records.
+  - **Conservative Future-Version Provenance Policy**: `isFutureVersion: true` when `compareGameVersions(record.version, CURRENT_GAME_VERSION) > 0`, downgraded to `provisional` (`future_version`), blocked from live actionability in `current` mode and from historical classification in `archive_simulation` mode, permitted only in `planning_preview` mode as qualified and non-actionable with warnings.
 
 ## 5. Project Stack & Environment
 - **Runtime / Framework**: React 19 + Vite + TypeScript (see `package.json`)

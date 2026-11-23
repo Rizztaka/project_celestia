@@ -872,6 +872,14 @@ export type ReliabilityStatus =
 export interface RecommendationReliability {
   status: ReliabilityStatus;
   mode: RecommendationMode;
+  /**
+   * Whether the recommendation is actionable in the live game right now.
+   * Applies strictly to currently actionable (`current`) advice backed by supported,
+   * non-upcoming, non-expired data. Forward-looking previews (`planning_preview` /
+   * upcoming banners or schedules), historical archives (`archive_simulation`),
+   * sandbox runs (`sandbox_simulation`), and `unsupported` results are not currently
+   * actionable (`false`). Evaluation rules are deferred to Phase 2.
+   */
   isActionable: boolean;
   verification: VerificationState;
   temporalState: TemporalState;
@@ -901,9 +909,12 @@ export interface DataProvenance {
   verificationMethod?: VerificationMethod;
   verifiedFields?: string[]; // Exact fields verified (e.g. ['featuredCharacters', 'weaponBanner', 'dates'])
   /**
-   * @deprecated Canonical schedule entities (`BannerPhase`, `AbyssCycleConfig`, `TheaterSeasonConfig`)
-   * own schedule dates. Retained strictly for Phase 1 compatibility with `src/services/data-freshness.ts`
-   * until Phase 2 moves lifecycle date evaluation to the central reliability evaluator.
+   * @deprecated Legacy-only Phase 1 compatibility field.
+   * Canonical schedule entities (`BannerPhase`, `AbyssCycleConfig`, `TheaterSeasonConfig`)
+   * are the single source of truth for schedule dates. Do not add new schedule-date fields
+   * or new `effectiveEndDate` values to `DataProvenance`.
+   * Mandatory Phase 2 task: remove this field and migrate expiry/lifecycle evaluation in
+   * `src/services/data-freshness.ts` to resolve dates from canonical schedule entities.
    */
   effectiveEndDate?: string;
 }

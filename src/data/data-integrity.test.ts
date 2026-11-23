@@ -379,7 +379,13 @@ describe('Data-Source Integrity Verification', () => {
             `sourceUrl for "${prov.datasetId}" must be HTTPS`,
           ).toBe(true);
         } else {
-          expect(prov.datasetId).toBe('custom-sandbox');
+          const allowsMissingUrl =
+            prov.datasetId === 'custom-sandbox' ||
+            prov.verificationMethod === 'in_game_verification';
+          expect(
+            allowsMissingUrl,
+            `Provenance "${prov.datasetId}" requires an HTTPS sourceUrl for verificationMethod "${prov.verificationMethod ?? 'none'}"`,
+          ).toBe(true);
         }
         expect(dateRegex.test(prov.verifiedAt), `verifiedAt for "${prov.datasetId}" must be YYYY-MM-DD`).toBe(true);
         expect(prov.evidence.length, `evidence for "${prov.datasetId}" must be substantive`).toBeGreaterThanOrEqual(15);
@@ -393,20 +399,48 @@ describe('Data-Source Integrity Verification', () => {
       (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
     type AssertDisjoint<A, B> = [Extract<A, B>] extends [never] ? true : false;
 
-    it('accepts all declared VerificationState values and represents missing provenance as unregistered', () => {
-      const states: VerificationState[] = ['verified', 'provisional', 'stale', 'unregistered'];
-      const isExactVerificationUnion: AssertEqual<
+    it('enforces exact unions for all M9 reliability and provenance enums', () => {
+      const isExactVerification: AssertEqual<
         VerificationState,
         'verified' | 'provisional' | 'stale' | 'unregistered'
+      > = true;
+      const isExactTemporal: AssertEqual<
+        TemporalState,
+        'upcoming' | 'active' | 'expired' | 'not_applicable'
+      > = true;
+      const isExactMode: AssertEqual<
+        RecommendationMode,
+        'current' | 'planning_preview' | 'archive_simulation' | 'sandbox_simulation'
+      > = true;
+      const isExactReliability: AssertEqual<
+        ReliabilityStatus,
+        'reliable' | 'qualified' | 'historical' | 'unsupported'
+      > = true;
+      const isExactProvenanceStatus: AssertEqual<
+        ProvenanceStatus,
+        'verified' | 'provisional' | 'stale'
+      > = true;
+      const isExactVerificationMethod: AssertEqual<
+        VerificationMethod,
+        'official_notice' | 'in_game_verification' | 'theorycraft_consensus'
       > = true;
       const isRegisteredSubset: AssertEqual<
         Exclude<VerificationState, ProvenanceStatus>,
         'unregistered'
       > = true;
 
-      expect(states).toHaveLength(4);
-      expect(isExactVerificationUnion).toBe(true);
+      expect(isExactVerification).toBe(true);
+      expect(isExactTemporal).toBe(true);
+      expect(isExactMode).toBe(true);
+      expect(isExactReliability).toBe(true);
+      expect(isExactProvenanceStatus).toBe(true);
+      expect(isExactVerificationMethod).toBe(true);
       expect(isRegisteredSubset).toBe(true);
+    });
+
+    it('accepts all VerificationState values and represents missing provenance as unregistered', () => {
+      const states: VerificationState[] = ['verified', 'provisional', 'stale', 'unregistered'];
+      expect(states).toHaveLength(4);
 
       const missing = getProvenance('non_existent_dataset_id');
       const missingVerification: VerificationState = missing ? missing.status : 'unregistered';
@@ -442,11 +476,13 @@ describe('Data-Source Integrity Verification', () => {
       expect(methodDistinctFromMode).toBe(true);
     });
 
-    it('keeps ReliabilityStatus independent of VerificationState and TemporalState', () => {
+    it('keeps ReliabilityStatus independent of VerificationState and TemporalState without asserting evaluator policy', () => {
       const statuses: ReliabilityStatus[] = ['reliable', 'qualified', 'historical', 'unsupported'];
       const statusDistinctFromVerification: AssertDisjoint<ReliabilityStatus, VerificationState> = true;
       const statusDistinctFromTemporal: AssertDisjoint<ReliabilityStatus, TemporalState> = true;
 
+      // Structural contract fixtures only (evaluator decision rules are deferred to Phase 2).
+      // Upcoming planning previews are not currently actionable (isActionable: false).
       const sampleCombinations: RecommendationReliability[] = [
         {
           status: 'reliable',
@@ -460,11 +496,11 @@ describe('Data-Source Integrity Verification', () => {
         {
           status: 'qualified',
           mode: 'planning_preview',
-          isActionable: true,
+          isActionable: false,
           verification: 'verified',
           temporalState: 'upcoming',
           provenanceIds: ['season-7-2-dec-pyro-hydro-geo'],
-          warnings: ['Upcoming schedule preview'],
+          warnings: ['Upcoming schedule preview; not active yet'],
         },
         {
           status: 'historical',
@@ -490,6 +526,8 @@ describe('Data-Source Integrity Verification', () => {
       expect(statusDistinctFromVerification).toBe(true);
       expect(statusDistinctFromTemporal).toBe(true);
       expect(sampleCombinations.map((c) => c.status)).toEqual(statuses);
+      expect(sampleCombinations[0].isActionable).toBe(true);
+      expect(sampleCombinations.slice(1).every((c) => c.isActionable === false)).toBe(true);
     });
 
     it('ensures RecommendationReliability contains only JSON-serializable fields', () => {
@@ -537,32 +575,63 @@ describe('Data-Source Integrity Verification', () => {
       }
     });
 
-    it('validates all registry records against the revised DataProvenance contract without duplicating start dates', () => {
-      const validStatuses: ProvenanceStatus[] = ['verified', 'provisional', 'stale'];
-      const validMethods: VerificationMethod[] = [
-        'official_notice',
-        'in_game_verification',
-        'theorycraft_consensus',
-      ];
-
-      for (const prov of getAllProvenances()) {
-        const typedRecord: DataProvenance = prov;
-        expect(validStatuses).toContain(typedRecord.status);
-        if (typedRecord.verificationMethod !== undefined) {
-          expect(validMethods).toContain(typedRecord.verificationMethod);
-        }
-        // Ensure no start-date or banner schedule fields were introduced into provenance
-        const raw = prov as unknown as Record<string, unknown>;
-        expect(raw).not.toHaveProperty('effectiveStartDate');
-        expect(raw).not.toHaveProperty('startDate');
-        expect(raw).not.toHaveProperty('endDate');
-      }
+    it('allows optional sourceUrl for in-game observations and sandbox entries without breaking DataProvenance', () => {
+      const inGameObservation: DataProvenance = {
+        datasetId: 'in_game_observation_fixture',
+        version: CURRENT_GAME_VERSION,
+        verifiedAt: '2026-11-16',
+        verificationMethod: 'in_game_verification',
+        verifiedFields: ['enemies', 'hp'],
+        evidence: 'Direct in-game verification without a public notice URL.',
+        status: 'verified',
+      };
+      expect(inGameObservation.sourceUrl).toBeUndefined();
 
       const sandbox = getProvenance('custom-sandbox');
       expect(sandbox).toBeDefined();
       expect(sandbox?.status).toBe('provisional');
       expect(sandbox?.verificationMethod).toBeUndefined();
       expect(sandbox?.sourceUrl).toBeUndefined();
+    });
+
+    it('enforces the legacy-only effectiveEndDate compatibility boundary until Phase 2 removal', () => {
+      // Compile-time check: DataProvenance must not declare startDate, endDate, or effectiveStartDate
+      const hasEffectiveStartDate: AssertEqual<
+        'effectiveStartDate' extends keyof DataProvenance ? true : false,
+        false
+      > = true;
+      const hasStartDate: AssertEqual<'startDate' extends keyof DataProvenance ? true : false, false> = true;
+      const hasEndDate: AssertEqual<'endDate' extends keyof DataProvenance ? true : false, false> = true;
+      expect(hasEffectiveStartDate).toBe(true);
+      expect(hasStartDate).toBe(true);
+      expect(hasEndDate).toBe(true);
+
+      // Canonical schedule end-date map from canonical entity sources of truth
+      const canonicalEndDates = new Map<string, string>([
+        ...BANNER_PHASES.map((b) => [b.id, b.endDate] as const),
+        ...ABYSS_CYCLES.filter((c) => c.effectiveEndDate).map((c) => [c.id, c.effectiveEndDate!] as const),
+        ...THEATER_SEASONS.filter((s) => s.effectiveEndDate).map((s) => [s.id, s.effectiveEndDate!] as const),
+      ]);
+
+      const legacyEndDateIds: string[] = [];
+      for (const prov of getAllProvenances()) {
+        const raw = prov as unknown as Record<string, unknown>;
+        expect(raw).not.toHaveProperty('effectiveStartDate');
+        expect(raw).not.toHaveProperty('startDate');
+        expect(raw).not.toHaveProperty('endDate');
+
+        if (prov.effectiveEndDate !== undefined) {
+          legacyEndDateIds.push(prov.datasetId);
+          expect(
+            canonicalEndDates.get(prov.datasetId),
+            `Legacy effectiveEndDate on "${prov.datasetId}" must only mirror an existing canonical schedule entity`,
+          ).toBe(prov.effectiveEndDate);
+        }
+      }
+
+      // Frozen count of legacy-only effectiveEndDate entries (38 -> 35 registry records; 20 -> 17 legacy dates).
+      // Mandatory Phase 2 task: migrate freshness expiry to canonical entities and remove all 17 fields.
+      expect(legacyEndDateIds).toHaveLength(17);
     });
   });
 

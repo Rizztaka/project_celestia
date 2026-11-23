@@ -448,7 +448,8 @@ for (const b of provBlocks) {
   const verMatch = full.match(/version:\s*(CURRENT_GAME_VERSION|'([^']+)')/);
   const version = verMatch ? (verMatch[2] || currentGameVersion) : null;
   const verifiedAt = full.match(/verifiedAt:\s*'([^']+)'/)?.[1] || '';
-  const sourceUrl = full.match(/sourceUrl:\s*'([^']+)'/)?.[1] || '';
+  const sourceUrlMatch = full.match(/sourceUrl:\s*'([^']*)'/);
+  const sourceUrl = sourceUrlMatch ? sourceUrlMatch[1] : undefined;
   const method = full.match(/verificationMethod:\s*'([^']+)'/)?.[1] || '';
   const fieldsMatch = full.match(/verifiedFields:\s*\[([^\]]+)\]/);
   const evidenceMatch = full.match(/evidence:\s*(?:\n\s*)?'((?:\\'|[^'])+)'/);
@@ -460,8 +461,16 @@ for (const b of provBlocks) {
     recordError('Axis 6', `Provenance "${id}" has invalid verifiedAt "${verifiedAt}"`);
   }
   const isSandbox = id === 'custom-sandbox';
-  if (sourceUrl ? !sourceUrl.startsWith('https://') : !isSandbox) {
-    recordError('Axis 6', `Provenance "${id}" sourceUrl must be HTTPS`);
+  const allowsMissingUrl = isSandbox || method === 'in_game_verification';
+  if (sourceUrl !== undefined) {
+    if (!sourceUrl.startsWith('https://')) {
+      recordError('Axis 6', `Provenance "${id}" sourceUrl must be HTTPS`);
+    }
+  } else if (!allowsMissingUrl) {
+    recordError(
+      'Axis 6',
+      `Provenance "${id}" requires an HTTPS sourceUrl for verificationMethod "${method || 'none'}"`,
+    );
   }
   if (!method && !isSandbox) {
     recordError('Axis 6', `Provenance "${id}" must specify verificationMethod (not just a URL)`);

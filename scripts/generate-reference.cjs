@@ -314,6 +314,8 @@ To decouple data verification authenticity from schedule temporal lifecycles and
      temporalState: TemporalState;
      provenanceIds: string[];
      warnings: string[];
+     dependencies?: ReliabilityDependencyDetail[];
+     evaluatedAt?: string;
    }
    \`\`\`
 
@@ -322,11 +324,27 @@ To decouple data verification authenticity from schedule temporal lifecycles and
    - Strictly \`true\` only for currently actionable (\`current\`) advice backed by supported, non-upcoming, non-expired data.
    - Strictly \`false\` for forward-looking previews (\`planning_preview\`), historical archives (\`archive_simulation\`), sandbox runs (\`sandbox_simulation\`), and \`unsupported\` outputs.
 
-7. **Provenance Invariants & Exact Subsets**:
+7. **Provenance Invariants & Complete Removal of \`effectiveEndDate\`**:
    - \`ProvenanceStatus\` = \`Exclude<VerificationState, 'unregistered'>\` (\`'verified' | 'provisional' | 'stale'\`).
    - \`VerificationMethod\` = \`'official_notice' | 'in_game_verification' | 'theorycraft_consensus'\`.
    - \`sourceUrl?: string\` is optional; when provided, HTTPS is strictly enforced. Omitted URLs are permitted only for \`in_game_verification\` and \`custom-sandbox\`.
-   - \`effectiveEndDate?: string\` is \`@deprecated\` legacy-only, frozen at 17 entries mirroring canonical schedule entities (\`BANNER_PHASES\`, \`ABYSS_CYCLES\`, \`THEATER_SEASONS\`), with mandatory removal scheduled for Phase 2.
+   - \`effectiveEndDate\` is permanently removed from \`DataProvenance\`, and all 17 legacy entries are purged from \`src/data/provenance-registry.ts\`. Canonical schedule dates are derived exclusively from canonical entities (\`BANNER_PHASES\`, \`ABYSS_CYCLES\`, \`THEATER_SEASONS\`) and guarded by Axis 6 audit checks.
+
+8. **The 4 Freshness Policies & Risk Tiers**:
+   - \`schedule_window\` (High Risk): Governed strictly by canonical schedule start/end dates. Never decays via 42-day cycle.
+   - \`version_bound\` (High Risk): Governed strictly by active \`version === CURRENT_GAME_VERSION\`. Never decays via 42-day cycle.
+   - \`patch_cadence\` (Low Risk): Meta heuristics reviewed on 42-day cadence (\`PATCH_CYCLE_DAYS\`). Stale if \`ageDays > 42\` or prior version.
+   - \`sandbox\` (Low Risk): User-configured sandbox scenario. Always provisional, never ages out.
+
+9. **Central Evaluator SSOT & Single-Policy Freshness Architecture**:
+   - Central Evaluator SSOT (\`src/services/recommendation-reliability.ts\`) exposes \`evaluateRecommendationReliability()\`, \`evaluateDatasetFreshness()\`, and \`resolveScheduleTemporalState()\`.
+   - \`src/services/data-freshness.ts\` delegates directly to \`evaluateDatasetFreshness()\` and \`isSandboxDatasetId()\`, eliminating disparate staleness/expiry logic.
+
+10. **Conservative Future-Version Provenance Policy**:
+    - When \`compareGameVersions(record.version, CURRENT_GAME_VERSION) > 0\`, \`isFutureVersion: true\` is flagged, downgraded to \`provisional\` (\`future_version\`).
+    - Blocked from live actionability in \`current\` mode (\`isActionable: false\`, \`status: 'qualified'\`).
+    - Rejected from historical classification in \`archive_simulation\` mode (\`status: 'unsupported'\`).
+    - Permitted only in \`planning_preview\` mode as qualified and non-actionable with warnings.
 
 ### Self-Correction Protocol (Mandatory for All Agents)
 1. **Never Assume Outdated Baselines**:

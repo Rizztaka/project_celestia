@@ -869,6 +869,41 @@ export type ReliabilityStatus =
   | 'historical'
   | 'unsupported';
 
+export type ReliabilityScheduleType = 'banner' | 'abyss' | 'theater';
+
+export interface ReliabilityScheduleRef {
+  type: ReliabilityScheduleType;
+  entityId: string;
+}
+
+export interface ReliabilityEvaluationContext {
+  mode: RecommendationMode;
+  datasetIds: string[];
+  requiredDatasetIds: string[];
+  schedule?: ReliabilityScheduleRef;
+  /** Explicit ISO-8601 calendar date (`YYYY-MM-DD`) or timezone-qualified timestamp. */
+  evaluatedAt: string;
+}
+
+export type FreshnessPolicyKind =
+  | 'schedule_window'
+  | 'version_bound'
+  | 'patch_cadence'
+  | 'sandbox';
+
+export type DependencyRiskTier = 'high' | 'low';
+
+export interface ReliabilityDependencyDetail {
+  datasetId: string;
+  required: boolean;
+  verification: VerificationState;
+  policy: FreshnessPolicyKind;
+  riskTier: DependencyRiskTier;
+  version?: string;
+  verifiedAt?: string;
+  reason?: string;
+}
+
 export interface RecommendationReliability {
   status: ReliabilityStatus;
   mode: RecommendationMode;
@@ -878,13 +913,17 @@ export interface RecommendationReliability {
    * non-upcoming, non-expired data. Forward-looking previews (`planning_preview` /
    * upcoming banners or schedules), historical archives (`archive_simulation`),
    * sandbox runs (`sandbox_simulation`), and `unsupported` results are not currently
-   * actionable (`false`). Evaluation rules are deferred to Phase 2.
+   * actionable (`false`).
    */
   isActionable: boolean;
   verification: VerificationState;
   temporalState: TemporalState;
   provenanceIds: string[];
   warnings: string[];
+  /** Plain-data per-dependency evaluation breakdown sorted in ascending datasetId order. */
+  dependencies?: ReliabilityDependencyDetail[];
+  /** Normalized UTC evaluation calendar date (`YYYY-MM-DD`) used for the decision. */
+  evaluatedAt?: string;
 }
 
 /**
@@ -908,15 +947,6 @@ export interface DataProvenance {
   status: ProvenanceStatus;
   verificationMethod?: VerificationMethod;
   verifiedFields?: string[]; // Exact fields verified (e.g. ['featuredCharacters', 'weaponBanner', 'dates'])
-  /**
-   * @deprecated Legacy-only Phase 1 compatibility field.
-   * Canonical schedule entities (`BannerPhase`, `AbyssCycleConfig`, `TheaterSeasonConfig`)
-   * are the single source of truth for schedule dates. Do not add new schedule-date fields
-   * or new `effectiveEndDate` values to `DataProvenance`.
-   * Mandatory Phase 2 task: remove this field and migrate expiry/lifecycle evaluation in
-   * `src/services/data-freshness.ts` to resolve dates from canonical schedule entities.
-   */
-  effectiveEndDate?: string;
 }
 
 

@@ -41,6 +41,11 @@ All agents must adhere to the local repository data files as the definitive auth
   - **Canonical Provenance Registry (35 Datasets)**: Pruned 3 redundant aliases (`abyss_floor_12_v7_2`, `theater_season_7_2_nov`, `theater_season_7_2_dec`), leaving canonical schedule IDs (`cycle-7-2`, `season-7-2-hydro-electro-geo`, `season-7-2-dec-pyro-hydro-geo`) authoritative.
   - **Truthful Metadata & HTTPS Guardrails**: `sourceUrl` made optional without fabricated URLs (omitted allowed only for `in_game_verification` and `custom-sandbox`; HTTPS strictly enforced when present); removed invalid `'sandbox_simulation'` from `VerificationMethod`.
   - **Legacy Expiration Boundary**: `DataProvenance.effectiveEndDate` marked `@deprecated` and frozen at exactly 17 entries mirroring canonical schedules, scheduled for complete removal in Phase 2 in favor of canonical schedule entities (`BANNER_PHASES`, `ABYSS_CYCLES`, `THEATER_SEASONS`).
+- **Data Trust & Recommendation Reliability Invariants (M9 Phase 2 Baseline)**:
+  - **Central Evaluator SSOT (`src/services/recommendation-reliability.ts`)**: Authoritative module for 4 freshness policies (`schedule_window`, `version_bound`, `patch_cadence`, `sandbox`), canonical schedule temporal resolution (inclusive `[start, end]` for banners & Abyss; half-open `[start, end)` for Theater), dependency-linkage enforcement, archive compromise guards, and deterministic code-unit sorting.
+  - **Single-Policy Freshness Architecture**: `src/services/data-freshness.ts` delegates directly to `evaluateDatasetFreshness()` and `isSandboxDatasetId()`, eliminating disparate staleness/expiry logic.
+  - **Complete Removal of `effectiveEndDate`**: `DataProvenance.effectiveEndDate` permanently deleted; all 17 legacy entries purged from `src/data/provenance-registry.ts`.
+  - **Axis 6 Audit & Contract Guardrails**: Axis 6 in `scripts/audit-game-data.mjs` and compile-time/runtime assertions in `src/data/data-integrity.test.ts` forbid duplicating schedule-date fields on `DataProvenance` and registry records.
 
 ## 5. Project Stack & Environment
 - **Runtime / Framework**: React 19 + Vite + TypeScript (see `package.json`)

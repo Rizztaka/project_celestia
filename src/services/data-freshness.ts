@@ -1,14 +1,20 @@
-import type { DataProvenance, ProvenanceStatus, VerificationMethod } from '../types/genshin';
-import { CURRENT_GAME_VERSION, PATCH_CYCLE_DAYS, compareGameVersions } from '../data/game-version';
+import type { DataProvenance, VerificationMethod, VerificationState } from '../types/genshin';
+import { PATCH_CYCLE_DAYS } from '../data/game-version';
 import { getProvenance, getAllProvenances } from '../data/provenance-registry';
+import {
+  evaluateDatasetFreshness,
+  formatDateUtc,
+  isSandboxDatasetId,
+  type FreshnessStaleReason,
+} from './recommendation-reliability';
 
 export interface FreshnessInfo {
   datasetId: string;
   version: string;
-  status: ProvenanceStatus;
+  status: VerificationState;
   isStale: boolean;
   isExpired: boolean;
-  staleReason?: 'explicit_stale' | 'outdated_version' | 'expired_schedule' | 'age_exceeded' | 'invalid_date';
+  staleReason?: FreshnessStaleReason;
   ageDays: number;
   verifiedAt: string;
   effectiveEndDate?: string;
@@ -20,82 +26,35 @@ export interface FreshnessInfo {
   badgeDescription: string;
 }
 
-function parseUtcMidnight(d: Date | string): number {
-  if (typeof d === 'string') {
-    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(d.trim());
-    if (match) {
-      return Date.UTC(parseInt(match[1], 10), parseInt(match[2], 10) - 1, parseInt(match[3], 10));
-    }
-  }
-  const dateObj = typeof d === 'string' ? new Date(d) : d;
-  if (Number.isNaN(dateObj.getTime())) return NaN;
-  return Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
-}
-
 /**
- * Checks whether a time-boxed dataset's effectiveEndDate has strictly passed relative to referenceDate.
+ * Checks whether a time-boxed dataset's canonical schedule has expired relative to referenceDate.
  */
 export function isScheduleExpired(
   provenance: DataProvenance,
   referenceDate: Date = new Date(),
 ): boolean {
-  if (!provenance?.effectiveEndDate) return false;
-  const endUtc = parseUtcMidnight(provenance.effectiveEndDate);
-  const refUtc = parseUtcMidnight(referenceDate);
-  if (Number.isNaN(endUtc) || Number.isNaN(refUtc)) return false;
-  return refUtc > endUtc;
+  if (!provenance?.datasetId) return false;
+  const refUtc = formatDateUtc(referenceDate);
+  if (!refUtc) return false;
+  return evaluateDatasetFreshness(provenance, refUtc).isExpired;
 }
 
 /**
- * Determines whether a dataset is considered stale based on:
- * 1. Explicit 'stale' status in provenance
- * 2. Version strictly older than CURRENT_GAME_VERSION
- * 3. Time-boxed schedule effectiveEndDate has passed
- * 4. Verification age strictly exceeds thresholdDays (defaults to PATCH_CYCLE_DAYS = 42)
+ * Determines whether a dataset is stale using the unified dataset-specific freshness policy
+ * from `src/services/recommendation-reliability.ts`:
+ * - `schedule_window`: canonical schedule dates + game version
+ * - `version_bound`: game version (does not expire after 42 days)
+ * - `patch_cadence`: `thresholdDays` (defaults to `PATCH_CYCLE_DAYS = 42`) + game version
+ * - `sandbox`: remains provisional (never ages out)
  */
 export function isDatasetStale(
   provenance: DataProvenance,
-  thresholdDays: number = PATCH_CYCLE_DAYS,
+  thresholdDays?: number,
   referenceDate: Date = new Date(),
 ): boolean {
   if (!provenance) return true;
-  if (provenance.status === 'stale') {
-    return true;
-  }
-
-  if (compareGameVersions(provenance.version, CURRENT_GAME_VERSION) < 0) {
-    return true;
-  }
-
-  if (isScheduleExpired(provenance, referenceDate)) {
-    return true;
-  }
-
-  const vUtc = parseUtcMidnight(provenance.verifiedAt);
-  const rUtc = parseUtcMidnight(referenceDate);
-
-  if (Number.isNaN(vUtc) || Number.isNaN(rUtc)) {
-    return true;
-  }
-
-  const ageDays = Math.floor((rUtc - vUtc) / (1000 * 60 * 60 * 24));
-  return ageDays > thresholdDays;
-}
-
-function getStaleReason(
-  provenance: DataProvenance,
-  thresholdDays: number,
-  referenceDate: Date,
-): FreshnessInfo['staleReason'] {
-  if (provenance.status === 'stale') return 'explicit_stale';
-  if (compareGameVersions(provenance.version, CURRENT_GAME_VERSION) < 0) return 'outdated_version';
-  if (isScheduleExpired(provenance, referenceDate)) return 'expired_schedule';
-  const vUtc = parseUtcMidnight(provenance.verifiedAt);
-  const rUtc = parseUtcMidnight(referenceDate);
-  if (Number.isNaN(vUtc) || Number.isNaN(rUtc)) return 'invalid_date';
-  const ageDays = Math.floor((rUtc - vUtc) / (1000 * 60 * 60 * 24));
-  if (ageDays > thresholdDays) return 'age_exceeded';
-  return undefined;
+  const refUtc = formatDateUtc(referenceDate);
+  return evaluateDatasetFreshness(provenance, refUtc, thresholdDays).isStale;
 }
 
 /**
@@ -104,82 +63,55 @@ function getStaleReason(
 export function getFreshnessInfo(
   provenanceOrId: DataProvenance | string,
   referenceDate: Date = new Date(),
-  thresholdDays: number = PATCH_CYCLE_DAYS,
+  thresholdDays?: number,
 ): FreshnessInfo {
   const provenance: DataProvenance | undefined =
     typeof provenanceOrId === 'string' ? getProvenance(provenanceOrId) : provenanceOrId;
 
   if (!provenance) {
     const id = typeof provenanceOrId === 'string' ? provenanceOrId : 'unknown';
-    const vMatch =
-      id.match(/(?:cycle|banner|season)[-_]([0-9]+)[._]([0-9]+)/i) ||
-      id.match(/v?([0-9]+\.[0-9]+)/);
-    const inferredVersion = vMatch ? `${vMatch[1]}.${vMatch[2] ?? ''}`.replace(/\.$/, '') : null;
-    const isSandbox = id.includes('sandbox') || id.startsWith('custom-');
 
-    if (inferredVersion && compareGameVersions(inferredVersion, CURRENT_GAME_VERSION) < 0) {
+    if (isSandboxDatasetId(id)) {
       return {
         datasetId: id,
-        version: inferredVersion,
-        status: 'stale',
-        isStale: true,
-        isExpired: true,
-        staleReason: 'outdated_version',
-        ageDays: -1,
-        verifiedAt: 'Historical Archive',
-        sourceUrl: '',
-        evidence: `Historical dataset from Version ${inferredVersion}. In-game lineups, enemy buffs, or mechanics differ from active Version ${CURRENT_GAME_VERSION}.`,
-        badgeLabel: `Stale v${inferredVersion}`,
-        badgeDescription: `Data from prior game patch (v${inferredVersion}). Lineups or mechanics have shifted in v${CURRENT_GAME_VERSION}.`,
-      };
-    }
-
-    if (isSandbox) {
-      return {
-        datasetId: id,
-        version: CURRENT_GAME_VERSION,
-        status: 'provisional',
+        version: 'unknown',
+        status: 'unregistered',
         isStale: false,
         isExpired: false,
-        ageDays: 0,
-        verifiedAt: 'Active Sandbox',
+        ageDays: -1,
+        verifiedAt: 'Unregistered',
         sourceUrl: '',
-        evidence: `User-configured custom sandbox simulation. Computed using active v${CURRENT_GAME_VERSION} mechanics.`,
-        badgeLabel: 'Sandbox Simulation',
-        badgeDescription: 'User-customized sandbox mode. Real-time calculations active.',
+        evidence:
+          'Unregistered custom sandbox dataset. No provenance record exists; treat results as experimental and non-actionable.',
+        badgeLabel: 'Unregistered Sandbox',
+        badgeDescription: 'Unregistered custom sandbox mode. No provenance record exists.',
       };
     }
 
     return {
       datasetId: id,
-      version: CURRENT_GAME_VERSION,
-      status: 'provisional',
+      version: 'unknown',
+      status: 'unregistered',
       isStale: false,
       isExpired: false,
-      ageDays: 0,
+      ageDays: -1,
       verifiedAt: 'Unregistered',
       sourceUrl: '',
       evidence:
         'Dataset does not have an explicit provenance record yet; verify in-game before committing resources.',
-      badgeLabel: `Active v${CURRENT_GAME_VERSION}`,
-      badgeDescription: 'No external provenance record found. Standard engine defaults apply.',
+      badgeLabel: 'Unregistered',
+      badgeDescription:
+        'No provenance record found for this dataset. Do not treat as verified or active without checking in-game.',
     };
   }
 
-  const vUtc = parseUtcMidnight(provenance.verifiedAt);
-  const rUtc = parseUtcMidnight(referenceDate);
-  const ageDays =
-    Number.isNaN(vUtc) || Number.isNaN(rUtc)
-      ? -1
-      : Math.floor((rUtc - vUtc) / (1000 * 60 * 60 * 24));
-
-  const expired = isScheduleExpired(provenance, referenceDate);
-  const stale = isDatasetStale(provenance, thresholdDays, referenceDate);
-  const staleReason = stale ? getStaleReason(provenance, thresholdDays, referenceDate) : undefined;
+  const refUtc = formatDateUtc(referenceDate);
+  const freshness = evaluateDatasetFreshness(provenance, refUtc, thresholdDays);
+  const { ageDays, isExpired: expired, isStale: stale, staleReason, canonicalEndDate } = freshness;
 
   if (stale) {
-    const expiredNote = expired && provenance.effectiveEndDate
-      ? `Schedule ended on ${provenance.effectiveEndDate}. `
+    const expiredNote = expired && canonicalEndDate
+      ? `Schedule ended on ${canonicalEndDate}. `
       : '';
     return {
       datasetId: provenance.datasetId,
@@ -190,7 +122,7 @@ export function getFreshnessInfo(
       staleReason,
       ageDays,
       verifiedAt: provenance.verifiedAt,
-      effectiveEndDate: provenance.effectiveEndDate,
+      effectiveEndDate: canonicalEndDate,
       sourceUrl: provenance.sourceUrl ?? '',
       evidence: provenance.evidence,
       verificationMethod: provenance.verificationMethod,
@@ -200,9 +132,8 @@ export function getFreshnessInfo(
     };
   }
 
-  if (provenance.status === 'provisional') {
-    const isSandbox =
-      provenance.datasetId.includes('sandbox') || provenance.datasetId.startsWith('custom-');
+  if (provenance.status === 'provisional' || freshness.policy.policy === 'sandbox') {
+    const isSandbox = freshness.policy.policy === 'sandbox';
     return {
       datasetId: provenance.datasetId,
       version: provenance.version,
@@ -211,7 +142,7 @@ export function getFreshnessInfo(
       isExpired: false,
       ageDays,
       verifiedAt: provenance.verifiedAt,
-      effectiveEndDate: provenance.effectiveEndDate,
+      effectiveEndDate: canonicalEndDate,
       sourceUrl: provenance.sourceUrl ?? '',
       evidence: provenance.evidence,
       verificationMethod: provenance.verificationMethod,
@@ -231,7 +162,7 @@ export function getFreshnessInfo(
     isExpired: false,
     ageDays,
     verifiedAt: provenance.verifiedAt,
-    effectiveEndDate: provenance.effectiveEndDate,
+    effectiveEndDate: canonicalEndDate,
     sourceUrl: provenance.sourceUrl ?? '',
     evidence: provenance.evidence,
     verificationMethod: provenance.verificationMethod,
@@ -269,3 +200,4 @@ export function getStaleDatasetSummary(
 
   return { verified, provisional, stale };
 }
+

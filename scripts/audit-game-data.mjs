@@ -478,6 +478,12 @@ for (const b of provBlocks) {
   if (!fieldsMatch) {
     recordError('Axis 6', `Provenance "${id}" must declare verifiedFields[]`);
   }
+  if (/^\s*(?:effectiveEndDate|effectiveStartDate|startDate|endDate)\s*:/m.test(full)) {
+    recordError(
+      'Axis 6',
+      `Provenance "${id}" must not duplicate canonical schedule date fields (startDate/endDate/effectiveStartDate/effectiveEndDate)`,
+    );
+  }
   if (!evidence || evidence.trim().length < 25) {
     recordError('Axis 6', `Provenance "${id}" must provide specific verification evidence (>= 25 chars)`);
   }

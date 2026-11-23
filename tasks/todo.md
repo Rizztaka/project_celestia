@@ -98,3 +98,19 @@
   - Verify: `pnpm run verify:ssot`, `pnpm test src/data/reference-ssot.test.ts`
   - Files: `scripts/generate-reference.cjs`, `docs/knowledge/celestia-reference.md`, `GEMINI.md`
 
+- [x] Task 9.6: Central Recommendation Reliability Evaluator (Phase 2)
+  - Acceptance: Author `src/services/recommendation-reliability.ts` implementing `evaluateRecommendationReliability()`, `evaluateDatasetFreshness()`, `resolveScheduleTemporalState()`, 4 freshness policies (`schedule_window`, `version_bound`, `patch_cadence`, `sandbox`), dependency linkage enforcement, archive compromise guards, and deterministic sorting.
+  - Verify: `pnpm vitest run src/services/recommendation-reliability.test.ts` (31 tests passing)
+  - Files: `src/services/recommendation-reliability.ts`, `src/services/recommendation-reliability.test.ts`
+
+- [x] Task 9.7: Single-Policy Freshness Delegation (Phase 2)
+  - Acceptance: Refactor `src/services/data-freshness.ts` to delegate directly to `evaluateDatasetFreshness()` and `isSandboxDatasetId()`; ensure legacy parity, unregistered custom sandbox alignment, and zero divergence.
+  - Verify: `pnpm vitest run src/services/data-freshness.test.ts` (20 tests passing)
+  - Files: `src/services/data-freshness.ts`, `src/services/data-freshness.test.ts`
+
+- [x] Task 9.8: Removal of Legacy `effectiveEndDate` & Schedule Date Guards (Phase 2)
+  - Acceptance: Remove `effectiveEndDate?: string` from `DataProvenance` in `src/types/genshin.ts`; purge all 17 legacy `effectiveEndDate` fields from `src/data/provenance-registry.ts`; add Axis 6 schedule-date duplicate guard to `scripts/audit-game-data.mjs`; update compile-time and runtime assertions in `src/data/data-integrity.test.ts`.
+  - Verify: `node scripts/audit-game-data.mjs`, `pnpm vitest run src/data/data-integrity.test.ts`
+  - Files: `src/types/genshin.ts`, `src/data/provenance-registry.ts`, `scripts/audit-game-data.mjs`, `src/data/data-integrity.test.ts`
+
+

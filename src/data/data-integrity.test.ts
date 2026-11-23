@@ -594,44 +594,30 @@ describe('Data-Source Integrity Verification', () => {
       expect(sandbox?.sourceUrl).toBeUndefined();
     });
 
-    it('enforces the legacy-only effectiveEndDate compatibility boundary until Phase 2 removal', () => {
-      // Compile-time check: DataProvenance must not declare startDate, endDate, or effectiveStartDate
+    it('forbids duplicated canonical schedule dates in DataProvenance and the provenance registry', () => {
+      // Compile-time check: DataProvenance must not declare any schedule date fields
       const hasEffectiveStartDate: AssertEqual<
         'effectiveStartDate' extends keyof DataProvenance ? true : false,
+        false
+      > = true;
+      const hasEffectiveEndDate: AssertEqual<
+        'effectiveEndDate' extends keyof DataProvenance ? true : false,
         false
       > = true;
       const hasStartDate: AssertEqual<'startDate' extends keyof DataProvenance ? true : false, false> = true;
       const hasEndDate: AssertEqual<'endDate' extends keyof DataProvenance ? true : false, false> = true;
       expect(hasEffectiveStartDate).toBe(true);
+      expect(hasEffectiveEndDate).toBe(true);
       expect(hasStartDate).toBe(true);
       expect(hasEndDate).toBe(true);
 
-      // Canonical schedule end-date map from canonical entity sources of truth
-      const canonicalEndDates = new Map<string, string>([
-        ...BANNER_PHASES.map((b) => [b.id, b.endDate] as const),
-        ...ABYSS_CYCLES.filter((c) => c.effectiveEndDate).map((c) => [c.id, c.effectiveEndDate!] as const),
-        ...THEATER_SEASONS.filter((s) => s.effectiveEndDate).map((s) => [s.id, s.effectiveEndDate!] as const),
-      ]);
-
-      const legacyEndDateIds: string[] = [];
       for (const prov of getAllProvenances()) {
         const raw = prov as unknown as Record<string, unknown>;
         expect(raw).not.toHaveProperty('effectiveStartDate');
+        expect(raw).not.toHaveProperty('effectiveEndDate');
         expect(raw).not.toHaveProperty('startDate');
         expect(raw).not.toHaveProperty('endDate');
-
-        if (prov.effectiveEndDate !== undefined) {
-          legacyEndDateIds.push(prov.datasetId);
-          expect(
-            canonicalEndDates.get(prov.datasetId),
-            `Legacy effectiveEndDate on "${prov.datasetId}" must only mirror an existing canonical schedule entity`,
-          ).toBe(prov.effectiveEndDate);
-        }
       }
-
-      // Frozen count of legacy-only effectiveEndDate entries (38 -> 35 registry records; 20 -> 17 legacy dates).
-      // Mandatory Phase 2 task: migrate freshness expiry to canonical entities and remove all 17 fields.
-      expect(legacyEndDateIds).toHaveLength(17);
     });
   });
 

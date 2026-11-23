@@ -200,6 +200,103 @@ describe('Central Recommendation Reliability Evaluator (M9 Phase 2)', () => {
       expect(evaluateDatasetFreshness(DATA_PROVENANCE_REGISTRY.banner_7_2_phase_1, expiredDate, 9999).isStale).toBe(true);
     });
 
+    it('prevents future-version provenance from becoming verified or actionable in current mode while preserving current-version behavior', () => {
+      const futureCharacters: DataProvenance = {
+        datasetId: 'characters_v8_0_future',
+        version: '8.0',
+        verifiedAt: '2026-11-23',
+        sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+        verificationMethod: 'in_game_verification',
+        verifiedFields: ['id', 'element', 'weapon', 'rarity', 'stats'],
+        evidence: 'Version 8.0 forward-looking character catalog.',
+        status: 'verified',
+      };
+      const futurePatchWeapons: DataProvenance = {
+        datasetId: 'weapons_v7_2_1_future',
+        version: '7.2.1',
+        verifiedAt: '2026-11-23',
+        sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+        verificationMethod: 'in_game_verification',
+        verifiedFields: ['key', 'baseAtk'],
+        evidence: 'Version 7.2.1 hotfix weapon catalog.',
+        status: 'verified',
+      };
+      const registry = {
+        ...DATA_PROVENANCE_REGISTRY,
+        characters_v8_0_future: futureCharacters,
+        weapons_v7_2_1_future: futurePatchWeapons,
+      };
+
+      // Future major/minor version (8.0 vs active 7.2): never verified, never reliable/actionable in current mode
+      const freshness = evaluateDatasetFreshness(futureCharacters, parseIsoCalendarDate('2026-11-23'));
+      expect(freshness.isFutureVersion).toBe(true);
+      expect(freshness.isStale).toBe(false);
+
+      const currentFuture = evaluateRecommendationReliability(
+        {
+          mode: 'current',
+          datasetIds: ['characters_v8_0_future', 'weapons_v7_2_signatures'],
+          requiredDatasetIds: ['characters_v8_0_future', 'weapons_v7_2_signatures'],
+          evaluatedAt: '2026-11-23',
+        },
+        { provenanceRegistry: registry },
+      );
+      expect(currentFuture.status).toBe('unsupported');
+      expect(currentFuture.isActionable).toBe(false);
+      expect(currentFuture.verification).toBe('provisional');
+      expect(
+        currentFuture.dependencies?.find((d) => d.datasetId === 'characters_v8_0_future')?.reason,
+      ).toBe('future_version');
+      expect(currentFuture.warnings.some((w) => w.includes('characters_v8_0_future'))).toBe(true);
+
+      // Future patch version (7.2.1 vs active 7.2) is equally blocked in current mode
+      const currentFuturePatch = evaluateRecommendationReliability(
+        {
+          mode: 'current',
+          datasetIds: ['weapons_v7_2_1_future'],
+          requiredDatasetIds: ['weapons_v7_2_1_future'],
+          evaluatedAt: '2026-11-23',
+        },
+        { provenanceRegistry: registry },
+      );
+      expect(currentFuturePatch.status).toBe('unsupported');
+      expect(currentFuturePatch.isActionable).toBe(false);
+      expect(currentFuturePatch.verification).toBe('provisional');
+
+      // Planning preview allows future-version data only as qualified and non-actionable
+      const previewFuture = evaluateRecommendationReliability(
+        {
+          mode: 'planning_preview',
+          datasetIds: ['characters_v8_0_future'],
+          requiredDatasetIds: ['characters_v8_0_future'],
+          evaluatedAt: '2026-11-23',
+        },
+        { provenanceRegistry: registry },
+      );
+      expect(previewFuture.status).toBe('qualified');
+      expect(previewFuture.isActionable).toBe(false);
+      expect(previewFuture.verification).toBe('provisional');
+
+      // Legacy data-freshness.ts agrees: future-version record is provisional, never verified
+      const legacyInfo = getFreshnessInfo(futureCharacters, new Date('2026-11-23T12:00:00Z'));
+      expect(legacyInfo.status).toBe('provisional');
+      expect(legacyInfo.badgeLabel).toBe('Provisional v8.0');
+
+      // Normal current-version (7.2) version-bound datasets remain verified, reliable, and actionable
+      const normalCurrent = evaluateRecommendationReliability({
+        mode: 'current',
+        datasetIds: ['characters_v7_2_batch7', 'weapons_v7_2_signatures'],
+        requiredDatasetIds: ['characters_v7_2_batch7', 'weapons_v7_2_signatures'],
+        evaluatedAt: '2027-02-24',
+      });
+      expect(normalCurrent.status).toBe('reliable');
+      expect(normalCurrent.isActionable).toBe(true);
+      expect(normalCurrent.verification).toBe('verified');
+      expect(
+        evaluateDatasetFreshness(DATA_PROVENANCE_REGISTRY.characters_v7_2_batch7, parseIsoCalendarDate('2027-02-24')).isFutureVersion,
+      ).toBe(false);
+    });
+
     it('resolves unknown and version-like unregistered IDs as unregistered and unsupported', () => {
       for (const unknownId of ['arbitrary_unregistered_dataset', 'banner_5_0_phase_1']) {
         const result = evaluateRecommendationReliability({
@@ -593,6 +690,71 @@ describe('Central Recommendation Reliability Evaluator (M9 Phase 2)', () => {
       );
       expect(withCompromisedPrefix.status).toBe('unsupported');
       expect(withCompromisedPrefix.isActionable).toBe(false);
+    });
+
+    it('prevents archive_simulation from classifying future-version provenance as historical while preserving older-version archives', () => {
+      const futureVerifiedCore: DataProvenance = {
+        datasetId: 'characters_v8_0_future',
+        version: '8.0',
+        verifiedAt: '2026-11-23',
+        sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+        verificationMethod: 'in_game_verification',
+        verifiedFields: ['id', 'stats'],
+        evidence: 'Version 8.0 character snapshot.',
+        status: 'verified',
+      };
+      const futureStaleWithPrefix: DataProvenance = {
+        ...DATA_PROVENANCE_REGISTRY['cycle-5-3'],
+        version: '8.0',
+        status: 'stale',
+        evidence: 'Historical Archive · Future Version 8.0 Abyss cycle.',
+      };
+      const registry = {
+        ...DATA_PROVENANCE_REGISTRY,
+        characters_v8_0_future: futureVerifiedCore,
+        'cycle-5-3': futureStaleWithPrefix,
+      };
+
+      // Future-version verified supporting dependency cannot produce historical status
+      const archiveWithFutureCore = evaluateRecommendationReliability(
+        {
+          mode: 'archive_simulation',
+          datasetIds: ['cycle-7-1', 'characters_v8_0_future'],
+          requiredDatasetIds: ['cycle-7-1', 'characters_v8_0_future'],
+          schedule: { type: 'abyss', entityId: 'cycle-7-1' },
+          evaluatedAt: '2026-11-23',
+        },
+        { provenanceRegistry: registry },
+      );
+      expect(archiveWithFutureCore.status).toBe('unsupported');
+      expect(archiveWithFutureCore.isActionable).toBe(false);
+      expect(archiveWithFutureCore.warnings.some((w) => w.includes('characters_v8_0_future'))).toBe(true);
+
+      // Future-version stale schedule with Historical Archive prefix is still rejected
+      const archiveWithFutureSchedule = evaluateRecommendationReliability(
+        {
+          mode: 'archive_simulation',
+          datasetIds: ['cycle-5-3', 'characters_v7_2_batch7'],
+          requiredDatasetIds: ['cycle-5-3', 'characters_v7_2_batch7'],
+          schedule: { type: 'abyss', entityId: 'cycle-5-3' },
+          evaluatedAt: '2026-11-23',
+        },
+        { provenanceRegistry: registry },
+      );
+      expect(archiveWithFutureSchedule.status).toBe('unsupported');
+      expect(archiveWithFutureSchedule.isActionable).toBe(false);
+
+      // Older-version historical schedule archive (5.3) remains historical in the default registry
+      const validOlderArchive = evaluateRecommendationReliability({
+        mode: 'archive_simulation',
+        datasetIds: ['cycle-5-3', 'characters_v7_2_batch7'],
+        requiredDatasetIds: ['cycle-5-3', 'characters_v7_2_batch7'],
+        schedule: { type: 'abyss', entityId: 'cycle-5-3' },
+        evaluatedAt: '2026-11-23',
+      });
+      expect(validOlderArchive.status).toBe('historical');
+      expect(validOlderArchive.isActionable).toBe(false);
+      expect(validOlderArchive.temporalState).toBe('expired');
     });
 
     it('rejects unregistered data and records lacking substantive verification metadata in archive_simulation mode', () => {

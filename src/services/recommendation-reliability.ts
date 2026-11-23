@@ -78,6 +78,7 @@ export interface DatasetFreshnessResult {
   policy: DatasetFreshnessPolicy;
   isStale: boolean;
   isExpired: boolean;
+  isFutureVersion: boolean;
   staleReason?: FreshnessStaleReason;
   ageDays: number;
   canonicalSchedule?: CanonicalScheduleWindow;
@@ -393,12 +394,15 @@ export function evaluateDatasetFreshness(
     parsedVerifiedAt && evaluatedDate
       ? Math.floor((evaluatedDate.utcMs - parsedVerifiedAt.utcMs) / MS_PER_DAY)
       : -1;
+  const versionComparison = compareGameVersions(record.version, CURRENT_GAME_VERSION);
+  const isFutureVersion = policy.policy !== 'sandbox' && versionComparison > 0;
 
   if (record.status === 'stale') {
     return {
       policy,
       isStale: true,
       isExpired,
+      isFutureVersion,
       staleReason: 'explicit_stale',
       ageDays,
       canonicalSchedule,
@@ -413,6 +417,7 @@ export function evaluateDatasetFreshness(
       policy,
       isStale: false,
       isExpired: false,
+      isFutureVersion: false,
       ageDays,
       canonicalSchedule,
       canonicalEndDate,
@@ -421,11 +426,12 @@ export function evaluateDatasetFreshness(
     };
   }
 
-  if (compareGameVersions(record.version, CURRENT_GAME_VERSION) < 0) {
+  if (versionComparison < 0) {
     return {
       policy,
       isStale: true,
       isExpired,
+      isFutureVersion: false,
       staleReason: 'outdated_version',
       ageDays,
       canonicalSchedule,
@@ -440,6 +446,7 @@ export function evaluateDatasetFreshness(
       policy,
       isStale: true,
       isExpired: true,
+      isFutureVersion,
       staleReason: 'expired_schedule',
       ageDays,
       canonicalSchedule,
@@ -454,6 +461,7 @@ export function evaluateDatasetFreshness(
       policy,
       isStale: true,
       isExpired,
+      isFutureVersion,
       staleReason: 'invalid_date',
       ageDays: -1,
       canonicalSchedule,
@@ -470,6 +478,7 @@ export function evaluateDatasetFreshness(
         policy,
         isStale: true,
         isExpired,
+        isFutureVersion,
         staleReason: 'age_exceeded',
         ageDays,
         canonicalSchedule,
@@ -484,6 +493,7 @@ export function evaluateDatasetFreshness(
     policy,
     isStale: false,
     isExpired,
+    isFutureVersion,
     ageDays,
     canonicalSchedule,
     canonicalEndDate,
@@ -509,6 +519,7 @@ function hasSubstantiveVerificationMetadata(record: DataProvenance): boolean {
  *   canonical historical schedule archive with substantive metadata.
  * - `compromised_explicit_stale`: explicitly marked `stale` outside attested prior-version
  *   canonical schedule archives (e.g., compromised current-version or non-schedule data).
+ * - `future_version`: targets a game version ahead of `CURRENT_GAME_VERSION`.
  * - `insufficient_metadata`: missing verificationMethod / verifiedFields / evidence or invalid verifiedAt.
  * - `provisional_unverified`: provisional or sandbox dataset not verified for historical archive use.
  * - `unregistered`: missing provenance record.
@@ -516,6 +527,7 @@ function hasSubstantiveVerificationMetadata(record: DataProvenance): boolean {
 type ArchiveAdmissibility =
   | 'valid'
   | 'compromised_explicit_stale'
+  | 'future_version'
   | 'insufficient_metadata'
   | 'provisional_unverified'
   | 'unregistered';
@@ -525,6 +537,7 @@ interface ResolvedDependencyInternal {
   policy: DatasetFreshnessPolicy;
   isRegistered: boolean;
   temporalState: TemporalState;
+  isFutureVersion: boolean;
   archiveAdmissibility: ArchiveAdmissibility;
   warnings: string[];
 }
@@ -570,6 +583,7 @@ function resolveDependency(
       policy: fallbackPolicy,
       isRegistered: false,
       temporalState: 'not_applicable',
+      isFutureVersion: false,
       archiveAdmissibility: 'unregistered',
       warnings: [
         `${roleLabel} dataset "${datasetId}" has no provenance record (unregistered).`,
@@ -650,6 +664,18 @@ function resolveDependency(
     warnings.push(
       `${roleLabel} dataset "${datasetId}" is user-configured sandbox data (provisional).`,
     );
+  } else if (freshness.isFutureVersion) {
+    verification = 'provisional';
+    reason = 'future_version';
+    archiveAdmissibility = 'future_version';
+    warnings.push(
+      `${roleLabel} dataset "${datasetId}" targets future v${record.version} (active v${CURRENT_GAME_VERSION}) and cannot be treated as verified current-patch data.`,
+    );
+    if (!substantive) {
+      warnings.push(
+        `${roleLabel} dataset "${datasetId}" lacks required verification metadata (method, verifiedFields, or evidence) and cannot be treated as verified.`,
+      );
+    }
   } else if (record.status === 'provisional') {
     verification = 'provisional';
     reason = 'explicit_provisional';
@@ -684,6 +710,7 @@ function resolveDependency(
     policy: freshness.policy,
     isRegistered: true,
     temporalState: freshness.temporalState,
+    isFutureVersion: freshness.isFutureVersion,
     archiveAdmissibility,
     warnings,
   };
@@ -840,6 +867,8 @@ export function evaluateRecommendationReliability(
   const upcomingRequiredScheduleDeps = requiredDeps.filter(
     (d) => d.temporalState === 'upcoming',
   );
+  const futureVersionRequiredDeps = requiredDeps.filter((d) => d.isFutureVersion);
+  const hasRequiredFutureVersionDep = futureVersionRequiredDeps.length > 0;
   for (const dep of upcomingRequiredScheduleDeps) {
     if (dep.detail.datasetId !== context.schedule?.entityId) {
       structuralWarnings.push(
@@ -898,6 +927,13 @@ export function evaluateRecommendationReliability(
               'Upcoming schedule dependencies cannot be treated as current live-game advice; use planning_preview mode.',
             );
           }
+        } else if (hasRequiredFutureVersionDep) {
+          status = 'unsupported';
+          isActionable = false;
+          const futureIds = futureVersionRequiredDeps.map((d) => d.detail.datasetId).join(', ');
+          modeWarnings.push(
+            `Future-version dataset(s) [${futureIds}] target a game version ahead of active v${CURRENT_GAME_VERSION} and cannot be treated as current live-game advice; use planning_preview mode.`,
+          );
         } else if (temporalState === 'expired') {
           status = 'unsupported';
           isActionable = false;
@@ -957,6 +993,12 @@ export function evaluateRecommendationReliability(
               'Upcoming schedule dependencies cannot be evaluated as a historical archive.',
             );
           }
+        } else if (hasRequiredFutureVersionDep) {
+          status = 'unsupported';
+          const futureIds = futureVersionRequiredDeps.map((d) => d.detail.datasetId).join(', ');
+          modeWarnings.push(
+            `Archive simulation unsupported: future-version dataset(s) [${futureIds}] target a game version ahead of active v${CURRENT_GAME_VERSION} and cannot be classified as historical archive data.`,
+          );
         } else if (invalidArchiveDeps.length > 0) {
           status = 'unsupported';
           const affectedIds = invalidArchiveDeps.map((d) => d.detail.datasetId).join(', ');

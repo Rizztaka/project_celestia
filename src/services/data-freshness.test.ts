@@ -312,6 +312,26 @@ describe('Data Freshness Service', () => {
       expect(regHistorical.isExpired).toBe(true);
       expect(regHistorical.effectiveEndDate).toBe('2025-02-01');
     });
+
+    it('treats future-version provenance as provisional rather than verified while preserving current-version behavior', () => {
+      const futureVersionProv: DataProvenance = {
+        datasetId: 'characters_v8_0_future',
+        version: '8.0',
+        verifiedAt: '2026-11-20',
+        sourceUrl: 'https://genshin.hoyoverse.com/en/news',
+        verificationMethod: 'in_game_verification',
+        verifiedFields: ['id', 'stats'],
+        evidence: 'Forward-looking v8.0 character data.',
+        status: 'verified',
+      };
+
+      const futureInfo = getFreshnessInfo(futureVersionProv, baseDate);
+      expect(futureInfo.status).toBe('provisional');
+      expect(futureInfo.isStale).toBe(false);
+      expect(futureInfo.badgeLabel).toBe('Provisional v8.0');
+      expect(futureInfo.badgeDescription).toContain(`v${CURRENT_GAME_VERSION}`);
+      expect(getFreshnessInfo('characters_v7_2_batch7', baseDate).status).toBe('verified');
+    });
   });
 });
 

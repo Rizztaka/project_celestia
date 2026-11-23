@@ -1,5 +1,5 @@
 import type { DataProvenance, VerificationMethod, VerificationState } from '../types/genshin';
-import { PATCH_CYCLE_DAYS } from '../data/game-version';
+import { CURRENT_GAME_VERSION, PATCH_CYCLE_DAYS } from '../data/game-version';
 import { getProvenance, getAllProvenances } from '../data/provenance-registry';
 import {
   evaluateDatasetFreshness,
@@ -132,8 +132,17 @@ export function getFreshnessInfo(
     };
   }
 
-  if (provenance.status === 'provisional' || freshness.policy.policy === 'sandbox') {
+  if (
+    provenance.status === 'provisional' ||
+    freshness.policy.policy === 'sandbox' ||
+    freshness.isFutureVersion
+  ) {
     const isSandbox = freshness.policy.policy === 'sandbox';
+    const badgeDescription = isSandbox
+      ? 'User-customized sandbox mode. Real-time calculations active.'
+      : freshness.isFutureVersion
+        ? `Future-version dataset (v${provenance.version}) ahead of active v${CURRENT_GAME_VERSION}; treated as provisional and not verified for live-game advice.`
+        : `Provisional data verified on ${provenance.verifiedAt}. Evidence: ${provenance.evidence}`;
     return {
       datasetId: provenance.datasetId,
       version: provenance.version,
@@ -148,9 +157,7 @@ export function getFreshnessInfo(
       verificationMethod: provenance.verificationMethod,
       verifiedFields: provenance.verifiedFields,
       badgeLabel: isSandbox ? 'Sandbox Simulation' : `Provisional v${provenance.version}`,
-      badgeDescription: isSandbox
-        ? 'User-customized sandbox mode. Real-time calculations active.'
-        : `Provisional data verified on ${provenance.verifiedAt}. Evidence: ${provenance.evidence}`,
+      badgeDescription,
     };
   }
 

@@ -210,18 +210,6 @@ export const DATA_PROVENANCE_REGISTRY: Record<string, DataProvenance> = {
       'Version 7.2 Spiral Abyss Phase 1 (2026-11-16 to 2026-12-16) in-game Floor 12 verification: Stellar Fracture - Polestar Domain, Chambers 1–3 enemy HP, elemental resistances, and Pyro/Polestar shield units.',
     status: 'verified',
   },
-  abyss_floor_12_v7_2: {
-    datasetId: 'abyss_floor_12_v7_2',
-    version: CURRENT_GAME_VERSION,
-    verifiedAt: '2026-11-16',
-    effectiveEndDate: '2026-12-16',
-    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
-    verificationMethod: 'in_game_verification',
-    verifiedFields: ['chambers', 'enemies', 'hp', 'baseRes', 'shields'],
-    evidence:
-      'Version 7.2 Spiral Abyss Floor 12 Chamber 1–3 enemy lineup, HP multipliers, and 8-element resistance calibration.',
-    status: 'verified',
-  },
   'cycle-7-1': {
     datasetId: 'cycle-7-1',
     version: '7.1',
@@ -274,8 +262,6 @@ export const DATA_PROVENANCE_REGISTRY: Record<string, DataProvenance> = {
     datasetId: 'custom-sandbox',
     version: CURRENT_GAME_VERSION,
     verifiedAt: '2026-11-16',
-    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
-    verificationMethod: 'sandbox_simulation',
     verifiedFields: ['chambers'],
     evidence:
       'User-customized Spiral Abyss Floor 12 sandbox simulation evaluated against active combat mechanics.',
@@ -295,18 +281,6 @@ export const DATA_PROVENANCE_REGISTRY: Record<string, DataProvenance> = {
       'Version 7.2 Imaginarium Theater November 2026 season (2026-11-01 to 2026-12-01): Hydro/Electro/Geo restrictions, 6 Opening Cast, 4 off-element Special Guests, Acts 3/6/8/10 bosses.',
     status: 'verified',
   },
-  theater_season_7_2_nov: {
-    datasetId: 'theater_season_7_2_nov',
-    version: CURRENT_GAME_VERSION,
-    verifiedAt: '2026-11-16',
-    effectiveEndDate: '2026-12-01',
-    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
-    verificationMethod: 'in_game_verification',
-    verifiedFields: ['elements', 'openingCastIds', 'specialGuestIds', 'bosses'],
-    evidence:
-      'Version 7.2 Imaginarium Theater November 2026 Opening Cast (Columbina, Clorinde, Navia, Furina, Mitya, Zhongli) & Special Guests verification.',
-    status: 'verified',
-  },
   'season-7-2-dec-pyro-hydro-geo': {
     datasetId: 'season-7-2-dec-pyro-hydro-geo',
     version: CURRENT_GAME_VERSION,
@@ -317,18 +291,6 @@ export const DATA_PROVENANCE_REGISTRY: Record<string, DataProvenance> = {
     verifiedFields: ['elements', 'openingCastIds', 'specialGuestIds', 'bosses', 'dates'],
     evidence:
       'Version 7.2 Imaginarium Theater December 2026 schedule (2026-12-01 to 2027-01-01): Pyro/Hydro/Geo restrictions, 6 Opening Cast, 4 off-element Special Guests (Citlali, Nahida, Clorinde, Kazuha), Acts 3/6/8/10 bosses.',
-    status: 'verified',
-  },
-  theater_season_7_2_dec: {
-    datasetId: 'theater_season_7_2_dec',
-    version: CURRENT_GAME_VERSION,
-    verifiedAt: '2026-11-16',
-    effectiveEndDate: '2027-01-01',
-    sourceUrl: 'https://genshin.hoyoverse.com/en/news',
-    verificationMethod: 'official_notice',
-    verifiedFields: ['elements', 'openingCastIds', 'specialGuestIds', 'bosses'],
-    evidence:
-      'Version 7.2 Imaginarium Theater December 2026 Opening Cast & Special Guests verification.',
     status: 'verified',
   },
   'season-7-snezhnaya-cryo-hydro-electro': {

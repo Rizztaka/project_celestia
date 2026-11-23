@@ -459,10 +459,11 @@ for (const b of provBlocks) {
   if (!dateRegex.test(verifiedAt)) {
     recordError('Axis 6', `Provenance "${id}" has invalid verifiedAt "${verifiedAt}"`);
   }
-  if (!sourceUrl.startsWith('https://')) {
+  const isSandbox = id === 'custom-sandbox';
+  if (sourceUrl ? !sourceUrl.startsWith('https://') : !isSandbox) {
     recordError('Axis 6', `Provenance "${id}" sourceUrl must be HTTPS`);
   }
-  if (!method) {
+  if (!method && !isSandbox) {
     recordError('Axis 6', `Provenance "${id}" must specify verificationMethod (not just a URL)`);
   }
   if (!fieldsMatch) {

@@ -19,7 +19,17 @@ import {
   getProvenance,
   getAllProvenances,
 } from './provenance-registry';
-import type { Element } from '../types/genshin';
+import type {
+  DataProvenance,
+  Element,
+  ProvenanceStatus,
+  RecommendationMode,
+  RecommendationReliability,
+  ReliabilityStatus,
+  TemporalState,
+  VerificationMethod,
+  VerificationState,
+} from '../types/genshin';
 
 const VALID_ELEMENTS: Element[] = [
   'Pyro',
@@ -341,7 +351,6 @@ describe('Data-Source Integrity Verification', () => {
         'banner_7_2_phase_2',
         'banner_7_2_natlan_chronicled',
         'cycle-7-2',
-        'abyss_floor_12_v7_2',
         'season-7-2-hydro-electro-geo',
         'season-7-2-dec-pyro-hydro-geo',
         'characters_v7_2_batch7',
@@ -364,11 +373,196 @@ describe('Data-Source Integrity Verification', () => {
 
       for (const prov of allProvenances) {
         expect(prov.datasetId.length).toBeGreaterThan(0);
-        expect(prov.sourceUrl.startsWith('https://'), `sourceUrl for "${prov.datasetId}" must be HTTPS`).toBe(true);
+        if (prov.sourceUrl !== undefined) {
+          expect(
+            prov.sourceUrl.startsWith('https://'),
+            `sourceUrl for "${prov.datasetId}" must be HTTPS`,
+          ).toBe(true);
+        } else {
+          expect(prov.datasetId).toBe('custom-sandbox');
+        }
         expect(dateRegex.test(prov.verifiedAt), `verifiedAt for "${prov.datasetId}" must be YYYY-MM-DD`).toBe(true);
         expect(prov.evidence.length, `evidence for "${prov.datasetId}" must be substantive`).toBeGreaterThanOrEqual(15);
         expect(['verified', 'provisional', 'stale']).toContain(prov.status);
       }
+    });
+  });
+
+  describe('M9 Phase 1 — Reliability Contracts & Provenance Alignment', () => {
+    type AssertEqual<A, B> =
+      (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
+    type AssertDisjoint<A, B> = [Extract<A, B>] extends [never] ? true : false;
+
+    it('accepts all declared VerificationState values and represents missing provenance as unregistered', () => {
+      const states: VerificationState[] = ['verified', 'provisional', 'stale', 'unregistered'];
+      const isExactVerificationUnion: AssertEqual<
+        VerificationState,
+        'verified' | 'provisional' | 'stale' | 'unregistered'
+      > = true;
+      const isRegisteredSubset: AssertEqual<
+        Exclude<VerificationState, ProvenanceStatus>,
+        'unregistered'
+      > = true;
+
+      expect(states).toHaveLength(4);
+      expect(isExactVerificationUnion).toBe(true);
+      expect(isRegisteredSubset).toBe(true);
+
+      const missing = getProvenance('non_existent_dataset_id');
+      const missingVerification: VerificationState = missing ? missing.status : 'unregistered';
+      expect(missing).toBeUndefined();
+      expect(missingVerification).toBe('unregistered');
+    });
+
+    it('keeps TemporalState, RecommendationMode, VerificationState, and VerificationMethod distinct', () => {
+      const temporalStates: TemporalState[] = ['upcoming', 'active', 'expired', 'not_applicable'];
+      const modes: RecommendationMode[] = [
+        'current',
+        'planning_preview',
+        'archive_simulation',
+        'sandbox_simulation',
+      ];
+      const methods: VerificationMethod[] = [
+        'official_notice',
+        'in_game_verification',
+        'theorycraft_consensus',
+      ];
+
+      const temporalDistinctFromMode: AssertDisjoint<TemporalState, RecommendationMode> = true;
+      const temporalDistinctFromVerification: AssertDisjoint<TemporalState, VerificationState> = true;
+      const modeDistinctFromVerification: AssertDisjoint<RecommendationMode, VerificationState> = true;
+      const methodDistinctFromMode: AssertDisjoint<VerificationMethod, RecommendationMode> = true;
+
+      expect(temporalStates).toHaveLength(4);
+      expect(modes).toHaveLength(4);
+      expect(methods).toHaveLength(3);
+      expect(temporalDistinctFromMode).toBe(true);
+      expect(temporalDistinctFromVerification).toBe(true);
+      expect(modeDistinctFromVerification).toBe(true);
+      expect(methodDistinctFromMode).toBe(true);
+    });
+
+    it('keeps ReliabilityStatus independent of VerificationState and TemporalState', () => {
+      const statuses: ReliabilityStatus[] = ['reliable', 'qualified', 'historical', 'unsupported'];
+      const statusDistinctFromVerification: AssertDisjoint<ReliabilityStatus, VerificationState> = true;
+      const statusDistinctFromTemporal: AssertDisjoint<ReliabilityStatus, TemporalState> = true;
+
+      const sampleCombinations: RecommendationReliability[] = [
+        {
+          status: 'reliable',
+          mode: 'current',
+          isActionable: true,
+          verification: 'verified',
+          temporalState: 'active',
+          provenanceIds: ['cycle-7-2'],
+          warnings: [],
+        },
+        {
+          status: 'qualified',
+          mode: 'planning_preview',
+          isActionable: true,
+          verification: 'verified',
+          temporalState: 'upcoming',
+          provenanceIds: ['season-7-2-dec-pyro-hydro-geo'],
+          warnings: ['Upcoming schedule preview'],
+        },
+        {
+          status: 'historical',
+          mode: 'archive_simulation',
+          isActionable: false,
+          verification: 'stale',
+          temporalState: 'expired',
+          provenanceIds: ['cycle-5-3'],
+          warnings: ['Archived schedule'],
+        },
+        {
+          status: 'unsupported',
+          mode: 'current',
+          isActionable: false,
+          verification: 'unregistered',
+          temporalState: 'not_applicable',
+          provenanceIds: [],
+          warnings: ['Missing provenance record'],
+        },
+      ];
+
+      expect(statuses).toHaveLength(4);
+      expect(statusDistinctFromVerification).toBe(true);
+      expect(statusDistinctFromTemporal).toBe(true);
+      expect(sampleCombinations.map((c) => c.status)).toEqual(statuses);
+    });
+
+    it('ensures RecommendationReliability contains only JSON-serializable fields', () => {
+      const sample: RecommendationReliability = {
+        status: 'qualified',
+        mode: 'sandbox_simulation',
+        isActionable: false,
+        verification: 'provisional',
+        temporalState: 'not_applicable',
+        provenanceIds: ['custom-sandbox'],
+        warnings: ['User-configured sandbox simulation'],
+      };
+
+      const roundTripped = JSON.parse(JSON.stringify(sample)) as RecommendationReliability;
+      expect(roundTripped).toEqual(sample);
+      expect(Object.keys(roundTripped).sort()).toEqual([
+        'isActionable',
+        'mode',
+        'provenanceIds',
+        'status',
+        'temporalState',
+        'verification',
+        'warnings',
+      ]);
+    });
+
+    it('retains canonical Abyss and Theater registry IDs and excludes removed redundant IDs', () => {
+      const canonicalIds = [
+        'cycle-7-2',
+        'season-7-2-hydro-electro-geo',
+        'season-7-2-dec-pyro-hydro-geo',
+      ];
+      for (const id of canonicalIds) {
+        expect(getProvenance(id), `Expected canonical record "${id}"`).toBeDefined();
+      }
+
+      const removedRedundantIds = [
+        'abyss_floor_12_v7_2',
+        'theater_season_7_2_nov',
+        'theater_season_7_2_dec',
+      ];
+      for (const id of removedRedundantIds) {
+        expect(getProvenance(id), `Redundant ID "${id}" must be removed`).toBeUndefined();
+        expect(Object.prototype.hasOwnProperty.call(DATA_PROVENANCE_REGISTRY, id)).toBe(false);
+      }
+    });
+
+    it('validates all registry records against the revised DataProvenance contract without duplicating start dates', () => {
+      const validStatuses: ProvenanceStatus[] = ['verified', 'provisional', 'stale'];
+      const validMethods: VerificationMethod[] = [
+        'official_notice',
+        'in_game_verification',
+        'theorycraft_consensus',
+      ];
+
+      for (const prov of getAllProvenances()) {
+        const typedRecord: DataProvenance = prov;
+        expect(validStatuses).toContain(typedRecord.status);
+        if (typedRecord.verificationMethod !== undefined) {
+          expect(validMethods).toContain(typedRecord.verificationMethod);
+        }
+        // Ensure no start-date or banner schedule fields were introduced into provenance
+        const raw = prov as unknown as Record<string, unknown>;
+        expect(raw).not.toHaveProperty('effectiveStartDate');
+        expect(raw).not.toHaveProperty('startDate');
+        expect(raw).not.toHaveProperty('endDate');
+      }
+
+      const sandbox = getProvenance('custom-sandbox');
+      expect(sandbox).toBeDefined();
+      expect(sandbox?.status).toBe('provisional');
+      expect(sandbox?.verificationMethod).toBeUndefined();
+      expect(sandbox?.sourceUrl).toBeUndefined();
     });
   });
 

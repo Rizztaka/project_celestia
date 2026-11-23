@@ -8,7 +8,6 @@ const METHOD_LABELS: Record<VerificationMethod, string> = {
   official_notice: 'Official Notice',
   in_game_verification: 'In-Game Verified',
   theorycraft_consensus: 'Theorycraft Audit',
-  sandbox_simulation: 'Custom Sandbox',
 };
 
 export interface DataFreshnessBadgeProps {

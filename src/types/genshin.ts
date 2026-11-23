@@ -841,24 +841,71 @@ export interface AbyssDualTeamMultiPlan {
 }
 
 
-export type ProvenanceStatus = 'verified' | 'provisional' | 'stale';
+// ---------------------------------------------------------
+// M9 Data Trust & Recommendation Reliability Contracts
+// ---------------------------------------------------------
+
+export type VerificationState =
+  | 'verified'
+  | 'provisional'
+  | 'stale'
+  | 'unregistered';
+
+export type TemporalState =
+  | 'upcoming'
+  | 'active'
+  | 'expired'
+  | 'not_applicable';
+
+export type RecommendationMode =
+  | 'current'
+  | 'planning_preview'
+  | 'archive_simulation'
+  | 'sandbox_simulation';
+
+export type ReliabilityStatus =
+  | 'reliable'
+  | 'qualified'
+  | 'historical'
+  | 'unsupported';
+
+export interface RecommendationReliability {
+  status: ReliabilityStatus;
+  mode: RecommendationMode;
+  isActionable: boolean;
+  verification: VerificationState;
+  temporalState: TemporalState;
+  provenanceIds: string[];
+  warnings: string[];
+}
+
+/**
+ * Verification states valid for registered provenance entries.
+ * Missing provenance is represented as `'unregistered'` in `VerificationState`
+ * without fabricating a registry record.
+ */
+export type ProvenanceStatus = Exclude<VerificationState, 'unregistered'>;
 
 export type VerificationMethod =
   | 'official_notice'
   | 'in_game_verification'
-  | 'theorycraft_consensus'
-  | 'sandbox_simulation';
+  | 'theorycraft_consensus';
 
 export interface DataProvenance {
   datasetId: string;
   version: string;
   verifiedAt: string; // ISO date YYYY-MM-DD
-  sourceUrl: string;
+  sourceUrl?: string; // Optional for in-game observations or user sandbox data without a public URL
   evidence: string; // Specific patch notice, mechanic, or in-game verification note
   status: ProvenanceStatus;
   verificationMethod?: VerificationMethod;
   verifiedFields?: string[]; // Exact fields verified (e.g. ['featuredCharacters', 'weaponBanner', 'dates'])
-  effectiveEndDate?: string; // Optional ISO expiry date (YYYY-MM-DD) for time-boxed schedules
+  /**
+   * @deprecated Canonical schedule entities (`BannerPhase`, `AbyssCycleConfig`, `TheaterSeasonConfig`)
+   * own schedule dates. Retained strictly for Phase 1 compatibility with `src/services/data-freshness.ts`
+   * until Phase 2 moves lifecycle date evaluation to the central reliability evaluator.
+   */
+  effectiveEndDate?: string;
 }
 
 

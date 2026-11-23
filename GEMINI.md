@@ -13,6 +13,7 @@ All agents must adhere to the local repository data files as the definitive auth
 - **Artifact Sets (64 Master Sets / 37 Combat Sets)**: `src/data/artifacts-master.ts` (complete 64-set registry with 2pc/4pc/piece data) & `src/data/artifact-weights.ts` (curated stat weight profiles, maximum roll values, and domain drops for the 37 combat sets).
 - **Talent Scaling (128 Characters)**: `src/data/talent-scaling/` — Modular Level 1 to 15 scaling parameter curves.
 - **Character Rotations (128 Calibrated Profiles)**: `src/data/character-rotations.ts` — 128 calibrated rotation profiles and cooldown models.
+- **Data Provenance & Reliability (35 Canonical Datasets)**: `src/data/provenance-registry.ts` — Authoritative provenance registry across banners, Abyss cycles, Theater seasons, and core system datasets. Formal decoupled M9 reliability contracts in `src/types/genshin.ts` (`VerificationState`, `TemporalState`, `RecommendationMode`, `ReliabilityStatus`, `RecommendationReliability`).
 
 ## 3. Persistent Knowledge Base & Reference Documentation
 - **Master Knowledge Base**: [`docs/knowledge/celestia-reference.md`](docs/knowledge/celestia-reference.md) contains the authoritative directory of all 128 characters (by Element and Region), 64 artifact sets, 256 weapons, modular talent scaling, combat systems (Moonsign, Nightsoul, Hexerei, Polestar, Bond of Life), and the permanent Corrections Ledger.
@@ -34,6 +35,12 @@ All agents must adhere to the local repository data files as the definitive auth
   - **Weapon Banner 75/25 Guarantee Carryover**: Losing a 5★ to an off-banner standard weapon guarantees the next 5★ is a featured rate-up weapon (50% target win rate). This guarantee carries over across banner phases even though Fate Points reset to 0.
   - **4-Star Math Separation**: 4-star character acquisition has no hard guarantee ceiling and must be modeled via an absorbing Markov chain (median ~35 pulls, 90th percentile ~105 pulls), strictly segregated from 5★ pity.
   - **Chronicled Wish Rules**: 0.600% base rate, 74 soft pity, 90 hard pity, 50% base rate-up, 1 Fate Point ceiling (resets between banners).
+- **Data Trust & Recommendation Reliability Invariants (M9 Phase 1 Baseline)**:
+  - **Decoupled 5-Axis Contracts**: Segregated data verification (`VerificationState = 'verified' | 'provisional' | 'stale' | 'unregistered'`), schedule temporal lifecycle (`TemporalState = 'upcoming' | 'active' | 'expired' | 'not_applicable'`), engine execution mode (`RecommendationMode = 'current' | 'planning_preview' | 'archive_simulation' | 'sandbox_simulation'`), and recommendation trust rating (`ReliabilityStatus = 'reliable' | 'qualified' | 'historical' | 'unsupported'`).
+  - **Actionability Semantics (`isActionable`)**: Defined strictly as live-game actionability right now (`true` only for currently actionable `current` advice backed by supported, non-upcoming, non-expired data; `false` for forward-looking previews, historical archives, sandbox runs, and unsupported outputs).
+  - **Canonical Provenance Registry (35 Datasets)**: Pruned 3 redundant aliases (`abyss_floor_12_v7_2`, `theater_season_7_2_nov`, `theater_season_7_2_dec`), leaving canonical schedule IDs (`cycle-7-2`, `season-7-2-hydro-electro-geo`, `season-7-2-dec-pyro-hydro-geo`) authoritative.
+  - **Truthful Metadata & HTTPS Guardrails**: `sourceUrl` made optional without fabricated URLs (omitted allowed only for `in_game_verification` and `custom-sandbox`; HTTPS strictly enforced when present); removed invalid `'sandbox_simulation'` from `VerificationMethod`.
+  - **Legacy Expiration Boundary**: `DataProvenance.effectiveEndDate` marked `@deprecated` and frozen at exactly 17 entries mirroring canonical schedules, scheduled for complete removal in Phase 2 in favor of canonical schedule entities (`BANNER_PHASES`, `ABYSS_CYCLES`, `THEATER_SEASONS`).
 
 ## 5. Project Stack & Environment
 - **Runtime / Framework**: React 19 + Vite + TypeScript (see `package.json`)

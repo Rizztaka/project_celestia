@@ -215,7 +215,10 @@ const baselineIncidents = [
   '| **2026-11-15** | Weapon Count & Modern Passives | Hallucinated old weapon stats | Exactly **256 weapons** (76 5★, 146 4★, 24 3★, 10 1★–2★) in `src/data/weapons.ts` with full R1–R5 curves. | Reliance on memory. Remediation: Catalogued all 76 5★ signatures and top staples. |',
   '| **2026-11-15** | Weapon Signature Hallucinations | Hallucinated 8 fictitious weapons (Void-Severing Edge, Glacial Colossus, Boreas\' Northern Wrath, etc.) and fabricated class rarity distributions | All **76 authentic 5★ weapons** must be derived from `src/data/weapons.ts` with correct class counts (19 Swords, 11 Claymores, 13 Polearms, 12 Bows, 21 Catalysts). | Hallucination from memory instead of reading `WEAPONS_DATA`. Remediation: Programmatic generation directly from SSOT and automated Vitest validation. |',
   '| **2026-11-15** | GenshinDB Complete SSOT Expansion | Limited data to 122 characters, 246 weapons, and 37 artifact sets without modular talent scaling | Expanded to **128 canonical playable characters** (including 6 element-specific Traveler configurations), **256 weapons** (all 1★ to 5★ with R1–R5 curves), **64 Master Artifact Sets**, and **Level 1–15 modular talent scaling**. | Comprehensive SSOT synchronization directly from `genshin-db` v5.2.15+ and authoritative game data. |',
-  '| **2026-11-15** | Artifact ID & Weapon Key Integrity | Overwrote Resolution of Sojourner with duplicate ID `10001` for Initiate; created duplicate `PrizedIsshinBlade` keys overwriting weapon index | Assigned unique ID `10000` to Initiate and distinct keys `PrizedIsshinBlade`, `PrizedIsshinBlade1`, `PrizedIsshinBlade2` with authentic stats across all 256 weapons, 128 calibrated rotations, and talent scaling aliases. | Failure to enforce uniqueness on synthetic additions and name-based weapon iterations. Remediation: Added unique ID validation, verbose extraction, and full rotation calibration. |'
+  '| **2026-11-15** | Artifact ID & Weapon Key Integrity | Overwrote Resolution of Sojourner with duplicate ID `10001` for Initiate; created duplicate `PrizedIsshinBlade` keys overwriting weapon index | Assigned unique ID `10000` to Initiate and distinct keys `PrizedIsshinBlade`, `PrizedIsshinBlade1`, `PrizedIsshinBlade2` with authentic stats across all 256 weapons, 128 calibrated rotations, and talent scaling aliases. | Failure to enforce uniqueness on synthetic additions and name-based weapon iterations. Remediation: Added unique ID validation, verbose extraction, and full rotation calibration. |',
+  '| **2026-11-16** | Build & Stat Weight Calibration | 10 Batch 7 characters had mismatched goblet elements, wrong artifact sets (e.g. Cryo on Electro Alyosha, Geo on Electro Flins), and weapon/artifact typos; fallback weights hardcoded `pyro_dmg_` and ATK% for 113 characters; Kokomi crit-zeroing logic bypassed fallback weights; alias lookups (\'Kokomi\', \'Ayaka\', etc.) fell back to Pyro ATK% | All 128 characters have matching goblet elements/damage bonuses, accurate BiS artifact sets and wielder descriptions; `getCharacterStatWeights` dynamically synthesizes weights and goblets from character SSOT data with comprehensive alias resolution and zeroed crit for Kokomi; weapon solver guarantees 0 crit weight for Kokomi; target set typos corrected | Data ingestion drift in Batch 7 script and static fallback in artifact-weights. Remediation: Synchronized character builds, implemented dynamic stat weight synthesis and alias resolver in `getCharacterStatWeights`, moved Kokomi crit-zeroing outside undefined guard in `weapon-solver.ts`, fixed targetSets typos, and added comprehensive invariant tests. |',
+  '| **2026-11-20** | Gacha Mathematics & Wish Engine Invariants | Hardcoded Capturing Radiance 100% guarantee at streak 2 (yielding false 64.46% win rate); weapon banner omitted 75/25 off-banner carryover guarantee; universal sandbox assigned 5★ 180 hard pity to 4★ characters | 4-state Markov renewal model (`[0.50, 0.50, 8/11, 1.00]`) converging to exact published 55.000% consolidated win rate (streak 3 gives 100% guarantee on 4th attempt); weapon banner models 75/25 carryover (50% target win rate on next 5★); 4★ targets modeled via absorbing Markov chain with realistic percentiles (median ~35 pulls, 90th percentile ~105 pulls, uncapped ceiling); multi-copy discrete convolution for C1-C6 and R1-R5 goals; optional ~8% Starglitter cashback toggle | Incomplete capture of HoYoverse 5.0+ / 7.2 wish rules in initial heuristic engine. Remediation: Created centralized `src/data/banner-rules.ts`, refactored `gacha-math.ts`, created `gacha-4star.ts`, updated `pull-advisor.ts`, added 500k-iteration Monte Carlo verification suite, expanded schema in `types/genshin.ts` and `storage.ts`, and added interactive CDF and methodology modals. |',
+  '| **2026-11-23** | M9 Phase 1 Data Trust, Reliability Contracts & Provenance Consolidation | Overloaded `ProvenanceStatus` (`\'verified\' | \'provisional\' | \'stale\'`) coupled data verification with schedule lifecycles; fabricated URLs/methods existed for sandbox entries (`sandbox_simulation`); duplicate schedule IDs (`abyss_floor_12_v7_2`, `theater_season_7_2_nov`, `theater_season_7_2_dec`) inflated registry to 38 entries; duplicated schedule expiry dates into `DataProvenance.effectiveEndDate`. | Decoupled 5-axis contracts (`VerificationState`, `TemporalState`, `RecommendationMode`, `ReliabilityStatus`, `RecommendationReliability`); 35 canonical provenance records (redundancies pruned); clean optional `sourceUrl` (omitted allowed for in-game verification and sandbox); frozen 17 legacy `effectiveEndDate` entries mirroring canonical schedules pending Phase 2 migration; exact-union compile and runtime tests in `data-integrity.test.ts`. | Structural coupling in M4 schema. Remediation: Implemented formal M9 reliability contracts in `src/types/genshin.ts`, cleaned `src/data/provenance-registry.ts`, updated Axis 6 in `scripts/audit-game-data.mjs`, added exact-union assertions in `data-integrity.test.ts`, and established Phase 2 migration path. |'
 ];
 
 // Merge unique rows
@@ -239,6 +242,9 @@ let md = `# Project Celestia — Authoritative Reference & Knowledge Base (v${GA
 
 ## Table of Contents
 1. [Core Directives & Self-Correction Protocol](#1-core-directives--self-correction-protocol)
+   - [Single Source of Truth (SSOT) Files](#single-source-of-truth-ssot-files)
+   - [Data Trust & Recommendation Reliability Architecture](#data-trust--recommendation-reliability-architecture-milestone-m9-contracts)
+   - [Self-Correction Protocol](#self-correction-protocol-mandatory-for-all-agents)
 2. [Active Baseline & Version Architecture](#2-active-baseline--version-architecture)
 3. [Master Character Directory (128 Characters)](#3-master-character-directory-128-characters)
    - [Characters by Element](#characters-by-element)
@@ -267,6 +273,59 @@ let md = `# Project Celestia — Authoritative Reference & Knowledge Base (v${GA
 | **Artifacts** | \`src/data/artifacts-master.ts\` & \`src/data/artifact-weights.ts\` | **64 Sets** (37 Combat Sets) | Master registry of all 64 sets (1★–5★) plus stat weights, max substats, domain drops & builds |
 | **Talent Scaling** | \`src/data/talent-scaling/\` | **128 Profiles** | Full Level 1 to 15 scaling multiplier curves (Modular Architecture) |
 | **Rotations** | \`src/data/character-rotations.ts\` | **128 Profiles** | Precise action sequence, energy thresholds, skill cooldown timings |
+| **Data Provenance** | \`src/data/provenance-registry.ts\` | **35 Canonical Datasets** | Substantive provenance records linking patch notices, in-game verification, and theorycraft evidence |
+
+### Data Trust & Recommendation Reliability Architecture (Milestone M9 Contracts)
+
+To decouple data verification authenticity from schedule temporal lifecycles and solver execution modes, Project Celestia establishes five strongly-typed, JSON-serializable reliability contracts in \`src/types/genshin.ts\`:
+
+1. **\`VerificationState\`** (Exact 4-Value Union):
+   - \`'verified'\`: Dataset independently audited and verified against official notices, direct in-game observation, or theorycraft consensus.
+   - \`'provisional'\`: Preliminary data awaiting confirmation or active user sandbox modifications.
+   - \`'stale'\`: Un-synchronized or outdated dataset from prior versions requiring review.
+   - \`'unregistered'\`: Dataset or entity lacking a registered provenance entry in \`DATA_PROVENANCE_REGISTRY\`.
+
+2. **\`TemporalState\`** (Exact 4-Value Union):
+   - \`'upcoming'\`: Time-boxed schedule whose start date is in the future.
+   - \`'active'\`: Currently active schedule within valid start and end dates.
+   - \`'expired'\`: Concluded schedule past its effective end date.
+   - \`'not_applicable'\`: Evergreen datasets (characters, weapons, formulas) without calendar expiration.
+
+3. **\`RecommendationMode\`** (Exact 4-Value Union):
+   - \`'current'\`: Real-time recommendation evaluated against live-game state and active schedules.
+   - \`'planning_preview'\`: Forward-looking recommendation based on upcoming schedules or announced banners.
+   - \`'archive_simulation'\`: Retrospective analysis evaluated against concluded historical schedules.
+   - \`'sandbox_simulation'\`: Hypothetical solver evaluation against user-customized constraints or enemy lineups.
+
+4. **\`ReliabilityStatus\`** (Exact 4-Value Union):
+   - \`'reliable'\`: High-confidence recommendation backed by verified, currently active data.
+   - \`'qualified'\`: Recommendation valid under explicit qualifications (provisional data, sandbox assumptions, or partial constraints).
+   - \`'historical'\`: Informational output derived from expired schedules or archived combat environments.
+   - \`'unsupported'\`: Output cannot be guaranteed due to missing provenance, conflicting data, or stale assumptions.
+
+5. **\`RecommendationReliability\`** (Universal Solver Contract):
+   \`\`\`typescript
+   export interface RecommendationReliability {
+     status: ReliabilityStatus;
+     mode: RecommendationMode;
+     isActionable: boolean;
+     verification: VerificationState;
+     temporalState: TemporalState;
+     provenanceIds: string[];
+     warnings: string[];
+   }
+   \`\`\`
+
+6. **Actionability Semantics (\`isActionable\`)**:
+   - Represents whether the recommendation is actionable in the live game *right now*.
+   - Strictly \`true\` only for currently actionable (\`current\`) advice backed by supported, non-upcoming, non-expired data.
+   - Strictly \`false\` for forward-looking previews (\`planning_preview\`), historical archives (\`archive_simulation\`), sandbox runs (\`sandbox_simulation\`), and \`unsupported\` outputs.
+
+7. **Provenance Invariants & Exact Subsets**:
+   - \`ProvenanceStatus\` = \`Exclude<VerificationState, 'unregistered'>\` (\`'verified' | 'provisional' | 'stale'\`).
+   - \`VerificationMethod\` = \`'official_notice' | 'in_game_verification' | 'theorycraft_consensus'\`.
+   - \`sourceUrl?: string\` is optional; when provided, HTTPS is strictly enforced. Omitted URLs are permitted only for \`in_game_verification\` and \`custom-sandbox\`.
+   - \`effectiveEndDate?: string\` is \`@deprecated\` legacy-only, frozen at 17 entries mirroring canonical schedule entities (\`BANNER_PHASES\`, \`ABYSS_CYCLES\`, \`THEATER_SEASONS\`), with mandatory removal scheduled for Phase 2.
 
 ### Self-Correction Protocol (Mandatory for All Agents)
 1. **Never Assume Outdated Baselines**:

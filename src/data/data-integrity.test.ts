@@ -381,6 +381,7 @@ describe('Data-Source Integrity Verification', () => {
         } else {
           const allowsMissingUrl =
             prov.datasetId === 'custom-sandbox' ||
+            prov.datasetId === 'custom-theater-sandbox' ||
             prov.verificationMethod === 'in_game_verification';
           expect(
             allowsMissingUrl,
@@ -592,6 +593,12 @@ describe('Data-Source Integrity Verification', () => {
       expect(sandbox?.status).toBe('provisional');
       expect(sandbox?.verificationMethod).toBeUndefined();
       expect(sandbox?.sourceUrl).toBeUndefined();
+
+      const theaterSandbox = getProvenance('custom-theater-sandbox');
+      expect(theaterSandbox).toBeDefined();
+      expect(theaterSandbox?.status).toBe('provisional');
+      expect(theaterSandbox?.verificationMethod).toBeUndefined();
+      expect(theaterSandbox?.sourceUrl).toBeUndefined();
     });
 
     it('forbids duplicated canonical schedule dates in DataProvenance and the provenance registry', () => {

@@ -156,7 +156,7 @@ describe('Central Recommendation Reliability Evaluator (M9 Phase 2)', () => {
 
     it('explicitly classifies every registered dataset ID and detects unclassified datasets', () => {
       const allRegisteredIds = Object.keys(DATA_PROVENANCE_REGISTRY);
-      expect(allRegisteredIds).toHaveLength(35);
+      expect(allRegisteredIds).toHaveLength(36);
 
       const patchCadenceIds: string[] = [];
       for (const id of allRegisteredIds) {

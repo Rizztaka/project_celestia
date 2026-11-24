@@ -4,6 +4,8 @@ import type {
   OwnedWeapon,
   PullAdvice,
   PullBudgetState,
+  RecommendationCollection,
+  RecommendationExecutionContext,
 } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import { BANNER_PHASES } from '../data/banners';
@@ -17,6 +19,12 @@ import {
 } from './gacha-math';
 import { calculate4StarTargetOdds } from './gacha-4star';
 import { STARGLITTER_CASHBACK_RATE } from '../data/banner-rules';
+import {
+  evaluateEngineBoundaryReliability,
+  evaluateScheduledEngineReliability,
+  resolveEvaluationDate,
+  type UnattestedLocalDependency,
+} from '../services/engine-reliability';
 
 // Notable 5-star target pool for accounts
 const PULL_CANDIDATES = [
@@ -1231,6 +1239,11 @@ const CONSTELLATION_SPIKES: ConstellationSpike[] = [
   },
 ];
 
+/**
+ * @deprecated Legacy Pull Advisor heuristic excluded from M9 reliability integration.
+ * Use `evaluateComprehensivePullROI` for production recommendations with required
+ * `RecommendationReliability` metadata.
+ */
 export function evaluatePullRecommendations(ownedIds: string[]): PullAdvice[] {
   const ownedSet = new Set(ownedIds);
   const ownedCharacters = CHARACTERS.filter((c) => ownedSet.has(c.id));
@@ -1366,22 +1379,73 @@ export function evaluatePullRecommendations(ownedIds: string[]): PullAdvice[] {
   return adviceList.sort((a, b) => b.score - a.score);
 }
 
+/**
+ * Evaluates comprehensive pull ROI across C0 unlocks, constellations, and signature weapons
+ * with required M9 reliability metadata.
+ *
+ * Mode & schedule policy:
+ * - Specific canonical banner ID (`BANNER_PHASES` match): attaches `{ type: 'banner', entityId }`
+ *   and derives `'current'` (active), `'planning_preview'` (upcoming), or `'archive_simulation'`
+ *   (expired) strictly from canonical schedule dates.
+ * - Omitted `bannerFilter` or `'all'`: spans all 122 gacha characters across unscheduled and
+ *   multi-banner horizons without binding to a single banner schedule; conservatively classified as
+ *   `'planning_preview'` (`qualified`, `isActionable: false`, `temporalState: 'not_applicable'`).
+ * - Explicit `'sandbox'`: user-selected hypothetical all-target simulation; classified as
+ *   `'sandbox_simulation'` (`qualified`, `isActionable: false`, `temporalState: 'not_applicable'`).
+ * - Unknown non-reserved `bannerFilter`: never falls back to sandbox or an active banner; returns
+ *   `{ items: [], reliability }` with Phase 2's `'unsupported'` outcome.
+ * - Unattested local heuristic tables (`SIGNATURE_WEAPONS`, and `CONSTELLATION_SPIKES` when
+ *   owned candidates are evaluated) are declared as `unattestedLocalDependencies` so active
+ *   banner recommendations remain `qualified` and non-actionable until those tables are attested.
+ */
 export function evaluateComprehensivePullROI(
   ownedProfiles: Record<string, OwnedCharacterProfile>,
   ownedWeapons: OwnedWeapon[],
   budget: PullBudgetState,
   bannerFilter?: string,
-): EnhancedPullAdvice[] {
+  executionContext?: RecommendationExecutionContext,
+): RecommendationCollection<EnhancedPullAdvice> {
   const rawPulls = calculateTotalPulls(budget.primogems, budget.fates);
   const totalPulls = budget.includeCashback
     ? Math.floor(rawPulls * (1 + STARGLITTER_CASHBACK_RATE))
     : rawPulls;
 
+  const evaluatedAt = resolveEvaluationDate(executionContext?.evaluatedAt);
+  const resolvedExecContext: RecommendationExecutionContext | undefined =
+    evaluatedAt !== null ? { evaluatedAt } : undefined;
+  const isExplicitSandbox = bannerFilter === 'sandbox';
+  const isBroadCatalogPlanning = bannerFilter === undefined || bannerFilter === 'all';
+  const isUnscheduledScope = isExplicitSandbox || isBroadCatalogPlanning;
+
   // Determine candidate scope
-  const selectedBanner =
-    bannerFilter && bannerFilter !== 'all' && bannerFilter !== 'sandbox'
-      ? BANNER_PHASES.find((b) => b.id === bannerFilter)
-      : undefined;
+  const selectedBanner = !isUnscheduledScope
+    ? BANNER_PHASES.find((b) => b.id === bannerFilter)
+    : undefined;
+
+  // Unknown specific banner ID: never silently fall back to sandbox or an active banner
+  if (
+    bannerFilter !== undefined &&
+    bannerFilter !== 'all' &&
+    bannerFilter !== 'sandbox' &&
+    !selectedBanner
+  ) {
+    const unknownRequired = [
+      'characters_v7_2_batch7',
+      'weapons_v7_2_signatures',
+      'gacha_rules_character_7_2',
+      'gacha_rules_weapon_7_2',
+      bannerFilter,
+    ];
+    if (budget.includeCashback) {
+      unknownRequired.push('gacha_rules_starglitter_7_2');
+    }
+    const reliability = evaluateScheduledEngineReliability({
+      schedule: { type: 'banner', entityId: bannerFilter },
+      requiredDatasetIds: unknownRequired,
+      executionContext: resolvedExecContext,
+    });
+    return { items: [], reliability };
+  }
 
   const isChronicledBanner = Boolean(
     selectedBanner &&
@@ -1463,6 +1527,59 @@ export function evaluateComprehensivePullROI(
       ]),
     );
   }
+
+  const requiredDatasetIds: string[] = [
+    'characters_v7_2_batch7',
+    'weapons_v7_2_signatures',
+  ];
+
+  if (isChronicledBanner) {
+    requiredDatasetIds.push('gacha_rules_chronicled_7_2');
+  } else {
+    requiredDatasetIds.push('gacha_rules_character_7_2', 'gacha_rules_weapon_7_2');
+  }
+
+  const evaluates4StarTargets =
+    isUnscheduledScope ||
+    Boolean(selectedBanner?.featured4StarIds && selectedBanner.featured4StarIds.length > 0);
+  if (evaluates4StarTargets) {
+    requiredDatasetIds.push('gacha_rules_4star_7_2');
+  }
+
+  if (budget.includeCashback) {
+    requiredDatasetIds.push('gacha_rules_starglitter_7_2');
+  }
+
+  // Declare materially influential unattested local ROI heuristic tables consumed in this call
+  const unattestedLocalDependencies: UnattestedLocalDependency[] = [
+    { name: 'SIGNATURE_WEAPONS', sourceFile: 'src/engines/pull-advisor.ts' },
+  ];
+  const evaluatesOwnedConstellations = candidateCharIds.some((charId) => {
+    if (!ownedSet.has(charId)) return false;
+    const prof = ownedProfiles[charId];
+    return (prof?.constellation ?? 0) < 6;
+  });
+  if (evaluatesOwnedConstellations) {
+    unattestedLocalDependencies.push({
+      name: 'CONSTELLATION_SPIKES',
+      sourceFile: 'src/engines/pull-advisor.ts',
+    });
+  }
+
+  const reliability = selectedBanner
+    ? evaluateScheduledEngineReliability({
+        schedule: { type: 'banner', entityId: selectedBanner.id },
+        entityVersion: selectedBanner.version,
+        requiredDatasetIds: [...requiredDatasetIds, selectedBanner.id],
+        unattestedLocalDependencies,
+        executionContext: resolvedExecContext,
+      })
+    : evaluateEngineBoundaryReliability({
+        mode: isExplicitSandbox ? 'sandbox_simulation' : 'planning_preview',
+        requiredDatasetIds,
+        unattestedLocalDependencies,
+        executionContext: resolvedExecContext,
+      });
 
   const adviceList: EnhancedPullAdvice[] = [];
 
@@ -2028,5 +2145,8 @@ export function evaluateComprehensivePullROI(
   }
 
   // Sort descending by score, tiebreaker on teamDamageUpliftPct
-  return adviceList.sort((a, b) => b.score - a.score || b.teamDamageUpliftPct - a.teamDamageUpliftPct);
+  const items = adviceList.sort(
+    (a, b) => b.score - a.score || b.teamDamageUpliftPct - a.teamDamageUpliftPct,
+  );
+  return { items, reliability };
 }

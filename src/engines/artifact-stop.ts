@@ -1,5 +1,5 @@
 import type { ArtifactStopRecommendation } from '../types/genshin';
-import { estimateBuildFromSliders } from './artifact-probability';
+import { computeBuildEstimateFromSlidersInternal } from './artifact-probability';
 
 export * from './artifact-probability';
 
@@ -45,7 +45,7 @@ export function calculateArtifactStopPoint(
     };
   }
 
-  const analysis = estimateBuildFromSliders(
+  const analysis = computeBuildEstimateFromSlidersInternal(
     characterName,
     safeCr,
     safeCd,

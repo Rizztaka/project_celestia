@@ -753,7 +753,7 @@ describe('Imaginarium Theater Engine', () => {
       const smallOwnedIds = ['Bennett', 'Xiangling', 'Xingqiu', 'Sucrose'];
       const eligible = CHARACTERS.filter((c) => smallOwnedIds.includes(c.id));
 
-      const borrows = recommendSupportCastBorrow(eligible, season1, smallOwnedIds);
+      const borrows = recommendSupportCastBorrow(eligible, season1, smallOwnedIds).items;
 
       expect(borrows).toHaveLength(3);
       // Strict feasibility: borrowed characters MUST NOT be owned
@@ -959,7 +959,7 @@ describe('Imaginarium Theater Engine', () => {
       const activeSeason = THEATER_SEASONS[0]; // Hydro / Electro / Geo with Act 10 Hydro Tulpa
       const owned = ['Bennett', 'Xiangling'];
       const filtered = filterEligibleTheaterRoster(owned, activeSeason);
-      const borrows = recommendSupportCastBorrow(filtered.eligible, activeSeason, owned);
+      const borrows = recommendSupportCastBorrow(filtered.eligible, activeSeason, owned).items;
 
       expect(borrows).toHaveLength(3);
       for (const b of borrows) {

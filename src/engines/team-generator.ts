@@ -4,6 +4,8 @@ import type {
   TeamRecommendation,
   OwnedCharacterProfile,
   OwnedWeapon,
+  RecommendationCollection,
+  RecommendationExecutionContext,
   TeamScoreBreakdown,
   TeamDamageOutputInfo,
 } from '../types/genshin';
@@ -26,6 +28,7 @@ import {
   isShielderCharacter,
 } from './team-rules';
 import { generateTeamExplanation } from './team-explain';
+import { evaluateEngineBoundaryReliability } from '../services/engine-reliability';
 
 // Re-export for SSOT contract & backward compatibility
 export { isSameCharacterOrTraveler };
@@ -729,45 +732,103 @@ export function determineBenchmarkTier(
   return 'B';
 }
 
-export function generateBestTeams(
+const TEAM_GENERATOR_REQUIRED_DATASETS = [
+  'characters_v7_2_batch7',
+  'team_archetypes_v7_2',
+  'rotations_v7_2_catalog',
+  'weapons_v7_2_signatures',
+];
+
+const TEAM_GENERATOR_OPTIONAL_DATASETS = ['artifact_weights_v7_2'];
+
+/**
+ * Internal team computation helper without reliability evaluation.
+ * Used by nested callers (such as `abyss-solver.ts`) so parent engines evaluate
+ * reliability once across the complete parent dependency graph.
+ */
+export function computeBestTeamsInternal(
   availableIds: string[],
   focusCharacterId?: string,
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
   ownedWeapons?: OwnedWeapon[],
   allowCatalogFallback: boolean = false,
-): TeamRecommendation[] {
+): { items: TeamRecommendation[]; isTheoreticalFallback: boolean } {
   const ownedSet = new Set(availableIds);
   const pool = CHARACTERS.filter((c) => ownedSet.has(c.id));
 
   if (focusCharacterId && !ownedSet.has(focusCharacterId)) {
     if (!allowCatalogFallback) {
-      return [];
+      return { items: [], isTheoreticalFallback: false };
     }
     const catalogPool = CHARACTERS.map((c) => ({
       ...c,
       isOwned: ownedSet.has(c.id),
     }));
     const teams = generateTeamsFromPool(catalogPool, focusCharacterId, rosterProfiles, ownedWeapons);
-    return teams.map((t) => ({ ...t, isTheoretical: true }));
+    return {
+      items: teams.map((t) => ({ ...t, isTheoretical: true })),
+      isTheoreticalFallback: true,
+    };
   }
 
   if (pool.length < 4) {
     if (!allowCatalogFallback) {
-      return [];
+      return { items: [], isTheoreticalFallback: false };
     }
     const catalogPool = CHARACTERS.map((c) => ({
       ...c,
       isOwned: ownedSet.has(c.id),
     }));
     const teams = generateTeamsFromPool(catalogPool, focusCharacterId, rosterProfiles, ownedWeapons);
-    return teams.map((t) => ({ ...t, isTheoretical: true }));
+    return {
+      items: teams.map((t) => ({ ...t, isTheoretical: true })),
+      isTheoreticalFallback: true,
+    };
   }
 
   const ownedPool = pool.map((c) => ({
     ...c,
     isOwned: true,
   }));
-  return generateTeamsFromPool(ownedPool, focusCharacterId, rosterProfiles, ownedWeapons);
+  return {
+    items: generateTeamsFromPool(ownedPool, focusCharacterId, rosterProfiles, ownedWeapons),
+    isTheoreticalFallback: false,
+  };
+}
+
+/**
+ * Generates ranked 4-character team recommendations with required M9 reliability metadata.
+ *
+ * Mode selection:
+ * - Owned-roster recommendations use `'current'`.
+ * - Theoretical catalog fallback (`allowCatalogFallback = true` when unowned characters
+ *   are synthesized into teams) uses `'sandbox_simulation'` because it simulates hypothetical
+ *   unowned rosters over already-released v7.2 characters (not upcoming content).
+ */
+export function generateBestTeams(
+  availableIds: string[],
+  focusCharacterId?: string,
+  rosterProfiles?: Record<string, OwnedCharacterProfile>,
+  ownedWeapons?: OwnedWeapon[],
+  allowCatalogFallback: boolean = false,
+  executionContext?: RecommendationExecutionContext,
+): RecommendationCollection<TeamRecommendation> {
+  const { items, isTheoreticalFallback } = computeBestTeamsInternal(
+    availableIds,
+    focusCharacterId,
+    rosterProfiles,
+    ownedWeapons,
+    allowCatalogFallback,
+  );
+
+  const reliability = evaluateEngineBoundaryReliability({
+    mode: isTheoreticalFallback ? 'sandbox_simulation' : 'current',
+    requiredDatasetIds: TEAM_GENERATOR_REQUIRED_DATASETS,
+    optionalDatasetIds: TEAM_GENERATOR_OPTIONAL_DATASETS,
+    executionContext,
+  });
+
+  return { items, reliability };
 }
 
 export const generateTeamRecommendations = generateBestTeams;

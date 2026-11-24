@@ -225,7 +225,7 @@ describe('Celestia v2 — End-to-End User Journeys (Audit Simulation)', () => {
   it('Journey 5: Recommends teams using strictly owned characters without unowned leak or dual-Travelers', () => {
     const ownedRoster = ['HuTao', 'Xingqiu', 'Yelan', 'Zhongli', 'Furina', 'Bennett', 'Xiangling'];
 
-    const teams = generateBestTeams(ownedRoster, 'HuTao');
+    const teams = generateBestTeams(ownedRoster, 'HuTao').items;
     expect(teams.length).toBeGreaterThan(0);
 
     const ownedSet = new Set(ownedRoster);

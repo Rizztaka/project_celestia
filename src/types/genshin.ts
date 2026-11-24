@@ -636,7 +636,11 @@ export interface UniversalStopSummary {
   reasons: string[];
 }
 
-export interface ArtifactStopAnalysisResult {
+/**
+ * Internal artifact build computation output shared by public production endpoints
+ * and excluded legacy helpers without forcing excluded helpers to claim reliability.
+ */
+export interface ArtifactBuildComputation {
   characterId: string;
   characterName: string;
   totalRollValue: number;
@@ -663,6 +667,10 @@ export interface ArtifactStopAnalysisResult {
   weightAdjustmentNotes?: string[];
   setBonusValidation?: SetBonusValidationResult;
   slotUpgradeRanking?: SlotUpgradePriorityItem[];
+}
+
+export interface ArtifactStopAnalysisResult extends ArtifactBuildComputation {
+  reliability: RecommendationReliability;
 }
 
 // ---------------------------------------------------------
@@ -747,6 +755,7 @@ export interface TheaterSeasonAnalysis {
   rosterWeaknesses: string[];
   preservationPlan: TheaterPreservationEntry[];
   draftPlan: TheaterDraftStep[];
+  reliability: RecommendationReliability;
 }
 
 export interface TheaterSeasonConfig {
@@ -831,6 +840,7 @@ export interface AbyssDualTeamPlan {
   firstHalfExplanation?: AbyssHalfExplanation;
   secondHalfExplanation?: AbyssHalfExplanation;
   missingCounterFallbacks?: AbyssMissingCounterFallback[];
+  reliability: RecommendationReliability;
 }
 
 export interface AbyssDualTeamMultiPlan {
@@ -923,6 +933,27 @@ export interface RecommendationReliability {
   /** Plain-data per-dependency evaluation breakdown sorted in ascending datasetId order. */
   dependencies?: ReliabilityDependencyDetail[];
   /** Normalized UTC evaluation calendar date (`YYYY-MM-DD`) used for the decision. */
+  evaluatedAt?: string;
+}
+
+/**
+ * Standard collection envelope for array-returning recommendation engines.
+ * Guarantees reliability survives JSON serialization and structured cloning
+ * without attaching non-serializable expando properties to arrays.
+ */
+export interface RecommendationCollection<T> {
+  items: T[];
+  reliability: RecommendationReliability;
+}
+
+/**
+ * Plain, structured-clone-safe execution context passed across public engines,
+ * Web Workers, and main-thread fallbacks so evaluation timestamps remain identical.
+ * Mode is derived strictly by each engine from actual execution context; caller-supplied
+ * mode or provenance-registry overrides are intentionally omitted.
+ */
+export interface RecommendationExecutionContext {
+  /** Explicit ISO-8601 calendar date (`YYYY-MM-DD`) or timezone-qualified timestamp. */
   evaluatedAt?: string;
 }
 

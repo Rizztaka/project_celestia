@@ -101,7 +101,8 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
 
   const effectiveWeapons = useMemo(() => weapons || [], [weapons]);
 
-  const recommendations = useMemo(() => {
+  // Retain full RecommendationCollection envelope (items + reliability) at view boundary
+  const pullAdviceResult = useMemo(() => {
     return evaluateComprehensivePullROI(
       effectiveProfiles,
       effectiveWeapons,
@@ -109,6 +110,7 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
       bannerFilter,
     );
   }, [effectiveProfiles, effectiveWeapons, deferredBudget, bannerFilter]);
+  const recommendations = pullAdviceResult.items;
 
   const displayedRecommendations = showAll
     ? recommendations

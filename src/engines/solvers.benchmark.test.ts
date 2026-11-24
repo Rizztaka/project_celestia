@@ -30,9 +30,9 @@ describe('Engine Solvers Performance & Mobile Throttle Profiling', () => {
 
     const iterations = 5;
     const start = performance.now();
-    let teams = generateBestTeams(allIds, 'Nefer', profiles, weaponsBag);
+    let teams = generateBestTeams(allIds, 'Nefer', profiles, weaponsBag).items;
     for (let i = 1; i < iterations; i++) {
-      teams = generateBestTeams(allIds, 'Nefer', profiles, weaponsBag);
+      teams = generateBestTeams(allIds, 'Nefer', profiles, weaponsBag).items;
     }
     const end = performance.now();
     const avgDuration = (end - start) / iterations;
@@ -48,7 +48,7 @@ describe('Engine Solvers Performance & Mobile Throttle Profiling', () => {
 
     // Verify Web Worker dispatcher offloading produces identical team generation results
     const { dispatchGenerateBestTeams } = await import('../services/solver-dispatcher');
-    const asyncTeams = await dispatchGenerateBestTeams(allIds, 'Nefer', profiles, weaponsBag);
+    const asyncTeams = (await dispatchGenerateBestTeams(allIds, 'Nefer', profiles, weaponsBag)).items;
     expect(asyncTeams.length).toBeGreaterThan(0);
     expect(asyncTeams[0].members).toHaveLength(4);
   });
@@ -92,9 +92,9 @@ describe('Engine Solvers Performance & Mobile Throttle Profiling', () => {
 
     const iterations = 10;
     const start = performance.now();
-    let rankings = rankWeaponsForCharacter(nefer, weaponsBag);
+    let rankings = rankWeaponsForCharacter(nefer, weaponsBag).items;
     for (let i = 1; i < iterations; i++) {
-      rankings = rankWeaponsForCharacter(nefer, weaponsBag);
+      rankings = rankWeaponsForCharacter(nefer, weaponsBag).items;
     }
     const end = performance.now();
     const avgDuration = (end - start) / iterations;

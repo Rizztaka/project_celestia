@@ -1,4 +1,5 @@
 import type {
+  ArtifactBuildComputation,
   ArtifactPiece,
   ArtifactSlot,
   ArtifactStopAnalysisResult,
@@ -7,6 +8,7 @@ import type {
   DomainRouteRecommendation,
   GuaranteedAlternative,
   InvestmentGoal,
+  RecommendationExecutionContext,
   ReshapePityTier,
   RoiComparison,
   RoiMilestoneComparison,
@@ -35,6 +37,10 @@ import {
   parseActiveSetBonuses,
 } from '../data/artifact-set-effects';
 import { validateArtifactSetBonuses } from './artifact-validator';
+import {
+  evaluateEngineBoundaryReliability,
+  type UnattestedLocalDependency,
+} from '../services/engine-reliability';
 
 export const SLOT_NAMES: Record<ArtifactSlot, string> = {
   flower: 'Flower of Life',
@@ -1590,15 +1596,43 @@ function calibratedCharKey(c: CharacterStatWeightConfig) {
 }
 
 /**
- * Performs complete universal stop-point & build intelligence analysis across all 5 slots
- * for any Genshin Impact character, set, or archetype up to v7.2.
+ * Artifact optimizer consumes `artifact-weights.ts`, `artifact-set-effects.ts`
+ * (stat weights, roll tiers, main-stat targets, and set effects attested under
+ * `artifact_weights_v7_2`), and `characters.ts` (`characters_v7_2_batch7`).
+ * `artifacts-master.ts` (`artifacts_v7_2_master`) is NOT imported anywhere in the
+ * optimizer call graph.
  */
-export function analyzeArtifactBuild(
+const ARTIFACT_OPTIMIZER_REQUIRED_DATASETS = [
+  'characters_v7_2_batch7',
+  'artifact_weights_v7_2',
+];
+
+/**
+ * Materially influential local tables and probability/transmuter constants consumed by
+ * `computeArtifactBuildAnalysis` that are NOT attested in `DATA_PROVENANCE_REGISTRY`.
+ * Declaring them ensures `analyzeArtifactBuild` never silently returns `reliable` / `isActionable: true`.
+ */
+const ARTIFACT_OPTIMIZER_UNATTESTED_DEPS: readonly UnattestedLocalDependency[] = [
+  { name: 'DOMAIN_CONSTANTS', sourceFile: 'src/data/artifact-weights.ts' },
+  { name: 'DOMAIN_PAIRS_REGISTRY', sourceFile: 'src/data/artifact-weights.ts' },
+  { name: 'STRONGBOX_SETS_SET', sourceFile: 'src/data/artifact-weights.ts' },
+  {
+    name: 'Artifact probability, Strongbox & transmuter/reshape constants',
+    sourceFile: 'src/engines/artifact-probability.ts',
+  },
+];
+
+/**
+ * Internal artifact build computation without reliability evaluation.
+ * Shared by `analyzeArtifactBuild` and `computeBuildEstimateFromSlidersInternal`
+ * to prevent duplicate reliability evaluations in nested calls.
+ */
+function computeArtifactBuildAnalysis(
   characterIdOrName: string,
   slots: Partial<Record<ArtifactSlot, ArtifactPiece | null>>,
   teamContext?: TeamContext,
   options?: UniversalStopOptions,
-): ArtifactStopAnalysisResult {
+): ArtifactBuildComputation {
   const baseConfig = getCharacterStatWeights(characterIdOrName);
   const config = adjustWeightsForTeamContext(baseConfig, teamContext);
   const goal: InvestmentGoal = options?.goal ?? 'endgame';
@@ -2122,9 +2156,34 @@ export function analyzeArtifactBuild(
 }
 
 /**
- * Synthesizes a simulated 5-piece build from slider stats for rapid estimation.
+ * Performs complete universal stop-point & build intelligence analysis across all 5 slots
+ * for any Genshin Impact character, set, or archetype up to v7.2.
  */
-export function estimateBuildFromSliders(
+export function analyzeArtifactBuild(
+  characterIdOrName: string,
+  slots: Partial<Record<ArtifactSlot, ArtifactPiece | null>>,
+  teamContext?: TeamContext,
+  options?: UniversalStopOptions,
+  executionContext?: RecommendationExecutionContext,
+): ArtifactStopAnalysisResult {
+  const computed = computeArtifactBuildAnalysis(characterIdOrName, slots, teamContext, options);
+  const reliability = evaluateEngineBoundaryReliability({
+    mode: 'current',
+    requiredDatasetIds: ARTIFACT_OPTIMIZER_REQUIRED_DATASETS,
+    unattestedLocalDependencies: ARTIFACT_OPTIMIZER_UNATTESTED_DEPS,
+    executionContext,
+  });
+  return { ...computed, reliability };
+}
+
+/**
+ * @internal Synthesizes a simulated 5-piece build from slider stats without invoking
+ * reliability evaluation. Used by `estimateBuildFromSliders` and by the `cv >= 170`
+ * delegation branch of excluded legacy helper `calculateArtifactStopPoint` in
+ * `src/engines/artifact-stop.ts` (whose `cv < 170` and EM/DEF early-return branches
+ * use direct CV arithmetic without calling this helper).
+ */
+export function computeBuildEstimateFromSlidersInternal(
   characterName: string,
   critRate: number,
   critDmg: number,
@@ -2132,7 +2191,7 @@ export function estimateBuildFromSliders(
   isReactionOrDefScaler: boolean = false,
   teamContext?: TeamContext,
   options?: UniversalStopOptions,
-): ArtifactStopAnalysisResult {
+): ArtifactBuildComputation {
   const config = getCharacterStatWeights(characterName);
   const targetSetName = config.targetSets?.[0] || 'Emblem of Severed Fate';
 
@@ -2261,5 +2320,38 @@ export function estimateBuildFromSliders(
     circlet: buildMockPiece('circlet', circletMain, "Gladiator's Finale"),
   };
 
-  return analyzeArtifactBuild(characterName, mockSlots, teamContext, options);
+  return computeArtifactBuildAnalysis(characterName, mockSlots, teamContext, options);
+}
+
+/**
+ * Synthesizes a simulated 5-piece build from slider stats for rapid estimation.
+ * Classified as `'sandbox_simulation'` because the 5-piece artifact set is synthesized
+ * from user sliders rather than observed equipped pieces.
+ */
+export function estimateBuildFromSliders(
+  characterName: string,
+  critRate: number,
+  critDmg: number,
+  secondaryStatValue: number = 100,
+  isReactionOrDefScaler: boolean = false,
+  teamContext?: TeamContext,
+  options?: UniversalStopOptions,
+  executionContext?: RecommendationExecutionContext,
+): ArtifactStopAnalysisResult {
+  const computed = computeBuildEstimateFromSlidersInternal(
+    characterName,
+    critRate,
+    critDmg,
+    secondaryStatValue,
+    isReactionOrDefScaler,
+    teamContext,
+    options,
+  );
+  const reliability = evaluateEngineBoundaryReliability({
+    mode: 'sandbox_simulation',
+    requiredDatasetIds: ARTIFACT_OPTIMIZER_REQUIRED_DATASETS,
+    unattestedLocalDependencies: ARTIFACT_OPTIMIZER_UNATTESTED_DEPS,
+    executionContext,
+  });
+  return { ...computed, reliability };
 }

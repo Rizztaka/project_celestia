@@ -6,10 +6,13 @@ import type {
   TeamWeaponAssignment,
   OwnedCharacterProfile,
   WeaponType,
+  RecommendationCollection,
+  RecommendationExecutionContext,
 } from '../types/genshin';
 import { getWeaponByKey, WEAPONS_BY_TYPE } from '../data/weapons';
 import { getCharacterStatWeights } from '../data/artifact-weights';
 import { DEFAULT_WEAPONS } from '../services/storage';
+import { evaluateEngineBoundaryReliability } from '../services/engine-reliability';
 
 /**
  * Calculates theoretical synergy score (0–100+) for a weapon equipped by a specific character.
@@ -285,6 +288,12 @@ export function scoreWeaponForCharacter(
   };
 }
 
+const WEAPON_SOLVER_REQUIRED_DATASETS = [
+  'characters_v7_2_batch7',
+  'weapons_v7_2_signatures',
+  'artifact_weights_v7_2',
+];
+
 /**
  * Ranks all owned weapons compatible with a character from best to worst.
  */
@@ -292,8 +301,17 @@ export function rankWeaponsForCharacter(
   character: Character,
   ownedWeapons: OwnedWeapon[],
   teamContext?: Character[],
-): WeaponScoreResult[] {
-  if (!ownedWeapons || ownedWeapons.length === 0) return [];
+  executionContext?: RecommendationExecutionContext,
+): RecommendationCollection<WeaponScoreResult> {
+  const reliability = evaluateEngineBoundaryReliability({
+    mode: 'current',
+    requiredDatasetIds: WEAPON_SOLVER_REQUIRED_DATASETS,
+    executionContext,
+  });
+
+  if (!ownedWeapons || ownedWeapons.length === 0) {
+    return { items: [], reliability };
+  }
 
   // Filter to matching weapon type only
   const compatible = ownedWeapons.filter((w) => {
@@ -307,13 +325,15 @@ export function rankWeaponsForCharacter(
   const scored = compatible.map((w) => scoreWeaponForCharacter(character, w, teamContext));
 
   // Sort descending by score, tiebreak by level then refinement
-  return scored.sort((a, b) => {
+  const items = scored.sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
     const wA = a.weapon as OwnedWeapon;
     const wB = b.weapon as OwnedWeapon;
     if (wB.level !== wA.level) return wB.level - wA.level;
     return wB.refinement - wA.refinement;
   });
+
+  return { items, reliability };
 }
 
 /**

@@ -21,7 +21,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
     };
     const weapons: OwnedWeapon[] = [];
 
-    const advice = evaluateComprehensivePullROI(profiles, weapons, baseBudget);
+    const advice = evaluateComprehensivePullROI(profiles, weapons, baseBudget).items;
 
     // Furina C0 should NOT be recommended
     const furinaC0 = advice.find((a) => a.characterId === 'Furina' && a.targetType === 'C0_Character');
@@ -42,7 +42,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
     };
     const weapons: OwnedWeapon[] = [];
 
-    const advice = evaluateComprehensivePullROI(profiles, weapons, baseBudget);
+    const advice = evaluateComprehensivePullROI(profiles, weapons, baseBudget).items;
 
     const furinaConst = advice.find(
       (a) => a.characterId === 'Furina' && a.targetType === 'Constellation',
@@ -59,7 +59,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
     };
     const weapons: OwnedWeapon[] = [];
 
-    const advice = evaluateComprehensivePullROI(profiles, weapons, baseBudget);
+    const advice = evaluateComprehensivePullROI(profiles, weapons, baseBudget).items;
 
     const xilonen = advice.find((a) => a.characterId === 'Xilonen' && a.targetType === 'C0_Character');
     expect(xilonen).toBeDefined();
@@ -89,7 +89,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
       },
     ];
 
-    const adviceA = evaluateComprehensivePullROI(profilesA, weaponsA, baseBudget);
+    const adviceA = evaluateComprehensivePullROI(profilesA, weaponsA, baseBudget).items;
     const tomeA = adviceA.find(
       (a) => a.targetType === 'Signature_Weapon' && a.weaponKey === 'TomeOfTheEternalFlow',
     );
@@ -116,7 +116,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
       },
     ];
 
-    const adviceB = evaluateComprehensivePullROI(profilesB, weaponsB, baseBudget);
+    const adviceB = evaluateComprehensivePullROI(profilesB, weaponsB, baseBudget).items;
     const tomeB = adviceB.find(
       (a) => a.targetType === 'Signature_Weapon' && a.weaponKey === 'TomeOfTheEternalFlow',
     );
@@ -141,7 +141,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
       weaponPity: 0,
       weaponFatePoints: 0,
     };
-    const adviceZero = evaluateComprehensivePullROI(profiles, weapons, zeroBudget);
+    const adviceZero = evaluateComprehensivePullROI(profiles, weapons, zeroBudget).items;
     const targetZero = adviceZero[0];
     expect(targetZero.odds.pullsAvailable).toBe(0);
     expect(targetZero.odds.cumulativeProbability).toBe(0);
@@ -156,7 +156,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
       weaponPity: 70,
       weaponFatePoints: 1,
     };
-    const adviceRich = evaluateComprehensivePullROI(profiles, weapons, richBudget);
+    const adviceRich = evaluateComprehensivePullROI(profiles, weapons, richBudget).items;
     const targetRich = adviceRich[0];
     expect(targetRich.odds.cumulativeProbability).toBe(1.0);
     expect(targetRich.odds.primogemsNeeded).toBe(0);
@@ -172,7 +172,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
       weapons,
       baseBudget,
       'banner_5_3_phase_1',
-    );
+    ).items;
 
     const characterIds = new Set(advice53.map((a) => a.characterId));
     expect(characterIds.has('Mavuika') || characterIds.has('Citlali')).toBe(true);
@@ -185,7 +185,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
     const profilesC0: Record<string, OwnedCharacterProfile> = {
       Nahida: { id: 'Nahida', level: 90, constellation: 0 },
     };
-    const adviceC0 = evaluateComprehensivePullROI(profilesC0, [], baseBudget);
+    const adviceC0 = evaluateComprehensivePullROI(profilesC0, [], baseBudget).items;
     const nahidaC0 = adviceC0.find((a) => a.characterId === 'Nahida' && a.targetType === 'Constellation');
     expect(nahidaC0).toBeDefined();
     expect(nahidaC0?.targetLevelText).toContain('C1');
@@ -194,7 +194,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
     const profilesC1: Record<string, OwnedCharacterProfile> = {
       Nahida: { id: 'Nahida', level: 90, constellation: 1 },
     };
-    const adviceC1 = evaluateComprehensivePullROI(profilesC1, [], baseBudget);
+    const adviceC1 = evaluateComprehensivePullROI(profilesC1, [], baseBudget).items;
     const nahidaC1 = adviceC1.find((a) => a.characterId === 'Nahida' && a.targetType === 'Constellation');
     expect(nahidaC1).toBeDefined();
     expect(nahidaC1?.targetLevelText).toContain('C2');
@@ -220,7 +220,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
       weapons,
       baseBudget,
       'banner_5_2_phase_2', // Neuvillette & Zhongli banner
-    );
+    ).items;
 
     const tomeAdvice = advice.find(
       (a) => a.targetType === 'Signature_Weapon' && a.weaponKey === 'TomeOfTheEternalFlow',
@@ -246,7 +246,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
       weaponsAlias,
       baseBudget,
       'banner_5_2_phase_2',
-    );
+    ).items;
     const tomeAdviceAlias = adviceAlias.find(
       (a) => a.targetType === 'Signature_Weapon' && a.weaponKey === 'TomeOfTheEternalFlow',
     );
@@ -274,7 +274,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
       [],
       baseBudget,
       'banner_5_2_phase_2',
-    );
+    ).items;
     const tomeAdviceEquipped = adviceEquipped.find(
       (a) => a.targetType === 'Signature_Weapon' && a.weaponKey === 'TomeOfTheEternalFlow',
     );
@@ -290,29 +290,29 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
     const weapons: OwnedWeapon[] = [];
 
     // 5.1 Phase 2 (Nahida & Hu Tao -> Floating Dreams & Staff of Homa)
-    const advice51p2 = evaluateComprehensivePullROI(profilesWithHuTao, weapons, baseBudget, 'banner_5_1_phase_2');
+    const advice51p2 = evaluateComprehensivePullROI(profilesWithHuTao, weapons, baseBudget, 'banner_5_1_phase_2').items;
     const homa = advice51p2.find((a) => a.weaponKey === 'StaffOfHoma');
     expect(homa).toBeDefined();
     expect(homa?.tier).toMatch(/Must Pull|High Value/);
 
     // When character is unowned, signature weapon receives unowned penalty ('Situational')
-    const adviceUnowned = evaluateComprehensivePullROI({}, weapons, baseBudget, 'banner_5_1_phase_2');
+    const adviceUnowned = evaluateComprehensivePullROI({}, weapons, baseBudget, 'banner_5_1_phase_2').items;
     const homaUnowned = adviceUnowned.find((a) => a.weaponKey === 'StaffOfHoma');
     expect(homaUnowned?.tier).toBe('Situational');
     expect(homaUnowned?.caution).toContain('does not yet own Hu Tao');
 
     // 5.1 Phase 1 (Xilonen & Chiori -> Peak Patrol Song & Uraku Misugiri)
-    const advice51p1 = evaluateComprehensivePullROI({}, weapons, baseBudget, 'banner_5_1_phase_1');
+    const advice51p1 = evaluateComprehensivePullROI({}, weapons, baseBudget, 'banner_5_1_phase_1').items;
     const uraku = advice51p1.find((a) => a.weaponKey === 'UrakuMisugiri');
     expect(uraku).toBeDefined();
 
     // 5.2 Phase 1 (Chasca & Lyney -> Crimson Plumage & The First Great Magic)
-    const advice52p1 = evaluateComprehensivePullROI({}, weapons, baseBudget, 'banner_5_2_phase_1');
+    const advice52p1 = evaluateComprehensivePullROI({}, weapons, baseBudget, 'banner_5_2_phase_1').items;
     const magic = advice52p1.find((a) => a.weaponKey === 'TheFirstGreatMagic');
     expect(magic).toBeDefined();
 
     // 5.4 Phase 1 (Nefer & Furina -> Reliquary of Truth & Splendor)
-    const advice54p1 = evaluateComprehensivePullROI({}, weapons, baseBudget, 'banner_5_4_phase_1');
+    const advice54p1 = evaluateComprehensivePullROI({}, weapons, baseBudget, 'banner_5_4_phase_1').items;
     const reliquary = advice54p1.find((a) => a.weaponKey === 'ReliquaryOfTruth');
     const splendor = advice54p1.find((a) => a.weaponKey === 'SplendorOfTranquilWaters');
     expect(reliquary).toBeDefined();
@@ -341,7 +341,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
       },
     ];
 
-    const advice = evaluateComprehensivePullROI(profiles, weapons, baseBudget);
+    const advice = evaluateComprehensivePullROI(profiles, weapons, baseBudget).items;
     const tome = advice.find((a) => a.weaponKey === 'TomeOfTheEternalFlow');
     expect(tome).toBeDefined();
     // Must trigger the R4-R5 penalty (uplift 24 - 18 = 6%), NOT the R1 penalty (uplift 24 - 12 = 12%)
@@ -350,7 +350,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
   });
 
   it('evaluates Version 7.2 Phase 1 banner with Mitya, Furina, Valeriy, and Starsealed Edict', () => {
-    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_phase_1');
+    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_phase_1').items;
     const mitya = advice.find((a) => a.characterId === 'Mitya' && a.targetType === 'C0_Character');
     const furina = advice.find((a) => a.characterId === 'Furina' && a.targetType === 'C0_Character');
     const valeriy = advice.find((a) => a.characterId === 'Valeriy');
@@ -368,7 +368,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
   });
 
   it('evaluates Version 7.2 Phase 2 banner with Zibai and Linnea without cross-character hijacking', () => {
-    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_phase_2');
+    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_phase_2').items;
     const zibai = advice.find((a) => a.characterId === 'Zibai' && a.targetType === 'C0_Character');
     const linnea = advice.find((a) => a.characterId === 'Linnea' && a.targetType === 'C0_Character');
     const foliar = advice.find((a) => a.weaponKey === 'LightOfFoliarIncision');
@@ -387,7 +387,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
   });
 
   it('evaluates Version 7.2 Natlan Chronicled Wish with Natlan 5★ units and authentic signatures', () => {
-    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_natlan_chronicled');
+    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_natlan_chronicled').items;
     const xilonen = advice.find((a) => a.characterId === 'Xilonen');
     const chasca = advice.find((a) => a.characterId === 'Chasca');
     const kinich = advice.find((a) => a.characterId === 'Kinich');
@@ -408,7 +408,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
   });
 
   it('evaluates all 122 playable gacha characters in Sandbox mode (excluding story Travelers)', () => {
-    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'sandbox');
+    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'sandbox').items;
     const charAdvice = advice.filter((a) => a.targetType === 'C0_Character');
 
     // Exactly 122 playable gacha characters (128 total canonical units minus 6 free story Travelers)
@@ -428,7 +428,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
   });
 
   it('verifies that every Signature_Weapon recommendation has a resolvable weaponKey with non-empty icon', () => {
-    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'sandbox');
+    const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'sandbox').items;
     const weaponAdvice = advice.filter((a) => a.targetType === 'Signature_Weapon');
     expect(weaponAdvice.length).toBeGreaterThan(0);
 
@@ -446,7 +446,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
     const profiles: Record<string, OwnedCharacterProfile> = {
       Escoffier: { id: 'Escoffier', level: 90, constellation: 0 },
     };
-    const advice = evaluateComprehensivePullROI(profiles, [], baseBudget, 'sandbox');
+    const advice = evaluateComprehensivePullROI(profiles, [], baseBudget, 'sandbox').items;
     const escoffierConst = advice.find(
       (a) => a.characterId === 'Escoffier' && a.targetType === 'Constellation',
     );
@@ -461,7 +461,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
       Navia: { id: 'Navia', level: 90, constellation: 0 },
     };
     const weaponsWithoutSub: OwnedWeapon[] = [];
-    const adviceWithoutSub = evaluateComprehensivePullROI(profiles, weaponsWithoutSub, baseBudget, 'sandbox');
+    const adviceWithoutSub = evaluateComprehensivePullROI(profiles, weaponsWithoutSub, baseBudget, 'sandbox').items;
     const verdictWithout = adviceWithoutSub.find(
       (a) => a.characterId === 'Navia' && a.targetType === 'Signature_Weapon',
     );
@@ -478,7 +478,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
         location: '',
       },
     ];
-    const adviceWithSub = evaluateComprehensivePullROI(profiles, weaponsWithSub, baseBudget, 'sandbox');
+    const adviceWithSub = evaluateComprehensivePullROI(profiles, weaponsWithSub, baseBudget, 'sandbox').items;
     const verdictWith = adviceWithSub.find(
       (a) => a.characterId === 'Navia' && a.targetType === 'Signature_Weapon',
     );
@@ -498,7 +498,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
         location: '',
       },
     ];
-    const adviceWithAlias = evaluateComprehensivePullROI(profiles, weaponsWithAlias, baseBudget, 'sandbox');
+    const adviceWithAlias = evaluateComprehensivePullROI(profiles, weaponsWithAlias, baseBudget, 'sandbox').items;
     const verdictWithAlias = adviceWithAlias.find(
       (a) => a.characterId === 'Navia' && a.targetType === 'Signature_Weapon',
     );
@@ -516,7 +516,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
         ...baseBudget,
         characterPity: 0,
         characterGuaranteed: false,
-      });
+      }).items;
 
       const furinaConst = advice.find(
         (a) => a.characterId === 'Furina' && a.targetType === 'Constellation',
@@ -531,7 +531,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
     });
 
     it('models featured 4-star characters via gacha-4star engine as uncapped', () => {
-      const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_phase_1');
+      const advice = evaluateComprehensivePullROI({}, [], baseBudget, 'banner_7_2_phase_1').items;
       // Valeriy is a 4-star featured on 7.2 Phase 1
       const valeriy = advice.find((a) => a.characterId === 'Valeriy');
       expect(valeriy).toBeDefined();
@@ -554,8 +554,8 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
         weaponGuaranteed: true,
       };
 
-      const adviceNoGuar = evaluateComprehensivePullROI({}, [], budgetNoGuar, 'banner_7_2_phase_1');
-      const adviceGuar = evaluateComprehensivePullROI({}, [], budgetGuar, 'banner_7_2_phase_1');
+      const adviceNoGuar = evaluateComprehensivePullROI({}, [], budgetNoGuar, 'banner_7_2_phase_1').items;
+      const adviceGuar = evaluateComprehensivePullROI({}, [], budgetGuar, 'banner_7_2_phase_1').items;
 
       const weapNoGuar = adviceNoGuar.find((a) => a.targetType === 'Signature_Weapon');
       const weapGuar = adviceGuar.find((a) => a.targetType === 'Signature_Weapon');
@@ -580,8 +580,8 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
         includeCashback: true,
       };
 
-      const adviceStd = evaluateComprehensivePullROI({}, [], standardBudget, 'banner_7_2_phase_1');
-      const adviceCashback = evaluateComprehensivePullROI({}, [], cashbackBudget, 'banner_7_2_phase_1');
+      const adviceStd = evaluateComprehensivePullROI({}, [], standardBudget, 'banner_7_2_phase_1').items;
+      const adviceCashback = evaluateComprehensivePullROI({}, [], cashbackBudget, 'banner_7_2_phase_1').items;
 
       // 100 pulls * 1.08 = 108 pulls
       expect(adviceStd[0].odds.pullsAvailable).toBe(100);
@@ -603,7 +603,7 @@ describe('Pull Advisor v2 - Account-Aware Comprehensive ROI Evaluator', () => {
         [],
         chronicledBudget,
         'banner_7_2_natlan_chronicled',
-      );
+      ).items;
       expect(advice.length).toBeGreaterThan(0);
       // With 1 Fate Point on Chronicled Wish, hard ceiling is 90 - 40 = 50 pulls
       expect(advice[0].odds.guaranteedPulls).toBe(50);

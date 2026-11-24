@@ -47,10 +47,12 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
     saveAbyssCycleId(cycleId);
   };
 
-  const analysis = useMemo(
+  // Retain full RecommendationCollection envelope (items + reliability) at view boundary
+  const readinessResult = useMemo(
     () => analyzeEndgameReadiness(ownedIds, activeCycle),
     [ownedIds, activeCycle],
   );
+  const analysis = readinessResult.items;
 
   return (
     <div className="space-y-6">

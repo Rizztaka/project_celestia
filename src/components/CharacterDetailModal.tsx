@@ -224,10 +224,12 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
   const activeWeapons = useMemo(() => weapons || getSavedWeapons(), [weapons]);
 
-  const rankedOwnedWeapons = useMemo(() => {
-    if (!character) return [];
+  // Retain full RecommendationCollection envelope (items + reliability) at modal boundary
+  const weaponRankingResult = useMemo(() => {
+    if (!character) return null;
     return rankWeaponsForCharacter(character, activeWeapons);
   }, [character, activeWeapons]);
+  const rankedOwnedWeapons = weaponRankingResult?.items ?? [];
 
   const [showManualCustomizer, setShowManualCustomizer] = useState(false);
   const [customWeaponKey, setCustomWeaponKey] = useState<string>('');

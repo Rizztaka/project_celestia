@@ -12,7 +12,7 @@ import type { OwnedCharacterProfile } from '../types/genshin';
 describe('Team Generator Engine & Three-Tier Scoring', () => {
   it('generates teams with complete three-tier scoring breakdown', () => {
     const owned = ['HuTao', 'Xingqiu', 'Yelan', 'Zhongli', 'Bennett', 'Xiangling', 'KaedeharaKazuha'];
-    const teams = generateBestTeams(owned, 'HuTao');
+    const teams = generateBestTeams(owned, 'HuTao').items;
 
     expect(teams.length).toBeGreaterThan(0);
     const vape = teams.find((t) => t.archetype === 'Vaporize') || teams[0];
@@ -38,7 +38,7 @@ describe('Team Generator Engine & Three-Tier Scoring', () => {
 
   it('generates premier Lunar-Bloom team declaratively for Nefer without procedural hacks', () => {
     const owned = ['Nefer', 'Furina', 'Nahida', 'KukiShinobu', 'Xingqiu', 'Baizhu'];
-    const teams = generateBestTeams(owned, 'Nefer');
+    const teams = generateBestTeams(owned, 'Nefer').items;
 
     expect(teams.length).toBeGreaterThan(0);
     const neferTeam = teams.find((t) => t.archetype === 'Lunar-Bloom');
@@ -61,7 +61,7 @@ describe('Team Generator Engine & Three-Tier Scoring', () => {
       'Furina',
       'Nahida',
     ];
-    const teams = generateBestTeams(owned, 'Chevreuse');
+    const teams = generateBestTeams(owned, 'Chevreuse').items;
     const overloadTeam = teams.find((t) => t.archetype === 'Overload');
 
     expect(overloadTeam).toBeDefined();
@@ -84,7 +84,7 @@ describe('Team Generator Engine & Three-Tier Scoring', () => {
       'RaidenShogun',
       'Bennett',
     ];
-    const teams = generateBestTeams(owned, 'Nilou');
+    const teams = generateBestTeams(owned, 'Nilou').items;
     const nilouTeam = teams.find((t) => t.archetype === 'Bountiful-Bloom');
 
     expect(nilouTeam).toBeDefined();
@@ -195,7 +195,7 @@ describe('Team Generator Engine & Three-Tier Scoring', () => {
     const c6Profiles: Record<string, OwnedCharacterProfile> = {
       Bennett: { id: 'Bennett', level: 90, constellation: 6 },
     };
-    const teams = generateBestTeams(owned, 'Eula', c6Profiles);
+    const teams = generateBestTeams(owned, 'Eula', c6Profiles).items;
     expect(teams.length).toBeGreaterThan(0);
 
     for (const team of teams) {
@@ -223,7 +223,7 @@ describe('Team Generator Engine & Three-Tier Scoring', () => {
       'Xingqiu',
       'Fischl',
     ];
-    const teams = generateBestTeams(owned);
+    const teams = generateBestTeams(owned).items;
     expect(teams.length).toBeGreaterThan(0);
 
     for (const team of teams) {
@@ -254,7 +254,7 @@ describe('Team Generator Engine & Three-Tier Scoring', () => {
 
   it('populates practicalPerformanceScore and unsimulated damageOutput metadata in scores', () => {
     const owned = ['HuTao', 'Xingqiu', 'Yelan', 'Zhongli', 'Bennett', 'Xiangling'];
-    const teams = generateBestTeams(owned, 'HuTao');
+    const teams = generateBestTeams(owned, 'HuTao').items;
     const team = teams[0];
 
     expect(team.scores?.practicalPerformanceScore).toBeDefined();
@@ -271,7 +271,7 @@ describe('Team Generator Engine & Three-Tier Scoring', () => {
     // Diluc (D) comes alphabetically before Hu Tao (H) and Mavuika (M)
     // But Mavuika and Hu Tao are S+ anchors with higher scaling
     const owned = ['Diluc', 'HuTao', 'Mavuika', 'Xingqiu', 'Yelan', 'Bennett', 'Zhongli'];
-    const teams = generateBestTeams(owned);
+    const teams = generateBestTeams(owned).items;
 
     const vapeTeam = teams.find((t) => t.archetype === 'Vaporize');
     expect(vapeTeam).toBeDefined();

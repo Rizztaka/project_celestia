@@ -321,6 +321,15 @@ export const DATA_PROVENANCE_REGISTRY: Record<string, DataProvenance> = {
       'Historical Archive · Version 5.0 Imaginarium Theater Season 2 (Hydro/Electro/Dendro opening cast & boss lineup).',
     status: 'stale',
   },
+  'custom-theater-sandbox': {
+    datasetId: 'custom-theater-sandbox',
+    version: CURRENT_GAME_VERSION,
+    verifiedAt: '2026-11-16',
+    verifiedFields: ['elements', 'openingCastIds', 'specialGuestIds', 'bosses'],
+    evidence:
+      'User-configured Imaginarium Theater custom element cycle sandbox evaluated against local Theater rules.',
+    status: 'provisional',
+  },
 
   // ── Core Game Datasets (Characters, Weapons, Artifacts, Rotations, Enka) ────
   characters_v7_2_batch7: {

@@ -3,13 +3,22 @@ import type {
   Element,
   EncounterTargetProfile,
   EnemyMovementTrait,
+  RecommendationCollection,
+  RecommendationExecutionContext,
 } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import {
+  ABYSS_CYCLES,
   getActiveAbyssCycle,
   type AbyssCycleConfig,
   type AbyssChamberHalfConfig,
 } from '../data/abyss-schedules';
+import { parseIsoCalendarDate } from '../services/recommendation-reliability';
+import {
+  evaluateEngineBoundaryReliability,
+  evaluateScheduledEngineReliability,
+  resolveEvaluationDate,
+} from '../services/engine-reliability';
 
 export interface AbyssChamberGuide {
   floor: number;
@@ -138,13 +147,37 @@ export interface RosterCounterAnalysis {
 
 export function analyzeEndgameReadiness(
   ownedIds: string[],
-  cycle: AbyssCycleConfig = getActiveAbyssCycle(),
-): RosterCounterAnalysis[] {
+  cycle?: AbyssCycleConfig,
+  executionContext?: RecommendationExecutionContext,
+): RecommendationCollection<RosterCounterAnalysis> {
+  const evaluatedAt = resolveEvaluationDate(executionContext?.evaluatedAt);
+  const parsedDate = evaluatedAt !== null ? parseIsoCalendarDate(evaluatedAt) : null;
+  const activeCycle =
+    cycle ??
+    (parsedDate ? getActiveAbyssCycle(new Date(parsedDate.utcMs)) : ABYSS_CYCLES[0]);
+
+  const resolvedExecContext: RecommendationExecutionContext | undefined =
+    evaluatedAt !== null ? { evaluatedAt } : undefined;
+
+  const isCustomSandbox = Boolean(activeCycle.isCustom || activeCycle.id === 'custom-sandbox');
+  const reliability = isCustomSandbox
+    ? evaluateEngineBoundaryReliability({
+        mode: 'sandbox_simulation',
+        requiredDatasetIds: ['characters_v7_2_batch7', 'custom-sandbox'],
+        executionContext: resolvedExecContext,
+      })
+    : evaluateScheduledEngineReliability({
+        schedule: { type: 'abyss', entityId: activeCycle.id },
+        entityVersion: activeCycle.version,
+        requiredDatasetIds: ['characters_v7_2_batch7', activeCycle.id],
+        executionContext: resolvedExecContext,
+      });
+
   const ownedSet = new Set(ownedIds);
   const owned = CHARACTERS.filter((c) => ownedSet.has(c.id));
-  const chamberGuides = deriveAbyssChamberGuides(cycle);
+  const chamberGuides = deriveAbyssChamberGuides(activeCycle);
 
-  return chamberGuides.map((chamber) => {
+  const items = chamberGuides.map((chamber) => {
     const prohibitedSet = new Set(chamber.prohibitedElements ?? []);
     const usable = owned.filter((c) => {
       if (prohibitedSet.has(c.element)) return false;
@@ -165,7 +198,11 @@ export function analyzeEndgameReadiness(
       chamber,
       usableCounters: usable.slice(0, 5),
       missingElements: missing,
-      verdict: missing.length === 0 ? 'Ready to Clear' : 'Caution: Missing Elements',
+      verdict: (missing.length === 0 ? 'Ready to Clear' : 'Caution: Missing Elements') as
+        | 'Ready to Clear'
+        | 'Caution: Missing Elements',
     };
   });
+
+  return { items, reliability };
 }

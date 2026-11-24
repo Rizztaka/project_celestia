@@ -8,11 +8,19 @@ import type {
   TheaterDraftStep,
   OwnedCharacterProfile,
   BossMatchupRating,
+  RecommendationCollection,
+  RecommendationExecutionContext,
+  RecommendationReliability,
 } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
 import { THEATER_DIFFICULTIES, THEATER_BOSS_INFO } from '../data/theater-seasons';
 import { isNightsoulCharacter } from './combat-mechanics';
 import { isSameCharacterOrTraveler } from './team-rules';
+import {
+  evaluateEngineBoundaryReliability,
+  evaluateScheduledEngineReliability,
+  type UnattestedLocalDependency,
+} from '../services/engine-reliability';
 
 export interface FilteredTheaterRoster {
   eligible: Character[];
@@ -165,18 +173,68 @@ export interface TheaterScheduleResult {
   validationErrors: string[];
   shortfallSuggestions?: Character[];
   seasonAnalysis?: TheaterSeasonAnalysis;
+  reliability: RecommendationReliability;
+}
+
+const THEATER_PLAN_UNATTESTED_DEPS: readonly UnattestedLocalDependency[] = [
+  { name: 'THEATER_BOSS_INFO', sourceFile: 'src/data/theater-seasons.ts' },
+  { name: 'THEATER_DIFFICULTIES', sourceFile: 'src/data/theater-seasons.ts' },
+];
+
+const THEATER_BORROW_UNATTESTED_DEPS: readonly UnattestedLocalDependency[] = [
+  { name: 'THEATER_BOSS_INFO', sourceFile: 'src/data/theater-seasons.ts' },
+];
+
+function isCustomTheaterSeason(season: TheaterSeasonConfig): boolean {
+  return season.id === 'custom-theater-sandbox' || season.id.startsWith('custom-');
 }
 
 /**
- * Builds an actionable preservation plan, apex boss readiness audit, roster weakness list,
- * recommended archetypes, and phased draft plan for the current Theater schedule.
+ * Evaluates Theater reliability at the public engine boundary.
+ * - Custom Theater seasons use `sandbox_simulation` mode with the dedicated provisional
+ *   `'custom-theater-sandbox'` marker and `'characters_v7_2_batch7'`, without reusing
+ *   Abyss's `'custom-sandbox'`, without a canonical schedule object, and without synthetic
+ *   `custom-*` season IDs.
+ * - Canonical Theater seasons resolve mode via `evaluateScheduledEngineReliability()`.
+ * - Unknown non-custom season IDs remain unregistered and resolve to `unsupported`.
+ * - Unattested local static tables (`THEATER_BOSS_INFO`, and `THEATER_DIFFICULTIES` for
+ *   draft/season analysis) are declared so active-season recommendations remain `qualified`
+ *   and non-actionable until those tables receive provenance attestation.
  */
-export function analyzeTheaterSeasonPlan(
+function evaluateTheaterReliability(
+  season: TheaterSeasonConfig,
+  unattestedLocalDependencies: readonly UnattestedLocalDependency[],
+  executionContext?: RecommendationExecutionContext,
+): RecommendationReliability {
+  if (isCustomTheaterSeason(season)) {
+    return evaluateEngineBoundaryReliability({
+      mode: 'sandbox_simulation',
+      requiredDatasetIds: ['characters_v7_2_batch7', 'custom-theater-sandbox'],
+      unattestedLocalDependencies,
+      executionContext,
+    });
+  }
+
+  return evaluateScheduledEngineReliability({
+    schedule: { type: 'theater', entityId: season.id },
+    entityVersion: season.version,
+    requiredDatasetIds: ['characters_v7_2_batch7', season.id],
+    unattestedLocalDependencies,
+    executionContext,
+  });
+}
+
+/**
+ * Internal season-plan computation without reliability evaluation so `autoDraftTheaterSchedule`
+ * evaluates reliability once and guarantees identical reliability metadata on both
+ * `TheaterScheduleResult` and `TheaterSeasonAnalysis`.
+ */
+function computeTheaterSeasonPlanInternal(
   acts: TheaterActPlan[],
   eligible: Character[],
   difficulty: TheaterDifficulty,
   season: TheaterSeasonConfig,
-): TheaterSeasonAnalysis {
+): Omit<TheaterSeasonAnalysis, 'reliability'> {
   const diffConfig = THEATER_DIFFICULTIES[difficulty];
   const bossActs = [...diffConfig.bossActs].sort((a, b) => a - b);
   const apexBossAct = bossActs[bossActs.length - 1];
@@ -386,6 +444,26 @@ export function analyzeTheaterSeasonPlan(
 }
 
 /**
+ * Builds an actionable preservation plan, apex boss readiness audit, roster weakness list,
+ * recommended archetypes, and phased draft plan for the current Theater schedule.
+ */
+export function analyzeTheaterSeasonPlan(
+  acts: TheaterActPlan[],
+  eligible: Character[],
+  difficulty: TheaterDifficulty,
+  season: TheaterSeasonConfig,
+  executionContext?: RecommendationExecutionContext,
+): TheaterSeasonAnalysis {
+  const analysis = computeTheaterSeasonPlanInternal(acts, eligible, difficulty, season);
+  const reliability = evaluateTheaterReliability(
+    season,
+    THEATER_PLAN_UNATTESTED_DEPS,
+    executionContext,
+  );
+  return { ...analysis, reliability };
+}
+
+/**
  * Auto-drafts an optimal Theater act schedule respecting:
  * 1. Strict 2-Vigor constraint (no character can appear in > 2 acts).
  * 2. Boss Act allocation: Acts 3, 6, 8, 10 prioritize premier carries & buffers tailored to boss mechanics.
@@ -399,7 +477,13 @@ export function autoDraftTheaterSchedule(
   season: TheaterSeasonConfig,
   userLocks?: Record<number, string[]>,
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
+  executionContext?: RecommendationExecutionContext,
 ): TheaterScheduleResult {
+  const reliability = evaluateTheaterReliability(
+    season,
+    THEATER_PLAN_UNATTESTED_DEPS,
+    executionContext,
+  );
   const diffConfig = THEATER_DIFFICULTIES[difficulty];
   const totalActs = diffConfig.acts;
   const requiredCount = diffConfig.requiredCharacters;
@@ -648,7 +732,10 @@ export function autoDraftTheaterSchedule(
     }
   }
 
-  const seasonAnalysis = analyzeTheaterSeasonPlan(acts, eligible, difficulty, season);
+  const seasonAnalysis: TheaterSeasonAnalysis = {
+    ...computeTheaterSeasonPlanInternal(acts, eligible, difficulty, season),
+    reliability,
+  };
 
   return {
     acts,
@@ -656,6 +743,7 @@ export function autoDraftTheaterSchedule(
     validationErrors,
     shortfallSuggestions,
     seasonAnalysis,
+    reliability,
   };
 }
 
@@ -1224,7 +1312,13 @@ export function recommendSupportCastBorrow(
   eligible: Character[],
   season: TheaterSeasonConfig,
   ownedIds?: string[],
-): Character[] {
+  executionContext?: RecommendationExecutionContext,
+): RecommendationCollection<Character> {
+  const reliability = evaluateTheaterReliability(
+    season,
+    THEATER_BORROW_UNATTESTED_DEPS,
+    executionContext,
+  );
   const ownedSet = new Set(ownedIds ?? eligible.map((c) => c.id));
   const seasonElements = new Set(season.elements);
   const guestSet = new Set(season.specialGuestIds);
@@ -1243,7 +1337,7 @@ export function recommendSupportCastBorrow(
     });
   }
 
-  if (candidates.length === 0) return [];
+  if (candidates.length === 0) return { items: [], reliability };
 
   const bossActs = Object.keys(season.bosses)
     .map(Number)
@@ -1299,5 +1393,5 @@ export function recommendSupportCastBorrow(
   });
 
   scoredCandidates.sort((a, b) => b.value - a.value);
-  return scoredCandidates.slice(0, 3).map((item) => item.char);
+  return { items: scoredCandidates.slice(0, 3).map((item) => item.char), reliability };
 }

@@ -6,9 +6,33 @@ import type {
   Character,
   TheaterDifficulty,
   TheaterSeasonConfig,
+  RecommendationCollection,
+  RecommendationExecutionContext,
 } from '../types/genshin';
 import type { AbyssCycleConfig } from '../data/abyss-schedules';
 import type { TheaterScheduleResult } from '../engines/theater-solver';
+
+/**
+ * Resolves an explicit UTC evaluation date once at dispatch time without importing
+ * heavy data/evaluator modules so the dispatcher chunk stays under the 20 KB budget.
+ * Explicitly supplied `evaluatedAt` strings (even invalid ones) are forwarded verbatim
+ * and never replaced by the system clock; the system clock is used only when omitted.
+ */
+function withResolvedExecutionContext(
+  executionContext?: RecommendationExecutionContext,
+): RecommendationExecutionContext | undefined {
+  if (executionContext !== undefined && executionContext.evaluatedAt !== undefined) {
+    return { evaluatedAt: executionContext.evaluatedAt };
+  }
+  const now = new Date();
+  if (Number.isNaN(now.getTime())) {
+    return undefined;
+  }
+  const yyyy = String(now.getUTCFullYear()).padStart(4, '0');
+  const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(now.getUTCDate()).padStart(2, '0');
+  return { evaluatedAt: `${yyyy}-${mm}-${dd}` };
+}
 
 let workerInstance: Worker | null = null;
 let workerFailed = false;
@@ -88,16 +112,19 @@ export async function dispatchSolveAbyss(
   ownedIds: string[],
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
   cycle?: AbyssCycleConfig,
+  executionContext?: RecommendationExecutionContext,
 ): Promise<AbyssDualTeamPlan> {
+  const resolvedContext = withResolvedExecutionContext(executionContext);
   try {
     return await runWorkerTask<AbyssDualTeamPlan>('SOLVE_ABYSS', {
       ownedIds,
       rosterProfiles,
       cycle,
+      executionContext: resolvedContext,
     });
   } catch {
     const { solveAbyssDualTeams } = await import('../engines/abyss-solver');
-    return solveAbyssDualTeams(ownedIds, rosterProfiles, cycle);
+    return solveAbyssDualTeams(ownedIds, rosterProfiles, cycle, resolvedContext);
   }
 }
 
@@ -111,14 +138,17 @@ export async function dispatchGenerateBestTeams(
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
   ownedWeapons?: OwnedWeapon[],
   allowCatalogFallback?: boolean,
-): Promise<TeamRecommendation[]> {
+  executionContext?: RecommendationExecutionContext,
+): Promise<RecommendationCollection<TeamRecommendation>> {
+  const resolvedContext = withResolvedExecutionContext(executionContext);
   try {
-    return await runWorkerTask<TeamRecommendation[]>('GENERATE_TEAMS', {
+    return await runWorkerTask<RecommendationCollection<TeamRecommendation>>('GENERATE_TEAMS', {
       availableIds,
       focusCharacterId,
       rosterProfiles,
       ownedWeapons,
       allowCatalogFallback,
+      executionContext: resolvedContext,
     });
   } catch {
     const { generateBestTeams } = await import('../engines/team-generator');
@@ -128,6 +158,7 @@ export async function dispatchGenerateBestTeams(
       rosterProfiles,
       ownedWeapons,
       allowCatalogFallback,
+      resolvedContext,
     );
   }
 }
@@ -142,7 +173,9 @@ export async function dispatchAutoDraftTheater(
   season: TheaterSeasonConfig,
   userLocks?: Record<number, string[]>,
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
+  executionContext?: RecommendationExecutionContext,
 ): Promise<TheaterScheduleResult> {
+  const resolvedContext = withResolvedExecutionContext(executionContext);
   try {
     return await runWorkerTask<TheaterScheduleResult>('SOLVE_THEATER', {
       eligible,
@@ -150,6 +183,7 @@ export async function dispatchAutoDraftTheater(
       season,
       userLocks,
       rosterProfiles,
+      executionContext: resolvedContext,
     });
   } catch {
     const { autoDraftTheaterSchedule } = await import('../engines/theater-solver');
@@ -159,6 +193,7 @@ export async function dispatchAutoDraftTheater(
       season,
       userLocks,
       rosterProfiles,
+      resolvedContext,
     );
   }
 }

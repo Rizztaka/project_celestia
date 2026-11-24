@@ -91,7 +91,7 @@ describe('Canonical Meta-Team Benchmark Library (25+ Archetypes across 3 Persona
   // 2. Persona 1: Starter F2P Recommendations
   describe('Persona 1: Starter F2P Account', () => {
     it('recommends premier F2P National team (Xiangling / Bennett / Xingqiu / Sucrose)', () => {
-      const teams = generateBestTeams(STARTER_F2P_IDS, undefined, STARTER_PROFILES);
+      const teams = generateBestTeams(STARTER_F2P_IDS, undefined, STARTER_PROFILES).items;
       expect(teams.length).toBeGreaterThan(0);
 
       const national =
@@ -106,7 +106,7 @@ describe('Canonical Meta-Team Benchmark Library (25+ Archetypes across 3 Persona
     });
 
     it('enforces exact owned roster: exactly 0 unowned characters appear', () => {
-      const teams = generateBestTeams(STARTER_F2P_IDS, undefined, STARTER_PROFILES);
+      const teams = generateBestTeams(STARTER_F2P_IDS, undefined, STARTER_PROFILES).items;
       const starterSet = new Set(STARTER_F2P_IDS);
 
       for (const team of teams) {
@@ -120,7 +120,7 @@ describe('Canonical Meta-Team Benchmark Library (25+ Archetypes across 3 Persona
     });
 
     it('never pairs multiple Traveler elemental configurations together', () => {
-      const teams = generateBestTeams(STARTER_F2P_IDS, undefined, STARTER_PROFILES);
+      const teams = generateBestTeams(STARTER_F2P_IDS, undefined, STARTER_PROFILES).items;
       for (const team of teams) {
         const travelers = team.members.filter((m) => m.id.startsWith('Traveler'));
         expect(travelers.length).toBeLessThanOrEqual(1);
@@ -131,19 +131,19 @@ describe('Canonical Meta-Team Benchmark Library (25+ Archetypes across 3 Persona
   // 3. Persona 2: Dolphin Account
   describe('Persona 2: Dolphin Account', () => {
     it('generates high-tier teams for prominent carries (Neuvillette, Mavuika, Clorinde)', () => {
-      const teamsNeuv = generateBestTeams(DOLPHIN_IDS, 'Neuvillette', DOLPHIN_PROFILES, ALL_WEAPONS_BAG);
+      const teamsNeuv = generateBestTeams(DOLPHIN_IDS, 'Neuvillette', DOLPHIN_PROFILES, ALL_WEAPONS_BAG).items;
       expect(teamsNeuv.length).toBeGreaterThan(0);
       const neuvTeam = teamsNeuv[0];
       expect(neuvTeam.members.map((m) => m.id)).toContain('Neuvillette');
       expect(neuvTeam.scores?.benchmarkTier).toBe('S+');
 
-      const teamsMav = generateBestTeams(DOLPHIN_IDS, 'Mavuika', DOLPHIN_PROFILES, ALL_WEAPONS_BAG);
+      const teamsMav = generateBestTeams(DOLPHIN_IDS, 'Mavuika', DOLPHIN_PROFILES, ALL_WEAPONS_BAG).items;
       expect(teamsMav.length).toBeGreaterThan(0);
       expect(teamsMav.some((t) => t.members.some((m) => m.id === 'Mavuika'))).toBe(true);
     });
 
     it('enforces Chevreuse exclusivity on Dolphin Overload teams: 0 off-element supports', () => {
-      const teams = generateBestTeams(DOLPHIN_IDS, 'Chevreuse', DOLPHIN_PROFILES, ALL_WEAPONS_BAG);
+      const teams = generateBestTeams(DOLPHIN_IDS, 'Chevreuse', DOLPHIN_PROFILES, ALL_WEAPONS_BAG).items;
       const chevTeam = teams.find((t) => t.archetype === 'Overload');
 
       expect(chevTeam).toBeDefined();
@@ -383,7 +383,7 @@ describe('Canonical Meta-Team Benchmark Library (25+ Archetypes across 3 Persona
           item.focusId,
           WHALE_PROFILES,
           ALL_WEAPONS_BAG,
-        );
+        ).items;
         expect(
           teams.length,
           `Failed to generate any teams for focus character ${item.focusId}`,

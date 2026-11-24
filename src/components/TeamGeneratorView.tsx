@@ -24,6 +24,7 @@ import type {
   OwnedWeapon,
   TeamWeaponAssignment,
   TeamRecommendation,
+  RecommendationCollection,
 } from '../types/genshin';
 import {
   Sparkles,
@@ -123,7 +124,11 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
 
   const weaponBag = useMemo(() => weapons || getSavedWeapons(), [weapons]);
 
-  const [teams, setTeams] = useState<TeamRecommendation[]>([]);
+  // Retain full RecommendationCollection envelope (items + reliability) in state for Phase 4
+  const [teamResult, setTeamResult] = useState<RecommendationCollection<TeamRecommendation> | null>(
+    null
+  );
+  const teams = useMemo(() => teamResult?.items ?? [], [teamResult]);
   const [isSolving, setIsSolving] = useState<boolean>(
     () => ownedIds.length >= 4 || showCatalogFallback
   );
@@ -131,7 +136,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
 
   useEffect(() => {
     if (ownedIds.length < 4 && !showCatalogFallback) {
-      setTeams([]);
+      setTeamResult(null);
       setIsSolving(false);
       return;
     }
@@ -144,10 +149,10 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
       profiles,
       weaponBag,
       showCatalogFallback,
-    ).then((newTeams) => {
+    ).then((result) => {
       if (isMounted) {
         startTransition(() => {
-          setTeams(newTeams);
+          setTeamResult(result);
           setIsSolving(false);
         });
       }
@@ -157,13 +162,26 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
     };
   }, [ownedIds, focusId, profiles, weaponBag, showCatalogFallback]);
 
+  // Retain full weapon-ranking collection envelope (items + reliability) for the active swap modal
+  const quickSwapWeaponRanking = useMemo(() => {
+    if (!quickSwapTarget) return null;
+    return rankWeaponsForCharacter(
+      quickSwapTarget.character,
+      weaponBag,
+      quickSwapTarget.teamMembers,
+    );
+  }, [quickSwapTarget, weaponBag]);
+
   const handleSwapMember = (
     teamId: string,
     originalId: string,
     newMember: Character,
   ) => {
-    setTeams((prevTeams) =>
-      prevTeams.map((t) => {
+    setTeamResult((prevResult) => {
+      if (!prevResult) return prevResult;
+      return {
+        ...prevResult,
+        items: prevResult.items.map((t) => {
         if (t.id !== teamId) return t;
         const newMembers = t.members.map((m) => (m.id === originalId ? newMember : m));
         const template = TEMPLATES.find((tpl) => tpl.archetype === t.archetype) || {
@@ -242,7 +260,8 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
           explanation,
         };
       }),
-    );
+      };
+    });
   };
 
   const featuredCarries = ['Nefer', 'Mavuika', 'HuTao', 'Alhaitham', 'Clorinde', 'Neuvillette', 'Navia'];
@@ -1172,11 +1191,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
             </p>
 
             <div className="overflow-y-auto flex-1 min-h-0 space-y-2 pr-1">
-              {rankWeaponsForCharacter(
-                quickSwapTarget.character,
-                weaponBag,
-                quickSwapTarget.teamMembers,
-              ).map((scoreRes) => {
+              {(quickSwapWeaponRanking?.items ?? []).map((scoreRes) => {
                 const w = scoreRes.weapon as OwnedWeapon;
                 const isCurrent = quickSwapTarget.currentAssignment?.assignedWeapon.id === w.id;
                 const canonicalW = getWeaponByKey(w.key) || getWeaponByKey(w.name);
@@ -1276,11 +1291,12 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                               borrowedFrom: prevWeapon.location,
                             };
                           } else {
-                            const availableForOther = rankWeaponsForCharacter(
+                            const otherWeaponRanking = rankWeaponsForCharacter(
                               otherMemberUsingW,
                               weaponBag.filter((wb) => wb.id !== w.id),
                               quickSwapTarget.teamMembers,
                             );
+                            const availableForOther = otherWeaponRanking.items;
                             if (availableForOther.length > 0) {
                               const bestNext = availableForOther[0];
                               const nextW = bestNext.weapon as OwnedWeapon;

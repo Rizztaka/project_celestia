@@ -460,7 +460,7 @@ for (const b of provBlocks) {
   if (!dateRegex.test(verifiedAt)) {
     recordError('Axis 6', `Provenance "${id}" has invalid verifiedAt "${verifiedAt}"`);
   }
-  const isSandbox = id === 'custom-sandbox';
+  const isSandbox = id === 'custom-sandbox' || id === 'custom-theater-sandbox';
   const allowsMissingUrl = isSandbox || method === 'in_game_verification';
   if (sourceUrl !== undefined) {
     if (!sourceUrl.startsWith('https://')) {

@@ -725,7 +725,7 @@ describe('Spiral Abyss Floor 12 Dual-Team Solver', () => {
 
     it('analyzeEndgameReadiness flags missing Bow User Required and excludes prohibited elements from usableCounters', () => {
       const noBowOnlyPyro = ['Arlecchino', 'Bennett', 'Xiangling'];
-      const readiness = analyzeEndgameReadiness(noBowOnlyPyro, ABYSS_CYCLES[0]);
+      const readiness = analyzeEndgameReadiness(noBowOnlyPyro, ABYSS_CYCLES[0]).items;
 
       const c2Second = readiness.find((r) => r.chamber.chamber === 2 && r.chamber.half === 'Second Half')!;
       expect(c2Second.missingElements).toContain('Bow User Required');

@@ -17,7 +17,7 @@ describe('Celestia v2 Core Engines', () => {
         'Xingqiu',
         'Bennett',
       ];
-      const teams = generateBestTeams(invertedRoster, 'HuTao');
+      const teams = generateBestTeams(invertedRoster, 'HuTao').items;
       const vape = teams.find((t) => t.archetype === 'Vaporize');
       expect(vape).toBeDefined();
 
@@ -83,7 +83,7 @@ describe('Celestia v2 Core Engines', () => {
         'Xiangling',
         'Nahida',
       ];
-      const teams = generateBestTeams(rosterWithTravelers);
+      const teams = generateBestTeams(rosterWithTravelers).items;
       expect(teams.length).toBeGreaterThan(0);
 
       for (const team of teams) {
@@ -104,7 +104,7 @@ describe('Celestia v2 Core Engines', () => {
         'Zhongli',
         'Xingqiu',
       ];
-      const teams = generateBestTeams(roster, 'HuTao');
+      const teams = generateBestTeams(roster, 'HuTao').items;
       const vape = teams.find((t) => t.archetype === 'Vaporize');
       expect(vape).toBeDefined();
 
@@ -116,7 +116,7 @@ describe('Celestia v2 Core Engines', () => {
 
     it('generates a premier Lunar-Bloom team when Nefer is owned', () => {
       const owned = ['Nefer', 'Furina', 'Nahida', 'KukiShinobu', 'Xingqiu'];
-      const teams = generateBestTeams(owned, 'Nefer');
+      const teams = generateBestTeams(owned, 'Nefer').items;
 
       expect(teams.length).toBeGreaterThan(0);
       const neferTeam = teams.find((t) => t.archetype === 'Lunar-Bloom');
@@ -129,7 +129,7 @@ describe('Celestia v2 Core Engines', () => {
 
     it('calculates elemental resonance properly', () => {
       const owned = ['HuTao', 'Bennett', 'Xingqiu', 'Yelan'];
-      const teams = generateBestTeams(owned);
+      const teams = generateBestTeams(owned).items;
       const vapeTeam = teams.find((t) => t.archetype === 'Vaporize');
       expect(vapeTeam).toBeDefined();
       expect(vapeTeam?.resonance.some((r) => r.includes('Fervent Flames') || r.includes('Soothing Water'))).toBe(true);
@@ -137,14 +137,14 @@ describe('Celestia v2 Core Engines', () => {
 
     it('boosts synergy score and appends reasons when constellation milestones are met', () => {
       const owned = ['Xiangling', 'Bennett', 'Xingqiu', 'RaidenShogun'];
-      const baseTeams = generateBestTeams(owned);
+      const baseTeams = generateBestTeams(owned).items;
       const baseVape = baseTeams.find((t) => t.archetype === 'Vaporize') || baseTeams[0];
 
       const boostedProfiles = {
         Xiangling: { id: 'Xiangling', level: 90, constellation: 4 },
         Bennett: { id: 'Bennett', level: 90, constellation: 1 },
       };
-      const boostedTeams = generateBestTeams(owned, undefined, boostedProfiles);
+      const boostedTeams = generateBestTeams(owned, undefined, boostedProfiles).items;
       const boostedVape = boostedTeams.find((t) => t.archetype === 'Vaporize') || boostedTeams[0];
 
       expect(boostedVape.synergyScore).toBeGreaterThanOrEqual(baseVape.synergyScore);
@@ -158,7 +158,7 @@ describe('Celestia v2 Core Engines', () => {
       const c6ProfilesXiangling = {
         Bennett: { id: 'Bennett', level: 90, constellation: 6 },
       };
-      const teamsWithXiangling = generateBestTeams(pyroMeleeOwned, undefined, c6ProfilesXiangling);
+      const teamsWithXiangling = generateBestTeams(pyroMeleeOwned, undefined, c6ProfilesXiangling).items;
       const xianglingTeam = teamsWithXiangling.find((t) => t.members.some((m) => m.id === 'Xiangling')) || teamsWithXiangling[0];
       expect(xianglingTeam.reasons.some((r) => r.includes('Bennett C6: +15% Pyro DMG Bonus for Sword, Claymore, and Polearm carries.'))).toBe(true);
 
@@ -167,7 +167,7 @@ describe('Celestia v2 Core Engines', () => {
       const c6ProfilesYoimiya = {
         Bennett: { id: 'Bennett', level: 90, constellation: 6 },
       };
-      const teamsWithYoimiya = generateBestTeams(bowOwned, undefined, c6ProfilesYoimiya);
+      const teamsWithYoimiya = generateBestTeams(bowOwned, undefined, c6ProfilesYoimiya).items;
       const yoimiyaTeam = teamsWithYoimiya.find((t) => t.members.some((m) => m.id === 'Yoimiya')) || teamsWithYoimiya[0];
       expect(yoimiyaTeam.reasons.some((r) => r.includes('Bennett C6: +15% Pyro DMG Bonus'))).toBe(false);
 
@@ -176,22 +176,22 @@ describe('Celestia v2 Core Engines', () => {
       const c6ProfilesEula = {
         Bennett: { id: 'Bennett', level: 90, constellation: 6 },
       };
-      const teamsWithEula = generateBestTeams(physicalOwned, undefined, c6ProfilesEula);
+      const teamsWithEula = generateBestTeams(physicalOwned, undefined, c6ProfilesEula).items;
       const eulaTeam = teamsWithEula.find((t) => t.members.some((m) => m.id === 'Eula')) || teamsWithEula[0];
       expect(eulaTeam.reasons.some((r) => r.includes('Caution: Bennett C6 Pyro Infusion overrides'))).toBe(true);
     });
 
     it('enforces strict ownership and returns empty array when fewer than 4 characters owned', () => {
       // 0 owned
-      const emptyTeams = generateBestTeams([]);
+      const emptyTeams = generateBestTeams([]).items;
       expect(emptyTeams).toEqual([]);
 
       // 1-3 owned
-      const partialTeams = generateBestTeams(['Furina', 'Neuvillette']);
+      const partialTeams = generateBestTeams(['Furina', 'Neuvillette']).items;
       expect(partialTeams).toEqual([]);
 
       // With allowCatalogFallback = true, returns theoretical catalog teams
-      const fallbackTeams = generateBestTeams(['Furina', 'Neuvillette'], undefined, undefined, undefined, true);
+      const fallbackTeams = generateBestTeams(['Furina', 'Neuvillette'], undefined, undefined, undefined, true).items;
       expect(fallbackTeams.length).toBeGreaterThan(0);
       expect(fallbackTeams[0].isTheoretical).toBe(true);
 
@@ -209,11 +209,11 @@ describe('Celestia v2 Core Engines', () => {
     it('strictly enforces focus-character ownership constraint', () => {
       // 4 owned, but focus character is unowned
       const owned = ['Furina', 'Neuvillette', 'KaedeharaKazuha', 'Zhongli'];
-      const teamsUnownedFocus = generateBestTeams(owned, 'HuTao');
+      const teamsUnownedFocus = generateBestTeams(owned, 'HuTao').items;
       expect(teamsUnownedFocus).toEqual([]);
 
       // 4 owned, focus character unowned, but allowCatalogFallback is true -> returns theoretical teams with HuTao
-      const teamsUnownedWithFallback = generateBestTeams(owned, 'HuTao', undefined, undefined, true);
+      const teamsUnownedWithFallback = generateBestTeams(owned, 'HuTao', undefined, undefined, true).items;
       expect(teamsUnownedWithFallback.length).toBeGreaterThan(0);
       expect(teamsUnownedWithFallback[0].isTheoretical).toBe(true);
       for (const team of teamsUnownedWithFallback) {
@@ -221,7 +221,7 @@ describe('Celestia v2 Core Engines', () => {
       }
 
       // 4 owned, focus character IS owned -> every team MUST contain the focus character
-      const teamsOwnedFocus = generateBestTeams(owned, 'Neuvillette');
+      const teamsOwnedFocus = generateBestTeams(owned, 'Neuvillette').items;
       expect(teamsOwnedFocus.length).toBeGreaterThan(0);
       for (const team of teamsOwnedFocus) {
         expect(team.members.some((m) => m.id === 'Neuvillette')).toBe(true);
@@ -277,7 +277,7 @@ describe('Celestia v2 Core Engines', () => {
   describe('Endgame Shield Helper', () => {
     it('identifies Hydro counters for Pyro Lector in Floor 12 Chamber 1', () => {
       const owned = ['Furina', 'Neuvillette', 'Bennett', 'Fischl'];
-      const analysis = analyzeEndgameReadiness(owned);
+      const analysis = analyzeEndgameReadiness(owned).items;
 
       const chamber1Part2 = analysis.find((a) => a.chamber.chamber === 1 && a.chamber.half === 'Second Half');
       expect(chamber1Part2).toBeDefined();

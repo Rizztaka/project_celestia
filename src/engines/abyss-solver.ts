@@ -10,9 +10,13 @@ import type {
   EncounterTargetProfile,
   EnemyMovementTrait,
   OwnedCharacterProfile,
+  RecommendationExecutionContext,
+  RecommendationReliability,
+  ReliabilityDependencyDetail,
+  VerificationState,
 } from '../types/genshin';
 import { CHARACTERS } from '../data/characters';
-import { generateBestTeams } from './team-generator';
+import { computeBestTeamsInternal } from './team-generator';
 import { synthesizeTeamRotation } from './rotation-synthesizer';
 import {
   calculateEffectiveResMultiplier,
@@ -29,6 +33,11 @@ import {
 } from '../data/abyss-schedules';
 import { getSavedCustomAbyss } from '../services/storage';
 import { isSameCharacterOrTraveler } from './team-rules';
+import { parseIsoCalendarDate } from '../services/recommendation-reliability';
+import {
+  evaluateEngineBoundaryReliability,
+  evaluateScheduledEngineReliability,
+} from '../services/engine-reliability';
 
 export { NATLAN_NIGHTSOUL_IDS };
 
@@ -838,6 +847,222 @@ function injectEncounterCounterCandidates(
   return injected;
 }
 
+function evaluateAbyssReliability(
+  activeCycle: AbyssCycleConfig,
+  executionContext?: RecommendationExecutionContext,
+): RecommendationReliability {
+  const isCustomSandbox = Boolean(activeCycle.isCustom || activeCycle.id === 'custom-sandbox');
+  const baseRequired = [
+    'characters_v7_2_batch7',
+    'team_archetypes_v7_2',
+    'rotations_v7_2_catalog',
+    'weapons_v7_2_signatures',
+  ];
+  const optionalDatasetIds = ['artifact_weights_v7_2'];
+
+  if (isCustomSandbox) {
+    return evaluateEngineBoundaryReliability({
+      mode: 'sandbox_simulation',
+      requiredDatasetIds: [...baseRequired, 'custom-sandbox'],
+      optionalDatasetIds,
+      executionContext,
+    });
+  }
+
+  return evaluateScheduledEngineReliability({
+    schedule: { type: 'abyss', entityId: activeCycle.id },
+    entityVersion: activeCycle.version,
+    requiredDatasetIds: [...baseRequired, activeCycle.id],
+    optionalDatasetIds,
+    executionContext,
+  });
+}
+
+const VALID_RELIABILITY_STATUSES = new Set(['reliable', 'qualified', 'historical', 'unsupported']);
+const VALID_MODES = new Set([
+  'current',
+  'planning_preview',
+  'archive_simulation',
+  'sandbox_simulation',
+]);
+const VALID_VERIFICATIONS = new Set(['verified', 'provisional', 'stale', 'unregistered']);
+const VALID_TEMPORALS = new Set(['upcoming', 'active', 'expired', 'not_applicable']);
+const VALID_POLICIES = new Set(['schedule_window', 'version_bound', 'patch_cadence', 'sandbox']);
+const VALID_RISK_TIERS = new Set(['high', 'low']);
+
+function isValidDependencyDetail(dep: unknown): boolean {
+  if (!dep || typeof dep !== 'object') return false;
+  const d = dep as Record<string, unknown>;
+  return (
+    typeof d.datasetId === 'string' &&
+    d.datasetId.length > 0 &&
+    typeof d.required === 'boolean' &&
+    typeof d.verification === 'string' &&
+    VALID_VERIFICATIONS.has(d.verification) &&
+    typeof d.policy === 'string' &&
+    VALID_POLICIES.has(d.policy) &&
+    typeof d.riskTier === 'string' &&
+    VALID_RISK_TIERS.has(d.riskTier) &&
+    (d.version === undefined || typeof d.version === 'string') &&
+    (d.verifiedAt === undefined || typeof d.verifiedAt === 'string') &&
+    (d.reason === undefined || typeof d.reason === 'string')
+  );
+}
+
+/**
+ * Validates both the complete `RecommendationReliability` structural contract
+ * and core M9 semantic consistency invariants so malformed, incomplete, or
+ * contradictory metadata can never be preserved as trusted.
+ */
+function isValidReliabilityEnvelope(value: unknown): value is RecommendationReliability {
+  if (!value || typeof value !== 'object') return false;
+  const r = value as Record<string, unknown>;
+
+  // 1. Structural type assertions for core scalar and array fields
+  if (
+    typeof r.status !== 'string' ||
+    !VALID_RELIABILITY_STATUSES.has(r.status) ||
+    typeof r.mode !== 'string' ||
+    !VALID_MODES.has(r.mode) ||
+    typeof r.isActionable !== 'boolean' ||
+    typeof r.verification !== 'string' ||
+    !VALID_VERIFICATIONS.has(r.verification) ||
+    typeof r.temporalState !== 'string' ||
+    !VALID_TEMPORALS.has(r.temporalState) ||
+    !Array.isArray(r.provenanceIds) ||
+    !r.provenanceIds.every((id) => typeof id === 'string' && id.length > 0) ||
+    !Array.isArray(r.warnings) ||
+    !r.warnings.every((w) => typeof w === 'string')
+  ) {
+    return false;
+  }
+
+  // 2. EvaluatedAt timestamp validation (optional, but if present must be valid ISO calendar date)
+  if (r.evaluatedAt !== undefined) {
+    if (typeof r.evaluatedAt !== 'string' || parseIsoCalendarDate(r.evaluatedAt) === null) {
+      return false;
+    }
+  }
+
+  // 3. Dependencies contract validation: must be an array of valid entries with no duplicates
+  if (!Array.isArray(r.dependencies)) {
+    return false;
+  }
+  if (!r.dependencies.every(isValidDependencyDetail)) {
+    return false;
+  }
+  const deps = r.dependencies as ReliabilityDependencyDetail[];
+  const seenDepIds = new Set<string>();
+  for (const dep of deps) {
+    if (seenDepIds.has(dep.datasetId)) {
+      return false; // Reject duplicate dependency IDs
+    }
+    seenDepIds.add(dep.datasetId);
+  }
+
+  // 4. Enforce Phase 2 provenance / dependency consistency contract:
+  // Every registered dependency must have its datasetId present in provenanceIds.
+  // Conversely, every ID in provenanceIds must originate from a registered dependency.
+  const registeredDepIds = new Set(
+    deps.filter((d) => d.verification !== 'unregistered').map((d) => d.datasetId),
+  );
+  const provIdSet = new Set(r.provenanceIds as string[]);
+
+  if (registeredDepIds.size !== provIdSet.size) {
+    return false;
+  }
+  for (const id of provIdSet) {
+    if (!registeredDepIds.has(id)) {
+      return false;
+    }
+  }
+
+  // 5. Enforce Phase 2 verification aggregation contract on required dependencies:
+  // Aggregation evaluates strictly required dependencies with precedence:
+  // unregistered > stale > provisional > verified
+  const requiredDeps = deps.filter((d) => d.required);
+  const expectedVerification: VerificationState =
+    requiredDeps.length === 0 || requiredDeps.some((d) => d.verification === 'unregistered')
+      ? 'unregistered'
+      : requiredDeps.some((d) => d.verification === 'stale')
+        ? 'stale'
+        : requiredDeps.some((d) => d.verification === 'provisional')
+          ? 'provisional'
+          : 'verified';
+
+  if (r.verification !== expectedVerification) {
+    return false;
+  }
+
+  // Any required unregistered dependency strictly requires status: 'unsupported' and isActionable: false
+  if (requiredDeps.some((d) => d.verification === 'unregistered')) {
+    if (r.status !== 'unsupported' || r.isActionable) {
+      return false;
+    }
+  }
+
+  // 6. Core M9 semantic invariants
+  if (r.status === 'unsupported' && r.isActionable) return false;
+  if (r.mode !== 'current' && (r.isActionable || r.status === 'reliable')) return false;
+  if (
+    (r.temporalState === 'upcoming' || r.temporalState === 'expired') &&
+    (r.isActionable || r.status === 'reliable')
+  ) {
+    return false;
+  }
+  if (r.verification === 'unregistered' && (r.status !== 'unsupported' || r.isActionable)) {
+    return false;
+  }
+
+  // 7. Reliable envelope invariants:
+  // Must be verified and actionable with at least one provenance ID.
+  // Must have at least one required dependency, all required dependencies must be verified,
+  // and all required dependencies must be present in provenanceIds.
+  if (r.status === 'reliable') {
+    if (r.verification !== 'verified' || !r.isActionable || r.provenanceIds.length === 0) {
+      return false;
+    }
+    if (requiredDeps.length === 0) {
+      return false; // Reliable envelope cannot omit required dependencies
+    }
+    if (!requiredDeps.every((d) => d.verification === 'verified' && provIdSet.has(d.datasetId))) {
+      return false;
+    }
+  }
+
+  // 8. Historical envelope invariants
+  if (r.status === 'historical' && (r.mode !== 'archive_simulation' || r.isActionable)) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Preserves a valid, semantically consistent reliability envelope across half-swaps
+ * without re-evaluating. Missing, incomplete, malformed, or inconsistent metadata
+ * yields a conservative unsupported, non-actionable envelope.
+ */
+function preserveSwapReliability(
+  existing: RecommendationReliability | undefined,
+): RecommendationReliability {
+  if (isValidReliabilityEnvelope(existing)) {
+    return existing;
+  }
+  return {
+    status: 'unsupported',
+    mode: 'current',
+    isActionable: false,
+    verification: 'unregistered',
+    temporalState: 'not_applicable',
+    provenanceIds: [],
+    warnings: [
+      'Original Abyss plan is missing valid or semantically consistent reliability metadata; swapAbyssDualHalves() refuses to reconstruct missing reliability as trusted.',
+    ],
+    dependencies: [],
+  };
+}
+
 /**
  * Solves the unified Spiral Abyss Floor 12 pairing:
  * Finds two completely disjoint teams (TeamA ∩ TeamB = ∅) prioritizing 100% chamber mechanics clearance,
@@ -848,8 +1073,10 @@ export function solveAbyssDualTeams(
   ownedIds: string[],
   rosterProfiles?: Record<string, OwnedCharacterProfile>,
   cycle?: AbyssCycleConfig,
+  executionContext?: RecommendationExecutionContext,
 ): AbyssDualTeamPlan {
   const activeCycle = cycle || ABYSS_CYCLES[0];
+  const reliability = evaluateAbyssReliability(activeCycle, executionContext);
   const ownedSet = new Set(ownedIds);
   const rawOwnedChars = CHARACTERS.filter((c) => ownedSet.has(c.id));
 
@@ -905,6 +1132,7 @@ export function solveAbyssDualTeams(
       warnings: [
         `Roster Shortfall: Floor 12 requires at least 8 distinct characters (4 for First Half, 4 for Second Half). Your roster only has ${ownedChars.length} distinct characters. Showing partial draft.`,
       ],
+      reliability,
     };
     partialPlan.allPairs = [partialPlan];
     partialPlan.primaryPair = partialPlan;
@@ -912,7 +1140,7 @@ export function solveAbyssDualTeams(
   }
 
   // 1. Generate candidate primary teams + encounter-adapted tech variants
-  const rawCandidateTeams = generateBestTeams(uniqueOwnedIds, undefined, rosterProfiles);
+  const rawCandidateTeams = computeBestTeamsInternal(uniqueOwnedIds, undefined, rosterProfiles).items;
   const candidateTeams = [
     ...rawCandidateTeams,
     ...injectEncounterCounterCandidates(rawCandidateTeams, ownedChars, activeCycle),
@@ -996,7 +1224,7 @@ export function solveAbyssDualTeams(
 
     if (remainingChars.length >= 4) {
       const remainingIds = remainingChars.map((c) => c.id);
-      const rawSecondary = generateBestTeams(remainingIds, undefined, rosterProfiles);
+      const rawSecondary = computeBestTeamsInternal(remainingIds, undefined, rosterProfiles).items;
       const secondaryTeams = [
         ...rawSecondary,
         ...injectEncounterCounterCandidates(rawSecondary, remainingChars, activeCycle),
@@ -1079,6 +1307,7 @@ export function solveAbyssDualTeams(
       secondHalfExplanation: sp.secondHalfExplanation,
       ...(fallbacks.length > 0 ? { missingCounterFallbacks: fallbacks } : {}),
       ...(warnings.length > 0 ? { warnings } : {}),
+      reliability,
     };
   };
 
@@ -1173,7 +1402,8 @@ export function solveAbyssDualTeams(
 
 /**
  * 1-Click Swap Halves: Swaps First Half and Second Half teams and re-evaluates chamber coverage,
- * explanations, and fallback recommendations. Guaranteed 0-overlap preservation.
+ * explanations, and fallback recommendations while preserving valid reliability metadata or
+ * returning a conservative unsupported envelope if missing, malformed, or inconsistent.
  */
 export function swapAbyssDualHalves(
   plan: AbyssDualTeamPlan,
@@ -1206,6 +1436,7 @@ export function swapAbyssDualHalves(
       mechanicCoverageScore: Math.max(0, evalRes.totalScore),
       firstHalfExplanation: evalRes.firstHalfExplanation,
       secondHalfExplanation: evalRes.secondHalfExplanation,
+      reliability: preserveSwapReliability(p.reliability),
     };
   };
 

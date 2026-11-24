@@ -133,7 +133,7 @@ describe('Weapon Synergy Engine & Conflict Solver', () => {
         },
       ];
 
-      const ranked = rankWeaponsForCharacter(huTao, owned);
+      const ranked = rankWeaponsForCharacter(huTao, owned).items;
       // FavoniusSword should be filtered out because Hu Tao uses Polearm
       expect(ranked.length).toBe(2);
       expect(ranked[0].weapon.name).toBe('Staff of Homa');
@@ -141,7 +141,7 @@ describe('Weapon Synergy Engine & Conflict Solver', () => {
       expect(ranked[0].equippedOn).toBe('Zhongli');
 
       // Xiangling has Favonius Lance equipped
-      const xianglingRanked = rankWeaponsForCharacter(xiangling, owned);
+      const xianglingRanked = rankWeaponsForCharacter(xiangling, owned).items;
       const favLanceResult = xianglingRanked.find((r) => r.weapon.name === 'Favonius Lance');
       expect(favLanceResult?.isEquipped).toBe(true);
       expect(favLanceResult?.equippedOn).toBe('Xiangling');
@@ -388,7 +388,7 @@ describe('Weapon Synergy Engine & Conflict Solver', () => {
       expect(result.score).toBeGreaterThan(70);
 
       // Verify rankWeaponsForCharacter also returns 5★ rarity on the weapon
-      const ranked = rankWeaponsForCharacter(arlecchino, [ownedPjwsNoRarity]);
+      const ranked = rankWeaponsForCharacter(arlecchino, [ownedPjwsNoRarity]).items;
       expect(ranked.length).toBe(1);
       expect(ranked[0].weapon.rarity).toBe(5);
     });
@@ -497,10 +497,10 @@ describe('Weapon Synergy Engine & Conflict Solver', () => {
       };
 
       // rankWeaponsForCharacter must NOT include unresolvable unknown weapon for either polearm or sword
-      const rankedArle = rankWeaponsForCharacter(arlecchino, [unknownWeapon]);
+      const rankedArle = rankWeaponsForCharacter(arlecchino, [unknownWeapon]).items;
       expect(rankedArle.length).toBe(0);
 
-      const rankedFurina = rankWeaponsForCharacter(furina, [unknownWeapon]);
+      const rankedFurina = rankWeaponsForCharacter(furina, [unknownWeapon]).items;
       expect(rankedFurina.length).toBe(0);
 
       // assignOptimalTeamWeapons must NOT assign unresolvable unknown weapon to team members

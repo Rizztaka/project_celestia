@@ -3,7 +3,6 @@ import type {
   Character,
   Element,
   TheaterDifficulty,
-  TheaterActPlan,
   TheaterSeasonConfig,
   OwnedCharacterProfile,
 } from '../types/genshin';
@@ -23,6 +22,7 @@ import {
   evaluateBossActMatchup,
   recommendSupportCastBorrow,
   analyzeTheaterSeasonPlan,
+  type TheaterScheduleResult,
 } from '../engines/theater-solver';
 import { isSameCharacterOrTraveler } from '../engines/team-rules';
 import { dispatchAutoDraftTheater } from '../services/solver-dispatcher';
@@ -83,10 +83,12 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
   );
   const [customElements, setCustomElements] = useState<Element[]>(['Pyro', 'Hydro', 'Anemo']);
   const [difficulty, setDifficulty] = useState<TheaterDifficulty>('Visionary');
-  const [schedule, setSchedule] = useState<TheaterActPlan[]>([]);
-  const [vigorState, setVigorState] = useState<Record<string, number>>({});
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
-  const [shortfallSuggestions, setShortfallSuggestions] = useState<Character[]>([]);
+  // Retain full TheaterScheduleResult envelope (including reliability) in component state
+  const [scheduleResult, setScheduleResult] = useState<TheaterScheduleResult | null>(null);
+  const schedule = useMemo(() => scheduleResult?.acts ?? [], [scheduleResult]);
+  const vigorState = useMemo(() => scheduleResult?.vigorState ?? {}, [scheduleResult]);
+  const validationErrors = scheduleResult?.validationErrors ?? [];
+  const shortfallSuggestions = scheduleResult?.shortfallSuggestions ?? [];
   const [lockedActNumbers, setLockedActNumbers] = useState<Set<number>>(new Set());
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [modalError, setModalError] = useState<string | null>(null);
@@ -125,9 +127,11 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     return filterEligibleTheaterRoster(ownedIds, activeSeason, profiles, difficulty);
   }, [ownedIds, activeSeason, profiles, difficulty]);
 
-  const recommendedBorrows = useMemo(() => {
+  // Retain full RecommendationCollection envelope (items + reliability) for borrow advisor
+  const borrowResult = useMemo(() => {
     return recommendSupportCastBorrow(filteredRoster.eligible, activeSeason, ownedIds);
   }, [filteredRoster.eligible, activeSeason, ownedIds]);
+  const recommendedBorrows = borrowResult.items;
 
   const effectiveEligible = useMemo(() => {
     if (!borrowedCharId) return filteredRoster.eligible;
@@ -138,10 +142,19 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     return [borrowedChar, ...filteredRoster.eligible];
   }, [filteredRoster.eligible, borrowedCharId]);
 
+  // Reuse the schedule's evaluatedAt context so TheaterSeasonAnalysis and TheaterScheduleResult
+  // always produce identical reliability decisions across manual edits.
   const seasonAnalysis = useMemo(() => {
     if (schedule.length === 0) return null;
-    return analyzeTheaterSeasonPlan(schedule, effectiveEligible, difficulty, activeSeason);
-  }, [schedule, effectiveEligible, difficulty, activeSeason]);
+    const evaluatedAt = scheduleResult?.reliability.evaluatedAt;
+    return analyzeTheaterSeasonPlan(
+      schedule,
+      effectiveEligible,
+      difficulty,
+      activeSeason,
+      evaluatedAt ? { evaluatedAt } : undefined,
+    );
+  }, [schedule, effectiveEligible, difficulty, activeSeason, scheduleResult?.reliability.evaluatedAt]);
 
   const preservedActsByCharId = useMemo(() => {
     const map = new Map<string, number[]>();
@@ -196,10 +209,10 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
           isLocked: currentLocked.has(a.actNumber),
         }));
 
-        setSchedule(actsWithLocks);
-        setVigorState(res.vigorState);
-        setValidationErrors(res.validationErrors);
-        setShortfallSuggestions(res.shortfallSuggestions || []);
+        setScheduleResult({
+          ...res,
+          acts: actsWithLocks,
+        });
       });
     });
   };
@@ -242,8 +255,15 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
       } else {
         next.add(actNumber);
       }
-      setSchedule((curr) =>
-        curr.map((a) => (a.actNumber === actNumber ? { ...a, isLocked: next.has(actNumber) } : a))
+      setScheduleResult((prev) =>
+        prev
+          ? {
+              ...prev,
+              acts: prev.acts.map((a) =>
+                a.actNumber === actNumber ? { ...a, isLocked: next.has(actNumber) } : a
+              ),
+            }
+          : prev
       );
       return next;
     });
@@ -286,8 +306,15 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
       }
       return updated;
     });
-    setSchedule(actsWithLock);
-    setVigorState(res.vigorState);
+    setScheduleResult((prev) =>
+      prev
+        ? {
+            ...prev,
+            acts: actsWithLock,
+            vigorState: res.vigorState,
+          }
+        : prev
+    );
     setLockedActNumbers((prev) => new Set(prev).add(swapTarget.actNumber));
     setSwapTarget(null);
   };
@@ -303,8 +330,15 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
         }
         return updated;
       });
-      setSchedule(actsWithLock);
-      setVigorState(res.vigorState);
+      setScheduleResult((prev) =>
+        prev
+          ? {
+              ...prev,
+              acts: actsWithLock,
+              vigorState: res.vigorState,
+            }
+          : prev
+      );
       setLockedActNumbers((prev) => new Set(prev).add(actNumber));
     }
   };

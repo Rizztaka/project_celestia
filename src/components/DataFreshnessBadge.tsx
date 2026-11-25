@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
-import { CheckCircle2, AlertTriangle, Info, ExternalLink } from 'lucide-react';
+import React, { useState, useRef, useEffect, useId } from 'react';
+import {
+  CheckCircle2,
+  AlertTriangle,
+  Info,
+  ShieldAlert,
+  ExternalLink,
+  X,
+} from 'lucide-react';
 import type { DataProvenance, VerificationMethod } from '../types/genshin';
 import { getFreshnessInfo, type FreshnessInfo } from '../services/data-freshness';
 import { CURRENT_GAME_VERSION } from '../data/game-version';
@@ -9,6 +16,52 @@ const METHOD_LABELS: Record<VerificationMethod, string> = {
   in_game_verification: 'In-Game Verified',
   theorycraft_consensus: 'Theorycraft Audit',
 };
+
+const UNREGISTERED_EXPLANATION =
+  'This dataset has no registered provenance record. Verification metadata and source links are withheld; verify details in-game before committing resources.';
+
+function sanitizeHttpsUrl(rawUrl?: string): string | undefined {
+  if (typeof rawUrl !== 'string') return undefined;
+  const trimmed = rawUrl.trim();
+  if (!trimmed) return undefined;
+  try {
+    const parsed = new URL(trimmed);
+    return parsed.protocol === 'https:' ? trimmed : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function getAppliedTranslateX(element: HTMLElement): number {
+  const computedTransform = window.getComputedStyle(element).transform;
+  const inlineTransform = element.style.transform;
+  const transform =
+    computedTransform && computedTransform !== 'none' ? computedTransform : inlineTransform;
+
+  if (!transform || transform === 'none') return 0;
+
+  if (typeof DOMMatrix !== 'undefined') {
+    try {
+      return new DOMMatrix(transform).m41;
+    } catch {
+      // Fallback to regex parsing below when DOMMatrix cannot parse the transform string
+    }
+  }
+
+  const matrixMatch = transform.match(/^matrix\(([^)]+)\)$/);
+  if (matrixMatch) {
+    const parts = matrixMatch[1].split(',').map((value) => Number.parseFloat(value.trim()));
+    return parts.length >= 5 && Number.isFinite(parts[4]) ? parts[4] : 0;
+  }
+
+  const translateMatch = transform.match(/translateX\(\s*([-\d.]+)px\s*\)/);
+  if (translateMatch) {
+    const parsed = Number.parseFloat(translateMatch[1]);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  return 0;
+}
 
 export interface DataFreshnessBadgeProps {
   datasetId?: string;
@@ -27,10 +80,119 @@ export const DataFreshnessBadge: React.FC<DataFreshnessBadgeProps> = ({
   showTooltip = true,
   referenceDate,
 }) => {
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [horizontalOffset, setHorizontalOffset] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const popoverId = useId();
 
-  const info: FreshnessInfo = getFreshnessInfo(provenance || datasetId || '', referenceDate);
+  const isExplicitlyUnregisteredProvenance =
+    provenance !== undefined && (provenance as { status?: string }).status === 'unregistered';
+
+  const info: FreshnessInfo = isExplicitlyUnregisteredProvenance
+    ? {
+        datasetId: provenance.datasetId || 'unknown',
+        version: 'unknown',
+        status: 'unregistered',
+        isStale: false,
+        isExpired: false,
+        ageDays: -1,
+        verifiedAt: 'Unregistered',
+        sourceUrl: '',
+        evidence: '',
+        badgeLabel: 'Unregistered',
+        badgeDescription:
+          'No provenance record found for this dataset. Do not treat as verified or active without checking in-game.',
+      }
+    : getFreshnessInfo(provenance || datasetId || '', referenceDate);
+
+  const isUnregistered = info.status === 'unregistered';
   const label = labelOverride || info.badgeLabel;
+  const safeSourceUrl = isUnregistered ? undefined : sanitizeHttpsUrl(info.sourceUrl);
+
+  useEffect(() => {
+    if (!showTooltip || !isPopoverOpen) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsPopoverOpen(false);
+      }
+    };
+
+    // Capture phase ensures Escape dismisses only this disclosure before reaching parent modal listeners
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.stopPropagation();
+        setIsPopoverOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown, true);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown, true);
+    };
+  }, [isPopoverOpen, showTooltip]);
+
+  useEffect(() => {
+    if (!showTooltip || !isPopoverOpen) {
+      setHorizontalOffset(0);
+      return;
+    }
+
+    let rafId: number | null = null;
+
+    const clampToViewport = () => {
+      const popover = popoverRef.current;
+      if (!popover) return;
+      const rect = popover.getBoundingClientRect();
+      if (rect.width === 0) return;
+
+      const margin = 16;
+      const viewportWidth = window.innerWidth;
+      const appliedOffset = getAppliedTranslateX(popover);
+      const naturalLeft = rect.left - appliedOffset;
+      const naturalRight = rect.right - appliedOffset;
+
+      let nextOffset = 0;
+      if (naturalLeft < margin) {
+        nextOffset = margin - naturalLeft;
+      } else if (naturalRight > viewportWidth - margin) {
+        nextOffset = viewportWidth - margin - naturalRight;
+      }
+
+      const roundedOffset = Math.round(nextOffset * 100) / 100;
+      setHorizontalOffset((prev) =>
+        Math.abs(prev - roundedOffset) < 0.01 ? prev : roundedOffset,
+      );
+    };
+
+    const scheduleClamp = () => {
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        clampToViewport();
+      });
+    };
+
+    scheduleClamp();
+    window.addEventListener('resize', scheduleClamp);
+
+    return () => {
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+      window.removeEventListener('resize', scheduleClamp);
+    };
+  }, [isPopoverOpen, showTooltip]);
 
   const getStatusStyles = () => {
     switch (info.status) {
@@ -47,6 +209,13 @@ export const DataFreshnessBadge: React.FC<DataFreshnessBadgeProps> = ({
           dot: 'bg-sky-400',
           icon: <Info className="w-3 h-3 text-sky-400 shrink-0" aria-hidden="true" />,
         };
+      case 'unregistered':
+        return {
+          container:
+            'bg-rose-950/85 text-rose-100 border-rose-500/60 hover:border-rose-400/90',
+          dot: 'bg-rose-400',
+          icon: <ShieldAlert className="w-3 h-3 text-rose-200 shrink-0" aria-hidden="true" />,
+        };
       case 'stale':
       default:
         return {
@@ -58,88 +227,119 @@ export const DataFreshnessBadge: React.FC<DataFreshnessBadgeProps> = ({
   };
 
   const styles = getStatusStyles();
+  const hasKnownVersion = Boolean(info.version && info.version !== 'unknown');
+  const headerTitle = isUnregistered
+    ? 'Unregistered Dataset'
+    : `${info.status} Dataset${hasKnownVersion ? ` (v${info.version})` : ''}`;
+  const headerVerificationMeta =
+    isUnregistered || info.verifiedAt === 'Unregistered'
+      ? 'Not Registered'
+      : `Verified: ${info.verifiedAt}`;
 
   return (
-    <div
-      className={`relative inline-flex items-center ${className}`}
-      onMouseEnter={() => showTooltip && setIsTooltipOpen(true)}
-      onMouseLeave={() => showTooltip && setIsTooltipOpen(false)}
-      onFocus={() => showTooltip && setIsTooltipOpen(true)}
-      onBlur={(e) => {
-        if (showTooltip && !e.currentTarget.contains(e.relatedTarget as Node | null)) {
-          setIsTooltipOpen(false);
-        }
-      }}
-    >
+    <div ref={containerRef} className={`relative inline-flex items-center max-w-full ${className}`}>
       <button
+        ref={triggerRef}
         type="button"
-        onClick={() => showTooltip && setIsTooltipOpen((prev) => !prev)}
-        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-colors cursor-pointer select-none ${styles.container}`}
+        onClick={(event) => {
+          event.stopPropagation();
+          if (showTooltip) {
+            setIsPopoverOpen((prev) => !prev);
+          }
+        }}
+        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-colors cursor-pointer select-none max-w-full ${styles.container}`}
         aria-label={`Data Freshness Status: ${info.status}, ${label}`}
-        aria-expanded={isTooltipOpen}
+        aria-expanded={showTooltip ? isPopoverOpen : undefined}
+        aria-controls={showTooltip ? popoverId : undefined}
       >
         {styles.icon}
-        <span>{label}</span>
+        <span className="truncate">{label}</span>
       </button>
 
-      {showTooltip && isTooltipOpen && (
+      {showTooltip && (
         <div
-          role="tooltip"
-          className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-80 p-3 rounded-xl bg-[#0f121d] border border-[#2b3353] shadow-2xl text-left text-xs text-zinc-300 pointer-events-auto backdrop-blur-md"
+          ref={popoverRef}
+          id={popoverId}
+          role="region"
+          aria-label={`Data freshness details for ${label}`}
+          hidden={!isPopoverOpen}
+          aria-hidden={isPopoverOpen ? undefined : true}
+          onClick={(event) => event.stopPropagation()}
+          style={
+            horizontalOffset !== 0
+              ? { transform: `translateX(${horizontalOffset}px)` }
+              : undefined
+          }
+          className={
+            isPopoverOpen
+              ? 'absolute z-50 top-full right-0 mt-2 w-[min(18rem,calc(100vw-2rem))] max-w-[calc(100vw-2rem)] p-3 rounded-xl bg-[#0f121d] border border-[#2b3353] shadow-2xl text-left text-xs text-zinc-200 pointer-events-auto backdrop-blur-md'
+              : 'hidden'
+          }
         >
-          <div className="flex items-center justify-between gap-2 pb-1.5 mb-1.5 border-b border-[#212740]">
-            <span className="font-bold text-zinc-100 flex items-center gap-1.5 capitalize">
-              {styles.icon}
-              {info.status} Dataset (v{info.version})
-            </span>
-            <span className="text-[10px] text-zinc-300 shrink-0">
-              {info.verifiedAt !== 'Unregistered' ? `Verified: ${info.verifiedAt}` : 'Unverified'}
-            </span>
+          <div className="flex items-start justify-between gap-2 pb-1.5 mb-1.5 border-b border-[#212740]">
+            <div className="min-w-0 space-y-0.5">
+              <span className="font-bold text-zinc-100 flex items-center gap-1.5 capitalize break-words">
+                {styles.icon}
+                <span>{headerTitle}</span>
+              </span>
+              <span className="block text-[11px] text-zinc-200">{headerVerificationMeta}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIsPopoverOpen(false);
+                triggerRef.current?.focus();
+              }}
+              aria-label="Close data freshness details"
+              className="p-1 rounded-md text-zinc-200 hover:text-zinc-100 hover:bg-[#1a2035] transition-colors cursor-pointer shrink-0"
+            >
+              <X className="w-3.5 h-3.5" aria-hidden="true" />
+            </button>
           </div>
 
-          {info.verificationMethod && (
+          {!isUnregistered && info.verificationMethod && (
             <div className="flex flex-wrap items-center gap-1.5 mb-2">
-              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-[#181d30] border border-[#2c3454] text-zinc-200">
+              <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-[#181d30] border border-[#2c3454] text-zinc-100">
                 {METHOD_LABELS[info.verificationMethod]}
               </span>
               {info.effectiveEndDate && (
-                <span className="text-[10px] font-mono text-zinc-400">
+                <span className="text-[11px] font-mono text-zinc-200">
                   Ends {info.effectiveEndDate}
                 </span>
               )}
             </div>
           )}
 
-          <p className="text-[11px] leading-relaxed text-zinc-300 mb-2">{info.evidence}</p>
+          <p className="text-[11px] leading-relaxed text-zinc-200 mb-2 break-words">
+            {isUnregistered ? UNREGISTERED_EXPLANATION : info.evidence}
+          </p>
 
-          {info.verifiedFields && info.verifiedFields.length > 0 && (
-            <p className="text-[10px] text-zinc-400 mb-2">
-              <strong className="text-zinc-300">Audited fields:</strong>{' '}
+          {!isUnregistered && info.verifiedFields && info.verifiedFields.length > 0 && (
+            <p className="text-[11px] text-zinc-200 mb-2 break-words">
+              <strong className="text-zinc-100">Audited fields:</strong>{' '}
               {info.verifiedFields.join(', ')}
             </p>
           )}
 
-          {info.isStale && (
-            <div className="p-1.5 rounded-lg bg-amber-950/40 border border-amber-700/50 text-[10px] text-amber-300 mb-2">
+          {!isUnregistered && info.isStale && (
+            <div className="p-1.5 rounded-lg bg-amber-950/60 border border-amber-500/50 text-[11px] text-amber-100 mb-2 break-words">
               {info.isExpired && info.effectiveEndDate
-                ? `⚠️ Schedule ended on ${info.effectiveEndDate}. In-game lineups or mechanics differ from active v${CURRENT_GAME_VERSION}.`
-                : `⚠️ Data is older than the standard 42-day patch cycle or belongs to an earlier patch. In-game lineups or boss mechanics may differ.`}
+                ? `Schedule ended on ${info.effectiveEndDate}. In-game lineups or mechanics differ from active v${CURRENT_GAME_VERSION}.`
+                : `Data is older than the standard 42-day patch cycle or belongs to an earlier patch. In-game lineups or boss mechanics may differ.`}
             </div>
           )}
 
-          {info.sourceUrl && (
+          {safeSourceUrl && (
             <a
-              href={info.sourceUrl}
+              href={safeSourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[10px] text-[#d4af37] hover:underline"
+              className="inline-flex items-center gap-1 text-[11px] font-medium text-[#f3cf58] hover:underline break-all"
             >
               <span>View Reference Source</span>
-              <ExternalLink className="w-2.5 h-2.5" aria-hidden="true" />
+              <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
             </a>
           )}
-
-          <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px w-2 h-2 bg-[#0f121d] border-r border-b border-[#2b3353] rotate-45" />
         </div>
       )}
     </div>

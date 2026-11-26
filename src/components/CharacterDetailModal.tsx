@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useId } from 'react';
 import type {
   Character,
   Element,
@@ -28,6 +28,9 @@ import { resolveCharacterRotationProfile } from '../engines/rotation-synthesizer
 import { RotationBadgeList } from './RotationBadgeList';
 import { rankWeaponsForCharacter } from '../engines/weapon-solver';
 import { InfoTooltip } from './InfoTooltip';
+import { RecommendationReliabilityBadge } from './RecommendationReliabilityBadge';
+import { RecommendationReliabilityBanner } from './RecommendationReliabilityBanner';
+import { ReliabilityDetailsPanel } from './ReliabilityDetailsPanel';
 import {
   getSavedWeapons,
   saveWeapons,
@@ -199,8 +202,14 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
   const [activeTab, setActiveTab] = useState<'build' | 'talents' | 'constellations'>('build');
   const [showAlternateRotation, setShowAlternateRotation] = useState<boolean>(false);
+  const [isReliabilityDetailsOpen, setIsReliabilityDetailsOpen] = useState<boolean>(false);
+  const reliabilityDetailsId = useId();
   const [transferToast, setTransferToast] = useState<string | null>(null);
   const [talentsSaved, setTalentsSaved] = useState<boolean>(false);
+
+  const handleToggleReliabilityDetails = () => {
+    setIsReliabilityDetailsOpen((prev) => !prev);
+  };
 
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
@@ -436,9 +445,10 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
     }, 2500);
   };
 
-  // Reset alternate rotation view on character switch
+  // Reset alternate rotation view and reliability disclosure on character switch
   useEffect(() => {
     setShowAlternateRotation(false);
+    setIsReliabilityDetailsOpen(false);
   }, [character?.id]);
 
   const rotationProfile = character ? resolveCharacterRotationProfile(character) : null;
@@ -892,14 +902,23 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
               {/* Best Owned Weapons Section */}
               <div className="space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="text-sm font-bold text-zinc-100 flex items-center gap-1.5">
-                    <Swords className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
-                    <span>Estimated Weapon Suitability ({rankedOwnedWeapons.length})</span>
-                    <InfoTooltip
-                      title="Estimated Weapon Suitability"
-                      content="Ranks weapons by class compatibility, base ATK, optimal substats, refinements, and team synergy."
+                  <div className="flex flex-wrap items-center gap-2 min-w-0">
+                    <h3 className="text-sm font-bold text-zinc-100 flex items-center gap-1.5">
+                      <Swords className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
+                      <span>Estimated Weapon Suitability ({rankedOwnedWeapons.length})</span>
+                      <InfoTooltip
+                        title="Estimated Weapon Suitability"
+                        content="Ranks weapons by class compatibility, base ATK, optimal substats, refinements, and team synergy."
+                      />
+                    </h3>
+                    <RecommendationReliabilityBadge
+                      reliability={weaponRankingResult?.reliability}
+                      size="sm"
+                      detailsControlsId={reliabilityDetailsId}
+                      isDetailsOpen={isReliabilityDetailsOpen}
+                      onToggleDetails={handleToggleReliabilityDetails}
                     />
-                  </h3>
+                  </div>
                   <button
                     type="button"
                     aria-expanded={showManualCustomizer}
@@ -910,6 +929,22 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                     <span>{showManualCustomizer ? 'Close Editor' : 'Customise Weapon'}</span>
                   </button>
                 </div>
+
+                <RecommendationReliabilityBanner
+                  reliability={weaponRankingResult?.reliability}
+                  contextLabel="Weapon Suitability"
+                  detailsControlsId={reliabilityDetailsId}
+                  isDetailsOpen={isReliabilityDetailsOpen}
+                  onToggleDetails={handleToggleReliabilityDetails}
+                />
+
+                <ReliabilityDetailsPanel
+                  id={reliabilityDetailsId}
+                  reliability={weaponRankingResult?.reliability}
+                  isOpen={isReliabilityDetailsOpen}
+                  onClose={() => setIsReliabilityDetailsOpen(false)}
+                  contextLabel="Weapon Suitability"
+                />
 
                 {/* Collapsible Manual Customizer */}
                 {showManualCustomizer && (

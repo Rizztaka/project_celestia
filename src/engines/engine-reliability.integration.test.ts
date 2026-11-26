@@ -1377,4 +1377,302 @@ describe('M9 Phase 3 — Engine Reliability Integration (All 10 Public Endpoints
       expect('reliability' in legacyPull).toBe(false);
     });
   });
+
+  describe('Gacha reliability compatibility under PullBudgetState assumptions (Slice 3.4.2)', () => {
+    it('links gacha_rules_starglitter_7_2 provenance and dependency metadata strictly when includeCashback is true', () => {
+      const cashbackFalseBudget: PullBudgetState = {
+        ...baseBudget,
+        includeCashback: false,
+      };
+      const cashbackTrueBudget: PullBudgetState = {
+        ...baseBudget,
+        includeCashback: true,
+      };
+
+      const contexts: Array<{ bannerFilter: string; evaluatedAt: string }> = [
+        { bannerFilter: 'banner_7_2_phase_1', evaluatedAt: ACTIVE_DATE },
+        { bannerFilter: 'banner_7_2_natlan_chronicled', evaluatedAt: '2026-11-25' },
+        { bannerFilter: 'sandbox', evaluatedAt: ACTIVE_DATE },
+        { bannerFilter: 'banner_9_9_nonexistent', evaluatedAt: ACTIVE_DATE },
+      ];
+
+      for (const ctx of contexts) {
+        const withoutCashback = evaluateComprehensivePullROI(
+          {},
+          [],
+          cashbackFalseBudget,
+          ctx.bannerFilter,
+          { evaluatedAt: ctx.evaluatedAt },
+        );
+        const withCashback = evaluateComprehensivePullROI(
+          {},
+          [],
+          cashbackTrueBudget,
+          ctx.bannerFilter,
+          { evaluatedAt: ctx.evaluatedAt },
+        );
+
+        expect(withoutCashback.reliability.provenanceIds).not.toContain('gacha_rules_starglitter_7_2');
+        expect(
+          withoutCashback.reliability.dependencies?.some(
+            (d) => d.datasetId === 'gacha_rules_starglitter_7_2',
+          ),
+        ).toBe(false);
+
+        expect(withCashback.reliability.provenanceIds).toContain('gacha_rules_starglitter_7_2');
+        const starglitterDep = withCashback.reliability.dependencies?.find(
+          (d) => d.datasetId === 'gacha_rules_starglitter_7_2',
+        );
+        expect(starglitterDep).toEqual({
+          datasetId: 'gacha_rules_starglitter_7_2',
+          required: true,
+          verification: 'verified',
+          policy: 'version_bound',
+          riskTier: 'high',
+          version: DATA_PROVENANCE_REGISTRY.gacha_rules_starglitter_7_2.version,
+          verifiedAt: DATA_PROVENANCE_REGISTRY.gacha_rules_starglitter_7_2.verifiedAt,
+        });
+
+        assertJsonSerializableReliability(withoutCashback.reliability);
+        assertJsonSerializableReliability(withCashback.reliability);
+      }
+
+      // Cashback changes effective pull counts for recommendations without altering trust status
+      const activeWithout = evaluateComprehensivePullROI(
+        {},
+        [],
+        cashbackFalseBudget,
+        'banner_7_2_phase_1',
+        { evaluatedAt: ACTIVE_DATE },
+      );
+      const activeWith = evaluateComprehensivePullROI(
+        {},
+        [],
+        cashbackTrueBudget,
+        'banner_7_2_phase_1',
+        { evaluatedAt: ACTIVE_DATE },
+      );
+      expect(activeWithout.items[0].odds.pullsAvailable).toBe(120);
+      expect(activeWith.items[0].odds.pullsAvailable).toBe(129);
+      expect(activeWith.reliability.status).toBe(activeWithout.reliability.status);
+      expect(activeWith.reliability.isActionable).toBe(activeWithout.reliability.isActionable);
+    });
+
+    it('keeps reliability invariant across PullBudgetState pity, guarantee, Radiance streak, Chronicled, and cashback assumptions while odds update', () => {
+      const budgetVariants: Array<{ name: string; budget: PullBudgetState; expectedEffectivePulls: number }> = [
+        {
+          name: 'zero-budget',
+          expectedEffectivePulls: 0,
+          budget: {
+            primogems: 0,
+            fates: 0,
+            characterPity: 0,
+            characterGuaranteed: false,
+            consecutiveLossCount: 0,
+            weaponPity: 0,
+            weaponGuaranteed: false,
+            weaponFatePoints: 0,
+            chronicledPity: 0,
+            chronicledFatePoints: 0,
+            includeCashback: false,
+          },
+        },
+        {
+          name: 'radiance-streak-3-and-75-25-carryover',
+          expectedEffectivePulls: 100,
+          budget: {
+            primogems: 14400,
+            fates: 10,
+            characterPity: 75,
+            characterGuaranteed: false,
+            consecutiveLossCount: 3,
+            weaponPity: 65,
+            weaponGuaranteed: true,
+            weaponFatePoints: 0,
+            chronicledPity: 40,
+            chronicledFatePoints: 0,
+            includeCashback: false,
+          },
+        },
+        {
+          name: 'guaranteed-fate-1-with-cashback',
+          expectedEffectivePulls: 270,
+          budget: {
+            primogems: 32000,
+            fates: 50,
+            characterPity: 80,
+            characterGuaranteed: true,
+            consecutiveLossCount: 1,
+            weaponPity: 70,
+            weaponGuaranteed: false,
+            weaponFatePoints: 1,
+            chronicledPity: 80,
+            chronicledFatePoints: 1,
+            includeCashback: true,
+          },
+        },
+        {
+          name: 'chronicled-carryover-with-cashback',
+          expectedEffectivePulls: 75,
+          budget: {
+            primogems: 6400,
+            fates: 30,
+            characterPity: 12,
+            characterGuaranteed: false,
+            consecutiveLossCount: 2,
+            weaponPity: 20,
+            weaponGuaranteed: true,
+            weaponFatePoints: 1,
+            chronicledPity: 74,
+            chronicledFatePoints: 1,
+            includeCashback: true,
+          },
+        },
+      ];
+
+      // Confirm budget assumptions materially change calculated odds and pull budgets
+      const zeroActive = evaluateComprehensivePullROI(
+        {},
+        [],
+        budgetVariants[0].budget,
+        'banner_7_2_phase_1',
+        { evaluatedAt: ACTIVE_DATE },
+      );
+      const richActive = evaluateComprehensivePullROI(
+        {},
+        [],
+        budgetVariants[2].budget,
+        'banner_7_2_phase_1',
+        { evaluatedAt: ACTIVE_DATE },
+      );
+      expect(zeroActive.items[0].odds.pullsAvailable).toBe(0);
+      expect(zeroActive.items[0].odds.cumulativeProbability).toBe(0);
+      expect(richActive.items[0].odds.pullsAvailable).toBe(270);
+      expect(richActive.items[0].odds.cumulativeProbability).toBe(1.0);
+      expect(richActive.items[0].odds.primogemsNeeded).toBe(0);
+
+      const zeroChronicled = evaluateComprehensivePullROI(
+        {},
+        [],
+        budgetVariants[0].budget,
+        'banner_7_2_natlan_chronicled',
+        { evaluatedAt: '2026-11-25' },
+      );
+      const fateChronicled = evaluateComprehensivePullROI(
+        {},
+        [],
+        budgetVariants[2].budget,
+        'banner_7_2_natlan_chronicled',
+        { evaluatedAt: '2026-11-25' },
+      );
+      expect(zeroChronicled.items[0].odds.guaranteedPulls).toBe(180);
+      expect(fateChronicled.items[0].odds.guaranteedPulls).toBe(10);
+
+      const representativeContexts = [
+        {
+          label: 'active-current-banner',
+          bannerFilter: 'banner_7_2_phase_1',
+          evaluatedAt: ACTIVE_DATE,
+          expected: {
+            mode: 'current',
+            status: 'qualified',
+            isActionable: false,
+            verification: 'verified',
+            temporalState: 'active',
+          },
+        },
+        {
+          label: 'upcoming-planning-preview',
+          bannerFilter: 'banner_7_2_phase_2',
+          evaluatedAt: UPCOMING_BANNER_DATE,
+          expected: {
+            mode: 'planning_preview',
+            status: 'qualified',
+            isActionable: false,
+            verification: 'verified',
+            temporalState: 'upcoming',
+          },
+        },
+        {
+          label: 'expired-archive-simulation',
+          bannerFilter: 'banner_7_2_phase_1',
+          evaluatedAt: EXPIRED_BANNER_DATE,
+          expected: {
+            mode: 'archive_simulation',
+            status: 'historical',
+            isActionable: false,
+            verification: 'stale',
+            temporalState: 'expired',
+          },
+        },
+        {
+          label: 'sandbox-simulation',
+          bannerFilter: 'sandbox',
+          evaluatedAt: ACTIVE_DATE,
+          expected: {
+            mode: 'sandbox_simulation',
+            status: 'qualified',
+            isActionable: false,
+            verification: 'verified',
+            temporalState: 'not_applicable',
+          },
+        },
+        {
+          label: 'unsupported-banner',
+          bannerFilter: 'banner_9_9_nonexistent',
+          evaluatedAt: ACTIVE_DATE,
+          expected: {
+            mode: 'current',
+            status: 'unsupported',
+            isActionable: false,
+            verification: 'unregistered',
+            temporalState: 'not_applicable',
+          },
+        },
+      ] as const;
+
+      for (const ctx of representativeContexts) {
+        let baselineNoCashbackReliability: RecommendationReliability | undefined;
+        let baselineCashbackReliability: RecommendationReliability | undefined;
+
+        for (const variant of budgetVariants) {
+          const res = evaluateComprehensivePullROI(
+            {},
+            [],
+            variant.budget,
+            ctx.bannerFilter,
+            { evaluatedAt: ctx.evaluatedAt },
+          );
+
+          expect(res.reliability.mode).toBe(ctx.expected.mode);
+          expect(res.reliability.status).toBe(ctx.expected.status);
+          expect(res.reliability.isActionable).toBe(ctx.expected.isActionable);
+          expect(res.reliability.verification).toBe(ctx.expected.verification);
+          expect(res.reliability.temporalState).toBe(ctx.expected.temporalState);
+          expect(res.reliability.evaluatedAt).toBe(ctx.evaluatedAt);
+
+          if (ctx.expected.status === 'unsupported') {
+            expect(res.items).toEqual([]);
+          } else {
+            expect(res.items.length).toBeGreaterThan(0);
+            expect(res.items[0].odds.pullsAvailable).toBe(variant.expectedEffectivePulls);
+          }
+
+          if (variant.budget.includeCashback) {
+            if (!baselineCashbackReliability) {
+              baselineCashbackReliability = res.reliability;
+            } else {
+              expect(res.reliability).toEqual(baselineCashbackReliability);
+            }
+          } else {
+            if (!baselineNoCashbackReliability) {
+              baselineNoCashbackReliability = res.reliability;
+            } else {
+              expect(res.reliability).toEqual(baselineNoCashbackReliability);
+            }
+          }
+        }
+      }
+    });
+  });
 });

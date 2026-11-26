@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect, useDeferredValue } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useDeferredValue, useId } from 'react';
 import { CHARACTERS } from '../data/characters';
 import type {
   Character,
@@ -35,7 +35,9 @@ import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { ArtifactDiminishingReturnsCurve } from './ArtifactDiminishingReturnsCurve';
 import { ArtifactSlotCard } from './ArtifactSlotCard';
 import { InfoTooltip } from './InfoTooltip';
-import { DataFreshnessBadge } from './DataFreshnessBadge';
+import { RecommendationReliabilityBadge } from './RecommendationReliabilityBadge';
+import { RecommendationReliabilityBanner } from './RecommendationReliabilityBanner';
+import { ReliabilityDetailsPanel } from './ReliabilityDetailsPanel';
 import { useModalAccessibility } from '../hooks/useModalAccessibility';
 import {
   analyzeArtifactBuild,
@@ -71,6 +73,11 @@ export const ArtifactStopView: React.FC = () => {
   const [selectedTeamPreset, setSelectedTeamPreset] = useState<TeamPresetKey>('unbuffed');
   const [investmentGoal, setInvestmentGoal] = useState<InvestmentGoal>('endgame');
   const [bonusWeaponEr, setBonusWeaponEr] = useState<number>(0);
+  const [isReliabilityDetailsOpen, setIsReliabilityDetailsOpen] = useState(false);
+  const reliabilityDetailsId = useId();
+  const handleToggleReliabilityDetails = () => {
+    setIsReliabilityDetailsOpen((prev) => !prev);
+  };
 
   const ACTION_META: Record<
     UniversalStopAction,
@@ -353,7 +360,13 @@ export const ArtifactStopView: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase mb-1">
               <PieChart className="w-4 h-4" aria-hidden="true" />
               <span>Resin ROI &amp; Roll Value Diminishing Returns Engine</span>
-              <DataFreshnessBadge datasetId="artifact_weights_v7_2" />
+              <RecommendationReliabilityBadge
+                reliability={analysis.reliability}
+                size="sm"
+                detailsControlsId={reliabilityDetailsId}
+                isDetailsOpen={isReliabilityDetailsOpen}
+                onToggleDetails={handleToggleReliabilityDetails}
+              />
             </div>
             <h1 className="text-2xl font-bold text-zinc-100 font-serif">
               When Is Artifact Farming No Longer Worth Your Resin?
@@ -363,6 +376,22 @@ export const ArtifactStopView: React.FC = () => {
               Calculates the exact binomial probability of finding an upgrade across each slot and charts the diminishing returns curve.
             </p>
           </div>
+
+          <RecommendationReliabilityBanner
+            reliability={analysis.reliability}
+            contextLabel="Artifact Stop Optimizer"
+            detailsControlsId={reliabilityDetailsId}
+            isDetailsOpen={isReliabilityDetailsOpen}
+            onToggleDetails={handleToggleReliabilityDetails}
+          />
+
+          <ReliabilityDetailsPanel
+            id={reliabilityDetailsId}
+            reliability={analysis.reliability}
+            isOpen={isReliabilityDetailsOpen}
+            onClose={() => setIsReliabilityDetailsOpen(false)}
+            contextLabel="Artifact Stop Optimizer"
+          />
 
           {/* Top Controls & Navigation Bar */}
           <div className="bg-[#121420] border border-[#24293d] p-4 sm:p-5 rounded-2xl shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">

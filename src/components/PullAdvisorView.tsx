@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect, useDeferredValue, Suspense } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useDeferredValue, useId, Suspense } from 'react';
 import type {
   Character,
   EnhancedPullAdvice,
@@ -19,11 +19,14 @@ import { CHARACTERS } from '../data/characters';
 import { CURRENT_GAME_VERSION } from '../data/game-version';
 import { getWeaponByKey } from '../data/weapons';
 import { getSavedPullBudget, savePullBudget } from '../services/storage';
+import { selectDefaultBannerId } from '../services/reliability-presentation';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { PullBudgetCard } from './PullBudgetCard';
 import { InfoTooltip } from './InfoTooltip';
-import { DataFreshnessBadge, StaleDataWarningBanner } from './DataFreshnessBadge';
+import { RecommendationReliabilityBadge } from './RecommendationReliabilityBadge';
+import { RecommendationReliabilityBanner } from './RecommendationReliabilityBanner';
+import { ReliabilityDetailsPanel } from './ReliabilityDetailsPanel';
 
 const LazyPullDistributionModal = React.lazy(() =>
   import('./PullDistributionModal').then((m) => ({ default: m.PullDistributionModal }))
@@ -65,7 +68,9 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
     useState<EnhancedPullAdvice | null>(null);
   const [isAssumptionsOpen, setIsAssumptionsOpen] = useState(false);
   const [expandedBreakdowns, setExpandedBreakdowns] = useState<Record<string, boolean>>({});
-  const [bannerFilter, setBannerFilter] = useState<string>('banner_7_2_phase_1');
+  const [bannerFilter, setBannerFilter] = useState<string>(() => selectDefaultBannerId());
+  const [isReliabilityDetailsOpen, setIsReliabilityDetailsOpen] = useState(false);
+  const reliabilityDetailsId = useId();
   const [budget, setBudget] = useState<PullBudgetState>(() => getSavedPullBudget());
   const deferredBudget = useDeferredValue(budget);
   const [simulationToast, setSimulationToast] = useState<string | null>(null);
@@ -87,6 +92,10 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
 
   const toggleBreakdown = (id: string) => {
     setExpandedBreakdowns((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleToggleReliabilityDetails = () => {
+    setIsReliabilityDetailsOpen((prev) => !prev);
   };
 
   const effectiveProfiles = useMemo(() => {
@@ -295,9 +304,14 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
         <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-zinc-200">
           <Calendar className="w-4 h-4 text-[#d4af37]" aria-hidden="true" />
           <span>Banner Phase Filter:</span>
-          {bannerFilter !== 'sandbox' && bannerFilter !== 'all' && (
-            <DataFreshnessBadge datasetId={bannerFilter} className="ml-1" />
-          )}
+          <RecommendationReliabilityBadge
+            reliability={pullAdviceResult.reliability}
+            size="sm"
+            detailsControlsId={reliabilityDetailsId}
+            isDetailsOpen={isReliabilityDetailsOpen}
+            onToggleDetails={handleToggleReliabilityDetails}
+            className="ml-1"
+          />
         </div>
 
         <div
@@ -335,9 +349,30 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
         </div>
       </div>
 
-      {bannerFilter !== 'sandbox' && bannerFilter !== 'all' && (
-        <StaleDataWarningBanner datasetId={bannerFilter} contextLabel="Banner Schedule" />
-      )}
+      <RecommendationReliabilityBanner
+        reliability={pullAdviceResult.reliability}
+        contextLabel="Pull Advisor"
+        detailsControlsId={reliabilityDetailsId}
+        isDetailsOpen={isReliabilityDetailsOpen}
+        onToggleDetails={handleToggleReliabilityDetails}
+        primaryAction={
+          pullAdviceResult.reliability.status === 'unsupported'
+            ? {
+                label: 'Reset Banner Filter',
+                onClick: () => setBannerFilter(selectDefaultBannerId()),
+                variant: 'recovery',
+              }
+            : undefined
+        }
+      />
+
+      <ReliabilityDetailsPanel
+        id={reliabilityDetailsId}
+        reliability={pullAdviceResult.reliability}
+        isOpen={isReliabilityDetailsOpen}
+        onClose={() => setIsReliabilityDetailsOpen(false)}
+        contextLabel="Pull Advisor"
+      />
 
       {/* Target Recommendations Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

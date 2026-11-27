@@ -274,7 +274,7 @@ let md = `# Project Celestia — Authoritative Reference & Knowledge Base (v${GA
 | **Artifacts** | \`src/data/artifacts-master.ts\` & \`src/data/artifact-weights.ts\` | **64 Sets** (37 Combat Sets) | Master registry of all 64 sets (1★–5★) plus stat weights, max substats, domain drops & builds |
 | **Talent Scaling** | \`src/data/talent-scaling/\` | **128 Profiles** | Full Level 1 to 15 scaling multiplier curves (Modular Architecture) |
 | **Rotations** | \`src/data/character-rotations.ts\` | **128 Profiles** | Precise action sequence, energy thresholds, skill cooldown timings |
-| **Data Provenance** | \`src/data/provenance-registry.ts\` | **35 Canonical Datasets** | Substantive provenance records linking patch notices, in-game verification, and theorycraft evidence |
+| **Data Provenance** | \`src/data/provenance-registry.ts\` | **36 Canonical Datasets** | Substantive provenance records linking patch notices, in-game verification, and theorycraft evidence |
 
 ### Data Trust & Recommendation Reliability Architecture (Milestone M9 Contracts)
 

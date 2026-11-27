@@ -128,22 +128,20 @@
   - Verify: `pnpm run verify:ssot`, `pnpm test src/data/reference-ssot.test.ts`
   - Files: `docs/decisions/0004-m9-data-trust-and-recommendation-reliability.md`, `scripts/generate-reference.cjs`, `docs/knowledge/celestia-reference.md`, `GEMINI.md`
 
-# Task List: M9 — Data Trust & Recommendation Reliability (Phase 3 Roadmap)
+# Task List: M9 — Data Trust & Recommendation Reliability (Phase 3 & Phase 4 Closure)
 
-- [ ] Task 9.12: Analytical Engine Return Type Integration (Phase 3)
-  - Scope: Update return types of `generateBestTeams()`, `solveAbyssDualTeams()`, `solveImaginariumTheater()`, `calculateArtifactUpgradeProbabilities()`, and `evaluatePullPlan()` to return `reliability: RecommendationReliability`.
-  - Verify: Solver unit tests, engine integration tests.
-  - Files: `src/engines/team-generator.ts`, `src/engines/abyss-solver.ts`, `src/engines/theater-solver.ts`, `src/engines/artifact-probability.ts`, `src/engines/pull-advisor.ts`
+- [x] Task 9.12: Analytical Engine Return Type Integration & Worker Parity (Phase 3)
+  - Scope: Wired `RecommendationReliability` across all 10 public endpoints (`generateBestTeams`, `rankWeaponsForCharacter`, `evaluateComprehensivePullROI`, `solveAbyssDualTeams`, `swapAbyssDualHalves`, `analyzeEndgameReadiness`, `autoDraftTheaterSchedule`, `analyzeTheaterSeasonPlan`, `recommendSupportCastBorrow`, `analyzeArtifactBuild`, `estimateBuildFromSliders`), Web Worker parity (`solver-worker.ts`, `solver-dispatcher.ts`), and fail-closed `unattestedLocalDependencies` guards (`C0_ROI_HEURISTICS`, `BORROW_PREMIER_RANKINGS`, etc.).
+  - Verify: `src/engines/engine-reliability.integration.test.ts`, `src/services/solver-dispatcher.test.ts`
+  - Files: `src/services/engine-reliability.ts`, `src/engines/team-generator.ts`, `src/engines/weapon-solver.ts`, `src/engines/pull-advisor.ts`, `src/engines/abyss-solver.ts`, `src/engines/endgame-helper.ts`, `src/engines/theater-solver.ts`, `src/engines/artifact-probability.ts`, `src/workers/solver-worker.ts`, `src/services/solver-dispatcher.ts`
 
-- [ ] Task 9.13: UI Badging & Actionability Header Integration (Phase 3)
-  - Scope: Upgrade `DataFreshnessBadge.tsx` and view headers (`AbyssDualTeamView.tsx`, `ImaginariumTheaterView.tsx`, `PullAdvisorView.tsx`, `TeamGeneratorView.tsx`) to surface reliability status ratings, actionability pills, and multi-dependency breakdown modals.
-  - Verify: Component tests, browser verification.
-  - Files: `src/components/DataFreshnessBadge.tsx`, `src/components/AbyssDualTeamView.tsx`, `src/components/ImaginariumTheaterView.tsx`, `src/components/PullAdvisorView.tsx`, `src/components/TeamGeneratorView.tsx`
+- [x] Task 9.13: Presentation Layer, 6-State Crosswalk & All 9 UI Surfaces (Phase 4)
+  - Scope: Built pure `reliability-presentation.ts`, `RecommendationReliabilityBadge`, `RecommendationReliabilityBanner`, `ReliabilityDetailsPanel`, hardened `DataFreshnessBadge`, integrated all 9 surfaces (`TeamGeneratorView` Best Teams & Quick Swap, `CharacterDetailModal`, `PullAdvisorView`, `AbyssDualTeamView`, `EndgameView` Chamber Guide with `customCycle` sync, `ImaginariumTheaterView` Schedule Auto-Draft & Borrow Advisor with date-aware default season & async reducer), and split interactive buttons out of `role="status"` / `role="alert"`.
+  - Verify: Component unit/SSR suites (`RecommendationReliabilityUI.test.tsx`, `PullAdvisorView.test.tsx`, `ArtifactStopView.test.tsx`, `CharacterDetailModal.test.tsx`, `TeamGeneratorView.test.tsx`, `AbyssDualTeamView.test.tsx`, `EndgameView.test.tsx`, `ImaginariumTheaterView.test.tsx`)
+  - Files: `src/services/reliability-presentation.ts`, `src/components/RecommendationReliabilityBadge.tsx`, `src/components/RecommendationReliabilityBanner.tsx`, `src/components/ReliabilityDetailsPanel.tsx`, `src/components/DataFreshnessBadge.tsx`, `src/components/TeamGeneratorView.tsx`, `src/components/CharacterDetailModal.tsx`, `src/components/PullAdvisorView.tsx`, `src/components/AbyssDualTeamView.tsx`, `src/components/EndgameView.tsx`, `src/components/ImaginariumTheaterView.tsx`, `src/components/ArtifactStopView.tsx`
 
-- [ ] Task 9.14: Playwright E2E Reliability Journeys (Phase 3)
-  - Scope: Create comprehensive Playwright journeys verifying live actionability indicators across active schedules, planning preview badges for upcoming banners, and historical warnings in archive modes.
-  - Verify: `pnpm exec playwright test e2e/journeys/09-data-reliability.spec.ts`
-  - Files: `e2e/journeys/09-data-reliability.spec.ts`
-
-
+- [x] Task 9.14: Playwright E2E Reliability Journeys, Doc Reconciliation & Quality Gate (Phase 4 Closure)
+  - Scope: Verified Playwright reliability journeys (`13`–`19`), reconciled `docs/ROADMAP.md`, `docs/decisions/0010-team-aware-artifact-optimizer-scope.md`, `docs/decisions/0004-m9-data-trust-and-recommendation-reliability.md`, `docs/plans/CURRENT_HANDOFF.md`, `celestia-reference.md` (36 canonical datasets), and `GEMINI.md`, and passed `pnpm run verify:all`.
+  - Verify: `pnpm run verify:all`
+  - Files: `e2e/journeys/13-reliability-ux.spec.ts` through `e2e/journeys/19-endgame-theater-reliability-disclosure.spec.ts`, `docs/ROADMAP.md`, `docs/decisions/0010-team-aware-artifact-optimizer-scope.md`, `docs/decisions/0004-m9-data-trust-and-recommendation-reliability.md`, `docs/plans/CURRENT_HANDOFF.md`, `docs/knowledge/celestia-reference.md`, `GEMINI.md`
 

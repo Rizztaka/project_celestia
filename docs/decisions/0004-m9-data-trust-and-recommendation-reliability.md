@@ -2,9 +2,9 @@
 
 > **Continuity Note**: This Architecture Decision Record documents Milestone M9 Phase 2 (ADR-009). The file path `docs/decisions/0004-m9-data-trust-and-recommendation-reliability.md` preserves direct succession and evolution from [ADR-004: 7-Axis Game Data Integrity, Version SSOT & Substantive Provenance Architecture](0004-data-accuracy-and-provenance-gate.md) and incorporates the foundation established in M9 Phase 1.
 
-- **Status:** Accepted (Phase 2 Implemented)
-- **Date:** 2026-11-23
-- **Milestone:** M9 Phase 2 — Central Recommendation Reliability Evaluator & Single-Policy Freshness Architecture
+- **Status:** Accepted (M9 Completed — Phases 1–4 Implemented)
+- **Date:** 2026-11-27
+- **Milestone:** M9 — Current-State Audit, Data Trust & Recommendation Reliability Architecture (Phases 1–4)
 
 ## Context
 
@@ -207,34 +207,22 @@ export interface DataProvenance {
 - **Robust Multi-Risk Model**: Differentiates between critical game data (high-risk) and advisory meta heuristics (low-risk 42-day review cadence).
 - **Comprehensive Test Verification**: 92 focused tests and 661 repository-wide tests pass with 100% compliance.
 
-### Deferred to Phase 3
-- **Solver Return Type Integration**: Analytical solvers (`team-generator`, `abyss-solver`, `theater-solver`, `artifact-probability`, `pull-advisor`) currently calculate recommendations without embedding `RecommendationReliability` in their primary return interfaces.
-- **UI Surface Expansion**: While `DataFreshnessBadge.tsx` consumes unified freshness data, primary solver views do not yet render full multi-dependency reliability panels or actionability headers.
+### Completed in Phases 3 & 4 (M9 Closure)
+- **Engine Boundary Integration (Phase 3)**: All 10 analytical engine endpoints (`generateBestTeams`, `rankWeaponsForCharacter`, `evaluateComprehensivePullROI`, `solveAbyssDualTeams`, `swapAbyssDualHalves`, `analyzeEndgameReadiness`, `autoDraftTheaterSchedule`, `analyzeTheaterSeasonPlan`, `recommendSupportCastBorrow`, `analyzeArtifactBuild`, `estimateBuildFromSliders`) emit `RecommendationReliability` via `src/services/engine-reliability.ts`, with Web Worker parity in `src/workers/solver-worker.ts` and `src/services/solver-dispatcher.ts`. Unattested local heuristic tables (`SIGNATURE_WEAPONS`, `CONSTELLATION_SPIKES`, `C0_ROI_HEURISTICS`, `THEATER_BOSS_INFO`, `THEATER_DIFFICULTIES`, `BORROW_PREMIER_RANKINGS`, `DOMAIN_CONSTANTS`, `DOMAIN_PAIRS_REGISTRY`, `STRONGBOX_SETS_SET`, and probability/transmuter/set-bonus constants) remain fail-closed (`qualified`, `isActionable: false`).
+- **UI Presentation & Accessibility Disclosure (Phase 4)**: All 9 UI surfaces (`TeamGeneratorView` Best Teams & Quick Swap modal, `CharacterDetailModal`, `PullAdvisorView`, `AbyssDualTeamView`, `EndgameView` Chamber Reference Guide, `ImaginariumTheaterView` Schedule Auto-Draft & Support Cast Borrow Advisor, and `ArtifactStopView`) render `RecommendationReliabilityBadge`, `RecommendationReliabilityBanner`, and `ReliabilityDetailsPanel` formatted strictly via `src/services/reliability-presentation.ts`, keeping interactive buttons outside `role="status"` and `role="alert"` live regions.
+- **6-State Data Confidence Crosswalk**: Maps M9's runtime contract and UI error states cleanly to the Consolidated Roadmap's six data states:
+  - **Verified** → `status: 'reliable'` (`conceptualDataState: 'Verified'`)
+  - **Estimated** → `status: 'qualified'` (`conceptualDataState: 'Estimated'`, covering provisional datasets, planning previews, sandboxes, and unattested local heuristic tables)
+  - **Unknown** → `status: 'unsupported'` with `verification: 'unregistered'` (`conceptualDataState: 'Unknown'`)
+  - **Expired** → `status: 'historical'` or `status: 'unsupported'` with `temporalState: 'expired'` (`conceptualDataState: 'Expired'`)
+  - **Unsupported** → `status: 'unsupported'` for future-version/invalid-clock/unsupported mechanics (`conceptualDataState: 'Unsupported'`)
+  - **Unavailable** → Explicit UI-level runtime/worker/network/storage error alerts (`solverError` + Retry recovery, `enka.ts` fetch errors, `storage.ts` availability checks), slated for unified M10 hardening.
 
 ## Verification & Test Matrix
 
-The Phase 2 architecture is verified by automated test suites across unit, contract, and end-to-end layers:
+The complete M9 architecture (Phases 1–4) is verified across unit, engine integration, component SSR, data-audit, bundle-budget, and 4-browser Playwright E2E suites (`pnpm run verify:all`).
 
-1. **Central Evaluator Test Suite (`src/services/recommendation-reliability.test.ts`)**:
-   - 33 tests covering all 4 freshness policies, schedule temporal boundary evaluation (inclusive vs half-open), future-version quarantine, archive compromise detection, deterministic code-unit sorting, and multi-dependency matrix resolution.
-2. **Single-Policy Freshness Test Suite (`src/services/data-freshness.test.ts`)**:
-   - 21 tests verifying that `isScheduleExpired()`, `isDatasetStale()`, and `getFreshnessInfo()` delegate correctly and mirror central evaluator results without divergence.
-3. **Data Integrity & Audit Suite (`src/data/data-integrity.test.ts` & `scripts/audit-game-data.mjs`)**:
-   - 30 tests in `data-integrity.test.ts` asserting exact-union types, compile-time absence of `effectiveEndDate` on `DataProvenance`, runtime validation across all 35 records, and 100% pass across all 7 axes of `audit-game-data.mjs`.
-4. **UI Freshness Component Suite (`src/components/DataFreshnessBadge.test.tsx`)**:
-   - 8 tests verifying accurate badge labels, status tooltips, and expiration warnings.
-5. **Full Repository Test Suite**:
-   - Exactly **661 tests passing across 40 test files** with 0 failures, 0 broken references, and 0 TypeScript diagnostic errors (`pnpm exec tsc --noEmit`).
-
-## Phase 3 Implementation Roadmap
-
-Milestone M9 Phase 3 will complete full downstream adoption of the reliability architecture:
-
-1. **Solver Interface & Return Payload Wiring**:
-   - Update return types of `generateBestTeams()`, `solveAbyssDualTeams()`, `solveImaginariumTheater()`, `calculateArtifactUpgradeProbabilities()`, and `evaluatePullPlan()` to include `reliability: RecommendationReliability`.
-   - Wire `evaluateRecommendationReliability()` into solver execution paths, passing solver mode (`current`, `planning_preview`, `archive_simulation`, `sandbox_simulation`), target schedule refs, and constituent dataset IDs.
-2. **UI Actionability Headers & Reliability Modals**:
-   - Expand `DataFreshnessBadge.tsx` and view headers across `AbyssDualTeamView.tsx`, `ImaginariumTheaterView.tsx`, `PullAdvisorView.tsx`, and `TeamGeneratorView.tsx` to surface reliability ratings (`reliable`, `qualified`, `historical`, `unsupported`) and actionable badges.
-   - Introduce a multi-dependency breakdown modal allowing users to inspect individual dependency risk tiers, freshness policies, and warnings.
-3. **Playwright E2E Reliability Journeys**:
-   - Add end-to-end user journeys verifying reliability badge transitions across active Abyss, upcoming banners, historical archive simulations, and custom sandbox configurations.
+1. **Central Evaluator & Freshness Suites (`recommendation-reliability.test.ts`, `data-freshness.test.ts`)**: Policy classification across all 36 registered datasets, schedule boundary semantics, future-version quarantine, archive compromise guard, and single-policy delegation.
+2. **Data Integrity & 7-Axis Audit (`data-integrity.test.ts`, `scripts/audit-game-data.mjs`)**: Exact-union compile checks, absence of `effectiveEndDate`, and 100% pass across all 7 axes.
+3. **Engine Reliability & Worker Parity (`engine-reliability.integration.test.ts`, `solver-dispatcher.test.ts`)**: All 10 public endpoints, strict `evaluatedAt` validation, unattested local dependency fail-closed checks, and `structuredClone` worker parity.
+4. **Presentation, Component SSR & E2E Journeys (`reliability-presentation.test.ts`, `RecommendationReliabilityUI.test.tsx`, per-view component tests, and Playwright E2E journeys `13`–`19`)**: Zero nested buttons, zero buttons inside `role="status"`/`role="alert"`, valid `aria-controls`, mobile 320px/390px overflow safety, and Axe WCAG 2.1 AA checks.

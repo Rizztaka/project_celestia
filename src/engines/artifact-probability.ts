@@ -1617,7 +1617,7 @@ const ARTIFACT_OPTIMIZER_UNATTESTED_DEPS: readonly UnattestedLocalDependency[] =
   { name: 'DOMAIN_PAIRS_REGISTRY', sourceFile: 'src/data/artifact-weights.ts' },
   { name: 'STRONGBOX_SETS_SET', sourceFile: 'src/data/artifact-weights.ts' },
   {
-    name: 'Artifact probability, Strongbox & transmuter/reshape constants',
+    name: 'Artifact probability, Strongbox, domainEfficiency, conditional set bonus & transmuter/reshape constants',
     sourceFile: 'src/engines/artifact-probability.ts',
   },
 ];

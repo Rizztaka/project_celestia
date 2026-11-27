@@ -267,7 +267,7 @@ export const ReliabilityDetailsPanel: React.FC<ReliabilityDetailsPanelProps> = (
             {contextLabel ? `${contextLabel} — Reliability Details` : 'Reliability Details'}
           </h3>
           <p className="text-xs text-zinc-200 break-words">
-            {model.contextTag}
+            {model.contextTag} · Data State: {model.dataStateLabel}
             {model.evaluatedAt !== undefined ? ` · Evaluated UTC: ${model.evaluatedAt}` : ''}
           </p>
         </div>

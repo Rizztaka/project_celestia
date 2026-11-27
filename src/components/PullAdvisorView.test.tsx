@@ -395,5 +395,49 @@ describe('PullAdvisorView Component (M9 Phase 4 — Slice 3.1)', () => {
       expect(openPanelHtml).toContain('href="https://genshin.hoyoverse.com/en/news"');
       expect(decoded).toContain('SIGNATURE_WEAPONS');
     });
+
+    it('suppresses the maxed-out empty state banner when bannerFilter is unsupported', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-11-23T12:00:00Z'));
+
+      const maxedProfiles: Record<string, OwnedCharacterProfile> = {};
+      for (const char of CHARACTERS) {
+        maxedProfiles[char.id] = { id: char.id, level: 90, constellation: 6 };
+      }
+      const allWeaponsOwned: OwnedWeapon[] = WEAPONS_DATA.map((w, idx) => ({
+        id: `owned-${w.key}-${idx}`,
+        key: w.key,
+        name: w.name,
+        level: 90,
+        refinement: 1,
+        location: '',
+      }));
+
+      const savedPhases = BANNER_PHASES.splice(0, BANNER_PHASES.length);
+      let html: string;
+      try {
+        BANNER_PHASES.push({
+          ...savedPhases[0],
+          id: 'banner_unknown_9_9',
+          startDate: '2026-11-01',
+          endDate: '2026-12-30',
+        });
+        html = renderToString(
+          <PullAdvisorView
+            ownedIds={Object.keys(maxedProfiles)}
+            profiles={maxedProfiles}
+            weapons={allWeaponsOwned}
+          />,
+        );
+      } finally {
+        BANNER_PHASES.splice(0, BANNER_PHASES.length, ...savedPhases);
+      }
+
+      const decoded = decodeHtmlEntities(html);
+      expect(decoded).toContain('Unsupported Recommendation Context');
+      expect(decoded).toContain('Reset Banner Filter');
+      expect(decoded).not.toContain('All targets in this banner phase are already maxed out!');
+      assertAccessibilityInvariants(html);
+    });
   });
 });

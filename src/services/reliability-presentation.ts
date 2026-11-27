@@ -21,6 +21,7 @@ import {
 export type ReliabilitySeverity = 'none' | 'info' | 'warning' | 'blocking';
 export type ReliabilityContainerKind = 'none' | 'context' | 'status' | 'alert';
 export type ProvenanceMatchStatus = 'matched' | 'unregistered' | 'unmatched' | 'ambiguous';
+export type ConceptualDataState = 'Verified' | 'Estimated' | 'Unknown' | 'Expired' | 'Unsupported';
 
 export type ReliabilityBadgeTone =
   | 'reliable'
@@ -56,6 +57,8 @@ export interface ReliabilityPresentationModel {
 
   badgeLabel: string;
   badgeTone: ReliabilityBadgeTone;
+  conceptualDataState: ConceptualDataState;
+  dataStateLabel: string;
   actionabilityLabel: string;
   contextTag: string;
   triggerAriaLabel: string;
@@ -282,6 +285,38 @@ export function formatReliabilityPresentation(
     requiredDependencies.length > 0 || optionalDependencies.length > 0;
   const contextTag = formatContextTag(reliability.mode, reliability.temporalState);
 
+  let conceptualDataState: ConceptualDataState;
+  let dataStateLabel: string;
+  switch (reliability.status) {
+    case 'reliable':
+      conceptualDataState = 'Verified';
+      dataStateLabel = 'Verified';
+      break;
+    case 'qualified':
+      conceptualDataState = 'Estimated';
+      dataStateLabel = 'Estimated (Qualified / Provisional)';
+      break;
+    case 'historical':
+      conceptualDataState = 'Expired';
+      dataStateLabel = 'Expired (Historical Archive)';
+      break;
+    case 'unsupported':
+      if (
+        reliability.verification === 'unregistered' ||
+        requiredDependencies.some((d) => d.verification === 'unregistered')
+      ) {
+        conceptualDataState = 'Unknown';
+        dataStateLabel = 'Unknown (Unregistered Data)';
+      } else if (reliability.temporalState === 'expired') {
+        conceptualDataState = 'Expired';
+        dataStateLabel = 'Expired (Schedule Expired)';
+      } else {
+        conceptualDataState = 'Unsupported';
+        dataStateLabel = 'Unsupported';
+      }
+      break;
+  }
+
   let badgeLabel: string;
   let badgeTone: ReliabilityBadgeTone;
   let actionabilityLabel: string;
@@ -443,6 +478,8 @@ export function formatReliabilityPresentation(
     isActionable: reliability.isActionable,
     badgeLabel,
     badgeTone,
+    conceptualDataState,
+    dataStateLabel,
     actionabilityLabel,
     contextTag,
     triggerAriaLabel: buildTriggerAriaLabel(badgeLabel, actionabilityLabel),

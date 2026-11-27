@@ -1,10 +1,11 @@
-import React, { useState, useMemo, useEffect, useTransition, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useTransition, useRef, useReducer, useId } from 'react';
 import type {
   Character,
   Element,
   TheaterDifficulty,
   TheaterSeasonConfig,
   OwnedCharacterProfile,
+  RecommendationReliability,
 } from '../types/genshin';
 import {
   THEATER_SEASONS,
@@ -12,9 +13,12 @@ import {
   THEATER_BOSS_INFO,
   createCustomSeason,
   DEFAULT_ACTIVE_THEATER_SEASON_ID,
+  getActiveTheaterSeason,
 } from '../data/theater-seasons';
 import { CHARACTERS } from '../data/characters';
-import { DataFreshnessBadge, StaleDataWarningBanner } from './DataFreshnessBadge';
+import { RecommendationReliabilityBadge } from './RecommendationReliabilityBadge';
+import { RecommendationReliabilityBanner } from './RecommendationReliabilityBanner';
+import { ReliabilityDetailsPanel } from './ReliabilityDetailsPanel';
 import {
   filterEligibleTheaterRoster,
   swapTheaterActMember,
@@ -47,12 +51,297 @@ import {
   Compass,
   ListChecks,
   Shield,
+  ShieldAlert,
 } from 'lucide-react';
 
 interface ImaginariumTheaterViewProps {
   ownedIds: string[];
   profiles?: Record<string, OwnedCharacterProfile>;
+  evaluatedAt?: string;
 }
+
+function getCurrentUtcDateString(): string {
+  const now = new Date();
+  if (Number.isNaN(now.getTime())) {
+    return '';
+  }
+  const yyyy = String(now.getUTCFullYear()).padStart(4, '0');
+  const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(now.getUTCDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function resolveDefaultSeasonId(evaluatedAt?: string): string {
+  if (evaluatedAt !== undefined) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(evaluatedAt.trim());
+    if (match) {
+      const parsed = new Date(`${match[1]}-${match[2]}-${match[3]}T12:00:00Z`);
+      if (!Number.isNaN(parsed.getTime())) {
+        return getActiveTheaterSeason(parsed).id;
+      }
+    }
+    return DEFAULT_ACTIVE_THEATER_SEASON_ID;
+  }
+  return getActiveTheaterSeason().id;
+}
+
+export interface TheaterSolveRequestParams {
+  effectiveEligible: Character[];
+  difficulty: TheaterDifficulty;
+  activeSeason: TheaterSeasonConfig;
+  profiles?: Record<string, OwnedCharacterProfile>;
+  evaluatedAt: string;
+}
+
+function canonicalizeTheaterInputValue(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map(canonicalizeTheaterInputValue);
+  }
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    const normalized: Record<string, unknown> = {};
+    for (const key of Object.keys(record).sort()) {
+      const entry = record[key];
+      if (entry !== undefined) {
+        normalized[key] = canonicalizeTheaterInputValue(entry);
+      }
+    }
+    return normalized;
+  }
+  return value;
+}
+
+/** Deterministic input snapshot key for Imaginarium Theater schedule auto-drafting. */
+export function buildTheaterSolveInputKey(params: TheaterSolveRequestParams): string {
+  const eligibleIds = params.effectiveEligible.map((c) => c.id).sort();
+  return JSON.stringify({
+    eligibleIds,
+    difficulty: params.difficulty,
+    season: canonicalizeTheaterInputValue(params.activeSeason),
+    profiles: canonicalizeTheaterInputValue(params.profiles ?? {}),
+    evaluatedAt: params.evaluatedAt,
+  });
+}
+
+export interface TheaterSolveState {
+  scheduleResult: TheaterScheduleResult | null;
+  solvedSeasonId: string | null;
+  resultInputKey: string | null;
+  isSolving: boolean;
+  solverError: string | null;
+}
+
+export const initialTheaterSolveState: TheaterSolveState = {
+  scheduleResult: null,
+  solvedSeasonId: null,
+  resultInputKey: null,
+  isSolving: true,
+  solverError: null,
+};
+
+export type TheaterSolveAction =
+  | { type: 'SOLVE_STARTED' }
+  | {
+      type: 'SOLVE_SUCCEEDED';
+      result: TheaterScheduleResult;
+      seasonId: string;
+      inputKey: string;
+    }
+  | { type: 'SOLVE_FAILED'; error: string }
+  | {
+      type: 'UPDATE_RESULT';
+      updater: (prev: TheaterScheduleResult | null) => TheaterScheduleResult | null;
+    };
+
+/** Pure reducer for async Imaginarium Theater auto-drafting and manual edits. */
+export function theaterSolveReducer(
+  state: TheaterSolveState,
+  action: TheaterSolveAction,
+): TheaterSolveState {
+  switch (action.type) {
+    case 'SOLVE_STARTED':
+      return {
+        ...state,
+        isSolving: true,
+        solverError: null,
+      };
+    case 'SOLVE_SUCCEEDED':
+      return {
+        scheduleResult: action.result,
+        solvedSeasonId: action.seasonId,
+        resultInputKey: action.inputKey,
+        isSolving: false,
+        solverError: null,
+      };
+    case 'SOLVE_FAILED':
+      return {
+        ...state,
+        scheduleResult: null,
+        solvedSeasonId: null,
+        resultInputKey: null,
+        isSolving: false,
+        solverError: action.error,
+      };
+    case 'UPDATE_RESULT':
+      return {
+        ...state,
+        scheduleResult: action.updater(state.scheduleResult),
+      };
+  }
+}
+
+export function startTheaterSolveRequest(
+  params: TheaterSolveRequestParams,
+  userLocks: Record<number, string[]> | undefined,
+  lockedActNumbers: Set<number>,
+  deps: {
+    requestIdRef: { current: number };
+    isMountedRef: { current: boolean };
+    dispatch: (action: TheaterSolveAction) => void;
+    scheduleTransition: (callback: () => void) => void;
+    dispatchSolveFn?: typeof dispatchAutoDraftTheater;
+  },
+): () => void {
+  const reqId = ++deps.requestIdRef.current;
+  const inputKey = buildTheaterSolveInputKey(params);
+  const runSolve = deps.dispatchSolveFn ?? dispatchAutoDraftTheater;
+
+  deps.dispatch({ type: 'SOLVE_STARTED' });
+
+  runSolve(
+    params.effectiveEligible,
+    params.difficulty,
+    params.activeSeason,
+    userLocks && Object.keys(userLocks).length > 0 ? userLocks : undefined,
+    params.profiles,
+    { evaluatedAt: params.evaluatedAt },
+  )
+    .then((res) => {
+      if (!deps.isMountedRef.current || reqId !== deps.requestIdRef.current) return;
+      deps.scheduleTransition(() => {
+        if (!deps.isMountedRef.current || reqId !== deps.requestIdRef.current) return;
+        const actsWithLocks = res.acts.map((a) => ({
+          ...a,
+          isLocked: lockedActNumbers.has(a.actNumber),
+        }));
+        deps.dispatch({
+          type: 'SOLVE_SUCCEEDED',
+          result: { ...res, acts: actsWithLocks },
+          seasonId: params.activeSeason.id,
+          inputKey,
+        });
+      });
+    })
+    .catch((err: unknown) => {
+      if (!deps.isMountedRef.current || reqId !== deps.requestIdRef.current) return;
+      const message =
+        err instanceof Error && err.message.trim().length > 0
+          ? err.message
+          : 'Unable to auto-draft Imaginarium Theater schedule right now.';
+      deps.dispatch({ type: 'SOLVE_FAILED', error: message });
+    });
+
+  return () => {
+    if (deps.requestIdRef.current === reqId) {
+      deps.requestIdRef.current += 1;
+    }
+  };
+}
+
+export interface TheaterReliabilitySectionProps {
+  reliability: RecommendationReliability | null;
+  detailsControlsId: string;
+  isDetailsOpen: boolean;
+  onToggleDetails: () => void;
+  onCloseDetails: () => void;
+  solverError: string | null;
+  onRetry: () => void;
+}
+
+export const TheaterReliabilitySection: React.FC<TheaterReliabilitySectionProps> = ({
+  reliability,
+  detailsControlsId,
+  isDetailsOpen,
+  onToggleDetails,
+  onCloseDetails,
+  solverError,
+  onRetry,
+}) => (
+  <div className="space-y-3">
+    {solverError && (
+      <div className="w-full max-w-full min-w-0 p-3.5 rounded-xl border bg-rose-950/85 border-rose-500/65 text-rose-100 flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+        <div role="alert" aria-live="assertive" className="min-w-0 flex-1">
+          <div className="flex items-start gap-2.5 min-w-0">
+            <ShieldAlert className="w-4 h-4 text-rose-200 shrink-0 mt-0.5" aria-hidden="true" />
+            <div className="min-w-0 flex-1 space-y-0.5 text-xs leading-relaxed">
+              <p className="font-bold text-rose-100">Imaginarium Theater Solver Error</p>
+              <p className="text-rose-200 break-words">{solverError}</p>
+            </div>
+          </div>
+        </div>
+        <div className="shrink-0 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={onRetry}
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold border bg-rose-200 text-rose-950 border-rose-200 hover:bg-rose-100 transition-colors cursor-pointer"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    )}
+
+    <RecommendationReliabilityBanner
+      reliability={reliability}
+      contextLabel="Imaginarium Theater"
+      detailsControlsId={detailsControlsId}
+      isDetailsOpen={isDetailsOpen}
+      onToggleDetails={onToggleDetails}
+    />
+
+    <ReliabilityDetailsPanel
+      id={detailsControlsId}
+      reliability={reliability}
+      isOpen={isDetailsOpen}
+      onClose={onCloseDetails}
+      contextLabel="Imaginarium Theater"
+    />
+  </div>
+);
+
+export interface TheaterBorrowReliabilitySectionProps {
+  reliability: RecommendationReliability | null;
+  detailsControlsId: string;
+  isDetailsOpen: boolean;
+  onToggleDetails: () => void;
+  onCloseDetails: () => void;
+}
+
+export const TheaterBorrowReliabilitySection: React.FC<TheaterBorrowReliabilitySectionProps> = ({
+  reliability,
+  detailsControlsId,
+  isDetailsOpen,
+  onToggleDetails,
+  onCloseDetails,
+}) => (
+  <div className="space-y-2.5">
+    <RecommendationReliabilityBanner
+      reliability={reliability}
+      contextLabel="Support Cast Borrow Advisor"
+      detailsControlsId={detailsControlsId}
+      isDetailsOpen={isDetailsOpen}
+      onToggleDetails={onToggleDetails}
+    />
+
+    <ReliabilityDetailsPanel
+      id={detailsControlsId}
+      reliability={reliability}
+      isOpen={isDetailsOpen}
+      onClose={onCloseDetails}
+      contextLabel="Support Cast Borrow Advisor"
+    />
+  </div>
+);
 
 const ALL_ELEMENTS: Element[] = [
   'Pyro',
@@ -77,23 +366,37 @@ const ELEMENT_BADGES: Record<Element, { bg: string; text: string; border: string
 export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
   ownedIds,
   profiles,
+  evaluatedAt,
 }) => {
-  const [selectedSeasonId, setSelectedSeasonId] = useState<string>(
-    DEFAULT_ACTIVE_THEATER_SEASON_ID
+  const [defaultEvaluatedAt] = useState<string>(() => getCurrentUtcDateString());
+  const resolvedEvaluatedAt = evaluatedAt !== undefined ? evaluatedAt : defaultEvaluatedAt;
+  const [selectedSeasonId, setSelectedSeasonId] = useState<string>(() =>
+    resolveDefaultSeasonId(evaluatedAt),
   );
   const [customElements, setCustomElements] = useState<Element[]>(['Pyro', 'Hydro', 'Anemo']);
   const [difficulty, setDifficulty] = useState<TheaterDifficulty>('Visionary');
-  // Retain full TheaterScheduleResult envelope (including reliability) in component state
-  const [scheduleResult, setScheduleResult] = useState<TheaterScheduleResult | null>(null);
-  const schedule = useMemo(() => scheduleResult?.acts ?? [], [scheduleResult]);
-  const vigorState = useMemo(() => scheduleResult?.vigorState ?? {}, [scheduleResult]);
-  const validationErrors = scheduleResult?.validationErrors ?? [];
-  const shortfallSuggestions = scheduleResult?.shortfallSuggestions ?? [];
+  const [solveState, dispatchSolve] = useReducer(theaterSolveReducer, initialTheaterSolveState);
+  const [solveNonce, setSolveNonce] = useState<number>(0);
   const [lockedActNumbers, setLockedActNumbers] = useState<Set<number>>(new Set());
+  const latestUserLocksRef = useRef<Record<number, string[]>>({});
+  const latestLockedActSetRef = useRef<Set<number>>(new Set());
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [modalError, setModalError] = useState<string | null>(null);
   const [borrowedCharId, setBorrowedCharId] = useState<string | null>(null);
+  const [isTheaterDetailsOpen, setIsTheaterDetailsOpen] = useState<boolean>(false);
+  const [isBorrowDetailsOpen, setIsBorrowDetailsOpen] = useState<boolean>(false);
+  const theaterDetailsId = useId();
+  const borrowDetailsId = useId();
   const [isPending, startTransition] = useTransition();
+  const isMountedRef = useRef<boolean>(true);
+  const requestIdRef = useRef<number>(0);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const [swapTarget, setSwapTarget] = useState<{
     actNumber: number;
@@ -129,8 +432,10 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
 
   // Retain full RecommendationCollection envelope (items + reliability) for borrow advisor
   const borrowResult = useMemo(() => {
-    return recommendSupportCastBorrow(filteredRoster.eligible, activeSeason, ownedIds);
-  }, [filteredRoster.eligible, activeSeason, ownedIds]);
+    return recommendSupportCastBorrow(filteredRoster.eligible, activeSeason, ownedIds, {
+      evaluatedAt: resolvedEvaluatedAt,
+    });
+  }, [filteredRoster.eligible, activeSeason, ownedIds, resolvedEvaluatedAt]);
   const recommendedBorrows = borrowResult.items;
 
   const effectiveEligible = useMemo(() => {
@@ -142,19 +447,73 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
     return [borrowedChar, ...filteredRoster.eligible];
   }, [filteredRoster.eligible, borrowedCharId]);
 
+  const solveParams = useMemo<TheaterSolveRequestParams>(
+    () => ({
+      effectiveEligible,
+      difficulty,
+      activeSeason,
+      profiles,
+      evaluatedAt: resolvedEvaluatedAt,
+    }),
+    [effectiveEligible, difficulty, activeSeason, profiles, resolvedEvaluatedAt],
+  );
+  const currentSolveInputKey = useMemo(
+    () => buildTheaterSolveInputKey(solveParams),
+    [solveParams],
+  );
+
+  useEffect(() => {
+    return startTheaterSolveRequest(
+      solveParams,
+      latestUserLocksRef.current,
+      latestLockedActSetRef.current,
+      {
+        requestIdRef,
+        isMountedRef,
+        dispatch: dispatchSolve,
+        scheduleTransition: startTransition,
+      },
+    );
+  }, [solveParams, solveNonce]);
+
+  const hasMatchingResult =
+    solveState.scheduleResult !== null &&
+    solveState.solvedSeasonId === activeSeason.id &&
+    solveState.resultInputKey !== null &&
+    solveState.resultInputKey === currentSolveInputKey;
+
+  const isPendingInputReevaluation =
+    solveState.scheduleResult !== null &&
+    (solveState.solvedSeasonId !== activeSeason.id ||
+      solveState.resultInputKey === null ||
+      solveState.resultInputKey !== currentSolveInputKey);
+
+  const effectiveIsSolving = solveState.isSolving || isPendingInputReevaluation;
+  const visibleScheduleResult =
+    hasMatchingResult && !solveState.solverError ? solveState.scheduleResult : null;
+
+  const schedule = useMemo(() => visibleScheduleResult?.acts ?? [], [visibleScheduleResult]);
+  const vigorState = useMemo(() => visibleScheduleResult?.vigorState ?? {}, [visibleScheduleResult]);
+  const validationErrors = visibleScheduleResult?.validationErrors ?? [];
+  const shortfallSuggestions = visibleScheduleResult?.shortfallSuggestions ?? [];
+
   // Reuse the schedule's evaluatedAt context so TheaterSeasonAnalysis and TheaterScheduleResult
   // always produce identical reliability decisions across manual edits.
   const seasonAnalysis = useMemo(() => {
-    if (schedule.length === 0) return null;
-    const evaluatedAt = scheduleResult?.reliability.evaluatedAt;
+    if (!visibleScheduleResult || schedule.length === 0) return null;
+    const syncEvaluatedAt = visibleScheduleResult.reliability.evaluatedAt ?? resolvedEvaluatedAt;
     return analyzeTheaterSeasonPlan(
       schedule,
       effectiveEligible,
       difficulty,
       activeSeason,
-      evaluatedAt ? { evaluatedAt } : undefined,
+      { evaluatedAt: syncEvaluatedAt },
     );
-  }, [schedule, effectiveEligible, difficulty, activeSeason, scheduleResult?.reliability.evaluatedAt]);
+  }, [visibleScheduleResult, schedule, effectiveEligible, difficulty, activeSeason, resolvedEvaluatedAt]);
+
+  const planReliability: RecommendationReliability | null = visibleScheduleResult
+    ? visibleScheduleResult.reliability ?? seasonAnalysis?.reliability ?? null
+    : null;
 
   const preservedActsByCharId = useMemo(() => {
     const map = new Map<string, number[]>();
@@ -187,85 +546,68 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
       });
   }, [swapTarget, schedule, effectiveEligible, vigorState]);
 
-  const handleGenerateSchedule = (currentLocked = lockedActNumbers) => {
-    const userLocks: Record<number, string[]> = {};
-    for (const actNum of currentLocked) {
-      const existingAct = schedule.find((a) => a.actNumber === actNum);
+  const syncLockRefs = (nextLocked: Set<number>, currentActs = schedule) => {
+    latestLockedActSetRef.current = nextLocked;
+    const locksMap: Record<number, string[]> = {};
+    for (const actNum of nextLocked) {
+      const existingAct = currentActs.find((a) => a.actNumber === actNum);
       if (existingAct && existingAct.team.length > 0) {
-        userLocks[actNum] = existingAct.team.map((m) => m.id);
+        locksMap[actNum] = existingAct.team.map((m) => m.id);
       }
     }
-
-    dispatchAutoDraftTheater(
-      effectiveEligible,
-      difficulty,
-      activeSeason,
-      Object.keys(userLocks).length > 0 ? userLocks : undefined,
-      profiles
-    ).then((res) => {
-      startTransition(() => {
-        const actsWithLocks = res.acts.map((a) => ({
-          ...a,
-          isLocked: currentLocked.has(a.actNumber),
-        }));
-
-        setScheduleResult({
-          ...res,
-          acts: actsWithLocks,
-        });
-      });
-    });
+    latestUserLocksRef.current = locksMap;
   };
 
-  const eligibleKey = useMemo(
-    () => effectiveEligible.map((c) => c.id).sort().join(','),
-    [effectiveEligible]
-  );
-
-  const isInitialMount = useRef(true);
-
-  useEffect(() => {
+  const handleSelectSeason = (nextSeasonId: string) => {
     setBorrowedCharId(null);
-  }, [activeSeason.id]);
+    const emptyLocks = new Set<number>();
+    setLockedActNumbers(emptyLocks);
+    latestLockedActSetRef.current = emptyLocks;
+    latestUserLocksRef.current = {};
+    setSelectedSeasonId(nextSeasonId);
+    setSwapTarget(null);
+    setModalError(null);
+  };
 
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      handleGenerateSchedule(new Set());
-      return;
-    }
-    setLockedActNumbers(new Set());
-    handleGenerateSchedule(new Set());
-  }, [activeSeason.id, difficulty]);
+  const handleSelectDifficulty = (nextDifficulty: TheaterDifficulty) => {
+    const emptyLocks = new Set<number>();
+    setLockedActNumbers(emptyLocks);
+    latestLockedActSetRef.current = emptyLocks;
+    latestUserLocksRef.current = {};
+    setDifficulty(nextDifficulty);
+    setSwapTarget(null);
+    setModalError(null);
+  };
 
-  useEffect(() => {
-    if (isInitialMount.current) return;
-    handleGenerateSchedule(lockedActNumbers);
-  }, [eligibleKey]);
+  const handleGenerateSchedule = () => {
+    syncLockRefs(lockedActNumbers);
+    setSolveNonce((prev) => prev + 1);
+  };
 
   const diffConfig = THEATER_DIFFICULTIES[difficulty];
   const requiredChars = diffConfig.requiredCharacters;
   const isShortfall = filteredRoster.eligible.length < requiredChars;
 
   const handleToggleLock = (actNumber: number) => {
-    setLockedActNumbers((prev) => {
-      const next = new Set(prev);
-      if (next.has(actNumber)) {
-        next.delete(actNumber);
-      } else {
-        next.add(actNumber);
-      }
-      setScheduleResult((prev) =>
-        prev
+    const next = new Set(lockedActNumbers);
+    if (next.has(actNumber)) {
+      next.delete(actNumber);
+    } else {
+      next.add(actNumber);
+    }
+    setLockedActNumbers(next);
+    syncLockRefs(next);
+    dispatchSolve({
+      type: 'UPDATE_RESULT',
+      updater: (prevResult) =>
+        prevResult
           ? {
-              ...prev,
-              acts: prev.acts.map((a) =>
-                a.actNumber === actNumber ? { ...a, isLocked: next.has(actNumber) } : a
+              ...prevResult,
+              acts: prevResult.acts.map((a) =>
+                a.actNumber === actNumber ? { ...a, isLocked: next.has(actNumber) } : a,
               ),
             }
-          : prev
-      );
-      return next;
+          : prevResult,
     });
   };
 
@@ -306,16 +648,20 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
       }
       return updated;
     });
-    setScheduleResult((prev) =>
-      prev
-        ? {
-            ...prev,
-            acts: actsWithLock,
-            vigorState: res.vigorState,
-          }
-        : prev
-    );
-    setLockedActNumbers((prev) => new Set(prev).add(swapTarget.actNumber));
+    const nextLocks = new Set(lockedActNumbers).add(swapTarget.actNumber);
+    setLockedActNumbers(nextLocks);
+    syncLockRefs(nextLocks, actsWithLock);
+    dispatchSolve({
+      type: 'UPDATE_RESULT',
+      updater: (prev) =>
+        prev
+          ? {
+              ...prev,
+              acts: actsWithLock,
+              vigorState: res.vigorState,
+            }
+          : prev,
+    });
     setSwapTarget(null);
   };
 
@@ -330,16 +676,20 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
         }
         return updated;
       });
-      setScheduleResult((prev) =>
-        prev
-          ? {
-              ...prev,
-              acts: actsWithLock,
-              vigorState: res.vigorState,
-            }
-          : prev
-      );
-      setLockedActNumbers((prev) => new Set(prev).add(actNumber));
+      const nextLocks = new Set(lockedActNumbers).add(actNumber);
+      setLockedActNumbers(nextLocks);
+      syncLockRefs(nextLocks, actsWithLock);
+      dispatchSolve({
+        type: 'UPDATE_RESULT',
+        updater: (prev) =>
+          prev
+            ? {
+                ...prev,
+                acts: actsWithLock,
+                vigorState: res.vigorState,
+              }
+            : prev,
+      });
     }
   };
 
@@ -354,9 +704,25 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
 
         <div className="flex flex-wrap items-center justify-between gap-4 relative z-10">
           <div>
-            <div className="flex items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase mb-1">
+            <div className="flex flex-wrap items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase mb-1">
               <Crown className="w-4 h-4" aria-hidden="true" />
               <span>Visionary Mode Solver · 2-Vigor Act Planner</span>
+              <RecommendationReliabilityBadge
+                reliability={planReliability}
+                isLoading={effectiveIsSolving}
+                size="sm"
+                detailsControlsId={theaterDetailsId}
+                isDetailsOpen={isTheaterDetailsOpen}
+                onToggleDetails={() => setIsTheaterDetailsOpen((v) => !v)}
+              />
+              {(isPending || effectiveIsSolving) && (
+                <span
+                  role="status"
+                  className="text-xs text-amber-300 animate-pulse motion-reduce:animate-none font-normal lowercase tracking-normal"
+                >
+                  (drafting…)
+                </span>
+              )}
             </div>
             <h1 className="text-2xl font-bold text-zinc-100 font-serif">
               Imaginarium Theater
@@ -389,7 +755,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
             <select
               id="theater-season-select"
               value={selectedSeasonId}
-              onChange={(e) => setSelectedSeasonId(e.target.value)}
+              onChange={(e) => handleSelectSeason(e.target.value)}
               className="min-h-[38px] bg-[#161928] border border-[#323954] text-zinc-100 text-xs font-medium rounded-xl px-3 py-1.5 focus:border-[#d4af37]"
             >
               <optgroup label="Active Seasons (Version 7.x)">
@@ -424,8 +790,6 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                 );
               })}
             </div>
-
-            <DataFreshnessBadge datasetId={activeSeason.id} />
           </div>
 
           {/* Difficulty Toggle Pills */}
@@ -444,7 +808,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                   key={mode}
                   type="button"
                   aria-pressed={isActive}
-                  onClick={() => setDifficulty(mode)}
+                  onClick={() => handleSelectDifficulty(mode)}
                   className={`min-h-[38px] sm:min-h-[34px] text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 ${
                     isActive
                       ? 'bg-[#d4af37] text-[#0a0b0e] shadow-md font-bold'
@@ -461,8 +825,18 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
           </div>
         </div>
 
-        {/* Stale Data Warning Banner */}
-        <StaleDataWarningBanner datasetId={activeSeason.id} contextLabel="Imaginarium Theater" className="mt-4" />
+        {/* Recommendation Reliability Disclosure */}
+        <div className="mt-4 empty:hidden">
+          <TheaterReliabilitySection
+            reliability={planReliability}
+            detailsControlsId={theaterDetailsId}
+            isDetailsOpen={isTheaterDetailsOpen}
+            onToggleDetails={() => setIsTheaterDetailsOpen((v) => !v)}
+            onCloseDetails={() => setIsTheaterDetailsOpen(false)}
+            solverError={solveState.solverError}
+            onRetry={handleGenerateSchedule}
+          />
+        </div>
 
         {/* Custom Element Selector Drawer */}
         {selectedSeasonId === 'custom' && (
@@ -497,11 +871,11 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
 
       {/* Shortfall or Error Alert Banner */}
       {(isShortfall || validationErrors.length > 0) && (
-        <div
-          role="status"
+        <section
+          aria-label="Roster shortfall notice"
           className="bg-amber-950/35 border border-amber-400/45 p-4 rounded-xl space-y-3"
         >
-          <div className="flex items-start gap-3">
+          <div role="status" className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
             <div className="text-xs space-y-1">
               <div className="font-bold text-amber-200">
@@ -554,7 +928,7 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
               </div>
             </div>
           )}
-        </div>
+        </section>
       )}
 
       {/* Support Cast Borrow Recommendation Banner */}
@@ -568,6 +942,13 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
                 <span className="text-[11px] font-mono text-[#f3cf58] bg-[#161a2b] border border-[#d4af37]/35 px-2 py-0.5 rounded-full lowercase">
                   1 Friend Slot Available
                 </span>
+                <RecommendationReliabilityBadge
+                  reliability={borrowResult.reliability}
+                  size="sm"
+                  detailsControlsId={borrowDetailsId}
+                  isDetailsOpen={isBorrowDetailsOpen}
+                  onToggleDetails={() => setIsBorrowDetailsOpen((v) => !v)}
+                />
               </h2>
               <p className="text-xs text-zinc-300 mt-0.5">
                 Borrow a high-impact carry or support character from friends to conquer this season&apos;s apex boss mechanics.
@@ -593,6 +974,14 @@ export const ImaginariumTheaterView: React.FC<ImaginariumTheaterViewProps> = ({
             </div>
           )}
         </div>
+
+        <TheaterBorrowReliabilitySection
+          reliability={borrowResult.reliability}
+          detailsControlsId={borrowDetailsId}
+          isDetailsOpen={isBorrowDetailsOpen}
+          onToggleDetails={() => setIsBorrowDetailsOpen((v) => !v)}
+          onCloseDetails={() => setIsBorrowDetailsOpen(false)}
+        />
 
         {recommendedBorrows.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">

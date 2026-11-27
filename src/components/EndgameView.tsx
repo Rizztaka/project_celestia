@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useId } from 'react';
 import { analyzeEndgameReadiness } from '../engines/endgame-helper';
 import type { Character, OwnedCharacterProfile } from '../types/genshin';
 import {
@@ -17,40 +17,72 @@ import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { ImaginariumTheaterView } from './ImaginariumTheaterView';
 import { AbyssDualTeamView } from './AbyssDualTeamView';
+import { RecommendationReliabilityBadge } from './RecommendationReliabilityBadge';
+import { RecommendationReliabilityBanner } from './RecommendationReliabilityBanner';
+import { ReliabilityDetailsPanel } from './ReliabilityDetailsPanel';
 import { ABYSS_CYCLES, type AbyssCycleConfig } from '../data/abyss-schedules';
 import { getSavedAbyssCycleId, saveAbyssCycleId, getSavedCustomAbyss } from '../services/storage';
 
 interface EndgameViewProps {
   ownedIds: string[];
   profiles?: Record<string, OwnedCharacterProfile>;
+  evaluatedAt?: string;
+}
+
+function getCurrentUtcDateString(): string {
+  const now = new Date();
+  if (Number.isNaN(now.getTime())) {
+    return '';
+  }
+  const yyyy = String(now.getUTCFullYear()).padStart(4, '0');
+  const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(now.getUTCDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
 }
 
 export const EndgameView: React.FC<EndgameViewProps> = ({
   ownedIds,
   profiles,
+  evaluatedAt,
 }) => {
   const [activeSubTab, setActiveSubTab] = useState<'theater' | 'abyss'>('theater');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [showDetailedChamberGuide, setShowDetailedChamberGuide] = useState<boolean>(false);
+  const [isChamberDetailsOpen, setIsChamberDetailsOpen] = useState<boolean>(false);
+  const chamberDetailsId = useId();
   const [selectedCycleId, setSelectedCycleId] = useState<string>(() => getSavedAbyssCycleId());
+  const [customCycle, setCustomCycle] = useState<AbyssCycleConfig>(() => getSavedCustomAbyss());
+  const [defaultEvaluatedAt, setDefaultEvaluatedAt] = useState<string>(() => getCurrentUtcDateString());
+
+  useEffect(() => {
+    if (evaluatedAt === undefined && activeSubTab === 'abyss') {
+      const next = getCurrentUtcDateString();
+      setDefaultEvaluatedAt((prev) => (prev === next ? prev : next));
+    }
+  }, [evaluatedAt, activeSubTab]);
+
+  const abyssEvaluatedAt = evaluatedAt !== undefined ? evaluatedAt : defaultEvaluatedAt;
 
   const activeCycle: AbyssCycleConfig = useMemo(() => {
     if (selectedCycleId === 'custom-sandbox') {
-      return getSavedCustomAbyss();
+      return customCycle;
     }
     const found = ABYSS_CYCLES.find((c) => c.id === selectedCycleId);
     return found || ABYSS_CYCLES[0];
-  }, [selectedCycleId]);
+  }, [selectedCycleId, customCycle]);
 
   const handleSelectCycleId = (cycleId: string) => {
     setSelectedCycleId(cycleId);
     saveAbyssCycleId(cycleId);
+    if (cycleId === 'custom-sandbox') {
+      setCustomCycle(getSavedCustomAbyss());
+    }
   };
 
   // Retain full RecommendationCollection envelope (items + reliability) at view boundary
   const readinessResult = useMemo(
-    () => analyzeEndgameReadiness(ownedIds, activeCycle),
-    [ownedIds, activeCycle],
+    () => analyzeEndgameReadiness(ownedIds, activeCycle, { evaluatedAt: abyssEvaluatedAt }),
+    [ownedIds, activeCycle, abyssEvaluatedAt],
   );
   const analysis = readinessResult.items;
 
@@ -104,7 +136,11 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
           role="tabpanel"
           aria-labelledby="endgame-tab-theater"
         >
-          <ImaginariumTheaterView ownedIds={ownedIds} profiles={profiles} />
+          <ImaginariumTheaterView
+            ownedIds={ownedIds}
+            profiles={profiles}
+            evaluatedAt={evaluatedAt}
+          />
         </div>
       )}
 
@@ -121,34 +157,70 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
             profiles={profiles}
             selectedCycleId={selectedCycleId}
             onSelectCycleId={handleSelectCycleId}
+            customCycle={customCycle}
+            onCustomCycleChange={setCustomCycle}
+            evaluatedAt={abyssEvaluatedAt}
           />
 
           {/* Collapsible Chamber & Enemy Deep Dive */}
           <div className="bg-[#121420] border border-[#24293d] rounded-2xl overflow-hidden">
-            <button
-              type="button"
-              aria-expanded={showDetailedChamberGuide}
-              aria-controls="abyss-chamber-reference"
-              onClick={() => setShowDetailedChamberGuide(!showDetailedChamberGuide)}
-              className="w-full min-h-[48px] p-4 flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-zinc-100 hover:bg-[#1a1e2e] transition-colors cursor-pointer bg-[#151826]"
-            >
-              <div className="flex flex-wrap items-center gap-2 text-left">
-                <Target className="w-4 h-4 text-[#d4af37] shrink-0" aria-hidden="true" />
-                <span>Enemy Lineup, Resistances &amp; Positioning Reference Guide</span>
-                <span className="text-xs font-normal text-[#f3cf58]">· {activeCycle.name}</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-zinc-300 ml-auto">
-                <span>{showDetailedChamberGuide ? 'Hide Reference' : 'View Reference'}</span>
-                {showDetailedChamberGuide ? (
-                  <ChevronUp className="w-4 h-4" aria-hidden="true" />
-                ) : (
-                  <ChevronDown className="w-4 h-4" aria-hidden="true" />
-                )}
-              </div>
-            </button>
+            <div className="w-full min-h-[48px] p-4 flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-zinc-100 bg-[#151826]">
+              <button
+                type="button"
+                aria-expanded={showDetailedChamberGuide}
+                aria-controls="abyss-chamber-reference"
+                onClick={() => setShowDetailedChamberGuide(!showDetailedChamberGuide)}
+                className="flex flex-1 min-w-0 flex-wrap items-center justify-between gap-2 text-left hover:text-[#f3cf58] transition-colors cursor-pointer"
+              >
+                <div className="flex flex-wrap items-center gap-2">
+                  <Target className="w-4 h-4 text-[#d4af37] shrink-0" aria-hidden="true" />
+                  <span>Enemy Lineup, Resistances &amp; Positioning Reference Guide</span>
+                  <span className="text-xs font-normal text-[#f3cf58]">· {activeCycle.name}</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-zinc-300">
+                  <span>{showDetailedChamberGuide ? 'Hide Reference' : 'View Reference'}</span>
+                  {showDetailedChamberGuide ? (
+                    <ChevronUp className="w-4 h-4" aria-hidden="true" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4" aria-hidden="true" />
+                  )}
+                </div>
+              </button>
 
-            {showDetailedChamberGuide && (
-              <div id="abyss-chamber-reference" className="p-4 sm:p-5 border-t border-[#24293d]">
+              <RecommendationReliabilityBadge
+                reliability={readinessResult.reliability}
+                size="sm"
+                detailsControlsId={chamberDetailsId}
+                isDetailsOpen={isChamberDetailsOpen}
+                onToggleDetails={() => setIsChamberDetailsOpen((v) => !v)}
+              />
+            </div>
+
+            <div className="px-4 pb-3 space-y-3 bg-[#151826]/60 border-t border-[#202538]/70 empty:hidden">
+              <RecommendationReliabilityBanner
+                reliability={readinessResult.reliability}
+                contextLabel="Abyss Chamber Reference"
+                detailsControlsId={chamberDetailsId}
+                isDetailsOpen={isChamberDetailsOpen}
+                onToggleDetails={() => setIsChamberDetailsOpen((v) => !v)}
+                className="mt-3"
+              />
+              <ReliabilityDetailsPanel
+                id={chamberDetailsId}
+                reliability={readinessResult.reliability}
+                isOpen={isChamberDetailsOpen}
+                onClose={() => setIsChamberDetailsOpen(false)}
+                contextLabel="Abyss Chamber Reference"
+              />
+            </div>
+
+            <div
+              id="abyss-chamber-reference"
+              hidden={!showDetailedChamberGuide}
+              aria-hidden={!showDetailedChamberGuide}
+              className={showDetailedChamberGuide ? 'p-4 sm:p-5 border-t border-[#24293d]' : 'hidden'}
+            >
+              {showDetailedChamberGuide && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {analysis.map((item, idx) => {
                     const isReady = item.verdict === 'Ready to Clear';
@@ -297,8 +369,8 @@ export const EndgameView: React.FC<EndgameViewProps> = ({
                     );
                   })}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}

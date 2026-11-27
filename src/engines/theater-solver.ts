@@ -182,6 +182,7 @@ const THEATER_PLAN_UNATTESTED_DEPS: readonly UnattestedLocalDependency[] = [
 ];
 
 const THEATER_BORROW_UNATTESTED_DEPS: readonly UnattestedLocalDependency[] = [
+  { name: 'BORROW_PREMIER_RANKINGS', sourceFile: 'src/engines/theater-solver.ts' },
   { name: 'THEATER_BOSS_INFO', sourceFile: 'src/data/theater-seasons.ts' },
 ];
 

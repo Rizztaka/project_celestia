@@ -795,10 +795,72 @@ describe('Reliability Presentation Service (M9 Phase 4 — Slice 1)', () => {
       );
       expect(unsupported.badgeLabel).toBe('Unsupported');
       expect(unsupported.badgeTone).toBe('unsupported');
+      expect(unsupported.conceptualDataState).toBe('Unknown');
+      expect(unsupported.dataStateLabel).toBe('Unknown (Unregistered Data)');
       expect(unsupported.actionabilityLabel).toBe('Blocked · Not Live-Actionable');
       expect(unsupported.bannerSeverity).toBe('blocking');
       expect(unsupported.containerKind).toBe('alert');
       expect(unsupported.bannerSummary).toBe('Unknown abyss schedule entity "cycle-unknown".');
+    });
+
+    it('maps all 6-state conceptualDataState variants distinctly (Verified, Estimated, Unknown, Expired, Unsupported)', () => {
+      const verified = formatReliabilityPresentation(
+        buildEnvelope({
+          status: 'reliable',
+          mode: 'current',
+          isActionable: true,
+          verification: 'verified',
+        }),
+      );
+      expect(verified.conceptualDataState).toBe('Verified');
+      expect(verified.dataStateLabel).toBe('Verified');
+
+      const estimated = formatReliabilityPresentation(
+        buildEnvelope({
+          status: 'qualified',
+          mode: 'current',
+          isActionable: false,
+          verification: 'provisional',
+        }),
+      );
+      expect(estimated.conceptualDataState).toBe('Estimated');
+
+      const expiredArchive = formatReliabilityPresentation(
+        buildEnvelope({
+          status: 'historical',
+          mode: 'archive_simulation',
+          isActionable: false,
+          verification: 'stale',
+          temporalState: 'expired',
+        }),
+      );
+      expect(expiredArchive.conceptualDataState).toBe('Expired');
+
+      const expiredUnsupported = formatReliabilityPresentation(
+        buildEnvelope({
+          status: 'unsupported',
+          mode: 'current',
+          isActionable: false,
+          verification: 'stale',
+          temporalState: 'expired',
+          warnings: ['Schedule expired.'],
+        }),
+      );
+      expect(expiredUnsupported.conceptualDataState).toBe('Expired');
+      expect(expiredUnsupported.dataStateLabel).toBe('Expired (Schedule Expired)');
+
+      const unsupportedOther = formatReliabilityPresentation(
+        buildEnvelope({
+          status: 'unsupported',
+          mode: 'current',
+          isActionable: false,
+          verification: 'provisional',
+          temporalState: 'not_applicable',
+          warnings: ['Invalid evaluatedAt clock.'],
+        }),
+      );
+      expect(unsupportedOther.conceptualDataState).toBe('Unsupported');
+      expect(unsupportedOther.dataStateLabel).toBe('Unsupported');
     });
   });
 

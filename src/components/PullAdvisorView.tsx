@@ -586,31 +586,39 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
                       </span>
                     </button>
 
-                    {isExpanded && (
-                      <div
-                        id={breakdownPanelId}
-                        className="mt-2 bg-[#0a0c14] rounded-lg p-3 border border-[#202538] text-xs space-y-1.5 font-mono"
-                      >
-                        <div className="grid grid-cols-4 text-zinc-300 text-[11px] uppercase pb-1 border-b border-white/10">
-                          <span>Target</span>
-                          <span className="text-center">Median</span>
-                          <span className="text-center">Hard Pity</span>
-                          <span className="text-right">Chance</span>
-                        </div>
-                        {item.odds.copiesBreakdown?.map((step) => (
-                          <div key={step.copyNumber} className="grid grid-cols-4 text-zinc-200 tabular-nums">
-                            <span className="font-sans font-semibold text-zinc-100">{step.label}</span>
-                            <span className="text-center text-[#f3cf58]">~{step.medianPulls}p</span>
-                            <span className="text-center text-emerald-300">
-                              {item.odds.isUncapped ? 'Uncapped' : `${step.guaranteedPulls}p`}
-                            </span>
-                            <span className="text-right text-sky-300 font-bold">
-                              {(step.cumulativeProbability * 100).toFixed(1)}%
-                            </span>
+                    <div
+                      id={breakdownPanelId}
+                      hidden={!isExpanded}
+                      aria-hidden={!isExpanded}
+                      className={
+                        isExpanded
+                          ? 'mt-2 bg-[#0a0c14] rounded-lg p-3 border border-[#202538] text-xs space-y-1.5 font-mono'
+                          : 'hidden'
+                      }
+                    >
+                      {isExpanded && (
+                        <>
+                          <div className="grid grid-cols-4 text-zinc-300 text-[11px] uppercase pb-1 border-b border-white/10">
+                            <span>Target</span>
+                            <span className="text-center">Median</span>
+                            <span className="text-center">Hard Pity</span>
+                            <span className="text-right">Chance</span>
                           </div>
-                        ))}
-                      </div>
-                    )}
+                          {item.odds.copiesBreakdown?.map((step) => (
+                            <div key={step.copyNumber} className="grid grid-cols-4 text-zinc-200 tabular-nums">
+                              <span className="font-sans font-semibold text-zinc-100">{step.label}</span>
+                              <span className="text-center text-[#f3cf58]">~{step.medianPulls}p</span>
+                              <span className="text-center text-emerald-300">
+                                {item.odds.isUncapped ? 'Uncapped' : `${step.guaranteedPulls}p`}
+                              </span>
+                              <span className="text-right text-sky-300 font-bold">
+                                {(step.cumulativeProbability * 100).toFixed(1)}%
+                              </span>
+                            </div>
+                          ))}
+                        </>
+                      )}
+                    </div>
                   </div>
                 )}
 
@@ -697,18 +705,20 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
         </div>
       )}
 
-      {recommendations.length === 0 && (
-        <div
-          role="status"
+      {recommendations.length === 0 && pullAdviceResult.reliability.status !== 'unsupported' && (
+        <section
+          aria-label="Pull advisor empty state"
           className="bg-[#121420] border border-[#24293d] rounded-2xl p-8 text-center space-y-3"
         >
-          <CheckCircle2 className="w-8 h-8 mx-auto text-emerald-300" aria-hidden="true" />
-          <p className="font-semibold text-zinc-100">
-            All targets in this banner phase are already maxed out!
-          </p>
-          <p className="text-xs text-zinc-300">
-            Switch to All-Target Sandbox to evaluate upcoming meta characters, constellations, and signatures.
-          </p>
+          <div role="status" className="space-y-3">
+            <CheckCircle2 className="w-8 h-8 mx-auto text-emerald-300" aria-hidden="true" />
+            <p className="font-semibold text-zinc-100">
+              All targets in this banner phase are already maxed out!
+            </p>
+            <p className="text-xs text-zinc-300">
+              Switch to All-Target Sandbox to evaluate upcoming meta characters, constellations, and signatures.
+            </p>
+          </div>
           <button
             type="button"
             onClick={() => setBannerFilter('sandbox')}
@@ -716,7 +726,7 @@ export const PullAdvisorView: React.FC<PullAdvisorViewProps> = ({
           >
             Open All-Target Sandbox
           </button>
-        </div>
+        </section>
       )}
 
       {/* Character Details Modal */}

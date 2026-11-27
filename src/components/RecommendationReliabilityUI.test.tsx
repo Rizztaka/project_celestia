@@ -238,14 +238,16 @@ describe('Shared Recommendation Reliability UI Components (M9 Phase 4 — Slice 
       expect(openPanelTag).not.toMatch(/\bhidden\b/);
       expect(openPanelTag).not.toContain('aria-hidden="true"');
 
-      expect(openHtml).toContain('Status');
-      expect(openHtml).toContain('Mode');
-      expect(openHtml).toContain('Verification');
-      expect(openHtml).toContain('Temporal State');
-      expect(openHtml).toContain('Actionability');
-      expect(openHtml).toContain('Evaluated UTC: 2026-11-23');
-      expect(openHtml).toContain('Close');
-      expect(openHtml).not.toMatch(/<article\b/i);
+      const normalizedOpenHtml = openHtml.replace(/<!--\s*-->/g, '');
+      expect(normalizedOpenHtml).toContain('Status');
+      expect(normalizedOpenHtml).toContain('Mode');
+      expect(normalizedOpenHtml).toContain('Verification');
+      expect(normalizedOpenHtml).toContain('Temporal State');
+      expect(normalizedOpenHtml).toContain('Actionability');
+      expect(normalizedOpenHtml).toContain('Data State: Verified');
+      expect(normalizedOpenHtml).toContain('Evaluated UTC: 2026-11-23');
+      expect(normalizedOpenHtml).toContain('Close');
+      expect(normalizedOpenHtml).not.toMatch(/<article\b/i);
     });
   });
 

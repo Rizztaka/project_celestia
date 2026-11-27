@@ -1552,6 +1552,7 @@ export function evaluateComprehensivePullROI(
 
   // Declare materially influential unattested local ROI heuristic tables consumed in this call
   const unattestedLocalDependencies: UnattestedLocalDependency[] = [
+    { name: 'C0_ROI_HEURISTICS', sourceFile: 'src/engines/pull-advisor.ts' },
     { name: 'SIGNATURE_WEAPONS', sourceFile: 'src/engines/pull-advisor.ts' },
   ];
   const evaluatesOwnedConstellations = candidateCharIds.some((charId) => {

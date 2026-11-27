@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useTransition, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useTransition, useRef, useReducer, useId } from 'react';
 import { CHARACTERS } from '../data/characters';
 import {
   TEMPLATES,
@@ -25,6 +25,7 @@ import type {
   TeamWeaponAssignment,
   TeamRecommendation,
   RecommendationCollection,
+  RecommendationReliability,
 } from '../types/genshin';
 import {
   Sparkles,
@@ -42,12 +43,15 @@ import {
   ArrowRightLeft,
   Layers,
   Activity,
+  ShieldAlert,
 } from 'lucide-react';
 import { LazyCharacterDetailModal } from './LazyCharacterDetailModal';
 import { CharacterPortrait } from './CharacterPortrait';
 import { RotationBadgeList } from './RotationBadgeList';
 import { InfoTooltip } from './InfoTooltip';
-import { DataFreshnessBadge } from './DataFreshnessBadge';
+import { RecommendationReliabilityBadge } from './RecommendationReliabilityBadge';
+import { RecommendationReliabilityBanner } from './RecommendationReliabilityBanner';
+import { ReliabilityDetailsPanel } from './ReliabilityDetailsPanel';
 import {
   rankWeaponsForCharacter,
   scoreWeaponForCharacter,
@@ -87,6 +91,355 @@ function getCharacterName(id: string): string {
   return CHARACTER_NAME_BY_ID.get(id) ?? id;
 }
 
+export interface TeamGeneratorSolveState {
+  teamResult: RecommendationCollection<TeamRecommendation> | null;
+  resultInputKey: string | null;
+  isSolving: boolean;
+  solverError: string | null;
+}
+
+export type TeamGeneratorSolveAction =
+  | { type: 'INSUFFICIENT_ROSTER' }
+  | { type: 'SOLVE_STARTED' }
+  | {
+      type: 'SOLVE_SUCCEEDED';
+      result: RecommendationCollection<TeamRecommendation>;
+      inputKey: string;
+    }
+  | { type: 'SOLVE_FAILED'; error: string }
+  | {
+      type: 'SWAP_MEMBER_UPDATED';
+      updater: (
+        prev: RecommendationCollection<TeamRecommendation> | null,
+      ) => RecommendationCollection<TeamRecommendation> | null;
+    };
+
+/** Canonicalizes nested plain values so equivalent objects produce identical snapshots. */
+function canonicalizeSolveInputValue(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map(canonicalizeSolveInputValue);
+  }
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    const normalized: Record<string, unknown> = {};
+    for (const key of Object.keys(record).sort()) {
+      const entry = record[key];
+      if (entry !== undefined) {
+        normalized[key] = canonicalizeSolveInputValue(entry);
+      }
+    }
+    return normalized;
+  }
+  return value;
+}
+
+/** Builds a deterministic snapshot key covering all material solve inputs. */
+export function buildTeamGenerationInputKey(params: TeamGenerationRequestParams): string {
+  const normalizedOwnedIds = Array.from(new Set(params.ownedIds)).sort();
+  const normalizedFocusId = params.focusId || '';
+  const normalizedProfiles = canonicalizeSolveInputValue(params.profiles ?? {});
+  const normalizedWeapons = canonicalizeSolveInputValue(params.weaponBag);
+
+  return JSON.stringify({
+    ownedIds: normalizedOwnedIds,
+    focusId: normalizedFocusId,
+    profiles: normalizedProfiles,
+    weaponBag: normalizedWeapons,
+    showCatalogFallback: Boolean(params.showCatalogFallback),
+  });
+}
+
+/** Creates the initial solver state for TeamGeneratorView. */
+export function createInitialTeamGeneratorSolveState(init: {
+  ownedCount: number;
+  showCatalogFallback: boolean;
+}): TeamGeneratorSolveState {
+  return {
+    teamResult: null,
+    resultInputKey: null,
+    isSolving: init.ownedCount >= 4 || init.showCatalogFallback,
+    solverError: null,
+  };
+}
+
+/** Pure state reducer for async team generation and inline member swaps. */
+export function teamGeneratorSolveReducer(
+  state: TeamGeneratorSolveState,
+  action: TeamGeneratorSolveAction,
+): TeamGeneratorSolveState {
+  switch (action.type) {
+    case 'INSUFFICIENT_ROSTER':
+      return { teamResult: null, resultInputKey: null, isSolving: false, solverError: null };
+    case 'SOLVE_STARTED':
+      return { teamResult: null, resultInputKey: null, isSolving: true, solverError: null };
+    case 'SOLVE_SUCCEEDED':
+      return {
+        teamResult: action.result,
+        resultInputKey: action.inputKey,
+        isSolving: false,
+        solverError: null,
+      };
+    case 'SOLVE_FAILED':
+      return { teamResult: null, resultInputKey: null, isSolving: false, solverError: action.error };
+    case 'SWAP_MEMBER_UPDATED':
+      return { ...state, teamResult: action.updater(state.teamResult) };
+  }
+}
+
+export interface TeamGenerationRequestParams {
+  ownedIds: string[];
+  focusId?: string;
+  profiles?: Record<string, OwnedCharacterProfile>;
+  weaponBag: OwnedWeapon[];
+  showCatalogFallback: boolean;
+}
+
+export interface TeamGenerationLifecycleGuards {
+  requestIdRef: { current: number };
+  isMountedRef: { current: boolean };
+  dispatch: (action: TeamGeneratorSolveAction) => void;
+  dispatcher?: typeof dispatchGenerateBestTeams;
+  scheduleTransition?: (fn: () => void) => void;
+}
+
+function formatTeamGenerationError(err: unknown): string {
+  return err instanceof Error && err.message.trim().length > 0
+    ? err.message
+    : 'Failed to generate team recommendations.';
+}
+
+/**
+ * Starts a sequenced team-generation request and returns a cleanup callback
+ * that invalidates this request on unmount or superseded re-runs.
+ */
+export function startTeamGenerationRequest(
+  params: TeamGenerationRequestParams,
+  guards: TeamGenerationLifecycleGuards,
+): () => void {
+  const requestId = ++guards.requestIdRef.current;
+  let isEffectActive = true;
+
+  const isCurrentAndActive = () =>
+    isEffectActive && guards.isMountedRef.current && requestId === guards.requestIdRef.current;
+
+  const cleanup = () => {
+    isEffectActive = false;
+    guards.requestIdRef.current += 1;
+  };
+
+  if (params.ownedIds.length < 4 && !params.showCatalogFallback) {
+    guards.dispatch({ type: 'INSUFFICIENT_ROSTER' });
+    return cleanup;
+  }
+
+  guards.dispatch({ type: 'SOLVE_STARTED' });
+
+  const inputKey = buildTeamGenerationInputKey(params);
+  const runDispatch = guards.dispatcher ?? dispatchGenerateBestTeams;
+  let dispatchPromise: Promise<RecommendationCollection<TeamRecommendation>>;
+  try {
+    dispatchPromise = Promise.resolve(
+      runDispatch(
+        params.ownedIds,
+        params.focusId || undefined,
+        params.profiles,
+        params.weaponBag,
+        params.showCatalogFallback,
+      ),
+    );
+  } catch (err: unknown) {
+    if (isCurrentAndActive()) {
+      guards.dispatch({ type: 'SOLVE_FAILED', error: formatTeamGenerationError(err) });
+    }
+    return cleanup;
+  }
+
+  dispatchPromise
+    .then((result) => {
+      if (!isCurrentAndActive()) return;
+      const applyResult = () => {
+        if (!isCurrentAndActive()) return;
+        guards.dispatch({ type: 'SOLVE_SUCCEEDED', result, inputKey });
+      };
+      if (guards.scheduleTransition) {
+        guards.scheduleTransition(applyResult);
+      } else {
+        applyResult();
+      }
+    })
+    .catch((err: unknown) => {
+      if (!isCurrentAndActive()) return;
+      guards.dispatch({ type: 'SOLVE_FAILED', error: formatTeamGenerationError(err) });
+    });
+
+  return cleanup;
+}
+
+export interface QuickSwapTarget {
+  teamId: string;
+  character: Character;
+  teamMembers: Character[];
+  currentAssignment?: TeamWeaponAssignment;
+}
+
+export interface QuickSwapModalState {
+  target: QuickSwapTarget | null;
+  isDetailsOpen: boolean;
+}
+
+export type QuickSwapModalAction =
+  | { type: 'OPEN_TARGET'; target: QuickSwapTarget }
+  | { type: 'CLOSE' }
+  | { type: 'TOGGLE_DETAILS' }
+  | { type: 'CLOSE_DETAILS' };
+
+export const initialQuickSwapModalState: QuickSwapModalState = {
+  target: null,
+  isDetailsOpen: false,
+};
+
+/** Pure state reducer ensuring Quick Swap disclosure resets on close or target change. */
+export function quickSwapModalReducer(
+  state: QuickSwapModalState,
+  action: QuickSwapModalAction,
+): QuickSwapModalState {
+  switch (action.type) {
+    case 'OPEN_TARGET':
+      return { target: action.target, isDetailsOpen: false };
+    case 'CLOSE':
+      return { target: null, isDetailsOpen: false };
+    case 'TOGGLE_DETAILS':
+      return state.target ? { ...state, isDetailsOpen: !state.isDetailsOpen } : state;
+    case 'CLOSE_DETAILS':
+      return state.isDetailsOpen ? { ...state, isDetailsOpen: false } : state;
+  }
+}
+
+export interface TeamGeneratorReliabilitySectionProps {
+  reliability?: RecommendationReliability | null;
+  detailsControlsId: string;
+  isDetailsOpen: boolean;
+  onToggleDetails: () => void;
+  onCloseDetails: () => void;
+  solverError?: string | null;
+  onRetry?: () => void;
+}
+
+/** Reliability banner, details panel, and split worker-error alert for Main Best Teams. */
+export const TeamGeneratorReliabilitySection: React.FC<TeamGeneratorReliabilitySectionProps> = ({
+  reliability,
+  detailsControlsId,
+  isDetailsOpen,
+  onToggleDetails,
+  onCloseDetails,
+  solverError,
+  onRetry,
+}) => {
+  if (!reliability && !solverError) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-3">
+      {solverError && (
+        <div
+          data-reliability-container="alert"
+          className="w-full max-w-full min-w-0 p-3.5 rounded-xl border bg-rose-950/85 border-rose-500/65 text-rose-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+        >
+          <div role="alert" aria-live="assertive" className="min-w-0 flex-1">
+            <div className="flex items-start gap-2.5 min-w-0">
+              <ShieldAlert className="w-4 h-4 text-rose-200 shrink-0 mt-0.5" aria-hidden="true" />
+              <div className="min-w-0 flex-1 space-y-0.5 text-xs leading-relaxed">
+                <p className="font-bold text-rose-100">Team Synergy Solver Error</p>
+                <p className="text-rose-200 break-words">{solverError}</p>
+              </div>
+            </div>
+          </div>
+          {onRetry && (
+            <div className="shrink-0 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={onRetry}
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold border bg-rose-200 text-rose-950 border-rose-200 hover:bg-rose-100 transition-colors cursor-pointer"
+              >
+                Retry
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {reliability && (
+        <>
+          <RecommendationReliabilityBanner
+            reliability={reliability}
+            contextLabel="Team Synergy Solver"
+            detailsControlsId={detailsControlsId}
+            isDetailsOpen={isDetailsOpen}
+            onToggleDetails={onToggleDetails}
+          />
+          <ReliabilityDetailsPanel
+            id={detailsControlsId}
+            reliability={reliability}
+            isOpen={isDetailsOpen}
+            onClose={onCloseDetails}
+            contextLabel="Team Synergy Solver"
+          />
+        </>
+      )}
+    </div>
+  );
+};
+
+export interface QuickSwapReliabilitySectionProps {
+  reliability?: RecommendationReliability | null;
+  detailsControlsId: string;
+  isDetailsOpen: boolean;
+  onToggleDetails: () => void;
+  onCloseDetails: () => void;
+}
+
+/** Reliability badge, banner, and details panel for the Quick Swap Weapon Modal. */
+export const QuickSwapReliabilitySection: React.FC<QuickSwapReliabilitySectionProps> = ({
+  reliability,
+  detailsControlsId,
+  isDetailsOpen,
+  onToggleDetails,
+  onCloseDetails,
+}) => {
+  if (!reliability) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-2.5">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <RecommendationReliabilityBadge
+          size="sm"
+          reliability={reliability}
+          detailsControlsId={detailsControlsId}
+          isDetailsOpen={isDetailsOpen}
+          onToggleDetails={onToggleDetails}
+        />
+      </div>
+      <RecommendationReliabilityBanner
+        reliability={reliability}
+        contextLabel="Quick Swap Weapon Ranking"
+        detailsControlsId={detailsControlsId}
+        isDetailsOpen={isDetailsOpen}
+        onToggleDetails={onToggleDetails}
+      />
+      <ReliabilityDetailsPanel
+        id={detailsControlsId}
+        reliability={reliability}
+        isOpen={isDetailsOpen}
+        onClose={onCloseDetails}
+        contextLabel="Quick Swap Weapon Ranking"
+      />
+    </div>
+  );
+};
+
 export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
   ownedIds,
   profiles,
@@ -102,65 +455,78 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
   const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
   const [expandedDrawerTeamId, setExpandedDrawerTeamId] = useState<string | null>(null);
   const [showCatalogFallback, setShowCatalogFallback] = useState<boolean>(false);
-  const [quickSwapTarget, setQuickSwapTarget] = useState<{
-    teamId: string;
-    character: Character;
-    teamMembers: Character[];
-    currentAssignment?: TeamWeaponAssignment;
-  } | null>(null);
+  const [quickSwapState, dispatchQuickSwap] = useReducer(
+    quickSwapModalReducer,
+    initialQuickSwapModalState,
+  );
+  const quickSwapTarget = quickSwapState.target;
   const [customAssignments, setCustomAssignments] = useState<
     Record<string, Record<string, TeamWeaponAssignment>>
   >({});
+  const [isTeamDetailsOpen, setIsTeamDetailsOpen] = useState<boolean>(false);
+  const teamDetailsId = useId();
+  const swapDetailsId = useId();
 
   const swapModalRef = useRef<HTMLDivElement>(null);
   const swapCloseBtnRef = useRef<HTMLButtonElement>(null);
+  const isMountedRef = useRef<boolean>(true);
+  const requestIdRef = useRef<number>(0);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   useModalAccessibility({
     isOpen: Boolean(quickSwapTarget),
-    onClose: () => setQuickSwapTarget(null),
+    onClose: () => dispatchQuickSwap({ type: 'CLOSE' }),
     containerRef: swapModalRef,
     initialFocusRef: swapCloseBtnRef,
   });
 
   const weaponBag = useMemo(() => weapons || getSavedWeapons(), [weapons]);
-
-  // Retain full RecommendationCollection envelope (items + reliability) in state for Phase 4
-  const [teamResult, setTeamResult] = useState<RecommendationCollection<TeamRecommendation> | null>(
-    null
-  );
-  const teams = useMemo(() => teamResult?.items ?? [], [teamResult]);
-  const [isSolving, setIsSolving] = useState<boolean>(
-    () => ownedIds.length >= 4 || showCatalogFallback
-  );
-  const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    if (ownedIds.length < 4 && !showCatalogFallback) {
-      setTeamResult(null);
-      setIsSolving(false);
-      return;
-    }
-
-    let isMounted = true;
-    setIsSolving(true);
-    dispatchGenerateBestTeams(
+  const solveParams = useMemo<TeamGenerationRequestParams>(
+    () => ({
       ownedIds,
-      focusId || undefined,
+      focusId: focusId || undefined,
       profiles,
       weaponBag,
       showCatalogFallback,
-    ).then((result) => {
-      if (isMounted) {
-        startTransition(() => {
-          setTeamResult(result);
-          setIsSolving(false);
-        });
-      }
+    }),
+    [ownedIds, focusId, profiles, weaponBag, showCatalogFallback],
+  );
+  const currentSolveInputKey = useMemo(
+    () => buildTeamGenerationInputKey(solveParams),
+    [solveParams],
+  );
+
+  // Retain full RecommendationCollection envelope (items + reliability) in state for Phase 4
+  const [solveState, dispatchSolve] = useReducer(
+    teamGeneratorSolveReducer,
+    { ownedCount: ownedIds.length, showCatalogFallback },
+    createInitialTeamGeneratorSolveState,
+  );
+  const { teamResult, resultInputKey, isSolving, solverError } = solveState;
+  const hasMatchingResult = teamResult !== null && resultInputKey === currentSolveInputKey;
+  const visibleTeamResult = hasMatchingResult ? teamResult : null;
+  const teams = useMemo(() => visibleTeamResult?.items ?? [], [visibleTeamResult]);
+  const [retryNonce, setRetryNonce] = useState<number>(0);
+  const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    return startTeamGenerationRequest(solveParams, {
+      requestIdRef,
+      isMountedRef,
+      dispatch: dispatchSolve,
+      scheduleTransition: startTransition,
     });
-    return () => {
-      isMounted = false;
-    };
-  }, [ownedIds, focusId, profiles, weaponBag, showCatalogFallback]);
+  }, [solveParams, retryNonce]);
+
+  const handleRetrySolve = () => {
+    setRetryNonce((prev) => prev + 1);
+  };
 
   // Retain full weapon-ranking collection envelope (items + reliability) for the active swap modal
   const quickSwapWeaponRanking = useMemo(() => {
@@ -177,9 +543,11 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
     originalId: string,
     newMember: Character,
   ) => {
-    setTeamResult((prevResult) => {
-      if (!prevResult) return prevResult;
-      return {
+    dispatchSolve({
+      type: 'SWAP_MEMBER_UPDATED',
+      updater: (prevResult) => {
+        if (!prevResult) return prevResult;
+        return {
         ...prevResult,
         items: prevResult.items.map((t) => {
         if (t.id !== teamId) return t;
@@ -259,13 +627,17 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
           },
           explanation,
         };
-      }),
-      };
+        }),
+        };
+      },
     });
   };
 
   const featuredCarries = ['Nefer', 'Mavuika', 'HuTao', 'Alhaitham', 'Clorinde', 'Neuvillette', 'Navia'];
   const isInsufficientRoster = ownedIds.length < 4 && !showCatalogFallback;
+  const isPendingInputReevaluation =
+    !isInsufficientRoster && teamResult !== null && resultInputKey !== currentSolveInputKey;
+  const effectiveIsSolving = isSolving || isPendingInputReevaluation;
 
   return (
     <div className="space-y-6">
@@ -276,8 +648,16 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
             <div className="flex flex-wrap items-center gap-2 text-[#f3cf58] text-xs font-bold tracking-wider uppercase mb-1">
               <Sparkles className="w-4 h-4" aria-hidden="true" />
               <span>Instant Archetype Synergy Engine</span>
-              <DataFreshnessBadge datasetId="team_archetypes_v7_2" />
-              {(isPending || isSolving) && (
+              <RecommendationReliabilityBadge
+                reliability={visibleTeamResult?.reliability}
+                isLoading={effectiveIsSolving}
+                emptyLabel={isInsufficientRoster ? 'Awaiting 4+ Roster' : undefined}
+                size="sm"
+                detailsControlsId={teamDetailsId}
+                isDetailsOpen={isTeamDetailsOpen}
+                onToggleDetails={() => setIsTeamDetailsOpen((v) => !v)}
+              />
+              {(isPending || effectiveIsSolving) && (
                 <span
                   role="status"
                   className="text-xs text-amber-300 animate-pulse motion-reduce:animate-none font-normal lowercase tracking-normal"
@@ -339,6 +719,16 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
         </div>
       </div>
 
+      <TeamGeneratorReliabilitySection
+        reliability={visibleTeamResult?.reliability}
+        detailsControlsId={teamDetailsId}
+        isDetailsOpen={isTeamDetailsOpen}
+        onToggleDetails={() => setIsTeamDetailsOpen((v) => !v)}
+        onCloseDetails={() => setIsTeamDetailsOpen(false)}
+        solverError={solverError}
+        onRetry={handleRetrySolve}
+      />
+
       {/* Insufficient Roster Banner */}
       {isInsufficientRoster && (
         <section
@@ -381,11 +771,11 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
 
       {/* Notice when viewing Catalog Fallback */}
       {ownedIds.length < 4 && showCatalogFallback && (
-        <div
-          role="status"
+        <section
+          aria-label="Theoretical catalog fallback notice"
           className="bg-[#141624] border border-[#323954] p-3.5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs"
         >
-          <div className="flex items-start sm:items-center gap-2 text-zinc-200">
+          <div role="status" className="flex items-start sm:items-center gap-2 text-zinc-200">
             <Info className="w-4 h-4 text-[#d4af37] shrink-0 mt-0.5 sm:mt-0" aria-hidden="true" />
             <span>
               Viewing <strong className="text-white">Theoretical Catalog Teams</strong> across all 128 characters. Characters not currently owned by you are marked with an <strong className="text-rose-200">Unowned</strong> badge.
@@ -398,7 +788,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
           >
             Hide Catalog Teams
           </button>
-        </div>
+        </section>
       )}
 
       {/* Recommended Teams Grid */}
@@ -617,11 +1007,14 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                         <button
                           type="button"
                           onClick={() =>
-                            setQuickSwapTarget({
-                              teamId: team.id,
-                              character: member,
-                              teamMembers: team.members,
-                              currentAssignment: assignment,
+                            dispatchQuickSwap({
+                              type: 'OPEN_TARGET',
+                              target: {
+                                teamId: team.id,
+                                character: member,
+                                teamMembers: team.members,
+                                currentAssignment: assignment,
+                              },
                             })
                           }
                           aria-label={`Swap weapon for ${member.name}: currently ${
@@ -780,12 +1173,18 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                         )}
                       </button>
 
-                      {isTipsExpanded && (
-                        <div
-                          id={tipsPanelId}
-                          className="mt-2 space-y-2 bg-[#131624] p-3 rounded-lg border border-[#24293d] text-xs"
-                        >
-                          {team.steppedRotation.steps.map((step) => (
+                      <div
+                        id={tipsPanelId}
+                        hidden={!isTipsExpanded}
+                        aria-hidden={!isTipsExpanded}
+                        className={
+                          isTipsExpanded
+                            ? 'mt-2 space-y-2 bg-[#131624] p-3 rounded-lg border border-[#24293d] text-xs'
+                            : 'hidden'
+                        }
+                      >
+                        {isTipsExpanded &&
+                          team.steppedRotation.steps.map((step) => (
                             <div key={step.stepNumber} className="flex items-start gap-2 text-zinc-200">
                               <span className="text-[#f3cf58] font-bold shrink-0 font-mono">
                                 [Step {step.stepNumber} · {step.characterName}]:
@@ -795,8 +1194,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                               </span>
                             </div>
                           ))}
-                        </div>
-                      )}
+                      </div>
                     </div>
                   </div>
                 ) : (
@@ -822,7 +1220,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                 <button
                   type="button"
                   aria-expanded={isDrawerExpanded}
-                  aria-controls={drawerPanelId}
+                  aria-controls={team.explanation ? drawerPanelId : undefined}
                   onClick={() => setExpandedDrawerTeamId(isDrawerExpanded ? null : team.id)}
                   className="w-full min-h-[44px] py-2.5 px-3.5 rounded-xl bg-[#0e1019] hover:bg-[#161a29] border border-[#24293d] hover:border-[#d4af37]/50 text-xs font-bold text-zinc-100 flex flex-wrap items-center justify-between gap-2 transition-colors cursor-pointer group"
                 >
@@ -850,16 +1248,24 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                   </span>
                 </button>
 
-                {isDrawerExpanded && team.explanation && (
+                {team.explanation && (
                   <div
                     id={drawerPanelId}
-                    className="mt-3 p-4 bg-[#0b0d15] rounded-xl border border-[#24293d] space-y-4 text-xs"
+                    hidden={!isDrawerExpanded}
+                    aria-hidden={!isDrawerExpanded}
+                    className={
+                      isDrawerExpanded
+                        ? 'mt-3 p-4 bg-[#0b0d15] rounded-xl border border-[#24293d] space-y-4 text-xs'
+                        : 'hidden'
+                    }
                   >
-                    {/* 1. Reaction Execution Workflow */}
-                    <div className="bg-[#121524] p-3.5 rounded-lg border border-[#202538]">
-                      <div className="text-[11px] font-bold text-[#f3cf58] uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
-                        <Zap className="w-3.5 h-3.5" aria-hidden="true" />
-                        <span>Reaction Execution Chain</span>
+                    {isDrawerExpanded && (
+                      <>
+                        {/* 1. Reaction Execution Workflow */}
+                        <div className="bg-[#121524] p-3.5 rounded-lg border border-[#202538]">
+                          <div className="text-[11px] font-bold text-[#f3cf58] uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
+                            <Zap className="w-3.5 h-3.5" aria-hidden="true" />
+                            <span>Reaction Execution Chain</span>
                       </div>
                       <p className="text-zinc-100 font-mono text-xs leading-relaxed">
                         {team.explanation.reactionWorkflow}
@@ -1088,6 +1494,8 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                           </div>
                         </div>
                       )}
+                      </>
+                    )}
                   </div>
                 )}
               </div>
@@ -1096,23 +1504,27 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
         })}
       </div>
 
-      {/* Empty State when no teams match (suppressed when Insufficient Roster banner is already shown) */}
-      {teams.length === 0 && !isInsufficientRoster && (
-        <div
-          role="status"
+      {/* Empty State when no teams match (suppressed when Insufficient Roster banner or error alert is shown) */}
+      {teams.length === 0 && !isInsufficientRoster && !solverError && (
+        <section
+          aria-label="Empty team recommendations status"
           className="bg-[#121420] border border-[#24293d] rounded-2xl p-8 text-center space-y-3 shadow-md"
         >
-          {isSolving ? (
-            <p className="text-xs text-zinc-300">Calculating optimal team recommendations…</p>
+          {effectiveIsSolving ? (
+            <p role="status" className="text-xs text-zinc-300">
+              Calculating optimal team recommendations…
+            </p>
           ) : (
             <>
-              <Users className="w-8 h-8 mx-auto text-zinc-400" aria-hidden="true" />
-              <h2 className="text-base font-bold text-zinc-100 font-serif">No Matching Teams Found</h2>
-              <p className="text-xs text-zinc-300 max-w-md mx-auto leading-relaxed">
-                {focusId && !ownedIds.includes(focusId)
-                  ? `You do not currently own ${getCharacterName(focusId)}. Enable theoretical catalog teams to explore compositions with them.`
-                  : 'Could not generate full 4-character compositions with the current filters and roster.'}
-              </p>
+              <div role="status" className="space-y-3">
+                <Users className="w-8 h-8 mx-auto text-zinc-400" aria-hidden="true" />
+                <h2 className="text-base font-bold text-zinc-100 font-serif">No Matching Teams Found</h2>
+                <p className="text-xs text-zinc-300 max-w-md mx-auto leading-relaxed">
+                  {focusId && !ownedIds.includes(focusId)
+                    ? `You do not currently own ${getCharacterName(focusId)}. Enable theoretical catalog teams to explore compositions with them.`
+                    : 'Could not generate full 4-character compositions with the current filters and roster.'}
+                </p>
+              </div>
               <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
                 {focusId && (
                   <button
@@ -1136,7 +1548,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
               </div>
             </>
           )}
-        </div>
+        </section>
       )}
 
       {/* Interactive Character Detail Modal */}
@@ -1159,7 +1571,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
           aria-modal="true"
           aria-labelledby="quick-swap-title"
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm"
-          onClick={() => setQuickSwapTarget(null)}
+          onClick={() => dispatchQuickSwap({ type: 'CLOSE' })}
         >
           <div
             ref={swapModalRef}
@@ -1178,19 +1590,28 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                 ref={swapCloseBtnRef}
                 type="button"
                 aria-label="Close weapon swap modal"
-                onClick={() => setQuickSwapTarget(null)}
+                onClick={() => dispatchQuickSwap({ type: 'CLOSE' })}
                 className="min-w-[38px] min-h-[38px] rounded-xl flex items-center justify-center text-zinc-300 hover:text-white hover:bg-[#22283d] cursor-pointer"
               >
                 <X className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
 
-            <p className="text-xs text-zinc-300">
-              Select an owned {quickSwapTarget.character.weapon} from your armory to assign to{' '}
-              <strong className="text-white">{quickSwapTarget.character.name}</strong> for this team composition.
-            </p>
+            <div className="overflow-y-auto flex-1 min-h-0 space-y-3 pr-1">
+              <p className="text-xs text-zinc-300">
+                Select an owned {quickSwapTarget.character.weapon} from your armory to assign to{' '}
+                <strong className="text-white">{quickSwapTarget.character.name}</strong> for this team composition.
+              </p>
 
-            <div className="overflow-y-auto flex-1 min-h-0 space-y-2 pr-1">
+              <QuickSwapReliabilitySection
+                reliability={quickSwapWeaponRanking?.reliability}
+                detailsControlsId={swapDetailsId}
+                isDetailsOpen={quickSwapState.isDetailsOpen}
+                onToggleDetails={() => dispatchQuickSwap({ type: 'TOGGLE_DETAILS' })}
+                onCloseDetails={() => dispatchQuickSwap({ type: 'CLOSE_DETAILS' })}
+              />
+
+              <div className="space-y-2">
               {(quickSwapWeaponRanking?.items ?? []).map((scoreRes) => {
                 const w = scoreRes.weapon as OwnedWeapon;
                 const isCurrent = quickSwapTarget.currentAssignment?.assignedWeapon.id === w.id;
@@ -1339,7 +1760,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                           onUpdateWeapons(updatedWeapons);
                         }
 
-                        setQuickSwapTarget(null);
+                        dispatchQuickSwap({ type: 'CLOSE' });
                       }}
                       className={`min-h-[40px] sm:min-h-[36px] px-4 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer shrink-0 ${
                         isCurrent
@@ -1352,6 +1773,7 @@ export const TeamGeneratorView: React.FC<TeamGeneratorViewProps> = ({
                   </div>
                 );
               })}
+              </div>
             </div>
           </div>
         </div>
